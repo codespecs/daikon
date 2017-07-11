@@ -109,7 +109,8 @@ public class AnnotateNullable {
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit() || !is_static_method(ppt)) continue;
+      if (!ppt.is_combined_exit() || !ppt.is_combined_exception() || !is_static_method(ppt))
+        continue;
 
       String name = ppt.name().replaceFirst("[(].*$", "");
       int lastdot = name.lastIndexOf('.');
@@ -403,6 +404,14 @@ public class AnnotateNullable {
         "signature") // application invariant: returnVar.type.toString() is a binary name (if returnVar is non-null), because we are processing a Java program
     String returnType =
         returnVar == null ? "V" : UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
+    // Or an throw point
+    if (returnVar == null) {
+      returnVar = ppt.find_var_by_name("exception");
+      returnType =
+          returnVar == null
+              ? "V"
+              : "V throws " + UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
+    }
 
     return method + UtilMDE.arglistToJvm(java_args) + returnType;
   }

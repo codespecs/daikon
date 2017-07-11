@@ -14,6 +14,10 @@ class WeightedNodePath : // 1142/- obj/class samples
     return: 
     parameter #0 :  // node
     parameter #1 : @Nullable  // path
+  method <init>(LMapQuick/WeightedNode;LMapQuick/;)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // node
+    parameter #1 :  // path
   method cost()D : // 103 samples
     return: 
   method elements()Ljava/util/Iterator; : // 84 samples
@@ -28,6 +32,9 @@ class WeightedNodePath : // 1142/- obj/class samples
     return: 
     parameter #0 :  // node
   method extend(Ljava/lang/Object;)LMapQuick/Path; : // 128 samples
+    return: 
+    parameter #0 :  // o
+  method extend(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
     return: 
     parameter #0 :  // o
   method hashCode()I : // 32 samples

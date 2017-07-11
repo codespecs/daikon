@@ -892,12 +892,26 @@ public class PptRelation implements Serializable {
       }
 
       // if an exitNN point, parent is combined exit point
-      if (ppt.is_subexit()) {
+      if (ppt.is_subexit() && pname.isExitPoint()) {
         PptTopLevel parent = all_ppts.get(pname.makeExit());
-        if (parent != null) rels.add(newCombinedExitExitNNRel(parent, ppt));
+        if (parent != null) {
+          rels.add(newCombinedExitExitNNRel(parent, ppt));
+        }
 
+        // if an throw[s] point, parent is combined Exception point
+      } else if (ppt.is_subexit() && pname.isExceptionPoint()) {
+        PptTopLevel parent = all_ppts.get(pname.makeThrowExit());
+        if (parent != null) {
+          rels.add(newCombinedExitExitNNRel(parent, ppt));
+        }
         // Connect combined exit points to enter points over orig variables
       } else if (ppt.is_combined_exit()) {
+        PptTopLevel enter = all_ppts.get(pname.makeEnter());
+        if (enter != null) {
+          rels.add(PptRelation.newEnterExitRel(enter, ppt));
+        }
+        // Connect combined exception points to enter points over orig variables
+      } else if (ppt.is_combined_exception()) {
         PptTopLevel enter = all_ppts.get(pname.makeEnter());
         if (enter != null) {
           rels.add(PptRelation.newEnterExitRel(enter, ppt));

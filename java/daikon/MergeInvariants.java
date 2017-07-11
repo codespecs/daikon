@@ -268,12 +268,12 @@ public final class MergeInvariants {
     debugProgress.fine("Building hierarchy between leaves of the maps");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
-      // Skip everything that is not a final exit point
-      if (!ppt.ppt_name.isExitPoint()) {
+      // Skip everything that is not a final exit or exception point
+      if (!ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isExceptionPoint()) {
         assert ppt.children.size() > 0 : ppt;
         continue;
       }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
+      if (ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isCombinedThrowPoint()) {
         assert ppt.children.size() > 0 : ppt;
         continue;
       }
@@ -380,8 +380,14 @@ public final class MergeInvariants {
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-      if (!ppt.ppt_name.isExitPoint()) continue;
-      if (ppt.ppt_name.isCombinedExitPoint()) continue;
+
+      if (!ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isExceptionPoint()) {
+        continue;
+      }
+      if (ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isCombinedThrowPoint()) {
+        continue;
+      }
+
       ppt.children.clear();
       for (PptConditional cond : ppt.cond_iterable()) {
         cond.children.clear();

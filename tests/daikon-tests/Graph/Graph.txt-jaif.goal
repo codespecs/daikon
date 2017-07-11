@@ -49,10 +49,20 @@ class Graph : // 5621/- obj/class samples
     return: 
     parameter #0 :  // from
     parameter #1 :  // to
+  method addEdge(Ljava/lang/Object;Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // from
+    parameter #1 :  // to
   method addNode(Ljava/lang/Object;)V : // 82 samples
     return: 
     parameter #0 :  // node
+  method addNode(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // node
   method adjTo(Ljava/lang/Object;)Ljava/util/Set; : // 528 samples
+    return: 
+    parameter #0 :  // node
+  method adjTo(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
     return: 
     parameter #0 :  // node
   method checkRep()V : // 1223 samples

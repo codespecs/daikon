@@ -14,9 +14,11 @@ SRC_FILES = DataStructures/Comparable.java \
 			DataStructures/Overflow.java \
 			DataStructures/StackAr.java \
 			DataStructures/StackArTester.java \
+			DataStructures/StackArTesterException.java \
 			DataStructures/Underflow.java
 CLASS_FILES = $(subst .java,.class,$(SRC_FILES))
 TARGET_ARGS = DataStructures.StackArTester
+TARGET_ARGSE = DataStructures.StackArTesterException
 DAIKON_ARGS = --no_text_output --no_show_progress --config config.txt --config_option daikon.Debug.show_stack_trace=true -o $@
 CHICORY     = $(DAIKONDIR)/java/ChicoryPremain.jar
 PREMAIN		= $(CHICORY)
@@ -33,7 +35,8 @@ ifeq (cygwin,$(OSTYPE))
 endif
 
 
-TESTS		= online pptsel pptomit nesting stdvis varomit samples misc
+TESTS = online pptsel pptomit nesting stdvis varomit samples misc \
+	exception exceptionSel exceptionOmit
 
 # This is the working directory, but not necessarily the directory in
 # which this Makefile is found.
@@ -82,6 +85,20 @@ misc.inv.gz : $(CLASS_FILES) $(CHICORY)
 	java -cp $(CP) daikon.Chicory --purity-file=StackAr.pure \
 	--premain=$(PREMAIN) --heap_size=100m \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+
+exception.inv.gz : $(CLASS_FILES) $(CHICORY)
+	java -cp $(CP) daikon.Chicory --exception-handling \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
+
+exceptionOmit.inv.gz : $(CLASS_FILES) $(CHICORY)
+	java -cp $(CP) daikon.Chicory --exception-handling \
+	  --ppt-omit-pattern 'push|pop' \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
+
+exceptionSel.inv.gz : $(CLASS_FILES) $(CHICORY)
+	java -cp $(CP) daikon.Chicory --exception-handling \
+	  --ppt-select-pattern 'push|pop' \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
 
 %.daikon.diff : %.inv.gz %.inv.txt.goal
 	java -cp $(CP) daikon.PrintInvariants $< > $*.inv.txt

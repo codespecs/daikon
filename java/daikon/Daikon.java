@@ -1591,7 +1591,12 @@ public final class Daikon {
 
       PptTopLevel exitnn_ppt = ppt;
       PptName exitnn_name = exitnn_ppt.ppt_name;
-      PptName exit_name = ppt.ppt_name.makeExit();
+      PptName exit_name;
+      if (!exitnn_name.isThrowPoint()) {
+        exit_name = ppt.ppt_name.makeExit();
+      } else {
+        exit_name = ppt.ppt_name.makeThrowExit();
+      }
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
       if (debugInit.isLoggable(Level.FINE)) {
@@ -1678,7 +1683,7 @@ public final class Daikon {
    * EXIT/EXITnn.
    */
   private static void create_orig_vars(PptTopLevel exit_ppt, PptMap ppts) {
-    if (!exit_ppt.ppt_name.isExitPoint()) {
+    if (!exit_ppt.ppt_name.isExitPoint() && !exit_ppt.ppt_name.isExceptionPoint()) {
       if (VarInfo.assertionsEnabled()) {
         for (VarInfo vi : exit_ppt.var_infos) {
           try {
@@ -2244,8 +2249,8 @@ public final class Daikon {
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
       if (p.ppt_name.isCombinedExitPoint()
+          || p.ppt_name.isCombinedThrowPoint()
           || p.ppt_name.isEnterPoint()
-          || p.ppt_name.isThrowsPoint()
           || p.ppt_name.isObjectInstanceSynthetic()
           || p.ppt_name.isClassStaticSynthetic()) {
         return;

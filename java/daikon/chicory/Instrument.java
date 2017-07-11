@@ -27,6 +27,20 @@ import org.checkerframework.dataflow.qual.*;
 @SuppressWarnings("nullness")
 class Instrument extends StackMapUtils implements ClassFileTransformer {
 
+  public static Map<Type, Byte> STACKMAP_TYPE = new HashMap<Type, Byte>();
+
+  static {
+    STACKMAP_TYPE.put(Type.INT, Const.ITEM_Integer);
+    STACKMAP_TYPE.put(Type.BOOLEAN, Const.ITEM_Integer);
+    STACKMAP_TYPE.put(Type.BYTE, Const.ITEM_Integer);
+    STACKMAP_TYPE.put(Type.CHAR, Const.ITEM_Integer);
+    STACKMAP_TYPE.put(Type.DOUBLE, Const.ITEM_Double);
+    STACKMAP_TYPE.put(Type.FLOAT, Const.ITEM_Float);
+    STACKMAP_TYPE.put(Type.LONG, Const.ITEM_Long);
+    STACKMAP_TYPE.put(Type.SHORT, Const.ITEM_Integer);
+    STACKMAP_TYPE.put(Type.VOID, Const.ITEM_Integer);
+  }
+
   /** the index of this method into SharedData.methods */
   int cur_method_info_index = 0;
 
@@ -505,6 +519,9 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           SharedData.methods.add(mi);
         }
 
+        // Remember the start of the original Code.
+        InstructionHandle try_start = il.getStart();
+
         // Add nonce local to matchup enter/exits
         String entry_ppt_name =
             DaikonWriter.methodEntryName(
@@ -523,7 +540,9 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
         Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
         Iterator<Integer> exitIter = mi.exit_locations.iterator();
+        Iterator<Integer> throwIter = mi.throw_locations.iterator();
 
+        List<InstructionHandle> throw_ils = new ArrayList<InstructionHandle>();
         // Loop through each instruction looking for the return(s)
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
           Instruction inst = ih.getInstruction();
@@ -531,6 +550,13 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           // If this is a return instruction, insert method exit instrumentation
           InstructionList new_il =
               add_return_instrumentation(fullClassName, inst, context, shouldIncIter, exitIter);
+
+          // If not Return maybe it is an Throw
+          if (new_il == null) {
+            new_il =
+                add_throw_instrumentation(fullClassName, inst, context, shouldIncIter, throwIter);
+            if (new_il != null) throw_ils.add(ih);
+          }
 
           // Remember the next instruction to process
           InstructionHandle next_ih = ih.getNext();
@@ -590,6 +616,198 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
         // Update the Uninitialized_variable_info offsets before
         // we write out the new StackMapTable.
         process_uninitialized_variable_info(il, false);
+
+        // Insert the try-catch-block to catch delegated Exceptions
+        if (Chicory.exception_handling) {
+          print_stack_map_table("Final before Chicory.exception_handling");
+          // Remember the end of the original Code.
+          InstructionHandle try_end = il.getEnd();
+          InstructionList catch_il = add_tryCatch_instrumentation(fullClassName, context);
+          // Is the method the constructor?
+          if (mg.getName().equals("<init>")) {
+            // first command must be super (implicit or direct)
+            if (try_start.getNext().getInstruction().getOpcode() == Const.INVOKESPECIAL) {
+              try_start = try_start.getNext().getNext();
+              //                //find last putfield
+              //                InstructionHandle endOfConstruct = null;
+              //                // Loop through each instruction looking for the putfield
+              //                for (InstructionHandle tmpRun = try_start; tmpRun != null; ) {
+              //                    Short tmpCode = tmpRun.getInstruction().getOpcode();
+              //                    if(tmpCode == Const.PUTFIELD || tmpCode == Const.PUTSTATIC){
+              //                        endOfConstruct = tmpRun;
+              //                    }
+              //                    tmpRun = tmpRun.getNext();
+              //                }
+              //                if(endOfConstruct != null){
+              //                    try_start = endOfConstruct.getNext();
+              //                }
+            } else {
+              catch_il = null;
+            }
+          }
+
+          if (catch_il != null) {
+            try_start = try_start == null ? il.getStart() : try_start;
+            // Remember the Size of the OriginalCode, to calculate the Offset in the StackMap
+            int tagetIS = il.getByteCode().length;
+            InstructionHandle handler = il.append(try_end, catch_il);
+
+            // Set the gaps in the ExceptionTable for Throw
+            // ignore throw-Commands in the try-catch-block to not catch them and
+            // trace/log them twice
+            if (!throw_ils.isEmpty()) {
+              InstructionHandle run_start = try_start;
+              for (InstructionHandle run_ih : throw_ils) {
+                mg.addExceptionHandler(
+                    run_start,
+                    run_ih.getPrev(),
+                    handler,
+                    ObjectType.getInstance("java.lang.Throwable"));
+                run_start = run_ih.getNext();
+              }
+              if (!run_start.equals(handler) || run_start.getPosition() >= 0)
+                mg.addExceptionHandler(
+                    run_start, try_end, handler, ObjectType.getInstance("java.lang.Throwable"));
+            } else {
+              mg.addExceptionHandler(
+                  try_start, try_end, handler, ObjectType.getInstance("java.lang.Throwable"));
+            }
+
+            // ADD StackMapEntry for the handle-block
+            StackMapEntry[] new_map = new StackMapEntry[stack_map_table.length + 1];
+            StackMapType stackItem_type =
+                new StackMapType(
+                    Const.ITEM_Object,
+                    pool.addClass("java.lang.Throwable"),
+                    pool.getConstantPool());
+            StackMapType[] stackItem_types = {stackItem_type};
+
+            // The new handle-block will require a new StackMap entry.
+            // This entry needs to include information about the local
+            // stack items.  To do this, we need to process all the
+            // StackMap entries prior to the handle-block to calculate
+            // the localItem state for the new StackMap entry.
+            Stack<StackMapType> localItems_types = new Stack<StackMapType>();
+
+            // Start with Parameters as locals
+            int newLocalCnt = mg.getArgumentNames().length;
+            // ADD THIS
+            if (!mg.isStatic()) {
+              newLocalCnt++;
+              localItems_types.push(
+                  new StackMapType(
+                      Const.ITEM_Object, pool.addClass(mg.getClassName()), pool.getConstantPool()));
+            }
+            // ADD PARAMETERS
+            for (int tt = 0; tt < mg.getArgumentTypes().length; tt++) {
+              Type runType = mg.getArgumentTypes()[tt];
+              // if(!runType.getClass().equals(ObjectType.class) ){ //&& !runType.getClass().equals(BasicType.class)
+              //   continue;
+              // }
+              if (runType.getClass().equals(BasicType.class)) {
+                Byte tmpTag = STACKMAP_TYPE.get(runType);
+                if (tmpTag == null) {
+                  // ERROR
+                  continue;
+                }
+                localItems_types.push(new StackMapType(tmpTag, -1, pool.getConstantPool()));
+                continue;
+              }
+              localItems_types.push(
+                  new StackMapType(
+                      Const.ITEM_Object,
+                      pool.addClass(runType.getSignature()),
+                      pool.getConstantPool()));
+            }
+
+            boolean fullFrameFound = false;
+            // Keep track of the count of locals
+            int runLocalCnt = newLocalCnt;
+            int offset = 0;
+
+            // traverse the stackframe table and create the stack for the new entry.
+            for (int j = 0; j < stack_map_table.length; j++) {
+              StackMapEntry runSME = stack_map_table[j];
+              if ((offset - 1) <= try_start.getPosition()) {
+                newLocalCnt = runLocalCnt;
+              }
+
+              int runFrameType = runSME.getFrameType();
+              if (runFrameType >= Const.APPEND_FRAME && runFrameType <= Const.APPEND_FRAME_MAX) {
+                int addCnt = runFrameType - (Const.APPEND_FRAME - 1);
+                localItems_types.addAll(Arrays.asList(runSME.getTypesOfLocals()));
+                runLocalCnt += addCnt;
+              }
+
+              if (runFrameType >= Const.CHOP_FRAME && runFrameType <= Const.CHOP_FRAME_MAX) {
+                int delCnt = (Const.CHOP_FRAME_MAX + 1) - runFrameType;
+                for (int k = 0; k < delCnt; k++) {
+                  localItems_types.pop();
+                }
+                runLocalCnt -= delCnt;
+              }
+
+              if (runFrameType == Const.FULL_FRAME) {
+                localItems_types.clear();
+                localItems_types.addAll(Arrays.asList(runSME.getTypesOfLocals()));
+                runLocalCnt = localItems_types.size();
+                fullFrameFound = true;
+              }
+
+              offset += runSME.getByteCodeOffset() + 1;
+              new_map[j] = runSME;
+            }
+            int goalOffset = tagetIS - offset;
+            //            Are the locals the same?
+            //            create SAME_LOCALS_1_STACK_ITEM_FRAME
+            if (newLocalCnt == runLocalCnt && !mg.getName().equals("<init>")) {
+              int tmpTag =
+                  (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset)
+                          > Const.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX
+                      ? Const.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED
+                      : (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset);
+              new_map[stack_map_table.length] =
+                  new StackMapEntry(
+                      tmpTag, goalOffset, null, stackItem_types, pool.getConstantPool());
+              //        new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
+              //            null, 1, stackItem_types, pool.getConstantPool());
+            } else {
+              if (localItems_types.size() >= newLocalCnt || mg.getName().equals("<init>")) {
+                // Create FULL-FRAME-Entry
+                int localsCnt = newLocalCnt;
+                while (localItems_types.size() > localsCnt) {
+                  localItems_types.pop();
+                }
+                StackMapType[] newlocalItems_types = new StackMapType[localsCnt];
+
+                newlocalItems_types = localItems_types.toArray(newlocalItems_types);
+
+                new_map[stack_map_table.length] =
+                    new StackMapEntry(
+                        Const.FULL_FRAME,
+                        goalOffset,
+                        newlocalItems_types,
+                        stackItem_types,
+                        pool.getConstantPool());
+              } else {
+                //ERROR but keep a valid Stackframe
+                // Need to find out if it happens
+                int tmpTag =
+                    (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset)
+                            > Const.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX
+                        ? Const.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED
+                        : (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset);
+                new_map[stack_map_table.length] =
+                    new StackMapEntry(
+                        tmpTag, goalOffset, null, stackItem_types, pool.getConstantPool());
+                //            new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
+                //                null, 1, stackItem_types, pool.getConstantPool());
+              }
+            }
+
+            stack_map_table = new_map;
+          }
+        }
 
         create_new_stack_map_attribute(mg);
 
@@ -701,6 +919,100 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
     il.append(call_enter_exit(c, "exit", exitIter.next()));
     return il;
+  }
+
+  /**
+   * Transforms Throw instructions to first assign the Exception to a local variable
+   * (exception__$trace2_val) and then do the return. Also, calls Runtime.throw() immediately before
+   * the return.
+   */
+  private /*@Nullable*/ InstructionList add_throw_instrumentation(
+      String fullClassName,
+      Instruction inst,
+      MethodContext c,
+      Iterator<Boolean> shouldIncIter,
+      Iterator<Integer> throwIter) {
+
+    //    if (Chicory.exception_handling)
+    //      return (null);
+
+    switch (inst.getOpcode()) {
+      case Const.ATHROW:
+        break;
+
+      default:
+        return (null);
+    }
+
+    debug_instrument.log("Found a throw%n");
+
+    if (!shouldIncIter.hasNext()) throw new RuntimeException("Not enough entries in shouldIncIter");
+
+    boolean shouldInclude = shouldIncIter.next();
+
+    if (!shouldInclude) return null;
+
+    Type type = Type.getType(Throwable.class);
+    InstructionList il = new InstructionList();
+    LocalVariableGen throw_loc = get_throw_local(c.mgen, type);
+    il.append(InstructionFactory.createDup(type.getSize()));
+    il.append(InstructionFactory.createStore(type, throw_loc.getIndex()));
+
+    if (!throwIter.hasNext())
+      throw new RuntimeException("Not enough exit locations in the exitIter");
+
+    il.append(call_enter_exit(c, "exitThrow", throwIter.next()));
+    return (il);
+  }
+
+  /**
+   * Transforms Throw instructions to first assign the Exception to a local variable
+   * (exception__$trace2_val) and then do the return. Also, calls Runtime.throw() immediately before
+   * the return.
+   */
+  private /*@Nullable*/ InstructionList add_tryCatch_instrumentation(
+      String fullClassName, MethodContext c) {
+
+    //  if (c.mgen.getName().contains("init>")
+    //      || c.mgen.getName().contentEquals("<cinit>"))
+    //    return (null);
+
+    Type type = Type.getType(Throwable.class);
+    InstructionList il = new InstructionList();
+    LocalVariableGen throw_loc = get_throw_local(c.mgen, type);
+    il.append(InstructionFactory.createStore(type, throw_loc.getIndex()));
+
+    il.append(call_enter_exit(c, "exitThrow", -1));
+    il.append(InstructionFactory.createLoad(type, throw_loc.getIndex()));
+    il.append(new ATHROW());
+    return (il);
+  }
+
+  /**
+   * Returns the local variable used to store the Exception thrown. If it is not present, creates it
+   * with the Exception type.
+   */
+  private LocalVariableGen get_throw_local(MethodGen mgen, /*@NotNull*/ Type return_type) {
+    // Find the local used for the return value
+    LocalVariableGen return_local = null;
+    for (LocalVariableGen lv : mgen.getLocalVariables()) {
+      if (lv.getName().equals("exception__$trace2_val")) {
+        return_local = lv;
+        break;
+      }
+    }
+
+    // If the variable was found, they must match
+    if (return_local != null)
+      assert (return_type.equals(return_local.getType()))
+          : " return_type = " + return_type + "current type = " + return_local.getType();
+
+    if (return_local == null) {
+      // log ("Adding Exception local return__$trace2_val");
+      return_local = mgen.addLocalVariable("exception__$trace2_val", return_type, null, null);
+    }
+
+    return (return_local);
   }
 
   /**
@@ -1010,14 +1322,34 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
       il.append(ifact.createConstant(line));
     }
 
+    // If this is an throwExit, push the Exception and line number.
+    // The Exception value
+    // is stored in the local "exception__$trace2_val"
+    if (method_name.equals("exitThrow")) {
+      Type exception_type = Type.getType(Throwable.class);
+      LocalVariableGen throw_local = get_throw_local(mgen, exception_type);
+      il.append(InstructionFactory.createLoad(exception_type, throw_local.getIndex()));
+      // push line number
+      // System.out.println(c.mgen.getName() + " --> " + line);
+      il.append(ifact.createConstant(line));
+    }
+
     // Call the specified method
     Type[] method_args;
     if (method_name.equals("exit")) {
       method_args =
           new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.OBJECT, Type.INT};
+
+    } else if (method_name.equals("exitThrow")) {
+      method_args =
+          new Type[] {
+            Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.getType(Throwable.class), Type.INT
+          };
+
     } else {
       method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
     }
+
     il.append(
         c.ifact.createInvoke(
             runtime_classname, method_name, Type.VOID, method_args, Const.INVOKESTATIC));
@@ -1119,7 +1451,6 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
   // creates a MethodInfo struct corresponding to mgen
   @SuppressWarnings("unchecked")
   private /*@Nullable*/ MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen) {
-
     // Get the argument names for this method
     String[] arg_names = mgen.getArgumentNames();
     LocalVariableGen[] lvs = mgen.getLocalVariables();
@@ -1187,8 +1518,10 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
     // Loop through each instruction and find the line number for each
     // return opcode
     List<Integer> exit_locs = new ArrayList<Integer>();
+    // throw opcode
+    List<Integer> throw_locs = new ArrayList<Integer>();
 
-    // tells whether each exit loc in the method is included or not (based on filters)
+    // tells whether each exit/throw loc in the method is included or not (based on filters)
     List<Boolean> isIncluded = new ArrayList<Boolean>();
 
     // debug_transform.log("Looking for exit points in %s%n", mgen.getName());
@@ -1246,7 +1579,31 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           } else {
             isIncluded.add(false);
           }
+          break;
 
+        case Const.ATHROW:
+          // only do incremental lines if we don't have the line generator
+          if (line_number == last_line_number && foundLine == false) {
+            line_number++;
+          }
+          last_line_number = line_number;
+
+          if (!shouldFilter(
+              class_info.class_name,
+              mgen.getName(),
+              DaikonWriter.methodThrowName(
+                  class_info.class_name,
+                  getArgTypes(mgen),
+                  mgen.toString(),
+                  mgen.getName(),
+                  line_number))) {
+            shouldInclude = true;
+            throw_locs.add(new Integer(line_number));
+
+            isIncluded.add(true);
+          } else {
+            isIncluded.add(false);
+          }
           break;
 
         default:
@@ -1256,7 +1613,13 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
     if (shouldInclude) {
       return new MethodInfo(
-          class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
+          class_info,
+          mgen.getName(),
+          arg_names,
+          arg_type_strings,
+          exit_locs,
+          throw_locs,
+          isIncluded);
     } else {
       return null;
     }

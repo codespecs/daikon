@@ -42,7 +42,7 @@ everything-%: quick-% nonquick-%
 	@echo ${HR}
 quick-%: SQD-% polycalc-% special-cases-% siemens-%
 	@echo ${HR}
-nonquick-%: dsaa-% mapquick-% javautil-% 6170-% large-% new-%
+nonquick-%: dsaa-% mapquick-% javautil-% 6170-% large-% new-% newRar-%
 	@echo ${HR}
 
 # Canonical groupings
@@ -66,6 +66,8 @@ javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
 new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-%
+	@echo ${HR}
+newRar-%: do-ExceptionHandling-%
 	@echo ${HR}
 
 # Extra groupings

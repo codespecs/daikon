@@ -340,6 +340,7 @@ make-check-nullness-raw-output.txt*
 make-check-nullness-fbc-output.txt*
 tests/chicory-tests/option-tests/DataStructures
 tests/chicory-tests/option-tests/StackArTester.dtrace.gz
+tests/chicory-tests/option-tests/StackArTesterException.dtrace.gz
 tests/dyncomp-tests/Apples/Apples
 tests/dyncomp-tests/DerivedComparability/DerivedComparability
 tests/dyncomp-tests/FloatTest/FloatTest

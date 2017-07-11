@@ -3,7 +3,7 @@ annotation @Nullable:
 annotation @NonNull:
 
 package DataStructures:
-class StackAr : // 5193/- obj/class samples
+class StackAr : // 5195/- obj/class samples
   field theArray :  // java.lang.Object[]
   field topOfStack :  // int
   method <init>(I)V : // 29 samples
@@ -17,7 +17,12 @@ class StackAr : // 5193/- obj/class samples
     return: 
   method pop()V : // 48 samples
     return: 
+  method pop()V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
   method push(Ljava/lang/Object;)V : // 199 samples
+    return: 
+    parameter #0 :  // x
+  method push(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 1 samples
     return: 
     parameter #0 :  // x
   method top()Ljava/lang/Object; : // 431 samples

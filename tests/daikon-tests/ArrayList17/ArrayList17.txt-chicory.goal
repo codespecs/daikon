@@ -1,5 +1,5 @@
 // Declarations for javautil.ArrayList17
-// Declarations written Sun Nov 27 16:57:46 PST 2016
+// Declarations written Mon Jul 10 09:57:10 PDT 2017
 
 decl-version 2.0
 var-comparability none
@@ -139,6 +139,147 @@ variable initialCapacity
   dec-type int
   rep-type int
   flags is_param nomod
+  comparability 22
+
+ppt javautil.ArrayList17.ArrayList17(int):::THROW144
+ppt-type subexit
+parent parent javautil.ArrayList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.ArrayList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData
+  var-kind field elementData
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..]
+  var-kind array 
+  enclosing-var this.elementData
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.size
+  var-kind field size
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable initialCapacity
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
   comparability 22
 
 ppt javautil.ArrayList17.ArrayList17():::ENTER
@@ -1829,6 +1970,88 @@ variable return
   dec-type int
   rep-type int
   flags nomod
+  comparability 22
+
+ppt javautil.ArrayList17.hugeCapacity(int):::THROW249
+ppt-type subexit
+parent parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable minCapacity
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
   comparability 22
 
 ppt javautil.ArrayList17.size():::ENTER
@@ -3988,6 +4211,141 @@ variable return.getClass().getName()
   dec-type java.lang.Class
   rep-type java.lang.String
   function-args return
+  flags nomod synthetic classname non_null
+  comparability 22
+
+ppt javautil.ArrayList17.clone():::THROW341
+ppt-type subexit
+parent parent javautil.ArrayList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.ArrayList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData
+  var-kind field elementData
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..]
+  var-kind array 
+  enclosing-var this.elementData
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.size
+  var-kind field size
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
   flags nomod synthetic classname non_null
   comparability 22
 
@@ -8557,6 +8915,147 @@ variable index
   flags is_param nomod
   comparability 22
 
+ppt javautil.ArrayList17.rangeCheck(int):::THROW637
+ppt-type subexit
+parent parent javautil.ArrayList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.ArrayList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData
+  var-kind field elementData
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..]
+  var-kind array 
+  enclosing-var this.elementData
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.size
+  var-kind field size
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable index
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
+  comparability 22
+
 ppt javautil.ArrayList17.rangeCheckForAdd(int):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList17:::OBJECT 1
@@ -8811,6 +9310,147 @@ variable index
   dec-type int
   rep-type int
   flags is_param nomod
+  comparability 22
+
+ppt javautil.ArrayList17.rangeCheckForAdd(int):::THROW645
+ppt-type subexit
+parent parent javautil.ArrayList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.ArrayList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData
+  var-kind field elementData
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..]
+  var-kind array 
+  enclosing-var this.elementData
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.size
+  var-kind field size
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable index
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
   comparability 22
 
 ppt javautil.ArrayList17.outOfBoundsMsg(int):::ENTER
@@ -9929,6 +10569,161 @@ variable return
   flags nomod
   comparability 22
 
+ppt javautil.ArrayList17.batchRemove(java.util.Collection,\_boolean):::THROW719
+ppt-type subexit
+parent parent javautil.ArrayList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.ArrayList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData
+  var-kind field elementData
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..]
+  var-kind array 
+  enclosing-var this.elementData
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.size
+  var-kind field size
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable c
+  var-kind variable 
+  dec-type java.util.Collection
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var c
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags nomod synthetic classname non_null
+  comparability 22
+variable complement
+  var-kind variable 
+  dec-type boolean
+  rep-type boolean
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
+  comparability 22
+
 ppt javautil.ArrayList17.writeObject(java.io.ObjectOutputStream):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList17:::OBJECT 1
@@ -10183,6 +10978,147 @@ variable s
   dec-type java.io.ObjectOutputStream
   rep-type hashcode
   flags is_param nomod
+  comparability 22
+
+ppt javautil.ArrayList17.writeObject(java.io.ObjectOutputStream):::THROW748
+ppt-type subexit
+parent parent javautil.ArrayList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.ArrayList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData
+  var-kind field elementData
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..]
+  var-kind array 
+  enclosing-var this.elementData
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.size
+  var-kind field size
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable s
+  var-kind variable 
+  dec-type java.io.ObjectOutputStream
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
   comparability 22
 
 ppt javautil.ArrayList17.readObject(java.io.ObjectInputStream):::ENTER
@@ -10708,6 +11644,147 @@ variable return.getClass().getName()
   dec-type java.lang.Class
   rep-type java.lang.String
   function-args return
+  flags nomod synthetic classname non_null
+  comparability 22
+
+ppt javautil.ArrayList17.listIterator(int):::THROW792
+ppt-type subexit
+parent parent javautil.ArrayList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.ArrayList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData
+  var-kind field elementData
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..]
+  var-kind array 
+  enclosing-var this.elementData
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.elementData[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.size
+  var-kind field size
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::OBJECT 1
+variable index
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
   flags nomod synthetic classname non_null
   comparability 22
 
@@ -11688,6 +12765,288 @@ variable size
   flags is_param nomod
   comparability 22
 
+ppt javautil.ArrayList17.subListRangeCheck(int,\_int,\_int):::THROW962
+ppt-type subexit
+parent parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable fromIndex
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable toIndex
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable size
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
+  comparability 22
+
+ppt javautil.ArrayList17.subListRangeCheck(int,\_int,\_int):::THROW964
+ppt-type subexit
+parent parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable fromIndex
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable toIndex
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable size
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
+  comparability 22
+
+ppt javautil.ArrayList17.subListRangeCheck(int,\_int,\_int):::THROW966
+ppt-type subexit
+parent parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.serialVersionUID
+  var-kind variable 
+  dec-type long
+  rep-type int
+  constant 8683452581122892189
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA
+  var-kind variable 
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  var-kind array 
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args javautil.ArrayList17.EMPTY_ELEMENTDATA[]
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable javautil.ArrayList17.MAX_ARRAY_SIZE
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 2147483639
+  flags nomod
+  comparability 22
+  parent javautil.ArrayList17:::CLASS 1
+variable fromIndex
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable toIndex
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable size
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
+  comparability 22
+
 ppt javautil.ArrayList17:::CLASS
 ppt-type class
 variable javautil.ArrayList17.serialVersionUID
@@ -12027,6 +13386,67 @@ variable element.getClass().getName()
   flags nomod synthetic classname non_null
   comparability 22
 
+ppt javautil.AbstractList17.set(int,\_java.lang.Object):::THROW134
+ppt-type subexit
+parent parent javautil.AbstractList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.AbstractList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable index
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable element
+  var-kind variable 
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable element.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var element
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args element
+  flags nomod synthetic classname non_null
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
+  comparability 22
+
 ppt javautil.AbstractList17.add(int,\_java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList17:::OBJECT 1
@@ -12075,6 +13495,67 @@ variable element.getClass().getName()
   flags nomod synthetic classname non_null
   comparability 22
 
+ppt javautil.AbstractList17.add(int,\_java.lang.Object):::THROW150
+ppt-type subexit
+parent parent javautil.AbstractList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.AbstractList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable index
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable element
+  var-kind variable 
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable element.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var element
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args element
+  flags nomod synthetic classname non_null
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
+  comparability 22
+
 ppt javautil.AbstractList17.remove(int):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList17:::OBJECT 1
@@ -12107,6 +13588,53 @@ variable index
   dec-type int
   rep-type int
   flags is_param nomod
+  comparability 22
+
+ppt javautil.AbstractList17.remove(int):::THROW163
+ppt-type subexit
+parent parent javautil.AbstractList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.AbstractList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable index
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
   comparability 22
 
 ppt javautil.AbstractList17.indexOf(java.lang.Object):::ENTER
@@ -13414,6 +14942,53 @@ variable index
   dec-type int
   rep-type int
   flags is_param nomod
+  comparability 22
+
+ppt javautil.AbstractList17.rangeCheckForAdd(int):::THROW607
+ppt-type subexit
+parent parent javautil.AbstractList17:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type javautil.AbstractList17
+  rep-type hashcode
+  flags is_param nomod non_null
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags nomod synthetic classname non_null
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable this.modCount
+  var-kind field modCount
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent javautil.AbstractList17:::OBJECT 1
+variable index
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param nomod
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags nomod synthetic classname non_null
   comparability 22
 
 ppt javautil.AbstractList17.outOfBoundsMsg(int):::ENTER

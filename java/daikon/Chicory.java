@@ -117,6 +117,12 @@ public class Chicory {
   @Option("Number of calls after which sampling will begin")
   public static int sample_start = 0;
 
+  @Option("Add all uncaught exceptions to the ppt hierarchy")
+  public static boolean exception_handling = false;
+
+  @Option("Enable remote debug")
+  public static boolean remote_debug = false;
+
   /** Daikon port number. Daikon writes this to stdout when it is started in online mode. */
   private static int daikon_port = -1;
 
@@ -138,8 +144,6 @@ public class Chicory {
 
   /** flag to use if we want to turn on the static initialization checks */
   public static final boolean checkStaticInit = true;
-
-  private static final boolean RemoteDebug = false;
 
   /** Flag to initiate a purity analysis and use results to create add vars */
   private static boolean purityAnalysis = false;
@@ -339,9 +343,10 @@ public class Chicory {
     List<String> cmdlist = new ArrayList<String>();
     cmdlist.add("java");
 
-    if (RemoteDebug) {
+    if (remote_debug) {
       //-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
-      cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
+      cmdlist.add("-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y");
+      //cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
       //cmdlist.add("-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
     }
 
@@ -460,6 +465,11 @@ public class Chicory {
               heap_size, cp, daikon_args, output_dir, dtrace_file);
     }
 
+    if (remote_debug) {
+      cmdstr =
+          cmdstr.replace(
+              "java", "java -agentlib:jdwp=transport=dt_socket,server=y,address=8001,suspend=y");
+    }
     //System.out.println("daikon command is " + daikon_cmd);
     //System.out.println("daikon command cmdstr " + cmdstr);
 

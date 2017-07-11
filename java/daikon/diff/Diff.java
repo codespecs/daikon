@@ -663,6 +663,8 @@ public final class Diff {
         return true;
       } else if (ppt.ppt_name.isCombinedExitPoint()) {
         return true;
+      } else if (ppt.ppt_name.isCombinedThrowPoint()) {
+        return true;
       } else {
         return false;
       }

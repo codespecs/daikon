@@ -1,0 +1,162 @@
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions:::OBJECT
+this has only one value
+this.classVar >= 2
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::EXIT
+this.classVar == 42
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this.classVar == parameter
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT23
+this.classVar == return
+return == orig(this.classVar)
+return == orig(parameter)
+return == 0  (mod 2)
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT25
+this.classVar == 1  (mod 2)
+return == this.classVar**2
+this.classVar < return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+(this.classVar == 0  (mod 2))  <==>  (this.classVar == return)
+(this.classVar == 0  (mod 2))  ==>  (return == 0  (mod 2))
+(this.classVar == 1  (mod 2))  <==>  (this.classVar < return)
+(this.classVar == 1  (mod 2))  ==>  (return == this.classVar**2)
+return % this.classVar == 0
+this.classVar <= return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROWSCOMBINED
+this == orig(this)
+this.classVar == parameter
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+exception != null
+exception.getClass().getName() == java.lang.Exception.class
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this.classVar == parameter
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT35
+this.classVar == return
+return == orig(this.classVar)
+return == orig(parameter)
+return == 0  (mod 2)
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this.classVar == 1  (mod 2)
+return == this.classVar**2
+this.classVar < return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+(this.classVar == 0  (mod 2))  <==>  (this.classVar == return)
+(this.classVar == 0  (mod 2))  ==>  (return == 0  (mod 2))
+(this.classVar == 1  (mod 2))  <==>  (this.classVar < return)
+(this.classVar == 1  (mod 2))  ==>  (return == this.classVar**2)
+return % this.classVar == 0
+this.classVar <= return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWSCOMBINED
+this == orig(this)
+this.classVar == parameter
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+exception.getClass().getName() == java.lang.ArithmeticException.class
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this.classVar == parameter
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT46
+this.classVar <= return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+return == 0
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+(return == 0)  ==>  (return is a pointer)
+return >= 0
+return % this.classVar == 0
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this.classVar == parameter
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT84
+this.classVar == return
+return == orig(this.classVar)
+return == orig(parameter)
+return == 0  (mod 2)
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this.classVar == 1  (mod 2)
+return == this.classVar**2
+this.classVar < return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+(this.classVar == 0  (mod 2))  <==>  (this.classVar == return)
+(this.classVar == 0  (mod 2))  ==>  (return == 0  (mod 2))
+(this.classVar == 1  (mod 2))  <==>  (this.classVar < return)
+(this.classVar == 1  (mod 2))  ==>  (return == this.classVar**2)
+return % this.classVar == 0
+this.classVar <= return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
+exception.getClass().getName() == java.lang.Exception.class
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+exception.getClass().getName() == java.lang.ArithmeticException.class
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWSCOMBINED
+this == orig(this)
+this.classVar == parameter
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+exception.getClass().getName() is printable
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this.classVar == parameter
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT102
+this.classVar == return
+return == orig(this.classVar)
+return == orig(parameter)
+return == 0  (mod 2)
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this.classVar == 1  (mod 2)
+return == this.classVar**2
+this.classVar < return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+(this.classVar == 0  (mod 2))  <==>  (this.classVar == return)
+(this.classVar == 0  (mod 2))  ==>  (return == 0  (mod 2))
+(this.classVar == 1  (mod 2))  <==>  (this.classVar < return)
+(this.classVar == 1  (mod 2))  ==>  (return == this.classVar**2)
+return % this.classVar == 0
+this.classVar <= return
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW99
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROWSCOMBINED
+this == orig(this)
+this.classVar == parameter
+this.classVar == orig(this.classVar)
+this.classVar == orig(parameter)
+exception.getClass().getName() == java.lang.Exception.class

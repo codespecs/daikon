@@ -274,8 +274,30 @@ public class PptName implements Serializable {
   /** @return true iff this name refers to an abrupt completion point */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/
+  public boolean isThrowPoint() {
+    return (point != null) && point.startsWith(FileIO.throw_suffix);
+  }
+
+  /** @return true iff this name refers to an abrupt completion point */
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
+  /*@Pure*/
   public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
+  }
+
+  /** @return true iff this name refers to a procedure exception point */
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
+  /*@Pure*/
+  public boolean isExceptionPoint() {
+    return (point != null)
+        && (point.startsWith(FileIO.throw_suffix) || point.equals(FileIO.exception_suffix));
+  }
+
+  /** @return true iff this name refers to a combined (synthetic) procedure exception point */
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
+  /*@Pure*/
+  public boolean isCombinedThrowPoint() {
+    return (point != null) && point.equals(FileIO.exception_suffix);
   }
 
   /** @return true iff this name refers to a combined (synthetic) procedure exit point */
@@ -378,9 +400,9 @@ public class PptName implements Serializable {
     // We may wish to have a different exceptional than non-exceptional
     // entry point; in particular, if there was an exception, then perhaps
     // the precondition or object invariant was not met.
-    assert isExitPoint() : fullname;
+    assert isExitPoint() || isExceptionPoint() : fullname;
 
-    assert isExitPoint() || isThrowsPoint();
+    assert isExitPoint() || isExceptionPoint();
     return new PptName(cls, method, FileIO.enter_suffix);
   }
 
@@ -395,12 +417,22 @@ public class PptName implements Serializable {
   }
 
   /**
+   * Requires: this.isThrowPoint() || this.isEnterPoint()
+   *
+   * @return a name for the combined exit point
+   */
+  public PptName makeThrowExit() {
+    assert isThrowPoint() || isEnterPoint() : fullname;
+    return new PptName(cls, method, FileIO.exception_suffix);
+  }
+
+  /**
    * Requires: this.isExitPoint() || this.isEnterPoint()
    *
    * @return a name for the corresponding object invariant
    */
   public PptName makeObject() {
-    assert isExitPoint() || isEnterPoint() : fullname;
+    assert isExitPoint() || isEnterPoint() || isExceptionPoint() : fullname;
     return new PptName(cls, null, FileIO.object_suffix);
   }
 
@@ -410,7 +442,8 @@ public class PptName implements Serializable {
    * @return a name for the corresponding class-static invariant
    */
   public PptName makeClassStatic() {
-    assert isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic() : fullname;
+    assert isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic() || isExceptionPoint()
+        : fullname;
     return new PptName(cls, null, FileIO.class_static_suffix);
   }
 
