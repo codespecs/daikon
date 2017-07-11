@@ -936,12 +936,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
     //    if (Chicory.exception_handling)
     //      return (null);
 
-    switch (inst.getOpcode()) {
-      case Const.ATHROW:
-        break;
-
-      default:
-        return (null);
+    if (inst.getOpcode() != Const.ATHROW) {
+      return (null);
     }
 
     debug_instrument.log("Found a throw%n");
@@ -992,27 +988,27 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
    * Returns the local variable used to store the Exception thrown. If it is not present, creates it
    * with the Exception type.
    */
-  private LocalVariableGen get_throw_local(MethodGen mgen, /*@NotNull*/ Type return_type) {
-    // Find the local used for the return value
-    LocalVariableGen return_local = null;
+  private LocalVariableGen get_throw_local(MethodGen mgen, /*@NotNull*/ Type exception_type) {
+    // Find the local used for the exception value
+    LocalVariableGen exception_local = null;
     for (LocalVariableGen lv : mgen.getLocalVariables()) {
       if (lv.getName().equals("exception__$trace2_val")) {
-        return_local = lv;
+        exception_local = lv;
         break;
       }
     }
 
     // If the variable was found, they must match
-    if (return_local != null)
-      assert (return_type.equals(return_local.getType()))
-          : " return_type = " + return_type + "current type = " + return_local.getType();
+    if (exception_local != null)
+      assert (exception_type.equals(exception_local.getType()))
+          : " exception_type = " + exception_type + "current type = " + exception_local.getType();
 
-    if (return_local == null) {
-      // log ("Adding Exception local return__$trace2_val");
-      return_local = mgen.addLocalVariable("exception__$trace2_val", return_type, null, null);
+    if (exception_local == null) {
+      // log ("Adding Exception local exception__$trace2_val");
+      exception_local = mgen.addLocalVariable("exception__$trace2_val", exception_type, null, null);
     }
 
-    return (return_local);
+    return (exception_local);
   }
 
   /**
@@ -1560,7 +1556,6 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
             debug_instrument.log("Could not find line... at %d%n", line_number);
             line_number++;
           }
-
           last_line_number = line_number;
 
           if (!shouldFilter(
@@ -1584,6 +1579,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
         case Const.ATHROW:
           // only do incremental lines if we don't have the line generator
           if (line_number == last_line_number && foundLine == false) {
+            debug_instrument.log("Could not find line... at %d%n", line_number);
             line_number++;
           }
           last_line_number = line_number;
