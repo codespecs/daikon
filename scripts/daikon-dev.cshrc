@@ -51,7 +51,7 @@ setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
 # # Using ${INV}/plume-lib seems undesirable.  If a new version of plume-lib
 # # deprecates a method, then Daikon won't compile for developers; however,
 # # changing Daikon's source code would cause Daikon not to compile for ordinary
-# # users.  
+# # users.
 # # setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}:${INV}/plume-lib/java/junit-4.12.jar:${INV}/plume-lib/java/plume.jar
 # unsetenv DAIKON_LIBS
 

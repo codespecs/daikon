@@ -54,7 +54,7 @@ for (my $i = 0; $i <= $#dfile; $i++) {
         if ($global_name eq "") {
             ($global_name) = split (/\./, $line);
         }
-        if ($debug) {            
+        if ($debug) {
             print STDERR "found matching ppt: $line\n";
         }
         $exit_cnt++;

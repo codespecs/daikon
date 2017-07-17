@@ -217,7 +217,7 @@ fjalar/valgrind/Makefile.am:
 fjalar/valgrind/Makefile.in: fjalar/valgrind/Makefile.am
 	cd fjalar/valgrind && ./autogen.sh
 
-fjalar/valgrind/Makefile: fjalar/valgrind/Makefile.in 
+fjalar/valgrind/Makefile: fjalar/valgrind/Makefile.in
 	cd fjalar/valgrind && ./configure --prefix=`pwd`/inst
 
 .PHONY: kvasir
@@ -393,7 +393,7 @@ repository-test:
 	export DAIKONDIR=${MYTESTDIR}/daikon
 	export JAVA_HOME=/usr/lib/jvm/java
 	source ${DAIKONDIR}/scripts/daikon.bashrc
-	cd daikon && make 
+	cd daikon && make
 
 
 validate:

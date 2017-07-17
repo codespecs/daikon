@@ -258,7 +258,7 @@ sub deparse {
         # We're on the lookout for an OP whose next OP (roughly) is
         # $self->{'leavesub'}.
         my $o = $op;
-        $o = $o->next while !null($op->next) and 
+        $o = $o->next while !null($op->next) and
             $o->next->name =~ /^leave(loop|try)?$/;
         if (${$o->next} == ${$self->{'leavesub'}}) {
             $self->{'returns_count'}++ if $meth eq "pp_return";
@@ -715,7 +715,7 @@ sub pp_cond_expr {
         }
         ####
     }
-    return $head . join($cuddle, "", @elsifs) . $false; 
+    return $head . join($cuddle, "", @elsifs) . $false;
 }
 
 # Mostly unchanged
@@ -784,13 +784,13 @@ sub const {
 sub pp_const {
     my $self = shift;
     my($op, $cx) = @_;
- 
+
 # OPpCONST_ARYBASE removed from Perl > 5.10 (markro)
 #
 #   if ($op->private & OPpCONST_ARYBASE) {
 #       return '$[';
 #   }
-#    if ($op->private & OPpCONST_BARE) { # trouble with `=>' autoquoting 
+#    if ($op->private & OPpCONST_BARE) { # trouble with `=>' autoquoting
 #       return $self->const_sv($op)->PV;
 #    }
     my $sv = $self->const_sv($op);

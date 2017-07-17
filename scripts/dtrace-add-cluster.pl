@@ -94,7 +94,7 @@ if ($algorithm eq 'hierarchical' || $algorithm eq 'km') {
 }
 
 foreach my $dtrace_file (@dtrace_files) {
- 
+
   # need to run the DtraceNonceDoctor in order in order for
   # xmeans and possibly other clustering methods to work
   system_or_die ("java daikon.tools.DtraceNonceFixer $dtrace_file");
@@ -106,7 +106,7 @@ foreach my $dtrace_file (@dtrace_files) {
   }
 
 
- if ($dtrace_file =~ /\.gz$/) {  
+ if ($dtrace_file =~ /\.gz$/) {
     open (DTRACE_IN, "zcat $dtrace_file |") || &dieusage("couldn't open dtrace file $dtrace_file with zcat");
   } else {
     open (DTRACE_IN, $dtrace_file) || &dieusage("couldn't open dtrace file $dtrace_file");

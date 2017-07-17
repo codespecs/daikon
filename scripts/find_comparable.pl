@@ -4,8 +4,8 @@
 
 ## Looks for comparable variables in each ppt and prints them to separate
 ## files named with the program point.  Best executed in empty directory
-## 
-## Only ppts that have at least some variables that are comparable to 
+##
+## Only ppts that have at least some variables that are comparable to
 ## one another will be printed.
 
 use English;
@@ -55,7 +55,7 @@ for (my $i = 0; $i <= $#dfile; $i++) {
             next;
         }
         my $ppt = $line;
-        if ($debug) {            
+        if ($debug) {
             print STDERR "found matching ppt: $ppt\n";
         }
         $exit_cnt++;
