@@ -12,7 +12,7 @@ use Carp;
 
 my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom","assume", "nowarn");
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
-my %prefixes = 
+my %prefixes =
     (EVU => "/*@",   # Expressible Verified Unique
      EVR => "/**@",  # Expressible Verified Redundant
      ENU => "/*#",   # Expressible Unverified Unique

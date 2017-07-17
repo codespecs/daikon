@@ -2,7 +2,7 @@
 if [ -z "$DAIKONDIR" ]; then
     DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     echo "Warning: environment variable DAIKONDIR is not set; using $DAIKONDIR"
-fi 
+fi
 if [ ! -d "$DAIKONDIR/fjalar" ]
 then
     echo "Kvasir is not installed; to install it, run:    make -C \$DAIKONDIR fjalar"

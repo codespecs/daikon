@@ -18,7 +18,7 @@ my @dfile;
 
 #process arguments
 while (@ARGV) {
-    push @vars, shift @ARGV; 
+    push @vars, shift @ARGV;
     push @auxs, shift @ARGV;
 }
 
@@ -50,7 +50,7 @@ while (@vars) {
             if (!($line =~ /$ppt/)) {
                 next;
             }
-            if ($debug) {            
+            if ($debug) {
                 print STDERR "found matching ppt: $line\n";
             }
             $line = $dfile[++$i];

@@ -131,10 +131,10 @@ def StripKvasirPptName(ppt):
         enterOrExit = 'ENTER'
     else:
         enterOrExit = 'EXIT'
-        
+
     # Return a pair of the function name and 'ENTER' or 'EXITxxx'
     return (fnname, enterOrExit)
-   
+
 
 # .decls States:
 # About to read in ...
@@ -159,7 +159,7 @@ KvasirPptMap = {}
 myState = DeclsState.Uninit
 
 for line in kvasirDeclsAllLines:
-  
+
     if myState == DeclsState.Uninit:
 
         # The program point name always follows the
@@ -171,7 +171,7 @@ for line in kvasirDeclsAllLines:
         curVarList = []
         KvasirPptMap[StripKvasirPptName(line)] = [line, curVarList]
         myState = DeclsState.VarName
-        
+
     elif myState == DeclsState.VarName:
         if line == "DECLARE":
             myState = DeclsState.PptName
@@ -181,15 +181,15 @@ for line in kvasirDeclsAllLines:
             curVarList.append([])
             curVarList[-1].append(line)
             myState = DeclsState.DecType
-        
+
     elif myState == DeclsState.DecType:
 #        curVarList[-1].append(line)
         myState = DeclsState.RepType
-        
+
     elif myState == DeclsState.RepType:
         curVarList[-1].append(line)
         myState = DeclsState.CompNum
-        
+
     elif myState == DeclsState.CompNum:
 #        curVarList[-1].append(line)
 
@@ -205,7 +205,7 @@ def processPpt(pptName, varInfo):
     # by munging its name, and if so, print out the Kvasir
     # version of the name
     stripped = StripDfecPptName(pptName)
-    
+
     if stripped in KvasirPptMap:
         print KvasirPptMap[stripped][0]
 
@@ -233,19 +233,19 @@ def processPpt(pptName, varInfo):
             if varToLookup in varInfo:
                 stuff = varInfo[varToLookup]
                 print varName
-                
+
                 if repType[-2:] == '[]' and stuff[0][0] != '[' and stuff[0] != "uninit" and stuff[0] != "nonsensical":
                     print '[', stuff[0], ']'
                 else:
                     print stuff[0]
-                    
+
                 print stuff[1]
             # Total cop out ... print blank
             else:
                 print varName
 
                 print "uninit"
-                    
+
                 print "2"
 
         # Blank line ends this ppt
@@ -276,7 +276,7 @@ curVarInfo = None
 # entire file in at once, which is crucial for huge examples:
 for line in open(sys.argv[2], 'r'):
     line = line.strip()
-    
+
     if dState == DtraceState.Uninit:
         # Match program point name with ':::ENTER' or ':::EXIT'
         if ':::ENTER' in line or ':::EXIT' in line:
@@ -296,24 +296,24 @@ for line in open(sys.argv[2], 'r'):
 
             curPptName = None
             VarInfo = {}
-            
+
             dState = DtraceState.Uninit
         else:
             curVarName = line
             curVarInfo = []
             dState = DtraceState.Value
-        
+
     elif dState == DtraceState.Value:
         curVarInfo.append(line)
         dState = DtraceState.Modbit
-        
+
     elif dState == DtraceState.Modbit:
         curVarInfo.append(line)
         VarInfo[ConvertDfecVarName(curVarName)] = curVarInfo
         curVarName = None
         curVarInfo = None
         dState = DtraceState.VarName
-        
+
 
 ##ResultMap = {}
 
@@ -375,7 +375,7 @@ for line in open(sys.argv[2], 'r'):
 ### This is important to see how much of the intersection between
 ### Dfec and Kvasir variables that we've successfully picked up:
 
-###        print "Leftovers", DfecVarMap.keys()            
+###        print "Leftovers", DfecVarMap.keys()
 ###        print "# vars in Dfec:  ", len(DfecVarMap.keys())
 ###        print "# vars in Kvasir:", len(KvasirVarList)
 ###        print "# vars in result:", len(curResultVarList)
@@ -421,7 +421,7 @@ for line in open(sys.argv[2], 'r'):
 ### Output the various .decls files
 ### (Read these names from KvasirPptNames to preserve ordering)
 ##for ppt in KvasirPptNames:
-    
+
 ##    for f in allDeclsFiles:
 ##        f.write("DECLARE\n")
 ##        f.write(ppt)
@@ -446,7 +446,7 @@ for line in open(sys.argv[2], 'r'):
 ##    for varEntry in ResultMap[ppt]:
 
 ##        for f in allDeclsFiles:
-##            # Variable name            
+##            # Variable name
 ##            f.write(varEntry[0])
 ##            f.write("\n")
 
@@ -461,7 +461,7 @@ for line in open(sys.argv[2], 'r'):
 ##        # Comparability number - this is where the action is!
 ##        # For Lackwit, we choose the car of the tuple,
 ##        outputLackwitDeclsF.write(varEntry[3][0])
-##        # For DynComp, we choose the cadr       
+##        # For DynComp, we choose the cadr
 ##        outputDynCompDeclsF.write(varEntry[3][1])
 ##        # For dec. type, we choose the caddr
 ##        outputDecTypesDeclsF.write(str(varEntry[3][2]))
@@ -483,8 +483,8 @@ for line in open(sys.argv[2], 'r'):
 
 ##    if isExit:
 ##        outputVarsF.write("\n")
-    
-    
+
+
 ###print '# Dfec ppts:', len(DfecPptMap.keys())
 ###print '# Kvasir ppts:', len(KvasirPptMap.keys())
 ###print '# Common ppts:', len(ResultMap.keys())

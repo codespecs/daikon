@@ -829,21 +829,21 @@ audit:
 
 .PHONY: reformat check-format
 
-get-run-google-java-format:
-	@-(cd .run-google-java-format && git pull -q) || git clone -q https://github.com/plume-lib/run-google-java-format.git .run-google-java-format
+update-run-google-java-format:
+	@[ -d .run-google-java-format ] && (cd .run-google-java-format && git pull -q) || git clone -q https://github.com/plume-lib/run-google-java-format.git .run-google-java-format
 
 # Requires Java 8
 reformat:
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
-	${MAKE} get-run-google-java-format
+	${MAKE} update-run-google-java-format
 	@./.run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
 endif
 
 # Requires Java 8
 check-format:
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
-	${MAKE} get-run-google-java-format
-	@./.run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && false)
+	${MAKE} update-run-google-java-format
+	@./.run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
 endif
 
 

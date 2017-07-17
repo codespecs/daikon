@@ -62,7 +62,7 @@ hg push
 # Do I want to eliminate ENGINE_V2_PATCHES branch?
 
 # reset the repository (http://code.google.com/p/daikon/source/sync?repo=default)
-# 
+#
 # Upload to Google Code.
 cd ..
 hg push https://daikon.googlecode.com/hg

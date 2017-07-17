@@ -15,21 +15,21 @@
 
 if (! $?JAVA_HOME) then
   echo "JAVA_HOME environment variable is not set."
-  echo "Please fix this before proceeding.  Aborting daikon.cshrc ." 
+  echo "Please fix this before proceeding.  Aborting daikon.cshrc ."
   exit 2
 else if (! -d $JAVA_HOME && $JAVA_HOME != "none") then
   echo "JAVA_HOME is set to non-existent directory: $JAVA_HOME"
-  echo "Please fix this before proceeding.  Aborting daikon.cshrc ." 
+  echo "Please fix this before proceeding.  Aborting daikon.cshrc ."
   exit 2
 endif
 
 if (! $?DAIKONDIR) then
   echo "DAIKONDIR environment variable is not set."
-  echo "Please fix this before proceeding.  Aborting daikon.cshrc ." 
+  echo "Please fix this before proceeding.  Aborting daikon.cshrc ."
   exit 2
 else if (! -d $DAIKONDIR) then
   echo "DAIKONDIR is set to non-existent directory: $DAIKONDIR"
-  echo "Please fix this before proceeding.  Aborting daikon.cshrc ." 
+  echo "Please fix this before proceeding.  Aborting daikon.cshrc ."
   exit 2
 endif
 
@@ -40,7 +40,7 @@ if (! $?DAIKONBIN) then
     setenv DAIKONBIN ${DAIKONDIR}/scripts
   else
     echo "Cannot choose a value for environment variable DAIKONBIN."
-    echo "Please fix this before proceeding.  Aborting daikon.cshrc ." 
+    echo "Please fix this before proceeding.  Aborting daikon.cshrc ."
     exit 2
   endif
 endif
