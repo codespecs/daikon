@@ -11853,7 +11853,7 @@ echo $ECHO_N "checking whether to enable debugging... $ECHO_C" >&6
 if test x"$enable_debug" = x"yes"; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-  pov_flags="-g"
+  pov_flags="-gdwarf-2"
 
 
 
@@ -12099,7 +12099,7 @@ if test x"$enable_profile" = x"yes"; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   if test -z "$pov_cv_prog_cxx_flags_g"; then
-    pov_flags="-g"
+    pov_flags="-gdwarf-2"
 
 
 

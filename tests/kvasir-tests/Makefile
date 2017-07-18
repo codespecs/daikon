@@ -77,9 +77,7 @@ TEMP-nightly-summary-only-w-daikon: TEMP-nightly-tests__summary-w-daikon-if-work
 clean diffs invs update-goals:
 	$(MAKE) default-projects__$@
 
-# nightly-tests__%: default-projects__% medium-tests__%
-#	@
-nightly-tests__%: default-projects__% medium-easy-tests__%
+nightly-tests__%: default-projects__% medium-tests__%
 	@
 TEMP-nightly-tests__%: default-projects__% TEMP-medium-easy-tests__%
 	@
@@ -103,11 +101,6 @@ cpp-tests__%: do-CppFunctionTest__% do-SimpleClassesTest__% \
 	@
 
 medium-tests__%: rothermel-tests__% medium-real-tests__% medium-crypto-tests__% \
-                 missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
-	@
-
-# Omits povray
-medium-easy-tests__%: rothermel-tests__% medium-real-easy-tests__% medium-crypto-tests__% \
                  missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
 	@
 
@@ -196,10 +189,6 @@ small-real-tests__%:
 
 medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__% \
                       do-tcas__%
-	@
-
-# Omits povray
-medium-real-easy-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__% do-tcas__%
 	@
 
 # Omits povray and perl
