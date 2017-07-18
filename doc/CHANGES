@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.6.0 (August ?, 2017)
+
+Chicory now instruments exceptional exits.  That means that Daikon is able
+to infer invariants about when a Java method throws an exception.
+
+===========================================================================
+
 5.5.10 (July 4, 2017)
 
 Chicory and DynComp:
