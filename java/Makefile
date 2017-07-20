@@ -87,7 +87,7 @@ JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac
 
 ### end of user customizations
 
-JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
+JAVAC_COMMAND ?= ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 # When running the checkers, it is important not to pass in "-source 5".
 # Also avoid unqualified "-Xlint" that activates warnings about failure to use == for interned values.
 JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
@@ -783,6 +783,14 @@ tags-without-generated-files: clean-generated-files
 ###########################################################################
 ### Code quality (static checks of the code)
 ###
+
+error-prone: errorprone
+errorprone:
+	${MAKE} lib/error_prone_ant-2.0.21.jar
+	$(MAKE) JAVAC_COMMAND="java -Xbootclasspath/p:lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Werror"
+
+lib/error_prone_ant-2.0.21.jar:
+	(cd lib && wget https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/2.0.21/error_prone_ant-2.0.21.jar)
 
 findbugs: .findbugs-output
 .PHONY: findbugs

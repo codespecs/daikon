@@ -521,6 +521,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied VarInfoName this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
@@ -540,11 +541,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // returns a new string each time, but it is equal() to any other
   // returned string, so their hashCode()s should be the same.
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied VarInfoName this*/) {
     return repr().hashCode();
   }
 
   /*@Pure*/
+  @Override
   public int compareTo(/*>>>@GuardSatisfied VarInfoName this,*/ VarInfoName other) {
     int nameCmp = name().compareTo(other.name());
     if (nameCmp != 0) return nameCmp;
@@ -556,6 +559,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // Code producing output should usually call name() rather than
   // calling toString (perhaps implicitly).
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied VarInfoName this*/) {
     return repr();
   }
@@ -590,6 +594,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.name = name;
     }
     /*@Pure*/
+    @Override
     public boolean isLiteralConstant() {
       try {
         Integer.parseInt(name);
@@ -599,18 +604,22 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied Simple this*/) {
       return name;
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied Simple this*/) {
       return name;
     }
 
+    @Override
     protected String esc_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       if (isLiteralConstant()) {
         return name;
@@ -632,14 +641,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return "|" + s + "|";
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return "return".equals(name) ? "\\result" : name;
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return "return".equals(name) ? "\\result" : name;
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       if (name.equals("return")) {
         return "$result";
@@ -648,6 +660,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     protected String identifier_name_impl() {
       if (name.equals("return")) {
         return "Daikon_return";
@@ -668,6 +681,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitSimple(this);
     }
@@ -775,10 +789,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.sequence = sequence;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied SizeOf this*/) {
       return "SizeOf[" + sequence.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied SizeOf this*/) {
       return "size(" + sequence.name() + ")";
 
@@ -810,22 +826,27 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       throw new RuntimeException("unexpected term in sizeof " + this);
     }
 
+    @Override
     protected String esc_name_impl() {
       return get_term().esc_name() + ".length";
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return "(arrayLength " + get_term().simplify_name(prestate) + ")";
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return java_family_impl(OutputFormat.JAVA, v);
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return java_family_impl(OutputFormat.JML, v);
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return java_family_impl(OutputFormat.DBCJAVA, v);
     }
@@ -858,10 +879,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       //       }
     }
 
+    @Override
     protected String identifier_name_impl() {
       return "size_of" + sequence.identifier_name() + "___";
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitSizeOf(this);
     }
@@ -912,14 +935,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.argument = argument;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied FunctionOf this*/) {
       return "FunctionOf{" + function + "}[" + argument.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied FunctionOf this*/) {
       return function + "(" + argument.name() + ")";
     }
 
+    @Override
     protected String esc_name_impl() {
       return "(warning: format_esc() needs to be implemented: "
           + function
@@ -928,6 +954,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + ")";
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return "(warning: format_simplify() needs to be implemented: "
           + function
@@ -936,14 +963,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + ")";
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JAVA, v);
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JML, v);
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.DBCJAVA, v);
     }
@@ -963,10 +993,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return "daikon.Quant." + function + "(" + argument.name_using(format, argVarInfo) + ")";
     }
 
+    @Override
     protected String identifier_name_impl() {
       return function + "_of_" + argument.identifier_name() + "___";
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitFunctionOf(this);
     }
@@ -1007,14 +1039,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return UtilMDE.join(elts_repr(), ", ");
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied FunctionOfN this*/) {
       return "FunctionOfN{" + function + "}[" + elts_repr_commas() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied FunctionOfN this*/) {
       return function + "(" + elts_repr_commas() + ")";
     }
 
+    @Override
     protected String esc_name_impl() {
       return "(warning: format_esc() needs to be implemented: "
           + function
@@ -1023,6 +1058,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + ")";
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return "(warning: format_simplify() needs to be implemented: "
           + function
@@ -1031,14 +1067,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + ")";
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JAVA, v);
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JML, v);
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.DBCJAVA, v);
     }
@@ -1069,6 +1108,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + ")";
     }
 
+    @Override
     protected String identifier_name_impl() {
       List<String> elts = new ArrayList<String>(args.size());
       for (VarInfoName vin : args) {
@@ -1082,6 +1122,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return args.get(n);
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitFunctionOfN(this);
     }
@@ -1151,18 +1192,22 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.field = field;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied Field this*/) {
       return "Field{" + field + "}[" + term.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied Field this*/) {
       return term.name() + "." + field;
     }
 
+    @Override
     protected String esc_name_impl() {
       return term.esc_name() + "." + field;
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return "(select "
           + Simple.simplify_name_impl(field, false)
@@ -1171,14 +1216,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + ")";
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return java_family_name(OutputFormat.JAVA, v);
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return java_family_name(OutputFormat.JML, v);
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return java_family_name(OutputFormat.DBCJAVA, v);
     }
@@ -1338,10 +1386,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     protected String identifier_name_impl() {
       return term.identifier_name() + "_dot_" + field;
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitField(this);
     }
@@ -1369,18 +1419,22 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.term = term;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied TypeOf this*/) {
       return "TypeOf[" + term.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied TypeOf this*/) {
       return term.name() + DaikonVariableInfo.class_suffix;
     }
 
+    @Override
     protected String esc_name_impl() {
       return "\\typeof(" + term.esc_name() + ")";
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return "(typeof " + term.simplify_name(prestate) + ")";
     }
@@ -1394,6 +1448,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       if (testCall) {
         return "no format when testCall.";
@@ -1401,6 +1456,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return javaFamilyFormat(term.java_name(v), v.type.isArray());
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       if (testCall) {
         return "no format when testCall.";
@@ -1408,6 +1464,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return javaFamilyFormat(term.jml_name(v), v.type.isArray());
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       if (testCall) {
         return "no format when testCall.";
@@ -1415,10 +1472,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return javaFamilyFormat(term.dbc_name(v), v.type.isArray());
     }
 
+    @Override
     protected String identifier_name_impl() {
       return "type_of_" + term.identifier_name() + "___";
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitTypeOf(this);
     }
@@ -1454,22 +1513,27 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.term = term;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied Prestate this*/) {
       return "Prestate[" + term.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied Prestate this*/) {
       return "orig(" + term.name() + ")";
     }
 
+    @Override
     protected String esc_name_impl() {
       return "\\old(" + term.esc_name() + ")";
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(true);
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       if (PrintInvariants.dkconfig_replace_prestate) {
         return PrintInvariants.addPrestateExpression(term.java_name(v));
@@ -1477,10 +1541,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return "\\old(" + term.java_name(v) + ")";
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return "\\old(" + term.jml_name(v) + ")";
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
 
       // See declaration of testCall for explanation of this flag.
@@ -1504,10 +1570,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return "$pre(" + preType + brackets + ", " + term.dbc_name(v) + ")";
     }
 
+    @Override
     protected String identifier_name_impl() {
       return "orig_of_" + term.identifier_name() + "___";
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitPrestate(this);
     }
@@ -1553,40 +1621,49 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.term = term;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied Poststate this*/) {
       return "Poststate[" + term.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied Poststate this*/) {
       return "post(" + term.name() + ")";
     }
 
+    @Override
     protected String esc_name_impl() {
       return "\\new(" + term.esc_name() + ")";
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(false);
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return "\\post(" + term.java_name(v) + ")";
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return "\\new(" + term.jml_name(v) + ")";
       // return "(warning: JML format cannot express a Poststate"
       //  + " [repr=" + repr() + "])";
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return "(warning: DBC format cannot express a Poststate" + " [repr=" + repr() + "])";
     }
 
+    @Override
     protected String identifier_name_impl() {
       return "post_of_" + term.identifier_name() + "___";
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitPoststate(this);
     }
@@ -1621,36 +1698,44 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return (amount < 0) ? String.valueOf(amount) : "+" + amount;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied Add this*/) {
       return "Add{" + amount() + "}[" + term.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied Add this*/) {
       return term.name() + amount();
     }
 
+    @Override
     protected String esc_name_impl() {
       return term.esc_name() + amount();
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return (amount < 0)
           ? "(- " + term.simplify_name(prestate) + " " + (-amount) + ")"
           : "(+ " + term.simplify_name(prestate) + " " + amount + ")";
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return term.java_name(v) + amount();
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return term.jml_name(v) + amount();
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v) + amount();
     }
 
+    @Override
     protected String identifier_name_impl() {
       if (amount >= 0) {
         return term.identifier_name() + "_plus" + amount;
@@ -1659,10 +1744,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitAdd(this);
     }
     // override for cleanliness
+    @Override
     public VarInfoName applyAdd(int _amount) {
       int amt = _amount + this.amount;
       return (amt == 0) ? term : term.applyAdd(amt);
@@ -1701,10 +1788,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.term = term;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied Elements this*/) {
       return "Elements[" + term.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied Elements this*/) {
       return name_impl("");
     }
@@ -1713,6 +1802,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return term.name() + "[" + index + "]";
     }
 
+    @Override
     protected String esc_name_impl() {
       throw new UnsupportedOperationException(
           "ESC cannot format an unquantified sequence of elements" + " [repr=" + repr() + "]");
@@ -1722,10 +1812,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return term.esc_name() + "[" + index + "]";
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return "(select elems " + term.simplify_name(prestate) + ")";
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return term.java_name(v);
     }
@@ -1734,6 +1826,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return java_family_impl(OutputFormat.JAVA, v, index);
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return term.jml_name(v);
     }
@@ -1742,6 +1835,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return java_family_impl(OutputFormat.JML, v, index);
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v);
     }
@@ -1782,6 +1876,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     protected String identifier_name_impl() {
       return identifier_name_impl("");
     }
