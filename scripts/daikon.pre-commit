@@ -9,7 +9,7 @@ set -e
 # check files that changed.
 CHANGED_JAVA_FILES=`git diff --staged --name-only --diff-filter=ACM | grep '\.java$' | grep '^java/' | grep -v '^java/jtb/' || true`
 if [ ! -z "$CHANGED_JAVA_FILES" ]; then
-    make --silent update-run-google-java-format
+    make -C java --silent update-run-google-java-format
     ./java/.run-google-java-format/check-google-java-format.py ${CHANGED_JAVA_FILES} || (echo "Try running:  make reformat" && /bin/false)
 fi
 
