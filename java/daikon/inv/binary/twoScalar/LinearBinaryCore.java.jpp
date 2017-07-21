@@ -76,6 +76,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();

@@ -22,6 +22,7 @@ public abstract class UnaryDerivation extends Derivation {
   }
 
   /*@SideEffectFree*/
+  @Override
   public UnaryDerivation clone(/*>>>@GuardSatisfied UnaryDerivation this*/) {
     try {
       return (UnaryDerivation) super.clone();

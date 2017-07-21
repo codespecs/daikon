@@ -226,6 +226,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // f3 -> [ ExtendsList(isInterface) ]
   // f4 -> [ ImplementsList(isInterface) ]
   // f5 -> ClassOrInterfaceBody(isInterface)
+  @Override
   public void visit(ClassOrInterfaceDeclaration n) {
     String classname = Ast.getClassName(n);
     String pptname = classname + ":::OBJECT";
@@ -281,6 +282,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   // Given that this method works not on FieldDeclaration, but its grandparent,
   // it should likely be moved to a method with a different formal parameter.
+  @Override
   public void visit(FieldDeclaration n) {
     super.visit(n); // call "accept(this)" on each field
 
@@ -354,6 +356,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         return "normal_behavior";
       }
 
+      @Override
       public void visit(NodeChoice nc) {
         // Since we know we are in a Modifiers() parse tree, the only
         // thing a NodeChoice can hold is a NodeToken for the modifer.
@@ -377,6 +380,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         }
       }
 
+      @Override
       public void visit(NodeListOptional nlo) {
         Annotate.debug.fine("InsertBehavior visitor visiting a NodeListOptional");
         Annotate.debug.fine("With " + nlo.nodes.size() + " nodes");
@@ -416,6 +420,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     Annotate.debug.fine("InsertBehavior visitor complete");
   }
 
+  @Override
   public void visit(MethodDeclaration n) {
 
     // Grammar production for ClassOrInterfaceBodyDeclaration:
@@ -509,6 +514,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // f5 -> [ ExplicitConstructorInvocation() ]
   // f6 -> ( BlockStatement() )*
   // f7 -> "}"
+  @Override
   public void visit(ConstructorDeclaration n) {
     Annotate.debug.fine("ConstructorDeclaration: " + n.f1);
 
@@ -694,6 +700,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // f0 -> PreIncrementExpression()
   //       | PreDecrementExpression()
   //       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
+  @Override
   public void visit(StatementExpression n) {
     super.visit(n); // call "accept(this)" on each field
 
@@ -772,6 +779,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // This is an assignment exactly if field f1 is present.
   // f0 -> ConditionalExpression()
   // f1 -> [ AssignmentOperator() Expression() ]
+  @Override
   public void visit(Expression n) {
     super.visit(n); // call "accept(this)" on each field
 

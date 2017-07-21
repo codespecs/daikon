@@ -453,6 +453,7 @@ class Test {
     return ((double) i1);
   }
 
+  @SuppressWarnings("IdentityBinaryExpression")
   public static void t1(A a1, A a2, A a3, A a4) {
 
     if (a1 == a2) {

@@ -98,6 +98,7 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -135,6 +136,7 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   public SUBSET instantiate_dyn(/*>>> @Prototype SUBSET this,*/ PptSlice slice) {
     return new SUBSET(slice);
   }
@@ -143,11 +145,13 @@ public class SUBSET extends TWOSEQUENCE {
     return new SUBSET_SWAP(ppt);
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied SUBSET this*/) {
     return SUBSETSTRING + varNames() + ": ,falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied SUBSET this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
@@ -267,6 +271,7 @@ public class SUBSET extends TWOSEQUENCE {
 
   }
 
+  @Override
   public InvariantStatus check_modified(LONG[] a1, LONG[] a2, int count) {
 #if (defined(SUB) || defined(SUBFLOAT))
     if (!IS_SUBSET(a1, a2)) {
@@ -282,6 +287,7 @@ public class SUBSET extends TWOSEQUENCE {
 #endif
   }
 
+  @Override
   public InvariantStatus add_modified(LONG[] a1, LONG[] a2, int count) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(ArraysMDE.toString(a1));
@@ -290,6 +296,7 @@ public class SUBSET extends TWOSEQUENCE {
     return check_modified(a1, a2, count);
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
@@ -301,6 +308,7 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];

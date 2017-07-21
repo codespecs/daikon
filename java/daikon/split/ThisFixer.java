@@ -65,6 +65,7 @@ class ThisFixer extends DepthFirstVisitor {
    * with "_" if was preceeded by "this", or adds "this_" to the token image of an unqualified
    * member variable.
    */
+  @Override
   public void visit(NodeToken n) {
     boolean found = false;
 

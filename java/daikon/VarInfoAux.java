@@ -257,6 +257,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /** Creates and returns a copy of this. */
   // Default implementation to quiet Findbugs.
   /*@SideEffectFree*/
+  @Override
   public VarInfoAux clone(
       /*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
     VarInfoAux result = (VarInfoAux) super.clone();

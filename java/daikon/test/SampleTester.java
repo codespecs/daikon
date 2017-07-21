@@ -159,7 +159,7 @@ public class SampleTester extends TestCase {
     daikon.inv.ternary.threeScalar.FunctionBinary.dkconfig_enabled = true;
     daikon.inv.ternary.threeScalar.FunctionBinaryFloat.dkconfig_enabled = true;
 
-    this.fname = fname;
+    this.fname = filename;
     fp = new LineNumberReader(new InputStreamReader(commands));
 
     for (String line = fp.readLine(); line != null; line = fp.readLine()) {
@@ -324,6 +324,7 @@ public class SampleTester extends TestCase {
     stok.quoteChar('"');
     stok.set_error_handler(
         new StrTok.ErrorHandler() {
+          @Override
           public void tok_error(String s) {
             parse_error(s);
           }

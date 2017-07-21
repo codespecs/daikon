@@ -2120,7 +2120,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     str_name = str_name.intern();
 
     for (VarParent parent : parents) {
-      parent.parent_ppt.intern();
+      parent.parent_ppt = parent.parent_ppt.intern();
       if (parent.parent_variable != null) parent.parent_variable = parent.parent_variable.intern();
     }
 
@@ -3768,7 +3768,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns whether or not this variable represents the type of a variable (eg,
-   * a.getClass().getName()). This version finds prestate variable such as
+   * a.getClass().getName()). This version finds prestate variables such as
    * 'org(a.getClass().getName())'.
    */
   public boolean has_typeof() {

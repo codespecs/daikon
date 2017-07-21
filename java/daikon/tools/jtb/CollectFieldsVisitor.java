@@ -122,6 +122,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   // explore them if they are the root.
   private boolean in_class = false;
 
+  @Override
   public void visit(ClassOrInterfaceDeclaration n) {
     assert !cached;
     if (include_nested_classes) {
@@ -140,6 +141,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   // f2 -> VariableDeclarator()
   // f3 -> ( "," VariableDeclarator() )*
   // f4 -> ";"
+  @Override
   public void visit(FieldDeclaration n) {
     assert !cached;
     fieldDecls.add(n);

@@ -33,6 +33,7 @@ public abstract class TernaryDerivation extends Derivation {
   }
 
   /*@SideEffectFree*/
+  @Override
   public TernaryDerivation clone(/*>>>@GuardSatisfied TernaryDerivation this*/) {
     try {
       return (TernaryDerivation) super.clone();

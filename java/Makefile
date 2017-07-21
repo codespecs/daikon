@@ -604,6 +604,7 @@ dyncomp-jdk-only dcomp-jdk-only :
 # daikon.util is a copy of plume.
 # Copied source files are read-only, to prevent accidental changes.
 # Use the README file as a "canary" for copying everything.
+# If other files change without the README changing, this won't update.
 .PHONY: plume-copy
 plume-copy : daikon/util/README
 
@@ -787,7 +788,8 @@ tags-without-generated-files: clean-generated-files
 error-prone: errorprone
 errorprone:
 	${MAKE} lib/error_prone_ant-2.0.21.jar
-	$(MAKE) JAVAC_COMMAND="java -Xbootclasspath/p:lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Werror"
+#	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
+	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
 
 lib/error_prone_ant-2.0.21.jar:
 	(cd lib && wget https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/2.0.21/error_prone_ant-2.0.21.jar)

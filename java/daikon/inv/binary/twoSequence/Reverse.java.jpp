@@ -73,6 +73,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -92,6 +93,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
@@ -101,11 +103,13 @@ public class CLASSNAME extends SUPERCLASS {
     return this;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -191,6 +195,7 @@ public class CLASSNAME extends SUPERCLASS {
       + " " + index + "))))))";
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
     if (a1.length != a2.length) {
       return InvariantStatus.FALSIFIED;
@@ -204,10 +209,12 @@ public class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
     return check_modified(a1, a2, count);
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }

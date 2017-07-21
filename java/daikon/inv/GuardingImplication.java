@@ -48,6 +48,7 @@ public class GuardingImplication extends Implication {
     // return !right.isObvious();
   }
 
+  @Override
   public boolean enoughSamples(/*>>>@GuardSatisfied GuardingImplication this*/) {
     return right.enoughSamples();
   }

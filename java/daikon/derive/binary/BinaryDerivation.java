@@ -29,6 +29,7 @@ public abstract class BinaryDerivation extends Derivation {
   }
 
   /*@SideEffectFree*/
+  @Override
   public BinaryDerivation clone(/*>>>@GuardSatisfied BinaryDerivation this*/) {
     try {
       return (BinaryDerivation) super.clone();

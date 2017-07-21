@@ -305,9 +305,11 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   public static final ProglangType BOOLEAN_ARRAY = ProglangType.intern("boolean", 1);
   public static final ProglangType HASHCODE_ARRAY = ProglangType.intern("hashcode", 1);
 
-  // Like Long.parseLong(), but transform large unsigned longs (as
-  // from C's unsigned long long) into the corresponding negative Java
-  // longs.  Also handles hex values that begin with 0x
+  /**
+   * Like Long.parseLong(), but transform large unsigned longs (as from C's unsigned long long) into
+   * the corresponding negative Java longs. Also handles hex values that begin with 0x.
+   */
+  @SuppressWarnings("ConstantOverflow")
   private static long myParseLong(String value) {
     if (value.length() == 20 && value.charAt(0) == '1'
         || value.length() == 19
@@ -320,7 +322,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       long subtracted; // The amount we effectively subtracted to make it
       if (value.length() == 20) {
         rest = value.substring(1);
-        subtracted = 100000L * 100000 * 100000 * 10000; // 10^19
+        subtracted = 100000L * 100000 * 100000 * 10000; // 10^19; overflows
       } else {
         rest = value.substring(1);
         subtracted = 9L * 100000 * 100000 * 100000 * 1000; // 9*10^18

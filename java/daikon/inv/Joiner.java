@@ -46,6 +46,7 @@ public abstract class Joiner extends Invariant {
   public abstract String format_using(/*>>>@GuardSatisfied Joiner this,*/ OutputFormat format);
 
   /*@Pure*/
+  @Override
   public boolean isValidEscExpression() {
     return left.isValidEscExpression() && right.isValidEscExpression();
   }
@@ -92,6 +93,7 @@ public abstract class Joiner extends Invariant {
   }
 
   /*@Pure*/
+  @Override
   public boolean isInteresting() {
     return (left.isInteresting() && right.isInteresting());
   }

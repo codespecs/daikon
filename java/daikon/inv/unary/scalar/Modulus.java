@@ -54,6 +54,7 @@ public class Modulus extends SingleScalar {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -71,11 +72,13 @@ public class Modulus extends SingleScalar {
     return new Modulus(slice);
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied Modulus this*/) {
     return "Modulus" + varNames() + ": " + "modulus=" + modulus + ",remainder=" + remainder;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied Modulus this,*/ OutputFormat format) {
     String name = var().name_using(format);
 
@@ -118,6 +121,7 @@ public class Modulus extends SingleScalar {
     return format_unimplemented(format);
   }
 
+  @Override
   public InvariantStatus check_modified(long value, int count) {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been
@@ -153,6 +157,7 @@ public class Modulus extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(long value, int count) {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been
@@ -199,8 +204,7 @@ public class Modulus extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
-  //  public InvariantStatus check_modified(long value, int count) {}
-
+  @Override
   protected double computeConfidence() {
     if (modulus == 1) {
       return Invariant.CONFIDENCE_NEVER;

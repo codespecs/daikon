@@ -18,6 +18,7 @@ public class CmdAssume implements Cmd {
   }
 
   /** For documentation, read the class overview. */
+  @Override
   public void apply(final /*@GuardedBy("<self>")*/ Session s) {
 
     synchronized (s) {
@@ -33,6 +34,7 @@ public class CmdAssume implements Cmd {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied CmdAssume this*/) {
     return "CmdAssume: " + proposition;
   }

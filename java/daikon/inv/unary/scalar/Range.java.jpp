@@ -124,6 +124,7 @@ public abstract class RANGE extends SUPERCLASS {
    * %var1% are replaced by the variable name in the specified format.
    */
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied RANGE this,*/ OutputFormat format) {
 
     String fmt_str = get_format_str(format);
@@ -155,6 +156,7 @@ public abstract class RANGE extends SUPERCLASS {
   }
 
 #if defined(SEQ)
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] x, int count) {
     for (int i = 0; i < x.length; i++) {
       if (!eq_check(x[i])) {
@@ -164,12 +166,14 @@ public abstract class RANGE extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] x, int count) {
     return check_modified(x, count);
   }
 
 #else
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE x, int count) {
     if (eq_check(x)) {
       return InvariantStatus.NO_CHANGE;
@@ -178,12 +182,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE x, int count) {
     return check_modified(x, count);
   }
 
 #endif
 
+  @Override
   protected double computeConfidence() {
     return CONFIDENCE_JUSTIFIED;
   }
@@ -274,12 +280,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return ONEOF.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
-    public EqualZero instantiate_dyn(/*>>> @Prototype EqualZero this,*/ PptSlice slice) {
+    @Override
+  public EqualZero instantiate_dyn(/*>>> @Prototype EqualZero this,*/ PptSlice slice) {
       return new EqualZero(slice);
     }
 
@@ -323,12 +331,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return ONEOF.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
-    public EqualOne instantiate_dyn(/*>>> @Prototype EqualOne this,*/ PptSlice slice) {
+    @Override
+  public EqualOne instantiate_dyn(/*>>> @Prototype EqualOne this,*/ PptSlice slice) {
       return new EqualOne(slice);
     }
 
@@ -372,12 +382,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return ONEOF.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
-    public EqualMinusOne instantiate_dyn(/*>>> @Prototype EqualMinusOne this,*/ PptSlice slice) {
+    @Override
+  public EqualMinusOne instantiate_dyn(/*>>> @Prototype EqualMinusOne this,*/ PptSlice slice) {
       return new EqualMinusOne(slice);
     }
 
@@ -421,12 +433,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
-    public GreaterEqualZero instantiate_dyn(/*>>> @Prototype GreaterEqualZero this,*/ PptSlice slice) {
+    @Override
+  public GreaterEqualZero instantiate_dyn(/*>>> @Prototype GreaterEqualZero this,*/ PptSlice slice) {
       return new GreaterEqualZero(slice);
     }
 
@@ -470,7 +484,8 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled;
     }
 
@@ -520,12 +535,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
-    public BooleanVal instantiate_dyn(/*>>> @Prototype BooleanVal this,*/ PptSlice slice) {
+    @Override
+  public BooleanVal instantiate_dyn(/*>>> @Prototype BooleanVal this,*/ PptSlice slice) {
       return new BooleanVal(slice);
     }
 
@@ -573,12 +590,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
-    public PowerOfTwo instantiate_dyn(/*>>> @Prototype PowerOfTwo this,*/ PptSlice slice) {
+    @Override
+  public PowerOfTwo instantiate_dyn(/*>>> @Prototype PowerOfTwo this,*/ PptSlice slice) {
       return new PowerOfTwo(slice);
     }
 
@@ -654,12 +673,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
-    public Even instantiate_dyn(/*>>> @Prototype Even this,*/ PptSlice slice) {
+    @Override
+  public Even instantiate_dyn(/*>>> @Prototype Even this,*/ PptSlice slice) {
       return new Even(slice);
     }
 
@@ -721,7 +742,8 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;
     }
 

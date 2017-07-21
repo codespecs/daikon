@@ -161,6 +161,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // convert to normal two-way IntEqual type invariants.  However,
   // they can be called if desired.
 
+  @Override
   public String repr(/*>>>@GuardSatisfied Equality this*/) {
     return "Equality: size="
         + size()
@@ -173,6 +174,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);

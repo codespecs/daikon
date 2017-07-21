@@ -78,6 +78,7 @@ public class IsPointer extends SingleScalar {
     return check_modified(value, count);
   }
 
+  @Override
   public InvariantStatus check_modified(long v, int count) {
     if (!isWithinPointerRange(v)) {
       return InvariantStatus.FALSIFIED;
@@ -103,6 +104,7 @@ public class IsPointer extends SingleScalar {
     }
   }
 
+  @Override
   protected double computeConfidence() {
     return 1 - computeProbability();
   }

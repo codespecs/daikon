@@ -411,6 +411,7 @@ import typequals.*;
 
   /** Do nothing special, Overridden to remove exception from declaration. */
   /*@SideEffectFree*/
+  @Override
   public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     try {
       Invariant result = (Invariant) super.clone();

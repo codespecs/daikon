@@ -182,6 +182,7 @@ public class DummyInvariant extends Invariant {
     return inv;
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
@@ -191,6 +192,7 @@ public class DummyInvariant extends Invariant {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();

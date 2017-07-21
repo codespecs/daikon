@@ -29,15 +29,18 @@ public class AndJoiner extends Joiner {
     super(ppt, left, right);
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.confidence_and(left.computeConfidence(), right.computeConfidence());
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied AndJoiner this*/) {
     return "[" + left.repr() + " and " + right.repr() + "]";
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied AndJoiner this,*/ OutputFormat format) {
     List<Invariant> invs = conjuncts();
     List<String> invStrings = new ArrayList<String>(invs.size());
@@ -93,6 +96,7 @@ public class AndJoiner extends Joiner {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     DiscardInfo leftObvious = left.isObviousStatically(vis);
     DiscardInfo rightObvious = right.isObviousStatically(vis);

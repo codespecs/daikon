@@ -299,6 +299,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -350,6 +351,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
     #endif
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
     return SEQSEQINTEQUALstring + varNames() + ": ,orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
@@ -357,6 +359,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied SEQSEQINTEQUAL this,*/ OutputFormat format) {
     // System.out.println("Calling " + SEQSEQINTEQUALstring + ".format for: " + repr());
 
@@ -451,6 +454,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
     #endif
   }
 
+  @Override
   public InvariantStatus check_modified(
       PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
@@ -475,6 +479,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     if (logDetail()) {
       log("add_modified (%s, %s)", ArraysMDE.toString(v1), ArraysMDE.toString(v2));
@@ -482,6 +487,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
         return check_modified(v1, v2, count);
   }
 
+  @Override
   protected double computeConfidence() {
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     // It's an equality invariant
@@ -505,11 +511,13 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant o) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant o) {
     return false;
   }
@@ -544,6 +552,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     #ifdef NUMERIC
       VarInfo var1 = vis[0];

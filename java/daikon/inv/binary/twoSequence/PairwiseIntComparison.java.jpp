@@ -251,6 +251,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -290,6 +291,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   #endif
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
@@ -398,6 +400,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 #endif
 
+  @Override
   public String repr(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
     return PAIRWISEINTEQUALstring + varNames() + ": ";
   }
@@ -407,6 +410,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
@@ -455,6 +459,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " +  split1[0] + "[i]"  + split1[1] + equals_str + split2[0] + "[i]" + split2[1] + end_str + ")";
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
     assert a1 != null && a2 != null
       : var1() + " " + var2() + " " + FileIO.get_linenum();
@@ -477,7 +482,8 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
-    public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
+    @Override
+  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
                                         int count) {
       if (logDetail()) {
         log(debug, "saw add_modified (" + ArraysMDE.toString(a1)
@@ -486,6 +492,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
       return check_modified(a1, a2, count);
     }
 
+  @Override
   protected double computeConfidence() {
     // num_elt_values() would be more appropriate
     // int num_values = ((PptSlice2) ppt).num_elt_values();

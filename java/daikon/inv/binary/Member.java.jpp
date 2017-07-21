@@ -115,6 +115,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -125,6 +126,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (isObviousMember(sclvar(vis), seqvar(vis))) {
       log("scalar is obvious member of");
@@ -262,11 +264,13 @@ public final class CLASSNAME extends SEQUENCESCALAR {
     return false;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return "Member" + varNames() + ": falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) {
@@ -348,6 +352,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
   }
 #endif
 
+  @Override
   public InvariantStatus check_modified(SCALAR /*@Interned*/ [] a, SCALAR i, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
@@ -357,6 +362,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(SCALAR /*@Interned*/ [] a, SCALAR i, int count) {
 
     InvariantStatus is = check_modified(a, i, count);
@@ -367,6 +373,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
     return is;
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }

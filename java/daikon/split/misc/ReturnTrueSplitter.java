@@ -24,11 +24,13 @@ public final class ReturnTrueSplitter extends Splitter {
     instantiated = true;
   }
 
+  @Override
   public Splitter instantiate(Ppt ppt) {
     return new ReturnTrueSplitter(ppt);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="return_varinfo")*/
+  @Override
   public boolean valid() {
     return ((return_varinfo != null) && (return_varinfo.type == ProglangType.BOOLEAN));
   }
@@ -36,14 +38,17 @@ public final class ReturnTrueSplitter extends Splitter {
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // application invariant about private variable
   /*@RequiresNonNull("return_varinfo")*/
+  @Override
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);
   }
 
+  @Override
   public String condition() {
     return "return == true";
   }
 
+  @Override
   public /*@Nullable*/ DummyInvariant getDummyInvariant() {
     return null;
   }

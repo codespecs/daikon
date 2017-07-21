@@ -48,6 +48,7 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -61,6 +62,7 @@ public class CommonStringSequence extends SingleStringSequence {
   // Don't write clone, because this.intersect is read-only
   // protected Object clone();
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     return "CommonStringSequence " + varNames() + ": " + "elts=\"" + elts;
   }
@@ -78,6 +80,7 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(
       /*>>>@GuardSatisfied CommonStringSequence this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
@@ -109,6 +112,7 @@ public class CommonStringSequence extends SingleStringSequence {
     return "Contract.ForAll(new[] " + exp + " , x => " + var().csharp_name() + ".Contains(x))";
   }
 
+  @Override
   public InvariantStatus check_modified(/*@Interned*/ String /*@Interned*/ [] a, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
@@ -130,6 +134,7 @@ public class CommonStringSequence extends SingleStringSequence {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(/*@Interned*/ String /*@Interned*/ [] a, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
@@ -154,6 +159,7 @@ public class CommonStringSequence extends SingleStringSequence {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   protected double computeConfidence() {
     throw new Error("Not yet implemented");
   }

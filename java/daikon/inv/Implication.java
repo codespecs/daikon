@@ -103,6 +103,7 @@ public class Implication extends Joiner {
     return result;
   }
 
+  @Override
   protected double computeConfidence() {
     double pred_conf = orig_left.computeConfidence();
     double cons_conf = orig_right.computeConfidence();
@@ -114,11 +115,13 @@ public class Implication extends Joiner {
     return result;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied Implication this*/) {
     return "[Implication: " + left.repr() + " => " + right.repr() + "]";
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied Implication this,*/ OutputFormat format) {
     String pred_fmt = left.format_using(format);
     String consq_fmt = right.format_using(format);
@@ -152,6 +155,7 @@ public class Implication extends Joiner {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     assert vis.length > 0;
     for (int ii = 0; ii < vis.length; ii++) {
@@ -248,12 +252,14 @@ public class Implication extends Joiner {
   // An implication is only interesting if both the predicate and
   // consequent are interesting
   /*@Pure*/
+  @Override
   public boolean isInteresting() {
     return (predicate().isInteresting() && consequent().isInteresting());
   }
 
   // If a constant managed to appear in a predicate, that's
   // interesting enough for us.
+  @Override
   public boolean hasUninterestingConstant() {
     return consequent().hasUninterestingConstant();
   }
