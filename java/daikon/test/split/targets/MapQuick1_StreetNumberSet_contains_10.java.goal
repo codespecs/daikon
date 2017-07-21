@@ -1,58 +1,58 @@
-import daikon.*; 
-import daikon.inv.*; 
-import daikon.split.*; 
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
 
-public final class MapQuick1_StreetNumberSet_contains_10 extends Splitter { 
+public final class MapQuick1_StreetNumberSet_contains_10 extends Splitter {
 
-  public String condition() { 
-    return "orig(sets[i].contains(sn))"; 
-  } 
+  public String condition() {
+    return "orig(sets[i].contains(sn))";
+  }
 
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
-  public MapQuick1_StreetNumberSet_contains_10() { } 
-  public MapQuick1_StreetNumberSet_contains_10(Ppt ppt) { 
+  public MapQuick1_StreetNumberSet_contains_10() { }
+  public MapQuick1_StreetNumberSet_contains_10(Ppt ppt) {
   }
 
-  public Splitter instantiate(Ppt ppt) { 
-    return new MapQuick1_StreetNumberSet_contains_10(ppt); 
-  } 
+  public Splitter instantiate(Ppt ppt) {
+    return new MapQuick1_StreetNumberSet_contains_10(ppt);
+  }
 
-  public boolean valid() { 
+  public boolean valid() {
     /* no variables were found */
     return false;
-  } 
+  }
 
-  public boolean test(ValueTuple vt) { 
+  public boolean test(ValueTuple vt) {
     /* writeTestBody: 0 declarations */
-    return(orig_sets[orig_i].contains(orig_sn)); 
-  } 
+    return(orig_sets[orig_i].contains(orig_sn));
+  }
 
-  public String repr() { 
+  public String repr() {
     return "MapQuick1_StreetNumberSet_contains_10: "
       ;
-  } 
+  }
 
-  public void makeDummyInvariantFactory(DummyInvariant inv) { 
-    dummyInvFactory = inv; 
-  } 
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
 
-  public void instantiateDummy(PptTopLevel ppt) { 
-    dummyInv = null; 
-  } 
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+  }
 
-  public DummyInvariant getDummyInvariant() { 
-    return dummyInv; 
-  } 
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
 
-  public int[] getIntArray(long[] longArray) { 
-    int[] intArray = new int[longArray.length]; 
-    for (int i = 0; i < intArray.length; i++) { 
-      intArray[i] = (int) longArray[i]; 
-    } 
-    return intArray; 
-  } 
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
 
-} 
+}
