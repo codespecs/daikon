@@ -1,8 +1,12 @@
 package daikon.tools.jtb;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.*;
 import gnu.getopt.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
 import jtb.JavaParser;
@@ -116,7 +120,8 @@ public class CreateSpinfo {
           "Error: No .java file arguments supplied." + Global.lineSep + usage);
     }
     if (outputfilename != null) {
-      PrintWriter output = new PrintWriter(new FileWriter(outputfilename));
+      PrintWriter output =
+          new PrintWriter(Files.newBufferedWriter(Paths.get(outputfilename), UTF_8));
       for (; argindex < args.length; argindex++) {
         String javaFileName = args[argindex];
         writeSplitters(javaFileName, output);
@@ -127,7 +132,8 @@ public class CreateSpinfo {
       for (; argindex < args.length; argindex++) {
         String javaFileName = args[argindex];
         String spinfoFileName = spinfoFileName(javaFileName);
-        PrintWriter output = new PrintWriter(new FileWriter(spinfoFileName));
+        PrintWriter output =
+            new PrintWriter(Files.newBufferedWriter(Paths.get(spinfoFileName), UTF_8));
         writeSplitters(javaFileName, output);
         output.flush();
         output.close();
@@ -165,7 +171,7 @@ public class CreateSpinfo {
    * @param output the PrintWriter to which this spinfo file is being wrote
    */
   private static void writeSplitters(String javaFileName, PrintWriter output) throws IOException {
-    Reader input = new FileReader(javaFileName);
+    Reader input = Files.newBufferedReader(Paths.get(javaFileName), UTF_8);
     JavaParser parser = new JavaParser(input);
     Node root;
     try {

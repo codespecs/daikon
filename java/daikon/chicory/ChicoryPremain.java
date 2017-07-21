@@ -3,6 +3,7 @@ package daikon.chicory;
 //import harpoon.ClassFile.HMethod;
 
 import static daikon.tools.nullness.NullnessUtils.castNonNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
 import daikon.util.*;
@@ -231,7 +232,7 @@ public class ChicoryPremain {
   private static void writePurityFile(String fileName, String parentDir) {
     PrintWriter pureFileWriter;
     try {
-      pureFileWriter = new PrintWriter(new File(parentDir, fileName));
+      pureFileWriter = new PrintWriter(new File(parentDir, fileName), UTF_8.name());
     } catch (FileNotFoundException e) {
       throw new Error("Could not open " + fileName + " for writing", e);
     }
@@ -440,6 +441,7 @@ public class ChicoryPremain {
       return (name.replace(".", "/") + ".class");
     }
 
+    @Override
     protected Class<?> loadClass(
         /*@BinaryName*/ String name, boolean resolve) throws java.lang.ClassNotFoundException {
 

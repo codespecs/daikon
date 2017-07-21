@@ -29,14 +29,17 @@ public class KillerInstruction implements IInstruction {
     this.instructions = instructions;
   }
 
+  @Override
   public String getAddress() {
     throw new UnsupportedOperationException();
   }
 
+  @Override
   public Set<String> getBinaryVarNames() {
     return Collections.emptySet();
   }
 
+  @Override
   public boolean kills(String var) {
     for (X86Instruction i : instructions) {
       if (i.kills(var)) {
@@ -47,6 +50,7 @@ public class KillerInstruction implements IInstruction {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied KillerInstruction this*/) {
     StringBuilder b = new StringBuilder();
     for (X86Instruction i : instructions) {

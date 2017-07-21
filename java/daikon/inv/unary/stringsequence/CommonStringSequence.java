@@ -54,6 +54,7 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   protected CommonStringSequence instantiate_dyn(
       /*>>> @Prototype CommonStringSequence this,*/ PptSlice slice) {
     return new CommonStringSequence(slice);
@@ -170,6 +171,7 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CommonStringSequence;
     return true;

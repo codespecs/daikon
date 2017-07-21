@@ -10,6 +10,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 public class OnlyConstantVariablesFilter extends InvariantFilter {
+  @Override
   public String getDescription() {
     return "Suppress invariants containing only constants";
   }
@@ -21,6 +22,7 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     isOn = dkconfig_enabled;
   }
 
+  @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
     // System.out.println("OnlyConstantVariablesFilter: " + invariant.format());
     if (IsEqualityComparison.it.accept(invariant)) {

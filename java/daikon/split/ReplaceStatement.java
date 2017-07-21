@@ -87,6 +87,7 @@ class ReplaceStatement {
 
   /** Returns a string representation of this. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied ReplaceStatement this*/) {
     StringBuffer params = new StringBuffer();
     for (int i = 0; i < parameters.length; i++) {
@@ -111,6 +112,7 @@ class ReplaceStatement {
      * This method should not be directly used by users of this class. Sets methodName, and
      * parameters.
      */
+    @Override
     public void visit(MethodDeclaration n) {
       methodName = methodName + Ast.getName(n);
       List<MethodParameter> params = new ArrayList<MethodParameter>();

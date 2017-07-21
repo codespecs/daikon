@@ -7,6 +7,7 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 public class ObviousFilter extends InvariantFilter {
+  @Override
   public String getDescription() {
     return "Suppress obvious invariants";
   }
@@ -18,6 +19,7 @@ public class ObviousFilter extends InvariantFilter {
     isOn = dkconfig_enabled;
   }
 
+  @Override
   @SuppressWarnings("nullness") // condition hidden in local variable
   /*@EnsuresNonNullIf(result=true, expression="#1.isObvious()")*/
   boolean shouldDiscardInvariant(Invariant invariant) {

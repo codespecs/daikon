@@ -29,6 +29,7 @@ public abstract class SingleString extends UnaryInvariant {
   }
 
   /** Returns whether or not the specified types are valid for unary string. */
+  @Override
   public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1) && vis[0].file_rep_type.isString());
   }
@@ -41,6 +42,7 @@ public abstract class SingleString extends UnaryInvariant {
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(String,int)}.
+  @Override
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
@@ -52,6 +54,7 @@ public abstract class SingleString extends UnaryInvariant {
     }
   }
 
+  @Override
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);

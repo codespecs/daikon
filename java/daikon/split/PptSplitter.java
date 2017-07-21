@@ -820,6 +820,7 @@ public class PptSplitter implements Serializable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied PptSplitter this*/) {
     return "Splitter " + splitter + ": ppt1 " + ppts[0].name() + ": ppt2 " + ppts[1].name;
   }

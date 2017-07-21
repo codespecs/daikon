@@ -143,6 +143,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * Always return JUSTIFIED because we aggregate Comparison invariants that are all justified to
    * the confidence_limit threshold.
    */
+  @Override
   public double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
@@ -344,6 +345,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied Equality this*/) {
     return repr();
   }
@@ -426,12 +428,14 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     throw new UnsupportedOperationException();
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     throw new UnsupportedOperationException(
         "Equality.isSameFormula(): this method should not be called");
@@ -526,6 +530,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     leaderCache = newLeader;
   }
 
+  @Override
   public void repCheck() {
     super.repCheck();
     VarInfo leader = leader();
@@ -535,14 +540,17 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     }
   }
 
+  @Override
   public boolean enabled(/*>>> @Prototype Equality this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
+  @Override
   public boolean valid_types(/*>>> @Prototype Equality this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
+  @Override
   protected /*@NonPrototype*/ Equality instantiate_dyn(
       /*>>> @Prototype Equality this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");

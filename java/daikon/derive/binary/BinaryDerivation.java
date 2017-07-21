@@ -39,11 +39,13 @@ public abstract class BinaryDerivation extends Derivation {
   }
 
   /*@SideEffectFree*/
+  @Override
   public VarInfo[] getBases() {
     return new VarInfo[] {base1, base2};
   }
 
   /*@Pure*/
+  @Override
   public VarInfo getBase(int i) {
     switch (i) {
       case 0:
@@ -55,6 +57,7 @@ public abstract class BinaryDerivation extends Derivation {
     }
   }
 
+  @Override
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
     BinaryDerivation result = this.clone();
     result.base1 = new_vars[ArraysMDE.indexOf(old_vars, result.base1)];
@@ -62,6 +65,7 @@ public abstract class BinaryDerivation extends Derivation {
     return result;
   }
 
+  @Override
   public ValueAndModified computeValueAndModified(ValueTuple vt) {
     int source_mod1 = base1.getModified(vt);
     int source_mod2 = base2.getModified(vt);
@@ -86,19 +90,23 @@ public abstract class BinaryDerivation extends Derivation {
   protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
   /*@Pure*/
+  @Override
   protected boolean isParam() {
     return (base1.isParam() || base2.isParam());
   }
 
+  @Override
   public int derivedDepth() {
     return 1 + Math.max(base1.derivedDepth(), base2.derivedDepth());
   }
 
+  @Override
   public boolean canBeMissing() {
     return base1.canBeMissing || base2.canBeMissing;
   }
 
   /*@Pure*/
+  @Override
   public boolean isDerivedFromNonCanonical() {
     // We insist that both are canonical, not just one.
     return !(base1.isCanonical() && base2.isCanonical());

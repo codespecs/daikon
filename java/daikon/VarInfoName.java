@@ -1881,6 +1881,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return identifier_name_impl("");
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitElements(this);
     }
@@ -1968,18 +1969,22 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.index = index;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied Subscript this*/) {
       return "Subscript{" + index.repr() + "}[" + sequence.repr() + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied Subscript this*/) {
       return sequence.name_impl(index.name());
     }
 
+    @Override
     protected String esc_name_impl() {
       return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       return "(select "
           + sequence.simplify_name(prestate)
@@ -1988,14 +1993,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + ")";
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return java_family_impl(OutputFormat.JAVA, v);
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return java_family_impl(OutputFormat.JML, v);
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return java_family_impl(OutputFormat.DBCJAVA, v);
     }
@@ -2024,10 +2032,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     protected String identifier_name_impl() {
       return sequence.identifier_name_impl(index.identifier_name());
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitSubscript(this);
     }
@@ -2075,6 +2085,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.j = j;
     }
 
+    @Override
     protected String repr_impl(/*>>>@GuardSatisfied Slice this*/) {
       return "Slice{"
           + ((i == null) ? "" : i.repr())
@@ -2085,11 +2096,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + "]";
     }
 
+    @Override
     protected String name_impl(/*>>>@GuardSatisfied Slice this*/) {
       return sequence.name_impl(
           "" + ((i == null) ? "0" : i.name()) + ".." + ((j == null) ? "" : j.name()));
     }
 
+    @Override
     protected String esc_name_impl() {
       // return the default implementation for now.
       // return name_impl();
@@ -2097,20 +2110,24 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           "ESC cannot format an unquantified slice of elements");
     }
 
+    @Override
     protected String simplify_name_impl(boolean prestate) {
       System.out.println(" seq: " + sequence + " " + i + " " + j);
       throw new UnsupportedOperationException(
           "Simplify cannot format an unquantified slice of elements");
     }
 
+    @Override
     protected String java_name_impl(VarInfo v) {
       return slice_helper(OutputFormat.JAVA, v);
     }
 
+    @Override
     protected String jml_name_impl(VarInfo v) {
       return slice_helper(OutputFormat.JML, v);
     }
 
+    @Override
     protected String dbc_name_impl(VarInfo v) {
       return slice_helper(OutputFormat.DBCJAVA, v);
     }
@@ -2199,12 +2216,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
+    @Override
     protected String identifier_name_impl() {
       String start = (i == null) ? "0" : i.identifier_name();
       String end = (j == null) ? "" : j.identifier_name();
       return sequence.identifier_name_impl(start + "_to_" + end);
     }
 
+    @Override
     public <T> T accept(Visitor<T> v) {
       return v.visitSlice(this);
     }
@@ -2258,20 +2277,24 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * more than one branch.
    */
   public abstract static class AbstractVisitor<T> implements Visitor<T> {
+    @Override
     public T visitSimple(Simple o) {
       // nothing to do; leaf node
       return null;
     }
 
+    @Override
     public T visitSizeOf(SizeOf o) {
       return o.sequence.accept(this);
     }
 
+    @Override
     public T visitFunctionOf(FunctionOf o) {
       return o.argument.accept(this);
     }
 
     /** By default, return effect on first argument, but traverse all, backwards. */
+    @Override
     public T visitFunctionOfN(FunctionOfN o) {
       T retval = null;
       for (ListIterator<VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
@@ -2281,33 +2304,41 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return retval;
     }
 
+    @Override
     public T visitField(Field o) {
       return o.term.accept(this);
     }
 
+    @Override
     public T visitTypeOf(TypeOf o) {
       return o.term.accept(this);
     }
 
+    @Override
     public T visitPrestate(Prestate o) {
       return o.term.accept(this);
     }
 
+    @Override
     public T visitPoststate(Poststate o) {
       return o.term.accept(this);
     }
 
+    @Override
     public T visitAdd(Add o) {
       return o.term.accept(this);
     }
 
+    @Override
     public T visitElements(Elements o) {
       return o.term.accept(this);
     }
     // leave abstract; traversal order and return values matter
+    @Override
     public abstract T visitSubscript(Subscript o);
 
     // leave abstract; traversal order and return values matter
+    @Override
     public abstract T visitSlice(Slice o);
   }
 
@@ -2335,18 +2366,22 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return pre;
     }
     // visitor methods that get the job done
+    @Override
     public VarInfoName visitSimple(Simple o) {
       return (o == goal) ? goal : null;
     }
 
+    @Override
     public VarInfoName visitSizeOf(SizeOf o) {
       return (o == goal) ? goal : super.visitSizeOf(o);
     }
 
+    @Override
     public VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == goal) ? goal : super.visitFunctionOf(o);
     }
 
+    @Override
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName retval = null;
       for (VarInfoName vin : o.args) {
@@ -2358,32 +2393,39 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return retval;
     }
 
+    @Override
     public VarInfoName visitField(Field o) {
       return (o == goal) ? goal : super.visitField(o);
     }
 
+    @Override
     public VarInfoName visitTypeOf(TypeOf o) {
       return (o == goal) ? goal : super.visitTypeOf(o);
     }
 
+    @Override
     public VarInfoName visitPrestate(Prestate o) {
       pre = true;
       return super.visitPrestate(o);
     }
 
+    @Override
     public VarInfoName visitPoststate(Poststate o) {
       pre = false;
       return super.visitPoststate(o);
     }
 
+    @Override
     public VarInfoName visitAdd(Add o) {
       return (o == goal) ? goal : super.visitAdd(o);
     }
 
+    @Override
     public VarInfoName visitElements(Elements o) {
       return (o == goal) ? goal : super.visitElements(o);
     }
 
+    @Override
     public VarInfoName visitSubscript(Subscript o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
@@ -2391,6 +2433,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return null;
     }
 
+    @Override
     public VarInfoName visitSlice(Slice o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
@@ -2435,18 +2478,22 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     // visitor methods that get the job done
+    @Override
     public VarInfoName visitSimple(Simple o) {
       return (goals.contains(o)) ? o : null;
     }
 
+    @Override
     public VarInfoName visitSizeOf(SizeOf o) {
       return (goals.contains(o)) ? o : o.sequence.intern().accept(this);
     }
 
+    @Override
     public VarInfoName visitFunctionOf(FunctionOf o) {
       return (goals.contains(o)) ? o : super.visitFunctionOf(o);
     }
 
+    @Override
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName result = null;
       if (goals.contains(o)) return o;
@@ -2457,32 +2504,39 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return result;
     }
 
+    @Override
     public VarInfoName visitField(Field o) {
       return (goals.contains(o)) ? o : super.visitField(o);
     }
 
+    @Override
     public VarInfoName visitTypeOf(TypeOf o) {
       return (goals.contains(o)) ? o : super.visitTypeOf(o);
     }
 
+    @Override
     public VarInfoName visitPrestate(Prestate o) {
       if (goals.contains(o)) return o;
       return super.visitPrestate(o);
     }
 
+    @Override
     public VarInfoName visitPoststate(Poststate o) {
       if (goals.contains(o)) return o;
       return super.visitPoststate(o);
     }
 
+    @Override
     public VarInfoName visitAdd(Add o) {
       return (goals.contains(o)) ? o : super.visitAdd(o);
     }
 
+    @Override
     public VarInfoName visitElements(Elements o) {
       return (goals.contains(o)) ? o : super.visitElements(o);
     }
 
+    @Override
     public VarInfoName visitSubscript(Subscript o) {
       if (goals.contains(o)) return o;
       VarInfoName temp = o.sequence.accept(this);
@@ -2492,6 +2546,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return null;
     }
 
+    @Override
     public VarInfoName visitSlice(Slice o) {
       if (goals.contains(o)) return o;
       VarInfoName temp = o.sequence.accept(this);
@@ -2526,6 +2581,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return result;
     }
 
+    @Override
     public Boolean visitFunctionOfN(FunctionOfN o) {
       Boolean retval = null;
       for (ListIterator<VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
@@ -2538,6 +2594,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return retval;
     }
 
+    @Override
     public Boolean visitSubscript(Subscript o) {
       Boolean temp = o.sequence.accept(this);
       if (temp == null) return temp;
@@ -2545,6 +2602,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return temp;
     }
 
+    @Override
     public Boolean visitSlice(Slice o) {
       Boolean temp = o.sequence.accept(this);
       if (temp == null) return temp;
@@ -2570,11 +2628,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       super(vin);
     }
 
+    @Override
     public Boolean visitSimple(Simple o) {
       // Any var not inside an orig() isn't prestate
       return null;
     }
 
+    @Override
     public Boolean visitPrestate(Prestate o) {
       // orig(...) is all prestate unless it contains post(...)
       return (new IsAllNonPoststateVisitor(o).result()) ? Boolean.TRUE : null;
@@ -2586,11 +2646,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       super(vin);
     }
 
+    @Override
     public Boolean visitSimple(Simple o) {
       // Any var not inside a post() isn't poststate
       return Boolean.TRUE;
     }
 
+    @Override
     public Boolean visitPoststate(Poststate o) {
       // If we see a post(...), we aren't all poststate.
       return null;
@@ -2620,6 +2682,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     // visitor methods that get the job done
+    @Override
     public Elements visitFunctionOfN(FunctionOfN o) {
       Elements retval = null;
       for (VarInfoName vin : o.args) {
@@ -2631,20 +2694,24 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return retval;
     }
 
+    @Override
     public Elements visitPrestate(Prestate o) {
       pre = true;
       return super.visitPrestate(o);
     }
 
+    @Override
     public Elements visitPoststate(Poststate o) {
       pre = false;
       return super.visitPoststate(o);
     }
 
+    @Override
     public Elements visitElements(Elements o) {
       return o;
     }
 
+    @Override
     public Elements visitSubscript(Subscript o) {
       // skip the subscripted sequence
       Elements tmp = o.sequence.term.accept(this);
@@ -2654,6 +2721,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return tmp;
     }
 
+    @Override
     public Elements visitSlice(Slice o) {
       // skip the sliced sequence
       Elements tmp = o.sequence.term.accept(this);
@@ -2685,18 +2753,22 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return root.accept(this);
     }
 
+    @Override
     public VarInfoName visitSimple(Simple o) {
       return (o == old) ? _new : o;
     }
 
+    @Override
     public VarInfoName visitSizeOf(SizeOf o) {
       return (o == old) ? _new : super.visitSizeOf(o).applySize();
     }
 
+    @Override
     public VarInfoName visitFunctionOf(FunctionOf o) {
       return (o == old) ? _new : super.visitFunctionOf(o).applyFunction(o.function);
     }
 
+    @Override
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       // If o is getting replaced, then just replace it
       // otherwise, create a new function and check if arguments get replaced
@@ -2709,34 +2781,42 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return VarInfoName.applyFunctionOfN(o.function, newArgs);
     }
 
+    @Override
     public VarInfoName visitField(Field o) {
       return (o == old) ? _new : super.visitField(o).applyField(o.field);
     }
 
+    @Override
     public VarInfoName visitTypeOf(TypeOf o) {
       return (o == old) ? _new : super.visitTypeOf(o).applyTypeOf();
     }
 
+    @Override
     public VarInfoName visitPrestate(Prestate o) {
       return (o == old) ? _new : super.visitPrestate(o).applyPrestate();
     }
 
+    @Override
     public VarInfoName visitPoststate(Poststate o) {
       return (o == old) ? _new : super.visitPoststate(o).applyPoststate();
     }
 
+    @Override
     public VarInfoName visitAdd(Add o) {
       return (o == old) ? _new : super.visitAdd(o).applyAdd(o.amount);
     }
 
+    @Override
     public VarInfoName visitElements(Elements o) {
       return (o == old) ? _new : super.visitElements(o).applyElements();
     }
 
+    @Override
     public VarInfoName visitSubscript(Subscript o) {
       return (o == old) ? _new : o.sequence.accept(this).applySubscript(o.index.accept(this));
     }
 
+    @Override
     public VarInfoName visitSlice(Slice o) {
       return (o == old)
           ? _new
@@ -2758,11 +2838,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       super(null, null);
     }
 
+    @Override
     public VarInfoName visitSimple(Simple o) {
       if (o.name.equals("return")) return o;
       return o.applyPoststate();
     }
 
+    @Override
     public VarInfoName visitPrestate(Prestate o) {
       return o.term;
     }
@@ -2788,21 +2870,25 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     // visitor methods that get the job done
+    @Override
     public NoReturnValue visitSimple(Simple o) {
       result.add(o);
       return super.visitSimple(o);
     }
 
+    @Override
     public NoReturnValue visitSizeOf(SizeOf o) {
       result.add(o);
       return super.visitSizeOf(o);
     }
 
+    @Override
     public NoReturnValue visitFunctionOf(FunctionOf o) {
       result.add(o);
       return super.visitFunctionOf(o);
     }
 
+    @Override
     public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       result.add(o);
       for (VarInfoName vin : o.args) {
@@ -2811,36 +2897,43 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return null;
     }
 
+    @Override
     public NoReturnValue visitField(Field o) {
       result.add(o);
       return super.visitField(o);
     }
 
+    @Override
     public NoReturnValue visitTypeOf(TypeOf o) {
       result.add(o);
       return super.visitTypeOf(o);
     }
 
+    @Override
     public NoReturnValue visitPrestate(Prestate o) {
       result.add(o);
       return super.visitPrestate(o);
     }
 
+    @Override
     public NoReturnValue visitPoststate(Poststate o) {
       result.add(o);
       return super.visitPoststate(o);
     }
 
+    @Override
     public NoReturnValue visitAdd(Add o) {
       result.add(o);
       return super.visitAdd(o);
     }
 
+    @Override
     public NoReturnValue visitElements(Elements o) {
       result.add(o);
       return super.visitElements(o);
     }
 
+    @Override
     public NoReturnValue visitSubscript(Subscript o) {
       result.add(o);
       o.sequence.accept(this);
@@ -2848,6 +2941,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return null;
     }
 
+    @Override
     public NoReturnValue visitSlice(Slice o) {
       result.add(o);
       o.sequence.accept(this);
@@ -2879,30 +2973,36 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     // visitor methods that get the job done
+    @Override
     public NoReturnValue visitSimple(Simple o) {
       simples.add(o.name);
       return super.visitSimple(o);
     }
 
+    @Override
     public NoReturnValue visitElements(Elements o) {
       return super.visitElements(o);
     }
 
+    @Override
     public NoReturnValue visitFunctionOf(FunctionOf o) {
       simples.add(o.function);
       return super.visitFunctionOf(o);
     }
 
+    @Override
     public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       simples.add(o.function);
       return super.visitFunctionOfN(o);
     }
 
+    @Override
     public NoReturnValue visitSubscript(Subscript o) {
       o.sequence.accept(this);
       return o.index.accept(this);
     }
 
+    @Override
     public NoReturnValue visitSlice(Slice o) {
       if (o.i != null) {
         o.i.accept(this);
@@ -2948,15 +3048,18 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     // visitor methods that get the job done
+    @Override
     public NoReturnValue visitSimple(Simple o) {
       return super.visitSimple(o);
     }
 
+    @Override
     public NoReturnValue visitElements(Elements o) {
       unquant.add(o);
       return super.visitElements(o);
     }
 
+    @Override
     public NoReturnValue visitFunctionOf(FunctionOf o) {
       return null;
       // return o.args.get(0).accept(this); // Return value doesn't matter
@@ -2968,18 +3071,21 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      * arrays that are returned, making the quantification engine think it's working with 2-d
      * arrays.)
      */
+    @Override
     public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       return null;
       // return o.args.get(0).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
     }
 
+    @Override
     public NoReturnValue visitSizeOf(SizeOf o) {
       // don't visit the sequence; we aren't using the elements of it,
       // just the length, so we don't want to include it in the results
       return o.get_term().accept(this);
     }
 
+    @Override
     public NoReturnValue visitSubscript(Subscript o) {
       o.index.accept(this);
       // don't visit the sequence; it is fixed with an exact
@@ -2987,6 +3093,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return o.sequence.term.accept(this);
     }
 
+    @Override
     public NoReturnValue visitSlice(Slice o) {
       unquant.add(o);
       if (o.i != null) {
@@ -3028,16 +3135,19 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         super(name);
       }
 
+      @Override
       protected String repr_impl(/*>>>@GuardSatisfied FreeVar this*/) {
         return "Free[" + super.repr_impl() + "]";
       }
 
+      @Override
       protected String jml_name_impl(VarInfo v) {
         return super.jml_name_impl(v);
       }
       // protected String esc_name_impl() {
       //   return super.esc_name_impl();
       // }
+      @Override
       protected String simplify_name_impl(boolean prestate) {
         return super.simplify_name_impl(false);
       }
@@ -3895,6 +4005,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   /** A pass-through transformer. */
   public static final Transformer IDENTITY_TRANSFORMER =
       new Transformer() {
+        @Override
         public VarInfoName transform(VarInfoName v) {
           return v;
         }
@@ -3903,6 +4014,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   /** Compare VarInfoNames alphabetically. */
   public static class LexicalComparator implements Comparator<VarInfoName> {
     /*@Pure*/
+    @Override
     public int compare(VarInfoName name1, VarInfoName name2) {
       return name1.compareTo(name2);
     }

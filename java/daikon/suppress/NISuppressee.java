@@ -247,6 +247,7 @@ public class NISuppressee {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied NISuppressee this*/) {
 
     String extra = "";

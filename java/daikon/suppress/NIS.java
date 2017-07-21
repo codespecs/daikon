@@ -900,6 +900,7 @@ public class NIS {
     /** Equal iff classes / swap variable / and variables match exactly */
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied SupInv this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -927,6 +928,7 @@ public class NIS {
 
     /** Hash on class and variables */
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied SupInv this*/) {
       int code = suppressee.sup_class.hashCode();
       for (int i = 0; i < vis.length; i++) {
@@ -974,6 +976,7 @@ public class NIS {
 
     /** Return string representation of the suppressed invariant */
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied SupInv this*/) {
       String[] names = new String[vis.length];
       for (int i = 0; i < vis.length; i++) {
@@ -1071,6 +1074,7 @@ public class NIS {
 
     /** Returns a string representation of all of the antecedents by class. */
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Antecedents this*/) {
 
       String out = "Comparability " + comparability + " : ";

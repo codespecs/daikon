@@ -58,6 +58,7 @@ public class NonModulus extends SingleScalar {
   }
 
   /** NonModulus is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) return false;
@@ -72,6 +73,7 @@ public class NonModulus extends SingleScalar {
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   protected NonModulus instantiate_dyn(/*>>> @Prototype NonModulus this,*/ PptSlice slice) {
     return new NonModulus(slice);
   }

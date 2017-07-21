@@ -90,6 +90,7 @@ public class Positive extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof Positive;
     return true;

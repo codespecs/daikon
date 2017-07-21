@@ -43,6 +43,7 @@ public class GuardingImplication extends Implication {
   }
 
   /*@Pure*/
+  @Override
   public boolean isWorthPrinting() {
     return right.isWorthPrinting();
     // return !right.isObvious();
@@ -53,6 +54,7 @@ public class GuardingImplication extends Implication {
     return right.enoughSamples();
   }
 
+  @Override
   public double computeConfidence() {
     return right.computeConfidence();
   }

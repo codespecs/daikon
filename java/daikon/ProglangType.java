@@ -757,6 +757,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
 
   // For Java programs, a @BinaryName.
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied ProglangType this*/) {
     return format();
   }

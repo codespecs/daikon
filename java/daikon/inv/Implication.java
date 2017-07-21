@@ -165,6 +165,7 @@ public class Implication extends Joiner {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     assert vis.length > 0;
     for (int ii = 0; ii < vis.length; ii++) {
@@ -190,6 +191,7 @@ public class Implication extends Joiner {
    * The standard version passes the vis from the slice containing the implication itself (slice 0).
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
     //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
@@ -212,6 +214,7 @@ public class Implication extends Joiner {
    * The standard version passes the vis from the slice containing the implication itself (slice 0).
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
 
     // If the consequent is ni-suppressed in its original program point,
@@ -235,6 +238,7 @@ public class Implication extends Joiner {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(/*@NonNull*/ Invariant other) {
     Implication other_implic = (Implication) other;
     return ((iff == other_implic.iff) && super.isSameFormula(other_implic));
@@ -242,6 +246,7 @@ public class Implication extends Joiner {
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean isSameInvariant(Invariant other) {
     if (other == null) return false;
     if (!(other instanceof Implication)) return false;
@@ -265,6 +270,7 @@ public class Implication extends Joiner {
   }
 
   /*@Pure*/
+  @Override
   public boolean isAllPrestate() {
     return predicate().isAllPrestate() && consequent().isAllPrestate();
   }
@@ -317,14 +323,17 @@ public class Implication extends Joiner {
             + ")]"));
   }
 
+  @Override
   public boolean enabled(/*>>> @Prototype Implication this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
+  @Override
   public boolean valid_types(/*>>> @Prototype Implication this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
+  @Override
   protected /*@NonPrototype*/ Invariant instantiate_dyn(
       /*>>> @Prototype Implication this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");

@@ -181,6 +181,7 @@ public class DynamicConstants implements Serializable {
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied Constant this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -192,10 +193,12 @@ public class DynamicConstants implements Serializable {
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Constant this*/) {
       return (vi.hashCode());
     }
 
+    @Override
     @SuppressWarnings("purity") // side effects to local state (string creation)
     /*@SideEffectFree*/
     public String toString(/*>>>@GuardSatisfied Constant this*/) {
@@ -232,6 +235,7 @@ public class DynamicConstants implements Serializable {
     private ConIndexComparator() {}
 
     /*@Pure*/
+    @Override
     public int compare(Constant con1, Constant con2) {
       return (con1.vi.varinfo_index - con2.vi.varinfo_index);
     }

@@ -13,6 +13,7 @@ public final class StringLengthFactory extends UnaryDerivationFactory {
   /** Debug output */
   public static final Logger debug = Logger.getLogger("daikon.derive.unary.StringLengthFactory");
 
+  @Override
   public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {
     if (!StringLength.dkconfig_enabled) {
       return null;

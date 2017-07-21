@@ -16,6 +16,7 @@ import org.checkerframework.checker.regex.qual.*;
  */
 public class DerivedVariableFilter extends InvariantFilter {
 
+  @Override
   public String getDescription() {
     return "Derived Variable filter on '" + dkconfig_class_re + "'";
   }
@@ -43,6 +44,7 @@ public class DerivedVariableFilter extends InvariantFilter {
     return dkconfig_class_re;
   }
 
+  @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
 
     assert class_re != null : "@AssumeAssertion(nullness):  only called when filter is active";

@@ -60,6 +60,7 @@ public class Modulus extends SingleScalar {
   }
 
   /** Modulus is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) return false;
@@ -68,6 +69,7 @@ public class Modulus extends SingleScalar {
   }
 
   /** Instantiate an invariant on the specified slice */
+  @Override
   protected Modulus instantiate_dyn(/*>>> @Prototype Modulus this,*/ PptSlice slice) {
     return new Modulus(slice);
   }
@@ -218,6 +220,7 @@ public class Modulus extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     Modulus otherModulus = (Modulus) other;
 
@@ -235,6 +238,7 @@ public class Modulus extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     if ((modulus == 0) || (modulus == 1)) {
       return false;
@@ -272,6 +276,7 @@ public class Modulus extends SingleScalar {
    * </pre>
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // Do not show x-1 = a (mod b).  There must be a different mod

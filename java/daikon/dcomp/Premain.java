@@ -1,10 +1,13 @@
 package daikon.dcomp;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.util.*;
 import java.io.*;
 import java.lang.instrument.*;
+import java.nio.file.Files;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
@@ -91,7 +94,7 @@ public class Premain {
             "Can't find jdk_classes.txt; see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
         System.exit(1);
       }
-      BufferedReader reader = new BufferedReader(new InputStreamReader(strm));
+      BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));
       while (true) {
         String line = reader.readLine();
         if (line == null) break;
@@ -132,6 +135,7 @@ public class Premain {
   /** Shutdown thread that writes out the comparability results. */
   public static class ShutdownThread extends Thread {
 
+    @Override
     public void run() {
 
       in_shutdown = true;
@@ -199,7 +203,7 @@ public class Premain {
 
   public static PrintWriter open(File filename) {
     try {
-      return new PrintWriter(new BufferedWriter(new FileWriter(filename)));
+      return new PrintWriter(Files.newBufferedWriter(filename.toPath(), UTF_8));
       //return new PrintWriter (filename);
       //return new PrintStream (new BufferedWriter
       //            (new Outpu32tStreamWriter (new FileOutputStream(filename))));

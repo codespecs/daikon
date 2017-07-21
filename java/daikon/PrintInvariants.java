@@ -1,5 +1,7 @@
 package daikon;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.FileIO.ParentRelation;
 import daikon.PptRelation.PptRelationType;
 import daikon.VarInfo.VarFlags;
@@ -13,6 +15,8 @@ import daikon.split.PptSplitter;
 import daikon.suppress.*;
 import gnu.getopt.*;
 import java.io.*;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -698,9 +702,9 @@ public final class PrintInvariants {
 
     PrintWriter pw;
     if (out_stream == null) {
-      pw = new PrintWriter(System.out, true);
+      pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8)), true);
     } else {
-      pw = new PrintWriter(out_stream, true);
+      pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(out_stream, UTF_8)), true);
     }
 
     PptTopLevel combined_exit = null;

@@ -1,6 +1,7 @@
 package daikon.test.inv;
 
 import static daikon.inv.Invariant.asInvClass;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.*;
 import daikon.config.Configuration;
@@ -10,6 +11,8 @@ import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.unary.*;
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -282,7 +285,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     //  String inputFile = inputFileLocation.getFile();
     LineNumberReader input;
     try {
-      input = new LineNumberReader(new InputStreamReader(new FileInputStream(inputFileName)));
+      input =
+          new LineNumberReader(new InputStreamReader(new FileInputStream(inputFileName), UTF_8));
     } catch (FileNotFoundException e) {
       fail(
           "Unexpected FileNotFoundException (very strange since the URL of the file was found earlier)");
@@ -294,7 +298,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   private static FileWriter getCommandWriter() {
 
     try {
-      return new FileWriter(commandsFileName);
+      return Files.newBufferedWriter(Paths.get(commandsFileName), UTF_8);
     } catch (IOException e) {
       throw new RuntimeException("Cannot write output into " + commandsFileName);
     }
@@ -314,7 +318,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     //    System.out.println(System.getProperty("user.dir"));
     LineNumberReader commands;
     try {
-      commands = new LineNumberReader(new InputStreamReader(new FileInputStream(commandsFileName)));
+      commands =
+          new LineNumberReader(new InputStreamReader(new FileInputStream(commandsFileName), UTF_8));
     } catch (FileNotFoundException e) {
       fail(
           "Unexpected FileNotFoundException (very strange since the URL of the file was found earlier)");
@@ -325,7 +330,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
   private static FileWriter getDiffsOutputWriter() {
     try {
-      return new FileWriter(new File(diffFileName));
+      return Files.newBufferedWriter(new File(diffFileName).toPath(), UTF_8);
     } catch (IOException e) {
       throw new RuntimeException("Cannot write output into " + diffFileName);
     }

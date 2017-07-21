@@ -31,12 +31,14 @@ public abstract class UnaryDerivation extends Derivation {
     }
   }
 
+  @Override
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
     UnaryDerivation result = this.clone();
     result.base = new_vars[ArraysMDE.indexOf(old_vars, result.base)];
     return result;
   }
 
+  @Override
   public ValueAndModified computeValueAndModified(ValueTuple vt) {
     int source_mod = base.getModified(vt);
     if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
@@ -57,11 +59,13 @@ public abstract class UnaryDerivation extends Derivation {
   }
 
   /*@SideEffectFree*/
+  @Override
   public VarInfo[] getBases() {
     return new VarInfo[] {base()};
   }
 
   /*@Pure*/
+  @Override
   public VarInfo getBase(int i) {
     switch (i) {
       case 0:
@@ -72,19 +76,23 @@ public abstract class UnaryDerivation extends Derivation {
   }
 
   /*@Pure*/
+  @Override
   protected boolean isParam() {
     return base.isParam();
   }
 
   /*@Pure*/
+  @Override
   public boolean isDerivedFromNonCanonical() {
     return !base.isCanonical();
   }
 
+  @Override
   public int derivedDepth() {
     return 1 + base.derivedDepth();
   }
 
+  @Override
   public boolean canBeMissing() {
     return base.canBeMissing;
   }

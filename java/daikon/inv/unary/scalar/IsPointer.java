@@ -124,6 +124,7 @@ public class IsPointer extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof IsPointer;
     return true;

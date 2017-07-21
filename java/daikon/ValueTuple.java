@@ -375,6 +375,7 @@ public final class ValueTuple implements Cloneable {
   // same contents compare identically.
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied ValueTuple this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -383,6 +384,7 @@ public final class ValueTuple implements Cloneable {
     return (vals == other.vals) && (mods == other.mods);
   }
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied ValueTuple this*/) {
     return Arrays.hashCode(vals) * 31 + Arrays.hashCode(mods);
   }
@@ -403,6 +405,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied ValueTuple this*/) {
     return toString(null);
   }

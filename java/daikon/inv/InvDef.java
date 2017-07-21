@@ -118,6 +118,7 @@ public class InvDef {
   //   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied InvDef this*/) {
     String out = "v1=" + v1.name();
     if (v2 != null) out += ", v2=" + v2.name();

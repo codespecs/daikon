@@ -8,7 +8,8 @@ DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
+# Don't let the user override this; it should refer to the current directory.
+DAIKONDIR = ${DAIKONDIR_DEFAULT}
 
 # Test that the directory exists.  There must be a better way to do this.
 DAIKONDIR:=$(wildcard ${DAIKONDIR})
@@ -789,7 +790,10 @@ error-prone: errorprone
 errorprone:
 	${MAKE} lib/error_prone_ant-2.0.21.jar
 #	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
-	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
+#	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
+# To create a patch file to apply changes:
+	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+# To apply the patch, see instructions in the Error Prone output.
 
 lib/error_prone_ant-2.0.21.jar:
 	(cd lib && wget https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/2.0.21/error_prone_ant-2.0.21.jar)

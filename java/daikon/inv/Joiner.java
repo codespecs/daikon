@@ -35,14 +35,17 @@ public abstract class Joiner extends Invariant {
     this(ppt.joiner_view, left, right);
   }
 
+  @Override
   public abstract String repr(/*>>>@GuardSatisfied Joiner this*/);
 
   // I think we don't resurrect joiners
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     throw new UnsupportedOperationException();
   }
 
   /*@SideEffectFree*/
+  @Override
   public abstract String format_using(/*>>>@GuardSatisfied Joiner this,*/ OutputFormat format);
 
   /*@Pure*/
@@ -61,6 +64,7 @@ public abstract class Joiner extends Invariant {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameInvariant(Invariant other) {
     if (!getClass().equals(other.getClass())) {
       return false;
@@ -76,6 +80,7 @@ public abstract class Joiner extends Invariant {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     if (!getClass().equals(other.getClass())) return false;
     Joiner other_joiner = (Joiner) other;

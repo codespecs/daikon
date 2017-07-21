@@ -46,6 +46,7 @@ public class X86Instruction implements IInstruction {
     return args;
   }
 
+  @Override
   public Set<String> getBinaryVarNames() {
     Set<String> retval = new LinkedHashSet<String>();
 
@@ -106,6 +107,7 @@ public class X86Instruction implements IInstruction {
    * @see daikon.IInstruction#toString()
    */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied X86Instruction this*/) {
     StringBuilder b = new StringBuilder();
     // b.append(owner != null ? owner + ":" : "");
@@ -219,6 +221,7 @@ public class X86Instruction implements IInstruction {
   // Only works for extended registers. This should
   // be fine because we only compute variables over
   // extended registers.
+  @Override
   public boolean kills(String var) {
 
     assert Operand.isRegister(var) ? Operand.isExtendedReg(var) : true;
@@ -339,6 +342,7 @@ public class X86Instruction implements IInstruction {
    *
    * @see daikon.IInstruction#getAddress()
    */
+  @Override
   public String getAddress() {
     return address;
   }

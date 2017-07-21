@@ -44,6 +44,7 @@ public abstract class SingleScalar extends UnaryInvariant {
   }
 
   /** Returns whether or not the specified types are valid for unary scalar. */
+  @Override
   public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);
   }
@@ -51,6 +52,7 @@ public abstract class SingleScalar extends UnaryInvariant {
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
+  @Override
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
@@ -62,6 +64,7 @@ public abstract class SingleScalar extends UnaryInvariant {
     }
   }
 
+  @Override
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
