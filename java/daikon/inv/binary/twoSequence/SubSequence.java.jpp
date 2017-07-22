@@ -137,6 +137,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
@@ -551,6 +552,7 @@ public class CLASSNAME extends SUPERCLASS {
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // System.out.println("checking isObviousImplied for: " + format());
@@ -823,6 +825,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant inv) {
     assert inv instanceof CLASSNAME;
     return true;

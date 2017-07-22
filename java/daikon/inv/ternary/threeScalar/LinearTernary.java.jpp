@@ -112,6 +112,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** LinearTernary is only valid on non-constant integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -372,6 +373,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -387,11 +389,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);

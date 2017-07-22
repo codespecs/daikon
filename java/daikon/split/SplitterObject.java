@@ -3,6 +3,7 @@ package daikon.split;
 import daikon.Daikon;
 import daikon.inv.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import plume.*;
 
 /*>>>
@@ -89,16 +90,14 @@ public class SplitterObject implements Comparable<SplitterObject> {
     Class<?> tempClass = defineSplitterClass(className, directory + className + ".class");
     if (tempClass != null) {
       try {
-        splitter = (Splitter) tempClass.newInstance();
-      } catch (ClassFormatError ce) {
-        ce.printStackTrace(System.out);
-        throw new Error(ce);
-      } catch (InstantiationException ie) {
-        ie.printStackTrace(System.out);
-        throw new Error(ie);
-      } catch (IllegalAccessException iae) {
-        iae.printStackTrace(System.out);
-        throw new Error(iae);
+        splitter = (Splitter) tempClass.getDeclaredConstructor().newInstance();
+      } catch (ClassFormatError
+          | IllegalAccessException
+          | InstantiationException
+          | InvocationTargetException
+          | NoSuchMethodException e) {
+        e.printStackTrace(System.out);
+        throw new Error("Trying to invoke " + tempClass + " constructor", e);
       }
       DummyInvariant dummy =
           new /*@Prototype*/ DummyInvariant(

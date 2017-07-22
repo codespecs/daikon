@@ -305,6 +305,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /** Non-Equal SeqComparison is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -570,6 +571,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -739,6 +741,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }

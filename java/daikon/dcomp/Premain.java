@@ -118,7 +118,8 @@ public class Premain {
     // use a special classloader to ensure correct version of BCEL is used
     ClassLoader loader = new daikon.chicory.ChicoryPremain.ChicoryLoader();
     try {
-      transformer = loader.loadClass("daikon.dcomp.Instrument").newInstance();
+      transformer =
+          loader.loadClass("daikon.dcomp.Instrument").getDeclaredConstructor().newInstance();
       @SuppressWarnings("unchecked")
       Class<Instrument> c = (Class<Instrument>) transformer.getClass();
       // System.out.printf ("Classloader of tranformer = %s%n",

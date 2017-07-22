@@ -65,11 +65,11 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       Integer val = freqList.get(key);
       if (val == null) {
         // Use one as default, obviously
-        freqList.put(key, new Integer(1));
+        freqList.put(key, Integer.valueOf(1));
       }
       // increment if it's already there
       else {
-        freqList.put(key, new Integer(val.intValue() + 1));
+        freqList.put(key, Integer.valueOf(val.intValue() + 1));
       }
 
       // add to justified list if this was justified once

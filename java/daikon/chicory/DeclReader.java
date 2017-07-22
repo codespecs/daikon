@@ -156,13 +156,13 @@ public class DeclReader {
         return null;
       } else if (is_int()) {
         try {
-          return (Intern.intern(new Integer(value))); // interning bugfix
+          return (Intern.intern(Integer.valueOf(value))); // interning bugfix
         } catch (NumberFormatException t) {
           throw new Error("Unexpected value '" + value + "' for integer variable " + this.name);
         }
       } else if (is_double()) {
         try {
-          return (Intern.intern(new Double(value))); // interning bugfix
+          return (Intern.intern(Double.valueOf(value))); // interning bugfix
         } catch (NumberFormatException t) {
           throw new Error("Unexpected string '" + value + "' for double variable " + this.name);
         }
@@ -428,7 +428,7 @@ public class DeclReader {
             rep_map.put(vi.get_rep_type(), dec_map);
           }
           Integer cnt = dec_map.get(vi.get_type_name());
-          if (cnt == null) cnt = new Integer(0);
+          if (cnt == null) cnt = 0;
           dec_map.put(vi.get_type_name(), ++cnt);
 
           num_vars++;

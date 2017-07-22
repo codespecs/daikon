@@ -82,8 +82,7 @@ class WriteViolationFile {
 
       // On-the-fly implementation should flush after each violation is
       // written to disk.
-      try {
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get("violations.txt"), UTF_8);
+      try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("violations.txt"), UTF_8)) {
         writer.write(
             "# Times an invariant was evaluated ----------- "
                 + Long.toString(Runtime.numEvaluations)
@@ -112,7 +111,6 @@ class WriteViolationFile {
             writer.newLine();
           }
         }
-        writer.close();
       } catch (IOException e) {
         throw new Error("Problem while writing file violations.txt", e);
       }

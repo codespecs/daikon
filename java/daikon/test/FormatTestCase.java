@@ -910,7 +910,7 @@ class FormatTestCase {
       }
 
       // Set count to 1
-      params[sampleSize] = new Integer(1);
+      params[sampleSize] = 1;
 
       // Debug code
 

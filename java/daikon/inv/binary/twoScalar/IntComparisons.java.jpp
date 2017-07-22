@@ -407,6 +407,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   /** Returns whether or not the specified var types are valid for INTEQUAL */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -554,6 +555,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   /** Instantiate an invariant on the specified slice */
+  @Override
   protected INTEQUAL instantiate_dyn(/*>>> @Prototype INTEQUAL this,*/ PptSlice slice) {
     #if defined (NONEQUAL)
     // System.out.printf ("Instantiating non-equal on %s and %s%n",
@@ -569,6 +571,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 #endif
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     #if defined (EQUAL_OP) || defined (NONEQUAL_OP)
       // we don't care if things swap; we have symmetry
@@ -584,6 +587,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
 #if (defined(EQUAL_OP) || defined(NONEQUAL_OP))
   /*@Pure*/
+  @Override
   public boolean is_symmetric() {
     return true;
   }
@@ -840,11 +844,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
 
     // Also ought to check against LinearBinary, etc.
@@ -996,6 +1002,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #endif
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // JHP: We might consider adding a check over bounds.   If
@@ -1342,6 +1349,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #else
   /** Returns the non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }

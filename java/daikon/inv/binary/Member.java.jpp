@@ -121,6 +121,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   protected CLASSNAME instantiate_dyn(/*@Prototype*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
@@ -379,6 +380,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CLASSNAME;
     return true;
@@ -394,6 +396,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
    * </pre>
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     if (Debug.logOn()) {

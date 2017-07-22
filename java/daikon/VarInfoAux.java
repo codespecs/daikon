@@ -193,7 +193,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
         : "@AssumeAssertion(nullness):  application invariant:  postcondition of intern(), which was just called";
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("New parse " + result);
-      debug.fine("Intern table size: " + new Integer(interningMap.size()));
+      debug.fine("Intern table size: " + interningMap.size());
     }
     return result;
   }
@@ -284,14 +284,16 @@ public final class VarInfoAux implements Cloneable, Serializable {
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
-      return equals((VarInfoAux) o);
+      return equalsVarInfoAux((VarInfoAux) o);
     } else {
       return false;
     }
   }
 
   /*@Pure*/
-  public boolean equals(/*>>>@GuardSatisfied VarInfoAux this,*//*@GuardSatisfied*/ VarInfoAux o) {
+  public boolean equalsVarInfoAux(
+      /*>>>@GuardSatisfied VarInfoAux this,*/
+      /*@GuardSatisfied*/ VarInfoAux o) {
     return this.map.equals(o.map);
   }
 

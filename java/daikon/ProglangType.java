@@ -311,10 +311,10 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    */
   @SuppressWarnings("ConstantOverflow")
   private static long myParseLong(String value) {
-    if (value.length() == 20 && value.charAt(0) == '1'
-        || value.length() == 19
+    if ((value.length() == 20 && value.charAt(0) == '1')
+        || (value.length() == 19
             && value.charAt(0) == '9'
-            && value.compareTo("9223372036854775808") >= 0) {
+            && value.compareTo("9223372036854775808") >= 0)) {
       // Oops, we got a large unsigned long, which Java, having
       // only signed longs, will refuse to parse. We'll have to
       // turn it into the corresponding negative long value.

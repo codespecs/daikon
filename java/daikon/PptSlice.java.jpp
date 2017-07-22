@@ -106,6 +106,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 #endif
 
+  @Override
   public final int arity(
       /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PPTSLICE1 this*/) {
     return ARITY;
@@ -115,6 +116,7 @@ public final class PPTSLICE1 extends PptSlice {
    * created unless the variables in the slice are compatible. If the variables are compatible,
    * invariants that match the type of the slices variables are created.
    */
+  @Override
   public void instantiate_invariants() {
     instantiate_invariants(Daikon.proto_invs);
   }
@@ -197,6 +199,7 @@ public final class PPTSLICE1 extends PptSlice {
 
   // These accessors are for abstract methods declared in Ppt
   /** Returns the number of (non-missing) samples observed at this slice. */
+  @Override
   public int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PPTSLICE1 this*/) {
     if (parent == null || var_infos == null) { // handle not-yet-initialized slices
       return 0;
@@ -217,6 +220,7 @@ public final class PPTSLICE1 extends PptSlice {
    * Returns an upper bound on the number of distinct values observed at this slice. This is not the
    * number of samples observed.
    */
+  @Override
   public int num_values() {
     // return an approximation
     #if defined(ARITY1)
@@ -235,6 +239,7 @@ public final class PPTSLICE1 extends PptSlice {
    * proper types, and passes them along to the invariants proper. (The invariants accept typed
    * values rather than a ValueTuple that encapsulates objects of any type whatever.)
    */
+  @Override
   public List<Invariant> add(ValueTuple full_vt, int count) {
 
     assert invs.size() > 0;
@@ -480,6 +485,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 #endif
 
+  @Override
   public void addInvariant(Invariant invariant) {
     assert invariant != null;
     // assert invariant.ppt == this;
@@ -510,6 +516,7 @@ public final class PPTSLICE1 extends PptSlice {
    * Copy invariants from this slice to a new slice over the variables argNewVarInfos. The new slice
    * should not already exist.
    */
+  @Override
   protected PptSlice cloneAndPivot(VarInfo[] argNewVarInfos) {
 
     // Sort the VarInfos by var_index and build a matching permutation

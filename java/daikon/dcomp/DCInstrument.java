@@ -2929,7 +2929,7 @@ class DCInstrument extends StackMapUtils {
           }
           last_line_number = line_number;
 
-          exit_locs.add(new Integer(line_number));
+          exit_locs.add(Integer.valueOf(line_number));
           isIncluded.add(true);
           break;
 
@@ -4806,7 +4806,7 @@ class DCInstrument extends StackMapUtils {
     for (String line : new EntryReader(file, "UTF-8")) {
       String[] key_val = line.split("  *");
       assert !static_map.containsKey(key_val[0]) : key_val[0] + " " + key_val[1];
-      static_map.put(key_val[0], new Integer(key_val[1]));
+      static_map.put(key_val[0], Integer.valueOf(key_val[1]));
       // System.out.printf ("Adding %s %s to static map%n", key_val[0],
       //                   key_val[1]);
     }

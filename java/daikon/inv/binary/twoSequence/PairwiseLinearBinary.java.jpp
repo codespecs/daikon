@@ -90,6 +90,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiates the invariant on the specified slice */
+  @Override
   protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
@@ -183,11 +184,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
@@ -196,6 +199,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

@@ -257,6 +257,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /** PAIRWISEINTEQUAL is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -318,6 +319,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -510,11 +512,13 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
@@ -532,6 +536,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }

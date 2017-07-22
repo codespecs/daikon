@@ -198,6 +198,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Check that SeqIndex comparisons make sense over these vars */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -271,6 +272,7 @@ public class CLASSNAME extends SUPERCLASS {
 #else
   /** returns the ni-suppressions for CLASSNAME */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }
@@ -416,11 +418,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
@@ -448,6 +452,7 @@ public class CLASSNAME extends SUPERCLASS {
    * A[i] = i is not true.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);

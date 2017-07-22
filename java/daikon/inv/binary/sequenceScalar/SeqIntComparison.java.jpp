@@ -183,6 +183,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /** Non-equal SeqIntComparison is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -212,6 +213,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   protected SEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQINTEQUAL this,*/ PptSlice slice) {
     return new SEQINTEQUAL(slice);
   }
@@ -364,11 +366,13 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
@@ -393,6 +397,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
    * </pre>
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -489,6 +494,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }

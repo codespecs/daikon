@@ -199,6 +199,7 @@ public class CLASSNAME extends SUPERCLASS {
    * (if B[] is missing, A[] could have dups on those samples),
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -249,6 +250,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CLASSNAME;
     return true;

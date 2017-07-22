@@ -1577,6 +1577,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
 #if defined(IS_NUMERIC)
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -1733,6 +1734,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   }
 #elif defined(IS_ELT_NUMERIC)
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

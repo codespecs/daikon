@@ -152,6 +152,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /** CLASSNAME is only valid on IS_INTEGRAL types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -560,6 +561,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   // If our classes match, we must match
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
@@ -586,6 +588,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);

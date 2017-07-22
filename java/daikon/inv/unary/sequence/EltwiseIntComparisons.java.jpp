@@ -187,6 +187,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Non-equality CLASSNAME invariants are only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -203,6 +204,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiate the invariant on the specified slice */
+  @Override
   protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
@@ -315,6 +317,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return (other instanceof CLASSNAME);
   }
@@ -324,6 +327,7 @@ public class CLASSNAME extends SUPERCLASS {
   // regression tests test this functionality
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     // This whole approach is wrong in the case when the sequence can
     // ever consist of only one element.  For now, just forget
@@ -389,6 +393,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

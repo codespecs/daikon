@@ -188,6 +188,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     if (NIS.dkconfig_enabled && dkconfig_enabled) {
       return suppressions;

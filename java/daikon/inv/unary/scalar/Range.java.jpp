@@ -104,6 +104,7 @@ public abstract class RANGE extends SUPERCLASS {
    * Check that instantiation is ok. The type must be integral
    * (not boolean or hash code).
    */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -195,11 +196,13 @@ public abstract class RANGE extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other.getClass() == getClass();
     return true;
   }
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
@@ -209,6 +212,7 @@ public abstract class RANGE extends SUPERCLASS {
    * version of OneOf or Bound.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     return new DiscardInfo(this, DiscardCode.obvious,
@@ -630,6 +634,7 @@ public abstract class RANGE extends SUPERCLASS {
      * (and should thus be printed).
      */
     /*@Pure*/
+    @Override
     public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
        ONEOF oneof = find_oneof(vis);
@@ -704,6 +709,7 @@ public abstract class RANGE extends SUPERCLASS {
      * (and should thus be printed).
      */
     /*@Pure*/
+    @Override
     public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
        // If there is a oneof, it implies this
        ONEOF oneof = find_oneof(vis);

@@ -20,8 +20,10 @@ import org.checkerframework.dataflow.qual.*;
  * Runtime support for Chicory, the Daikon front end for Java. This class is a collection of
  * methods; it should never be instantiated.
  */
-@SuppressWarnings(
-    "initialization.fields.uninitialized") // library initialized in code added by run-time instrumentation
+@SuppressWarnings({
+  "initialization.fields.uninitialized", // library initialized in code added by run-time instrumentation
+  "JavaLangClash"
+})
 public class Runtime {
   /** Unique id for method entry/exit (so they can be matched up) */
   public static AtomicInteger nonce = new AtomicInteger();
@@ -454,6 +456,7 @@ public class Runtime {
    * Indicates that no more output should be printed to the dtrace file. The file is closed and iff
    * dtraceLimitTerminate is true the program is terminated.
    */
+  @SuppressWarnings("StaticGuardedByInstance")
   public static void noMoreOutput() {
     // The incrementRecords method (which calls this) is called inside a
     // synchronized block, but re-synchronize just to be sure, or in case
@@ -737,7 +740,7 @@ public class Runtime {
 
     @Override
     public Boolean getJavaWrapper() {
-      return new Boolean(val);
+      return val;
     }
 
     @Override
@@ -761,7 +764,7 @@ public class Runtime {
 
     @Override
     public Byte getJavaWrapper() {
-      return new Byte(val);
+      return val;
     }
 
     @Override
@@ -786,7 +789,7 @@ public class Runtime {
 
     @Override
     public Character getJavaWrapper() {
-      return new Character(val);
+      return val;
     }
 
     @Override
@@ -810,7 +813,7 @@ public class Runtime {
 
     @Override
     public Float getJavaWrapper() {
-      return new Float(val);
+      return val;
     }
 
     @Override
@@ -834,7 +837,7 @@ public class Runtime {
 
     @Override
     public Integer getJavaWrapper() {
-      return new Integer(val);
+      return val;
     }
 
     @Override
@@ -858,7 +861,7 @@ public class Runtime {
 
     @Override
     public Long getJavaWrapper() {
-      return new Long(val);
+      return val;
     }
 
     @Override
@@ -882,7 +885,7 @@ public class Runtime {
 
     @Override
     public Short getJavaWrapper() {
-      return new Short(val);
+      return val;
     }
 
     @Override
@@ -906,7 +909,7 @@ public class Runtime {
 
     @Override
     public Double getJavaWrapper() {
-      return new Double(val);
+      return val;
     }
 
     @Override

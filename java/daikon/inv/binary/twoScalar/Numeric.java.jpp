@@ -206,6 +206,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /** Returns true if it is ok to instantiate a numeric invariant over the specified slice. */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     ProglangType type1 = vis[0].file_rep_type;
@@ -489,6 +490,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #endif
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -826,6 +828,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
      * @return non-null value iff this invariant is obvious from other invariants in the same slice
      */
     /*@Pure*/
+    @Override
     public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
       // First call super type's method, and if it returns non-null, then
       // this invariant is already known to be obvious, so just return
@@ -1309,6 +1312,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
+    @Override
     public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
       return suppressions;
     }

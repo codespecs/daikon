@@ -95,10 +95,13 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     String expected = expectedAnswerBuffer.toString().trim();
     String[] expected_arr = UtilMDE.splitLines(expected);
 
-    // UtilMDE.writeFile (new File ("expected.txt"), expected);
-    // UtilMDE.writeFile (new File ("result.txt"), result);
+    UtilMDE.writeFile(new File("expected.txt"), expected);
+    UtilMDE.writeFile(new File("result.txt"), result);
 
-    assert expected_arr.length == result_arr.length : "diff in buffer lengths";
+    assert expected_arr.length == result_arr.length
+        : String.format(
+            "diff in buffer lengths: expected_arr=%d, result_arr=%d",
+            expected_arr.length, result_arr.length);
     for (int ii = 0; ii < expected_arr.length; ii++) {
       assert expected_arr[ii].equals(result_arr[ii]) : "diff at line " + ii;
     }
@@ -162,21 +165,13 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     expectedAnswerBuffer.append("  G  -->  Comparable\n");
     expectedAnswerBuffer.append("Method: <G extends Comparable >List<U>foo11(G x, C y)\n");
     expectedAnswerBuffer.append("  C  -->  java.lang.Object\n");
-    expectedAnswerBuffer.append("Method: // shadowing//\n");
-    expectedAnswerBuffer.append("/* */\n");
-    expectedAnswerBuffer.append("<C extends Comparable >List<U>foo115(C x, B y)\n");
+    expectedAnswerBuffer.append("Method: <C extends Comparable >List<U>foo115(C x, B y)\n");
     expectedAnswerBuffer.append("  Comparable  -->  Comparable\n");
-    expectedAnswerBuffer.append("Method: // shadowing//\n");
-    expectedAnswerBuffer.append("/* */\n");
-    expectedAnswerBuffer.append("<C extends Comparable >List<U>foo115(C x, B y)\n");
+    expectedAnswerBuffer.append("Method: <C extends Comparable >List<U>foo115(C x, B y)\n");
     expectedAnswerBuffer.append("  List<U>  -->  List\n");
-    expectedAnswerBuffer.append("Method: // shadowing//\n");
-    expectedAnswerBuffer.append("/* */\n");
-    expectedAnswerBuffer.append("<C extends Comparable >List<U>foo115(C x, B y)\n");
+    expectedAnswerBuffer.append("Method: <C extends Comparable >List<U>foo115(C x, B y)\n");
     expectedAnswerBuffer.append("  C  -->  Comparable\n");
-    expectedAnswerBuffer.append("Method: // shadowing//\n");
-    expectedAnswerBuffer.append("/* */\n");
-    expectedAnswerBuffer.append("<C extends Comparable >List<U>foo115(C x, B y)\n");
+    expectedAnswerBuffer.append("Method: <C extends Comparable >List<U>foo115(C x, B y)\n");
     expectedAnswerBuffer.append("  B  -->  String\n");
     expectedAnswerBuffer.append(
         "Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");

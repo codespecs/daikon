@@ -270,6 +270,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   /** LOWERBOUND is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -606,6 +607,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
@@ -661,6 +663,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -783,6 +786,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
 #ifdef IS_ELT
     // N.B. "x[] elements >= 200" is not mutually exclusive with "x[]

@@ -137,6 +137,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       return (Point) super.clone();
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Point this*/) {
       return ("(" + x + ", " + y + " ," + z + ")");
     }

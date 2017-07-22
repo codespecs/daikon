@@ -541,7 +541,7 @@ public final class FeatureExtractor {
   // Calculate a HashMap of every feature to a unique integer.
   private static HashMap<Object, Integer> getFullMapping() throws ClassNotFoundException {
     HashMap<Object, Integer> answer = new HashMap<Object, Integer>();
-    Integer counter = new Integer(0);
+    Integer counter = 0;
 
     //get a set of all Invariant classes
     File top = new File(CLASSES);
@@ -551,12 +551,12 @@ public final class FeatureExtractor {
       Field[] fields = currentClass.getFields();
       Method[] methods = currentClass.getMethods();
       //handle the class
-      counter = new Integer(counter.intValue() + 1);
+      counter = counter.intValue() + 1;
       answer.put(currentClass, counter);
 
       if (VarInfo.class.isAssignableFrom(currentClass)) {
         for (int iC = 0; iC < NUM_VARS; iC++) {
-          counter = new Integer(counter.intValue() + 1);
+          counter = counter.intValue() + 1;
           answer.put("Var#" + iC + "_" + currentClass.getName() + "Bool", counter);
         } //reserve space for all the variables
       }
@@ -574,11 +574,11 @@ public final class FeatureExtractor {
               name += "Float";
             }
 
-            counter = new Integer(counter.intValue() + 1);
+            counter = counter.intValue() + 1;
             answer.put(name, counter);
             if (VarInfo.class.isAssignableFrom(currentClass))
               for (int iC = 0; iC < NUM_VARS; iC++) {
-                counter = new Integer(counter.intValue() + 1);
+                counter = counter.intValue() + 1;
                 answer.put(iC + "_" + name, counter);
               }
           }
@@ -598,11 +598,11 @@ public final class FeatureExtractor {
             } else {
               name += "Float";
             }
-            counter = new Integer(counter.intValue() + 1);
+            counter = counter.intValue() + 1;
             answer.put(name, counter);
             if (VarInfo.class.isAssignableFrom(currentClass))
               for (int iC = 0; iC < NUM_VARS; iC++) {
-                counter = new Integer(counter.intValue() + 1);
+                counter = counter.intValue() + 1;
                 answer.put(iC + "_" + name, counter);
               }
           }
@@ -721,8 +721,8 @@ public final class FeatureExtractor {
     TreeSet<IntDoublePair> final_answer = new TreeSet<IntDoublePair>();
     HashSet<Integer> index = new HashSet<Integer>();
     for (IntDoublePair current : answer) {
-      if (!(index.contains(new Integer(current.number)))) final_answer.add(current);
-      index.add(new Integer(current.number));
+      if (!(index.contains(Integer.valueOf(current.number)))) final_answer.add(current);
+      index.add(Integer.valueOf(current.number));
     }
 
     return final_answer;

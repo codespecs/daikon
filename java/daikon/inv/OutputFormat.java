@@ -36,7 +36,7 @@ public enum OutputFormat {
   /** C# Code Contract */
   CSHARPCONTRACT("CSharpContract");
 
-  String name;
+  final String name;
 
   OutputFormat(String name) {
     this.name = name;

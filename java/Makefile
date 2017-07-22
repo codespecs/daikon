@@ -787,12 +787,15 @@ tags-without-generated-files: clean-generated-files
 ###
 
 error-prone: errorprone
-errorprone:
+errorprone: compile errorprone-nocompile
+errorprone-nocompile:
 	${MAKE} lib/error_prone_ant-2.0.21.jar
 #	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
-#	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
+	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF ${JAVA_FILES_FOR_STYLE}
 # To create a patch file to apply changes:
-	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+# This didn't create the file though its output claimed it did:
+#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:BoxedPrimitiveConstructor -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # To apply the patch, see instructions in the Error Prone output.
 
 lib/error_prone_ant-2.0.21.jar:
