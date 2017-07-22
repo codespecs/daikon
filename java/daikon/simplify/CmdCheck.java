@@ -28,6 +28,7 @@ public class CmdCheck implements Cmd {
   }
 
   /** For documentation, read the class overview. */
+  @Override
   public void apply(final /*@GuardedBy("<self>")*/ Session s) {
     try {
 
@@ -117,6 +118,7 @@ public class CmdCheck implements Cmd {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied CmdCheck this*/) {
     return "CmdCheck: " + proposition;
   }

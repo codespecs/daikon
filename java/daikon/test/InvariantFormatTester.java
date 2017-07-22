@@ -1,5 +1,7 @@
 package daikon.test;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -148,7 +150,8 @@ public class InvariantFormatTester extends TestCase {
               + " and it must be within the classpath)");
       throw new Error("This can't happen"); // to quiet Findbugs
     }
-    LineNumberReader commandReader = new LineNumberReader(new InputStreamReader(inputStream));
+    LineNumberReader commandReader =
+        new LineNumberReader(new InputStreamReader(inputStream, UTF_8));
 
     // Create a stream for the output
     OutputStream out = new ByteArrayOutputStream();

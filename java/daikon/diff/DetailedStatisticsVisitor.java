@@ -78,6 +78,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     this.continuousJustification = continuousJustification;
   }
 
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

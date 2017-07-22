@@ -51,6 +51,7 @@ class PrefixFixer extends DepthFirstVisitor {
    * fulfill the visitor interface. Replaces the token image with "" if it is a prefix or a "."
    * following a prefix. Appends to the tokenImage and "_" to the next token's image.
    */
+  @Override
   public void visit(NodeToken n) {
     if (isMatch(n)) {
       twoTokensAgo.tokenImage = "";

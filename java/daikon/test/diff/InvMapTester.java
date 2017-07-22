@@ -30,6 +30,7 @@ public class InvMapTester extends TestCase {
     super(name);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     map = new InvMap();

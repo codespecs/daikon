@@ -5,6 +5,7 @@ import daikon.inv.*;
 public class VariableFilter extends InvariantFilter {
   // This method is more for the property filters, but we need to implement
   // it because it's abstract.
+  @Override
   public String getDescription() {
     return "Variable filter on '" + variable + "'";
   }
@@ -19,6 +20,7 @@ public class VariableFilter extends InvariantFilter {
     return variable;
   }
 
+  @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
     return !invariant.usesVar(variable);
   }

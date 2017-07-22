@@ -8,6 +8,7 @@ import static daikon.VarInfo.RefType;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.VarKind;
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.config.Configuration;
 import daikon.derive.ValueAndModified;
@@ -15,6 +16,7 @@ import daikon.diff.InvMap;
 import daikon.inv.Invariant;
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
 import java.text.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -185,13 +187,16 @@ public final class FileIO {
       this.id = id;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied ParentRelation this*/) {
       return parent_ppt_name + "[" + id + "] " + rel_type;
     };
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
-      if (parent_ppt_name != null) parent_ppt_name.intern();
+      if (parent_ppt_name != null) {
+        parent_ppt_name = parent_ppt_name.intern();
+      }
     }
   }
 
@@ -845,6 +850,7 @@ public final class FileIO {
     // Return true if the invocations print the same
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied Invocation this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
@@ -856,11 +862,13 @@ public final class FileIO {
     }
 
     /*@Pure*/
+    @Override
     public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Invocation this*/) {
       return this.format().hashCode();
     }
@@ -1243,16 +1251,16 @@ public final class FileIO {
         reader = new LineNumberReader(file_reader);
       } else if (raw_filename.equals("+")) { //socket comm with Chicory
         InputStream chicoryInput = connectToChicory();
-        InputStreamReader chicReader = new InputStreamReader(chicoryInput);
+        InputStreamReader chicReader = new InputStreamReader(chicoryInput, UTF_8);
         reader = new LineNumberReader(chicReader);
       } else if (is_url) {
         URL url = new URL(raw_filename);
         InputStream stream = url.openStream();
         if (raw_filename.endsWith(".gz")) {
           GZIPInputStream gzip_stream = new GZIPInputStream(stream);
-          reader = new LineNumberReader(new InputStreamReader(gzip_stream));
+          reader = new LineNumberReader(new InputStreamReader(gzip_stream, UTF_8));
         } else {
-          reader = new LineNumberReader(new InputStreamReader(stream));
+          reader = new LineNumberReader(new InputStreamReader(stream, UTF_8));
         }
       } else {
         reader = UtilMDE.lineNumberFileReader(raw_filename);
@@ -1355,7 +1363,8 @@ public final class FileIO {
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter = new PrintWriter(new FileWriter(new File(filename + ".debug")));
+      Global.dtraceWriter =
+          new PrintWriter(Files.newBufferedWriter(new File(filename + ".debug").toPath(), UTF_8));
     }
 
     while (true) {
@@ -2597,6 +2606,7 @@ public final class FileIO {
     }
 
     /*@SideEffectFree*/
+    @Override
     public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/) {
       try {
         return (VarDefinition) super.clone();
@@ -2627,7 +2637,7 @@ public final class FileIO {
         relative_name = relative_name.intern();
       }
       for (VarParent parent : parents) {
-        parent.parent_ppt.intern();
+        parent.parent_ppt = parent.parent_ppt.intern();
         if (parent.parent_variable != null) {
           parent.parent_variable = parent.parent_variable.intern();
         }

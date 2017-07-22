@@ -1,6 +1,8 @@
 
 package daikon.dcomp;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.DynComp;
 import daikon.util.Option;
 import daikon.util.Options;
@@ -189,7 +191,7 @@ public class BuildJDK {
       // Write out the list of all classes in the jar file
       File jdk_classes_dir = new File(dest_dir, "java/lang");
       File jdk_classes_file = new File(jdk_classes_dir, "jdk_classes.txt");
-      PrintWriter pw = new PrintWriter(jdk_classes_file);
+      PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name());
       System.out.printf("Writing all classes to %s%n", jdk_classes_file);
       for (String classname : all_classes) {
         pw.println(classname);

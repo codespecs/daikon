@@ -279,6 +279,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /** Returns a representation of the class. This includes the classname, variables, and swap state. */
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return getClass().getName() + " (" + var1().name() + ", "
       + var2().name() + ") [swap=" + swap + "]";
@@ -294,6 +295,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return ((this.getClass() == inv.getClass()) && (this.swap == inv.swap));
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.conf_is_ge(ppt.num_values(), 5);
   }

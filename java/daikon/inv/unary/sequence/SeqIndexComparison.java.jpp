@@ -192,6 +192,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not we are enabled */
+  @Override
   public boolean enabled() {
     return (dkconfig_enabled && !dkconfig_SeqIndexDisableAll);
   }
@@ -222,6 +223,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiate the invariant on the specified slice */
+  @Override
   public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
@@ -287,6 +289,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -334,6 +337,7 @@ public class CLASSNAME extends SUPERCLASS {
       + form[3];
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     for (int i = 0; i < a.length; i++) {
       if (!EQUALS(a[i], i)) {
@@ -343,6 +347,7 @@ public class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
 
     if (logDetail()) {
@@ -357,6 +362,7 @@ public class CLASSNAME extends SUPERCLASS {
     return stat;
   }
 
+  @Override
   protected double computeConfidence() {
 
     // Make sure there have been some elements in the sequence

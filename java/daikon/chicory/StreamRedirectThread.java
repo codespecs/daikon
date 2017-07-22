@@ -34,6 +34,8 @@
 
 package daikon.chicory;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
 
 /**
@@ -93,8 +95,8 @@ public class StreamRedirectThread extends Thread {
     if (in == null || out == null) {
       System.out.println("bad arguments to StreamRedirectThread: " + in + " " + out);
     }
-    this.in = new InputStreamReader(in);
-    this.out = new OutputStreamWriter(out);
+    this.in = new InputStreamReader(in, UTF_8);
+    this.out = new OutputStreamWriter(out, UTF_8);
     this.outWriter = new PrintStream(out);
     this.line_by_line = line_by_line;
     this.debug = debug;
@@ -103,6 +105,7 @@ public class StreamRedirectThread extends Thread {
   }
 
   /** Copy. */
+  @Override
   public void run() {
     try {
       if (line_by_line) {

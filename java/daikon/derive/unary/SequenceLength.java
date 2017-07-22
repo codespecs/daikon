@@ -69,6 +69,7 @@ public final class SequenceLength extends UnaryDerivation {
     return true;
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
     if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
@@ -92,6 +93,7 @@ public final class SequenceLength extends UnaryDerivation {
     return new ValueAndModified(Intern.internedLong(len + shift), source_mod);
   }
 
+  @Override
   @SuppressWarnings("keyfor") // need EnsuresQualifier feature
   protected VarInfo makeVarInfo() {
     VarInfo v = VarInfo.make_scalar_seq_func("size", ProglangType.INT, base, shift);
@@ -111,11 +113,13 @@ public final class SequenceLength extends UnaryDerivation {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceLength) && (((SequenceLength) other).shift == this.shift);
   }
 
   /** Returns the ESC name */
+  @Override
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String esc_name(String index) {
@@ -135,6 +139,7 @@ public final class SequenceLength extends UnaryDerivation {
   }
 
   /** Returns the JML name */
+  @Override
   public String jml_name(String index) {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.jml_name();
@@ -142,6 +147,7 @@ public final class SequenceLength extends UnaryDerivation {
 
   /** Returns the Simplify name */
   /*@SideEffectFree*/
+  @Override
   public String simplify_name() {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.simplify_name();
@@ -149,12 +155,14 @@ public final class SequenceLength extends UnaryDerivation {
 
   /** Returns the CSharpContract name */
   /*@SideEffectFree*/
+  @Override
   public String csharp_name(String index) {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.csharp_name();
   }
 
   /** Adds one to the default complexity if shift is not 0 */
+  @Override
   public int complexity() {
     return super.complexity() + ((shift != 0) ? 1 : 0);
   }

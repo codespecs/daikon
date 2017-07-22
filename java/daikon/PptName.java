@@ -418,12 +418,14 @@ public class PptName implements Serializable {
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied PptName this*/) {
     return fullname;
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied PptName this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
@@ -437,6 +439,7 @@ public class PptName implements Serializable {
   }
 
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
     return fullname.hashCode();
   }

@@ -229,20 +229,18 @@ public class ChicoryPremain {
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
   private static void writePurityFile(String fileName, String parentDir) {
-    PrintWriter pureFileWriter;
-    try {
-      pureFileWriter = new PrintWriter(new File(parentDir, fileName));
+    File absFile = new File(parentDir, fileName);
+    System.out.printf("Writing pure methods to %s%n", absFile);
+    try (BufferedWriter pureFileWriter = new BufferedWriter(new FileWriter(absFile))) {
+      for (String methodName : pureMethods) {
+        pureFileWriter.write(methodName);
+        pureFileWriter.newLine();
+      }
     } catch (FileNotFoundException e) {
-      throw new Error("Could not open " + fileName + " for writing", e);
+      throw new Error("Could not open " + absFile, e);
+    } catch (IOException e) {
+      throw new Error("Problem writing to " + absFile, e);
     }
-
-    System.out.printf("Writing pure methods to %s%n", fileName);
-
-    for (String methodName : pureMethods) {
-      pureFileWriter.println(methodName);
-    }
-
-    pureFileWriter.close();
   }
 
   /**
@@ -440,6 +438,7 @@ public class ChicoryPremain {
       return (name.replace(".", "/") + ".class");
     }
 
+    @Override
     protected Class<?> loadClass(
         /*@BinaryName*/ String name, boolean resolve) throws java.lang.ClassNotFoundException {
 

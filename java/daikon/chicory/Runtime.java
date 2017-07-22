@@ -610,6 +610,7 @@ public class Runtime {
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
+              @Override
               @SuppressWarnings(
                   "lock") // TODO: Fix Checker Framework issue 523 and remove this @SuppressWarnings.
               public void run() {
@@ -729,14 +730,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied BooleanWrap this*/) {
       return Boolean.toString(val);
     }
 
+    @Override
     public Boolean getJavaWrapper() {
       return new Boolean(val);
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return boolean.class;
     }
@@ -750,14 +754,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied ByteWrap this*/) {
       return Byte.toString(val);
     }
 
+    @Override
     public Byte getJavaWrapper() {
       return new Byte(val);
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return byte.class;
     }
@@ -772,14 +779,17 @@ public class Runtime {
     }
     // Print characters as integers.
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied CharWrap this*/) {
       return Integer.toString(val);
     }
 
+    @Override
     public Character getJavaWrapper() {
       return new Character(val);
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return char.class;
     }
@@ -793,14 +803,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied FloatWrap this*/) {
       return Float.toString(val);
     }
 
+    @Override
     public Float getJavaWrapper() {
       return new Float(val);
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return float.class;
     }
@@ -814,14 +827,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied IntWrap this*/) {
       return Integer.toString(val);
     }
 
+    @Override
     public Integer getJavaWrapper() {
       return new Integer(val);
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return int.class;
     }
@@ -835,14 +851,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied LongWrap this*/) {
       return Long.toString(val);
     }
 
+    @Override
     public Long getJavaWrapper() {
       return new Long(val);
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return long.class;
     }
@@ -856,14 +875,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied ShortWrap this*/) {
       return Short.toString(val);
     }
 
+    @Override
     public Short getJavaWrapper() {
       return new Short(val);
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return short.class;
     }
@@ -877,14 +899,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied DoubleWrap this*/) {
       return Double.toString(val);
     }
 
+    @Override
     public Double getJavaWrapper() {
       return new Double(val);
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return double.class;
     }

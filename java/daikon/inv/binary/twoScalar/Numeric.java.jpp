@@ -218,10 +218,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
     return true;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return getClass().getSimpleName() + ": " + format()
       + (swap ? " [swapped]" : " [unswapped]");
@@ -234,6 +236,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * %varN% are replaced by the variable name in the specified format.
    */
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
 
     if (ppt == null) {
@@ -334,6 +337,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /** Calls the function specific equal check and returns the correct status. */
 #if (defined(SEQ))
+  @Override
   public InvariantStatus check_modified(PRIMITIVE[] x, PRIMITIVE[] y,
                                         int count) {
     if (x.length != y.length) {
@@ -366,6 +370,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
   }
 #else
+  @Override
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, int count) {
 
     try {
@@ -727,7 +732,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
@@ -921,7 +927,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
     protected Square instantiate_dyn(/*>>> @Prototype Square this,*/ PptSlice slice) {
@@ -999,7 +1006,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
@@ -1087,7 +1095,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
@@ -1157,11 +1166,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
-    public BitwiseSubset instantiate_dyn(/*>>> @Prototype BitwiseSubset this,*/ PptSlice slice) {
+    @Override
+  public BitwiseSubset instantiate_dyn(/*>>> @Prototype BitwiseSubset this,*/ PptSlice slice) {
       return new BitwiseSubset(slice, swap);
     }
 
@@ -1263,11 +1274,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
-    public BitwiseAndZero instantiate_dyn(/*>>> @Prototype BitwiseAndZero this,*/ PptSlice slice) {
+    @Override
+  public BitwiseAndZero instantiate_dyn(/*>>> @Prototype BitwiseAndZero this,*/ PptSlice slice) {
       return new BitwiseAndZero(slice);
     }
 
@@ -1355,7 +1368,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
@@ -1450,7 +1464,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() {
+    @Override
+  public boolean enabled() {
       return dkconfig_enabled;
     }
 
@@ -1479,7 +1494,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Justified as long as there are samples */
-    protected double computeConfidence() {
+    @Override
+  protected double computeConfidence() {
       if (ppt.num_samples() == 0) {
         return Invariant.CONFIDENCE_UNJUSTIFIED;
       }

@@ -24,6 +24,7 @@ public final class SequenceMin extends UnaryDerivation {
     super(vi);
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
     if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
@@ -43,17 +44,20 @@ public final class SequenceMin extends UnaryDerivation {
     }
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     return VarInfo.make_scalar_seq_func("min", null, base, 0);
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceMin);
   }
 
   /** Returns the ESC name */
   /*@SideEffectFree*/
+  @Override
   public String esc_name(String index) {
     return String.format("min(%s)", base.esc_name());
   }

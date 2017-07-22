@@ -84,6 +84,7 @@ public final class LogHelper {
       };
 
   public static class DaikonLogFormatter extends SimpleFormatter {
+    @Override
     public String format(LogRecord record) {
       // // By default, take up 20 spaces min, and 20 spaces max for logger.
       // // %c = Logger. %m = message, %n = newline

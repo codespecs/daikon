@@ -105,6 +105,7 @@ public final class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -120,12 +121,14 @@ public final class CLASSNAME extends SUPERCLASS {
     return (!ppt.var_infos[0].type.BASEISTYPE);
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": "
       + !falsified;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -145,6 +148,7 @@ public final class CLASSNAME extends SUPERCLASS {
   // We are a special case where a ghost field can actually talk about
   // array contents.
   /*@Pure*/
+  @Override
   public boolean isValidEscExpression() {
     return true;
   }
@@ -202,6 +206,7 @@ public final class CLASSNAME extends SUPERCLASS {
       + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     for (int ai = 0; ai < a.length; ai++) {
       PRIMITIVE v = a[ai];
@@ -213,6 +218,7 @@ public final class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
 
     //if (logOn()) {
@@ -223,6 +229,7 @@ public final class CLASSNAME extends SUPERCLASS {
     return (check_modified(a, count));
   }
 
+  @Override
   protected double computeConfidence() {
     // Maybe just use 0 as the min or max instead, and see what happens:
     // see whether the "nonzero" invariant holds anyway.  (Perhaps only
@@ -290,6 +297,7 @@ public final class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     // This test doesn't seem right: the invariant is obvious if the
     // elements don't have null, not if the collection doesn't have null.

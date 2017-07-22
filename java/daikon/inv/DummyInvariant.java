@@ -182,6 +182,7 @@ public class DummyInvariant extends Invariant {
     return inv;
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
@@ -191,6 +192,7 @@ public class DummyInvariant extends Invariant {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();
@@ -283,22 +285,27 @@ public class DummyInvariant extends Invariant {
     }
   }
 
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     throw new Error("Not implemented");
   }
 
+  @Override
   public boolean isSameFormula(Invariant other) {
     throw new Error("Not implemented");
   }
 
+  @Override
   public boolean enabled(/*>>> @Prototype DummyInvariant this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
+  @Override
   public boolean valid_types(/*>>> @Prototype DummyInvariant this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
+  @Override
   protected /*@NonPrototype*/ DummyInvariant instantiate_dyn(
       /*>>> @Prototype DummyInvariant this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");

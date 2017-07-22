@@ -36,6 +36,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
 
   /** Prints the pair of program points, and all the invariants contained within them. */
+  @Override
   public void visit(PptNode node) {
     // Empty the string buffer
     bufOutput.setLength(0);
@@ -67,6 +68,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
 
   /** Prints a pair of invariants. Includes the type of the invariants and their relationship. */
+  @Override
   public void visit(InvNode node) {
 
     if (HUMAN_OUTPUT) {

@@ -1,5 +1,7 @@
 package daikon.test;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.*;
 import daikon.inv.*;
 import gnu.getopt.*;
@@ -159,8 +161,8 @@ public class SampleTester extends TestCase {
     daikon.inv.ternary.threeScalar.FunctionBinary.dkconfig_enabled = true;
     daikon.inv.ternary.threeScalar.FunctionBinaryFloat.dkconfig_enabled = true;
 
-    this.fname = fname;
-    fp = new LineNumberReader(new InputStreamReader(commands));
+    this.fname = filename;
+    fp = new LineNumberReader(new InputStreamReader(commands, UTF_8));
 
     for (String line = fp.readLine(); line != null; line = fp.readLine()) {
 
@@ -324,6 +326,7 @@ public class SampleTester extends TestCase {
     stok.quoteChar('"');
     stok.set_error_handler(
         new StrTok.ErrorHandler() {
+          @Override
           public void tok_error(String s) {
             parse_error(s);
           }

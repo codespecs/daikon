@@ -181,6 +181,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -207,16 +208,19 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@SideEffectFree*/
+  @Override
   public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     return result;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -270,6 +274,7 @@ public class CLASSNAME extends SUPERCLASS {
       + form[3];
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     for (int i = 1; i < a.length; i++) {
       if (!COMPARATOR(a[i - 1], a[i])) {
@@ -279,12 +284,14 @@ public class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     return check_modified(a, count);
   }
 
   // Perhaps check whether all the arrays of interest have length 0 or 1.
 
+  @Override
   protected double computeConfidence() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
     if (ppt.num_samples() != 0) {
@@ -298,6 +305,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
     return true;

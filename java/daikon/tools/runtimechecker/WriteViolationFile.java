@@ -1,7 +1,11 @@
 package daikon.tools.runtimechecker;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /*>>>
@@ -79,7 +83,7 @@ class WriteViolationFile {
       // On-the-fly implementation should flush after each violation is
       // written to disk.
       try {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("violations.txt"));
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get("violations.txt"), UTF_8);
         writer.write(
             "# Times an invariant was evaluated ----------- "
                 + Long.toString(Runtime.numEvaluations)

@@ -401,6 +401,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -427,10 +428,10 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       #endif
     #elif defined (IS_STRING)
       #if defined (EQUALSTRING) || defined (NONEQUALSTRING)
-        boolean result = (!(vis[0].has_typeof() ^ vis[0].has_typeof()));
+        boolean result = (!(vis[0].has_typeof() ^ vis[1].has_typeof()));
         return result;
       #else
-        boolean result = (!(vis[0].has_typeof() || vis[0].has_typeof()));
+        boolean result = (!(vis[0].has_typeof() || vis[1].has_typeof()));
         // System.out.printf(INTEQUALstring + ".instantiate_ok(");
         // for (VarInfo vi : vis) {
         //   System.out.printf("%s ", vi.name());
@@ -617,11 +618,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     return null;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return INTEQUALstring + varNames();
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied INTEQUAL this,*/ OutputFormat format) {
 
     String var1name = var1().name_using(format);
@@ -728,6 +731,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     return format_unimplemented(format);
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     if (!(EQUALS(v1, v2))) {
       return InvariantStatus.FALSIFIED;
@@ -735,6 +739,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     if (logDetail() || debug.isLoggable(Level.FINE)) {
       log(
@@ -752,6 +757,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   // presumably be transitive, but it's not guaranteed to be so when using
   // this method and not dropping out all variables whose values are ever
   // missing.
+  @Override
   protected double computeConfidence() {
     // Should perhaps check number of samples and be unjustified if too few
     // samples.
@@ -779,6 +785,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
 #if defined(EQUAL_OP)
+  @Override
   public boolean enoughSamples(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return (ppt.num_samples() > 0);
   }
@@ -794,6 +801,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
     #if defined(EQUAL_OP)
       return true;

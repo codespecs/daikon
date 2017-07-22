@@ -151,6 +151,7 @@ public class ClassInfo {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied ClassInfo this*/) {
     return (String.format(
         "ClassInfo %08X [%s] %s", System.identityHashCode(this), class_name, clazz));

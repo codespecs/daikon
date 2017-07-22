@@ -291,6 +291,7 @@ public class ContextSplitterFactory {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied PptNameAndSplitters this*/) {
       return "PptNameAndSplitters<" + ppt_name + "," + Arrays.asList(splitters).toString() + ">";
     }

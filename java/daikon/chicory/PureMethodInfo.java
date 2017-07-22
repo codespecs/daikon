@@ -196,11 +196,13 @@ public class PureMethodInfo extends DaikonVariableInfo {
     }
   }
 
+  @Override
   public VarKind get_var_kind() {
     return VarKind.FUNCTION;
   }
 
   /** Return the short name of the method as the relative name */
+  @Override
   public String get_relative_name() {
     return minfo.method_name;
   }

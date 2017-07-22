@@ -10,6 +10,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /** Filter for not printing invariants that have a matching invariant at their parent PPT. */
 public class ParentFilter extends InvariantFilter {
+  @Override
   public String getDescription() {
     return "Filter invariants that match a parent program point invariant";
   }
@@ -24,6 +25,7 @@ public class ParentFilter extends InvariantFilter {
   private static boolean debug = false;
   // private static boolean debug = true;
 
+  @Override
   boolean shouldDiscardInvariant(Invariant inv) {
 
     // System.out.printf("shouldDiscardInvariant(%s)%n", inv.format());

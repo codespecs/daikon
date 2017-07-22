@@ -25,6 +25,7 @@ public abstract class UnaryInvariant extends Invariant {
   }
 
   /** @return this */
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 1;
     assert permutation[0] == 0;

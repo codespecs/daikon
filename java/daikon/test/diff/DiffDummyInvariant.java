@@ -65,21 +65,25 @@ public class DiffDummyInvariant extends Invariant {
     this.isWorthPrinting = isWorthPrinting;
   }
 
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     throw new UnsupportedOperationException();
   }
 
   /*@Pure*/
+  @Override
   public boolean isInteresting() {
     return interesting;
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameInvariant(Invariant other) {
     return this.isSameFormula(other);
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     if (other instanceof DiffDummyInvariant) {
       DiffDummyInvariant o = (DiffDummyInvariant) other;
@@ -89,15 +93,18 @@ public class DiffDummyInvariant extends Invariant {
     }
   }
 
+  @Override
   public double computeConfidence() {
     return confidence;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied DiffDummyInvariant this*/) {
     return "DiffDummyInvariant(" + ppt.arity() + "," + formula + "," + confidence + ")";
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied DiffDummyInvariant this,*/ OutputFormat format) {
     return repr();
   }
@@ -106,18 +113,22 @@ public class DiffDummyInvariant extends Invariant {
   // But this subclass is special:  it's not really an invariant,
   // but is only used for testing.
   /*@Pure*/
+  @Override
   public boolean isWorthPrinting() {
     return isWorthPrinting;
   }
 
+  @Override
   public boolean enabled() {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
+  @Override
   public boolean valid_types(VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
+  @Override
   protected DiffDummyInvariant instantiate_dyn(PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }

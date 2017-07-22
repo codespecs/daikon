@@ -99,17 +99,20 @@ public class PptMap implements Serializable {
     final Iterator<PptTopLevel> iter_view = nameToPpt.values().iterator();
     final Iterator<PptTopLevel> iter_sort = sorted.iterator();
     return new Iterator<PptTopLevel>() {
+      @Override
       public boolean hasNext() {
         boolean result = iter_view.hasNext();
         assert result == iter_sort.hasNext();
         return result;
       }
 
+      @Override
       public PptTopLevel next() {
         iter_view.next(); // to check for concurrent modifications
         return iter_sort.next();
       }
 
+      @Override
       public void remove() {
         throw new UnsupportedOperationException();
       }
@@ -144,6 +147,7 @@ public class PptMap implements Serializable {
     return new Iterator<PptTopLevel>() {
       /*@Nullable*/ Iterator<PptConditional> cond_iterator = null;
 
+      @Override
       public boolean hasNext() {
         if ((cond_iterator != null) && cond_iterator.hasNext()) {
           return true;
@@ -153,6 +157,7 @@ public class PptMap implements Serializable {
         return result;
       }
 
+      @Override
       public PptTopLevel next() {
         if ((cond_iterator != null) && cond_iterator.hasNext()) {
           return (cond_iterator.next());
@@ -163,6 +168,7 @@ public class PptMap implements Serializable {
         return ppt;
       }
 
+      @Override
       public void remove() {
         throw new UnsupportedOperationException();
       }
@@ -210,6 +216,7 @@ public class PptMap implements Serializable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied PptMap this*/) {
     return "PptMap: " + nameToPpt.toString();
   }

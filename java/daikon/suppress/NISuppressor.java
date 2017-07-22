@@ -490,6 +490,7 @@ public class NISuppressor {
    * variables x, y, and z are shown instead with indices 0, 1, and 2 respectively.
    */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied NISuppressor this*/) {
 
     String cname = inv_class.getCanonicalName();

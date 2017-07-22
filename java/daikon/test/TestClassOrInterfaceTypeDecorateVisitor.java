@@ -24,6 +24,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     List<ClassOrInterfaceType> generifieds = new ArrayList<ClassOrInterfaceType>();
     List<ClassOrInterfaceType> ungenerifieds = new ArrayList<ClassOrInterfaceType>();
 
+    @Override
     public void visit(ClassOrInterfaceType n) {
       generifieds.add(n);
       ungenerifieds.add(n.unGenerifiedVersionOfThis);

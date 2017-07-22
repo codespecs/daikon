@@ -67,11 +67,13 @@ public final class CompleteOneOfString extends SingleString {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   public CompleteOneOfString instantiate_dyn(
       /*>>> @Prototype CompleteOneOfString this,*/ PptSlice slice) {
     return new CompleteOneOfString(slice);
@@ -79,6 +81,7 @@ public final class CompleteOneOfString extends SingleString {
 
   /** Return description of invariant. Only Daikon format is implemented. */
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       if (vals.size() == 0) {
@@ -96,11 +99,13 @@ public final class CompleteOneOfString extends SingleString {
   }
 
   /** Check to see if a only contains printable ascii characters */
+  @Override
   public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
     return check_modified(a, count);
   }
 
   /** Check to see if a only contains printable ascii characters */
+  @Override
   public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
     for (Info val : vals) {
       if (val.val.equals(a)) {
@@ -112,6 +117,7 @@ public final class CompleteOneOfString extends SingleString {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   protected double computeConfidence() {
     ValueSet vs = ppt.var_infos[0].get_value_set();
     if (vs.size() > 0) {
@@ -126,6 +132,7 @@ public final class CompleteOneOfString extends SingleString {
    * are obviously printable (or not) from their values.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     return super.isObviousStatically(vis);
   }
@@ -135,6 +142,7 @@ public final class CompleteOneOfString extends SingleString {
    * presumed to be false.
    */
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant o) {
     return false;
   }

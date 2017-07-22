@@ -4,7 +4,9 @@ DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
+# Don't take value from user, because we want operations to apply to this directory.
+# DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
+DAIKONDIR = ${DAIKONDIR_DEFAULT}
 
 ##########################################################################
 ### Variables

@@ -158,11 +158,13 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return (FUNC(arg1, arg2));
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
     return (check_ordered(resultvar, arg1, arg2, count));
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
     if (Debug.logDetail()) {
@@ -178,6 +180,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   #ifdef EXACT
   /*@Pure*/
+  @Override
   public boolean isExact() {
     return true;
   }

@@ -14,6 +14,7 @@ public class MinusVisitor extends DepthFirstVisitor {
   private /*@MonotonicNonNull*/ PptTopLevel currentPpt;
 
   /** If the first ppt is non-null, it should be part of the result. */
+  @Override
   public void visit(PptNode node) {
     PptTopLevel ppt1 = node.getPpt1();
     if (ppt1 != null) {
@@ -24,6 +25,7 @@ public class MinusVisitor extends DepthFirstVisitor {
   }
 
   /** Possibly add the first invariant to the result set. */
+  @Override
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode has already been visited
   /*@RequiresNonNull("currentPpt")*/

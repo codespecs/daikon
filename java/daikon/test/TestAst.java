@@ -27,6 +27,7 @@ public final class TestAst extends TestCase {
   public static class MethodDeclarationHarvester extends DepthFirstVisitor {
     List<MethodDeclaration> decls = new ArrayList<MethodDeclaration>();
 
+    @Override
     public void visit(MethodDeclaration m) {
 
       decls.add(m);
@@ -42,6 +43,7 @@ public final class TestAst extends TestCase {
   public static class ClassOrInterfaceDeclarationHarvester extends DepthFirstVisitor {
     List<ClassOrInterfaceDeclaration> decls = new ArrayList<ClassOrInterfaceDeclaration>();
 
+    @Override
     public void visit(ClassOrInterfaceDeclaration m) {
       decls.add(m);
       m.f0.accept(this);
