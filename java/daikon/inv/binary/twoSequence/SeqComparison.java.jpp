@@ -254,7 +254,11 @@ import typequals.*;
  * <p>If the auxiliary information (e.g., order matters) doesn't match between two variables, then
  * this invariant cannot apply to those variables.
  */
-public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
+public class SEQSEQINTEQUAL extends SUPERCLASS
+#if defined (EQUAL) || defined(EQUALFLOAT) || defined (EQUALSTRING)
+  implements Comparison
+#endif
+{
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -339,11 +343,13 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /** Instantiates the invariant on the specified slice */
+  @Override
   protected SEQSEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.hasOrder() && slice.var_infos[1].aux.hasOrder();
     return new SEQSEQINTEQUAL(slice, has_order);
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     return this;
@@ -502,7 +508,9 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
 #endif
   }
 
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
   // For Comparison interface
+  @Override
   public double eq_confidence() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return getConfidence();
@@ -510,6 +518,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
       return Invariant.CONFIDENCE_NEVER;
     #endif
   }
+#endif
 
   /*@Pure*/
   @Override
@@ -528,6 +537,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
    * avoid circular isObvious relations.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically(this.ppt.var_infos);
@@ -541,6 +551,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
    * avoid circular isObvious relations.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (logOn()) {
       log("Considering dynamically_someInEquality");
@@ -706,6 +717,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
     return null;
   }
 
+  @Override
   public void repCheck() {
     super.repCheck();
     /*

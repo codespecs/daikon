@@ -326,7 +326,7 @@
   #define UB_MAX min()
 #endif
 
-#if (defined(EQUAL) || defined(EQUALFLOAT))
+#if defined(EQUAL_OP)
   #define IMPLEMENTSCOMPARISON implements Comparison
 #else
   #define IMPLEMENTSCOMPARISON
@@ -793,9 +793,9 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   public boolean enoughSamples(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return (ppt.num_samples() > 0);
   }
-#endif
 
-  // For Comparison interface
+  // For Comparison interface, which is satisfied only by exact equalities.
+  @Override
   public double eq_confidence() {
     if (isExact()) {
       return getConfidence();
@@ -803,6 +803,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       return Invariant.CONFIDENCE_NEVER;
     }
   }
+#endif
 
   /*@Pure*/
   @Override
@@ -824,6 +825,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   //   super.destroy();
   // }
 
+  @Override
   public InvariantStatus add(
       /*@Interned*/ Object v1, /*@Interned*/ Object v2, int mod_index, int count) {
     if (debug.isLoggable(Level.FINE)) {
@@ -978,6 +980,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    * rather than the cartesian product on the equality set.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically(this.ppt.var_infos);
@@ -992,6 +995,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    * rather than the cartesian product on the equality set.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousDynamically(this.ppt.var_infos);
@@ -1306,6 +1310,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
   /** Returns the non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)

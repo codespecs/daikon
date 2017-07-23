@@ -27,6 +27,7 @@ class WriteViolationFile {
     System.out.println("Output is written to file \"violations.txt\" in the current directory.");
   }
 
+  @SuppressWarnings("Finally")
   public static void main(String[] args) {
     if (args.length == 0) {
       System.out.println("Error: no class specified");

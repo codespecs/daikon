@@ -16,7 +16,7 @@ import plume.*;
  * <p>The caller must supply the collection of inserted comments for recognition by this visitor.
  */
 public class InsertCommentFormatter extends DepthFirstVisitor {
-  private boolean debug = false;
+  private boolean debugInsert = false;
 
   private List<NodeToken> comments;
   private int columnshift = 0;
@@ -53,7 +53,7 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
 
   @Override
   public void visit(NodeToken n) {
-    if (debug) {
+    if (debugInsert) {
       System.out.println(
           "Visit (at "
               + n.beginLine
@@ -91,7 +91,7 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
       n.endLine += lineshift;
       n.beginColumn += columnshift;
       n.endColumn += columnshift;
-      if (debug) {
+      if (debugInsert) {
         System.out.println(
             "Shifted by " + lineshift + "," + columnshift + ": <<<" + n.tokenImage.trim() + ">>>");
       }
@@ -114,7 +114,7 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
       columnshift += numColumns(n);
       lineshift += numLines(n);
     }
-    if (debug) {
+    if (debugInsert) {
       System.out.println(
           "End visit (at " + n.beginLine + "," + n.beginColumn + ") " + n.tokenImage);
     }

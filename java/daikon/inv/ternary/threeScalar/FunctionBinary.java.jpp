@@ -346,6 +346,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * (re-arrangement given by the permutation). We accomplish this by returning the class that
    * corresponds to the the new permutation.
    */
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
 
     assert permutation.length == 3;
@@ -565,6 +566,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public boolean isSameFormula(Invariant other) {
     return true;
   }
+  @Override
   public double computeConfidence() {
     if (logOn()) {
       VarInfo v1 = ppt.var_infos[0];

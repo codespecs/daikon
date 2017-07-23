@@ -387,6 +387,7 @@ public class CLASSNAME extends SUPERCLASS {
    * are meaningless. This function is meant to be used in isObviousImplied() to prevent such
    * meaningless invariants from being printed.
    */
+  @Override
   public boolean hasSeenNonTrivialSample() {
     VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
     return (vs.multi_arr_cnt() > 0);

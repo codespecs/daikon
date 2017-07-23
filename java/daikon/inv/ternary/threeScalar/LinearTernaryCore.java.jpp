@@ -133,6 +133,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       return ((this.x == x) && (this.y == y) && (this.z == z));
     }
     /*@SideEffectFree*/
+    @Override
     protected Point clone(/*>>>@GuardSatisfied Point this*/) throws CloneNotSupportedException {
       return (Point) super.clone();
     }

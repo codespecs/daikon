@@ -220,12 +220,11 @@ public final class FileIO {
       result = isComment(nextline);
     } catch (IOException e) {
       result = false;
-    } finally {
-      try {
-        reader.reset();
-      } catch (IOException e) {
-        throw new Error(e);
-      }
+    }
+    try {
+      reader.reset();
+    } catch (IOException e) {
+      throw new Error(e);
     }
     return result;
   }

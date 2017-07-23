@@ -274,6 +274,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   protected PAIRWISEINTEQUAL instantiate_dyn(/*>>> @Prototype PAIRWISEINTEQUAL this,*/ PptSlice slice) {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn()) {
@@ -380,6 +381,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return di;
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return this;
@@ -390,6 +392,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     /*@Pure*/
+    @Override
     public boolean is_symmetric() {
     return true;
   }
@@ -485,7 +488,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
     @Override
-  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
+    public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
                                         int count) {
       if (logDetail()) {
         log(debug, "saw add_modified (" + ArraysMDE.toString(a1)

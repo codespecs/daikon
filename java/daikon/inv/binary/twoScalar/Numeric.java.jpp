@@ -735,14 +735,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled */
     @Override
-  public boolean enabled() {
+    public boolean enabled() {
       return dkconfig_enabled;
     }
 
+    @Override
     protected Divides instantiate_dyn(/*>>> @Prototype Divides this,*/ PptSlice slice) {
       return new Divides(slice, swap);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied Divides this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ 0 (MOD %var1% %var2%))";
@@ -757,6 +759,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS(0, (x % y)));
     }
@@ -766,6 +769,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
        * This needs to be an obvious check and not a suppression for sequences because there is no
        * consistent way to check that var1 and var2 have the same length (for derivations).
        */
+      @Override
       public InvDef[][] obvious_checks(VarInfo[] vis) {
 
         return new InvDef[][] {
@@ -781,6 +785,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
+    @Override
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
@@ -931,13 +936,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled */
     @Override
-  public boolean enabled() {
+    public boolean enabled() {
       return dkconfig_enabled;
     }
+    @Override
     protected Square instantiate_dyn(/*>>> @Prototype Square this,*/ PptSlice slice) {
       return new Square(slice, swap);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied Square this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ %var1% (* %var2% %var2))";
@@ -955,6 +962,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Check to see if x == y squared. */
+    @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS(x, y*y));
     }
@@ -1010,14 +1018,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled */
     @Override
-  public boolean enabled() {
+    public boolean enabled() {
       return dkconfig_enabled;
     }
 
+    @Override
     protected ZeroTrack instantiate_dyn(/*>>> @Prototype ZeroTrack this,*/ PptSlice slice) {
       return new ZeroTrack(slice, swap);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied ZeroTrack this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(IMPLIES (EQ %var1% 0) (EQ %var2% 0))";
@@ -1028,6 +1038,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       if (x == 0) {
         return (y == 0);
@@ -1038,6 +1049,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
+    @Override
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
@@ -1099,19 +1111,22 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled */
     @Override
-  public boolean enabled() {
+    public boolean enabled() {
       return dkconfig_enabled;
     }
 
+    @Override
     protected BitwiseComplement instantiate_dyn(/*>>> @Prototype BitwiseComplement this,*/ PptSlice slice) {
       return new BitwiseComplement(slice);
     }
 
     /*@Pure*/
+    @Override
     public boolean is_symmetric() {
       return true;
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied BitwiseComplement this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ %var1% (~ %var2%))";
@@ -1127,6 +1142,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Check to see if x == ~y . */
+    @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS(x, ~y));
     }
@@ -1170,15 +1186,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled */
     @Override
-  public boolean enabled() {
+    public boolean enabled() {
       return dkconfig_enabled;
     }
 
     @Override
-  public BitwiseSubset instantiate_dyn(/*>>> @Prototype BitwiseSubset this,*/ PptSlice slice) {
+    public BitwiseSubset instantiate_dyn(/*>>> @Prototype BitwiseSubset this,*/ PptSlice slice) {
       return new BitwiseSubset(slice, swap);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied BitwiseSubset this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ %var1% (|java-bitwise-or| %var2% %var1%))";
@@ -1195,6 +1212,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS(x, (y | x)));
     }
@@ -1204,6 +1222,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
        * This needs to be an obvious check and not a suppression for sequences because there is no
        * consistent way to check that var1 and var2 have the same length (for derivations).
        */
+      @Override
       public InvDef[][] obvious_checks(VarInfo[] vis) {
 
         return new InvDef[][] {
@@ -1217,6 +1236,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
+    @Override
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
@@ -1278,15 +1298,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled */
     @Override
-  public boolean enabled() {
+    public boolean enabled() {
       return dkconfig_enabled;
     }
 
     @Override
-  public BitwiseAndZero instantiate_dyn(/*>>> @Prototype BitwiseAndZero this,*/ PptSlice slice) {
+    public BitwiseAndZero instantiate_dyn(/*>>> @Prototype BitwiseAndZero this,*/ PptSlice slice) {
       return new BitwiseAndZero(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied BitwiseAndZero this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ (|java-&| %var1% %var2%) 0)";
@@ -1302,10 +1323,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /*@Pure*/
+    @Override
     public boolean is_symmetric() {
       return true;
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       return ((x & y) == 0);
     }
@@ -1373,14 +1396,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled */
     @Override
-  public boolean enabled() {
+    public boolean enabled() {
       return dkconfig_enabled;
     }
 
+    @Override
     protected ShiftZero instantiate_dyn(/*>>> @Prototype ShiftZero this,*/ PptSlice slice) {
       return new ShiftZero(slice, swap);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied ShiftZero this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ (|java->>| %var1% %var2%) 0)";
@@ -1395,6 +1420,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       if ((y < 0) || (y > 63)) {
         throw new ArithmeticException("shift op (" + y + ") is out of range");
@@ -1404,6 +1430,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
+    @Override
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
@@ -1469,14 +1496,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled */
     @Override
-  public boolean enabled() {
+    public boolean enabled() {
       return dkconfig_enabled;
     }
 
+    @Override
     protected SubString instantiate_dyn(/*>>> @Prototype SubString this,*/ PptSlice slice) {
       return new SubString(slice, swap);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied SubString this,*/ OutputFormat format) {
       if (format == OutputFormat.DAIKON) {
         return "%var1% is a substring of %var2%";
@@ -1493,13 +1522,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       return (y.contains(x));
     }
 
     /** Justified as long as there are samples */
     @Override
-  protected double computeConfidence() {
+    protected double computeConfidence() {
       if (ppt.num_samples() == 0) {
         return Invariant.CONFIDENCE_UNJUSTIFIED;
       }
@@ -1509,6 +1539,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
+    @Override
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;

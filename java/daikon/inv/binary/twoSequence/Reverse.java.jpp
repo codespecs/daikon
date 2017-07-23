@@ -99,6 +99,7 @@ public class CLASSNAME extends SUPERCLASS {
     return new CLASSNAME(slice);
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     // "reverse of" is symmetric
     return this;

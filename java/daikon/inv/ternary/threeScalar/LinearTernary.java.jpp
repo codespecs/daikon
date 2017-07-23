@@ -309,6 +309,7 @@ public class CLASSNAME extends SUPERCLASS {
     return result;
   }
 
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     core.permute(permutation);
     return this;
@@ -332,6 +333,7 @@ public class CLASSNAME extends SUPERCLASS {
   // }
 
   /*@Pure*/
+  @Override
   public boolean isActive() {
     return core.isActive();
   }

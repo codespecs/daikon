@@ -142,6 +142,7 @@ public class CLASSNAME extends SUPERCLASS {
     return new CLASSNAME(slice);
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     return new SUBSEQ_SWAP(ppt);
   }
@@ -833,6 +834,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** returns the ni-suppressions for SubSequence */
   /*@Pure*/
+  @Override
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }

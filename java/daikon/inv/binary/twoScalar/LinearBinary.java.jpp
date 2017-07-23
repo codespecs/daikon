@@ -116,6 +116,7 @@ public class CLASSNAME extends SUPERCLASS {
     return result;
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     core.swap();
     return this;
@@ -135,6 +136,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isActive() {
     return core.isActive();
   }

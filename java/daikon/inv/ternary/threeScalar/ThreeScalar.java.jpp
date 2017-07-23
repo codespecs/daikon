@@ -55,6 +55,7 @@ public abstract class CLASSNAME extends TernaryInvariant {
   }
 
   /** Returns whether or not the specified types are valid. */
+  @Override
   public final boolean valid_types(VarInfo[] vis) {
 
     return ((vis.length == 3)
@@ -75,6 +76,7 @@ public abstract class CLASSNAME extends TernaryInvariant {
     return ppt.var_infos[2];
   }
 
+  @Override
   public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
@@ -97,6 +99,7 @@ public abstract class CLASSNAME extends TernaryInvariant {
     }
   }
 
+  @Override
   public InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.

@@ -142,6 +142,7 @@ public class SUBSET extends TWOSEQUENCE {
     return new SUBSET(slice);
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     return new SUBSET_SWAP(ppt);
   }
@@ -166,6 +167,7 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format(/*>>>@GuardSatisfied SUBSET this*/) {
     String v1 = var1().name();
     String v2 = var2().name();
@@ -379,6 +381,7 @@ public class SUBSET extends TWOSEQUENCE {
 
   /** returns the ni-suppressions for SUBSET */
   /*@Pure*/
+  @Override
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       NISuppressee suppressee = new NISuppressee(SUBSET.class, 2);
