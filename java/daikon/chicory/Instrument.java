@@ -543,18 +543,20 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
         Iterator<Integer> throwIter = mi.throw_locations.iterator();
 
         List<InstructionHandle> throw_ils = new ArrayList<InstructionHandle>();
-        // Loop through each instruction looking for the return(s)
+        // Loop through each instruction looking for the returns and throws
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
           Instruction inst = ih.getInstruction();
 
           // If this is a return instruction, insert method exit instrumentation
           InstructionList new_il =
-              add_return_instrumentation(fullClassName, inst, context, shouldIncIter, exitIter);
+              generate_return_instrumentation(
+                  fullClassName, inst, context, shouldIncIter, exitIter);
 
           // If not Return maybe it is an Throw
           if (new_il == null) {
             new_il =
-                add_throw_instrumentation(fullClassName, inst, context, shouldIncIter, throwIter);
+                generate_throw_instrumentation(
+                    fullClassName, inst, context, shouldIncIter, throwIter);
             if (new_il != null) throw_ils.add(ih);
           }
 
@@ -613,21 +615,20 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           ih = next_ih;
         }
 
-        // Update the Uninitialized_variable_info offsets before
-        // we write out the new StackMapTable.
-        process_uninitialized_variable_info(il, false);
-
-        // Insert the try-catch-block to catch delegated Exceptions
+        // Wrap the user's code with a try-catch-block to catch delegated Exceptions
         if (Chicory.exception_handling) {
           print_stack_map_table("Final before Chicory.exception_handling");
           // Remember the end of the original Code.
           InstructionHandle try_end = il.getEnd();
-          InstructionList catch_il = add_tryCatch_instrumentation(fullClassName, context);
+          InstructionList catch_il =
+              generate_internal_catch_instrumentation(fullClassName, context);
           // Is the method the constructor?
           if (mg.getName().equals("<init>")) {
             // first command must be super (implicit or direct)
             if (try_start.getNext().getInstruction().getOpcode() == Const.INVOKESPECIAL) {
               try_start = try_start.getNext().getNext();
+              // It is tricky to figure out when the object has been completely initialized.
+              // It looks like Philipp tried but in the end decided to only handle the simple case. (markro)
               //                //find last putfield
               //                InstructionHandle endOfConstruct = null;
               //                // Loop through each instruction looking for the putfield
@@ -647,14 +648,16 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           }
 
           if (catch_il != null) {
-            try_start = try_start == null ? il.getStart() : try_start;
+            // Not sure when try_start could ever be null. (markro)
+            try_start = (try_start == null ? il.getStart() : try_start);
             // Remember the Size of the OriginalCode, to calculate the Offset in the StackMap
             int tagetIS = il.getByteCode().length;
             InstructionHandle handler = il.append(try_end, catch_il);
 
-            // Set the gaps in the ExceptionTable for Throw
-            // ignore throw-Commands in the try-catch-block to not catch them and
-            // trace/log them twice
+            // Add our handler to the ExceptionTable.
+            // If there were throws in the code, we need to divide the code into
+            // multiple ranges (omitting the throw statements) so that we do not
+            // catch them and trace/log them twice.
             if (!throw_ils.isEmpty()) {
               InstructionHandle run_start = try_start;
               for (InstructionHandle run_ih : throw_ils) {
@@ -669,18 +672,19 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
                 mg.addExceptionHandler(
                     run_start, try_end, handler, ObjectType.getInstance("java.lang.Throwable"));
             } else {
+              // No throws, just one handler for the entire range.
               mg.addExceptionHandler(
                   try_start, try_end, handler, ObjectType.getInstance("java.lang.Throwable"));
             }
 
-            // ADD StackMapEntry for the handle-block
+            // Add a new StackMapEntry for our handle-block.
             StackMapEntry[] new_map = new StackMapEntry[stack_map_table.length + 1];
-            StackMapType stackItem_type =
+            StackMapType stack_throwable_type =
                 new StackMapType(
                     Const.ITEM_Object,
                     pool.addClass("java.lang.Throwable"),
                     pool.getConstantPool());
-            StackMapType[] stackItem_types = {stackItem_type};
+            StackMapType[] stack_throwable_type_entry = {stack_throwable_type};
 
             // The new handle-block will require a new StackMap entry.
             // This entry needs to include information about the local
@@ -768,9 +772,9 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
                       : (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset);
               new_map[stack_map_table.length] =
                   new StackMapEntry(
-                      tmpTag, goalOffset, null, stackItem_types, pool.getConstantPool());
+                      tmpTag, goalOffset, null, stack_throwable_type_entry, pool.getConstantPool());
               //        new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
-              //            null, 1, stackItem_types, pool.getConstantPool());
+              //            null, 1, stack_throwable_type_entry, pool.getConstantPool());
             } else {
               if (localItems_types.size() >= newLocalCnt || mg.getName().equals("<init>")) {
                 // Create FULL-FRAME-Entry
@@ -787,7 +791,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
                         Const.FULL_FRAME,
                         goalOffset,
                         newlocalItems_types,
-                        stackItem_types,
+                        stack_throwable_type_entry,
                         pool.getConstantPool());
               } else {
                 //ERROR but keep a valid Stackframe
@@ -799,9 +803,13 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
                         : (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset);
                 new_map[stack_map_table.length] =
                     new StackMapEntry(
-                        tmpTag, goalOffset, null, stackItem_types, pool.getConstantPool());
+                        tmpTag,
+                        goalOffset,
+                        null,
+                        stack_throwable_type_entry,
+                        pool.getConstantPool());
                 //            new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
-                //                null, 1, stackItem_types, pool.getConstantPool());
+                //                null, 1, stack_throwable_type_entry, pool.getConstantPool());
               }
             }
 
@@ -809,6 +817,9 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           }
         }
 
+        // Update the Uninitialized_variable_info offsets before
+        // we write out the new StackMapTable.
+        process_uninitialized_variable_info(il, false);
         create_new_stack_map_attribute(mg);
 
         remove_local_variable_type_table(mg);
@@ -879,7 +890,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
    * (return__$trace2_val) and then do the return. Also, calls Runtime.exit() immediately before the
    * return.
    */
-  private /*@Nullable*/ InstructionList add_return_instrumentation(
+  private /*@Nullable*/ InstructionList generate_return_instrumentation(
       String fullClassName,
       Instruction inst,
       MethodContext c,
@@ -926,7 +937,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
    * (exception__$trace2_val) and then do the return. Also, calls Runtime.throw() immediately before
    * the return.
    */
-  private /*@Nullable*/ InstructionList add_throw_instrumentation(
+  private /*@Nullable*/ InstructionList generate_throw_instrumentation(
       String fullClassName,
       Instruction inst,
       MethodContext c,
@@ -966,7 +977,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
    * (exception__$trace2_val) and then do the return. Also, calls Runtime.throw() immediately before
    * the return.
    */
-  private /*@Nullable*/ InstructionList add_tryCatch_instrumentation(
+  private /*@Nullable*/ InstructionList generate_internal_catch_instrumentation(
       String fullClassName, MethodContext c) {
 
     //  if (c.mgen.getName().contains("init>")
