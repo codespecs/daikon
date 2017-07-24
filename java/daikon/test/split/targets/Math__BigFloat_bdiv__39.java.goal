@@ -1,12 +1,12 @@
-import daikon.*; 
-import daikon.inv.*; 
-import daikon.split.*; 
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
 
-public final class Math__BigFloat_bdiv__39 extends Splitter { 
+public final class Math__BigFloat_bdiv__39 extends Splitter {
 
-  public String condition() { 
-    return "orig($p) != 0 && orig($p) != orig($x._p) && ((orig($y._m.value.deref).length == 1 && orig($y._e.value.deref).length == 1 && orig($y._e.value.deref)[0] == 0 && orig($y._m.value.deref)[0] == 1) || (orig($y._m.value.deref).length == 1 && orig($y._m.value.deref)[0] == 0) || (orig($x._m.value.deref).length == 1 && orig($x._m.value.deref)[0] == 0)) && (orig($x.sign).equals(\"+\") || orig($x.sign).equals(\"-\")) && (orig($y.sign).equals(\"+\") || orig($y.sign).equals(\"-\"))"; 
-  } 
+  public String condition() {
+    return "orig($p) != 0 && orig($p) != orig($x._p) && ((orig($y._m.value.deref).length == 1 && orig($y._e.value.deref).length == 1 && orig($y._e.value.deref)[0] == 0 && orig($y._m.value.deref)[0] == 1) || (orig($y._m.value.deref).length == 1 && orig($y._m.value.deref)[0] == 0) || (orig($x._m.value.deref).length == 1 && orig($x._m.value.deref)[0] == 0)) && (orig($x.sign).equals(\"+\") || orig($x.sign).equals(\"-\")) && (orig($y.sign).equals(\"+\") || orig($y.sign).equals(\"-\"))";
+  }
 
   VarInfo orig_$x__p_varinfo; // orig($x._p)
   VarInfo orig_$x_sign_varinfo; // orig($x.sign)
@@ -16,58 +16,58 @@ public final class Math__BigFloat_bdiv__39 extends Splitter {
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
-  public Math__BigFloat_bdiv__39() { } 
-  public Math__BigFloat_bdiv__39(Ppt ppt) { 
+  public Math__BigFloat_bdiv__39() { }
+  public Math__BigFloat_bdiv__39(Ppt ppt) {
     orig_$x__p_varinfo = ppt.find_var_by_name("orig($x._p)");
     orig_$x_sign_varinfo = ppt.find_var_by_name("orig($x.sign)");
     orig_$y_sign_varinfo = ppt.find_var_by_name("orig($y.sign)");
     orig_$p_varinfo = ppt.find_var_by_name("orig($p)");
   }
 
-  public Splitter instantiate(Ppt ppt) { 
-    return new Math__BigFloat_bdiv__39(ppt); 
-  } 
+  public Splitter instantiate(Ppt ppt) {
+    return new Math__BigFloat_bdiv__39(ppt);
+  }
 
-  public boolean valid() { 
+  public boolean valid() {
     return (orig_$x__p_varinfo != null) && (orig_$x_sign_varinfo != null) && (orig_$y_sign_varinfo != null) && (orig_$p_varinfo != null);
-  } 
+  }
 
-  public boolean test(ValueTuple vt) { 
+  public boolean test(ValueTuple vt) {
     /* writeTestBody: 4 declarations */
     long orig_$x__p = orig_$x__p_varinfo.getIntValue(vt);
     String orig_$x_sign = orig_$x_sign_varinfo.getStringValue(vt);
     String orig_$y_sign = orig_$y_sign_varinfo.getStringValue(vt);
     long orig_$p = orig_$p_varinfo.getIntValue(vt);
-    return(orig_$p!=0&&orig_$p!=orig_$x__p&&((orig_$y__m_value_deref.length==1&&orig_$y__e_value_deref.length==1&&orig_$y__e_value_deref[0]==0&&orig_$y__m_value_deref[0]==1)||(orig_$y__m_value_deref.length==1&&orig_$y__m_value_deref[0]==0)||(orig_$x__m_value_deref.length==1&&orig_$x__m_value_deref[0]==0))&&(orig_$x_sign.equals("+")||orig_$x_sign.equals("-"))&&(orig_$y_sign.equals("+")||orig_$y_sign.equals("-"))); 
-  } 
+    return(orig_$p!=0&&orig_$p!=orig_$x__p&&((orig_$y__m_value_deref.length==1&&orig_$y__e_value_deref.length==1&&orig_$y__e_value_deref[0]==0&&orig_$y__m_value_deref[0]==1)||(orig_$y__m_value_deref.length==1&&orig_$y__m_value_deref[0]==0)||(orig_$x__m_value_deref.length==1&&orig_$x__m_value_deref[0]==0))&&(orig_$x_sign.equals("+")||orig_$x_sign.equals("-"))&&(orig_$y_sign.equals("+")||orig_$y_sign.equals("-")));
+  }
 
-  public String repr() { 
+  public String repr() {
     return "Math__BigFloat_bdiv__39: "
       + "orig_$x__p_varinfo = " + orig_$x__p_varinfo.repr() + " "
       + "orig_$x_sign_varinfo = " + orig_$x_sign_varinfo.repr() + " "
       + "orig_$y_sign_varinfo = " + orig_$y_sign_varinfo.repr() + " "
       + "orig_$p_varinfo = " + orig_$p_varinfo.repr() + " "
       ;
-  } 
+  }
 
-  public void makeDummyInvariantFactory(DummyInvariant inv) { 
-    dummyInvFactory = inv; 
-  } 
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
 
-  public void instantiateDummy(PptTopLevel ppt) { 
-    dummyInv = null; 
-  } 
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+  }
 
-  public DummyInvariant getDummyInvariant() { 
-    return dummyInv; 
-  } 
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
 
-  public int[] getIntArray(long[] longArray) { 
-    int[] intArray = new int[longArray.length]; 
-    for (int i = 0; i < intArray.length; i++) { 
-      intArray[i] = (int) longArray[i]; 
-    } 
-    return intArray; 
-  } 
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
 
-} 
+}
