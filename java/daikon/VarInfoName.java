@@ -525,12 +525,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   public boolean equals(
       /*>>>@GuardSatisfied VarInfoName this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
-    return (o instanceof VarInfoName) && equalsVarInfoName((VarInfoName) o);
+    return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public boolean equalsVarInfoName(
+  public boolean equals(
       /*>>>@GuardSatisfied @Interned VarInfoName this,*/
       /*@GuardSatisfied*/ VarInfoName other) {
     return ((other == this) // "interned": equality optimization pattern

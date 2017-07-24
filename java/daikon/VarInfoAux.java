@@ -284,16 +284,14 @@ public final class VarInfoAux implements Cloneable, Serializable {
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
-      return equalsVarInfoAux((VarInfoAux) o);
+      return equals((VarInfoAux) o);
     } else {
       return false;
     }
   }
 
   /*@Pure*/
-  public boolean equalsVarInfoAux(
-      /*>>>@GuardSatisfied VarInfoAux this,*/
-      /*@GuardSatisfied*/ VarInfoAux o) {
+  public boolean equals(/*>>>@GuardSatisfied VarInfoAux this,*//*@GuardSatisfied*/ VarInfoAux o) {
     return this.map.equals(o.map);
   }
 
