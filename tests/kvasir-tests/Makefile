@@ -187,6 +187,7 @@ tiny-real-tests__%: do-wordplay__% test-bc__%
 small-real-tests__%:
 	@
 
+# omit povray test; see povray/README for details
 #medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__%  do-tcas__%
 medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%   do-tcas__%
 	@
