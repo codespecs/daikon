@@ -1,6 +1,6 @@
 sudo: false
 
-language: java
+language: generic
 
 services:
   - docker
@@ -47,11 +47,21 @@ jobs:
   include:
     - stage: trigger-downstream
       script: |
-        echo "TRAVIS_BRANCH=$TRAVIS_BRANCH TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
-        if [[ ($TRAVIS_BRANCH == master) &&
-              ($TRAVIS_PULL_REQUEST == false) ]] ; then
-          curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
-          sh trigger-travis.sh typetests daikon-typecheck $TRAVISTOKEN
+          echo "TRAVIS_BRANCH=$TRAVIS_BRANCH TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
+          if [[ ($TRAVIS_BRANCH == master) &&
+                ($TRAVIS_PULL_REQUEST == false) ]] ; then
+            SLUGOWNER=${TRAVIS_REPO_SLUG%/*}
+            if [[ "$SLUGOWNER" == "" ]]; then
+              SLUGOWNER=codespecs
+            fi
+
+            curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+
+            git ls-remote https://github.com/${SLUGOWNER}/daikon-typecheck.git &>-
+            if [ "$?" -eq 0 ]; then
+              sh trigger-travis.sh ${SLUGOWNER} daikon-typecheck $TRAVISTOKEN
+            fi
+
         fi
 
 git:
