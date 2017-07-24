@@ -108,7 +108,7 @@ ignoreHashcodes = False
 if (len(sys.argv) < 2):
     print "Usage: decls2compy decls-file [no-hashcodes]"
     sys.exit()
-   
+
 
 if ((len(sys.argv) == 3) and
     sys.argv[2] == "no-hashcodes"):
@@ -172,12 +172,12 @@ for pptName in sortedPptKeys:
 
 
     # The comparability info for a variable at a program point is
-    # prefixed by comparability    
+    # prefixed by comparability
 
     curVar = None
     for line in v:
         strippedLine = line.strip()
-                 
+
         if strippedLine[0:len(VAR_START)] == VAR_START:
             curVar = strippedLine[len(VAR_START):]
         elif strippedLine[0:len(REP_START)] == REP_START:
@@ -188,7 +188,7 @@ for pptName in sortedPptKeys:
             curComp = strippedLine[len(COMP_START):]
             var2comp[curVar] = curComp
 
-        
+
     # Now we can do the real work of grouping variables together
     # in comparability sets based on their numbers
     sortedVars = var2comp.keys()

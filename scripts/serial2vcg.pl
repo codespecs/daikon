@@ -293,7 +293,7 @@ sub class_desc {
     die unless $buf eq "x"; # Else class annotation
     my($supername, $super) = maybe_class_desc();
     @$subs = (@$super, @$subs);
-    push @$subs, ["extra", sub { 
+    push @$subs, ["extra", sub {
                       my @data;
                       while (1) {
                           push @data, content()

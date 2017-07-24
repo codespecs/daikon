@@ -51,7 +51,7 @@ while (<>) {
 
     # if get here, must be a value
     push @values, $_;
-}    
+}
 
 # now print collected info to stdout
 
@@ -70,6 +70,6 @@ foreach my $value (@values) {
     print "$value";
 }
 
-        
+
 
 # eof

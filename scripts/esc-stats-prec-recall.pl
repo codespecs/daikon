@@ -1,7 +1,7 @@
 : # Use -*- Perl -*- without knowing its path
   eval 'exec perl -S -w $0 "$@"'
   if 0;
-# esc-stats-prec-recall.pl -- Collect statistics over a ESC-merged file. 
+# esc-stats-prec-recall.pl -- Collect statistics over a ESC-merged file.
 # Calculate the precision and recall. (Adapted from esc-stats.pl)
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
 
@@ -13,7 +13,7 @@ use Carp;
 
 my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom","assume", "nowarn");
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
-my %prefixes = 
+my %prefixes =
     (EVU => "/*@",   # Expressible Verified Unique
      EVR => "/**@",  # Expressible Verified Redundant
      ENU => "/*#",   # Expressible Unverified Unique
@@ -26,7 +26,7 @@ my %prefixes =
 
 for my $file (@ARGV) {
     my $evu = 0; my $enu = 0; my $a = 0; #the number of invariants in each category
-    
+
     print "# $file\n";
     open(SOURCE, $file) or die("Cannot open $file!");
     my @lines = <SOURCE>;
@@ -54,7 +54,7 @@ for my $file (@ARGV) {
 	    print STDERR "$file: " . (join("$file: ", @matches)) if ($count);
 	    print $count;
 	    print "\t" unless ($category eq "A");
-	    
+
 	    if ($category eq "A") {
 		$a = $a + $count;
 	    } elsif ($category eq "EVU") {
@@ -65,16 +65,16 @@ for my $file (@ARGV) {
 	}
 	print "\n";
     }
-    
+
     my $t1 = $enu + $evu;
     my $t2 = $evu + $a;
     my $precision = 0; my $recall = 0;
-    
+
     if ($t1 != 0) {
 	$precision = $evu/$t1;
 	$precision = sprintf("%.2f", $precision);
     }
-    
+
     if ($t2 != 0) {
 	$recall = $evu/$t2;
 	$recall = sprintf("%.2f", $recall);

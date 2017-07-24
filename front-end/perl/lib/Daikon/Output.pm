@@ -219,7 +219,7 @@ sub daikon_output_spec {
                     my($prefix, $suffix, $type, $rep_type, $output, $flags)
                       = @$spec;
                     push @specs, [$prefix, ".$k$suffix", $type, $rep_type,
-                                  sub { exists($_[0]->{$k}) ? 
+                                  sub { exists($_[0]->{$k}) ?
                                           $output->(\ ($_[0]->{$k}))
                                             : $output->(\undef) },
                                   $flags];

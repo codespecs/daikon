@@ -42,13 +42,13 @@ while (<>) {
 
         push @ppt, shift(@lines);
 
-        while((@lines) && (not ($lines[0] =~ /\s*variable/))) {                    
+        while((@lines) && (not ($lines[0] =~ /\s*variable/))) {
             push @ppt,  "\n" . shift(@lines);
         }
 
         while(my $line = shift @lines) {
             if($line =~ /^\s+variable.+/){
-                if($var) { 
+                if($var) {
                     push @vars, $var;
                     $var = "";
                 }
@@ -61,12 +61,12 @@ while (<>) {
         if($var) {
             push @vars, $var;
         }
-        
+
         @vars = sort @vars;
         @ppt = (@ppt, @vars );
 
         push @decls, join("", @ppt);
-        
+
     }elsif (/^DECLARE/) {
 	chomp;
 	my @lines = split(/\n/, $_);

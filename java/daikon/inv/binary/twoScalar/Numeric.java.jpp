@@ -590,7 +590,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         && (v1_ss.index_shift == v2_ss.index_shift)) {
       return (new InvDef(v1_ss.sclvar(), v2_ss.sclvar(), IntEqual.class));
     }
-    
+
     return null;
   }
 

@@ -9,5 +9,3 @@ if (-e $DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz) then
 else
   echo /scratch/$USER/tests/daikon-tests/${prog}_chicory/$prog.dtrace.gz
 endif
-
-  

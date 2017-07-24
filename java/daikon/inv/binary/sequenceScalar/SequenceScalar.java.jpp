@@ -79,7 +79,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     if (!vis[0].file_rep_type.BASE_IS_SCALAR || !vis[1].file_rep_type.BASE_IS_SCALAR) {
       return false;
     }
-    
+
     return ((vis[0].file_rep_type.isArray() && !vis[1].file_rep_type.isArray())
             || !vis[0].file_rep_type.isArray() && vis[1].file_rep_type.isArray());
   }
@@ -187,7 +187,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * invariant. Does not change the state of the invariant.
    *
    * @param count how many identical samples were observed in a row. For example, three calls to
-   *     check_modified with a count parameter of 1 is equivalent to one call to check_modified with 
+   *     check_modified with a count parameter of 1 is equivalent to one call to check_modified with
    *     a count parameter of 3.
    * @return whether or not the sample is consistent with the invariant
    */

@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.6.0 (August ?, 2017)
+
+Chicory now instruments exceptional exits.  That means that Daikon is able
+to infer invariants about when a Java method throws an exception.
+
+===========================================================================
+
 5.5.10 (July 4, 2017)
 
 Chicory and DynComp:
@@ -297,7 +304,7 @@ Daikon:
 Kvasir:
 - We made some changes to the DynComp tool to improve the accuracy of the
   comparability information. Occasionally, the system loader was causing
-  unrelated items to be placed in the same comparability set.  
+  unrelated items to be placed in the same comparability set.
 
 ===========================================================================
 
@@ -353,7 +360,7 @@ the new version control repositories by running:
   git clone https://github.com/codespecs/fjalar.git
 
 The location of the Celeriac front end has changed:
-  https://github.com/codespecs/daikon-dot-net-front-end	
+  https://github.com/codespecs/daikon-dot-net-front-end
 
 The Daikon .tar and .zip release file names now include the version number;
 e.g., daikon-5.2.8.zip instead of daikon.zip.  The same renaming is true
@@ -377,10 +384,10 @@ Daikon:
 Chicory:
   Improved support for nested classes.  When processing an object of inner
   class type, Chicory outputs outer class fields just like inner class fields.
-  
+
 DynComp:
   Fixed a problem with DynComp not working properly with JDK 8.
-  
+
 Changes relevant to building from source:
   The plume-lib library's version control repository has moved.
   If you are currently building Daikon from a clone of our repository, run:
@@ -397,14 +404,14 @@ Tools that process invariant files:
   Fixed a problem with Annotate and improved its output
 
 The parser used by several tools (Annotate and RuntimeChecker, for example)
-has been improved to understand the 'diamond operator' ("<>") used for 
+has been improved to understand the 'diamond operator' ("<>") used for
 type inference in generic instance creation.
 
 Documentation:
   Improved discussion of splitters
 
 The location of the Celeriac front end has changed:
-  https://github.com/melonhead901/daikon-dot-net-front-end	
+  https://github.com/melonhead901/daikon-dot-net-front-end
 
 
 ===========================================================================
@@ -518,7 +525,7 @@ Bug fixes:
   support unnamed parameters and subclasses that add no additional data
   members.
 
-  We have modified the output of txt-cset and txt-trace so that the 
+  We have modified the output of txt-cset and txt-trace so that the
   invariants detected match those of the decls-DynComp output.
 
   We have improved Daikon splitter file processing. In particular, the
@@ -565,7 +572,7 @@ Bug fixes:
   - for <init> methods
   - for BASTORE instruction
   Improved Kvasir (C/C++ Daikon front end) support for 32bit hosts.
-   
+
 ===========================================================================
 
 5.1.2 (June 30, 2014)
@@ -575,12 +582,12 @@ Bug fixes:
     generated StackMaps.
   Documentation updates and cleanup.
   - Added material on CSharpContracts; usage and copyright.
-   
+
 ===========================================================================
 
 5.1.0 (May 30, 2014)
 
-  Daikon can now infer code contracts for .NET programs, such as C# programs. 
+  Daikon can now infer code contracts for .NET programs, such as C# programs.
   You will require the Celeriac front end:
     https://github.com/codespecs/daikon-dot-net-front-end
   In the past, when using Celeriac, you were required to use a special version
@@ -589,7 +596,7 @@ Bug fixes:
   DynComp for Java now works with Java 7.  Chicory already worked with Java 7,
   but the DynComp component did not work with Java 7 until this release.
   (This is the fix for Daikon issue #24.)
-   
+
 ===========================================================================
 
 5.0.8 (May 2, 2014)
@@ -630,7 +637,7 @@ Daikon:
   https://github.com/codespecs/daikon/issues/28
 
 Fjalar:
-  We updated our object code reader to match version 2.24 of the GNU binutils. 
+  We updated our object code reader to match version 2.24 of the GNU binutils.
   Updated the source copyrights.
   Added two more regressions tests.
   Fixed Daikon issue #28.
@@ -653,7 +660,7 @@ Daikon:
 Fjalar:
   We updated the underlying Valgrind infrastructure to version 3.9.0
   (build 13710).  In addition, we cleaned up our sources so that there
-  are no compiler warnings when building Valgrind/Fjalar/Kvasir. 
+  are no compiler warnings when building Valgrind/Fjalar/Kvasir.
   As Fjalar is based on the Valgrind tool "memcheck", we have seen one
   new memory usage error when running our tests.  Other than this slim
   possibility, users of Kvasir to analyze C/C++ codes should not see
@@ -701,7 +708,7 @@ General
     https://github.com/codespecs/daikon/issues/
     https://github.com/codespecs/fjalar/issues/
   Problems with Kvasir should be submitted against the Fjalar product.
-  All other problems should be submitted against the Daikon product.  
+  All other problems should be submitted against the Daikon product.
 
   Mailing lists have migrated to Google Groups:
     daikon-announce@googlegroups.com
@@ -811,7 +818,7 @@ Daikon
 
     Daikon uses the JAVA_HOME environment variable, rather than JDKDIR.
 
-  Non-user-visible changes  
+  Non-user-visible changes
 
     Extracted utilMDE and other utilities into a new library named
     plume-lib, which makes it easier to use in other programs.  See
@@ -834,7 +841,7 @@ Kvasir
   User-visible changes
 
     Fixed an issue where Fjalar would not correctly traverse variables
-    when using the var-list-file option.    
+    when using the var-list-file option.
 
     The var-list-file can specify different global variables for different
     functions, rather than having to specify the same set of global
@@ -1007,7 +1014,7 @@ Kvasir
 
 	Fixed an issue where the decls header wasn't printed if Kvasir was
 	run with DynComp.
-	
+
 	Fixed an issue where extra decls headers were printed when Kvasir
 	was in append mode.
 
