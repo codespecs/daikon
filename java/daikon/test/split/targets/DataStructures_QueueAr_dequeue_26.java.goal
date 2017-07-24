@@ -32,6 +32,7 @@ public final class DataStructures_QueueAr_dequeue_26 extends Splitter {
     return(this_currentSize==0);
   }
 
+  @Override
   public String repr() {
     return "DataStructures_QueueAr_dequeue_26: "
       + "this_currentSize_varinfo = " + this_currentSize_varinfo.repr() + " "
