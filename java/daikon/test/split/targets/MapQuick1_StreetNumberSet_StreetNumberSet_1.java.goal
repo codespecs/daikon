@@ -30,6 +30,7 @@ public final class MapQuick1_StreetNumberSet_StreetNumberSet_1 extends Splitter 
     return(items.hasMoreTokens());
   }
 
+  @Override
   public String repr() {
     return "MapQuick1_StreetNumberSet_StreetNumberSet_1: "
       ;
