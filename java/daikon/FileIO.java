@@ -1607,7 +1607,7 @@ public final class FileIO {
         if (nonce_number == null) {
           throw new Daikon.TerminationMessage("File ended while trying to read nonce", state);
         }
-        nonce = new Integer(nonce_number);
+        nonce = Integer.valueOf(nonce_number);
 
         if (Global.debugPrintDtrace) {
           to_write_nonce = true;
@@ -1816,10 +1816,10 @@ public final class FileIO {
       /*@Interned*/ Invocation invok = invok_noncanonical.canonicalize();
       if (counter.containsKey(invok)) {
         Integer oldCount = counter.get(invok);
-        Integer newCount = new Integer(oldCount.intValue() + 1);
+        Integer newCount = oldCount.intValue() + 1;
         counter.put(invok, newCount);
       } else {
-        counter.put(invok, new Integer(1));
+        counter.put(invok, 1);
       }
     }
 

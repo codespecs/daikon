@@ -235,7 +235,7 @@ public class ContextSplitterFactory {
         ids = new TreeSet<Long>();
         caller2ids.put(caller_condition, ids);
       }
-      ids.add(new Long(entry.id));
+      ids.add(entry.id);
     } // for all entries
 
     ArrayList<PptNameAndSplitters> result = new ArrayList<PptNameAndSplitters>();
