@@ -1041,7 +1041,7 @@ int Send_Progress(const char *statusString, int progressState)
 {
 	POVMSObject msg;
 	int err = kNoErr;
-
+#if 0
 	Previous_t = 0;
 
 	if(err == kNoErr)
@@ -1062,7 +1062,7 @@ int Send_Progress(const char *statusString, int progressState)
 
 	if(err == kNoErr)
 		err = POVMS_Send(POVMS_Render_Context, &msg, NULL, kPOVMSSendMode_NoReply);
-
+#endif
 	return err;
 }
 
@@ -1097,7 +1097,7 @@ int Send_ProgressUpdate(int progressState, int t)
 	POVMSObject msg;
 	int err = kNoErr;
 	DBL time_dif;
-
+#if 0
 	STOP_TIME
 	time_dif = TIME_ELAPSED
 
@@ -1122,7 +1122,7 @@ int Send_ProgressUpdate(int progressState, int t)
 		if(err == kNoErr)
 			err = POVMS_Send(POVMS_Render_Context, &msg, NULL, kPOVMSSendMode_NoReply);
 	}
-
+#endif
 	return err;
 }
 

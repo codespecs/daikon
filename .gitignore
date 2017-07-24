@@ -409,6 +409,9 @@ tests/kvasir-tests/md5/md5
 tests/kvasir-tests/partial-init/partial-init
 tests/kvasir-tests/perl/perl
 tests/kvasir-tests/pointer-levels/pointer-levels
+tests/kvasir-tests/povray/povray
+tests/kvasir-tests/povray/scene.tga
+tests/kvasir-tests/povray/source
 tests/kvasir-tests/printf-interact/printf-interact
 tests/kvasir-tests/print_tokens/print_tokens
 tests/kvasir-tests/print_tokens2/print_tokens2
