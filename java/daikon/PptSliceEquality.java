@@ -97,7 +97,7 @@ public class PptSliceEquality extends PptSlice {
       if (!(o instanceof VarInfoAndComparability)) {
         return false;
       }
-      return equals((VarInfoAndComparability) o);
+      return equalsVarInfoAndComparability((VarInfoAndComparability) o);
     }
 
     /**
@@ -106,7 +106,7 @@ public class PptSliceEquality extends PptSlice {
      */
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
-    public boolean equals(
+    public boolean equalsVarInfoAndComparability(
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
         /*@GuardSatisfied*/ VarInfoAndComparability o) {
 

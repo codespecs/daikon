@@ -1,8 +1,12 @@
 package daikon.asm;
 
-import java.io.FileReader;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,7 +25,7 @@ public class PptFile {
 
   public static PptFile getPptFile(String fileName) {
     try {
-      FileReader fileReader = new FileReader(fileName);
+      Reader fileReader = Files.newBufferedReader(Paths.get(fileName), UTF_8);
       LineNumberReader reader = new LineNumberReader(fileReader);
       return new PptFile(reader);
     } catch (IOException e) {

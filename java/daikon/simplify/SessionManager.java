@@ -1,5 +1,7 @@
 package daikon.simplify;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -110,7 +112,7 @@ public class SessionManager {
           throw new RuntimeException(
               "Could not find resource daikon/simplify/" + fileName + " on the classpath");
         }
-        BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream));
+        BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream, UTF_8));
         String line;
         while ((line = lines.readLine()) != null) {
           line = line.trim();

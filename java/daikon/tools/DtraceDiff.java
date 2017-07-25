@@ -334,7 +334,7 @@ public class DtraceDiff {
             return; // EOF on both files ==> normal return
           }
         } else if ((state1.rtype == FileIO.RecordType.TRUNCATED)
-            || (state1.rtype == FileIO.RecordType.TRUNCATED))
+            || (state2.rtype == FileIO.RecordType.TRUNCATED))
           return; // either file reached truncation limit, return quietly
         else if (state1.rtype == FileIO.RecordType.EOF) {
           assert state2.ppt != null

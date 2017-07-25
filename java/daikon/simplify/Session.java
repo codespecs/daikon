@@ -1,5 +1,7 @@
 package daikon.simplify;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
 import java.util.*;
 
@@ -104,7 +106,7 @@ public class Session {
       // set up result stream
       @SuppressWarnings("nullness") // getInputStream is non-null because we didn't redirect
       /*@NonNull*/ InputStream is = process.getInputStream();
-      output = new BufferedReader(new InputStreamReader(is));
+      output = new BufferedReader(new InputStreamReader(is, UTF_8));
 
       // turn off prompting
       SessionManager.debugln("Session: prompt off");
@@ -115,7 +117,7 @@ public class Session {
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
       assert pos != -1 : "Prompt exected, stream ended";
-      String actual = new String(buf, 0, pos);
+      String actual = new String(buf, 0, pos, UTF_8);
       assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 
     } catch (IOException e) {

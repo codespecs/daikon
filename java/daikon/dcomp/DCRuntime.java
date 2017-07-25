@@ -299,7 +299,7 @@ public final class DCRuntime {
       for (Class<?> c : o1superifaces) {
         System.err.printf("  o1super interface %s%n", c);
       }
-      for (Method m : o1super.getClass().getDeclaredMethods()) {
+      for (Method m : o1super.getDeclaredMethods()) {
         System.err.printf("  o1super method %s%n", m);
       }
       throw new RuntimeException(e);

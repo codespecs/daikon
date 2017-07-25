@@ -1,6 +1,10 @@
 package daikon.tools.jtb;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import jtb.*;
 import jtb.syntaxtree.*;
@@ -69,7 +73,7 @@ public class ParseResults {
         : "Found a java-file argument that doesn't end in .java: " + file;
 
     try {
-      Reader input = new FileReader(javaFileName);
+      Reader input = Files.newBufferedReader(Paths.get(javaFileName), UTF_8);
       JavaParser parser = new JavaParser(input);
       compilationUnit = parser.CompilationUnit();
       input.close();
