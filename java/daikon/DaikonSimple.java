@@ -403,7 +403,7 @@ public class DaikonSimple {
 
     // pointer to last nonce so we can associate the object entry
     // with the right enter entry
-    Integer last_nonce = new Integer(-1);
+    Integer last_nonce = -1;
 
     /**
      * Creates a valuetuple for the receiver using the vt of the original. The method copies over

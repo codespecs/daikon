@@ -468,7 +468,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             Ast.create(
                 "MethodDeclaration",
                 new Class[] {Integer.TYPE},
-                new Object[] {new Integer(0)}, // modifiers = 0
+                new Object[] {0}, // modifiers = 0
                 Ast.format(method));
 
     Block block = (Block) Ast.create("Block", new_method);
@@ -1071,9 +1071,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       for (int j = 0; j < chars.length; j++) {
         char c = chars[j];
         if ((c == '\"') || (c == '\\')) {
-          charList.add(new Character('\\'));
+          charList.add('\\');
         }
-        charList.add(new Character(c));
+        charList.add(c);
       }
       char[] backslashedChars = new char[charList.size()];
       for (int j = 0; j < charList.size(); j++) {

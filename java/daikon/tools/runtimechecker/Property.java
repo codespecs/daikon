@@ -325,7 +325,7 @@ public class Property implements Serializable {
       throws MalformedPropertyException {
 
     Property anno = new Property(kind, daikonRep, method, jmlRep, daikonClass, confidence);
-    Integer key = new Integer(anno.hashCode());
+    Integer key = anno.hashCode();
     if (propertiesMap.containsKey(key)) {
       return propertiesMap.get(key);
     } else {

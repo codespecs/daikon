@@ -194,7 +194,7 @@ public class PptSliceEquality extends PptSlice {
         vlist = new ArrayList<VarInfo>();
         vlist.add(cp.v1);
         varmap.put(cp.v1, vlist);
-        sample_cnt_map.put(cp.v1, new Integer(cp.samples));
+        sample_cnt_map.put(cp.v1, cp.samples);
       }
       vlist.add(cp.v2);
       vlist = varmap.get(cp.v2);
@@ -202,7 +202,7 @@ public class PptSliceEquality extends PptSlice {
         vlist = new ArrayList<VarInfo>();
         vlist.add(cp.v2);
         varmap.put(cp.v2, vlist);
-        sample_cnt_map.put(cp.v2, new Integer(cp.samples));
+        sample_cnt_map.put(cp.v2, cp.samples);
       }
       vlist.add(cp.v1);
     }
