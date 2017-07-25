@@ -1,0 +1,9 @@
+It does not seem possible, at this time, to get this test
+to pass on all platforms.  It is written in C++ and uses
+lots of the tricky bits.  The generated Dwarf code turns
+out to be very compiler dependent.
+
+In addition, the test case itself is timing dependent and
+X11 enabled dependent. So either we need a unique set of
+goal files for each compiler/system combination or we just
+leave it turned off.  We have opted for the later.

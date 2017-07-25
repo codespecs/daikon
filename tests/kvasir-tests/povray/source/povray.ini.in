@@ -32,10 +32,12 @@ Bounding_Threshold = 3
 ;
 ;
 ; Turn display on
-Display=On
+;Display=On
+Display=Off
 ;
 ; Turn verbose mode on
-Verbose=On
+;Verbose=On
+Verbose=Off
 ;
 ;
 ; Specify path to search for any files not found in current
