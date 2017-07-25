@@ -355,9 +355,9 @@ public final class FeatureExtractor {
       //
       //  HashSet temp = new HashSet();
       //  for (IntDoublePair meh : allFets) {
-      //    if (temp.contains(new Integer(meh.number)))
+      //    if (temp.contains(meh.number))
       //    throw new RuntimeException(lineSep + "Found duplicate feature: "+meh.number);
-      //    temp.add(new Integer(meh.number));
+      //    temp.add(meh.number);
       //  }
       // End Debugging Code
 
@@ -721,8 +721,11 @@ public final class FeatureExtractor {
     TreeSet<IntDoublePair> final_answer = new TreeSet<IntDoublePair>();
     HashSet<Integer> index = new HashSet<Integer>();
     for (IntDoublePair current : answer) {
-      if (!(index.contains(Integer.valueOf(current.number)))) final_answer.add(current);
-      index.add(Integer.valueOf(current.number));
+      Integer current_number = current.number;
+      if (!(index.contains(current_number))) {
+        final_answer.add(current);
+      }
+      index.add(current_number);
     }
 
     return final_answer;

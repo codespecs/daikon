@@ -156,13 +156,13 @@ public class DeclReader {
         return null;
       } else if (is_int()) {
         try {
-          return (Intern.intern(Integer.valueOf(value))); // interning bugfix
+          return (Intern.intern(value)); // interning bugfix
         } catch (NumberFormatException t) {
           throw new Error("Unexpected value '" + value + "' for integer variable " + this.name);
         }
       } else if (is_double()) {
         try {
-          return (Intern.intern(Double.valueOf(value))); // interning bugfix
+          return (Intern.intern(value)); // interning bugfix
         } catch (NumberFormatException t) {
           throw new Error("Unexpected string '" + value + "' for double variable " + this.name);
         }

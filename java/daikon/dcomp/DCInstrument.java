@@ -2929,7 +2929,7 @@ class DCInstrument extends StackMapUtils {
           }
           last_line_number = line_number;
 
-          exit_locs.add(Integer.valueOf(line_number));
+          exit_locs.add(line_number);
           isIncluded.add(true);
           break;
 

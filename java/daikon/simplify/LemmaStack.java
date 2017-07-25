@@ -486,7 +486,7 @@ public class LemmaStack {
 
   /** Keep track that we've seen this number in formulas, for the sake of pushOrdering. */
   public static void noticeInt(long i) {
-    ints_seen.add(Long.valueOf(i));
+    ints_seen.add(i);
   }
 
   public static void clearInts() {

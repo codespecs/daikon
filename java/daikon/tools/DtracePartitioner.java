@@ -132,7 +132,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
         // as the key in the nonceMap, which maps
         // nonces --> ENTER half of invocation
         int theNonce = calcNonce(enterStr);
-        nonceMap.put(Integer.valueOf(theNonce), enterStr);
+        nonceMap.put(theNonce, enterStr);
       }
 
       // look for EXIT half of invocations and augment
