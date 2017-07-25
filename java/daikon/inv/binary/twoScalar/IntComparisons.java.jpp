@@ -326,7 +326,7 @@
   #define UB_MAX min()
 #endif
 
-#if (defined(EQUAL) || defined(EQUALFLOAT))
+#if defined(EQUAL_OP)
   #define IMPLEMENTSCOMPARISON implements Comparison
 #else
   #define IMPLEMENTSCOMPARISON
@@ -803,8 +803,10 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       return Invariant.CONFIDENCE_NEVER;
     }
   }
+#endif
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
     #if defined(EQUAL_OP)
       return true;
