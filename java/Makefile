@@ -88,7 +88,7 @@ JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac
 
 ### end of user customizations
 
-JAVAC_COMMAND ?= ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 # When running the checkers, it is important not to pass in "-source 5".
 # Also avoid unqualified "-Xlint" that activates warnings about failure to use == for interned values.
 JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
