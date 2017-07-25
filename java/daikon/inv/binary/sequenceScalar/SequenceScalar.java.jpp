@@ -101,7 +101,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return true;
   }
 
-   // Check if swap occurred and call one of the other two methods
+  // Check if swap occurred and call one of the other two methods
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
     // assert ArraysMDE.fn_is_permutation(permutation);
