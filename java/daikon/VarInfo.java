@@ -2120,8 +2120,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     str_name = str_name.intern();
 
     for (VarParent parent : parents) {
-      parent.parent_ppt.intern();
-      if (parent.parent_variable != null) parent.parent_variable = parent.parent_variable.intern();
+      parent.parent_ppt = parent.parent_ppt.intern();
+      if (parent.parent_variable != null) {
+        parent.parent_variable = parent.parent_variable.intern();
+      }
     }
 
     if (relative_name != null) relative_name = relative_name.intern();
