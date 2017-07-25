@@ -58,7 +58,8 @@ public class GenericTestClass<A, B extends String, C extends java.lang.Object, U
     return null;
   }
 
-  // shadowing
+  // test type parameter shadowing
+  @SuppressWarnings("TypeParameterShadowing")
   <C extends Comparable> List<U> foo115(C x, B y) {
     return null;
   }

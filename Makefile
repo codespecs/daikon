@@ -194,8 +194,6 @@ dyncomp-jdk:
 dcomp-jdk:
 	cd java && $(MAKE) dcomp-jdk
 
-reformat:
-	cd java && $(MAKE) reformat
 
 ### Kvasir (C/C++ front end)
 
