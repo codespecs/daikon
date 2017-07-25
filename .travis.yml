@@ -62,7 +62,7 @@ jobs:
               sh trigger-travis.sh ${SLUGOWNER} daikon-typecheck $TRAVISTOKEN
             fi
 
-        fi
+          fi
 
 git:
   depth: 10
