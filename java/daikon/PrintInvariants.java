@@ -1552,9 +1552,9 @@ public final class PrintInvariants {
       }
       Integer cnt = inv_map.get(inv.getClass());
       if (cnt == null) {
-        cnt = new Integer(1);
+        cnt = 1;
       } else {
-        cnt = new Integer(cnt.intValue() + 1);
+        cnt = cnt.intValue() + 1;
       }
       inv_map.put(inv.getClass(), cnt);
 

@@ -335,7 +335,7 @@ public abstract class StackMapUtils {
           for (StackMapType smt : smte.getTypesOfLocals()) {
             if (smt.getType() == Const.ITEM_NewObject) {
               int i = smt.getIndex();
-              uninitialized_NEW_map.put(il.findHandle(i), new Integer(i));
+              uninitialized_NEW_map.put(il.findHandle(i), i);
             }
           }
         }
@@ -343,7 +343,7 @@ public abstract class StackMapUtils {
           for (StackMapType smt : smte.getTypesOfStackItems()) {
             if (smt.getType() == Const.ITEM_NewObject) {
               int i = smt.getIndex();
-              uninitialized_NEW_map.put(il.findHandle(i), new Integer(i));
+              uninitialized_NEW_map.put(il.findHandle(i), i);
             }
           }
         }
@@ -404,7 +404,7 @@ public abstract class StackMapUtils {
       int new_offset = ih.getPosition();
       if (old_offset != new_offset) {
         update_NEW_object_stack_map_entries(old_offset, new_offset);
-        e.setValue(new Integer(new_offset));
+        e.setValue(new_offset);
       }
     }
   }

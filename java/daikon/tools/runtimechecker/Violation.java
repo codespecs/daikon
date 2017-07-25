@@ -142,7 +142,7 @@ public class Violation implements Serializable {
   /** Returns a violation with the given attributes. */
   public static Violation get(Property anno, Time t) {
     Violation vio = new Violation(anno, t);
-    Integer key = new Integer(vio.hashCode());
+    Integer key = vio.hashCode();
     if (violationsMap.containsKey(key)) {
       return violationsMap.get(key);
     } else {

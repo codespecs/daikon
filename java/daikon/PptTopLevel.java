@@ -2897,9 +2897,9 @@ public class PptTopLevel extends Ppt {
         }
         for (Lemma problem : problems) {
           if (demerits.containsKey(problem)) {
-            demerits.put(problem, new Integer(demerits.get(problem).intValue() + 1));
+            demerits.put(problem, demerits.get(problem).intValue() + 1);
           } else {
-            demerits.put(problem, new Integer(1));
+            demerits.put(problem, 1);
           }
         }
         int max_demerits = -1;

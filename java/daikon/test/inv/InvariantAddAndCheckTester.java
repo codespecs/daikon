@@ -582,7 +582,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       for (int i = 0; i < types.length; i++) {
         params[i] = types[i].parse_value(tokens.nextToken().trim(), null, null);
       }
-      params[params.length - 1] = new Integer(1); // the "count" argument
+      params[params.length - 1] = 1; // the "count" argument
       return params;
     }
 

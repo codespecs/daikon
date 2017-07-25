@@ -53,9 +53,9 @@ public class ProglangTypeTest extends TestCase {
 
   public void test_parse_value() {
     ProglangType pint = ProglangType.INT;
-    test_parse_value_helper(pint, "1", new Long(1));
-    test_parse_value_helper(pint, "0", new Long(0));
-    test_parse_value_helper(pint, "-3", new Long(-3));
+    test_parse_value_helper(pint, "1", Long.valueOf(1));
+    test_parse_value_helper(pint, "0", Long.valueOf(0));
+    test_parse_value_helper(pint, "-3", Long.valueOf(-3));
 
     ProglangType pstring = ProglangType.STRING;
     test_parse_value_helper(pstring, "\"foo\"", "foo");
