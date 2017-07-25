@@ -82,7 +82,7 @@ while (<DECLS>) {
       my $rep_type = <DECLS>;
       my $implicit = <DECLS>;
       chomp $implicit;
-      
+
       if ($implicit =~ /^(\d+)\[(\d+)\]$/) {
         push @implicit_types, $1;
         push @implicit_types, $2;
@@ -97,7 +97,7 @@ while (<DECLS>) {
       foreach my $imp2 (@implicit_types) {
         next if ($imp1 == $imp2);
         my $explicit;
-        if (common_key($implicit_to_explicit{$imp1}, 
+        if (common_key($implicit_to_explicit{$imp1},
                        $implicit_to_explicit{$imp2}, \$explicit)) {
           print "$ppt_declaration\nexplicit type \"$explicit\" " .
             "in multiple implicit types: $imp1, $imp2\n\n";

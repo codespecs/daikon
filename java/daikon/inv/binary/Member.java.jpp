@@ -460,7 +460,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
               + sssc.sclvar().name()
               + "] member "
               + seq_var.name());
-    }  
+    }
 
     return null;
   }

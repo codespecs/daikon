@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.5.9
+@center Daikon version 5.5.11
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.5.9 release date
-@center June 2, 2017
+@c Print out the Daikon version 5.5.11 release date
+@center July 4, 2017
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.5.9, released June 2, 2017.
+It describes Daikon version 5.5.11, released July 4, 2017.
 
 @menu
 * Introduction::
@@ -2554,6 +2554,27 @@ Repeat the previous step to rebuild the release candidate.
 @item
 Repeat this step to verify your corrections.
 @end itemize
+
+If @file{check.log} contains an error message of the form:
+@smallexample
+List of broken links and other issues:
+http://plse.cs.washington.edu/daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html
+  Line: 185
+  Code: 200 OK
+ To do: Some of the links to this resource point to broken URI fragments
+        (such as index.html#fragment).
+The following fragments need to be fixed:
+        Requirements-for-compiling-Kvasir       Line: 185
+@end smallexample
+@noindent
+This is probably caused by the way @command{makeinfo} deals with chapter splits via
+indirect references through stub files.  Two @command{suppress-fragment} entries in
+@file{../plume-lib/bin/checklink-args.txt} are required.  For the example above, these
+would be:
+@smallexample
+--suppress-fragment http://plse.cs.washington.edu/daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir
+--suppress-fragment http://plse.cs.washington.edu/staging-daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir
+@end smallexample
 
 [Time: 8 min]
 

@@ -1,6 +1,6 @@
 JAVA = java -Xmx768m -XX:MaxPermSize=768M
 # DAIKON = $(JAVA) daikon.Daikon --no_text_output --show_progress --suppress_redundant
-DAIKON = $(JAVA) daikon.Daikon --no_text_output --show_progress 
+DAIKON = $(JAVA) daikon.Daikon --no_text_output --show_progress
 
 all: birthday.inv standalone.inv
 

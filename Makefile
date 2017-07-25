@@ -79,7 +79,7 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/test/dtracediff/Hanoi.dtrace.gz \
 	daikon/test/dtracediff/Hanoi-truncated.dtrace.gz
 
-# the following is only used in show-vars 
+# the following is only used in the "make showvars" target
 WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|/.\#|.bak$$|uw/|pubs/')
 
 WWW_PARENT ?= /cse/web/research/plse
@@ -217,7 +217,7 @@ fjalar/valgrind/Makefile.am:
 fjalar/valgrind/Makefile.in: fjalar/valgrind/Makefile.am
 	cd fjalar/valgrind && ./autogen.sh
 
-fjalar/valgrind/Makefile: fjalar/valgrind/Makefile.in 
+fjalar/valgrind/Makefile: fjalar/valgrind/Makefile.in
 	cd fjalar/valgrind && ./configure --prefix=`pwd`/inst
 
 .PHONY: kvasir
@@ -393,7 +393,7 @@ repository-test:
 	export DAIKONDIR=${MYTESTDIR}/daikon
 	export JAVA_HOME=/usr/lib/jvm/java
 	source ${DAIKONDIR}/scripts/daikon.bashrc
-	cd daikon && make 
+	cd daikon && make
 
 
 validate:
@@ -731,6 +731,7 @@ showvars:
 	@echo "WWW_FILES =" $(WWW_FILES)
 	@echo "CUR_RELEASE_NAME =" $(CUR_RELEASE_NAME)
 	@echo "NEW_RELEASE_NAME =" $(NEW_RELEASE_NAME)
+	${MAKE} -C java showvars
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar

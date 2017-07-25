@@ -60,7 +60,7 @@ KvasirPptNames = []
 myState = State.Uninit
 
 for line in allLines:
-  
+
     if myState == State.Uninit:
 
         # The program point name always follows the
@@ -70,11 +70,11 @@ for line in allLines:
 
     elif myState == State.PptName:
         curVarList = []
-        # Remember to add an entry to both the list and the map        
+        # Remember to add an entry to both the list and the map
         KvasirPptNames.append(line)
         KvasirPptMap[line] = curVarList
         myState = State.VarName
-        
+
     elif myState == State.VarName:
         if line == "DECLARE":
             myState = State.PptName
@@ -84,15 +84,15 @@ for line in allLines:
             curVarList.append([])
             curVarList[-1].append(line)
             myState = State.DecType
-        
+
     elif myState == State.DecType:
         curVarList[-1].append(line)
         myState = State.RepType
-        
+
     elif myState == State.RepType:
         curVarList[-1].append(line)
         myState = State.CompNum
-        
+
     elif myState == State.CompNum:
         curVarList[-1].append(line)
 
@@ -109,8 +109,8 @@ for line in allLines:
 # point.
 for ppt in KvasirPptMap:
     curCompNum = 1 # Start at 1 and monotonically increase
-    
-    # Key: declared type; Value: comp. num associated with that type    
+
+    # Key: declared type; Value: comp. num associated with that type
     decTypesMap = {}
 
     curVarList = KvasirPptMap[ppt]
@@ -128,13 +128,13 @@ for ppt in KvasirPptMap:
 # Output the various .decls files
 # (Read these names from KvasirPptNames to preserve ordering)
 for ppt in KvasirPptNames:
-    
+
     print "DECLARE"
     print ppt
 
     for varEntry in KvasirPptMap[ppt]:
 
-        # Variable name            
+        # Variable name
         print varEntry[0]
 
         # Declared type

@@ -78,7 +78,7 @@ for (my $i = 0; $i <= $#dfile; $i++) {
             if ($varname !~ /^$global_prefix/) {
                 next;
             }
-            
+
             $globals{$varname} = "$type : $rep : $comp";
         }
     }
@@ -126,4 +126,3 @@ for (my $i = 0; $i <= $#dfile; $i++) {
 foreach $line (@dfile) {
     print "$line\n";
 }
-

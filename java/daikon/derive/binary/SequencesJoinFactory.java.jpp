@@ -55,7 +55,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
       return null;
     }
 
-    /*    if (!(var1.rep_type == ProglangType.INT_ARRAY) 
+    /*    if (!(var1.rep_type == ProglangType.INT_ARRAY)
               || !(var2.rep_type == ProglangType.INT_ARRAY)) {
             return null;
           }

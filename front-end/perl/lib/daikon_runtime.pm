@@ -67,7 +67,7 @@ sub set_output_style {
     my $i = 0;
     for my $kind ('types', 'dtrace') {
         for my $info ('basedir', 'style', 'append') {
-            if (exists $output_style{$kind}{$info} and 
+            if (exists $output_style{$kind}{$info} and
                 $output_style{$kind}{$info} ne $styles[$i]) {
                 die "Inconsistent output specification: ".
                     "conflicting $info for $kind files.\n";

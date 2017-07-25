@@ -305,7 +305,7 @@ sub daikon_compile {
                         "daikon_compile.out");
 }
 
-# Build the dyncomp rt.jar 
+# Build the dyncomp rt.jar
 sub build_dyncomp_jar {
   print_log("Building dcomp_rt.jar...");
   return buildtest_cmd ("make -C $INV/java dcomp_rt.jar",

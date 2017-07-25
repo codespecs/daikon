@@ -64,7 +64,7 @@ can be run in the usual way. They will generate three output files for
 each instrumented package "foo" (recall that a program without a
 package declaration will be in the package "main"):
 
-- "foo.types" 
+- "foo.types"
   This file includes a guess at the type of any variables whose type
   was unknown when the package was instrumented, but for which
   examples were seen in this execution. Information is always appended

@@ -31,7 +31,7 @@ for line in allLines:
     # We hit a program point name, so calculate stuff
     # for the previous program point
     if pptNameRE.search(line):
-        
+
         # Special case for the first program point reached
         if not curPpt:
             curPpt = line

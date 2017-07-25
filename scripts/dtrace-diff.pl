@@ -93,11 +93,11 @@ sub load_decls ( $ ) {
             my $currep = "";
             my $curdec = "";
             my $curcomp = "";
-            
+
             while(my $subline = getline($decls)) {
                 $subline =~ s/^\s+//;
                 $subline  =~ s/\s+$//;
-                
+
                 if($subline =~ /(^variable\s+)(.+)/) {
                     unless($curvar eq "") { # Push stuff to the stack
                         $$lhashref{$curvar} = [$curdec, $currep, $curcomp];
@@ -115,7 +115,7 @@ sub load_decls ( $ ) {
                     $curdec = $2;
                 }elsif ($subline =~ /(^comparability\s*)(.+)/) {
                     $curcomp = $2;
-                }                   
+                }
             }
             unless($curvar eq "") { # Push stuff to the stack
                 $$lhashref{$curvar} = [$curdec, $currep, $curcomp];

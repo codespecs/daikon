@@ -63,7 +63,7 @@ public final class CLASSNAME extends BinaryDerivation {
   /** Boolean. True if Daikon should only generate derivations on boolean predicates. */
   public static boolean dkconfig_boolOnly = true;
 
-  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) { 
+  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return base1;
   }
 
@@ -107,7 +107,7 @@ public final class CLASSNAME extends BinaryDerivation {
   /**
    * Returns a subset of val1 such that the corresponding element in var2 equals this.choose. It is
    * assumed that val1 and val2 originated from the same, larger data structure.
-   * 
+   *
    * @param full_vt the value tuple of a program point to compute the derived value from
    */
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {

@@ -699,7 +699,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         return var1name + ".compareTo(" + var2name +") >= 0";
       #else
         if ((var1name.indexOf("daikon.Quant.collectObject") != -1)
-           
+
             || (var2name.indexOf("daikon.Quant.collectObject") != -1)) {
           return "(warning: it is meaningless to compare hashcodes for values obtained through daikon.Quant.collect... methods:"
             + var1name + " " + EQUALSstring + " " + var2name + ")";
@@ -1177,7 +1177,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     if (der1.index_shift != der2.index_shift) {
       return null;
     }
-    
+
     // Make sure that the indices are equal
     if (!ppt.parent.is_equal(der1.sclvar().canonicalRep(), der2.sclvar().canonicalRep())) {
       return null;

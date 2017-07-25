@@ -737,7 +737,7 @@ class FormatTestCase {
 
   //            Object arrayFunctionParams[] = new Object [3];
   //            arrayFunctionParams[0] = (Object)sample;
-  //            arrayFunctionParams[1] = new Integer(sampleIndex);
+  //            arrayFunctionParams[1] = sampleIndex;
 
   //            // Debug code
 
@@ -790,7 +790,7 @@ class FormatTestCase {
   //            arrayFunction = Array.class.getMethod(arrayFunctionName, new Class [] {Object.class, int.class, subType});
 
   //            for (int i = 0; i<arrayLength; i++) {
-  //              arrayFunction.invoke(null, new Object [] {result, new Integer(i), temp[i]});
+  //              arrayFunction.invoke(null, new Object [] {result, i), temp[i]};
   //            }
   //          } else {
   //            for (int i = 0; i<arrayLength; i++) {
@@ -910,7 +910,7 @@ class FormatTestCase {
       }
 
       // Set count to 1
-      params[sampleSize] = new Integer(1);
+      params[sampleSize] = 1;
 
       // Debug code
 
