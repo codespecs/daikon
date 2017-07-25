@@ -1,9 +1,13 @@
 package daikon.tools.jtb;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.*;
 import daikon.inv.OutputFormat;
 import gnu.getopt.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
 import jtb.*;
@@ -238,14 +242,14 @@ public class Annotate {
         throw new Error("unsupported output file format " + Daikon.output_format);
       }
       // outputFile.getParentFile().mkdirs();
-      Writer output = new FileWriter(outputFile);
+      Writer output = Files.newBufferedWriter(outputFile.toPath(), UTF_8);
 
       debug.fine("Parsing file " + javafilename);
 
       // Annotate the file
       Reader input;
       try {
-        input = new FileReader(javafilename);
+        input = Files.newBufferedReader(Paths.get(javafilename), UTF_8);
       } catch (FileNotFoundException e) {
         throw new Error(e);
       }

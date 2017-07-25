@@ -8,6 +8,7 @@ import static daikon.VarInfo.RefType;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.VarKind;
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.config.Configuration;
 import daikon.derive.ValueAndModified;
@@ -15,6 +16,7 @@ import daikon.diff.InvMap;
 import daikon.inv.Invariant;
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
 import java.text.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -217,12 +219,11 @@ public final class FileIO {
       result = isComment(nextline);
     } catch (IOException e) {
       result = false;
-    } finally {
-      try {
-        reader.reset();
-      } catch (IOException e) {
-        throw new Error(e);
-      }
+    }
+    try {
+      reader.reset();
+    } catch (IOException e) {
+      throw new Error(e);
     }
     return result;
   }
@@ -1245,16 +1246,16 @@ public final class FileIO {
         reader = new LineNumberReader(file_reader);
       } else if (raw_filename.equals("+")) { //socket comm with Chicory
         InputStream chicoryInput = connectToChicory();
-        InputStreamReader chicReader = new InputStreamReader(chicoryInput);
+        InputStreamReader chicReader = new InputStreamReader(chicoryInput, UTF_8);
         reader = new LineNumberReader(chicReader);
       } else if (is_url) {
         URL url = new URL(raw_filename);
         InputStream stream = url.openStream();
         if (raw_filename.endsWith(".gz")) {
           GZIPInputStream gzip_stream = new GZIPInputStream(stream);
-          reader = new LineNumberReader(new InputStreamReader(gzip_stream));
+          reader = new LineNumberReader(new InputStreamReader(gzip_stream, UTF_8));
         } else {
-          reader = new LineNumberReader(new InputStreamReader(stream));
+          reader = new LineNumberReader(new InputStreamReader(stream, UTF_8));
         }
       } else {
         reader = UtilMDE.lineNumberFileReader(raw_filename);
@@ -1357,7 +1358,8 @@ public final class FileIO {
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter = new PrintWriter(new FileWriter(new File(filename + ".debug")));
+      Global.dtraceWriter =
+          new PrintWriter(Files.newBufferedWriter(new File(filename + ".debug").toPath(), UTF_8));
     }
 
     while (true) {

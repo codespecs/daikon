@@ -3,6 +3,7 @@ package daikon.chicory;
 //import harpoon.ClassFile.HMethod;
 
 import static daikon.tools.nullness.NullnessUtils.castNonNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
 import daikon.util.*;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.lang.instrument.*;
 import java.lang.reflect.Member;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.jar.*;
 
@@ -124,7 +126,8 @@ public class ChicoryPremain {
     // use a special classloader to ensure correct version of BCEL is used
     ClassLoader loader = new ChicoryLoader();
     try {
-      transformer = loader.loadClass("daikon.chicory.Instrument").newInstance();
+      transformer =
+          loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
       @SuppressWarnings("unchecked")
       Class<Instrument> c = (Class<Instrument>) transformer.getClass();
       // System.out.printf ("Classloader of tranformer = %s%n",
@@ -229,20 +232,18 @@ public class ChicoryPremain {
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
   private static void writePurityFile(String fileName, String parentDir) {
-    PrintWriter pureFileWriter;
-    try {
-      pureFileWriter = new PrintWriter(new File(parentDir, fileName));
+    File absFile = new File(parentDir, fileName);
+    System.out.printf("Writing pure methods to %s%n", absFile);
+    try (BufferedWriter pureFileWriter = Files.newBufferedWriter(absFile.toPath(), UTF_8)) {
+      for (String methodName : pureMethods) {
+        pureFileWriter.write(methodName);
+        pureFileWriter.newLine();
+      }
     } catch (FileNotFoundException e) {
-      throw new Error("Could not open " + fileName + " for writing", e);
+      throw new Error("Could not open " + absFile, e);
+    } catch (IOException e) {
+      throw new Error("Problem writing to " + absFile, e);
     }
-
-    System.out.printf("Writing pure methods to %s%n", fileName);
-
-    for (String methodName : pureMethods) {
-      pureFileWriter.println(methodName);
-    }
-
-    pureFileWriter.close();
   }
 
   /**

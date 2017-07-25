@@ -1,5 +1,7 @@
 package daikon;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.chicory.*;
 import daikon.util.*;
 import java.io.*;
@@ -298,7 +300,7 @@ public class Chicory {
       @SuppressWarnings("nullness") // getInputStream is non-null because we didn't redirect it.
       /*@NonNull*/ InputStream daikonStdOut = daikon_proc.getInputStream();
       // daikonReader escapes, so it is not closed in this method.
-      BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut));
+      BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut, UTF_8));
 
       // Examine up to 100 lines of Daikon output, looking for
       // the "DaikonChicoryOnlinePort=" line.  Note that if file progress
@@ -527,7 +529,7 @@ public class Chicory {
         if (!directory.exists()) directory.mkdir();
       }
 
-      outFile = new PrintWriter(new File(dirName, fileName));
+      outFile = new PrintWriter(new File(dirName, fileName), UTF_8.name());
     } catch (IOException e) {
       if (outFile == null) {
         throw new RuntimeException("This can't happen.");

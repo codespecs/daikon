@@ -2371,7 +2371,7 @@ public class PptTopLevel extends Ppt {
     // Don't create a partially reflexive slice (two vars the same) if there
     // is only one variable in its equality set
     if (false) {
-      if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1)) {
+      if (((v1 == v2) || (v1 == v3)) && (v1.get_equalitySet_size() == 1)) {
         return false;
       }
       if ((v2 == v3) && (v2.get_equalitySet_size() == 1)) {
