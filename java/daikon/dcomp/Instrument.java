@@ -31,6 +31,7 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+  @Override
   @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
   public byte /*@Nullable*/ [] transform(
       ClassLoader loader,

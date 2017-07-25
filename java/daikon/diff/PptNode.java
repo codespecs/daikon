@@ -29,6 +29,7 @@ public class PptNode extends Node</*@Nullable*/ PptTopLevel, InvNode> {
     return getUserRight();
   }
 
+  @Override
   public void accept(Visitor v) {
     v.visit(this);
   }

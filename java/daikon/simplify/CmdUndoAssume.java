@@ -13,6 +13,7 @@ public class CmdUndoAssume implements Cmd {
   public static CmdUndoAssume single = new CmdUndoAssume();
 
   /** For documentation, read the class overview. */
+  @Override
   public void apply(final /*@GuardedBy("<self>")*/ Session s) {
 
     synchronized (s) {
@@ -28,6 +29,7 @@ public class CmdUndoAssume implements Cmd {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied CmdUndoAssume this*/) {
     return "CmdUndoAssume";
   }

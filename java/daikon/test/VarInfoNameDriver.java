@@ -69,6 +69,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName parse(String);
   private static class Parse implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
       String var = args[0];
@@ -85,6 +86,7 @@ public class VarInfoNameDriver {
 
   // String name();
   private static class Name implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 1;
       VarInfoName var = vars.get(args[0]);
@@ -98,6 +100,7 @@ public class VarInfoNameDriver {
 
   // String esc_name();
   private static class EscName implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 1;
       VarInfoName var = vars.get(args[0]);
@@ -111,6 +114,7 @@ public class VarInfoNameDriver {
 
   // String simplify_name();
   private static class SimplifyName implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 1;
       VarInfoName var = vars.get(args[0]);
@@ -124,6 +128,7 @@ public class VarInfoNameDriver {
 
   // String[] QuantHelper.format_esc(VarInfoName[] roots)
   private static class QuantifyEscName implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       VarInfoName[] roots = new VarInfoName[args.length];
       for (int i = 0; i < args.length; i++) {
@@ -149,6 +154,7 @@ public class VarInfoNameDriver {
 
   // String[] QuantHelper.format_simplify(VarInfoName[] roots)
   private static class QuantifySimplifyName implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       VarInfoName[] roots = new VarInfoName[args.length];
       for (int i = 0; i < args.length; i++) {
@@ -177,6 +183,7 @@ public class VarInfoNameDriver {
   // boolean equals(Object);
   // boolean equals(VarInfoName);
   private static class Equals implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
       VarInfoName a = vars.get(args[0]);
@@ -191,6 +198,7 @@ public class VarInfoNameDriver {
 
   // int hashCode(/*>>>@GuardSatisfied VarInfoNameDriver this*/);
   private static class HashCode implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
       VarInfoName a = vars.get(args[0]);
@@ -213,6 +221,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applySize();
   private static class Size implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
@@ -228,6 +237,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applyFunction(String);
   private static class Function implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 3;
       String func = args[1];
@@ -244,6 +254,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applyTypeOf();
   private static class TypeOf implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
@@ -259,6 +270,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applyPrestate();
   private static class Prestate implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
@@ -274,6 +286,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applyPoststate();
   private static class Poststate implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
@@ -291,6 +304,7 @@ public class VarInfoNameDriver {
   private static class PostPreConverter implements Handler {
     private static VarInfoName.PostPreConverter converter = new VarInfoName.PostPreConverter();
 
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       VarInfoName var = vars.get(args[0]);
       VarInfoName result = converter.replace(var);
@@ -305,6 +319,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applyAdd(int);
   private static class Add implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 3;
       VarInfoName var = vars.get(args[1]);
@@ -321,6 +336,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applyElements();
   private static class Elements implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
@@ -336,6 +352,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applySubscript(VarInfoName);
   private static class Subscript implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 3;
       VarInfoName var = vars.get(args[1]);
@@ -352,6 +369,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applySlice(VarInfoName, VarInfoName);
   private static class Slice implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 4;
       VarInfoName var = vars.get(args[1]);
@@ -369,6 +387,7 @@ public class VarInfoNameDriver {
 
   // String jml_name()
   private static class JMLName implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 1;
       VarInfoName var = vars.get(args[0]);
@@ -384,6 +403,7 @@ public class VarInfoNameDriver {
 
   // VarInfoName applyFunctionOfN(String function, List vars)
   private static class FunctionOfN implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length >= 4;
       String func = args[1];
@@ -403,6 +423,7 @@ public class VarInfoNameDriver {
 
   // public VarInfoName applyField(String field)
   private static class Field implements Handler {
+    @Override
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 3;
       VarInfoName var = vars.get(args[1]);

@@ -156,6 +156,7 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public LOWERBOUNDCORE clone(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
     try {
       return (LOWERBOUNDCORE) super.clone();

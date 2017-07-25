@@ -35,6 +35,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
   // throw out Program points that are not Conditional,
   // meaning they were NOT added from our splitters
+  @Override
   public void visit(PptNode node) {
     PptTopLevel ppt = node.getPpt1();
     if (!(ppt instanceof PptConditional)) {
@@ -44,6 +45,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     }
   }
 
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

@@ -105,11 +105,13 @@ public class NONZERO extends SINGLESCALAR {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** Make sure the NonZero make sense on these vars */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -125,6 +127,7 @@ public class NONZERO extends SINGLESCALAR {
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   public NONZERO instantiate_dyn(/*>>> @Prototype NONZERO this,*/ PptSlice slice) {
     return new NONZERO(slice);
   }
@@ -141,6 +144,7 @@ public class NONZERO extends SINGLESCALAR {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied @Prototype NONZERO this,*/ OutputFormat format) {
     // // var() fails for prototype invariants
     // if (ppt == null) {
@@ -170,6 +174,7 @@ public class NONZERO extends SINGLESCALAR {
     return format_unimplemented(format);
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE v, int count) {
     if (v == 0) {
       return InvariantStatus.FALSIFIED;
@@ -178,6 +183,7 @@ public class NONZERO extends SINGLESCALAR {
     }
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE v, int count) {
     InvariantStatus status = check_modified(v, count);
     if (status == InvariantStatus.FALSIFIED) {
@@ -195,6 +201,7 @@ public class NONZERO extends SINGLESCALAR {
     return (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE);
   }
 
+  @Override
   protected double computeConfidence() {
     return 1 - computeProbability();
   }
@@ -254,6 +261,7 @@ public class NONZERO extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var = vis[0];
 
@@ -276,6 +284,7 @@ public class NONZERO extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -348,12 +357,14 @@ public class NONZERO extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof NONZERO;
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof OneOfScalar) {
       OneOfScalar oos = (OneOfScalar) other;

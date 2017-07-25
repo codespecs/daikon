@@ -806,6 +806,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * @see #name
    */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied VarInfo this*/) {
     return name();
   }
@@ -1430,6 +1431,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       this.var = var;
     }
 
+    @Override
     public boolean accept(Invariant inv) {
       return inv.usesVar(var);
     }
@@ -2274,6 +2276,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return false;
       }
 
+      @Override
       public List<VarInfo> visitSimple(Simple o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         // No recursion:  no children
@@ -2286,6 +2289,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitSizeOf(SizeOf o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
@@ -2298,6 +2302,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitFunctionOf(FunctionOf o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
@@ -2311,6 +2316,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitFunctionOfN(FunctionOfN o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
@@ -2326,6 +2332,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitField(Field o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
@@ -2342,6 +2349,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitTypeOf(TypeOf o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
@@ -2354,6 +2362,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitPrestate(Prestate o) {
         assert inPre == false;
         inPre = true;
@@ -2366,6 +2375,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitPoststate(Poststate o) {
         assert inPre == true;
         inPre = false;
@@ -2378,6 +2388,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitAdd(Add o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
@@ -2390,6 +2401,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitElements(Elements o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
@@ -2402,6 +2414,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitSubscript(Subscript o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
@@ -2415,6 +2428,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return result;
       }
 
+      @Override
       public List<VarInfo> visitSlice(Slice o) {
         List<VarInfo> result = new ArrayList<VarInfo>();
         if (shouldBeGuarded(o)) {
@@ -2579,6 +2593,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     private IndexComparator() {}
 
     /*@Pure*/
+    @Override
     public int compare(VarInfo vi1, VarInfo vi2) {
       if (vi1.varinfo_index < vi2.varinfo_index) {
         return -1;
@@ -2640,6 +2655,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied Pair this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -2650,11 +2666,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Pair this*/) {
       return (v1.hashCode() + v2.hashCode());
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Pair this*/) {
       return (v1.name() + " = " + v2.name());
     }

@@ -37,6 +37,7 @@ public class Lemma implements Comparable<Lemma> {
   }
 
   /*@Pure*/
+  @Override
   public int compareTo(/*>>>@GuardSatisfied Lemma this,*/ Lemma other) {
     return summarize().compareTo(other.summarize());
   }

@@ -31,6 +31,7 @@ class Visitors implements JavaParserConstants {
     class ExpressionExtractor extends DepthFirstVisitor {
       private /*@Nullable*/ Node expressionNode;
 
+      @Override
       public void visit(VariableInitializer n) {
         expressionNode = n.f0;
       }

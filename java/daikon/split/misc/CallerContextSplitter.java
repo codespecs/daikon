@@ -19,6 +19,7 @@ public final class CallerContextSplitter extends Splitter {
   static final long serialVersionUID = 20030112L;
 
   /** Create a new splitter for the given ppt using this as a prototype. */
+  @Override
   public Splitter instantiate(Ppt ppt) {
     return new CallerContextSplitter(ppt, ids, condition);
   }
@@ -45,6 +46,7 @@ public final class CallerContextSplitter extends Splitter {
   }
 
   /*@EnsuresNonNullIf(result=true, expression="caller_varinfo")*/
+  @Override
   public boolean valid() {
     return (caller_varinfo != null);
   }
@@ -52,16 +54,19 @@ public final class CallerContextSplitter extends Splitter {
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // application invariant about private variable
   /*@RequiresNonNull("caller_varinfo")*/
+  @Override
   public boolean test(ValueTuple vt) {
     long caller = caller_varinfo.getIntValue(vt);
     return (ArraysMDE.indexOf(ids, caller) >= 0);
   }
 
+  @Override
   public String condition() {
     return condition;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied CallerContextSplitter this*/) {
     String attach = "(unattached prototype)";
     if (caller_varinfo != null) {
@@ -70,6 +75,7 @@ public final class CallerContextSplitter extends Splitter {
     return "CallerContextSplitter<" + condition + ", " + attach + ">";
   }
 
+  @Override
   public /*@Nullable*/ DummyInvariant getDummyInvariant() {
     return null;
   }

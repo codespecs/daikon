@@ -74,6 +74,7 @@ public class Property implements Serializable {
 
   /** Easy-on-the-eye string representation. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied Property this*/) {
     return kind.toString() + " : " + daikonRep();
   }
@@ -97,11 +98,13 @@ public class Property implements Serializable {
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
       return name.hashCode();
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Kind this*/) {
       return name;
     }
@@ -139,6 +142,7 @@ public class Property implements Serializable {
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied Property this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
@@ -155,6 +159,7 @@ public class Property implements Serializable {
   }
 
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied Property this*/) {
     return daikonRep.hashCode() + kind.hashCode() + (method == null ? 0 : method.hashCode());
   }

@@ -64,6 +64,7 @@ public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
     super(vi1, vi2);
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     debug.fine("Computing value and modified");
 
@@ -106,18 +107,21 @@ public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
     return new ValueAndModified(intersect, mod);
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     debug.fine("Computing varInfo");
     return VarInfo.make_function("intersection", base1, base2);
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SCALARSEQUENCESINTERSECTION);
   }
 
   /** Returns the ESC name for sequence subsequence */
   /*@SideEffectFree*/
+  @Override
   public String esc_name(String index) {
     return String.format("intersection[%s,%s]", base1.esc_name(), base2.esc_name());
   }

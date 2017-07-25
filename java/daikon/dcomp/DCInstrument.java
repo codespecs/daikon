@@ -171,6 +171,7 @@ class DCInstrument extends StackMapUtils {
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied MethodDef this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -180,6 +181,7 @@ class DCInstrument extends StackMapUtils {
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied MethodDef this*/) {
       int code = name.hashCode();
       for (Type arg : arg_types) {
@@ -203,6 +205,7 @@ class DCInstrument extends StackMapUtils {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied CodeRange this*/) {
       return String.format("Code range: %d..%d", start_pc, start_pc + len - 1);
     }

@@ -32,6 +32,7 @@ import org.checkerframework.checker.interning.qual.*;
  */
 public class InstrumentHandler extends CommandHandler {
 
+  @Override
   public boolean handles(String command) {
     if (command.equals("instrument")) {
       return true;
@@ -64,6 +65,7 @@ public class InstrumentHandler extends CommandHandler {
 
   @SuppressWarnings(
       "enhancedfor.type.incompatible") // Checker Framework bug exposed on line "for (TypeDeclaration decl : oneFile.roots) {"
+  @Override
   public boolean handle(String[] args) {
 
     Daikon.output_format = daikon.inv.OutputFormat.JAVA;

@@ -156,6 +156,7 @@ public class PptTopLevel extends Ppt {
   public final PptName ppt_name;
 
   /*@Pure*/
+  @Override
   public String name(
       /*>>>@GuardSatisfied @UnknownInitialization(PptTopLevel.class) @Raw(PptTopLevel.class) PptTopLevel this*/) {
     return name;
@@ -206,6 +207,7 @@ public class PptTopLevel extends Ppt {
     int splitter_index = 0;
     int ppts_index = 0;
 
+    @Override
     @SuppressWarnings(
         "flowexpr.parse.error") // Checker Framework bug: splitters is a field in this class
     /*@EnsuresNonNullIf(result=true, expression="splitters")*/
@@ -215,6 +217,7 @@ public class PptTopLevel extends Ppt {
       return true;
     }
 
+    @Override
     public PptConditional next() {
 
       if (!hasNext()) {
@@ -233,6 +236,7 @@ public class PptTopLevel extends Ppt {
       return ppt;
     }
 
+    @Override
     public void remove() {
       throw new UnsupportedOperationException("Remove unsupported in CondIterator");
     }
@@ -441,11 +445,13 @@ public class PptTopLevel extends Ppt {
 
   /** Returns the full name of the ppt */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied PptTopLevel this*/) {
     return name();
   }
 
   /** Trim the collections used here, in hopes of saving space. */
+  @Override
   public void trimToSize() {
     super.trimToSize();
     if (splitters != null) {
@@ -2371,7 +2377,7 @@ public class PptTopLevel extends Ppt {
     // Don't create a partially reflexive slice (two vars the same) if there
     // is only one variable in its equality set
     if (false) {
-      if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1)) {
+      if (((v1 == v2) || (v1 == v3)) && (v1.get_equalitySet_size() == 1)) {
         return false;
       }
       if ((v2 == v3) && (v2.get_equalitySet_size() == 1)) {
@@ -2694,6 +2700,7 @@ public class PptTopLevel extends Ppt {
       markImpliedViaSimplify_int(
           all_ppts,
           new SimplifyInclusionTester() {
+            @Override
             public boolean include(Invariant inv) {
               return InvariantFilters.defaultFilters().shouldKeep(inv) == null;
             }
@@ -3093,10 +3100,12 @@ public class PptTopLevel extends Ppt {
       implication_iterator = ppt.joiner_view.invs.iterator();
     }
 
+    @Override
     public boolean hasNext() {
       return (vitor.hasNext() || (implication_iterator != null));
     }
 
+    @Override
     public Iterator<Invariant> next() {
       if (vitor.hasNext()) {
         return vitor.next().invs.iterator();
@@ -3110,6 +3119,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
+    @Override
     public void remove() {
       throw new UnsupportedOperationException();
     }

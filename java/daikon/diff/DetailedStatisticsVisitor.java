@@ -68,8 +68,11 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     "SJJ", "SJU", "SUJ", "SUU", "DJJ", "DJU", "DUJ", "DUU", "JM", "UM", "MJ", "MU"
   };
 
-  // Table of frequencies, indexed by type of invariant, and
-  // relationship between the invariants
+  /**
+   * Table of frequencies, indexed by type of invariant, and relationship between the invariants.
+   *
+   * <p>Unfortunately, this is heterogeneous: some measurement are integers and others are doubles.
+   */
   private double[][] freq = new double[NUM_TYPES][NUM_RELATIONSHIPS];
 
   private boolean continuousJustification;
@@ -78,6 +81,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     this.continuousJustification = continuousJustification;
   }
 
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
@@ -252,6 +256,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   }
 
   /** Returns a human-readable table of its data. */
+  @SuppressWarnings("NarrowingCompoundAssignment") // due to heterogeneous freq array
   /*@SideEffectFree*/
   public String format() {
     StringWriter sw = new StringWriter();

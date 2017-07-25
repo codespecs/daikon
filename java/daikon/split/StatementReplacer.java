@@ -101,6 +101,7 @@ class StatementReplacer extends DepthFirstVisitor {
    *
    * @param n the possible method call in which replacement may be made
    */
+  @Override
   public void visit(PrimaryExpression n) {
     if (!matchFound) {
       ReplaceStatement replaceStatement;
@@ -159,6 +160,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * the empty string. All begin columns and endColumns are set to -1, to ensure that Ast printing
    * exceptions are not thrown.
    */
+  @Override
   public void visit(NodeToken n) {
     if (matchFound) {
       n.tokenImage = "";

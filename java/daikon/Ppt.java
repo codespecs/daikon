@@ -144,6 +144,7 @@ public abstract class Ppt implements Serializable {
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
   public static final class NameComparator implements Comparator<PptTopLevel> {
     /*@Pure*/
+    @Override
     public int compare(PptTopLevel p1, PptTopLevel p2) {
       if (p1 == p2) {
         return 0;

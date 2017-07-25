@@ -84,16 +84,19 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** Instantiates the invariant on the specified slice */
+  @Override
   protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
   /*@SideEffectFree*/
+  @Override
   public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
@@ -101,17 +104,20 @@ public class CLASSNAME extends SUPERCLASS {
     return result;
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     core.swap();
     return this;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": falsified=" + falsified
       + "; " + core.repr();
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (core.a == 0 && core.b == 0 && core.c == 0) {
       return format_too_few_samples(format, null);
@@ -149,10 +155,12 @@ public class CLASSNAME extends SUPERCLASS {
       + ")";
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] x_arr, PRIMITIVE /*@Interned*/ [] y_arr, int count) {
     return clone().add_modified(x_arr, y_arr, count);
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] x_arr, PRIMITIVE /*@Interned*/ [] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       return InvariantStatus.FALSIFIED;
@@ -171,16 +179,19 @@ public class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   protected double computeConfidence() {
     return core.computeConfidence();
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
@@ -189,6 +200,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -211,10 +223,12 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isActive() {
     return core.isActive();
   }
 
+  @Override
   public boolean mergeFormulasOk() {
     return (core.mergeFormulasOk());
   }
@@ -227,6 +241,7 @@ public class CLASSNAME extends SUPERCLASS {
    *     order in parent_ppt.
    * @param parent_ppt slice that will contain the new invariant
    */
+  @Override
   public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores

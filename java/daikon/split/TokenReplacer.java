@@ -90,6 +90,7 @@ class TokenReplacer extends DepthFirstVisitor {
    * The beginColumn and endColumn of all NodeTokens are set to -1 to ensure that Ast printing
    * exceptions are not thrown from the lengths of tokens changing.
    */
+  @Override
   public void visit(NodeToken n) {
     if (Visitors.isLParen(n)
         && lastToken != null

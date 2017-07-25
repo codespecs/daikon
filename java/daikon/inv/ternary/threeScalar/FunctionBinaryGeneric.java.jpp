@@ -87,6 +87,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn(/*>>> @Prototype CNAME(FUNCTION,PERM_NAME) this,*/ PptSlice slice) {
     return new CNAME(FUNCTION,PERM_NAME) (slice);
   }
@@ -101,16 +102,19 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   private static String[] method_name = new String[] METHOD_NAME;
 
+  @Override
   public String[] get_method_name(/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
     return method_name;
   }
 
   private static int function_id = -1;
 
+  @Override
   public int get_function_id() {
     return function_id;
   }
 
+  @Override
   public void set_function_id(int function_id) {
     assert CNAME(FUNCTION,PERM_NAME).function_id == -1;
     CNAME(FUNCTION,PERM_NAME).function_id = function_id;
@@ -118,11 +122,13 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   private static int var_order = PERMUTATION;
 
+  @Override
   public int get_var_order(/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
     return var_order;
   }
 
   /*@Pure*/
+  @Override
   public boolean is_symmetric() {
     #ifdef SYMMETRIC
       return true;
@@ -131,6 +137,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     #endif
   }
 
+  @Override
   public PRIMITIVE func(PRIMITIVE arg1, PRIMITIVE arg2) {
     #ifdef ARG1_BOUND
       if ((arg1 < arg1_bound[0]) || (arg1 > arg1_bound[1])) {
@@ -158,11 +165,13 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return (FUNC(arg1, arg2));
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
     return (check_ordered(resultvar, arg1, arg2, count));
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
     if (Debug.logDetail()) {
@@ -172,12 +181,14 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   /*@Pure*/
+  @Override
   public boolean is ## FUNCTION() {
     return true;
   }
 
   #ifdef EXACT
   /*@Pure*/
+  @Override
   public boolean isExact() {
     return true;
   }
@@ -185,6 +196,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     if (NIS.dkconfig_enabled && dkconfig_enabled) {
       return suppressions;

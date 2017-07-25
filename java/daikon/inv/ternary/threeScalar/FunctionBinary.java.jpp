@@ -146,11 +146,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** CLASSNAME is only valid on IS_INTEGRAL types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -344,6 +346,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * (re-arrangement given by the permutation). We accomplish this by returning the class that
    * corresponds to the the new permutation.
    */
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
 
     assert permutation.length == 3;
@@ -410,11 +413,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
     throw new Error("Could not find new ordering");
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return format();
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
@@ -557,9 +562,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   // If our classes match, we must match
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
+  @Override
   public double computeConfidence() {
     if (logOn()) {
       VarInfo v1 = ppt.var_infos[0];
@@ -583,6 +590,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);

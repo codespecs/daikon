@@ -89,20 +89,24 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": ";
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(repr());
@@ -143,6 +147,7 @@ public class CLASSNAME extends SUPERCLASS {
     return collection + ".Distinct().Count() == " + collection + ".Count()";
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     // if (logDetail())
     //   log ("sample " + ArraysMDE.toString (a));
@@ -156,6 +161,7 @@ public class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     InvariantStatus status = check_modified(a, count);
     if (debug.isLoggable(Level.FINE) && (status == InvariantStatus.FALSIFIED)) {
@@ -165,6 +171,7 @@ public class CLASSNAME extends SUPERCLASS {
     return status;
   }
 
+  @Override
   protected double computeConfidence() {
     // num_no_dup_values() would be more appropriate
     // return 1 - Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
@@ -172,6 +179,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (!vis[0].aux.hasDuplicates()) {
       return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically");
@@ -191,6 +199,7 @@ public class CLASSNAME extends SUPERCLASS {
    * (if B[] is missing, A[] could have dups on those samples),
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -241,6 +250,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CLASSNAME;
     return true;

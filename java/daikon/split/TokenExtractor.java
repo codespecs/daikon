@@ -50,6 +50,7 @@ class TokenExtractor extends DepthFirstVisitor {
    * This method should not be used directly by users of this class. If presently visiting
    * expression, adds n to tokens.
    */
+  @Override
   public void visit(NodeToken n) {
     tokens.add(n);
     super.visit(n);

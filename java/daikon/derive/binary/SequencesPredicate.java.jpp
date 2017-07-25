@@ -63,10 +63,12 @@ public final class CLASSNAME extends BinaryDerivation {
   /** Boolean. True if Daikon should only generate derivations on boolean predicates. */
   public static boolean dkconfig_boolOnly = true;
 
+  @Override
   public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return base1;
   }
 
+  @Override
   public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return base2;
   }
@@ -110,6 +112,7 @@ public final class CLASSNAME extends BinaryDerivation {
    *
    * @param full_vt the value tuple of a program point to compute the derived value from
    */
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
@@ -198,11 +201,13 @@ public final class CLASSNAME extends BinaryDerivation {
     }
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     return VarInfo.make_function("predicateSlice", var1(), var2());
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return "[" + CLASSSTRING + " of "
         + var1().name()
@@ -214,6 +219,7 @@ public final class CLASSNAME extends BinaryDerivation {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
     if (other instanceof CLASSNAME) {
@@ -225,6 +231,7 @@ public final class CLASSNAME extends BinaryDerivation {
 
   /** Returns the ESC name */
   /*@SideEffectFree*/
+  @Override
   public String esc_name(String index) {
     return String.format("predicate(%s,%s)", var1().esc_name(), var2().esc_name());
   }

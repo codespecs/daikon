@@ -6,6 +6,7 @@ import daikon.inv.*;
 public class SimplifyFilter extends InvariantFilter {
   static String description = "Eliminate invariants based on Simplify (slow)";
 
+  @Override
   public String getDescription() {
     return description;
   }
@@ -17,6 +18,7 @@ public class SimplifyFilter extends InvariantFilter {
     isOn = dkconfig_enabled;
   }
 
+  @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
     if (Daikon.suppress_redundant_invariants_with_simplify
         && invariant.ppt.parent.redundant_invs.contains(invariant)) {

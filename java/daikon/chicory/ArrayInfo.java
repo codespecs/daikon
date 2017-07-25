@@ -37,6 +37,7 @@ public class ArrayInfo extends DaikonVariableInfo {
     return array_type;
   }
 
+  @Override
   public VarKind get_var_kind() {
     return VarKind.ARRAY;
   }

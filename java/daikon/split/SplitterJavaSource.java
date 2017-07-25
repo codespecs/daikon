@@ -108,6 +108,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     add("    return(" + NullReplacer.replaceNull(condition) + ");");
     add("  }");
     skipLine();
+    add("  @Override");
     add("  public String repr() {");
     writeReprBody();
     add("  }");

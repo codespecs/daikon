@@ -129,6 +129,7 @@ public class DeclReader {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied DeclVarInfo this*/) {
       return String.format("%s [%s] %s", type, rep_type, name);
     }
@@ -249,6 +250,7 @@ public class DeclReader {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied DeclPpt this*/) {
       return name;
     }

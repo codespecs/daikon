@@ -53,6 +53,7 @@ class OrigFixer extends DepthFirstVisitor {
    * This method should not be directly used by users of this class. If n is an instance of "orig()"
    * it is replaced.
    */
+  @Override
   public void visit(PrimaryExpression n) {
     if (isOrig(n)) {
       NodeToken origToken = ((Name) n.f0.f0.choice).f0;
@@ -80,6 +81,7 @@ class OrigFixer extends DepthFirstVisitor {
    * This method should not be directly used by users of this class. Marks whether this is presently
    * visiting the arguments to an instance of "orig()".
    */
+  @Override
   public void visit(Arguments n) {
     if (foundOrig) {
       withinArgList = true;
@@ -108,6 +110,7 @@ class OrigFixer extends DepthFirstVisitor {
    * This method should not be directly used by users of this class. Updates n to be prefixed with
    * "orig_" if needed.
    */
+  @Override
   public void visit(NodeToken n) {
     n.beginColumn = -1;
     n.endColumn = -1;

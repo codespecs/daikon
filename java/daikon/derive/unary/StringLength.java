@@ -29,6 +29,7 @@ public final class StringLength extends UnaryDerivation {
     return true;
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
     if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
@@ -43,16 +44,19 @@ public final class StringLength extends UnaryDerivation {
     return new ValueAndModified(Intern.internedLong(len), source_mod);
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     return VarInfo.make_scalar_str_func("length", ProglangType.INT, base);
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof StringLength);
   }
 
   /** Returns the ESC name */
+  @Override
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String csharp_name(String index) {
@@ -60,6 +64,7 @@ public final class StringLength extends UnaryDerivation {
   }
 
   /** Returns the ESC name */
+  @Override
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String esc_name(String index) {
@@ -67,12 +72,14 @@ public final class StringLength extends UnaryDerivation {
   }
 
   /** Returns the JML name */
+  @Override
   @SuppressWarnings("nullness")
   public String jml_name(String index) {
     return String.format("%s.length()", base.jml_name());
   }
 
   /** Returns the simplify name */
+  @Override
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String simplify_name() {

@@ -50,6 +50,7 @@ class Test {
       add(y);
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied A this*/) {
       return ("A " + id);
     }
@@ -69,6 +70,7 @@ class Test {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied C this*/) {
       return cid;
     }
@@ -263,6 +265,7 @@ class Test {
   public static class G {
     static class Uncloneable {
       /*@SideEffectFree*/
+      @Override
       protected Object clone(
           /*>>>@GuardSatisfied Uncloneable this*/) throws CloneNotSupportedException {
         //        return super.clone();
@@ -324,12 +327,14 @@ class Test {
     }
 
     /*@SideEffectFree*/
+    @Override
     protected Object clone(/*>>>@GuardSatisfied Obj this*/) throws CloneNotSupportedException {
       return super.clone();
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied Obj this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -337,11 +342,13 @@ class Test {
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Obj this*/) {
       return this.x + this.y;
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Obj this*/) {
       return String.valueOf(this.x) + String.valueOf(this.y);
     }
@@ -358,6 +365,7 @@ class Test {
     // Overrides Obj.equals
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied ObjSub this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -442,6 +450,7 @@ class Test {
     list.contains(a11);
   }
 
+  @SuppressWarnings("NarrowingCompoundAssignment")
   public static double double_check(double d1, Integer wrapper, int i1) {
 
     double loc1 = 22.4;
@@ -453,6 +462,7 @@ class Test {
     return ((double) i1);
   }
 
+  @SuppressWarnings("IdentityBinaryExpression")
   public static void t1(A a1, A a2, A a3, A a4) {
 
     if (a1 == a2) {

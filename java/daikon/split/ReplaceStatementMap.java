@@ -58,6 +58,7 @@ class ReplaceStatementMap {
 
   /** For debugging only. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied ReplaceStatementMap this*/) {
     return map.toString();
   }

@@ -185,6 +185,7 @@ public final class FileIO {
       this.id = id;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied ParentRelation this*/) {
       return parent_ppt_name + "[" + id + "] " + rel_type;
     };
@@ -847,6 +848,7 @@ public final class FileIO {
     // Return true if the invocations print the same
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied Invocation this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
@@ -858,11 +860,13 @@ public final class FileIO {
     }
 
     /*@Pure*/
+    @Override
     public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Invocation this*/) {
       return this.format().hashCode();
     }
@@ -2599,6 +2603,7 @@ public final class FileIO {
     }
 
     /*@SideEffectFree*/
+    @Override
     public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/) {
       try {
         return (VarDefinition) super.clone();

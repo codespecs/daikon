@@ -32,6 +32,7 @@ public final class DataStructures_QueueAr_dequeue_25 extends Splitter {
     return(++this_front==this_theArray.length);
   }
 
+  @Override
   public String repr() {
     return "DataStructures_QueueAr_dequeue_25: "
       + "this_front_varinfo = " + this_front_varinfo.repr() + " "

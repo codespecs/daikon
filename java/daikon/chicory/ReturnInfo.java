@@ -12,6 +12,7 @@ public class ReturnInfo extends DaikonVariableInfo {
     throw new RuntimeException("Don't call getMyValFromParentVal on ReturnInfo objects");
   }
 
+  @Override
   public VarKind get_var_kind() {
     return VarKind.RETURN;
   }

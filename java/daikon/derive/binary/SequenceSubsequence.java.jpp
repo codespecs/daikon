@@ -85,6 +85,7 @@ public final class SEQUENCESCALARSUBSEQUENCE extends SequenceSubsequence {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied SEQUENCESCALARSUBSEQUENCE this*/) {
     String shift = "";
     if (index_shift < 0) {
@@ -100,6 +101,7 @@ public final class SEQUENCESCALARSUBSEQUENCE extends SequenceSubsequence {
     }
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
     if (mod1 == ValueTuple.MISSING_NONSENSICAL) {
@@ -163,6 +165,7 @@ public final class SEQUENCESCALARSUBSEQUENCE extends SequenceSubsequence {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARSUBSEQUENCE)
       && (((SEQUENCESCALARSUBSEQUENCE) other).index_shift == this.index_shift)

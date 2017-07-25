@@ -131,20 +131,24 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     return new SUBSEQ_SWAP(ppt);
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
@@ -265,6 +269,7 @@ public class CLASSNAME extends SUPERCLASS {
     */
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2,
                                         int count) {
     if ((a1 == null) || (a2 == null)) {
@@ -284,6 +289,7 @@ public class CLASSNAME extends SUPERCLASS {
     }
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2,
                                       int count) {
     InvariantStatus is = check_modified(a1, a2, count);
@@ -295,6 +301,7 @@ public class CLASSNAME extends SUPERCLASS {
     return is;
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
@@ -507,6 +514,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
 
     VarInfo subvar = SUB_VAR(vis);
@@ -545,6 +553,7 @@ public class CLASSNAME extends SUPERCLASS {
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // System.out.println("checking isObviousImplied for: " + format());
@@ -817,6 +826,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant inv) {
     assert inv instanceof CLASSNAME;
     return true;
@@ -824,6 +834,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** returns the ni-suppressions for SubSequence */
   /*@Pure*/
+  @Override
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }

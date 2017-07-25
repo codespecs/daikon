@@ -137,6 +137,7 @@ public class RootInfo extends DaikonVariableInfo {
     return root;
   }
 
+  @Override
   public VarKind get_var_kind() {
     throw new RuntimeException("No var-kind for RootInfo");
   }

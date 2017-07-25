@@ -3,6 +3,7 @@ package daikon.inv.filter;
 import daikon.inv.*;
 
 public class UnjustifiedFilter extends InvariantFilter {
+  @Override
   public String getDescription() {
     return "Suppress unjustified invariants";
   }
@@ -14,6 +15,7 @@ public class UnjustifiedFilter extends InvariantFilter {
     isOn = dkconfig_enabled;
   }
 
+  @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
     return !invariant.justified();
   }
