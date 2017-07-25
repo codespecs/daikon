@@ -1071,9 +1071,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       for (int j = 0; j < chars.length; j++) {
         char c = chars[j];
         if ((c == '\"') || (c == '\\')) {
-          charList.add(Character.valueOf('\\'));
+          charList.add('\\');
         }
-        charList.add(Character.valueOf(c));
+        charList.add(c);
       }
       char[] backslashedChars = new char[charList.size()];
       for (int j = 0; j < charList.size(); j++) {
