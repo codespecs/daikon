@@ -199,6 +199,7 @@ dcomp-jdk:
 reformat:
 	cd java && $(MAKE) reformat
 
+
 ### Kvasir (C/C++ front end)
 
 ifeq ($(shell uname -m),x86_64)
