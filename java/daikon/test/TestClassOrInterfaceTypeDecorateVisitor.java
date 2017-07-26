@@ -100,7 +100,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
 
     assert expected_arr.length == result_arr.length
         : String.format(
-            "diff in buffer lengths: exepected %d, result %d",
+            "diff in buffer lengths: expected %d, result %d",
             expected_arr.length, result_arr.length);
     for (int ii = 0; ii < expected_arr.length; ii++) {
       assert expected_arr[ii].equals(result_arr[ii]) : "diff at line " + ii;
