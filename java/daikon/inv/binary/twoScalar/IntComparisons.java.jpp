@@ -793,8 +793,9 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   public boolean enoughSamples(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return (ppt.num_samples() > 0);
   }
+#endif
 
-  // For Comparison interface, which is satisfied only by exact equalities.
+  // For Comparison interface
   @Override
   public double eq_confidence() {
     if (isExact()) {
@@ -803,7 +804,6 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       return Invariant.CONFIDENCE_NEVER;
     }
   }
-#endif
 
   /*@Pure*/
   @Override
