@@ -1,5 +1,7 @@
 package daikon.test;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
 import java.util.*;
 import junit.framework.*;
@@ -73,7 +75,7 @@ public class VarInfoNameTest extends TestCase {
     // put desired into goal
     List<String> _goal = new ArrayList<String>();
     try {
-      BufferedReader buf = new BufferedReader(new InputStreamReader(goal_stream));
+      BufferedReader buf = new BufferedReader(new InputStreamReader(goal_stream, UTF_8));
       while (buf.ready()) {
         String line = buf.readLine();
         _goal.add(line);
