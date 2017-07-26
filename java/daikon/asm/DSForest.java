@@ -31,7 +31,7 @@ public class DSForest {
 
   // A node in the tree.
   /*@UsesObjectEquals*/
-  private class DSForestNode {
+  private static class DSForestNode {
     public String element;
     public DSForestNode parent;
     public int rank;
