@@ -558,7 +558,11 @@ public class DeclWriter extends DaikonWriter {
       VarKind kind = var.get_var_kind();
       String relative_name = var.get_relative_name();
       if (relative_name == null) relative_name = "";
-      outFile.println("  var-kind " + out_name(kind) + " " + relative_name);
+      outFile.print("  var-kind " + out_name(kind));
+      if (relative_name != "") {
+        outFile.print(" " + relative_name);
+      }
+      outFile.println();
 
       // Write out the enclosing variable.
       // If we are in an inner class, we need to special case the
