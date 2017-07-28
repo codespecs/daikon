@@ -299,7 +299,7 @@ public final class DCRuntime {
       for (Class<?> c : o1superifaces) {
         System.err.printf("  o1super interface %s%n", c);
       }
-      for (Method m : o1super.getClass().getDeclaredMethods()) {
+      for (Method m : o1super.getDeclaredMethods()) {
         System.err.printf("  o1super method %s%n", m);
       }
       throw new RuntimeException(e);
@@ -557,9 +557,9 @@ public final class DCRuntime {
       String method_name = caller_name();
       Integer count = methodCountMap.get(method_name);
       if (count == null) {
-        count = new Integer(1);
+        count = 1;
       } else {
-        count = new Integer(count.intValue() + 1);
+        count = count.intValue() + 1;
       }
       methodCountMap.put(method_name, count);
     }
@@ -595,7 +595,7 @@ public final class DCRuntime {
     // the parameters
     td.tag_stack.push(method_marker);
     // save the tag stack depth for debugging
-    tag_frame[frame_size - 1] = new Integer(++td.tag_stack_depth);
+    tag_frame[frame_size - 1] = ++td.tag_stack_depth;
     if (debug_tag_frame) {
       System.out.printf("push method marker tag: %s%n", method_marker);
       System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);

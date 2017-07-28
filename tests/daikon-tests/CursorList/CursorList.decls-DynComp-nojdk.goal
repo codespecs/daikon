@@ -5,7 +5,7 @@ implicit
 DECLARE
 DataStructures.CursorList:::CLASS
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -21,7 +21,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -29,26 +29,26 @@ java.lang.Class[]
 java.lang.String[]
 1[8]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[9]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
 DECLARE
 DataStructures.CursorList:::OBJECT
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -64,7 +64,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -72,11 +72,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
@@ -84,7 +84,7 @@ int
 DECLARE
 DataStructures.CursorList.alloc():::ENTER
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -100,7 +100,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -108,18 +108,18 @@ java.lang.Class[]
 java.lang.String[]
 1[8]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[9]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
 DECLARE
 DataStructures.CursorList.alloc():::EXIT37
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -135,7 +135,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -143,11 +143,11 @@ java.lang.Class[]
 java.lang.String[]
 1[8]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[9]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 return
@@ -159,7 +159,7 @@ int
 DECLARE
 DataStructures.CursorList.free(int):::ENTER
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -175,7 +175,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -183,11 +183,11 @@ java.lang.Class[]
 java.lang.String[]
 1[8]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[9]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 p
@@ -198,7 +198,7 @@ int
 DECLARE
 DataStructures.CursorList.free(int):::EXIT45
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -214,7 +214,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -222,11 +222,11 @@ java.lang.Class[]
 java.lang.String[]
 1[8]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[9]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 p
@@ -241,15 +241,15 @@ DataStructures.CursorList.CursorList():::ENTER
 DECLARE
 DataStructures.CursorList.CursorList():::EXIT54
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -265,7 +265,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -273,11 +273,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
@@ -285,15 +285,15 @@ int
 DECLARE
 DataStructures.CursorList.isEmpty():::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -309,7 +309,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -317,26 +317,26 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
 DECLARE
 DataStructures.CursorList.isEmpty():::EXIT62
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -352,7 +352,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -360,11 +360,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 return
@@ -376,15 +376,15 @@ boolean
 DECLARE
 DataStructures.CursorList.makeEmpty():::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -400,7 +400,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -408,26 +408,26 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
 DECLARE
 DataStructures.CursorList.makeEmpty():::EXIT72
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -443,7 +443,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -451,11 +451,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
@@ -463,15 +463,15 @@ int
 DECLARE
 DataStructures.CursorList.zeroth():::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -487,7 +487,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -495,26 +495,26 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
 DECLARE
 DataStructures.CursorList.zeroth():::EXIT80
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -530,7 +530,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -538,11 +538,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 return
@@ -550,7 +550,7 @@ DataStructures.CursorListItr
 hashcode
 7
 return.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -558,15 +558,15 @@ int
 DECLARE
 DataStructures.CursorList.first():::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -582,7 +582,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -590,26 +590,26 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
 DECLARE
 DataStructures.CursorList.first():::EXIT89
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -625,7 +625,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -633,11 +633,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 return
@@ -645,7 +645,7 @@ DataStructures.CursorListItr
 hashcode
 7
 return.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -653,15 +653,15 @@ int
 DECLARE
 DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -677,7 +677,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -685,11 +685,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 x
@@ -705,22 +705,22 @@ DataStructures.CursorListItr # isParam=true
 hashcode
 7
 p.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::EXIT108
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -736,7 +736,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -744,11 +744,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 x
@@ -764,7 +764,7 @@ DataStructures.CursorListItr # isParam=true
 hashcode
 7
 p.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -772,15 +772,15 @@ int
 DECLARE
 DataStructures.CursorList.find(java.lang.Object):::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -796,7 +796,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -804,11 +804,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 x
@@ -823,15 +823,15 @@ java.lang.String
 DECLARE
 DataStructures.CursorList.find(java.lang.Object):::EXIT122
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -847,7 +847,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -855,11 +855,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 x
@@ -875,7 +875,7 @@ DataStructures.CursorListItr
 hashcode
 7
 return.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -883,15 +883,15 @@ int
 DECLARE
 DataStructures.CursorList.findPrevious(java.lang.Object):::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -907,7 +907,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -915,11 +915,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 x
@@ -934,15 +934,15 @@ java.lang.String
 DECLARE
 DataStructures.CursorList.findPrevious(java.lang.Object):::EXIT139
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -958,7 +958,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -966,11 +966,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 x
@@ -986,7 +986,7 @@ DataStructures.CursorListItr
 hashcode
 7
 return.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -994,15 +994,15 @@ int
 DECLARE
 DataStructures.CursorList.remove(java.lang.Object):::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -1018,7 +1018,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -1026,11 +1026,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 x
@@ -1045,15 +1045,15 @@ java.lang.String
 DECLARE
 DataStructures.CursorList.remove(java.lang.Object):::EXIT157
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 7
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -1069,7 +1069,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -1077,11 +1077,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 x
@@ -1097,7 +1097,7 @@ java.lang.String
 DECLARE
 DataStructures.CursorList.printList(DataStructures.CursorList):::ENTER
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -1113,7 +1113,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -1121,11 +1121,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 theList
@@ -1133,14 +1133,14 @@ DataStructures.CursorList # isParam=true
 hashcode
 7
 theList.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.CursorList.printList(DataStructures.CursorList):::EXIT172
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -1156,7 +1156,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -1164,11 +1164,11 @@ java.lang.Class[]
 java.lang.String[]
 1[9]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[10]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 theList
@@ -1176,7 +1176,7 @@ DataStructures.CursorList # isParam=true
 hashcode
 7
 theList.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -1184,15 +1184,15 @@ int
 DECLARE
 DataStructures.CursorList.equals(java.lang.Object):::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -1208,7 +1208,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -1216,11 +1216,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 obj
@@ -1235,15 +1235,15 @@ java.lang.String
 DECLARE
 DataStructures.CursorList.equals(java.lang.Object):::EXIT1
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 9
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -1259,7 +1259,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[10]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -1267,11 +1267,11 @@ java.lang.Class[]
 java.lang.String[]
 1[11]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[12]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 obj
@@ -1291,15 +1291,15 @@ boolean
 DECLARE
 DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 8
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -1315,7 +1315,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -1323,11 +1323,11 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[11]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 obj
@@ -1342,15 +1342,15 @@ java.lang.String
 DECLARE
 DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.CursorList # isNonNull=true isParam=true
+DataStructures.CursorList # isNonNull=true, isParam=true
 hashcode
 9
 this.header
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
 hashcode
 4
 DataStructures.CursorList.cursorSpace.getClass().getName()
@@ -1366,7 +1366,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode[]
 6[10]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
@@ -1374,11 +1374,11 @@ java.lang.Class[]
 java.lang.String[]
 1[11]
 DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 int[]
 3[12]
 DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 obj
@@ -1400,11 +1400,11 @@ DataStructures.CursorNode:::CLASS
 DECLARE
 DataStructures.CursorNode:::OBJECT
 this
-DataStructures.CursorNode # isNonNull=true isParam=true
+DataStructures.CursorNode # isNonNull=true, isParam=true
 hashcode
 2
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.element.getClass().getName()
@@ -1412,7 +1412,7 @@ java.lang.Class
 java.lang.String
 1
 this.next
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 
@@ -1431,11 +1431,11 @@ java.lang.String
 DECLARE
 DataStructures.CursorNode.CursorNode(java.lang.Object):::EXIT13
 this
-DataStructures.CursorNode # isNonNull=true isParam=true
+DataStructures.CursorNode # isNonNull=true, isParam=true
 hashcode
 3
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.element.getClass().getName()
@@ -1443,7 +1443,7 @@ java.lang.Class
 java.lang.String
 1
 this.next
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 theElement
@@ -1474,11 +1474,11 @@ int
 DECLARE
 DataStructures.CursorNode.CursorNode(java.lang.Object, int):::EXIT19
 this
-DataStructures.CursorNode # isNonNull=true isParam=true
+DataStructures.CursorNode # isNonNull=true, isParam=true
 hashcode
 4
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.element.getClass().getName()
@@ -1486,7 +1486,7 @@ java.lang.Class
 java.lang.String
 1
 this.next
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 theElement
@@ -1506,11 +1506,11 @@ int
 DECLARE
 DataStructures.CursorNode.equals(java.lang.Object):::ENTER
 this
-DataStructures.CursorNode # isNonNull=true isParam=true
+DataStructures.CursorNode # isNonNull=true, isParam=true
 hashcode
 3
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.element.getClass().getName()
@@ -1518,7 +1518,7 @@ java.lang.Class
 java.lang.String
 1
 this.next
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 obj
@@ -1533,11 +1533,11 @@ java.lang.String
 DECLARE
 DataStructures.CursorNode.equals(java.lang.Object):::EXIT1
 this
-DataStructures.CursorNode # isNonNull=true isParam=true
+DataStructures.CursorNode # isNonNull=true, isParam=true
 hashcode
 4
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.element.getClass().getName()
@@ -1545,7 +1545,7 @@ java.lang.Class
 java.lang.String
 1
 this.next
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 6
 obj
@@ -1565,11 +1565,11 @@ boolean
 DECLARE
 DataStructures.CursorNode.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.CursorNode # isNonNull=true isParam=true
+DataStructures.CursorNode # isNonNull=true, isParam=true
 hashcode
 3
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.element.getClass().getName()
@@ -1577,7 +1577,7 @@ java.lang.Class
 java.lang.String
 1
 this.next
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 obj
@@ -1592,11 +1592,11 @@ java.lang.String
 DECLARE
 DataStructures.CursorNode.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.CursorNode # isNonNull=true isParam=true
+DataStructures.CursorNode # isNonNull=true, isParam=true
 hashcode
 4
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.element.getClass().getName()
@@ -1604,7 +1604,7 @@ java.lang.Class
 java.lang.String
 1
 this.next
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 6
 obj
@@ -1626,11 +1626,11 @@ DataStructures.CursorListItr:::CLASS
 DECLARE
 DataStructures.CursorListItr:::OBJECT
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -1645,11 +1645,11 @@ int
 DECLARE
 DataStructures.CursorListItr.CursorListItr(int):::EXIT27
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 theNode
@@ -1661,22 +1661,22 @@ int
 DECLARE
 DataStructures.CursorListItr.isPastEnd():::ENTER
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.CursorListItr.isPastEnd():::EXIT35
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -1688,22 +1688,22 @@ boolean
 DECLARE
 DataStructures.CursorListItr.retrieve():::ENTER
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.CursorListItr.retrieve():::EXIT45
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -1719,22 +1719,22 @@ java.lang.String
 DECLARE
 DataStructures.CursorListItr.advance():::ENTER
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.CursorListItr.advance():::EXIT56
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -1742,11 +1742,11 @@ int
 DECLARE
 DataStructures.CursorListItr.equals(java.lang.Object):::ENTER
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 obj
@@ -1761,11 +1761,11 @@ java.lang.String
 DECLARE
 DataStructures.CursorListItr.equals(java.lang.Object):::EXIT1
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 4
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 obj
@@ -1785,11 +1785,11 @@ boolean
 DECLARE
 DataStructures.CursorListItr.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 obj
@@ -1804,11 +1804,11 @@ java.lang.String
 DECLARE
 DataStructures.CursorListItr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.CursorListItr # isNonNull=true isParam=true
+DataStructures.CursorListItr # isNonNull=true, isParam=true
 hashcode
 4
 this.current
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 obj

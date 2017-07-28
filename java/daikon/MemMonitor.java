@@ -1,6 +1,12 @@
 package daikon;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -18,7 +24,7 @@ public class MemMonitor implements Runnable {
   public MemMonitor(String fileName) {
     filename = fileName;
     try {
-      fout = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+      fout = new PrintWriter(Files.newBufferedWriter(Paths.get(fileName), UTF_8));
     } catch (java.io.IOException e) {
       throw new Error("could not open " + fileName, e);
     }
@@ -58,7 +64,7 @@ public class MemMonitor implements Runnable {
       int num_derived_array_vars) {
 
     try {
-      fout = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));
+      fout = new PrintWriter(Files.newBufferedWriter(Paths.get(filename), UTF_8, CREATE, APPEND));
     } catch (java.io.IOException e) {
       System.out.println("could not open " + filename);
     }

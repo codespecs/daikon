@@ -290,7 +290,7 @@ public class Annotation {
       throws Annotation.MalformedAnnotationException {
 
     Annotation anno = new Annotation(kind, daikonRep, method, invRep, daikonClass);
-    Integer key = new Integer(anno.hashCode());
+    Integer key = anno.hashCode();
     if (annotationsMap.containsKey(key)) {
       return annotationsMap.get(key);
     } else {

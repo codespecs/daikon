@@ -665,21 +665,29 @@ import typequals.*;
   }
 
   /**
-   * Returns a high-level printed representation of the invariant, for user output. format produces
-   * normal output, while the {@link #repr} formatting routine produces low-level, detailed output
-   * for debugging, and {@link #repr_prob} also prints the confidence.
+   * Returns a high-level printed representation of the invariant, for user output. {@code format}
+   * produces normal output, while the {@link #repr} formatting routine produces low-level, detailed
+   * output for debugging, and {@link #repr_prob} also prints the confidence.
    */
-  // receiver must be fully-initialized because subclasses read their fields
+  // Does not respect PrintInvariants.dkconfig_print_inv_class; PrintInvariants does so.
+  // Receiver must be fully-initialized because subclasses read their fields.
   /*@SideEffectFree*/
   public String format(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
-    String result = format_using(OutputFormat.DAIKON);
-    if (PrintInvariants.dkconfig_print_inv_class) {
-      String classname = getClass().getName();
-      int index = classname.lastIndexOf('.');
-      classname = classname.substring(index + 1);
-      result = result + " [" + classname + "]";
+    return format_using(OutputFormat.DAIKON);
+  }
+
+  /**
+   * Returns the class name of the invariant, for use in debugging output. Returns "" if {@link
+   * PrintInvariants#dkconfig_print_inv_class} is false.
+   */
+  public String format_classname() {
+    if (!PrintInvariants.dkconfig_print_inv_class) {
+      return "";
     }
-    return result;
+    String classname = getClass().getName();
+    int index = classname.lastIndexOf('.');
+    classname = classname.substring(index + 1);
+    return " [" + classname + "]";
   }
 
   /*@SideEffectFree*/

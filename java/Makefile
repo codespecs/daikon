@@ -8,7 +8,8 @@ DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
+# Don't let the user override this; it should refer to the current directory.
+DAIKONDIR = ${DAIKONDIR_DEFAULT}
 
 # Test that the directory exists.  There must be a better way to do this.
 DAIKONDIR:=$(wildcard ${DAIKONDIR})
@@ -604,6 +605,7 @@ dyncomp-jdk-only dcomp-jdk-only :
 # daikon.util is a copy of plume.
 # Copied source files are read-only, to prevent accidental changes.
 # Use the README file as a "canary" for copying everything.
+# If other files change without the README changing, this won't update.
 .PHONY: plume-copy
 plume-copy : daikon/util/README
 
@@ -783,6 +785,21 @@ tags-without-generated-files: clean-generated-files
 ###########################################################################
 ### Code quality (static checks of the code)
 ###
+
+error-prone: errorprone
+errorprone: compile errorprone-nocompile
+errorprone-nocompile:
+	${MAKE} lib/error_prone_ant-2.0.21.jar
+#	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
+	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF ${JAVA_FILES_FOR_STYLE}
+# To create a patch file to apply changes:
+#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+# This didn't create the file though its output claimed it did:
+#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:BoxedPrimitiveConstructor -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+# To apply the patch, see instructions in the Error Prone output.
+
+lib/error_prone_ant-2.0.21.jar:
+	(cd lib && wget https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/2.0.21/error_prone_ant-2.0.21.jar)
 
 findbugs: .findbugs-output
 .PHONY: findbugs

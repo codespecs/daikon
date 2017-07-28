@@ -1,3 +1,5 @@
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public final class SplitDtrace {
     OutputStream output = new FileOutputStream(out);
     boolean isGz = filename.endsWith(".dtrace.gz");
     if (isGz) output = new GZIPOutputStream(output);
-    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
+    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
     BufferedReader reader = getStream(filename);
 
     int currRecCount = 0;

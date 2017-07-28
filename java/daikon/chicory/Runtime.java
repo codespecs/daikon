@@ -826,7 +826,7 @@ public class Runtime {
     }
 
     public Byte getJavaWrapper() {
-      return new Byte(val);
+      return val;
     }
 
     public Class<?> primitiveClass() {
@@ -848,7 +848,7 @@ public class Runtime {
     }
 
     public Character getJavaWrapper() {
-      return new Character(val);
+      return val;
     }
 
     public Class<?> primitiveClass() {
@@ -869,7 +869,7 @@ public class Runtime {
     }
 
     public Float getJavaWrapper() {
-      return new Float(val);
+      return val;
     }
 
     public Class<?> primitiveClass() {
@@ -890,7 +890,7 @@ public class Runtime {
     }
 
     public Integer getJavaWrapper() {
-      return new Integer(val);
+      return val;
     }
 
     public Class<?> primitiveClass() {
@@ -911,7 +911,7 @@ public class Runtime {
     }
 
     public Long getJavaWrapper() {
-      return new Long(val);
+      return val;
     }
 
     public Class<?> primitiveClass() {
@@ -932,7 +932,7 @@ public class Runtime {
     }
 
     public Short getJavaWrapper() {
-      return new Short(val);
+      return val;
     }
 
     public Class<?> primitiveClass() {
@@ -953,7 +953,7 @@ public class Runtime {
     }
 
     public Double getJavaWrapper() {
-      return new Double(val);
+      return val;
     }
 
     public Class<?> primitiveClass() {

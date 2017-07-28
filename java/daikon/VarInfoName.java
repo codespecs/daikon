@@ -524,12 +524,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   public boolean equals(
       /*>>>@GuardSatisfied VarInfoName this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
-    return (o instanceof VarInfoName) && equals((VarInfoName) o);
+    return (o instanceof VarInfoName) && equalsVarInfoName((VarInfoName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public boolean equals(
+  public boolean equalsVarInfoName(
       /*>>>@GuardSatisfied @Interned VarInfoName this,*/
       /*@GuardSatisfied*/ VarInfoName other) {
     return ((other == this) // "interned": equality optimization pattern
@@ -3131,7 +3131,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
       for (int i = 0; i < roots.length; i++) {
         if (QuantHelper.debug.isLoggable(Level.FINE)) {
-          QuantHelper.debug.fine("Calling quanthelper on: " + new Integer(i) + " " + roots[i]);
+          QuantHelper.debug.fine("Calling quanthelper on: " + i + " " + roots[i]);
         }
 
         helper[i] = new QuantifierVisitor(roots[i]);

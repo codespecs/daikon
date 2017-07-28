@@ -1578,7 +1578,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
                   mgen.getName(),
                   line_number))) {
             shouldInclude = true;
-            exit_locs.add(new Integer(line_number));
+            exit_locs.add(line_number);
 
             isIncluded.add(true);
           } else {

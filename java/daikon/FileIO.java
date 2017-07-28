@@ -8,6 +8,7 @@ import static daikon.VarInfo.RefType;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.VarKind;
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.config.Configuration;
 import daikon.derive.ValueAndModified;
@@ -15,6 +16,7 @@ import daikon.diff.InvMap;
 import daikon.inv.Invariant;
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
 import java.text.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -197,7 +199,9 @@ public final class FileIO {
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
-      if (parent_ppt_name != null) parent_ppt_name.intern();
+      if (parent_ppt_name != null) {
+        parent_ppt_name = parent_ppt_name.intern();
+      }
     }
   }
 
@@ -221,12 +225,11 @@ public final class FileIO {
       result = isComment(nextline);
     } catch (IOException e) {
       result = false;
-    } finally {
-      try {
-        reader.reset();
-      } catch (IOException e) {
-        throw new Error(e);
-      }
+    }
+    try {
+      reader.reset();
+    } catch (IOException e) {
+      throw new Error(e);
     }
     return result;
   }
@@ -1249,16 +1252,16 @@ public final class FileIO {
         reader = new LineNumberReader(file_reader);
       } else if (raw_filename.equals("+")) { //socket comm with Chicory
         InputStream chicoryInput = connectToChicory();
-        InputStreamReader chicReader = new InputStreamReader(chicoryInput);
+        InputStreamReader chicReader = new InputStreamReader(chicoryInput, UTF_8);
         reader = new LineNumberReader(chicReader);
       } else if (is_url) {
         URL url = new URL(raw_filename);
         InputStream stream = url.openStream();
         if (raw_filename.endsWith(".gz")) {
           GZIPInputStream gzip_stream = new GZIPInputStream(stream);
-          reader = new LineNumberReader(new InputStreamReader(gzip_stream));
+          reader = new LineNumberReader(new InputStreamReader(gzip_stream, UTF_8));
         } else {
-          reader = new LineNumberReader(new InputStreamReader(stream));
+          reader = new LineNumberReader(new InputStreamReader(stream, UTF_8));
         }
       } else {
         reader = UtilMDE.lineNumberFileReader(raw_filename);
@@ -1361,7 +1364,8 @@ public final class FileIO {
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter = new PrintWriter(new FileWriter(new File(filename + ".debug")));
+      Global.dtraceWriter =
+          new PrintWriter(Files.newBufferedWriter(new File(filename + ".debug").toPath(), UTF_8));
     }
 
     while (true) {
@@ -1613,7 +1617,7 @@ public final class FileIO {
         if (nonce_number == null) {
           throw new Daikon.TerminationMessage("File ended while trying to read nonce", state);
         }
-        nonce = new Integer(nonce_number);
+        nonce = Integer.valueOf(nonce_number);
 
         if (Global.debugPrintDtrace) {
           to_write_nonce = true;
@@ -1828,10 +1832,10 @@ public final class FileIO {
       /*@Interned*/ Invocation invok = invok_noncanonical.canonicalize();
       if (counter.containsKey(invok)) {
         Integer oldCount = counter.get(invok);
-        Integer newCount = new Integer(oldCount.intValue() + 1);
+        Integer newCount = oldCount.intValue() + 1;
         counter.put(invok, newCount);
       } else {
-        counter.put(invok, new Integer(1));
+        counter.put(invok, 1);
       }
     }
 
@@ -2639,7 +2643,7 @@ public final class FileIO {
         relative_name = relative_name.intern();
       }
       for (VarParent parent : parents) {
-        parent.parent_ppt.intern();
+        parent.parent_ppt = parent.parent_ppt.intern();
         if (parent.parent_variable != null) {
           parent.parent_variable = parent.parent_variable.intern();
         }

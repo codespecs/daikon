@@ -28,7 +28,10 @@ import org.checkerframework.checker.signature.qual.*;
  */
 // I don't see a way to suppress per-field rather than on the whole class.
 // See Checker Framework test case
-@SuppressWarnings("initialization.fields.uninitialized") // for the dtrace field.
+@SuppressWarnings({
+  "initialization.fields.uninitialized", // for the dtrace field.
+  "JavaLangClash"
+})
 public final class Runtime {
 
   private static final String lineSep = System.getProperty("line.separator");
@@ -159,6 +162,7 @@ public final class Runtime {
   }
 
   // Ensures that no more dtrace output will occur.  May terminate Java.
+  @SuppressWarnings("StaticGuardedByInstance")
   public static void noMoreOutput() {
     // The incrementRecords method (which calls this) is called inside a
     // synchronized block, but re-synchronize just to be sure, or in case
@@ -1433,6 +1437,7 @@ public final class Runtime {
     return result;
   }
 
+  @SuppressWarnings("NarrowingCompoundAssignment")
   public static byte[] toBytes(short value) {
     byte[] result = new byte[2];
     for (int i = 1; i >= 0; i--) {

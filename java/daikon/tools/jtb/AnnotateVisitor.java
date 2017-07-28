@@ -197,7 +197,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     throw new Error("Didn't find ClassFieldInfo for " + fieldname);
   }
 
-  class ClassFieldInfo {
+  static class ClassFieldInfo {
     // List<FieldDeclaration> fieldDecls;
     // List<String> allFieldNames;
     List<String> ownedFieldNames;

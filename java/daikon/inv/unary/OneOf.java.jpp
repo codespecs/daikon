@@ -2066,7 +2066,11 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         #endif
         InvariantStatus status = result.add_mod_elem(val, 1);
         if (status == InvariantStatus.FALSIFIED) {
+          #if defined (IS_SEQUENCE)
+          result.log("%s", "child value '" + Arrays.toString(val) + "' destroyed oneof");
+          #else
           result.log("%s", "child value '" + val + "' destroyed oneof");
+          #endif
           return null;
         }
       }

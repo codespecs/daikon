@@ -11,6 +11,7 @@ import org.checkerframework.checker.lock.qual.*;
  * If a class has been instrumented with the instrumenter, invariant violations are added to the
  * <code>violations</code> list.
  */
+@SuppressWarnings("JavaLangClash")
 public class Runtime {
 
   /** A list of throwables seen when attempting to evaluate properties. */

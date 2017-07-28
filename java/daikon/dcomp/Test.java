@@ -213,8 +213,8 @@ class Test {
       obj2 = new Obj(a2, b2);
       os1 = new ObjSub(a1, b1, c1);
       os2 = new ObjSub(a2, b2, c2);
-      int1 = new Integer(42);
-      int2 = new Integer(42);
+      int1 = 42;
+      int2 = 42;
     }
 
     // Should make obj1 and obj2 comparable
@@ -442,6 +442,7 @@ class Test {
     list.contains(a11);
   }
 
+  @SuppressWarnings("NarrowingCompoundAssignment")
   public static double double_check(double d1, Integer wrapper, int i1) {
 
     double loc1 = 22.4;
@@ -453,6 +454,7 @@ class Test {
     return ((double) i1);
   }
 
+  @SuppressWarnings("IdentityBinaryExpression")
   public static void t1(A a1, A a2, A a3, A a4) {
 
     if (a1 == a2) {

@@ -8,11 +8,11 @@ MapQuick1.Graph:::CLASS
 DECLARE
 MapQuick1.Graph:::OBJECT
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 2
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 3
 
@@ -23,11 +23,11 @@ MapQuick1.Graph.Graph():::ENTER
 DECLARE
 MapQuick1.Graph.Graph():::EXIT29
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 2
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 3
 
@@ -35,22 +35,22 @@ hashcode
 DECLARE
 MapQuick1.Graph.checkRep():::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 2
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 3
 
 DECLARE
 MapQuick1.Graph.checkRep():::EXIT49
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 2
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 3
 
@@ -58,11 +58,11 @@ hashcode
 DECLARE
 MapQuick1.Graph.addNode(java.lang.Object):::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 node
@@ -77,11 +77,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.addNode(java.lang.Object):::EXIT68
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 node
@@ -97,11 +97,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.containsNode(java.lang.Object):::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 node
@@ -116,11 +116,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.containsNode(java.lang.Object):::EXIT76
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 4
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 5
 node
@@ -140,22 +140,22 @@ boolean
 DECLARE
 MapQuick1.Graph.nodeSet():::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 2
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 3
 
 DECLARE
 MapQuick1.Graph.nodeSet():::EXIT87
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 return
@@ -171,11 +171,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.adjTo(java.lang.Object):::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 node
@@ -190,11 +190,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.adjTo(java.lang.Object):::EXIT102
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 4
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 5
 node
@@ -218,11 +218,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 from
@@ -245,11 +245,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT128
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 from
@@ -273,11 +273,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.childrenOf(java.lang.Object):::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 node
@@ -292,11 +292,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.childrenOf(java.lang.Object):::EXIT146
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 4
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 5
 node
@@ -320,11 +320,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.equals(java.lang.Object):::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 obj
@@ -339,11 +339,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.equals(java.lang.Object):::EXIT1
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 4
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 5
 obj
@@ -363,11 +363,11 @@ boolean
 DECLARE
 MapQuick1.Graph.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 3
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 4
 obj
@@ -382,11 +382,11 @@ java.lang.String
 DECLARE
 MapQuick1.Graph.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-MapQuick1.Graph # isNonNull=true isParam=true
+MapQuick1.Graph # isNonNull=true, isParam=true
 hashcode
 4
 this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1, 
+java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
 hashcode
 5
 obj
