@@ -42,17 +42,19 @@ public final class FileIO {
 
   // Program point name tags
   public static final String ppt_tag_separator = ":::";
-  public static final String enter_suffix = "ENTER";
-  public static final String enter_tag = ppt_tag_separator + enter_suffix;
+  public static final String entry_suffix = "ENTER";
+  public static final String entry_tag = ppt_tag_separator + entry_suffix;
   // EXIT does not necessarily appear at the end of the program point name;
   // a number may follow it.
   public static final String exit_suffix = "EXIT";
   public static final String exit_tag = ppt_tag_separator + exit_suffix;
-  public static final String throw_suffix = "THROW";
-  public static final String throw_tag = ppt_tag_separator + throw_suffix;
-  public static final String throws_suffix = "THROWS";
-  public static final String throws_tag = ppt_tag_separator + throws_suffix;
-  public static final String exception_suffix = "THROWSCOMBINED";
+  //public static final String throw_suffix = "THROW";
+  //public static final String throw_tag = ppt_tag_separator + throw_suffix;
+  public static final String exception_uncaught_suffix = "EXCEPTIONUNCAUGHT";
+  public static final String exception_uncaught_tag = ppt_tag_separator + exception_uncaught_suffix;
+  // EXCEPTION does not necessarily appear at the end of the program point name;
+  // a number may follow it.
+  public static final String exception_suffix = "EXCEPTION";
   public static final String exception_tag = ppt_tag_separator + exception_suffix;
   public static final String object_suffix = "OBJECT";
   public static final String object_tag = ppt_tag_separator + object_suffix;
@@ -1709,7 +1711,7 @@ public final class FileIO {
             "Bad program point name " + ppt.name + " is a combined exit point name");
       }
 
-      if (ppt.ppt_name.isExceptionPoint() && ppt.ppt_name.isCombinedThrowPoint()) {
+      if (ppt.ppt_name.isExceptionPoint() && ppt.ppt_name.isCombinedExceptionPoint()) {
         // not Daikon.TerminationMessage; caller has more info (e.g., filename)
         throw new RuntimeException(
             "Bad program point name " + ppt.name + " is a combined exception point name");
@@ -2135,7 +2137,7 @@ public final class FileIO {
     VarInfo[] vis = ppt.var_infos;
     /*@Interned*/ String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
-    if (ppt_name.endsWith(enter_tag)) {
+    if (ppt_name.endsWith(entry_tag)) {
       Invocation invok = new Invocation(ppt, vals, mods);
       if (nonce == null) {
         call_stack.push(invok);

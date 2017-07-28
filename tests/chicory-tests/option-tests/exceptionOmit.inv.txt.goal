@@ -219,6 +219,28 @@ DataStructures.StackArTesterException.s.theArray[0..DataStructures.StackArTester
 DataStructures.StackArTesterException.s.theArray.getClass().getName() != x.getClass().getName()
 DataStructures.StackArTesterException.s.theArray[0..DataStructures.StackArTesterException.s.topOfStack] elements == x
 ===========================================================================
+DataStructures.StackArTesterException.InsertCanFail(java.lang.Object):::EXCEPTION
+DataStructures.StackArTesterException.s == orig(DataStructures.StackArTesterException.s)
+DataStructures.StackArTesterException.s == orig(x)
+DataStructures.StackArTesterException.s.theArray == orig(DataStructures.StackArTesterException.s.theArray)
+DataStructures.StackArTesterException.s.theArray[] == orig(DataStructures.StackArTesterException.s.theArray[])
+DataStructures.StackArTesterException.s.topOfStack == orig(DataStructures.StackArTesterException.s.topOfStack)
+DataStructures.StackArTesterException.s.topOfStack == size(DataStructures.StackArTesterException.s.theArray[])-1
+DataStructures.StackArTesterException.s.topOfStack == orig(size(DataStructures.StackArTesterException.s.theArray[]))-1
+DataStructures.StackArTesterException.rnd == orig(DataStructures.StackArTesterException.rnd)
+x == orig(x)
+DataStructures.StackArTesterException.s has only one value
+DataStructures.StackArTesterException.s.theArray has only one value
+DataStructures.StackArTesterException.s.theArray[] == []
+DataStructures.StackArTesterException.s.theArray[].getClass().getName() == []
+exception has only one value
+exception.getClass().getName() == DataStructures.Overflow.class
+orig(x) has only one value
+DataStructures.StackArTesterException.s.theArray.getClass().getName() == orig(DataStructures.StackArTesterException.s.theArray.getClass().getName())
+x.getClass().getName() == orig(x.getClass().getName())
+===========================================================================
+DataStructures.StackArTesterException.InsertCanFail(java.lang.Object):::EXCEPTIONUNCAUGHT
+===========================================================================
 DataStructures.StackArTesterException.InsertCanFail(java.lang.Object):::EXIT
 DataStructures.StackArTesterException.s == orig(DataStructures.StackArTesterException.s)
 DataStructures.StackArTesterException.s == orig(x)
@@ -245,28 +267,6 @@ DataStructures.StackArTesterException.s.topOfStack - orig(DataStructures.StackAr
 orig(DataStructures.StackArTesterException.s.topOfStack) < size(DataStructures.StackArTesterException.s.theArray[])-1
 DataStructures.StackArTesterException.s.theArray[0..DataStructures.StackArTesterException.s.topOfStack] elements == orig(x)
 orig(DataStructures.StackArTesterException.s.theArray[post(DataStructures.StackArTesterException.s.topOfStack)..]) elements == orig(DataStructures.StackArTesterException.s.theArray[post(DataStructures.StackArTesterException.s.topOfStack)])
-===========================================================================
-DataStructures.StackArTesterException.InsertCanFail(java.lang.Object):::THROWS
-===========================================================================
-DataStructures.StackArTesterException.InsertCanFail(java.lang.Object):::THROWSCOMBINED
-DataStructures.StackArTesterException.s == orig(DataStructures.StackArTesterException.s)
-DataStructures.StackArTesterException.s == orig(x)
-DataStructures.StackArTesterException.s.theArray == orig(DataStructures.StackArTesterException.s.theArray)
-DataStructures.StackArTesterException.s.theArray[] == orig(DataStructures.StackArTesterException.s.theArray[])
-DataStructures.StackArTesterException.s.topOfStack == orig(DataStructures.StackArTesterException.s.topOfStack)
-DataStructures.StackArTesterException.s.topOfStack == size(DataStructures.StackArTesterException.s.theArray[])-1
-DataStructures.StackArTesterException.s.topOfStack == orig(size(DataStructures.StackArTesterException.s.theArray[]))-1
-DataStructures.StackArTesterException.rnd == orig(DataStructures.StackArTesterException.rnd)
-x == orig(x)
-DataStructures.StackArTesterException.s has only one value
-DataStructures.StackArTesterException.s.theArray has only one value
-DataStructures.StackArTesterException.s.theArray[] == []
-DataStructures.StackArTesterException.s.theArray[].getClass().getName() == []
-exception has only one value
-exception.getClass().getName() == DataStructures.Overflow.class
-orig(x) has only one value
-DataStructures.StackArTesterException.s.theArray.getClass().getName() == orig(DataStructures.StackArTesterException.s.theArray.getClass().getName())
-x.getClass().getName() == orig(x.getClass().getName())
 ===========================================================================
 DataStructures.StackArTesterException.createItem(int):::ENTER
 phase >= 0

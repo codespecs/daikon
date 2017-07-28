@@ -1,5 +1,5 @@
 // Declarations for ExceptionHandling.DaikonAnalyseExceptions
-// Declarations written Mon Jul 10 10:01:17 PDT 2017
+// Declarations written Tue Jul 25 16:42:58 PDT 2017
 
 decl-version 2.0
 var-comparability none
@@ -11,7 +11,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::EXIT5
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -25,11 +25,11 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -43,7 +43,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -59,7 +59,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::ENTER
 ppt-type enter
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -73,7 +73,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -83,7 +83,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::EXIT8
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -97,22 +97,22 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -126,13 +126,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -148,7 +148,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::ENTER
 ppt-type enter
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -162,7 +162,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -172,7 +172,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::EXIT12
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -186,22 +186,22 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -215,13 +215,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -237,7 +237,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
 ppt-type enter
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -251,7 +251,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -261,7 +261,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT23
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -275,13 +275,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -290,7 +290,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT25
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -304,22 +304,22 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -333,13 +333,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -351,11 +351,11 @@ variable exception.getClass().getName()
   flags synthetic classname non_null
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -369,13 +369,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -391,7 +391,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
 ppt-type enter
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -405,7 +405,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -415,7 +415,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT35
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -429,13 +429,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -444,7 +444,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -458,22 +458,22 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -487,13 +487,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -509,7 +509,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
 ppt-type enter
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -523,7 +523,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -533,7 +533,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -547,13 +547,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -562,7 +562,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT46
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -576,22 +576,22 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -605,13 +605,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -627,7 +627,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::ENTER
 ppt-type enter
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -641,7 +641,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -651,7 +651,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT66
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -665,13 +665,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -680,7 +680,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT68
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -694,13 +694,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -709,7 +709,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT71
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -723,22 +723,22 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::THROW62
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXCEPTION62
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -752,13 +752,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -770,11 +770,11 @@ variable exception.getClass().getName()
   flags synthetic classname non_null
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -788,13 +788,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -810,7 +810,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
 ppt-type enter
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -824,7 +824,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -834,7 +834,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT84
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -848,13 +848,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -863,7 +863,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -877,22 +877,22 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION80
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -906,13 +906,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -924,11 +924,11 @@ variable exception.getClass().getName()
   flags synthetic classname non_null
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -942,13 +942,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -964,7 +964,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
 ppt-type enter
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -978,7 +978,7 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -988,7 +988,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT102
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -1002,13 +1002,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -1017,7 +1017,7 @@ ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -1031,22 +1031,22 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION96
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -1060,13 +1060,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -1078,11 +1078,11 @@ variable exception.getClass().getName()
   flags synthetic classname non_null
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW99
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION99
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -1096,13 +1096,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -1114,11 +1114,11 @@ variable exception.getClass().getName()
   flags synthetic classname non_null
   comparability 22
 
-ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROWS
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTIONUNCAUGHT
 ppt-type subexit
 parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -1132,13 +1132,13 @@ variable this.classVar
   comparability 22
   parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
 variable parameter
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -1153,7 +1153,7 @@ variable exception.getClass().getName()
 ppt ExceptionHandling.DaikonAnalyseExceptions:::OBJECT
 ppt-type object
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type ExceptionHandling.DaikonAnalyseExceptions
   rep-type hashcode
   flags is_param non_null
@@ -1714,7 +1714,7 @@ parameter
 5
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 19
 this
@@ -1746,7 +1746,7 @@ parameter
 5
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 20
 this
@@ -1791,7 +1791,7 @@ parameter
 5
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 22
 this
@@ -1839,7 +1839,7 @@ parameter
 5
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION80
 this_invocation_nonce
 23
 this
@@ -1871,7 +1871,7 @@ parameter
 5
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION96
 this_invocation_nonce
 24
 this
@@ -2019,7 +2019,7 @@ parameter
 6
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 29
 this
@@ -2051,7 +2051,7 @@ parameter
 6
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW99
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION99
 this_invocation_nonce
 30
 this
@@ -2605,7 +2605,7 @@ parameter
 10
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 49
 this
@@ -2637,7 +2637,7 @@ parameter
 10
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 50
 this
@@ -2682,7 +2682,7 @@ parameter
 10
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 52
 this
@@ -2730,7 +2730,7 @@ parameter
 10
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION80
 this_invocation_nonce
 53
 this
@@ -2762,7 +2762,7 @@ parameter
 10
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION96
 this_invocation_nonce
 54
 this
@@ -3084,7 +3084,7 @@ parameter
 12
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 65
 this
@@ -3116,7 +3116,7 @@ parameter
 12
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW99
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION99
 this_invocation_nonce
 66
 this
@@ -3496,7 +3496,7 @@ parameter
 15
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 79
 this
@@ -3528,7 +3528,7 @@ parameter
 15
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 80
 this
@@ -3573,7 +3573,7 @@ parameter
 15
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 82
 this
@@ -3621,7 +3621,7 @@ parameter
 15
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION80
 this_invocation_nonce
 83
 this
@@ -3653,7 +3653,7 @@ parameter
 15
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION96
 this_invocation_nonce
 84
 this
@@ -4149,7 +4149,7 @@ parameter
 18
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 101
 this
@@ -4181,7 +4181,7 @@ parameter
 18
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW99
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION99
 this_invocation_nonce
 102
 this
@@ -4387,7 +4387,7 @@ parameter
 20
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 109
 this
@@ -4419,7 +4419,7 @@ parameter
 20
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 110
 this
@@ -4464,7 +4464,7 @@ parameter
 20
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 112
 this
@@ -4512,7 +4512,7 @@ parameter
 20
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION80
 this_invocation_nonce
 113
 this
@@ -4544,7 +4544,7 @@ parameter
 20
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION96
 this_invocation_nonce
 114
 this
@@ -5214,7 +5214,7 @@ parameter
 24
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 137
 this
@@ -5246,7 +5246,7 @@ parameter
 24
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW99
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION99
 this_invocation_nonce
 138
 this
@@ -5278,7 +5278,7 @@ parameter
 25
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 139
 this
@@ -5310,7 +5310,7 @@ parameter
 25
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 140
 this
@@ -5355,7 +5355,7 @@ parameter
 25
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 142
 this
@@ -5403,7 +5403,7 @@ parameter
 25
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION80
 this_invocation_nonce
 143
 this
@@ -5435,7 +5435,7 @@ parameter
 25
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION96
 this_invocation_nonce
 144
 this
@@ -6163,7 +6163,7 @@ parameter
 30
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 169
 this
@@ -6195,7 +6195,7 @@ parameter
 30
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTIONUNCAUGHT
 this_invocation_nonce
 170
 this
@@ -6240,7 +6240,7 @@ parameter
 30
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
 this_invocation_nonce
 172
 this
@@ -6288,7 +6288,7 @@ parameter
 30
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION80
 this_invocation_nonce
 173
 this
@@ -6320,7 +6320,7 @@ parameter
 30
 1
 
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION96
 this_invocation_nonce
 174
 this

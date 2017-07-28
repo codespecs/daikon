@@ -22,7 +22,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
  * task is to add "hooks" into the other class at method entries and exits for instrumentation
- * purposes.
+ * purposes. (We now hook throws as well.)
  */
 @SuppressWarnings("nullness")
 class Instrument extends StackMapUtils implements ClassFileTransformer {
@@ -410,7 +410,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
    * Instrument all the methods in a class. For each method, add instrumentation code at the entry
    * and at each return from the method. In addition, changes each return statement to first place
    * the value being returned into a local and then return. This allows us to work around the JDI
-   * deficiency of not being able to query return values.
+   * deficiency of not being able to query return values. (We now instrument throws as well.)
    *
    * @param fullClassName must be fully qualified: packageName.className
    */
@@ -552,7 +552,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
               generate_return_instrumentation(
                   fullClassName, inst, context, shouldIncIter, exitIter);
 
-          // If not Return maybe it is an Throw
+          // If not return maybe it is a throw
           if (new_il == null) {
             new_il =
                 generate_throw_instrumentation(
@@ -563,15 +563,15 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           // Remember the next instruction to process
           InstructionHandle next_ih = ih.getNext();
 
-          // If this instruction was modified, replace it with the new
-          // instruction list. If this instruction was the target of any
-          // jumps, replace it with the first instruction in the new list
+          // If this instruction was processed, insert the new instruction
+          // list before it. If this instruction was the target of any jumps,
+          // change the target to be the first instruction in the new list.
           if (new_il != null) {
             if (next_ih != null) {
-              // This return is not at the end of the method. That
-              // means the instruction after the RETURN is a branch
+              // This return or throw is not at the end of the method.
+              // That means that the following instruction is a branch
               // target and that means it has a StackMap entry. (Java7)
-              // We need to adjust its offset for our inserted code.
+              // We need to adjust its offset to account for our inserted code.
 
               // If there was no orgiinal StackMapTable (smta == null)
               // then class was compiled for Java 5.
@@ -886,9 +886,9 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
   }
 
   /**
-   * Transforms return instructions to first assign the result to a local variable
-   * (return__$trace2_val) and then do the return. Also, calls Runtime.exit() immediately before the
-   * return.
+   * If this is a return instruction, generate new il to assign the result to a local variable
+   * (return__$trace2_val) and then call Runtime.exit(). This il wil be inserted immediately before
+   * the return.
    */
   private /*@Nullable*/ InstructionList generate_return_instrumentation(
       String fullClassName,
@@ -933,9 +933,9 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
   }
 
   /**
-   * Transforms Throw instructions to first assign the Exception to a local variable
-   * (exception__$trace2_val) and then do the return. Also, calls Runtime.throw() immediately before
-   * the return.
+   * If this is a throw instruction, generate new il to assign the exception to a local variable
+   * (exception__$trace2_val) and then call Runtime.exceptionExit(). This il wil be inserted
+   * immediately before the throw.
    */
   private /*@Nullable*/ InstructionList generate_throw_instrumentation(
       String fullClassName,
@@ -961,21 +961,22 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
     Type type = Type.getType(Throwable.class);
     InstructionList il = new InstructionList();
-    LocalVariableGen throw_loc = get_throw_local(c.mgen, type);
+    LocalVariableGen throw_loc = get_exception_local(c.mgen, type);
     il.append(InstructionFactory.createDup(type.getSize()));
     il.append(InstructionFactory.createStore(type, throw_loc.getIndex()));
 
     if (!throwIter.hasNext())
       throw new RuntimeException("Not enough exit locations in the exitIter");
 
-    il.append(call_enter_exit(c, "exitThrow", throwIter.next()));
+    il.append(call_enter_exit(c, "exceptionExit", throwIter.next()));
     return (il);
   }
 
   /**
-   * Transforms Throw instructions to first assign the Exception to a local variable
-   * (exception__$trace2_val) and then do the return. Also, calls Runtime.throw() immediately before
-   * the return.
+   * Used to generate code to process an uncaught exception that our instrumentation has caught.
+   * First, assign the Exception to a local variable (exception__$trace2_val). Then call
+   * Runtime.exceptionExit with line number = -1 to indicate this was a delegated exception.
+   * Finally, reload the exception value and re-throw it.
    */
   private /*@Nullable*/ InstructionList generate_internal_catch_instrumentation(
       String fullClassName, MethodContext c) {
@@ -986,10 +987,10 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
     Type type = Type.getType(Throwable.class);
     InstructionList il = new InstructionList();
-    LocalVariableGen throw_loc = get_throw_local(c.mgen, type);
+    LocalVariableGen throw_loc = get_exception_local(c.mgen, type);
     il.append(InstructionFactory.createStore(type, throw_loc.getIndex()));
 
-    il.append(call_enter_exit(c, "exitThrow", -1));
+    il.append(call_enter_exit(c, "exceptionExit", -1));
     il.append(InstructionFactory.createLoad(type, throw_loc.getIndex()));
     il.append(new ATHROW());
     return (il);
@@ -999,7 +1000,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
    * Returns the local variable used to store the Exception thrown. If it is not present, creates it
    * with the Exception type.
    */
-  private LocalVariableGen get_throw_local(MethodGen mgen, /*@NotNull*/ Type exception_type) {
+  private LocalVariableGen get_exception_local(MethodGen mgen, /*@NotNull*/ Type exception_type) {
     // Find the local used for the exception value
     LocalVariableGen exception_local = null;
     for (LocalVariableGen lv : mgen.getLocalVariables()) {
@@ -1074,7 +1075,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
   private void process_uninitialized_variable_info(InstructionList il, boolean save) {
     il.setPositions();
     if (save) {
-      // UNDONE: Should this be a sparse array?
+      // CONSIDER: Should this be a sparse array?
       // We allocate one entry for each byte of the instruction list.
       offset_map = new InstructionHandle[il.getEnd().getPosition()];
     }
@@ -1308,9 +1309,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
     }
 
     // If this is an exit, push the return value and line number.
-    // The return value
-    // is stored in the local "return__$trace2_val"  If the return
-    // value is a primitive, wrap it in the appropriate runtime wrapper
+    // The return value is stored in the local "return__$trace2_val".
+    // If the return value is a primitive, wrap it in the appropriate runtime wrapper.
     if (method_name.equals("exit")) {
       Type ret_type = mgen.getReturnType();
       if (isVoid(ret_type)) {
@@ -1329,13 +1329,12 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
       il.append(ifact.createConstant(line));
     }
 
-    // If this is an throwExit, push the Exception and line number.
-    // The Exception value
-    // is stored in the local "exception__$trace2_val"
-    if (method_name.equals("exitThrow")) {
+    // If this is an exceptionExit, push the Exception and line number.
+    // The Exception value is stored in the local "exception__$trace2_val".
+    if (method_name.equals("exceptionExit")) {
       Type exception_type = Type.getType(Throwable.class);
-      LocalVariableGen throw_local = get_throw_local(mgen, exception_type);
-      il.append(InstructionFactory.createLoad(exception_type, throw_local.getIndex()));
+      LocalVariableGen exception_local = get_exception_local(mgen, exception_type);
+      il.append(InstructionFactory.createLoad(exception_type, exception_local.getIndex()));
       // push line number
       // System.out.println(c.mgen.getName() + " --> " + line);
       il.append(ifact.createConstant(line));
@@ -1347,7 +1346,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
       method_args =
           new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.OBJECT, Type.INT};
 
-    } else if (method_name.equals("exitThrow")) {
+    } else if (method_name.equals("exceptionExit")) {
       method_args =
           new Type[] {
             Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.getType(Throwable.class), Type.INT
@@ -1598,7 +1597,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           if (!shouldFilter(
               class_info.class_name,
               mgen.getName(),
-              DaikonWriter.methodThrowName(
+              DaikonWriter.methodExceptionName(
                   class_info.class_name,
                   getArgTypes(mgen),
                   mgen.toString(),

@@ -69,7 +69,7 @@ public class DTraceWriter extends DaikonWriter {
 
     Member member = mi.member;
 
-    //get the root of the method's traversal pattern
+    // gets the traversal pattern root for this method's entry
     RootInfo root = mi.traversalEnter;
     if (root == null) {
       throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
@@ -102,7 +102,7 @@ public class DTraceWriter extends DaikonWriter {
     Runtime.incrementRecords();
   }
 
-  /** Prints the method exit program point in the dtrace file. */
+  /** Prints the method exit program point(s) in the dtrace file. */
   public void methodExit(
       /*>>>@GuardSatisfied DTraceWriter this,*/
       MethodInfo mi,
@@ -117,7 +117,7 @@ public class DTraceWriter extends DaikonWriter {
 
     Member member = mi.member;
 
-    //gets the traversal pattern root for this method exit
+    // gets the traversal pattern root for this method's exits
     RootInfo root = mi.traversalExit;
     if (root == null) {
       throw new RuntimeException(
@@ -145,8 +145,8 @@ public class DTraceWriter extends DaikonWriter {
     Runtime.incrementRecords();
   }
 
-  /** Prints the method exit program point in the dtrace file */
-  public void methodThrow(
+  /** Prints the method exception exit program point(s) in the dtrace file */
+  public void methodExceptionExit(
       MethodInfo mi,
       int nonceVal,
       /*@Nullable*/ Object obj,
@@ -157,12 +157,12 @@ public class DTraceWriter extends DaikonWriter {
 
     Member member = mi.member;
 
-    //gets the traversal pattern root for this method exitThrow
-    RootInfo root = mi.traversalThrow;
+    // gets the traversal pattern root for this method's exception exits
+    RootInfo root = mi.traversalException;
     if (root == null)
       throw new RuntimeException("Traversal pattern not initialized for method " + mi.method_name);
 
-    outFile.println(DaikonWriter.methodThrowName(member, lineNum));
+    outFile.println(DaikonWriter.methodExceptionName(member, lineNum));
     printNonce(nonceVal);
     traverse(mi, root, args, obj, exception_val);
 

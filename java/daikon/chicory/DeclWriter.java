@@ -267,7 +267,7 @@ public class DeclWriter extends DaikonWriter {
       String entryName =
           (member != null
               ? methodEntryName(member)
-              : mi.class_info.class_name + ".<clinit>" + FileIO.enter_tag);
+              : mi.class_info.class_name + ".<clinit>" + FileIO.entry_tag);
       print_method(mi, enterRoot, entryName, PptType.ENTER, comp_info);
 
       // Print exit program point for EACH exit location in the method
@@ -287,27 +287,34 @@ public class DeclWriter extends DaikonWriter {
         print_method(mi, exitRoot, exitName, PptType.SUBEXIT, comp_info);
       }
 
-      // Print throw program point for EACH athrow location in the method
-      // Note that there may not be any athrow.  They may get filtered out,
-      // or some methods don't have an throw (only a exit)
+      // UNDONE: a class initializer can have a throw statement.
+      // I think we need code similar to:
+      //  (member != null
+      //      ? methodEntryName(member)
+      //      : mi.class_info.class_name + ".<clinit>" + FileIO.entry_tag);
+
+      // Print exception program point for EACH athrow location in the method
+      // Note that there may not be an athrow.  They may get filtered out,
+      // or some methods don't have a throw (only an exit)
       Set<Integer> theThrows = new HashSet<Integer>(mi.throw_locations);
       for (Integer throwLoc : theThrows) {
         // Get the root of the method's traversal pattern
-        RootInfo throwRoot = mi.traversalThrow;
-        assert throwRoot != null
+        RootInfo exceptionRoot = mi.traversalException;
+        assert exceptionRoot != null
             : "Throw Traversal pattern not initialized at " + "method " + mi.method_name;
 
         print_method(
             mi,
-            throwRoot,
-            methodThrowName(member, throwLoc.intValue()),
+            exceptionRoot,
+            methodExceptionName(member, throwLoc.intValue()),
             PptType.SUBEXIT,
             comp_info);
       }
 
       if (Chicory.exception_handling) {
-        RootInfo throwRoot = mi.traversalThrow;
-        print_method(mi, throwRoot, methodThrowName(member, -1), PptType.SUBEXIT, comp_info);
+        RootInfo exceptionRoot = mi.traversalException;
+        print_method(
+            mi, exceptionRoot, methodExceptionName(member, -1), PptType.SUBEXIT, comp_info);
       }
     }
 

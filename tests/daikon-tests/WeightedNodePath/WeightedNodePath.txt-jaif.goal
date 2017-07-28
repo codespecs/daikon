@@ -8,38 +8,38 @@ class WeightedNodePath : // 1142/- obj/class samples
   field path : @Nullable  // MapQuick.WeightedNodePath
   field cost :  // int
   method <init>(LMapQuick/WeightedNode;)V : // 32 samples
-    return: 
+    return:
     parameter #0 :  // node
-  method <init>(LMapQuick/WeightedNode;LMapQuick/;)V : // 160 samples
-    return: 
-    parameter #0 :  // node
-    parameter #1 : @Nullable  // path
   method <init>(LMapQuick/WeightedNode;LMapQuick/;)V throws Ljava/lang/Throwable; : // 0 samples
-    return: 
+    return:
     parameter #0 :  // node
     parameter #1 :  // path
+  method <init>(LMapQuick/WeightedNode;LMapQuick/;)V : // 160 samples
+    return:
+    parameter #0 :  // node
+    parameter #1 : @Nullable  // path
   method cost()D : // 103 samples
-    return: 
+    return:
   method elements()Ljava/util/Iterator; : // 84 samples
-    return: 
+    return:
   method equals(LMapQuick/WeightedNodePath;)Z : // 0 samples
-    return: 
+    return:
     parameter #0 :  // wnp
   method equals(Ljava/lang/Object;)Z : // 0 samples
-    return: 
+    return:
     parameter #0 :  // o
   method extend(LMapQuick/WeightedNode;)LMapQuick/Path; : // 128 samples
-    return: 
+    return:
     parameter #0 :  // node
-  method extend(Ljava/lang/Object;)LMapQuick/Path; : // 128 samples
-    return: 
-    parameter #0 :  // o
   method extend(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
-    return: 
+    return:
+    parameter #0 :  // o
+  method extend(Ljava/lang/Object;)LMapQuick/Path; : // 128 samples
+    return:
     parameter #0 :  // o
   method hashCode()I : // 32 samples
-    return: 
+    return:
   method toString()Ljava/lang/String; : // 0 samples
-    return: 
+    return:
 
 

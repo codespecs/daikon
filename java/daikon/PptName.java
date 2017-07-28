@@ -264,40 +264,43 @@ public class PptName implements Serializable {
     return FileIO.global_suffix.equals(point);
   }
 
+  /**
+   * @return true iff this name refers to a procedure exception point. This could be a throw
+   *     statement, a synthetic catch and throw of an (originally) uncaught exception, or synthetic
+   *     exception ppt that is the parent of all exception exits from a method.
+   */
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
+  /*@Pure*/
+  public boolean isExceptionPoint() {
+    return (point != null) && point.startsWith(FileIO.exception_suffix);
+  }
+
+  /**
+   * @return true iff this name refers to a combined (synthetic) exception point. This is a ppt that
+   *     is the parent of all exception exits from a method.
+   */
+  /** @return true iff this name refers to a combined (synthetic) procedure exception point */
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
+  /*@Pure*/
+  public boolean isCombinedExceptionPoint() {
+    return (point != null) && point.equals(FileIO.exception_suffix);
+  }
+
+  /**
+   * @return true iff this name refers to an actual (not combined) procedure exception point (eg,
+   *     EXCEPTION22)
+   */
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
+  /*@Pure*/
+  public boolean isNumberedExceptionPoint() {
+    return ((point != null) && (isExceptionPoint() && !isCombinedExceptionPoint()));
+  }
+
   /** @return true iff this name refers to a procedure exit point */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/
   public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
-  }
-
-  /** @return true iff this name refers to an abrupt completion point */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
-  public boolean isThrowPoint() {
-    return (point != null) && point.startsWith(FileIO.throw_suffix);
-  }
-
-  /** @return true iff this name refers to an abrupt completion point */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
-  public boolean isThrowsPoint() {
-    return (point != null) && point.startsWith(FileIO.throws_suffix);
-  }
-
-  /** @return true iff this name refers to a procedure exception point */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
-  public boolean isExceptionPoint() {
-    return (point != null)
-        && (point.startsWith(FileIO.throw_suffix) || point.equals(FileIO.exception_suffix));
-  }
-
-  /** @return true iff this name refers to a combined (synthetic) procedure exception point */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
-  public boolean isCombinedThrowPoint() {
-    return (point != null) && point.equals(FileIO.exception_suffix);
   }
 
   /** @return true iff this name refers to a combined (synthetic) procedure exit point */
@@ -320,7 +323,7 @@ public class PptName implements Serializable {
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/
   public boolean isEnterPoint() {
-    return (point != null) && point.startsWith(FileIO.enter_suffix);
+    return (point != null) && point.startsWith(FileIO.entry_suffix);
   }
 
   /**
@@ -401,9 +404,7 @@ public class PptName implements Serializable {
     // entry point; in particular, if there was an exception, then perhaps
     // the precondition or object invariant was not met.
     assert isExitPoint() || isExceptionPoint() : fullname;
-
-    assert isExitPoint() || isExceptionPoint();
-    return new PptName(cls, method, FileIO.enter_suffix);
+    return new PptName(cls, method, FileIO.entry_suffix);
   }
 
   /**
@@ -417,12 +418,12 @@ public class PptName implements Serializable {
   }
 
   /**
-   * Requires: this.isThrowPoint() || this.isEnterPoint()
+   * Requires: this.isExceptionPoint() || this.isEnterPoint()
    *
    * @return a name for the combined exit point
    */
-  public PptName makeThrowExit() {
-    assert isThrowPoint() || isEnterPoint() : fullname;
+  public PptName makeExceptionExit() {
+    assert isExceptionPoint() || isEnterPoint() : fullname;
     return new PptName(cls, method, FileIO.exception_suffix);
   }
 

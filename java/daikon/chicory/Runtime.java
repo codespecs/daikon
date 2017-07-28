@@ -271,9 +271,10 @@ public class Runtime {
    * @param mi_index - Index in methods of the MethodInfo for this method
    * @param args - Array of arguments to method
    * @param exception_val - thrown Exception
-   * @param exitLineNum - The line number at which this method exited by throw (-1 for throws)
+   * @param exitLineNum - The line number of the throw statement causing the exception exit or -1
+   *     for an uncaught exception
    */
-  public static synchronized void exitThrow(
+  public static synchronized void exceptionExit(
       /*@Nullable*/ Object obj,
       int nonce,
       int mi_index,
@@ -324,7 +325,7 @@ public class Runtime {
       // Write out the infromation for this method
       MethodInfo mi = SharedData.methods.get(mi_index);
       // long start = System.currentTimeMillis();
-      dtrace_writer.methodThrow(mi, nonce, obj, args, exception_val, exitLineNum);
+      dtrace_writer.methodExceptionExit(mi, nonce, obj, args, exception_val, exitLineNum);
       // long duration = System.currentTimeMillis() - start;
       // System.out.println ("Exit " + mi + " " + duration + "ms");
     } finally {
@@ -499,7 +500,7 @@ public class Runtime {
       for (MethodInfo mi : class_info.method_infos) {
         mi.traversalEnter = RootInfo.enter_process(mi, Runtime.nesting_depth);
         mi.traversalExit = RootInfo.exit_process(mi, Runtime.nesting_depth);
-        mi.traversalThrow = RootInfo.throw_process(mi, Runtime.nesting_depth);
+        mi.traversalException = RootInfo.exception_process(mi, Runtime.nesting_depth);
       }
 
       decl_writer.printDeclClass(class_info, comp_info);

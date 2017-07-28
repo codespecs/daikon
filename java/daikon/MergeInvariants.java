@@ -273,7 +273,7 @@ public final class MergeInvariants {
         assert ppt.children.size() > 0 : ppt;
         continue;
       }
-      if (ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isCombinedThrowPoint()) {
+      if (ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isCombinedExceptionPoint()) {
         assert ppt.children.size() > 0 : ppt;
         continue;
       }
@@ -384,7 +384,7 @@ public final class MergeInvariants {
       if (!ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isExceptionPoint()) {
         continue;
       }
-      if (ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isCombinedThrowPoint()) {
+      if (ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isCombinedExceptionPoint()) {
         continue;
       }
 

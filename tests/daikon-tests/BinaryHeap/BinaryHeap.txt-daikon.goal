@@ -118,6 +118,28 @@ x != null
 x.getClass().getName() == DataStructures.MyInteger.class
 this.array.getClass().getName() != x.getClass().getName()
 ===========================================================================
+DataStructures.BinaryHeap.insert(DataStructures.Comparable):::EXCEPTION
+this == orig(this)
+DataStructures.BinaryHeap.DEFAULT_CAPACITY == this.currentSize
+DataStructures.BinaryHeap.DEFAULT_CAPACITY == orig(this.currentSize)
+this.array == orig(this.array)
+this.array[] == orig(this.array[])
+x == orig(x)
+this.array[] has only one value, of length 101
+this.array[].getClass().getName() == [null, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger]
+exception has only one value
+exception.getClass().getName() == DataStructures.Overflow.class
+orig(x) has only one value
+this.array[DataStructures.BinaryHeap.DEFAULT_CAPACITY-1] has only one value
+this.array[DataStructures.BinaryHeap.DEFAULT_CAPACITY..] contains no nulls and has only one value, of length 1
+this.array[DataStructures.BinaryHeap.DEFAULT_CAPACITY..] elements has only one value
+this.array[0..DataStructures.BinaryHeap.DEFAULT_CAPACITY-1] has only one value, of length 100
+this.array.getClass().getName() == orig(this.array.getClass().getName())
+orig(x.getClass().getName()) in this.array[].getClass().getName()
+x.getClass().getName() == orig(x.getClass().getName())
+===========================================================================
+DataStructures.BinaryHeap.insert(DataStructures.Comparable):::EXCEPTION51
+===========================================================================
 DataStructures.BinaryHeap.insert(DataStructures.Comparable):::EXIT
 this.array == orig(this.array)
 size(this.array[]) == orig(size(this.array[]))
@@ -155,28 +177,6 @@ orig(this.array[post(DataStructures.BinaryHeap.DEFAULT_CAPACITY)..]) is a subseq
 orig(this.array[post(DataStructures.BinaryHeap.DEFAULT_CAPACITY)..]) is a subset of this.array[0..this.currentSize]
 orig(this.array[post(DataStructures.BinaryHeap.DEFAULT_CAPACITY)..]) is a subsequence of this.array[0..this.currentSize-1]
 orig(this.array[post(DataStructures.BinaryHeap.DEFAULT_CAPACITY)..]) is a subset of this.array[0..this.currentSize-1]
-===========================================================================
-DataStructures.BinaryHeap.insert(DataStructures.Comparable):::THROW51
-===========================================================================
-DataStructures.BinaryHeap.insert(DataStructures.Comparable):::THROWSCOMBINED
-this == orig(this)
-DataStructures.BinaryHeap.DEFAULT_CAPACITY == this.currentSize
-DataStructures.BinaryHeap.DEFAULT_CAPACITY == orig(this.currentSize)
-this.array == orig(this.array)
-this.array[] == orig(this.array[])
-x == orig(x)
-this.array[] has only one value, of length 101
-this.array[].getClass().getName() == [null, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger]
-exception has only one value
-exception.getClass().getName() == DataStructures.Overflow.class
-orig(x) has only one value
-this.array[DataStructures.BinaryHeap.DEFAULT_CAPACITY-1] has only one value
-this.array[DataStructures.BinaryHeap.DEFAULT_CAPACITY..] contains no nulls and has only one value, of length 1
-this.array[DataStructures.BinaryHeap.DEFAULT_CAPACITY..] elements has only one value
-this.array[0..DataStructures.BinaryHeap.DEFAULT_CAPACITY-1] has only one value, of length 100
-this.array.getClass().getName() == orig(this.array.getClass().getName())
-orig(x.getClass().getName()) in this.array[].getClass().getName()
-x.getClass().getName() == orig(x.getClass().getName())
 ===========================================================================
 DataStructures.BinaryHeap.isEmpty():::ENTER
 this.array[].getClass().getName() == [null, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, DataStructures.MyInteger, null]

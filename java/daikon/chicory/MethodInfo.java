@@ -57,23 +57,23 @@ public class MethodInfo {
   /**
    * The root of the variable tree for the method entry program point.
    *
-   * <p>Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by Runtime and read by DeclWriter and DTraceWriter.
    */
   public /*@MonotonicNonNull*/ RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
    *
-   * <p>Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by Runtime and read by DeclWriter and DTraceWriter.
    */
   public /*@MonotonicNonNull*/ RootInfo traversalExit = null;
 
   /**
-   * The root of the variable tree for the method throw program point(s).
+   * The root of the variable tree for the method exception program point(s).
    *
-   * <p>Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by Runtime and read by DeclWriter and DTraceWriter.
    */
-  public /*@MonotonicNonNull*/ RootInfo traversalThrow = null;
+  public /*@MonotonicNonNull*/ RootInfo traversalException = null;
 
   /** The number of times this method has been called */
   public int call_cnt = 0;

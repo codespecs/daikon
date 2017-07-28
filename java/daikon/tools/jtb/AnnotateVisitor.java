@@ -326,7 +326,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         }
         ensures_invs = invariants_for(ppt, ppts);
       } else if (ppt.ppt_name.isExceptionPoint()) {
-        if (!ppt.ppt_name.isCombinedThrowPoint()) {
+        if (!ppt.ppt_name.isCombinedExceptionPoint()) {
           continue;
         }
         throw_invs = invariants_for(ppt, ppts);

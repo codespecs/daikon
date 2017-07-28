@@ -21,6 +21,7 @@ TARGET_ARGS = DataStructures.StackArTester
 TARGET_ARGSE = DataStructures.StackArTesterException
 DAIKON_ARGS = --no_text_output --no_show_progress --config config.txt --config_option daikon.Debug.show_stack_trace=true -o $@
 CHICORY     = $(DAIKONDIR)/java/ChicoryPremain.jar
+CHICORY_ARGS = --dtrace-file=$(basename $(basename $@)).dtrace
 PREMAIN		= $(CHICORY)
 CP          = $(DAIKONDIR)/java:$(CLASSPATH)
 
@@ -54,49 +55,49 @@ $(CLASS_FILES) :
 	javac -g `find . -name *.java`
 
 online.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) \
 	  --daikon-online --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 pptsel.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --ppt-select-pattern 'push|pop' \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --ppt-select-pattern 'push|pop' \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 pptomit.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --ppt-omit-pattern 'push|pop' \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --ppt-omit-pattern 'push|pop' \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 nesting.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --nesting-depth 0 \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --nesting-depth 0 \
 	  --daikon-online --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 stdvis.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --std-visibility \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --std-visibility \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 varomit.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --omit-var theArray \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --omit-var theArray \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 samples.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --sample-start=100 \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --sample-start=100 \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 misc.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --purity-file=StackAr.pure \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --purity-file=StackAr.pure \
 	--premain=$(PREMAIN) --heap_size=100m \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 exception.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --exception-handling \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --exception-handling \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
 
 exceptionOmit.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --exception-handling \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --exception-handling \
 	  --ppt-omit-pattern 'push|pop' \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
 
 exceptionSel.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory --exception-handling \
+	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --exception-handling \
 	  --ppt-select-pattern 'push|pop' \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
 

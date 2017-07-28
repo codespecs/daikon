@@ -12,6 +12,18 @@ ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
     Variables: this this.classVar parameter
 this.classVar == parameter
 ===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION
+    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
+this == \old(this)
+this.classVar == parameter
+this.classVar == \old(this.classVar)
+this.classVar == \old(parameter)
+Exception != null
+Exception.getClass().getName() == java.lang.Exception.class.getName()
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXCEPTION20
+    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
+===========================================================================
 ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT23
     Variables: this this.classVar parameter return orig(this) orig(this.classVar) orig(parameter)
 this.classVar == \result
@@ -36,21 +48,20 @@ this.classVar == \old(parameter)
 \result % this.classVar == 0
 this.classVar <= \result
 ===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW20
-    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+    Variables: this this.classVar parameter
+this.classVar == parameter
 ===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROWSCOMBINED
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTION
     Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
 this == \old(this)
 this.classVar == parameter
 this.classVar == \old(this.classVar)
 this.classVar == \old(parameter)
-Exception != null
-Exception.getClass().getName() == java.lang.Exception.class.getName()
+Exception.getClass().getName() == java.lang.ArithmeticException.class.getName()
 ===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
-    Variables: this this.classVar parameter
-this.classVar == parameter
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXCEPTIONUNCAUGHT
+    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
 ===========================================================================
 ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT35
     Variables: this this.classVar parameter return orig(this) orig(this.classVar) orig(parameter)
@@ -76,17 +87,6 @@ this.classVar == \old(parameter)
 \result % this.classVar == 0
 this.classVar <= \result
 ===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
-    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
-===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWSCOMBINED
-    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
-this == \old(this)
-this.classVar == parameter
-this.classVar == \old(this.classVar)
-this.classVar == \old(parameter)
-Exception.getClass().getName() == java.lang.ArithmeticException.class.getName()
-===========================================================================
 ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
     Variables: this this.classVar parameter
 this.classVar == parameter
@@ -110,6 +110,22 @@ this.classVar == \old(parameter)
 ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
     Variables: this this.classVar parameter
 this.classVar == parameter
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION
+    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
+this == \old(this)
+this.classVar == parameter
+this.classVar == \old(this.classVar)
+this.classVar == \old(parameter)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: exception.getClass().getName() is printable
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTION80
+    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
+Exception.getClass().getName() == java.lang.Exception.class.getName()
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXCEPTIONUNCAUGHT
+    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
+Exception.getClass().getName() == java.lang.ArithmeticException.class.getName()
 ===========================================================================
 ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT84
     Variables: this this.classVar parameter return orig(this) orig(this.classVar) orig(parameter)
@@ -135,25 +151,23 @@ this.classVar == \old(parameter)
 \result % this.classVar == 0
 this.classVar <= \result
 ===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW80
-    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
-Exception.getClass().getName() == java.lang.Exception.class.getName()
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+    Variables: this this.classVar parameter
+this.classVar == parameter
 ===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
-    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
-Exception.getClass().getName() == java.lang.ArithmeticException.class.getName()
-===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWSCOMBINED
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION
     Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
 this == \old(this)
 this.classVar == parameter
 this.classVar == \old(this.classVar)
 this.classVar == \old(parameter)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: exception.getClass().getName() is printable
+Exception.getClass().getName() == java.lang.Exception.class.getName()
 ===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
-    Variables: this this.classVar parameter
-this.classVar == parameter
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION96
+    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
+===========================================================================
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXCEPTION99
+    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
 ===========================================================================
 ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT102
     Variables: this this.classVar parameter return orig(this) orig(this.classVar) orig(parameter)
@@ -178,17 +192,3 @@ this.classVar == \old(parameter)
 (this.classVar % 2 == 1)  ==>  (\result == this.classVar*this.classVar)
 \result % this.classVar == 0
 this.classVar <= \result
-===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW96
-    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
-===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW99
-    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
-===========================================================================
-ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROWSCOMBINED
-    Variables: this this.classVar parameter exception exception.getClass().getName() orig(this) orig(this.classVar) orig(parameter)
-this == \old(this)
-this.classVar == parameter
-this.classVar == \old(this.classVar)
-this.classVar == \old(parameter)
-Exception.getClass().getName() == java.lang.Exception.class.getName()

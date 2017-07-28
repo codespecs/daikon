@@ -1,5 +1,5 @@
 // Declarations for DataStructures.StackAr
-// Declarations written Mon Jul 10 09:19:15 PDT 2017
+// Declarations written Tue Jul 25 16:01:44 PDT 2017
 
 decl-version 2.0
 var-comparability none
@@ -7,7 +7,7 @@ var-comparability none
 ppt DataStructures.StackAr.StackAr(int):::ENTER
 ppt-type enter
 variable capacity
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -17,7 +17,7 @@ ppt DataStructures.StackAr.StackAr(int):::EXIT33
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -40,7 +40,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -65,7 +65,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable capacity
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -75,7 +75,7 @@ ppt DataStructures.StackAr.isEmpty():::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -98,7 +98,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -127,7 +127,7 @@ ppt DataStructures.StackAr.isEmpty():::EXIT42
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -150,7 +150,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -175,7 +175,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
   comparability 22
@@ -184,7 +184,7 @@ ppt DataStructures.StackAr.isFull():::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -207,7 +207,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -236,7 +236,7 @@ ppt DataStructures.StackAr.isFull():::EXIT52
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -259,7 +259,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -284,7 +284,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
   comparability 22
@@ -293,7 +293,7 @@ ppt DataStructures.StackAr.makeEmpty():::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -316,7 +316,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -345,7 +345,7 @@ ppt DataStructures.StackAr.makeEmpty():::EXIT63
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -368,7 +368,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -397,7 +397,7 @@ ppt DataStructures.StackAr.top():::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -420,7 +420,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -449,7 +449,7 @@ ppt DataStructures.StackAr.top():::EXIT74
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -472,7 +472,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -497,7 +497,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object
   rep-type hashcode
   comparability 22
@@ -514,7 +514,7 @@ ppt DataStructures.StackAr.top():::EXIT75
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -537,7 +537,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -562,7 +562,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object
   rep-type hashcode
   comparability 22
@@ -579,7 +579,7 @@ ppt DataStructures.StackAr.pop():::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -602,7 +602,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -631,7 +631,7 @@ ppt DataStructures.StackAr.pop():::EXIT87
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -654,7 +654,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -679,11 +679,11 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 
-ppt DataStructures.StackAr.pop():::THROW85
+ppt DataStructures.StackAr.pop():::EXCEPTION85
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -706,7 +706,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -731,7 +731,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -747,7 +747,7 @@ ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -770,7 +770,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -795,7 +795,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable x
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
@@ -813,7 +813,7 @@ ppt DataStructures.StackAr.push(java.lang.Object):::EXIT99
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -836,7 +836,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -861,7 +861,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable x
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
@@ -875,11 +875,11 @@ variable x.getClass().getName()
   flags synthetic classname non_null
   comparability 22
 
-ppt DataStructures.StackAr.push(java.lang.Object):::THROW97
+ppt DataStructures.StackAr.push(java.lang.Object):::EXCEPTION97
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -902,7 +902,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -927,7 +927,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable x
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
@@ -941,7 +941,7 @@ variable x.getClass().getName()
   flags synthetic classname non_null
   comparability 22
 variable exception
-  var-kind return 
+  var-kind return
   dec-type java.lang.Throwable
   rep-type hashcode
   comparability 22
@@ -957,7 +957,7 @@ ppt DataStructures.StackAr.topAndPop():::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -980,7 +980,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -1009,7 +1009,7 @@ ppt DataStructures.StackAr.topAndPop():::EXIT108
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -1032,7 +1032,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -1057,7 +1057,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object
   rep-type hashcode
   comparability 22
@@ -1074,7 +1074,7 @@ ppt DataStructures.StackAr.topAndPop():::EXIT111
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -1097,7 +1097,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -1122,7 +1122,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object
   rep-type hashcode
   comparability 22
@@ -1138,7 +1138,7 @@ variable return.getClass().getName()
 ppt DataStructures.StackAr:::OBJECT
 ppt-type object
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param non_null
@@ -1158,7 +1158,7 @@ variable this.theArray.getClass().getName()
   flags synthetic classname non_null
   comparability 22
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -3419,7 +3419,7 @@ return
 true
 1
 
-DataStructures.StackAr.push(java.lang.Object):::THROW97
+DataStructures.StackAr.push(java.lang.Object):::EXCEPTION97
 this_invocation_nonce
 47
 this

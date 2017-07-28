@@ -4310,10 +4310,17 @@ public class PptTopLevel extends Ppt {
     }
   }
 
+  // UNDONE: this doesn't look right
+  // if type != null then same as is_exit
+
   /** Is this is an exception ppt (combined or specific)? */
-  /*@Pure*/ public boolean is_throw() {
-    if (type != null) return ((type == PptType.EXIT) || (type == PptType.SUBEXIT));
-    else return ppt_name.isThrowPoint();
+  /*@Pure*/
+  public boolean is_exception() {
+    if (type != null) {
+      return ((type == PptType.EXIT) || (type == PptType.SUBEXIT));
+    } else {
+      return ppt_name.isExceptionPoint();
+    }
   }
 
   /** is this an enter ppt */
@@ -4336,11 +4343,20 @@ public class PptTopLevel extends Ppt {
     }
   }
 
+  // UNDONE: this doesn't look right
+  // if type != null then same as is_combined_exit
+
   /** Is this a combined exception point? */
-  /*@Pure*/ public boolean is_combined_exception() {
-    if (type != null) return (type == PptType.EXIT);
-    else return ppt_name.isCombinedThrowPoint();
+  /*@Pure*/
+  public boolean is_combined_exception() {
+    if (type != null) {
+      return (type == PptType.EXIT);
+    } else {
+      return ppt_name.isCombinedExceptionPoint();
+    }
   }
+
+  // UNDONE: this doesn't look right
 
   /** Is this a numbered (specific) exit point? */
   /*@Pure*/
@@ -4349,7 +4365,7 @@ public class PptTopLevel extends Ppt {
       return (type == PptType.SUBEXIT);
     } else {
       return ((ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint())
-          || (ppt_name.isThrowPoint()));
+          || (ppt_name.isExceptionPoint()));
     }
   }
 

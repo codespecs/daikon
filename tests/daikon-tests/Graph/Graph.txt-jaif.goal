@@ -5,38 +5,38 @@ annotation @NonNull:
 package MapQuick1:
 class Graph$DuplicateEdgeException : // 0/- obj/class samples
   method DuplicateEdgeException(LMapQuick1/Graph;)V : // 0 samples
-    return: 
+    return:
   method DuplicateEdgeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
-    return: 
+    return:
     parameter #0 :  // s
 
 
 package MapQuick1:
 class Graph$DuplicateNodeException : // 0/- obj/class samples
   method DuplicateNodeException(LMapQuick1/Graph;)V : // 0 samples
-    return: 
+    return:
   method DuplicateNodeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
-    return: 
+    return:
     parameter #0 :  // s
 
 
 package MapQuick1:
 class Graph$GraphException : // 0/- obj/class samples
   method GraphException(LMapQuick1/Graph;)V : // 0 samples
-    return: 
+    return:
   method GraphException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
-    return: 
+    return:
     parameter #0 :  // s
   method getGraph()LMapQuick1/Graph; : // 0 samples
-    return: 
+    return:
 
 
 package MapQuick1:
 class Graph$NoNodeException : // 0/- obj/class samples
   method NoNodeException(LMapQuick1/Graph;)V : // 0 samples
-    return: 
+    return:
   method NoNodeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
-    return: 
+    return:
     parameter #0 :  // s
 
 
@@ -44,36 +44,36 @@ package MapQuick1:
 class Graph : // 5621/- obj/class samples
   field adjMap :  // java.util.LinkedHashMap
   method <init>()V : // 3 samples
-    return: 
-  method addEdge(Ljava/lang/Object;Ljava/lang/Object;)V : // 140 samples
-    return: 
-    parameter #0 :  // from
-    parameter #1 :  // to
+    return:
   method addEdge(Ljava/lang/Object;Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
-    return: 
+    return:
     parameter #0 :  // from
     parameter #1 :  // to
-  method addNode(Ljava/lang/Object;)V : // 82 samples
-    return: 
-    parameter #0 :  // node
+  method addEdge(Ljava/lang/Object;Ljava/lang/Object;)V : // 140 samples
+    return:
+    parameter #0 :  // from
+    parameter #1 :  // to
   method addNode(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
-    return: 
+    return:
     parameter #0 :  // node
-  method adjTo(Ljava/lang/Object;)Ljava/util/Set; : // 528 samples
-    return: 
+  method addNode(Ljava/lang/Object;)V : // 82 samples
+    return:
     parameter #0 :  // node
   method adjTo(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
-    return: 
+    return:
+    parameter #0 :  // node
+  method adjTo(Ljava/lang/Object;)Ljava/util/Set; : // 528 samples
+    return:
     parameter #0 :  // node
   method checkRep()V : // 1223 samples
-    return: 
+    return:
   method childrenOf(Ljava/lang/Object;)Ljava/util/Collection; : // 388 samples
-    return: 
+    return:
     parameter #0 :  // node
   method containsNode(Ljava/lang/Object;)Z : // 448 samples
-    return: 
+    return:
     parameter #0 :  // node
   method nodeSet()Ljava/util/Set; : // 0 samples
-    return: 
+    return:
 
 

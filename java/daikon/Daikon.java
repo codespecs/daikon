@@ -1592,10 +1592,10 @@ public final class Daikon {
       PptTopLevel exitnn_ppt = ppt;
       PptName exitnn_name = exitnn_ppt.ppt_name;
       PptName exit_name;
-      if (!exitnn_name.isThrowPoint()) {
+      if (exitnn_name.isExitPoint()) {
         exit_name = ppt.ppt_name.makeExit();
       } else {
-        exit_name = ppt.ppt_name.makeThrowExit();
+        exit_name = ppt.ppt_name.makeExceptionExit();
       }
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
@@ -2249,7 +2249,7 @@ public final class Daikon {
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
       if (p.ppt_name.isCombinedExitPoint()
-          || p.ppt_name.isCombinedThrowPoint()
+          || p.ppt_name.isCombinedExceptionPoint()
           || p.ppt_name.isEnterPoint()
           || p.ppt_name.isObjectInstanceSynthetic()
           || p.ppt_name.isClassStaticSynthetic()) {

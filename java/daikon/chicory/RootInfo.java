@@ -85,9 +85,9 @@ public class RootInfo extends DaikonVariableInfo {
     return root;
   }
 
-  /** Creates a RootInfo object for a method exitThrow program point. */
-  public static RootInfo throw_process(MethodInfo mi, int depth) {
-    debug_vars.clear("Building exit tree for %s%n", mi);
+  /** Creates a RootInfo object for a method exception exit program point. */
+  public static RootInfo exception_process(MethodInfo mi, int depth) {
+    debug_vars.clear("Building exception exit tree for %s%n", mi);
 
     RootInfo root = new RootInfo();
 
@@ -98,7 +98,7 @@ public class RootInfo extends DaikonVariableInfo {
 
     root = method_process(mi, depth);
 
-    // add a new ReturnInfo object to the traversal tree
+    // add a new ThrowInfo object to the traversal tree
     Class<?> returnType = Throwable.class;
     DaikonVariableInfo retInfo = new ThrowInfo(returnType);
     root.addChild(retInfo);
@@ -112,7 +112,7 @@ public class RootInfo extends DaikonVariableInfo {
             "exception" + class_suffix, classClassName, stringClassName, null, false);
     retInfo.addChild(childClass);
 
-    debug_vars.log("exit throw_process%n");
+    debug_vars.log("exit exception_process%n");
 
     return root;
   }

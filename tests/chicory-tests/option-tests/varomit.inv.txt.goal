@@ -64,13 +64,7 @@ this.topOfStack - orig(this.topOfStack) + 1 == 0
 DataStructures.StackAr.push(java.lang.Object):::ENTER
 x != null
 ===========================================================================
-DataStructures.StackAr.push(java.lang.Object):::EXIT
-this.topOfStack >= 0
-this.topOfStack - orig(this.topOfStack) - 1 == 0
-===========================================================================
-DataStructures.StackAr.push(java.lang.Object):::THROW97
-===========================================================================
-DataStructures.StackAr.push(java.lang.Object):::THROWSCOMBINED
+DataStructures.StackAr.push(java.lang.Object):::EXCEPTION
 this == orig(this)
 this.topOfStack == orig(this.topOfStack)
 x == orig(x)
@@ -82,6 +76,12 @@ orig(this) has only one value
 orig(x) has only one value
 orig(x.getClass().getName()) == DataStructures.StackAr.class
 x.getClass().getName() == orig(x.getClass().getName())
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXCEPTION97
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXIT
+this.topOfStack >= 0
+this.topOfStack - orig(this.topOfStack) - 1 == 0
 ===========================================================================
 DataStructures.StackAr.top():::ENTER
 ===========================================================================

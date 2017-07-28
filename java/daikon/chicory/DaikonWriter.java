@@ -36,80 +36,97 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Given a method, returns the method entry program point name for Daikon
+   * Given a method, returns the method entry program point name for Daikon.
    *
    * @param method non-null method
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(Member method) {
-    return methodName(method, "ENTER");
+    return methodName(method, daikon.FileIO.entry_suffix);
   }
 
   /**
-   * Given a method, returns the method entry program point name for Daikon method entry name for
-   * Daikon. Used when reflection information is not available
+   * Given a method, returns the method entry program point name for Daikon. Used when reflection
+   * information is not available.
    *
-   * @param types argument types
+   * @param fullClassName packageName.className
+   * @param types string representation of the declared types of the parameters
+   * @param name the method name with modifiers and parameters
+   * @param short_name just the method's name ("<init>" for constructors)
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(
       String fullClassName, String[] types, String name, String short_name) {
-    return methodName(fullClassName, types, name, short_name, "ENTER");
+    return methodName(fullClassName, types, name, short_name, daikon.FileIO.entry_suffix);
   }
+
   /**
    * Given a method, returns the method exit program point name for Daikon
    *
-   * @param method require method != null
-   * @param lineNum the line number of the exit point of the method
+   * @param method non-null method
+   * @param lineNum the line number of a return statement in the method
    * @return the decorated method exit name for Daikon
    */
   public static String methodExitName(Member method, int lineNum) {
-    return methodName(method, "EXIT" + lineNum);
+    return methodName(method, daikon.FileIO.exit_suffix + lineNum);
   }
+
   /**
-   * Given a method, returns the method exit program point name for Daikon
+   * Given a method, returns the method exit program point name for Daikon Used when reflection
+   * information is not available.
    *
-   * @param types argument types
-   * @param lineNum the line number of the exit point of the method
-   * @return the decorated method entry name for Daikon
+   * @param fullClassName packageName.className
+   * @param types string representation of the declared types of the parameters
+   * @param name the method name with modifiers and parameters
+   * @param short_name just the method's name ("<init>" for constructors)
+   * @param lineNum the line number of a return statement in the method
+   * @return the decorated method exit name for Daikon
    */
   public static String methodExitName(
       String fullClassName, String[] types, String name, String short_name, int lineNum) {
-    return methodName(fullClassName, types, name, short_name, "EXIT" + lineNum);
+    return methodName(fullClassName, types, name, short_name, daikon.FileIO.exit_suffix + lineNum);
   }
 
   /**
-   * Returns the program point name the Throw-Method for Daikon
+   * Constructs the program point name suffix for an exception exit
    *
-   * @param lineNum The line number of the throw point of the method -1 for Throws
-   * @return the ThrowExit program point name for Daikon
+   * @param lineNum the line number of a throw statement causing the exception exit or -1 for an
+   *     uncaught exception
+   * @return the exception name suffix for Daikon
    */
-  private static String methodThrowPointName(int lineNum) {
-    return lineNum < 0 ? "THROWS" : "THROW" + lineNum;
+  private static String exceptionSuffix(int lineNum) {
+    return lineNum < 0
+        ? daikon.FileIO.exception_uncaught_suffix
+        : daikon.FileIO.exception_suffix + lineNum;
   }
 
   /**
-   * Given a method, returns the method exitThrow program point name for Daikon
+   * Given a method, returns the method exception program point name for Daikon
    *
    * @param method non-null method
-   * @param lineNum The line number of the throw point of the method (-1 for passed Exception)
-   * @return the decorated method exitThrow name for Daikon
+   * @param lineNum the line number of a throw statement in the method or -1 for an uncaught
+   *     exception
+   * @return the decorated method exception name for Daikon
    */
-  public static String methodThrowName(Member method, int lineNum) {
-    return methodName(method, methodThrowPointName(lineNum));
+  public static String methodExceptionName(Member method, int lineNum) {
+    return methodName(method, exceptionSuffix(lineNum));
   }
 
   /**
-   * Given a method, returns the method exitThrow program point name for Daikon method exitThrow
-   * name for Daikon. Used when reflection information is not available
+   * Given a method, returns the method exception program point name for Daikon. Used when
+   * reflection information is not available.
    *
-   * @param types Argument types
-   * @param lineNum The line number of the throw point of the method (-1 for passed Exception)
-   * @return the decorated method exitThrow name for Daikon
+   * @param fullClassName packageName.className
+   * @param types string representation of the declared types of the parameters
+   * @param name the method name with modifiers and parameters
+   * @param short_name just the method's name ("<init>" for constructors)
+   * @param lineNum the line number of a throw statement in the method or -1 for an uncaught
+   *     exception
+   * @return the decorated method exception name for Daikon
    */
-  public static String methodThrowName(
+  public static String methodExceptionName(
       String fullClassName, String[] types, String name, String short_name, int lineNum) {
-    return methodName(fullClassName, types, name, short_name, methodThrowPointName(lineNum));
+    return methodName(fullClassName, types, name, short_name, exceptionSuffix(lineNum));
   }
 
   /**
@@ -126,7 +143,7 @@ public abstract class DaikonWriter {
    *    short_name: doNew
    * </pre>
    *
-   * @param point usually "EXIT" or "ENTER"
+   * @param point such as "EXIT" or "ENTER"
    * @return same thing as methodName(Member, point)
    */
   private static String methodName(

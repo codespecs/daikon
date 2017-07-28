@@ -900,7 +900,7 @@ public class PptRelation implements Serializable {
 
         // if an throw[s] point, parent is combined Exception point
       } else if (ppt.is_subexit() && pname.isExceptionPoint()) {
-        PptTopLevel parent = all_ppts.get(pname.makeThrowExit());
+        PptTopLevel parent = all_ppts.get(pname.makeExceptionExit());
         if (parent != null) {
           rels.add(newCombinedExitExitNNRel(parent, ppt));
         }

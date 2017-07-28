@@ -116,6 +116,32 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 (NEQ (arrayLength (select |theArray| |this|)) (stringLength (typeof |x|)))
 (NEQ (- (arrayLength (select |theArray| |this|)) 1) (stringLength (typeof |x|)))
 ===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXCEPTION
+(EQ (hash |this|) (hash |__orig__this|))
+(EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
+(EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
+(EQ (select |topOfStack| |this|) (- (arrayLength (select |theArray| |this|)) 1))
+(EQ (select |topOfStack| |this|) (- (arrayLength (select |theArray| |__orig__this|)) 1))
+(EQ (hash |x|) (hash |__orig__x|))
+(EQ (hash |__orig__this|) (hash |__orig__x|))
+(EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
+(EQ (stringLength (typeof |x|)) (stringLength (typeof |__orig__x|)))
+(EQ (hash (select |theArray| |this|)) (hashcode 1002))
+(AND (EQ (arrayLength (select |theArray| |this|)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
+(EQ (arrayLength (select |theArray| |this|)) 0)
+(EQ (hash |return|) (hashcode 1003))
+(EQ (typeof |return|) |T_DataStructures.Overflow|)
+(EQ (hash |__orig__this|) (hashcode 1004))
+(EQ (hash |__orig__x|) (hashcode 1004))
+(EQ (typeof |__orig__x|) |T_DataStructures.StackAr|)
+(EQ (stringLength (typeof |x|)) 22)
+(EQ (stringLength (typeof |return|)) 23)
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
+(EQ (typeof |x|) (typeof |__orig__x|))
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXCEPTION97
+===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
 (EQ (hash |__orig__x|) (hash (select (select elems (select |theArray| |this|)) (select |topOfStack| |this|))))
@@ -147,32 +173,6 @@ warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputForma
 (EQ (|java->>| (- (arrayLength (select |theArray| |this|)) 1) (stringLength (typeof |x|))) 0)
 (NEQ (- (arrayLength (select |theArray| |this|)) 1) (stringLength (typeof |x|)))
 (FORALL (|i|) (IMPLIES (AND (<= (select |topOfStack| |this|) |i|) (<= |i| (- (arrayLength (select |theArray| |__orig__this|)) 1))) (EQ (select (select elems (select |theArray| |__orig__this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) (select |topOfStack| |this|)))))
-===========================================================================
-DataStructures.StackAr.push(java.lang.Object):::THROW97
-===========================================================================
-DataStructures.StackAr.push(java.lang.Object):::THROWSCOMBINED
-(EQ (hash |this|) (hash |__orig__this|))
-(EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
-(EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
-(EQ (select |topOfStack| |this|) (- (arrayLength (select |theArray| |this|)) 1))
-(EQ (select |topOfStack| |this|) (- (arrayLength (select |theArray| |__orig__this|)) 1))
-(EQ (hash |x|) (hash |__orig__x|))
-(EQ (hash |__orig__this|) (hash |__orig__x|))
-(EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
-(EQ (stringLength (typeof |x|)) (stringLength (typeof |__orig__x|)))
-(EQ (hash (select |theArray| |this|)) (hashcode 1002))
-(AND (EQ (arrayLength (select |theArray| |this|)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
-(EQ (arrayLength (select |theArray| |this|)) 0)
-(EQ (hash |return|) (hashcode 1003))
-(EQ (typeof |return|) |T_DataStructures.Overflow|)
-(EQ (hash |__orig__this|) (hashcode 1004))
-(EQ (hash |__orig__x|) (hashcode 1004))
-(EQ (typeof |__orig__x|) |T_DataStructures.StackAr|)
-(EQ (stringLength (typeof |x|)) 22)
-(EQ (stringLength (typeof |return|)) 23)
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
-(EQ (typeof |x|) (typeof |__orig__x|))
 ===========================================================================
 DataStructures.StackAr.top():::ENTER
 ===========================================================================
