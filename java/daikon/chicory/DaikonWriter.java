@@ -52,7 +52,7 @@ public abstract class DaikonWriter {
    * @param fullClassName packageName.className
    * @param types string representation of the declared types of the parameters
    * @param name the method name with modifiers and parameters
-   * @param short_name just the method's name ("<init>" for constructors)
+   * @param short_name just the method's name ("&lt;init&gt;" for constructors)
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(
@@ -78,7 +78,7 @@ public abstract class DaikonWriter {
    * @param fullClassName packageName.className
    * @param types string representation of the declared types of the parameters
    * @param name the method name with modifiers and parameters
-   * @param short_name just the method's name ("<init>" for constructors)
+   * @param short_name just the method's name ("&lt;init&gt;" for constructors)
    * @param lineNum the line number of a return statement in the method
    * @return the decorated method exit name for Daikon
    */
@@ -119,7 +119,7 @@ public abstract class DaikonWriter {
    * @param fullClassName packageName.className
    * @param types string representation of the declared types of the parameters
    * @param name the method name with modifiers and parameters
-   * @param short_name just the method's name ("<init>" for constructors)
+   * @param short_name just the method's name ("&lt;init&gt;" for constructors)
    * @param lineNum the line number of a throw statement in the method or -1 for an uncaught
    *     exception
    * @return the decorated method exception name for Daikon
