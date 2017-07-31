@@ -1,6 +1,7 @@
 ABI
 accessor
 accessors
+acyclic
 ADDR
 AFS
 AMD
@@ -132,6 +133,7 @@ programmatically
 prover
 Randoop
 readelf
+refactored
 rethrown
 runnable
 runtime
