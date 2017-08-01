@@ -5,22 +5,39 @@ annotation @NonNull:
 package six170:
 class FixedSizeSet : // 23458/- obj/class samples
   field bits :  // boolean[]
+  method <init>()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method <init>()V : // 102 samples
-    return: 
+    return:
+  method add(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // n
   method add(I)V : // 1186 samples
-    return: 
+    return:
+    parameter #0 :  // n
+  method contains(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // n
   method contains(I)Z : // 10040 samples
-    return: 
+    return:
     parameter #0 :  // n
-  method intersect(Lsix170/FixedSizeSet;)V : // 31 samples
-    return: 
+  method intersect(Lsix170/FixedSizeSet;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // other
-  method remove(I)V : // 402 samples
-    return: 
+  method intersect(Lsix170/FixedSizeSet;)V : // 31 samples
+    return:
+    parameter #0 :  // other
+  method remove(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // n
+  method remove(I)V : // 402 samples
+    return:
+    parameter #0 :  // n
+  method union(Lsix170/FixedSizeSet;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // other
   method union(Lsix170/FixedSizeSet;)V : // 19 samples
-    return: 
+    return:
     parameter #0 :  // other
 
 

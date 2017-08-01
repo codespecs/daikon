@@ -108,23 +108,51 @@ this.root == \old(this.root)
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
     Variables: this this.root x x.getClass().getName()
-x != null
 (x != null)  ==>  (x.getClass().getName() == DataStructures.MyInteger.class.getName())
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTION
+    Variables: this this.root x x.getClass().getName() exception exception.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName())
+this == \old(this)
+this.root == \old(this.root)
+x == \old(x)
+this.root != null
+Exception != null
+Exception.getClass().getName() == java.lang.NullPointerException.class.getName()
+\old(x) == null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTIONUNCAUGHT
+    Variables: this this.root x x.getClass().getName() exception exception.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName())
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
     Variables: this this.root x x.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName())
 assignable this.root
 this.root != null
+\old(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
     Variables: this this.root x x.getClass().getName() t
-x != null
 (x != null)  ==>  (x.getClass().getName() == DataStructures.MyInteger.class.getName())
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION
+    Variables: this this.root x x.getClass().getName() t exception exception.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName()) orig(t)
+this == \old(this)
+this.root == t
+this.root == \old(this.root)
+this.root == \old(t)
+x == \old(x)
+this.root != null
+Exception != null
+Exception.getClass().getName() == java.lang.NullPointerException.class.getName()
+\old(x) == null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT
+    Variables: this this.root x x.getClass().getName() t exception exception.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName()) orig(t)
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
     Variables: this this.root x x.getClass().getName() t return orig(this) orig(this.root) orig(x) orig(x.getClass().getName()) orig(t)
 this.root == \old(this.root)
 \result != null
+\old(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.isEmpty():::ENTER
     Variables: this this.root

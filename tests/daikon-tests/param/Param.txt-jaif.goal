@@ -8,15 +8,28 @@ class Param : // 203/- obj/class samples
   field gi2 :  // int
   field gs1 :  // misc.ParamType
   field gs2 :  // misc.ParamType
-  method main([Ljava/lang/String;)V : // 1 samples
-    return: 
+  method main([Ljava/lang/String;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // args
+  method main([Ljava/lang/String;)V : // 1 samples
+    return:
+    parameter #0 :  // args
+  method <init>()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method <init>()V : // 1 samples
-    return: 
+    return:
+  method main()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method main()V : // 1 samples
-    return: 
+    return:
+  method work(IILmisc/ParamType;Lmisc/ParamType;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // pi1
+    parameter #1 :  // pi2
+    parameter #2 :  // ps1
+    parameter #3 :  // ps2
   method work(IILmisc/ParamType;Lmisc/ParamType;)V : // 100 samples
-    return: 
+    return:
     parameter #0 :  // pi1
     parameter #1 :  // pi2
     parameter #2 :  // ps1
@@ -27,7 +40,9 @@ package misc:
 class ParamType : // 102/- obj/class samples
   field a :  // int
   field b :  // int
+  method <init>()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method <init>()V : // 102 samples
-    return: 
+    return:
 
 

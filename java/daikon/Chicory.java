@@ -119,9 +119,6 @@ public class Chicory {
   @Option("Number of calls after which sampling will begin")
   public static int sample_start = 0;
 
-  @Option("Add all uncaught exceptions to the ppt hierarchy")
-  public static boolean exception_handling = false;
-
   @Option("Enable remote debug")
   public static boolean remote_debug = false;
 

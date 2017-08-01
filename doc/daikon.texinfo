@@ -3891,15 +3891,6 @@ command-line argument is given.
 The size is specified in the same manner as the
 @option{--Xmx} switch to @command{java}; for example: @option{--heap-size=2048m}.
 
-@item --exception-handling
-By default, Chicory only traces the call of an exception
-(@code{throw new Exception();}) which leads to an exit of the current method.
-With the @option{--exception-handling} parameter, Chicory will catch all
-uncaught Exceptions (thrown and delegated) in all the methods and produce a
-valid Dataflow hierarchy and trace.  To realize it, Chicory encapsulates
-every method-block with an try-catch-block, which then catches the delegated
-exceptions.
-
 @end table
 
 
@@ -7973,8 +7964,7 @@ points are encountered.
 @option{--nohierarchy} switch to Daikon;
 see @ref{Options to control invariant detection}.)
 If no @code{:::EXIT} or @code{:::EXCEPTION} program points are present
-(perhaps every execution threw an exception and
-@option{--exception-handling} was not active, or you filtered out
+(perhaps every execution threw an exception or you filtered out
 all the @code{:::EXIT} and @code{:::EXCEPTION} program points, or the
 data trace is obtained from
 spreadsheet data instead of from a program execution),

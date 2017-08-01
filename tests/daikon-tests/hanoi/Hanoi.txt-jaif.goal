@@ -7,27 +7,49 @@ class Hanoi : // 2208/- obj/class samples
   field diskLocation :  // int[]
   field height :  // int
   field noOutput :  // boolean
-  method otherPeg(II)I : // 342 samples
-    return: 
+  method otherPeg(II)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // pegA
     parameter #1 :  // pegB
-  method <init>(I)V : // 6 samples
-    return: 
+  method otherPeg(II)I : // 342 samples
+    return:
+    parameter #0 :  // pegA
+    parameter #1 :  // pegB
+  method <init>(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // height
-  method <init>(IZ)V : // 6 samples
-    return: 
+  method <init>(I)V : // 6 samples
+    return:
+    parameter #0 :  // height
+  method <init>(IZ)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // height
     parameter #1 :  // noOutput
-  method moveDisk(II)V : // 360 samples
-    return: 
+  method <init>(IZ)V : // 6 samples
+    return:
+    parameter #0 :  // height
+    parameter #1 :  // noOutput
+  method moveDisk(II)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // fromPeg
     parameter #1 :  // toPeg
-  method moveTower(III)V : // 360 samples
-    return: 
+  method moveDisk(II)V : // 360 samples
+    return:
+    parameter #0 :  // fromPeg
+    parameter #1 :  // toPeg
+  method moveTower(III)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // fromPeg
     parameter #1 :  // toPeg
     parameter #2 :  // towerHeight
+  method moveTower(III)V : // 360 samples
+    return:
+    parameter #0 :  // fromPeg
+    parameter #1 :  // toPeg
+    parameter #2 :  // towerHeight
+  method showTowers()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method showTowers()V : // 378 samples
-    return: 
+    return:
 
 

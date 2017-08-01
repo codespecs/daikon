@@ -431,21 +431,33 @@ return != null
 orig(t) != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
-x != null
 x.getClass().getName() == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTION
+this == orig(this)
+this.root == orig(this.root)
+x == orig(x)
+this.root != null
+exception != null
+exception.getClass().getName() == java.lang.NullPointerException.class
+orig(x) == null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTIONUNCAUGHT
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
 this.root != null
+orig(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 (this.root == null)  ==>  (t == null)
 (this.root == null)  ==>  (this.root == t)
-x != null
+(this.root == null)  ==>  (x != null)
 x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER;condition="root == null"
 this.root == t
 this.root == null
+x != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER;condition="not(root == null)"
 this.root != null
@@ -458,14 +470,70 @@ x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER;condition="not(isEmpty())"
 this.root != null
-x != null
 x.getClass().getName() == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION
+this == orig(this)
+this.root == orig(this.root)
+x == orig(x)
+t == orig(t)
+this.root != null
+exception != null
+exception.getClass().getName() == java.lang.NullPointerException.class
+orig(x) == null
+orig(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION;condition="not(orig(root == null))"
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION;condition="not(root == null)"
+this == orig(this)
+this.root == orig(this.root)
+x == orig(x)
+t == orig(t)
+this.root != null
+exception != null
+exception.getClass().getName() == java.lang.NullPointerException.class
+orig(x) == null
+orig(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION;condition="not(isEmpty())"
+this == orig(this)
+this.root == orig(this.root)
+x == orig(x)
+t == orig(t)
+this.root != null
+exception != null
+exception.getClass().getName() == java.lang.NullPointerException.class
+orig(x) == null
+orig(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION;condition="not(orig(isEmpty()))"
+this == orig(this)
+this.root == orig(this.root)
+x == orig(x)
+t == orig(t)
+this.root != null
+exception != null
+exception.getClass().getName() == java.lang.NullPointerException.class
+orig(x) == null
+orig(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT;condition="not(orig(root == null))"
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT;condition="not(isEmpty())"
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT;condition="not(orig(isEmpty()))"
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
 (this.root == null)  ==>  (orig(t) == null)
 (this.root == null)  ==>  (this.root == orig(t))
 return != null
+orig(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
 this.root == orig(t)
@@ -484,6 +552,7 @@ DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures
 this.root == orig(this.root)
 this.root != null
 return != null
+orig(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="isEmpty()"
 this.root == orig(this.root)
@@ -495,6 +564,7 @@ DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures
 this.root == orig(this.root)
 this.root != null
 return != null
+orig(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(isEmpty())"
 this.root == orig(this.root)

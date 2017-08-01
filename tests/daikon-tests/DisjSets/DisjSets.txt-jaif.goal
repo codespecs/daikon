@@ -5,18 +5,32 @@ annotation @NonNull:
 package DataStructures:
 class DisjSets : // 23589/- obj/class samples
   field s :  // int[]
-  method <init>(I)V : // 29 samples
-    return: 
+  method <init>(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // numElements
-  method find(I)I : // 11018 samples
-    return: 
+  method <init>(I)V : // 29 samples
+    return:
+    parameter #0 :  // numElements
+  method find(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // x
-  method unionCareful(II)V : // 576 samples
-    return: 
+  method find(I)I : // 11018 samples
+    return:
+    parameter #0 :  // x
+  method unionCareful(II)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // set1
     parameter #1 :  // set2
+  method unionCareful(II)V : // 576 samples
+    return:
+    parameter #0 :  // set1
+    parameter #1 :  // set2
+  method unionDisjoint(II)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // root1
+    parameter #1 :  // root2
   method unionDisjoint(II)V : // 186 samples
-    return: 
+    return:
     parameter #0 :  // root1
     parameter #1 :  // root2
 

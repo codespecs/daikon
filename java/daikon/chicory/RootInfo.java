@@ -1,6 +1,5 @@
 package daikon.chicory;
 
-import daikon.Chicory;
 import java.lang.reflect.*;
 import java.util.Arrays;
 
@@ -90,8 +89,6 @@ public class RootInfo extends DaikonVariableInfo {
     debug_vars.clear("Building exception exit tree for %s%n", mi);
 
     RootInfo root = new RootInfo();
-
-    if (mi.throw_locations.isEmpty() && !Chicory.exception_handling) return root;
 
     // Don't build a tree for class initializers.
     if (mi.is_class_init()) return root;

@@ -84,19 +84,43 @@ DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT
 (EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
-(NEQ (hash |x|) null)
 (EQ (typeof |x|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTION
+(EQ (hash |this|) (hash |__orig__this|))
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(EQ (hash |x|) (hash |__orig__x|))
+(NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |return|) null)
+(EQ (typeof |return|) |T_java.lang.NullPointerException|)
+(EQ (hash |__orig__x|) null)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTIONUNCAUGHT
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
 (NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |__orig__x|) null)
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
-(NEQ (hash |x|) null)
 (EQ (typeof |x|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION
+(EQ (hash |this|) (hash |__orig__this|))
+(EQ (hash (select |root| |this|)) (hash |t|))
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(EQ (hash (select |root| |this|)) (hash |__orig__t|))
+(EQ (hash |x|) (hash |__orig__x|))
+(NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |return|) null)
+(EQ (typeof |return|) |T_java.lang.NullPointerException|)
+(EQ (hash |__orig__x|) null)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
 (EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
 (NEQ (hash |return|) null)
+(NEQ (hash |__orig__x|) null)
 ===========================================================================
 DataStructures.BinarySearchTree.isEmpty():::ENTER
 ===========================================================================

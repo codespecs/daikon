@@ -340,7 +340,11 @@ public class AnnotateNullable {
       System.out.printf("); // %d samples%n", ppt.num_samples());
     } else {
       System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
-      System.out.printf("    return: %s%n", return_annotation);
+      if (return_annotation != "") {
+        System.out.printf("    return: %s%n", return_annotation);
+      } else {
+        System.out.printf("    return:%n");
+      }
       for (int i = 0; i < params.size(); i++) {
         // Print the annotation for this parameter
         System.out.printf("    parameter #%d : %s // %s%n", i, annos.get(i), names.get(i));

@@ -84,19 +84,43 @@ DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
-x != null
 x.getClass().getName() == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTION
+this == orig(this)
+this.root == orig(this.root)
+x == orig(x)
+this.root != null
+exception != null
+exception.getClass().getName() == java.lang.NullPointerException.class
+orig(x) == null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTIONUNCAUGHT
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
 this.root != null
+orig(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
-x != null
 x.getClass().getName() == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION
+this == orig(this)
+this.root == t
+this.root == orig(this.root)
+this.root == orig(t)
+x == orig(x)
+this.root != null
+exception != null
+exception.getClass().getName() == java.lang.NullPointerException.class
+orig(x) == null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
 return != null
+orig(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.isEmpty():::ENTER
 ===========================================================================

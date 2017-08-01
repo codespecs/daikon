@@ -311,11 +311,8 @@ public class DeclWriter extends DaikonWriter {
             comp_info);
       }
 
-      if (Chicory.exception_handling) {
-        RootInfo exceptionRoot = mi.traversalException;
-        print_method(
-            mi, exceptionRoot, methodExceptionName(member, -1), PptType.SUBEXIT, comp_info);
-      }
+      RootInfo exceptionRoot = mi.traversalException;
+      print_method(mi, exceptionRoot, methodExceptionName(member, -1), PptType.SUBEXIT, comp_info);
     }
 
     print_class_ppt(cinfo, cinfo.class_name + ":::CLASS", comp_info);

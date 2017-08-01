@@ -5,7 +5,7 @@
 MAIN_CLASS:= ExceptionHandling.ExceptionHTest
 THISPWD:=$(shell pwd)
 
-CHICORY_USER_FLAGS:= --exception-handling --purity-file=${THISPWD}/DaikonAnalyse.pure
+CHICORY_USER_FLAGS:= --purity-file=${THISPWD}/DaikonAnalyse.pure
 
 include ../../Makefile.common
 

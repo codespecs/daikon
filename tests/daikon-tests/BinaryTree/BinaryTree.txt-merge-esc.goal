@@ -30,10 +30,10 @@ public class BinarySearchTree<E extends Comparable>
     root = null;
   }
 
-  /*@ requires x != null; */
   /*@ requires \typeof(x) == \type(DataStructures.MyInteger); */
   /*@ modifies this.root; */
   /*@ ensures this.root != null; */
+  /*@ ensures \old(x) != null; */
   /**
    * Insert into the tree; duplicates are ignored.
    * @param x the item to insert.
@@ -133,9 +133,9 @@ public class BinarySearchTree<E extends Comparable>
     return t == null ? null : t.element;
   }
 
-  /*@ requires x != null; */
   /*@ requires \typeof(x) == \type(DataStructures.MyInteger); */
   /*@ ensures \result != null; */
+  /*@ ensures \old(x) != null; */
   /**
    * Internal method to insert into a subtree.
    * @param x the item to insert.

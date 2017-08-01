@@ -4,8 +4,13 @@ annotation @NonNull:
 
 package MapQuick1:
 class Graph$DuplicateEdgeException : // 0/- obj/class samples
+  method DuplicateEdgeException(LMapQuick1/Graph;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method DuplicateEdgeException(LMapQuick1/Graph;)V : // 0 samples
     return:
+  method DuplicateEdgeException(LMapQuick1/Graph;Ljava/lang/String;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // s
   method DuplicateEdgeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
     return:
     parameter #0 :  // s
@@ -13,8 +18,13 @@ class Graph$DuplicateEdgeException : // 0/- obj/class samples
 
 package MapQuick1:
 class Graph$DuplicateNodeException : // 0/- obj/class samples
+  method DuplicateNodeException(LMapQuick1/Graph;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method DuplicateNodeException(LMapQuick1/Graph;)V : // 0 samples
     return:
+  method DuplicateNodeException(LMapQuick1/Graph;Ljava/lang/String;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // s
   method DuplicateNodeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
     return:
     parameter #0 :  // s
@@ -22,19 +32,31 @@ class Graph$DuplicateNodeException : // 0/- obj/class samples
 
 package MapQuick1:
 class Graph$GraphException : // 0/- obj/class samples
+  method GraphException(LMapQuick1/Graph;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method GraphException(LMapQuick1/Graph;)V : // 0 samples
     return:
+  method GraphException(LMapQuick1/Graph;Ljava/lang/String;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // s
   method GraphException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
     return:
     parameter #0 :  // s
+  method getGraph()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method getGraph()LMapQuick1/Graph; : // 0 samples
     return:
 
 
 package MapQuick1:
 class Graph$NoNodeException : // 0/- obj/class samples
+  method NoNodeException(LMapQuick1/Graph;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method NoNodeException(LMapQuick1/Graph;)V : // 0 samples
     return:
+  method NoNodeException(LMapQuick1/Graph;Ljava/lang/String;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // s
   method NoNodeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
     return:
     parameter #0 :  // s
@@ -43,6 +65,8 @@ class Graph$NoNodeException : // 0/- obj/class samples
 package MapQuick1:
 class Graph : // 5621/- obj/class samples
   field adjMap :  // java.util.LinkedHashMap
+  method <init>()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method <init>()V : // 3 samples
     return:
   method addEdge(Ljava/lang/Object;Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
@@ -65,14 +89,24 @@ class Graph : // 5621/- obj/class samples
   method adjTo(Ljava/lang/Object;)Ljava/util/Set; : // 528 samples
     return:
     parameter #0 :  // node
+  method checkRep()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method checkRep()V : // 1223 samples
     return:
+  method childrenOf(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // node
   method childrenOf(Ljava/lang/Object;)Ljava/util/Collection; : // 388 samples
+    return:
+    parameter #0 :  // node
+  method containsNode(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
     return:
     parameter #0 :  // node
   method containsNode(Ljava/lang/Object;)Z : // 448 samples
     return:
     parameter #0 :  // node
+  method nodeSet()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method nodeSet()Ljava/util/Set; : // 0 samples
     return:
 

@@ -5,32 +5,59 @@ annotation @NonNull:
 package PolyCalc:
 class RatTermVec : // 164488/- obj/class samples
   field wrapped :  // java.util.ArrayList
+  method <init>()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method <init>()V : // 1042 samples
-    return: 
+    return:
+  method addElement(LPolyCalc/RatTerm;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // t
   method addElement(LPolyCalc/RatTerm;)V : // 749 samples
-    return: 
+    return:
     parameter #0 :  // t
+  method copy()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method copy()LPolyCalc/RatTermVec; : // 426 samples
-    return: 
+    return:
+  method get(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // index
   method get(I)LPolyCalc/RatTerm; : // 37190 samples
-    return: 
+    return:
     parameter #0 :  // index
+  method insert(LPolyCalc/RatTerm;I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // t
+    parameter #1 :  // index
   method insert(LPolyCalc/RatTerm;I)V : // 116 samples
-    return: 
+    return:
     parameter #0 :  // t
     parameter #1 :  // index
+  method printDebug()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method printDebug()Ljava/lang/String; : // 26 samples
-    return: 
-  method remove(I)V : // 96 samples
-    return: 
+    return:
+  method remove(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // index
-  method set(LPolyCalc/RatTerm;I)V : // 518 samples
-    return: 
+  method remove(I)V : // 96 samples
+    return:
+    parameter #0 :  // index
+  method set(LPolyCalc/RatTerm;I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // t
     parameter #1 :  // index
+  method set(LPolyCalc/RatTerm;I)V : // 518 samples
+    return:
+    parameter #0 :  // t
+    parameter #1 :  // index
+  method size()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method size()I : // 42576 samples
-    return: 
+    return:
+  method toString()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method toString()Ljava/lang/String; : // 26 samples
-    return: 
+    return:
 
 

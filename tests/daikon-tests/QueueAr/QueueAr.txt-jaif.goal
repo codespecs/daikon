@@ -8,10 +8,17 @@ class QueueAr : // 14931/- obj/class samples
   field currentSize :  // int
   field front :  // int
   field back :  // int
+  method <init>(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // capacity
   method <init>(I)V : // 37 samples
     return:
     parameter #0 :  // capacity
+  method dequeue()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method dequeue()Ljava/lang/Object; : // 536 samples
+    return:
+  method dequeueAll()V throws Ljava/lang/Throwable; : // 0 samples
     return:
   method dequeueAll()V : // 4 samples
     return:
@@ -21,11 +28,19 @@ class QueueAr : // 14931/- obj/class samples
   method enqueue(Ljava/lang/Object;)V : // 673 samples
     return:
     parameter #0 :  // x
+  method getFront()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method getFront()Ljava/lang/Object; : // 1231 samples
     return: @Nullable
+  method isEmpty()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method isEmpty()Z : // 3070 samples
     return:
+  method isFull()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method isFull()Z : // 1904 samples
+    return:
+  method makeEmpty()V throws Ljava/lang/Throwable; : // 0 samples
     return:
   method makeEmpty()V : // 29 samples
     return:
