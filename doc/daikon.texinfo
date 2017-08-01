@@ -2104,7 +2104,7 @@ invariant does not hold.)
 
 The Java instrumenter Chicory selects names for program
 points that include an indication of the argument and return types for
-each method.  These signatures are presented in the @option{JML} format: one
+each method.  These signatures are presented in Class.getName format: one
 character for each primitive type (@samp{B} for byte, @samp{C} for
 character, @samp{Z} for boolean (so as not to clash with byte), etc.);
 @samp{L@var{classname};} for object types; and a @samp{[}
