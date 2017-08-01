@@ -6702,7 +6702,7 @@ java daikon.PrintInvariants @i{[@var{flags}]} @var{inv-file}
 These flags are only briefly summarized here.
 For more information about these flags, see @ref{Configuration options}.
 
-In particular, see the configuration opitons whose names start with
+In particular, see the configuration options whose names start with
 @code{daikon.PrintInvariants}; see @ref{General configuration options}.
 
 @table @option
