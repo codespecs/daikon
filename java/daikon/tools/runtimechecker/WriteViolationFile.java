@@ -1,7 +1,11 @@
 package daikon.tools.runtimechecker;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /*>>>
@@ -23,6 +27,7 @@ class WriteViolationFile {
     System.out.println("Output is written to file \"violations.txt\" in the current directory.");
   }
 
+  @SuppressWarnings("Finally")
   public static void main(String[] args) {
     if (args.length == 0) {
       System.out.println("Error: no class specified");
@@ -78,8 +83,7 @@ class WriteViolationFile {
 
       // On-the-fly implementation should flush after each violation is
       // written to disk.
-      try {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("violations.txt"));
+      try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("violations.txt"), UTF_8)) {
         writer.write(
             "# Times an invariant was evaluated ----------- "
                 + Long.toString(Runtime.numEvaluations)
@@ -108,7 +112,6 @@ class WriteViolationFile {
             writer.newLine();
           }
         }
-        writer.close();
       } catch (IOException e) {
         throw new Error("Problem while writing file violations.txt", e);
       }

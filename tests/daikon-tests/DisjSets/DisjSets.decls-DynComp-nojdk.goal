@@ -8,11 +8,11 @@ DataStructures.DisjSets:::CLASS
 DECLARE
 DataStructures.DisjSets:::OBJECT
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 2
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.s[..]
@@ -31,11 +31,11 @@ int
 DECLARE
 DataStructures.DisjSets.DisjSets(int):::EXIT32
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.s[..]
@@ -51,11 +51,11 @@ int
 DECLARE
 DataStructures.DisjSets.unionDisjoint(int, int):::ENTER
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.s[..]
@@ -74,11 +74,11 @@ int
 DECLARE
 DataStructures.DisjSets.unionDisjoint(int, int):::EXIT44
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.s[..]
@@ -98,11 +98,11 @@ int
 DECLARE
 DataStructures.DisjSets.unionCareful(int, int):::ENTER
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.s[..]
@@ -121,11 +121,11 @@ int
 DECLARE
 DataStructures.DisjSets.unionCareful(int, int):::EXIT57
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.s[..]
@@ -145,11 +145,11 @@ int
 DECLARE
 DataStructures.DisjSets.find(int):::ENTER
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 2
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.s[..]
@@ -164,11 +164,11 @@ int
 DECLARE
 DataStructures.DisjSets.find(int):::EXIT68
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.s[..]
@@ -187,11 +187,11 @@ int
 DECLARE
 DataStructures.DisjSets.find(int):::EXIT70
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.s[..]
@@ -211,11 +211,11 @@ int
 DECLARE
 DataStructures.DisjSets.equals(java.lang.Object):::ENTER
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 3
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.s[..]
@@ -234,11 +234,11 @@ java.lang.String
 DECLARE
 DataStructures.DisjSets.equals(java.lang.Object):::EXIT1
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.s[..]
@@ -262,11 +262,11 @@ boolean
 DECLARE
 DataStructures.DisjSets.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 3
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.s[..]
@@ -285,11 +285,11 @@ java.lang.String
 DECLARE
 DataStructures.DisjSets.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.DisjSets # isNonNull=true isParam=true
+DataStructures.DisjSets # isNonNull=true, isParam=true
 hashcode
 4
 this.s
-int[] # declaringClassPackageName=DataStructures, 
+int[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.s[..]

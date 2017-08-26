@@ -1,5 +1,7 @@
 package daikon;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.FileIO.ParentRelation;
 import daikon.PptRelation.PptRelationType;
 import daikon.VarInfo.VarFlags;
@@ -13,6 +15,8 @@ import daikon.split.PptSplitter;
 import daikon.suppress.*;
 import gnu.getopt.*;
 import java.io.*;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -213,7 +217,7 @@ public final class PrintInvariants {
    */
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
-  // Stores the output file stream if --output is specified.
+  // Stores the output file stream if --output is specified.  Null means System.out.
   private static /*@Nullable*/ OutputStream out_stream = null;
   private static boolean print_csharp_metadata = false;
 
@@ -698,17 +702,18 @@ public final class PrintInvariants {
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants(PptMap all_ppts) {
 
-    PrintWriter pw;
     if (out_stream == null) {
-      pw = new PrintWriter(System.out, true);
-    } else {
-      pw = new PrintWriter(out_stream, true);
+      out_stream = System.out;
     }
+    PrintWriter pw =
+        new PrintWriter(new BufferedWriter(new OutputStreamWriter(out_stream, UTF_8)), true);
 
     PptTopLevel combined_exit = null;
     boolean enable_exit_swap = true; // !Daikon.dkconfig_df_bottom_up;
 
-    if (Daikon.no_text_output) return;
+    if (Daikon.no_text_output) {
+      return;
+    }
 
     // Retrieve Ppt objects in sorted order.  Put them in an array list
     // so that it is easier to look behind and ahead.
@@ -813,7 +818,7 @@ public final class PrintInvariants {
       }
     }
 
-    // Be silent if we never saw any samples.
+    // Skip this ppt if it never saw any samples.
     // (Maybe this test isn't even necessary, but will be subsumed by others,
     // as all the invariants will be unjustified.)
     if (ppt.num_samples() == 0) {
@@ -846,7 +851,7 @@ public final class PrintInvariants {
     }
     // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
-    out.println("===========================================" + "================================");
+    out.println("===========================================================================");
 
     print_invariants(ppt, out, all_ppts);
 
@@ -1018,9 +1023,6 @@ public final class PrintInvariants {
   public static void print_invariant(
       Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt) {
 
-    int inv_num_samps = inv.ppt.num_samples();
-    String num_values_samples = "\t\t(" + nplural(inv_num_samps, "sample") + ")";
-
     String inv_rep = inv.format_using(Daikon.output_format);
     assert inv_rep != null : String.format("Null format (%s): %s", inv.getClass(), inv);
 
@@ -1042,10 +1044,7 @@ public final class PrintInvariants {
       }
     }
 
-    /*
-     * Special print for c sharp contracts that provides additional
-     * information about each invariant.
-     */
+    // Addditional information about C# (C Sharp) contracts.
     if (Daikon.output_format == OutputFormat.CSHARPCONTRACT) {
 
       String csharp = inv.format_using(OutputFormat.CSHARPCONTRACT);
@@ -1085,7 +1084,12 @@ public final class PrintInvariants {
       return;
     }
 
+    // Returns "" unless PrintInvariants.dkconfig_print_inv_class is set.
+    inv_rep += inv.format_classname();
+
     if (Daikon.output_num_samples) {
+      int inv_num_samps = inv.ppt.num_samples();
+      String num_values_samples = "\t\t(" + nplural(inv_num_samps, "sample") + ")";
       inv_rep += num_values_samples;
     }
 
@@ -1281,8 +1285,7 @@ public final class PrintInvariants {
     }
     if (debugFiltering.isLoggable(Level.FINE)) {
       debugFiltering.fine(
-          "----------------------------------------"
-              + "--------------------------------------------------------");
+          "---------------------------------------------------------------------------");
       debugFiltering.fine(ppt.name());
     }
 
@@ -1301,7 +1304,9 @@ public final class PrintInvariants {
       }
     }
 
-    if (debugBound.isLoggable(Level.FINE)) ppt.debug_unary_info(debugBound);
+    if (debugBound.isLoggable(Level.FINE)) {
+      ppt.debug_unary_info(debugBound);
+    }
 
     Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);

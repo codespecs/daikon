@@ -1,9 +1,13 @@
 package daikon.tools;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.*;
 import daikon.inv.*;
 import gnu.getopt.*;
 import java.io.*;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.*;
@@ -151,7 +155,8 @@ public class ExtractConsequent {
       extract_consequent_maybe(ppt, ppts);
     }
 
-    PrintWriter pw = new PrintWriter(System.out, true);
+    PrintWriter pw =
+        new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8)), true);
 
     // All conditions at a program point.  A TreeSet to enable
     // deterministic output.

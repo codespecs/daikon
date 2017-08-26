@@ -721,10 +721,11 @@ public final class FeatureExtractor {
     TreeSet<IntDoublePair> final_answer = new TreeSet<IntDoublePair>();
     HashSet<Integer> index = new HashSet<Integer>();
     for (IntDoublePair current : answer) {
-      if (!(index.contains(current.number))) {
+      Integer current_number = current.number;
+      if (!(index.contains(current_number))) {
         final_answer.add(current);
       }
-      index.add(current.number);
+      index.add(current_number);
     }
 
     return final_answer;

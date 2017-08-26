@@ -639,9 +639,8 @@ public final class Daikon {
         List<Invariant> invs = PrintInvariants.sort_invariant_list(ppt.invariants_vector());
         List<Invariant> filtered_invs = filter_invs(invs);
 
-        // Sometimes the program points actually differ in number of
-        // samples seen due to differences in how Daikon and DaikonSimple
-        // see the variable hierarchy.
+        // Debugging output.  Sometimes the program points actually differ in number of samples seen
+        // due to differences in how Daikon and DaikonSimple see the variable hierarchy.
         if (false) {
           System.out.println("====================================================");
           System.out.println(ppt.name());

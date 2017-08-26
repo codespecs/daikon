@@ -427,10 +427,10 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       #endif
     #elif defined (IS_STRING)
       #if defined (EQUALSTRING) || defined (NONEQUALSTRING)
-        boolean result = (!(vis[0].has_typeof() ^ vis[0].has_typeof()));
+        boolean result = (!(vis[0].has_typeof() ^ vis[1].has_typeof()));
         return result;
       #else
-        boolean result = (!(vis[0].has_typeof() || vis[0].has_typeof()));
+        boolean result = (!(vis[0].has_typeof() || vis[1].has_typeof()));
         // System.out.printf(INTEQUALstring + ".instantiate_ok(");
         // for (VarInfo vi : vis) {
         //   System.out.printf("%s ", vi.name());
