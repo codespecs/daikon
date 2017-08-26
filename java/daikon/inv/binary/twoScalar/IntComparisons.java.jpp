@@ -796,7 +796,9 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #endif
 
   // For Comparison interface
+#if defined(EQUAL_OP)
   @Override
+#endif
   public double eq_confidence() {
     if (isExact()) {
       return getConfidence();

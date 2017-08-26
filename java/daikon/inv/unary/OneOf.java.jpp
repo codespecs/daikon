@@ -1617,7 +1617,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
         Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
         for (String s : vsValidValues) {
-          setValidValues.add(new NUMWRAPPER(s));
+          setValidValues.add(NUMWRAPPER.valueOf(s));
         }
         Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
         for (INT e : elts) {
@@ -1705,17 +1705,20 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         && v.aux.getInt(VarInfoAux.MINIMUM_LENGTH) == 1) {
       #if defined(SEQUENCE)
       #define BASETYPE Long
+      #define NEW_BASETYPE Long.valueOf
       #elif defined(FLOATSEQUENCE)
       #define BASETYPE Double
+      #define NEW_BASETYPE Double.valueOf
       #else
       #define BASETYPE String
+      #define NEW_BASETYPE
       #endif
 
       @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<BASETYPE> setValidValues = new TreeSet<BASETYPE>();
       for (String s : vsValidValues) {
-        setValidValues.add(new BASETYPE(s));
+        setValidValues.add(NEW_BASETYPE(s));
       }
       Set<BASETYPE> setValuesInvariant = new TreeSet<BASETYPE>();
       for (INT e : elts) {
@@ -1750,7 +1753,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
       for (String s : vsValidValues) {
-        setValidValues.add(new NUMWRAPPER(s));
+        setValidValues.add(NUMWRAPPER.valueOf(s));
       }
       Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
       for (INT e : elts) {

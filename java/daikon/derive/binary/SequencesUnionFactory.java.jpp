@@ -46,6 +46,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 public final class SCALARSEQUENCESUNIONFACTORY extends BinaryDerivationFactory {
 
+  @Override
   public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo seq1, VarInfo seq2) {
     if (!SCALARSEQUENCESUNION.dkconfig_enabled) {
       return null;

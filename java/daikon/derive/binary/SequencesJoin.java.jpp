@@ -122,10 +122,10 @@ public final class CLASSNAME extends BinaryDerivation {
       Object e1 = null;
       Object e2 = null;
       if (val1 instanceof PRIMITIVE[]) {
-        e1 = new NUMWRAPPER(((PRIMITIVE[]) val1)[i]);
+        e1 = NUMWRAPPER.valueOf(((PRIMITIVE[]) val1)[i]);
       }
       if (val2 instanceof PRIMITIVE[]) {
-        e2 = new NUMWRAPPER(((PRIMITIVE[]) val2)[i]);
+        e2 = NUMWRAPPER.valueOf(((PRIMITIVE[]) val2)[i]);
       }
       if (val1 instanceof Object[]) {
         e1 = ((Object[]) val1)[i];
@@ -133,8 +133,8 @@ public final class CLASSNAME extends BinaryDerivation {
       if (val2 instanceof Object[]) {
         e2 = ((Object[]) val2)[i];
       }
-      if (e1 == null) e1 = new NUMWRAPPER(0);
-      if (e2 == null) e2 = new NUMWRAPPER(0);
+      if (e1 == null) e1 = NUMWRAPPER.valueOf(0);
+      if (e2 == null) e2 = NUMWRAPPER.valueOf(0);
       // Loses top 8 bits, but we're just mixing two hashCodes.
       result[i] = (e1.hashCode() << 8) + e2.hashCode();
     }
