@@ -61,7 +61,7 @@ public abstract class DaikonVariableInfo
   protected static final String isParamString = " # isParam=true";
 
   /** Indicates that a given variable is non-null and a parameter. */
-  protected static final String isNonNullParamString = " # isNonNull=true isParam=true";
+  protected static final String isNonNullParamString = " # isNonNull=true, isParam=true";
 
   // Certain hardcoded class names
   protected static final String classClassName = "java.lang.Class";
@@ -70,6 +70,8 @@ public abstract class DaikonVariableInfo
   // Suffix for "typeOf" (CLASSNAME) variables that represent a class,
   // eg, "foo.getClass().getName()".
   public static final String class_suffix = ".getClass().getName()";
+
+  public static final String class_suffix_relative_name = class_suffix.substring(1);
 
   /** Determines whether or not synthetic variables should be ignored */
   private static boolean skip_synthetic = true;
@@ -940,9 +942,8 @@ public abstract class DaikonVariableInfo
     StringBuilder ret = new StringBuilder();
 
     // String staticString = (Modifier.isStatic(modifiers)) ? "true" : "false";
-    ret.append(" # ");
     if (pkgName != null) {
-      ret.append("declaringClassPackageName=" + pkgName + ", ");
+      ret.append(" # declaringClassPackageName=" + pkgName);
     }
 
     return ret.toString();

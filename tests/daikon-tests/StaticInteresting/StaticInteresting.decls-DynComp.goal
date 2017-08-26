@@ -5,18 +5,18 @@ implicit
 DECLARE
 misc.StaticInteresting:::CLASS
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
 DECLARE
 misc.StaticInteresting:::OBJECT
 this
-misc.StaticInteresting # isNonNull=true isParam=true
+misc.StaticInteresting # isNonNull=true, isParam=true
 hashcode
 3
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.outer[..]
@@ -24,7 +24,7 @@ int[]
 int[]
 6[6]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.inner[..]
@@ -32,15 +32,15 @@ int[]
 int[]
 6[4]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
@@ -48,7 +48,7 @@ hashcode
 DECLARE
 misc.StaticInteresting.main(java.lang.String[]):::ENTER
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 args
@@ -71,7 +71,7 @@ java.lang.String[]
 DECLARE
 misc.StaticInteresting.main(java.lang.String[]):::EXIT60
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 args
@@ -95,11 +95,11 @@ java.lang.String[]
 DECLARE
 misc.StaticInteresting.work():::ENTER
 this
-misc.StaticInteresting # isNonNull=true isParam=true
+misc.StaticInteresting # isNonNull=true, isParam=true
 hashcode
 3
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.outer[..]
@@ -107,7 +107,7 @@ int[]
 int[]
 6[6]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.inner[..]
@@ -115,26 +115,26 @@ int[]
 int[]
 6[4]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
 DECLARE
 misc.StaticInteresting.work():::EXIT71
 this
-misc.StaticInteresting # isNonNull=true isParam=true
+misc.StaticInteresting # isNonNull=true, isParam=true
 hashcode
 3
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.outer[..]
@@ -142,7 +142,7 @@ int[]
 int[]
 6[6]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.inner[..]
@@ -150,15 +150,15 @@ int[]
 int[]
 6[4]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
@@ -169,11 +169,11 @@ misc.StaticInteresting.StaticInteresting():::ENTER
 DECLARE
 misc.StaticInteresting.StaticInteresting():::EXIT78
 this
-misc.StaticInteresting # isNonNull=true isParam=true
+misc.StaticInteresting # isNonNull=true, isParam=true
 hashcode
 3
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.outer[..]
@@ -181,7 +181,7 @@ int[]
 int[]
 6[6]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.inner[..]
@@ -189,15 +189,15 @@ int[]
 int[]
 6[4]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
@@ -205,11 +205,11 @@ hashcode
 DECLARE
 misc.StaticInteresting.equals(java.lang.Object):::ENTER
 this
-misc.StaticInteresting # isNonNull=true isParam=true
+misc.StaticInteresting # isNonNull=true, isParam=true
 hashcode
 4
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 8
 this.outer[..]
@@ -217,7 +217,7 @@ int[]
 int[]
 7[7]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 6
 this.inner[..]
@@ -225,15 +225,15 @@ int[]
 int[]
 7[5]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 obj
@@ -248,11 +248,11 @@ java.lang.String
 DECLARE
 misc.StaticInteresting.equals(java.lang.Object):::EXIT1
 this
-misc.StaticInteresting # isNonNull=true isParam=true
+misc.StaticInteresting # isNonNull=true, isParam=true
 hashcode
 5
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 9
 this.outer[..]
@@ -260,7 +260,7 @@ int[]
 int[]
 8[8]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.inner[..]
@@ -268,15 +268,15 @@ int[]
 int[]
 8[6]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 obj
@@ -296,11 +296,11 @@ boolean
 DECLARE
 misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.StaticInteresting # isNonNull=true isParam=true
+misc.StaticInteresting # isNonNull=true, isParam=true
 hashcode
 4
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 8
 this.outer[..]
@@ -308,7 +308,7 @@ int[]
 int[]
 7[7]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 6
 this.inner[..]
@@ -316,15 +316,15 @@ int[]
 int[]
 7[5]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 obj
@@ -339,11 +339,11 @@ java.lang.String
 DECLARE
 misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.StaticInteresting # isNonNull=true isParam=true
+misc.StaticInteresting # isNonNull=true, isParam=true
 hashcode
 5
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 9
 this.outer[..]
@@ -351,7 +351,7 @@ int[]
 int[]
 8[8]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.inner[..]
@@ -359,15 +359,15 @@ int[]
 int[]
 8[6]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 obj
@@ -386,18 +386,18 @@ boolean
 DECLARE
 misc.StaticInteresting2:::CLASS
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
 DECLARE
 misc.StaticInteresting2:::OBJECT
 this
-misc.StaticInteresting2 # isNonNull=true isParam=true
+misc.StaticInteresting2 # isNonNull=true, isParam=true
 hashcode
 3
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.outer[..]
@@ -405,7 +405,7 @@ int[]
 int[]
 6[6]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.inner[..]
@@ -413,15 +413,15 @@ int[]
 int[]
 6[4]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
@@ -429,7 +429,7 @@ hashcode
 DECLARE
 misc.StaticInteresting2.main(java.lang.String[]):::ENTER
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 args
@@ -452,7 +452,7 @@ java.lang.String[]
 DECLARE
 misc.StaticInteresting2.main(java.lang.String[]):::EXIT104
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 args
@@ -476,11 +476,11 @@ java.lang.String[]
 DECLARE
 misc.StaticInteresting2.work():::ENTER
 this
-misc.StaticInteresting2 # isNonNull=true isParam=true
+misc.StaticInteresting2 # isNonNull=true, isParam=true
 hashcode
 3
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.outer[..]
@@ -488,7 +488,7 @@ int[]
 int[]
 6[6]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.inner[..]
@@ -496,26 +496,26 @@ int[]
 int[]
 6[4]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
 DECLARE
 misc.StaticInteresting2.work():::EXIT115
 this
-misc.StaticInteresting2 # isNonNull=true isParam=true
+misc.StaticInteresting2 # isNonNull=true, isParam=true
 hashcode
 3
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.outer[..]
@@ -523,7 +523,7 @@ int[]
 int[]
 6[6]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.inner[..]
@@ -531,15 +531,15 @@ int[]
 int[]
 6[4]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
@@ -550,11 +550,11 @@ misc.StaticInteresting2.StaticInteresting2():::ENTER
 DECLARE
 misc.StaticInteresting2.StaticInteresting2():::EXIT122
 this
-misc.StaticInteresting2 # isNonNull=true isParam=true
+misc.StaticInteresting2 # isNonNull=true, isParam=true
 hashcode
 3
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.outer[..]
@@ -562,7 +562,7 @@ int[]
 int[]
 6[6]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.inner[..]
@@ -570,15 +570,15 @@ int[]
 int[]
 6[4]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 
@@ -586,11 +586,11 @@ hashcode
 DECLARE
 misc.StaticInteresting2.equals(java.lang.Object):::ENTER
 this
-misc.StaticInteresting2 # isNonNull=true isParam=true
+misc.StaticInteresting2 # isNonNull=true, isParam=true
 hashcode
 4
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 8
 this.outer[..]
@@ -598,7 +598,7 @@ int[]
 int[]
 7[7]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 6
 this.inner[..]
@@ -606,15 +606,15 @@ int[]
 int[]
 7[5]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 obj
@@ -629,11 +629,11 @@ java.lang.String
 DECLARE
 misc.StaticInteresting2.equals(java.lang.Object):::EXIT1
 this
-misc.StaticInteresting2 # isNonNull=true isParam=true
+misc.StaticInteresting2 # isNonNull=true, isParam=true
 hashcode
 5
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 9
 this.outer[..]
@@ -641,7 +641,7 @@ int[]
 int[]
 8[8]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.inner[..]
@@ -649,15 +649,15 @@ int[]
 int[]
 8[6]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 obj
@@ -677,11 +677,11 @@ boolean
 DECLARE
 misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.StaticInteresting2 # isNonNull=true isParam=true
+misc.StaticInteresting2 # isNonNull=true, isParam=true
 hashcode
 4
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 8
 this.outer[..]
@@ -689,7 +689,7 @@ int[]
 int[]
 7[7]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 6
 this.inner[..]
@@ -697,15 +697,15 @@ int[]
 int[]
 7[5]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 obj
@@ -720,11 +720,11 @@ java.lang.String
 DECLARE
 misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.StaticInteresting2 # isNonNull=true isParam=true
+misc.StaticInteresting2 # isNonNull=true, isParam=true
 hashcode
 5
 this.outer
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 9
 this.outer[..]
@@ -732,7 +732,7 @@ int[]
 int[]
 8[8]
 this.inner
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.inner[..]
@@ -740,15 +740,15 @@ int[]
 int[]
 8[6]
 this.y
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.x
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 2
 obj

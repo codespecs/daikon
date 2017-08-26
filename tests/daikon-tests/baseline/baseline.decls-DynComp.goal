@@ -8,7 +8,7 @@ Main:::CLASS
 DECLARE
 Main:::OBJECT
 this
-Main # isNonNull=true isParam=true
+Main # isNonNull=true, isParam=true
 hashcode
 2
 
@@ -19,7 +19,7 @@ Main.Main():::ENTER
 DECLARE
 Main.Main():::EXIT3
 this
-Main # isNonNull=true isParam=true
+Main # isNonNull=true, isParam=true
 hashcode
 2
 
@@ -66,7 +66,7 @@ java.lang.String[]
 DECLARE
 Main.equals(java.lang.Object):::ENTER
 this
-Main # isNonNull=true isParam=true
+Main # isNonNull=true, isParam=true
 hashcode
 3
 obj
@@ -81,7 +81,7 @@ java.lang.String
 DECLARE
 Main.equals(java.lang.Object):::EXIT1
 this
-Main # isNonNull=true isParam=true
+Main # isNonNull=true, isParam=true
 hashcode
 4
 obj
@@ -101,7 +101,7 @@ boolean
 DECLARE
 Main.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-Main # isNonNull=true isParam=true
+Main # isNonNull=true, isParam=true
 hashcode
 3
 obj
@@ -116,7 +116,7 @@ java.lang.String
 DECLARE
 Main.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-Main # isNonNull=true isParam=true
+Main # isNonNull=true, isParam=true
 hashcode
 4
 obj
@@ -138,7 +138,7 @@ TestScores:::CLASS
 DECLARE
 TestScores:::OBJECT
 this
-TestScores # isNonNull=true isParam=true
+TestScores # isNonNull=true, isParam=true
 hashcode
 2
 
@@ -149,7 +149,7 @@ TestScores.TestScores():::ENTER
 DECLARE
 TestScores.TestScores():::EXIT3
 this
-TestScores # isNonNull=true isParam=true
+TestScores # isNonNull=true, isParam=true
 hashcode
 2
 
@@ -244,7 +244,7 @@ TestScores.six893():::EXIT70
 DECLARE
 TestScores.equals(java.lang.Object):::ENTER
 this
-TestScores # isNonNull=true isParam=true
+TestScores # isNonNull=true, isParam=true
 hashcode
 3
 obj
@@ -259,7 +259,7 @@ java.lang.String
 DECLARE
 TestScores.equals(java.lang.Object):::EXIT1
 this
-TestScores # isNonNull=true isParam=true
+TestScores # isNonNull=true, isParam=true
 hashcode
 4
 obj
@@ -279,7 +279,7 @@ boolean
 DECLARE
 TestScores.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-TestScores # isNonNull=true isParam=true
+TestScores # isNonNull=true, isParam=true
 hashcode
 3
 obj
@@ -294,7 +294,7 @@ java.lang.String
 DECLARE
 TestScores.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-TestScores # isNonNull=true isParam=true
+TestScores # isNonNull=true, isParam=true
 hashcode
 4
 obj
@@ -316,15 +316,15 @@ DataAvg:::CLASS
 DECLARE
 DataAvg:::OBJECT
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 2
 this.sum
-int # 
+int
 int
 3
 this.count
-int # 
+int
 int
 3
 
@@ -335,15 +335,15 @@ DataAvg.DataAvg():::ENTER
 DECLARE
 DataAvg.DataAvg():::EXIT13
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 2
 this.sum
-int # 
+int
 int
 3
 this.count
-int # 
+int
 int
 3
 
@@ -351,15 +351,15 @@ int
 DECLARE
 DataAvg.insert(int):::ENTER
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 3
 this.sum
-int # 
+int
 int
 2
 this.count
-int # 
+int
 int
 2
 element
@@ -370,15 +370,15 @@ int
 DECLARE
 DataAvg.insert(int):::EXIT19
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 3
 this.sum
-int # 
+int
 int
 2
 this.count
-int # 
+int
 int
 2
 element
@@ -390,30 +390,30 @@ int
 DECLARE
 DataAvg.average():::ENTER
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 2
 this.sum
-int # 
+int
 int
 3
 this.count
-int # 
+int
 int
 3
 
 DECLARE
 DataAvg.average():::EXIT24
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 3
 this.sum
-int # 
+int
 int
 2
 this.count
-int # 
+int
 int
 2
 return
@@ -425,15 +425,15 @@ int
 DECLARE
 DataAvg.equals(java.lang.Object):::ENTER
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 3
 this.sum
-int # 
+int
 int
 4
 this.count
-int # 
+int
 int
 4
 obj
@@ -448,15 +448,15 @@ java.lang.String
 DECLARE
 DataAvg.equals(java.lang.Object):::EXIT1
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 4
 this.sum
-int # 
+int
 int
 5
 this.count
-int # 
+int
 int
 5
 obj
@@ -476,15 +476,15 @@ boolean
 DECLARE
 DataAvg.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 3
 this.sum
-int # 
+int
 int
 4
 this.count
-int # 
+int
 int
 4
 obj
@@ -499,15 +499,15 @@ java.lang.String
 DECLARE
 DataAvg.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataAvg # isNonNull=true isParam=true
+DataAvg # isNonNull=true, isParam=true
 hashcode
 4
 this.sum
-int # 
+int
 int
 5
 this.count
-int # 
+int
 int
 5
 obj
@@ -529,7 +529,7 @@ RandomMean:::CLASS
 DECLARE
 RandomMean:::OBJECT
 this
-RandomMean # isNonNull=true isParam=true
+RandomMean # isNonNull=true, isParam=true
 hashcode
 2
 
@@ -540,7 +540,7 @@ RandomMean.RandomMean():::ENTER
 DECLARE
 RandomMean.RandomMean():::EXIT3
 this
-RandomMean # isNonNull=true isParam=true
+RandomMean # isNonNull=true, isParam=true
 hashcode
 2
 
@@ -562,7 +562,7 @@ RandomMean.compute():::EXIT20
 DECLARE
 RandomMean.equals(java.lang.Object):::ENTER
 this
-RandomMean # isNonNull=true isParam=true
+RandomMean # isNonNull=true, isParam=true
 hashcode
 3
 obj
@@ -577,7 +577,7 @@ java.lang.String
 DECLARE
 RandomMean.equals(java.lang.Object):::EXIT1
 this
-RandomMean # isNonNull=true isParam=true
+RandomMean # isNonNull=true, isParam=true
 hashcode
 4
 obj
@@ -597,7 +597,7 @@ boolean
 DECLARE
 RandomMean.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-RandomMean # isNonNull=true isParam=true
+RandomMean # isNonNull=true, isParam=true
 hashcode
 3
 obj
@@ -612,7 +612,7 @@ java.lang.String
 DECLARE
 RandomMean.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-RandomMean # isNonNull=true isParam=true
+RandomMean # isNonNull=true, isParam=true
 hashcode
 4
 obj

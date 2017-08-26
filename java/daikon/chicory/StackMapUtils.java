@@ -521,7 +521,7 @@ public abstract class StackMapUtils {
   /**
    * Convert a Type name to a Class name.
    *
-   * @param t Type whose name is to be converted
+   * @param t type whose name is to be converted
    */
   @SuppressWarnings("signature") // conversion routine
   protected static /*@ClassGetName*/ String typeToClassGetName(Type t) {
@@ -541,7 +541,7 @@ public abstract class StackMapUtils {
   /**
    * Convert a Type name to a StackMap type name.
    *
-   * @param t Type whose name is to be converted
+   * @param t type whose name is to be converted
    */
   // creates a MethodInfo struct corresponding to mgen
   protected final StackMapType generate_StackMapType_from_Type(Type t) {
@@ -578,7 +578,7 @@ public abstract class StackMapUtils {
    * of the local variables PRIOR to the addition of the new local in question.
    *
    * @param offset offset into stack of the new variable we are adding
-   * @param type_new_var Type of new variable we are adding
+   * @param type_new_var type of new variable we are adding
    * @param locals a copy of the local variable table prior to this modification
    */
   protected final void update_full_frame_stack_map_entries(

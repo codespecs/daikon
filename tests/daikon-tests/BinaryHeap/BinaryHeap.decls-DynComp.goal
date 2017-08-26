@@ -5,26 +5,26 @@ implicit
 DECLARE
 DataStructures.BinaryHeap:::CLASS
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 
 DECLARE
 DataStructures.BinaryHeap:::OBJECT
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -47,19 +47,19 @@ DataStructures.BinaryHeap.BinaryHeap():::ENTER
 DECLARE
 DataStructures.BinaryHeap.BinaryHeap():::EXIT30
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -86,19 +86,19 @@ int
 DECLARE
 DataStructures.BinaryHeap.BinaryHeap(int):::EXIT40
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 5
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.array.getClass().getName()
@@ -122,19 +122,19 @@ int
 DECLARE
 DataStructures.BinaryHeap.insert(DataStructures.Comparable):::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -161,19 +161,19 @@ java.lang.String
 DECLARE
 DataStructures.BinaryHeap.insert(DataStructures.Comparable):::EXIT58
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -201,19 +201,19 @@ java.lang.String
 DECLARE
 DataStructures.BinaryHeap.findMin():::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -232,19 +232,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.findMin():::EXIT67
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 4
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.array.getClass().getName()
@@ -271,19 +271,19 @@ java.lang.String
 DECLARE
 DataStructures.BinaryHeap.findMin():::EXIT68
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 4
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.array.getClass().getName()
@@ -311,19 +311,19 @@ java.lang.String
 DECLARE
 DataStructures.BinaryHeap.deleteMin():::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -342,19 +342,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.deleteMin():::EXIT78
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 4
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.array.getClass().getName()
@@ -381,19 +381,19 @@ java.lang.String
 DECLARE
 DataStructures.BinaryHeap.deleteMin():::EXIT84
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 4
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.array.getClass().getName()
@@ -421,19 +421,19 @@ java.lang.String
 DECLARE
 DataStructures.BinaryHeap.buildHeap():::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -452,19 +452,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.buildHeap():::EXIT95
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -484,19 +484,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.isEmpty():::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -515,19 +515,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.isEmpty():::EXIT103
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 4
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.array.getClass().getName()
@@ -551,19 +551,19 @@ boolean
 DECLARE
 DataStructures.BinaryHeap.isFull():::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -582,19 +582,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.isFull():::EXIT112
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 4
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.array.getClass().getName()
@@ -618,19 +618,19 @@ boolean
 DECLARE
 DataStructures.BinaryHeap.makeEmpty():::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -649,19 +649,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.makeEmpty():::EXIT121
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 3
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.array.getClass().getName()
@@ -681,19 +681,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.percolateDown(int):::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 5
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.array.getClass().getName()
@@ -716,19 +716,19 @@ int
 DECLARE
 DataStructures.BinaryHeap.percolateDown(int):::EXIT149
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 5
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.array.getClass().getName()
@@ -752,7 +752,7 @@ int
 DECLARE
 DataStructures.BinaryHeap.main(java.lang.String[]):::ENTER
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 args
@@ -775,7 +775,7 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.main(java.lang.String[]):::EXIT178
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 args
@@ -799,19 +799,19 @@ java.lang.String[]
 DECLARE
 DataStructures.BinaryHeap.equals(java.lang.Object):::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 4
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.array.getClass().getName()
@@ -838,19 +838,19 @@ java.lang.String
 DECLARE
 DataStructures.BinaryHeap.equals(java.lang.Object):::EXIT1
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 5
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 6
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 7
 this.array.getClass().getName()
@@ -882,19 +882,19 @@ boolean
 DECLARE
 DataStructures.BinaryHeap.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 4
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.array.getClass().getName()
@@ -921,19 +921,19 @@ java.lang.String
 DECLARE
 DataStructures.BinaryHeap.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.BinaryHeap # isNonNull=true isParam=true
+DataStructures.BinaryHeap # isNonNull=true, isParam=true
 hashcode
 5
 DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 6
 this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures, 
+DataStructures.Comparable[] # declaringClassPackageName=DataStructures
 hashcode
 7
 this.array.getClass().getName()
