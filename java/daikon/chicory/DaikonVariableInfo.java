@@ -71,6 +71,8 @@ public abstract class DaikonVariableInfo
   // eg, "foo.getClass().getName()".
   public static final String class_suffix = ".getClass().getName()";
 
+  public static final String class_suffix_relative_name = class_suffix.substring(1);
+
   /** Determines whether or not synthetic variables should be ignored */
   private static boolean skip_synthetic = true;
 
