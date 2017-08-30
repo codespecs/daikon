@@ -39,6 +39,7 @@
   #define EQUALS(a,b) (a == b)
   #define SYMMETRIC_OP
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define EQUALSSIMPLIFYstring "EQ"
   #define EQUALSQUANTstring "Equal"
@@ -47,6 +48,7 @@
   #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
   #define SYMMETRIC_OP
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define EQUALSSIMPLIFYstring "EQ"
   #define EQUALSQUANTstring "Equal"
@@ -55,6 +57,7 @@
   #define EQUALS(a,b) (a != b)
   #define SYMMETRIC_OP
   #define EQUALShtml !=
+  #define EQUALScode !=
   #define EQUALSstring "!="
   #define EQUALSSIMPLIFYstring "NEQ"
   #define EQUALSQUANTstring "NotEqual"
@@ -63,6 +66,7 @@
   #define EQUALS(a,b) (Global.fuzzy.ne(a, b))
   #define SYMMETRIC_OP
   #define EQUALShtml !=
+  #define EQUALScode !=
   #define EQUALSstring "!="
   #define EQUALSSIMPLIFYstring "NEQ"
   #define EQUALSQUANTstring "NotEqual"
@@ -71,6 +75,7 @@
   #define CLASS_SWAP SeqIndexIntGreaterThan
   #define EQUALS(a,b) (a < b)
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define EQUALSSIMPLIFYstring "<"
   #define EQUALSQUANTstring "Lt"
@@ -79,6 +84,7 @@
   #define CLASS_SWAP SeqIndexFloatGreaterThan
   #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define EQUALSSIMPLIFYstring "<"
   #define EQUALSQUANTstring "Lt"
@@ -87,6 +93,7 @@
   #define CLASS_SWAP SeqIndexIntGreaterEqual
   #define EQUALS(a,b) (a <= b)
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define EQUALSSIMPLIFYstring "<="
   #define EQUALSQUANTstring "Lte"
@@ -95,6 +102,7 @@
   #define CLASS_SWAP SeqIndexFloatGreaterEqual
   #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define EQUALSSIMPLIFYstring "<="
   #define EQUALSQUANTstring "Lte"
@@ -103,6 +111,7 @@
   #define CLASS_SWAP SeqIndexIntLessThan
   #define EQUALS(a,b) (a > b)
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define EQUALSSIMPLIFYstring ">"
   #define EQUALSQUANTstring "Gt"
@@ -111,6 +120,7 @@
   #define CLASS_SWAP SeqIndexFloatLessThan
   #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define EQUALSSIMPLIFYstring ">"
   #define EQUALSQUANTstring "Gt"
@@ -119,6 +129,7 @@
   #define CLASS_SWAP SeqIndexIntLessEqual
   #define EQUALS(a,b) (a >= b)
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define EQUALSSIMPLIFYstring ">="
   #define EQUALSQUANTstring "Gte"
@@ -127,6 +138,7 @@
   #define CLASS_SWAP SeqIndexFloatLessEqual
   #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define EQUALSSIMPLIFYstring ">="
   #define EQUALSQUANTstring "Gte"
@@ -157,7 +169,7 @@ import typequals.*;
 
 /**
  * Represents an invariant over sequences of PRIMITIVE values between the index of an element of the
- * sequence and the element itself. Prints as {@code x[i] EQUALShtml i}.
+ * sequence and the element itself. Prints as {@code x[i] EQUALScode i}.
  */
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to

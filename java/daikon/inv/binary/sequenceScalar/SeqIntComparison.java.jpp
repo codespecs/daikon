@@ -39,6 +39,7 @@
   #define SEQINTEQUALstring "SeqIntEqual"
   #define EQUALS(a,b) (a == b)
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "eltsEqual"
   #define EQUALSSIMPLIFYstring "EQ"
@@ -47,6 +48,7 @@
   #define SEQINTEQUALstring "SeqFloatEqual"
   #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
   #define EQUALShtml
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "eltsEqual"
   #define EQUALSSIMPLIFYstring "EQ"
@@ -55,6 +57,7 @@
   #define SEQINTEQUALstring "SeqIntLessThan"
   #define EQUALS(a,b) (a < b)
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define EQUALSstringDBC "eltsLT"
   #define EQUALSSIMPLIFYstring "<"
@@ -63,6 +66,7 @@
   #define SEQINTEQUALstring "SeqFloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define EQUALSstringDBC "eltsLT"
   #define EQUALSSIMPLIFYstring "<"
@@ -71,6 +75,7 @@
   #define SEQINTEQUALstring "SeqIntLessEqual"
   #define EQUALS(a,b) (a <= b)
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define EQUALSstringDBC "eltsLTE"
   #define EQUALSSIMPLIFYstring "<="
@@ -79,6 +84,7 @@
   #define SEQINTEQUALstring "SeqFloatLessEqual"
   #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define EQUALSstringDBC "eltsLTE"
   #define EQUALSSIMPLIFYstring "<="
@@ -87,6 +93,7 @@
   #define SEQINTEQUALstring "SeqIntGreaterThan"
   #define EQUALS(a,b) (a > b)
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define EQUALSstringDBC "eltsGT"
   #define EQUALSSIMPLIFYstring ">"
@@ -95,6 +102,7 @@
   #define SEQINTEQUALstring "SeqFloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define EQUALSstringDBC "eltsGT"
   #define EQUALSSIMPLIFYstring ">"
@@ -103,6 +111,7 @@
   #define SEQINTEQUALstring "SeqIntGreaterEqual"
   #define EQUALS(a,b) (a >= b)
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define EQUALSstringDBC "eltsGTE"
   #define EQUALSSIMPLIFYstring ">="
@@ -111,6 +120,7 @@
   #define SEQINTEQUALstring "SeqFloatGreaterEqual"
   #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define EQUALSstringDBC "eltsGTE"
   #define EQUALSSIMPLIFYstring ">="
@@ -142,7 +152,7 @@ import typequals.*;
 
 /**
  * Represents an invariant between a PRIMITIVE scalar and a a sequence of PRIMITIVE values. Prints
- * as {@code x[] elements EQUALShtml y} where {@code x} is a PRIMITIVE sequence and
+ * as {@code x[] elements EQUALScode y} where {@code x} is a PRIMITIVE sequence and
  * {@code y} is a PRIMITIVE scalar.
  */
 public final class SEQINTEQUAL extends SUPERCLASS {

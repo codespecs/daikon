@@ -81,6 +81,7 @@
   #define INTEQUALstring "IntEqual"
   #define EQUALS(a,b) (a == b)
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
   #define PAIRWISE_COMPARE PairwiseIntEqual
@@ -91,6 +92,7 @@
   #define INTEQUALstring "FloatEqual"
   #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
   #define PAIRWISE_COMPARE PairwiseFloatEqual
@@ -101,6 +103,7 @@
   #define INTEQUALstring "StringEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a == b))
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
 #if 0
@@ -114,6 +117,7 @@
   #define INTEQUALstring "IntNonEqual"
   #define EQUALS(a,b) (a != b)
   #define EQUALShtml !=
+  #define EQUALScode !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugIntNonEqual
@@ -123,6 +127,7 @@
   #define INTEQUALstring "FloatNonEqual"
   #define EQUALS(a,b) (Global.fuzzy.ne(a, b))
   #define EQUALShtml !=
+  #define EQUALScode !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugIntNonEqual
@@ -132,6 +137,7 @@
   #define INTEQUALstring "StringNonEqual"
   #define EQUALS(a,b) (a != b)
   #define EQUALShtml !=
+  #define EQUALScode !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugStringNonEqual
@@ -143,6 +149,7 @@
   #define INTEQUALstring "IntLessThan"
   #define EQUALS(a,b) (a < b)
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
   #define PAIRWISE_COMPARE PairwiseIntLessThan
@@ -154,6 +161,7 @@
   #define INTEQUALstring "FloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
   #define PAIRWISE_COMPARE PairwiseFloatLessThan
@@ -165,6 +173,7 @@
   #define INTEQUALstring "StringLessThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) < 0))
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
 #if 0
@@ -179,6 +188,7 @@
   #define INTEQUALstring "IntLessEqual"
   #define EQUALS(a,b) (a <= b)
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
   #define PAIRWISE_COMPARE PairwiseIntLessEqual
@@ -190,6 +200,7 @@
   #define INTEQUALstring "FloatLessEqual"
   #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
   #define PAIRWISE_COMPARE PairwiseFloatLessEqual
@@ -201,6 +212,7 @@
   #define INTEQUALstring "StringLessEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) <= 0))
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
 #if 0
@@ -215,6 +227,7 @@
   #define INTEQUALstring "IntGreaterThan"
   #define EQUALS(a,b) (a > b)
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
   #define PAIRWISE_COMPARE PairwiseIntGreaterThan
@@ -226,6 +239,7 @@
   #define INTEQUALstring "FloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
   #define PAIRWISE_COMPARE PairwiseFloatGreaterThan
@@ -237,6 +251,7 @@
   #define INTEQUALstring "StringGreaterThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) > 0))
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
 #if 0
@@ -251,6 +266,7 @@
   #define INTEQUALstring "IntGreaterEqual"
   #define EQUALS(a,b) (a >= b)
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define INVEQUALSstring "<="
   #define PAIRWISE_COMPARE PairwiseIntGreaterEqual
@@ -262,8 +278,10 @@
   #define INTEQUALstring "FloatGreaterEqual"
   #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
+  #define INVEQUALScode <=
   #define INVEQUALSstring "<="
   #define PAIRWISE_COMPARE PairwiseFloatGreaterEqual
   #define DEBUGINTEQUAL debugIntGreaterEqual
@@ -274,8 +292,10 @@
   #define INTEQUALstring "StringGreaterEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) >= 0))
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
+  #define INVEQUALScode <=
   #define INVEQUALSstring "<="
 #if 0
   // #define PAIRWISE_COMPARE PairwiseStringGreaterEqual
@@ -364,7 +384,7 @@ import typequals.*;
 */
 
 /**
- * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as {@code x EQUALShtml y}.
+ * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as {@code x EQUALScode y}.
  */
 public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
