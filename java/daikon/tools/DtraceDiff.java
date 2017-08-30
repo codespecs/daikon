@@ -59,6 +59,9 @@ public class DtraceDiff {
   /**
    * This entry point is useful for testing. It returns a boolean to indicate return status instead
    * of croaking with an error.
+   *
+   * @param args command-line arguments, like those of {@link #mainHelper} and {@link #main}
+   * @return true if DtraceDiff completed without an error
    */
   public static boolean mainTester(String[] args) {
     try {
@@ -76,6 +79,7 @@ public class DtraceDiff {
    * progrmmatically. Termination of the program with a message to the user is indicated by throwing
    * daikon.Daikon.TerminationMessage.
    *
+   * @param args command-line arguments, like those of {@link main}
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */

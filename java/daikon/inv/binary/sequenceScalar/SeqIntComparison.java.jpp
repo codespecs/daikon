@@ -142,8 +142,8 @@ import typequals.*;
 
 /**
  * Represents an invariant between a PRIMITIVE scalar and a a sequence of PRIMITIVE values. Prints
- * as <code>x[] elements EQUALShtml y</code> where <code>x</code> is a PRIMITIVE sequence and
- * <code>y</code> is a PRIMITIVE scalar.
+ * as {@code x[] elements EQUALShtml y} where {@code x} is a PRIMITIVE sequence and
+ * {@code y} is a PRIMITIVE scalar.
  */
 public final class SEQINTEQUAL extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to

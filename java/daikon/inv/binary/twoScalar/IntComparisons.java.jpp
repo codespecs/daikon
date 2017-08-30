@@ -364,7 +364,7 @@ import typequals.*;
 */
 
 /**
- * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as <code>x EQUALShtml y</code>.
+ * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as {@code x EQUALShtml y}.
  */
 public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 

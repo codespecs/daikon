@@ -157,7 +157,7 @@ import typequals.*;
 
 /**
  * Represents an invariant over sequences of PRIMITIVE values between the index of an element of the
- * sequence and the element itself. Prints as <code>x[i] EQUALShtml i</code>.
+ * sequence and the element itself. Prints as {@code x[i] EQUALShtml i}.
  */
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to

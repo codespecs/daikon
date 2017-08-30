@@ -101,8 +101,8 @@ public final class Daikon {
 
   /**
    * Integer. Percentage of program points to process. All program points are sorted by name, and
-   * all samples for the first <code>ppt_perc</code> program points are processed. A percentage of
-   * 100 matches all program points.
+   * all samples for the first {@code ppt_perc} program points are processed. A percentage of 100
+   * matches all program points.
    */
   public static int dkconfig_ppt_perc = 100;
 
@@ -118,7 +118,7 @@ public final class Daikon {
 
   /**
    * Boolean. Controls whether or not processing information is printed out. Setting this variable
-   * to true also automatically sets <code>progress_delay</code> to -1.
+   * to true also automatically sets {@code progress_delay} to -1.
    */
   public static boolean dkconfig_quiet = false;
 
@@ -175,8 +175,8 @@ public final class Daikon {
    * Java output and "never" mode otherwise.
    *
    * <p>Guarding means adding predicates that ensure that variables can be dereferenced. For
-   * instance, if <code>a</code> can be null --- that is, if <code>a.b</code> can be nonsensical ---
-   * then the guarded version of
+   * instance, if {@code a} can be null --- that is, if {@code a.b} can be nonsensical --- then the
+   * guarded version of
    *
    * <pre>a.b == 5</pre>
    *

@@ -143,13 +143,13 @@ import typequals.*;
 #if defined(EQUAL) || defined(EQUALFLOAT)
   /**
    * Represents equality between adjacent elements (x[i], x[i+1]) of a PRIMITIVE sequence. Prints as
-   * <code>x[] elements are equal</code>.
+   * {@code x[] elements are equal}.
    */
 #else
   /**
    * Represents the invariant COMPARATORhtml between adjacent elements
    * (x[i], x[i+1]) of a PRIMITIVE sequence. Prints as
-   * <code>x[] sorted by COMPARATORhtml</code>.
+   * {@code x[] sorted by COMPARATORhtml}.
    */
 #endif
 public class CLASSNAME extends SUPERCLASS {

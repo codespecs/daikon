@@ -244,11 +244,11 @@ import typequals.*;
 /**
  * Represents invariants between two sequences of PRIMITIVE values. If order matters for each
  * variable (which it does by default), then the sequences are compared lexically. Prints as
- * <code>x[] EQUALShtml y[] lexically</code>.
+ * {@code x[] EQUALShtml y[] lexically}.
  *
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
  * <p>If order doesn't matter for each variable, then the sequences are compared to see if they are
- * set equivalent. Prints as <code>x[] == y[]</code>.
+ * set equivalent. Prints as {@code x[] == y[]}.
  *
 #endif
  * <p>If the auxiliary information (e.g., order matters) doesn't match between two variables, then
