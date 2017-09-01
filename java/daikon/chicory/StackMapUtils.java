@@ -461,7 +461,8 @@ public abstract class StackMapUtils {
    * stack_map_table. Must be called prior to any other methods that manipulate the stack_map_table.
    *
    * @param mgen MethodGen to search
-   * @param java_class_version
+   * @param java_class_version Java version for the classfile; stack_map_table is optional before
+   *     Java 1.7
    */
   /*@EnsuresNonNull({"stack_map_table"})*/
   protected final void fetch_current_stack_map_table(MethodGen mgen, int java_class_version) {

@@ -227,7 +227,7 @@ public final class DCRuntime {
   static Map<Object, Class<?>> active_clone_calls = new HashMap<Object, Class<?>>();
 
   /**
-   * Handles <code>super.equals(Object)</code> calls.
+   * Handles {@code super.equals(Object)} calls.
    *
    * @see #active_equals_calls
    */
@@ -317,10 +317,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles <code>clone()</code> calls.
+   * Handles {@code clone()} calls.
    *
    * <p>This method throws Throwable because it may throw any checked exception that is thrown by
-   * <code>o.clone()</code>.
+   * {@code o.clone()}.
    */
   // XXX TODO consolidate this and dcomp_super_clone, since there is a
   // lot of duplicated code
@@ -376,7 +376,7 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles <code>super.clone()</code> calls.
+   * Handles {@code super.clone()} calls.
    *
    * @see #active_clone_calls
    */

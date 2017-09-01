@@ -52,6 +52,7 @@ endif
 
 # To run doclint, do
 #   JAVADOC="~/research/types/jsr308-langtools/dist/bin/javadoc -Xdoclint:all,-missing" make javadoc
+# But doclint is enabled by default starting with Java 8.
 ifeq (cygwin, $(OSTYPE))
   ## Make the classpath explicit on the command line so it can be processed by *-cygwin
   JAVA ?= ${PLUMEBIN}/java-cygwin -ea -classpath "${CLASSPATH}"

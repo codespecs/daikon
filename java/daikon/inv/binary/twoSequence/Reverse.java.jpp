@@ -41,7 +41,7 @@ import typequals.*;
 
 /**
  * Represents two sequences of PRIMITIVE where one is in the reverse order of the other. Prints as
- * <code>x[] is the reverse of y[]</code>.
+ * {@code x[] is the reverse of y[]}.
  */
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to

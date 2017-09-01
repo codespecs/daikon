@@ -290,7 +290,7 @@ public final class Debug {
   public static boolean dkconfig_showTraceback = false;
 
   /**
-   * Determines whether or not detailed info (such as from <code>add_modified</code>) is printed.
+   * Determines whether or not detailed info (such as from {@code add_modified}) is printed.
    *
    * @see #log(Logger, Class, Ppt, String)
    * @see #logDetail()
@@ -343,7 +343,7 @@ public final class Debug {
    * {@link #debugTrackPpt}, and {@link #debugTrackVars}. Only those that match are printed.
    * Variables will match if they are in the same equality set. The information is written as:
    *
-   * <p><code> class: ppt : var1 : var2 : var3 : msg </code>
+   * <p>{@code class: ppt : var1 : var2 : var3 : msg }
    *
    * <p>Note that if {@link #debugTrack} is not enabled then nothing is printed. It is somewhat
    * faster to check {@link #logOn()} directly rather than relying on the check here.
