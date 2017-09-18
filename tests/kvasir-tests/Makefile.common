@@ -50,7 +50,7 @@ OS_REL := $(shell lsb_release -sr)
 GOAL := goal
 
 ifeq ($(OS_ID),CentOS)
-ifeq ($(OS_REL),7.3.1611)
+ifeq ($(OS_REL),7.4.1708)
 ifeq (washington,$(findstring washington,$(shell uname -n)))
 # PLSE special version of CentOS
 	GOAL := goalCP
@@ -305,6 +305,7 @@ summary: diffs
 	done
 
 summary-w-daikon: diffs-w-daikon
+	@echo "OS:" $(OS_ID) "REL:" $(OS_REL) $(shell uname -n)
 	@echo -e "\t["$$(basename `pwd`)"]"
 	@for file in $(DIFF_FILES) $(INV_DIFFS); do \
 	  if [ -s $$file ]; then \
