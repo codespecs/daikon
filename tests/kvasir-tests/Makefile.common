@@ -59,6 +59,10 @@ else
 	GOAL := goalCS
 endif
 endif
+ifeq ($(OS_REL),7.3.1611)
+# Standard version of CentOS
+	GOAL := goalCS
+endif
 endif
 
 ifeq ($(OS_ID),Fedora)
@@ -305,7 +309,6 @@ summary: diffs
 	done
 
 summary-w-daikon: diffs-w-daikon
-	@echo "OS:" $(OS_ID) "REL:" $(OS_REL) $(shell uname -n)
 	@echo -e "\t["$$(basename `pwd`)"]"
 	@for file in $(DIFF_FILES) $(INV_DIFFS); do \
 	  if [ -s $$file ]; then \
