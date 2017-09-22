@@ -8,11 +8,11 @@ DataStructures.QueueAr:::CLASS
 DECLARE
 DataStructures.QueueAr:::OBJECT
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -28,15 +28,15 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -51,11 +51,11 @@ int
 DECLARE
 DataStructures.QueueAr.QueueAr(int):::EXIT36
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 4
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.theArray.getClass().getName()
@@ -71,15 +71,15 @@ java.lang.Class[]
 java.lang.String[]
 1[2]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 capacity
@@ -91,11 +91,11 @@ int
 DECLARE
 DataStructures.QueueAr.isEmpty():::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -111,26 +111,26 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.QueueAr.isEmpty():::EXIT44
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -146,15 +146,15 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -166,11 +166,11 @@ boolean
 DECLARE
 DataStructures.QueueAr.isFull():::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -186,26 +186,26 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.QueueAr.isFull():::EXIT53
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -221,15 +221,15 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -241,11 +241,11 @@ boolean
 DECLARE
 DataStructures.QueueAr.makeEmpty():::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -261,26 +261,26 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.QueueAr.makeEmpty():::EXIT65
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -296,15 +296,15 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -312,11 +312,11 @@ int
 DECLARE
 DataStructures.QueueAr.getFront():::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -332,26 +332,26 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.QueueAr.getFront():::EXIT75
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -367,15 +367,15 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -390,11 +390,11 @@ java.lang.String
 DECLARE
 DataStructures.QueueAr.getFront():::EXIT76
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -410,15 +410,15 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -434,11 +434,11 @@ java.lang.String
 DECLARE
 DataStructures.QueueAr.dequeue():::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -454,26 +454,26 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.QueueAr.dequeue():::EXIT86
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -489,15 +489,15 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -512,11 +512,11 @@ java.lang.String
 DECLARE
 DataStructures.QueueAr.dequeue():::EXIT93
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -532,15 +532,15 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -556,11 +556,11 @@ java.lang.String
 DECLARE
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -576,15 +576,15 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 x
@@ -599,11 +599,11 @@ java.lang.String
 DECLARE
 DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT109
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -619,15 +619,15 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 x
@@ -643,11 +643,11 @@ java.lang.String
 DECLARE
 DataStructures.QueueAr.dequeueAll():::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -663,26 +663,26 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.QueueAr.dequeueAll():::EXIT116
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -698,15 +698,15 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -714,11 +714,11 @@ int
 DECLARE
 DataStructures.QueueAr.equals(java.lang.Object):::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -734,15 +734,15 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 obj
@@ -757,11 +757,11 @@ java.lang.String
 DECLARE
 DataStructures.QueueAr.equals(java.lang.Object):::EXIT1
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 4
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.theArray.getClass().getName()
@@ -777,15 +777,15 @@ java.lang.Class[]
 java.lang.String[]
 1[5]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 obj
@@ -805,11 +805,11 @@ boolean
 DECLARE
 DataStructures.QueueAr.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -825,15 +825,15 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 obj
@@ -848,11 +848,11 @@ java.lang.String
 DECLARE
 DataStructures.QueueAr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.QueueAr # isNonNull=true isParam=true
+DataStructures.QueueAr # isNonNull=true, isParam=true
 hashcode
 4
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.theArray.getClass().getName()
@@ -868,15 +868,15 @@ java.lang.Class[]
 java.lang.String[]
 1[5]
 this.currentSize
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.front
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 this.back
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 obj

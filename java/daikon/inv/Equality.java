@@ -40,10 +40,10 @@ import typequals.*;
 
 /**
  * Keeps track of sets of variables that are equal. Other invariants are instantiated for only one
- * member of the Equality set, the leader. If variables <code>x</code>, <code>y</code>, and <code>z
- * </code> are members of the Equality set and <code>x</code> is chosen as the leader, then the
- * Equality will internally convert into binary comparison invariants that print as <code>x == y
- * </code> and <code>x == z</code>.
+ * member of the Equality set, the leader. If variables {@code x}, {@code y}, and {@code z} are
+ * members of the Equality set and {@code x} is chosen as the leader, then the Equality will
+ * internally convert into binary comparison invariants that print as {@code x == y} and {@code x ==
+ * z}.
  */
 public final /*(at)Interned*/ class Equality extends Invariant {
   // We are Serializable, so we specify a version to allow changes to

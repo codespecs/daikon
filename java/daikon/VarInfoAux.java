@@ -413,10 +413,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return map.get(key);
   }
 
-  /**
-   * Return <code>true</code> if the value for the given key is defined, and <code>false</code>
-   * otherwise.
-   */
+  /** Return {@code true} if the value for the given key is defined, and {@code false} otherwise. */
   public boolean hasValue(String key) {
     return map.containsKey(key);
   }
@@ -437,7 +434,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Converts the integer <code>value</code> to a String before invoking {@link #setValue(String,
+   * Converts the integer {@code value} to a String before invoking {@link #setValue(String,
    * String)}.
    */
   public VarInfoAux setInt(String key, int value) {

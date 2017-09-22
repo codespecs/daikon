@@ -8,23 +8,23 @@ misc.Purity:::CLASS
 DECLARE
 misc.Purity:::OBJECT
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 2
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 3
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 4
 this.list1[..]
@@ -36,7 +36,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 6
 this.list2[..]
@@ -67,23 +67,23 @@ int
 DECLARE
 misc.Purity.Purity(int, int):::EXIT24
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -95,7 +95,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -123,23 +123,23 @@ int
 DECLARE
 misc.Purity.getValue():::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 2
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 3
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 4
 this.list1[..]
@@ -151,7 +151,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 6
 this.list2[..]
@@ -170,23 +170,23 @@ java.lang.String
 DECLARE
 misc.Purity.getValue():::EXIT27
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -198,7 +198,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -222,23 +222,23 @@ int
 DECLARE
 misc.Purity.getShift():::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 2
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 3
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 4
 this.list1[..]
@@ -250,7 +250,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 6
 this.list2[..]
@@ -269,23 +269,23 @@ java.lang.String
 DECLARE
 misc.Purity.getShift():::EXIT31
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -297,7 +297,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -321,23 +321,23 @@ int
 DECLARE
 misc.Purity.isHeavy():::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 2
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 3
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 4
 this.list1[..]
@@ -349,7 +349,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 6
 this.list2[..]
@@ -368,23 +368,23 @@ java.lang.String
 DECLARE
 misc.Purity.isHeavy():::EXIT35
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 2
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 4
 this.list1[..]
@@ -396,7 +396,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 6
 this.list2[..]
@@ -420,23 +420,23 @@ boolean
 DECLARE
 misc.Purity.getNum():::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 2
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 3
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 4
 this.list1[..]
@@ -448,7 +448,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 6
 this.list2[..]
@@ -467,23 +467,23 @@ java.lang.String
 DECLARE
 misc.Purity.getNum():::EXIT39
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -495,7 +495,7 @@ java.lang.Class[]
 java.lang.String[]
 1[11]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -523,23 +523,23 @@ java.lang.String
 DECLARE
 misc.Purity.getJWrap():::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 2
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 3
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 4
 this.list1[..]
@@ -551,7 +551,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 6
 this.list2[..]
@@ -570,23 +570,23 @@ java.lang.String
 DECLARE
 misc.Purity.getJWrap():::EXIT43
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -598,7 +598,7 @@ java.lang.Class[]
 java.lang.String[]
 1[11]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -622,23 +622,23 @@ hashcode
 DECLARE
 misc.Purity.scale(int):::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -650,7 +650,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -673,23 +673,23 @@ int
 DECLARE
 misc.Purity.scale(int):::EXIT47
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -701,7 +701,7 @@ java.lang.Class[]
 java.lang.String[]
 1[10]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -729,23 +729,23 @@ int
 DECLARE
 misc.Purity.sum(java.lang.Number):::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -757,7 +757,7 @@ java.lang.Class[]
 java.lang.String[]
 1[11]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -784,23 +784,23 @@ java.lang.String
 DECLARE
 misc.Purity.sum(java.lang.Number):::EXIT51
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 4
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 5
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 6
 this.list1[..]
@@ -812,7 +812,7 @@ java.lang.Class[]
 java.lang.String[]
 1[11]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 8
 this.list2[..]
@@ -844,23 +844,23 @@ int
 DECLARE
 misc.Purity.retrieve(java.util.List):::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 4
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 10
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 10
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 5
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 6
 this.list1[..]
@@ -872,7 +872,7 @@ java.lang.Class[]
 java.lang.String[]
 1[12]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 8
 this.list2[..]
@@ -907,23 +907,23 @@ java.lang.String
 DECLARE
 misc.Purity.retrieve(java.util.List):::EXIT55
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 5
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 11
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 11
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 6
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 7
 this.list1[..]
@@ -935,7 +935,7 @@ java.lang.Class[]
 java.lang.String[]
 1[13]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 9
 this.list2[..]
@@ -975,23 +975,23 @@ int
 DECLARE
 misc.Purity.equals(java.lang.Object):::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -1003,7 +1003,7 @@ java.lang.Class[]
 java.lang.String[]
 1[11]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -1030,23 +1030,23 @@ java.lang.String
 DECLARE
 misc.Purity.equals(java.lang.Object):::EXIT1
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 4
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 10
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 10
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 5
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 6
 this.list1[..]
@@ -1058,7 +1058,7 @@ java.lang.Class[]
 java.lang.String[]
 1[12]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 8
 this.list2[..]
@@ -1090,23 +1090,23 @@ boolean
 DECLARE
 misc.Purity.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 3
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 9
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 4
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 5
 this.list1[..]
@@ -1118,7 +1118,7 @@ java.lang.Class[]
 java.lang.String[]
 1[11]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 7
 this.list2[..]
@@ -1145,23 +1145,23 @@ java.lang.String
 DECLARE
 misc.Purity.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Purity # isNonNull=true isParam=true
+misc.Purity # isNonNull=true, isParam=true
 hashcode
 4
 this.value
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 10
 this.shift
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 10
 this.heavy
-boolean # declaringClassPackageName=misc, 
+boolean # declaringClassPackageName=misc
 boolean
 5
 this.list1
-java.util.LinkedList # declaringClassPackageName=misc, 
+java.util.LinkedList # declaringClassPackageName=misc
 hashcode
 6
 this.list1[..]
@@ -1173,7 +1173,7 @@ java.lang.Class[]
 java.lang.String[]
 1[12]
 this.list2
-java.util.List # declaringClassPackageName=misc, 
+java.util.List # declaringClassPackageName=misc
 hashcode
 8
 this.list2[..]

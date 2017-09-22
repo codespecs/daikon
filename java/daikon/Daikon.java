@@ -77,8 +77,8 @@ public final class Daikon {
    */
   public static int dkconfig_progress_delay = 1000;
 
-  public static final String release_version = "5.5.11";
-  public static final String release_date = "July 4, 2017";
+  public static final String release_version = "5.5.13";
+  public static final String release_date = "September 5, 2017";
   public static final String release_string =
       "Daikon version "
           + release_version
@@ -101,8 +101,8 @@ public final class Daikon {
 
   /**
    * Integer. Percentage of program points to process. All program points are sorted by name, and
-   * all samples for the first <code>ppt_perc</code> program points are processed. A percentage of
-   * 100 matches all program points.
+   * all samples for the first {@code ppt_perc} program points are processed. A percentage of 100
+   * matches all program points.
    */
   public static int dkconfig_ppt_perc = 100;
 
@@ -118,7 +118,7 @@ public final class Daikon {
 
   /**
    * Boolean. Controls whether or not processing information is printed out. Setting this variable
-   * to true also automatically sets <code>progress_delay</code> to -1.
+   * to true also automatically sets {@code progress_delay} to -1.
    */
   public static boolean dkconfig_quiet = false;
 
@@ -175,8 +175,8 @@ public final class Daikon {
    * Java output and "never" mode otherwise.
    *
    * <p>Guarding means adding predicates that ensure that variables can be dereferenced. For
-   * instance, if <code>a</code> can be null --- that is, if <code>a.b</code> can be nonsensical ---
-   * then the guarded version of
+   * instance, if {@code a} can be null --- that is, if {@code a.b} can be nonsensical --- then the
+   * guarded version of
    *
    * <pre>a.b == 5</pre>
    *
@@ -361,7 +361,7 @@ public final class Daikon {
   static String usage =
       UtilMDE.joinLines(
           release_string,
-          "Daikon invariant detector, copyright 1998-2016",
+          "Daikon invariant detector, copyright 1998-2017",
           // " by Michael Ernst <mernst@cs.washington.edu>",
           "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
           // "For licensing information, see the License section of the manual.",

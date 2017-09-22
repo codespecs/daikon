@@ -461,7 +461,8 @@ public abstract class StackMapUtils {
    * stack_map_table. Must be called prior to any other methods that manipulate the stack_map_table.
    *
    * @param mgen MethodGen to search
-   * @param java_class_version
+   * @param java_class_version Java version for the classfile; stack_map_table is optional before
+   *     Java 1.7
    */
   /*@EnsuresNonNull({"stack_map_table"})*/
   protected final void fetch_current_stack_map_table(MethodGen mgen, int java_class_version) {
@@ -521,7 +522,7 @@ public abstract class StackMapUtils {
   /**
    * Convert a Type name to a Class name.
    *
-   * @param t Type whose name is to be converted
+   * @param t type whose name is to be converted
    */
   @SuppressWarnings("signature") // conversion routine
   protected static /*@ClassGetName*/ String typeToClassGetName(Type t) {
@@ -541,7 +542,7 @@ public abstract class StackMapUtils {
   /**
    * Convert a Type name to a StackMap type name.
    *
-   * @param t Type whose name is to be converted
+   * @param t type whose name is to be converted
    */
   // creates a MethodInfo struct corresponding to mgen
   protected final StackMapType generate_StackMapType_from_Type(Type t) {
@@ -578,7 +579,7 @@ public abstract class StackMapUtils {
    * of the local variables PRIOR to the addition of the new local in question.
    *
    * @param offset offset into stack of the new variable we are adding
-   * @param type_new_var Type of new variable we are adding
+   * @param type_new_var type of new variable we are adding
    * @param locals a copy of the local variable table prior to this modification
    */
   protected final void update_full_frame_stack_map_entries(
