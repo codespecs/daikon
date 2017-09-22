@@ -60,7 +60,7 @@
 #endif
 
 /**
- * Represents the invariant <code>resultvar = FUNCTION(arg1, arg2)</code> over three PRIMITIVE
+ * Represents the invariant {@code resultvar = FUNCTION(arg1, arg2)} over three PRIMITIVE
  * scalars. EXTRA_INV_DOC
  */
 public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {

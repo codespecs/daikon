@@ -610,8 +610,7 @@ public class Runtime {
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
-              @SuppressWarnings(
-                  "lock") // TODO: Fix Checker Framework issue 523 and remove this @SuppressWarnings.
+              @SuppressWarnings("lock") // https://tinyurl.com/cfissue/523
               public void run() {
                 if (!dtrace_closed) {
                   // When the program being instrumented exits, the buffers

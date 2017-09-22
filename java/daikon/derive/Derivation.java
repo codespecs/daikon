@@ -27,11 +27,11 @@ public abstract class Derivation implements Serializable, Cloneable {
   // with the other options for controlling derived variables
   /**
    * Boolean. If true, Daikon will not create any derived variables. Derived variables, which are
-   * combinations of variables that appeared in the program, like <code>array[index]</code> if
-   * <code>array</code> and <code>index</code> appeared, can increase the number of properties
-   * Daikon finds, especially over sequences. However, derived variables increase Daikon's time and
-   * memory usage, sometimes dramatically. If false, individual kinds of derived variables can be
-   * enabled or disabled individually using configuration options under <code>daikon.derive</code>.
+   * combinations of variables that appeared in the program, like {@code array[index]} if {@code
+   * array} and {@code index} appeared, can increase the number of properties Daikon finds,
+   * especially over sequences. However, derived variables increase Daikon's time and memory usage,
+   * sometimes dramatically. If false, individual kinds of derived variables can be enabled or
+   * disabled individually using configuration options under {@code daikon.derive}.
    */
   public static boolean dkconfig_disable_derived_variables = false;
 
@@ -49,7 +49,10 @@ public abstract class Derivation implements Serializable, Cloneable {
   /*@SideEffectFree*/
   public abstract VarInfo[] getBases();
 
-  /** @return one of the VarInfos this was derived from */
+  /**
+   * @param i index into the array of Varinfos this was derived from
+   * @return the {@code i}th VarInfo this was derived from
+   */
   /*@Pure*/
   public abstract VarInfo getBase(int i);
 
@@ -68,6 +71,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * Get the VarInfo that this would represent. However, the VarInfo can't be used to obtain values
    * without further modification -- use computeValueAndModified() for this.
    *
+   * @return the VarInfo hat this would represent
    * @see Derivation#computeValueAndModified
    */
   public VarInfo getVarInfo() {

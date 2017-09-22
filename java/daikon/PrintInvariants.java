@@ -105,8 +105,8 @@ public final class PrintInvariants {
   public static boolean dkconfig_replace_prestate = true;
 
   /**
-   * Print invariant classname with invariants in output of <code>format()</code> method, normally
-   * used only for debugging output rather than ordinary printing of invariants.
+   * Print invariant classname with invariants in output of {@code format()} method, normally used
+   * only for debugging output rather than ordinary printing of invariants.
    */
   public static boolean dkconfig_print_inv_class = false;
 

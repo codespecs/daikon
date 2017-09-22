@@ -79,8 +79,8 @@ public class Property implements Serializable {
   }
 
   /**
-   * A class representing the kind of an property. An invariant is either <code>Kind.enter</code>,
-   * <code>Kind.exit</code>, or <code>Kind.objectInvariant</code>.
+   * A class representing the kind of an property. An invariant is either {@code Kind.enter}, {@code
+   * Kind.exit}, or {@code Kind.objectInvariant}.
    */
   // This should be an enum.
   /*@UsesObjectEquals*/
@@ -134,8 +134,8 @@ public class Property implements Serializable {
   }
 
   /**
-   * Two properties are equal if their fields <code>daikonRep</code>, <code>method</code> and <code>
-   * kind</code> are equal. The other fields may differ.
+   * Two properties are equal if their fields {@code daikonRep}, {@code method} and {@code kind} are
+   * equal. The other fields may differ.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
@@ -250,7 +250,7 @@ public class Property implements Serializable {
    * Similar to {@link #xmlString()}, but without a {@code <INV>...</INV>} tag (the JML
    * representation).
    *
-   * <p>Invariant: <code>this.equals(Property.get(this.xmlStringNoJml())</code>
+   * <p>Invariant: {@code this.equals(Property.get(this.xmlStringNoJml())}
    */
   public String xmlStringNoJml() {
     return "<INVINFO> "
@@ -272,8 +272,7 @@ public class Property implements Serializable {
 
   /**
    * Find, parse and return all well-formed XML String representing properties. String. The string
-   * <code>annoString</code> may contain none, one, or several properties. Ignores malformed
-   * properties.
+   * {@code annoString} may contain none, one, or several properties. Ignores malformed properties.
    */
   public static Property[] findProperties(String annoString) {
     List<String> l = Collections.singletonList(annoString);
@@ -282,7 +281,7 @@ public class Property implements Serializable {
 
   /**
    * Find, parse and return all distinct properties found in a list of strings. Each string in
-   * <code>annoStrings</code> may contain none, one, or several properties. Malformed properties are
+   * {@code annoStrings} may contain none, one, or several properties. Malformed properties are
    * ignored.
    */
   public static Property[] findProperties(List<String> annoStrings) {
@@ -340,7 +339,7 @@ public class Property implements Serializable {
   // This is never used, and the "break" clause seems to be buggy, so
   // that this returns at most one property.
   // /**
-  //  * The properties in <code>annas</code> with the given kind.
+  //  * The properties in {@code annas} with the given kind.
   //  */
   // public static Property[] getKind(Property[] annas, Kind kind) {
   //     List<Property> retval = new ArrayList<Property>();
@@ -358,7 +357,7 @@ public class Property implements Serializable {
    * of an property, among them:
    *
    * <ul>
-   *   <li>The values of <code>property.kind()</code>.
+   *   <li>The values of {@code property.kind()}.
    *   <li>The "Daikon class" of the property.
    *   <li>Whether the property relates old and new state.
    *   <li>The total number of properties in the method containing this property.

@@ -96,7 +96,7 @@ public final class FileIO {
 
   /**
    * Boolean. When true, don't print a warning about unmatched procedure entries, which are ignored
-   * by Daikon (unless the <code>--nohierarchy</code> command-line argument is provided).
+   * by Daikon (unless the {@code --nohierarchy} command-line argument is provided).
    */
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
 

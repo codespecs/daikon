@@ -565,6 +565,7 @@ public class LogicalCompare {
    * progrmmatically. Termination of the program with a message to the user is indicated by throwing
    * Daikon.TerminationMessage.
    *
+   * @param args command-line arguments, like those of {@link main}
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */

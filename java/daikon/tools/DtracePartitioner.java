@@ -90,7 +90,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     return invocation.substring(0, invocation.indexOf(lineSep));
   }
 
-  /** Same as {@link #patchValues (List&lt;String&gt;, boolean)} with second arg=false. */
+  /** Same as {@link #patchValues(List, boolean)} with second arg=false. */
   public List<String> patchValues(List<String> enters) {
     return patchValues(enters, false);
   }

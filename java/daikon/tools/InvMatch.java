@@ -21,7 +21,11 @@ import org.checkerframework.dataflow.qual.*;
  */
 public class InvMatch {
 
-  /** Main program for testing purposes. */
+  /**
+   * Main program for testing purposes.
+   *
+   * @param args command-line arguments, ignored
+   */
   @SuppressWarnings("nullness") // testing method, not worth type-checking
   public static void main(String[] args) throws IOException {
 

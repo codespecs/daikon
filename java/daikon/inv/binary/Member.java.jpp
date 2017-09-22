@@ -83,7 +83,7 @@ import typequals.*;
 
 /**
  * Represents SCALAR scalars that are always members of a sequence of SCALAR values. Prints as
- * <code>x in y[]</code> where <code>x</code> is a SCALAR scalar and <code>y[]</code> is a sequence
+ * {@code x in y[]} where {@code x} is a SCALAR scalar and {@code y[]} is a sequence
  * of SCALAR.
  */
 public final class CLASSNAME extends SEQUENCESCALAR {
