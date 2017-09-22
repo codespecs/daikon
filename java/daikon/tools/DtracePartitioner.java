@@ -137,7 +137,9 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       br = UtilMDE.bufferedFileReader(fileName);
       while (br.ready()) {
         String nextInvo = grabNextInvocation();
-        if (nextInvo.indexOf("EXIT") == -1) continue;
+        if (nextInvo.indexOf("EXIT") == -1) {
+          continue;
+        }
         int invoNonce = calcNonce(nextInvo);
         Integer key = invoNonce;
         String enterInvo = nonceMap.get(key);

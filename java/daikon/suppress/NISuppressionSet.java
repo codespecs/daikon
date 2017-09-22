@@ -56,7 +56,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         NISuppressor suppressor = j.next();
 
         // If we have seen this suppressor already, skip it
-        if (all_suppressors.contains(suppressor.get_inv_class())) continue;
+        if (all_suppressors.contains(suppressor.get_inv_class())) {
+          continue;
+        }
 
         // Note that we have now seen this suppressor invariant class
         all_suppressors.add(suppressor.get_inv_class());
@@ -138,12 +140,18 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
           // hashcode types are not involved in suppressions
           if (NIS.dkconfig_skip_hashcode_type) {
-            if (l1.file_rep_type.isHashcode()) continue;
+            if (l1.file_rep_type.isHashcode()) {
+              continue;
+            }
           }
 
           // Make sure the slice is interesting
-          if (v1.missingOutOfBounds() || l1.missingOutOfBounds()) continue;
-          if (!ppt.is_slice_ok(v1, l1)) continue;
+          if (v1.missingOutOfBounds() || l1.missingOutOfBounds()) {
+            continue;
+          }
+          if (!ppt.is_slice_ok(v1, l1)) {
+            continue;
+          }
 
           VarInfo[] vis;
 
@@ -154,7 +162,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
             vis = new VarInfo[] {l1, v1};
           }
 
-          if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) continue;
+          if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) {
+            continue;
+          }
 
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
@@ -184,10 +194,14 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           VarInfo l = leaders[i];
 
           if (NIS.dkconfig_skip_hashcode_type) {
-            if (l.file_rep_type.isHashcode()) continue;
+            if (l.file_rep_type.isHashcode()) {
+              continue;
+            }
           }
 
-          if (!ppt.is_slice_ok(l, v1, v2)) continue;
+          if (!ppt.is_slice_ok(l, v1, v2)) {
+            continue;
+          }
           if (l.missingOutOfBounds() || v1.missingOutOfBounds() || v2.missingOutOfBounds()) {
             continue;
           }
@@ -203,7 +217,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
             vis = new VarInfo[] {v1, v2, l};
           }
 
-          if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) continue;
+          if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) {
+            continue;
+          }
 
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
@@ -224,21 +240,27 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           VarInfo l1 = leaders[i];
 
           if (NIS.dkconfig_skip_hashcode_type) {
-            if (l1.file_rep_type.isHashcode()) continue;
+            if (l1.file_rep_type.isHashcode()) {
+              continue;
+            }
           }
 
           for (int j = i; j < leaders.length; j++) {
             VarInfo l2 = leaders[j];
 
             if (NIS.dkconfig_skip_hashcode_type) {
-              if (l2.file_rep_type.isHashcode()) continue;
+              if (l2.file_rep_type.isHashcode()) {
+                continue;
+              }
             }
 
             // Make sure the slice is interesting
             if (v1.missingOutOfBounds() || l1.missingOutOfBounds() || l2.missingOutOfBounds()) {
               continue;
             }
-            if (!ppt.is_slice_ok(v1, l1, l2)) continue;
+            if (!ppt.is_slice_ok(v1, l1, l2)) {
+              continue;
+            }
 
             VarInfo[] vis;
 
@@ -251,7 +273,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
               vis = new VarInfo[] {l1, l2, v1};
             }
 
-            if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) continue;
+            if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) {
+              continue;
+            }
 
             if (NIS.debug.isLoggable(Level.FINE)) {
               NIS.debug.fine(

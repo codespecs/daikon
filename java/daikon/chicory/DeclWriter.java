@@ -257,7 +257,9 @@ public class DeclWriter extends DaikonWriter {
       Member member = mi.member;
 
       // Don't want to instrument these types of methods
-      if (!shouldInstrumentMethod(member)) continue;
+      if (!shouldInstrumentMethod(member)) {
+        continue;
+      }
 
       // Gset the root of the method's traversal pattern
       RootInfo enterRoot = mi.traversalEnter;

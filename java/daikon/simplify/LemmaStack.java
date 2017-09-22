@@ -504,7 +504,9 @@ public class LemmaStack {
     long last_long = Long.MIN_VALUE;
     for (Long ll : ints_seen) {
       long l = ll.longValue();
-      if (l == Long.MIN_VALUE) continue;
+      if (l == Long.MIN_VALUE) {
+        continue;
+      }
       assert l != last_long;
       String formula =
           "(< " + SimpUtil.formatInteger(last_long) + " " + SimpUtil.formatInteger(l) + ")";

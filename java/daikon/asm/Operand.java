@@ -134,8 +134,9 @@ public class Operand {
     // TODO a regexp would be more succint.
     for (int i = 0; i < withoutBrackets.length(); i++) {
       char c = withoutBrackets.charAt(i);
-      if (Character.isDigit(c)) continue;
-      if (c == '+') continue;
+      if ((Character.isDigit(c)) || (c == '+')) {
+        continue;
+      }
       return false;
     }
     return true;

@@ -386,8 +386,10 @@ public abstract class DaikonVariableInfo
     for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++) {
       Class<?> type = arguments[i];
       String name = argnamesiter.next();
-      if (type.getName().equals("daikon.dcomp.DCompMarker")) continue;
-      if (type.getName().equals("java.lang.DCompMarker")) continue;
+      if ((type.getName().equals("daikon.dcomp.DCompMarker"))
+          || (type.getName().equals("java.lang.DCompMarker"))) {
+        continue;
+      }
       debug_vars.indent("processing parameter '%s'%n", name);
       DaikonVariableInfo theChild =
           addParamDeclVar(cinfo, type, name, offset, depth, i, param_offset);

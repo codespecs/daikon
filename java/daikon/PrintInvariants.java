@@ -973,7 +973,9 @@ public final class PrintInvariants {
     if (Daikon.output_format == OutputFormat.ESCJAVA || Daikon.output_format == OutputFormat.JML) {
       List<VarInfo> mods = new ArrayList<VarInfo>();
       for (VarInfo vi : modified_vars) {
-        if (!vi.is_assignable_var()) continue;
+        if (!vi.is_assignable_var()) {
+          continue;
+        }
         mods.add(vi);
       }
 
@@ -1426,7 +1428,9 @@ public final class PrintInvariants {
       for (PptSlice slice : ppt.views_iterable()) {
         total_slice_cnt++;
         total_inv_cnt += slice.invs.size();
-        if (slice.arity() != 3) continue;
+        if (slice.arity() != 3) {
+          continue;
+        }
         slice_cnt++;
         inv_cnt += slice.invs.size();
         for (Invariant inv : slice.invs) {
@@ -1445,7 +1449,9 @@ public final class PrintInvariants {
 
       // Loop through each ternary slice
       for (PptSlice slice : ppt.views_iterable()) {
-        if (slice.arity() != 3) continue;
+        if (slice.arity() != 3) {
+          continue;
+        }
         VarInfo[] vis = slice.var_infos;
 
         String var_str = "";

@@ -34,11 +34,15 @@ public final class SplitDtrace {
     ArrayList<String> rec = new ArrayList<String>();
     while (true) {
       readRec(reader, rec);
-      if (isDeclare(rec)) break;
+      if (isDeclare(rec)) {
+        break;
+      }
     }
     while (true) {
       readRec(reader, rec);
-      if (rec.size() == 0) break;
+      if (rec.size() == 0) {
+        break;
+      }
       if (isDeclare(rec)) {
         declNum++;
       } else {
@@ -72,11 +76,15 @@ public final class SplitDtrace {
       readRec(reader, rec);
       if (isDeclare(rec)) writer.newLine();
       writeRec(writer, rec);
-      if (isDeclare(rec)) break;
+      if (isDeclare(rec)) {
+        break;
+      }
     }
     while (true) {
       readRec(reader, rec);
-      if (rec.size() == 0) break;
+      if (rec.size() == 0) {
+        break;
+      }
       boolean isDecl = isDeclare(rec);
       if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
         boolean shouldWrite = true;
@@ -138,11 +146,15 @@ public final class SplitDtrace {
     res.clear();
     String line;
     while ((line = reader.readLine()) != null) {
-      if (!isEmpty(line)) break;
+      if (!isEmpty(line)) {
+        break;
+      }
     } //eat white space
     while (line != null) {
       line = line.trim();
-      if (isEmpty(line)) break;
+      if (isEmpty(line)) {
+        break;
+      }
       res.add(line.trim());
       line = reader.readLine();
     }

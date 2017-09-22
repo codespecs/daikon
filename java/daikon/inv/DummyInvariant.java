@@ -123,7 +123,9 @@ public class DummyInvariant extends Invariant {
       int i = 0;
       while (it.hasNext()) {
         newVars[i++] = it.next();
-        if (i == sliceSize) break;
+        if (i == sliceSize) {
+          break;
+        }
       }
     }
     vars = newVars;

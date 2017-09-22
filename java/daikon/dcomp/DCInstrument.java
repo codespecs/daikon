@@ -637,7 +637,9 @@ class DCInstrument extends StackMapUtils {
         // Don't modify class initialization methods.  They can't affect
         // user comparability and there isn't any way to get a second
         // copy of them.
-        if (BCELUtil.is_clinit(m)) continue;
+        if (BCELUtil.is_clinit(m)) {
+          continue;
+        }
 
         debug_transform.log("  Processing method %s", m);
 
@@ -770,7 +772,9 @@ class DCInstrument extends StackMapUtils {
         // Don't modify class initialization methods.  They can't affect
         // user comparability and there isn't any way to get a second
         // copy of them.
-        if (BCELUtil.is_clinit(m)) continue;
+        if (BCELUtil.is_clinit(m)) {
+          continue;
+        }
 
         debug_transform.log("  Processing method %s", m);
 
@@ -4238,7 +4242,9 @@ class DCInstrument extends StackMapUtils {
       field_set.add(f.getName());
 
       // skip primitive fields
-      if (!is_primitive(f.getType())) continue;
+      if (!is_primitive(f.getType())) {
+        continue;
+      }
 
       MethodGen get_method;
       MethodGen set_method;
@@ -4266,9 +4272,15 @@ class DCInstrument extends StackMapUtils {
     }
     for (JavaClass super_class : super_classes) {
       for (Field f : super_class.getFields()) {
-        if (f.isPrivate()) continue;
-        if (field_set.contains(f.getName())) continue;
-        if (!is_primitive(f.getType())) continue;
+        if (f.isPrivate()) {
+          continue;
+        }
+        if (field_set.contains(f.getName())) {
+          continue;
+        }
+        if (!is_primitive(f.getType())) {
+          continue;
+        }
 
         field_set.add(f.getName());
         MethodGen get_method;
@@ -4317,7 +4329,9 @@ class DCInstrument extends StackMapUtils {
     // Also make sure the the static_tags list is large enough for
     // of the tags.
     for (Field f : jc.getFields()) {
-      if (!is_primitive(f.getType())) continue;
+      if (!is_primitive(f.getType())) {
+        continue;
+      }
       if (f.isStatic()) {
         if (!in_jdk) {
           int min_size = static_map.size() + DCRuntime.max_jdk_static;
