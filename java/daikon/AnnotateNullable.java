@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.checkerframework.checker.index.qual.NonNegative;
 import plume.Option;
 import plume.Options;
 import plume.SimpleLog;
@@ -111,8 +112,9 @@ public class AnnotateNullable {
     for (PptTopLevel ppt : ppts.pptIterable()) {
       if (!ppt.is_combined_exit() || !is_static_method(ppt)) continue;
 
-      String name = ppt.name().replaceFirst("[(].*$", "");
-      int lastdot = name.lastIndexOf('.');
+      String name = ppt.name().replaceFirst("[(].*$", ""); // remove arguments, leaving method name
+      @SuppressWarnings("index") // Invariants are from Java file, so method name contains .
+      @NonNegative int lastdot = name.lastIndexOf('.');
       @SuppressWarnings("keyfor") // appliction invariant:  KeyFor and substring
       // @KeyFor because class_map has entry per class, and this method is in some class
       /*@KeyFor("class_map")*/ String classname = name.substring(0, lastdot);

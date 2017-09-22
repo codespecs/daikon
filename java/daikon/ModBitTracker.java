@@ -26,7 +26,7 @@ public class ModBitTracker implements Serializable, Cloneable {
   private static boolean debug = false;
 
   /** The maximum number of BitSets; the size of modbits_arrays. */
-  private /*@NonNegative*/ int num_vars;
+  private /*@LengthOf("modbits_arrays")*/ int num_vars;
   /** The size of each BitSet in modbits_arrays. */
   private /*@NonNegative*/ int num_samples;
 

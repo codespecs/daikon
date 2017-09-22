@@ -86,10 +86,10 @@ public class DynamicConstants implements Serializable {
   List<Constant> missing_list = new ArrayList<Constant>();
 
   // Same contents in both.  Why two data structures?
-  /** List of all variables. Some may be non-constant. */
+  /** List of all variables. Some may be non-constant. Same length and indexing as ppt.var_infos. */
   Constant[] all_vars;
 
-  /** List of all variables. Some may be non-constant. */
+  /** List of all variables. Some may be non-constant. Same length and indexing as ppt.var_infos. */
   List<Constant> all_list = new ArrayList<Constant>();
 
   /** Program point of these constants. */
@@ -509,7 +509,9 @@ public class DynamicConstants implements Serializable {
     // Create any ternary invariants that are suppressed when one
     // of the variables is a constant.  Currently, only LinearTernary
     // falls into this list (It is suppressed by (x = C) && (Ay + Bz = D))
-    if (NIS.dkconfig_enabled) instantiate_constant_suppressions(noncons, all_list);
+    if (NIS.dkconfig_enabled) {
+      instantiate_constant_suppressions(noncons, all_list);
+    }
   }
 
   /**

@@ -3,6 +3,7 @@ package daikon;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
 import plume.*;
 
 /*>>>
@@ -231,7 +232,7 @@ public class PptName implements Serializable {
   public int getPointSubscript() {
     int result = Integer.MIN_VALUE;
     if (point != null) {
-      // returns the largest substring [i..] which parses to an integer
+      // returns the largest substring [i..] that parses to an integer
       for (int i = 0; i < point.length(); i++) {
         char c = point.charAt(i);
         if (('0' <= c) && (c <= '9')) {
@@ -310,9 +311,12 @@ public class PptName implements Serializable {
     if (!isExitPoint()) {
       return "";
     }
-    int non_digit;
-    for (non_digit = FileIO.exit_suffix.length(); non_digit < point.length(); non_digit++) {
-      if (!Character.isDigit(point.charAt(non_digit))) break;
+    @SuppressWarnings("index") // isExitPoint() => point.startsWith(FileIO.exit_suffix).
+    @IndexOrHigh("point") int non_digit = FileIO.exit_suffix.length();
+    for (; non_digit < point.length(); non_digit++) {
+      if (!Character.isDigit(point.charAt(non_digit))) {
+        break;
+      }
     }
     return point.substring(FileIO.exit_suffix.length(), non_digit);
   }
