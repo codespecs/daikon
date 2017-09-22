@@ -706,8 +706,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     for (int i = 0; i < tokens.length; i++) {
       NodeToken token = tokens[i];
       if (token.kind == IDENTIFIER) {
-        if ((i > 0) && (tokens[i - 1].kind == DOT)) continue;
-        if ((i < tokens.length - 1) && (tokens[i + 1].kind == LPAREN)) continue;
+        if ((i > 0) && (tokens[i - 1].kind == DOT)) {
+          continue;
+        }
+        if ((i < tokens.length - 1) && (tokens[i + 1].kind == LPAREN)) {
+          continue;
+        }
         variables.add(token.tokenImage);
       }
     }

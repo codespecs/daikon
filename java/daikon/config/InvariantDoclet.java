@@ -200,8 +200,12 @@ public class InvariantDoclet {
     TreeSet<ClassDoc> list = new TreeSet<ClassDoc>();
     gather_derived_classes(cd, list);
     for (ClassDoc dc : list) {
-      if (dc.isAbstract()) continue;
-      if (dc.qualifiedName().indexOf(".test.") != -1) continue;
+      if (dc.isAbstract()) {
+        continue;
+      }
+      if (dc.qualifiedName().indexOf(".test.") != -1) {
+        continue;
+      }
 
       // setup the comment for info
       String comment = dc.commentText();

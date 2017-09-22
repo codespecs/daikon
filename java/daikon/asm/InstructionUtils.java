@@ -127,20 +127,34 @@ public class InstructionUtils {
           allVarBases.add(varBase);
           String var = "bv:" + instr.getAddress() + ":" + varBase;
           // If variable is already redundant, skip it.
-          if (rvars.containsKey(var)) continue;
+          if (rvars.containsKey(var)) {
+            continue;
+          }
           // If last time variable var was killed was by a memory load
           // instruction like "mov_ld [memref] -> var", then make var
           // redundant and make [memref] its leader.
-          if (!Operand.isRegister(varBase)) continue;
+          if (!Operand.isRegister(varBase)) {
+            continue;
+          }
           Integer lastTimeKilled = timeKilled.get(varBase);
-          if (lastTimeKilled == null) continue;
+          if (lastTimeKilled == null) {
+            continue;
+          }
           IInstruction ii = path.get(lastTimeKilled);
-          if (!(ii instanceof X86Instruction)) continue;
+          if (!(ii instanceof X86Instruction)) {
+            continue;
+          }
           X86Instruction mov_ld = (X86Instruction) ii;
-          if (!mov_ld.getOpName().equals("mov_ld")) continue;
-          if (!mov_ld.killedVars.contains(varBase)) continue;
+          if (!mov_ld.getOpName().equals("mov_ld")) {
+            continue;
+          }
+          if (!mov_ld.killedVars.contains(varBase)) {
+            continue;
+          }
           // bvs for mov_ld could be zero: for example, mov_ld [48178228+].
-          if (mov_ld.getBinaryVarNames().size() == 0) continue;
+          if (mov_ld.getBinaryVarNames().size() == 0) {
+            continue;
+          }
           assert mov_ld.args.size() == 1;
           assert mov_ld.getBinaryVarNames().contains(mov_ld.args.get(0));
           String leaderBase = mov_ld.args.get(0);

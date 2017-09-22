@@ -170,7 +170,9 @@ public class InvMatch {
       List<InvTranslate> new_translation = new ArrayList<InvTranslate>();
       new_translation.addAll(current_translation);
       new_translation.add(xlate);
-      if (!is_good_translation(new_translation)) continue;
+      if (!is_good_translation(new_translation)) {
+        continue;
+      }
 
       if ((index + 1) == xlate_list.size()) {
         valid_translations.add(new_translation);
@@ -185,7 +187,9 @@ public class InvMatch {
     Map<String, String> var_map = new LinkedHashMap<String, String>();
 
     for (InvTranslate xlate : translation_list) {
-      if (xlate == null) continue;
+      if (xlate == null) {
+        continue;
+      }
       for (String key : xlate.var_map.keySet()) {
         String val = xlate.var_map.get(key);
         String cur_val = var_map.get(key);
