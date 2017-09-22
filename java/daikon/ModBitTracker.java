@@ -44,8 +44,8 @@ public class ModBitTracker implements Serializable, Cloneable {
   private int[] index;
 
   /**
-   * The number of BitSets (equivalence sets) in use. All elements of modbits_arrays at or past this
-   * index are null.
+   * The number of BitSets (equivalence sets) in use. All elements of modbits_arrays before this
+   * index are non-null, and all elements at or past this index are null.
    */
   private int num_sets;
 
@@ -66,10 +66,12 @@ public class ModBitTracker implements Serializable, Cloneable {
     modbits_arrays = new /*@Nullable*/ BitSet[num_vars];
     if (num_vars > 0) {
       modbits_arrays[0] = new BitSet();
+      num_sets = 1;
+    } else {
+      num_sets = 0;
     }
     num_samples = 0;
     index = new int[num_vars];
-    num_sets = 1;
     this_bits = new boolean[num_vars];
     this_bits_valid = new boolean[num_vars];
     this_bits_exception_index = new int[num_vars];
