@@ -209,8 +209,11 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
       JavaClass njc = cg.getJavaClass();
       if (Chicory.debug) {
-        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), "/tmp/ret/");
-        njc.dump("/tmp/ret/" + njc.getClassName() + ".class");
+        String dir = "/tmp/chicory-debug";
+        String filename = dir + "/" + njc.getClassName() + ".class";
+        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), filename);
+        new File(dir).mkdirs();
+        njc.dump(filename);
       }
 
       if (c_info.shouldInclude) {
