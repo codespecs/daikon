@@ -4,6 +4,8 @@ import daikon.Chicory;
 import daikon.util.SimpleLog;
 import java.io.*;
 import java.lang.instrument.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
@@ -209,11 +211,11 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
       JavaClass njc = cg.getJavaClass();
       if (Chicory.debug) {
-        String dir = "/tmp/chicory-debug";
-        String filename = dir + "/" + njc.getClassName() + ".class";
-        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), filename);
-        new File(dir).mkdirs();
-        njc.dump(filename);
+        Path dir = Files.createTempDirectory("chicory-debug");
+        Path file = dir.resolve(njc.getClassName() + ".class");
+        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
+        Files.createDirectories(dir);
+        njc.dump(file.toFile());
       }
 
       if (c_info.shouldInclude) {
