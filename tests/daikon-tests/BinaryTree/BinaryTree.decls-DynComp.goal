@@ -8,11 +8,11 @@ DataStructures.BinarySearchTree:::CLASS
 DECLARE
 DataStructures.BinarySearchTree:::OBJECT
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -23,11 +23,11 @@ DataStructures.BinarySearchTree.BinarySearchTree():::ENTER
 DECLARE
 DataStructures.BinarySearchTree.BinarySearchTree():::EXIT30
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -35,11 +35,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -54,11 +54,11 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT39
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -74,11 +74,11 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -93,11 +93,11 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::EXIT48
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -113,22 +113,22 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.findMin():::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.BinarySearchTree.findMin():::EXIT56
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 4
 return
@@ -144,22 +144,22 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.findMax():::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.BinarySearchTree.findMax():::EXIT65
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 4
 return
@@ -175,11 +175,11 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.find(DataStructures.Comparable):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -194,11 +194,11 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT75
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 4
 x
@@ -222,22 +222,22 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.makeEmpty():::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.BinarySearchTree.makeEmpty():::EXIT84
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -245,22 +245,22 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.isEmpty():::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.BinarySearchTree.isEmpty():::EXIT92
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 4
 return
@@ -272,22 +272,22 @@ boolean
 DECLARE
 DataStructures.BinarySearchTree.printTree():::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.BinarySearchTree.printTree():::EXIT104
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 2
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -295,11 +295,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 t
@@ -310,11 +310,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT113
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 4
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 3
 t
@@ -334,11 +334,11 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -357,11 +357,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT132
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -385,11 +385,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -408,11 +408,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -435,11 +435,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -463,11 +463,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 t
@@ -478,11 +478,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 t
@@ -497,11 +497,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 t
@@ -516,11 +516,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 t
@@ -536,11 +536,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 t
@@ -551,11 +551,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT184
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 t
@@ -571,11 +571,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -594,11 +594,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -621,11 +621,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -648,11 +648,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -675,11 +675,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 2
 x
@@ -703,11 +703,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 4
 t
@@ -718,11 +718,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode):::EXIT217
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 4
 t
@@ -734,11 +734,11 @@ hashcode
 DECLARE
 DataStructures.BinarySearchTree.equals(java.lang.Object):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 4
 obj
@@ -753,11 +753,11 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.equals(java.lang.Object):::EXIT1
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 4
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 5
 obj
@@ -777,11 +777,11 @@ boolean
 DECLARE
 DataStructures.BinarySearchTree.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 3
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 4
 obj
@@ -796,11 +796,11 @@ java.lang.String
 DECLARE
 DataStructures.BinarySearchTree.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.BinarySearchTree # isNonNull=true isParam=true
+DataStructures.BinarySearchTree # isNonNull=true, isParam=true
 hashcode
 4
 this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures, 
+DataStructures.BinaryNode # declaringClassPackageName=DataStructures
 hashcode
 5
 obj

@@ -286,7 +286,7 @@ public class AnnotateNullable {
       // if (! stub_format) {
       //   annotation = "org.checkerframework.checker.nullness.qual." + annotation;
       // }
-      annotation = "@" + annotation + " ";
+      annotation = "@" + annotation;
     }
     return annotation;
   }

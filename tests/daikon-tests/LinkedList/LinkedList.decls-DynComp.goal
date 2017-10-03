@@ -8,15 +8,15 @@ DataStructures.LinkedList:::CLASS
 DECLARE
 DataStructures.LinkedList:::OBJECT
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -24,11 +24,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -36,7 +36,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -47,15 +47,15 @@ DataStructures.LinkedList.LinkedList():::ENTER
 DECLARE
 DataStructures.LinkedList.LinkedList():::EXIT37
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -63,11 +63,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -75,7 +75,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -83,15 +83,15 @@ hashcode
 DECLARE
 DataStructures.LinkedList.isEmpty():::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -99,11 +99,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -111,22 +111,22 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.LinkedList.isEmpty():::EXIT45
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 3
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.element.getClass().getName()
@@ -134,11 +134,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.next.element.getClass().getName()
@@ -146,7 +146,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 return
@@ -158,15 +158,15 @@ boolean
 DECLARE
 DataStructures.LinkedList.makeEmpty():::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -174,11 +174,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -186,22 +186,22 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.LinkedList.makeEmpty():::EXIT54
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -209,11 +209,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -221,7 +221,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -229,15 +229,15 @@ hashcode
 DECLARE
 DataStructures.LinkedList.zeroth():::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -245,11 +245,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -257,22 +257,22 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.LinkedList.zeroth():::EXIT62
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 5
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.element.getClass().getName()
@@ -280,11 +280,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 7
 this.header.next.element.getClass().getName()
@@ -292,7 +292,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 return
@@ -300,11 +300,11 @@ DataStructures.LinkedListItr
 hashcode
 2
 return.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 return.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 return.current.element.getClass().getName()
@@ -312,7 +312,7 @@ java.lang.Class
 java.lang.String
 1
 return.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -320,15 +320,15 @@ hashcode
 DECLARE
 DataStructures.LinkedList.first():::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -336,11 +336,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -348,22 +348,22 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.LinkedList.first():::EXIT71
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 5
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.element.getClass().getName()
@@ -371,11 +371,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.next.element.getClass().getName()
@@ -383,7 +383,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 return
@@ -391,11 +391,11 @@ DataStructures.LinkedListItr
 hashcode
 2
 return.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 return.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 return.current.element.getClass().getName()
@@ -403,7 +403,7 @@ java.lang.Class
 java.lang.String
 1
 return.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -411,15 +411,15 @@ hashcode
 DECLARE
 DataStructures.LinkedList.insert(java.lang.Object, DataStructures.LinkedListItr):::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 5
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.element.getClass().getName()
@@ -427,11 +427,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.next.element.getClass().getName()
@@ -439,7 +439,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -455,11 +455,11 @@ DataStructures.LinkedListItr # isParam=true
 hashcode
 2
 p.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 p.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 p.current.element.getClass().getName()
@@ -467,22 +467,22 @@ java.lang.Class
 java.lang.String
 1
 p.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
 DECLARE
 DataStructures.LinkedList.insert(java.lang.Object, DataStructures.LinkedListItr):::EXIT83
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 5
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.element.getClass().getName()
@@ -490,11 +490,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.next.element.getClass().getName()
@@ -502,7 +502,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -518,11 +518,11 @@ DataStructures.LinkedListItr # isParam=true
 hashcode
 2
 p.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 p.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 p.current.element.getClass().getName()
@@ -530,7 +530,7 @@ java.lang.Class
 java.lang.String
 1
 p.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -538,15 +538,15 @@ hashcode
 DECLARE
 DataStructures.LinkedList.find(java.lang.Object):::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -554,11 +554,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -566,7 +566,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -581,15 +581,15 @@ java.lang.String
 DECLARE
 DataStructures.LinkedList.find(java.lang.Object):::EXIT97
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 5
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.element.getClass().getName()
@@ -597,11 +597,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.next.element.getClass().getName()
@@ -609,7 +609,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -625,11 +625,11 @@ DataStructures.LinkedListItr
 hashcode
 2
 return.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 return.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 return.current.element.getClass().getName()
@@ -637,7 +637,7 @@ java.lang.Class
 java.lang.String
 1
 return.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -645,15 +645,15 @@ hashcode
 DECLARE
 DataStructures.LinkedList.findPrevious(java.lang.Object):::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -661,11 +661,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -673,7 +673,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -688,15 +688,15 @@ java.lang.String
 DECLARE
 DataStructures.LinkedList.findPrevious(java.lang.Object):::EXIT113
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 5
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.element.getClass().getName()
@@ -704,11 +704,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.next.element.getClass().getName()
@@ -716,7 +716,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -732,11 +732,11 @@ DataStructures.LinkedListItr
 hashcode
 2
 return.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 return.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 return.current.element.getClass().getName()
@@ -744,7 +744,7 @@ java.lang.Class
 java.lang.String
 1
 return.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 
@@ -752,15 +752,15 @@ hashcode
 DECLARE
 DataStructures.LinkedList.remove(java.lang.Object):::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -768,11 +768,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -780,7 +780,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -795,15 +795,15 @@ java.lang.String
 DECLARE
 DataStructures.LinkedList.remove(java.lang.Object):::EXIT126
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 2
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element.getClass().getName()
@@ -811,11 +811,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element.getClass().getName()
@@ -823,7 +823,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 x
@@ -843,11 +843,11 @@ DataStructures.LinkedList # isParam=true
 hashcode
 2
 theList.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 theList.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 theList.header.element.getClass().getName()
@@ -855,7 +855,7 @@ java.lang.Class
 java.lang.String
 1
 theList.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 
@@ -866,11 +866,11 @@ DataStructures.LinkedList # isParam=true
 hashcode
 2
 theList.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 theList.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 theList.header.element.getClass().getName()
@@ -878,7 +878,7 @@ java.lang.Class
 java.lang.String
 1
 theList.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 
@@ -886,15 +886,15 @@ hashcode
 DECLARE
 DataStructures.LinkedList.equals(java.lang.Object):::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 3
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.element.getClass().getName()
@@ -902,11 +902,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.next.element.getClass().getName()
@@ -914,7 +914,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 obj
@@ -929,15 +929,15 @@ java.lang.String
 DECLARE
 DataStructures.LinkedList.equals(java.lang.Object):::EXIT1
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 4
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.element.getClass().getName()
@@ -945,11 +945,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 7
 this.header.next.element.getClass().getName()
@@ -957,7 +957,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 obj
@@ -977,15 +977,15 @@ boolean
 DECLARE
 DataStructures.LinkedList.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 3
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.element.getClass().getName()
@@ -993,11 +993,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.next.element.getClass().getName()
@@ -1005,7 +1005,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 obj
@@ -1020,15 +1020,15 @@ java.lang.String
 DECLARE
 DataStructures.LinkedList.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.LinkedList # isNonNull=true isParam=true
+DataStructures.LinkedList # isNonNull=true, isParam=true
 hashcode
 4
 this.header
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.header.element.getClass().getName()
@@ -1036,11 +1036,11 @@ java.lang.Class
 java.lang.String
 1
 this.header.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.header.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 7
 this.header.next.element.getClass().getName()
@@ -1048,7 +1048,7 @@ java.lang.Class
 java.lang.String
 1
 this.header.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 obj
@@ -1070,11 +1070,11 @@ DataStructures.ListNode:::CLASS
 DECLARE
 DataStructures.ListNode:::OBJECT
 this
-DataStructures.ListNode # isNonNull=true isParam=true
+DataStructures.ListNode # isNonNull=true, isParam=true
 hashcode
 2
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.element.getClass().getName()
@@ -1082,11 +1082,11 @@ java.lang.Class
 java.lang.String
 1
 this.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.next.element.getClass().getName()
@@ -1094,11 +1094,11 @@ java.lang.Class
 java.lang.String
 1
 this.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.next.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.next.next.element.getClass().getName()
@@ -1106,7 +1106,7 @@ java.lang.Class
 java.lang.String
 1
 this.next.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 
@@ -1125,11 +1125,11 @@ java.lang.String
 DECLARE
 DataStructures.ListNode.ListNode(java.lang.Object):::EXIT13
 this
-DataStructures.ListNode # isNonNull=true isParam=true
+DataStructures.ListNode # isNonNull=true, isParam=true
 hashcode
 3
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.element.getClass().getName()
@@ -1137,11 +1137,11 @@ java.lang.Class
 java.lang.String
 1
 this.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.next.element.getClass().getName()
@@ -1149,11 +1149,11 @@ java.lang.Class
 java.lang.String
 1
 this.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 this.next.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.next.next.element.getClass().getName()
@@ -1161,7 +1161,7 @@ java.lang.Class
 java.lang.String
 1
 this.next.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 theElement
@@ -1189,7 +1189,7 @@ DataStructures.ListNode # isParam=true
 hashcode
 2
 n.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 n.element.getClass().getName()
@@ -1197,11 +1197,11 @@ java.lang.Class
 java.lang.String
 1
 n.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 n.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 n.next.element.getClass().getName()
@@ -1209,18 +1209,18 @@ java.lang.Class
 java.lang.String
 1
 n.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 
 DECLARE
 DataStructures.ListNode.ListNode(java.lang.Object, DataStructures.ListNode):::EXIT19
 this
-DataStructures.ListNode # isNonNull=true isParam=true
+DataStructures.ListNode # isNonNull=true, isParam=true
 hashcode
 6
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.element.getClass().getName()
@@ -1228,11 +1228,11 @@ java.lang.Class
 java.lang.String
 1
 this.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 2
 this.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.next.element.getClass().getName()
@@ -1240,11 +1240,11 @@ java.lang.Class
 java.lang.String
 1
 this.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.next.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.next.next.element.getClass().getName()
@@ -1252,7 +1252,7 @@ java.lang.Class
 java.lang.String
 1
 this.next.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 theElement
@@ -1268,7 +1268,7 @@ DataStructures.ListNode # isParam=true
 hashcode
 2
 n.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 n.element.getClass().getName()
@@ -1276,11 +1276,11 @@ java.lang.Class
 java.lang.String
 1
 n.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 n.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 n.next.element.getClass().getName()
@@ -1288,7 +1288,7 @@ java.lang.Class
 java.lang.String
 1
 n.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 
@@ -1296,11 +1296,11 @@ hashcode
 DECLARE
 DataStructures.ListNode.equals(java.lang.Object):::ENTER
 this
-DataStructures.ListNode # isNonNull=true isParam=true
+DataStructures.ListNode # isNonNull=true, isParam=true
 hashcode
 3
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.element.getClass().getName()
@@ -1308,11 +1308,11 @@ java.lang.Class
 java.lang.String
 1
 this.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.next.element.getClass().getName()
@@ -1320,11 +1320,11 @@ java.lang.Class
 java.lang.String
 1
 this.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 this.next.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.next.next.element.getClass().getName()
@@ -1332,7 +1332,7 @@ java.lang.Class
 java.lang.String
 1
 this.next.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 obj
@@ -1347,11 +1347,11 @@ java.lang.String
 DECLARE
 DataStructures.ListNode.equals(java.lang.Object):::EXIT1
 this
-DataStructures.ListNode # isNonNull=true isParam=true
+DataStructures.ListNode # isNonNull=true, isParam=true
 hashcode
 4
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.element.getClass().getName()
@@ -1359,11 +1359,11 @@ java.lang.Class
 java.lang.String
 1
 this.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 this.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.next.element.getClass().getName()
@@ -1371,11 +1371,11 @@ java.lang.Class
 java.lang.String
 1
 this.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 this.next.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.next.next.element.getClass().getName()
@@ -1383,7 +1383,7 @@ java.lang.Class
 java.lang.String
 1
 this.next.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 8
 obj
@@ -1403,11 +1403,11 @@ boolean
 DECLARE
 DataStructures.ListNode.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.ListNode # isNonNull=true isParam=true
+DataStructures.ListNode # isNonNull=true, isParam=true
 hashcode
 3
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.element.getClass().getName()
@@ -1415,11 +1415,11 @@ java.lang.Class
 java.lang.String
 1
 this.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.next.element.getClass().getName()
@@ -1427,11 +1427,11 @@ java.lang.Class
 java.lang.String
 1
 this.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 this.next.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.next.next.element.getClass().getName()
@@ -1439,7 +1439,7 @@ java.lang.Class
 java.lang.String
 1
 this.next.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 obj
@@ -1454,11 +1454,11 @@ java.lang.String
 DECLARE
 DataStructures.ListNode.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.ListNode # isNonNull=true isParam=true
+DataStructures.ListNode # isNonNull=true, isParam=true
 hashcode
 4
 this.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.element.getClass().getName()
@@ -1466,11 +1466,11 @@ java.lang.Class
 java.lang.String
 1
 this.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 this.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.next.element.getClass().getName()
@@ -1478,11 +1478,11 @@ java.lang.Class
 java.lang.String
 1
 this.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 this.next.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.next.next.element.getClass().getName()
@@ -1490,7 +1490,7 @@ java.lang.Class
 java.lang.String
 1
 this.next.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 8
 obj
@@ -1512,15 +1512,15 @@ DataStructures.LinkedListItr:::CLASS
 DECLARE
 DataStructures.LinkedListItr:::OBJECT
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element.getClass().getName()
@@ -1528,11 +1528,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.next.element.getClass().getName()
@@ -1540,7 +1540,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 
@@ -1552,7 +1552,7 @@ DataStructures.ListNode # isParam=true
 hashcode
 2
 theNode.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 theNode.element.getClass().getName()
@@ -1560,11 +1560,11 @@ java.lang.Class
 java.lang.String
 1
 theNode.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 theNode.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 theNode.next.element.getClass().getName()
@@ -1572,22 +1572,22 @@ java.lang.Class
 java.lang.String
 1
 theNode.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 
 DECLARE
 DataStructures.LinkedListItr.LinkedListItr(DataStructures.ListNode):::EXIT27
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 6
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 2
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.current.element.getClass().getName()
@@ -1595,11 +1595,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 this.current.next.element.getClass().getName()
@@ -1607,7 +1607,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 theNode
@@ -1615,7 +1615,7 @@ DataStructures.ListNode # isParam=true
 hashcode
 2
 theNode.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 theNode.element.getClass().getName()
@@ -1623,11 +1623,11 @@ java.lang.Class
 java.lang.String
 1
 theNode.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 theNode.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 3
 theNode.next.element.getClass().getName()
@@ -1635,7 +1635,7 @@ java.lang.Class
 java.lang.String
 1
 theNode.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 
@@ -1643,15 +1643,15 @@ hashcode
 DECLARE
 DataStructures.LinkedListItr.isPastEnd():::ENTER
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element.getClass().getName()
@@ -1659,11 +1659,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.next.element.getClass().getName()
@@ -1671,22 +1671,22 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 
 DECLARE
 DataStructures.LinkedListItr.isPastEnd():::EXIT35
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.element.getClass().getName()
@@ -1694,11 +1694,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element.getClass().getName()
@@ -1706,7 +1706,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 return
@@ -1718,15 +1718,15 @@ boolean
 DECLARE
 DataStructures.LinkedListItr.retrieve():::ENTER
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element.getClass().getName()
@@ -1734,11 +1734,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.next.element.getClass().getName()
@@ -1746,22 +1746,22 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 
 DECLARE
 DataStructures.LinkedListItr.retrieve():::EXIT45
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 2
 this.current.element.getClass().getName()
@@ -1769,11 +1769,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 2
 this.current.next.element.getClass().getName()
@@ -1781,7 +1781,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 return
@@ -1797,15 +1797,15 @@ java.lang.String
 DECLARE
 DataStructures.LinkedListItr.advance():::ENTER
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element.getClass().getName()
@@ -1813,11 +1813,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.next.element.getClass().getName()
@@ -1825,22 +1825,22 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 
 DECLARE
 DataStructures.LinkedListItr.advance():::EXIT56
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 2
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 3
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element.getClass().getName()
@@ -1848,11 +1848,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.next.element.getClass().getName()
@@ -1860,7 +1860,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 
@@ -1868,15 +1868,15 @@ hashcode
 DECLARE
 DataStructures.LinkedListItr.equals(java.lang.Object):::ENTER
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.element.getClass().getName()
@@ -1884,11 +1884,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element.getClass().getName()
@@ -1896,7 +1896,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 obj
@@ -1911,15 +1911,15 @@ java.lang.String
 DECLARE
 DataStructures.LinkedListItr.equals(java.lang.Object):::EXIT1
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 4
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.current.element.getClass().getName()
@@ -1927,11 +1927,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.current.next.element.getClass().getName()
@@ -1939,7 +1939,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 8
 obj
@@ -1959,15 +1959,15 @@ boolean
 DECLARE
 DataStructures.LinkedListItr.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 3
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 4
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.element.getClass().getName()
@@ -1975,11 +1975,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 6
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.next.element.getClass().getName()
@@ -1987,7 +1987,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 obj
@@ -2002,15 +2002,15 @@ java.lang.String
 DECLARE
 DataStructures.LinkedListItr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.LinkedListItr # isNonNull=true isParam=true
+DataStructures.LinkedListItr # isNonNull=true, isParam=true
 hashcode
 4
 this.current
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 5
 this.current.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.current.element.getClass().getName()
@@ -2018,11 +2018,11 @@ java.lang.Class
 java.lang.String
 1
 this.current.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 7
 this.current.next.element
-java.lang.Object # declaringClassPackageName=DataStructures, 
+java.lang.Object # declaringClassPackageName=DataStructures
 hashcode
 6
 this.current.next.element.getClass().getName()
@@ -2030,7 +2030,7 @@ java.lang.Class
 java.lang.String
 1
 this.current.next.next
-DataStructures.ListNode # declaringClassPackageName=DataStructures, 
+DataStructures.ListNode # declaringClassPackageName=DataStructures
 hashcode
 8
 obj

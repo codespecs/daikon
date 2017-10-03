@@ -13,9 +13,8 @@ import typequals.*;
 */
 
 /**
- * Represents the invariant <code>x == r (mod m)</code> where <code>x</code> is a long scalar
- * variable, <code>r</code> is the (constant) remainder, and <code>m</code> is the (constant)
- * modulus.
+ * Represents the invariant {@code x == r (mod m)} where {@code x} is a long scalar variable, {@code
+ * r} is the (constant) remainder, and {@code m} is the (constant) modulus.
  */
 public class Modulus extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to
