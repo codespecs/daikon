@@ -386,7 +386,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
       int tokInfo = tok.nextToken();
       while (tokInfo != StreamTokenizer.TT_EOF) {
-        if (tok.ttype != '"') continue;
+        if (tok.ttype != '"') {
+          continue;
+        }
         assert tok.sval != null
             : "@AssumeAssertion(nullness)"; // tok.type == '"' guarantees not null
         lValues.add(tok.sval.trim());

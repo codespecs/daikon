@@ -209,7 +209,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     String leaderName = leader.name();
     List<String> clauses = new ArrayList<String>();
     for (VarInfo var : vars) {
-      if (leader == var) continue;
+      if (leader == var) {
+        continue;
+      }
       clauses.add(String.format("(%s == %s)", leaderName, var.name()));
     }
     return UtilMDE.join(clauses, " && ");
@@ -248,9 +250,15 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     int numprinted = 0;
     for (int j = 0; j < equal_vars.size(); j++) {
       VarInfo other = equal_vars.get(j);
-      if (other == leader) continue;
-      if (leader.prestate_name().equals(other.name())) continue;
-      if (other.prestate_name().equals(leader.name())) continue;
+      if (other == leader) {
+        continue;
+      }
+      if (leader.prestate_name().equals(other.name())) {
+        continue;
+      }
+      if (other.prestate_name().equals(leader.name())) {
+        continue;
+      }
       if (numprinted > 0) {
         result += Global.lineSep;
       }
@@ -287,7 +295,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     String leaderName = leader.simplify_name();
     if (leader.rep_type.isArray()) {
       for (VarInfo var : vars) {
-        if (var == leader) continue;
+        if (var == leader) {
+          continue;
+        }
         String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(), leader, var);
         String a = format_elt(form[1]);
         String b = format_elt(form[2]);
@@ -295,7 +305,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
     } else {
       for (VarInfo var : vars) {
-        if (var == leader) continue;
+        if (var == leader) {
+          continue;
+        }
         String a = format_elt(leaderName);
         String b = format_elt(var.simplify_name());
         result.append(" (EQ ");
@@ -318,7 +330,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     String leaderName = leader.name_using(format);
     List<String> clauses = new ArrayList<String>();
     for (VarInfo var : vars) {
-      if (leader == var) continue;
+      if (leader == var) {
+        continue;
+      }
       if (leader.rep_type.isArray()) {
         clauses.add(
             String.format(
@@ -373,7 +387,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     }
     for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
       VarInfo vi = i.next();
-      if (vi == leader) continue;
+      if (vi == leader) {
+        continue;
+      }
       assert vi.comparableNWay(leader);
       Object viValue = vi.getValueOrNull(vt);
       int viMod = vi.getModified(vt);
@@ -456,7 +472,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       debugPostProcess.fine("  var1: " + leader.name());
     }
     for (int i = 0; i < varArray.length; i++) {
-      if (varArray[i] == leader) continue;
+      if (varArray[i] == leader) {
+        continue;
+      }
       if (debugPostProcess.isLoggable(Level.FINE)) {
         debugPostProcess.fine("  var2: " + varArray[i].name());
       }
@@ -474,7 +492,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
             break;
           }
         }
-        if (allEqual) continue;
+        if (allEqual) {
+          continue;
+        }
       }
 
       parent.create_equality_inv(leader, varArray[i], numSamples());

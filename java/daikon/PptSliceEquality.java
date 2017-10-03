@@ -212,7 +212,9 @@ public class PptSliceEquality extends PptSlice {
     // equality set (albeit with only the one variable)
     ArrayList<Invariant> newInvs = new ArrayList<Invariant>();
     for (VarInfo v : var_infos) {
-      if (v.equalitySet != null) continue;
+      if (v.equalitySet != null) {
+        continue;
+      }
       List<VarInfo> vlist = varmap.get(v);
       if (vlist == null) {
         vlist = new ArrayList<VarInfo>(1);

@@ -97,7 +97,9 @@ public class Premain {
       BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));
       while (true) {
         String line = reader.readLine();
-        if (line == null) break;
+        if (line == null) {
+          break;
+        }
         // System.out.printf ("adding '%s'%n", line);
         pre_instrumented.add(line);
       }

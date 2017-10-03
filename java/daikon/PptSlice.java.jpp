@@ -356,7 +356,9 @@ public final class PPTSLICE1 extends PptSlice {
     List<Invariant> result = new ArrayList<Invariant>();
     for (Invariant invariant : invs) {
       UnaryInvariant inv = (UnaryInvariant) invariant;
-      if (inv.is_false()) continue;
+      if (inv.is_false()) {
+  continue;
+}
       InvariantStatus status = inv.add(val1, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
         inv.falsify();
@@ -392,7 +394,9 @@ public final class PPTSLICE1 extends PptSlice {
     if (array2 && ! array1) {
       for (Invariant invariant : invs) {
         BinaryInvariant inv = (BinaryInvariant) invariant;
-        if (inv.is_false()) continue;
+        if (inv.is_false()) {
+  continue;
+}
         InvariantStatus status = inv.add(val2, val1, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
           inv.falsify();
@@ -411,7 +415,9 @@ public final class PPTSLICE1 extends PptSlice {
     } else {
       for (Invariant invariant : invs) {
         BinaryInvariant inv = (BinaryInvariant) invariant;
-        if (inv.is_false()) continue;
+        if (inv.is_false()) {
+  continue;
+}
         Invariant clone = inv.clone();
         InvariantStatus status = inv.add(val1, val2, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
@@ -455,7 +461,9 @@ public final class PPTSLICE1 extends PptSlice {
     List<Invariant> result = new ArrayList<Invariant>();
     for (Invariant invariant : invs) {
       TernaryInvariant inv = (TernaryInvariant) invariant;
-      if (inv.is_false()) continue;
+      if (inv.is_false()) {
+  continue;
+}
       Invariant clone = inv.clone();
       InvariantStatus status = inv.add(val1, val2, val3, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {

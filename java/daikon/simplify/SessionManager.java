@@ -116,8 +116,9 @@ public class SessionManager {
         String line;
         while ((line = lines.readLine()) != null) {
           line = line.trim();
-          if (line.length() == 0) continue;
-          if (line.startsWith(";")) continue;
+          if ((line.length() == 0) || line.startsWith(";")) {
+            continue;
+          }
           result.append(" ");
           result.append(line);
           result.append(daikon.Global.lineSep);

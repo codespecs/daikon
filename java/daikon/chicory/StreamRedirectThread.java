@@ -123,7 +123,9 @@ public class StreamRedirectThread extends Thread {
           // read() is a blocking call, but that's OK because
           // this is running in its own thread.
           nextChar = in.read();
-          if (nextChar == -1) break;
+          if (nextChar == -1) {
+            break;
+          }
 
           if (debug) {
             System.out.println("[[[" + nextChar + "]]]");

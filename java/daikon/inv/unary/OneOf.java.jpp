@@ -1703,7 +1703,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       }
       Set<BASETYPE> setValuesInvariant = new TreeSet<BASETYPE>();
       for (INT e : elts) {
-        if (e == null) continue;
+        if (e == null) {
+  continue;
+}
         for (BASETYPE b : e) {
           setValuesInvariant.add(b);
         }
@@ -1786,7 +1788,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       }
       Set<INT> setValuesInvariant = new TreeSet<INT>();
       for (INT e : elts) {
-        if (e == null) continue;
+        if (e == null) {
+  continue;
+}
         setValuesInvariant.add(e);
       }
 

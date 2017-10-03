@@ -556,7 +556,9 @@ public final class Debug {
     // Loop through each set of specified debug variables.
     outer:
     for (String[] cv : debugTrackVars) {
-      if (cv.length != vis.length) continue;
+      if (cv.length != vis.length) {
+        continue;
+      }
       for (int j = 0; j < ourvars.length; j++) {
         ourvars[j] = null;
       }
@@ -644,8 +646,12 @@ public final class Debug {
     String out = "";
 
     for (VarInfo v : ppt.var_infos) {
-      if (!v.isCanonical()) continue;
-      if (v.file_rep_type != ProglangType.INT) continue;
+      if (!v.isCanonical()) {
+        continue;
+      }
+      if (v.file_rep_type != ProglangType.INT) {
+        continue;
+      }
       out += v.name() + "=" + toString(v.getValueOrNull(vt)) + " [" + vt.getModified(v) + "]: ";
     }
     return out;

@@ -316,7 +316,9 @@ public class DtraceDiff {
 
             // check to see that variables on this pair of samples match
             for (int i = 0; i < ppt1.num_tracevars; i++) {
-              if (vis1[i].is_static_constant) continue;
+              if (vis1[i].is_static_constant) {
+                continue;
+              }
               boolean missing1 = vt1.isMissingNonsensical(vis1[i]);
               boolean missing2 = vt2.isMissingNonsensical(vis2[i]);
               Object val1 = vt1.getValueOrNull(vis1[i]);

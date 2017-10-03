@@ -1450,7 +1450,9 @@ public final class DCRuntime {
       for (Object atag : elements) {
         // Ignore null and nonsensical tags.  There is no reason to process
         // their children, because they can't have any with reasonable values
-        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) continue;
+        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) {
+          continue;
+        }
 
         // Look up this object.  If it already is associated with a
         // DaikonVariable merge those variables.  Otherwise, add it to
@@ -1483,10 +1485,14 @@ public final class DCRuntime {
       for (Object atag : elements) {
         // Ignore null and nonsensical tags.  There is no reason to process
         // their children, because they can't have any with reasonable values
-        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) continue;
+        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) {
+          continue;
+        }
 
         // No need to handle the same tag twice
-        if (prev_tag == atag) continue;
+        if (prev_tag == atag) {
+          continue;
+        }
         prev_tag = atag;
 
         // Look up this object.  If it already is associated with a
@@ -1606,7 +1612,9 @@ public final class DCRuntime {
       for (Object atag : elements) {
         // Ignore null and nonsensical tags.  There is no reason to process
         // their children, because they can't have any with reasonable values
-        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) continue;
+        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) {
+          continue;
+        }
 
         // Look up this object.  If it already is associated with a
         // DaikonVariable merge those variables.  Otherwise, add it to
@@ -1639,10 +1647,14 @@ public final class DCRuntime {
       for (Object atag : elements) {
         // Ignore null and nonsensical tags.  There is no reason to process
         // their children, because they can't have any with reasonable values
-        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) continue;
+        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) {
+          continue;
+        }
 
         // No need to handle the same tag twice
-        if (prev_tag == atag) continue;
+        if (prev_tag == atag) {
+          continue;
+        }
         prev_tag = atag;
 
         // Look up this object.  If it already is associated with a
@@ -1717,9 +1729,13 @@ public final class DCRuntime {
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) continue;
+        if (mi.is_class_init()) {
+          continue;
+        }
         // skip our added method
-        if (mi.method_name.equals("equals_dcomp_instrumented")) continue;
+        if (mi.method_name.equals("equals_dcomp_instrumented")) {
+          continue;
+        }
         ps.printf("%n");
         print_comparable(ps, mi);
       }
@@ -1735,9 +1751,13 @@ public final class DCRuntime {
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) continue;
+        if (mi.is_class_init()) {
+          continue;
+        }
         // skip our added method
-        if (mi.method_name.equals("equals_dcomp_instrumented")) continue;
+        if (mi.method_name.equals("equals_dcomp_instrumented")) {
+          continue;
+        }
         ps.printf("%n");
         print_comparable_refs_only(ps, mi);
       }
@@ -1749,8 +1769,12 @@ public final class DCRuntime {
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) continue;
-        if (mi.method_name.equals("equals_dcomp_instrumented")) continue;
+        if (mi.is_class_init()) {
+          continue;
+        }
+        if (mi.method_name.equals("equals_dcomp_instrumented")) {
+          continue;
+        }
         ps.printf("%n");
         print_comparable_traced(ps, mi);
       }
@@ -1796,7 +1820,9 @@ public final class DCRuntime {
       add_dv_stats(ci.traversalClass);
       add_dv_stats(ci.traversalObject);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) continue;
+        if (mi.is_class_init()) {
+          continue;
+        }
         method_cnt++;
         System.out.printf("  Processing method %s [%d calls]%n", mi, mi.call_cnt);
         if (mi.traversalEnter == null) {
@@ -1844,8 +1870,12 @@ public final class DCRuntime {
     if (root == null) return;
     List<DaikonVariableInfo> dv_list = root.tree_as_list();
     for (DaikonVariableInfo dv : dv_list) {
-      if (dv instanceof RootInfo) continue;
-      if (!dv.declShouldPrint()) continue;
+      if (dv instanceof RootInfo) {
+        continue;
+      }
+      if (!dv.declShouldPrint()) {
+        continue;
+      }
       // System.out.printf ("      processing dv %s [%s]%n", dv,
       //                    dv.getTypeName());
       if (dv.isHashcode()) {
@@ -1903,7 +1933,9 @@ public final class DCRuntime {
 
     // Print the information for each enter/exit point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) continue;
+      if (mi.is_class_init()) {
+        continue;
+      }
       debug_decl_print.log("  method %s%n", mi.method_name);
       ps.printf("%n");
       print_decl(ps, mi);
@@ -1989,7 +2021,9 @@ public final class DCRuntime {
     // Loop through each set of comparable variables
     for (DVSet set : sets) {
 
-      if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
+      if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
+        continue;
+      }
 
       // Determine if the set has both hashcode variables and integer
       // variables.  If it does, it is indicating index comparability
@@ -2103,7 +2137,9 @@ public final class DCRuntime {
       ps.printf("  not called%n");
     } else {
       for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
+          continue;
+        }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf("  [%d] %s%n", stuff.size(), stuff);
@@ -2116,7 +2152,9 @@ public final class DCRuntime {
       ps.printf("  not called%n");
     } else {
       for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
+          continue;
+        }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf("  [%d] %s%n", stuff.size(), stuff);
@@ -2139,10 +2177,15 @@ public final class DCRuntime {
       ps.printf("  not called%n");
     } else {
       for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
-        if (set.get(0) instanceof FieldInfo) if (((FieldInfo) (set.get(0))).isPrimitive()) continue;
-        if (set.get(0) instanceof ParameterInfo)
-          if (((ParameterInfo) (set.get(0))).isPrimitive()) continue;
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
+          continue;
+        }
+        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) (set.get(0))).isPrimitive()) {
+          continue;
+        }
+        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) (set.get(0))).isPrimitive()) {
+          continue;
+        }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf("  [%d] %s%n", stuff.size(), stuff);
@@ -2155,10 +2198,15 @@ public final class DCRuntime {
       ps.printf("  not called%n");
     } else {
       for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
-        if (set.get(0) instanceof FieldInfo) if (((FieldInfo) (set.get(0))).isPrimitive()) continue;
-        if (set.get(0) instanceof ParameterInfo)
-          if (((ParameterInfo) (set.get(0))).isPrimitive()) continue;
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
+          continue;
+        }
+        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) (set.get(0))).isPrimitive()) {
+          continue;
+        }
+        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) (set.get(0))).isPrimitive()) {
+          continue;
+        }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf("  [%d] %s%n", stuff.size(), stuff);
@@ -2174,7 +2222,9 @@ public final class DCRuntime {
       ps.printf("  not called%n");
     } else {
       for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
+          continue;
+        }
         print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
         ps.printf("%n");
       }
@@ -2188,7 +2238,9 @@ public final class DCRuntime {
       ps.printf("  not called%n");
     } else {
       for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
+        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
+          continue;
+        }
         print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
         ps.printf("%n");
       }
@@ -2393,7 +2445,9 @@ public final class DCRuntime {
     // If any methods have not been executed, create their information
     // now (which will note all of their variables as not comparable)
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) continue;
+      if (mi.is_class_init()) {
+        continue;
+      }
       if (mi.traversalEnter == null) {
         // mi.initViaReflection();
         mi.init_traversal(depth);
@@ -2403,7 +2457,9 @@ public final class DCRuntime {
 
     // Merge the comparability from each exit point into the object point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) continue;
+      if (mi.is_class_init()) {
+        continue;
+      }
       debug_merge_comp.log("Merging %s exit to object%n", mi);
       merge_dv_comparability(mi.traversalExit, mi.traversalEnter);
       merge_dv_comparability(mi.traversalExit, ci.traversalObject);
@@ -2412,14 +2468,18 @@ public final class DCRuntime {
 
     // Merge the comparability from the object point back to each exit point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) continue;
+      if (mi.is_class_init()) {
+        continue;
+      }
       debug_merge_comp.log("merging object to %s exit%n", mi);
       merge_dv_comparability(ci.traversalObject, mi.traversalExit);
     }
 
     // Merge the comparability for each exit point back to the enter
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) continue;
+      if (mi.is_class_init()) {
+        continue;
+      }
       debug_merge_comp.log("merging %s exit to its enter%n", mi);
       merge_dv_comparability(mi.traversalExit, mi.traversalEnter);
     }
@@ -2448,7 +2508,9 @@ public final class DCRuntime {
 
     // Merge any destination variables that are in the same source set
     for (DVSet set : src_sets) {
-      if (set.size() == 1) continue;
+      if (set.size() == 1) {
+        continue;
+      }
       DaikonVariableInfo first_match = null;
       for (DaikonVariableInfo dvi : set) {
         if (first_match == null) {

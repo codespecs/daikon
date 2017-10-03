@@ -110,7 +110,9 @@ public final class LogHelper {
           if (ste.getClassName().startsWith("java")
               || ste.getClassName().contains("daikon.LogHelper")
               || ste.getMethodName().equals("log")
-              || ste.getClassName().contains("daikon.Debug")) continue;
+              || ste.getClassName().contains("daikon.Debug")) {
+            continue;
+          }
           src = ste.getFileName() + " " + ste.getLineNumber() + ": ";
         }
       }

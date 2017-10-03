@@ -4,6 +4,8 @@ import daikon.Chicory;
 import daikon.util.SimpleLog;
 import java.io.*;
 import java.lang.instrument.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
@@ -209,8 +211,11 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
       JavaClass njc = cg.getJavaClass();
       if (Chicory.debug) {
-        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), "/tmp/ret/");
-        njc.dump("/tmp/ret/" + njc.getClassName() + ".class");
+        Path dir = Files.createTempDirectory("chicory-debug");
+        Path file = dir.resolve(njc.getClassName() + ".class");
+        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
+        Files.createDirectories(dir);
+        njc.dump(file.toFile());
       }
 
       if (c_info.shouldInclude) {
@@ -420,6 +425,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
         // The class data in StackMapUtils is not thread safe,
         // allow only one method at a time to be instrumented.
+        // DynComp does this by creating a new instrumentation object
+        // for each class - probably a cleaner solution.
         synchronized (this) {
           pool = cg.getConstantPool();
           MethodGen mg = new MethodGen(methods[i], cg.getClassName(), pool);
@@ -446,8 +453,6 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
           if (il == null) {
             continue;
           }
-
-          fix_local_variable_table(mg);
 
           if (Chicory.debug) {
             Type[] arg_types = mg.getArgumentTypes();
@@ -476,6 +481,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
           // Get existing StackMapTable (if present)
           fetch_current_stack_map_table(mg, cg.getMajor());
+
+          fix_local_variable_table(mg);
 
           // Create a MethodInfo that describes this methods arguments
           // and exit line numbers (information not available via reflection)
