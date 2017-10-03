@@ -155,18 +155,12 @@ public abstract class StackMapUtils {
   /**
    * Remove the local variable type table attribute (LVTT) from mgen. Some instrumentation changes
    * require this to be updated, but without BCEL support that would be hard to do. It should be
-   * safe to just delete it since it is optional and really only of use to a debugger. NOTE: in a
-   * future version of BCEL this will be done with the single call:
-   * mgen.removeLocalVariableTypeTable();
+   * safe to just delete it since it is optional and really only of use to a debugger.
    *
    * @param mgen the method to clear out
    */
   protected final void remove_local_variable_type_table(MethodGen mgen) {
-    for (Attribute a : mgen.getCodeAttributes()) {
-      if (is_local_variable_type_table(a)) {
-        mgen.removeCodeAttribute(a);
-      }
-    }
+    mgen.removeLocalVariableTypeTable();
   }
 
   /**
