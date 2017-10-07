@@ -736,6 +736,7 @@ clean:
 	${MAKE} clean_class_files
 	-rm -f ChicoryPremain.jar
 	-rm -rf daikon/util
+	-rm -f daikon/chicory/Test.log
 
 dist_clean: clean
 	-rm -f TAGS
