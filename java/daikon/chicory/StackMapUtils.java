@@ -733,7 +733,7 @@ public abstract class StackMapUtils {
   /**
    * Convert a StackMapType to a Type.
    *
-   * @param t StackMapType to be converted
+   * @param smt StackMapType to be converted
    * @return result Type
    */
   protected final Type generate_Type_from_StackMapType(StackMapType smt) {
