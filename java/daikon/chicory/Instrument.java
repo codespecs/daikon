@@ -921,8 +921,6 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
     int new_index = 1;
     if (len_part2 > 0) {
-      // We need to check for len_part2 being too large,
-      // Daikon issue #30.
       new_map[1] =
           new StackMapEntry(
               ((len_part2 - 1) > Const.SAME_FRAME_MAX

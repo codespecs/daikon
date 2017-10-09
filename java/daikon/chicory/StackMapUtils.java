@@ -687,7 +687,7 @@ public abstract class StackMapUtils {
       return ((ObjectType) t).getClassName();
     } else if (t instanceof BasicType) {
       // Use reserved keyword for basic type rather than signature to
-      // avoid conflicts with user defined types. Daikon issue #10.
+      // avoid conflicts with user defined types.
       return t.toString();
     } else {
       // Array type: just convert '/' to '.'

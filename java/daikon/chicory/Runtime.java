@@ -614,7 +614,7 @@ public class Runtime {
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
-              @SuppressWarnings("lock") // https://tinyurl.com/cfissue/523
+              @SuppressWarnings("lock") // non-final field
               public void run() {
                 if (!dtrace_closed) {
                   // When the program being instrumented exits, the buffers
