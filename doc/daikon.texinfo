@@ -6739,7 +6739,7 @@ Track information on specified invariant class, variables and program point.
 For more information,
 see @ref{Track logging,,,developer,Daikon Developer Manual}.
 
-@item --wrap-xml
+@item --wrap_xml
 Print extra info about invariants, and wrap in XML tags.
 This is primarily for programmatic use and for debugging.
 
