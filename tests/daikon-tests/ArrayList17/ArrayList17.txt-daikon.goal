@@ -13,6 +13,7 @@ javautil.ArrayList17.EMPTY_ELEMENTDATA[] == []
 javautil.ArrayList17.EMPTY_ELEMENTDATA[].getClass().getName() == []
 ===========================================================================
 javautil.ArrayList17:::OBJECT
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == this.elementData.getClass().getName()
 this.elementData != null
 this.size >= 0
 this.modCount >= 0
@@ -28,7 +29,6 @@ javautil.ArrayList17.serialVersionUID > size(this.elementData[])
 (size(this.elementData[]) >> javautil.ArrayList17.DEFAULT_CAPACITY == 0)
 javautil.ArrayList17.DEFAULT_CAPACITY != size(this.elementData[])
 javautil.ArrayList17.DEFAULT_CAPACITY != size(this.elementData[])-1
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == this.elementData.getClass().getName()
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[this.size..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[0..this.size-1]
@@ -90,6 +90,8 @@ size(javautil.ArrayList17.EMPTY_ELEMENTDATA[]) < size(this.elementData[])-1
 ===========================================================================
 javautil.ArrayList17.add(java.lang.Object):::EXIT
 javautil.ArrayList17.EMPTY_ELEMENTDATA == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA)
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA[])
 this.size == this.modCount
 orig(e) == this.elementData[this.size-1]
@@ -101,8 +103,6 @@ this.elementData[0..orig(this.size)-1] == orig(this.elementData[0..this.modCount
 return == true
 (size(this.elementData[])-1 >> javautil.ArrayList17.DEFAULT_CAPACITY == 0)
 javautil.ArrayList17.DEFAULT_CAPACITY < size(this.elementData[])-1
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() != orig(e.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of orig(this.elementData[])
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY..]
@@ -174,6 +174,8 @@ size(javautil.ArrayList17.EMPTY_ELEMENTDATA[]) == (java.lang.Math.pow(size(this.
 ===========================================================================
 javautil.ArrayList17.elementData(int):::EXIT
 javautil.ArrayList17.EMPTY_ELEMENTDATA == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA)
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA[])
 this.elementData == orig(this.elementData)
 this.elementData[] == orig(this.elementData[])
@@ -188,8 +190,6 @@ size(this.elementData[]) == 109
 javautil.ArrayList17.DEFAULT_CAPACITY < this.size
 javautil.ArrayList17.DEFAULT_CAPACITY < this.modCount
 javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() != return.getClass().getName()
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY+1..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[0..javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -236,6 +236,8 @@ size(javautil.ArrayList17.EMPTY_ELEMENTDATA[]) < size(this.elementData[])-1
 ===========================================================================
 javautil.ArrayList17.ensureCapacityInternal(int):::EXIT
 javautil.ArrayList17.EMPTY_ELEMENTDATA == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA)
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA[])
 this.size == orig(this.size)
 this.size == orig(this.modCount)
@@ -252,8 +254,6 @@ this.elementData[0..this.size-1] == orig(this.elementData[0..this.modCount-1])
 this.elementData[0..this.size] contains no duplicates
 (size(this.elementData[])-1 >> javautil.ArrayList17.DEFAULT_CAPACITY == 0)
 javautil.ArrayList17.DEFAULT_CAPACITY < size(this.elementData[])-1
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of orig(this.elementData[])
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY+1..]
@@ -303,6 +303,8 @@ size(javautil.ArrayList17.EMPTY_ELEMENTDATA[]) < size(this.elementData[])-1
 ===========================================================================
 javautil.ArrayList17.ensureExplicitCapacity(int):::EXIT
 javautil.ArrayList17.EMPTY_ELEMENTDATA == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA)
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA[])
 this.size == orig(this.size)
 this.size == orig(this.modCount)
@@ -319,8 +321,6 @@ this.elementData[0..this.size-1] == orig(this.elementData[0..this.modCount-1])
 this.elementData[0..this.size] contains no duplicates
 (size(this.elementData[])-1 >> javautil.ArrayList17.DEFAULT_CAPACITY == 0)
 javautil.ArrayList17.DEFAULT_CAPACITY < size(this.elementData[])-1
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of orig(this.elementData[])
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY+1..]
@@ -365,6 +365,8 @@ this.size - this.modCount + 1 == 0
 ===========================================================================
 javautil.ArrayList17.grow(int):::EXIT
 javautil.ArrayList17.EMPTY_ELEMENTDATA == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA)
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA[])
 this.size == orig(this.size)
 this.size == orig(size(this.elementData[]))
@@ -388,8 +390,6 @@ this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY] has only one value
 this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY-1] has only one value
 this.elementData[0..javautil.ArrayList17.DEFAULT_CAPACITY] contains no nulls and has only one value, of length 11
 this.elementData[0..javautil.ArrayList17.DEFAULT_CAPACITY-1] contains no nulls and has only one value, of length 10
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY+1..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[0..this.size]
@@ -449,6 +449,8 @@ size(javautil.ArrayList17.EMPTY_ELEMENTDATA[]) == (java.lang.Math.pow(size(this.
 ===========================================================================
 javautil.ArrayList17.rangeCheck(int):::EXIT
 javautil.ArrayList17.EMPTY_ELEMENTDATA == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA)
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA[])
 this.elementData == orig(this.elementData)
 this.elementData[] == orig(this.elementData[])
@@ -458,8 +460,6 @@ this.elementData has only one value
 size(this.elementData[]) == 109
 javautil.ArrayList17.DEFAULT_CAPACITY < this.size
 javautil.ArrayList17.DEFAULT_CAPACITY < this.modCount
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY+1..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[0..javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -524,6 +524,8 @@ size(javautil.ArrayList17.EMPTY_ELEMENTDATA[]) == (java.lang.Math.pow(size(this.
 ===========================================================================
 javautil.ArrayList17.remove(int):::EXIT
 javautil.ArrayList17.EMPTY_ELEMENTDATA == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA)
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA[])
 this.elementData == orig(this.elementData)
 return == orig(this.elementData[post(index)])
@@ -548,8 +550,6 @@ orig(this.elementData[0..post(this.size)]) elements != null
 javautil.ArrayList17.DEFAULT_CAPACITY < this.size
 javautil.ArrayList17.DEFAULT_CAPACITY < this.modCount
 javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() != return.getClass().getName()
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName())
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == orig(this.elementData.getClass().getName())
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of orig(this.elementData[])
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY..]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[] is a subset of this.elementData[javautil.ArrayList17.DEFAULT_CAPACITY+1..]

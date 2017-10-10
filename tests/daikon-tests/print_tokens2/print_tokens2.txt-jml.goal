@@ -8,9 +8,9 @@ fp != null
 ..get_char():::EXIT
     Variables: ::buffer fp fp[] return orig(::buffer) orig(fp) orig(fp[]) size(fp[]) size(fp[])-1 orig(size(fp[])) orig(size(fp[]))-1 fp[return] fp[return-1] fp[return..] fp[return+1..] fp[0..return] fp[0..return-1] orig(fp[post(return)]) orig(fp[post(return)-1]) orig(fp[post(return)..]) orig(fp[post(return)+1..]) orig(fp[0..post(return)]) orig(fp[0..post(return)-1])
 assignable fp[*]
+::buffer.equals(\old(::buffer))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer is printable
 return != 0
-::buffer.equals(\old(::buffer))
 ===========================================================================
 ..get_token():::ENTER
     Variables: ::buffer tp tp[] size(tp[]) size(tp[])-1
@@ -28,8 +28,8 @@ assignable ::buffer, tp[*]
 ===========================================================================
 ..is_eof_token():::EXIT
     Variables: ::buffer tok return orig(::buffer) orig(tok)
-return == 0 || return == 1
 ::buffer.equals(\old(::buffer))
+return == 0 || return == 1
 ===========================================================================
 ..open_character_stream():::ENTER
     Variables: ::buffer fname
@@ -37,21 +37,21 @@ return == 0 || return == 1
 ===========================================================================
 ..open_character_stream():::EXIT
     Variables: ::buffer fname return return[] orig(::buffer) orig(fname) size(return[]) size(return[])-1
+::buffer.equals(\old(::buffer))
 ::buffer.equals("")
 return != null
-::buffer.equals(\old(::buffer))
 ===========================================================================
 ..open_token_stream():::ENTER
     Variables: ::buffer fname
-::buffer.equals("")
 ::buffer.equals(fname)
+::buffer.equals("")
 ===========================================================================
 ..open_token_stream():::EXIT
     Variables: ::buffer fname return return[] orig(::buffer) orig(fname) size(return[]) size(return[])-1
-::buffer.equals("")
-return != null
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(fname))
+::buffer.equals("")
+return != null
 ===========================================================================
 ..print_token():::ENTER
     Variables: ::buffer tok
@@ -68,9 +68,9 @@ print_tokens2.c.is_char_constant():::ENTER
 ===========================================================================
 print_tokens2.c.is_char_constant():::EXIT
     Variables: ::buffer str return orig(::buffer) orig(str)
-return == 0
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(str))
+return == 0
 ===========================================================================
 print_tokens2.c.is_comment():::ENTER
     Variables: ::buffer ident
@@ -78,9 +78,9 @@ print_tokens2.c.is_comment():::ENTER
 ===========================================================================
 print_tokens2.c.is_comment():::EXIT
     Variables: ::buffer ident return orig(::buffer) orig(ident)
-return == 0 || return == 1
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(ident))
+return == 0 || return == 1
 ===========================================================================
 print_tokens2.c.is_identifier():::ENTER
     Variables: ::buffer str
@@ -88,9 +88,9 @@ print_tokens2.c.is_identifier():::ENTER
 ===========================================================================
 print_tokens2.c.is_identifier():::EXIT
     Variables: ::buffer str return orig(::buffer) orig(str)
-return == 0 || return == 1
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(str))
+return == 0 || return == 1
 ===========================================================================
 print_tokens2.c.is_keyword():::ENTER
     Variables: ::buffer str
@@ -98,9 +98,9 @@ print_tokens2.c.is_keyword():::ENTER
 ===========================================================================
 print_tokens2.c.is_keyword():::EXIT
     Variables: ::buffer str return orig(::buffer) orig(str)
-return == 0 || return == 1
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(str))
+return == 0 || return == 1
 ===========================================================================
 print_tokens2.c.is_num_constant():::ENTER
     Variables: ::buffer str
@@ -108,17 +108,17 @@ print_tokens2.c.is_num_constant():::ENTER
 ===========================================================================
 print_tokens2.c.is_num_constant():::EXIT
     Variables: ::buffer str return orig(::buffer) orig(str)
-return == 0 || return == 1
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(str))
+return == 0 || return == 1
 ===========================================================================
 print_tokens2.c.is_spec_symbol():::ENTER
     Variables: ::buffer str
 ===========================================================================
 print_tokens2.c.is_spec_symbol():::EXIT
     Variables: ::buffer str return orig(::buffer) orig(str)
-return == 0 || return == 1
 ::buffer.equals(\old(::buffer))
+return == 0 || return == 1
 ===========================================================================
 print_tokens2.c.is_str_constant():::ENTER
     Variables: ::buffer str
@@ -126,9 +126,9 @@ print_tokens2.c.is_str_constant():::ENTER
 ===========================================================================
 print_tokens2.c.is_str_constant():::EXIT
     Variables: ::buffer str return orig(::buffer) orig(str)
-return == 0 || return == 1
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(str))
+return == 0 || return == 1
 ===========================================================================
 print_tokens2.c.is_token_end():::ENTER
     Variables: ::buffer str_com_id ch
@@ -138,24 +138,24 @@ str_com_id < ch
 ===========================================================================
 print_tokens2.c.is_token_end():::EXIT
     Variables: ::buffer str_com_id ch return orig(::buffer) orig(str_com_id) orig(ch)
+::buffer.equals(\old(::buffer))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer is printable
 return == 0 || return == 1
-::buffer.equals(\old(::buffer))
 (return & \old(ch)) == 0
 return < \old(ch)
 ===========================================================================
 print_tokens2.c.print_spec_symbol():::ENTER
     Variables: ::buffer str
+::buffer.equals(str)
 ::buffer.equals("'") || ::buffer.equals(")") || ::buffer.equals("`")
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer is printable
-::buffer.equals(str)
 ===========================================================================
 print_tokens2.c.print_spec_symbol():::EXIT
     Variables: ::buffer str orig(::buffer) orig(str)
-::buffer.equals("'") || ::buffer.equals(")") || ::buffer.equals("`")
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer is printable
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(str))
+::buffer.equals("'") || ::buffer.equals(")") || ::buffer.equals("`")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer is printable
 ===========================================================================
 print_tokens2.c.token_type():::ENTER
     Variables: ::buffer tok
@@ -163,6 +163,6 @@ print_tokens2.c.token_type():::ENTER
 ===========================================================================
 print_tokens2.c.token_type():::EXIT
     Variables: ::buffer tok return orig(::buffer) orig(tok)
-return >= 1
 ::buffer.equals(\old(::buffer))
 ::buffer.equals(\old(tok))
+return >= 1

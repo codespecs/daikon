@@ -20,7 +20,6 @@ MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT
     Variables: this this.begins this.begins[] this.ends this.ends[] numbers numbers.toString orig(numbers) orig(numbers.toString) size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1
       Unmodified variables: numbers numbers.toString
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: numbers.toString is printable
-numbers.toString == \old(numbers.toString)
 ===========================================================================
 MapQuick1.StreetNumberSet.checkRep():::ENTER
     Variables: this this.begins this.begins[] this.ends this.ends[] size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1
