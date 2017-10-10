@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.5.14 (October 3, 2017)
+
+Chicory:
+- Fixed a couple of Chicory bugs.
+
+Updated our internal version of BCEL to match Apache version 6.1.
+Daikon will fail if some other version of BCEL is found first on the classpath.
+
+===========================================================================
+
 5.5.12 (September 5, 2017)
 
 Chicory:

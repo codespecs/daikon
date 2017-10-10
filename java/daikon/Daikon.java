@@ -77,8 +77,8 @@ public final class Daikon {
    */
   public static int dkconfig_progress_delay = 1000;
 
-  public static final String release_version = "5.5.13";
-  public static final String release_date = "September 5, 2017";
+  public static final String release_version = "5.5.15";
+  public static final String release_date = "October 3, 2017";
   public static final String release_string =
       "Daikon version "
           + release_version
@@ -1846,9 +1846,6 @@ public final class Daikon {
    * two return statements are enabled by default (though other splitters can be defined by the
    * user).
    */
-  // TODO: When Checker Framework issue 752 is fixed, remove this
-  // @SuppressWarnings and address the type checking error issued
-  // for the call to SplitterFactory.load_splitters.
   @SuppressWarnings("contracts.precondition.not.satisfied")
   public static void setup_splitters(PptTopLevel ppt) {
     if (PptSplitter.dkconfig_disable_splitting) {

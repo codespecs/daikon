@@ -736,6 +736,7 @@ clean:
 	${MAKE} clean_class_files
 	-rm -f ChicoryPremain.jar
 	-rm -rf daikon/util
+	-rm -f daikon/chicory/Test.log
 
 dist_clean: clean
 	-rm -f TAGS
@@ -934,6 +935,7 @@ show_nullness_java_files:
 ## check-regex-qual target runs extremely slowly.
 # check-all: check-formatter check-interning check-nullness check-regex check-regex-qual check-signature
 check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock check-index
+typecheck: check-all
 
 index: check-index
 check-index: daikon/util/README ${INDEX_JAVA_FILES} compile

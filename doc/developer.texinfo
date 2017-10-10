@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.5.13
+@center Daikon version 5.5.15
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.5.13 release date
-@center September 5, 2017
+@c Print out the Daikon version 5.5.15 release date
+@center October 3, 2017
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.5.13, released September 5, 2017.
+It describes Daikon version 5.5.15, released October 3, 2017.
 
 @menu
 * Introduction::
@@ -2166,9 +2166,6 @@ This should fulfill most of the directory layout requirements noted above.
 @node    Updating dependencies
 @section  Getting the latest version of dependencies
 
-@enumerate
-
-@item
 Update the Daikon source files to their most recent version.
 
 @smallexample
@@ -2188,20 +2185,6 @@ nothing to commit, working directory clean
 @end example
 
 [Time: moments]
-
-
-@item
-Make sure your Checker Framework repositories are up-to-date.
-(For instructions on how to set up and build the Checker Framework, see
-@uref{https://checkerframework.org/manual/#build-source,Building from source}.)
-Make sure the @env{CHECKERFRAMEWORK} environment
-variable points to the location of your Checker Framework directory.
-
-[Time: moments]
-
-
-@end enumerate
-
 
 The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.
@@ -2326,7 +2309,8 @@ in the process.
 @node    Distribution steps
 @section Steps for making the distribution
 
-Use JDK@tie{}7 for the release process.
+Use JDK@tie{}7 for the release process. Make sure the @env{CHECKERFRAMEWORK} environment
+variable is not defined.
 
 @enumerate
 
@@ -2489,7 +2473,7 @@ build everything to be distributed and copy it to the temporary staging area
 @example
 mkdir -p /tmp/$USER
 rm -rf /tmp/$USER/stage-daikon
-git clone https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
+git clone --depth 3 https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk7
@@ -2616,6 +2600,26 @@ If there is a problem, fix it and start over.
 
 [Time: 15 min]
 
+Note that sometimes Travis has trouble starting MacOSX jobs.  You may wish to log on to a
+MacOSX machine (with the development tools installed) and run the tests manually.
+The example below shows the commands required to do this.  The output
+should show a number of lines beginning with
+"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
+Kvasir was not built because this is not a Linux platform.  Then execution will
+continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
+Success is indicated by invariant output being written to the screen.
+
+@smallexample
+export JAVA_HOME=$(/usr/libexec/java_home)
+mkdir -p ~/tmp
+cd ~/tmp
+curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
+export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
+sh test-distribution.sh
+@end smallexample
+
+[Time: 4 min]
+
 
 @need 1000
 @item
@@ -2623,8 +2627,8 @@ Test the distribution on a Windows machine
 with Cygwin installed, as a guest user (or at least one without
 environment variables such as @env{$DAIKONDIR} defined!).
 
-The output from the make command should show a number of lines beginning with
-"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
+The output from the the commands below should show
+that @file{dcomp_rt.jar} is being built.  Next it should indicate that
 Kvasir was not built because this is not a Linux platform.  Then execution will
 continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
 Success is indicated by invariant output being written to the screen.
