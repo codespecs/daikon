@@ -31,3 +31,5 @@ return one of { "CC", "D" }
 ::g_x == orig(x)
 ::g_y == orig(::g_y)
 ::g_y == orig(y)
+::g_x == "CC"
+::g_y == "D"

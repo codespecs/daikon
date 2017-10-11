@@ -32,6 +32,8 @@
 ::globalBetterFoo.namedBar.crappyFoo.b.a == orig(::globalBetterFoo.namedBar.crappyFoo.b.a)
 ::globalBetterFoo.namedBar.crappyFoo.b.b == orig(::globalBetterFoo.namedBar.crappyFoo.b.b)
 ::globalBetterFoo.namedBar.myBazzz == orig(::globalBetterFoo.namedBar.myBazzz)
+::globalBetterFoo.namedBar.myBazzz.hello == orig(::globalBetterFoo.namedBar.myBazzz.hello)
+::globalBetterFoo.namedBar.myBazzz.world == orig(::globalBetterFoo.namedBar.myBazzz.world)
 ::globalFoo == orig(::globalFoo)
 ::globalFoo[] == orig(::globalFoo[])
 ::globalFoo[].b == orig(::globalFoo[].b)
@@ -56,8 +58,6 @@
 ::globalFoo[].b.b == [0, 100, 200, 300]
 ::globalFoo[].name == [globalFoo[0], globalFoo[1], globalFoo[2], globalFoo[3]]
 return == 0
-::globalBetterFoo.namedBar.myBazzz.hello == orig(::globalBetterFoo.namedBar.myBazzz.hello)
-::globalBetterFoo.namedBar.myBazzz.world == orig(::globalBetterFoo.namedBar.myBazzz.world)
 ===========================================================================
 ..returnF():::ENTER
 ::globalFoo[].name == f[].name
@@ -131,6 +131,8 @@ blah[] elements == ::globalBetterFoo.namedBar.crappyFoo.b.b
 ::globalBetterFoo.namedBar.crappyFoo.b.a == orig(::globalBetterFoo.namedBar.crappyFoo.b.a)
 ::globalBetterFoo.namedBar.crappyFoo.b.b == orig(::globalBetterFoo.namedBar.crappyFoo.b.b)
 ::globalBetterFoo.namedBar.myBazzz == orig(::globalBetterFoo.namedBar.myBazzz)
+::globalBetterFoo.namedBar.myBazzz.hello == orig(::globalBetterFoo.namedBar.myBazzz.hello)
+::globalBetterFoo.namedBar.myBazzz.world == orig(::globalBetterFoo.namedBar.myBazzz.world)
 ::globalFoo == orig(::globalFoo)
 ::globalFoo[] == orig(::globalFoo[])
 ::globalFoo[].age == orig(::globalFoo[].age)
@@ -203,8 +205,6 @@ blah[] elements == ::globalBetterFoo.namedBar.crappyFoo.b.a
 blah[] elements == ::globalBetterFoo.namedBar.crappyFoo.b.b
 ::globalBetterFoo.namedBar.crappyFoo.b.b in f[].b.a
 ::globalBetterFoo.namedBar.crappyFoo.b.b in f[].b.b
-::globalBetterFoo.namedBar.myBazzz.hello == orig(::globalBetterFoo.namedBar.myBazzz.hello)
-::globalBetterFoo.namedBar.myBazzz.world == orig(::globalBetterFoo.namedBar.myBazzz.world)
 ::globalFoo[].age == f[].age (elementwise)
 ::globalFoo[].b.a == f[].b.a (elementwise)
 ::globalFoo[].b.b == f[].b.b (elementwise)

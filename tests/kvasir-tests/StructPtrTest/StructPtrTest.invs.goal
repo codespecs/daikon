@@ -10,6 +10,7 @@ m.tiles[].b == [first, second, third, fourth, fifth]
 m.tiles[].c == [10, 20, 30, 40, 50]
 ===========================================================================
 ..barMaps():::EXIT
+m.mapName == orig(m.mapName)
 m.numTiles == orig(m.numTiles)
 m.tiles == orig(m.tiles)
 m.tiles[] == orig(m.tiles[])
@@ -23,7 +24,6 @@ m.tiles[].a == [1, 2, 3, 4, 5]
 m.tiles[].b == [first, second, third, fourth, fifth]
 m.tiles[].c == [10, 20, 30, 40, 50]
 return == 300
-m.mapName == orig(m.mapName)
 ===========================================================================
 ..bazMapPtr():::ENTER
 m has only one value

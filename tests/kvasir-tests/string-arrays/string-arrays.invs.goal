@@ -19,5 +19,5 @@ return == 0
 s == "huckleberry"
 ===========================================================================
 ..uppercase():::EXIT
-::upcasestr == "HUCKLEBERRY"
 ::upcasestr == return
+::upcasestr == "HUCKLEBERRY"
