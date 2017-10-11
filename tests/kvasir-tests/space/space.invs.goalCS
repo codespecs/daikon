@@ -223,11 +223,6 @@ pp2[]->LINE_NUM one of { [7], [9] }
 pp2[]->info elements one of { 49, 71 }
 pp2[]->info one of { [49], [71] }
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..GetKeyword():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -2905,11 +2900,11 @@ return == 0
 ::UserNames == orig(::UserNames)
 ===========================================================================
 ..glvainit():::ENTER
+::Keywords == ::UserNames
 ::ErrorMessages == ""
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == ""
 ::MOSErrors == ""
-::Keywords == ::UserNames
 ===========================================================================
 ..glvainit():::EXIT
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -3891,6 +3886,7 @@ return == 0
 ::UserNames == orig(::UserNames)
 ===========================================================================
 ..grwrite():::ENTER
+::GLOBLE_FILENAME == filename
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].ELEM_PTR->QDIM
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GEOMNODE_PTR->PSIZE
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GEOMNODE_PTR->QSIZE
@@ -4004,7 +4000,6 @@ group_ptr[].NUM_OF_NODES == [7]
 group_ptr[].PSIZE == [258.0]
 group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
-::GLOBLE_FILENAME == filename
 ===========================================================================
 ..grwrite():::EXIT
 group_ptr[] == orig(group_ptr[])
@@ -4654,6 +4649,7 @@ return == 0
 ::UserNames == orig(::UserNames)
 ===========================================================================
 ..main():::ENTER
+::Keywords == ::UserNames
 ::ErrorMessages == ""
 ::GLOBLE_FILENAME == ""
 ::Keywords == ""
@@ -4661,7 +4657,6 @@ return == 0
 argc == 2
 argv has only one value
 argv[] == [./space]
-::Keywords == ::UserNames
 ===========================================================================
 ..main():::EXIT
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -5609,6 +5604,7 @@ firstel[].info == [71]
 ::UserNames == orig(::UserNames)
 ===========================================================================
 ..readfil3():::ENTER
+::GLOBLE_FILENAME == filename
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
@@ -5618,7 +5614,6 @@ firstel has only one value
 firstel[] == [null]
 lastel has only one value
 lastel[] == [null]
-::GLOBLE_FILENAME == filename
 ===========================================================================
 ..readfil3():::EXIT
 lastel[] == lastel[]->PREV->NEXT
