@@ -4,6 +4,8 @@ import daikon.Chicory;
 import daikon.util.SimpleLog;
 import java.io.*;
 import java.lang.instrument.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
@@ -210,8 +212,11 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
       JavaClass njc = cg.getJavaClass();
       if (Chicory.debug) {
-        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), "/tmp/ret/");
-        njc.dump("/tmp/ret/" + njc.getClassName() + ".class");
+        Path dir = Files.createTempDirectory("chicory-debug");
+        Path file = dir.resolve(njc.getClassName() + ".class");
+        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
+        Files.createDirectories(dir);
+        njc.dump(file.toFile());
       }
 
       if (c_info.shouldInclude) {
@@ -415,216 +420,221 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
     boolean shouldInclude = false;
 
     try {
-      pool = cg.getConstantPool();
-
       // Loop through each method in the class
       Method[] methods = cg.getMethods();
       for (int i = 0; i < methods.length; i++) {
-        MethodGen mg = new MethodGen(methods[i], cg.getClassName(), pool);
-        MethodContext context = new MethodContext(cg, mg);
 
-        // check for the class static initializer method
-        if (mg.getName().equals("<clinit>")) {
-          if (Chicory.checkStaticInit) {
-            cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
-            cg.update();
+        // The class data in StackMapUtils is not thread safe,
+        // allow only one method at a time to be instrumented.
+        // DynComp does this by creating a new instrumentation object
+        // for each class - probably a cleaner solution.
+        synchronized (this) {
+          pool = cg.getConstantPool();
+          MethodGen mg = new MethodGen(methods[i], cg.getClassName(), pool);
+          MethodContext context = new MethodContext(cg, mg);
+
+          // check for the class static initializer method
+          if (mg.getName().equals("<clinit>")) {
+            if (Chicory.checkStaticInit) {
+              cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
+              cg.update();
+            }
+            if (!Chicory.instrument_clinit) {
+              continue;
+            }
           }
-          if (!Chicory.instrument_clinit) {
+
+          // If method is synthetic... (default constructors and <clinit> are not synthetic)
+          if ((Const.ACC_SYNTHETIC & mg.getAccessFlags()) > 0) {
             continue;
           }
-        }
 
-        // If method is synthetic... (default constructors and <clinit> are not synthetic)
-        if ((Const.ACC_SYNTHETIC & mg.getAccessFlags()) > 0) {
-          continue;
-        }
-
-        // Get the instruction list and skip methods with no instructions
-        InstructionList il = mg.getInstructionList();
-        if (il == null) {
-          continue;
-        }
-
-        fix_local_variable_table(mg);
-
-        if (Chicory.debug) {
-          Type[] arg_types = mg.getArgumentTypes();
-          String[] arg_names = mg.getArgumentNames();
-          LocalVariableGen[] local_vars = mg.getLocalVariables();
-          String types = "", names = "", locals = "";
-
-          for (int j = 0; j < arg_types.length; j++) {
-            types = types + arg_types[j] + " ";
-          }
-          for (int j = 0; j < arg_names.length; j++) {
-            names = names + arg_names[j] + " ";
-          }
-          for (int j = 0; j < local_vars.length; j++) {
-            locals = locals + local_vars[j].getName() + " ";
-          }
-          debug_instrument.log("%nMethod = %s%n", mg);
-          debug_instrument.log("arg_types(%d): %s%n", arg_types.length, types);
-          debug_instrument.log("arg_names(%d): %s%n", arg_names.length, names);
-          debug_instrument.log("localvars(%d): %s%n", local_vars.length, locals);
-          debug_instrument.log("Original code: %s%n", mg.getMethod().getCode());
-          debug_instrument.log("ClassInfo: %s%n", class_info);
-          debug_instrument.log("MethodGen: %s%n", mg);
-          dump_code_attributes(mg);
-        }
-
-        // Get existing StackMapTable (if present)
-        fetch_current_stack_map_table(mg, cg.getMajor());
-
-        // Create a MethodInfo that describes this methods arguments
-        // and exit line numbers (information not available via reflection)
-        // and add it to the list for this class.
-        MethodInfo mi = (create_method_info(class_info, mg));
-
-        print_stack_map_table("After create_method_info");
-
-        if (mi == null) // method filtered out!
-        continue;
-
-        // Create a map of Uninitialized_variable_info offsets to
-        // InstructionHandles.  We will use this map after we
-        // complete instrumentation to update the offsets due
-        // to code modification and expansion.
-        // The offsets point to 'new' instructions; since we do
-        // not modify these, their Instruction Handles will remain
-        // unchanged throught the instrumentaion process.
-        process_uninitialized_variable_info(il, true);
-
-        if (!shouldInclude) {
-          debug_transform.log("Class %s included [%s]%n", cg.getClassName(), mi);
-        }
-        shouldInclude = true; // at least one method not filtered out
-
-        method_infos.add(mi);
-
-        synchronized (SharedData.methods) {
-          cur_method_info_index = SharedData.methods.size();
-          SharedData.methods.add(mi);
-        }
-
-        // Add nonce local to matchup enter/exits
-        String entry_ppt_name =
-            DaikonWriter.methodEntryName(
-                fullClassName, getArgTypes(mg), mg.toString(), mg.getName());
-        add_entry_instrumentation(
-            il, context, !shouldFilter(fullClassName, mg.getName(), entry_ppt_name));
-
-        print_stack_map_table("After add_entry_instrumentation");
-
-        debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
-
-        // Need to see if there are any switches after this location.
-        // If so, we may need to update the corresponding stackmap if
-        // the amount of the switch padding changed.
-        modify_stack_maps_for_switches(il.getStart(), il);
-
-        Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
-        Iterator<Integer> exitIter = mi.exit_locations.iterator();
-
-        // Loop through each instruction looking for the return(s)
-        for (InstructionHandle ih = il.getStart(); ih != null; ) {
-          Instruction inst = ih.getInstruction();
-
-          // If this is a return instruction, insert method exit instrumentation
-          InstructionList new_il =
-              add_return_instrumentation(fullClassName, inst, context, shouldIncIter, exitIter);
-
-          // Remember the next instruction to process
-          InstructionHandle next_ih = ih.getNext();
-
-          // If this instruction was modified, replace it with the new
-          // instruction list. If this instruction was the target of any
-          // jumps, replace it with the first instruction in the new list
-          if (new_il != null) {
-            if (next_ih != null) {
-              // This return is not at the end of the method. That
-              // means the instruction after the RETURN is a branch
-              // target and that means it has a StackMap entry. (Java7)
-              // We need to adjust its offset for our inserted code.
-
-              // If there was no orgiinal StackMapTable (smta == null)
-              // then class was compiled for Java 5.
-              if (smta != null) {
-                int len = (new_il.getByteCode()).length;
-                il.setPositions();
-                int current_offset = next_ih.getPosition();
-
-                if (Chicory.debug) {
-                  debug_instrument.log(
-                      "Current offset: %d Inserted length: %d%n", current_offset, len);
-                  //debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
-                  //dump_code_attributes(mg);
-                }
-
-                // find stack map for current location
-                StackMapEntry stack_map = find_stack_map_equal(current_offset);
-                stack_map.updateByteCodeOffset(len);
-              }
-            }
-
-            InstructionHandle new_start = il.insert(ih, new_il);
-            // debug_instrument.log("old start = %s, new_start = %s%n", ih, new_start);
-            il.redirectBranches(ih, new_start);
-
-            // Fix up line numbers to point at the new code
-            if (ih.hasTargeters()) {
-              for (InstructionTargeter it : ih.getTargeters()) {
-                if (it instanceof LineNumberGen) {
-                  it.updateTarget(ih, new_start);
-                }
-              }
-            }
-
-            // Need to see if there are any switches after this location.
-            // If so, we may need to update the corresponding stackmap if
-            // the amount of the switch padding changed.
-            modify_stack_maps_for_switches(next_ih, il);
-          }
-          // Go on to the next instruction in the list
-          ih = next_ih;
-        }
-
-        // Update the Uninitialized_variable_info offsets before
-        // we write out the new StackMapTable.
-        process_uninitialized_variable_info(il, false);
-
-        create_new_stack_map_attribute(mg);
-
-        remove_local_variable_type_table(mg);
-
-        // Update the instruction list
-        mg.setInstructionList(il);
-        mg.update();
-
-        // Update the max stack
-        mg.setMaxStack();
-        mg.update();
-
-        // Update the method in the class
-        try {
-          cg.replaceMethod(methods[i], mg.getMethod());
-        } catch (Exception e) {
-          if ((e.getMessage()).startsWith("Branch target offset too large")) {
-            System.out.printf(
-                "Chicory warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
-                cg.getClassName(), mg.getName());
+          // Get the instruction list and skip methods with no instructions
+          InstructionList il = mg.getInstructionList();
+          if (il == null) {
             continue;
-          } else {
-            throw e;
           }
-        }
 
-        if (Chicory.debug) {
+          if (Chicory.debug) {
+            Type[] arg_types = mg.getArgumentTypes();
+            String[] arg_names = mg.getArgumentNames();
+            LocalVariableGen[] local_vars = mg.getLocalVariables();
+            String types = "", names = "", locals = "";
+
+            for (int j = 0; j < arg_types.length; j++) {
+              types = types + arg_types[j] + " ";
+            }
+            for (int j = 0; j < arg_names.length; j++) {
+              names = names + arg_names[j] + " ";
+            }
+            for (int j = 0; j < local_vars.length; j++) {
+              locals = locals + local_vars[j].getName() + " ";
+            }
+            debug_instrument.log("%nMethod = %s%n", mg);
+            debug_instrument.log("arg_types(%d): %s%n", arg_types.length, types);
+            debug_instrument.log("arg_names(%d): %s%n", arg_names.length, names);
+            debug_instrument.log("localvars(%d): %s%n", local_vars.length, locals);
+            debug_instrument.log("Original code: %s%n", mg.getMethod().getCode());
+            debug_instrument.log("ClassInfo: %s%n", class_info);
+            debug_instrument.log("MethodGen: %s%n", mg);
+            dump_code_attributes(mg);
+          }
+
+          // Get existing StackMapTable (if present)
+          fetch_current_stack_map_table(mg, cg.getMajor());
+
+          fix_local_variable_table(mg);
+
+          // Create a MethodInfo that describes this methods arguments
+          // and exit line numbers (information not available via reflection)
+          // and add it to the list for this class.
+          MethodInfo mi = (create_method_info(class_info, mg));
+
+          print_stack_map_table("After create_method_info");
+
+          if (mi == null) // method filtered out!
+          continue;
+
+          // Create a map of Uninitialized_variable_info offsets to
+          // InstructionHandles.  We will use this map after we
+          // complete instrumentation to update the offsets due
+          // to code modification and expansion.
+          // The offsets point to 'new' instructions; since we do
+          // not modify these, their Instruction Handles will remain
+          // unchanged throught the instrumentaion process.
+          process_uninitialized_variable_info(il, true);
+
+          if (!shouldInclude) {
+            debug_transform.log("Class %s included [%s]%n", cg.getClassName(), mi);
+          }
+          shouldInclude = true; // at least one method not filtered out
+
+          method_infos.add(mi);
+
+          synchronized (SharedData.methods) {
+            cur_method_info_index = SharedData.methods.size();
+            SharedData.methods.add(mi);
+          }
+
+          // Add nonce local to matchup enter/exits
+          String entry_ppt_name =
+              DaikonWriter.methodEntryName(
+                  fullClassName, getArgTypes(mg), mg.toString(), mg.getName());
+          add_entry_instrumentation(
+              il, context, !shouldFilter(fullClassName, mg.getName(), entry_ppt_name));
+
+          print_stack_map_table("After add_entry_instrumentation");
+
           debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
-          dump_code_attributes(mg);
+
+          // Need to see if there are any switches after this location.
+          // If so, we may need to update the corresponding stackmap if
+          // the amount of the switch padding changed.
+          modify_stack_maps_for_switches(il.getStart(), il);
+
+          Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
+          Iterator<Integer> exitIter = mi.exit_locations.iterator();
+
+          // Loop through each instruction looking for the return(s)
+          for (InstructionHandle ih = il.getStart(); ih != null; ) {
+            Instruction inst = ih.getInstruction();
+
+            // If this is a return instruction, insert method exit instrumentation
+            InstructionList new_il =
+                add_return_instrumentation(fullClassName, inst, context, shouldIncIter, exitIter);
+
+            // Remember the next instruction to process
+            InstructionHandle next_ih = ih.getNext();
+
+            // If this instruction was modified, replace it with the new
+            // instruction list. If this instruction was the target of any
+            // jumps, replace it with the first instruction in the new list
+            if (new_il != null) {
+              if (next_ih != null) {
+                // This return is not at the end of the method. That
+                // means the instruction after the RETURN is a branch
+                // target and that means it has a StackMap entry. (Java7)
+                // We need to adjust its offset for our inserted code.
+
+                // If there was no orgiinal StackMapTable (smta == null)
+                // then class was compiled for Java 5.
+                if (smta != null) {
+                  int len = (new_il.getByteCode()).length;
+                  il.setPositions();
+                  int current_offset = next_ih.getPosition();
+
+                  if (Chicory.debug) {
+                    debug_instrument.log(
+                        "Current offset: %d Inserted length: %d%n", current_offset, len);
+                    //debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+                    //dump_code_attributes(mg);
+                  }
+
+                  // find stack map for current location
+                  StackMapEntry stack_map = find_stack_map_equal(current_offset);
+                  stack_map.updateByteCodeOffset(len);
+                }
+              }
+
+              InstructionHandle new_start = il.insert(ih, new_il);
+              // debug_instrument.log("old start = %s, new_start = %s%n", ih, new_start);
+              il.redirectBranches(ih, new_start);
+
+              // Fix up line numbers to point at the new code
+              if (ih.hasTargeters()) {
+                for (InstructionTargeter it : ih.getTargeters()) {
+                  if (it instanceof LineNumberGen) {
+                    it.updateTarget(ih, new_start);
+                  }
+                }
+              }
+
+              // Need to see if there are any switches after this location.
+              // If so, we may need to update the corresponding stackmap if
+              // the amount of the switch padding changed.
+              modify_stack_maps_for_switches(next_ih, il);
+            }
+            // Go on to the next instruction in the list
+            ih = next_ih;
+          }
+
+          // Update the Uninitialized_variable_info offsets before
+          // we write out the new StackMapTable.
+          process_uninitialized_variable_info(il, false);
+
+          create_new_stack_map_attribute(mg);
+
+          remove_local_variable_type_table(mg);
+
+          // Update the instruction list
+          mg.setInstructionList(il);
+          mg.update();
+
+          // Update the max stack
+          mg.setMaxStack();
+          mg.update();
+
+          // Update the method in the class
+          try {
+            cg.replaceMethod(methods[i], mg.getMethod());
+          } catch (Exception e) {
+            if ((e.getMessage()).startsWith("Branch target offset too large")) {
+              System.out.printf(
+                  "Chicory warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
+                  cg.getClassName(), mg.getName());
+              continue;
+            } else {
+              throw e;
+            }
+          }
+
+          if (Chicory.debug) {
+            debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+            dump_code_attributes(mg);
+          }
+          cg.update();
         }
       }
-
-      cg.update();
     } catch (Exception e) {
       System.out.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
@@ -912,8 +922,6 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
     int new_index = 1;
     if (len_part2 > 0) {
-      // We need to check for len_part2 being too large,
-      // Daikon issue #30.
       new_map[1] =
           new StackMapEntry(
               ((len_part2 - 1) > Const.SAME_FRAME_MAX

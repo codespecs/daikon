@@ -577,9 +577,9 @@ n one of { "/home/mhardojo/.pine-interrupted-mail", "/var/spool/mail/mhardojo" }
 n is printable
 ===========================================================================
 global.context_apply():::EXIT
+return == orig(n)
 return one of { "/home/mhardojo/.pine-interrupted-mail", "/var/spool/mail/mhardojo" }
 return is printable
-return == orig(n)
 ===========================================================================
 global.context_digest():::ENTER
 context == "mail/[]"
@@ -1077,6 +1077,8 @@ km.how_many == orig(km.which)
 km.how_many == orig(km.width)
 km.keys == orig(km.keys)
 km.keys[] == orig(km.keys[])
+km.keys.name == orig(km.keys.name)
+km.keys.label == orig(km.keys.label)
 km.keys.bind == orig(km.keys.bind)
 km.keys.bind.cmd == orig(km.keys.bind.cmd)
 km.keys.bind.nch == orig(km.keys.bind.nch)
@@ -1095,8 +1097,6 @@ km.keys.bind.nch == 2
 km.keys.bind.ch has only one value
 km.formatted_hm one of { 0, 4294967042L }
 km.formatted_hm is a pointer
-km.keys.name == orig(km.keys.name)
-km.keys.label == orig(km.keys.label)
 ===========================================================================
 global.do_setup_task():::ENTER
 command == 97
@@ -1127,6 +1127,8 @@ km.how_many == km.which
 km.how_many == km.width
 km.keys == orig(km.keys)
 km.keys[] == orig(km.keys[])
+km.keys.name == orig(km.keys.name)
+km.keys.label == orig(km.keys.label)
 km.keys.bind == orig(km.keys.bind)
 km.keys.bind.cmd == orig(km.keys.bind.cmd)
 km.keys.bind.nch == orig(km.keys.bind.nch)
@@ -1143,8 +1145,6 @@ km.keys.column one of { 0, 1 }
 bitmap[] one of { 3, 253, 255 }
 km.how_many % orig(km.how_many) == 0
 orig(km.how_many) is a bitwise subset of km.how_many
-km.keys.name == orig(km.keys.name)
-km.keys.label == orig(km.keys.label)
 orig(km.how_many) is a bitwise subset of km.formatted_hm
 orig(km.formatted_hm) % km.formatted_hm == 0
 orig(km.formatted_hm) is a bitwise subset of km.formatted_hm
@@ -1577,8 +1577,8 @@ lineout is printable
 linein is printable
 ===========================================================================
 global.expand_variables():::EXIT
-return is printable
 return == orig(linein)
+return is printable
 ===========================================================================
 global.expire_sent_mail():::EXIT
 return == 0
@@ -1713,6 +1713,8 @@ km.how_many == km.which
 km.how_many == km.width
 km.keys == orig(km.keys)
 km.keys[] == orig(km.keys[])
+km.keys.name == orig(km.keys.name)
+km.keys.label == orig(km.keys.label)
 km.keys.bind == orig(km.keys.bind)
 km.keys.bind.cmd == orig(km.keys.bind.cmd)
 km.keys.bind.nch == orig(km.keys.bind.nch)
@@ -1729,8 +1731,6 @@ km.keys.column one of { 0, 1 }
 bm[] one of { 3, 253, 255 }
 km.how_many % orig(km.how_many) == 0
 orig(km.how_many) is a bitwise subset of km.how_many
-km.keys.name == orig(km.keys.name)
-km.keys.label == orig(km.keys.label)
 orig(km.how_many) is a bitwise subset of km.formatted_hm
 orig(km.formatted_hm) % km.formatted_hm == 0
 orig(km.formatted_hm) is a bitwise subset of km.formatted_hm
@@ -1826,9 +1826,9 @@ string is printable
 firstws == 0
 ===========================================================================
 global.get_pair():::EXIT
+value[] == orig(string)
 value[] one of { ".addressbook", "mail/[]" }
 value[] is printable
-value[] == orig(string)
 ===========================================================================
 global.get_user_info():::ENTER
 ui has only one value
@@ -4969,6 +4969,8 @@ menu.how_many == orig(menu.which)
 menu.how_many == orig(menu.width)
 menu.keys == orig(menu.keys)
 menu.keys[] == orig(menu.keys[])
+menu.keys.name == orig(menu.keys.name)
+menu.keys.label == orig(menu.keys.label)
 menu.keys.bind == orig(menu.keys.bind)
 menu.keys.bind.cmd == orig(menu.keys.bind.cmd)
 menu.keys.bind.nch == orig(menu.keys.bind.nch)
@@ -4986,8 +4988,6 @@ menu.formatted_hm one of { 0, 4294967042L }
 menu.formatted_hm is a pointer
 menu.how_many != menu.formatted_hm
 menu.keys.name < menu.keys.label
-menu.keys.name == orig(menu.keys.name)
-menu.keys.label == orig(menu.keys.label)
 menu.keys.bind.cmd > orig(key)
 menu.keys.bind.cmd < orig(cmd)
 menu.keys.bind.nch < orig(key)
@@ -5028,6 +5028,8 @@ menu.how_many == orig(menu.which)
 menu.how_many == orig(menu.width)
 menu.keys == orig(menu.keys)
 menu.keys[] == orig(menu.keys[])
+menu.keys.name == orig(menu.keys.name)
+menu.keys.label == orig(menu.keys.label)
 menu.keys.bind == orig(menu.keys.bind)
 menu.keys.bind.cmd == orig(menu.keys.bind.cmd)
 menu.keys.bind.nch == orig(menu.keys.bind.nch)
@@ -5052,8 +5054,6 @@ return one of { -1, 513 }
 return != 0
 menu.how_many != menu.formatted_hm
 menu.keys.name < menu.keys.label
-menu.keys.name == orig(menu.keys.name)
-menu.keys.label == orig(menu.keys.label)
 menu.keys.bind.cmd != return
 menu.keys.bind.cmd != orig(key)
 menu.keys.bind.nch != return
@@ -5090,6 +5090,8 @@ menu.how_many == orig(menu.which)
 menu.how_many == orig(menu.width)
 menu.keys == orig(menu.keys)
 menu.keys[] == orig(menu.keys[])
+menu.keys.name == orig(menu.keys.name)
+menu.keys.label == orig(menu.keys.label)
 menu.keys.bind == orig(menu.keys.bind)
 menu.keys.bind.cmd == orig(menu.keys.bind.cmd)
 menu.keys.bind.nch == orig(menu.keys.bind.nch)
@@ -5108,8 +5110,6 @@ menu.keys.bind.nch == 2
 menu.keys.bind.ch has only one value
 menu.keys.column == 0
 menu.formatted_hm == 0
-menu.keys.name == orig(menu.keys.name)
-menu.keys.label == orig(menu.keys.label)
 menu.keys.column == (java.lang.Math.pow(menu.keys.bind.cmd, orig(cmd)))
 menu.keys.column == (java.lang.Math.pow(menu.keys.bind.nch, orig(cmd)))
 ===========================================================================
@@ -5136,6 +5136,8 @@ menu.how_many == orig(menu.which)
 menu.how_many == orig(menu.width)
 menu.keys == orig(menu.keys)
 menu.keys[] == orig(menu.keys[])
+menu.keys.name == orig(menu.keys.name)
+menu.keys.label == orig(menu.keys.label)
 menu.keys.bind == orig(menu.keys.bind)
 menu.keys.bind.cmd == orig(menu.keys.bind.cmd)
 menu.keys.bind.nch == orig(menu.keys.bind.nch)
@@ -5152,8 +5154,6 @@ menu.keys.column == 0
 menu.formatted_hm one of { 4294966529L, 4294967042L }
 menu.formatted_hm is a pointer
 return one of { 512, 730 }
-menu.keys.name == orig(menu.keys.name)
-menu.keys.label == orig(menu.keys.label)
 ===========================================================================
 global.menu_init_binding():::ENTER
 menu.how_many == menu.which
@@ -5187,6 +5187,8 @@ menu.how_many == orig(menu.which)
 menu.how_many == orig(menu.width)
 menu.keys == orig(menu.keys)
 menu.keys[] == orig(menu.keys[])
+menu.keys.name == orig(menu.keys.name)
+menu.keys.label == orig(menu.keys.label)
 menu.keys.bind == orig(menu.keys.bind)
 menu.keys.bind.cmd == orig(menu.keys.bind.cmd)
 menu.keys.bind.nch == orig(menu.keys.bind.nch)
@@ -5205,8 +5207,6 @@ menu.keys.bind.nch == 2
 menu.keys.bind.ch has only one value
 menu.keys.column == 0
 menu.formatted_hm == 0
-menu.keys.name == orig(menu.keys.name)
-menu.keys.label == orig(menu.keys.label)
 (menu.keys.bind.cmd & orig(keynum)) == 0
 menu.keys.column == (java.lang.Math.pow(menu.keys.bind.cmd, orig(key)))
 menu.keys.column == (java.lang.Math.pow(menu.keys.bind.cmd, orig(cmd)))
@@ -5359,6 +5359,8 @@ km.how_many == orig(km.which)
 km.how_many == orig(km.width)
 km.keys == orig(km.keys)
 km.keys[] == orig(km.keys[])
+km.keys.name == orig(km.keys.name)
+km.keys.label == orig(km.keys.label)
 km.keys.bind == orig(km.keys.bind)
 km.keys.bind.cmd == orig(km.keys.bind.cmd)
 km.keys.bind.nch == orig(km.keys.bind.nch)
@@ -5375,8 +5377,6 @@ km.keys.bind.cmd one of { 0, 500 }
 km.keys.bind.nch one of { 0, 2 }
 km.keys.column one of { 0, 1 }
 bm[] one of { 3, 253, 255 }
-km.keys.name == orig(km.keys.name)
-km.keys.label == orig(km.keys.label)
 ===========================================================================
 global.output_message():::ENTER
 ===========================================================================
@@ -5401,9 +5401,9 @@ list is printable
 count == 1
 ===========================================================================
 global.parse_list():::EXIT
+return[] == orig(list)
 return[] one of { ".addressbook", "lpr", "mail/[]" }
 return[] is printable
-return[] == orig(list)
 ===========================================================================
 global.pine_args():::ENTER
 pine_state.next_screen == pine_state.prev_screen
@@ -5795,9 +5795,9 @@ folder one of { "", "INBOX" }
 folder is printable
 ===========================================================================
 global.pretty_fn():::EXIT
+return == orig(folder)
 return one of { "", "INBOX" }
 return is printable
-return == orig(folder)
 ===========================================================================
 global.process_config_input():::ENTER
 ===========================================================================
@@ -6615,9 +6615,9 @@ help_text[] == "Select one of the setup tasks by typing the capitalized letter."
 flags == 0
 ===========================================================================
 global.radio_buttons():::EXIT
+help_text[] == orig(help_text[])
 help_text[] == "Select one of the setup tasks by typing the capitalized letter."
 return one of { 97, 121 }
-help_text[] == orig(help_text[])
 ===========================================================================
 global.read_char():::ENTER
 time_out one of { 3, 150, 600 }
@@ -6661,6 +6661,7 @@ vars.cmdline_val has only one value
 ===========================================================================
 global.read_pinerc():::EXIT
 vars[] == orig(vars[])
+vars.name == orig(vars.name)
 vars.is_obsolete == vars.is_used
 vars.is_obsolete == vars.been_written
 vars.is_obsolete == vars.is_user
@@ -6674,6 +6675,7 @@ vars.is_obsolete == orig(vars.is_user)
 vars.is_obsolete == orig(vars.is_global)
 vars.is_obsolete == orig(vars.is_list)
 vars.is_obsolete == orig(vars.is_fixed)
+vars.descrip == orig(vars.descrip)
 vars.current_val == orig(vars.current_val)
 vars.current_val.l == vars.user_val.l
 vars.current_val.l == vars.global_val.l
@@ -6698,8 +6700,6 @@ vars.user_val has only one value
 vars.global_val has only one value
 vars.fixed_val has only one value
 vars.cmdline_val has only one value
-vars.name == orig(vars.name)
-vars.descrip == orig(vars.descrip)
 ===========================================================================
 global.register_key():::ENTER
 i >= 0
@@ -6786,6 +6786,7 @@ var.is_obsolete == var.is_list
 var.is_obsolete == var.is_fixed
 var.current_val.l == var.fixed_val.l
 var.current_val.l == var.cmdline_val.l
+var.user_val.l[] == var.global_val.l[]
 var != null
 var[] != null
 var.name is printable
@@ -6805,11 +6806,11 @@ var.name > var.descrip
 var.name != var.global_val.p
 var.user_val.l[] is a substring of var.descrip
 var.descrip != var.global_val.p
-var.user_val.l[] == var.global_val.l[]
 expand <= cmdline
 ===========================================================================
 global.set_current_val():::EXIT
 var[] == orig(var[])
+var.name == orig(var.name)
 var.is_obsolete == var.is_used
 var.is_obsolete == var.been_written
 var.is_obsolete == var.is_user
@@ -6823,10 +6824,17 @@ var.is_obsolete == orig(var.is_user)
 var.is_obsolete == orig(var.is_global)
 var.is_obsolete == orig(var.is_list)
 var.is_obsolete == orig(var.is_fixed)
+var.descrip == orig(var.descrip)
 var.current_val == orig(var.current_val)
+var.current_val.l[] == var.user_val.l[]
+var.current_val.l[] == var.global_val.l[]
+var.current_val.l[] == orig(var.global_val.l[])
 var.user_val == orig(var.user_val)
+var.user_val.p == orig(var.user_val.p)
 var.user_val.l == orig(var.user_val.l)
+var.user_val.l[] == orig(var.user_val.l[])
 var.global_val == orig(var.global_val)
+var.global_val.p == orig(var.global_val.p)
 var.global_val.l == orig(var.global_val.l)
 var.fixed_val == orig(var.fixed_val)
 var.fixed_val.l == var.cmdline_val.l
@@ -6849,17 +6857,9 @@ var.cmdline_val != null
 var.name > var.descrip
 var.name != var.current_val.p
 var.name != var.global_val.p
-var.name == orig(var.name)
 var.descrip != var.current_val.p
 var.user_val.l[] is a substring of var.descrip
 var.descrip != var.global_val.p
-var.descrip == orig(var.descrip)
-var.current_val.l[] == var.user_val.l[]
-var.current_val.l[] == var.global_val.l[]
-var.current_val.l[] == orig(var.global_val.l[])
-var.user_val.p == orig(var.user_val.p)
-var.user_val.l[] == orig(var.user_val.l[])
-var.global_val.p == orig(var.global_val.p)
 ===========================================================================
 global.set_feature_list_current_val():::ENTER
 var.is_obsolete == var.is_used
@@ -6887,6 +6887,7 @@ var.name is a substring of var.descrip
 ===========================================================================
 global.set_feature_list_current_val():::EXIT
 var[] == orig(var[])
+var.name == orig(var.name)
 var.is_obsolete == var.is_used
 var.is_obsolete == var.been_written
 var.is_obsolete == var.is_user
@@ -6900,6 +6901,7 @@ var.is_obsolete == orig(var.is_user)
 var.is_obsolete == orig(var.is_global)
 var.is_obsolete == orig(var.is_list)
 var.is_obsolete == orig(var.is_fixed)
+var.descrip == orig(var.descrip)
 var.current_val == orig(var.current_val)
 var.user_val == orig(var.user_val)
 var.user_val.l == var.global_val.l
@@ -6927,9 +6929,7 @@ var.fixed_val has only one value
 var.cmdline_val has only one value
 var.name is a substring of var.descrip
 var.current_val.p is a substring of var.name
-var.name == orig(var.name)
 var.current_val.p is a substring of var.descrip
-var.descrip == orig(var.descrip)
 ===========================================================================
 global.set_titlebar():::ENTER
 current_pl == total_pl
@@ -7028,6 +7028,7 @@ ps.feat_list_back_compat == ps.vars.cmdline_val.l
 ps.init_context == ps.printer_category
 ps.initial_cmds == ps.free_initial_cmds
 ps.ttyo.header_rows == km.keys.bind.nch
+ps.userdomain == ps.maildomain
 ps.status_msg_delay == quick_draw
 ps.hours_to_timeout == quick_draw
 ps.vars.is_obsolete == ps.vars.is_used
@@ -7105,7 +7106,6 @@ ps.home_dir is a substring of ps.folders_dir
 ps.home_dir is a substring of ps.pinerc
 ps.localdomain is a substring of ps.hostname
 ps.localdomain is a substring of ps.userdomain
-ps.userdomain == ps.maildomain
 ps.pine_name is a substring of ps.pinerc
 ===========================================================================
 global.show_main_screen():::EXIT
@@ -7153,6 +7153,7 @@ ps.mail_box_changed == orig(ps.unsorted_newmail)
 ps.atmts == orig(ps.atmts)
 ps.atmts_allocated == orig(ps.atmts_allocated)
 ps.index_disp_format == orig(ps.index_disp_format)
+ps.folders_dir == orig(ps.folders_dir)
 ps.start_mode == orig(ps.start_mode)
 ps.mangled_footer == ps.mangled_header
 ps.mangled_footer == ps.mangled_body
@@ -7242,11 +7243,20 @@ ps.ttyo.header_rows == km.keys.bind.nch
 ps.ttyo.header_rows == orig(ps.ttyo.header_rows)
 ps.ttyo.header_rows == orig(km.keys.bind.nch)
 ps.ttyo.footer_rows == orig(ps.ttyo.footer_rows)
+ps.home_dir == orig(ps.home_dir)
+ps.hostname == orig(ps.hostname)
+ps.localdomain == orig(ps.localdomain)
+ps.userdomain == ps.maildomain
+ps.userdomain == orig(ps.userdomain)
+ps.userdomain == orig(ps.maildomain)
+ps.pinerc == orig(ps.pinerc)
+ps.pine_name == orig(ps.pine_name)
 ps.last_expire_year == orig(ps.last_expire_year)
 ps.last_expire_month == orig(ps.last_expire_month)
 ps.composer_fillcol == orig(ps.composer_fillcol)
 ps.vars == orig(ps.vars)
 ps.vars[] == orig(ps.vars[])
+ps.vars.name == orig(ps.vars.name)
 ps.vars.is_obsolete == ps.vars.is_used
 ps.vars.is_obsolete == ps.vars.been_written
 ps.vars.is_obsolete == ps.vars.is_user
@@ -7260,7 +7270,9 @@ ps.vars.is_obsolete == orig(ps.vars.is_user)
 ps.vars.is_obsolete == orig(ps.vars.is_global)
 ps.vars.is_obsolete == orig(ps.vars.is_list)
 ps.vars.is_obsolete == orig(ps.vars.is_fixed)
+ps.vars.descrip == orig(ps.vars.descrip)
 ps.vars.current_val == orig(ps.vars.current_val)
+ps.vars.current_val.p == orig(ps.vars.current_val.p)
 ps.vars.current_val.l == orig(ps.vars.current_val.l)
 ps.vars.user_val == orig(ps.vars.user_val)
 ps.vars.global_val == orig(ps.vars.global_val)
@@ -7271,6 +7283,8 @@ km.how_many == km.which
 km.how_many == km.width
 km.keys == orig(km.keys)
 km.keys[] == orig(km.keys[])
+km.keys.name == orig(km.keys.name)
+km.keys.label == orig(km.keys.label)
 km.keys.bind == orig(km.keys.bind)
 km.keys.bind.cmd == orig(km.keys.bind.cmd)
 km.keys.bind.ch == orig(km.keys.bind.ch)
@@ -7331,24 +7345,10 @@ km.keys.bind.cmd == 500
 km.keys.bind.ch has only one value
 km.formatted_hm == 4294967042L
 ps.home_dir is a substring of ps.folders_dir
-ps.folders_dir == orig(ps.folders_dir)
 ps.home_dir is a substring of ps.pinerc
-ps.home_dir == orig(ps.home_dir)
 ps.localdomain is a substring of ps.hostname
-ps.hostname == orig(ps.hostname)
 ps.localdomain is a substring of ps.userdomain
-ps.localdomain == orig(ps.localdomain)
-ps.userdomain == ps.maildomain
-ps.userdomain == orig(ps.userdomain)
-ps.userdomain == orig(ps.maildomain)
 ps.pine_name is a substring of ps.pinerc
-ps.pinerc == orig(ps.pinerc)
-ps.pine_name == orig(ps.pine_name)
-ps.vars.name == orig(ps.vars.name)
-ps.vars.descrip == orig(ps.vars.descrip)
-ps.vars.current_val.p == orig(ps.vars.current_val.p)
-km.keys.name == orig(km.keys.name)
-km.keys.label == orig(km.keys.label)
 ===========================================================================
 global.simple_ttgetc():::ENTER
 recorder has only one value
@@ -7407,13 +7407,13 @@ ch == 64
 global.strrindex():::EXIT
 ===========================================================================
 global.strtoval():::ENTER
+s == errbuf
 s == "150"
 val has only one value
 val[] >= 0
 minmum one of { 0, 14 }
 errbuf is printable
 varname is printable
-s == errbuf
 (val[] == 0) ==> (minmum == 0)
 minmum is a bitwise subset of val[]
 val[] >= minmum
@@ -7528,6 +7528,7 @@ ps.feat_list_back_compat == ps.vars.cmdline_val.l
 ps.init_context == ps.printer_category
 ps.initial_cmds == ps.free_initial_cmds
 ps.ttyo.header_rows == func
+ps.userdomain == ps.maildomain
 ps.vars.is_obsolete == ps.vars.is_used
 ps.vars.is_obsolete == ps.vars.been_written
 ps.vars.is_obsolete == ps.vars.is_user
@@ -7586,7 +7587,6 @@ ps.home_dir is a substring of ps.folders_dir
 ps.home_dir is a substring of ps.pinerc
 ps.localdomain is a substring of ps.hostname
 ps.localdomain is a substring of ps.userdomain
-ps.userdomain == ps.maildomain
 ps.pine_name is a substring of ps.pinerc
 ===========================================================================
 global.tty_chmod():::EXIT
@@ -7631,6 +7631,7 @@ ps.mail_box_changed == orig(ps.unsorted_newmail)
 ps.atmts == orig(ps.atmts)
 ps.atmts_allocated == orig(ps.atmts_allocated)
 ps.index_disp_format == orig(ps.index_disp_format)
+ps.folders_dir == orig(ps.folders_dir)
 ps.start_mode == orig(ps.start_mode)
 ps.mangled_footer == ps.mangled_header
 ps.mangled_footer == ps.mangled_body
@@ -7763,11 +7764,20 @@ ps.initial_cmds == orig(ps.free_initial_cmds)
 ps.ttyo == orig(ps.ttyo)
 ps.ttyo[] == orig(ps.ttyo[])
 ps.ttyo.header_rows == orig(func)
+ps.home_dir == orig(ps.home_dir)
+ps.hostname == orig(ps.hostname)
+ps.localdomain == orig(ps.localdomain)
+ps.userdomain == ps.maildomain
+ps.userdomain == orig(ps.userdomain)
+ps.userdomain == orig(ps.maildomain)
+ps.pinerc == orig(ps.pinerc)
+ps.pine_name == orig(ps.pine_name)
 ps.last_expire_year == orig(ps.last_expire_year)
 ps.last_expire_month == orig(ps.last_expire_month)
 ps.composer_fillcol == orig(ps.composer_fillcol)
 ps.vars == orig(ps.vars)
 ps.vars[] == orig(ps.vars[])
+ps.vars.name == orig(ps.vars.name)
 ps.vars.is_obsolete == ps.vars.is_used
 ps.vars.is_obsolete == ps.vars.been_written
 ps.vars.is_obsolete == ps.vars.is_user
@@ -7781,7 +7791,9 @@ ps.vars.is_obsolete == orig(ps.vars.is_user)
 ps.vars.is_obsolete == orig(ps.vars.is_global)
 ps.vars.is_obsolete == orig(ps.vars.is_list)
 ps.vars.is_obsolete == orig(ps.vars.is_fixed)
+ps.vars.descrip == orig(ps.vars.descrip)
 ps.vars.current_val == orig(ps.vars.current_val)
+ps.vars.current_val.p == orig(ps.vars.current_val.p)
 ps.vars.current_val.l == orig(ps.vars.current_val.l)
 ps.vars.user_val == orig(ps.vars.user_val)
 ps.vars.global_val == orig(ps.vars.global_val)
@@ -7833,22 +7845,10 @@ ps.vars.global_val has only one value
 ps.vars.fixed_val has only one value
 ps.vars.cmdline_val has only one value
 ps.home_dir is a substring of ps.folders_dir
-ps.folders_dir == orig(ps.folders_dir)
 ps.home_dir is a substring of ps.pinerc
-ps.home_dir == orig(ps.home_dir)
 ps.localdomain is a substring of ps.hostname
-ps.hostname == orig(ps.hostname)
 ps.localdomain is a substring of ps.userdomain
-ps.localdomain == orig(ps.localdomain)
-ps.userdomain == ps.maildomain
-ps.userdomain == orig(ps.userdomain)
-ps.userdomain == orig(ps.maildomain)
 ps.pine_name is a substring of ps.pinerc
-ps.pinerc == orig(ps.pinerc)
-ps.pine_name == orig(ps.pine_name)
-ps.vars.name == orig(ps.vars.name)
-ps.vars.descrip == orig(ps.vars.descrip)
-ps.vars.current_val.p == orig(ps.vars.current_val.p)
 ===========================================================================
 global.update_bboard_spec():::ENTER
 bboard == "mail/[]"
@@ -7903,8 +7903,8 @@ gcos_field == "Madeline Hardojo"
 logname == "mhardojo"
 ===========================================================================
 os.c.gcos_name():::EXIT
-return == "Madeline Hardojo"
 return == orig(gcos_field)
+return == "Madeline Hardojo"
 ===========================================================================
 os.c.moveabsolute():::ENTER
 col >= 0

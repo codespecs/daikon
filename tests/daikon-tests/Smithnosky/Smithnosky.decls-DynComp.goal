@@ -8,35 +8,35 @@ misc.Smithnosky:::CLASS
 DECLARE
 misc.Smithnosky:::OBJECT
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 2
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 4
 this.s[..]
@@ -67,35 +67,35 @@ int
 DECLARE
 misc.Smithnosky.Smithnosky(int, int, int):::EXIT24
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 3
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 4
 this.s[..]
@@ -123,35 +123,35 @@ int
 DECLARE
 misc.Smithnosky.incA():::ENTER
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 2
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 4
 this.s[..]
@@ -166,35 +166,35 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incA():::EXIT29
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 2
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 4
 this.s[..]
@@ -210,35 +210,35 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incB():::ENTER
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 2
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 4
 this.s[..]
@@ -253,35 +253,35 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incB():::EXIT34
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 2
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 4
 this.s[..]
@@ -297,35 +297,35 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incC():::ENTER
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 2
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 4
 this.s[..]
@@ -340,35 +340,35 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incC():::EXIT39
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 2
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 4
 this.s[..]
@@ -384,35 +384,35 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.add(java.lang.Object):::ENTER
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 3
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 5
 this.s[..]
@@ -435,35 +435,35 @@ java.lang.String
 DECLARE
 misc.Smithnosky.add(java.lang.Object):::EXIT44
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 3
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 5
 this.s[..]
@@ -526,35 +526,35 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.equals(java.lang.Object):::ENTER
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 3
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 5
 this.s[..]
@@ -577,35 +577,35 @@ java.lang.String
 DECLARE
 misc.Smithnosky.equals(java.lang.Object):::EXIT1
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 4
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 6
 this.s[..]
@@ -633,35 +633,35 @@ boolean
 DECLARE
 misc.Smithnosky.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 3
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 5
 this.s[..]
@@ -684,35 +684,35 @@ java.lang.String
 DECLARE
 misc.Smithnosky.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Smithnosky # isNonNull=true isParam=true
+misc.Smithnosky # isNonNull=true, isParam=true
 hashcode
 4
 this.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.aXb
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.aXc
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this.size
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 this.s
-java.util.Vector # declaringClassPackageName=misc, 
+java.util.Vector # declaringClassPackageName=misc
 hashcode
 6
 this.s[..]

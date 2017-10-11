@@ -54,7 +54,12 @@ public class InvTranslate {
   //   quality = 0;
   // }
 
-  /** Setup a translation from i1 to i2. The quality and the variable map is set accordingly. */
+  /**
+   * Setup a translation from i1 to i2. The quality and the variable map is set accordingly.
+   *
+   * @param i1 the invariant to translate from
+   * @param i2 the invariant to translate to
+   */
   public InvTranslate(Invariant i1, Invariant i2) {
 
     inv1 = i1;

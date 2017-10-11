@@ -66,7 +66,7 @@ import typequals.*;
 /**
  * Represents two sequences of LONG values where one of the sequences is a subset of the other; that
  * is each element of one sequence appears in the other. Prints as either
- * <code>x[] is a subset of y[]</code> or as <code>x[] is a superset of y[]</code>.
+ * {@code x[] is a subset of y[]} or as {@code x[] is a superset of y[]}.
  */
 public class SUBSET extends TWOSEQUENCE {
   // We are Serializable, so we specify a version to allow changes to

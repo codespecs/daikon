@@ -40,9 +40,9 @@ import typequals.*;
 */
 
 /**
- * Represents a Linear invariant between two PRIMITIVE scalars <code>x</code> and <code>y</code>, of
- * the form <code>ax + by + c = 0</code>. The constants <code>a</code>, <code>b</code> and
- * <code>c</code> are mutually relatively prime, and the constant <code>a</code> is always positive.
+ * Represents a Linear invariant between two PRIMITIVE scalars {@code x} and {@code y}, of
+ * the form {@code ax + by + c = 0}. The constants {@code a}, {@code b} and
+ * {@code c} are mutually relatively prime, and the constant {@code a} is always positive.
  */
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to

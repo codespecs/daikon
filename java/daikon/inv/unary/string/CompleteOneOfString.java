@@ -16,8 +16,8 @@ import typequals.*;
 */
 
 /**
- * Tracks every unique value and how many times it occurs. Prints as either <code>x has no values
- * </code> or as <code>x has values: "v1" "v2" "v3" ...</code>.
+ * Tracks every unique value and how many times it occurs. Prints as either {@code x has no values}
+ * or as {@code x has values: "v1" "v2" "v3" ...}.
  */
 public final class CompleteOneOfString extends SingleString {
   // We are Serializable, so we specify a version to allow changes to

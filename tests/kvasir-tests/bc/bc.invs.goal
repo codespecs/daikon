@@ -15,6 +15,7 @@ c_code one of { 0, 1 }
 ===========================================================================
 ..bc_compare():::ENTER
 n1->n_len == n2->n_len
+n1->n_ptr == n1->n_value
 n1->n_scale == n2->n_scale
 n1->n_sign == n2->n_sign
 n1->n_len one of { 1, 2 }
@@ -24,12 +25,14 @@ n1->n_scale == 0
 n1->n_sign == 0
 n2->n_ptr == ""
 n2->n_refs one of { 1, 5, 18 }
-n1->n_ptr == n1->n_value
 ===========================================================================
 ..bc_compare():::EXIT
 n1->n_len == n2->n_len
 n1->n_len == orig(n1->n_len)
 n1->n_len == orig(n2->n_len)
+n1->n_ptr == n1->n_value
+n1->n_ptr == orig(n1->n_ptr)
+n1->n_ptr == orig(n1->n_value)
 n1->n_refs == orig(n1->n_refs)
 n1->n_scale == n2->n_scale
 n1->n_scale == orig(n1->n_scale)
@@ -48,11 +51,9 @@ n1->n_sign == 0
 n2->n_ptr == ""
 n2->n_refs one of { 1, 5, 18 }
 return one of { -1, 0, 1 }
-n1->n_ptr == n1->n_value
-n1->n_ptr == orig(n1->n_ptr)
-n1->n_ptr == orig(n1->n_value)
 ===========================================================================
 ..bc_copy_num():::ENTER
+num->n_ptr == num->n_value
 num != null
 num->n_len == 1
 num->n_next has only one value
@@ -85,7 +86,6 @@ num->n_next[].n_scale elements == num->n_scale
 num->n_scale in num->n_next[].n_scale
 num->n_next[].n_sign elements == num->n_sign
 num->n_sign in num->n_next[].n_sign
-num->n_ptr == num->n_value
 ===========================================================================
 ..bc_copy_num():::EXIT
 num->n_len == return->n_len
@@ -102,11 +102,16 @@ num->n_next[].n_refs == orig(num->n_next[].n_refs)
 num->n_next[].n_scale == return->n_next[].n_scale
 num->n_next[].n_scale == orig(num->n_next[].n_scale)
 num->n_next[].n_sign == orig(num->n_next[].n_sign)
+num->n_ptr == num->n_value
+num->n_ptr == return->n_ptr
+num->n_ptr == orig(num->n_ptr)
 num->n_refs == return->n_refs
 num->n_scale == return->n_scale
 num->n_scale == orig(num->n_scale)
 num->n_sign == return->n_sign
 num->n_sign == orig(num->n_sign)
+num->n_value == return->n_value
+num->n_value == orig(num->n_value)
 num[0] == return[0]
 num[0] == orig(num[0])
 return == orig(num)
@@ -147,18 +152,16 @@ num->n_next[].n_scale elements == num->n_scale
 num->n_scale in num->n_next[].n_scale
 num->n_next[].n_sign elements == num->n_sign
 num->n_sign in num->n_next[].n_sign
-num->n_ptr == num->n_value
-num->n_ptr == return->n_ptr
-num->n_ptr == orig(num->n_ptr)
 num->n_refs - orig(num->n_refs) - 1 == 0
 num->n_sign in return->n_next[].n_sign
 return->n_next[].n_sign elements == num->n_sign
-num->n_value == return->n_value
-num->n_value == orig(num->n_value)
 ===========================================================================
 ..bc_divide():::ENTER
 n1->n_len == n2->n_len
 n1->n_len == quot[0]->n_len
+n1->n_ptr == n1->n_value
+n1->n_ptr == quot[0]->n_ptr
+n1->n_ptr == quot[0]->n_value
 n1->n_sign == n2->n_sign
 n1->n_sign == quot[0]->n_sign
 n2->n_scale == quot[0]->n_scale
@@ -185,9 +188,6 @@ quot[0] has only one value
 quot[0]->n_refs == 17
 quot[0][0] has only one value
 scale == 20
-n1->n_ptr == n1->n_value
-n1->n_ptr == quot[0]->n_ptr
-n1->n_ptr == quot[0]->n_value
 ===========================================================================
 ..bc_divide():::EXIT
 n1->n_len == n2->n_len
@@ -200,6 +200,13 @@ n1->n_next[] == orig(n1->n_next[])
 n1->n_next[].n_next == orig(n1->n_next[].n_next)
 n1->n_next[].n_refs == orig(n1->n_next[].n_refs)
 n1->n_next[].n_sign == orig(n1->n_next[].n_sign)
+n1->n_ptr == n1->n_value
+n1->n_ptr == quot[0]->n_ptr
+n1->n_ptr == quot[0]->n_value
+n1->n_ptr == orig(n1->n_ptr)
+n1->n_ptr == orig(n1->n_value)
+n1->n_ptr == orig(quot[0]->n_ptr)
+n1->n_ptr == orig(quot[0]->n_value)
 n1->n_refs == orig(n1->n_refs)
 n1->n_scale == orig(n1->n_scale)
 n1->n_sign == n2->n_sign
@@ -233,15 +240,9 @@ quot[0] has only one value
 quot[0]->n_refs == 1
 quot[0][0] has only one value
 return == 0
-n1->n_ptr == n1->n_value
-n1->n_ptr == quot[0]->n_ptr
-n1->n_ptr == quot[0]->n_value
-n1->n_ptr == orig(n1->n_ptr)
-n1->n_ptr == orig(n1->n_value)
-n1->n_ptr == orig(quot[0]->n_ptr)
-n1->n_ptr == orig(quot[0]->n_value)
 ===========================================================================
 ..bc_free_num():::ENTER
+num[0]->n_ptr == num[0]->n_value
 num != null
 num[0] != null
 num[0]->n_len one of { 1, 2 }
@@ -271,7 +272,6 @@ num[0]->n_len != num[0]->n_scale
 num[0]->n_scale % num[0]->n_len == 0
 num[0]->n_next[].n_sign elements == num[0]->n_sign
 num[0]->n_sign in num[0]->n_next[].n_sign
-num[0]->n_ptr == num[0]->n_value
 ===========================================================================
 ..bc_free_num():::EXIT
 num[0] == null
@@ -279,6 +279,7 @@ num[0] in orig(num[0]->n_next[].n_next)
 orig(num[0]->n_next[].n_next) elements == num[0]
 ===========================================================================
 ..bc_init_num():::ENTER
+num[0]->n_ptr == num[0]->n_value
 num != null
 num[0]->n_len == 1
 num[0]->n_next has only one value
@@ -309,10 +310,12 @@ num[0]->n_next[].n_scale elements == num[0]->n_scale
 num[0]->n_scale in num[0]->n_next[].n_scale
 num[0]->n_next[].n_sign elements == num[0]->n_sign
 num[0]->n_sign in num[0]->n_next[].n_sign
-num[0]->n_ptr == num[0]->n_value
 ===========================================================================
 ..bc_init_num():::EXIT
 num[0]->n_len == orig(num[0]->n_len)
+num[0]->n_ptr == num[0]->n_value
+num[0]->n_ptr == orig(num[0]->n_ptr)
+num[0]->n_ptr == orig(num[0]->n_value)
 num[0]->n_sign == orig(num[0]->n_sign)
 num[0] has only one value
 num[0]->n_len == 1
@@ -322,15 +325,13 @@ num[0]->n_sign == 0
 num[0][0] has only one value
 num[0]->n_len in orig(num[0]->n_next[].n_len)
 orig(num[0]->n_next[].n_len) elements == num[0]->n_len
-num[0]->n_ptr == num[0]->n_value
-num[0]->n_ptr == orig(num[0]->n_ptr)
-num[0]->n_ptr == orig(num[0]->n_value)
 num[0]->n_scale in orig(num[0]->n_next[].n_refs)
 orig(num[0]->n_next[].n_refs) elements == num[0]->n_scale
 num[0]->n_sign in orig(num[0]->n_next[].n_sign)
 orig(num[0]->n_next[].n_sign) elements == num[0]->n_sign
 ===========================================================================
 ..bc_int2num():::ENTER
+num[0]->n_ptr == num[0]->n_value
 num has only one value
 num[0] has only one value
 num[0]->n_len == 1
@@ -340,9 +341,9 @@ num[0]->n_scale == 0
 num[0]->n_sign == 0
 num[0][0] has only one value
 val == 20
-num[0]->n_ptr == num[0]->n_value
 ===========================================================================
 ..bc_int2num():::EXIT
+num[0]->n_ptr == num[0]->n_value
 num[0]->n_scale == orig(num[0]->n_scale)
 num[0]->n_sign == orig(num[0]->n_sign)
 num[0] has only one value
@@ -352,9 +353,9 @@ num[0]->n_refs == 1
 num[0]->n_scale == 0
 num[0]->n_sign == 0
 num[0][0] has only one value
-num[0]->n_ptr == num[0]->n_value
 ===========================================================================
 ..bc_is_neg():::ENTER
+num->n_ptr == num->n_value
 num has only one value
 num->n_len == 2
 num->n_ptr == "\002"
@@ -362,10 +363,12 @@ num->n_refs == 1
 num->n_scale == 0
 num->n_sign == 0
 num[0] has only one value
-num->n_ptr == num->n_value
 ===========================================================================
 ..bc_is_neg():::EXIT
 num->n_len == orig(num->n_len)
+num->n_ptr == num->n_value
+num->n_ptr == orig(num->n_ptr)
+num->n_ptr == orig(num->n_value)
 num->n_refs == orig(num->n_refs)
 num->n_scale == orig(num->n_scale)
 num->n_sign == orig(num->n_sign)
@@ -377,11 +380,9 @@ num->n_scale == 0
 num->n_sign == 0
 num[0] has only one value
 return == 0
-num->n_ptr == num->n_value
-num->n_ptr == orig(num->n_ptr)
-num->n_ptr == orig(num->n_value)
 ===========================================================================
 ..bc_is_zero():::ENTER
+num->n_ptr == num->n_value
 num->n_len one of { 1, 2 }
 num->n_next has only one value
 num->n_next[] contains no nulls and has only one value, of length 1
@@ -412,7 +413,6 @@ num->n_next[].n_scale elements == num->n_scale
 num->n_scale in num->n_next[].n_scale
 num->n_next[].n_sign elements == num->n_sign
 num->n_sign in num->n_next[].n_sign
-num->n_ptr == num->n_value
 ===========================================================================
 ..bc_is_zero():::EXIT
 num->n_len == orig(num->n_len)
@@ -423,9 +423,12 @@ num->n_next[].n_next == orig(num->n_next[].n_next)
 num->n_next[].n_refs == orig(num->n_next[].n_refs)
 num->n_next[].n_scale == orig(num->n_next[].n_scale)
 num->n_next[].n_sign == orig(num->n_next[].n_sign)
+num->n_ptr == num->n_value
+num->n_ptr == orig(num->n_ptr)
 num->n_refs == orig(num->n_refs)
 num->n_scale == orig(num->n_scale)
 num->n_sign == orig(num->n_sign)
+num->n_value == orig(num->n_value)
 num[0] == orig(num[0])
 num->n_len one of { 1, 2 }
 num->n_next has only one value
@@ -460,9 +463,6 @@ num->n_next[].n_scale elements == num->n_scale
 num->n_scale in num->n_next[].n_scale
 num->n_next[].n_sign elements == num->n_sign
 num->n_sign in num->n_next[].n_sign
-num->n_ptr == num->n_value
-num->n_ptr == orig(num->n_ptr)
-num->n_value == orig(num->n_value)
 ===========================================================================
 ..bc_malloc():::ENTER
 size >= 2
@@ -473,6 +473,9 @@ size >= 2
 n1->n_len == n2->n_len
 n1->n_len == prod[0]->n_len
 n1->n_scale == prod[0]->n_scale
+n2->n_ptr == n2->n_value
+n2->n_ptr == prod[0]->n_ptr
+n2->n_ptr == prod[0]->n_value
 n2->n_scale == scale
 n1 has only one value
 n1->n_len == 1
@@ -492,9 +495,6 @@ prod[0]->n_refs == 9
 prod[0]->n_sign == 0
 prod[0][0] has only one value
 scale == 20
-n2->n_ptr == n2->n_value
-n2->n_ptr == prod[0]->n_ptr
-n2->n_ptr == prod[0]->n_value
 ===========================================================================
 ..bc_multiply():::EXIT
 n1->n_len == n2->n_len
@@ -508,6 +508,12 @@ n1->n_scale == orig(n1->n_scale)
 n1->n_scale == orig(prod[0]->n_scale)
 n1->n_sign == orig(n1->n_sign)
 n1[0] == orig(n1[0])
+n2->n_ptr == n2->n_value
+n2->n_ptr == prod[0]->n_ptr
+n2->n_ptr == orig(n2->n_ptr)
+n2->n_ptr == orig(n2->n_value)
+n2->n_ptr == orig(prod[0]->n_ptr)
+n2->n_ptr == orig(prod[0]->n_value)
 n2->n_refs == orig(n2->n_refs)
 n2->n_scale == prod[0]->n_scale
 n2->n_scale == orig(n2->n_scale)
@@ -537,12 +543,6 @@ prod[0]->n_next[].n_sign == [0]
 prod[0]->n_refs == 1
 prod[0]->n_sign == 0
 prod[0][0] has only one value
-n2->n_ptr == n2->n_value
-n2->n_ptr == prod[0]->n_ptr
-n2->n_ptr == orig(n2->n_ptr)
-n2->n_ptr == orig(n2->n_value)
-n2->n_ptr == orig(prod[0]->n_ptr)
-n2->n_ptr == orig(prod[0]->n_value)
 ===========================================================================
 ..bc_new_num():::ENTER
 length one of { 1, 2, 23 }
@@ -552,6 +552,7 @@ scale % length == 0
 ===========================================================================
 ..bc_new_num():::EXIT
 return->n_len == orig(length)
+return->n_ptr == return->n_value
 return->n_scale == orig(scale)
 return->n_len one of { 1, 2, 23 }
 return->n_next[] contains no nulls and has only one value, of length 1
@@ -576,9 +577,9 @@ return->n_len != return->n_scale
 return->n_scale % return->n_len == 0
 return->n_next[].n_sign elements == return->n_sign
 return->n_sign in return->n_next[].n_sign
-return->n_ptr == return->n_value
 ===========================================================================
 ..bc_num2long():::ENTER
+num->n_ptr == num->n_value
 num has only one value
 num->n_len == 2
 num->n_ptr == "\002"
@@ -586,10 +587,12 @@ num->n_refs == 1
 num->n_scale == 0
 num->n_sign == 0
 num[0] has only one value
-num->n_ptr == num->n_value
 ===========================================================================
 ..bc_num2long():::EXIT
 num->n_len == orig(num->n_len)
+num->n_ptr == num->n_value
+num->n_ptr == orig(num->n_ptr)
+num->n_ptr == orig(num->n_value)
 num->n_refs == orig(num->n_refs)
 num->n_scale == orig(num->n_scale)
 num->n_sign == orig(num->n_sign)
@@ -601,9 +604,6 @@ num->n_scale == 0
 num->n_sign == 0
 num[0] has only one value
 return == 20
-num->n_ptr == num->n_value
-num->n_ptr == orig(num->n_ptr)
-num->n_ptr == orig(num->n_value)
 ===========================================================================
 ..bc_out_num():::ENTER
 leading_zero == 0
@@ -633,6 +633,7 @@ num->n_next[].n_next == orig(num->n_next[].n_next)
 num->n_next[].n_refs == orig(num->n_next[].n_refs)
 num->n_next[].n_scale == orig(num->n_next[].n_scale)
 num->n_next[].n_sign == orig(num->n_next[].n_sign)
+num->n_ptr == orig(num->n_ptr)
 num->n_refs == orig(num->n_refs)
 num->n_scale == orig(num->n_scale)
 num->n_sign == orig(num->n_sign)
@@ -650,7 +651,6 @@ num->n_refs == 1
 num->n_scale == 20
 num->n_sign == 0
 num[0] has only one value
-num->n_ptr == orig(num->n_ptr)
 ===========================================================================
 ..byte():::ENTER
 pc != null
@@ -740,10 +740,12 @@ tree->v_name in tree->left[].v_name
 ===========================================================================
 ..find_id():::EXIT
 return->a_name == tree->a_name
+return->id == orig(id)
 return->v_name == tree->v_name
 tree->a_name == orig(tree->a_name)
 tree->balance == orig(tree->balance)
 tree->f_name == orig(tree->f_name)
+tree->id == orig(tree->id)
 tree->left == orig(tree->left)
 tree->left[] == orig(tree->left[])
 tree->left[].a_name == orig(tree->left[].a_name)
@@ -799,7 +801,6 @@ tree->left[].balance elements == return->balance
 return->f_name in tree->left[].f_name
 tree->left[].f_name elements == return->f_name
 return->id in tree->left[].id
-return->id == orig(id)
 return->left in tree->left[].left
 tree->left[].left elements == return->left
 return->right in tree->left[].right
@@ -818,7 +819,6 @@ tree->balance in tree->left[].a_name
 tree->left[].a_name elements == tree->balance
 tree->balance in tree->left[].v_name
 tree->left[].v_name elements == tree->balance
-tree->id == orig(tree->id)
 tree->left[].a_name elements == tree->v_name
 tree->v_name in tree->left[].a_name
 tree->left[].v_name elements == tree->v_name
@@ -923,12 +923,14 @@ new_id->a_name == root[0]->a_name
 new_id->a_name == orig(new_id->a_name)
 new_id->a_name == orig(root[0]->a_name)
 new_id->f_name == orig(new_id->f_name)
+new_id->id == orig(new_id->id)
 new_id->left == new_id->right
 new_id->v_name == root[0]->v_name
 new_id->v_name == orig(new_id->v_name)
 new_id->v_name == orig(root[0]->v_name)
 new_id[0] == orig(new_id[0])
 root[0]->f_name == orig(root[0]->f_name)
+root[0]->id == orig(root[0]->id)
 root[0]->left[].id == orig(root[0]->left[].id)
 root[0][0] == orig(root[0][0])
 new_id->a_name == 0
@@ -974,7 +976,6 @@ new_id->f_name in root[0]->left[].v_name
 new_id->f_name < orig(root[0]->f_name)
 new_id->f_name in orig(root[0]->left[].a_name)
 new_id->f_name in orig(root[0]->left[].v_name)
-new_id->id == orig(new_id->id)
 new_id->id != orig(root[0]->id)
 new_id->left in root[0]->left[].left
 new_id->left in orig(root[0]->left[].left)
@@ -990,7 +991,6 @@ root[0]->balance in root[0]->left[].a_name
 root[0]->balance in root[0]->left[].v_name
 root[0]->balance in orig(root[0]->left[].a_name)
 root[0]->balance in orig(root[0]->left[].v_name)
-root[0]->id == orig(root[0]->id)
 root[0]->left[] == orig(root[0]->left[]) (elementwise)
 root[0]->left[] is the reverse of orig(root[0]->left[])
 orig(root[0]->a_name) in root[0]->left[].a_name
@@ -1154,8 +1154,8 @@ argv has only one value
 argv[0] == "./bc"
 ===========================================================================
 ..parse_args():::EXIT
-argv[0] == "./bc"
 argv[0] == orig(argv[0])
+argv[0] == "./bc"
 ===========================================================================
 ..pop_vars():::ENTER
 list->arg_is_var == 0
@@ -1253,14 +1253,17 @@ pc->pc_func one of { 0, 4 }
 pc[0] has only one value
 ===========================================================================
 ..push_copy():::ENTER
+num->n_ptr == num->n_value
 num->n_len == 1
 num->n_ptr == ""
 num->n_scale == 0
 num->n_sign == 0
-num->n_ptr == num->n_value
 ===========================================================================
 ..push_copy():::EXIT
 num->n_len == orig(num->n_len)
+num->n_ptr == num->n_value
+num->n_ptr == orig(num->n_ptr)
+num->n_ptr == orig(num->n_value)
 num->n_scale == orig(num->n_scale)
 num->n_sign == orig(num->n_sign)
 num[0] == orig(num[0])
@@ -1268,12 +1271,10 @@ num->n_len == 1
 num->n_ptr == ""
 num->n_scale == 0
 num->n_sign == 0
-num->n_ptr == num->n_value
-num->n_ptr == orig(num->n_ptr)
-num->n_ptr == orig(num->n_value)
 num->n_refs - orig(num->n_refs) - 1 == 0
 ===========================================================================
 ..push_num():::ENTER
+num->n_ptr == num->n_value
 num->n_len one of { 1, 2 }
 num->n_next[] contains no nulls and has only one value, of length 1
 num->n_next[] elements has only one value
@@ -1297,7 +1298,6 @@ num->n_value one of { "", "\002" }
 num->n_scale % num->n_len == 0
 num->n_next[].n_sign elements == num->n_sign
 num->n_sign in num->n_next[].n_sign
-num->n_ptr == num->n_value
 ===========================================================================
 ..push_num():::EXIT
 num->n_len == orig(num->n_len)
@@ -1308,9 +1308,12 @@ num->n_next[].n_next == orig(num->n_next[].n_next)
 num->n_next[].n_refs == orig(num->n_next[].n_refs)
 num->n_next[].n_scale == orig(num->n_next[].n_scale)
 num->n_next[].n_sign == orig(num->n_next[].n_sign)
+num->n_ptr == num->n_value
+num->n_ptr == orig(num->n_ptr)
 num->n_refs == orig(num->n_refs)
 num->n_scale == orig(num->n_scale)
 num->n_sign == orig(num->n_sign)
+num->n_value == orig(num->n_value)
 num[0] == orig(num[0])
 num->n_len one of { 1, 2 }
 num->n_next[] contains no nulls and has only one value, of length 1
@@ -1335,9 +1338,6 @@ num->n_value one of { "", "\002" }
 num->n_scale % num->n_len == 0
 num->n_next[].n_sign elements == num->n_sign
 num->n_sign in num->n_next[].n_sign
-num->n_ptr == num->n_value
-num->n_ptr == orig(num->n_ptr)
-num->n_value == orig(num->n_value)
 ===========================================================================
 ..store_var():::ENTER
 var_name one of { 2, 4, 11 }
@@ -1354,6 +1354,7 @@ file has only one value
 size == 16384
 ===========================================================================
 ..yy_create_buffer():::EXIT
+return->yy_buf_pos == return->yy_ch_buf
 return->yy_input_file == orig(file)
 return has only one value
 return->yy_at_bol == 1
@@ -1366,7 +1367,6 @@ return->yy_is_interactive == 0
 return->yy_is_our_buffer == 1
 return->yy_n_chars == 0
 return[0] has only one value
-return->yy_buf_pos == return->yy_ch_buf
 ===========================================================================
 ..yy_flush_buffer():::ENTER
 b has only one value
@@ -1374,6 +1374,7 @@ b->yy_buf_size == 16384
 b->yy_is_our_buffer == 1
 ===========================================================================
 ..yy_flush_buffer():::EXIT
+b->yy_buf_pos == b->yy_ch_buf
 b->yy_buf_size == orig(b->yy_buf_size)
 b->yy_is_our_buffer == orig(b->yy_is_our_buffer)
 b->yy_at_bol == 1
@@ -1382,7 +1383,6 @@ b->yy_buf_size == 16384
 b->yy_buffer_status == 0
 b->yy_is_our_buffer == 1
 b->yy_n_chars == 0
-b->yy_buf_pos == b->yy_ch_buf
 ===========================================================================
 ..yy_init_buffer():::ENTER
 b has only one value
@@ -1391,6 +1391,7 @@ b->yy_is_our_buffer == 1
 file has only one value
 ===========================================================================
 ..yy_init_buffer():::EXIT
+b->yy_buf_pos == b->yy_ch_buf
 b->yy_buf_size == orig(b->yy_buf_size)
 b->yy_input_file == orig(file)
 b->yy_is_our_buffer == orig(b->yy_is_our_buffer)
@@ -1404,12 +1405,12 @@ b->yy_is_interactive == 0
 b->yy_is_our_buffer == 1
 b->yy_n_chars == 0
 b[0] has only one value
-b->yy_buf_pos == b->yy_ch_buf
 ===========================================================================
 ..yylex():::EXIT
 ===========================================================================
 number.c._bc_do_compare():::ENTER
 n1->n_len == n2->n_len
+n1->n_ptr == n1->n_value
 n1->n_scale == n2->n_scale
 n1->n_sign == n2->n_sign
 ignore_last == 0
@@ -1421,12 +1422,14 @@ n1->n_sign == 0
 n2->n_ptr == ""
 n2->n_refs one of { 1, 5, 18 }
 use_sign == 1
-n1->n_ptr == n1->n_value
 ===========================================================================
 number.c._bc_do_compare():::EXIT
 n1->n_len == n2->n_len
 n1->n_len == orig(n1->n_len)
 n1->n_len == orig(n2->n_len)
+n1->n_ptr == n1->n_value
+n1->n_ptr == orig(n1->n_ptr)
+n1->n_ptr == orig(n1->n_value)
 n1->n_refs == orig(n1->n_refs)
 n1->n_scale == n2->n_scale
 n1->n_scale == orig(n1->n_scale)
@@ -1445,14 +1448,12 @@ n1->n_sign == 0
 n2->n_ptr == ""
 n2->n_refs one of { 1, 5, 18 }
 return one of { -1, 0, 1 }
-n1->n_ptr == n1->n_value
-n1->n_ptr == orig(n1->n_ptr)
-n1->n_ptr == orig(n1->n_value)
 ===========================================================================
 number.c._bc_rec_mul():::ENTER
 full_scale == v->n_scale
 u->n_len == ulen
 ulen == v->n_len
+v->n_ptr == v->n_value
 full_scale == 20
 prod has only one value
 u has only one value
@@ -1468,10 +1469,11 @@ v->n_refs == 1
 v->n_sign == 0
 v[0] has only one value
 vlen == 21
-v->n_ptr == v->n_value
 ===========================================================================
 number.c._bc_rec_mul():::EXIT
+prod[0]->n_ptr == v->n_ptr
 prod[0]->n_scale == u->n_scale
+prod[0]->n_value == v->n_ptr
 u->n_len == v->n_len
 u->n_len == orig(u->n_len)
 u->n_len == orig(ulen)
@@ -1481,6 +1483,9 @@ u->n_refs == orig(u->n_refs)
 u->n_scale == orig(u->n_scale)
 u->n_sign == orig(u->n_sign)
 u[0] == orig(u[0])
+v->n_ptr == v->n_value
+v->n_ptr == orig(v->n_ptr)
+v->n_ptr == orig(v->n_value)
 v->n_refs == orig(v->n_refs)
 v->n_scale == orig(full_scale)
 v->n_scale == orig(v->n_scale)
@@ -1509,13 +1514,9 @@ v->n_refs == 1
 v->n_scale == 20
 v->n_sign == 0
 v[0] has only one value
-prod[0]->n_ptr == v->n_ptr
-prod[0]->n_value == v->n_ptr
-v->n_ptr == v->n_value
-v->n_ptr == orig(v->n_ptr)
-v->n_ptr == orig(v->n_value)
 ===========================================================================
 number.c._bc_rm_leading_zeros():::ENTER
+num->n_ptr == num->n_value
 num->n_len one of { 1, 3 }
 num->n_next has only one value
 num->n_next[] contains no nulls and has only one value, of length 1
@@ -1542,7 +1543,6 @@ num->n_next[].n_scale elements == num->n_scale
 num->n_scale in num->n_next[].n_scale
 num->n_next[].n_sign elements == num->n_sign
 num->n_sign in num->n_next[].n_sign
-num->n_ptr == num->n_value
 ===========================================================================
 number.c._bc_rm_leading_zeros():::EXIT
 num->n_next == orig(num->n_next)
@@ -1552,6 +1552,9 @@ num->n_next[].n_next == orig(num->n_next[].n_next)
 num->n_next[].n_refs == orig(num->n_next[].n_refs)
 num->n_next[].n_scale == orig(num->n_next[].n_scale)
 num->n_next[].n_sign == orig(num->n_next[].n_sign)
+num->n_ptr == num->n_value
+num->n_ptr == orig(num->n_ptr)
+num->n_ptr == orig(num->n_value)
 num->n_refs == orig(num->n_refs)
 num->n_scale == orig(num->n_scale)
 num->n_sign == orig(num->n_sign)
@@ -1585,14 +1588,12 @@ num->n_next[].n_scale elements == num->n_scale
 num->n_scale in num->n_next[].n_scale
 num->n_next[].n_sign elements == num->n_sign
 num->n_sign in num->n_next[].n_sign
-num->n_ptr == num->n_value
-num->n_ptr == orig(num->n_ptr)
-num->n_ptr == orig(num->n_value)
 ===========================================================================
 number.c._bc_simp_mul():::ENTER
 full_scale == n2->n_scale
 n1->n_len == n1len
 n1len == n2->n_len
+n2->n_ptr == n2->n_value
 full_scale == 20
 n1 has only one value
 n1->n_next == null
@@ -1608,7 +1609,6 @@ n2->n_sign == 0
 n2[0] has only one value
 n2len == 21
 prod has only one value
-n2->n_ptr == n2->n_value
 ===========================================================================
 number.c._bc_simp_mul():::EXIT
 n1->n_len == n2->n_len
@@ -1621,6 +1621,11 @@ n1->n_scale == prod[0]->n_scale
 n1->n_scale == orig(n1->n_scale)
 n1->n_sign == orig(n1->n_sign)
 n1[0] == orig(n1[0])
+n2->n_ptr == n2->n_value
+n2->n_ptr == prod[0]->n_ptr
+n2->n_ptr == prod[0]->n_value
+n2->n_ptr == orig(n2->n_ptr)
+n2->n_ptr == orig(n2->n_value)
 n2->n_refs == orig(n2->n_refs)
 n2->n_scale == orig(full_scale)
 n2->n_scale == orig(n2->n_scale)
@@ -1649,11 +1654,6 @@ prod[0]->n_next[].n_sign == [0]
 prod[0]->n_refs == 1
 prod[0]->n_sign == 0
 prod[0][0] has only one value
-n2->n_ptr == n2->n_value
-n2->n_ptr == prod[0]->n_ptr
-n2->n_ptr == prod[0]->n_value
-n2->n_ptr == orig(n2->n_ptr)
-n2->n_ptr == orig(n2->n_value)
 ===========================================================================
 number.c._one_mult():::ENTER
 num != null

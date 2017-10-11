@@ -65,7 +65,9 @@ public class FieldInfo extends DaikonVariableInfo {
         //                   field_num);
         return;
       }
-      if (Modifier.isStatic(f.getModifiers())) continue;
+      if (Modifier.isStatic(f.getModifiers())) {
+        continue;
+      }
       if (f.getType().isPrimitive()) field_num++;
     }
     throw new Error("Can't find " + field + " in " + field.getDeclaringClass());
@@ -79,7 +81,9 @@ public class FieldInfo extends DaikonVariableInfo {
       @SuppressWarnings("nullness") // clazz != object and so superclass != null
       int field_cnt = num_prim_fields(clazz.getSuperclass());
       for (Field f : clazz.getDeclaredFields()) {
-        if (Modifier.isStatic(f.getModifiers())) continue;
+        if (Modifier.isStatic(f.getModifiers())) {
+          continue;
+        }
         if (f.getType().isPrimitive()) field_cnt++;
       }
       return field_cnt;

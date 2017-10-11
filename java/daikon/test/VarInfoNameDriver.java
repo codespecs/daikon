@@ -1,5 +1,7 @@
 package daikon.test;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.*;
 import java.io.*;
 import java.util.*;
@@ -28,7 +30,7 @@ public class VarInfoNameDriver {
   }
 
   private static void run_helper(InputStream _commands, PrintStream output) throws IOException {
-    BufferedReader commands = new BufferedReader(new InputStreamReader(_commands));
+    BufferedReader commands = new BufferedReader(new InputStreamReader(_commands, UTF_8));
     Map<String, VarInfoName> variables = new HashMap<String, VarInfoName>();
 
     String command;

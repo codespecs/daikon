@@ -15,9 +15,9 @@ import typequals.*;
 // This invariant is provided for pedagogical reasons only.
 
 /**
- * Represents the invariant <code>x &gt; 0</code> where <code>x</code> is a long scalar. This exists
- * only as an example for the purposes of the manual. It isn't actually used (it is replaced by the
- * more general invariant LowerBound).
+ * Represents the invariant {@code x > 0} where {@code x} is a long scalar. This exists only as an
+ * example for the purposes of the manual. It isn't actually used (it is replaced by the more
+ * general invariant LowerBound).
  */
 public class Positive extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to

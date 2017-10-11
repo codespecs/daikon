@@ -21,7 +21,7 @@ public class PrintNullDiffVisitor extends PrintDifferingInvariantsVisitor {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
     // If (inv1 XOR inv2) is null
-    if (inv1 != null && inv2 == null || inv2 != null && inv1 == null) {
+    if (inv1 != null ^ inv2 == null) {
       super.visit(node);
     }
   }

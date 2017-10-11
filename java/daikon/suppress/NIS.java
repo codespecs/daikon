@@ -228,7 +228,9 @@ public class NIS {
       for (NISuppressionSet ss : ss_list) {
         NISuppressee suppressee = ss.get_suppressee();
         List<NISuppressionSet> suppressor_ss_list = suppressor_map.get(suppressee.sup_class);
-        if (suppressor_ss_list == null) continue;
+        if (suppressor_ss_list == null) {
+          continue;
+        }
         for (NISuppressionSet suppressor_ss : suppressor_ss_list) {
           suppressor_ss.recurse_definitions(ss);
         }
@@ -503,7 +505,9 @@ public class NIS {
             }
           }
 
-          if (hashFound) continue;
+          if (hashFound) {
+            continue;
+          }
         }
 
         if (inv.is_false()) {
@@ -710,7 +714,9 @@ public class NIS {
     // Add always comparable antecedents to each of the other maps.
     if ((compare_all != null) && (comp_ants.size() > 1)) {
       for (Antecedents ants : comp_ants.values()) {
-        if (ants.alwaysComparable()) continue;
+        if (ants.alwaysComparable()) {
+          continue;
+        }
         ants.add(compare_all);
       }
       comp_ants.remove(compare_all.comparability);
@@ -781,11 +787,15 @@ public class NIS {
           }
         }
 
-        if (hashFound) continue;
+        if (hashFound) {
+          continue;
+        }
       }
 
       for (Invariant inv : slice.invs) {
-        if (!is_suppressor(inv.getClass())) continue;
+        if (!is_suppressor(inv.getClass())) {
+          continue;
+        }
 
         if (inv.is_false()) false_invs++;
 
@@ -817,7 +827,9 @@ public class NIS {
     while (slice_iterator.hasNext()) {
       PptSlice slice = slice_iterator.next();
       for (Invariant inv : slice.invs) {
-        if (!is_suppressor(inv.getClass())) continue;
+        if (!is_suppressor(inv.getClass())) {
+          continue;
+        }
         if (inv.is_false()) false_cnt++;
         List<Invariant> antecedents = antecedent_map.get(inv.getClass());
         if (antecedents == null) {

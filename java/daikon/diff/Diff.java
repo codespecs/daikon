@@ -4,6 +4,8 @@ import daikon.*;
 import daikon.inv.*;
 import gnu.getopt.*;
 import java.io.*;
+import java.lang.NoSuchMethodException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,7 +105,8 @@ public final class Diff {
       /*@Nullable*/ /*@ClassGetName*/ String invSortComparator2Classname,
       /*@Nullable*/ /*@ClassGetName*/ String invPairComparatorClassname,
       Comparator<Invariant> defaultComparator)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+      throws ClassNotFoundException, IllegalAccessException, InstantiationException,
+          InvocationTargetException, NoSuchMethodException {
     this.examineAllPpts = examineAllPpts;
     this.ignoreNumberedExits = ignoreNumberedExits;
     this.invSortComparator1 = selectComparator(invSortComparator1Classname, defaultComparator);
@@ -117,7 +120,8 @@ public final class Diff {
    */
   public static void main(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
-          ClassNotFoundException, InstantiationException, IllegalAccessException {
+          ClassNotFoundException, IllegalAccessException, InstantiationException,
+          InvocationTargetException, NoSuchMethodException {
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
@@ -137,7 +141,8 @@ public final class Diff {
    */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
-          ClassNotFoundException, InstantiationException, IllegalAccessException {
+          ClassNotFoundException, InstantiationException, IllegalAccessException,
+          InvocationTargetException, NoSuchMethodException {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     boolean printDiff = false;
@@ -581,7 +586,9 @@ public final class Diff {
     ppts.addAll(pptMap.asCollection());
 
     for (PptTopLevel ppt : ppts) {
-      if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint()) continue;
+      if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint()) {
+        continue;
+      }
 
       // List<Invariant> invs = ppt.getInvariants();
       List<Invariant> invs = UtilMDE.sortList(ppt.getInvariants(), PptTopLevel.icfp);
@@ -837,12 +844,14 @@ public final class Diff {
    */
   private static Comparator<Invariant> selectComparator(
       /*@Nullable*/ /*@ClassGetName*/ String classname, Comparator<Invariant> defaultComparator)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+      throws ClassNotFoundException, IllegalAccessException, InstantiationException,
+          InvocationTargetException, NoSuchMethodException {
 
     if (classname != null) {
       Class<?> cls = Class.forName(classname);
       @SuppressWarnings("unchecked")
-      Comparator<Invariant> cmp = (Comparator<Invariant>) cls.newInstance();
+      Comparator<Invariant> cmp =
+          (Comparator<Invariant>) cls.getDeclaredConstructor().newInstance();
       return cmp;
     } else {
       return defaultComparator;

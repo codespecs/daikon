@@ -21,8 +21,8 @@ class StackAr : // 5193/- obj/class samples
     return: 
     parameter #0 :  // x
   method top()Ljava/lang/Object; : // 431 samples
-    return: @Nullable 
+    return: @Nullable
   method topAndPop()Ljava/lang/Object; : // 86 samples
-    return: @Nullable 
+    return: @Nullable
 
 

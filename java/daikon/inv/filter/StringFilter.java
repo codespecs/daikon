@@ -16,15 +16,13 @@ import java.util.logging.Level;
  * discarded:
  *
  * <ul>
- *   <li><code>x != null</code>, if <code>!string.IsNullOrEmpty(...)</code> or <code>
- *       !string.IsNullOrWhitespace(...)</code> is inferred.
+ *   <li>{@code x != null}, if {@code !string.IsNullOrEmpty(...)} or {@code
+ *       !string.IsNullOrWhitespace(...)} is inferred.
  *   <li>Frame conditions for string properties, if the frame condition exists for the string
  *       (reference or value)
  *   <li>String properties, if {@link OneOfString} is inferred.
- *   <li><code>!string.IsNullOrEmpty(...)</code> if <code>!string.IsNullOrWhitespace(...)</code> is
- *       inferred.
- *   <li><code>string.IsNullOrWhitespace(...)</code> if <code>string.IsNullOrEmpty(...)</code> is
- *       inferred.
+ *   <li>{@code !string.IsNullOrEmpty(...)} if {@code !string.IsNullOrWhitespace(...)} is inferred.
+ *   <li>{@code string.IsNullOrWhitespace(...)} if {@code string.IsNullOrEmpty(...)} is inferred.
  * </ul>
  */
 public class StringFilter extends InvariantFilter {
@@ -114,8 +112,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   /**
-   * <code>true</code> iff <code>invariant</code> encodes <code>x != null</code> and <code>
-   * !string.IsNullOrEmpty(x)</code> is an inferred invariant</code>
+   * {@code true} iff {@code invariant} encodes {@code x != null} and {@code
+   * !string.IsNullOrEmpty(x)} is an inferred invariant</code>
    */
   boolean shouldDiscardNonNullInvariant(Invariant invariant) {
     if (invariant instanceof NonZero) {
@@ -141,8 +139,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   /**
-   * <code>true</code> iff <code>invariant</code> encodes <code>!string.IsNullOrEmpty()</code> and
-   * <code>!string.IsNullOrWhitespace()</code> is an inferred invariant</code>.
+   * {@code true} iff {@code invariant} encodes {@code !string.IsNullOrEmpty()} and {@code
+   * !string.IsNullOrWhitespace()} is an inferred invariant</code>.
    */
   boolean shouldDiscardNullOrEmptyInvariant(Invariant invariant) {
     if (invariant instanceof OneOfScalar) {
@@ -170,8 +168,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   /**
-   * <code>true</code> iff <code>invariant</code> encodes <code>string.IsNullOrWhitespace()</code>
-   * and <code>string.IsNullOrEmpty()</code> is an inferred invariant</code>.
+   * {@code true} iff {@code invariant} encodes {@code string.IsNullOrWhitespace()} and {@code
+   * string.IsNullOrEmpty()} is an inferred invariant</code>.
    */
   boolean shouldDiscardNullOrWhitespaceInvariant(Invariant invariant) {
     if (invariant instanceof OneOfScalar) {

@@ -81,8 +81,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
       return false;
     }
 
-    return ((vis[0].file_rep_type.isArray() && !vis[1].file_rep_type.isArray())
-            || !vis[0].file_rep_type.isArray() && vis[1].file_rep_type.isArray());
+    return (vis[0].file_rep_type.isArray() ^ vis[1].file_rep_type.isArray());
   }
 
   /**
