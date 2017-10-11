@@ -6,11 +6,11 @@ oneShort one of { 6, 106 }
 oneShort in manyShorts[]
 ===========================================================================
 ..b():::EXIT
+::trueGlobalStaticBuffer == orig(::trueGlobalStaticBuffer)
 manyShorts[] == orig(manyShorts[])
 ::trueGlobalStaticBuffer == ""
 manyShorts[] one of { [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], [101, 102, 8192, 104, 105, 106, 107, 108, 109] }
 return == 42
-::trueGlobalStaticBuffer == orig(::trueGlobalStaticBuffer)
 orig(oneShort) in manyShorts[]
 ===========================================================================
 ..f():::ENTER
@@ -18,9 +18,9 @@ orig(oneShort) in manyShorts[]
 arg one of { "STATIC banana", "banana" }
 ===========================================================================
 ..f():::EXIT
+::trueGlobalStaticBuffer == orig(::trueGlobalStaticBuffer)
 ::trueGlobalStaticBuffer == ""
 return == 12
-::trueGlobalStaticBuffer == orig(::trueGlobalStaticBuffer)
 ===========================================================================
 ..main():::ENTER
 ::staticShorts has only one value
@@ -31,10 +31,10 @@ return == 12
 ..main():::EXIT
 ::staticShorts == orig(::staticShorts)
 ::staticStrings == orig(::staticStrings)
+::trueGlobalStaticBuffer == orig(::trueGlobalStaticBuffer)
 ::staticShorts has only one value
 ::staticShorts[] == [42, 42, 42, 42, 42, 42, 42, 42, 42]
 ::staticStrings has only one value
 ::staticStrings[] == [STATIC apple, STATIC banana, STATIC carrot, STATIC daikon, STATIC eggplant, MODIFIED STATIC fig, STATIC grape, MODIFIED STATIC horseradish]
 ::trueGlobalStaticBuffer == ""
 return == 0
-::trueGlobalStaticBuffer == orig(::trueGlobalStaticBuffer)

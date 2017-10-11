@@ -27,6 +27,7 @@ DataStructures.StackAr.isEmpty():::ENTER
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
 (EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
@@ -42,12 +43,12 @@ DataStructures.StackAr.isEmpty():::EXIT
 (IMPLIES (>= (select |topOfStack| |this|) 0) (FORALL (|i|) (IMPLIES (AND (<= (select |topOfStack| |__orig__this|) |i|) (<= |i| (+ (select |topOfStack| |this|) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
 (IMPLIES (>= (select |topOfStack| |this|) 0) (FORALL (|i|) (IMPLIES (AND (<= (select |topOfStack| |this|) |i|) (<= |i| (+ (select |topOfStack| |__orig__this|) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
 (FORALL (|i|) (IMPLIES (AND (<= (+ (select |topOfStack| |this|) 1) |i|) (<= |i| (select |topOfStack| |__orig__this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 ===========================================================================
 DataStructures.StackAr.isFull():::ENTER
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
 (EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
@@ -60,7 +61,6 @@ DataStructures.StackAr.isFull():::EXIT
 (IMPLIES (EQ |return| |@true|) (AND (EQ (+ 1 (- (- (arrayLength (select |theArray| |this|)) 1) (+ (select |topOfStack| |this|) 1))) 0) (FORALL (|i|) (IMPLIES (AND (<= (+ (select |topOfStack| |this|) 1) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))))
 (IMPLIES (EQ |return| |@true|) (NEQ (select |topOfStack| |this|) (stringLength (typeof (select |theArray| |this|)))))
 (FORALL (|i|) (IMPLIES (AND (<= (+ (select |topOfStack| |this|) 1) |i|) (<= |i| (select |topOfStack| |__orig__this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::ENTER
 (< (select |topOfStack| |this|) (stringLength (typeof (select |theArray| |this|))))
@@ -68,6 +68,7 @@ DataStructures.StackAr.makeEmpty():::ENTER
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
 (EQ (arrayLength (select |theArray| |this|)) (arrayLength (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= (+ (select |topOfStack| |__orig__this|) 1) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= (+ (select |topOfStack| |__orig__this|) 1) |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
@@ -75,7 +76,6 @@ DataStructures.StackAr.makeEmpty():::EXIT
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (typeof (select (select elems (select |theArray| |this|)) |i|)) |T_null|)))
 (EQ (select |topOfStack| |this|) -1)
 (AND (EQ (+ 1 (- (select |topOfStack| |this|) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (<= (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
 (< (select |topOfStack| |__orig__this|) (stringLength (typeof (select |theArray| |this|))))
 (IMPLIES (EQ (select |topOfStack| |__orig__this|) 0) (EQ (- (arrayLength (select |theArray| |this|)) 1) 0))
@@ -88,6 +88,7 @@ DataStructures.StackAr.pop():::ENTER
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
 (EQ (arrayLength (select |theArray| |this|)) (arrayLength (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|)) (<= 0 |j|) (<= |j| (select |topOfStack| |this|)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
@@ -97,7 +98,6 @@ DataStructures.StackAr.pop():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |__orig__this|)) (<= 0 |j|) (<= |j| (select |topOfStack| |__orig__this|)) (NEQ |i| |j|)) (NEQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= (+ (select |topOfStack| |this|) 1) |i|) (<= |i| (select |topOfStack| |__orig__this|))) (EQ (select (select elems (select |theArray| |this|)) |i|)  null)))
 (FORALL (|i|) (IMPLIES (AND (<= (+ (select |topOfStack| |this|) 1) |i|) (<= |i| (+ (select |topOfStack| |__orig__this|) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ 0 (+ (+ (select |topOfStack| |this|) (* -1 (select |topOfStack| |__orig__this|))) 1))
 (<= (select |topOfStack| |this|) (stringLength (typeof (select |theArray| |this|))))
 (< (select |topOfStack| |this|) (- (arrayLength (select |theArray| |this|)) 1))
@@ -122,6 +122,7 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (hash |__orig__x|) (hash (select (select elems (select |theArray| |this|)) (select |topOfStack| |this|))))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
 (EQ (arrayLength (select |theArray| |this|)) (arrayLength (select |theArray| |__orig__this|)))
@@ -134,7 +135,6 @@ DataStructures.StackAr.push(java.lang.Object):::EXIT
 (EQ (MOD (stringLength (typeof |x|)) 2) 0)
 (FORALL (|i|) (IMPLIES (AND (<= (select |topOfStack| |this|) |i|) (<= |i| (- (arrayLength (select |theArray| |__orig__this|)) 1))) (EQ (select (select elems (select |theArray| |__orig__this|)) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= (+ (select |topOfStack| |__orig__this|) 1) |i|) (<= |i| (+ (select |topOfStack| |this|) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (NEQ (typeof (select |theArray| |this|)) (typeof |__orig__x|))
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 (EQ 0 (+ (+ (select |topOfStack| |this|) (* -1 (select |topOfStack| |__orig__this|))) -1))
@@ -174,6 +174,7 @@ DataStructures.StackAr.top():::EXIT75
 ===========================================================================
 DataStructures.StackAr.top():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
 (EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
@@ -209,7 +210,6 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 (EQ (MOD (stringLength (typeof |return|)) 2) 0)
 (FORALL (|i|) (IMPLIES (AND (<= (+ (select |topOfStack| |this|) 1) |i|) (<= |i| (select |topOfStack| |__orig__this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))
 (NEQ (typeof (select |theArray| |this|)) (typeof |return|))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() in this.theArray[].getClass().getName()
 (EQ (|java->>| (select |topOfStack| |this|) (stringLength (typeof |return|))) 0)
 (NEQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof |return|)))
@@ -247,6 +247,7 @@ DataStructures.StackAr.topAndPop():::EXIT111
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
 (EQ (arrayLength (select |theArray| |this|)) (arrayLength (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|)) (<= 0 |j|) (<= |j| (select |topOfStack| |this|)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
@@ -301,7 +302,6 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 (EQ (MOD (stringLength (typeof |return|)) 8) 0)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |__orig__this|)) (<= 0 |j|) (<= |j| (select |topOfStack| |__orig__this|)) (NEQ |i| |j|)) (NEQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) |j|))))
 (NEQ (typeof (select |theArray| |this|)) (typeof |return|))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (<= (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
 (<= (select |topOfStack| |this|) (stringLength (typeof (select |theArray| |this|))))
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() in orig(this.theArray[].getClass().getName())

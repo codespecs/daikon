@@ -1,5 +1,6 @@
 ===========================================================================
 ..alphabetic():::ENTER
+::keymem == ::words2mem
 ::words2[] == ::words2ptrs[]
 ::adjacentdups == 0
 ::findx1 has only one value
@@ -30,7 +31,6 @@
 ::findx2[] elements <= ::longestlength
 ::findx2[] elements <= ::ncount
 ::keymem in ::words2[]
-::keymem == ::words2mem
 ::keymem in ::words2ptrs[]
 ::keymem < s
 ::wordsn[] elements > ::largestlet
@@ -52,10 +52,14 @@ s in ::words2ptrs[]
 ===========================================================================
 ..alphabetic():::EXIT
 ::adjacentdups == orig(::adjacentdups)
+::alphstr == return
+::alphstr == orig(s)
 ::findx1 == orig(::findx1)
 ::findx1[] == orig(::findx1[])
 ::findx2 == orig(::findx2)
 ::findx2[] == orig(::findx2[])
+::keymem == ::words2mem
+::keymem == orig(::keymem)
 ::largestlet == orig(::largestlet)
 ::lindx1 == orig(::lindx1)
 ::lindx2 == orig(::lindx2)
@@ -70,6 +74,7 @@ s in ::words2ptrs[]
 ::wordmasks == orig(::wordmasks)
 ::words2 == orig(::words2)
 ::words2[] == ::words2ptrs[]
+::words2mem == orig(::words2mem)
 ::words2ptrs == orig(::words2ptrs)
 ::wordsn == orig(::wordsn)
 ::wordsn[] == orig(::wordsn[])
@@ -99,17 +104,13 @@ s in ::words2ptrs[]
 ::alphstr in ::words2[]
 ::alphstr >= ::words2mem
 ::alphstr in ::words2ptrs[]
-::alphstr == return
-::alphstr == orig(s)
 ::findx1[] elements <= ::longestlength
 ::findx1[] elements <= ::ncount
 ::findx2[] elements <= ::longestlength
 ::findx2[] elements <= ::ncount
 ::keymem in ::words2[]
-::keymem == ::words2mem
 ::keymem in ::words2ptrs[]
 ::keymem <= orig(::alphstr)
-::keymem == orig(::keymem)
 ::wordsn[] elements > ::largestlet
 ::longestlength != ::max_depth
 ::wordsn[] elements <= ::longestlength
@@ -124,7 +125,6 @@ s in ::words2ptrs[]
 ::words2[] == ::words2ptrs[] (elementwise)
 ::words2mem in ::words2ptrs[]
 ::words2mem <= orig(::alphstr)
-::words2mem == orig(::words2mem)
 orig(::alphstr) in ::words2ptrs[]
 ===========================================================================
 ..anagramr7():::ENTER
@@ -188,6 +188,7 @@ minkey[] elements >= ::specfirstword
 ::findx1[] == orig(::findx1[])
 ::findx2 == orig(::findx2)
 ::findx2[] == orig(::findx2[])
+::keymem == orig(::keymem)
 ::largestlet == orig(::largestlet)
 ::lindx1 == orig(::lindx1)
 ::lindx1[] < minkey[] (lexically)
@@ -207,6 +208,7 @@ minkey[] elements >= ::specfirstword
 ::wordmasks == orig(::wordmasks)
 ::wordmasks[] == orig(::wordmasks[])
 ::words2 == orig(::words2)
+::words2mem == orig(::words2mem)
 ::words2ptrs == orig(::words2ptrs)
 ::wordsn == orig(::wordsn)
 ::wordsn[] == orig(::wordsn[])
@@ -244,7 +246,6 @@ minkey[] == orig(minkey[])
 minkey[i] >= i
 minkey[] elements >= ::adjacentdups
 orig(level[]) elements >= ::adjacentdups
-::keymem == orig(::keymem)
 ::keymem != orig(s)
 level[] elements < ::largestlet
 minkey[] elements < ::largestlet
@@ -264,7 +265,6 @@ orig(level[]) elements >= ::silent
 minkey[] elements >= ::specfirstword
 orig(level[]) elements >= ::specfirstword
 ::wordmasks[] elements > orig(::rec_anag_count)
-::words2mem == orig(::words2mem)
 ::words2mem != orig(s)
 level[] - orig(level[]) + 1 == 0
 level[] < orig(level[]) (elementwise)
@@ -353,6 +353,7 @@ s1 <= s2
 ::findx1[] == orig(::findx1[])
 ::findx2 == orig(::findx2)
 ::findx2[] == orig(::findx2[])
+::keymem == orig(::keymem)
 ::largestlet == orig(::largestlet)
 ::lindx1 == orig(::lindx1)
 ::lindx1[] == orig(::lindx1[])
@@ -362,6 +363,7 @@ s1 <= s2
 ::max_depth == orig(::max_depth)
 ::maxdepthspec == orig(::maxdepthspec)
 ::ncount == orig(::ncount)
+::r1 == return
 ::rec_anag_count == orig(::rec_anag_count)
 ::silent == orig(::silent)
 ::specfirstword == orig(::specfirstword)
@@ -369,6 +371,7 @@ s1 <= s2
 ::wordmasks == orig(::wordmasks)
 ::wordmasks[] == orig(::wordmasks[])
 ::words2 == orig(::words2)
+::words2mem == orig(::words2mem)
 ::words2ptrs == orig(::words2ptrs)
 ::wordsn == orig(::wordsn)
 ::wordsn[] == orig(::wordsn[])
@@ -414,7 +417,6 @@ s1 <= s2
 ::keymem != ::r1
 ::keymem < ::words2mem
 ::keymem in ::wordss[]
-::keymem == orig(::keymem)
 ::keymem != orig(::r1)
 ::keymem != orig(s1)
 ::lindx1[] elements < ::largestlet
@@ -438,7 +440,6 @@ s1 <= s2
 ::wordmasks[] elements > ::ncount
 ::wordsn[] elements < ::ncount
 ::r1 != ::words2mem
-::r1 == return
 ::r1 != orig(s1)
 ::r1 != orig(s2)
 ::wordmasks[] elements > ::rec_anag_count
@@ -451,7 +452,6 @@ s1 <= s2
 ::words2mem in ::words2[]
 ::words2mem in ::words2ptrs[]
 ::words2mem != orig(::r1)
-::words2mem == orig(::words2mem)
 ::words2mem != orig(s1)
 ::words2mem != orig(s2)
 orig(s2) in ::wordss[]
@@ -505,6 +505,7 @@ orig(s2) in ::wordss[]
 ::findx1[] == orig(::findx1[])
 ::findx2 == orig(::findx2)
 ::findx2[] == orig(::findx2[])
+::keymem == orig(::keymem)
 ::largestlet == orig(::largestlet)
 ::lindx1 == orig(::lindx1)
 ::lindx1[] == orig(::lindx1[])
@@ -521,6 +522,7 @@ orig(s2) in ::wordss[]
 ::wordmasks == orig(::wordmasks)
 ::wordmasks[] == orig(::wordmasks[])
 ::words2 == orig(::words2)
+::words2mem == orig(::words2mem)
 ::words2ptrs == orig(::words2ptrs)
 ::wordsn == orig(::wordsn)
 ::wordsn[] == orig(::wordsn[])
@@ -558,7 +560,6 @@ orig(s2) in ::wordss[]
 ::wordmasks[] elements > ::adjacentdups
 ::findx1[] elements < return
 ::findx2[] elements < return
-::keymem == orig(::keymem)
 ::wordmasks[] elements > ::largestlet
 ::lindx1[] elements < return
 ::lindx2[] elements < return
@@ -570,7 +571,6 @@ orig(s2) in ::wordss[]
 ::wordmasks[] elements > ::silent
 ::wordmasks[] elements > ::specfirstword
 ::wordmasks[] elements > ::vowelcheck
-::words2mem == orig(::words2mem)
 ::words2mem != orig(s)
 ::wordsn[] elements < return
 ===========================================================================
@@ -680,6 +680,7 @@ return == 0
 ::findx1[] == orig(::findx1[])
 ::findx2 == orig(::findx2)
 ::findx2[] == orig(::findx2[])
+::keymem == orig(::keymem)
 ::largestlet == orig(::largestlet)
 ::lindx1 == orig(::lindx1)
 ::lindx1[] == orig(::lindx1[])
@@ -696,6 +697,7 @@ return == 0
 ::wordmasks == orig(::wordmasks)
 ::wordmasks[] == orig(::wordmasks[])
 ::words2 == orig(::words2)
+::words2mem == orig(::words2mem)
 ::words2ptrs == orig(::words2ptrs)
 ::wordsn == orig(::wordsn)
 ::wordsn[] == orig(::wordsn[])
@@ -731,14 +733,13 @@ return == 0
 ::wordss has only one value
 ::wordss[] == [AADGLNR, AADGLNRSS, AADGLNS, AADGNRUV, ADEGNR, ADEGNR, ADEGNR, ADGNU, ADKR, AEGSS, AEILN, AILRSUVV, DIKNR, EGINSS, EIKV, EILRSV, EILRSV, EIRSUVV, EIRSUVV, IKRS, IKSS, IRSUV]
 return >= 1
-::keymem == orig(::keymem)
 ::keymem != orig(s)
 ::wordmasks[] elements > ::rec_anag_count
 ::wordmasks[] elements > return
-::words2mem == orig(::words2mem)
 ::words2mem != orig(s)
 ===========================================================================
 ..uppercase():::ENTER
+::keymem == ::words2mem
 ::adjacentdups == 0
 ::findx1 has only one value
 ::findx1[] == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -766,7 +767,6 @@ return >= 1
 ::findx2[] elements <= ::ncount
 ::keymem <= ::upcasestr
 ::keymem in ::words2[]
-::keymem == ::words2mem
 ::keymem < s
 ::wordsn[] elements > ::largestlet
 ::longestlength != ::max_depth
@@ -790,6 +790,8 @@ s in ::words2[]
 ::findx1[] == orig(::findx1[])
 ::findx2 == orig(::findx2)
 ::findx2[] == orig(::findx2[])
+::keymem == ::words2mem
+::keymem == orig(::keymem)
 ::largestlet == orig(::largestlet)
 ::lindx1 == orig(::lindx1)
 ::lindx2 == orig(::lindx2)
@@ -800,9 +802,11 @@ s in ::words2[]
 ::rec_anag_count == orig(::rec_anag_count)
 ::silent == orig(::silent)
 ::specfirstword == orig(::specfirstword)
+::upcasestr == return
 ::vowelcheck == orig(::vowelcheck)
 ::wordmasks == orig(::wordmasks)
 ::words2 == orig(::words2)
+::words2mem == orig(::words2mem)
 ::words2ptrs == orig(::words2ptrs)
 ::wordsn == orig(::wordsn)
 ::wordsn[] == orig(::wordsn[])
@@ -834,8 +838,6 @@ s in ::words2[]
 ::findx2[] elements <= ::ncount
 ::keymem < ::upcasestr
 ::keymem in ::words2[]
-::keymem == ::words2mem
-::keymem == orig(::keymem)
 ::keymem <= orig(::upcasestr)
 ::keymem < orig(s)
 ::wordsn[] elements > ::largestlet
@@ -850,11 +852,9 @@ s in ::words2[]
 ::wordsn[] elements > ::specfirstword
 ::upcasestr in ::words2[]
 ::upcasestr >= ::words2mem
-::upcasestr == return
 ::upcasestr <= orig(s)
 ::wordsn[] elements > ::vowelcheck
 ::words2mem in ::words2[]
 orig(s) in ::words2[]
 ::words2mem <= orig(::upcasestr)
-::words2mem == orig(::words2mem)
 ::words2mem <= orig(s)

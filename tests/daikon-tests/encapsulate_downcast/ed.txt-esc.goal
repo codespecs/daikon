@@ -56,8 +56,7 @@ misc.Person.Person(java.lang.String, int, int):::EXIT
     Variables: this this._name this._name.toString this._height this._weight name name.toString height weight orig(name) orig(name.toString) orig(height) orig(weight)
       Unmodified variables: name name.toString height weight
 this._name == \old(name)
+this._name.toString == name.toString
 this._height == \old(height)
 this._weight == \old(weight)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: name.toString is printable
-this._name.toString == name.toString
-name.toString == \old(name.toString)

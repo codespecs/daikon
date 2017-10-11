@@ -5,12 +5,12 @@ if [ -z "$DAIKONDIR" ]; then
 fi
 if [ ! -d "$DAIKONDIR/fjalar" ]
 then
-    echo "Kvasir is not installed; to install it, run:    make -C \$DAIKONDIR fjalar"
+    echo "Kvasir is not installed; to install it, run:    make -C \$DAIKONDIR kvasir"
     exit 1
 fi
 if [ ! -f "$DAIKONDIR/fjalar/valgrind/inst/bin/valgrind" ]
 then
-    echo "Kvasir is not built; to build it, run:    make -C \$DAIKONDIR fjalar"
+    echo "Kvasir is not built; to build it, run:    make -C \$DAIKONDIR kvasir"
     exit 1
 fi
 $DAIKONDIR/fjalar/valgrind/inst/bin/valgrind --tool=fjalar "$@"

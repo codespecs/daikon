@@ -423,7 +423,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     }
     // When parse_value is called from FileIO.read_ppt_decl, we have
     // not set file_rep_type. Hence, rep_type is still file_rep_type
-    // and BASE_BOOLEAN is legal.  (Daikon issue #33 - markro)
+    // and BASE_BOOLEAN is legal.
     else if ((base == BASE_INT) || (base == BASE_BOOLEAN)) {
       // File rep type might be int, boolean, or hashcode.
       // If we had the declared type, we could do error-checking here.

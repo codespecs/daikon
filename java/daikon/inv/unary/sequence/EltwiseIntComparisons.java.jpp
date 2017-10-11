@@ -43,6 +43,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseIntEqual"
   #define COMPARATOR(a,b) ((a) == (b))
   #define COMPARATORhtml ==
+  #define COMPARATORstring ==
   #define COMPARATORSTRING "=="
   #define COMPARATORSTRINGQUANT "eltwiseEqual"
   #define INVERSECOMPARATORSTRING "!="
@@ -51,6 +52,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseIntLessThan"
   #define COMPARATOR(a,b) ((a) < (b))
   #define COMPARATORhtml &lt;
+  #define COMPARATORstring <
   #define COMPARATORSTRING "<"
   #define COMPARATORSTRINGQUANT "eltwiseLT"
   #define INVERSECOMPARATORSTRING ">="
@@ -59,6 +61,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseIntLessEqual"
   #define COMPARATOR(a,b) ((a) <= (b))
   #define COMPARATORhtml &le;
+  #define COMPARATORstring <=
   #define COMPARATORSTRING "<="
   #define COMPARATORSTRINGQUANT "eltwiseLTE"
   #define INVERSECOMPARATORSTRING ">"
@@ -67,6 +70,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseIntGreaterThan"
   #define COMPARATOR(a,b) ((a) > (b))
   #define COMPARATORhtml &gt;
+  #define COMPARATORstring >
   #define COMPARATORSTRING ">"
   #define COMPARATORSTRINGQUANT "eltwiseGT"
   #define INVERSECOMPARATORSTRING "<="
@@ -75,6 +79,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseIntGreaterEqual"
   #define COMPARATOR(a,b) ((a) >= (b))
   #define COMPARATORhtml &ge;
+  #define COMPARATORstring >=
   #define COMPARATORSTRING ">="
   #define COMPARATORSTRINGQUANT "eltwiseGTE"
   #define INVERSECOMPARATORSTRING "<"
@@ -83,6 +88,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseFloatEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.eq(a,b))
   #define COMPARATORhtml ==
+  #define COMPARATORstring ==
   #define COMPARATORSTRING "=="
   #define COMPARATORSTRINGQUANT "eltwiseEqual"
   #define INVERSECOMPARATORSTRING "!="
@@ -91,6 +97,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseFloatLessThan"
   #define COMPARATOR(a,b) (Global.fuzzy.lt(a,b))
   #define COMPARATORhtml &lt;
+  #define COMPARATORstring <
   #define COMPARATORSTRING "<"
   #define COMPARATORSTRINGQUANT "eltwiseLT"
   #define INVERSECOMPARATORSTRING ">="
@@ -99,6 +106,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseFloatLessEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.lte(a,b))
   #define COMPARATORhtml &le;
+  #define COMPARATORstring <=
   #define COMPARATORSTRING "<="
   #define COMPARATORSTRINGQUANT "eltwiseLTE"
   #define INVERSECOMPARATORSTRING ">"
@@ -107,6 +115,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseFloatGreaterThan"
   #define COMPARATOR(a,b) (Global.fuzzy.gt(a,b))
   #define COMPARATORhtml &gt;
+  #define COMPARATORstring >
   #define COMPARATORSTRING ">"
   #define COMPARATORSTRINGQUANT "eltwiseGT"
   #define INVERSECOMPARATORSTRING "<="
@@ -115,6 +124,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseFloatGreaterEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.gte(a,b))
   #define COMPARATORhtml &ge;
+  #define COMPARATORstring >=
   #define COMPARATORSTRING ">="
   #define COMPARATORSTRINGQUANT "eltwiseGTE"
   #define INVERSECOMPARATORSTRING "<"
@@ -143,13 +153,13 @@ import typequals.*;
 #if defined(EQUAL) || defined(EQUALFLOAT)
   /**
    * Represents equality between adjacent elements (x[i], x[i+1]) of a PRIMITIVE sequence. Prints as
-   * <code>x[] elements are equal</code>.
+   * {@code x[] elements are equal}.
    */
 #else
   /**
    * Represents the invariant COMPARATORhtml between adjacent elements
    * (x[i], x[i+1]) of a PRIMITIVE sequence. Prints as
-   * <code>x[] sorted by COMPARATORhtml</code>.
+   * {@code x[] sorted by COMPARATORstring}.
    */
 #endif
 public class CLASSNAME extends SUPERCLASS {

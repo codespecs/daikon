@@ -17,9 +17,9 @@ class Person {
     @ requires height >= 0;
     @ requires height < weight;
     @ ensures this._name == \old(name);
+    @ ensures this._name.toString().equals(name.toString());
     @ ensures this._height == \old(height);
     @ ensures this._weight == \old(weight);
-    @ ensures this._name.toString().equals(name.toString());
     @ ensures name.toString().equals(\old(name.toString()));
     @*/
     public Person(String name, int height, int weight) {

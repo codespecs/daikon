@@ -91,8 +91,8 @@ import typequals.*;
    * Floating-point number between 0 and 0.1, representing the maximum relative difference between
    * two floats for fuzzy comparisons. Larger values will result in floats that are relatively
    * farther apart being treated as equal. A value of 0 essentially disables fuzzy comparisons.
-   * Specifically, if <code>abs (1 - f1/f2)</code> is less than or equal to this value, then the two
-   * doubles (<code>f1</code> and <code>f2</code>) will be treated as equal by Daikon.
+   * Specifically, if {@code abs(1 - f1/f2)} is less than or equal to this value, then the two
+   * doubles ({@code f1} and {@code f2}) will be treated as equal by Daikon.
    */
   public static double dkconfig_fuzzy_ratio = 0.0001;
 
@@ -1575,7 +1575,9 @@ import typequals.*;
     Invariant guardingPredicate = null;
     for (VarInfo vi : mustBeGuarded) {
       Invariant currentGuard = vi.createGuardingPredicate(install);
-      if (currentGuard == null) continue;
+      if (currentGuard == null) {
+        continue;
+      }
       debugGuarding.fine(String.format("VarInfo %s guard is %s", vi, currentGuard));
       if (guardingPredicate == null) {
         guardingPredicate = currentGuard;

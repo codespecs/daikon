@@ -17,13 +17,13 @@ pdf[i] > i
 ::f[] == f[]
 ::f[] == orig(::f[])
 ::f[] == orig(f[])
+::line == orig(::line)
 ::r == orig(::r)
 ::r == orig(r)
 ::f has only one value
 ::f[] elements >= 0
 pdf[] elements >= 2
 pdf[i] > i
-::line == orig(::line)
 ===========================================================================
 ..LGamma():::ENTER
 ::cof has only one value
@@ -40,6 +40,7 @@ x >= 1.0
 ::cof[] == orig(::cof[])
 ::f == orig(::f)
 ::f[] == orig(::f[])
+::line == orig(::line)
 ::r == orig(::r)
 ::cof has only one value
 ::cof[] == [76.18009173, -86.50532032999999, 24.014098219999997, -1.231739516, 0.00120858003, -5.363819999999999E-6]
@@ -47,7 +48,6 @@ x >= 1.0
 ::f[] elements >= 0
 ::r >= 2
 (::r >> ::c == 0)
-::line == orig(::line)
 return != orig(x)
 ===========================================================================
 ..QChiSq():::ENTER
@@ -62,12 +62,12 @@ df >= 2
 ::c == orig(::c)
 ::f == orig(::f)
 ::f[] == orig(::f[])
+::line == orig(::line)
 ::r == orig(::r)
 ::f has only one value
 ::f[] elements >= 0
 ::r >= 2
 (::r >> ::c == 0)
-::line == orig(::line)
 return != orig(chisq)
 ===========================================================================
 ..QGamma():::ENTER
@@ -83,12 +83,12 @@ a != x
 ::c == orig(::c)
 ::f == orig(::f)
 ::f[] == orig(::f[])
+::line == orig(::line)
 ::r == orig(::r)
 ::f has only one value
 ::f[] elements >= 0
 ::r >= 2
 (::r >> ::c == 0)
-::line == orig(::line)
 return <= orig(a)
 return != orig(x)
 ===========================================================================
@@ -124,12 +124,12 @@ tot_info.c.gcf():::EXIT
 ::c == orig(::c)
 ::f == orig(::f)
 ::f[] == orig(::f[])
+::line == orig(::line)
 ::r == orig(::r)
 ::f has only one value
 ::f[] elements >= 0
 ::r >= 2
 (::r >> ::c == 0)
-::line == orig(::line)
 return < orig(a)
 return < orig(x)
 ===========================================================================
@@ -148,6 +148,7 @@ tot_info.c.gser():::EXIT
 ::c == orig(::c)
 ::f == orig(::f)
 ::f[] == orig(::f[])
+::line == orig(::line)
 ::r == orig(::r)
 ::f has only one value
 ::f[] elements >= 0
@@ -155,7 +156,6 @@ tot_info.c.gser():::EXIT
 (::c >> ::r == 0)
 (::r >> ::c == 0)
 ::r in ::f[]
-::line == orig(::line)
 return < orig(a)
 (orig(x) == 0) ==> (return == 0)
 (return == 0) ==> (orig(x) == 0)

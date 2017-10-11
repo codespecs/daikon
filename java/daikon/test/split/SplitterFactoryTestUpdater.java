@@ -150,7 +150,7 @@ public class SplitterFactoryTestUpdater {
       to.delete();
     }
     // file.renameTo(to) fails if the two files are on different file systems
-    // (e.g., /tmp and /scratch may be different
+    // (e.g., /tmp and /scratch may be different).
     // So read and write the file directly rather than using renameTo().
     UtilMDE.writeFile(to, UtilMDE.readFile(from));
   }

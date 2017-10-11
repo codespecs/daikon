@@ -15,8 +15,8 @@ import typequals.*;
 */
 
 /**
- * Tracks every unique value and how many times it occurs. Prints as <code>
- * x has values: v1 v2 v3 ...</code>.
+ * Tracks every unique value and how many times it occurs. Prints as {@code x has values: v1 v2 v3
+ * ...}.
  */
 public final class CompleteOneOfScalar extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to

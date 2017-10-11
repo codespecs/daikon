@@ -95,8 +95,8 @@ public class BinarySearchTree<E extends Comparable>
   @ requires x != null;
   @ requires x.getClass().getName() == DataStructures.MyInteger.class.getName();
   @ ensures this.root == \old(this.root);
-  @ ensures \result.getClass().getName() == DataStructures.MyInteger.class.getName();
   @ ensures \result.getClass().getName() == \old(x.getClass().getName());
+  @ ensures \result.getClass().getName() == DataStructures.MyInteger.class.getName();
   @*/
   /**
    * Find an item in the tree.
