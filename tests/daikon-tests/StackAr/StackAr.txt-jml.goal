@@ -33,6 +33,7 @@ DataStructures.StackAr.isEmpty():::EXIT
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
 assignable this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 this.theArray == \old(this.theArray)
+this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 daikon.Quant.pairwiseEqual(this.theArray, \old(this.theArray))
 this.topOfStack == \old(this.topOfStack)
 this.theArray.getClass().getName().length() == \old(this.theArray.getClass().getName()).length()
@@ -48,7 +49,6 @@ this.theArray.getClass().getName().length() == \old(this.theArray.getClass().get
 (this.topOfStack >= 0)  ==>  (("oneOf.java.jpp: SEQUENCE unimplemented" != null))
 (this.topOfStack >= 0)  ==>  (("oneOf.java.jpp: SEQUENCE unimplemented" != null))
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
-this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.isFull():::ENTER
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
@@ -57,6 +57,7 @@ DataStructures.StackAr.isFull():::EXIT
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
 assignable this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 this.theArray == \old(this.theArray)
+this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 daikon.Quant.pairwiseEqual(this.theArray, \old(this.theArray))
 this.topOfStack == \old(this.topOfStack)
 this.theArray.getClass().getName().length() == \old(this.theArray.getClass().getName()).length()
@@ -69,7 +70,6 @@ this.theArray.getClass().getName().length() == \old(this.theArray.getClass().get
 (\result == true)  ==>  (("oneOf.java.jpp: SEQUENCE unimplemented" != null))
 (\result == true)  ==>  (this.topOfStack != this.theArray.getClass().getName().length())
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
-this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::ENTER
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
@@ -80,6 +80,7 @@ DataStructures.StackAr.makeEmpty():::EXIT
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
 assignable this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]
 this.theArray == \old(this.theArray)
+this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == \old(this.theArray.getClass().getName()).length()
 daikon.Quant.size(this.theArray) == \old(daikon.Quant.size(this.theArray))
 daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, \old(this.topOfStack)+1, daikon.Quant.size(this.theArray)), \old(daikon.Quant.slice(this.theArray, this.topOfStack+1, daikon.Quant.size(this.theArray))))
@@ -87,7 +88,6 @@ daikon.Quant.eltsEqual(this.theArray, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(this.theArray), null)
 this.topOfStack == -1
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
-this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 this.topOfStack <= \old(this.topOfStack)
 \old(this.topOfStack) < this.theArray.getClass().getName().length()
 (!(\old(this.topOfStack) == 0)) || (daikon.Quant.size(this.theArray)-1 == 0)
@@ -103,6 +103,7 @@ DataStructures.StackAr.pop():::EXIT
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
 assignable this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]
 this.theArray == \old(this.theArray)
+this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == \old(this.theArray.getClass().getName()).length()
 daikon.Quant.size(this.theArray) == \old(daikon.Quant.size(this.theArray))
 daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, 0, this.topOfStack), \old(daikon.Quant.slice(this.theArray, 0, \new(this.topOfStack))))
@@ -112,7 +113,6 @@ daikon.Quant.getElement_Object(this.theArray, \old(this.topOfStack)) == null
 daikon.Quant.noDups(daikon.Quant.slice(this.theArray, 0, \old(this.topOfStack)))
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
-this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 this.topOfStack - \old(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < daikon.Quant.size(this.theArray)-1
@@ -140,6 +140,7 @@ DataStructures.StackAr.push(java.lang.Object):::EXIT
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack x x.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) orig(x) orig(x.getClass().getName()) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 x.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(x.getClass().getName()).length() this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
 assignable this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack-1]
 this.theArray == \old(this.theArray)
+this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 \old(x) == daikon.Quant.getElement_Object(this.theArray, this.topOfStack)
 this.theArray.getClass().getName().length() == \old(this.theArray.getClass().getName()).length()
 daikon.Quant.size(this.theArray) == \old(daikon.Quant.size(this.theArray))
@@ -152,7 +153,6 @@ x.getClass().getName().length() == 16 || x.getClass().getName().length() == 22 |
 x.getClass().getName().length() % 2 == 0
 daikon.Quant.eltsEqual(\old(daikon.Quant.slice(this.theArray, \new(this.topOfStack), daikon.Quant.size(this.theArray))), null)
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
-this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != \old(x.getClass().getName())
 daikon.Quant.memberOf(\old(x.getClass().getName()) , daikon.Quant.typeArray(this.theArray) )
 this.topOfStack - \old(this.topOfStack) - 1 == 0
@@ -210,6 +210,7 @@ DataStructures.StackAr.top():::EXIT
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return return.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
 assignable this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 this.theArray == \old(this.theArray)
+this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 daikon.Quant.pairwiseEqual(this.theArray, \old(this.theArray))
 this.topOfStack == \old(this.topOfStack)
 this.theArray.getClass().getName().length() == \old(this.theArray.getClass().getName()).length()
@@ -245,7 +246,6 @@ this.theArray.getClass().getName().length() == \old(this.theArray.getClass().get
 (\result != null)  ==>  (\result.getClass().getName().length() % 2 == 0)
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 (\result != null)  ==>  (this.theArray.getClass().getName() != \result.getClass().getName())
-this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 (\result != null)  ==>  (daikon.Quant.memberOf(\result.getClass().getName() , daikon.Quant.typeArray(this.theArray) ))
 (\result != null)  ==>  ((this.topOfStack >> \result.getClass().getName().length() == 0))
 (\result != null)  ==>  (this.theArray.getClass().getName().length() != \result.getClass().getName().length())
@@ -302,6 +302,7 @@ DataStructures.StackAr.topAndPop():::EXIT
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return return.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
 assignable this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]
 this.theArray == \old(this.theArray)
+this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == \old(this.theArray.getClass().getName()).length()
 daikon.Quant.size(this.theArray) == \old(daikon.Quant.size(this.theArray))
 daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, 0, this.topOfStack), \old(daikon.Quant.slice(this.theArray, 0, \new(this.topOfStack))))
@@ -356,7 +357,6 @@ daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, \old(this.topOfStac
 (\result != null)  ==>  (\result.getClass().getName().length() % 8 == 0)
 daikon.Quant.noDups(daikon.Quant.slice(this.theArray, 0, \old(this.topOfStack)))
 (\result != null)  ==>  (this.theArray.getClass().getName() != \result.getClass().getName())
-this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 this.topOfStack <= \old(this.topOfStack)
 this.topOfStack <= this.theArray.getClass().getName().length()
 (\result != null)  ==>  (daikon.Quant.memberOf(\result.getClass().getName() , \old(daikon.Quant.typeArray(this.theArray)) ))

@@ -52,7 +52,7 @@ GOAL := goal
 ifeq ($(OS_ID),CentOS)
 ifeq ($(OS_REL),7.4.1708)
 ifeq (washington,$(findstring washington,$(shell uname -n)))
-# UW CSE special version of CentOS
+# UW CSE version of CentOS
 	GOAL := goal-CentOS-UWCSE
 else
 # Standard version of CentOS

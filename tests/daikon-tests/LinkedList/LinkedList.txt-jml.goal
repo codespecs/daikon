@@ -25,15 +25,15 @@ this.header == \old(this.header)
 this.header.element == \old(this.header.element)
 this.header.next == \old(this.header.next)
 this.header.next.element == \old(this.header.next.element)
+this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName())
 this.header.next.next == \old(this.header.next.next)
+((\result.current != null) && (\result.current.element != null))  ==>  (\result.current.element.getClass().getName() == \old(x.getClass().getName()))
 this.header.next != null
 this.header.next.element != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this.header.next.element.getClass().getName() is printable
 \result != null
 (\result.current != null)  ==>  (\result.current.element != null)
 ((\result.current != null) && (\result.current.element != null))  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: return.current.element.getClass().getName() is printable)
-this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName())
-((\result.current != null) && (\result.current.element != null))  ==>  (\result.current.element.getClass().getName() == \old(x.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedList.findPrevious(java.lang.Object):::ENTER
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next x x.getClass().getName()
@@ -46,11 +46,11 @@ this.header == \old(this.header)
 this.header.element == \old(this.header.element)
 this.header.next == \old(this.header.next)
 ((this.header.next != null) && (\old(this.header.next) != null))  ==>  (this.header.next.element == \old(this.header.next.element))
+((this.header.next != null) && (this.header.next.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ((this.header.next != null) && (\old(this.header.next) != null))  ==>  (this.header.next.next == \old(this.header.next.next))
 \result != null
 \result.current != null
 (\result.current.element != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: return.current.element.getClass().getName() is printable)
-((this.header.next != null) && (this.header.next.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedList.first():::ENTER
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next
@@ -61,15 +61,15 @@ this.header == \old(this.header)
 this.header.element == \old(this.header.element)
 this.header.next == \result.current
 ((this.header.next != null) && (\result.current != null))  ==>  (this.header.next.element == \result.current.element)
+((this.header.next != null) && (this.header.next.element != null) && (\result.current != null) && (\result.current.element != null))  ==>  (this.header.next.element.getClass().getName() == \result.current.element.getClass().getName())
 ((this.header.next != null) && (\result.current != null))  ==>  (this.header.next.next == \result.current.next)
 \result.current == \old(this.header.next)
 ((\result.current != null) && (\old(this.header.next) != null))  ==>  (\result.current.element == \old(this.header.next.element))
+((\result.current != null) && (\result.current.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (\result.current.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ((\result.current != null) && (\old(this.header.next) != null))  ==>  (\result.current.next == \old(this.header.next.next))
 \result != null
 (\result.current != null)  ==>  (\result.current.element != null)
 ((\result.current != null) && (\result.current.element != null))  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: return.current.element.getClass().getName() is printable)
-((this.header.next != null) && (this.header.next.element != null) && (\result.current != null) && (\result.current.element != null))  ==>  (this.header.next.element.getClass().getName() == \result.current.element.getClass().getName())
-((\result.current != null) && (\result.current.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (\result.current.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedList.insert(java.lang.Object, DataStructures.LinkedListItr):::ENTER
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next x x.getClass().getName() p p.current p.current.element p.current.element.getClass().getName() p.current.next
@@ -86,13 +86,13 @@ this.header == \old(this.header)
 this.header.element == \old(this.header.element)
 p.current == \old(p.current)
 p.current.element == \old(p.current.element)
+((p.current.element != null) && (\old(p.current.element) != null))  ==>  (p.current.element.getClass().getName() == \old(p.current.element.getClass().getName()))
 this.header.next != null
 this.header.next.element != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this.header.next.element.getClass().getName() is printable
 p.current != null
 (p.current.element != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: p.current.element.getClass().getName() is printable)
 p.current.next != null
-((p.current.element != null) && (\old(p.current.element) != null))  ==>  (p.current.element.getClass().getName() == \old(p.current.element.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedList.isEmpty():::ENTER
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next
@@ -103,13 +103,13 @@ this.header == \old(this.header)
 this.header.element == \old(this.header.element)
 this.header.next == \old(this.header.next)
 ((this.header.next != null) && (\old(this.header.next) != null))  ==>  (this.header.next.element == \old(this.header.next.element))
+((this.header.next != null) && (this.header.next.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ((this.header.next != null) && (\old(this.header.next) != null))  ==>  (this.header.next.next == \old(this.header.next.next))
 (this.header.next != null)  <==>  (\result == false)
 (this.header.next != null)  ==>  (this.header.next.element != null)
 (this.header.next != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this.header.next.element.getClass().getName() is printable)
 (this.header.next == null)  <==>  (\result == true)
 (this.header.next == null)  ==>  (this.header.element == this.header.next)
-((this.header.next != null) && (this.header.next.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedList.makeEmpty():::ENTER
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next
@@ -139,12 +139,12 @@ theList.header.element == null
 ===========================================================================
 DataStructures.LinkedList.remove(java.lang.Object):::ENTER
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next x x.getClass().getName()
+this.header.next.element.getClass().getName() == x.getClass().getName()
 this.header.next != null
 this.header.next.element != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this.header.next.element.getClass().getName() is printable
 this.header.next.next != null
 x != null
-this.header.next.element.getClass().getName() == x.getClass().getName()
 ===========================================================================
 DataStructures.LinkedList.remove(java.lang.Object):::EXIT
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next x x.getClass().getName() orig(this) orig(this.header) orig(this.header.element) orig(this.header.element.getClass().getName()) orig(this.header.next) orig(this.header.next.element) orig(this.header.next.element.getClass().getName()) orig(this.header.next.next) orig(x) orig(x.getClass().getName())
@@ -168,9 +168,9 @@ this.header.element == \old(this.header.element)
 this.header.next == \result.current.next
 this.header.next == \old(this.header.next)
 ((this.header.next != null) && (\old(this.header.next) != null))  ==>  (this.header.next.element == \old(this.header.next.element))
+((this.header.next != null) && (this.header.next.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ((this.header.next != null) && (\old(this.header.next) != null))  ==>  (this.header.next.next == \old(this.header.next.next))
 \result != null
-((this.header.next != null) && (this.header.next.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedListItr:::OBJECT
     Variables: this this.current this.current.element this.current.element.getClass().getName() this.current.next this.current.next.element this.current.next.element.getClass().getName() this.current.next.next
@@ -188,20 +188,20 @@ DataStructures.LinkedListItr.LinkedListItr(DataStructures.ListNode):::EXIT
     Variables: this this.current this.current.element this.current.element.getClass().getName() this.current.next this.current.next.element this.current.next.element.getClass().getName() this.current.next.next theNode theNode.element theNode.element.getClass().getName() theNode.next theNode.next.element theNode.next.element.getClass().getName() theNode.next.next orig(theNode) orig(theNode.element) orig(theNode.element.getClass().getName()) orig(theNode.next) orig(theNode.next.element) orig(theNode.next.element.getClass().getName()) orig(theNode.next.next)
 this.current == \old(theNode)
 ((this.current != null) && (theNode != null))  ==>  (this.current.element == theNode.element)
+((this.current != null) && (this.current.element != null) && (theNode != null) && (theNode.element != null))  ==>  (this.current.element.getClass().getName() == theNode.element.getClass().getName())
 ((this.current != null) && (theNode != null))  ==>  (this.current.next == theNode.next)
 ((this.current != null) && (this.current.next != null) && (theNode != null) && (theNode.next != null))  ==>  (this.current.next.element == theNode.next.element)
+((this.current != null) && (this.current.next != null) && (this.current.next.element != null) && (theNode != null) && (theNode.next != null) && (theNode.next.element != null))  ==>  (this.current.next.element.getClass().getName() == theNode.next.element.getClass().getName())
 ((this.current != null) && (this.current.next != null) && (theNode != null) && (theNode.next != null))  ==>  (this.current.next.next == theNode.next.next)
 ((theNode != null) && (\old(theNode) != null))  ==>  (theNode.element == \old(theNode.element))
+((theNode != null) && (theNode.element != null) && (\old(theNode) != null) && (\old(theNode.element) != null))  ==>  (theNode.element.getClass().getName() == \old(theNode.element.getClass().getName()))
 ((theNode != null) && (\old(theNode) != null))  ==>  (theNode.next == \old(theNode.next))
 ((theNode != null) && (theNode.next != null) && (\old(theNode) != null) && (\old(theNode.next) != null))  ==>  (theNode.next.element == \old(theNode.next.element))
+((theNode != null) && (theNode.next != null) && (theNode.next.element != null) && (\old(theNode) != null) && (\old(theNode.next) != null) && (\old(theNode.next.element) != null))  ==>  (theNode.next.element.getClass().getName() == \old(theNode.next.element.getClass().getName()))
 ((theNode != null) && (theNode.next != null) && (\old(theNode) != null) && (\old(theNode.next) != null))  ==>  (theNode.next.next == \old(theNode.next.next))
 ((theNode != null) && (theNode.element != null))  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: theNode.element.getClass().getName() is printable)
 ((theNode != null) && (theNode.next != null))  ==>  (theNode.next.element != null)
 ((theNode != null) && (theNode.next != null) && (theNode.next.element != null))  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: theNode.next.element.getClass().getName() is printable)
-((this.current != null) && (this.current.element != null) && (theNode != null) && (theNode.element != null))  ==>  (this.current.element.getClass().getName() == theNode.element.getClass().getName())
-((this.current != null) && (this.current.next != null) && (this.current.next.element != null) && (theNode != null) && (theNode.next != null) && (theNode.next.element != null))  ==>  (this.current.next.element.getClass().getName() == theNode.next.element.getClass().getName())
-((theNode != null) && (theNode.element != null) && (\old(theNode) != null) && (\old(theNode.element) != null))  ==>  (theNode.element.getClass().getName() == \old(theNode.element.getClass().getName()))
-((theNode != null) && (theNode.next != null) && (theNode.next.element != null) && (\old(theNode) != null) && (\old(theNode.next) != null) && (\old(theNode.next.element) != null))  ==>  (theNode.next.element.getClass().getName() == \old(theNode.next.element.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedListItr.advance():::ENTER
     Variables: this this.current this.current.element this.current.element.getClass().getName() this.current.next this.current.next.element this.current.next.element.getClass().getName() this.current.next.next
@@ -215,9 +215,9 @@ DataStructures.LinkedListItr.advance():::EXIT
 assignable this.current, this.current.element, this.current.next, this.current.next.element, this.current.next.next
 this.current == \old(this.current.next)
 ((this.current != null) && (\old(this.current.next) != null))  ==>  (this.current.element == \old(this.current.next.element))
+((this.current != null) && (this.current.element != null) && (\old(this.current.next) != null) && (\old(this.current.next.element) != null))  ==>  (this.current.element.getClass().getName() == \old(this.current.next.element.getClass().getName()))
 ((this.current != null) && (\old(this.current.next) != null))  ==>  (this.current.next == \old(this.current.next.next))
 (this.current != null)  ==>  (this.current.element != null)
-((this.current != null) && (this.current.element != null) && (\old(this.current.next) != null) && (\old(this.current.next.element) != null))  ==>  (this.current.element.getClass().getName() == \old(this.current.next.element.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedListItr.isPastEnd():::ENTER
     Variables: this this.current this.current.element this.current.element.getClass().getName() this.current.next this.current.next.element this.current.next.element.getClass().getName() this.current.next.next
@@ -226,16 +226,16 @@ DataStructures.LinkedListItr.isPastEnd():::EXIT
     Variables: this this.current this.current.element this.current.element.getClass().getName() this.current.next this.current.next.element this.current.next.element.getClass().getName() this.current.next.next return orig(this) orig(this.current) orig(this.current.element) orig(this.current.element.getClass().getName()) orig(this.current.next) orig(this.current.next.element) orig(this.current.next.element.getClass().getName()) orig(this.current.next.next)
 this.current == \old(this.current)
 ((this.current != null) && (\old(this.current) != null))  ==>  (this.current.element == \old(this.current.element))
+((this.current != null) && (this.current.element != null) && (\old(this.current) != null) && (\old(this.current.element) != null))  ==>  (this.current.element.getClass().getName() == \old(this.current.element.getClass().getName()))
 ((this.current != null) && (\old(this.current) != null))  ==>  (this.current.next == \old(this.current.next))
 ((this.current != null) && (this.current.next != null) && (\old(this.current) != null) && (\old(this.current.next) != null))  ==>  (this.current.next.element == \old(this.current.next.element))
+((this.current != null) && (this.current.next != null) && (this.current.next.element != null) && (\old(this.current) != null) && (\old(this.current.next) != null) && (\old(this.current.next.element) != null))  ==>  (this.current.next.element.getClass().getName() == \old(this.current.next.element.getClass().getName()))
 ((this.current != null) && (this.current.next != null) && (\old(this.current) != null) && (\old(this.current.next) != null))  ==>  (this.current.next.next == \old(this.current.next.next))
 (this.current != null)  <==>  (\result == false)
 (this.current != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this.current.element.getClass().getName() is printable)
 (this.current != null)  ==>  (this.current.next.element != null)
 (this.current != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this.current.next.element.getClass().getName() is printable)
 (this.current == null)  <==>  (\result == true)
-((this.current != null) && (this.current.element != null) && (\old(this.current) != null) && (\old(this.current.element) != null))  ==>  (this.current.element.getClass().getName() == \old(this.current.element.getClass().getName()))
-((this.current != null) && (this.current.next != null) && (this.current.next.element != null) && (\old(this.current) != null) && (\old(this.current.next) != null) && (\old(this.current.next.element) != null))  ==>  (this.current.next.element.getClass().getName() == \old(this.current.next.element.getClass().getName()))
 ===========================================================================
 DataStructures.LinkedListItr.retrieve():::ENTER
     Variables: this this.current this.current.element this.current.element.getClass().getName() this.current.next this.current.next.element this.current.next.element.getClass().getName() this.current.next.next
@@ -245,13 +245,13 @@ DataStructures.LinkedListItr.retrieve():::EXIT
 this.current == \old(this.current)
 (this.current != null)  ==>  (this.current.element == \result)
 ((this.current != null) && (\old(this.current) != null))  ==>  (this.current.element == \old(this.current.element))
+((this.current != null) && (this.current.element != null) && (\result != null))  ==>  (this.current.element.getClass().getName() == \result.getClass().getName())
 ((this.current != null) && (\old(this.current) != null))  ==>  (this.current.next == \old(this.current.next))
 ((this.current != null) && (this.current.next != null) && (\old(this.current) != null) && (\old(this.current.next) != null))  ==>  (this.current.next.element == \old(this.current.next.element))
-((this.current != null) && (this.current.next != null) && (\old(this.current) != null) && (\old(this.current.next) != null))  ==>  (this.current.next.next == \old(this.current.next.next))
-(\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: return.getClass().getName() is printable)
-((this.current != null) && (this.current.element != null) && (\result != null))  ==>  (this.current.element.getClass().getName() == \result.getClass().getName())
 ((this.current != null) && (this.current.next != null) && (this.current.next.element != null) && (\old(this.current) != null) && (\old(this.current.next) != null) && (\old(this.current.next.element) != null))  ==>  (this.current.next.element.getClass().getName() == \old(this.current.next.element.getClass().getName()))
+((this.current != null) && (this.current.next != null) && (\old(this.current) != null) && (\old(this.current.next) != null))  ==>  (this.current.next.next == \old(this.current.next.next))
 ((\result != null) && (\old(this.current) != null) && (\old(this.current.element) != null))  ==>  (\result.getClass().getName() == \old(this.current.element.getClass().getName()))
+(\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: return.getClass().getName() is printable)
 ===========================================================================
 DataStructures.ListNode:::OBJECT
     Variables: this this.element this.element.getClass().getName() this.next this.next.element this.next.element.getClass().getName() this.next.next this.next.next.element this.next.next.element.getClass().getName() this.next.next.next
@@ -283,21 +283,21 @@ DataStructures.ListNode.ListNode(java.lang.Object, DataStructures.ListNode):::EN
 DataStructures.ListNode.ListNode(java.lang.Object, DataStructures.ListNode):::EXIT
     Variables: this this.element this.element.getClass().getName() this.next this.next.element this.next.element.getClass().getName() this.next.next this.next.next.element this.next.next.element.getClass().getName() this.next.next.next theElement theElement.getClass().getName() n n.element n.element.getClass().getName() n.next n.next.element n.next.element.getClass().getName() n.next.next orig(theElement) orig(theElement.getClass().getName()) orig(n) orig(n.element) orig(n.element.getClass().getName()) orig(n.next) orig(n.next.element) orig(n.next.element.getClass().getName()) orig(n.next.next)
 this.element == \old(theElement)
+((this.element != null) && (\old(theElement) != null))  ==>  (this.element.getClass().getName() == \old(theElement.getClass().getName()))
 this.next == \old(n)
 ((this.next != null) && (n != null))  ==>  (this.next.element == n.element)
+((this.next != null) && (this.next.element != null) && (n != null) && (n.element != null))  ==>  (this.next.element.getClass().getName() == n.element.getClass().getName())
 ((this.next != null) && (n != null))  ==>  (this.next.next == n.next)
 ((this.next != null) && (this.next.next != null) && (n != null) && (n.next != null))  ==>  (this.next.next.element == n.next.element)
+((this.next != null) && (this.next.next != null) && (this.next.next.element != null) && (n != null) && (n.next != null) && (n.next.element != null))  ==>  (this.next.next.element.getClass().getName() == n.next.element.getClass().getName())
 ((this.next != null) && (this.next.next != null) && (n != null) && (n.next != null))  ==>  (this.next.next.next == n.next.next)
 ((n != null) && (\old(n) != null))  ==>  (n.element == \old(n.element))
+((n != null) && (n.element != null) && (\old(n) != null) && (\old(n.element) != null))  ==>  (n.element.getClass().getName() == \old(n.element.getClass().getName()))
 ((n != null) && (\old(n) != null))  ==>  (n.next == \old(n.next))
 ((n != null) && (n.next != null) && (\old(n) != null) && (\old(n.next) != null))  ==>  (n.next.element == \old(n.next.element))
+((n != null) && (n.next != null) && (n.next.element != null) && (\old(n) != null) && (\old(n.next) != null) && (\old(n.next.element) != null))  ==>  (n.next.element.getClass().getName() == \old(n.next.element.getClass().getName()))
 ((n != null) && (n.next != null) && (\old(n) != null) && (\old(n.next) != null))  ==>  (n.next.next == \old(n.next.next))
 (n != null)  ==>  (n.element != null)
 ((n != null) && (n.element != null))  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: n.element.getClass().getName() is printable)
 ((n != null) && (n.next != null))  ==>  (n.next.element != null)
 ((n != null) && (n.next != null) && (n.next.element != null))  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: n.next.element.getClass().getName() is printable)
-((this.element != null) && (\old(theElement) != null))  ==>  (this.element.getClass().getName() == \old(theElement.getClass().getName()))
-((this.next != null) && (this.next.element != null) && (n != null) && (n.element != null))  ==>  (this.next.element.getClass().getName() == n.element.getClass().getName())
-((this.next != null) && (this.next.next != null) && (this.next.next.element != null) && (n != null) && (n.next != null) && (n.next.element != null))  ==>  (this.next.next.element.getClass().getName() == n.next.element.getClass().getName())
-((n != null) && (n.element != null) && (\old(n) != null) && (\old(n.element) != null))  ==>  (n.element.getClass().getName() == \old(n.element.getClass().getName()))
-((n != null) && (n.next != null) && (n.next.element != null) && (\old(n) != null) && (\old(n.next) != null) && (\old(n.next.element) != null))  ==>  (n.next.element.getClass().getName() == \old(n.next.element.getClass().getName()))

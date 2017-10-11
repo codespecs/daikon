@@ -35,6 +35,7 @@ DataStructures.QueueAr.dequeue():::EXIT93
 ===========================================================================
 DataStructures.QueueAr.dequeue():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.back == orig(this.back)
 return == orig(this.theArray[this.front])
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -46,7 +47,6 @@ return != null
 return.getClass().getName() is printable
 this.theArray[orig(this.front)] == null
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.currentSize - orig(this.currentSize) + 1 == 0
 (size(this.theArray[])-1 == 0) ==> (this.currentSize == 0)
 this.currentSize <= size(this.theArray[])-1
@@ -67,6 +67,7 @@ this.theArray[this.back..] elements == this.theArray[this.back]
 ===========================================================================
 DataStructures.QueueAr.dequeueAll():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.currentSize == this.front
 this.currentSize == orig(this.front)
 this.back == orig(this.back)
@@ -81,7 +82,6 @@ this.theArray[].getClass().getName() elements == null
 this.currentSize == 0
 this.theArray[0..this.currentSize] == [null]
 this.theArray[0..this.currentSize-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] elements == this.theArray[this.currentSize]
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
@@ -94,6 +94,7 @@ this.currentSize <= size(this.theArray[])-1
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.front == orig(this.front)
 orig(x) == this.theArray[this.back]
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -104,7 +105,6 @@ orig(this.theArray[post(this.currentSize)-1]) == orig(this.theArray[this.current
 this.currentSize >= 1
 this.theArray[this.front] != null
 orig(this.theArray[post(this.back)]) == null
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 (this.front >> this.currentSize == 0)
@@ -148,6 +148,7 @@ this.theArray[this.back] != null
 ===========================================================================
 DataStructures.QueueAr.getFront():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.currentSize == orig(this.currentSize)
 this.front == orig(this.front)
@@ -195,13 +196,13 @@ return == orig(this.theArray[this.front])
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == null)
 return.getClass().getName() is printable
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return.getClass().getName() in this.theArray[].getClass().getName()
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::ENTER
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.currentSize == orig(this.currentSize)
 this.front == orig(this.front)
@@ -235,7 +236,6 @@ this.back == orig(this.back)
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize..] elements == this.theArray[this.front])
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.back])
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.front])
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::EXIT;condition="return == true"
 this.theArray[this.currentSize] == this.theArray[this.front]
@@ -269,6 +269,7 @@ DataStructures.QueueAr.isFull():::ENTER
 ===========================================================================
 DataStructures.QueueAr.isFull():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.currentSize == orig(this.currentSize)
 this.front == orig(this.front)
@@ -281,7 +282,6 @@ this.back == orig(this.back)
 (return == true)  ==>  (this.theArray[] contains no duplicates)
 (return == true)  ==>  (this.theArray[] elements != null)
 (return == true)  ==>  (this.theArray[this.currentSize..] == [])
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.QueueAr.isFull():::EXIT;condition="return == true"
 this.currentSize == size(this.theArray[])
@@ -303,6 +303,7 @@ DataStructures.QueueAr.makeEmpty():::ENTER
 ===========================================================================
 DataStructures.QueueAr.makeEmpty():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.currentSize == this.front
 this.back == size(this.theArray[])-1
 this.back == orig(size(this.theArray[]))-1
@@ -315,7 +316,6 @@ this.theArray[].getClass().getName() elements == null
 this.currentSize == 0
 this.theArray[0..this.currentSize] == [null]
 this.theArray[0..this.currentSize-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] elements == this.theArray[this.currentSize]
 this.currentSize <= this.back
 this.currentSize <= orig(this.currentSize)

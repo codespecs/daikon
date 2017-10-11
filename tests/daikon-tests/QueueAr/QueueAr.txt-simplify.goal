@@ -35,6 +35,7 @@ DataStructures.QueueAr.dequeue():::EXIT93
 ===========================================================================
 DataStructures.QueueAr.dequeue():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (select |back| |this|) (select |back| |__orig__this|))
 (EQ (hash |return|) (hash (select (select elems (select |theArray| |__orig__this|)) (select |front| |__orig__this|))))
 (EQ (arrayLength (select |theArray| |this|)) (arrayLength (select |theArray| |__orig__this|)))
@@ -46,7 +47,6 @@ DataStructures.QueueAr.dequeue():::EXIT
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() is printable
 (EQ (hash (select (select elems (select |theArray| |this|)) (select |front| |__orig__this|))) null)
 (NEQ (typeof (select |theArray| |this|)) (typeof |return|))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ 0 (+ (+ (select |currentSize| |this|) (* -1 (select |currentSize| |__orig__this|))) 1))
 (IMPLIES (EQ (- (arrayLength (select |theArray| |this|)) 1) 0) (EQ (select |currentSize| |this|) 0))
 (<= (select |currentSize| |this|) (- (arrayLength (select |theArray| |this|)) 1))
@@ -67,6 +67,7 @@ DataStructures.QueueAr.dequeueAll():::ENTER
 ===========================================================================
 DataStructures.QueueAr.dequeueAll():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (select |currentSize| |this|) (select |front| |this|))
 (EQ (select |currentSize| |this|) (select |front| |__orig__this|))
 (EQ (select |back| |this|) (select |back| |__orig__this|))
@@ -81,7 +82,6 @@ DataStructures.QueueAr.dequeueAll():::EXIT
 (EQ (select |currentSize| |this|) 0)
 (AND (EQ (+ 1 (- (select |currentSize| |this|) 0)) 1) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |currentSize| |this|))) (EQ (select (select elems (select |theArray| |this|)) |i|)  null))))
 (AND (EQ (+ 1 (- (- (select |currentSize| |this|) 1) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |currentSize| |this|) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) (select |currentSize| |this|)))))
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
@@ -94,6 +94,7 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (select |front| |this|) (select |front| |__orig__this|))
 (EQ (hash |__orig__x|) (hash (select (select elems (select |theArray| |this|)) (select |back| |this|))))
 (EQ (arrayLength (select |theArray| |this|)) (arrayLength (select |theArray| |__orig__this|)))
@@ -104,7 +105,6 @@ DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT
 (>= (select |currentSize| |this|) 1)
 (NEQ (hash (select (select elems (select |theArray| |this|)) (select |front| |this|))) null)
 (EQ (hash (select (select elems (select |theArray| |__orig__this|)) (select |back| |this|))) null)
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (NEQ (typeof (select |theArray| |this|)) (typeof |__orig__x|))
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 (EQ (|java->>| (select |front| |this|) (select |currentSize| |this|)) 0)
@@ -148,6 +148,7 @@ DataStructures.QueueAr.getFront():::EXIT76
 ===========================================================================
 DataStructures.QueueAr.getFront():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
 (EQ (select |currentSize| |this|) (select |currentSize| |__orig__this|))
 (EQ (select |front| |this|) (select |front| |__orig__this|))
@@ -195,13 +196,13 @@ DataStructures.QueueAr.getFront():::EXIT
 (IMPLIES (EQ (select |currentSize| |this|) 0) (EQ (hash (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))) null))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() is printable
 (NEQ (typeof (select |theArray| |this|)) (typeof |return|))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() in this.theArray[].getClass().getName()
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::ENTER
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
 (EQ (select |currentSize| |this|) (select |currentSize| |__orig__this|))
 (EQ (select |front| |this|) (select |front| |__orig__this|))
@@ -235,12 +236,12 @@ DataStructures.QueueAr.isEmpty():::EXIT
 (IMPLIES (EQ (select |currentSize| |this|) 0) (FORALL (|i|) (IMPLIES (AND (<= (select |currentSize| |this|) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) (select |front| |this|))))))
 (IMPLIES (EQ (select |currentSize| |this|) 0) (EQ (hash (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))) (hash (select (select elems (select |theArray| |this|)) (select |back| |this|)))))
 (IMPLIES (EQ (select |currentSize| |this|) 0) (EQ (hash (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))) (hash (select (select elems (select |theArray| |this|)) (select |front| |this|)))))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 ===========================================================================
 DataStructures.QueueAr.isFull():::ENTER
 ===========================================================================
 DataStructures.QueueAr.isFull():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
 (EQ (select |currentSize| |this|) (select |currentSize| |__orig__this|))
 (EQ (select |front| |this|) (select |front| |__orig__this|))
@@ -253,7 +254,6 @@ DataStructures.QueueAr.isFull():::EXIT
 (IMPLIES (EQ |return| |@true|) (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |theArray| |this|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) |j|)))))
 (IMPLIES (EQ |return| |@true|) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|) null))))
 (IMPLIES (EQ |return| |@true|) (AND (EQ (+ 1 (- (- (arrayLength (select |theArray| |this|)) 1) (select |currentSize| |this|))) 0) (FORALL (|i|) (IMPLIES (AND (<= (select |currentSize| |this|) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 ===========================================================================
 DataStructures.QueueAr.makeEmpty():::ENTER
 (IMPLIES (EQ (select |currentSize| |this|) 0) (EQ (select |front| |this|) 0))
@@ -262,6 +262,7 @@ DataStructures.QueueAr.makeEmpty():::ENTER
 ===========================================================================
 DataStructures.QueueAr.makeEmpty():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (select |currentSize| |this|) (select |front| |this|))
 (EQ (select |back| |this|) (- (arrayLength (select |theArray| |this|)) 1))
 (EQ (select |back| |this|) (- (arrayLength (select |theArray| |__orig__this|)) 1))
@@ -274,7 +275,6 @@ DataStructures.QueueAr.makeEmpty():::EXIT
 (EQ (select |currentSize| |this|) 0)
 (AND (EQ (+ 1 (- (select |currentSize| |this|) 0)) 1) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |currentSize| |this|))) (EQ (select (select elems (select |theArray| |this|)) |i|)  null))))
 (AND (EQ (+ 1 (- (- (select |currentSize| |this|) 1) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |currentSize| |this|) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
-(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) (select |currentSize| |this|)))))
 (<= (select |currentSize| |this|) (select |back| |this|))
 (<= (select |currentSize| |this|) (select |currentSize| |__orig__this|))

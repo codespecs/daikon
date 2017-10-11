@@ -3,8 +3,8 @@
 fp has only one value
 ===========================================================================
 ..get_char():::EXIT
-return != 0
 ::buffer == orig(::buffer)
+return != 0
 ===========================================================================
 ..get_token():::ENTER
 tp has only one value
@@ -15,25 +15,25 @@ tp has only one value
 ..is_eof_token():::ENTER
 ===========================================================================
 ..is_eof_token():::EXIT
-return one of { 0, 1 }
 ::buffer == orig(::buffer)
+return one of { 0, 1 }
 ===========================================================================
 ..open_character_stream():::ENTER
 ::buffer == ""
 ===========================================================================
 ..open_character_stream():::EXIT
+::buffer == orig(::buffer)
 ::buffer == ""
 return has only one value
-::buffer == orig(::buffer)
 ===========================================================================
 ..open_token_stream():::ENTER
 ::buffer == ""
 fname == ""
 ===========================================================================
 ..open_token_stream():::EXIT
+::buffer == orig(::buffer)
 ::buffer == ""
 return has only one value
-::buffer == orig(::buffer)
 ===========================================================================
 ..print_token():::ENTER
 ::buffer == tok
@@ -46,76 +46,76 @@ print_tokens2.c.is_char_constant():::ENTER
 ::buffer == str
 ===========================================================================
 print_tokens2.c.is_char_constant():::EXIT
-return == 0
 ::buffer == orig(::buffer)
 ::buffer == orig(str)
+return == 0
 ===========================================================================
 print_tokens2.c.is_comment():::ENTER
 ::buffer == ident
 ===========================================================================
 print_tokens2.c.is_comment():::EXIT
-return one of { 0, 1 }
 ::buffer == orig(::buffer)
 ::buffer == orig(ident)
+return one of { 0, 1 }
 ===========================================================================
 print_tokens2.c.is_identifier():::ENTER
 ::buffer == str
 ===========================================================================
 print_tokens2.c.is_identifier():::EXIT
-return one of { 0, 1 }
 ::buffer == orig(::buffer)
 ::buffer == orig(str)
+return one of { 0, 1 }
 ===========================================================================
 print_tokens2.c.is_keyword():::ENTER
 ::buffer == str
 ===========================================================================
 print_tokens2.c.is_keyword():::EXIT
-return one of { 0, 1 }
 ::buffer == orig(::buffer)
 ::buffer == orig(str)
+return one of { 0, 1 }
 ===========================================================================
 print_tokens2.c.is_num_constant():::ENTER
 ::buffer == str
 ===========================================================================
 print_tokens2.c.is_num_constant():::EXIT
-return one of { 0, 1 }
 ::buffer == orig(::buffer)
 ::buffer == orig(str)
+return one of { 0, 1 }
 ===========================================================================
 print_tokens2.c.is_spec_symbol():::ENTER
 ===========================================================================
 print_tokens2.c.is_spec_symbol():::EXIT
-return one of { 0, 1 }
 ::buffer == orig(::buffer)
+return one of { 0, 1 }
 ===========================================================================
 print_tokens2.c.is_str_constant():::ENTER
 ::buffer == str
 ===========================================================================
 print_tokens2.c.is_str_constant():::EXIT
-return one of { 0, 1 }
 ::buffer == orig(::buffer)
 ::buffer == orig(str)
+return one of { 0, 1 }
 ===========================================================================
 print_tokens2.c.is_token_end():::ENTER
 str_com_id one of { 0, 1, 2 }
 ===========================================================================
 print_tokens2.c.is_token_end():::EXIT
-return one of { 0, 1 }
 ::buffer == orig(::buffer)
+return one of { 0, 1 }
 ===========================================================================
 print_tokens2.c.print_spec_symbol():::ENTER
-::buffer one of { "'", ")", "`" }
 ::buffer == str
+::buffer one of { "'", ")", "`" }
 ===========================================================================
 print_tokens2.c.print_spec_symbol():::EXIT
-::buffer one of { "'", ")", "`" }
 ::buffer == orig(::buffer)
 ::buffer == orig(str)
+::buffer one of { "'", ")", "`" }
 ===========================================================================
 print_tokens2.c.token_type():::ENTER
 ::buffer == tok
 ===========================================================================
 print_tokens2.c.token_type():::EXIT
-return >= 1
 ::buffer == orig(::buffer)
 ::buffer == orig(tok)
+return >= 1

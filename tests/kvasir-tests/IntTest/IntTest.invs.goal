@@ -16,6 +16,7 @@ size(::globalIntArray[]) == 18
 ::globalIntArray == orig(::globalIntArray)
 ::globalIntArray[] == orig(::globalIntArray[])
 ::globalX == orig(::globalX)
+::whatsUp == orig(::whatsUp)
 ::globalIntArray[::globalX] == ::globalIntArray[orig(::globalX)]
 ::globalIntArray[::globalX] == orig(::globalIntArray[post(::globalX)])
 ::globalIntArray[::globalX] == orig(::globalIntArray[::globalX])
@@ -39,7 +40,6 @@ size(::globalIntArray[]) == 18
 ::globalIntArray[return+1..] == [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 ::globalIntArray[0..return] == [1]
 ::globalIntArray[0..return-1] == []
-::whatsUp == orig(::whatsUp)
 ===========================================================================
 ..returnIntSum():::ENTER
 size(a[]) == size(b[])
@@ -124,6 +124,7 @@ u[::globalX-1] in ::globalIntArray[::globalX+1..]
 ::globalIntArray == orig(::globalIntArray)
 ::globalIntArray[] == orig(::globalIntArray[])
 ::globalX == orig(::globalX)
+::whatsUp == orig(::whatsUp)
 b[] == orig(b[])
 dummy[] == orig(dummy[])
 u[] == orig(u[])
@@ -164,7 +165,6 @@ u[::globalX-1] in ::globalIntArray[]
 ::globalX in u[]
 ::globalX in u[::globalX..]
 ::globalX in u[::globalX+1..]
-::whatsUp == orig(::whatsUp)
 a[] == orig(a[]) (elementwise)
 a[] is the reverse of orig(a[])
 size(a[])-1 in u[]

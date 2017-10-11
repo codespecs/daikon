@@ -87,7 +87,6 @@ public class QueueAr
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (this.currentSize <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.front]))); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.back]); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.front]); */
-  /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
   /**
    * Test if the queue is logically empty.
    * @return true if empty, false otherwise.
@@ -104,7 +103,6 @@ public class QueueAr
   /*@ ensures (\result == true)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null))); */
   /*@ ensures (\result == true)  ==>  (\nonnullelements(this.theArray)); */
   /*@ ensures (\result == true)  ==>  ((\forall int i; (this.currentSize <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != null))); */
-  /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
   /**
    * Test if the queue is logically full.
    * @return true if full, false otherwise.
@@ -129,7 +127,6 @@ public class QueueAr
   /*@ ensures this.currentSize == 0; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null)); */
-  /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.currentSize])); */
   /*@ ensures this.currentSize <= this.back; */
   /*@ ensures this.currentSize <= \old(this.currentSize); */
@@ -190,7 +187,6 @@ public class QueueAr
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (this.currentSize <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.currentSize]))); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == null); */
   /*@ ensures \typeof(this.theArray) != \typeof(\result); */
-  /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
   /*@ ensures !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \typeof(\result))); */
   /**
    * Get the least recently inserted item in the queue.
@@ -212,7 +208,6 @@ public class QueueAr
   /*@ ensures \result != null; */
   /*@ ensures this.theArray[\old(this.front)] == null; */
   /*@ ensures \typeof(this.theArray) != \typeof(\result); */
-  /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
   /*@ ensures this.currentSize - \old(this.currentSize) + 1 == 0; */
   /*@ ensures (this.theArray.length-1 == 0) ==> (this.currentSize == 0); */
   /*@ ensures this.currentSize <= this.theArray.length-1; */
@@ -247,7 +242,6 @@ public class QueueAr
   /*@ ensures this.theArray[this.currentSize-1] == this.theArray[\old(this.currentSize)]; */
   /*@ ensures this.currentSize >= 1; */
   /*@ ensures this.theArray[this.front] != null; */
-  /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
   /*@ ensures \typeof(this.theArray) != \old(\typeof(x)); */
   /*@ ensures !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \old(\typeof(x)))); */
   /*@ ensures this.currentSize - \old(this.currentSize) - 1 == 0; */
@@ -293,7 +287,6 @@ public class QueueAr
   /*@ ensures this.currentSize == 0; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null)); */
-  /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.currentSize])); */
   public void dequeueAll()
   {

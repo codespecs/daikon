@@ -346,7 +346,7 @@
   #define UB_MAX min()
 #endif
 
-#if (defined(EQUAL) || defined(EQUALFLOAT))
+#if defined(EQUAL_OP)
   #define IMPLEMENTSCOMPARISON implements Comparison
 #else
   #define IMPLEMENTSCOMPARISON

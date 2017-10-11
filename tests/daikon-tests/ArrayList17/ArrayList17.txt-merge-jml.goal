@@ -1145,6 +1145,7 @@ import java.util.*;
 public class ArrayList17<E> extends AbstractList17<E>
         implements List<E>, RandomAccess, Cloneable, java.io.Serializable
 {
+    /*@ invariant javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == this.elementData.getClass().getName(); */
     /*@ invariant this.elementData != null; */
     /*@ invariant this.size >= 0; */
     /*@ invariant this.modCount >= 0; */
@@ -1157,7 +1158,6 @@ public class ArrayList17<E> extends AbstractList17<E>
     /*@ invariant javautil.ArrayList17.serialVersionUID > daikon.Quant.size(this.elementData); */
     /*@ invariant javautil.ArrayList17.DEFAULT_CAPACITY != daikon.Quant.size(this.elementData); */
     /*@ invariant javautil.ArrayList17.DEFAULT_CAPACITY != daikon.Quant.size(this.elementData)-1; */
-    /*@ invariant javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == this.elementData.getClass().getName(); */
     /*@ invariant daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, this.elementData); */
     /*@ invariant daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, this.size, daikon.Quant.size(this.elementData))); */
     /*@ invariant daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, 0, this.size-1)); */
@@ -1319,6 +1319,8 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ requires minCapacity > daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA);
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) < daikon.Quant.size(this.elementData)-1;
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA);
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.pairwiseEqual(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(javautil.ArrayList17.EMPTY_ELEMENTDATA));
     @ ensures this.size == \old(this.size);
     @ ensures this.size == \old(this.modCount);
@@ -1329,8 +1331,6 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.elementData, 0, this.size-1), \old(daikon.Quant.slice(this.elementData, 0, this.modCount-1)));
     @ ensures daikon.Quant.noDups(daikon.Quant.slice(this.elementData, 0, this.size));
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < daikon.Quant.size(this.elementData)-1;
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(this.elementData));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY+1, daikon.Quant.size(this.elementData)));
@@ -1376,6 +1376,8 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ requires minCapacity > daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA);
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) < daikon.Quant.size(this.elementData)-1;
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA);
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.pairwiseEqual(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(javautil.ArrayList17.EMPTY_ELEMENTDATA));
     @ ensures this.size == \old(this.size);
     @ ensures this.size == \old(this.modCount);
@@ -1386,8 +1388,6 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.elementData, 0, this.size-1), \old(daikon.Quant.slice(this.elementData, 0, this.modCount-1)));
     @ ensures daikon.Quant.noDups(daikon.Quant.slice(this.elementData, 0, this.size));
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < daikon.Quant.size(this.elementData)-1;
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(this.elementData));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY+1, daikon.Quant.size(this.elementData)));
@@ -1435,6 +1435,8 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ requires daikon.Quant.getElement_Object(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY-1) != null;
     @ requires this.size - this.modCount + 1 == 0;
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA);
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.pairwiseEqual(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(javautil.ArrayList17.EMPTY_ELEMENTDATA));
     @ ensures this.size == \old(this.size);
     @ ensures this.size == \old(daikon.Quant.size(this.elementData));
@@ -1451,8 +1453,6 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ ensures daikon.Quant.getElement_Object(this.elementData, this.size-1) == \old(daikon.Quant.getElement_Object(this.elementData, this.size-1));
     @ ensures daikon.Quant.getElement_Object(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY) != null;
     @ ensures daikon.Quant.getElement_Object(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY-1) != null;
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY+1, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, 0, this.size));
@@ -1713,6 +1713,8 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) == (java.lang.Math.pow(daikon.Quant.size(this.elementData)-1, this.size));
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) == (java.lang.Math.pow(daikon.Quant.size(this.elementData)-1, this.modCount));
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA);
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.pairwiseEqual(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(javautil.ArrayList17.EMPTY_ELEMENTDATA));
     @ ensures this.elementData == \old(this.elementData);
     @ ensures daikon.Quant.pairwiseEqual(this.elementData, \old(this.elementData));
@@ -1726,8 +1728,6 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < this.size;
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < this.modCount;
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() != \result.getClass().getName();
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY+1, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, 0, javautil.ArrayList17.DEFAULT_CAPACITY));
@@ -1815,6 +1815,8 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ requires daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, 0, javautil.ArrayList17.DEFAULT_CAPACITY-1));
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) < daikon.Quant.size(this.elementData)-1;
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA);
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.pairwiseEqual(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(javautil.ArrayList17.EMPTY_ELEMENTDATA));
     @ ensures this.size == this.modCount;
     @ ensures \old(e) == daikon.Quant.getElement_Object(this.elementData, this.size-1);
@@ -1825,8 +1827,6 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.elementData, 0, \old(this.size)-1), \old(daikon.Quant.slice(this.elementData, 0, this.modCount-1)));
     @ ensures \result == true;
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < daikon.Quant.size(this.elementData)-1;
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() != \old(e.getClass().getName());
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(this.elementData));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY, daikon.Quant.size(this.elementData)));
@@ -1919,6 +1919,8 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) == (java.lang.Math.pow(daikon.Quant.size(this.elementData)-1, this.size));
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) == (java.lang.Math.pow(daikon.Quant.size(this.elementData)-1, this.modCount));
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA);
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.pairwiseEqual(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(javautil.ArrayList17.EMPTY_ELEMENTDATA));
     @ ensures this.elementData == \old(this.elementData);
     @ ensures \result == \old(daikon.Quant.getElement_Object(this.elementData, index));
@@ -1937,8 +1939,6 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < this.size;
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < this.modCount;
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() != \result.getClass().getName();
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(this.elementData));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY+1, daikon.Quant.size(this.elementData)));
@@ -2235,6 +2235,8 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) == (java.lang.Math.pow(daikon.Quant.size(this.elementData)-1, this.size));
     @ requires daikon.Quant.size(javautil.ArrayList17.EMPTY_ELEMENTDATA) == (java.lang.Math.pow(daikon.Quant.size(this.elementData)-1, this.modCount));
     @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA);
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
+    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.pairwiseEqual(javautil.ArrayList17.EMPTY_ELEMENTDATA, \old(javautil.ArrayList17.EMPTY_ELEMENTDATA));
     @ ensures this.elementData == \old(this.elementData);
     @ ensures daikon.Quant.pairwiseEqual(this.elementData, \old(this.elementData));
@@ -2244,8 +2246,6 @@ public class ArrayList17<E> extends AbstractList17<E>
     @ ensures daikon.Quant.size(this.elementData) == 109;
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < this.size;
     @ ensures javautil.ArrayList17.DEFAULT_CAPACITY < this.modCount;
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName());
-    @ ensures javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == \old(this.elementData.getClass().getName());
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, javautil.ArrayList17.DEFAULT_CAPACITY+1, daikon.Quant.size(this.elementData)));
     @ ensures daikon.Quant.subsetOf(javautil.ArrayList17.EMPTY_ELEMENTDATA, daikon.Quant.slice(this.elementData, 0, javautil.ArrayList17.DEFAULT_CAPACITY));
