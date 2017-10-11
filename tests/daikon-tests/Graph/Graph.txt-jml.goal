@@ -8,10 +8,10 @@ MapQuick1.Graph.Graph():::EXIT
 ===========================================================================
 MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
     Variables: this this.adjMap from from.getClass().getName() to to.getClass().getName()
+from.getClass().getName() == to.getClass().getName()
 from != null
 from.getClass().getName() == MapQuick1.GeoSegment.class.getName()
 to != null
-from.getClass().getName() == to.getClass().getName()
 ===========================================================================
 MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT
     Variables: this this.adjMap from from.getClass().getName() to to.getClass().getName() orig(this) orig(this.adjMap) orig(from) orig(from.getClass().getName()) orig(to) orig(to.getClass().getName())

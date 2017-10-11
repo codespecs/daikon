@@ -46,5 +46,5 @@ misc.Person.Person(java.lang.String, int, int):::EXIT
 this._name == orig(name)
 this._height == orig(height)
 this._weight == orig(weight)
-name.toString is printable
 name.toString == orig(name.toString)
+name.toString is printable

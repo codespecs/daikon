@@ -24,11 +24,11 @@ dst one of { "", "my name is", "pgbovine" }
 ..simple_strcpy():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
+return == orig(src)
 ::g_p == 1
 ::g_q == 2
 ::g_x == "MY"
 ::g_y one of { "NAME", "pgbovine" }
-return == orig(src)
 ===========================================================================
 ..testCalloc():::ENTER
 ::g_p == 1
@@ -43,6 +43,8 @@ b[] == [0, 0, 0]
 ..testCalloc():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
+::g_x == orig(::g_x)
+::g_y == orig(::g_y)
 a[] == orig(a[])
 b[] == orig(b[])
 ::g_p == 1
@@ -51,8 +53,6 @@ b[] == orig(b[])
 ::g_y == "pgbovine"
 a[] == [0, 0]
 b[] == [0, 0, 0]
-::g_x == orig(::g_x)
-::g_y == orig(::g_y)
 ===========================================================================
 ..testDynamicSimpleStrcpy():::ENTER
 ::g_p == 1
@@ -65,32 +65,32 @@ y == "world"
 ..testDynamicSimpleStrcpy():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
-::g_p == 1
-::g_q == 2
-::g_x == "MY"
-::g_y == "NAME"
 ::g_x == orig(::g_x)
 ::g_y == orig(::g_y)
-===========================================================================
-..testGlobalSimpleStrcpy():::ENTER
 ::g_p == 1
 ::g_q == 2
 ::g_x == "MY"
 ::g_y == "NAME"
+===========================================================================
+..testGlobalSimpleStrcpy():::ENTER
 ::g_x == x
 ::g_y == y
+::g_p == 1
+::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 ===========================================================================
 ..testGlobalSimpleStrcpy():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
-::g_p == 1
-::g_q == 2
-::g_x == "MY"
-::g_y == "NAME"
 ::g_x == orig(::g_x)
 ::g_x == orig(x)
 ::g_y == orig(::g_y)
 ::g_y == orig(y)
+::g_p == 1
+::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 ===========================================================================
 ..testMalloc():::ENTER
 ::g_p == 1
@@ -105,6 +105,8 @@ b[] == [202]
 ..testMalloc():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
+::g_x == orig(::g_x)
+::g_y == orig(::g_y)
 a[] == orig(a[])
 b[] == orig(b[])
 ::g_p == 1
@@ -113,8 +115,6 @@ b[] == orig(b[])
 ::g_y == "pgbovine"
 a[] == [101]
 b[] == [202]
-::g_x == orig(::g_x)
-::g_y == orig(::g_y)
 ===========================================================================
 ..testStrCalloc():::ENTER
 ::g_p == 1
@@ -127,12 +127,12 @@ b == ""
 ..testStrCalloc():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
+::g_x == orig(::g_x)
+::g_y == orig(::g_y)
 ::g_p == 1
 ::g_q == 2
 ::g_x == "my name is"
 ::g_y == "pgbovine"
-::g_x == orig(::g_x)
-::g_y == orig(::g_y)
 ===========================================================================
 ..testTrivial():::ENTER
 ::g_p == 1
@@ -145,10 +145,10 @@ b one of { 5, 10 }
 ..testTrivial():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
+::g_x == orig(::g_x)
+::g_y == orig(::g_y)
 ::g_p == 1
 ::g_q == 2
 ::g_x == "MY"
 ::g_y == "NAME"
 return one of { 6, 12 }
-::g_x == orig(::g_x)
-::g_y == orig(::g_y)

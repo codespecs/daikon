@@ -63,6 +63,7 @@ f == 30000
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 ::globalWkdayA == orig(::globalWkdayA)
 bp[] == cp[]->basic2
 bp[] == return[][0]->basic2
@@ -115,7 +116,6 @@ return[] contains no nulls and has only one value, of length 1
 return[][0]->basic1 contains no nulls and has only one value, of length 1
 return[][0]->basic2[0] contains no nulls and has only one value, of length 1
 return[][0][0] contains no nulls and has only one value, of length 1
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..main():::ENTER
 ::cpg == null
@@ -130,6 +130,7 @@ return[][0][0] contains no nulls and has only one value, of length 1
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 ::globalWkdayA == orig(::globalWkdayA)
 ::cpg has only one value
 ::cpg[] contains no nulls and has only one value, of length 1
@@ -158,7 +159,6 @@ is a good manhello	world
 ::globalStr == "MR FURLEY\t\nis a good man\rhello\tworld\t\n\n\n\\ \r \r a\r  \\b \\c"
 ::globalWkdayA == 4
 return == 0
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..returnWeekday():::ENTER
 ::cpg[]->next == ::cpg[]->prev
@@ -212,6 +212,7 @@ day == 5
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 ::globalWkdayA == orig(::globalWkdayA)
 ::cpg has only one value
 ::cpg[] contains no nulls and has only one value, of length 1
@@ -240,4 +241,3 @@ is a good manhello	world
 ::globalStr == "MR FURLEY\t\nis a good man\rhello\tworld\t\n\n\n\\ \r \r a\r  \\b \\c"
 ::globalWkdayA == 4
 return == 5
-::globalStr == orig(::globalStr)
