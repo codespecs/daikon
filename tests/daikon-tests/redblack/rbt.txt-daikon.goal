@@ -1,6 +1,7 @@
 ===========================================================================
 DataStructures.RedBlackNode:::OBJECT
 this.element == this.left.element
+this.element.getClass().getName() == this.left.element.getClass().getName()
 this.left == this.left.left
 this.left == this.right
 this.left.element == this.left.left.element
@@ -8,6 +9,11 @@ this.left.element == this.left.right.element
 this.left.element == this.right.element
 this.left.element == this.right.left.element
 this.left.element == this.right.right.element
+this.left.element.getClass().getName() == this.left.left.element.getClass().getName()
+this.left.element.getClass().getName() == this.left.right.element.getClass().getName()
+this.left.element.getClass().getName() == this.right.element.getClass().getName()
+this.left.element.getClass().getName() == this.right.left.element.getClass().getName()
+this.left.element.getClass().getName() == this.right.right.element.getClass().getName()
 this.left.left == this.left.left.left
 this.left.left == this.left.left.right
 this.left.left == this.left.right
@@ -32,23 +38,18 @@ this.left.left has only one value
 this.left.left != null
 this.left.color == 1
 this.color == 1
-this.element.getClass().getName() == this.left.element.getClass().getName()
-this.left.element.getClass().getName() == this.left.left.element.getClass().getName()
-this.left.element.getClass().getName() == this.left.right.element.getClass().getName()
-this.left.element.getClass().getName() == this.right.element.getClass().getName()
-this.left.element.getClass().getName() == this.right.left.element.getClass().getName()
-this.left.element.getClass().getName() == this.right.right.element.getClass().getName()
 ===========================================================================
 DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable):::ENTER
 theElement.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable):::EXIT
 this.element == orig(theElement)
-this.left == null
 this.element.getClass().getName() == orig(theElement.getClass().getName())
+this.left == null
 ===========================================================================
 DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable, DataStructures.RedBlackNode, DataStructures.RedBlackNode):::ENTER
 theElement == lt.element
+theElement.getClass().getName() == lt.element.getClass().getName()
 lt == lt.left
 lt == rt
 lt.element == lt.left.element
@@ -56,6 +57,11 @@ lt.element == lt.right.element
 lt.element == rt.element
 lt.element == rt.left.element
 lt.element == rt.right.element
+lt.element.getClass().getName() == lt.left.element.getClass().getName()
+lt.element.getClass().getName() == lt.right.element.getClass().getName()
+lt.element.getClass().getName() == rt.element.getClass().getName()
+lt.element.getClass().getName() == rt.left.element.getClass().getName()
+lt.element.getClass().getName() == rt.right.element.getClass().getName()
 lt.left == lt.left.left
 lt.left == lt.left.right
 lt.left == lt.right
@@ -78,39 +84,41 @@ lt.element.getClass().getName() == DataStructures.MyInteger.class
 lt.left has only one value
 lt.left != null
 lt.color == 1
-theElement.getClass().getName() == lt.element.getClass().getName()
-lt.element.getClass().getName() == lt.left.element.getClass().getName()
-lt.element.getClass().getName() == lt.right.element.getClass().getName()
-lt.element.getClass().getName() == rt.element.getClass().getName()
-lt.element.getClass().getName() == rt.left.element.getClass().getName()
-lt.element.getClass().getName() == rt.right.element.getClass().getName()
 ===========================================================================
 DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable, DataStructures.RedBlackNode, DataStructures.RedBlackNode):::EXIT
 this.element == lt.element
 this.element == orig(theElement)
+this.element.getClass().getName() == lt.element.getClass().getName()
+this.element.getClass().getName() == orig(theElement.getClass().getName())
 this.left == lt.left
 this.left == orig(lt)
 this.left == orig(rt)
 this.left.element == lt.element
+this.left.element.getClass().getName() == lt.element.getClass().getName()
 this.left.left == lt.left
 this.left.left.element == lt.element
+this.left.left.element.getClass().getName() == lt.element.getClass().getName()
 this.left.left.left == lt.left
 this.left.left.right == lt.left
 this.left.left.color == lt.color
 this.left.right == lt.left
 this.left.right.element == lt.element
+this.left.right.element.getClass().getName() == lt.element.getClass().getName()
 this.left.right.left == lt.left
 this.left.right.right == lt.left
 this.left.right.color == lt.color
 this.left.color == lt.color
 this.right.element == lt.element
+this.right.element.getClass().getName() == lt.element.getClass().getName()
 this.right.left == lt.left
 this.right.left.element == lt.element
+this.right.left.element.getClass().getName() == lt.element.getClass().getName()
 this.right.left.left == lt.left
 this.right.left.right == lt.left
 this.right.left.color == lt.color
 this.right.right == lt.left
 this.right.right.element == lt.element
+this.right.right.element.getClass().getName() == lt.element.getClass().getName()
 this.right.right.left == lt.left
 this.right.right.right == lt.left
 this.right.right.color == lt.color
@@ -127,6 +135,17 @@ lt.element == orig(lt.right.element)
 lt.element == orig(rt.element)
 lt.element == orig(rt.left.element)
 lt.element == orig(rt.right.element)
+lt.element.getClass().getName() == lt.left.element.getClass().getName()
+lt.element.getClass().getName() == lt.right.element.getClass().getName()
+lt.element.getClass().getName() == rt.element.getClass().getName()
+lt.element.getClass().getName() == rt.left.element.getClass().getName()
+lt.element.getClass().getName() == rt.right.element.getClass().getName()
+lt.element.getClass().getName() == orig(lt.element.getClass().getName())
+lt.element.getClass().getName() == orig(lt.left.element.getClass().getName())
+lt.element.getClass().getName() == orig(lt.right.element.getClass().getName())
+lt.element.getClass().getName() == orig(rt.element.getClass().getName())
+lt.element.getClass().getName() == orig(rt.left.element.getClass().getName())
+lt.element.getClass().getName() == orig(rt.right.element.getClass().getName())
 lt.left == lt.left.left
 lt.left == lt.left.right
 lt.left == lt.right
@@ -166,25 +185,6 @@ lt.element.getClass().getName() == DataStructures.MyInteger.class
 lt.left has only one value
 lt.left != null
 lt.color == 1
-this.element.getClass().getName() == lt.element.getClass().getName()
-this.element.getClass().getName() == orig(theElement.getClass().getName())
-this.left.element.getClass().getName() == lt.element.getClass().getName()
-this.left.left.element.getClass().getName() == lt.element.getClass().getName()
-this.left.right.element.getClass().getName() == lt.element.getClass().getName()
-this.right.element.getClass().getName() == lt.element.getClass().getName()
-this.right.left.element.getClass().getName() == lt.element.getClass().getName()
-this.right.right.element.getClass().getName() == lt.element.getClass().getName()
-lt.element.getClass().getName() == lt.left.element.getClass().getName()
-lt.element.getClass().getName() == lt.right.element.getClass().getName()
-lt.element.getClass().getName() == rt.element.getClass().getName()
-lt.element.getClass().getName() == rt.left.element.getClass().getName()
-lt.element.getClass().getName() == rt.right.element.getClass().getName()
-lt.element.getClass().getName() == orig(lt.element.getClass().getName())
-lt.element.getClass().getName() == orig(lt.left.element.getClass().getName())
-lt.element.getClass().getName() == orig(lt.right.element.getClass().getName())
-lt.element.getClass().getName() == orig(rt.element.getClass().getName())
-lt.element.getClass().getName() == orig(rt.left.element.getClass().getName())
-lt.element.getClass().getName() == orig(rt.right.element.getClass().getName())
 ===========================================================================
 DataStructures.RedBlackTree:::CLASS
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.nullNode.left
@@ -195,6 +195,20 @@ DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.nullNode.rig
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.nullNode.right.right
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.nullNode.left.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.nullNode.right.element
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.current.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.current.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.current.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.parent.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.parent.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.parent.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.grand.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.grand.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.grand.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.right.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.left.color == DataStructures.RedBlackTree.BLACK
 DataStructures.RedBlackTree.nullNode.right.color == DataStructures.RedBlackTree.BLACK
 DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.BLACK
@@ -249,20 +263,6 @@ DataStructures.RedBlackTree.great.right.left != null
 DataStructures.RedBlackTree.great.right.right != null
 DataStructures.RedBlackTree.great.right.color one of { 0, 1 }
 DataStructures.RedBlackTree.great.color one of { 0, 1 }
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.current.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.current.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.current.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.parent.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.parent.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.parent.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.grand.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.grand.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.grand.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.right.element.getClass().getName()
 DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.current.color
@@ -289,11 +289,14 @@ DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.great.right.color
 DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.great.color
 ===========================================================================
 DataStructures.RedBlackTree:::OBJECT
+this.header.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
 this.header.left == DataStructures.RedBlackTree.nullNode
 this.header.left.element == DataStructures.RedBlackTree.nullNode.element
+this.header.left.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
 this.header.left.left == DataStructures.RedBlackTree.nullNode
 this.header.left.right == DataStructures.RedBlackTree.nullNode
 this.header.left.color == DataStructures.RedBlackTree.BLACK
+this.header.right.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
 this.header.color == DataStructures.RedBlackTree.BLACK
 this has only one value
 this.header has only one value
@@ -305,9 +308,6 @@ this.header.right != null
 this.header.right.left != null
 this.header.right.right != null
 this.header.right.color one of { 0, 1 }
-this.header.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
-this.header.left.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
-this.header.right.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
 this.header.right.color <= DataStructures.RedBlackTree.BLACK
 this.header.right.color >= DataStructures.RedBlackTree.RED
 this.header.right.color >= DataStructures.RedBlackTree.current.color
@@ -322,6 +322,7 @@ negInf.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.RedBlackTree.RedBlackTree(DataStructures.Comparable):::EXIT
 this.header.element == orig(negInf)
+this.header.element.getClass().getName() == orig(negInf.getClass().getName())
 this.header.right == DataStructures.RedBlackTree.nullNode
 this.header.right.element == DataStructures.RedBlackTree.nullNode.element
 this.header.right.left == DataStructures.RedBlackTree.nullNode
@@ -332,7 +333,6 @@ DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.great
 DataStructures.RedBlackTree.nullNode.element == null
 DataStructures.RedBlackTree.current == null
-this.header.element.getClass().getName() == orig(negInf.getClass().getName())
 ===========================================================================
 DataStructures.RedBlackTree.find(DataStructures.Comparable):::ENTER
 this.header.right.color == DataStructures.RedBlackTree.BLACK
@@ -345,6 +345,7 @@ DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.grand.left.l
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.grand.right.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.grand.right.right
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.left.element
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == x.getClass().getName()
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
@@ -386,15 +387,17 @@ DataStructures.RedBlackTree.great.right.element has only one value
 DataStructures.RedBlackTree.great.right.left has only one value
 DataStructures.RedBlackTree.great.right.right has only one value
 x != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == x.getClass().getName()
 ===========================================================================
 DataStructures.RedBlackTree.find(DataStructures.Comparable):::EXIT128
 ===========================================================================
 DataStructures.RedBlackTree.find(DataStructures.Comparable):::EXIT
 this.header == orig(this.header)
 this.header.element == orig(this.header.element)
+this.header.element.getClass().getName() == return.getClass().getName()
+this.header.left.element.getClass().getName() == return.getClass().getName()
 this.header.right == orig(this.header.right)
 this.header.right.element == orig(this.header.right.element)
+this.header.right.element.getClass().getName() == return.getClass().getName()
 this.header.right.left == orig(this.header.right.left)
 this.header.right.right == orig(this.header.right.right)
 this.header.right.color == DataStructures.RedBlackTree.BLACK
@@ -426,6 +429,9 @@ DataStructures.RedBlackTree.nullNode == orig(DataStructures.RedBlackTree.grand.r
 DataStructures.RedBlackTree.nullNode == orig(DataStructures.RedBlackTree.grand.right.right)
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.left.element
 DataStructures.RedBlackTree.nullNode.element == orig(x)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
@@ -436,6 +442,9 @@ DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.colo
 DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
 DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
 DataStructures.RedBlackTree.current.element == return
+DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.current.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
@@ -444,26 +453,54 @@ DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.great.lef
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
 DataStructures.RedBlackTree.parent.element == orig(DataStructures.RedBlackTree.parent.element)
 DataStructures.RedBlackTree.parent.element == orig(DataStructures.RedBlackTree.grand.left.element)
+DataStructures.RedBlackTree.parent.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.parent.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.parent.right == DataStructures.RedBlackTree.grand.left.right
 DataStructures.RedBlackTree.parent.right == orig(DataStructures.RedBlackTree.parent.right)
 DataStructures.RedBlackTree.parent.right == orig(DataStructures.RedBlackTree.grand.left.right)
 DataStructures.RedBlackTree.parent.right.element == orig(DataStructures.RedBlackTree.parent.right.element)
+DataStructures.RedBlackTree.parent.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.grand == DataStructures.RedBlackTree.great.left
 DataStructures.RedBlackTree.grand == orig(DataStructures.RedBlackTree.grand)
 DataStructures.RedBlackTree.grand == orig(DataStructures.RedBlackTree.great.left)
 DataStructures.RedBlackTree.grand.element == DataStructures.RedBlackTree.great.left.element
 DataStructures.RedBlackTree.grand.element == orig(DataStructures.RedBlackTree.grand.element)
 DataStructures.RedBlackTree.grand.element == orig(DataStructures.RedBlackTree.great.left.element)
+DataStructures.RedBlackTree.grand.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.grand.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.grand.right == DataStructures.RedBlackTree.great.left.right
 DataStructures.RedBlackTree.grand.right == orig(DataStructures.RedBlackTree.grand.right)
 DataStructures.RedBlackTree.grand.right == orig(DataStructures.RedBlackTree.great.left.right)
 DataStructures.RedBlackTree.grand.right.element == orig(DataStructures.RedBlackTree.grand.right.element)
+DataStructures.RedBlackTree.grand.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great == orig(DataStructures.RedBlackTree.great)
 DataStructures.RedBlackTree.great.element == orig(DataStructures.RedBlackTree.great.element)
+DataStructures.RedBlackTree.great.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.great.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great.right == orig(DataStructures.RedBlackTree.great.right)
 DataStructures.RedBlackTree.great.right.element == orig(DataStructures.RedBlackTree.great.right.element)
+DataStructures.RedBlackTree.great.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great.right.left == orig(DataStructures.RedBlackTree.great.right.left)
 DataStructures.RedBlackTree.great.right.right == orig(DataStructures.RedBlackTree.great.right.right)
+return.getClass().getName() == orig(this.header.element.getClass().getName())
+return.getClass().getName() == orig(this.header.left.element.getClass().getName())
+return.getClass().getName() == orig(this.header.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
+return.getClass().getName() == orig(x.getClass().getName())
 this.header.right has only one value
 this.header.right.element has only one value
 this.header.right.element != null
@@ -490,43 +527,6 @@ DataStructures.RedBlackTree.great.right.left has only one value
 DataStructures.RedBlackTree.great.right.right has only one value
 return != null
 return.getClass().getName() == DataStructures.MyInteger.class
-this.header.element.getClass().getName() == return.getClass().getName()
-this.header.left.element.getClass().getName() == return.getClass().getName()
-this.header.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.right.element.getClass().getName() == return.getClass().getName()
-return.getClass().getName() == orig(this.header.element.getClass().getName())
-return.getClass().getName() == orig(this.header.left.element.getClass().getName())
-return.getClass().getName() == orig(this.header.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
-return.getClass().getName() == orig(x.getClass().getName())
 ===========================================================================
 DataStructures.RedBlackTree.findMax():::ENTER
 this.header.right.color == DataStructures.RedBlackTree.BLACK
@@ -593,8 +593,11 @@ DataStructures.RedBlackTree.findMax():::EXIT108
 DataStructures.RedBlackTree.findMax():::EXIT
 this.header == orig(this.header)
 this.header.element == orig(this.header.element)
+this.header.element.getClass().getName() == return.getClass().getName()
+this.header.left.element.getClass().getName() == return.getClass().getName()
 this.header.right == orig(this.header.right)
 this.header.right.element == orig(this.header.right.element)
+this.header.right.element.getClass().getName() == return.getClass().getName()
 this.header.right.left == orig(this.header.right.left)
 this.header.right.right == orig(this.header.right.right)
 this.header.right.color == DataStructures.RedBlackTree.BLACK
@@ -650,6 +653,9 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.current.right.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.left.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.right.element)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
@@ -667,6 +673,9 @@ DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.ri
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.current)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.parent.right)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.grand.left.right)
+DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.current.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
@@ -675,22 +684,49 @@ DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.great.lef
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
 DataStructures.RedBlackTree.parent.element == orig(DataStructures.RedBlackTree.parent.element)
 DataStructures.RedBlackTree.parent.element == orig(DataStructures.RedBlackTree.grand.left.element)
+DataStructures.RedBlackTree.parent.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.parent.left.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.parent.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.grand == DataStructures.RedBlackTree.great.left
 DataStructures.RedBlackTree.grand == orig(DataStructures.RedBlackTree.grand)
 DataStructures.RedBlackTree.grand == orig(DataStructures.RedBlackTree.great.left)
 DataStructures.RedBlackTree.grand.element == DataStructures.RedBlackTree.great.left.element
 DataStructures.RedBlackTree.grand.element == orig(DataStructures.RedBlackTree.grand.element)
 DataStructures.RedBlackTree.grand.element == orig(DataStructures.RedBlackTree.great.left.element)
+DataStructures.RedBlackTree.grand.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.grand.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.grand.right == DataStructures.RedBlackTree.great.left.right
 DataStructures.RedBlackTree.grand.right == orig(DataStructures.RedBlackTree.grand.right)
 DataStructures.RedBlackTree.grand.right == orig(DataStructures.RedBlackTree.great.left.right)
 DataStructures.RedBlackTree.grand.right.element == orig(DataStructures.RedBlackTree.grand.right.element)
+DataStructures.RedBlackTree.grand.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great == orig(DataStructures.RedBlackTree.great)
 DataStructures.RedBlackTree.great.element == orig(DataStructures.RedBlackTree.great.element)
+DataStructures.RedBlackTree.great.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.great.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great.right == orig(DataStructures.RedBlackTree.great.right)
 DataStructures.RedBlackTree.great.right.element == orig(DataStructures.RedBlackTree.great.right.element)
+DataStructures.RedBlackTree.great.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great.right.left == orig(DataStructures.RedBlackTree.great.right.left)
 DataStructures.RedBlackTree.great.right.right == orig(DataStructures.RedBlackTree.great.right.right)
+return.getClass().getName() == orig(this.header.element.getClass().getName())
+return.getClass().getName() == orig(this.header.left.element.getClass().getName())
+return.getClass().getName() == orig(this.header.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
 this.header.right has only one value
 this.header.right.element has only one value
 this.header.right.left has only one value
@@ -711,42 +747,6 @@ DataStructures.RedBlackTree.great.right.left has only one value
 DataStructures.RedBlackTree.great.right.right has only one value
 return has only one value
 return.getClass().getName() == DataStructures.MyInteger.class
-this.header.element.getClass().getName() == return.getClass().getName()
-this.header.left.element.getClass().getName() == return.getClass().getName()
-this.header.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.right.element.getClass().getName() == return.getClass().getName()
-return.getClass().getName() == orig(this.header.element.getClass().getName())
-return.getClass().getName() == orig(this.header.left.element.getClass().getName())
-return.getClass().getName() == orig(this.header.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
 ===========================================================================
 DataStructures.RedBlackTree.findMin():::ENTER
 this.header.right.color == DataStructures.RedBlackTree.BLACK
@@ -813,8 +813,11 @@ DataStructures.RedBlackTree.findMin():::EXIT91
 DataStructures.RedBlackTree.findMin():::EXIT
 this.header == orig(this.header)
 this.header.element == orig(this.header.element)
+this.header.element.getClass().getName() == return.getClass().getName()
+this.header.left.element.getClass().getName() == return.getClass().getName()
 this.header.right == orig(this.header.right)
 this.header.right.element == orig(this.header.right.element)
+this.header.right.element.getClass().getName() == return.getClass().getName()
 this.header.right.left == orig(this.header.right.left)
 this.header.right.right == orig(this.header.right.right)
 this.header.right.color == DataStructures.RedBlackTree.BLACK
@@ -870,6 +873,9 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.current.right.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.left.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.right.element)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
@@ -887,6 +893,9 @@ DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.ri
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.current)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.parent.right)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.grand.left.right)
+DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.current.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
@@ -895,22 +904,49 @@ DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.great.lef
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
 DataStructures.RedBlackTree.parent.element == orig(DataStructures.RedBlackTree.parent.element)
 DataStructures.RedBlackTree.parent.element == orig(DataStructures.RedBlackTree.grand.left.element)
+DataStructures.RedBlackTree.parent.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.parent.left.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.parent.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.grand == DataStructures.RedBlackTree.great.left
 DataStructures.RedBlackTree.grand == orig(DataStructures.RedBlackTree.grand)
 DataStructures.RedBlackTree.grand == orig(DataStructures.RedBlackTree.great.left)
 DataStructures.RedBlackTree.grand.element == DataStructures.RedBlackTree.great.left.element
 DataStructures.RedBlackTree.grand.element == orig(DataStructures.RedBlackTree.grand.element)
 DataStructures.RedBlackTree.grand.element == orig(DataStructures.RedBlackTree.great.left.element)
+DataStructures.RedBlackTree.grand.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.grand.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.grand.right == DataStructures.RedBlackTree.great.left.right
 DataStructures.RedBlackTree.grand.right == orig(DataStructures.RedBlackTree.grand.right)
 DataStructures.RedBlackTree.grand.right == orig(DataStructures.RedBlackTree.great.left.right)
 DataStructures.RedBlackTree.grand.right.element == orig(DataStructures.RedBlackTree.grand.right.element)
+DataStructures.RedBlackTree.grand.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great == orig(DataStructures.RedBlackTree.great)
 DataStructures.RedBlackTree.great.element == orig(DataStructures.RedBlackTree.great.element)
+DataStructures.RedBlackTree.great.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.great.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great.right == orig(DataStructures.RedBlackTree.great.right)
 DataStructures.RedBlackTree.great.right.element == orig(DataStructures.RedBlackTree.great.right.element)
+DataStructures.RedBlackTree.great.right.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.great.right.left == orig(DataStructures.RedBlackTree.great.right.left)
 DataStructures.RedBlackTree.great.right.right == orig(DataStructures.RedBlackTree.great.right.right)
+return.getClass().getName() == orig(this.header.element.getClass().getName())
+return.getClass().getName() == orig(this.header.left.element.getClass().getName())
+return.getClass().getName() == orig(this.header.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
+return.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
 this.header.right has only one value
 this.header.right.element has only one value
 this.header.right.left has only one value
@@ -931,46 +967,11 @@ DataStructures.RedBlackTree.great.right.left has only one value
 DataStructures.RedBlackTree.great.right.right has only one value
 return has only one value
 return.getClass().getName() == DataStructures.MyInteger.class
-this.header.element.getClass().getName() == return.getClass().getName()
-this.header.left.element.getClass().getName() == return.getClass().getName()
-this.header.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.current.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.parent.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.grand.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.left.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.great.right.element.getClass().getName() == return.getClass().getName()
-return.getClass().getName() == orig(this.header.element.getClass().getName())
-return.getClass().getName() == orig(this.header.left.element.getClass().getName())
-return.getClass().getName() == orig(this.header.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
-return.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
 ===========================================================================
 DataStructures.RedBlackTree.handleReorient(DataStructures.Comparable):::ENTER
 this.header.right.color == DataStructures.RedBlackTree.BLACK
 DataStructures.RedBlackTree.nullNode.element == item
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == item.getClass().getName()
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.color
 DataStructures.RedBlackTree.current.left.color == DataStructures.RedBlackTree.current.right.color
 this.header.right.element != null
@@ -979,7 +980,6 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == item.getClass().getName()
 ===========================================================================
 DataStructures.RedBlackTree.handleReorient(DataStructures.Comparable):::EXIT
 this.header == orig(this.header)
@@ -1000,6 +1000,25 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.nullNode.left.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.nullNode.right.element)
 DataStructures.RedBlackTree.nullNode.element == orig(item)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.getClass().getName())
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
 DataStructures.RedBlackTree.current.left.color == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.current.left.color == orig(DataStructures.RedBlackTree.parent.color)
@@ -1021,25 +1040,6 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.getClass().getName())
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.left.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.right.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.grand.color
@@ -1087,6 +1087,7 @@ DataStructures.RedBlackTree.grand.left.color == (plume.MathMDE.gcd(orig(DataStru
 DataStructures.RedBlackTree.grand.right.color == (java.lang.Math.pow(orig(DataStructures.RedBlackTree.grand.right.color), DataStructures.RedBlackTree.grand.color))
 ===========================================================================
 DataStructures.RedBlackTree.insert(DataStructures.Comparable):::ENTER
+this.header.element.getClass().getName() == item.getClass().getName()
 this.header.right.color == DataStructures.RedBlackTree.BLACK
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
@@ -1102,7 +1103,6 @@ DataStructures.RedBlackTree.parent.color == DataStructures.RedBlackTree.grand.le
 DataStructures.RedBlackTree.current.left.left has only one value
 DataStructures.RedBlackTree.parent.color == 1
 item != null
-this.header.element.getClass().getName() == item.getClass().getName()
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.left.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.right.color
 DataStructures.RedBlackTree.current.left.color <= DataStructures.RedBlackTree.parent.color
@@ -1147,6 +1147,9 @@ DataStructures.RedBlackTree.nullNode == orig(DataStructures.RedBlackTree.nullNod
 DataStructures.RedBlackTree.nullNode == orig(DataStructures.RedBlackTree.nullNode.right.right)
 DataStructures.RedBlackTree.nullNode == orig(DataStructures.RedBlackTree.current.left.left)
 DataStructures.RedBlackTree.nullNode.element == orig(item)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.getClass().getName())
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
 DataStructures.RedBlackTree.current.left.color == DataStructures.RedBlackTree.current.right.color
@@ -1156,9 +1159,6 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.getClass().getName())
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.left.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.right.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.grand.color
@@ -1303,6 +1303,24 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.current.right.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.left.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.right.element)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
@@ -1363,24 +1381,6 @@ DataStructures.RedBlackTree.great.right.element has only one value
 DataStructures.RedBlackTree.great.right.left has only one value
 DataStructures.RedBlackTree.great.right.right has only one value
 return == false
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
 ===========================================================================
 DataStructures.RedBlackTree.isEmpty():::EXIT;condition="not(return == true)"
 ===========================================================================
@@ -1467,6 +1467,10 @@ DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.right.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.right.right
 DataStructures.RedBlackTree.nullNode.element == item
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == item.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.right.element.getClass().getName()
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
@@ -1497,10 +1501,6 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == item.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.right.element.getClass().getName()
 DataStructures.RedBlackTree.parent.left.color != DataStructures.RedBlackTree.parent.right.color
 DataStructures.RedBlackTree.parent.right.color == (this.header.right.color >> DataStructures.RedBlackTree.parent.left.color)
 DataStructures.RedBlackTree.parent.right.color == (this.header.right.color >>> DataStructures.RedBlackTree.parent.left.color)
@@ -1643,6 +1643,34 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.nullNode.left.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.nullNode.right.element)
 DataStructures.RedBlackTree.nullNode.element == orig(item)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.right.element.getClass().getName())
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
@@ -1716,34 +1744,6 @@ DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
 this.header.right.color >= orig(DataStructures.RedBlackTree.parent.right.color)
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.right.element.getClass().getName())
 orig(DataStructures.RedBlackTree.parent.right.color) == (this.header.right.color >> orig(DataStructures.RedBlackTree.parent.left.color))
 orig(DataStructures.RedBlackTree.parent.right.color) == (this.header.right.color >>> orig(DataStructures.RedBlackTree.parent.left.color))
 ===========================================================================
@@ -1774,6 +1774,9 @@ DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.pare
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.right.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.grand.right.element
 DataStructures.RedBlackTree.nullNode.element == k2.right.element
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.right.element.getClass().getName()
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.right.color
@@ -1800,9 +1803,6 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.right.element.getClass().getName()
 ===========================================================================
 DataStructures.RedBlackTree.rotateWithLeftChild(DataStructures.RedBlackNode):::EXIT
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
@@ -1876,6 +1876,30 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.right.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.grand.right.element)
 DataStructures.RedBlackTree.nullNode.element == orig(k2.right.element)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.right.element.getClass().getName())
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
@@ -1930,36 +1954,15 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.right.element.getClass().getName())
 ===========================================================================
 DataStructures.RedBlackTree.rotateWithRightChild(DataStructures.RedBlackNode):::ENTER
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.right
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.right.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.right.right
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.right.element.getClass().getName()
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
@@ -1995,9 +1998,6 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.right.element.getClass().getName()
 ===========================================================================
 DataStructures.RedBlackTree.rotateWithRightChild(DataStructures.RedBlackNode):::EXIT
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
@@ -2018,6 +2018,30 @@ DataStructures.RedBlackTree.nullNode == orig(DataStructures.RedBlackTree.current
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.nullNode.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.nullNode.left.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.nullNode.right.element)
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.left.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.right.element.getClass().getName()
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.left.element.getClass().getName())
+DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.right.element.getClass().getName())
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
@@ -2112,27 +2136,3 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.left.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.current.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.parent.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.grand.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.left.element.getClass().getName())
-DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.right.element.getClass().getName())

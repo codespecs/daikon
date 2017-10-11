@@ -294,10 +294,10 @@ PolyCalc.RatNum.parse(java.lang.String):::EXIT273
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT
     Variables: ratStr ratStr.toString return return.numer return.denom orig(ratStr) orig(ratStr.toString)
+ratStr.toString().equals(\old(ratStr.toString()))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ratStr.toString is printable
 \result != null
 \result.denom >= 0
-ratStr.toString().equals(\old(ratStr.toString()))
 ===========================================================================
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
     Variables: this this.numer this.denom arg arg.numer arg.denom

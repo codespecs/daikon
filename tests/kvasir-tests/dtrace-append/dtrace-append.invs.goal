@@ -11,6 +11,7 @@
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 ::globalWkdayA == orig(::globalWkdayA)
 ::localAddr == orig(::localAddr)
 ::globalDouble == 12345.67890123
@@ -20,4 +21,3 @@
 ::globalWkdayA == 4
 ::localAddr == null
 return == 0
-::globalStr == orig(::globalStr)

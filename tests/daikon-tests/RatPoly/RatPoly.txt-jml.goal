@@ -294,10 +294,10 @@ PolyCalc.RatNum.parse(java.lang.String):::EXIT273
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT
     Variables: ratStr ratStr.toString return return.numer return.denom orig(ratStr) orig(ratStr.toString)
+ratStr.toString().equals(\old(ratStr.toString()))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ratStr.toString is printable
 \result != null
 \result.denom >= 0
-ratStr.toString().equals(\old(ratStr.toString()))
 ===========================================================================
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
     Variables: this this.numer this.denom arg arg.numer arg.denom
@@ -948,6 +948,7 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML)
 ===========================================================================
 PolyCalc.RatPoly.parse(java.lang.String):::EXIT
     Variables: polyStr polyStr.toString return return.terms return.terms.wrapped return.terms.wrapped[] return.terms.wrapped[].getClass().getName() orig(polyStr) orig(polyStr.toString) size(return.terms.wrapped[]) size(return.terms.wrapped[])-1
+polyStr.toString().equals(\old(polyStr.toString()))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: polyStr.toString is printable
 \result != null
 \result.terms != null
@@ -955,7 +956,6 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML)
 daikon.Quant.noDups(\result.terms.wrapped)
 daikon.Quant.eltsNotEqual(\result.terms.wrapped, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(\result.terms.wrapped), "PolyCalc.RatTerm")
-polyStr.toString().equals(\old(polyStr.toString()))
 ===========================================================================
 PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm, PolyCalc.RatTermVec, int):::ENTER
     Variables: term term.coeff term.coeff.numer term.coeff.denom term.expt ts ts.wrapped ts.wrapped[] ts.wrapped[].getClass().getName() index size(ts.wrapped[]) size(ts.wrapped[])-1 ts.wrapped[term.coeff.numer] ts.wrapped[term.coeff.numer-1] ts.wrapped[term.coeff.numer..] ts.wrapped[term.coeff.numer+1..] ts.wrapped[0..term.coeff.numer] ts.wrapped[0..term.coeff.numer-1] ts.wrapped[term.coeff.denom] ts.wrapped[term.coeff.denom-1] ts.wrapped[term.coeff.denom..] ts.wrapped[term.coeff.denom+1..] ts.wrapped[0..term.coeff.denom] ts.wrapped[0..term.coeff.denom-1] ts.wrapped[term.expt] ts.wrapped[term.expt-1] ts.wrapped[term.expt..] ts.wrapped[term.expt+1..] ts.wrapped[0..term.expt] ts.wrapped[0..term.expt-1] ts.wrapped[index] ts.wrapped[index-1] ts.wrapped[index..] ts.wrapped[index+1..] ts.wrapped[0..index] ts.wrapped[0..index-1]
