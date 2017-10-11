@@ -18,15 +18,15 @@ import typequals.*;
  * assumed to hold and is always considered to be statistically justified.
  *
  * <p>The main use for a dummy invariant is to represent a splitting condition that appears in a
- * <code>.spinfo</code> file. The <code>.spinfo</code> file can indicate an arbitrary Java
- * expression, which might not be equivalent to any invariant in Daikon's grammar.
+ * {@code .spinfo} file. The {@code .spinfo} file can indicate an arbitrary Java expression, which
+ * might not be equivalent to any invariant in Daikon's grammar.
  *
  * <p>Ordinarily, Daikon uses splitting conditions to split data, then seeks to use that split data
  * to form conditional invariants out of its standard built-in invariants. If you wish the
  * expression in the .spinfo file to be printed as an invariant, whether or not it is itself
- * discovered by Daikon during invariant detection, then the configuration option <code>
- * daikon.split.PptSplitter.dummy_invariant_level</code> must be set, and formatting information
- * must be supplied in the splitter info file.
+ * discovered by Daikon during invariant detection, then the configuration option {@code
+ * daikon.split.PptSplitter.dummy_invariant_level} must be set, and formatting information must be
+ * supplied in the splitter info file.
  */
 public class DummyInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -123,7 +123,9 @@ public class DummyInvariant extends Invariant {
       int i = 0;
       while (it.hasNext()) {
         newVars[i++] = it.next();
-        if (i == sliceSize) break;
+        if (i == sliceSize) {
+          break;
+        }
       }
     }
     vars = newVars;

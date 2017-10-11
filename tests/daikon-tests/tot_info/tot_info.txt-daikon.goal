@@ -25,6 +25,7 @@ pdf[] elements < size(::f[])-1
 pdf[] elements > size(pdf[])
 ===========================================================================
 ..InfoTbl():::EXIT
+::line == orig(::line)
 ::f == orig(::f)
 ::f == orig(f)
 ::f[] == f[]
@@ -39,7 +40,6 @@ pdf[] elements > size(pdf[])
 pdf[] elements >= 2
 pdf[i] > i
 size(::f[]) == 1000
-::line == orig(::line)
 ::f[] elements >= size(pdf[])-1
 size(pdf[])-1 in ::f[]
 ::f[] elements >= orig(size(pdf[]))-1
@@ -76,6 +76,7 @@ size(::f[]) == 1000
 ..LGamma():::EXIT
 ::cof == orig(::cof)
 ::cof[] == orig(::cof[])
+::line == orig(::line)
 ::f == orig(::f)
 ::f[] == orig(::f[])
 ::r == orig(::r)
@@ -87,7 +88,6 @@ size(::f[]) == 1000
 ::r >= 2
 size(::cof[]) == 6
 size(::f[]) == 1000
-::line == orig(::line)
 (::r >> ::c == 0)
 (::r >> size(::cof[]) == 0)
 ::r != size(::cof[])
@@ -111,6 +111,7 @@ size(::f[]) == 1000
 df < size(::f[])-1
 ===========================================================================
 ..QChiSq():::EXIT
+::line == orig(::line)
 ::f == orig(::f)
 ::f[] == orig(::f[])
 ::r == orig(::r)
@@ -119,7 +120,6 @@ df < size(::f[])-1
 ::f[] elements >= 0
 ::r >= 2
 size(::f[]) == 1000
-::line == orig(::line)
 (::r >> ::c == 0)
 ::r < size(::f[])-1
 ::c < size(::f[])-1
@@ -139,6 +139,7 @@ size(::f[]) == 1000
 a != x
 ===========================================================================
 ..QGamma():::EXIT
+::line == orig(::line)
 ::f == orig(::f)
 ::f[] == orig(::f[])
 ::r == orig(::r)
@@ -147,7 +148,6 @@ a != x
 ::f[] elements >= 0
 ::r >= 2
 size(::f[]) == 1000
-::line == orig(::line)
 (::r >> ::c == 0)
 ::r < size(::f[])-1
 ::c < size(::f[])-1
@@ -204,6 +204,7 @@ size(::f[]) == 1000
 a < x
 ===========================================================================
 tot_info.c.gcf():::EXIT
+::line == orig(::line)
 ::f == orig(::f)
 ::f[] == orig(::f[])
 ::r == orig(::r)
@@ -212,7 +213,6 @@ tot_info.c.gcf():::EXIT
 ::f[] elements >= 0
 ::r >= 2
 size(::f[]) == 1000
-::line == orig(::line)
 (::r >> ::c == 0)
 ::r < size(::f[])-1
 ::c < size(::f[])-1
@@ -236,6 +236,7 @@ size(::f[]) == 1000
 a != x
 ===========================================================================
 tot_info.c.gser():::EXIT
+::line == orig(::line)
 ::f == orig(::f)
 ::f[] == orig(::f[])
 ::r == orig(::r)
@@ -243,7 +244,6 @@ tot_info.c.gser():::EXIT
 ::f has only one value
 ::f[] elements >= 0
 size(::f[]) == 1000
-::line == orig(::line)
 ::r in ::f[]
 ::c in ::f[]
 (::c >> ::r == 0)

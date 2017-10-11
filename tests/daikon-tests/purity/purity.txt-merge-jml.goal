@@ -76,14 +76,14 @@ public class Purity {
 	@ ensures daikon.Quant.pairwiseEqual(this.list1, \old(this.list1));
 	@ ensures this.list2 == \old(this.list2);
 	@ ensures daikon.Quant.pairwiseEqual(this.list2, \old(this.list2));
+	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
 	@ ensures this.getValue() == \result;
+	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures this.sum() == \old(this.sum());
 	@ ensures \result == \old(this.value);
 	@ ensures \result == \old(this.getValue());
 	@ ensures daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2));
 	@ ensures this.shift % 5 == 0;
-	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures (!(\result == 0)) || (this.scale() == 0);
 	@ ensures (!(this.scale() == 0)) || (\result == 0);
 	@ ensures this.scale() >= \result;
@@ -106,7 +106,9 @@ public class Purity {
 	@ ensures daikon.Quant.pairwiseEqual(this.list1, \old(this.list1));
 	@ ensures this.list2 == \old(this.list2);
 	@ ensures daikon.Quant.pairwiseEqual(this.list2, \old(this.list2));
+	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
 	@ ensures this.getShift() == \result;
+	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures this.sum() == \old(this.sum());
 	@ ensures this.retrieve() == \result;
 	@ ensures this.retrieve() == \result;
@@ -117,8 +119,6 @@ public class Purity {
 	@ ensures daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2));
 	@ ensures \result == 0 || \result == 5 || \result == 10;
 	@ ensures \result % 5 == 0;
-	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures \result <= daikon.Quant.size(this.list1)-1;
 	@*/
 	public int getShift() {
@@ -138,7 +138,9 @@ public class Purity {
 	@ ensures daikon.Quant.pairwiseEqual(this.list1, \old(this.list1));
 	@ ensures this.list2 == \old(this.list2);
 	@ ensures daikon.Quant.pairwiseEqual(this.list2, \old(this.list2));
+	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
 	@ ensures this.isHeavy() == \result;
+	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures this.sum() == \old(this.sum());
 	@ ensures \result == \old(this.heavy);
 	@ ensures \result == \old(this.isHeavy());
@@ -161,8 +163,6 @@ public class Purity {
 	@ ensures (this.shift == 5 || this.shift == 10)  ==>  (this.shift != this.scale());
 	@ ensures (this.shift == 5 || this.shift == 10)  ==>  (this.shift % 5 == 0);
 	@ ensures (this.shift == 5 || this.shift == 10)  ==>  (this.value + 15 * this.shift - this.scale() - 50 == 0);
-	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@*/
 	public boolean isHeavy() {
 		return heavy;
@@ -183,15 +183,15 @@ public class Purity {
 	@ ensures daikon.Quant.pairwiseEqual(this.list1, \old(this.list1));
 	@ ensures this.list2 == \old(this.list2);
 	@ ensures daikon.Quant.pairwiseEqual(this.list2, \old(this.list2));
+	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
+	@ ensures this.getNum().getClass().getName() == \result.getClass().getName();
 	@ ensures this.sum() == \old(this.sum());
+	@ ensures \result.getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2));
 	@ ensures this.shift % 5 == 0;
 	@ ensures \result != null;
 	@ ensures \result.getClass().getName() == java.lang.Integer.class.getName();
 	@ ensures this.list2.getClass().getName() != \result.getClass().getName();
-	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \result.getClass().getName();
-	@ ensures \result.getClass().getName() == \old(this.getNum().getClass().getName());
 	@*/
 	public Number getNum() {
 		return (Number) new Integer(value);
@@ -212,12 +212,12 @@ public class Purity {
 	@ ensures daikon.Quant.pairwiseEqual(this.list1, \old(this.list1));
 	@ ensures this.list2 == \old(this.list2);
 	@ ensures daikon.Quant.pairwiseEqual(this.list2, \old(this.list2));
+	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
+	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures this.sum() == \old(this.sum());
 	@ ensures daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2));
 	@ ensures this.shift % 5 == 0;
 	@ ensures \result != null;
-	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@*/
 	public Integer getJWrap() {
 		return new Integer(value);
@@ -240,6 +240,8 @@ public class Purity {
 	@ ensures daikon.Quant.pairwiseEqual(this.list1, \old(this.list1));
 	@ ensures this.list2 == \old(this.list2);
 	@ ensures daikon.Quant.pairwiseEqual(this.list2, \old(this.list2));
+	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
+	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures this.scale() == \result;
 	@ ensures this.scale() == \result;
 	@ ensures this.sum() == \old(this.sum());
@@ -249,8 +251,6 @@ public class Purity {
 	@ ensures this.shift % 5 == 0;
 	@ ensures (!(\result == 0)) || (this.value == 0);
 	@ ensures (!(this.value == 0)) || (\result == 0);
-	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures (!(\result == 0)) || (this.sum() == 0);
 	@ ensures (!(this.sum() == 0)) || (\result == 0);
 	@*/
@@ -260,9 +260,9 @@ public class Purity {
 	
 	/*@
 	@ public normal_behavior // Generated by Daikon
+	@ requires this.getNum().getClass().getName() == n.getClass().getName();
 	@ requires this.shift % 5 == 0;
 	@ requires n != null;
-	@ requires this.getNum().getClass().getName() == n.getClass().getName();
 	@ ensures this.value == \old(this.value);
 	@ ensures this.value == \old(this.getValue());
 	@ ensures this.shift == \old(this.shift);
@@ -275,6 +275,9 @@ public class Purity {
 	@ ensures daikon.Quant.pairwiseEqual(this.list1, \old(this.list1));
 	@ ensures this.list2 == \old(this.list2);
 	@ ensures daikon.Quant.pairwiseEqual(this.list2, \old(this.list2));
+	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
+	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
+	@ ensures this.getNum().getClass().getName() == \old(n.getClass().getName());
 	@ ensures this.sum() == \result;
 	@ ensures this.sum() == \result;
 	@ ensures \result == \old(this.sum());
@@ -285,9 +288,6 @@ public class Purity {
 	@ ensures (!(\result == 0)) || (this.value == 0);
 	@ ensures (!(this.value == 0)) || (\result == 0);
 	@ ensures 2 * this.value - \result == 0;
-	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \old(n.getClass().getName());
 	@ ensures (!(\result == 0)) || (this.scale() == 0);
 	@ ensures (!(this.scale() == 0)) || (\result == 0);
 	@ ensures \result != daikon.Quant.size(this.list1);
@@ -298,13 +298,13 @@ public class Purity {
 	
 	/*@
 	@ public normal_behavior // Generated by Daikon
+	@ requires this.list2.getClass().getName() == l.getClass().getName();
 	@ requires this.shift % 5 == 0;
 	@ requires l != null;
 	@ requires daikon.Quant.noDups(l);
 	@ requires daikon.Quant.eltsNotEqual(l, null);
 	@ requires daikon.Quant.size(l) == 20;
 	@ requires this.shift < daikon.Quant.size(l)-1;
-	@ requires this.list2.getClass().getName() == l.getClass().getName();
 	@ requires this.sum() != daikon.Quant.size(l)-1;
 	@ ensures this.value == \old(this.value);
 	@ ensures this.value == \old(this.getValue());
@@ -315,7 +315,10 @@ public class Purity {
 	@ ensures daikon.Quant.pairwiseEqual(this.list1, \old(this.list1));
 	@ ensures this.list2 == \old(this.list2);
 	@ ensures daikon.Quant.pairwiseEqual(this.list2, \old(this.list2));
+	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
+	@ ensures this.list2.getClass().getName() == \old(l.getClass().getName());
 	@ ensures this.getShift() == \result;
+	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures this.sum() == \old(this.sum());
 	@ ensures this.retrieve() == \result;
 	@ ensures this.retrieve() == \result;
@@ -329,9 +332,6 @@ public class Purity {
 	@ ensures daikon.Quant.eltsNotEqual(l, null);
 	@ ensures \result == 0 || \result == 5 || \result == 10;
 	@ ensures \result % 5 == 0;
-	@ ensures this.list2.getClass().getName() == \old(this.list2.getClass().getName());
-	@ ensures this.list2.getClass().getName() == \old(l.getClass().getName());
-	@ ensures this.getNum().getClass().getName() == \old(this.getNum().getClass().getName());
 	@ ensures this.sum() != daikon.Quant.size(l)-1;
 	@ ensures \result <= daikon.Quant.size(this.list1)-1;
 	@ ensures \result < daikon.Quant.size(l)-1;

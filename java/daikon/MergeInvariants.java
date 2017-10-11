@@ -296,7 +296,9 @@ public final class MergeInvariants {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
         // System.out.printf ("found child %s from pmap %d\n", child, j);
-        if (child == null) continue;
+        if (child == null) {
+          continue;
+        }
         if (child.equality_view == null) {
           System.out.println(
               "equality_view == null in child ppt: "
@@ -380,8 +382,12 @@ public final class MergeInvariants {
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-      if (!ppt.ppt_name.isExitPoint()) continue;
-      if (ppt.ppt_name.isCombinedExitPoint()) continue;
+      if (!ppt.ppt_name.isExitPoint()) {
+        continue;
+      }
+      if (ppt.ppt_name.isCombinedExitPoint()) {
+        continue;
+      }
       ppt.children.clear();
       for (PptConditional cond : ppt.cond_iterable()) {
         cond.children.clear();

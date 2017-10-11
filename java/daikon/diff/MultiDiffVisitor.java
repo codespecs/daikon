@@ -142,7 +142,9 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       String key = entry.getKey();
       ArrayList<String> al = entry.getValue();
       // don't print anything if there are no selective invariants
-      if (al.size() == 0) continue;
+      if (al.size() == 0) {
+        continue;
+      }
       System.out.println();
       System.out.println(key + "*****************");
       System.out.println();
@@ -204,7 +206,9 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       ArrayList<String> al = lastMap.get(key);
       // don't print anything if there are no selective invariants
 
-      if (al.size() == 0) continue;
+      if (al.size() == 0) {
+        continue;
+      }
 
       // Get rid of the extra stuff like (III)I:::ENTER
       // at the end of each of the program points

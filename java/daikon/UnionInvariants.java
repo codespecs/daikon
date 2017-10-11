@@ -155,7 +155,9 @@ public final class UnionInvariants {
   public static void union(PptMap collector, PptMap source) {
     for (PptTopLevel ppt : source.pptIterable()) {
 
-      if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) continue;
+      if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
+        continue;
+      }
 
       if (collector.get(ppt.ppt_name) != null) {
         throw new RuntimeException("Cannot merge two non-empty ppts named " + ppt.name());

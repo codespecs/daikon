@@ -290,7 +290,7 @@ public final class Debug {
   public static boolean dkconfig_showTraceback = false;
 
   /**
-   * Determines whether or not detailed info (such as from <code>add_modified</code>) is printed.
+   * Determines whether or not detailed info (such as from {@code add_modified}) is printed.
    *
    * @see #log(Logger, Class, Ppt, String)
    * @see #logDetail()
@@ -343,7 +343,7 @@ public final class Debug {
    * {@link #debugTrackPpt}, and {@link #debugTrackVars}. Only those that match are printed.
    * Variables will match if they are in the same equality set. The information is written as:
    *
-   * <p><code> class: ppt : var1 : var2 : var3 : msg </code>
+   * <p>{@code class: ppt : var1 : var2 : var3 : msg }
    *
    * <p>Note that if {@link #debugTrack} is not enabled then nothing is printed. It is somewhat
    * faster to check {@link #logOn()} directly rather than relying on the check here.
@@ -556,7 +556,9 @@ public final class Debug {
     // Loop through each set of specified debug variables.
     outer:
     for (String[] cv : debugTrackVars) {
-      if (cv.length != vis.length) continue;
+      if (cv.length != vis.length) {
+        continue;
+      }
       for (int j = 0; j < ourvars.length; j++) {
         ourvars[j] = null;
       }
@@ -644,8 +646,12 @@ public final class Debug {
     String out = "";
 
     for (VarInfo v : ppt.var_infos) {
-      if (!v.isCanonical()) continue;
-      if (v.file_rep_type != ProglangType.INT) continue;
+      if (!v.isCanonical()) {
+        continue;
+      }
+      if (v.file_rep_type != ProglangType.INT) {
+        continue;
+      }
       out += v.name() + "=" + toString(v.getValueOrNull(vt)) + " [" + vt.getModified(v) + "]: ";
     }
     return out;

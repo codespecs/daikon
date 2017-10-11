@@ -247,10 +247,10 @@ PolyCalc.RatNum.parse(java.lang.String):::EXIT267
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT
+(EQ (select |toString| |ratStr|) (select |toString| |__orig__ratStr|))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: ratStr.toString is printable
 (NEQ (hash |return|) null)
 (>= (select |denom| |return|) 0)
-(EQ (select |toString| |ratStr|) (select |toString| |__orig__ratStr|))
 ===========================================================================
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
 (NEQ (hash |arg|) null)
@@ -833,6 +833,7 @@ PolyCalc.RatPoly.parse(java.lang.String):::ENTER
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: polyStr.toString is printable
 ===========================================================================
 PolyCalc.RatPoly.parse(java.lang.String):::EXIT
+(EQ (select |toString| |polyStr|) (select |toString| |__orig__polyStr|))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: polyStr.toString is printable
 (NEQ (hash |return|) null)
 (NEQ (hash (select |terms| |return|)) null)
@@ -840,7 +841,6 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| (select |terms| |return|))) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |wrapped| (select |terms| |return|))) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |wrapped| (select |terms| |return|))) |i|) (select (select elems (select |wrapped| (select |terms| |return|))) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| (select |terms| |return|))) 1))) (NEQ (select (select elems (select |wrapped| (select |terms| |return|))) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| (select |terms| |return|))) 1))) (EQ (typeof (select (select elems (select |wrapped| (select |terms| |return|))) |i|)) |T_PolyCalc.RatTerm|)))
-(EQ (select |toString| |polyStr|) (select |toString| |__orig__polyStr|))
 ===========================================================================
 PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm, PolyCalc.RatTermVec, int):::ENTER
 (NEQ (hash |term|) null)

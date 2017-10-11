@@ -79,7 +79,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
   /** Returns the name of this field */
   public String get_relative_name() {
     // need to skip the leading "."
-    return DaikonVariableInfo.class_suffix.substring(1);
+    return DaikonVariableInfo.class_suffix_relative_name;
   }
 
   public EnumSet<VarFlags> get_var_flags() {

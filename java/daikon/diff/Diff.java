@@ -586,7 +586,9 @@ public final class Diff {
     ppts.addAll(pptMap.asCollection());
 
     for (PptTopLevel ppt : ppts) {
-      if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint()) continue;
+      if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint()) {
+        continue;
+      }
 
       // List<Invariant> invs = ppt.getInvariants();
       List<Invariant> invs = UtilMDE.sortList(ppt.getInvariants(), PptTopLevel.icfp);

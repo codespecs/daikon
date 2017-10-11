@@ -234,22 +234,22 @@ import typequals.*;
 #if defined (SCALAR)
   /**
    * Represents long scalars that take on only a few distinct values. Prints as either
-   * <code>x == c</code> (when there is only one value), <code>x one of {c1, c2, c3}</code> (when
-   * there are multiple values), or <code>x has only one value</code> (when <code>x</code> is a
+   * {@code x == c} (when there is only one value), {@code x one of {c1, c2, c3}} (when
+   * there are multiple values), or {@code x has only one value} (when {@code x} is a
    * hashcode (pointer) -- this is because the numerical value of the hashcode (pointer) is
    * uninteresting).
    */
 #elif defined (IS_SCALAR) || defined (IS_SEQUENCE)
   /**
    * Represents INT_PRINTED variables that take on only a few distinct values. Prints as either
-   * <code>x == c</code> (when there is only one value) or as <code>x one of {c1, c2, c3}</code>
+   * {@code x == c} (when there is only one value) or as {@code x one of {c1, c2, c3}}
    * (when there are multiple values).
    */
 #else
   /**
    * Represents sequences of INT_PRINTED values where the elements of the sequence take on only a
-   * few distinct values. Prints as either <code>x[] == c</code> (when there is only one value), or
-   * as <code>x[] one of {c1, c2, c3}</code> (when there are multiple values).
+   * few distinct values. Prints as either {@code x[] == c} (when there is only one value), or
+   * as {@code x[] one of {c1, c2, c3}} (when there are multiple values).
    */
 #endif
 
@@ -270,7 +270,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   /**
    * Positive integer. Specifies the maximum set size for this type of invariant (x is one of
-   * <code>size</code> items).
+   * {@code size} items).
    */
 #if defined(STRINGSEQUENCE)
   public static int dkconfig_size = 2;
@@ -287,7 +287,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
    * a hashcode uninterpreted function to an integer representing the bit pattern of the hashcode.
    * One might wish to omit the exact values of the hashcodes because they are usually
    * uninteresting; this is the same reason they print in the native Daikon format, for instance, as
-   * <code>var has only one value</code> rather than <code>var == 150924732</code>.
+   * {@code var has only one value} rather than {@code var == 150924732}.
    */
   public static boolean dkconfig_omit_hashcode_values_Simplify = false;
 #endif
@@ -1703,7 +1703,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       }
       Set<BASETYPE> setValuesInvariant = new TreeSet<BASETYPE>();
       for (INT e : elts) {
-        if (e == null) continue;
+        if (e == null) {
+  continue;
+}
         for (BASETYPE b : e) {
           setValuesInvariant.add(b);
         }
@@ -1786,7 +1788,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       }
       Set<INT> setValuesInvariant = new TreeSet<INT>();
       for (INT e : elts) {
-        if (e == null) continue;
+        if (e == null) {
+  continue;
+}
         setValuesInvariant.add(e);
       }
 

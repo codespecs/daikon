@@ -35,6 +35,7 @@ DataStructures.StackAr.isEmpty():::ENTER
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 (this.topOfStack == -1)  <==>  (return == true)
@@ -43,7 +44,6 @@ this.topOfStack == orig(this.topOfStack)
 (this.topOfStack == -1)  ==>  (this.theArray[].getClass().getName() elements == null)
 (this.topOfStack >= 0)  <==>  (return == false)
 (this.topOfStack >= 0)  ==>  ((size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0))
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT;condition="return == true"
 this.theArray[] elements == null
@@ -61,6 +61,7 @@ DataStructures.StackAr.isFull():::ENTER
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 (return == false)  <==>  (this.theArray[this.topOfStack+1..] elements == null)
@@ -69,7 +70,6 @@ this.topOfStack == orig(this.topOfStack)
 (return == true)  ==>  (size(this.theArray[]) one of { 0, 10, 20 })
 (return == true)  ==>  (this.theArray[] elements != null)
 (return == true)  ==>  (this.theArray[this.topOfStack+1..] == [])
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="return == true"
 this.topOfStack == size(this.theArray[])-1
@@ -88,13 +88,13 @@ DataStructures.StackAr.makeEmpty():::ENTER
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
 this.topOfStack == -1
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 (orig(this.topOfStack) == 0) ==> (size(this.theArray[])-1 == 0)
 orig(this.topOfStack) <= size(this.theArray[])-1
@@ -105,13 +105,13 @@ this.theArray[0..this.topOfStack] contains no duplicates
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..this.topOfStack-1])
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
 this.theArray[orig(this.topOfStack)] == null
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack < size(this.theArray[])-1
 orig(this.topOfStack) <= size(this.theArray[])-1
@@ -124,6 +124,7 @@ this.topOfStack < size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[this.topOfStack+1..] == orig(this.theArray[post(this.topOfStack)+1..])
@@ -131,7 +132,6 @@ this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..post(this.topOfStac
 this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..this.topOfStack])
 this.topOfStack >= 0
 orig(this.theArray[post(this.topOfStack)..]) elements == null
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack - orig(this.topOfStack) - 1 == 0
@@ -160,6 +160,7 @@ size(this.theArray[]) one of { 3, 10, 20 }
 ===========================================================================
 DataStructures.StackAr.top():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 (this.topOfStack == -1)  <==>  (return == null)
@@ -177,7 +178,6 @@ this.topOfStack == orig(this.topOfStack)
 (this.topOfStack >= 0)  ==>  (size(this.theArray[]) one of { 3, 10, 20 })
 (this.topOfStack >= 0)  ==>  (this.theArray.getClass().getName() != return.getClass().getName())
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return.getClass().getName() in this.theArray[].getClass().getName()
 ===========================================================================
 DataStructures.StackAr.topAndPop():::ENTER
@@ -205,6 +205,7 @@ this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStac
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -238,7 +239,6 @@ this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1
 (return == null)  ==>  (this.topOfStack == -1)
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 return.getClass().getName() in orig(this.theArray[].getClass().getName())
 orig(this.topOfStack) <= size(this.theArray[])-1
@@ -290,13 +290,13 @@ size(DataStructures.StackArTester.s.theArray[]) one of { 3, 10, 20 }
 DataStructures.StackArTester.createItem(int):::EXIT
 DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
 DataStructures.StackArTester.s.theArray == orig(DataStructures.StackArTester.s.theArray)
+DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.theArray[] == orig(DataStructures.StackArTester.s.theArray[])
 DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
 DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
 return != null
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] contains no duplicates
 DataStructures.StackArTester.s.theArray.getClass().getName() != return.getClass().getName()
-DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.topOfStack < size(DataStructures.StackArTester.s.theArray[])-1
 orig(phase) <= size(DataStructures.StackArTester.s.theArray[])
 orig(phase) != size(DataStructures.StackArTester.s.theArray[])-1
@@ -311,6 +311,7 @@ DataStructures.StackArTester.s.topOfStack < size
 size != size(DataStructures.StackArTester.s.theArray[])-1
 ===========================================================================
 DataStructures.StackArTester.doNew(int):::EXIT
+DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
 DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
 orig(size) == size(DataStructures.StackArTester.s.theArray[])
@@ -318,7 +319,6 @@ DataStructures.StackArTester.s.theArray[] elements == null
 DataStructures.StackArTester.s.theArray[].getClass().getName() elements == null
 DataStructures.StackArTester.s.topOfStack == -1
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] == []
-DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.topOfStack <= orig(size(DataStructures.StackArTester.s.theArray[]))-1
 ===========================================================================
 DataStructures.StackArTester.fill(int):::ENTER
@@ -331,6 +331,7 @@ DataStructures.StackArTester.s.topOfStack < n
 n >= size(DataStructures.StackArTester.s.theArray[])
 ===========================================================================
 DataStructures.StackArTester.fill(int):::EXIT
+DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
 DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
 orig(n) == size(DataStructures.StackArTester.s.theArray[])
@@ -338,7 +339,6 @@ DataStructures.StackArTester.s.theArray[] elements == null
 DataStructures.StackArTester.s.theArray[].getClass().getName() elements == null
 DataStructures.StackArTester.s.topOfStack == -1
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] == []
-DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 orig(DataStructures.StackArTester.s.theArray[]) is a subsequence of DataStructures.StackArTester.s.theArray[]
 DataStructures.StackArTester.s.topOfStack <= orig(size(DataStructures.StackArTester.s.theArray[]))-1
 (size(DataStructures.StackArTester.s.theArray[])-1 == 0) ==> (orig(size(DataStructures.StackArTester.s.theArray[])) == 0)
@@ -358,6 +358,7 @@ args[].toString == []
 DataStructures.StackArTester.s.theArray[] is the reverse of args[]
 ===========================================================================
 DataStructures.StackArTester.main(java.lang.String[]):::EXIT
+DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
 DataStructures.StackArTester.s.topOfStack == size(args[])-1
 DataStructures.StackArTester.s.topOfStack == orig(size(DataStructures.StackArTester.s.theArray[]))-1
@@ -373,7 +374,6 @@ DataStructures.StackArTester.s.theArray[].getClass().getName() elements == null
 args[] == []
 args[].toString == []
 size(DataStructures.StackArTester.s.theArray[]) == 20
-DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 args[] is the reverse of orig(DataStructures.StackArTester.s.theArray[])
 ===========================================================================
 DataStructures.StackArTester.observe():::ENTER
@@ -381,10 +381,10 @@ DataStructures.StackArTester.observe():::ENTER
 DataStructures.StackArTester.observe():::EXIT
 DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
 DataStructures.StackArTester.s.theArray == orig(DataStructures.StackArTester.s.theArray)
+DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.theArray[] == orig(DataStructures.StackArTester.s.theArray[])
 DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
 DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
-DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 ===========================================================================
 DataStructures.StackArTester.push():::ENTER
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] contains no duplicates
@@ -393,6 +393,7 @@ DataStructures.StackArTester.s.topOfStack < size(DataStructures.StackArTester.s.
 DataStructures.StackArTester.push():::EXIT
 DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
 DataStructures.StackArTester.s.theArray == orig(DataStructures.StackArTester.s.theArray)
+DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
 size(DataStructures.StackArTester.s.theArray[]) == orig(size(DataStructures.StackArTester.s.theArray[]))
 DataStructures.StackArTester.s.theArray[DataStructures.StackArTester.s.topOfStack+1..] == orig(DataStructures.StackArTester.s.theArray[post(DataStructures.StackArTester.s.topOfStack)+1..])
@@ -402,7 +403,6 @@ DataStructures.StackArTester.s.topOfStack >= 0
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] contains no duplicates
 orig(DataStructures.StackArTester.s.theArray[post(DataStructures.StackArTester.s.topOfStack)..]) elements == null
 orig(DataStructures.StackArTester.s.theArray[0..post(DataStructures.StackArTester.s.topOfStack)]) contains no duplicates
-DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.topOfStack - orig(DataStructures.StackArTester.s.topOfStack) - 1 == 0
 (size(DataStructures.StackArTester.s.theArray[])-1 == 0) ==> (DataStructures.StackArTester.s.topOfStack == 0)
 orig(DataStructures.StackArTester.s.topOfStack) < size(DataStructures.StackArTester.s.theArray[])-1
@@ -414,11 +414,11 @@ DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfS
 DataStructures.StackArTester.topOrPop():::EXIT
 DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
 DataStructures.StackArTester.s.theArray == orig(DataStructures.StackArTester.s.theArray)
+DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
 size(DataStructures.StackArTester.s.theArray[]) == orig(size(DataStructures.StackArTester.s.theArray[]))
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] == orig(DataStructures.StackArTester.s.theArray[0..post(DataStructures.StackArTester.s.topOfStack)])
 DataStructures.StackArTester.s.theArray[orig(DataStructures.StackArTester.s.topOfStack)+1..] == orig(DataStructures.StackArTester.s.theArray[DataStructures.StackArTester.s.topOfStack+1..])
 DataStructures.StackArTester.s.theArray[0..orig(DataStructures.StackArTester.s.topOfStack)] contains no duplicates
-DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.topOfStack <= orig(DataStructures.StackArTester.s.topOfStack)
 orig(DataStructures.StackArTester.s.topOfStack) <= size(DataStructures.StackArTester.s.theArray[])-1

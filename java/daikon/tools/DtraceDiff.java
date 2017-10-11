@@ -59,6 +59,9 @@ public class DtraceDiff {
   /**
    * This entry point is useful for testing. It returns a boolean to indicate return status instead
    * of croaking with an error.
+   *
+   * @param args command-line arguments, like those of {@link #mainHelper} and {@link #main}
+   * @return true if DtraceDiff completed without an error
    */
   public static boolean mainTester(String[] args) {
     try {
@@ -76,6 +79,7 @@ public class DtraceDiff {
    * progrmmatically. Termination of the program with a message to the user is indicated by throwing
    * daikon.Daikon.TerminationMessage.
    *
+   * @param args command-line arguments, like those of {@link #main}
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -312,7 +316,9 @@ public class DtraceDiff {
 
             // check to see that variables on this pair of samples match
             for (int i = 0; i < ppt1.num_tracevars; i++) {
-              if (vis1[i].is_static_constant) continue;
+              if (vis1[i].is_static_constant) {
+                continue;
+              }
               boolean missing1 = vt1.isMissingNonsensical(vis1[i]);
               boolean missing2 = vt2.isMissingNonsensical(vis2[i]);
               Object val1 = vt1.getValueOrNull(vis1[i]);

@@ -925,7 +925,9 @@ public class PptTopLevel extends Ppt {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < vt.size(); i++) {
           VarInfo vi = var_infos[i];
-          if (!vi.name().startsWith("xx")) continue;
+          if (!vi.name().startsWith("xx")) {
+            continue;
+          }
           out.append(String.format("%s %b %s ", vi.name(), vt.isMissing(i), vt.getValue(vi)));
         }
         System.out.printf("%s vals: %s%n", name(), out);
@@ -1069,7 +1071,9 @@ public class PptTopLevel extends Ppt {
 
     // Add the sample to each slice
     for (PptSlice slice : views_iterable()) {
-      if (slice.invs.size() == 0) continue;
+      if (slice.invs.size() == 0) {
+        continue;
+      }
       weakened_invs.addAll(slice.add(vt, count));
     }
 
@@ -1158,7 +1162,9 @@ public class PptTopLevel extends Ppt {
       if (Debug.logDetail()) inv.log("Processing in inv_add");
 
       // Skip falsified invariants (shouldn't happen)
-      if (inv.is_false()) continue;
+      if (inv.is_false()) {
+        continue;
+      }
 
       // Skip any invariants with a missing variable
       for (int j = 0; j < inv.ppt.var_infos.length; j++) {
@@ -1327,7 +1333,9 @@ public class PptTopLevel extends Ppt {
 
     for (Iterator<PptSlice> j = views_iterator(); j.hasNext(); ) {
       PptSlice slice = j.next();
-      if (!(slice instanceof PptSlice1)) continue;
+      if (!(slice instanceof PptSlice1)) {
+        continue;
+      }
       LowerBound lb = null;
       LowerBoundFloat lbf = null;
       UpperBound ub = null;
@@ -1614,14 +1622,18 @@ public class PptTopLevel extends Ppt {
     for (PptSlice slice : views.values()) {
 
       // Skip slices that don't use v
-      if (!slice.usesVar(v)) continue;
+      if (!slice.usesVar(v)) {
+        continue;
+      }
 
       // Skip slices that use v in more than one slot (eg, v = v/1)
       int cnt = 0;
       for (VarInfo vi : slice.var_infos) {
         if (vi == v) cnt++;
       }
-      if (cnt > 1) continue;
+      if (cnt > 1) {
+        continue;
+      }
 
       // Look for exact assignments
       for (Invariant inv : slice.invs) {
@@ -2072,7 +2084,9 @@ public class PptTopLevel extends Ppt {
 
       // we do not call is_var_ok_unary on vi here because
       // is_slice_ok does the same thing
-      if (!is_slice_ok(vi)) continue;
+      if (!is_slice_ok(vi)) {
+        continue;
+      }
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
@@ -2094,7 +2108,9 @@ public class PptTopLevel extends Ppt {
     for (int i1 = 0; i1 < var_infos.length; i1++) {
       VarInfo var1 = var_infos[i1];
 
-      if (!is_var_ok_binary(var1)) continue;
+      if (!is_var_ok_binary(var1)) {
+        continue;
+      }
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
@@ -2103,7 +2119,9 @@ public class PptTopLevel extends Ppt {
       for (int i2 = i1; i2 < var_infos.length; i2++) {
         VarInfo var2 = var_infos[i2];
 
-        if (!is_var_ok_binary(var2)) continue;
+        if (!is_var_ok_binary(var2)) {
+          continue;
+        }
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
@@ -2139,7 +2157,9 @@ public class PptTopLevel extends Ppt {
     List<PptSlice> ternary_views = new ArrayList<PptSlice>();
     for (int i1 = 0; i1 < var_infos.length; i1++) {
       VarInfo var1 = var_infos[i1];
-      if (!is_var_ok_ternary(var1)) continue;
+      if (!is_var_ok_ternary(var1)) {
+        continue;
+      }
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
@@ -2148,7 +2168,9 @@ public class PptTopLevel extends Ppt {
       for (int i2 = i1; i2 < var_infos.length; i2++) {
         VarInfo var2 = var_infos[i2];
 
-        if (!is_var_ok_ternary(var2)) continue;
+        if (!is_var_ok_ternary(var2)) {
+          continue;
+        }
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
@@ -2158,9 +2180,13 @@ public class PptTopLevel extends Ppt {
 
           VarInfo var3 = var_infos[i3];
 
-          if (!is_var_ok_ternary(var3)) continue;
+          if (!is_var_ok_ternary(var3)) {
+            continue;
+          }
 
-          if (!is_slice_ok(var1, var2, var3)) continue;
+          if (!is_slice_ok(var1, var2, var3)) {
+            continue;
+          }
 
           PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
           slice3.instantiate_invariants();
@@ -2638,7 +2664,9 @@ public class PptTopLevel extends Ppt {
       for (int i = 0; i < slice.arity(); i++) {
         if (slice.var_infos[i].canonicalRep() != slice.var_infos[i]) needPivoting = true;
       }
-      if (!needPivoting) continue;
+      if (!needPivoting) {
+        continue;
+      }
       List<VarInfo> newVis_list = new ArrayList<VarInfo>(slice.arity());
       for (VarInfo vi : slice.var_infos) {
         newVis_list.add(vi.canonicalRep());
@@ -3442,7 +3470,9 @@ public class PptTopLevel extends Ppt {
       // since "this" is always present for object invariants.
       // For the moment, just punt on this case, to match the previous
       // behavior.
-      if (rel.getRelationType() == PptRelationType.USER) continue;
+      if (rel.getRelationType() == PptRelationType.USER) {
+        continue;
+      }
       for (int j = 0; j < var_infos.length; j++) {
         VarInfo parent_vi = var_infos[j];
         VarInfo child_vi = rel.childVar(parent_vi);
@@ -3487,7 +3517,9 @@ public class PptTopLevel extends Ppt {
     // variables and incrementing the sample count as we go
     for (int i = first_child + 1; i < children.size(); i++) {
       PptRelation rel = children.get(i);
-      if (rel.child.num_samples() == 0) continue;
+      if (rel.child.num_samples() == 0) {
+        continue;
+      }
       Map<VarInfo.Pair, VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
       // Cannot use foreach loop, due to desire to remove from emap.
       for (Iterator<VarInfo./*@KeyFor("emap")*/ Pair> j = emap.keySet().iterator(); j.hasNext(); ) {
@@ -3591,7 +3623,9 @@ public class PptTopLevel extends Ppt {
     List<VarInfo> non_missing_leaders = new ArrayList<VarInfo>(equality_view.invs.size());
     for (Invariant inv : equality_view.invs) {
       VarInfo l = ((Equality) inv).leader();
-      if (l.missingOutOfBounds()) continue;
+      if (l.missingOutOfBounds()) {
+        continue;
+      }
       if (constants != null && constants.is_missing(l)) {
         // System.out.printf ("skipping leader %s in ppt %s, always missing\n",
         //                   l, name());
@@ -3609,8 +3643,12 @@ public class PptTopLevel extends Ppt {
         new LinkedHashMap<PptTopLevel, List<Invariant>>();
     for (PptRelation rel : children) {
       PptTopLevel child = rel.child;
-      if (child.num_samples() == 0) continue;
-      if (suppressed_invs.get(child) != null) continue;
+      if (child.num_samples() == 0) {
+        continue;
+      }
+      if (suppressed_invs.get(child) != null) {
+        continue;
+      }
       suppressed_invs.put(child, NIS.create_suppressed_invs(child));
     }
 
@@ -3630,7 +3668,9 @@ public class PptTopLevel extends Ppt {
     List<PptSlice> binary_slices = new ArrayList<PptSlice>();
     for (int i = 0; i < leaders.length; i++) {
       for (int j = i; j < leaders.length; j++) {
-        if (!is_slice_ok(leaders[i], leaders[j])) continue;
+        if (!is_slice_ok(leaders[i], leaders[j])) {
+          continue;
+        }
         PptSlice2 slice2 = new PptSlice2(this, leaders[i], leaders[j]);
 
         slice2.merge_invariants();
@@ -3647,12 +3687,20 @@ public class PptTopLevel extends Ppt {
     // be created.
     List<PptSlice> ternary_slices = new ArrayList<PptSlice>();
     for (int i = 0; i < leaders.length; i++) {
-      if (leaders[i].rep_type.isArray()) continue;
+      if (leaders[i].rep_type.isArray()) {
+        continue;
+      }
       for (int j = i; j < leaders.length; j++) {
-        if (leaders[j].rep_type.isArray()) continue;
-        if (!leaders[i].compatible(leaders[j])) continue;
+        if (leaders[j].rep_type.isArray()) {
+          continue;
+        }
+        if (!leaders[i].compatible(leaders[j])) {
+          continue;
+        }
         for (int k = j; k < leaders.length; k++) {
-          if (!is_slice_ok(leaders[i], leaders[j], leaders[k])) continue;
+          if (!is_slice_ok(leaders[i], leaders[j], leaders[k])) {
+            continue;
+          }
           PptSlice3 slice3 = new PptSlice3(this, leaders[i], leaders[j], leaders[k]);
 
           slice3.merge_invariants();
@@ -3699,7 +3747,9 @@ public class PptTopLevel extends Ppt {
       // Matching parent variable info.  Skip this slice if there isn't a
       // match for each variable (such as with an enter-exit relation)
       VarInfo[] pvis = parent_vis(rel, cslice);
-      if (pvis == null) continue;
+      if (pvis == null) {
+        continue;
+      }
       VarInfo[] pvis_sorted = pvis.clone();
       Arrays.sort(pvis_sorted, VarInfo.IndexComparator.getInstance());
 
@@ -3750,7 +3800,9 @@ public class PptTopLevel extends Ppt {
       for (Iterator<VarInfo> k = cv.equalitySet.getVars().iterator(); k.hasNext(); ) {
         cv = k.next();
         pv = rel.parentVar(cv);
-        if (pv != null) break;
+        if (pv != null) {
+          break;
+        }
       }
       if (pv == null) return null;
 
@@ -3850,8 +3902,12 @@ public class PptTopLevel extends Ppt {
 
     List<PptSlice> slices_to_remove = new ArrayList<PptSlice>();
     for (PptSlice slice : viewsAsCollection()) {
-      if (slice.var_infos.length != 2) continue;
-      if (slice.var_infos[0].isCanonical() && slice.var_infos[1].isCanonical()) continue;
+      if (slice.var_infos.length != 2) {
+        continue;
+      }
+      if (slice.var_infos[0].isCanonical() && slice.var_infos[1].isCanonical()) {
+        continue;
+      }
       assert (slice.var_infos[0].canonicalRep() == slice.var_infos[1].canonicalRep()) : slice;
       slices_to_remove.add(slice);
     }
@@ -3910,13 +3966,17 @@ public class PptTopLevel extends Ppt {
       // Build the varlist for the parent.  If any variables are not present in
       // the parent, skip this slice
       VarInfo[] pvis = parent_vis(rel, slice);
-      if (pvis == null) continue;
+      if (pvis == null) {
+        continue;
+      }
       VarInfo[] pvis_sorted = pvis.clone();
       Arrays.sort(pvis_sorted, VarInfo.IndexComparator.getInstance());
 
       // Find the parent slice.  If it doesn't exist, there is nothing to do
       PptSlice pslice = rel.parent.findSlice(pvis_sorted);
-      if (pslice == null) continue;
+      if (pslice == null) {
+        continue;
+      }
 
       // Build the permute from child to parent
       int[] permute = build_permute(pvis_sorted, pvis);
@@ -4205,7 +4265,9 @@ public class PptTopLevel extends Ppt {
     Stats.dump_header(debug);
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       List<Stats> slist = stats_map.get(ppt);
-      if (slist == null) continue;
+      if (slist == null) {
+        continue;
+      }
       int sample_cnt = 0;
       int time = 0;
       double avg_equality_cnt = 0;

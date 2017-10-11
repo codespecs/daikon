@@ -4246,10 +4246,10 @@ return.denom == 1
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT
+ratStr.toString == orig(ratStr.toString)
 ratStr.toString is printable
 return != null
 return.denom >= 0
-ratStr.toString == orig(ratStr.toString)
 ===========================================================================
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
 (this.denom == 0)  ==>  ((this.numer == 0) ==> (arg.denom == 0))
@@ -5875,6 +5875,7 @@ polyStr != null
 polyStr.toString is printable
 ===========================================================================
 PolyCalc.RatPoly.parse(java.lang.String):::EXIT
+polyStr.toString == orig(polyStr.toString)
 polyStr.toString is printable
 return != null
 return.terms != null
@@ -5882,7 +5883,6 @@ return.terms.wrapped != null
 return.terms.wrapped[] contains no duplicates
 return.terms.wrapped[] elements != null
 return.terms.wrapped[].getClass().getName() elements == PolyCalc.RatTerm.class
-polyStr.toString == orig(polyStr.toString)
 ===========================================================================
 PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm, PolyCalc.RatTermVec, int):::ENTER
 term != null

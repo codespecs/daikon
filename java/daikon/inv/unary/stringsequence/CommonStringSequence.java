@@ -13,8 +13,8 @@ import typequals.*;
 */
 
 /**
- * Represents string sequences that contain a common subset. Prints as <code>
- * {s1, s2, s3, ...} subset of x[]</code>.
+ * Represents string sequences that contain a common subset. Prints as {@code {s1, s2, s3, ...}
+ * subset of x[]}.
  */
 public class CommonStringSequence extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to

@@ -15,8 +15,8 @@ numbers != null
 numbers.toString is printable
 ===========================================================================
 MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT
-numbers.toString is printable
 numbers.toString == orig(numbers.toString)
+numbers.toString is printable
 ===========================================================================
 MapQuick1.StreetNumberSet.checkRep():::ENTER
 ===========================================================================

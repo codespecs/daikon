@@ -298,7 +298,6 @@ PolyCalc.RatNum.parse(java.lang.String):::EXIT
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: ratStr.toString is printable
 \result != null
 \result.denom >= 0
-ratStr.toString == \old(ratStr.toString)
 ===========================================================================
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
     Variables: this this.numer this.denom arg arg.numer arg.denom
@@ -948,7 +947,6 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: return.terms.wrapped[] contains no duplicates
 \result.terms.wrapped.containsNull == false
 \result.terms.wrapped.elementType == \type(PolyCalc.RatTerm)
-polyStr.toString == \old(polyStr.toString)
 ===========================================================================
 PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm, PolyCalc.RatTermVec, int):::ENTER
     Variables: term term.coeff term.coeff.numer term.coeff.denom term.expt ts ts.wrapped ts.wrapped[] ts.wrapped[].getClass().getName() index size(ts.wrapped[]) size(ts.wrapped[])-1 ts.wrapped[term.coeff.numer] ts.wrapped[term.coeff.numer-1] ts.wrapped[term.coeff.numer..] ts.wrapped[term.coeff.numer+1..] ts.wrapped[0..term.coeff.numer] ts.wrapped[0..term.coeff.numer-1] ts.wrapped[term.coeff.denom] ts.wrapped[term.coeff.denom-1] ts.wrapped[term.coeff.denom..] ts.wrapped[term.coeff.denom+1..] ts.wrapped[0..term.coeff.denom] ts.wrapped[0..term.coeff.denom-1] ts.wrapped[term.expt] ts.wrapped[term.expt-1] ts.wrapped[term.expt..] ts.wrapped[term.expt+1..] ts.wrapped[0..term.expt] ts.wrapped[0..term.expt-1] ts.wrapped[index] ts.wrapped[index-1] ts.wrapped[index..] ts.wrapped[index+1..] ts.wrapped[0..index] ts.wrapped[0..index-1]

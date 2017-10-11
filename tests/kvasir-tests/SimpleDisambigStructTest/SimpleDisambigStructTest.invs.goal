@@ -12,9 +12,11 @@ actualB.staticString == "Hello1234"
 ..bar():::EXIT
 actualB.dynamicIntArray == orig(actualB.dynamicIntArray)
 actualB.dynamicIntArray[] == orig(actualB.dynamicIntArray[])
+actualB.dynamicString == orig(actualB.dynamicString)
 actualB.number == orig(actualB.number)
 actualB.staticIntArray == orig(actualB.staticIntArray)
 actualB.staticIntArray[] == orig(actualB.staticIntArray[])
+actualB.staticString == orig(actualB.staticString)
 actualB.dynamicIntArray has only one value
 actualB.dynamicIntArray[] == [0, 1, 2, 3, 4]
 actualB.dynamicString == "Hello world\n"
@@ -22,8 +24,6 @@ actualB.number == 42
 actualB.staticIntArray has only one value
 actualB.staticIntArray[] == [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 actualB.staticString == "Hello1234"
-actualB.dynamicString == orig(actualB.dynamicString)
-actualB.staticString == orig(actualB.staticString)
 ===========================================================================
 ..foo():::ENTER
 b has only one value

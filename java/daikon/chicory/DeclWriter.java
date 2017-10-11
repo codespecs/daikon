@@ -257,7 +257,9 @@ public class DeclWriter extends DaikonWriter {
       Member member = mi.member;
 
       // Don't want to instrument these types of methods
-      if (!shouldInstrumentMethod(member)) continue;
+      if (!shouldInstrumentMethod(member)) {
+        continue;
+      }
 
       // Gset the root of the method's traversal pattern
       RootInfo enterRoot = mi.traversalEnter;
@@ -557,15 +559,20 @@ public class DeclWriter extends DaikonWriter {
       // Write out the kind of variable and its relative name
       VarKind kind = var.get_var_kind();
       String relative_name = var.get_relative_name();
-      if (relative_name == null) relative_name = "";
-      outFile.println("  var-kind " + out_name(kind) + " " + relative_name);
+      outFile.print("  var-kind " + out_name(kind));
+      if (relative_name != null) {
+        outFile.print(" " + relative_name);
+      }
+      outFile.println();
 
       // Write out the enclosing variable.
       // If we are in an inner class, we need to special case the
       // 'hidden' field that holds the outer class 'this' pointer.
       // If the field name ends with ".this", it can only be this
       // special case and we need to not output the enclosing-var.
-      if ((parent != null) && !var.isStatic() && !relative_name.endsWith(".this")) {
+      if ((parent != null)
+          && !var.isStatic()
+          && !((relative_name != null) && relative_name.endsWith(".this"))) {
         if (debug) System.out.println("traverse var parent: " + parent.getName());
         outFile.println("  enclosing-var " + escape(parent.getName()));
       }

@@ -30,10 +30,14 @@ public class DTraceReader extends DeclReader {
         // System.out.printf ("Reading line %s%n", line);
 
         // Skip comments
-        if (line.trim().startsWith("//") || line.trim().startsWith("#")) continue;
+        if (line.trim().startsWith("//") || line.trim().startsWith("#")) {
+          continue;
+        }
 
         // Skip blank lines
-        if (line.trim().length() == 0) continue;
+        if (line.trim().length() == 0) {
+          continue;
+        }
 
         // Read declarations
         if (line.equals("DECLARE")) {

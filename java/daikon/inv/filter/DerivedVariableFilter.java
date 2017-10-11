@@ -48,7 +48,9 @@ public class DerivedVariableFilter extends InvariantFilter {
     assert class_re != null : "@AssumeAssertion(nullness):  only called when filter is active";
 
     for (VarInfo vi : invariant.ppt.var_infos) {
-      if (vi.derived == null) continue;
+      if (vi.derived == null) {
+        continue;
+      }
       // System.out.printf ("Comparing %s to %s\n",
       //                   vi.derived.getClass().getName(), class_re);
       assert class_re != null

@@ -206,11 +206,21 @@ public class NISuppressee {
     for (int i = 0; i < leaders.length; i++) {
       VarInfo v = leaders[i];
       vis[missing_index] = v;
-      if (v.missingOutOfBounds()) continue;
-      if (!ppt.vis_order_ok(vis)) continue;
-      if (!ppt.is_slice_ok(vis, vis.length)) continue;
-      if (!NISuppression.vis_compatible(vis)) continue;
-      if (!sample_inv.valid_types(vis)) continue;
+      if (v.missingOutOfBounds()) {
+        continue;
+      }
+      if (!ppt.vis_order_ok(vis)) {
+        continue;
+      }
+      if (!ppt.is_slice_ok(vis, vis.length)) {
+        continue;
+      }
+      if (!NISuppression.vis_compatible(vis)) {
+        continue;
+      }
+      if (!sample_inv.valid_types(vis)) {
+        continue;
+      }
       NIS.SupInv sinv = new NIS.SupInv(this, vis.clone(), ppt);
       sinv.log("Unspecified variable = " + v.name());
       sinv.log("Created for invariants: " + Arrays.toString(cinvs));

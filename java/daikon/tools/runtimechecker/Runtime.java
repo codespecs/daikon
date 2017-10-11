@@ -9,7 +9,7 @@ import org.checkerframework.checker.lock.qual.*;
 
 /**
  * If a class has been instrumented with the instrumenter, invariant violations are added to the
- * <code>violations</code> list.
+ * {@code violations} list.
  */
 @SuppressWarnings("JavaLangClash")
 public class Runtime {

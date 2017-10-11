@@ -247,10 +247,10 @@ PolyCalc.RatNum.parse(java.lang.String):::EXIT267
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT
+(EQ (select |toString| |ratStr|) (select |toString| |__orig__ratStr|))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: ratStr.toString is printable
 (NEQ (hash |return|) null)
 (>= (select |denom| |return|) 0)
-(EQ (select |toString| |ratStr|) (select |toString| |__orig__ratStr|))
 ===========================================================================
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
 (NEQ (hash |arg|) null)

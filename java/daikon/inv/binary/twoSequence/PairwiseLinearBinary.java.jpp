@@ -45,10 +45,10 @@ import typequals.*;
 */
 
 /**
- * Represents a linear invariant (i.e., <code>y = ax + b</code>) between the corresponding elements
- * of two sequences of PRIMITIVE values. Each <code>(x[i], y[i])</code> pair is examined. Thus,
- * <code>x[0]</code> is compared to <code>y[0]</code>, <code>x[1]</code> to <code>y[1]</code> and so
- * forth. Prints as <code>y[] = a * x[] + b</code>.
+ * Represents a linear invariant (i.e., {@code y = ax + b}) between the corresponding elements
+ * of two sequences of PRIMITIVE values. Each {@code (x[i], y[i])} pair is examined. Thus,
+ * {@code x[0]} is compared to {@code y[0]}, {@code x[1]} to {@code y[1]} and so
+ * forth. Prints as {@code y[] = a * x[] + b}.
  */
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to

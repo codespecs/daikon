@@ -285,10 +285,10 @@ return.denom == 1
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT
+ratStr.toString == orig(ratStr.toString)
 ratStr.toString is printable
 return != null
 return.denom >= 0
-ratStr.toString == orig(ratStr.toString)
 ===========================================================================
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
 arg != null
