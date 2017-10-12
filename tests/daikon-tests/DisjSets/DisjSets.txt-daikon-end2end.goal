@@ -174,7 +174,6 @@ size(this.s[])-1 > this.s[root1]
 ===========================================================================
 DataStructures.DisjSets.unionDisjoint(int, int):::EXIT
 this.s == orig(this.s)
-this.s[] > orig(this.s[]) (lexically)
 orig(root1) == this.s[orig(root2)]
 size(this.s[]) == orig(size(this.s[]))
 this.s[orig(root1)] == orig(this.s[post(root1)])
@@ -184,6 +183,7 @@ this.s[orig(root1)] == orig(this.s[root2])
 this.s[orig(root1)] == -1
 {-1} subset of this.s[orig(root1)..]
 {-1} subset of this.s[0..orig(root1)]
+this.s[] > orig(this.s[]) (lexically)
 this.s[] >= orig(this.s[]) (elementwise)
 this.s[] is a bitwise subset of orig(this.s[]) (elementwise)
 this.s[] is a superset of orig(this.s[])

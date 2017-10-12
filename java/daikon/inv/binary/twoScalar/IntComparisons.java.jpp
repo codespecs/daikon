@@ -347,7 +347,7 @@
 #endif
 
 #if defined(EQUAL_OP)
-  #define IMPLEMENTSCOMPARISON implements Comparison
+  #define IMPLEMENTSCOMPARISON implements EqualityComparison
 #else
   #define IMPLEMENTSCOMPARISON
 #endif
@@ -802,9 +802,8 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   public boolean enoughSamples(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return (ppt.num_samples() > 0);
   }
-#endif
 
-  // For Comparison interface
+  // For Comparison interface, which is satisfied only by exact equalities.
   public double eq_confidence() {
     if (isExact()) {
       return getConfidence();
@@ -812,6 +811,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       return Invariant.CONFIDENCE_NEVER;
     }
   }
+#endif
 
   /*@Pure*/
   public boolean isExact() {

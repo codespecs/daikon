@@ -269,7 +269,11 @@ import typequals.*;
  * <p>If the auxiliary information (e.g., order matters) doesn't match between two variables, then
  * this invariant cannot apply to those variables.
  */
-public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
+public class SEQSEQINTEQUAL extends SUPERCLASS
+#if defined (EQUAL) || defined(EQUALFLOAT) || defined (EQUALSTRING)
+  implements EqualityComparison
+#endif
+{
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -510,6 +514,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
 #endif
   }
 
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
   // For Comparison interface
   public double eq_confidence() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
@@ -518,6 +523,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
       return Invariant.CONFIDENCE_NEVER;
     #endif
   }
+#endif
 
   /*@Pure*/
   public boolean isSameFormula(Invariant o) {

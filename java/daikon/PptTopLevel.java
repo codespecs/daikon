@@ -4078,7 +4078,7 @@ public class PptTopLevel extends Ppt {
         invEquals = SeqSeqFloatEqual.get_proto().instantiate(newSlice);
       }
     } else {
-      throw new Error("No known Comparison invariant to convert equality into");
+      throw new Error("No known EqualityComparison invariant to convert equality into");
     }
 
     if (invEquals != null) {

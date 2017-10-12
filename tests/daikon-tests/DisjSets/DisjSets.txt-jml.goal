@@ -125,7 +125,6 @@ DataStructures.DisjSets.unionDisjoint(int, int):::EXIT
     Variables: this this.s this.s[] root1 root2 orig(this) orig(this.s) orig(this.s[]) orig(root1) orig(root2) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[root1] this.s[root1-1] this.s[root1..] this.s[root1+1..] this.s[0..root1] this.s[0..root1-1] this.s[root2] this.s[root2-1] this.s[root2..] this.s[root2+1..] this.s[0..root2] this.s[0..root2-1] this.s[orig(root1)] this.s[orig(root1)-1] this.s[orig(root1)..] this.s[orig(root1)+1..] this.s[0..orig(root1)] this.s[0..orig(root1)-1] this.s[orig(root2)] this.s[orig(root2)-1] this.s[orig(root2)..] this.s[orig(root2)+1..] this.s[0..orig(root2)] this.s[0..orig(root2)-1] orig(this.s[post(root1)]) orig(this.s[post(root1)-1]) orig(this.s[post(root1)..]) orig(this.s[post(root1)+1..]) orig(this.s[0..post(root1)]) orig(this.s[0..post(root1)-1]) orig(this.s[post(root2)]) orig(this.s[post(root2)-1]) orig(this.s[post(root2)..]) orig(this.s[post(root2)+1..]) orig(this.s[0..post(root2)]) orig(this.s[0..post(root2)-1]) orig(this.s[root1]) orig(this.s[root1-1]) orig(this.s[root1..]) orig(this.s[root1+1..]) orig(this.s[0..root1]) orig(this.s[0..root1-1]) orig(this.s[root2]) orig(this.s[root2-1]) orig(this.s[root2..]) orig(this.s[root2+1..]) orig(this.s[0..root2]) orig(this.s[0..root2-1])
 assignable this.s[*]
 this.s == \old(this.s)
-daikon.Quant.lexGT(this.s, \old(this.s))
 \old(root1) == daikon.Quant.getElement_int(this.s, \old(root2))
 daikon.Quant.size(this.s) == \old(daikon.Quant.size(this.s))
 daikon.Quant.getElement_int(this.s, \old(root1)) == \old(daikon.Quant.getElement_int(this.s, \new(root1)))
@@ -135,6 +134,7 @@ daikon.Quant.getElement_int(this.s, \old(root1)) == \old(daikon.Quant.getElement
 daikon.Quant.getElement_int(this.s, \old(root1)) == -1
 warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[orig(root1)..]
 warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[0..orig(root1)]
+daikon.Quant.lexGT(this.s, \old(this.s))
 daikon.Quant.pairwiseGTE(this.s, \old(this.s))
 daikon.Quant.pairwiseBitwiseSubset(\old(this.s), this.s)
 daikon.Quant.subsetOf(\old(this.s), this.s)
