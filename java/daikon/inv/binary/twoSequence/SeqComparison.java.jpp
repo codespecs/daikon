@@ -271,7 +271,7 @@ import typequals.*;
  */
 public class SEQSEQINTEQUAL extends SUPERCLASS
 #if defined (EQUAL) || defined(EQUALFLOAT) || defined (EQUALSTRING)
-  implements Comparison
+  implements EqualityComparison
 #endif
 {
   // We are Serializable, so we specify a version to allow changes to

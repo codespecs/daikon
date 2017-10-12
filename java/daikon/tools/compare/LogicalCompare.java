@@ -175,7 +175,7 @@ public class LogicalCompare {
       if (vi.isDerivedParamAndUninteresting()) {
         // Exception: let invariants like "orig(arg) == arg" through.
         if (IsEqualityComparison.it.accept(inv)) {
-          Comparison comp = (Comparison) inv;
+          EqualityComparison comp = (EqualityComparison) inv;
           VarInfo var1 = comp.var1();
           VarInfo var2 = comp.var2();
           boolean vars_are_same =
