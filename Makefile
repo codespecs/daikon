@@ -727,6 +727,8 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 ###
 
 showvars:
+	@echo "DAIKONDIR =" $(DAIKONDIR)
+	@echo "DAIKONDIR_DEFAULT =" $(DAIKONDIR_DEFAULT)
 	@echo "DAIKON_JAVA_FILES =" $(DAIKON_JAVA_FILES)
 	@echo "WWW_FILES =" $(WWW_FILES)
 	@echo "CUR_RELEASE_NAME =" $(CUR_RELEASE_NAME)
