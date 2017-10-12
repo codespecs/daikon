@@ -123,7 +123,7 @@ public class StringInfo extends DaikonVariableInfo {
     return VarKind.FUNCTION;
   }
 
-  /** Returns the name of this function. May return null. */
+  /** Returns the name of this function. */
   public String get_relative_name() {
     return "toString()";
   }
