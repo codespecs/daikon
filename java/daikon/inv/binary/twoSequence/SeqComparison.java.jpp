@@ -523,15 +523,13 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 #endif
   }
 
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
   // For Comparison interface
   @Override
   public double eq_confidence() {
-    #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return getConfidence();
-    #else
-      return Invariant.CONFIDENCE_NEVER;
-    #endif
   }
+#endif
 
   /*@Pure*/
   @Override
