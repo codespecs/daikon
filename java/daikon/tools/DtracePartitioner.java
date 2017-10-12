@@ -90,7 +90,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     return invocation.substring(0, invocation.indexOf(lineSep));
   }
 
-  /** Same as {@link #patchValues (List&lt;String&gt;, boolean)} with second arg=false. */
+  /** Same as {@link #patchValues(List, boolean)} with second arg=false. */
   public List<String> patchValues(List<String> enters) {
     return patchValues(enters, false);
   }
@@ -137,7 +137,9 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       br = UtilMDE.bufferedFileReader(fileName);
       while (br.ready()) {
         String nextInvo = grabNextInvocation();
-        if (nextInvo.indexOf("EXIT") == -1) continue;
+        if (nextInvo.indexOf("EXIT") == -1) {
+          continue;
+        }
         int invoNonce = calcNonce(nextInvo);
         Integer key = invoNonce;
         String enterInvo = nonceMap.get(key);

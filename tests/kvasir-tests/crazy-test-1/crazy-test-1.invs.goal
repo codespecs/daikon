@@ -106,6 +106,7 @@ cp[].basic2[0] contains no nulls and has only one value, of length 1
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 cp[] == orig(cp[])
 cp[].basic1 == orig(cp[].basic1)
 cp[].basic2[0] == orig(cp[].basic2[0])
@@ -146,7 +147,6 @@ return.day_of_week == 3
 return.footer == -123456
 return.myString has only one value
 return.myString[] contains no nulls and has only one value, of length 1
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..initBasicTypesStruct():::ENTER
 cp[]->basic1.char_val == cp[]->footer
@@ -209,6 +209,7 @@ f == 30000
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 bp[] == cp[]->basic2
 bp[] == return[][0]->basic2
 bp[] == orig(bp[])
@@ -263,7 +264,6 @@ return[] contains no nulls and has only one value, of length 1
 return[][0]->basic1 contains no nulls and has only one value, of length 1
 return[][0]->basic2[0] contains no nulls and has only one value, of length 1
 return[][0][0] contains no nulls and has only one value, of length 1
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..main():::ENTER
 ::cpg == null
@@ -276,6 +276,7 @@ return[][0][0] contains no nulls and has only one value, of length 1
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 ::cpg has only one value
 ::cpg[] contains no nulls and has only one value, of length 1
 ::cpg[]->basic1 contains no nulls and has only one value, of length 1
@@ -301,7 +302,6 @@ return[][0][0] contains no nulls and has only one value, of length 1
 ::globalLong == 6969696969696969L
 ::globalStr == "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 return == 0
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..printHelloWorld():::ENTER
 ::cpg[]->basic1.char_val == ::cpg[]->basic2->char_val
@@ -360,6 +360,7 @@ turnip == 99
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 ::cpg has only one value
 ::cpg[] contains no nulls and has only one value, of length 1
 ::cpg[]->basic1 contains no nulls and has only one value, of length 1
@@ -380,7 +381,6 @@ turnip == 99
 ::globalLong == 6969696969696969L
 ::globalStr == "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 return == 42536475
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..readStruct():::ENTER
 ::cpg[]->basic1.char_val == ::cpg[]->footer
@@ -427,6 +427,7 @@ a.ushort_val == 28000
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 a.char_val == return.char_val
 a.char_val == orig(a.char_val)
 a.int_val == return.int_val
@@ -457,7 +458,6 @@ a.short_val == -28000
 a.uchar_val == 42
 a.ushort_val == 28000
 return has only one value
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..returnDoublePtr():::ENTER
 ::cpg[]->basic1.char_val == ::cpg[]->basic2->char_val
@@ -518,6 +518,7 @@ uintPtrVar[] == [57015]
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 Int64PtrVar[] == orig(Int64PtrVar[])
 uintPtrVar[] == orig(uintPtrVar[])
 ::cpg has only one value
@@ -543,7 +544,6 @@ Int64PtrVar[] == [57005]
 return has only one value
 return[] == [1.4285714285714286]
 uintPtrVar[] == [57015]
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..returnFooString():::ENTER
 ::cpg[]->basic1.char_val == ::cpg[]->basic2->char_val
@@ -605,6 +605,8 @@ ushortValue == 20
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
+::returnVal == return
 doubleIntPtr[] == orig(doubleIntPtr[])
 doubleIntPtr[][0] == orig(doubleIntPtr[][0])
 ::cpg has only one value
@@ -629,8 +631,6 @@ doubleIntPtr[][0] == orig(doubleIntPtr[][0])
 ::returnVal == "uvwxyzabcdefghijklmnopqrstuvwx"
 doubleIntPtr[] contains no nulls and has only one value, of length 1
 doubleIntPtr[][0] == [30]
-::globalStr == orig(::globalStr)
-::returnVal == return
 ===========================================================================
 ..returnWeekday():::ENTER
 ::cpg[]->basic1.char_val == ::cpg[]->basic2->char_val
@@ -691,6 +691,7 @@ doubleIntPtr[][0] == [30]
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 ::cpg has only one value
 ::cpg[] contains no nulls and has only one value, of length 1
 ::cpg[]->basic1 contains no nulls and has only one value, of length 1
@@ -715,7 +716,6 @@ return >= 0
 ::cpg[]->basic1.int_val elements > orig(day)
 ::cpg[]->basic1.short_val elements < orig(day)
 ::cpg[]->footer elements < orig(day)
-::globalStr == orig(::globalStr)
 ===========================================================================
 ..valueAt():::ENTER
 ::cpg[]->basic1.char_val == ::cpg[]->basic2->char_val
@@ -779,6 +779,7 @@ index in myArray[]
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
+::globalStr == orig(::globalStr)
 myArray[] == orig(myArray[])
 ::cpg has only one value
 ::cpg[] contains no nulls and has only one value, of length 1
@@ -808,6 +809,5 @@ myArray[] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 ::cpg[]->basic1.short_val elements < orig(index)
 ::cpg[]->footer elements < return
 ::cpg[]->footer elements < orig(index)
-::globalStr == orig(::globalStr)
 return in myArray[]
 orig(index) in myArray[]

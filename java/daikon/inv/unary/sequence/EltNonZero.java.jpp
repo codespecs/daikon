@@ -71,7 +71,7 @@ import typequals.*;
 
 /**
  * Represents the invariant "x != 0" where x represents all of the elements of a sequence of
- * PRIMITIVE. Prints as <code>x[] elements != 0</code>.
+ * PRIMITIVE. Prints as {@code x[] elements != 0}.
  */
 
 public final class CLASSNAME extends SUPERCLASS {

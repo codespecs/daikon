@@ -403,6 +403,7 @@ class DCInstrument extends StackMapUtils {
         }
         debug_transform.exdent();
       } catch (Throwable t) {
+        if (debug_instrument.enabled) t.printStackTrace();
         throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
       }
     }
@@ -565,6 +566,7 @@ class DCInstrument extends StackMapUtils {
         }
         debug_transform.exdent();
       } catch (Throwable t) {
+        if (debug_instrument.enabled) t.printStackTrace();
         throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
       }
     }
@@ -637,7 +639,9 @@ class DCInstrument extends StackMapUtils {
         // Don't modify class initialization methods.  They can't affect
         // user comparability and there isn't any way to get a second
         // copy of them.
-        if (BCELUtil.is_clinit(m)) continue;
+        if (BCELUtil.is_clinit(m)) {
+          continue;
+        }
 
         debug_transform.log("  Processing method %s", m);
 
@@ -699,11 +703,11 @@ class DCInstrument extends StackMapUtils {
         gen.addMethod(mg.getMethod());
 
       } catch (Throwable t) {
+        if (debug_instrument.enabled) t.printStackTrace();
         skip_method(mgen);
         if (!DynComp.quit_if_error) {
           System.out.printf(
               "Unexpected error processing %s.%s: %s%n", gen.getClassName(), m.getName(), t);
-          // t.printStackTrace();
           System.out.printf("Method is NOT instrumented%n");
         } else {
           throw new Error(
@@ -770,7 +774,9 @@ class DCInstrument extends StackMapUtils {
         // Don't modify class initialization methods.  They can't affect
         // user comparability and there isn't any way to get a second
         // copy of them.
-        if (BCELUtil.is_clinit(m)) continue;
+        if (BCELUtil.is_clinit(m)) {
+          continue;
+        }
 
         debug_transform.log("  Processing method %s", m);
 
@@ -830,6 +836,7 @@ class DCInstrument extends StackMapUtils {
         gen.addMethod(mg.getMethod());
 
       } catch (Throwable t) {
+        if (debug_instrument.enabled) t.printStackTrace();
         skip_method(mgen);
         System.out.printf(
             "Unexpected error processing %s.%s: %s%n", gen.getClassName(), m.getName(), t);
@@ -1256,16 +1263,7 @@ class DCInstrument extends StackMapUtils {
 
     // We need to see if inserting the additional instructions caused
     // a change in the amount of switch instruction padding bytes.
-    //
-    // If there was no orgiinal StackMapTable (smta == null)
-    // then there are no switches and/or class was compiled for
-    // Java 5.  In either case, no need to process switches.
-    if (smta != null) {
-      // Need to see if there are any switches after this location.
-      // If so, we may need to update the corresponding stackmap if
-      // the amount of the switch padding changed.
-      modify_stack_maps_for_switches(new_start, il);
-    }
+    modify_stack_maps_for_switches(new_start, il);
   }
 
   /** Adds the call to DCRuntime.enter to the beginning of the method. */
@@ -2990,6 +2988,7 @@ class DCInstrument extends StackMapUtils {
       cinit_gen.setMaxStack();
       gen.replaceMethod(cinit, cinit_gen.getMethod());
     } catch (Throwable t) {
+      if (debug_instrument.enabled) t.printStackTrace();
       throw new Error(
           "Unexpected error processing " + gen.getClassName() + "." + cinit.getName(), t);
     }
@@ -3526,6 +3525,37 @@ class DCInstrument extends StackMapUtils {
   }
 
   /**
+   * Compute the StackMapTypes of the live variables of the current method at a specific location
+   * within the method.
+   */
+  protected StackMapType[] calculate_live_local_types(int location) {
+    int local_map_index = 0;
+    StackMapType[] local_map_types = new StackMapType[mgen.getMaxLocals()];
+    for (LocalVariableGen lv : mgen.getLocalVariables()) {
+      if (location >= lv.getStart().getPosition()) {
+        //if (lv.getLivePastEnd() || location < lv.getEnd().getPosition()) {
+        if (location < lv.getEnd().getPosition()) {
+          local_map_types[local_map_index++] = generate_StackMapType_from_Type(lv.getType());
+        }
+      }
+    }
+    return Arrays.copyOf(local_map_types, local_map_index);
+  }
+
+  /**
+   * Compute the StackMapTypes of the items on the execution stack as described by the OperandStack
+   * argument.
+   */
+  protected StackMapType[] calculate_live_stack_types(OperandStack stack) {
+    int ss = stack.size();
+    StackMapType[] stack_map_types = new StackMapType[ss];
+    for (int ii = 0; ii < ss; ii++) {
+      stack_map_types[ii] = generate_StackMapType_from_Type(stack.peek(ss - ii - 1));
+    }
+    return stack_map_types;
+  }
+
+  /**
    * Replace instruction ih in list il with the instructions in new_il. If new_il is null, do
    * nothing.
    */
@@ -3571,6 +3601,11 @@ class DCInstrument extends StackMapUtils {
       new_end = ih;
       // Update stack map for change in length of instruction bytes.
       update_stack_map_offset(ih.getPosition(), (new_length - old_length));
+
+      // We need to see if inserting the additional instructions caused
+      // a change in the amount of switch instruction padding bytes.
+      // If so, we may need to update the corresponding stackmap.
+      modify_stack_maps_for_switches(new_end, il);
     } else {
       print_stack_map_table("replace_inst_with_inst_list B");
       // We are inserting more than one instruction.
@@ -3674,9 +3709,15 @@ class DCInstrument extends StackMapUtils {
 
       if (needStackMap) {
         // Before we look for branches in the inserted code we need
-        // to update any exiting stack maps for locations in the old
+        // to update any existing stack maps for locations in the old
         // code that are after the inserted code.
         update_stack_map_offset(new_start.getPosition(), (new_length - old_length));
+
+        // We need to see if inserting the additional instructions caused
+        // a change in the amount of switch instruction padding bytes.
+        // If so, we may need to update the corresponding stackmap.
+        modify_stack_maps_for_switches(new_end, il);
+        print_stack_map_table("replace_inst_with_inst_list C");
 
         // Look for branches within the new il; i.e., both the source
         // and target must be within the new il.  If we find any, the
@@ -3732,64 +3773,88 @@ class DCInstrument extends StackMapUtils {
           StackTypes stack_types = bcel_calc_stack_types(mgen);
           OperandStack stack;
 
-          // need to find last stack map entry prior to first new branch target
-          // returns -1 if there isn't one
-          // also sets running_offset
+          // Find last stack map entry prior to first new branch target;
+          // returns -1 if there isn't one. Also sets running_offset and number_active_locals.
+          // The '+1' below means new_index points to the first stack map entry after our
+          // inserted code.  There may not be one; in which case new_index == orig_size.
           int new_index = find_stack_map_index_before(target_offsets[0]) + 1;
+
+          // The Java compiler can 'simplfy' the generated class file by not
+          // inserting a stack map entry every time a local is defined if
+          // that stack map entry is not needed as a branch target.  Thus,
+          // there can be more live locals than defined by the stack maps.
+          // This leads to serious complications if we wish to insert instrumentation
+          // code, that contains internal branches and hence needs stack
+          // map entries, into a section of code with 'extra' live locals.
+          // If we don't include these extra locals in our inserted stack
+          // map entries and they are subsequently referenced, that would
+          // cause a verification error.  But if we do include them the locals
+          // state might not be correct when execution reaches the first
+          // stack map entry after our inserted code and that
+          // would also cause a verification error. Dicey stuff.
+
+          // I think one possibllity would be to insert a nop instruction
+          // with a stack map of CHOP right after the last use of an 'extra'
+          // local prior to the next stack map entry. An interesting alternative
+          // might be, right as we start to process a method, make a pass over
+          // the byte codes and add any 'missing' stack maps. This would
+          // probably be too heavy as most instrumentation does not contain branches.
+          // Not sure which of these two methods is 'easier' at this point.
+
+          // I'm going to try a simplification.  If there are 'extra' locals
+          // and we need to generate a FULL stack map - then go through and
+          // make all subsequent StackMaps FULL as well.
+
+          // The inserted code has pushed an object reference on the stack.
+          // The StackMap(s) we create as targets of an internal branch
+          // must account for this item.  Normally, we would use
+          // SAME_LOCALS_1_STACK_ITEM_FRAME for this case, but there is a
+          // possibility that the compiler has already allocated extra local items
+          // that it plans to identify in a subsequent StackMap APPEND entry.
+
+          // First, lets calculate the number and types of the live locals.
+          StackMapType[] local_map_types = calculate_live_local_types(cur_loc);
+          int local_map_index = local_map_types.length;
+
+          // local_map_index now contains the number of live locals.
+          // number_active_locals has been calculated from the existing StackMap.
+          // If these two are equal, we should be ok.
+          int number_extra_locals = local_map_index - number_active_locals;
+          // lets do a sanity check
+          assert number_extra_locals >= 0
+              : "invalid extra locals count: " + number_active_locals + ", " + local_map_index;
 
           // Copy any existing stack maps prior to inserted code.
           System.arraycopy(stack_map_table, 0, new_stack_map_table, 0, new_index);
 
+          boolean need_full_maps = false;
           for (int i = 0; i < target_count; i++) {
             stack = stack_types.get(target_offsets[i]);
             debug_instrument.log("stack: %s %n", stack);
 
-            // The inserted code has pushed an object reference on the stack.
-            // The StackMap(s) we create as targets of the internal branch
-            // must account for this item.  Normally, we could use
-            // SAME_LOCALS_1_STACK_ITEM_FRAME to account for this extra item,
-            // but if the next StackMap after the insertion is FULL_FRAME
-            // then there is a possibility that there are extra items already
-            // on the stack and adding 1_STACK_ITEM will fail.
-            // TEMP hack for now is to just always force a FULL_FRAME.
-            // But this can sometimes fail as well for reasons as yet unkown. (markro)
-            if (stack.size() == 666) { // was  == 1
+            if (number_extra_locals == 0 && stack.size() == 1 && !need_full_maps) {
+              // the simple case
               StackMapType stack_map_type0 = generate_StackMapType_from_Type(stack.peek(0));
               StackMapType[] stack_map_types0 = {stack_map_type0};
               new_stack_map_table[new_index + i] =
                   new StackMapEntry(
                       Const.SAME_LOCALS_1_STACK_ITEM_FRAME,
-                      0,
+                      0, // byte_code_offset set below
                       null,
                       stack_map_types0,
                       pool.getConstantPool());
             } else {
-              // need stack map FULL - MAKE SHARED METHOD
-              int local_map_index = 0;
-              StackMapType[] local_map_types = new StackMapType[mgen.getMaxLocals()];
-
-              for (LocalVariableGen lv : mgen.getLocalVariables()) {
-                if ((cur_loc >= lv.getStart().getPosition())
-                    && (cur_loc <= lv.getEnd().getPosition())) {
-                  local_map_types[local_map_index++] =
-                      generate_StackMapType_from_Type(lv.getType());
-                }
-              }
-
-              int ss = stack.size();
-              StackMapType[] stack_map_types = new StackMapType[ss];
-              for (int ii = 0; ii < ss; ii++) {
-                stack_map_types[ii] = generate_StackMapType_from_Type(stack.peek(ss - ii - 1));
-              }
-
+              // need a FULL_FRAME stack map entry
+              need_full_maps = true;
               new_stack_map_table[new_index + i] =
                   new StackMapEntry(
                       Const.FULL_FRAME,
-                      0,
-                      Arrays.copyOf(local_map_types, local_map_index),
-                      stack_map_types,
+                      0, // byte_code_offset set below
+                      calculate_live_local_types(target_offsets[i]),
+                      calculate_live_stack_types(stack),
                       pool.getConstantPool());
             }
+            // now set the offset from the previous Stack Map entry to our new one.
             new_stack_map_table[new_index + i].updateByteCodeOffset(
                 target_offsets[i] - (running_offset + 1));
             running_offset = target_offsets[i];
@@ -3825,29 +3890,37 @@ class DCInstrument extends StackMapUtils {
               }
               nih = nih.getNext();
             }
-            System.arraycopy(
-                stack_map_table,
-                new_index,
-                new_stack_map_table,
-                new_index + target_count,
-                remainder);
+
+            // Now we can copy the remaining stack map entries.
+            if (need_full_maps) {
+              // Must convert all remaining stack map entries to FULL.
+              while (remainder > 0) {
+                int stack_map_offset = stack_map_table[new_index].getByteCodeOffset();
+                running_offset = running_offset + stack_map_offset + 1;
+                stack = stack_types.get(running_offset);
+                // System.out.printf("running_offset: %d, stack: %s%n", running_offset, stack);
+                new_stack_map_table[new_index + target_count] =
+                    new StackMapEntry(
+                        Const.FULL_FRAME,
+                        stack_map_offset,
+                        calculate_live_local_types(running_offset),
+                        calculate_live_stack_types(stack),
+                        pool.getConstantPool());
+                new_index++;
+                remainder--;
+              }
+            } else {
+              System.arraycopy(
+                  stack_map_table,
+                  new_index,
+                  new_stack_map_table,
+                  new_index + target_count,
+                  remainder);
+            }
           }
           stack_map_table = new_stack_map_table;
         }
       }
-    }
-
-    // We need to see if the change in the size of instruction bytes caused
-    // a change in the amount of switch instruction padding bytes.
-    //
-    // If there was no orgiinal StackMapTable (smta == null)
-    // then there are no switches and/or class was compiled for
-    // Java 5.  In either case, no need to process switches.
-    if (smta != null) {
-      // Need to see if there are any switches after this location.
-      // If so, we may need to update the corresponding stackmap if
-      // the amount of the switch padding changed.
-      modify_stack_maps_for_switches(new_end, il);
     }
 
     debug_instrument.log("%n");
@@ -4238,7 +4311,9 @@ class DCInstrument extends StackMapUtils {
       field_set.add(f.getName());
 
       // skip primitive fields
-      if (!is_primitive(f.getType())) continue;
+      if (!is_primitive(f.getType())) {
+        continue;
+      }
 
       MethodGen get_method;
       MethodGen set_method;
@@ -4266,9 +4341,15 @@ class DCInstrument extends StackMapUtils {
     }
     for (JavaClass super_class : super_classes) {
       for (Field f : super_class.getFields()) {
-        if (f.isPrivate()) continue;
-        if (field_set.contains(f.getName())) continue;
-        if (!is_primitive(f.getType())) continue;
+        if (f.isPrivate()) {
+          continue;
+        }
+        if (field_set.contains(f.getName())) {
+          continue;
+        }
+        if (!is_primitive(f.getType())) {
+          continue;
+        }
 
         field_set.add(f.getName());
         MethodGen get_method;
@@ -4317,7 +4398,9 @@ class DCInstrument extends StackMapUtils {
     // Also make sure the the static_tags list is large enough for
     // of the tags.
     for (Field f : jc.getFields()) {
-      if (!is_primitive(f.getType())) continue;
+      if (!is_primitive(f.getType())) {
+        continue;
+      }
       if (f.isStatic()) {
         if (!in_jdk) {
           int min_size = static_map.size() + DCRuntime.max_jdk_static;
@@ -4648,61 +4731,6 @@ class DCInstrument extends StackMapUtils {
     }
 
     return false;
-  }
-
-  /**
-   * Fixes the local variable table so that all parameters are in the local table. In some special
-   * cases where parameters are added by the compiler (eg, constructors for inner classes) the local
-   * variable table is missing the entry for the additional parameter. This method creates a correct
-   * array of locals and returns it.
-   */
-  protected LocalVariableGen[] get_fix_locals(MethodGen mg) {
-
-    LocalVariableGen[] locals = mg.getLocalVariables();
-    Type[] arg_types = mg.getArgumentTypes();
-
-    // We need a deep copy
-    for (int ii = 0; ii < locals.length; ii++) {
-      locals[ii] = (LocalVariableGen) (locals[ii].clone());
-    }
-
-    // Initial offset into the stack frame of the first parameter
-    int offset = 0;
-    if (!mg.isStatic()) offset = 1;
-
-    // Index into locals of the first parameter
-    int loc_index = 0;
-    if (!mg.isStatic()) loc_index = 1;
-
-    // (markro) Is this code correct?  What if missing local is size=2?
-
-    // Loop through each argument
-    for (int ii = 0; ii < arg_types.length; ii++) {
-
-      // If this parameter doesn't have a matching local
-      if ((loc_index >= locals.length) || (offset != locals[loc_index].getIndex())) {
-
-        // Create a local variable to describe the missing argument
-        LocalVariableGen missing_arg =
-            mg.addLocalVariable(mg.getArgumentName(ii), arg_types[ii], offset, null, null);
-
-        // Add the new local variable to a new locals array
-        LocalVariableGen[] new_locals = new LocalVariableGen[locals.length + 1];
-        System.arraycopy(locals, 0, new_locals, 0, loc_index);
-        new_locals[loc_index] = missing_arg;
-        System.arraycopy(locals, loc_index, new_locals, loc_index + 1, locals.length - loc_index);
-        // System.out.printf ("Added missing parameter %s%n", missing_arg);
-        locals = new_locals;
-        // System.out.printf ("New Local Array:%n");
-        // for (LocalVariableGen lvg : locals)
-        // System.out.printf ("  local[%d] = %s%n", lvg.getIndex(), lvg);
-      }
-
-      loc_index++;
-      offset += arg_types[ii].getSize();
-    }
-
-    return locals;
   }
 
   /**

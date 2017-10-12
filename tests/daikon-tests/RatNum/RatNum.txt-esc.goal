@@ -298,7 +298,6 @@ PolyCalc.RatNum.parse(java.lang.String):::EXIT
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: ratStr.toString is printable
 \result != null
 \result.denom >= 0
-ratStr.toString == \old(ratStr.toString)
 ===========================================================================
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
     Variables: this this.numer this.denom arg arg.numer arg.denom

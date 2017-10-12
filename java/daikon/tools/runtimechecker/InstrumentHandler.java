@@ -107,7 +107,7 @@ public class InstrumentHandler extends CommandHandler {
     // them via reflection).
     //compile(arguments.javaFileNames, "");
 
-    // Create filenames including temp directory and pakage directories.
+    // Create filenames including temp directory and package directories.
     List<ParseResults> parseResults =
         ParseResults.parse(arguments.javaFileNames, true /* discard comments */);
 

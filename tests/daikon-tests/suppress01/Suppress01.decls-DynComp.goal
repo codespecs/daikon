@@ -8,11 +8,11 @@ misc.Suppress01:::CLASS
 DECLARE
 misc.Suppress01:::OBJECT
 this
-misc.Suppress01 # isNonNull=true isParam=true
+misc.Suppress01 # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.theArray[..]
@@ -20,7 +20,7 @@ int[]
 int[]
 4[4]
 this.theArray2
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.theArray2[..]
@@ -28,7 +28,7 @@ int[]
 int[]
 4[4]
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
@@ -75,11 +75,11 @@ java.lang.String[]
 DECLARE
 misc.Suppress01.f():::ENTER
 this
-misc.Suppress01 # isNonNull=true isParam=true
+misc.Suppress01 # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.theArray[..]
@@ -87,7 +87,7 @@ int[]
 int[]
 4[4]
 this.theArray2
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.theArray2[..]
@@ -95,18 +95,18 @@ int[]
 int[]
 4[4]
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
 DECLARE
 misc.Suppress01.f():::EXIT35
 this
-misc.Suppress01 # isNonNull=true isParam=true
+misc.Suppress01 # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.theArray[..]
@@ -114,7 +114,7 @@ int[]
 int[]
 4[4]
 this.theArray2
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.theArray2[..]
@@ -122,7 +122,7 @@ int[]
 int[]
 4[4]
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
@@ -133,11 +133,11 @@ misc.Suppress01.Suppress01():::ENTER
 DECLARE
 misc.Suppress01.Suppress01():::EXIT43
 this
-misc.Suppress01 # isNonNull=true isParam=true
+misc.Suppress01 # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.theArray[..]
@@ -145,7 +145,7 @@ int[]
 int[]
 4[4]
 this.theArray2
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 5
 this.theArray2[..]
@@ -153,7 +153,7 @@ int[]
 int[]
 4[4]
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
@@ -161,11 +161,11 @@ int
 DECLARE
 misc.Suppress01.equals(java.lang.Object):::ENTER
 this
-misc.Suppress01 # isNonNull=true isParam=true
+misc.Suppress01 # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 6
 this.theArray[..]
@@ -173,7 +173,7 @@ int[]
 int[]
 5[5]
 this.theArray2
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 6
 this.theArray2[..]
@@ -181,7 +181,7 @@ int[]
 int[]
 5[5]
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 obj
@@ -196,11 +196,11 @@ java.lang.String
 DECLARE
 misc.Suppress01.equals(java.lang.Object):::EXIT1
 this
-misc.Suppress01 # isNonNull=true isParam=true
+misc.Suppress01 # isNonNull=true, isParam=true
 hashcode
 4
 this.theArray
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.theArray[..]
@@ -208,7 +208,7 @@ int[]
 int[]
 6[6]
 this.theArray2
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.theArray2[..]
@@ -216,7 +216,7 @@ int[]
 int[]
 6[6]
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 obj
@@ -236,11 +236,11 @@ boolean
 DECLARE
 misc.Suppress01.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Suppress01 # isNonNull=true isParam=true
+misc.Suppress01 # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 6
 this.theArray[..]
@@ -248,7 +248,7 @@ int[]
 int[]
 5[5]
 this.theArray2
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 6
 this.theArray2[..]
@@ -256,7 +256,7 @@ int[]
 int[]
 5[5]
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 obj
@@ -271,11 +271,11 @@ java.lang.String
 DECLARE
 misc.Suppress01.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Suppress01 # isNonNull=true isParam=true
+misc.Suppress01 # isNonNull=true, isParam=true
 hashcode
 4
 this.theArray
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.theArray[..]
@@ -283,7 +283,7 @@ int[]
 int[]
 6[6]
 this.theArray2
-int[] # declaringClassPackageName=misc, 
+int[] # declaringClassPackageName=misc
 hashcode
 7
 this.theArray2[..]
@@ -291,7 +291,7 @@ int[]
 int[]
 6[6]
 this.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 obj

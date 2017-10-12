@@ -61,7 +61,6 @@ public class StackAr
     /*@ ensures (this.topOfStack >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.topOfStack+1) ==> (this.theArray[i] != null))); */
     /*@ ensures (this.topOfStack >= 0)  ==>  ((\forall int i; (this.topOfStack <= i && i <= \old(this.topOfStack)+1) ==> (this.theArray[i] != null))); */
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null)); */
-    /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /**
      * Test if the stack is logically empty.
      * @return true if empty, false otherwise.
@@ -81,7 +80,6 @@ public class StackAr
     /*@ ensures (\result == true)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != null))); */
     /*@ ensures (\result == true)  ==>  (this.topOfStack != \typeof(this.theArray).length()); */
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null)); */
-    /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /**
      * Test if the stack is logically full.
      * @return true if full, false otherwise.
@@ -100,7 +98,6 @@ public class StackAr
     /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))); */
     /*@ ensures this.topOfStack == -1; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)); */
-    /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures this.topOfStack <= \old(this.topOfStack); */
     /*@ ensures \old(this.topOfStack) < \typeof(this.theArray).length(); */
     /*@ ensures (\old(this.topOfStack) == 0) ==> (this.theArray.length-1 == 0); */
@@ -137,7 +134,6 @@ public class StackAr
     /*@ ensures \typeof(\result).length() == 16 || \typeof(\result).length() == 22 || \typeof(\result).length() == 24; */
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null)); */
     /*@ ensures \typeof(this.theArray) != \typeof(\result); */
-    /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \typeof(\result))); */
     /*@ ensures \typeof(this.theArray).length() != \typeof(\result).length(); */
     /*@ ensures (this.theArray.length == 0) ==> (\typeof(\result).length() == 0); */
@@ -161,7 +157,6 @@ public class StackAr
     /*@ ensures this.theArray[\old(this.topOfStack)] == null; */
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] == null)); */
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)+1) ==> (this.theArray[i] != null)); */
-    /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures this.topOfStack - \old(this.topOfStack) + 1 == 0; */
     /*@ ensures this.topOfStack <= \typeof(this.theArray).length(); */
     /*@ ensures this.topOfStack < this.theArray.length-1; */
@@ -192,7 +187,6 @@ public class StackAr
     /*@ ensures \typeof(x).length() == 16 || \typeof(x).length() == 22 || \typeof(x).length() == 24; */
     /*@ ensures (\forall int i; (this.topOfStack <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == null)); */
     /*@ ensures (\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.topOfStack+1) ==> (this.theArray[i] != null)); */
-    /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures \typeof(this.theArray) != \old(\typeof(x)); */
     /*@ ensures !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \old(\typeof(x)))); */
     /*@ ensures this.topOfStack - \old(this.topOfStack) - 1 == 0; */
@@ -255,7 +249,6 @@ public class StackAr
     /*@ ensures (\result == null)  ==>  (this.topOfStack == -1); */
     /*@ ensures \typeof(\result).length() == 16 || \typeof(\result).length() == 24; */
     /*@ ensures \typeof(this.theArray) != \typeof(\result); */
-    /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures this.topOfStack <= \old(this.topOfStack); */
     /*@ ensures this.topOfStack <= \typeof(this.theArray).length(); */
     /*@ ensures !(\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) != \typeof(\result))); */

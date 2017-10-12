@@ -71,6 +71,7 @@ nxt[].next->next->next->next == orig(nxt[].next->next->next->next)
 nxt[].next->next->next[0] == orig(nxt[].next->next->next[0])
 nxt[].next->next[0] == orig(nxt[].next->next[0])
 nxt[].next[0] == orig(nxt[].next[0])
+this->data == orig(dat)
 this->next == orig(nxt)
 ::__numeric_traits_integer<char>::__max == 127
 ::__numeric_traits_integer<int>::__max == 2147483647
@@ -90,7 +91,6 @@ nxt[].next->next->next[0] contains no nulls and has only one value, of length 1
 nxt[].next->next->next[0] elements has only one value
 this->next[].next->next->next[0] contains no nulls and has only one value, of length 1
 this->next[].next->next->next[0] elements has only one value
-this->data == orig(dat)
 ===========================================================================
 Stack:::OBJECT
 this->head[] elements != null
@@ -119,6 +119,7 @@ Stack.Stack(char*):::EXIT
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
+this->myName == orig(name)
 ::__numeric_traits_integer<char>::__max == 127
 ::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
@@ -131,7 +132,6 @@ Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 0, 5 }
 this->head == null
 this->numElements == 0
-this->myName == orig(name)
 ===========================================================================
 Stack.getName():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
@@ -163,6 +163,8 @@ Stack.getName():::EXIT
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
+return == this->myName
+return == orig(this->myName)
 this->head == orig(this->head)
 this->head[] == orig(this->head[])
 this->head[].next == orig(this->head[].next)
@@ -191,8 +193,6 @@ this->head[].next->data one of { [Fourth line], [Tres] }
 this->head[].next->next->data elements one of { "Dos", "Third line" }
 this->head[].next->next->data one of { [Dos], [Third line] }
 this->numElements one of { 4, 5 }
-return == this->myName
-return == orig(this->myName)
 ===========================================================================
 Stack.getNumStacksCreated():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
@@ -254,6 +254,7 @@ Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 this->head[].next == orig(this->head[].next->next)
 this->head[].next->next == orig(this->head[].next->next->next)
+this->myName == orig(this->myName)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
 ::__numeric_traits_integer<int>::__max == 2147483647
@@ -274,7 +275,6 @@ orig(this->head[].next) elements == this->head
 this->head in orig(this->head[].next)
 this->head[] - orig(this->head[]) + 80 == 0
 this->head[].next[0] - orig(this->head[].next[0]) + 80 == 0
-this->myName == orig(this->myName)
 (orig(this->numElements) == 0) ==> (this->numElements == 0)
 this->numElements <= orig(this->numElements)
 ===========================================================================
@@ -316,6 +316,7 @@ this->head[].next->next->next == orig(this->head[].next->next->next)
 this->head[].next->next->next[0] == orig(this->head[].next->next->next[0])
 this->head[].next->next[0] == orig(this->head[].next->next[0])
 this->head[].next[0] == orig(this->head[].next[0])
+this->myName == orig(this->myName)
 this->numElements == orig(this->numElements)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
@@ -336,7 +337,6 @@ this->head[].next->data one of { [Fourth line], [Tres] }
 this->head[].next->next->data elements one of { "Dos", "Third line" }
 this->head[].next->next->data one of { [Dos], [Third line] }
 this->numElements one of { 4, 5 }
-this->myName == orig(this->myName)
 ===========================================================================
 Stack.push(char*):::ENTER
 ::__numeric_traits_integer<char>::__max == 127
@@ -364,6 +364,7 @@ Stack.push(char*):::EXIT
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 this->head[].next->next == orig(this->head[].next)
 this->head[].next->next->next == orig(this->head[].next->next)
+this->myName == orig(this->myName)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
 ::__numeric_traits_integer<int>::__max == 2147483647
@@ -380,7 +381,6 @@ orig(dat) in this->head[].data
 orig(this->head) in this->head[].next
 this->head[].next elements == orig(this->head)
 this->head[].next[0] - orig(this->head[].next[0]) - 80 == 0
-this->myName == orig(this->myName)
 this->numElements - orig(this->numElements) - 1 == 0
 ===========================================================================
 Stack.~Stack():::ENTER

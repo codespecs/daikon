@@ -318,7 +318,9 @@ public class Runtime {
         /*@NonNull*/ Stack<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
         while (!callstack.empty()) {
           ci = callstack.pop();
-          if (ci.nonce == nonce) break;
+          if (ci.nonce == nonce) {
+            break;
+          }
         }
         if (ci == null) {
           synchronized (SharedData.methods) {
@@ -416,7 +418,9 @@ public class Runtime {
           class_info = SharedData.new_classes.removeFirst();
         }
       }
-      if (class_info == null) break;
+      if (class_info == null) {
+        break;
+      }
 
       if (debug) System.out.println("processing class " + class_info.class_name);
       if (first_class) {
@@ -610,8 +614,7 @@ public class Runtime {
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
-              @SuppressWarnings(
-                  "lock") // TODO: Fix Checker Framework issue 523 and remove this @SuppressWarnings.
+              @SuppressWarnings("lock") // non-final field
               public void run() {
                 if (!dtrace_closed) {
                   // When the program being instrumented exits, the buffers

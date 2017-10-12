@@ -8,11 +8,11 @@ misc.Precedence:::CLASS
 DECLARE
 misc.Precedence:::OBJECT
 this
-misc.Precedence # isNonNull=true isParam=true
+misc.Precedence # isNonNull=true, isParam=true
 hashcode
 2
 this.i
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
@@ -23,11 +23,11 @@ misc.Precedence.Precedence():::ENTER
 DECLARE
 misc.Precedence.Precedence():::EXIT3
 this
-misc.Precedence # isNonNull=true isParam=true
+misc.Precedence # isNonNull=true, isParam=true
 hashcode
 2
 this.i
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
@@ -74,11 +74,11 @@ java.lang.String[]
 DECLARE
 misc.Precedence.lets_calculate(int):::ENTER
 this
-misc.Precedence # isNonNull=true isParam=true
+misc.Precedence # isNonNull=true, isParam=true
 hashcode
 3
 this.i
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 j
@@ -89,11 +89,11 @@ int
 DECLARE
 misc.Precedence.lets_calculate(int):::EXIT18
 this
-misc.Precedence # isNonNull=true isParam=true
+misc.Precedence # isNonNull=true, isParam=true
 hashcode
 3
 this.i
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 j
@@ -109,11 +109,11 @@ int
 DECLARE
 misc.Precedence.equals(java.lang.Object):::ENTER
 this
-misc.Precedence # isNonNull=true isParam=true
+misc.Precedence # isNonNull=true, isParam=true
 hashcode
 3
 this.i
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 obj
@@ -128,11 +128,11 @@ java.lang.String
 DECLARE
 misc.Precedence.equals(java.lang.Object):::EXIT1
 this
-misc.Precedence # isNonNull=true isParam=true
+misc.Precedence # isNonNull=true, isParam=true
 hashcode
 4
 this.i
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 obj
@@ -152,11 +152,11 @@ boolean
 DECLARE
 misc.Precedence.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Precedence # isNonNull=true isParam=true
+misc.Precedence # isNonNull=true, isParam=true
 hashcode
 3
 this.i
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 obj
@@ -171,11 +171,11 @@ java.lang.String
 DECLARE
 misc.Precedence.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Precedence # isNonNull=true isParam=true
+misc.Precedence # isNonNull=true, isParam=true
 hashcode
 4
 this.i
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 obj

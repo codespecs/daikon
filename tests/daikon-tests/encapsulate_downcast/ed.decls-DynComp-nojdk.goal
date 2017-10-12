@@ -5,42 +5,42 @@ implicit
 DECLARE
 misc.EncapsulateDowncast:::CLASS
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 4
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 
 DECLARE
 misc.EncapsulateDowncast:::OBJECT
 this
-misc.EncapsulateDowncast # isNonNull=true isParam=true
+misc.EncapsulateDowncast # isNonNull=true, isParam=true
 hashcode
 6
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 4
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 
@@ -51,23 +51,23 @@ misc.EncapsulateDowncast.EncapsulateDowncast():::ENTER
 DECLARE
 misc.EncapsulateDowncast.EncapsulateDowncast():::EXIT22
 this
-misc.EncapsulateDowncast # isNonNull=true isParam=true
+misc.EncapsulateDowncast # isNonNull=true, isParam=true
 hashcode
 6
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 4
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 
@@ -75,19 +75,19 @@ hashcode
 DECLARE
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 6
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 7
 list
@@ -106,19 +106,19 @@ java.lang.String[]
 DECLARE
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT34
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 6
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 7
 list
@@ -138,19 +138,19 @@ java.lang.String[]
 DECLARE
 misc.EncapsulateDowncast.main(java.lang.String[]):::ENTER
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 7
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 8
 argv
@@ -173,19 +173,19 @@ java.lang.String[]
 DECLARE
 misc.EncapsulateDowncast.main(java.lang.String[]):::EXIT52
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 7
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 8
 argv
@@ -209,23 +209,23 @@ java.lang.String[]
 DECLARE
 misc.EncapsulateDowncast.equals(java.lang.Object):::ENTER
 this
-misc.EncapsulateDowncast # isNonNull=true isParam=true
+misc.EncapsulateDowncast # isNonNull=true, isParam=true
 hashcode
 7
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 4
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 obj
@@ -240,23 +240,23 @@ java.lang.String
 DECLARE
 misc.EncapsulateDowncast.equals(java.lang.Object):::EXIT1
 this
-misc.EncapsulateDowncast # isNonNull=true isParam=true
+misc.EncapsulateDowncast # isNonNull=true, isParam=true
 hashcode
 8
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 4
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 obj
@@ -276,23 +276,23 @@ boolean
 DECLARE
 misc.EncapsulateDowncast.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.EncapsulateDowncast # isNonNull=true isParam=true
+misc.EncapsulateDowncast # isNonNull=true, isParam=true
 hashcode
 7
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 4
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 obj
@@ -307,23 +307,23 @@ java.lang.String
 DECLARE
 misc.EncapsulateDowncast.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.EncapsulateDowncast # isNonNull=true isParam=true
+misc.EncapsulateDowncast # isNonNull=true, isParam=true
 hashcode
 8
 misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 4
 misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc, 
+java.util.Random # declaringClassPackageName=misc
 hashcode
 5
 obj
@@ -345,11 +345,11 @@ misc.Person:::CLASS
 DECLARE
 misc.Person:::OBJECT
 this
-misc.Person # isNonNull=true isParam=true
+misc.Person # isNonNull=true, isParam=true
 hashcode
 2
 this._name
-java.lang.String # declaringClassPackageName=misc, 
+java.lang.String # declaringClassPackageName=misc
 hashcode
 4
 this._name.toString
@@ -357,11 +357,11 @@ java.lang.String
 java.lang.String
 5
 this._height
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this._weight
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 
@@ -388,11 +388,11 @@ int
 DECLARE
 misc.Person.Person(java.lang.String, int, int):::EXIT15
 this
-misc.Person # isNonNull=true isParam=true
+misc.Person # isNonNull=true, isParam=true
 hashcode
 5
 this._name
-java.lang.String # declaringClassPackageName=misc, 
+java.lang.String # declaringClassPackageName=misc
 hashcode
 3
 this._name.toString
@@ -400,11 +400,11 @@ java.lang.String
 java.lang.String
 6
 this._height
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 this._weight
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 name
@@ -428,11 +428,11 @@ int
 DECLARE
 misc.Person.getName():::ENTER
 this
-misc.Person # isNonNull=true isParam=true
+misc.Person # isNonNull=true, isParam=true
 hashcode
 2
 this._name
-java.lang.String # declaringClassPackageName=misc, 
+java.lang.String # declaringClassPackageName=misc
 hashcode
 4
 this._name.toString
@@ -440,22 +440,22 @@ java.lang.String
 java.lang.String
 5
 this._height
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 this._weight
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 
 DECLARE
 misc.Person.getName():::EXIT18
 this
-misc.Person # isNonNull=true isParam=true
+misc.Person # isNonNull=true, isParam=true
 hashcode
 4
 this._name
-java.lang.String # declaringClassPackageName=misc, 
+java.lang.String # declaringClassPackageName=misc
 hashcode
 6
 this._name.toString
@@ -463,11 +463,11 @@ java.lang.String
 java.lang.String
 7
 this._height
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this._weight
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 return
@@ -483,11 +483,11 @@ java.lang.String
 DECLARE
 misc.Person.equals(java.lang.Object):::ENTER
 this
-misc.Person # isNonNull=true isParam=true
+misc.Person # isNonNull=true, isParam=true
 hashcode
 3
 this._name
-java.lang.String # declaringClassPackageName=misc, 
+java.lang.String # declaringClassPackageName=misc
 hashcode
 5
 this._name.toString
@@ -495,11 +495,11 @@ java.lang.String
 java.lang.String
 6
 this._height
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this._weight
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 obj
@@ -514,11 +514,11 @@ java.lang.String
 DECLARE
 misc.Person.equals(java.lang.Object):::EXIT1
 this
-misc.Person # isNonNull=true isParam=true
+misc.Person # isNonNull=true, isParam=true
 hashcode
 4
 this._name
-java.lang.String # declaringClassPackageName=misc, 
+java.lang.String # declaringClassPackageName=misc
 hashcode
 6
 this._name.toString
@@ -526,11 +526,11 @@ java.lang.String
 java.lang.String
 7
 this._height
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this._weight
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 obj
@@ -550,11 +550,11 @@ boolean
 DECLARE
 misc.Person.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Person # isNonNull=true isParam=true
+misc.Person # isNonNull=true, isParam=true
 hashcode
 3
 this._name
-java.lang.String # declaringClassPackageName=misc, 
+java.lang.String # declaringClassPackageName=misc
 hashcode
 5
 this._name.toString
@@ -562,11 +562,11 @@ java.lang.String
 java.lang.String
 6
 this._height
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 4
 this._weight
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 7
 obj
@@ -581,11 +581,11 @@ java.lang.String
 DECLARE
 misc.Person.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Person # isNonNull=true isParam=true
+misc.Person # isNonNull=true, isParam=true
 hashcode
 4
 this._name
-java.lang.String # declaringClassPackageName=misc, 
+java.lang.String # declaringClassPackageName=misc
 hashcode
 6
 this._name.toString
@@ -593,11 +593,11 @@ java.lang.String
 java.lang.String
 7
 this._height
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 this._weight
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 8
 obj

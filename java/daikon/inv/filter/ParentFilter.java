@@ -90,7 +90,9 @@ public class ParentFilter extends InvariantFilter {
 
       // Lookup the slice, skip if not found
       PptSlice pslice = rel.parent.findSlice(pvis);
-      if (pslice == null) continue;
+      if (pslice == null) {
+        continue;
+      }
       if (Debug.logDetail()) inv.log("Found parent slice: %s", pslice.name());
 
       // System.out.printf ("  found parent slice (%d invs): %s%n", pslice.invs.size(), pslice.name());
@@ -98,16 +100,24 @@ public class ParentFilter extends InvariantFilter {
       // Look for a matching invariant in the parent slice.
       for (Invariant pinv : pslice.invs) {
         // System.out.printf ("  inv in parent slice: %s%n", pinv.format());
-        if (pinv.isGuardingPredicate) continue;
-        if (pinv.getClass() != inv.getClass()) continue;
-        if (!pinv.isSameFormula(inv)) continue;
+        if (pinv.isGuardingPredicate) {
+          continue;
+        }
+        if (pinv.getClass() != inv.getClass()) {
+          continue;
+        }
+        if (!pinv.isSameFormula(inv)) {
+          continue;
+        }
 
         // Check that all the guard variables correspond.
         List<VarInfo> guardedVars = inv.getGuardingList();
         List<VarInfo> pGuardedVars = pinv.getGuardingList();
         // Optimization: bail our early if size of list is different.
         if ((guardedVars.size() != pGuardedVars.size())
-            && (guardedVars.size() != pGuardedVars.size() + 1)) continue;
+            && (guardedVars.size() != pGuardedVars.size() + 1)) {
+          continue;
+        }
         boolean var_mismatch = false;
         for (VarInfo v : guardedVars) {
           VarInfo pv = rel.parentVarAnyInEquality(v);
@@ -138,7 +148,9 @@ public class ParentFilter extends InvariantFilter {
             break;
           }
         }
-        if (var_mismatch) continue;
+        if (var_mismatch) {
+          continue;
+        }
 
         if (Invariant.logOn()) {
           inv.log(

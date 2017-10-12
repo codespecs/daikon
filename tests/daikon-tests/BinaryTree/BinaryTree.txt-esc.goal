@@ -22,8 +22,8 @@ x != null
 DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT
     Variables: this this.root x x.getClass().getName() return return.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName())
       Unmodified variables: this this.root x x.getClass().getName()
-(\result != null)  ==>  (\typeof(\result) == \type(DataStructures.MyInteger))
 (\result != null)  ==>  (\typeof(\result) == \old(\typeof(x)))
+(\result != null)  ==>  (\typeof(\result) == \type(DataStructures.MyInteger))
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
     Variables: this this.root x x.getClass().getName() t

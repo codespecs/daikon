@@ -28,6 +28,7 @@ daikon.Quant.size(::f) == 1000
 ..InfoTbl():::EXIT
     Variables: ::line ::f ::f[] ::r ::c r c f f[] pdf pdf[] return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(r) orig(c) orig(f) orig(f[]) orig(pdf) orig(pdf[]) size(::f[]) size(::f[])-1 size(f[]) size(f[])-1 size(pdf[]) size(pdf[])-1 orig(size(::f[])) orig(size(::f[]))-1 orig(size(f[])) orig(size(f[]))-1 orig(size(pdf[])) orig(size(pdf[]))-1
 assignable pdf[*]
+::line.equals(\old(::line))
 ::f == \old(::f)
 ::f == \old(f)
 daikon.Quant.pairwiseEqual(::f, f)
@@ -42,7 +43,6 @@ daikon.Quant.eltsGTE(::f, 0)
 daikon.Quant.eltsGTE(pdf, 2)
 daikon.Quant.eltsGtIndex(pdf)
 daikon.Quant.size(::f) == 1000
-::line.equals(\old(::line))
 daikon.Quant.eltsGTE(::f, daikon.Quant.size(pdf)-1)
 daikon.Quant.memberOf(daikon.Quant.size(pdf)-1 , ::f )
 (\old(pdf) != null)  ==>  (daikon.Quant.eltsGTE(::f, \old(daikon.Quant.size(pdf))-1))
@@ -81,6 +81,7 @@ daikon.Quant.size(::f) == 1000
     Variables: ::cof ::cof[] ::line ::f ::f[] ::r ::c x return orig(::cof) orig(::cof[]) orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(x) size(::cof[]) size(::cof[])-1 size(::f[]) size(::f[])-1 orig(size(::cof[])) orig(size(::cof[]))-1 orig(size(::f[])) orig(size(::f[]))-1
 ::cof == \old(::cof)
 daikon.Quant.pairwiseEqual(::cof, \old(::cof))
+::line.equals(\old(::line))
 ::f == \old(::f)
 daikon.Quant.pairwiseEqual(::f, \old(::f))
 ::r == \old(::r)
@@ -92,7 +93,6 @@ daikon.Quant.eltsGTE(::f, 0)
 ::r >= 2
 daikon.Quant.size(::cof) == 6
 daikon.Quant.size(::f) == 1000
-::line.equals(\old(::line))
 (::r >> ::c == 0)
 (::r >> daikon.Quant.size(::cof) == 0)
 ::r != daikon.Quant.size(::cof)
@@ -118,6 +118,7 @@ df < daikon.Quant.size(::f)-1
 ===========================================================================
 ..QChiSq():::EXIT
     Variables: ::line ::f ::f[] ::r ::c chisq df return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(chisq) orig(df) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+::line.equals(\old(::line))
 ::f == \old(::f)
 daikon.Quant.pairwiseEqual(::f, \old(::f))
 ::r == \old(::r)
@@ -126,7 +127,6 @@ daikon.Quant.pairwiseEqual(::f, \old(::f))
 daikon.Quant.eltsGTE(::f, 0)
 ::r >= 2
 daikon.Quant.size(::f) == 1000
-::line.equals(\old(::line))
 (::r >> ::c == 0)
 ::r < daikon.Quant.size(::f)-1
 ::c < daikon.Quant.size(::f)-1
@@ -148,6 +148,7 @@ daikon.Quant.fuzzy.ne(a, x)
 ===========================================================================
 ..QGamma():::EXIT
     Variables: ::line ::f ::f[] ::r ::c a x return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(a) orig(x) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+::line.equals(\old(::line))
 ::f == \old(::f)
 daikon.Quant.pairwiseEqual(::f, \old(::f))
 ::r == \old(::r)
@@ -156,7 +157,6 @@ daikon.Quant.pairwiseEqual(::f, \old(::f))
 daikon.Quant.eltsGTE(::f, 0)
 ::r >= 2
 daikon.Quant.size(::f) == 1000
-::line.equals(\old(::line))
 (::r >> ::c == 0)
 ::r < daikon.Quant.size(::f)-1
 ::c < daikon.Quant.size(::f)-1
@@ -218,6 +218,7 @@ daikon.Quant.fuzzy.lt(a, x)
 ===========================================================================
 tot_info.c.gcf():::EXIT
     Variables: ::line ::f ::f[] ::r ::c a x return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(a) orig(x) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+::line.equals(\old(::line))
 ::f == \old(::f)
 daikon.Quant.pairwiseEqual(::f, \old(::f))
 ::r == \old(::r)
@@ -226,7 +227,6 @@ daikon.Quant.pairwiseEqual(::f, \old(::f))
 daikon.Quant.eltsGTE(::f, 0)
 ::r >= 2
 daikon.Quant.size(::f) == 1000
-::line.equals(\old(::line))
 (::r >> ::c == 0)
 ::r < daikon.Quant.size(::f)-1
 ::c < daikon.Quant.size(::f)-1
@@ -252,6 +252,7 @@ daikon.Quant.fuzzy.ne(a, x)
 ===========================================================================
 tot_info.c.gser():::EXIT
     Variables: ::line ::f ::f[] ::r ::c a x return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(a) orig(x) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+::line.equals(\old(::line))
 ::f == \old(::f)
 daikon.Quant.pairwiseEqual(::f, \old(::f))
 ::r == \old(::r)
@@ -259,7 +260,6 @@ daikon.Quant.pairwiseEqual(::f, \old(::f))
 ::f != null
 daikon.Quant.eltsGTE(::f, 0)
 daikon.Quant.size(::f) == 1000
-::line.equals(\old(::line))
 daikon.Quant.memberOf(::r , ::f )
 daikon.Quant.memberOf(::c , ::f )
 (::c >> ::r == 0)
