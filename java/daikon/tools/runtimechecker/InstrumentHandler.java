@@ -1,5 +1,7 @@
 package daikon.tools.runtimechecker;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import daikon.Daikon;
 import daikon.FileIO;
 import daikon.Global;
@@ -9,9 +11,9 @@ import daikon.tools.jtb.*;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -107,7 +109,7 @@ public class InstrumentHandler extends CommandHandler {
     // them via reflection).
     //compile(arguments.javaFileNames, "");
 
-    // Create filenames including temp directory and pakage directories.
+    // Create filenames including temp directory and package directories.
     List<ParseResults> parseResults =
         ParseResults.parse(arguments.javaFileNames, true /* discard comments */);
 
@@ -156,7 +158,7 @@ public class InstrumentHandler extends CommandHandler {
         File instrumentedFile = new File(instrumentedFileDir, instrumentedFileName);
         debug.fine("instrumented file name: " + instrumentedFile.getPath());
         System.out.println("Writing " + instrumentedFile);
-        Writer output = new FileWriter(instrumentedFile);
+        Writer output = Files.newBufferedWriter(instrumentedFile.toPath(), UTF_8);
         // Bug: JTB seems to order the modifiers in a non-standard way,
         // such as "static final public" instead of "public static final".
         oneFile.compilationUnit.accept(new TreeFormatter());
@@ -171,7 +173,7 @@ public class InstrumentHandler extends CommandHandler {
           String checkerClassFileName = cls.getCheckerClassName() + ".java";
           File checkerClassFile = new File(checkerClassesDir, checkerClassFileName);
           System.out.println("Writing " + checkerClassFile);
-          output = new FileWriter(checkerClassFile);
+          output = Files.newBufferedWriter(checkerClassFile.toPath(), UTF_8);
           CompilationUnit cu = cls.getCompilationUnit();
           cu.accept(new TreeFormatter());
           cu.accept(new TreeDumper(output));

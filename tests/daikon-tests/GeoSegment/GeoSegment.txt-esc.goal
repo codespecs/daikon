@@ -120,6 +120,7 @@ MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude name name.toString p1 p1.latitude p1.longitude p2 p2.latitude p2.longitude orig(name) orig(name.toString) orig(p1) orig(p1.latitude) orig(p1.longitude) orig(p2) orig(p2.latitude) orig(p2.longitude)
       Unmodified variables: name name.toString p1 p1.latitude p1.longitude p2 p2.latitude p2.longitude
 this.name == \old(name)
+this.name.toString == name.toString
 this.p1 == \old(p1)
 this.p1.latitude == p1.latitude
 this.p1.longitude == p1.longitude
@@ -131,8 +132,6 @@ p1.latitude is a pointer
 p1.longitude is a pointer
 p2.latitude is a pointer
 p2.longitude is a pointer
-this.name.toString == name.toString
-name.toString == \old(name.toString)
 p1.latitude > p1.longitude
 p1.latitude > p2.longitude
 p1.longitude < p2.latitude
@@ -153,7 +152,6 @@ MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass().getName() return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude) orig(o) orig(o.getClass().getName())
       Unmodified variables: this this.name this.name.toString this.p1 this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass().getName()
 \result == false
-this.name.toString == \old(this.name.toString)
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -165,7 +163,6 @@ MapQuick1.GeoSegment.hashCode():::EXIT
       Unmodified variables: this this.name this.name.toString this.p1 this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
 \result != 0
 \result is a pointer
-this.name.toString == \old(this.name.toString)
 this.p1.latitude != \result
 this.p1.longitude != \result
 this.p2.latitude != \result
@@ -179,7 +176,6 @@ this.p1.longitude != this.p2.longitude
 MapQuick1.GeoSegment.heading():::EXIT
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
       Unmodified variables: this this.name this.name.toString this.p1 this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
-this.name.toString == \old(this.name.toString)
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
@@ -191,7 +187,6 @@ this.p1.longitude != this.p2.longitude
 MapQuick1.GeoSegment.length():::EXIT
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
       Unmodified variables: this this.name this.name.toString this.p1 this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
-this.name.toString == \old(this.name.toString)
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -204,13 +199,13 @@ MapQuick1.GeoSegment.name():::EXIT
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return return.toString orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
       Unmodified variables: this this.name this.name.toString this.p1 this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
 this.name == \result
+this.name.toString == \result.toString
 \result == \old(this.name)
+\result.toString == \old(this.name.toString)
 \result != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.toString is printable
-this.name.toString == \result.toString
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
-\result.toString == \old(this.name.toString)
 ===========================================================================
 MapQuick1.GeoSegment.p1():::ENTER
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
@@ -229,7 +224,6 @@ this.p1.longitude == \result.longitude
 \result != null
 \result.latitude is a pointer
 \result.longitude is a pointer
-this.name.toString == \old(this.name.toString)
 this.p2.latitude != \result.latitude
 this.p2.latitude > \result.longitude
 this.p2.longitude < \result.latitude
@@ -251,7 +245,6 @@ this.p2.longitude == \result.longitude
 \result != null
 \result.latitude is a pointer
 \result.longitude is a pointer
-this.name.toString == \old(this.name.toString)
 this.p1.latitude > \result.longitude
 this.p1.longitude < \result.latitude
 \result.latitude > \result.longitude

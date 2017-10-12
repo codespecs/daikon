@@ -1,3 +1,5 @@
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -32,11 +34,15 @@ public final class SplitDtrace {
     ArrayList<String> rec = new ArrayList<String>();
     while (true) {
       readRec(reader, rec);
-      if (isDeclare(rec)) break;
+      if (isDeclare(rec)) {
+        break;
+      }
     }
     while (true) {
       readRec(reader, rec);
-      if (rec.size() == 0) break;
+      if (rec.size() == 0) {
+        break;
+      }
       if (isDeclare(rec)) {
         declNum++;
       } else {
@@ -60,7 +66,7 @@ public final class SplitDtrace {
     OutputStream output = new FileOutputStream(out);
     boolean isGz = filename.endsWith(".dtrace.gz");
     if (isGz) output = new GZIPOutputStream(output);
-    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
+    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
     BufferedReader reader = getStream(filename);
 
     int currRecCount = 0;
@@ -70,11 +76,15 @@ public final class SplitDtrace {
       readRec(reader, rec);
       if (isDeclare(rec)) writer.newLine();
       writeRec(writer, rec);
-      if (isDeclare(rec)) break;
+      if (isDeclare(rec)) {
+        break;
+      }
     }
     while (true) {
       readRec(reader, rec);
-      if (rec.size() == 0) break;
+      if (rec.size() == 0) {
+        break;
+      }
       boolean isDecl = isDeclare(rec);
       if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
         boolean shouldWrite = true;
@@ -136,11 +146,15 @@ public final class SplitDtrace {
     res.clear();
     String line;
     while ((line = reader.readLine()) != null) {
-      if (!isEmpty(line)) break;
+      if (!isEmpty(line)) {
+        break;
+      }
     } //eat white space
     while (line != null) {
       line = line.trim();
-      if (isEmpty(line)) break;
+      if (isEmpty(line)) {
+        break;
+      }
       res.add(line.trim());
       line = reader.readLine();
     }

@@ -1,5 +1,7 @@
 package daikon.tools.runtimechecker;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +30,7 @@ public class CommandHandler {
       System.err.println("Didn't find documentation for " + getClass());
       return;
     }
-    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8));
     try {
       String line;
       while ((line = reader.readLine()) != null) {

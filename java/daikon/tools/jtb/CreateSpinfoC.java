@@ -1,6 +1,12 @@
 package daikon.tools.jtb;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.*;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import jtb.cparser.*;
 import jtb.cparser.customvisitor.*;
 import jtb.cparser.syntaxtree.*;
@@ -24,8 +30,8 @@ public class CreateSpinfoC {
       // filter out the '\f' characters in the file
       try {
         temp = new File(fileName + ".temp");
-        FileReader reader = new FileReader(args[0]);
-        FileWriter writer = new FileWriter(temp);
+        Reader reader = Files.newBufferedReader(Paths.get(args[0]), UTF_8);
+        Writer writer = Files.newBufferedWriter(temp.toPath(), UTF_8);
         int c;
         while ((c = reader.read()) != -1) {
           if (c != '\f') {

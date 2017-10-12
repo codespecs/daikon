@@ -8,11 +8,11 @@ PolyCalc.RatTermVec:::CLASS
 DECLARE
 PolyCalc.RatTermVec:::OBJECT
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 2
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.wrapped[..]
@@ -31,11 +31,11 @@ PolyCalc.RatTermVec.RatTermVec():::ENTER
 DECLARE
 PolyCalc.RatTermVec.RatTermVec():::EXIT27
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 2
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.wrapped[..]
@@ -51,11 +51,11 @@ java.lang.String[]
 DECLARE
 PolyCalc.RatTermVec.size():::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 2
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.wrapped[..]
@@ -70,11 +70,11 @@ java.lang.String[]
 DECLARE
 PolyCalc.RatTermVec.size():::EXIT30
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 3
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.wrapped[..]
@@ -94,11 +94,11 @@ int
 DECLARE
 PolyCalc.RatTermVec.get(int):::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 3
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.wrapped[..]
@@ -117,11 +117,11 @@ int
 DECLARE
 PolyCalc.RatTermVec.get(int):::EXIT39
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 4
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.wrapped[..]
@@ -145,11 +145,11 @@ hashcode
 DECLARE
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 3
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.wrapped[..]
@@ -168,11 +168,11 @@ hashcode
 DECLARE
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::EXIT50
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 3
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.wrapped[..]
@@ -192,11 +192,11 @@ hashcode
 DECLARE
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 4
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.wrapped[..]
@@ -219,11 +219,11 @@ int
 DECLARE
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT64
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 4
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.wrapped[..]
@@ -247,11 +247,11 @@ int
 DECLARE
 PolyCalc.RatTermVec.remove(int):::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 3
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.wrapped[..]
@@ -270,11 +270,11 @@ int
 DECLARE
 PolyCalc.RatTermVec.remove(int):::EXIT78
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 3
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.wrapped[..]
@@ -294,11 +294,11 @@ int
 DECLARE
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 4
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.wrapped[..]
@@ -321,11 +321,11 @@ int
 DECLARE
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT89
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 4
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.wrapped[..]
@@ -349,11 +349,11 @@ int
 DECLARE
 PolyCalc.RatTermVec.copy():::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 2
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.wrapped[..]
@@ -368,11 +368,11 @@ java.lang.String[]
 DECLARE
 PolyCalc.RatTermVec.copy():::EXIT100
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 5
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.wrapped[..]
@@ -388,7 +388,7 @@ PolyCalc.RatTermVec
 hashcode
 2
 return.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 3
 return.wrapped[..]
@@ -404,11 +404,11 @@ java.lang.String[]
 DECLARE
 PolyCalc.RatTermVec.printDebug():::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 2
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.wrapped[..]
@@ -423,11 +423,11 @@ java.lang.String[]
 DECLARE
 PolyCalc.RatTermVec.printDebug():::EXIT105
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 4
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.wrapped[..]
@@ -451,11 +451,11 @@ java.lang.String
 DECLARE
 PolyCalc.RatTermVec.equals(java.lang.Object):::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 3
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.wrapped[..]
@@ -478,11 +478,11 @@ java.lang.String
 DECLARE
 PolyCalc.RatTermVec.equals(java.lang.Object):::EXIT1
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 4
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.wrapped[..]
@@ -510,11 +510,11 @@ boolean
 DECLARE
 PolyCalc.RatTermVec.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 3
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.wrapped[..]
@@ -537,11 +537,11 @@ java.lang.String
 DECLARE
 PolyCalc.RatTermVec.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-PolyCalc.RatTermVec # isNonNull=true isParam=true
+PolyCalc.RatTermVec # isNonNull=true, isParam=true
 hashcode
 4
 this.wrapped
-java.util.ArrayList # declaringClassPackageName=PolyCalc, 
+java.util.ArrayList # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.wrapped[..]

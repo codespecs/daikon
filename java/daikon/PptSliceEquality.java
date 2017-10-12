@@ -103,7 +103,7 @@ public class PptSliceEquality extends PptSlice {
       if (!(o instanceof VarInfoAndComparability)) {
         return false;
       }
-      return equals((VarInfoAndComparability) o);
+      return equalsVarInfoAndComparability((VarInfoAndComparability) o);
     }
 
     /**
@@ -112,7 +112,7 @@ public class PptSliceEquality extends PptSlice {
      */
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
-    public boolean equals(
+    public boolean equalsVarInfoAndComparability(
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
         /*@GuardSatisfied*/ VarInfoAndComparability o) {
 
@@ -219,7 +219,9 @@ public class PptSliceEquality extends PptSlice {
     // equality set (albeit with only the one variable)
     ArrayList<Invariant> newInvs = new ArrayList<Invariant>();
     for (VarInfo v : var_infos) {
-      if (v.equalitySet != null) continue;
+      if (v.equalitySet != null) {
+        continue;
+      }
       List<VarInfo> vlist = varmap.get(v);
       if (vlist == null) {
         vlist = new ArrayList<VarInfo>(1);

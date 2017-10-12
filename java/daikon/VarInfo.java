@@ -562,7 +562,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Returns true if all variables have a parent relation with the specified id */
   private static boolean allHaveRelation(int parent_relation_id, VarInfo... vs) {
     for (VarInfo vi : vs) {
-      if (vi == null) continue;
+      if (vi == null) {
+        continue;
+      }
       boolean hasRelId = false;
       for (VarParent vp : vi.parents) {
         if (parent_relation_id == vp.parent_relation_id) {
@@ -928,7 +930,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     for (int i = 0; i < vis.length; i++) {
       VarInfo vi = vis[i];
       Derivation der = vi.derived;
-      if (der == null) continue;
+      if (der == null) {
+        continue;
+      }
       if (ArraysMDE.indexOf(der.getBases(), this) >= 0) {
         result.add(der);
       }
@@ -2553,10 +2557,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           System.err.printf(
               "%s filerep type = %s, canbemissing = %b\n", vi, vi.file_rep_type, vi.canBeMissing);
         }
-        if (!vi.file_rep_type.isHashcode()) continue;
+        if (!vi.file_rep_type.isHashcode()) {
+          continue;
+        }
         result.add(0, vi);
         if ((Daikon.dkconfig_guardNulls == "missing") // interned
-            && !vi.canBeMissing) break;
+            && !vi.canBeMissing) {
+          break;
+        }
       }
       return result;
     }

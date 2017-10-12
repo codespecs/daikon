@@ -3,6 +3,7 @@ package daikon.chicory;
 //import harpoon.ClassFile.HMethod;
 
 import static daikon.tools.nullness.NullnessUtils.castNonNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
 import daikon.util.*;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.lang.instrument.*;
 import java.lang.reflect.Member;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.jar.*;
 
@@ -124,7 +126,8 @@ public class ChicoryPremain {
     // use a special classloader to ensure correct version of BCEL is used
     ClassLoader loader = new ChicoryLoader();
     try {
-      transformer = loader.loadClass("daikon.chicory.Instrument").newInstance();
+      transformer =
+          loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
       @SuppressWarnings("unchecked")
       Class<Instrument> c = (Class<Instrument>) transformer.getClass();
       // System.out.printf ("Classloader of tranformer = %s%n",
@@ -229,20 +232,18 @@ public class ChicoryPremain {
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
   private static void writePurityFile(String fileName, String parentDir) {
-    PrintWriter pureFileWriter;
-    try {
-      pureFileWriter = new PrintWriter(new File(parentDir, fileName));
+    File absFile = new File(parentDir, fileName);
+    System.out.printf("Writing pure methods to %s%n", absFile);
+    try (BufferedWriter pureFileWriter = Files.newBufferedWriter(absFile.toPath(), UTF_8)) {
+      for (String methodName : pureMethods) {
+        pureFileWriter.write(methodName);
+        pureFileWriter.newLine();
+      }
     } catch (FileNotFoundException e) {
-      throw new Error("Could not open " + fileName + " for writing", e);
+      throw new Error("Could not open " + absFile, e);
+    } catch (IOException e) {
+      throw new Error("Problem writing to " + absFile, e);
     }
-
-    System.out.printf("Writing pure methods to %s%n", fileName);
-
-    for (String methodName : pureMethods) {
-      pureFileWriter.println(methodName);
-    }
-
-    pureFileWriter.close();
   }
 
   /**
@@ -308,19 +309,20 @@ public class ChicoryPremain {
    * BCEL classes). All references to BCEL must be within that class (so that all references to BCEL
    * will get resolved by this classloader).
    *
-   * <p>There are three general versions of BCEL to consider:
+   * <p>There are several versions of BCEL that have been released:
    *
    * <ul>
    *   <li>the original 5.2 version
-   *   <li>the interim 6.0 version
+   *   <li>an interim 6.0 version
    *   <li>the offical 6.0 release version
+   *   <li>the offical 6.1 release version
    * </ul>
    *
-   * We are looking for the latter one. The first and third versions use the package name of
+   * We are looking for the latter one. All but the interim versions use the package name of
    * org.apache.bcel while the interim version uses the package name of org.apache.commons.bcel6.
-   * Also, there are several classes present in the 6.0 release version that are not in the original
+   * Also, there are two classes present in the 6.1 release version that are not in any other
    * version. Thus, we can identify the correct version of BCEL by the presence of the class:
-   * org.apache.bcel.util.ClassPathRepository.class
+   * org.apache.bcel.classfile.ConstantModule.class
    *
    * <p>Earlier versions of Chicory inspected all version of BCEL found on the path and selected the
    * correct one, if present. We now (9/15/16) simplify this to say the first BCEL found must be the
@@ -333,14 +335,14 @@ public class ChicoryPremain {
     public ChicoryLoader() throws IOException {
 
       String bcel_classname = "org.apache.bcel.Constants";
-      String plse_marker_classname = "org.apache.bcel.util.ClassPathRepository";
+      String plse_marker_classname = "org.apache.bcel.classfile.ConstantModule";
 
       List<URL> bcel_urls = get_resource_list(bcel_classname);
       List<URL> plse_urls = get_resource_list(plse_marker_classname);
 
       if (plse_urls.size() == 0) {
         System.err.printf(
-            "%nBCEL must be in the classpath.  " + "Normally it is found in daikon.jar .%n");
+            "%nBCEL 6.1 must be on the classpath.  " + "Normally it is found in daikon.jar .%n");
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }

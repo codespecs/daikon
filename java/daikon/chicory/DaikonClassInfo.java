@@ -82,7 +82,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
   @Override
   public String get_relative_name() {
     // need to skip the leading "."
-    return DaikonVariableInfo.class_suffix.substring(1);
+    return DaikonVariableInfo.class_suffix_relative_name;
   }
 
   @Override

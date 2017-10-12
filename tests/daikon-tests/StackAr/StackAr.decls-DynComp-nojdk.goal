@@ -8,11 +8,11 @@ DataStructures.StackAr:::CLASS
 DECLARE
 DataStructures.StackAr:::OBJECT
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -28,7 +28,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -43,11 +43,11 @@ int
 DECLARE
 DataStructures.StackAr.StackAr(int):::EXIT33
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 4
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 3
 this.theArray.getClass().getName()
@@ -63,7 +63,7 @@ java.lang.Class[]
 java.lang.String[]
 1[2]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 2
 capacity
@@ -75,11 +75,11 @@ int
 DECLARE
 DataStructures.StackAr.isEmpty():::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -95,18 +95,18 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.StackAr.isEmpty():::EXIT42
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -122,7 +122,7 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -134,11 +134,11 @@ boolean
 DECLARE
 DataStructures.StackAr.isFull():::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -154,18 +154,18 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.StackAr.isFull():::EXIT52
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -181,7 +181,7 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -193,11 +193,11 @@ boolean
 DECLARE
 DataStructures.StackAr.makeEmpty():::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -213,18 +213,18 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.StackAr.makeEmpty():::EXIT63
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -240,7 +240,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -248,11 +248,11 @@ int
 DECLARE
 DataStructures.StackAr.top():::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -268,18 +268,18 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.StackAr.top():::EXIT74
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -295,7 +295,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 return
@@ -310,11 +310,11 @@ java.lang.String
 DECLARE
 DataStructures.StackAr.top():::EXIT75
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -330,7 +330,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 return
@@ -346,11 +346,11 @@ java.lang.String
 DECLARE
 DataStructures.StackAr.pop():::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -366,18 +366,18 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.StackAr.pop():::EXIT87
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -393,7 +393,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
@@ -401,11 +401,11 @@ int
 DECLARE
 DataStructures.StackAr.push(java.lang.Object):::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -421,7 +421,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 x
@@ -436,11 +436,11 @@ java.lang.String
 DECLARE
 DataStructures.StackAr.push(java.lang.Object):::EXIT99
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -456,7 +456,7 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 x
@@ -472,11 +472,11 @@ java.lang.String
 DECLARE
 DataStructures.StackAr.topAndPop():::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 2
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 4
 this.theArray.getClass().getName()
@@ -492,18 +492,18 @@ java.lang.Class[]
 java.lang.String[]
 1[3]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 3
 
 DECLARE
 DataStructures.StackAr.topAndPop():::EXIT108
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -519,7 +519,7 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -534,11 +534,11 @@ java.lang.String
 DECLARE
 DataStructures.StackAr.topAndPop():::EXIT111
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -554,7 +554,7 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 return
@@ -570,11 +570,11 @@ java.lang.String
 DECLARE
 DataStructures.StackAr.equals(java.lang.Object):::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -590,7 +590,7 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 obj
@@ -605,11 +605,11 @@ java.lang.String
 DECLARE
 DataStructures.StackAr.equals(java.lang.Object):::EXIT1
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 4
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.theArray.getClass().getName()
@@ -625,7 +625,7 @@ java.lang.Class[]
 java.lang.String[]
 1[5]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 obj
@@ -645,11 +645,11 @@ boolean
 DECLARE
 DataStructures.StackAr.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 3
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 5
 this.theArray.getClass().getName()
@@ -665,7 +665,7 @@ java.lang.Class[]
 java.lang.String[]
 1[4]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 4
 obj
@@ -680,11 +680,11 @@ java.lang.String
 DECLARE
 DataStructures.StackAr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.StackAr # isNonNull=true isParam=true
+DataStructures.StackAr # isNonNull=true, isParam=true
 hashcode
 4
 this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures, 
+java.lang.Object[] # declaringClassPackageName=DataStructures
 hashcode
 6
 this.theArray.getClass().getName()
@@ -700,7 +700,7 @@ java.lang.Class[]
 java.lang.String[]
 1[5]
 this.topOfStack
-int # declaringClassPackageName=DataStructures, 
+int # declaringClassPackageName=DataStructures
 int
 5
 obj

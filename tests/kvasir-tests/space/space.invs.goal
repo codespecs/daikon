@@ -49,6 +49,11 @@ pp2[][0] contains no nulls and has only one value, of length 1
 ureal_ptr has only one value
 ===========================================================================
 ..Get1Real():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -124,11 +129,6 @@ pp2[]->info == [65]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
 ureal_ptr[] == [43.0]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..GetInt():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -163,6 +163,11 @@ p1 in pp2[]
 pp2[] elements == p1
 ===========================================================================
 ..GetInt():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -223,11 +228,6 @@ pp2[]->LINE_NUM one of { [7], [9] }
 pp2[]->info elements one of { 49, 71 }
 pp2[]->info one of { [49], [71] }
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..GetKeyword():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -286,6 +286,11 @@ tp[]->PREV->PREV->info > tp[]->PREV->info (elementwise)
 tp[]->PREV->info < tp[]->info (elementwise)
 ===========================================================================
 ..GetKeyword():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 tp[]->LINE_NUM == tp[]->PREV->LINE_NUM
 tp[]->PREV == tp[]->PREV->PREV->NEXT
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -312,13 +317,8 @@ tp[]->PREV->info elements == 32
 tp[]->PREV[0] elements != null
 tp[i]->info > i
 tp[][0] elements != null
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
 ::Keywords != ::UserNames
-::Keywords == orig(::Keywords)
 ::Keywords != orig(kw)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ::UserNames != orig(kw)
 tp[]->LINE_NUM elements > return
 tp[]->PREV->PREV->LINE_NUM elements > return
@@ -379,6 +379,11 @@ tp[]->PREV->PREV->info > tp[]->info (elementwise)
 tp[]->PREV->info < tp[]->info (elementwise)
 ===========================================================================
 ..GetReal():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 tp[] == tp[]->PREV->NEXT
 tp[]->LINE_NUM == tp[]->PREV->LINE_NUM
 tp[]->PREV == tp[]->PREV->PREV->NEXT
@@ -391,11 +396,6 @@ tp[]->PREV->info == orig(tp[]->PREV->info)
 ::UserNames == "testgroup"
 return == 0
 tp[]->PREV->info == [32]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 tp[]->LINE_NUM elements > return
 tp[]->PREV->PREV->info elements > return
 tp[]->info elements > return
@@ -434,6 +434,11 @@ tp[]->info elements one of { 71, 116 }
 tp[]->info one of { [71], [116] }
 ===========================================================================
 ..GetUName():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 tp[] == tp[]->PREV->NEXT
 tp[]->LINE_NUM == tp[]->PREV->LINE_NUM
 tp[]->PREV == tp[]->PREV->PREV->NEXT
@@ -453,11 +458,6 @@ tp[]->PREV->PREV->info elements one of { 84, 112 }
 tp[]->PREV->PREV->info one of { [84], [112] }
 tp[]->PREV->info == [32]
 tp[]->info == [71]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..InKWords():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -468,17 +468,17 @@ tp[]->info == [71]
 WORD one of { "GEOMETRY", "testgroup" }
 ===========================================================================
 ..InKWords():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames one of { "", "testgroup" }
 return one of { 0, 1 }
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..InUNames():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -489,17 +489,17 @@ return one of { 0, 1 }
 WORD == "testgroup"
 ===========================================================================
 ..InUNames():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames == ""
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..InserUN():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -510,17 +510,17 @@ return == 0
 WORD == "testgroup"
 ===========================================================================
 ..InserUN():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(WORD)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames == "testgroup"
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(WORD)
 ===========================================================================
 ..TapeGet():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -557,6 +557,11 @@ tp[]->PREV->NEXT - tp[]->PREV->PREV->NEXT - 96 == 0
 tp[]->PREV->PREV - tp[]->PREV->PREV->NEXT + 96 == 0
 ===========================================================================
 ..TapeGet():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 tp[] == orig(tp[]->NEXT)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
@@ -577,12 +582,7 @@ tp[i]->PREV->info > i
 tp[]->PREV[0] elements != null
 tp[i]->info > i
 tp[][0] elements != null
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
 ::Keywords != ::UserNames
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 tp[]->LINE_NUM elements < return
 return in tp[]->PREV->info
 orig(tp[]->PREV->PREV->LINE_NUM) elements < return
@@ -679,6 +679,11 @@ p1 in pp2[]
 pp2[] elements == p1
 ===========================================================================
 ..adddef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == orig(p1[].LINE_NUM)
@@ -775,11 +780,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [71]
 pp2[][0] contains no nulls and has only one value, of length 1
 return one of { 0, 1 }
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 addrem_ptr[]->ADDREM_TYPE elements == return
 return in addrem_ptr[]->ADDREM_TYPE
 addrem_ptr[]->NODE_PTR->ANGLE_UNIT elements == return
@@ -878,6 +878,11 @@ group_ptr[].SHAPE == [0]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..addscan():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 group_ptr[] == orig(group_ptr[])
 group_ptr[].ADDREM_PTR == orig(group_ptr[].ADDREM_PTR)
 group_ptr[].ADDREM_PTR->ADDREM_TYPE == orig(group_ptr[].ADDREM_PTR->ADDREM_TYPE)
@@ -1062,11 +1067,6 @@ group_ptr[].PSIZE == [258.0]
 group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..adremdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -1128,6 +1128,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..adremdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->LINE_NUM
@@ -1204,11 +1209,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..ampunit():::ENTER
 tp[] == tp[]->PREV->NEXT
@@ -1240,6 +1240,11 @@ tp[][0] contains no nulls and has only one value, of length 1
 unit_ptr has only one value
 ===========================================================================
 ..ampunit():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 tp[] == tp[]->PREV->NEXT
 tp[] == orig(tp[])
 tp[] == orig(tp[]->PREV->NEXT)
@@ -1287,11 +1292,6 @@ tp[]->PREV[0] contains no nulls and has only one value, of length 1
 tp[]->info == [80]
 tp[][0] contains no nulls and has only one value, of length 1
 unit_ptr[] == [0]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..ampval():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -1344,6 +1344,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..ampval():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -1420,11 +1425,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [80]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..angunit():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -1476,6 +1476,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..angunit():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->LINE_NUM
@@ -1561,11 +1566,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 20
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..angval():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -1618,6 +1618,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..angval():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -1694,11 +1699,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [69]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..blockdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -1751,6 +1751,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..blockdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 node_ptr[] == orig(node_ptr[])
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -1837,11 +1842,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..circspec():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -1894,6 +1894,11 @@ radius_ptr has only one value
 radius_unit_ptr has only one value
 ===========================================================================
 ..circspec():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -1970,11 +1975,6 @@ pp2[][0] contains no nulls and has only one value, of length 1
 radius_ptr[] == [43.0]
 radius_unit_ptr[] == [0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..dcos():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -1985,17 +1985,17 @@ return == 0
 x == 60.0
 ===========================================================================
 ..dcos():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames == "testgroup"
 return == 0.4999999998815835
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..degconv():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -2007,6 +2007,11 @@ unit == 0
 x_ptr[0] one of { -219.0, 0.0, 90.0 }
 ===========================================================================
 ..degconv():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 x_ptr[0] == orig(x_ptr[0])
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
@@ -2015,11 +2020,6 @@ x_ptr[0] == orig(x_ptr[0])
 ::UserNames == "testgroup"
 return == 0
 x_ptr[0] one of { -219.0, 0.0, 90.0 }
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..dsin():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -2030,17 +2030,17 @@ x_ptr[0] one of { -219.0, 0.0, 90.0 }
 x == 60.0
 ===========================================================================
 ..dsin():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames == "testgroup"
 return == 0.8660254038528064
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..elemdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -2093,6 +2093,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..elemdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == orig(p1[].LINE_NUM)
@@ -2183,11 +2188,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [65]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..emsginit():::ENTER
 ::ErrorMessages == ""
@@ -2197,15 +2197,15 @@ return == 0
 ::UserNames == ""
 ===========================================================================
 ..emsginit():::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == ""
 ::UserNames == ""
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..fixgramp():::ENTER
 g[].P1_ET == g[].Q2_ET
@@ -2225,6 +2225,11 @@ g[].Q1_ET == [34.0]
 g[].TYPE == [1]
 ===========================================================================
 ..fixgramp():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 g[] == orig(g[])
 g[].AMP_UNIT == orig(g[].AMP_UNIT)
 g[].CENTRE == orig(g[].CENTRE)
@@ -2249,11 +2254,6 @@ g[].PQEXP_PTR == [null]
 g[].Q1_ET == [34.0]
 g[].TYPE == [1]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..fixgrpha():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -2269,6 +2269,11 @@ g[].TYPE == [0]
 g[].UNIF_VAL == [-219.0]
 ===========================================================================
 ..fixgrpha():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 g[] == orig(g[])
 g[].PHASE_UNIT == orig(g[].PHASE_UNIT)
 g[].PQEXP_PTR == orig(g[].PQEXP_PTR)
@@ -2285,11 +2290,6 @@ g[].PQEXP_PTR == [null]
 g[].TYPE == [0]
 g[].UNIF_VAL == [-219.0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..fixport():::ENTER
 elem_ptr[].PHEPOL == elem_ptr[].PORT_PTR->PHEPOL
@@ -2330,6 +2330,11 @@ elem_ptr[].RADIUS_UNIT == [0]
 elem_ptr[].TYPE == [0]
 ===========================================================================
 ..fixport():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 elem_ptr[] == orig(elem_ptr[])
 elem_ptr[].DIRECTION == orig(elem_ptr[].DIRECTION)
 elem_ptr[].GAIN == orig(elem_ptr[].GAIN)
@@ -2395,11 +2400,6 @@ elem_ptr[].RADIUS == [43.0]
 elem_ptr[].RADIUS_UNIT == [0]
 elem_ptr[].TYPE == [0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..fixselem():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -2426,6 +2426,11 @@ elem_ptr[].RADIUS_UNIT == [0]
 elem_ptr[].TYPE == [0]
 ===========================================================================
 ..fixselem():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 elem_ptr[] == orig(elem_ptr[])
 elem_ptr[].DIRECTION == orig(elem_ptr[].DIRECTION)
 elem_ptr[].GAIN == orig(elem_ptr[].GAIN)
@@ -2478,11 +2483,6 @@ elem_ptr[].RADIUS == [43.0]
 elem_ptr[].RADIUS_UNIT == [0]
 elem_ptr[].TYPE == [0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..fixsgrel():::ENTER
 group_ptr[].GRAMPEXC_PTR->P1_ET == group_ptr[].GRAMPEXC_PTR->Q2_ET
@@ -2556,6 +2556,11 @@ group_ptr[].SHAPE == [0]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..fixsgrel():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 group_ptr[] == orig(group_ptr[])
 group_ptr[].ADDREM_PTR == orig(group_ptr[].ADDREM_PTR)
 group_ptr[].ADDREM_PTR->ADDREM_TYPE == orig(group_ptr[].ADDREM_PTR->ADDREM_TYPE)
@@ -2705,11 +2710,6 @@ group_ptr[].QSIZE == [0.0]
 group_ptr[].SHAPE == [0]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..fixsgrid():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -2725,6 +2725,11 @@ grid[].QSTEP == [0.0]
 grid[].TYPE == [2]
 ===========================================================================
 ..fixsgrid():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 grid[].LEVEL == orig(grid[].LEVEL)
 grid[].PQSTEP_UNIT == orig(grid[].PQSTEP_UNIT)
 grid[].PSTEP == orig(grid[].PSTEP)
@@ -2745,11 +2750,6 @@ grid[].QSTEP == [0.0]
 grid[].ROT_ANGLE == [0.0]
 grid[].TYPE == [2]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..floatsup():::ENTER
 ::ErrorMessages == ""
@@ -2759,16 +2759,16 @@ return == 0
 ::UserNames == ""
 ===========================================================================
 ..floatsup():::EXIT
-::ErrorMessages == ""
-::GLOBLE_FILENAME == "gr2712"
-::Keywords == ""
-::MOSErrors == ""
-::UserNames == ""
 ::ErrorMessages == orig(::ErrorMessages)
 ::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
 ::Keywords == orig(::Keywords)
 ::MOSErrors == orig(::MOSErrors)
 ::UserNames == orig(::UserNames)
+::ErrorMessages == ""
+::GLOBLE_FILENAME == "gr2712"
+::Keywords == ""
+::MOSErrors == ""
+::UserNames == ""
 ===========================================================================
 ..geomspec():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -2825,6 +2825,11 @@ radius_ptr has only one value
 radius_unit_ptr has only one value
 ===========================================================================
 ..geomspec():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->PREV->PREV->LINE_NUM
@@ -2902,28 +2907,23 @@ pp2[][0] contains no nulls and has only one value, of length 1
 radius_ptr[] == [43.0]
 radius_unit_ptr[] == [0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..glvainit():::ENTER
+::Keywords == ::UserNames
 ::ErrorMessages == ""
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == ""
 ::MOSErrors == ""
-::Keywords == ::UserNames
 ===========================================================================
 ..glvainit():::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::UserNames == orig(::Keywords)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames == ""
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::UserNames == orig(::Keywords)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..grampexc():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -2976,6 +2976,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..grampexc():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 grampexc_ptr[]->P1_ET == grampexc_ptr[]->Q2_ET
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -3060,11 +3065,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [80]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..greldef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -3119,6 +3119,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..greldef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == orig(p1[].LINE_NUM)
@@ -3214,11 +3219,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [65]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..grexcdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -3273,6 +3273,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..grexcdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 grampexc_ptr[]->P1_ET == grampexc_ptr[]->Q2_ET
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -3363,11 +3368,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [69]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..grgeodef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -3420,6 +3420,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..grgeodef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->PREV->PREV->LINE_NUM
@@ -3507,11 +3512,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [71]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..griddef1():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -3564,6 +3564,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..griddef1():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->PREV->PREV->LINE_NUM
@@ -3643,11 +3648,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [69]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..groupdef():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -3668,6 +3668,10 @@ pp2 has only one value
 pp2[] == [null]
 ===========================================================================
 ..groupdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
 group_ptr[]->GRAMPEXC_PTR->P1_ET == group_ptr[]->GRAMPEXC_PTR->Q2_ET
 p1[] == orig(p1[])
 p1[].LINE_NUM == orig(p1[].LINE_NUM)
@@ -3752,10 +3756,6 @@ p1[].PREV == [null]
 p1[].info == [71]
 pp2[] == [null]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
 ===========================================================================
 ..grphaexc():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -3808,6 +3808,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..grphaexc():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->PREV->PREV->LINE_NUM
@@ -3888,13 +3893,9 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [69]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..grwrite():::ENTER
+::GLOBLE_FILENAME == filename
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].ELEM_PTR->QDIM
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GEOMNODE_PTR->PSIZE
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GEOMNODE_PTR->QSIZE
@@ -4008,9 +4009,14 @@ group_ptr[].NUM_OF_NODES == [7]
 group_ptr[].PSIZE == [258.0]
 group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
-::GLOBLE_FILENAME == filename
 ===========================================================================
 ..grwrite():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME == orig(filename)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 group_ptr[] == orig(group_ptr[])
 group_ptr[].ADDREM_PTR == orig(group_ptr[].ADDREM_PTR)
 group_ptr[].ADDREM_PTR->ADDREM_TYPE == orig(group_ptr[].ADDREM_PTR->ADDREM_TYPE)
@@ -4229,12 +4235,6 @@ group_ptr[].PSIZE == [258.0]
 group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::GLOBLE_FILENAME == orig(filename)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..hexdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -4287,6 +4287,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..hexdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -4369,11 +4374,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [71]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..hexgrdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -4428,6 +4428,11 @@ pstep_unit_ptr has only one value
 pstep_unit_ptr[] == [0]
 ===========================================================================
 ..hexgrdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -4506,11 +4511,6 @@ pp2[][0] contains no nulls and has only one value, of length 1
 pstep_ptr[] == [0.0]
 pstep_unit_ptr[] == [0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..isletter():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -4521,18 +4521,18 @@ return == 0
 ::Keywords != ::UserNames
 ===========================================================================
 ..isletter():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames one of { "", "testgroup" }
 return one of { 0, 1 }
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
 ::Keywords != ::UserNames
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..kwdsinit():::ENTER
 ::ErrorMessages == ""
@@ -4542,15 +4542,15 @@ return one of { 0, 1 }
 ::UserNames == ""
 ===========================================================================
 ..kwdsinit():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == ""
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == ""
 ::UserNames == ""
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..lenunit():::ENTER
 tp[] == tp[]->PREV->NEXT
@@ -4582,6 +4582,11 @@ tp[][0] contains no nulls and has only one value, of length 1
 unit has only one value
 ===========================================================================
 ..lenunit():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 tp[] == tp[]->PREV->NEXT
 tp[] == orig(tp[])
 tp[] == orig(tp[]->PREV->NEXT)
@@ -4629,11 +4634,6 @@ tp[]->PREV[0] contains no nulls and has only one value, of length 1
 tp[]->info == [65]
 tp[][0] contains no nulls and has only one value, of length 1
 unit[] == [0]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..linconv():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -4644,6 +4644,11 @@ unit[] == [0]
 unit == 0
 ===========================================================================
 ..linconv():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 x_ptr[] == orig(x_ptr[])
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
@@ -4651,13 +4656,9 @@ x_ptr[] == orig(x_ptr[])
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames == "testgroup"
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..main():::ENTER
+::Keywords == ::UserNames
 ::ErrorMessages == ""
 ::GLOBLE_FILENAME == ""
 ::Keywords == ""
@@ -4665,7 +4666,6 @@ return == 0
 argc == 2
 argv has only one value
 argv[] == [./space]
-::Keywords == ::UserNames
 ===========================================================================
 ..main():::EXIT
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -4709,6 +4709,11 @@ nodes_num_ptr has only one value
 nodes_num_ptr[] == [0]
 ===========================================================================
 ..mkshex():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 addrem_ptr[] == orig(addrem_ptr[])
 addrem_ptr[].ADDREM_TYPE == orig(addrem_ptr[].ADDREM_TYPE)
 addrem_ptr[].BLOCK_TYPE == orig(addrem_ptr[].BLOCK_TYPE)
@@ -4799,11 +4804,6 @@ last_node_ptr[]->YA == [74.47818473134136]
 last_node_ptr[][0] contains no nulls and has only one value, of length 1
 nodes_num_ptr[] == [7]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..mmconv():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -4816,6 +4816,11 @@ x_ptr has only one value
 x_ptr[] == [43.0]
 ===========================================================================
 ..mmconv():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 x_ptr[] == orig(x_ptr[])
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
@@ -4824,11 +4829,6 @@ x_ptr[] == orig(x_ptr[])
 ::UserNames == "testgroup"
 return == 0
 x_ptr[] == [43.0]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..moseinit():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -4838,15 +4838,15 @@ x_ptr[] == [43.0]
 ::UserNames == ""
 ===========================================================================
 ..moseinit():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::UserNames == orig(::UserNames)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames == ""
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..nodecoor():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -4899,6 +4899,11 @@ pp2[][0] contains no nulls and has only one value, of length 1
 qcoord_ptr has only one value
 ===========================================================================
 ..nodecoor():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -4975,11 +4980,6 @@ pp2[]->info == [71]
 pp2[][0] contains no nulls and has only one value, of length 1
 qcoord_ptr[] == [1]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..nodedef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -5032,6 +5032,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..nodedef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 node_ptr[] == orig(node_ptr[])
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -5118,11 +5123,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..nomefile():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -5132,16 +5132,16 @@ return == 1
 ::UserNames == ""
 ===========================================================================
 ..nomefile():::EXIT
-::ErrorMessages == "** ERROR 0: NO ERRORS"
-::GLOBLE_FILENAME == "gr2712"
-::Keywords == "PLANE"
-::MOSErrors == "** ERROR  B0: Out of memory during MOS."
-::UserNames == ""
 ::ErrorMessages == orig(::ErrorMessages)
 ::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
 ::Keywords == orig(::Keywords)
 ::MOSErrors == orig(::MOSErrors)
 ::UserNames == orig(::UserNames)
+::ErrorMessages == "** ERROR 0: NO ERRORS"
+::GLOBLE_FILENAME == "gr2712"
+::Keywords == "PLANE"
+::MOSErrors == "** ERROR  B0: Out of memory during MOS."
+::UserNames == ""
 ===========================================================================
 ..polspec():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -5196,6 +5196,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..polspec():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->LINE_NUM
@@ -5284,11 +5289,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..polydef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -5341,6 +5341,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..polydef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 node_ptr[] == orig(node_ptr[])
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -5427,11 +5432,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..portspec():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -5484,6 +5484,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..portspec():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->LINE_NUM
@@ -5568,11 +5573,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..prnfile():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -5589,6 +5589,11 @@ firstel[].PREV == [null]
 firstel[].info == [71]
 ===========================================================================
 ..prnfile():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 firstel[] == orig(firstel[])
 firstel[].LINE_NUM == orig(firstel[].LINE_NUM)
 firstel[].NEXT == orig(firstel[].NEXT)
@@ -5606,13 +5611,9 @@ firstel[].NEXT contains no nulls and has only one value, of length 1
 firstel[].NEXT[0] contains no nulls and has only one value, of length 1
 firstel[].PREV == [null]
 firstel[].info == [71]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..readfil3():::ENTER
+::GLOBLE_FILENAME == filename
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
@@ -5622,9 +5623,14 @@ firstel has only one value
 firstel[] == [null]
 lastel has only one value
 lastel[] == [null]
-::GLOBLE_FILENAME == filename
 ===========================================================================
 ..readfil3():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME == orig(filename)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 lastel[] == lastel[]->PREV->NEXT
 lastel[]->PREV == lastel[]->PREV->PREV->NEXT
 lastel[]->PREV->LINE_NUM == lastel[]->PREV->PREV->LINE_NUM
@@ -5657,12 +5663,6 @@ lastel[]->PREV[0] contains no nulls and has only one value, of length 1
 lastel[]->info == [32]
 lastel[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::GLOBLE_FILENAME == orig(filename)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..recgrdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -5718,6 +5718,11 @@ pstep_ptr[] == [0.0]
 qstep_ptr has only one value
 ===========================================================================
 ..recgrdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -5807,11 +5812,6 @@ pqstep_unit_ptr[] == [0]
 pstep_ptr[] == [0.0]
 qstep_ptr[] == [0.0]
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..recspec():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -5865,6 +5865,11 @@ pqdim_unit_ptr has only one value
 qdim_ptr has only one value
 ===========================================================================
 ..recspec():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -5949,11 +5954,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..remdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -6006,6 +6006,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..remdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 addrem_ptr[] == orig(addrem_ptr[])
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -6092,11 +6097,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..secoramp():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -6153,6 +6153,11 @@ q1_et_ptr has only one value
 q2_et_ptr has only one value
 ===========================================================================
 ..secoramp():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -6233,11 +6238,6 @@ pp2[]->info == [80]
 pp2[][0] contains no nulls and has only one value, of length 1
 q1_et_ptr[] == [34.0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..secorder():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -6264,16 +6264,16 @@ e < y
 x > y
 ===========================================================================
 ..secorder():::EXIT
-::ErrorMessages == "** ERROR 0: NO ERRORS"
-::GLOBLE_FILENAME == "gr2712"
-::Keywords == "PLANE"
-::MOSErrors == "** ERROR  B0: Out of memory during MOS."
-::UserNames == "testgroup"
 ::ErrorMessages == orig(::ErrorMessages)
 ::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
 ::Keywords == orig(::Keywords)
 ::MOSErrors == orig(::MOSErrors)
 ::UserNames == orig(::UserNames)
+::ErrorMessages == "** ERROR 0: NO ERRORS"
+::GLOBLE_FILENAME == "gr2712"
+::Keywords == "PLANE"
+::MOSErrors == "** ERROR  B0: Out of memory during MOS."
+::UserNames == "testgroup"
 return > orig(a)
 return > orig(b)
 return > orig(c)
@@ -6360,6 +6360,11 @@ port_ptr[].PSC_UNIT == [0]
 port_ptr[].PSH_UNIT == [0]
 ===========================================================================
 ..sgramp2n():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 geomnode_ptr[] == orig(geomnode_ptr[])
 geomnode_ptr[].LOC_P == orig(geomnode_ptr[].LOC_P)
 geomnode_ptr[].LOC_Q == geomnode_ptr[].NEXT->LOC_Q
@@ -6508,11 +6513,6 @@ port_ptr[].PPA_UNIT == [0]
 port_ptr[].PSC_UNIT == [0]
 port_ptr[].PSH_UNIT == [0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..sgrphaun():::ENTER
 geomnode_ptr[].LOC_Q == geomnode_ptr[].NEXT->LOC_Q
@@ -6597,6 +6597,11 @@ port_ptr[].PSC_UNIT == [0]
 port_ptr[].PSH_UNIT == [0]
 ===========================================================================
 ..sgrphaun():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 geomnode_ptr[] == orig(geomnode_ptr[])
 geomnode_ptr[].GEOMPORT_PTR == orig(geomnode_ptr[].GEOMPORT_PTR)
 geomnode_ptr[].GEOMPORT_PTR->AMP == orig(geomnode_ptr[].GEOMPORT_PTR->AMP)
@@ -6753,11 +6758,6 @@ port_ptr[].PPA_UNIT == [0]
 port_ptr[].PSC_UNIT == [0]
 port_ptr[].PSH_UNIT == [0]
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..simamp():::ENTER
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].ELEM_PTR->QDIM
@@ -6867,6 +6867,11 @@ group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..simamp():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 group_ptr[] == orig(group_ptr[])
 group_ptr[].ADDREM_PTR == orig(group_ptr[].ADDREM_PTR)
 group_ptr[].ADDREM_PTR->ADDREM_TYPE == orig(group_ptr[].ADDREM_PTR->ADDREM_TYPE)
@@ -7073,11 +7078,6 @@ group_ptr[].PSIZE == [258.0]
 group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..simgroup():::ENTER
 group_ptr[].GRAMPEXC_PTR->P1_ET == group_ptr[].GRAMPEXC_PTR->Q2_ET
@@ -7151,6 +7151,11 @@ group_ptr[].SHAPE == [0]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..simgroup():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 group_ptr[] == orig(group_ptr[])
 group_ptr[].ADDREM_PTR == orig(group_ptr[].ADDREM_PTR)
 group_ptr[].ADDREM_PTR->ADDREM_TYPE == orig(group_ptr[].ADDREM_PTR->ADDREM_TYPE)
@@ -7312,11 +7317,6 @@ group_ptr[].PSIZE == [258.0]
 group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..simpha():::ENTER
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].ELEM_PTR->QDIM
@@ -7430,6 +7430,11 @@ group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..simpha():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 group_ptr[] == orig(group_ptr[])
 group_ptr[].ADDREM_PTR == orig(group_ptr[].ADDREM_PTR)
 group_ptr[].ADDREM_PTR->ADDREM_TYPE == orig(group_ptr[].ADDREM_PTR->ADDREM_TYPE)
@@ -7643,11 +7648,6 @@ group_ptr[].PSIZE == [258.0]
 group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..simpol():::ENTER
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].ELEM_PTR->QDIM
@@ -7764,6 +7764,11 @@ group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..simpol():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 group_ptr[] == orig(group_ptr[])
 group_ptr[].ADDREM_PTR == orig(group_ptr[].ADDREM_PTR)
 group_ptr[].ADDREM_PTR->ADDREM_TYPE == orig(group_ptr[].ADDREM_PTR->ADDREM_TYPE)
@@ -7981,11 +7986,6 @@ group_ptr[].PSIZE == [258.0]
 group_ptr[].SHAPE == [2]
 group_ptr[].SUPER_GROUP_PTR[0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..sinelem():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -8038,6 +8038,11 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 ===========================================================================
 ..sinelem():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 elem_ptr[] == orig(elem_ptr[])
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -8129,11 +8134,6 @@ pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->info == [65]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..sinstep():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -8188,6 +8188,11 @@ step_unit_ptr has only one value
 step_unit_ptr[] == [0]
 ===========================================================================
 ..sinstep():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == pp2[]->LINE_NUM
@@ -8276,11 +8281,6 @@ pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
 step_ptr[] == [0.0]
 step_unit_ptr[] == [0]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..squgrdef():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -8333,6 +8333,11 @@ pstep_ptr has only one value
 pstep_unit_ptr has only one value
 ===========================================================================
 ..squgrdef():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -8419,11 +8424,6 @@ pp2[][0] contains no nulls and has only one value, of length 1
 pstep_ptr[] == [0.0]
 pstep_unit_ptr[] == [0]
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..unaminit():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -8433,16 +8433,16 @@ return == 1
 ::UserNames == ""
 ===========================================================================
 ..unaminit():::EXIT
-::ErrorMessages == "** ERROR 0: NO ERRORS"
-::GLOBLE_FILENAME == "gr2712"
-::Keywords == "PLANE"
-::MOSErrors == ""
-::UserNames == ""
 ::ErrorMessages == orig(::ErrorMessages)
 ::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
 ::Keywords == orig(::Keywords)
 ::MOSErrors == orig(::MOSErrors)
 ::UserNames == orig(::UserNames)
+::ErrorMessages == "** ERROR 0: NO ERRORS"
+::GLOBLE_FILENAME == "gr2712"
+::Keywords == "PLANE"
+::MOSErrors == ""
+::UserNames == ""
 ===========================================================================
 ..unifamp():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -8495,6 +8495,11 @@ pp2[][0] contains no nulls and has only one value, of length 1
 unif_val_ptr has only one value
 ===========================================================================
 ..unifamp():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -8579,11 +8584,6 @@ pp2[]->PREV->PREV[0] contains no nulls and has only one value, of length 1
 pp2[]->PREV[0] contains no nulls and has only one value, of length 1
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 1
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..unifpha():::ENTER
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
@@ -8636,6 +8636,11 @@ pp2[][0] contains no nulls and has only one value, of length 1
 unif_val_ptr has only one value
 ===========================================================================
 ..unifpha():::EXIT
+::ErrorMessages == orig(::ErrorMessages)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::Keywords == orig(::Keywords)
+::MOSErrors == orig(::MOSErrors)
+::UserNames == orig(::UserNames)
 p1[] == orig(p1[])
 p1[].LINE_NUM == p1[].PREV->LINE_NUM
 p1[].LINE_NUM == p1[].PREV->PREV->LINE_NUM
@@ -8712,11 +8717,6 @@ pp2[]->info == [69]
 pp2[][0] contains no nulls and has only one value, of length 1
 return == 0
 unif_val_ptr[] == [-219.0]
-::ErrorMessages == orig(::ErrorMessages)
-::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
-::Keywords == orig(::Keywords)
-::MOSErrors == orig(::MOSErrors)
-::UserNames == orig(::UserNames)
 ===========================================================================
 ..waitcont():::ENTER
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -8726,13 +8726,13 @@ unif_val_ptr[] == [-219.0]
 ::UserNames == "testgroup"
 ===========================================================================
 ..waitcont():::EXIT
-::ErrorMessages == "** ERROR 0: NO ERRORS"
-::GLOBLE_FILENAME == "gr2712"
-::Keywords == "PLANE"
-::MOSErrors == "** ERROR  B0: Out of memory during MOS."
-::UserNames == "testgroup"
 ::ErrorMessages == orig(::ErrorMessages)
 ::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
 ::Keywords == orig(::Keywords)
 ::MOSErrors == orig(::MOSErrors)
 ::UserNames == orig(::UserNames)
+::ErrorMessages == "** ERROR 0: NO ERRORS"
+::GLOBLE_FILENAME == "gr2712"
+::Keywords == "PLANE"
+::MOSErrors == "** ERROR  B0: Out of memory during MOS."
+::UserNames == "testgroup"

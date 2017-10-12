@@ -8,31 +8,31 @@ PolyCalc.RatPolyStack:::CLASS
 DECLARE
 PolyCalc.RatPolyStack:::OBJECT
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -43,31 +43,31 @@ PolyCalc.RatPolyStack.RatPolyStack():::ENTER
 DECLARE
 PolyCalc.RatPolyStack.RatPolyStack():::EXIT74
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -75,31 +75,31 @@ int
 DECLARE
 PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 3
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 p
@@ -110,31 +110,31 @@ hashcode
 DECLARE
 PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::EXIT83
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 3
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 p
@@ -146,62 +146,62 @@ hashcode
 DECLARE
 PolyCalc.RatPolyStack.pop():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.pop():::EXIT99
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 3
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 return
@@ -213,62 +213,62 @@ hashcode
 DECLARE
 PolyCalc.RatPolyStack.dup():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.dup():::EXIT115
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -276,62 +276,62 @@ int
 DECLARE
 PolyCalc.RatPolyStack.swap():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.swap():::EXIT133
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -339,62 +339,62 @@ int
 DECLARE
 PolyCalc.RatPolyStack.clear():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.clear():::EXIT143
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -402,31 +402,31 @@ int
 DECLARE
 PolyCalc.RatPolyStack.get(int):::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 3
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 2
 index
@@ -437,31 +437,31 @@ int
 DECLARE
 PolyCalc.RatPolyStack.get(int):::EXIT156
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 4
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 2
 index
@@ -477,62 +477,62 @@ hashcode
 DECLARE
 PolyCalc.RatPolyStack.add():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.add():::EXIT173
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -540,62 +540,62 @@ int
 DECLARE
 PolyCalc.RatPolyStack.sub():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.sub():::EXIT189
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -603,62 +603,62 @@ int
 DECLARE
 PolyCalc.RatPolyStack.mul():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.mul():::EXIT205
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -666,62 +666,62 @@ int
 DECLARE
 PolyCalc.RatPolyStack.div():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.div():::EXIT221
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
@@ -729,62 +729,62 @@ int
 DECLARE
 PolyCalc.RatPolyStack.size():::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 2
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 5
 
 DECLARE
 PolyCalc.RatPolyStack.size():::EXIT228
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 3
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 2
 return
@@ -796,31 +796,31 @@ int
 DECLARE
 PolyCalc.RatPolyStack.getCons(int):::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 3
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 2
 index
@@ -831,31 +831,31 @@ int
 DECLARE
 PolyCalc.RatPolyStack.getCons(int):::EXIT252
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 5
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 2
 index
@@ -867,19 +867,19 @@ PolyCalc.Cons
 hashcode
 3
 return.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 return.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 return.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 return.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 
@@ -887,31 +887,31 @@ hashcode
 DECLARE
 PolyCalc.RatPolyStack.equals(java.lang.Object):::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 3
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 6
 obj
@@ -926,31 +926,31 @@ java.lang.String
 DECLARE
 PolyCalc.RatPolyStack.equals(java.lang.Object):::EXIT1
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 4
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 6
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 6
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 7
 obj
@@ -970,31 +970,31 @@ boolean
 DECLARE
 PolyCalc.RatPolyStack.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 3
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 6
 obj
@@ -1009,31 +1009,31 @@ java.lang.String
 DECLARE
 PolyCalc.RatPolyStack.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-PolyCalc.RatPolyStack # isNonNull=true isParam=true
+PolyCalc.RatPolyStack # isNonNull=true, isParam=true
 hashcode
 4
 this.polys
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 6
 this.polys.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.polys.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 6
 this.polys.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.size
-int # declaringClassPackageName=PolyCalc, 
+int # declaringClassPackageName=PolyCalc
 int
 7
 obj
@@ -1055,31 +1055,31 @@ PolyCalc.Cons:::CLASS
 DECLARE
 PolyCalc.Cons:::OBJECT
 this
-PolyCalc.Cons # isNonNull=true isParam=true
+PolyCalc.Cons # isNonNull=true, isParam=true
 hashcode
 2
 this.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.tail.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 6
 
@@ -1095,50 +1095,50 @@ PolyCalc.Cons # isParam=true
 hashcode
 3
 t.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 t.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 t.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 t.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 
 DECLARE
 PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::EXIT11
 this
-PolyCalc.Cons # isNonNull=true isParam=true
+PolyCalc.Cons # isNonNull=true, isParam=true
 hashcode
 6
 this.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 3
 this.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.tail.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 this.tail.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 h
@@ -1150,19 +1150,19 @@ PolyCalc.Cons # isParam=true
 hashcode
 3
 t.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 t.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 4
 t.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 2
 t.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 
@@ -1170,31 +1170,31 @@ hashcode
 DECLARE
 PolyCalc.Cons.equals(java.lang.Object):::ENTER
 this
-PolyCalc.Cons # isNonNull=true isParam=true
+PolyCalc.Cons # isNonNull=true, isParam=true
 hashcode
 3
 this.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 6
 this.tail.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.tail.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 7
 obj
@@ -1209,31 +1209,31 @@ java.lang.String
 DECLARE
 PolyCalc.Cons.equals(java.lang.Object):::EXIT1
 this
-PolyCalc.Cons # isNonNull=true isParam=true
+PolyCalc.Cons # isNonNull=true, isParam=true
 hashcode
 4
 this.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 6
 this.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 7
 this.tail.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 8
 obj
@@ -1253,31 +1253,31 @@ boolean
 DECLARE
 PolyCalc.Cons.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-PolyCalc.Cons # isNonNull=true isParam=true
+PolyCalc.Cons # isNonNull=true, isParam=true
 hashcode
 3
 this.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 6
 this.tail.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 4
 this.tail.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 7
 obj
@@ -1292,31 +1292,31 @@ java.lang.String
 DECLARE
 PolyCalc.Cons.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-PolyCalc.Cons # isNonNull=true isParam=true
+PolyCalc.Cons # isNonNull=true, isParam=true
 hashcode
 4
 this.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 6
 this.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 7
 this.tail.tail.head
-PolyCalc.RatPoly # declaringClassPackageName=PolyCalc, 
+PolyCalc.RatPoly # declaringClassPackageName=PolyCalc
 hashcode
 5
 this.tail.tail.tail
-PolyCalc.Cons # declaringClassPackageName=PolyCalc, 
+PolyCalc.Cons # declaringClassPackageName=PolyCalc
 hashcode
 8
 obj

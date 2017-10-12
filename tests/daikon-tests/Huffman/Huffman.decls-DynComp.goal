@@ -8,11 +8,11 @@ six170.HuffmanSymbol:::CLASS
 DECLARE
 six170.HuffmanSymbol:::OBJECT
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 this.symbol.getClass().getName()
@@ -20,7 +20,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 
@@ -43,11 +43,11 @@ int
 DECLARE
 six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object, int):::EXIT26
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 4
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 3
 this.symbol.getClass().getName()
@@ -55,7 +55,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 2
 symbol
@@ -75,11 +75,11 @@ int
 DECLARE
 six170.HuffmanSymbol.symbol():::ENTER
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 this.symbol.getClass().getName()
@@ -87,18 +87,18 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 
 DECLARE
 six170.HuffmanSymbol.symbol():::EXIT32
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 2
 this.symbol.getClass().getName()
@@ -106,7 +106,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 4
 return
@@ -122,11 +122,11 @@ java.lang.String
 DECLARE
 six170.HuffmanSymbol.frequency():::ENTER
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 this.symbol.getClass().getName()
@@ -134,18 +134,18 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 
 DECLARE
 six170.HuffmanSymbol.frequency():::EXIT39
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 this.symbol.getClass().getName()
@@ -153,7 +153,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 2
 return
@@ -165,11 +165,11 @@ int
 DECLARE
 six170.HuffmanSymbol.checkRep():::ENTER
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 this.symbol.getClass().getName()
@@ -177,18 +177,18 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 
 DECLARE
 six170.HuffmanSymbol.checkRep():::EXIT53
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 this.symbol.getClass().getName()
@@ -196,7 +196,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 
@@ -204,11 +204,11 @@ int
 DECLARE
 six170.HuffmanSymbol.equals(java.lang.Object):::ENTER
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 5
 this.symbol.getClass().getName()
@@ -216,7 +216,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 4
 obj
@@ -231,11 +231,11 @@ java.lang.String
 DECLARE
 six170.HuffmanSymbol.equals(java.lang.Object):::EXIT1
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 4
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 6
 this.symbol.getClass().getName()
@@ -243,7 +243,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 5
 obj
@@ -263,11 +263,11 @@ boolean
 DECLARE
 six170.HuffmanSymbol.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 5
 this.symbol.getClass().getName()
@@ -275,7 +275,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 4
 obj
@@ -290,11 +290,11 @@ java.lang.String
 DECLARE
 six170.HuffmanSymbol.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.HuffmanSymbol # isNonNull=true isParam=true
+six170.HuffmanSymbol # isNonNull=true, isParam=true
 hashcode
 4
 this.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 6
 this.symbol.getClass().getName()
@@ -302,7 +302,7 @@ java.lang.Class
 java.lang.String
 1
 this.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 5
 obj
@@ -324,11 +324,11 @@ six170.HuffmanCodec:::CLASS
 DECLARE
 six170.HuffmanCodec:::OBJECT
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 2
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 14
 this.encodingMap.getClass().getName()
@@ -336,15 +336,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -352,39 +352,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 12
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 
@@ -411,11 +411,11 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.HuffmanCodec(java.util.List):::EXIT24
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 4
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 16
 this.encodingMap.getClass().getName()
@@ -423,15 +423,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 15
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -439,39 +439,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 14
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 10
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 11
 huffmanSymbols
@@ -534,11 +534,11 @@ six170.HuffmanTree
 hashcode
 4
 return.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 return.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 14
 return.symbol.symbol.getClass().getName()
@@ -546,39 +546,39 @@ java.lang.Class
 java.lang.String
 1
 return.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 13
 return.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 return.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 7
 return.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 return.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 return.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 8
 return.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 return.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 return.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 10
 
@@ -625,11 +625,11 @@ six170.HuffmanTree
 hashcode
 3
 return.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 return.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 8
 return.symbol.symbol.getClass().getName()
@@ -637,39 +637,39 @@ java.lang.Class
 java.lang.String
 1
 return.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 return.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 return.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 return.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 
@@ -681,11 +681,11 @@ six170.HuffmanTree # isParam=true
 hashcode
 2
 decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 12
 decodingTree.symbol.symbol.getClass().getName()
@@ -693,39 +693,39 @@ java.lang.Class
 java.lang.String
 1
 decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 11
 decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 8
 
@@ -736,11 +736,11 @@ six170.HuffmanTree # isParam=true
 hashcode
 2
 decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 12
 decodingTree.symbol.symbol.getClass().getName()
@@ -748,39 +748,39 @@ java.lang.Class
 java.lang.String
 1
 decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 11
 decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 8
 return
@@ -808,11 +808,11 @@ six170.HuffmanTree # isParam=true
 hashcode
 5
 subTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 subTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 10
 subTree.symbol.symbol.getClass().getName()
@@ -820,39 +820,39 @@ java.lang.Class
 java.lang.String
 1
 subTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 9
 subTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 subTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 7
 subTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 bitStack
@@ -887,11 +887,11 @@ six170.HuffmanTree # isParam=true
 hashcode
 5
 subTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 subTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 10
 subTree.symbol.symbol.getClass().getName()
@@ -899,39 +899,39 @@ java.lang.Class
 java.lang.String
 1
 subTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 9
 subTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 subTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 7
 subTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 subTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 bitStack
@@ -955,11 +955,11 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.encode(java.util.List):::ENTER
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 4
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 16
 this.encodingMap.getClass().getName()
@@ -967,15 +967,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 15
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -983,39 +983,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 14
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 10
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 11
 inputStream
@@ -1038,11 +1038,11 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.encode(java.util.List):::EXIT142
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 6
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 18
 this.encodingMap.getClass().getName()
@@ -1050,15 +1050,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 15
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 17
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -1066,39 +1066,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 16
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 11
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 14
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 13
 inputStream
@@ -1138,11 +1138,11 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.decode(java.util.List):::ENTER
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 4
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 16
 this.encodingMap.getClass().getName()
@@ -1150,15 +1150,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 15
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -1166,39 +1166,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 14
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 10
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 11
 inputBitStream
@@ -1221,11 +1221,11 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.decode(java.util.List):::EXIT174
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 6
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 18
 this.encodingMap.getClass().getName()
@@ -1233,15 +1233,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 15
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 17
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -1249,39 +1249,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 16
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 11
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 14
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 13
 inputBitStream
@@ -1321,11 +1321,11 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.equals(java.lang.Object):::ENTER
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 3
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 15
 this.encodingMap.getClass().getName()
@@ -1333,15 +1333,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 14
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -1349,39 +1349,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 13
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 10
 obj
@@ -1396,11 +1396,11 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.equals(java.lang.Object):::EXIT1
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 4
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 16
 this.encodingMap.getClass().getName()
@@ -1408,15 +1408,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 15
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -1424,39 +1424,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 14
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 10
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 11
 obj
@@ -1476,11 +1476,11 @@ boolean
 DECLARE
 six170.HuffmanCodec.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 3
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 15
 this.encodingMap.getClass().getName()
@@ -1488,15 +1488,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 14
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -1504,39 +1504,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 13
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 10
 obj
@@ -1551,11 +1551,11 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.HuffmanCodec # isNonNull=true isParam=true
+six170.HuffmanCodec # isNonNull=true, isParam=true
 hashcode
 4
 this.encodingMap
-java.util.Map # declaringClassPackageName=six170, 
+java.util.Map # declaringClassPackageName=six170
 hashcode
 16
 this.encodingMap.getClass().getName()
@@ -1563,15 +1563,15 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.decodingTree.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.decodingTree.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 15
 this.decodingTree.symbol.symbol.getClass().getName()
@@ -1579,39 +1579,39 @@ java.lang.Class
 java.lang.String
 1
 this.decodingTree.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 14
 this.decodingTree.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 6
 this.decodingTree.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.decodingTree.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 7
 this.decodingTree.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 9
 this.decodingTree.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.decodingTree.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 10
 this.decodingTree.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 11
 obj
@@ -1633,15 +1633,15 @@ six170.HuffmanTree:::CLASS
 DECLARE
 six170.HuffmanTree:::OBJECT
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -1649,19 +1649,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -1669,51 +1669,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -1721,39 +1721,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
@@ -1765,7 +1765,7 @@ six170.HuffmanSymbol # isParam=true
 hashcode
 2
 symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 symbol.symbol.getClass().getName()
@@ -1773,22 +1773,22 @@ java.lang.Class
 java.lang.String
 1
 symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 
 DECLARE
 six170.HuffmanTree.HuffmanTree(six170.HuffmanSymbol):::EXIT29
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 5
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 2
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 this.symbol.symbol.getClass().getName()
@@ -1796,19 +1796,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 9
 this.left.symbol.symbol.getClass().getName()
@@ -1816,51 +1816,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 7
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.right.symbol.symbol.getClass().getName()
@@ -1868,39 +1868,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 5
 symbol
@@ -1908,7 +1908,7 @@ six170.HuffmanSymbol # isParam=true
 hashcode
 2
 symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 4
 symbol.symbol.getClass().getName()
@@ -1916,7 +1916,7 @@ java.lang.Class
 java.lang.String
 1
 symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 3
 
@@ -1928,11 +1928,11 @@ six170.HuffmanTree # isParam=true
 hashcode
 2
 left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 left.symbol.symbol.getClass().getName()
@@ -1940,39 +1940,39 @@ java.lang.Class
 java.lang.String
 1
 left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right
@@ -1980,11 +1980,11 @@ six170.HuffmanTree # isParam=true
 hashcode
 2
 right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 right.symbol.symbol.getClass().getName()
@@ -1992,54 +1992,54 @@ java.lang.Class
 java.lang.String
 1
 right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
 DECLARE
 six170.HuffmanTree.HuffmanTree(six170.HuffmanTree, six170.HuffmanTree):::EXIT43
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -2047,19 +2047,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -2067,51 +2067,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -2119,39 +2119,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left
@@ -2159,11 +2159,11 @@ six170.HuffmanTree # isParam=true
 hashcode
 2
 left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 left.symbol.symbol.getClass().getName()
@@ -2171,39 +2171,39 @@ java.lang.Class
 java.lang.String
 1
 left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right
@@ -2211,11 +2211,11 @@ six170.HuffmanTree # isParam=true
 hashcode
 2
 right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 right.symbol.symbol.getClass().getName()
@@ -2223,39 +2223,39 @@ java.lang.Class
 java.lang.String
 1
 right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
@@ -2263,15 +2263,15 @@ hashcode
 DECLARE
 six170.HuffmanTree.frequency():::ENTER
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -2279,19 +2279,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -2299,51 +2299,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -2351,54 +2351,54 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
 DECLARE
 six170.HuffmanTree.frequency():::EXIT51
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -2406,19 +2406,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 2
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -2426,51 +2426,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 2
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -2478,39 +2478,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 2
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return
@@ -2521,15 +2521,15 @@ int
 DECLARE
 six170.HuffmanTree.frequency():::EXIT53
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -2537,19 +2537,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 2
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -2557,51 +2557,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 2
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -2609,39 +2609,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 2
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return
@@ -2653,15 +2653,15 @@ int
 DECLARE
 six170.HuffmanTree.symbol():::ENTER
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -2669,19 +2669,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -2689,51 +2689,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -2741,54 +2741,54 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
 DECLARE
 six170.HuffmanTree.symbol():::EXIT63
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 2
 this.symbol.symbol.getClass().getName()
@@ -2796,19 +2796,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 8
 this.left.symbol.symbol.getClass().getName()
@@ -2816,51 +2816,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 12
 this.right.symbol.symbol.getClass().getName()
@@ -2868,39 +2868,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return
@@ -2915,15 +2915,15 @@ java.lang.String
 DECLARE
 six170.HuffmanTree.symbol():::EXIT65
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 2
 this.symbol.symbol.getClass().getName()
@@ -2931,19 +2931,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 8
 this.left.symbol.symbol.getClass().getName()
@@ -2951,51 +2951,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 12
 this.right.symbol.symbol.getClass().getName()
@@ -3003,39 +3003,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 return
@@ -3051,15 +3051,15 @@ java.lang.String
 DECLARE
 six170.HuffmanTree.left():::ENTER
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -3067,19 +3067,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -3087,51 +3087,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -3139,54 +3139,54 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
 DECLARE
 six170.HuffmanTree.left():::EXIT74
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -3194,19 +3194,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -3214,51 +3214,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -3266,39 +3266,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return
@@ -3306,11 +3306,11 @@ six170.HuffmanTree
 hashcode
 2
 return.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 return.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 return.symbol.symbol.getClass().getName()
@@ -3318,39 +3318,39 @@ java.lang.Class
 java.lang.String
 1
 return.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 return.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 return.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 return.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
@@ -3358,15 +3358,15 @@ hashcode
 DECLARE
 six170.HuffmanTree.right():::ENTER
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -3374,19 +3374,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -3394,51 +3394,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -3446,54 +3446,54 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
 DECLARE
 six170.HuffmanTree.right():::EXIT82
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -3501,19 +3501,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.left.symbol.symbol.getClass().getName()
@@ -3521,51 +3521,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.right.symbol.symbol.getClass().getName()
@@ -3573,39 +3573,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return
@@ -3613,11 +3613,11 @@ six170.HuffmanTree
 hashcode
 2
 return.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 return.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 return.symbol.symbol.getClass().getName()
@@ -3625,39 +3625,39 @@ java.lang.Class
 java.lang.String
 1
 return.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 return.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 return.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 return.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 return.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
@@ -3665,15 +3665,15 @@ hashcode
 DECLARE
 six170.HuffmanTree.checkRep():::ENTER
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -3681,19 +3681,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -3701,51 +3701,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -3753,54 +3753,54 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
 DECLARE
 six170.HuffmanTree.checkRep():::EXIT97
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -3808,19 +3808,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -3828,51 +3828,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -3880,39 +3880,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 
@@ -3920,15 +3920,15 @@ hashcode
 DECLARE
 six170.HuffmanTree.equals(java.lang.Object):::ENTER
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol.getClass().getName()
@@ -3936,19 +3936,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol.getClass().getName()
@@ -3956,51 +3956,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol.getClass().getName()
@@ -4008,39 +4008,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 6
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 8
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 obj
@@ -4055,15 +4055,15 @@ java.lang.String
 DECLARE
 six170.HuffmanTree.equals(java.lang.Object):::EXIT1
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 2
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 14
 this.symbol.symbol.getClass().getName()
@@ -4071,19 +4071,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 8
 this.left.symbol.symbol.getClass().getName()
@@ -4091,51 +4091,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 12
 this.right.symbol.symbol.getClass().getName()
@@ -4143,39 +4143,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 2
 obj
@@ -4195,15 +4195,15 @@ boolean
 DECLARE
 six170.HuffmanTree.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 3
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 13
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 14
 this.symbol.symbol.getClass().getName()
@@ -4211,19 +4211,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 8
 this.left.symbol.symbol.getClass().getName()
@@ -4231,51 +4231,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 4
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 12
 this.right.symbol.symbol.getClass().getName()
@@ -4283,39 +4283,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 7
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 9
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 3
 obj
@@ -4330,15 +4330,15 @@ java.lang.String
 DECLARE
 six170.HuffmanTree.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.HuffmanTree # isNonNull=true isParam=true
+six170.HuffmanTree # isNonNull=true, isParam=true
 hashcode
 4
 this.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 14
 this.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 15
 this.symbol.symbol.getClass().getName()
@@ -4346,19 +4346,19 @@ java.lang.Class
 java.lang.String
 1
 this.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 8
 this.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 7
 this.left.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 9
 this.left.symbol.symbol.getClass().getName()
@@ -4366,51 +4366,51 @@ java.lang.Class
 java.lang.String
 1
 this.left.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 8
 this.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.left.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 5
 this.left.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.left.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 6
 this.left.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.left.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 12
 this.right.symbol.symbol
-java.lang.Object # declaringClassPackageName=six170, 
+java.lang.Object # declaringClassPackageName=six170
 hashcode
 13
 this.right.symbol.symbol.getClass().getName()
@@ -4418,39 +4418,39 @@ java.lang.Class
 java.lang.String
 1
 this.right.symbol.frequency
-int # declaringClassPackageName=six170, 
+int # declaringClassPackageName=six170
 int
 8
 this.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.right.left.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 10
 this.right.left.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.right.left.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.right.right.symbol
-six170.HuffmanSymbol # declaringClassPackageName=six170, 
+six170.HuffmanSymbol # declaringClassPackageName=six170
 hashcode
 11
 this.right.right.left
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 this.right.right.right
-six170.HuffmanTree # declaringClassPackageName=six170, 
+six170.HuffmanTree # declaringClassPackageName=six170
 hashcode
 4
 obj

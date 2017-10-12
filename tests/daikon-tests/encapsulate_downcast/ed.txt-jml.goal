@@ -59,8 +59,8 @@ height < weight
 misc.Person.Person(java.lang.String, int, int):::EXIT
     Variables: this this._name this._name.toString this._height this._weight name name.toString height weight orig(name) orig(name.toString) orig(height) orig(weight)
 this._name == \old(name)
+this._name.toString().equals(name.toString())
 this._height == \old(height)
 this._weight == \old(weight)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: name.toString is printable
-this._name.toString().equals(name.toString())
 name.toString().equals(\old(name.toString()))
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: name.toString is printable

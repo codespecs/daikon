@@ -77,8 +77,8 @@ public final class Daikon {
    */
   public static int dkconfig_progress_delay = 1000;
 
-  public static final String release_version = "5.5.11";
-  public static final String release_date = "July 4, 2017";
+  public static final String release_version = "5.5.15";
+  public static final String release_date = "October 3, 2017";
   public static final String release_string =
       "Daikon version "
           + release_version
@@ -101,8 +101,8 @@ public final class Daikon {
 
   /**
    * Integer. Percentage of program points to process. All program points are sorted by name, and
-   * all samples for the first <code>ppt_perc</code> program points are processed. A percentage of
-   * 100 matches all program points.
+   * all samples for the first {@code ppt_perc} program points are processed. A percentage of 100
+   * matches all program points.
    */
   public static int dkconfig_ppt_perc = 100;
 
@@ -118,7 +118,7 @@ public final class Daikon {
 
   /**
    * Boolean. Controls whether or not processing information is printed out. Setting this variable
-   * to true also automatically sets <code>progress_delay</code> to -1.
+   * to true also automatically sets {@code progress_delay} to -1.
    */
   public static boolean dkconfig_quiet = false;
 
@@ -175,8 +175,8 @@ public final class Daikon {
    * Java output and "never" mode otherwise.
    *
    * <p>Guarding means adding predicates that ensure that variables can be dereferenced. For
-   * instance, if <code>a</code> can be null --- that is, if <code>a.b</code> can be nonsensical ---
-   * then the guarded version of
+   * instance, if {@code a} can be null --- that is, if {@code a.b} can be nonsensical --- then the
+   * guarded version of
    *
    * <pre>a.b == 5</pre>
    *
@@ -361,7 +361,7 @@ public final class Daikon {
   static String usage =
       UtilMDE.joinLines(
           release_string,
-          "Daikon invariant detector, copyright 1998-2016",
+          "Daikon invariant detector, copyright 1998-2017",
           // " by Michael Ernst <mernst@cs.washington.edu>",
           "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
           // "For licensing information, see the License section of the manual.",
@@ -635,9 +635,8 @@ public final class Daikon {
         List<Invariant> invs = PrintInvariants.sort_invariant_list(ppt.invariants_vector());
         List<Invariant> filtered_invs = filter_invs(invs);
 
-        // Sometimes the program points actually differ in number of
-        // samples seen due to differences in how Daikon and DaikonSimple
-        // see the variable hierarchy.
+        // Debugging output.  Sometimes the program points actually differ in number of samples seen
+        // due to differences in how Daikon and DaikonSimple see the variable hierarchy.
         if (false) {
           System.out.println("====================================================");
           System.out.println(ppt.name());
@@ -1587,7 +1586,9 @@ public final class Daikon {
 
     for (PptTopLevel ppt : ppts.pptIterable()) {
       // skip unless it's an EXITnn
-      if (!ppt.is_subexit()) continue;
+      if (!ppt.is_subexit()) {
+        continue;
+      }
 
       PptTopLevel exitnn_ppt = ppt;
       PptName exitnn_name = exitnn_ppt.ppt_name;
@@ -1714,7 +1715,9 @@ public final class Daikon {
       for (int k = 0; k < entry_ppt.num_declvars; k++) {
         VarInfo vi = entry_ppt_vis[k];
         assert !vi.isDerived() : "Derived when making orig(): " + vi.name();
-        if (vi.isStaticConstant()) continue;
+        if (vi.isStaticConstant()) {
+          continue;
+        }
         VarInfo origvar = VarInfo.origVarInfo(vi);
         // Fix comparability
         VarInfo postvar = exit_ppt.find_var_by_name(vi.name());
@@ -1843,9 +1846,6 @@ public final class Daikon {
    * two return statements are enabled by default (though other splitters can be defined by the
    * user).
    */
-  // TODO: When Checker Framework issue 752 is fixed, remove this
-  // @SuppressWarnings and address the type checking error issued
-  // for the call to SplitterFactory.load_splitters.
   @SuppressWarnings("contracts.precondition.not.satisfied")
   public static void setup_splitters(PptTopLevel ppt) {
     if (PptSplitter.dkconfig_disable_splitting) {
@@ -2178,7 +2178,9 @@ public final class Daikon {
     int ppt_w_sample_cnt = 0;
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       all_ppt_cnt++;
-      if (ppt.num_samples() == 0) continue;
+      if (ppt.num_samples() == 0) {
+        continue;
+      }
       ppt_w_sample_cnt++;
       System.out.printf("%s%n", ppt.name());
       System.out.printf("  samples    = %n%d", ppt.num_samples());
@@ -2186,7 +2188,9 @@ public final class Daikon {
       Map<ProglangType, Count> type_map = new LinkedHashMap<ProglangType, Count>();
       int leader_cnt = 0;
       for (VarInfo v : ppt.var_infos) {
-        if (!v.isCanonical()) continue;
+        if (!v.isCanonical()) {
+          continue;
+        }
         leader_cnt++;
         Count cnt = type_map.get(v.file_rep_type);
         if (cnt == null) type_map.put(v.file_rep_type, cnt = new Count(0));
@@ -2331,8 +2335,13 @@ public final class Daikon {
 
         // Read each ppt name from the file
         for (String line = fp.readLine(); line != null; line = fp.readLine()) {
-          if (line.equals("") || FileIO.isComment(line)) continue;
-          if (!line.equals("DECLARE")) continue;
+          if (line.equals("") || FileIO.isComment(line)) {
+            continue;
+          }
+          if (!line.equals("DECLARE")) {
+            continue;
+          }
+          // Just read "DECLARE", so next line has ppt name.
           String ppt_name = fp.readLine();
           if (ppt_name == null) {
             throw new Daikon.TerminationMessage("File " + file + " terminated prematurely");

@@ -5,26 +5,26 @@ implicit
 DECLARE
 MapQuick1.GeoPoint:::CLASS
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 
 DECLARE
 MapQuick1.GeoPoint:::OBJECT
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 
@@ -43,19 +43,19 @@ int
 DECLARE
 MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT47
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 4
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 3
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 3
 latitude
@@ -71,19 +71,19 @@ int
 DECLARE
 MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 o
@@ -98,19 +98,19 @@ java.lang.String
 DECLARE
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT66
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 5
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 5
 o
@@ -129,19 +129,19 @@ boolean
 DECLARE
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 5
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 5
 o
@@ -161,38 +161,38 @@ boolean
 DECLARE
 MapQuick1.GeoPoint.hashCode():::ENTER
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 
 DECLARE
 MapQuick1.GeoPoint.hashCode():::EXIT77
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 4
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 5
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 5
 return
@@ -204,19 +204,19 @@ int
 DECLARE
 MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 gp
@@ -224,30 +224,30 @@ MapQuick1.GeoPoint # isParam=true
 hashcode
 3
 gp.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 gp.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 
 DECLARE
 MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::EXIT91
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 gp
@@ -255,11 +255,11 @@ MapQuick1.GeoPoint # isParam=true
 hashcode
 3
 gp.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 gp.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 return
@@ -271,19 +271,19 @@ double
 DECLARE
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 gp
@@ -291,30 +291,30 @@ MapQuick1.GeoPoint # isParam=true
 hashcode
 3
 gp.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 gp.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 
 DECLARE
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::EXIT113
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 gp
@@ -322,11 +322,11 @@ MapQuick1.GeoPoint # isParam=true
 hashcode
 3
 gp.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 gp.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 return
@@ -338,19 +338,19 @@ double
 DECLARE
 MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 4
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 5
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 5
 obj
@@ -365,19 +365,19 @@ java.lang.String
 DECLARE
 MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-MapQuick1.GeoPoint # isNonNull=true isParam=true
+MapQuick1.GeoPoint # isNonNull=true, isParam=true
 hashcode
 5
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 this.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 obj
@@ -399,11 +399,11 @@ MapQuick1.GeoSegment:::CLASS
 DECLARE
 MapQuick1.GeoSegment:::OBJECT
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -411,31 +411,31 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 
@@ -455,15 +455,15 @@ MapQuick1.GeoPoint # isParam=true
 hashcode
 5
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 p2
@@ -471,22 +471,22 @@ MapQuick1.GeoPoint # isParam=true
 hashcode
 5
 p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 
 DECLARE
 MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT67
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 7
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 3
 this.name.toString
@@ -494,31 +494,31 @@ java.lang.String
 java.lang.String
 8
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 5
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 5
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 name
@@ -534,11 +534,11 @@ MapQuick1.GeoPoint # isParam=true
 hashcode
 5
 p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 p2
@@ -546,11 +546,11 @@ MapQuick1.GeoPoint # isParam=true
 hashcode
 5
 p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 6
 
@@ -558,11 +558,11 @@ int
 DECLARE
 MapQuick1.GeoSegment.reverse():::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -570,42 +570,42 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 
 DECLARE
 MapQuick1.GeoSegment.reverse():::EXIT80
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 12
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 13
 this.name.toString
@@ -613,31 +613,31 @@ java.lang.String
 java.lang.String
 14
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 15
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 16
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 16
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 15
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 16
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 16
 return
@@ -645,7 +645,7 @@ MapQuick1.GeoSegment
 hashcode
 3
 return.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 return.name.toString
@@ -653,27 +653,27 @@ java.lang.String
 java.lang.String
 5
 return.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 return.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 return.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 return.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 9
 return.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 10
 return.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 11
 
@@ -681,11 +681,11 @@ int
 DECLARE
 MapQuick1.GeoSegment.name():::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -693,42 +693,42 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 
 DECLARE
 MapQuick1.GeoSegment.name():::EXIT88
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 5
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 3
 this.name.toString
@@ -736,31 +736,31 @@ java.lang.String
 java.lang.String
 6
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 return
@@ -776,11 +776,11 @@ java.lang.String
 DECLARE
 MapQuick1.GeoSegment.p1():::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -788,42 +788,42 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 
 DECLARE
 MapQuick1.GeoSegment.p1():::EXIT94
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 5
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.name.toString
@@ -831,31 +831,31 @@ java.lang.String
 java.lang.String
 7
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 3
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 return
@@ -863,11 +863,11 @@ MapQuick1.GeoPoint
 hashcode
 3
 return.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 return.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 
@@ -875,11 +875,11 @@ int
 DECLARE
 MapQuick1.GeoSegment.p2():::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -887,42 +887,42 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 
 DECLARE
 MapQuick1.GeoSegment.p2():::EXIT100
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 5
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.name.toString
@@ -930,31 +930,31 @@ java.lang.String
 java.lang.String
 7
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 3
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 return
@@ -962,11 +962,11 @@ MapQuick1.GeoPoint
 hashcode
 3
 return.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 return.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 4
 
@@ -974,11 +974,11 @@ int
 DECLARE
 MapQuick1.GeoSegment.length():::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -986,42 +986,42 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 
 DECLARE
 MapQuick1.GeoSegment.length():::EXIT106
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 4
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 5
 this.name.toString
@@ -1029,31 +1029,31 @@ java.lang.String
 java.lang.String
 6
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 return
@@ -1065,11 +1065,11 @@ double
 DECLARE
 MapQuick1.GeoSegment.heading():::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -1077,42 +1077,42 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 
 DECLARE
 MapQuick1.GeoSegment.heading():::EXIT116
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 4
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 5
 this.name.toString
@@ -1120,31 +1120,31 @@ java.lang.String
 java.lang.String
 6
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 return
@@ -1156,11 +1156,11 @@ double
 DECLARE
 MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -1168,31 +1168,31 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 o
@@ -1207,11 +1207,11 @@ java.lang.String
 DECLARE
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT132
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 5
 this.name.toString
@@ -1219,31 +1219,31 @@ java.lang.String
 java.lang.String
 6
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 o
@@ -1262,11 +1262,11 @@ boolean
 DECLARE
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 5
 this.name.toString
@@ -1274,31 +1274,31 @@ java.lang.String
 java.lang.String
 6
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 o
@@ -1318,11 +1318,11 @@ boolean
 DECLARE
 MapQuick1.GeoSegment.hashCode():::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 3
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 4
 this.name.toString
@@ -1330,42 +1330,42 @@ java.lang.String
 java.lang.String
 5
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 7
 
 DECLARE
 MapQuick1.GeoSegment.hashCode():::EXIT144
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 4
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 5
 this.name.toString
@@ -1373,31 +1373,31 @@ java.lang.String
 java.lang.String
 6
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 return
@@ -1409,11 +1409,11 @@ int
 DECLARE
 MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 4
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 5
 this.name.toString
@@ -1421,31 +1421,31 @@ java.lang.String
 java.lang.String
 6
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 7
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 8
 obj
@@ -1460,11 +1460,11 @@ java.lang.String
 DECLARE
 MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-MapQuick1.GeoSegment # isNonNull=true isParam=true
+MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode
 5
 this.name
-java.lang.String # declaringClassPackageName=MapQuick1, 
+java.lang.String # declaringClassPackageName=MapQuick1
 hashcode
 6
 this.name.toString
@@ -1472,31 +1472,31 @@ java.lang.String
 java.lang.String
 7
 this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 8
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1, 
+double # declaringClassPackageName=MapQuick1
 double
 2
 this.p1.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 9
 this.p1.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 9
 this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1, 
+MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
 hashcode
 8
 this.p2.latitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 9
 this.p2.longitude
-int # declaringClassPackageName=MapQuick1, 
+int # declaringClassPackageName=MapQuick1
 int
 9
 obj

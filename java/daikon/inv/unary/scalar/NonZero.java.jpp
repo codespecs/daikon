@@ -66,11 +66,11 @@ import typequals.*;
 // This also serves as NonNull.
 
 /**
- * Represents long scalars that are non-zero. Prints as <code>x != 0</code>, or as <code>x !=
+ * Represents long scalars that are non-zero. Prints as {@code x != 0}, or as <code>x !=
  * null</code> for pointer types.
  */
 #else
-/** Represents double scalars that are non-zero. Prints as <code>x != 0</code>. */
+/** Represents double scalars that are non-zero. Prints as {@code x != 0}. */
 #endif
 public class NONZERO extends SINGLESCALAR {
   // We are Serializable, so we specify a version to allow changes to

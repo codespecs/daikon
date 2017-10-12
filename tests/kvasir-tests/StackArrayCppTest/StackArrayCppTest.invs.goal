@@ -61,6 +61,7 @@ Stack.Stack(char*, int):::EXIT
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 this->maxElts == orig(maxSize)
+this->myName == orig(name)
 ::__numeric_traits_integer<char>::__max == 127
 ::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
@@ -71,7 +72,6 @@ this->maxElts == orig(maxSize)
 ::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 this->numElts == 0
-this->myName == orig(name)
 ===========================================================================
 Stack.getMaxElts():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
@@ -98,6 +98,7 @@ Stack.getMaxElts():::EXIT
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 return == this->maxElts
 return == orig(this->maxElts)
+this->myName == orig(this->myName)
 this->numElts == orig(this->numElts)
 this->stackRep == orig(this->stackRep)
 this->stackRep[] == orig(this->stackRep[])
@@ -114,7 +115,6 @@ Stack::numStacksCreated one of { 1, 2 }
 return one of { 5, 10 }
 this->numElts one of { 3, 5 }
 this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
-this->myName == orig(this->myName)
 ===========================================================================
 Stack.getName():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
@@ -139,6 +139,8 @@ Stack.getName():::EXIT
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
+return == this->myName
+return == orig(this->myName)
 this->maxElts == orig(this->maxElts)
 this->numElts == orig(this->numElts)
 this->stackRep == orig(this->stackRep)
@@ -156,8 +158,6 @@ Stack::numStacksCreated one of { 1, 2 }
 return one of { "My first stack", "My second stack" }
 this->numElts one of { 3, 5 }
 this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
-return == this->myName
-return == orig(this->myName)
 ===========================================================================
 Stack.getNumStacksCreated():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
@@ -222,6 +222,7 @@ Stack.pop():::EXIT
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 this->maxElts == orig(this->maxElts)
+this->myName == orig(this->myName)
 this->stackRep == orig(this->stackRep)
 this->stackRep[] == orig(this->stackRep[])
 this[0] == orig(this[0])
@@ -245,7 +246,6 @@ this->stackRep[] elements > ::__numeric_traits_integer<short>::__min
 this->stackRep[] elements > ::__numeric_traits_integer<unsigned long>::__digits
 this->stackRep[] elements > Stack::numStacksCreated
 this->maxElts > orig(this->numElts)
-this->myName == orig(this->myName)
 (orig(this->numElts) == 0) ==> (this->numElts == 0)
 this->numElts <= orig(this->numElts)
 this->stackRep[] elements > orig(this->numElts)
@@ -281,6 +281,7 @@ Stack.privateStuff():::EXIT
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 this->maxElts == orig(this->maxElts)
+this->myName == orig(this->myName)
 this->numElts == orig(this->numElts)
 this->stackRep == orig(this->stackRep)
 this->stackRep[] == orig(this->stackRep[])
@@ -305,7 +306,6 @@ this->stackRep[] elements > ::__numeric_traits_integer<short>::__min
 this->stackRep[] elements > ::__numeric_traits_integer<unsigned long>::__digits
 this->stackRep[] elements > Stack::numStacksCreated
 this->stackRep[] elements > return
-this->myName == orig(this->myName)
 ===========================================================================
 Stack.push(int):::ENTER
 ::__numeric_traits_integer<char>::__max == 127
@@ -329,6 +329,7 @@ Stack.push(int):::EXIT
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 this->maxElts == orig(this->maxElts)
+this->myName == orig(this->myName)
 this->stackRep == orig(this->stackRep)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
@@ -349,7 +350,6 @@ this->stackRep[] elements > ::__numeric_traits_integer<short>::__min
 this->stackRep[] elements > ::__numeric_traits_integer<unsigned long>::__digits
 this->stackRep[] elements > Stack::numStacksCreated
 this->maxElts > orig(this->numElts)
-this->myName == orig(this->myName)
 this->numElts - orig(this->numElts) - 1 == 0
 orig(dat) in this->stackRep[]
 this->stackRep[] elements <= orig(dat)

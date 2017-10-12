@@ -2,7 +2,14 @@
 
 package daikon.diff;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.ClassNotFoundException;
+import java.lang.IllegalAccessException;
+import java.lang.InstantiationException;
+import java.lang.NoSuchMethodException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <B>MultiDiff</B> is an executable application that performs the same functionality as Diff with a
@@ -15,7 +22,8 @@ public class MultiDiff {
   }
 
   public static void main(String[] args)
-      throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+      throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
+          NoSuchMethodException, InvocationTargetException {
     try {
       mainHelper(args);
     } catch (daikon.Daikon.TerminationMessage e) {
@@ -34,7 +42,8 @@ public class MultiDiff {
    * @see daikon.Daikon.TerminationMessage
    */
   public static void mainHelper(final String[] args)
-      throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+      throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
+          InvocationTargetException, NoSuchMethodException {
     PrintStream out = new PrintStream(new FileOutputStream("rand_sel.spinfo"));
     /*
       try {

@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.5.11
+@center Daikon version 5.5.15
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.5.11 release date
-@center July 4, 2017
+@c Print out the Daikon version 5.5.15 release date
+@center October 3, 2017
 @end ifset
 
 @ifclear final
@@ -74,7 +74,7 @@ Copyright @copyright{} 1998-2014
 @c @headings off
 @c @evenheading @thispage @| @thischaptername @| Chapter @thischapternum
 @c @oddheading Section @thissectionnum @| @thissectionname @| @thispage
-@c @oddheading Chapter @thischapternum: @thischaptername @| @| @thispage 
+@c @oddheading Chapter @thischapternum: @thischaptername @| @| @thispage
 @c @evenheading @thispage @| @| Section @thissectionnum: @thissectionname
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.5.11, released July 4, 2017.
+It describes Daikon version 5.5.15, released October 3, 2017.
 
 @menu
 * Introduction::
@@ -124,7 +124,7 @@ It describes Daikon version 5.5.11, released July 4, 2017.
 @node    Introduction
 @chapter Introduction
 
-This is the developer manual for the 
+This is the developer manual for the
 @ifhtml
 @uref{http://plse.cs.washington.edu/daikon/, ,Daikon invariant detector}.
 @end ifhtml
@@ -213,7 +213,7 @@ always be in Windows format; i.e., it should use semicolons (;) rather
 than colons (:) as a path separator.
 Using the wrong filename format or the wrong pathname separator
 is a common source of errors that will result in odd error
-messages and build failures. 
+messages and build failures.
 
 Please note this applies to a @command{-CLASSPATH} argument to
 @command{java} as well: it must have Windows pathnames.
@@ -253,7 +253,7 @@ To compile Daikon on Windows, the best approach is to first install the Cygwin
 toolset (available at @uref{http://cygwin.com/}), which
 contains everything you need to compile and run Linux programs under
 Windows.  You can install Cygwin by running one of the setup
-programs (based on your machine type) found 
+programs (based on your machine type) found
 at @uref{http://cygwin.com/install.html}.
 Then, install any necessary programs such as those below.
 
@@ -348,8 +348,8 @@ Project > properties > Java build path:
    plus also the @file{tools.jar} file in the @file{lib/} directory of your JDK.
    (I'm not sure why, but @command{add jars} doesn't show all @file{.jar}
    files in the directory.)
-  
- Source: 
+
+ Source:
    add @file{Daikon}, remove @file{Daikon/src}.
    Default output folder: change from @file{Daikon/bin} to @file{Daikon}.
 
@@ -388,7 +388,7 @@ appropriate line in @code{Daikon.setup_proto_invs()}, then recompile
 Daikon.
 
 
-A Java class defining an invariant is a concrete subclass of one of the direct subclasses of 
+A Java class defining an invariant is a concrete subclass of one of the direct subclasses of
 @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/UnaryInvariant.html,@code{UnaryInvariant}},
 @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/BinaryInvariant.html,@code{BinaryInvariant}},
 or
@@ -400,7 +400,7 @@ Daikon's invariants are first instantiated, then are presented samples
 (tuples of values for all the variables of interest to the invariant;
 this might be a 1-tuple, a 2-tuple, or a 3-tuple) in turn.  If any
 sample falsifies the invariant, the invariant destroys itself.  All
-remaining invariants at the end of the program run can be queried for 
+remaining invariants at the end of the program run can be queried for
 their statistical confidence, then reported as
 likely to be true.
 
@@ -408,7 +408,7 @@ You need to implement the abstract methods of @uref{http://plse.cs.washington.ed
 
 @table @code
 @item protected @var{InvName}(PptSlice ppt)
-Constructor for class @var{InvName}.  Should only be called from 
+Constructor for class @var{InvName}.  Should only be called from
 @code{instantiate_dyn}.
 Its typical implementation is
 @example
@@ -505,7 +505,7 @@ Manual}), among others.  More often, users apply a programming language
 front end (also called an @dfn{instrumenter}) to a program, causing
 executions of the program to write files in Daikon's format.  (For
 information about existing front ends, see
-@ref{Front ends (instrumentation),,,daikon,Daikon User Manual}.) 
+@ref{Front ends (instrumentation),,,daikon,Daikon User Manual}.)
 When a general front end is not
 available, it is possible to manually instrument a specific program so
 that it writes files in Daikon's format.  The resulting instrumented
@@ -799,7 +799,7 @@ set of invariants (@code{NISuppression}) that imply and suppress a
 the suppressions that suppress a particular @var{suppressee} is stored in the
 class @code{NISuppressionSet}.
 
-Adding a new suppression is straightforward when the invariants involved 
+Adding a new suppression is straightforward when the invariants involved
 do not have any state.  Define the @var{suppressee} and
 each of the suppressions that suppress it using the corresponding
 constructors.  Add the method @code{get_ni_suppressions} to the class
@@ -840,9 +840,9 @@ For suppressions depending on the state of a particular invariant,
 each @code{Invariant} has an @code{isObviousDynamically(VarInfo[] vis)}
 method that is called once the state of other invariants has already
 been determined.  This method returns a non-null value if this invariant
-is implied by a fact that can be derived from the given @code{VarInfo}s.  
+is implied by a fact that can be derived from the given @code{VarInfo}s.
 
-For example, suppose division was not defined for divisors smaller than 1. 
+For example, suppose division was not defined for divisors smaller than 1.
 The following example defines an obvious check for @samp{x <= c}
 (where c < 1 is a constant) implies @samp{y % x == 0}, written in the
 Divides class.
@@ -863,7 +863,7 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
     return null;
   @}
 
-  for(Invariant inv : ppt_over1.invs) @{            
+  for(Invariant inv : ppt_over1.invs) @{
     if(inv instanceof UpperBound) @{
       if(((UpperBound) inv).max() < 1) @{
         return new DiscardInfo(this, DiscardCode.obvious,
@@ -874,7 +874,7 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
 
   return null;
 @}
-@end example  
+@end example
 @c restore default:
 @exampleindent 5
 
@@ -941,7 +941,7 @@ This chapter describes some of the command-line options in more detail.
 @cindex logging
 @cindex track logging
 
-Often it is desirable to print information only about one or more specific 
+Often it is desirable to print information only about one or more specific
 invariants.  This is distinct from general logging because it concentrates
 on specific invariant objects rather than a particular class or portion of Daikon.
 This is referred to as @dfn{Track} logging because it tracks particular
@@ -950,10 +950,10 @@ values across Daikon.
 @c makeinfo doesn't like ',' in @var so we can't do this:
 @c @var{class|class|...<var,var,var>@@ppt}
 The @option{--track @var{class|class|...<var}@i{,}@var{var}@i{,}@var{var>@@ppt}}
-option to Daikon 
+option to Daikon
 (@pxref{Daikon debugging options,,,daikon,Daikon User Manual})
 enables track logging.
-The argument to the @option{--track} option supplies three pieces of information: 
+The argument to the @option{--track} option supplies three pieces of information:
 
 @enumerate
 
@@ -965,8 +965,8 @@ Multiple class arguments can be specified separated by pipe symbols
 @code{size(this.s[])}).  The variables are specified in angle brackets
 (@samp{<>}).
 
-@item The program point of interest (e.g., 
-@code{DataStructures.StackAr.findMin()V:::ENTER}). 
+@item The program point of interest (e.g.,
+@code{DataStructures.StackAr.findMin()V:::ENTER}).
 The program point is preceded by an at sign (@samp{@@}).
 
 @end enumerate
@@ -1050,15 +1050,15 @@ log (Class, Ppt, VarInfo[], String)
 @end example
 
 @noindent
-The first uses the cached version of the @code{Class}, @code{Ppt}, 
+The first uses the cached version of the @code{Class}, @code{Ppt},
 and @code{VarInfo} that
 was provided in the constructor.  The second uses the specified
-variables and the @code{VarInfo} information from @code{Ppt}.  
+variables and the @code{VarInfo} information from @code{Ppt}.
 The third specifies each variable explicitly.
 
-When logging is not enabled, calling the logging functions can take a 
+When logging is not enabled, calling the logging functions can take a
 significant amount of time (because the parameters need to be evaluated and
-passed).  To minimize this, a function @code{logOn()} is provided to see 
+passed).  To minimize this, a function @code{logOn()} is provided to see
 if logging is enabled.  It is recommended that code of the following form
 be used for efficiency:
 
@@ -1119,7 +1119,7 @@ format. Space for three variables is always maintained for consistency:
 @end example
 
 @noindent
-If @code{showTrackback} is enabled, the @samp{traceback} will follow each 
+If @code{showTrackback} is enabled, the @samp{traceback} will follow each
 line of debug output.
 
 
@@ -1162,7 +1162,7 @@ time.  Two examples are @samp{A[i] is an element of A[]} and @samp{size(A[])
 @code{isObviousStatically} method.
 With the equality sets optimization (@pxref{Equality optimization}),
 non-instantiation can only happen if all equality permutations are
-statically obvious.  Note that @code{isObviousStatically} should 
+statically obvious.  Note that @code{isObviousStatically} should
 be used only for invariants that are known to be true.  Other code
 presumes that any statically obvious invariants are true and can
 be safely presumed when determining if other invariants are redundant.
@@ -1381,17 +1381,17 @@ int 37 boolean false
 @c restore default:
 @exampleindent 5
 
-@item Type string: 
+@item Type string:
 A type string must consist of one or more of the following literals:
-@samp{int}, @samp{double}, @samp{string}, @samp{int_array}, 
-@samp{double_array}, or @samp{string_array}, separated by spaces. 
+@samp{int}, @samp{double}, @samp{string}, @samp{int_array},
+@samp{double_array}, or @samp{string_array}, separated by spaces.
 This string represents the
 types that an invariant is supposed to compare For instance, a binary
 integer comparison would have type string @samp{int int}.  A pairwise
 sequence comparison would have type string @samp{int_array int_array}.
 
-@item Goal string: 
-The goal string must start with the prefix @samp{Goal }, and then 
+@item Goal string:
+The goal string must start with the prefix @samp{Goal }, and then
 continue with @samp{(<format type>): },
 where format type is the format in which the invariant will
 print. After this the representation of the invariant must occur. It
@@ -1428,14 +1428,14 @@ exact format is again:
 Goal<1 space>(<format name>):<1 space><goal text>
 @end example
 
-@item Samples: 
+@item Samples:
 Values formatted according to the type string, one value per
 line Make sure that the samples provided are actually instances of that
 particular invariant (That is, if the desired invariant is @samp{a < b}, then
-the first number of each sample better be less than the second) 
+the first number of each sample better be less than the second)
 
 @c The below is not necessary since we don't check this before formatting
-@c 
+@c
 @c Also be
 @c sure to have enough samples to ensure the invariant is apparent (and
 @c probable) to Daikon (6-8 will do for most binary integer comparisons,
@@ -1469,7 +1469,7 @@ Goal: a < b    <- goal string, no comment/blank lines after this
 @exampleindent 5
 
 @noindent
-Other examples are in the existing test file 
+Other examples are in the existing test file
 (@file{InvariantFormatTest.commands}).
 @end table
 
@@ -1494,7 +1494,7 @@ already recognized.
 @subsection Sample Testing
 
 Sample testing tests various components of Daikon as samples are being
-processed.  A file (normally @file{daikon/test/SampleTester.commands}) 
+processed.  A file (normally @file{daikon/test/SampleTester.commands})
 specifies a @file{.decls} file to use, the samples for each @samp{ppt/var},
 and assertions
 about Daikon's state (such as whether or not a particular invariant exists).
@@ -1512,14 +1512,14 @@ This command specifies the declaration file to use.  This is a normal
 
 @deffn {SampleTester Command} ppt: ppt
 This command specifies the program point that will be used with following
-vars, data, and assert commands.  The program point should be specified 
+vars, data, and assert commands.  The program point should be specified
 exactly as it appears in the @file{.decls} file.
 @end deffn
 
 @deffn {SampleTester Command} vars: var1 var2...
 Specifies the variables that will be used on following data lines.
 Each variable must match exactly a variable in the @code{ppt}.  Other
-variables will be treated as missing.  
+variables will be treated as missing.
 @end deffn
 
 @deffn {SampleTester Command} data: val1 val2...
@@ -1548,7 +1548,7 @@ The valid assertions for the assert: command are:
 @deffn Assertion inv format var1 ...
 
 The @code{inv} assertion asserts that the specified invariant exists in the
-current @code{ppt}.  The @var{format} argument is the result of calling 
+current @code{ppt}.  The @var{format} argument is the result of calling
 @code{format()} on
 the invariant.  This is how the invariant is recognized.  The remaining
 arguments are the variables that make up the invariants slice.  These
@@ -1628,13 +1628,13 @@ because it controls so many types of tests.
 @subsection Kvasir regression tests
 
 
-The Kvasir (Daikon C front-end) tests appear in the 
-@file{$DAIKONDIR/tests/kvasir-tests} directory. These tests run Daikon to ensure 
-that the Kvasir output is valid Daikon input. To run them, go to 
-@file{$DAIKONDIR/tests/kvasir-tests} or of its sub-directories and run 
+The Kvasir (Daikon C front-end) tests appear in the
+@file{$DAIKONDIR/tests/kvasir-tests} directory. These tests run Daikon to ensure
+that the Kvasir output is valid Daikon input. To run them, go to
+@file{$DAIKONDIR/tests/kvasir-tests} or of its sub-directories and run
 @command{make summary-w-daikon}. If any tests return @samp{FAILED}, then
-you should look at the appropriate @file{.diff} file. If you feel that the 
-failure was actually a result of your Daikon changes and should be in fact 
+you should look at the appropriate @file{.diff} file. If you feel that the
+failure was actually a result of your Daikon changes and should be in fact
 correct output, then run @command{make update-inv-goals} to update the Daikon
 @file{invs.goal} file.
 
@@ -1727,14 +1727,14 @@ easier to just add the additional @file{.goal} files.)
 You can start out with the @file{.goal} files empty.
 Execute @command{make diffs}, to produce output; the tests will fail
 because the output is not identical to the empty @file{.goal} files.
-When the test output is satisfactory, execute 
-@command{make update-goals} to copy the actual results to the @file{.goal} files.  
+When the test output is satisfactory, execute
+@command{make update-goals} to copy the actual results to the @file{.goal} files.
 Then, commit the goal files, Makefile, and source files
 to the repository.
 
 @item
 Make the new test be run by adding to the appropriate list (usually
-@samp{everything} or @samp{quick}) in 
+@samp{everything} or @samp{quick}) in
 @file{$DAIKONDIR/tests/daikon-tests/Makefile}.
 
 @end enumerate
@@ -1747,7 +1747,7 @@ For more information, see the comments in file
 
 The Daikon source code follows
 the @uref{https://google.github.io/styleguide/javaguide.html, Google Java Style}
-and also 
+and also
 @uref{http://homes.cs.washington.edu/~mernst/advice/coding-style.html, Michael Ernst's coding conventions}.
 
 
@@ -1887,7 +1887,7 @@ Daikon, @samp{jtb}, and plume.
 Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
 Path", then "Libraries", then "Add External Jars" and add @file{tools.jar},
-and the files in @file{daikon/java/lib/}, namely 
+and the files in @file{daikon/java/lib/}, namely
 @file{java-getopt.jar},
 @file{junit-4.12.jar},
 and
@@ -2166,9 +2166,6 @@ This should fulfill most of the directory layout requirements noted above.
 @node    Updating dependencies
 @section  Getting the latest version of dependencies
 
-@enumerate
-
-@item
 Update the Daikon source files to their most recent version.
 
 @smallexample
@@ -2188,20 +2185,6 @@ nothing to commit, working directory clean
 @end example
 
 [Time: moments]
-
-
-@item
-Make sure your Checker Framework repositories are up-to-date.
-(For instructions on how to set up and build the Checker Framework, see
-@uref{https://checkerframework.org/manual/#build-source,Building from source}.)
-Make sure the @env{CHECKERFRAMEWORK} environment
-variable points to the location of your Checker Framework directory.
-
-[Time: moments]
-
-
-@end enumerate
-
 
 The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.
@@ -2326,7 +2309,8 @@ in the process.
 @node    Distribution steps
 @section Steps for making the distribution
 
-Use JDK@tie{}7 for the release process.
+Use JDK@tie{}7 for the release process. Make sure the @env{CHECKERFRAMEWORK} environment
+variable is not defined.
 
 @enumerate
 
@@ -2489,7 +2473,7 @@ build everything to be distributed and copy it to the temporary staging area
 @example
 mkdir -p /tmp/$USER
 rm -rf /tmp/$USER/stage-daikon
-git clone https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
+git clone --depth 3 https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk7
@@ -2616,6 +2600,26 @@ If there is a problem, fix it and start over.
 
 [Time: 15 min]
 
+Note that sometimes Travis has trouble starting MacOSX jobs.  You may wish to log on to a
+MacOSX machine (with the development tools installed) and run the tests manually.
+The example below shows the commands required to do this.  The output
+should show a number of lines beginning with
+"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
+Kvasir was not built because this is not a Linux platform.  Then execution will
+continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
+Success is indicated by invariant output being written to the screen.
+
+@smallexample
+export JAVA_HOME=$(/usr/libexec/java_home)
+mkdir -p ~/tmp
+cd ~/tmp
+curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
+export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
+sh test-distribution.sh
+@end smallexample
+
+[Time: 4 min]
+
 
 @need 1000
 @item
@@ -2623,8 +2627,8 @@ Test the distribution on a Windows machine
 with Cygwin installed, as a guest user (or at least one without
 environment variables such as @env{$DAIKONDIR} defined!).
 
-The output from the make command should show a number of lines beginning with
-"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
+The output from the the commands below should show
+that @file{dcomp_rt.jar} is being built.  Next it should indicate that
 Kvasir was not built because this is not a Linux platform.  Then execution will
 continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
 Success is indicated by invariant output being written to the screen.
@@ -2789,7 +2793,7 @@ repository, which will be named @file{invariants/}:
 
 @example
 cat inv-cvsa? > inv-cvs-full.zip
-unzip inv-cvs-full.zip 
+unzip inv-cvs-full.zip
 @end example
 
 
@@ -2862,7 +2866,7 @@ known as a @dfn{branch}.  When you change files on a branch, those changes
 do not appear on the main trunk or other branches.
 
 Later you can move changes from one branch to another branch (or the
-main trunk) by @dfn{merging}.  Merging involves first running 
+main trunk) by @dfn{merging}.  Merging involves first running
 @command{cvs update -j}, to merge the changes into the working directory.
 You can then commit that revision, and thus effectively copy the
 changes onto another branch.
@@ -2957,7 +2961,7 @@ variable.  The list of variables in the data trace record must be
 identical to that in the corresponding declaration.  For a given program point,
 the declaration must precede the first data trace record for the program
 point.  It is not required that all the program point declarations
-appear before any of the data trace records.  
+appear before any of the data trace records.
 
 There exist some other declaration-related records;
 @pxref{Declaration-related records}.
@@ -3185,11 +3189,11 @@ with a unique id.  Typically, this is the corresponding source line number.
 @c in THROWS and GLOBAL.  Neither Daikon or Kvasir currently use them.
 
 The following information about the program point (@code{ppt-info}) can be specified:
-@itemize 
+@itemize
 @item @code{ppt-type <type>}
 
 Specifies the @var{type} of the program point.  Possible program point
-types are @code{point}, @code{class}, @code{object}, @code{enter}, 
+types are @code{point}, @code{class}, @code{object}, @code{enter},
 @code{exit}, @code{subexit}.  Except for @code{point} all of these
 types are related to the program point hierarchy (see @ref{Dataflow hierarchy}).
 
@@ -3237,33 +3241,33 @@ Multiple parent fields can be specified.
 @end itemize
 
 @c (unpublished notes to Daikon developers)
-@c 
+@c
 @c The following features were added to Daikon to support the Galar
 @c front end, which in turn supported the ClearView tool
 @c (https://homes.cs.washington.edu/~mernst/pubs/automatic-patching-sosp2009.pdf).
 @c Unfortunately, the Galar front end was never released.
-@c 
+@c
 @c There are five undocumented items: ppt-func, ppt-length,
 @c ppt-successors, ppt-basic_block and ppt-combined_basic_block.
-@c 
-@c If the ppt-type is basic_block then the ppt-name is expected to be of 
-@c the form "<string>:0x<hex offset>:::BB".  I'm not clear what the 
-@c <string> represents or how it is used.  The main item is the <hex 
+@c
+@c If the ppt-type is basic_block then the ppt-name is expected to be of
+@c the form "<string>:0x<hex offset>:::BB".  I'm not clear what the
+@c <string> represents or how it is used.  The main item is the <hex
 @c offset> which is the offset from the start of the function to this basic block.
-@c 
-@c The ppt-func record has a string argument for function_id.  I think 
-@c each basic_block ppt is supposed to have one of these records to 
+@c
+@c The ppt-func record has a string argument for function_id.  I think
+@c each basic_block ppt is supposed to have one of these records to
 @c identify the containing function.
-@c 
-@c The ppt-length record has a numeric argument for bb_length.  I think 
-@c each basic_block ppt is supposed to have one of these records 
+@c
+@c The ppt-length record has a numeric argument for bb_length.  I think
+@c each basic_block ppt is supposed to have one of these records
 @c indicating the length of the basic block.  I'm assume this is in bytes not
 @c instructions.
-@c 
-@c The ppt-successors record has a list of string arguments that identify 
-@c the successor blocks of the current basic block.  I think these names 
+@c
+@c The ppt-successors record has a list of string arguments that identify
+@c the successor blocks of the current basic block.  I think these names
 @c are supposed to be in the same format as the ppt-name.
-@c 
+@c
 @c (end developer notes)
 
 
@@ -3306,7 +3310,7 @@ Specifies the variable kind.  Possible values are: @code{field},
 are specified, the relative name of the field or function must be
 specified.  For example, if the variable is @code{this.theArray}, the
 relative name is @code{theArray}.  Pointers to arrays are of type
-@code{field}.  The arrays themselves (a sequence of values) are of 
+@code{field}.  The arrays themselves (a sequence of values) are of
 type @code{array}.  A var-kind entry is required in each variable block.
 
 @item @code{enclosing-var <enclosing-var-name>}
@@ -3375,7 +3379,7 @@ for the purposes of output.  For example, Daikon will print
 
 @item @code{flags <flags>}
 
-One or more flags may optionally be specified.  Possible values are: 
+One or more flags may optionally be specified.  Possible values are:
 @itemize
 
 @item @code{is_param}
@@ -3421,14 +3425,14 @@ variable declared @code{static final} in Java.
 @item @code{synthetic}
 
 Indicates that the variable was added by the front end and is not
-manifest in the input program.  
+manifest in the input program.
 
-@item @code{classname} 
+@item @code{classname}
 
-Indicates that the variable indicates the @code{classname} of its 
+Indicates that the variable indicates the @code{classname} of its
 enclosing variable.
 
-@item @code{to_string} 
+@item @code{to_string}
 
 Indicates that the variable is the string representation of its
 enclosing variable.
@@ -3523,7 +3527,7 @@ records.
 If this variable is computed as a function of some other variable,
 specifies the arguments to the function; otherwise, the
 @code{function-args} line must be omitted.
-The arguments are specified by their 
+The arguments are specified by their
 external variable name.  Multiple arguments are
 blank separated.  For example
 @example
@@ -3748,7 +3752,7 @@ ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param nomod
@@ -3772,7 +3776,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -3799,7 +3803,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable DataStructures.StackAr.DEFAULT_CAPACITY
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   constant 10
@@ -3807,7 +3811,7 @@ variable DataStructures.StackAr.DEFAULT_CAPACITY
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable x
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param nomod
@@ -3825,7 +3829,7 @@ ppt DataStructures.StackAr.push(java.lang.Object):::EXIT103
 ppt-type subexit
 parent parent DataStructures.StackAr:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param nomod
@@ -3849,7 +3853,7 @@ variable this.theArray.getClass().getName()
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -3876,7 +3880,7 @@ variable this.topOfStack
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable DataStructures.StackAr.DEFAULT_CAPACITY
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   constant 10
@@ -3884,7 +3888,7 @@ variable DataStructures.StackAr.DEFAULT_CAPACITY
   comparability 22
   parent DataStructures.StackAr:::OBJECT 1
 variable x
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param nomod
@@ -3901,7 +3905,7 @@ variable x.getClass().getName()
 ppt DataStructures.StackAr:::CLASS
 ppt-type class
 variable DataStructures.StackAr.DEFAULT_CAPACITY
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   constant 10
@@ -3912,7 +3916,7 @@ ppt DataStructures.StackAr:::OBJECT
 ppt-type object
 parent parent DataStructures.StackAr:::CLASS 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.StackAr
   rep-type hashcode
   flags is_param nomod
@@ -3933,7 +3937,7 @@ variable this.theArray.getClass().getName()
   flags nomod synthetic classname
   comparability 22
 variable this.theArray[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.theArray
   array 1
   dec-type java.lang.Object[]
@@ -3957,7 +3961,7 @@ variable this.topOfStack
   flags nomod
   comparability 22
 variable DataStructures.StackAr.DEFAULT_CAPACITY
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   constant 10
@@ -3972,7 +3976,7 @@ variable DataStructures.StackAr.DEFAULT_CAPACITY
 
 This is part of file @file{StackArTester.dtrace}, which you can create by
 running the instrumented @file{StackAr.java} program
-(@pxref{StackAr example,,,daikon,Daikon User Manual}). 
+(@pxref{StackAr example,,,daikon,Daikon User Manual}).
 This excerpt contains only the
 first two calls to
 @code{push} and the first return from @code{push}, along with the
@@ -4158,7 +4162,7 @@ specification of the naming format.
 for each variable:
 @itemize @bullet
 @item
-name: a string containing no tabs or newlines. 
+name: a string containing no tabs or newlines.
 @xref{Variable names,,,daikon,Daikon User Manual}.
 
 @item

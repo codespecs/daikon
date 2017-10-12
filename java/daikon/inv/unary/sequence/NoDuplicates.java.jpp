@@ -56,7 +56,7 @@ import typequals.*;
 
 /**
  * Represents sequences of PRIMITIVE that contain no duplicate elements. Prints as
- * <code>x[] contains no duplicates</code>.
+ * {@code x[] contains no duplicates}.
  */
 
 public class CLASSNAME extends SUPERCLASS {
