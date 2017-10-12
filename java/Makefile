@@ -14,7 +14,7 @@ DAIKONDIR = ${DAIKONDIR_DEFAULT}
 # Test that the directory exists.  There must be a better way to do this.
 DAIKONDIR:=$(wildcard ${DAIKONDIR})
 ifndef DAIKONDIR
-  $(error Environment variable DAIKONDIR is not set to an existing directory; is set to $DAIKONDIR)
+  $(error Environment variable DAIKONDIR is not set to an existing directory; is set to ${DAIKONDIR}.  DAIKONDIR_DEFAULT=${DAIKONDIR_DEFAULT})
 endif
 
 # Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.

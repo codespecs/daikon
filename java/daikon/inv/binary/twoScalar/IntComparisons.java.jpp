@@ -347,7 +347,7 @@
 #endif
 
 #if defined(EQUAL_OP)
-  #define IMPLEMENTSCOMPARISON implements Comparison
+  #define IMPLEMENTSCOMPARISON implements EqualityComparison
 #else
   #define IMPLEMENTSCOMPARISON
 #endif

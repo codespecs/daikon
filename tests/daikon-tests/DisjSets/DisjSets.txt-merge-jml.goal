@@ -58,12 +58,12 @@ class DisjSets
   @ requires root2 > daikon.Quant.getElement_int(this.s, root1);
   @ requires daikon.Quant.size(this.s)-1 > daikon.Quant.getElement_int(this.s, root1);
   @ ensures this.s == \old(this.s);
-  @ ensures daikon.Quant.lexGT(this.s, \old(this.s));
   @ ensures \old(root1) == daikon.Quant.getElement_int(this.s, \old(root2));
   @ ensures daikon.Quant.size(this.s) == \old(daikon.Quant.size(this.s));
   @ ensures daikon.Quant.getElement_int(this.s, \old(root1)) == \old(daikon.Quant.getElement_int(this.s, root1));
   @ ensures daikon.Quant.getElement_int(this.s, \old(root1)) == \old(daikon.Quant.getElement_int(this.s, root2));
   @ ensures daikon.Quant.getElement_int(this.s, \old(root1)) == -1;
+  @ ensures daikon.Quant.lexGT(this.s, \old(this.s));
   @ ensures daikon.Quant.pairwiseGTE(this.s, \old(this.s));
   @ ensures daikon.Quant.pairwiseBitwiseSubset(\old(this.s), this.s);
   @ ensures daikon.Quant.subsetOf(\old(this.s), this.s);
