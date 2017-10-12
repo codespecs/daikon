@@ -255,6 +255,7 @@ endif
 endif
 endif
 
+
 ### Rebuild everything; used for monthly releases, for example
 
 rebuild-everything-clean:
@@ -322,6 +323,7 @@ nightly-test-except-doc-pdf:
 	$(MAKE) javadoc doc-all-except-pdf
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
+
 
 ### Tags
 
