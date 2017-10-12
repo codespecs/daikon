@@ -16,10 +16,9 @@ import org.checkerframework.checker.nullness.qual.*;
  *
  * <p>To use this program to update SplitterFactoryTest and the target files, run
  *
- * <pre>    rm $inv/java/daikon/test/split/targets/*.java.goal
- *      rm $inv/java/daikon/test/split/SplitterFactoryTest.java</pre>
+ * <pre>    \rm -f targets/*.java.goal SplitterFactoryTest.java</pre>
  *
- * Then simply run the main method without any arguments in the $INV/java directory, and then
+ * Then simply run the main method without any arguments in the daikon/java directory, and then
  * re-compile the SplitterFactoryTest.
  *
  * <p>To add additional tests to this test program, place the .spinfo and decls files into the
@@ -151,7 +150,7 @@ public class SplitterFactoryTestUpdater {
       to.delete();
     }
     // file.renameTo(to) fails if the two files are on different file systems
-    // (e.g., /tmp and /scratch may be different
+    // (e.g., /tmp and /scratch may be different).
     // So read and write the file directly rather than using renameTo().
     UtilMDE.writeFile(to, UtilMDE.readFile(from));
   }

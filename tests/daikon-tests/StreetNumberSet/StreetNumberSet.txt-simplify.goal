@@ -15,8 +15,8 @@ MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::ENTER
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: numbers.toString is printable
 ===========================================================================
 MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: numbers.toString is printable
 (EQ (select |toString| |numbers|) (select |toString| |__orig__numbers|))
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: numbers.toString is printable
 ===========================================================================
 MapQuick1.StreetNumberSet.checkRep():::ENTER
 ===========================================================================

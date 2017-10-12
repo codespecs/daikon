@@ -5,10 +5,10 @@ MapQuick1.Graph:::OBJECT
 MapQuick1.Graph.Graph():::EXIT
 ===========================================================================
 MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
+(EQ (typeof |from|) (typeof |to|))
 (NEQ (hash |from|) null)
 (EQ (typeof |from|) |T_MapQuick1.GeoSegment|)
 (NEQ (hash |to|) null)
-(EQ (typeof |from|) (typeof |to|))
 ===========================================================================
 MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT
 (EQ (hash (select |adjMap| |this|)) (hash (select |adjMap| |__orig__this|)))

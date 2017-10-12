@@ -279,17 +279,23 @@ public class DaikonSimple {
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 
-      if (!is_var_ok(var1)) continue;
+      if (!is_var_ok(var1)) {
+        continue;
+      }
 
       for (int i2 = i1; i2 < ppt.var_infos.length; i2++) {
         VarInfo var2 = ppt.var_infos[i2];
 
-        if (!is_var_ok(var2)) continue;
+        if (!is_var_ok(var2)) {
+          continue;
+        }
 
         for (int i3 = i2; i3 < ppt.var_infos.length; i3++) {
           VarInfo var3 = ppt.var_infos[i3];
 
-          if (!is_var_ok(var3)) continue;
+          if (!is_var_ok(var3)) {
+            continue;
+          }
 
           if (!is_slice_ok(var1, var2, var3)) {
             continue;
@@ -425,7 +431,9 @@ public class DaikonSimple {
       // vt and filling in the gaps.
       int k = 0;
       for (VarInfo var : receiver.var_infos) {
-        if (var.is_static_constant) continue;
+        if (var.is_static_constant) {
+          continue;
+        }
         boolean found = false;
         for (VarInfo var2 : original.var_infos) {
           if (var.name().equals(var2.name())) {

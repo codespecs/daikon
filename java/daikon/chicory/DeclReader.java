@@ -271,7 +271,9 @@ public class DeclReader {
 
     try {
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
-        if (!line.equals("DECLARE")) continue;
+        if (!line.equals("DECLARE")) {
+          continue;
+        }
 
         // Read the declaration
         read_decl(decl_file);

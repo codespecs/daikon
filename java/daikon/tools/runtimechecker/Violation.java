@@ -17,7 +17,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Represents a violation of a <code>Property</code>.
+ * Represents a violation of a {@code Property}.
  *
  * @see Property
  */
@@ -45,7 +45,7 @@ public class Violation implements Serializable {
   /**
    * Indicates at which program point the violation occurred: at method entry or method exit.
    *
-   * <p>This class contains only two (static) objects: <code>onEntry</code> and <code>onExit</code>.
+   * <p>This class contains only two (static) objects: {@code onEntry} and {@code onExit}.
    */
   // This should be an enum
   /*@UsesObjectEquals*/
@@ -94,7 +94,7 @@ public class Violation implements Serializable {
   }
 
   /**
-   * Creates the violation represented by <code>vioString</code>.
+   * Creates the violation represented by {@code vioString}.
    *
    * <p>Precondition: the string is of the form:
    *
@@ -154,8 +154,8 @@ public class Violation implements Serializable {
   }
 
   /**
-   * if <code>property</code> is an entry or exit property, returns the violation corresponding to
-   * this property. If it's an object invariant property, throws an exception.
+   * if {@code property} is an entry or exit property, returns the violation corresponding to this
+   * property. If it's an object invariant property, throws an exception.
    */
   public static Violation get(Property property) {
     Time t;
@@ -212,8 +212,8 @@ public class Violation implements Serializable {
   }
 
   /**
-   * Returns all violations in <code>vios</code> that violate properties with confidence greater
-   * than or equal to <code>thresh</code>.
+   * Returns all violations in {@code vios} that violate properties with confidence greater than or
+   * equal to {@code thresh}.
    */
   public static Violation[] viosWithConfGEQ(Violation[] vios, double thresh) {
     List<Violation> ret = new ArrayList<Violation>();
@@ -228,8 +228,8 @@ public class Violation implements Serializable {
   }
 
   /**
-   * Returns all violations in <code>vios</code> that violate properties with confidence less than
-   * <code>thresh</code>.
+   * Returns all violations in {@code vios} that violate properties with confidence less than {@code
+   * thresh}.
    */
   public static Violation[] viosWithConfLT(Violation[] vios, double thresh) {
     List<Violation> ret = new ArrayList<Violation>();
@@ -243,7 +243,7 @@ public class Violation implements Serializable {
     return ret.toArray(new Violation[] {});
   }
 
-  /** Returns all violations in <code>vios</code> with the given time. */
+  /** Returns all violations in {@code vios} with the given time. */
   public static Violation[] withTime(Violation[] vios, Time time) {
     List<Violation> ret = new ArrayList<Violation>();
     for (int i = 0; i < vios.length; i++) {
@@ -255,7 +255,7 @@ public class Violation implements Serializable {
     return ret.toArray(new Violation[] {});
   }
 
-  /** Returns all violations in <code>vios</code> with the given king. */
+  /** Returns all violations in {@code vios} with the given king. */
   public static Violation[] withKind(Violation[] vios, Property.Kind kind) {
     List<Violation> ret = new ArrayList<Violation>();
     for (int i = 0; i < vios.length; i++) {

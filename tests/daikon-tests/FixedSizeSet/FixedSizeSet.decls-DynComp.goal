@@ -8,11 +8,11 @@ six170.FixedSizeSet:::CLASS
 DECLARE
 six170.FixedSizeSet:::OBJECT
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 2
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -27,11 +27,11 @@ six170.FixedSizeSet.FixedSizeSet():::ENTER
 DECLARE
 six170.FixedSizeSet.FixedSizeSet():::EXIT26
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 2
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -43,11 +43,11 @@ boolean[]
 DECLARE
 six170.FixedSizeSet.add(int):::ENTER
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 4
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -62,11 +62,11 @@ int
 DECLARE
 six170.FixedSizeSet.add(int):::EXIT34
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 4
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -82,11 +82,11 @@ int
 DECLARE
 six170.FixedSizeSet.remove(int):::ENTER
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 4
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -101,11 +101,11 @@ int
 DECLARE
 six170.FixedSizeSet.remove(int):::EXIT42
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 4
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -121,11 +121,11 @@ int
 DECLARE
 six170.FixedSizeSet.contains(int):::ENTER
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 4
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -140,11 +140,11 @@ int
 DECLARE
 six170.FixedSizeSet.contains(int):::EXIT49
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 5
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -164,11 +164,11 @@ boolean
 DECLARE
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 5
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -180,7 +180,7 @@ six170.FixedSizeSet # isParam=true
 hashcode
 2
 other.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 other.bits[..]
@@ -191,11 +191,11 @@ boolean[]
 DECLARE
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT62
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 5
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -207,7 +207,7 @@ six170.FixedSizeSet # isParam=true
 hashcode
 2
 other.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 other.bits[..]
@@ -219,11 +219,11 @@ boolean[]
 DECLARE
 six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 5
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -235,7 +235,7 @@ six170.FixedSizeSet # isParam=true
 hashcode
 2
 other.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 other.bits[..]
@@ -246,11 +246,11 @@ boolean[]
 DECLARE
 six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT74
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 5
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 this.bits[..]
@@ -262,7 +262,7 @@ six170.FixedSizeSet # isParam=true
 hashcode
 2
 other.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 3
 other.bits[..]
@@ -274,11 +274,11 @@ boolean[]
 DECLARE
 six170.FixedSizeSet.equals(java.lang.Object):::ENTER
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 3
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 4
 this.bits[..]
@@ -297,11 +297,11 @@ java.lang.String
 DECLARE
 six170.FixedSizeSet.equals(java.lang.Object):::EXIT1
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 4
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 5
 this.bits[..]
@@ -325,11 +325,11 @@ boolean
 DECLARE
 six170.FixedSizeSet.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 3
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 4
 this.bits[..]
@@ -348,11 +348,11 @@ java.lang.String
 DECLARE
 six170.FixedSizeSet.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.FixedSizeSet # isNonNull=true isParam=true
+six170.FixedSizeSet # isNonNull=true, isParam=true
 hashcode
 4
 this.bits
-boolean[] # declaringClassPackageName=six170, 
+boolean[] # declaringClassPackageName=six170
 hashcode
 5
 this.bits[..]

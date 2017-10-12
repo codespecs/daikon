@@ -63,12 +63,12 @@ import typequals.*;
 */
 
 /**
- * Represents a Linear invariant over three PRIMITIVE scalars <code>x</code>,
- * <code>y</code>, and <code>z</code>, of the form
- * <code>ax + by + cz + d = 0</code>.
- * The constants <code>a</code>, <code>b</code>, <code>c</code>, and
- * <code>d</code> are mutually relatively prime, and the constant
- * <code>a</code> is always positive.
+ * Represents a Linear invariant over three PRIMITIVE scalars {@code x},
+ * {@code y}, and {@code z}, of the form
+ * {@code ax + by + cz + d = 0}.
+ * The constants {@code a}, {@code b}, {@code c}, and
+ * {@code d} are mutually relatively prime, and the constant
+ * {@code a} is always positive.
  */
 
 public class CLASSNAME extends SUPERCLASS {

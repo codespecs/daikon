@@ -8,43 +8,43 @@ MapQuick.WeightedNodePath:::CLASS
 DECLARE
 MapQuick.WeightedNodePath:::OBJECT
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 2
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 
@@ -59,43 +59,43 @@ hashcode
 DECLARE
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT33
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 node
@@ -115,70 +115,70 @@ MapQuick.WeightedNodePath # isParam=true
 hashcode
 3
 path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 
 DECLARE
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT51
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 7
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 3
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 node
@@ -190,27 +190,27 @@ MapQuick.WeightedNodePath # isParam=true
 hashcode
 3
 path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 
@@ -218,43 +218,43 @@ int
 DECLARE
 MapQuick.WeightedNodePath.extend(java.lang.Object):::ENTER
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 o
@@ -269,43 +269,43 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT56
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 4
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 o
@@ -329,43 +329,43 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 node
@@ -376,43 +376,43 @@ hashcode
 DECLARE
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT63
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 4
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 2
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 node
@@ -432,86 +432,86 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.cost():::ENTER
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 2
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 
 DECLARE
 MapQuick.WeightedNodePath.cost():::EXIT68
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 2
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 2
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 2
 return
@@ -523,86 +523,86 @@ double
 DECLARE
 MapQuick.WeightedNodePath.elements():::ENTER
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 2
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 
 DECLARE
 MapQuick.WeightedNodePath.elements():::EXIT79
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 return
@@ -618,43 +618,43 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.equals(java.lang.Object):::ENTER
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 o
@@ -669,43 +669,43 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.equals(java.lang.Object):::EXIT103
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 4
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 9
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 o
@@ -724,43 +724,43 @@ boolean
 DECLARE
 MapQuick.WeightedNodePath.equals(java.lang.Object):::EXIT105
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 4
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 9
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 o
@@ -780,43 +780,43 @@ boolean
 DECLARE
 MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath):::ENTER
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 2
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 wnp
@@ -824,70 +824,70 @@ MapQuick.WeightedNodePath # isParam=true
 hashcode
 8
 wnp.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 10
 wnp.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 11
 wnp.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 13
 wnp.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 14
 wnp.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 12
 wnp.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 9
 
 DECLARE
 MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath):::EXIT113
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 wnp
@@ -895,27 +895,27 @@ MapQuick.WeightedNodePath # isParam=true
 hashcode
 9
 wnp.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 11
 wnp.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 12
 wnp.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 14
 wnp.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 15
 wnp.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 13
 wnp.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 10
 return
@@ -927,86 +927,86 @@ boolean
 DECLARE
 MapQuick.WeightedNodePath.hashCode():::ENTER
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 2
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 4
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 3
 
 DECLARE
 MapQuick.WeightedNodePath.hashCode():::EXIT120
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 return
@@ -1018,43 +1018,43 @@ int
 DECLARE
 MapQuick.WeightedNodePath.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 3
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 5
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 4
 obj
@@ -1069,43 +1069,43 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-MapQuick.WeightedNodePath # isNonNull=true isParam=true
+MapQuick.WeightedNodePath # isNonNull=true, isParam=true
 hashcode
 4
 this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 7
 this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 8
 this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNode # declaringClassPackageName=MapQuick
 hashcode
 6
 this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick, 
+MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
 hashcode
 9
 this.path.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.path.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 this.cost
-int # declaringClassPackageName=MapQuick, 
+int # declaringClassPackageName=MapQuick
 int
 5
 obj

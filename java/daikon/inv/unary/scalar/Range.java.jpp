@@ -579,7 +579,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Invariant representing longs whose values are always a power of 2 (exactly one bit is set).
    * Used for non-instantiating suppressions. Since this is not covered by the Bound or OneOf
-   * invariants it is printed. Prints as <code>x is a power of 2</code>.
+   * invariants it is printed. Prints as {@code x is a power of 2}.
    */
   public static class PowerOfTwo extends RANGE {
 
@@ -665,7 +665,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Invariant representing longs whose values are always even. Used for non-instantiating
    * suppressions. Since this is not covered by the Bound or OneOf invariants it is printed. Prints
-   * as <code>x is even</code>.
+   * as {@code x is even}.
    */
   public static class Even extends RANGE {
 

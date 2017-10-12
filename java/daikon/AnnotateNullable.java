@@ -109,7 +109,9 @@ public class AnnotateNullable {
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit() || !is_static_method(ppt)) continue;
+      if (!ppt.is_combined_exit() || !is_static_method(ppt)) {
+        continue;
+      }
 
       String name = ppt.name().replaceFirst("[(].*$", "");
       int lastdot = name.lastIndexOf('.');
@@ -146,8 +148,9 @@ public class AnnotateNullable {
           PptRelation child_rel = ppt.children.get(i);
           PptTopLevel child = child_rel.child;
           // Skip enter ppts, all of the info is at the exit.
-          if (child.type == PptType.ENTER) continue;
-          if (child.type == PptType.OBJECT) continue;
+          if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
+            continue;
+          }
           child_cnt++;
           assert static_methods.contains(child) : child;
         }
@@ -159,7 +162,9 @@ public class AnnotateNullable {
     for (PptTopLevel ppt : ppts.pptIterable()) {
 
       // Skip synthetic program points
-      if (ppt.name().startsWith("$")) continue;
+      if (ppt.name().startsWith("$")) {
+        continue;
+      }
 
       // Skip program points that are not OBJECT ppts
       if (ppt.is_object()) {
@@ -237,8 +242,9 @@ public class AnnotateNullable {
       for (PptRelation child_rel : class_ppt.children) {
         PptTopLevel child = child_rel.child;
         // Skip enter ppts, all of the info is at the exit.
-        if (child.type == PptType.ENTER) continue;
-        if (child.type == PptType.OBJECT) continue;
+        if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
+          continue;
+        }
         debug.log("processing static method %s, type %s", child, child.type);
         process_method(child);
       }
@@ -257,7 +263,9 @@ public class AnnotateNullable {
     for (PptRelation child_rel : object_ppt.children) {
       PptTopLevel child = child_rel.child;
       // Skip enter ppts, all of the info is at the exit.
-      if (child.type == PptType.ENTER) continue;
+      if (child.type == PptType.ENTER) {
+        continue;
+      }
       debug.log("processing method %s, type %s", child, child.type);
       process_method(child);
     }
@@ -286,7 +294,7 @@ public class AnnotateNullable {
       // if (! stub_format) {
       //   annotation = "org.checkerframework.checker.nullness.qual." + annotation;
       // }
-      annotation = "@" + annotation + " ";
+      annotation = "@" + annotation;
     }
     return annotation;
   }
@@ -357,10 +365,14 @@ public class AnnotateNullable {
       // Skip anyone with a parent in the hierarchy.  We are only
       // interested in them at the top (e.g., we don't want to see
       // object fields in each method).
-      if (!vi.parents.isEmpty()) continue;
+      if (!vi.parents.isEmpty()) {
+        continue;
+      }
 
       // Skip variables that are always non-null.
-      if (vi.aux.isNonNull()) continue;
+      if (vi.aux.isNonNull()) {
+        continue;
+      }
 
       // Skip any variable that is enclosed by a variable other than 'this'.
       // These are fields and can only be annotated where they are declared.

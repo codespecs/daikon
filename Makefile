@@ -196,6 +196,9 @@ dyncomp-jdk:
 dcomp-jdk:
 	cd java && $(MAKE) dcomp-jdk
 
+reformat:
+	cd java && $(MAKE) reformat
+
 
 ### Kvasir (C/C++ front end)
 
@@ -251,6 +254,7 @@ endif
 endif
 endif
 endif
+
 
 ### Rebuild everything; used for monthly releases, for example
 
@@ -319,6 +323,7 @@ nightly-test-except-doc-pdf:
 	$(MAKE) javadoc doc-all-except-pdf
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
+
 
 ### Tags
 

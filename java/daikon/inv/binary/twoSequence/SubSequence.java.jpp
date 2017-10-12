@@ -98,7 +98,7 @@ import typequals.*;
 
 /**
  * Represents two sequences of PRIMITIVE values where one sequence is a subsequence of the
- * other. Prints as <code>x[] is a subsequence of y[]</code>.
+ * other. Prints as {@code x[] is a subsequence of y[]}.
  */
 
 public class CLASSNAME extends SUPERCLASS {

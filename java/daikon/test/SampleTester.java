@@ -169,7 +169,9 @@ public class SampleTester extends TestCase {
       // Remove comments and skip blank lines
       line = line.replaceAll("#.*", "");
       line = line.trim();
-      if (line.length() == 0) continue;
+      if (line.length() == 0) {
+        continue;
+      }
 
       // Get the line type and the remainder of the line
       String[] sa = line.split(": *", 2);
@@ -277,7 +279,9 @@ public class SampleTester extends TestCase {
 
     // Parse and enter the specified variables, - indicates a missing value
     for (int i = 0; i < vars.length; i++) {
-      if (da[i].equals("-")) continue;
+      if (da[i].equals("-")) {
+        continue;
+      }
       VarInfo vi = vars[i];
       vals[vi.value_index] = vi.rep_type.parse_value(da[i], reader, filename);
       mods[vi.value_index] = ValueTuple.parseModified("1");

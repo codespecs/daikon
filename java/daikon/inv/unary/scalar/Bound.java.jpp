@@ -36,7 +36,6 @@ The correct way to build the system is to run 'make'.
   #define GREATER greater
   #define GT >
   #define GTE >=
-  #define GTEHTML &gt;=
   #define MIN min
   #define MIN1 core.min1
   #define NUM_MIN1 core.num_min1
@@ -92,7 +91,6 @@ The correct way to build the system is to run 'make'.
   #define GREATER less
   #define GT <
   #define GTE <=
-  #define GTEHTML &lt;=
   #define MIN max
   #define MIN1 core.max1
   #define NUM_MIN1 core.num_max1
@@ -202,13 +200,13 @@ import typequals.*;
 
 #if defined (IS_SCALAR)
   /**
-   * Represents the invariant <tt>x GTEHTML c</tt>, where <code>c</code> is a constant and
-   * <code>x</code> is a LONG scalar.
+   * Represents the invariant {@code x GTE c}, where {@code c} is a constant and
+   * {@code x} is a LONG scalar.
    */
 #else
   /**
    * Represents the invariant that each element of a sequence of PRIMITIVE values is GREATER than or
-   * equal to a constant. Prints as <code>x[] elements GTEHTML c</code>.
+   * equal to a constant. Prints as {@code x[] elements GTE c}.
    */
 #endif
 // One reason not to combine LowerBound and UpperBound into a single range
@@ -225,18 +223,18 @@ public class LOWERBOUND extends SINGLESCALAR {
   /** Boolean. True iff LOWERBOUND invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
   /**
-   * Long integer. Together with the corresponding <code>maximal_interesting</code> parameter,
+   * Long integer. Together with the corresponding {@code maximal_interesting} parameter,
    * specifies the range of the computed constant that is ``interesting'' --- the range that should
-   * be reported. For instance, setting <code>minimal_interesting</code> to -1 and
-   * <code>maximal_interesting</code> to 2 would only permit output of LOWERBOUND invariants whose
+   * be reported. For instance, setting {@code minimal_interesting} to -1 and
+   * {@code maximal_interesting} to 2 would only permit output of LOWERBOUND invariants whose
    * cutoff was one of (-1,0,1,2).
    */
   public static long dkconfig_minimal_interesting = -1;
   /**
-   * Long integer. Together with the corresponding <code>minimal_interesting</code> parameter,
+   * Long integer. Together with the corresponding {@code minimal_interesting} parameter,
    * specifies the range of the computed constant that is ``interesting'' --- the range that should
-   * be reported. For instance, setting <code>minimal_interesting</code> to -1 and
-   * <code>maximal_interesting</code> to 2 would only permit output of LOWERBOUND invariants whose
+   * be reported. For instance, setting {@code minimal_interesting} to -1 and
+   * {@code maximal_interesting} to 2 would only permit output of LOWERBOUND invariants whose
    * cutoff was one of (-1,0,1,2).
    */
   public static long dkconfig_maximal_interesting = 2;

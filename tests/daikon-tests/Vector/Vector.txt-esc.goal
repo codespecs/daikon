@@ -81,7 +81,6 @@ modifies this.elementData, this.elementData[*], this.elementCount, this.elementD
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..orig(this.elementCount)-1] == orig(this.elementData[0..this.elementCount-1])
 this.elementCount >= 1
 this.elementData.length >= 1
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 (\old(obj) != null)  ==>  (\typeof(this.elementData) != \old(\typeof(obj)))
 (\old(obj) != null)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(obj)))))
 this.elementCount - \old(this.elementCount) - 1 == 0
@@ -102,7 +101,6 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 \result != null
 \typeof(\result) == \type(javautil.Vector13)
 \typeof(this.elementData) != \typeof(\result)
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::ENTER
     Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement javautil.Vector13.serialVersionUID elem elem.getClass().getName() size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.elementCount] this.elementData[this.elementCount-1] this.elementData[this.elementCount..] this.elementData[this.elementCount+1..] this.elementData[0..this.elementCount] this.elementData[0..this.elementCount-1] this.elementData[this.capacityIncrement] this.elementData[this.capacityIncrement-1] this.elementData[this.capacityIncrement..] this.elementData[this.capacityIncrement+1..] this.elementData[0..this.capacityIncrement] this.elementData[0..this.capacityIncrement-1] this.elementData[javautil.Vector13.serialVersionUID] this.elementData[javautil.Vector13.serialVersionUID-1] this.elementData[javautil.Vector13.serialVersionUID..] this.elementData[javautil.Vector13.serialVersionUID+1..] this.elementData[0..javautil.Vector13.serialVersionUID] this.elementData[0..javautil.Vector13.serialVersionUID-1]
@@ -119,14 +117,13 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 (\result == true)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] != \old(elem))))
 (\result == true)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(elem)))))
 (\result == true)  ==>  (this.elementCount >= 1)
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 \typeof(this.elementData) != \old(\typeof(elem))
 ===========================================================================
 javautil.Vector13.copyInto(java.lang.Object[]):::ENTER
     Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement javautil.Vector13.serialVersionUID anArray anArray.getClass().getName() anArray[] size(this.elementData[]) size(this.elementData[])-1 size(anArray[]) size(anArray[])-1 this.elementData[this.elementCount] this.elementData[this.elementCount-1] this.elementData[this.elementCount..] this.elementData[this.elementCount+1..] this.elementData[0..this.elementCount] this.elementData[0..this.elementCount-1] this.elementData[this.capacityIncrement] this.elementData[this.capacityIncrement-1] this.elementData[this.capacityIncrement..] this.elementData[this.capacityIncrement+1..] this.elementData[0..this.capacityIncrement] this.elementData[0..this.capacityIncrement-1] this.elementData[javautil.Vector13.serialVersionUID] this.elementData[javautil.Vector13.serialVersionUID-1] this.elementData[javautil.Vector13.serialVersionUID..] this.elementData[javautil.Vector13.serialVersionUID+1..] this.elementData[0..javautil.Vector13.serialVersionUID] this.elementData[0..javautil.Vector13.serialVersionUID-1] anArray[this.elementCount] anArray[this.elementCount-1] anArray[this.elementCount..] anArray[this.elementCount+1..] anArray[0..this.elementCount] anArray[0..this.elementCount-1] anArray[this.capacityIncrement] anArray[this.capacityIncrement-1] anArray[this.capacityIncrement..] anArray[this.capacityIncrement+1..] anArray[0..this.capacityIncrement] anArray[0..this.capacityIncrement-1] anArray[javautil.Vector13.serialVersionUID] anArray[javautil.Vector13.serialVersionUID-1] anArray[javautil.Vector13.serialVersionUID..] anArray[javautil.Vector13.serialVersionUID+1..] anArray[0..javautil.Vector13.serialVersionUID] anArray[0..javautil.Vector13.serialVersionUID-1]
+\typeof(this.elementData) == \typeof(anArray)
 anArray != null
 (\forall int i, j; (this.elementCount <= i && i <= anArray.length-1 && this.elementCount <= j && j <= anArray.length-1) ==> (anArray[i] == anArray[j]))
-\typeof(this.elementData) == \typeof(anArray)
 (anArray.length == 0) ==> (this.elementCount == 0)
 this.elementCount <= anArray.length
 javautil.Vector13.serialVersionUID < anArray.length-1
@@ -136,14 +133,13 @@ javautil.Vector13.copyInto(java.lang.Object[]):::EXIT
       Modified variables: anArray[] this.elementData[this.elementCount] this.elementData[this.elementCount-1] this.elementData[this.elementCount+1..] this.elementData[0..this.elementCount] this.elementData[this.capacityIncrement] this.elementData[this.capacityIncrement-1] this.elementData[this.capacityIncrement..] this.elementData[this.capacityIncrement+1..] this.elementData[0..this.capacityIncrement] this.elementData[0..this.capacityIncrement-1] anArray[this.elementCount] anArray[this.elementCount-1] anArray[this.elementCount+1..] anArray[0..this.elementCount] anArray[0..this.elementCount-1] anArray[this.capacityIncrement] anArray[this.capacityIncrement-1] anArray[this.capacityIncrement..] anArray[this.capacityIncrement+1..] anArray[0..this.capacityIncrement] anArray[0..this.capacityIncrement-1]
       Unmodified variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement anArray anArray.getClass().getName() size(this.elementData[]) size(anArray[]) this.elementData[this.elementCount..] this.elementData[0..this.elementCount-1] anArray[this.elementCount..]
 modifies anArray[*], this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1], anArray[this.elementCount], anArray[this.elementCount-1], anArray[this.elementCount+1..], anArray[0..this.elementCount], anArray[0..this.elementCount-1], anArray[this.capacityIncrement], anArray[this.capacityIncrement-1], anArray[this.capacityIncrement..], anArray[this.capacityIncrement+1..], anArray[0..this.capacityIncrement], anArray[0..this.capacityIncrement-1]
+\typeof(this.elementData) == \old(\typeof(anArray))
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..this.elementCount-1] == anArray[0..this.elementCount-1]
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..orig(this.elementCount)-1] == anArray[0..this.elementCount-1]
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: anArray[this.elementCount..] == orig(anArray[post(this.elementCount)..])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: anArray[0..this.elementCount-1] == orig(this.elementData[0..post(this.elementCount)-1])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: anArray[0..this.elementCount-1] == orig(this.elementData[0..this.elementCount-1])
 (\forall int i, j; (this.elementCount <= i && i <= anArray.length-1 && this.elementCount <= j && j <= anArray.length-1) ==> (anArray[i] == anArray[j]))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
-\typeof(this.elementData) == \old(\typeof(anArray))
 (\old(anArray.length) == 0) ==> (this.elementCount == 0)
 this.elementCount <= \old(anArray.length)
 javautil.Vector13.serialVersionUID < anArray.length-1
@@ -167,7 +163,6 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 \result == \old(this.elementData[index])
 (\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable)
 (\result != null)  ==>  (\typeof(this.elementData) != \typeof(\result))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 (\result != null)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \typeof(\result))))
 this.elementCount > \old(index)
 (this.elementData.length-1 == 0) ==> (\old(index) == 0)
@@ -184,7 +179,6 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 \result != null
 \typeof(\result) == \type(javautil.VectorEnumerator13)
 \typeof(this.elementData) != \typeof(\result)
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 ===========================================================================
 javautil.Vector13.ensureCapacity(int):::ENTER
     Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement javautil.Vector13.serialVersionUID minCapacity size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.elementCount] this.elementData[this.elementCount-1] this.elementData[this.elementCount..] this.elementData[this.elementCount+1..] this.elementData[0..this.elementCount] this.elementData[0..this.elementCount-1] this.elementData[this.capacityIncrement] this.elementData[this.capacityIncrement-1] this.elementData[this.capacityIncrement..] this.elementData[this.capacityIncrement+1..] this.elementData[0..this.capacityIncrement] this.elementData[0..this.capacityIncrement-1] this.elementData[javautil.Vector13.serialVersionUID] this.elementData[javautil.Vector13.serialVersionUID-1] this.elementData[javautil.Vector13.serialVersionUID..] this.elementData[javautil.Vector13.serialVersionUID+1..] this.elementData[0..javautil.Vector13.serialVersionUID] this.elementData[0..javautil.Vector13.serialVersionUID-1] this.elementData[minCapacity] this.elementData[minCapacity-1] this.elementData[minCapacity..] this.elementData[minCapacity+1..] this.elementData[0..minCapacity] this.elementData[0..minCapacity-1]
@@ -198,7 +192,6 @@ javautil.Vector13.ensureCapacity(int):::EXIT
       Unmodified variables: this this.elementData.getClass().getName() this.elementCount this.capacityIncrement minCapacity this.elementData[0..this.elementCount-1]
 modifies this.elementData, this.elementData[*], this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount..], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..this.elementCount-1] == orig(this.elementData[0..post(this.elementCount)-1])
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 warning: method daikon.inv.binary.twoSequence.SuperSequence.format(OutputFormat:ESC/Java) needs to be implemented: orig(this.elementData[]) is a subsequence of this.elementData[]
 warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be implemented: this.elementData[] is a superset of orig(this.elementData[])
 (\old(this.elementData.length) == 0) ==> (this.elementCount == 0)
@@ -226,7 +219,6 @@ modifies this.elementData, this.elementData[*], this.elementData[this.elementCou
 this.elementData[this.elementCount] == this.elementData[\old(minCapacity)-1]
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..this.elementCount-1] == orig(this.elementData[0..post(this.elementCount)-1])
 this.elementData.length >= 1
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be implemented: this.elementData[] is a superset of orig(this.elementData[])
 this.elementCount < \old(minCapacity)
 (this.elementData.length-1 == 0) ==> (this.elementCount == 0)
@@ -258,7 +250,6 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 this.elementCount >= 1
 (\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable)
 (\result != null)  ==>  (\typeof(this.elementData) != \typeof(\result))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 !(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] != \result))
 (\result != null)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \typeof(\result))))
 !(\forall int i; (0 <= i && i <= this.elementCount-1) ==> (this.elementData[i] != \result))
@@ -275,7 +266,6 @@ javautil.Vector13.indexOf(java.lang.Object):::EXIT
       Unmodified variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement elem elem.getClass().getName() size(this.elementData[]) this.elementData[this.elementCount..] this.elementData[0..this.elementCount-1]
 modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]
 \result >= -1
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 \typeof(this.elementData) != \old(\typeof(elem))
 this.elementCount > \result
 javautil.Vector13.serialVersionUID < \result
@@ -338,7 +328,6 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 (\result >= 0)  ==>  (this.elementCount >= 1)
 (\result >= 0)  ==>  (this.elementData[\result] != null)
 \result >= -1
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 \typeof(this.elementData) != \old(\typeof(elem))
 this.elementCount > \result
 javautil.Vector13.serialVersionUID < \result
@@ -367,7 +356,6 @@ this.elementData[this.elementCount-1] == this.elementData[\old(this.elementCount
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..orig(index)-1] == orig(this.elementData[0..post(index)-1])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..orig(index)-1] == orig(this.elementData[0..index-1])
 this.elementCount >= 1
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 (\old(obj) != null)  ==>  (\typeof(this.elementData) != \old(\typeof(obj)))
 (\old(obj) != null)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(obj)))))
 this.elementCount - \old(this.elementCount) - 1 == 0
@@ -397,7 +385,6 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 (this.elementCount == 0)  ==>  ((\forall int i; (0 <= i && i <= this.elementCount-1) ==> (this.elementData[i] != null)))
 (this.elementCount == 0)  ==>  ((\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)))
 (this.elementCount == 0)  ==>  ((\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null))))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 ===========================================================================
 javautil.Vector13.lastElement():::ENTER
     Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement javautil.Vector13.serialVersionUID size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.elementCount] this.elementData[this.elementCount-1] this.elementData[this.elementCount..] this.elementData[this.elementCount+1..] this.elementData[0..this.elementCount] this.elementData[0..this.elementCount-1] this.elementData[this.capacityIncrement] this.elementData[this.capacityIncrement-1] this.elementData[this.capacityIncrement..] this.elementData[this.capacityIncrement+1..] this.elementData[0..this.capacityIncrement] this.elementData[0..this.capacityIncrement-1] this.elementData[javautil.Vector13.serialVersionUID] this.elementData[javautil.Vector13.serialVersionUID-1] this.elementData[javautil.Vector13.serialVersionUID..] this.elementData[javautil.Vector13.serialVersionUID+1..] this.elementData[0..javautil.Vector13.serialVersionUID] this.elementData[0..javautil.Vector13.serialVersionUID-1]
@@ -415,7 +402,6 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 this.elementCount >= 1
 (\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable)
 (\result != null)  ==>  (\typeof(this.elementData) != \typeof(\result))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 (\result != null)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \typeof(\result))))
 ===========================================================================
 javautil.Vector13.lastIndexOf(java.lang.Object):::ENTER
@@ -430,7 +416,6 @@ javautil.Vector13.lastIndexOf(java.lang.Object):::EXIT
       Unmodified variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement elem elem.getClass().getName() size(this.elementData[]) this.elementData[this.elementCount..] this.elementData[0..this.elementCount-1]
 modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]
 \result >= -1
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 \typeof(this.elementData) != \old(\typeof(elem))
 this.elementCount > \result
 javautil.Vector13.serialVersionUID < \result
@@ -492,7 +477,6 @@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount
 (\result >= 0)  ==>  (this.elementCount >= 1)
 (\result >= 0)  ==>  (this.elementData[\result] != null)
 \result >= -1
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 \typeof(this.elementData) != \old(\typeof(elem))
 this.elementCount > \result
 this.elementCount > \old(index)
@@ -514,7 +498,6 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null)))
 this.elementCount == 0
 (\forall int i; (0 <= i && i <= this.elementCount-1) ==> (this.elementData[i] != null))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 this.elementCount <= this.capacityIncrement
 this.elementCount <= \old(this.elementCount)
 javautil.Vector13.serialVersionUID < \old(this.elementCount)
@@ -581,7 +564,6 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 (\result == true)  ==>  ((\forall int i; (this.elementCount <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == this.elementData[\old(this.elementCount)-1])))
 (\result == true)  ==>  ((\forall int i; (this.elementCount <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == this.elementData[this.elementCount])))
 (\result == true)  ==>  (this.elementData[this.elementCount] == this.elementData[\old(this.elementCount)-1])
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 \typeof(this.elementData) != \old(\typeof(obj))
 (\old(this.elementCount) == 0) ==> (this.elementCount == 0)
 this.elementCount <= \old(this.elementCount)
@@ -611,7 +593,6 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..orig(index)-1] == orig(this.elementData[0..post(index)-1])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..orig(index)-1] == orig(this.elementData[0..index-1])
 \old(this.elementData[\new(this.elementCount)]) == \old(this.elementData[this.elementCount-1])
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 this.elementCount - \old(this.elementCount) + 1 == 0
 (this.elementCount == 0) ==> (\old(index) == 0)
 this.elementCount >= \old(index)
@@ -647,7 +628,6 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[orig(index)+1..] == orig(this.elementData[index+1..])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..orig(index)-1] == orig(this.elementData[0..post(index)-1])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[0..orig(index)-1] == orig(this.elementData[0..index-1])
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 (\old(obj) != null)  ==>  (\typeof(this.elementData) != \old(\typeof(obj)))
 !(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] != \old(this.elementData[this.elementCount-1])))
 (\old(obj) != null)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(obj)))))
@@ -669,7 +649,6 @@ javautil.Vector13.setSize(int):::EXIT
 modifies this.elementData, this.elementData[*], this.elementCount, this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount..], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[0..this.elementCount-1], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]
 this.elementCount == \old(newSize)
 (\forall int i; (\old(this.elementCount) <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 (this.elementData.length == 0) ==> (this.capacityIncrement == 0)
 javautil.Vector13.serialVersionUID < \old(this.elementCount)
 (this.elementData.length == 0) ==> (\old(this.elementCount) == 0)
@@ -692,7 +671,6 @@ this.elementCount == \result
 \result == \old(this.elementCount)
 \result >= 0
 (\forall int i; (\result <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 javautil.Vector13.serialVersionUID < \result
 (this.elementData.length == 0) ==> (\result == 0)
 \result <= this.elementData.length
@@ -707,7 +685,6 @@ javautil.Vector13.toString():::EXIT
 modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]
 \result != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.toString is printable
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 ===========================================================================
 javautil.Vector13.trimToSize():::ENTER
     Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement javautil.Vector13.serialVersionUID size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.elementCount] this.elementData[this.elementCount-1] this.elementData[this.elementCount..] this.elementData[this.elementCount+1..] this.elementData[0..this.elementCount] this.elementData[0..this.elementCount-1] this.elementData[this.capacityIncrement] this.elementData[this.capacityIncrement-1] this.elementData[this.capacityIncrement..] this.elementData[this.capacityIncrement+1..] this.elementData[0..this.capacityIncrement] this.elementData[0..this.capacityIncrement-1] this.elementData[javautil.Vector13.serialVersionUID] this.elementData[javautil.Vector13.serialVersionUID-1] this.elementData[javautil.Vector13.serialVersionUID..] this.elementData[javautil.Vector13.serialVersionUID+1..] this.elementData[0..javautil.Vector13.serialVersionUID] this.elementData[0..javautil.Vector13.serialVersionUID-1]
@@ -721,7 +698,6 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[] == orig(this.elementData[0..this.elementCount-1])
 this.elementCount == this.elementData.length
 (\forall int i; (this.elementCount <= i && i <= this.elementData.length-1) ==> (this.elementData[i] != null))
-\typeof(this.elementData) == \old(\typeof(this.elementData))
 (\old(this.elementData.length) == 0) ==> (this.elementCount == 0)
 this.elementCount <= \old(this.elementData.length)
 this.elementData.length-1 <= \old(this.elementData.length)-1

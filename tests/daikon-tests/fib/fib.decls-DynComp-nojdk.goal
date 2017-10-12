@@ -5,42 +5,42 @@ implicit
 DECLARE
 misc.Fib:::CLASS
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
 DECLARE
 misc.Fib:::OBJECT
 this
-misc.Fib # isNonNull=true isParam=true
+misc.Fib # isNonNull=true, isParam=true
 hashcode
 4
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
@@ -51,23 +51,23 @@ misc.Fib.Fib():::ENTER
 DECLARE
 misc.Fib.Fib():::EXIT5
 this
-misc.Fib # isNonNull=true isParam=true
+misc.Fib # isNonNull=true, isParam=true
 hashcode
 4
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
@@ -75,19 +75,19 @@ int
 DECLARE
 misc.Fib.main(java.lang.String[]):::ENTER
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 args
@@ -110,19 +110,19 @@ java.lang.String[]
 DECLARE
 misc.Fib.main(java.lang.String[]):::EXIT18
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 5
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 6
 args
@@ -146,38 +146,38 @@ java.lang.String[]
 DECLARE
 misc.Fib.increment():::ENTER
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
 DECLARE
 misc.Fib.increment():::EXIT25
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 
@@ -185,23 +185,23 @@ int
 DECLARE
 misc.Fib.equals(java.lang.Object):::ENTER
 this
-misc.Fib # isNonNull=true isParam=true
+misc.Fib # isNonNull=true, isParam=true
 hashcode
 5
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 obj
@@ -216,23 +216,23 @@ java.lang.String
 DECLARE
 misc.Fib.equals(java.lang.Object):::EXIT1
 this
-misc.Fib # isNonNull=true isParam=true
+misc.Fib # isNonNull=true, isParam=true
 hashcode
 6
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 obj
@@ -252,23 +252,23 @@ boolean
 DECLARE
 misc.Fib.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Fib # isNonNull=true isParam=true
+misc.Fib # isNonNull=true, isParam=true
 hashcode
 5
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 obj
@@ -283,23 +283,23 @@ java.lang.String
 DECLARE
 misc.Fib.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Fib # isNonNull=true isParam=true
+misc.Fib # isNonNull=true, isParam=true
 hashcode
 6
 misc.Fib.STEPS
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 2
 misc.Fib.a
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.b
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 misc.Fib.c
-int # declaringClassPackageName=misc, 
+int # declaringClassPackageName=misc
 int
 3
 obj

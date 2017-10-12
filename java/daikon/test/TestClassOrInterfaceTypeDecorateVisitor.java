@@ -95,9 +95,12 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     String expected = expectedAnswerBuffer.toString().trim();
     String[] expected_arr = UtilMDE.splitLines(expected);
 
+    // UtilMDE.writeFile(new File("expected.txt"), expected);
+    // UtilMDE.writeFile(new File("result.txt"), result);
+
     assert expected_arr.length == result_arr.length
         : String.format(
-            "diff in buffer lengths: expected_arr=%d, result_arr=%d",
+            "diff in buffer lengths: exepected %d, result %d",
             expected_arr.length, result_arr.length);
     for (int ii = 0; ii < expected_arr.length; ii++) {
       assert expected_arr[ii].equals(result_arr[ii]) : "diff at line " + ii;

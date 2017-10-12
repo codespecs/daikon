@@ -174,8 +174,8 @@ public class Annotation {
   }
 
   /**
-   * Find, parse and return all distinct annotations found in a String. The string <code>annoString
-   * </code> may contain none, one, or several annotations. Malformed annotations are ignored.
+   * Find, parse and return all distinct annotations found in a String. The string {@code
+   * annoString} may contain none, one, or several annotations. Malformed annotations are ignored.
    */
   public static Annotation[] findAnnotations(String annoString) {
     List<String> l = Collections.singletonList(annoString);
@@ -184,8 +184,8 @@ public class Annotation {
 
   /**
    * Find, parse and return all distinct annotations found in a list of strings. Each string in
-   * <code>annoString</code> may contain none, one, or several annotations. Malformed annotations
-   * are ignored.
+   * {@code annoString} may contain none, one, or several annotations. Malformed annotations are
+   * ignored.
    */
   public static Annotation[] findAnnotations(List<String> annoStrings) {
 
@@ -218,9 +218,9 @@ public class Annotation {
 
   // This class should really be an enum.
   /**
-   * A class representing the kind of an annotation. An invariant is either <code>Kind.enter</code>,
-   * <code>Kind.exit</code>, or <code>Kind.objectInvariant</code> For well-formed Annotations, the
-   * following holds:
+   * A class representing the kind of an annotation. An invariant is either {@code Kind.enter},
+   * {@code Kind.exit}, or {@code Kind.objectInvariant} For well-formed Annotations, the following
+   * holds:
    *
    * <pre>
    *    a.kind == Kind.enter
@@ -307,7 +307,7 @@ public class Annotation {
   // This is never used, and the "break" clause seems to be buggy, so
   // that this returns at most one property.
   // /**
-  //  * The annotations in <code>annas</code> of kind <code>kind</code>.
+  //  * The annotations in {@code annas} of kind {@code kind}.
   //  */
   // public static Annotation[] getKind(Annotation[] annas, Kind kind) {
   //   List<Annotation> retval = new ArrayList<Annotation>();

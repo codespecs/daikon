@@ -15,21 +15,21 @@ dst one of { "AAAA", "BBB" }
 src one of { "CC", "D" }
 ===========================================================================
 ..simple_strcpy():::EXIT
+return == orig(src)
 ::g_x == "CC"
 ::g_y one of { "BBB", "D" }
 return one of { "CC", "D" }
-return == orig(src)
 ===========================================================================
 ..testSimpleStrcpy():::ENTER
-::g_x == "CC"
-::g_y == "D"
 ::g_x == x
 ::g_y == y
-===========================================================================
-..testSimpleStrcpy():::EXIT
 ::g_x == "CC"
 ::g_y == "D"
+===========================================================================
+..testSimpleStrcpy():::EXIT
 ::g_x == orig(::g_x)
 ::g_x == orig(x)
 ::g_y == orig(::g_y)
 ::g_y == orig(y)
+::g_x == "CC"
+::g_y == "D"
