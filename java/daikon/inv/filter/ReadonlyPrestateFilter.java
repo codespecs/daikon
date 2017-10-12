@@ -36,7 +36,7 @@ public class ReadonlyPrestateFilter extends InvariantFilter {
       return false;
     }
 
-    Comparison comp = (Comparison) invariant;
+    EqualityComparison comp = (EqualityComparison) invariant;
     VarInfo var1 = comp.var1();
     VarInfo var2 = comp.var2();
 

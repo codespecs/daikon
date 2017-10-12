@@ -914,10 +914,10 @@ import typequals.*;
       if (inv2 instanceof GuardingImplication) inv2 = ((GuardingImplication) inv2).right;
 
       // Put equality invariants first
-      if ((inv1 instanceof Comparison) && (!(inv2 instanceof Comparison))) {
+      if ((inv1 instanceof EqualityComparison) && (!(inv2 instanceof EqualityComparison))) {
         return -1;
       }
-      if ((!(inv1 instanceof Comparison)) && (inv2 instanceof Comparison)) {
+      if ((!(inv1 instanceof EqualityComparison)) && (inv2 instanceof EqualityComparison)) {
         return 1;
       }
 

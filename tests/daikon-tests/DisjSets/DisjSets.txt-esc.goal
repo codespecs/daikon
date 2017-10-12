@@ -133,7 +133,6 @@ DataStructures.DisjSets.unionDisjoint(int, int):::EXIT
       Modified primitive arguments: this.s[root1-1] this.s[root1..] this.s[root1+1..] this.s[0..root1] this.s[0..root1-1] this.s[root2] this.s[root2-1] this.s[root2..] this.s[0..root2]
       Unmodified variables: this this.s root1 root2 size(this.s[]) this.s[root1] this.s[root2+1..] this.s[0..root2-1]
 modifies this.s[*]
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] > orig(this.s[]) (lexically)
 \old(root1) == this.s[\old(root2)]
 this.s[\old(root1)] == \old(this.s[\new(root1)])
 this.s[\old(root1)] == \old(this.s[\new(root2)])
@@ -142,6 +141,7 @@ this.s[\old(root1)] == \old(this.s[root2])
 this.s[\old(root1)] == -1
 warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:ESC/Java) needs to be implemented: {-1} subset of this.s[orig(root1)..]
 warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:ESC/Java) needs to be implemented: {-1} subset of this.s[0..orig(root1)]
+warning: method daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] > orig(this.s[]) (lexically)
 (\forall int i, j; (0 <= i && i <= this.s.length-1 && 0 <= j && j <= \old(this.s.length-1) && i == j) ==> (this.s[i] >= \old(this.s[j])))
 (\forall int i, j; (0 <= i && i <= \old(this.s.length-1) && 0 <= j && j <= this.s.length-1 && i == j) ==> (\old(this.s[i]) == (this.s[j] | \old(this.s[i]))))
 warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be implemented: this.s[] is a superset of orig(this.s[])
