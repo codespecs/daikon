@@ -128,10 +128,6 @@ s in ::words2ptrs[]
 orig(::alphstr) in ::words2ptrs[]
 ===========================================================================
 ..anagramr7():::ENTER
-::lindx1[] < minkey[] (lexically)
-::lindx1[] <= minkey[] (lexically)
-::lindx2[] < minkey[] (lexically)
-::lindx2[] <= minkey[] (lexically)
 ::adjacentdups == 0
 ::findx1 has only one value
 ::findx1[] == [0, -1, -1, 12, 13, -1, -1, -1, 19, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
@@ -171,6 +167,10 @@ minkey[] elements >= ::adjacentdups
 ::keymem != s
 level[] elements < ::largestlet
 minkey[] elements < ::largestlet
+::lindx1[] < minkey[] (lexically)
+::lindx1[] <= minkey[] (lexically)
+::lindx2[] < minkey[] (lexically)
+::lindx2[] <= minkey[] (lexically)
 level[] elements < ::longestlength
 level[] elements <= ::max_depth
 level[] elements < ::ncount
@@ -191,12 +191,8 @@ minkey[] elements >= ::specfirstword
 ::keymem == orig(::keymem)
 ::largestlet == orig(::largestlet)
 ::lindx1 == orig(::lindx1)
-::lindx1[] < minkey[] (lexically)
-::lindx1[] <= minkey[] (lexically)
 ::lindx1[] == orig(::lindx1[])
 ::lindx2 == orig(::lindx2)
-::lindx2[] < minkey[] (lexically)
-::lindx2[] <= minkey[] (lexically)
 ::lindx2[] == orig(::lindx2[])
 ::longestlength == orig(::longestlength)
 ::max_depth == orig(::max_depth)
@@ -250,6 +246,10 @@ orig(level[]) elements >= ::adjacentdups
 level[] elements < ::largestlet
 minkey[] elements < ::largestlet
 orig(level[]) elements < ::largestlet
+::lindx1[] < minkey[] (lexically)
+::lindx1[] <= minkey[] (lexically)
+::lindx2[] < minkey[] (lexically)
+::lindx2[] <= minkey[] (lexically)
 level[] elements < ::longestlength
 orig(level[]) elements < ::longestlength
 level[] elements < ::max_depth

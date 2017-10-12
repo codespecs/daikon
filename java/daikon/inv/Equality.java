@@ -28,7 +28,7 @@ import typequals.*;
 // invariants for one member of each Equal set, the leader.
 //
 // During postProcessing, each instance of Equality instantiates into
-// displaying several equality Comparison invariants ("x == y", "x ==
+// displaying several EqualityComparison invariants ("x == y", "x ==
 // z").  Equality invariants have leaders, which are the canonical
 // forms of their variables.  In the previous example, x is the
 // leader.  Equality invariants sort their variables by index ordering
@@ -140,8 +140,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * Always return JUSTIFIED because we aggregate Comparison invariants that are all justified to
-   * the confidence_limit threshold.
+   * Always return JUSTIFIED because we aggregate EqualityComparison invariants that are all
+   * justified to the confidence_limit threshold.
    */
   @Override
   public double computeConfidence() {

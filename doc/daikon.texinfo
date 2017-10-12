@@ -6742,6 +6742,8 @@ see @ref{Track logging,,,developer,Daikon Developer Manual}.
 @item --wrap_xml
 Print extra info about invariants, and wrap in XML tags.
 This is primarily for programmatic use and for debugging.
+To add just the Java class of each invariant, use
+@code{--config_option daikon.PrintInvariants.print_inv_class=true}.
 
 @end table
 

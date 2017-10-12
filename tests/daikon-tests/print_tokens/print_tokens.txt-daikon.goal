@@ -1,11 +1,5 @@
 ===========================================================================
 ..get_char():::ENTER
-::base[] < stream_ptr[].stream_ind (lexically)
-::base[] <= stream_ptr[].stream_ind (lexically)
-::next[] < stream_ptr[].stream_ind (lexically)
-::next[] <= stream_ptr[].stream_ind (lexically)
-::check[] < stream_ptr[].stream_ind (lexically)
-::check[] <= stream_ptr[].stream_ind (lexically)
 size(::default1[]) == size(::base[])
 size(::next[]) == size(::check[])
 ::default1 has only one value
@@ -35,12 +29,18 @@ size(::next[]) == 360
 size(stream_ptr[]) == 1
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < stream_ptr[].stream_ind (lexically)
+::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::base[]
+::next[] < stream_ptr[].stream_ind (lexically)
+::next[] <= stream_ptr[].stream_ind (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(stream_ptr[]) in ::next[]
 size(stream_ptr[])-1 in ::next[]
+::check[] < stream_ptr[].stream_ind (lexically)
+::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(stream_ptr[]) in ::check[]
@@ -53,23 +53,11 @@ stream_ptr[].stream_ind elements > size(stream_ptr[])
 ::default1 == orig(::default1)
 ::default1[] == orig(::default1[])
 ::base == orig(::base)
-::base[] < stream_ptr[].stream_ind (lexically)
-::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] == orig(::base[])
-::base[] < orig(stream_ptr[].stream_ind) (lexically)
-::base[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::next == orig(::next)
-::next[] < stream_ptr[].stream_ind (lexically)
-::next[] <= stream_ptr[].stream_ind (lexically)
 ::next[] == orig(::next[])
-::next[] < orig(stream_ptr[].stream_ind) (lexically)
-::next[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::check == orig(::check)
-::check[] < stream_ptr[].stream_ind (lexically)
-::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] == orig(::check[])
-::check[] < orig(stream_ptr[].stream_ind) (lexically)
-::check[] <= orig(stream_ptr[].stream_ind) (lexically)
 stream_ptr[] == orig(stream_ptr[])
 stream_ptr[].fp == orig(stream_ptr[].fp)
 size(::default1[]) == size(::base[])
@@ -103,12 +91,24 @@ size(::next[]) == 360
 {-1, 51, 52, 26, 54, 28} subset of ::check[return+1..]
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < stream_ptr[].stream_ind (lexically)
+::base[] <= stream_ptr[].stream_ind (lexically)
+::base[] < orig(stream_ptr[].stream_ind) (lexically)
+::base[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::base[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::base[]
+::next[] < stream_ptr[].stream_ind (lexically)
+::next[] <= stream_ptr[].stream_ind (lexically)
+::next[] < orig(stream_ptr[].stream_ind) (lexically)
+::next[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::next[]
 orig(size(stream_ptr[])) in ::next[]
+::check[] < stream_ptr[].stream_ind (lexically)
+::check[] <= stream_ptr[].stream_ind (lexically)
+::check[] < orig(stream_ptr[].stream_ind) (lexically)
+::check[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::check[]
@@ -129,12 +129,6 @@ size(stream_ptr[])-1 == (return / size(::next[])-1)
 orig(size(stream_ptr[])) == (plume.MathMDE.gcd(return, size(::next[])-1))
 ===========================================================================
 ..get_token():::ENTER
-::base[] < tstream_ptr[].ch_stream->stream_ind (lexically)
-::base[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
-::next[] < tstream_ptr[].ch_stream->stream_ind (lexically)
-::next[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
-::check[] < tstream_ptr[].ch_stream->stream_ind (lexically)
-::check[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
 size(::default1[]) == size(::base[])
 size(::next[]) == size(::check[])
 size(tstream_ptr[]) == size(tstream_ptr[].ch_stream[0])
@@ -170,12 +164,18 @@ size(::next[]) == 360
 size(tstream_ptr[]) == 1
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < tstream_ptr[].ch_stream->stream_ind (lexically)
+::base[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
 ::base[] elements < size(::next[])-1
 size(tstream_ptr[])-1 in ::base[]
+::next[] < tstream_ptr[].ch_stream->stream_ind (lexically)
+::next[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(tstream_ptr[]) in ::next[]
 size(tstream_ptr[])-1 in ::next[]
+::check[] < tstream_ptr[].ch_stream->stream_ind (lexically)
+::check[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(tstream_ptr[]) in ::check[]
@@ -186,29 +186,13 @@ tstream_ptr[].ch_stream->stream_ind elements > size(tstream_ptr[])
 ===========================================================================
 ..get_token():::EXIT
 ::default1 == orig(::default1)
-::default1[] > return[].token_id (lexically)
-::default1[] >= return[].token_id (lexically)
 ::default1[] == orig(::default1[])
 ::base == orig(::base)
-::base[] < tstream_ptr[].ch_stream->stream_ind (lexically)
-::base[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
-::base[] < return[].token_id (lexically)
-::base[] <= return[].token_id (lexically)
 ::base[] == orig(::base[])
-::base[] < orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
-::base[] <= orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
 ::next == orig(::next)
-::next[] < tstream_ptr[].ch_stream->stream_ind (lexically)
-::next[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
 ::next[] == orig(::next[])
-::next[] < orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
-::next[] <= orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
 ::check == orig(::check)
-::check[] < tstream_ptr[].ch_stream->stream_ind (lexically)
-::check[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
 ::check[] == orig(::check[])
-::check[] < orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
-::check[] <= orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
 tstream_ptr[] == orig(tstream_ptr[])
 tstream_ptr[].ch_stream == orig(tstream_ptr[].ch_stream)
 tstream_ptr[].ch_stream[0] == orig(tstream_ptr[].ch_stream[0])
@@ -250,16 +234,32 @@ return[i].token_id >= i
 size(::default1[]) == 60
 size(::next[]) == 360
 size(return[]) == 1
+::default1[] > return[].token_id (lexically)
+::default1[] >= return[].token_id (lexically)
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < tstream_ptr[].ch_stream->stream_ind (lexically)
+::base[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
+::base[] < return[].token_id (lexically)
+::base[] <= return[].token_id (lexically)
+::base[] < orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
+::base[] <= orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
 ::base[] elements < size(::next[])-1
 size(tstream_ptr[])-1 in ::base[]
+::next[] < tstream_ptr[].ch_stream->stream_ind (lexically)
+::next[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
 ::next[] is a superset of return[].token_id
 return[].token_id is a subsequence of ::next[]
+::next[] < orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
+::next[] <= orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(tstream_ptr[])-1 in ::next[]
 size(return[]) in ::next[]
+::check[] < tstream_ptr[].ch_stream->stream_ind (lexically)
+::check[] <= tstream_ptr[].ch_stream->stream_ind (lexically)
+::check[] < orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
+::check[] <= orig(tstream_ptr[].ch_stream->stream_ind) (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(tstream_ptr[])-1 in ::check[]
@@ -273,12 +273,6 @@ orig(tstream_ptr[].ch_stream->stream_ind) elements < size(::next[])-1
 orig(tstream_ptr[].ch_stream->stream_ind) elements > size(return[])
 ===========================================================================
 ..is_end_of_character_stream():::ENTER
-::base[] < stream_ptr[].stream_ind (lexically)
-::base[] <= stream_ptr[].stream_ind (lexically)
-::next[] < stream_ptr[].stream_ind (lexically)
-::next[] <= stream_ptr[].stream_ind (lexically)
-::check[] < stream_ptr[].stream_ind (lexically)
-::check[] <= stream_ptr[].stream_ind (lexically)
 size(::default1[]) == size(::base[])
 size(::next[]) == size(::check[])
 ::default1 has only one value
@@ -307,12 +301,18 @@ size(::next[]) == 360
 size(stream_ptr[]) == 1
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < stream_ptr[].stream_ind (lexically)
+::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::base[]
+::next[] < stream_ptr[].stream_ind (lexically)
+::next[] <= stream_ptr[].stream_ind (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(stream_ptr[]) in ::next[]
 size(stream_ptr[])-1 in ::next[]
+::check[] < stream_ptr[].stream_ind (lexically)
+::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(stream_ptr[]) in ::check[]
@@ -325,16 +325,10 @@ stream_ptr[].stream_ind elements > size(stream_ptr[])
 ::default1 == orig(::default1)
 ::default1[] == orig(::default1[])
 ::base == orig(::base)
-::base[] < stream_ptr[].stream_ind (lexically)
-::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] == orig(::base[])
 ::next == orig(::next)
-::next[] < stream_ptr[].stream_ind (lexically)
-::next[] <= stream_ptr[].stream_ind (lexically)
 ::next[] == orig(::next[])
 ::check == orig(::check)
-::check[] < stream_ptr[].stream_ind (lexically)
-::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] == orig(::check[])
 stream_ptr[] == orig(stream_ptr[])
 stream_ptr[].fp == orig(stream_ptr[].fp)
@@ -401,14 +395,20 @@ stream_ptr[0..return-1].stream_ind one of { [], [6] }
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
 ::default1[] elements > ::base[return]
+::base[] < stream_ptr[].stream_ind (lexically)
+::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::base[]
+::next[] < stream_ptr[].stream_ind (lexically)
+::next[] <= stream_ptr[].stream_ind (lexically)
 return in ::next[]
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::next[]
 orig(size(stream_ptr[])) in ::next[]
 ::next[] elements > ::base[return]
+::check[] < stream_ptr[].stream_ind (lexically)
+::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::check[]
@@ -500,10 +500,6 @@ stream_ptr[0..return-1].stream_ind is a subsequence of ::next[return+1..]
 ::next[0..return] >= ::check[0..return] (elementwise)
 ===========================================================================
 ..is_eof_token():::ENTER
-::default1[] > t[].token_id (lexically)
-::default1[] >= t[].token_id (lexically)
-::base[] < t[].token_id (lexically)
-::base[] <= t[].token_id (lexically)
 size(::default1[]) == size(::base[])
 size(::next[]) == size(::check[])
 ::default1 has only one value
@@ -524,8 +520,12 @@ t[i].token_id >= i
 size(::default1[]) == 60
 size(::next[]) == 360
 size(t[]) == 1
+::default1[] > t[].token_id (lexically)
+::default1[] >= t[].token_id (lexically)
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < t[].token_id (lexically)
+::base[] <= t[].token_id (lexically)
 ::base[] elements < size(::next[])-1
 size(t[])-1 in ::base[]
 ::next[] is a superset of t[].token_id
@@ -542,12 +542,8 @@ t[].token_id elements >= size(t[])-1
 ===========================================================================
 ..is_eof_token():::EXIT
 ::default1 == orig(::default1)
-::default1[] > t[].token_id (lexically)
-::default1[] >= t[].token_id (lexically)
 ::default1[] == orig(::default1[])
 ::base == orig(::base)
-::base[] < t[].token_id (lexically)
-::base[] <= t[].token_id (lexically)
 ::base[] == orig(::base[])
 ::next == orig(::next)
 ::next[] == orig(::next[])
@@ -611,9 +607,13 @@ size(::next[]) == 360
 ::check[0..return] sorted by <
 t[0..return-1] elements has only one value
 t[return..].token_id > (index)
+::default1[] > t[].token_id (lexically)
+::default1[] >= t[].token_id (lexically)
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
 ::default1[] elements > ::base[return]
+::base[] < t[].token_id (lexically)
+::base[] <= t[].token_id (lexically)
 ::base[] elements < size(::next[])-1
 size(t[])-1 in ::base[]
 ::next[] is a superset of t[].token_id
@@ -840,10 +840,6 @@ size(return[]) in ::check[]
 size(return[])-1 in ::check[]
 ===========================================================================
 ..print_token():::ENTER
-::default1[] > token_ptr[].token_id (lexically)
-::default1[] >= token_ptr[].token_id (lexically)
-::base[] < token_ptr[].token_id (lexically)
-::base[] <= token_ptr[].token_id (lexically)
 size(::default1[]) == size(::base[])
 size(::next[]) == size(::check[])
 ::default1 has only one value
@@ -864,8 +860,12 @@ token_ptr[i].token_id >= i
 size(::default1[]) == 60
 size(::next[]) == 360
 size(token_ptr[]) == 1
+::default1[] > token_ptr[].token_id (lexically)
+::default1[] >= token_ptr[].token_id (lexically)
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < token_ptr[].token_id (lexically)
+::base[] <= token_ptr[].token_id (lexically)
 ::base[] elements < size(::next[])-1
 size(token_ptr[])-1 in ::base[]
 ::next[] is a superset of token_ptr[].token_id
@@ -1053,16 +1053,6 @@ size(token_ptr[])-1 <= token_ptr[return-1].token_id
 size(token_ptr[])-1 == (token_ptr[return-1].token_id / ::base[return])
 ===========================================================================
 ..unget_char():::ENTER
-::base[] < stream_ptr[].stream_ind (lexically)
-::base[] <= stream_ptr[].stream_ind (lexically)
-::next[] < stream_ptr[].stream_ind (lexically)
-::next[] <= stream_ptr[].stream_ind (lexically)
-::check[] < stream_ptr[].stream_ind (lexically)
-::check[] <= stream_ptr[].stream_ind (lexically)
-stream_ptr[].stream_ind > ::default1[ch..] (lexically)
-stream_ptr[].stream_ind >= ::default1[ch..] (lexically)
-stream_ptr[].stream_ind > ::default1[ch+1..] (lexically)
-stream_ptr[].stream_ind >= ::default1[ch+1..] (lexically)
 size(::default1[]) == size(::base[])
 size(::next[]) == size(::check[])
 ::default1[ch] == ::default1[ch-1]
@@ -1118,9 +1108,13 @@ size(stream_ptr[]) == 1
 ::check[0..ch-1] one of { [0, 1, 0, 0, 2, 3, 4, 0, 0, 0], [0, 1, 0, 0, 2, 3, 4, 0, 0, 0, 5, -1, 0, 7, 8, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 12, 14] }
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < stream_ptr[].stream_ind (lexically)
+::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::base[]
 ch in ::next[]
+::next[] < stream_ptr[].stream_ind (lexically)
+::next[] <= stream_ptr[].stream_ind (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(stream_ptr[]) in ::next[]
@@ -1130,6 +1124,8 @@ size(stream_ptr[])-1 in ::next[]
 ::base[ch-1] in ::next[]
 ::check[ch] in ::next[]
 ::check[ch-1] in ::next[]
+::check[] < stream_ptr[].stream_ind (lexically)
+::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(stream_ptr[]) in ::check[]
@@ -1154,6 +1150,10 @@ stream_ptr[].stream_ind elements <= size(::default1[])
 stream_ptr[].stream_ind elements < size(::next[])-1
 stream_ptr[].stream_ind elements > size(stream_ptr[])
 stream_ptr[].stream_ind elements > ::default1[ch]
+stream_ptr[].stream_ind > ::default1[ch..] (lexically)
+stream_ptr[].stream_ind >= ::default1[ch..] (lexically)
+stream_ptr[].stream_ind > ::default1[ch+1..] (lexically)
+stream_ptr[].stream_ind >= ::default1[ch+1..] (lexically)
 stream_ptr[].stream_ind elements > ::base[ch]
 stream_ptr[].stream_ind elements > ::base[ch-1]
 size(::default1[])-1 > ::default1[ch]
@@ -1237,33 +1237,13 @@ size(stream_ptr[])-1 in ::check[0..ch-1]
 ::default1 == orig(::default1)
 ::default1[] == orig(::default1[])
 ::base == orig(::base)
-::base[] < stream_ptr[].stream_ind (lexically)
-::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] == orig(::base[])
-::base[] < orig(stream_ptr[].stream_ind) (lexically)
-::base[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::next == orig(::next)
-::next[] < stream_ptr[].stream_ind (lexically)
-::next[] <= stream_ptr[].stream_ind (lexically)
 ::next[] == orig(::next[])
-::next[] < orig(stream_ptr[].stream_ind) (lexically)
-::next[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::check == orig(::check)
-::check[] < stream_ptr[].stream_ind (lexically)
-::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] == orig(::check[])
-::check[] < orig(stream_ptr[].stream_ind) (lexically)
-::check[] <= orig(stream_ptr[].stream_ind) (lexically)
 stream_ptr[] == orig(stream_ptr[])
 stream_ptr[].fp == orig(stream_ptr[].fp)
-stream_ptr[].stream_ind > ::default1[orig(ch)..] (lexically)
-stream_ptr[].stream_ind >= ::default1[orig(ch)..] (lexically)
-stream_ptr[].stream_ind > ::default1[orig(ch)+1..] (lexically)
-stream_ptr[].stream_ind >= ::default1[orig(ch)+1..] (lexically)
-orig(stream_ptr[].stream_ind) > ::default1[orig(ch)..] (lexically)
-orig(stream_ptr[].stream_ind) >= ::default1[orig(ch)..] (lexically)
-orig(stream_ptr[].stream_ind) > ::default1[orig(ch)+1..] (lexically)
-orig(stream_ptr[].stream_ind) >= ::default1[orig(ch)+1..] (lexically)
 size(::default1[]) == size(::base[])
 size(::default1[]) == orig(size(::base[]))
 size(::next[]) == size(::check[])
@@ -1322,10 +1302,18 @@ size(::next[]) == 360
 ::check[0..orig(ch)-1] one of { [0, 1, 0, 0, 2, 3, 4, 0, 0, 0], [0, 1, 0, 0, 2, 3, 4, 0, 0, 0, 5, -1, 0, 7, 8, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 12, 14] }
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < stream_ptr[].stream_ind (lexically)
+::base[] <= stream_ptr[].stream_ind (lexically)
+::base[] < orig(stream_ptr[].stream_ind) (lexically)
+::base[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::base[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::base[]
 ::check[return] in ::base[]
+::next[] < stream_ptr[].stream_ind (lexically)
+::next[] <= stream_ptr[].stream_ind (lexically)
 orig(ch) in ::next[]
+::next[] < orig(stream_ptr[].stream_ind) (lexically)
+::next[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::next[]
@@ -1338,6 +1326,10 @@ orig(size(stream_ptr[])) in ::next[]
 ::check[return-1] in ::next[]
 ::check[orig(ch)] in ::next[]
 ::check[orig(ch)-1] in ::next[]
+::check[] < stream_ptr[].stream_ind (lexically)
+::check[] <= stream_ptr[].stream_ind (lexically)
+::check[] < orig(stream_ptr[].stream_ind) (lexically)
+::check[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::check[]
@@ -1355,6 +1347,10 @@ stream_ptr[].stream_ind elements <= size(::default1[])-1
 stream_ptr[].stream_ind elements < size(::next[])-1
 stream_ptr[].stream_ind elements > orig(size(stream_ptr[]))
 stream_ptr[].stream_ind elements > ::default1[orig(ch)]
+stream_ptr[].stream_ind > ::default1[orig(ch)..] (lexically)
+stream_ptr[].stream_ind >= ::default1[orig(ch)..] (lexically)
+stream_ptr[].stream_ind > ::default1[orig(ch)+1..] (lexically)
+stream_ptr[].stream_ind >= ::default1[orig(ch)+1..] (lexically)
 stream_ptr[].stream_ind elements > ::base[orig(ch)]
 stream_ptr[].stream_ind elements > ::base[orig(ch)-1]
 stream_ptr[].stream_ind elements > ::check[return]
@@ -1414,6 +1410,10 @@ orig(ch) > ::check[orig(ch)-1]
 orig(stream_ptr[].stream_ind) elements <= size(::default1[])
 orig(stream_ptr[].stream_ind) elements < size(::next[])-1
 orig(stream_ptr[].stream_ind) elements > ::default1[orig(ch)]
+orig(stream_ptr[].stream_ind) > ::default1[orig(ch)..] (lexically)
+orig(stream_ptr[].stream_ind) >= ::default1[orig(ch)..] (lexically)
+orig(stream_ptr[].stream_ind) > ::default1[orig(ch)+1..] (lexically)
+orig(stream_ptr[].stream_ind) >= ::default1[orig(ch)+1..] (lexically)
 orig(stream_ptr[].stream_ind) elements > ::base[orig(ch)]
 orig(stream_ptr[].stream_ind) elements > ::base[orig(ch)-1]
 orig(stream_ptr[].stream_ind) elements > ::check[return]
@@ -3837,12 +3837,6 @@ size(return[]) in ::check[0..orig(token_ind)-1]
 ::next[0..orig(token_ind)-1] is a subset of ::check[orig(token_ind)+1..]
 ===========================================================================
 print_tokens.c.skip():::ENTER
-::base[] < stream_ptr[].stream_ind (lexically)
-::base[] <= stream_ptr[].stream_ind (lexically)
-::next[] < stream_ptr[].stream_ind (lexically)
-::next[] <= stream_ptr[].stream_ind (lexically)
-::check[] < stream_ptr[].stream_ind (lexically)
-::check[] <= stream_ptr[].stream_ind (lexically)
 size(::default1[]) == size(::base[])
 size(::next[]) == size(::check[])
 ::default1 has only one value
@@ -3871,12 +3865,18 @@ size(::next[]) == 360
 size(stream_ptr[]) == 1
 ::default1[] elements < size(::default1[])-1
 ::default1[] elements < size(::next[])-1
+::base[] < stream_ptr[].stream_ind (lexically)
+::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::base[]
+::next[] < stream_ptr[].stream_ind (lexically)
+::next[] <= stream_ptr[].stream_ind (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(stream_ptr[]) in ::next[]
 size(stream_ptr[])-1 in ::next[]
+::check[] < stream_ptr[].stream_ind (lexically)
+::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 size(stream_ptr[]) in ::check[]
@@ -3889,33 +3889,13 @@ print_tokens.c.skip():::EXIT
 ::default1 == orig(::default1)
 ::default1[] == orig(::default1[])
 ::base == orig(::base)
-::base[] < stream_ptr[].stream_ind (lexically)
-::base[] <= stream_ptr[].stream_ind (lexically)
 ::base[] == orig(::base[])
-::base[] < orig(stream_ptr[].stream_ind) (lexically)
-::base[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::next == orig(::next)
-::next[] < stream_ptr[].stream_ind (lexically)
-::next[] <= stream_ptr[].stream_ind (lexically)
 ::next[] == orig(::next[])
-::next[] < orig(stream_ptr[].stream_ind) (lexically)
-::next[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::check == orig(::check)
-::check[] < stream_ptr[].stream_ind (lexically)
-::check[] <= stream_ptr[].stream_ind (lexically)
 ::check[] == orig(::check[])
-::check[] < orig(stream_ptr[].stream_ind) (lexically)
-::check[] <= orig(stream_ptr[].stream_ind) (lexically)
 stream_ptr[] == orig(stream_ptr[])
 stream_ptr[].fp == orig(stream_ptr[].fp)
-stream_ptr[].stream_ind > ::default1[return..] (lexically)
-stream_ptr[].stream_ind >= ::default1[return..] (lexically)
-stream_ptr[].stream_ind > ::default1[return+1..] (lexically)
-stream_ptr[].stream_ind >= ::default1[return+1..] (lexically)
-orig(stream_ptr[].stream_ind) > ::default1[return..] (lexically)
-orig(stream_ptr[].stream_ind) >= ::default1[return..] (lexically)
-orig(stream_ptr[].stream_ind) > ::default1[return+1..] (lexically)
-orig(stream_ptr[].stream_ind) >= ::default1[return+1..] (lexically)
 size(::default1[]) == size(::base[])
 size(::default1[]) == orig(size(::base[]))
 size(::next[]) == size(::check[])
@@ -3977,9 +3957,17 @@ size(::next[]) == 360
 ::default1[] elements < size(::next[])-1
 ::default1[] elements > ::base[return]
 ::base[return-1] in ::default1[]
+::base[] < stream_ptr[].stream_ind (lexically)
+::base[] <= stream_ptr[].stream_ind (lexically)
+::base[] < orig(stream_ptr[].stream_ind) (lexically)
+::base[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::base[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::base[]
+::next[] < stream_ptr[].stream_ind (lexically)
+::next[] <= stream_ptr[].stream_ind (lexically)
 return in ::next[]
+::next[] < orig(stream_ptr[].stream_ind) (lexically)
+::next[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::next[] elements < size(::default1[])-1
 ::next[] elements < size(::next[])-1
 size(stream_ptr[])-1 in ::next[]
@@ -3989,7 +3977,11 @@ orig(size(stream_ptr[])) in ::next[]
 ::base[return-1] in ::next[]
 ::next[] elements >= ::base[return-1]
 ::check[return] in ::next[]
+::check[] < stream_ptr[].stream_ind (lexically)
+::check[] <= stream_ptr[].stream_ind (lexically)
 return in ::check[]
+::check[] < orig(stream_ptr[].stream_ind) (lexically)
+::check[] <= orig(stream_ptr[].stream_ind) (lexically)
 ::check[] elements < size(::default1[])-1
 ::check[] elements < size(::next[])-1
 orig(size(stream_ptr[])) in ::check[]
@@ -4004,6 +3996,10 @@ stream_ptr[].stream_ind elements <= size(::default1[])-1
 stream_ptr[].stream_ind elements < size(::next[])-1
 stream_ptr[].stream_ind elements > orig(size(stream_ptr[]))
 stream_ptr[].stream_ind elements > ::default1[return]
+stream_ptr[].stream_ind > ::default1[return..] (lexically)
+stream_ptr[].stream_ind >= ::default1[return..] (lexically)
+stream_ptr[].stream_ind > ::default1[return+1..] (lexically)
+stream_ptr[].stream_ind >= ::default1[return+1..] (lexically)
 stream_ptr[].stream_ind elements > ::base[return]
 stream_ptr[].stream_ind elements > ::base[return-1]
 stream_ptr[].stream_ind elements > ::next[return]
@@ -4020,6 +4016,10 @@ return in ::check[return+1..]
 orig(stream_ptr[].stream_ind) elements < size(::default1[])-1
 orig(stream_ptr[].stream_ind) elements < size(::next[])-1
 orig(stream_ptr[].stream_ind) elements > ::default1[return]
+orig(stream_ptr[].stream_ind) > ::default1[return..] (lexically)
+orig(stream_ptr[].stream_ind) >= ::default1[return..] (lexically)
+orig(stream_ptr[].stream_ind) > ::default1[return+1..] (lexically)
+orig(stream_ptr[].stream_ind) >= ::default1[return+1..] (lexically)
 orig(stream_ptr[].stream_ind) elements > ::base[return]
 orig(stream_ptr[].stream_ind) elements > ::base[return-1]
 orig(stream_ptr[].stream_ind) elements > ::next[return]

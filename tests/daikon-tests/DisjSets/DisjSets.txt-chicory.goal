@@ -1,5 +1,5 @@
 // Declarations for DataStructures.DisjSets
-// Declarations written Thu Jun 04 13:26:11 PDT 2015
+// Declarations written Thu Oct 12 05:47:27 PDT 2017
 
 decl-version 2.0
 var-comparability none
@@ -7,7 +7,7 @@ var-comparability none
 ppt DataStructures.DisjSets.DisjSets(int):::ENTER
 ppt-type enter
 variable numElements
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -17,10 +17,10 @@ ppt DataStructures.DisjSets.DisjSets(int):::EXIT32
 ppt-type subexit
 parent parent DataStructures.DisjSets:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s
@@ -31,7 +31,7 @@ variable this.s
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
@@ -39,7 +39,7 @@ variable this.s[..]
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable numElements
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -49,10 +49,10 @@ ppt DataStructures.DisjSets.unionDisjoint(int,\_int):::ENTER
 ppt-type enter
 parent parent DataStructures.DisjSets:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s
@@ -63,7 +63,7 @@ variable this.s
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
@@ -71,13 +71,13 @@ variable this.s[..]
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable root1
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable root2
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -87,10 +87,10 @@ ppt DataStructures.DisjSets.unionDisjoint(int,\_int):::EXIT44
 ppt-type subexit
 parent parent DataStructures.DisjSets:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s
@@ -101,7 +101,7 @@ variable this.s
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
@@ -109,13 +109,13 @@ variable this.s[..]
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable root1
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable root2
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -125,10 +125,10 @@ ppt DataStructures.DisjSets.unionCareful(int,\_int):::ENTER
 ppt-type enter
 parent parent DataStructures.DisjSets:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s
@@ -139,7 +139,7 @@ variable this.s
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
@@ -147,13 +147,13 @@ variable this.s[..]
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable set1
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable set2
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -163,10 +163,10 @@ ppt DataStructures.DisjSets.unionCareful(int,\_int):::EXIT57
 ppt-type subexit
 parent parent DataStructures.DisjSets:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s
@@ -177,7 +177,7 @@ variable this.s
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
@@ -185,13 +185,13 @@ variable this.s[..]
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable set1
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable set2
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -201,10 +201,10 @@ ppt DataStructures.DisjSets.find(int):::ENTER
 ppt-type enter
 parent parent DataStructures.DisjSets:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s
@@ -215,7 +215,7 @@ variable this.s
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
@@ -223,7 +223,7 @@ variable this.s[..]
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable x
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
@@ -233,10 +233,10 @@ ppt DataStructures.DisjSets.find(int):::EXIT68
 ppt-type subexit
 parent parent DataStructures.DisjSets:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s
@@ -247,7 +247,7 @@ variable this.s
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
@@ -255,13 +255,13 @@ variable this.s[..]
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable x
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -270,10 +270,10 @@ ppt DataStructures.DisjSets.find(int):::EXIT70
 ppt-type subexit
 parent parent DataStructures.DisjSets:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s
@@ -284,7 +284,7 @@ variable this.s
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
@@ -292,13 +292,13 @@ variable this.s[..]
   comparability 22
   parent DataStructures.DisjSets:::OBJECT 1
 variable x
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
   comparability 22
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
   comparability 22
@@ -306,10 +306,10 @@ variable return
 ppt DataStructures.DisjSets:::OBJECT
 ppt-type object
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type DataStructures.DisjSets
   rep-type hashcode
-  flags is_param
+  flags is_param non_null
   comparability 22
 variable this.s
   var-kind field s
@@ -318,7 +318,7 @@ variable this.s
   rep-type hashcode
   comparability 22
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type int[]
