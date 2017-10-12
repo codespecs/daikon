@@ -199,6 +199,7 @@ dcomp-jdk:
 reformat:
 	cd java && $(MAKE) reformat
 
+
 ### Kvasir (C/C++ front end)
 
 ifeq ($(shell uname -m),x86_64)
@@ -253,6 +254,7 @@ endif
 endif
 endif
 endif
+
 
 ### Rebuild everything; used for monthly releases, for example
 
@@ -321,6 +323,7 @@ nightly-test-except-doc-pdf:
 	$(MAKE) javadoc doc-all-except-pdf
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
+
 
 ### Tags
 
