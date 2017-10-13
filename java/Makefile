@@ -804,7 +804,7 @@ errorprone-nocompile:
 # To apply the patch, see instructions in the Error Prone output.
 
 lib/error_prone_ant-${ERRORPRONE_VERSION}.jar:
-	(cd lib && wget https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/error_prone_ant-${ERRORPRONE_VERSION}.jar)
+	(cd lib && curl -s -O https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/error_prone_ant-${ERRORPRONE_VERSION}.jar)
 
 findbugs: .findbugs-output
 .PHONY: findbugs
