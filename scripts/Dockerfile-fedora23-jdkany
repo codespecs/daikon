@@ -20,6 +20,7 @@ RUN dnf -qy upgrade && dnf -qy install \
   m4 \
   make \
   redhat-lsb \
+  rsync \
   tar \
   unzip \
   which \
