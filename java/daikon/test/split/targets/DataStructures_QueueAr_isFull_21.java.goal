@@ -32,7 +32,6 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
     return(this_currentSize==this_theArray.length);
   }
 
-  @Override
   public String repr() {
     return "DataStructures_QueueAr_isFull_21: "
       + "this_currentSize_varinfo = " + this_currentSize_varinfo.repr() + " "
