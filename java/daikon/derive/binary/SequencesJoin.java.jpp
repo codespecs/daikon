@@ -136,7 +136,7 @@ public final class CLASSNAME extends BinaryDerivation {
       if (e1 == null) e1 = NUMWRAPPER.valueOf(0);
       if (e2 == null) e2 = NUMWRAPPER.valueOf(0);
       // Loses top 8 bits, but we're just mixing two hashCodes.
-      result[i] = (e1.hashCode() << 8) + e2.hashCode();
+      result[i] = ((long) e1.hashCode() << 8L) + e2.hashCode();
     }
 
     /*

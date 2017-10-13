@@ -58,6 +58,9 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   ## (Maybe they don't even need the full ./.travis-build-without-test.sh .)
   echo ".travis-build.sh is running misc tests"
 
+  # Code style & quality
+  make -C java error-prone
+
   # Code formatting
   # Problem: this target requires Java 8, but is being run under Java 7.
   # It is failing, but is not failing the build.  Why?

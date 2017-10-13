@@ -62,7 +62,7 @@ public class DummyInvariant extends Invariant {
       /*@Nullable*/ String jml,
       /*@Nullable*/ String dbc,
       /*@Nullable*/ String csharp,
-      boolean desired) {
+      boolean valid) {
     super(ppt);
     daikonFormat = daikonStr;
     javaFormat = java;
@@ -71,7 +71,7 @@ public class DummyInvariant extends Invariant {
     jmlFormat = jml;
     dbcFormat = dbc;
     csharpFormat = csharp;
-    valid = desired;
+    this.valid = valid;
   }
 
   public /*@Prototype*/ DummyInvariant(
@@ -82,7 +82,7 @@ public class DummyInvariant extends Invariant {
       /*@Nullable*/ String jml,
       /*@Nullable*/ String dbc,
       /*@Nullable*/ String csharp,
-      boolean desired) {
+      boolean valid) {
     super();
     daikonFormat = daikonStr;
     javaFormat = java;
@@ -91,7 +91,7 @@ public class DummyInvariant extends Invariant {
     jmlFormat = jml;
     dbcFormat = dbc;
     csharpFormat = csharp;
-    valid = desired;
+    this.valid = valid;
   }
 
   public DummyInvariant instantiate(PptTopLevel parent, VarInfo[] vars) {
