@@ -22,7 +22,7 @@ import org.checkerframework.dataflow.qual.*;
  */
 @SuppressWarnings({
   "initialization.fields.uninitialized", // library initialized in code added by run-time instrumentation
-  "JavaLangClash"
+  "JavaLangClash" // same class name as one in java.lang.
 })
 public class Runtime {
   /** Unique id for method entry/exit (so they can be matched up) */
