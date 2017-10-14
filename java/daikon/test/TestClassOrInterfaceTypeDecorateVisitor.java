@@ -24,6 +24,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     List<ClassOrInterfaceType> generifieds = new ArrayList<ClassOrInterfaceType>();
     List<ClassOrInterfaceType> ungenerifieds = new ArrayList<ClassOrInterfaceType>();
 
+    @Override
     public void visit(ClassOrInterfaceType n) {
       generifieds.add(n);
       ungenerifieds.add(n.unGenerifiedVersionOfThis);
@@ -99,7 +100,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
 
     assert expected_arr.length == result_arr.length
         : String.format(
-            "diff in buffer lengths: exepected %d, result %d",
+            "diff in buffer lengths: expected %d, result %d",
             expected_arr.length, result_arr.length);
     for (int ii = 0; ii < expected_arr.length; ii++) {
       assert expected_arr[ii].equals(result_arr[ii]) : "diff at line " + ii;

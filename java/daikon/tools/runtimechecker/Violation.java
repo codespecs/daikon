@@ -63,11 +63,13 @@ public class Violation implements Serializable {
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Time this*/) {
       return name.hashCode();
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Time this*/) {
       return name;
     }
@@ -175,6 +177,7 @@ public class Violation implements Serializable {
 
   /** String representation. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied Violation this*/) {
     return time.toString() + " : " + property.toString();
   }
@@ -188,6 +191,7 @@ public class Violation implements Serializable {
   /** Two violations are equal if their properties and times are equal. */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied Violation this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
@@ -202,6 +206,7 @@ public class Violation implements Serializable {
   }
 
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied Violation this*/) {
     return property.hashCode() + time.hashCode();
   }

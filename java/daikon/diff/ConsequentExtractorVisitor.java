@@ -32,6 +32,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
     nonce = 0;
   }
 
+  @Override
   public void visit(/*@NonNull*/ PptNode node) {
     assert node.getPpt1() != null
         : "@AssumeAssertion(nullness): method precondition: has a (non-null) consequent";
@@ -67,6 +68,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
    * invariant. Otherwise, extract the Consequent, remove the Implication, and then add the
    * consequent to the list.
    */
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     // do nothing if the invariant does not exist

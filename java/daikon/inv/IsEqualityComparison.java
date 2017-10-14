@@ -21,6 +21,7 @@ public final class IsEqualityComparison implements Filter<Invariant> {
 
   private IsEqualityComparison() {}
 
+  @Override
   public boolean accept(Invariant inv) {
     if (!(inv instanceof EqualityComparison)) return false;
     double chance_conf = ((EqualityComparison) inv).eq_confidence();

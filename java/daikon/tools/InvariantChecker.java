@@ -362,6 +362,7 @@ public class InvariantChecker {
      * invariant is falsified or weakened.
      */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
+    @Override
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
 

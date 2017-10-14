@@ -411,6 +411,7 @@ import typequals.*;
 
   /** Do nothing special, Overridden to remove exception from declaration. */
   /*@SideEffectFree*/
+  @Override
   public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     try {
       Invariant result = (Invariant) super.clone();
@@ -902,6 +903,7 @@ import typequals.*;
   /** Compare based on arity, then printed representation. */
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
     /*@Pure*/
+    @Override
     public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       if (inv1 == inv2) return 0;
 
@@ -1384,6 +1386,7 @@ import typequals.*;
   // comparing the predicate, then the consequent.
   public static final class ClassVarnameComparator implements Comparator<Invariant> {
     /*@Pure*/
+    @Override
     public int compare(Invariant inv1, Invariant inv2) {
 
       if (inv1 instanceof Implication && inv2 instanceof Implication) {
@@ -1457,6 +1460,7 @@ import typequals.*;
     Comparator<Invariant> classVarnameComparator = new ClassVarnameComparator();
 
     /*@Pure*/
+    @Override
     public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       int compareClassVarname = classVarnameComparator.compare(inv1, inv2);
 
@@ -1509,6 +1513,7 @@ import typequals.*;
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied Match this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -1519,6 +1524,7 @@ import typequals.*;
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Match this*/) {
       return (inv.getClass().hashCode());
     }
@@ -1874,6 +1880,7 @@ import typequals.*;
 
   // Receiver must be fully initialized
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied Invariant this*/) {
     return format();
   }

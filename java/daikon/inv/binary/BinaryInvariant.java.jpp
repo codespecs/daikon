@@ -114,6 +114,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /** Returns whether or not the specified types are valid. */
+  @Override
   final public boolean valid_types(VarInfo[] vis) {
 
     if (vis.length != 2) {
@@ -130,11 +131,13 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /** Returns whether or not the variable order is currently swapped for this invariant. */
+  @Override
   public boolean get_swap() {
     return swap;
   }
 
   /** Checks to see if the variable order was swapped and calls the correct routine to handle it. */
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
     // assert ArraysMDE.fn_is_permutation(permutation);
@@ -207,6 +210,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
   }
 
+  @Override
   public InvariantStatus check(
       /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
@@ -230,6 +234,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
   }
 
+  @Override
   public InvariantStatus add(
       /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
@@ -279,6 +284,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /** Returns a representation of the class. This includes the classname, variables, and swap state. */
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return getClass().getName() + " (" + var1().name() + ", "
       + var2().name() + ") [swap=" + swap + "]";
@@ -289,11 +295,13 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * same.
    */
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     CLASSNAME inv = (CLASSNAME) other;
     return ((this.getClass() == inv.getClass()) && (this.swap == inv.swap));
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.conf_is_ge(ppt.num_values(), 5);
   }

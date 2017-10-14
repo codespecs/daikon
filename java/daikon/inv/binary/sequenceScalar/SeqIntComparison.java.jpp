@@ -187,11 +187,13 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** Non-equal SeqIntComparison is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -221,6 +223,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   protected SEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQINTEQUAL this,*/ PptSlice slice) {
     return new SEQINTEQUAL(slice);
   }
@@ -237,6 +240,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
    * (except when op is GreaterEqual for max and LessEqual for min).
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
 
     SequenceMin seqmin = null;
@@ -257,16 +261,19 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /*@SideEffectFree*/
+  @Override
   public SEQINTEQUAL clone(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     return SEQINTEQUALstring + varNames() + ": ,falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
@@ -312,6 +319,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
         + ")";
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
     /*if (logDetail() || debug.isLoggable(Level.FINE))
       log(debug,"(" + EQUALSstring + " " + ArraysMDE.toString(a)
@@ -327,10 +335,12 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
     return check_modified(a, x, count);
   }
 
+  @Override
   protected double computeConfidence() {
 
     // If there are no samples over our variables, its unjustified
@@ -356,6 +366,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
       return true;
@@ -365,11 +376,13 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
@@ -394,6 +407,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
    * </pre>
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -490,6 +504,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }

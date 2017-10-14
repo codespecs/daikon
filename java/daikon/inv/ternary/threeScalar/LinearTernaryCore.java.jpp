@@ -133,10 +133,12 @@ public final class CLASSNAME implements Serializable, Cloneable {
       return ((this.x == x) && (this.y == y) && (this.z == z));
     }
     /*@SideEffectFree*/
+    @Override
     protected Point clone(/*>>>@GuardSatisfied Point this*/) throws CloneNotSupportedException {
       return (Point) super.clone();
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Point this*/) {
       return ("(" + x + ", " + y + " ," + z + ")");
     }
@@ -163,6 +165,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();

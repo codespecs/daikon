@@ -10,6 +10,7 @@ import java.util.logging.Level;
  * output.
  */
 public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
+  @Override
   public String getDescription() {
     return "Suppress invariants that merely indicate that a variable was unmodified";
   }
@@ -21,6 +22,7 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
     isOn = dkconfig_enabled;
   }
 
+  @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
       PrintInvariants.debugFiltering.fine("\tEntering UmVEF.shouldDiscard");

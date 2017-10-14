@@ -464,6 +464,7 @@ public class DaikonSimple {
      * Process the sample by checking it against each existing invariant at the program point and
      * removing the invariant from the list of possibles if any invariant is falsified.
      */
+    @Override
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
       this.all_ppts = all_ppts;

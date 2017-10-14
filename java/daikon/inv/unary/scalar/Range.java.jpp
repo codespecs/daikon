@@ -104,6 +104,7 @@ public abstract class RANGE extends SUPERCLASS {
    * Check that instantiation is ok. The type must be integral
    * (not boolean or hash code).
    */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -124,6 +125,7 @@ public abstract class RANGE extends SUPERCLASS {
    * %var1% are replaced by the variable name in the specified format.
    */
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied RANGE this,*/ OutputFormat format) {
 
     String fmt_str = get_format_str(format);
@@ -155,6 +157,7 @@ public abstract class RANGE extends SUPERCLASS {
   }
 
 #if defined(SEQ)
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] x, int count) {
     for (int i = 0; i < x.length; i++) {
       if (!eq_check(x[i])) {
@@ -164,12 +167,14 @@ public abstract class RANGE extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] x, int count) {
     return check_modified(x, count);
   }
 
 #else
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE x, int count) {
     if (eq_check(x)) {
       return InvariantStatus.NO_CHANGE;
@@ -178,22 +183,26 @@ public abstract class RANGE extends SUPERCLASS {
     }
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE x, int count) {
     return check_modified(x, count);
   }
 
 #endif
 
+  @Override
   protected double computeConfidence() {
     return CONFIDENCE_JUSTIFIED;
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other.getClass() == getClass();
     return true;
   }
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
@@ -203,6 +212,7 @@ public abstract class RANGE extends SUPERCLASS {
    * version of OneOf or Bound.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     return new DiscardInfo(this, DiscardCode.obvious,
@@ -274,15 +284,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return ONEOF.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public EqualZero instantiate_dyn(/*>>> @Prototype EqualZero this,*/ PptSlice slice) {
       return new EqualZero(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied EqualZero this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ 0 %var1%)";
@@ -291,6 +304,7 @@ public abstract class RANGE extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return (x == 0);
     }
@@ -323,15 +337,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return ONEOF.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public EqualOne instantiate_dyn(/*>>> @Prototype EqualOne this,*/ PptSlice slice) {
       return new EqualOne(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied EqualOne this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ 1 %var1%)";
@@ -340,6 +357,7 @@ public abstract class RANGE extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return (x == 1);
     }
@@ -372,15 +390,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return ONEOF.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public EqualMinusOne instantiate_dyn(/*>>> @Prototype EqualMinusOne this,*/ PptSlice slice) {
       return new EqualMinusOne(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied EqualMinusOne this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ -1 %var1%)";
@@ -389,6 +410,7 @@ public abstract class RANGE extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return (x == -1);
     }
@@ -421,15 +443,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public GreaterEqualZero instantiate_dyn(/*>>> @Prototype GreaterEqualZero this,*/ PptSlice slice) {
       return new GreaterEqualZero(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied GreaterEqualZero this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(>= %var1% 0)";
@@ -438,6 +463,7 @@ public abstract class RANGE extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return (x >= 0);
     }
@@ -470,15 +496,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public GreaterEqual64 instantiate_dyn(/*>>> @Prototype GreaterEqual64 this,*/ PptSlice slice) {
       return new GreaterEqual64(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied GreaterEqual64 this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(>= %var1% 64)";
@@ -487,6 +516,7 @@ public abstract class RANGE extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return (x >= 64);
     }
@@ -520,15 +550,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public BooleanVal instantiate_dyn(/*>>> @Prototype BooleanVal this,*/ PptSlice slice) {
       return new BooleanVal(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied BooleanVal this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(OR (EQ 0 %var1%) (EQ 1 %var1%))";
@@ -537,6 +570,7 @@ public abstract class RANGE extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return ((x == 0) || (x == 1));
     }
@@ -573,15 +607,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public PowerOfTwo instantiate_dyn(/*>>> @Prototype PowerOfTwo this,*/ PptSlice slice) {
       return new PowerOfTwo(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied PowerOfTwo this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EXISTS (p) (EQ %var1% (pow 2 p)))";
@@ -602,6 +639,7 @@ public abstract class RANGE extends SUPERCLASS {
      * unmodified by a subtract operation and thus the bitwise-and be non-zero. There is probably a
      * more elegant way to do this.
      */
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return ((x >= 1) && ((x & (x - 1)) == 0));
     }
@@ -611,6 +649,7 @@ public abstract class RANGE extends SUPERCLASS {
      * (and should thus be printed).
      */
     /*@Pure*/
+    @Override
     public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
        ONEOF oneof = find_oneof(vis);
@@ -654,15 +693,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public Even instantiate_dyn(/*>>> @Prototype Even this,*/ PptSlice slice) {
       return new Even(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied Even this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ (MOD %var1% 2) 0)";
@@ -674,6 +716,7 @@ public abstract class RANGE extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return ((x & 1) == 0);
     }
@@ -683,6 +726,7 @@ public abstract class RANGE extends SUPERCLASS {
      * (and should thus be printed).
      */
     /*@Pure*/
+    @Override
     public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
        // If there is a oneof, it implies this
        ONEOF oneof = find_oneof(vis);
@@ -721,15 +765,18 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** Returns whether or not this invariant is enabled */
+    @Override
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;
     }
 
     /** instantiates the invariant on the specified slice */
+    @Override
     public Bound0_63 instantiate_dyn(/*>>> @Prototype Bound0_63 this,*/ PptSlice slice) {
       return new Bound0_63(slice);
     }
 
+    @Override
     public String get_format_str(/*>>>@GuardSatisfied Bound0_63 this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(AND (>= %var1% 0) (>= 63 %var1%))";
@@ -738,6 +785,7 @@ public abstract class RANGE extends SUPERCLASS {
       }
     }
 
+    @Override
     public boolean eq_check(PRIMITIVE x) {
       return ((x >= 0) && (x <= 63));
     }

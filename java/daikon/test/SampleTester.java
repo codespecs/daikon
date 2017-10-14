@@ -330,6 +330,7 @@ public class SampleTester extends TestCase {
     stok.quoteChar('"');
     stok.set_error_handler(
         new StrTok.ErrorHandler() {
+          @Override
           public void tok_error(String s) {
             parse_error(s);
           }

@@ -85,6 +85,7 @@ class NameFixer extends DepthFirstVisitor {
    * This method should not be directly used by users of this class; however, must be public to
    * fulfill Visitor interface.
    */
+  @Override
   public void visit(NodeToken n) {
     boolean found = false;
 

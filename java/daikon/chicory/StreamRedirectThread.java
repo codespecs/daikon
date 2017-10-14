@@ -105,6 +105,7 @@ public class StreamRedirectThread extends Thread {
   }
 
   /** Copy. */
+  @Override
   public void run() {
     try {
       if (line_by_line) {

@@ -257,6 +257,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /** Creates and returns a copy of this. */
   // Default implementation to quiet Findbugs.
   /*@SideEffectFree*/
+  @Override
   public VarInfoAux clone(
       /*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
     VarInfoAux result = (VarInfoAux) super.clone();
@@ -265,17 +266,20 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.toString();
   }
 
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.hashCode();
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {

@@ -238,10 +238,12 @@ public class Annotation {
       this.xmlname = xmlname;
     }
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
       return name.hashCode();
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Kind this*/) {
       return name;
     }
@@ -257,6 +259,7 @@ public class Annotation {
 
   /** Easy-on-the-eye format. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied Annotation this*/) {
     return kind.toString() + " : " + daikonRep();
   }
@@ -264,6 +267,7 @@ public class Annotation {
   /** Two annotations are equal iff their fields "daikonRep", "method" and "kind" are equal. */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied Annotation this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
@@ -280,6 +284,7 @@ public class Annotation {
   }
 
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied Annotation this*/) {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }

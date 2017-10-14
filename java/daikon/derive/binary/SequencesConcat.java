@@ -29,10 +29,12 @@ public final class SequencesConcat extends BinaryDerivation {
   /** Boolean. True iff SequencesConcat derived variables should be created. */
   public static boolean dkconfig_enabled = false;
 
+  @Override
   public VarInfo var1(/*>>>@GuardSatisfied SequencesConcat this*/) {
     return base1;
   }
 
+  @Override
   public VarInfo var2(/*>>>@GuardSatisfied SequencesConcat this*/) {
     return base2;
   }
@@ -47,6 +49,7 @@ public final class SequencesConcat extends BinaryDerivation {
     super(vi1, vi2);
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
@@ -88,22 +91,26 @@ public final class SequencesConcat extends BinaryDerivation {
     }
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     return VarInfo.make_function("concat", var1(), var2());
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied SequencesConcat this*/) {
     return "[SequencesConcat of " + var1().name() + " " + var2().name() + "]";
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequencesConcat);
   }
 
   /** Returns the ESC name for sequence subsequence */
   /*@SideEffectFree*/
+  @Override
   public String esc_name(String index) {
     return String.format("SequencesConcat[%s,%s]", var1().esc_name(), var2().esc_name());
   }

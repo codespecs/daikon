@@ -480,6 +480,7 @@ public class DeclWriter extends DaikonWriter {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied VarRelation this*/) {
       return String.format(
           "VarRelation %s (%s->%s) %s [%s]",

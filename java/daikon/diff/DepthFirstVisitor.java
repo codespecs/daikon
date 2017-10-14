@@ -8,17 +8,20 @@ import java.util.*;
  */
 public class DepthFirstVisitor implements Visitor {
 
+  @Override
   public void visit(RootNode node) {
     for (Iterator<PptNode> i = node.children(); i.hasNext(); ) {
       i.next().accept(this);
     }
   }
 
+  @Override
   public void visit(PptNode node) {
     for (Iterator<InvNode> i = node.children(); i.hasNext(); ) {
       i.next().accept(this);
     }
   }
 
+  @Override
   public void visit(InvNode node) {}
 }

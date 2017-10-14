@@ -31,6 +31,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     }
   }
 
+  @Override
   public boolean hasNext() {
     try {
       return br.ready();
@@ -41,10 +42,12 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   }
 
   /** Not implemented, because this class does not modify the underlying trace file. */
+  @Override
   public void remove() {
     throw new UnsupportedOperationException("Can not remove");
   }
 
+  @Override
   public String next() {
     try {
       String ret = grabNextInvocation();
@@ -82,6 +85,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   }
 
   /** Returns the program point name given by the input invocation. */
+  @Override
   public String assignToBucket(String invocation) {
     if (invocation.indexOf(lineSep) == -1) {
       // was: return null;

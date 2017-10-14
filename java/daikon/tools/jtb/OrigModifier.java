@@ -26,6 +26,7 @@ public class OrigModifier extends DepthFirstVisitor {
    *
    * <p>Modifies: n, this.
    */
+  @Override
   public void visit(NodeToken n) {
     if (n.beginLine == columnshiftline) {
       n.beginColumn = n.beginColumn + columnshift;
@@ -43,6 +44,7 @@ public class OrigModifier extends DepthFirstVisitor {
    */
   // f0 -> PrimaryPrefix()
   // f1 -> ( PrimarySuffix() )*
+  @Override
   public void visit(PrimaryExpression n) {
     // let simple variables be variables with out "."'s in their names
     // such as x or myList

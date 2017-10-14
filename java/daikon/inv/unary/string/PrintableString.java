@@ -42,17 +42,20 @@ public final class PrintableString extends SingleString {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   public PrintableString instantiate_dyn(/*>>> @Prototype PrintableString this,*/ PptSlice slice) {
     return new PrintableString(slice);
   }
 
   /** Return description of invariant. Only Daikon format is implemented. */
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied PrintableString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       return var().name() + " is printable";
@@ -62,11 +65,13 @@ public final class PrintableString extends SingleString {
   }
 
   /** Check to see if a only contains printable ascii characters */
+  @Override
   public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
     return check_modified(a, count);
   }
 
   /** Check to see if a only contains printable ascii characters */
+  @Override
   public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
     for (int ii = 0; ii < a.length(); ii++) {
       char ch = a.charAt(ii);
@@ -80,6 +85,7 @@ public final class PrintableString extends SingleString {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   protected double computeConfidence() {
     ValueSet vs = ppt.var_infos[0].get_value_set();
     if (vs.size() > 1) {
@@ -94,6 +100,7 @@ public final class PrintableString extends SingleString {
    * are obviously printable (or not) from their values.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (vis[0].isStaticConstant()) {
       return new DiscardInfo(this, DiscardCode.obvious, vis[0].name() + " is a static constant.");
@@ -102,6 +109,7 @@ public final class PrintableString extends SingleString {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant o) {
     assert o instanceof PrintableString;
     return true;

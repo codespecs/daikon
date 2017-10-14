@@ -138,6 +138,7 @@ public class Premain {
   /** Shutdown thread that writes out the comparability results. */
   public static class ShutdownThread extends Thread {
 
+    @Override
     public void run() {
 
       in_shutdown = true;

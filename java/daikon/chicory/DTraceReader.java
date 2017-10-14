@@ -19,6 +19,7 @@ import org.checkerframework.checker.interning.qual.*;
 @SuppressWarnings("nullness") // to do
 public class DTraceReader extends DeclReader {
 
+  @Override
   public void read(File pathname) {
 
     try {

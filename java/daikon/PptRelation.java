@@ -128,6 +128,7 @@ public class PptRelation implements Serializable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }

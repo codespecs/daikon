@@ -26,27 +26,33 @@ public final class VarComparabilityNone extends VarComparability implements Seri
     return it;
   }
 
+  @Override
   public VarComparability makeAlias() {
     return it;
   }
 
+  @Override
   public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return it;
   }
 
+  @Override
   public VarComparability indexType(/*>>>@GuardSatisfied VarComparabilityNone this,*/ int dim) {
     return it;
   }
 
+  @Override
   public VarComparability string_length_type() {
     return it;
   }
 
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return 0;
   }
 
+  @Override
   public boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return true;
   }
@@ -64,6 +70,7 @@ public final class VarComparabilityNone extends VarComparability implements Seri
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return "no-comparability";
   }

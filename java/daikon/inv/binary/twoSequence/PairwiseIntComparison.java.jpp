@@ -266,11 +266,13 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** PAIRWISEINTEQUAL is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -287,6 +289,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /** instantiates the invariant on the specified slice */
+  @Override
   protected PAIRWISEINTEQUAL instantiate_dyn(/*>>> @Prototype PAIRWISEINTEQUAL this,*/ PptSlice slice) {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn()) {
@@ -305,6 +308,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   #endif
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
@@ -331,6 +335,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -391,6 +396,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return di;
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return this;
@@ -401,6 +407,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     /*@Pure*/
+    @Override
     public boolean is_symmetric() {
     return true;
   }
@@ -413,6 +420,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 #endif
 
+  @Override
   public String repr(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
     return PAIRWISEINTEQUALstring + varNames() + ": ";
   }
@@ -422,6 +430,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
@@ -470,6 +479,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " +  split1[0] + "[i]"  + split1[1] + equals_str + split2[0] + "[i]" + split2[1] + end_str + ")";
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
     assert a1 != null && a2 != null
       : var1() + " " + var2() + " " + FileIO.get_linenum();
@@ -492,6 +502,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+    @Override
     public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
                                         int count) {
       if (logDetail()) {
@@ -501,6 +512,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
       return check_modified(a1, a2, count);
     }
 
+  @Override
   protected double computeConfidence() {
     // num_elt_values() would be more appropriate
     // int num_values = ((PptSlice2) ppt).num_elt_values();
@@ -518,11 +530,13 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
@@ -540,6 +554,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }

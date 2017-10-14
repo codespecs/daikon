@@ -53,6 +53,7 @@ public final class StackTypes {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied StackTypes this*/) {
 
     StringBuffer sb = new StringBuffer();

@@ -204,11 +204,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not we are enabled */
+  @Override
   public boolean enabled() {
     return (dkconfig_enabled && !dkconfig_SeqIndexDisableAll);
   }
 
   /** Check that SeqIndex comparisons make sense over these vars */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -234,6 +236,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiate the invariant on the specified slice */
+  @Override
   public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
@@ -244,6 +247,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** returns the ni-suppressions for CLASSNAME */
   /*@Pure*/
+  @Override
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
@@ -281,6 +285,7 @@ public class CLASSNAME extends SUPERCLASS {
 #else
   /** returns the ni-suppressions for CLASSNAME */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }
@@ -299,6 +304,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -346,6 +352,7 @@ public class CLASSNAME extends SUPERCLASS {
       + form[3];
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     for (int i = 0; i < a.length; i++) {
       if (!EQUALS(a[i], i)) {
@@ -355,6 +362,7 @@ public class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
 
     if (logDetail()) {
@@ -369,6 +377,7 @@ public class CLASSNAME extends SUPERCLASS {
     return stat;
   }
 
+  @Override
   protected double computeConfidence() {
 
     // Make sure there have been some elements in the sequence
@@ -422,11 +431,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
@@ -454,6 +465,7 @@ public class CLASSNAME extends SUPERCLASS {
    * A[i] = i is not true.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);

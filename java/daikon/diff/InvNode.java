@@ -27,6 +27,7 @@ public class InvNode extends Node</*@Nullable*/ Invariant, /*@NonNull*/ Void> {
     return getUserRight();
   }
 
+  @Override
   public void accept(Visitor v) {
     v.visit(this);
   }

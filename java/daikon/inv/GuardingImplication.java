@@ -43,15 +43,18 @@ public class GuardingImplication extends Implication {
   }
 
   /*@Pure*/
+  @Override
   public boolean isWorthPrinting() {
     return right.isWorthPrinting();
     // return !right.isObvious();
   }
 
+  @Override
   public boolean enoughSamples(/*>>>@GuardSatisfied GuardingImplication this*/) {
     return right.enoughSamples();
   }
 
+  @Override
   public double computeConfidence() {
     return right.computeConfidence();
   }

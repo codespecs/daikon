@@ -114,6 +114,7 @@ public class InvTranslate {
 
   /** Returns a somewhat verbose description of the translation. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied InvTranslate this*/) {
     StringBuilder out = new StringBuilder();
 

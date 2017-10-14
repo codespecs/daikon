@@ -32,6 +32,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     suppression_set = suppressions;
   }
 
+  @Override
   public Iterator<NISuppression> iterator() {
     List<NISuppression> asList = Arrays.<NISuppression>asList(suppression_set);
     return asList.iterator();
@@ -617,6 +618,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
   /** Returns a string containing each suppression separated by commas. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
     return UtilMDE.join(suppression_set, ", ");
   }

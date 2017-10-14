@@ -102,6 +102,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
    * entries and exits. Because Chicory is invoked as a javaagent, the transform method is called by
    * the Java runtime each time a new class is loaded.
    */
+  @Override
   public byte /*@Nullable*/ [] transform(
       ClassLoader loader,
       /*@InternalForm*/ String className,

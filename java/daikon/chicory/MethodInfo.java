@@ -213,6 +213,7 @@ public class MethodInfo {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied MethodInfo this*/) {
     String out = "";
     if (class_info != null) out = class_info.class_name + ".";

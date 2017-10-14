@@ -64,6 +64,7 @@ class PrefixRemover extends DepthFirstVisitor {
    * This method should not be directly used by users of this class. Replaces the token image with
    * "" if it is prefix or a "." following prefix.
    */
+  @Override
   public void visit(NodeToken n) {
     if (Visitors.isDot(n)
         && lastToken != null

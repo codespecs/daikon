@@ -106,11 +106,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** LinearTernary is only valid on non-constant integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -293,11 +295,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiate the invariant on the specified slice */
+  @Override
   public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
   /*@SideEffectFree*/
+  @Override
   public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
@@ -305,17 +309,20 @@ public class CLASSNAME extends SUPERCLASS {
     return result;
   }
 
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     core.permute(permutation);
     return this;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": falsified=" + falsified
       + "; " + core.repr();
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     return core.format_using(format, var1().name_using(format),
                         var2().name_using(format), var3().name_using(format));
@@ -326,6 +333,7 @@ public class CLASSNAME extends SUPERCLASS {
   // }
 
   /*@Pure*/
+  @Override
   public boolean isActive() {
     return core.isActive();
   }
@@ -340,28 +348,34 @@ public class CLASSNAME extends SUPERCLASS {
     return core.setup(oo, v1, con1, v2, con2);
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     return clone().add_modified(x, y, z, count);
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     return core.add_modified(x, y, z, count);
   }
 
+  @Override
   public boolean enoughSamples(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return core.enoughSamples();
   }
 
+  @Override
   protected double computeConfidence() {
     return core.computeConfidence();
   }
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -377,11 +391,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
@@ -415,6 +431,7 @@ public class CLASSNAME extends SUPERCLASS {
     return result;
   }
 
+  @Override
   public boolean mergeFormulasOk() {
     return (core.mergeFormulasOk());
   }
@@ -427,6 +444,7 @@ public class CLASSNAME extends SUPERCLASS {
    *     order in parent_ppt.
    * @param parent_ppt slice that will contain the new invariant
    */
+  @Override
   public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores

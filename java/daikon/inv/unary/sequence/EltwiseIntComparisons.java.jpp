@@ -191,11 +191,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** Non-equality CLASSNAME invariants are only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -212,21 +214,25 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiate the invariant on the specified slice */
+  @Override
   protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
   /*@SideEffectFree*/
+  @Override
   public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     return result;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -280,6 +286,7 @@ public class CLASSNAME extends SUPERCLASS {
       + form[3];
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     for (int i = 1; i < a.length; i++) {
       if (!COMPARATOR(a[i - 1], a[i])) {
@@ -289,12 +296,14 @@ public class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     return check_modified(a, count);
   }
 
   // Perhaps check whether all the arrays of interest have length 0 or 1.
 
+  @Override
   protected double computeConfidence() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
     if (ppt.num_samples() != 0) {
@@ -308,6 +317,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
     return true;
@@ -317,6 +327,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return (other instanceof CLASSNAME);
   }
@@ -326,6 +337,7 @@ public class CLASSNAME extends SUPERCLASS {
   // regression tests test this functionality
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     // This whole approach is wrong in the case when the sequence can
     // ever consist of only one element.  For now, just forget
@@ -385,12 +397,14 @@ public class CLASSNAME extends SUPERCLASS {
    * are meaningless. This function is meant to be used in isObviousImplied() to prevent such
    * meaningless invariants from being printed.
    */
+  @Override
   public boolean hasSeenNonTrivialSample() {
     VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
     return (vs.multi_arr_cnt() > 0);
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

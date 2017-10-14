@@ -93,6 +93,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied SEQUENCESCALARSUBSCRIPT this*/) {
     String shift = "";
     if (index_shift < 0) {
@@ -103,6 +104,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     return (UtilMDE.replaceString(seqvar().name(), "[]", "") + "[" + sclvar().name() + shift + "]");
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
     if (mod1 == ValueTuple.MISSING_NONSENSICAL) {
@@ -133,11 +135,13 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     return new ValueAndModified(INTERN(val), mod);
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     return VarInfo.make_subscript(seqvar(), sclvar(), index_shift);
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARSUBSCRIPT)
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
@@ -146,6 +150,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
   /** Returns the ESC name for sequence subscript */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
+  @Override
   public String esc_name(String index) {
     if (seqvar().isPrestate()) {
       return String.format(
@@ -161,6 +166,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
 
   /** Returns the JML name for sequence subscript */
   @SuppressWarnings("nullness")
+  @Override
   public String jml_name(String index) {
     String get_element = GET_ELEMENT;
     if (seqvar().file_rep_type.baseIsHashcode()) {
@@ -187,6 +193,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
   /** Returns the CSHARPCONTRACT name for sequence subscript */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
+  @Override
   public String csharp_name(String index) {
     String[] split = seqvar().csharp_array_split();
     if (seqvar().isPrestate()) {
@@ -204,6 +211,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
   /** Return the simplify name for sequence subscript */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
+  @Override
   public String simplify_name() {
     String subscript = sclvar().simplify_name();
     if (index_shift < 0) {
@@ -217,6 +225,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
   }
 
   /** Adds one to the default complexity if index_shift is not 0 */
+  @Override
   public int complexity() {
     return super.complexity() + ((index_shift != 0) ? 1 : 0);
   }

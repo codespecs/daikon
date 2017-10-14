@@ -42,6 +42,7 @@ public class PptCountVisitor extends PrintAllVisitor {
   }
 
   // Throw out Program points that are Conditional.
+  @Override
   public void visit(PptNode node) {
     @SuppressWarnings("nullness") // application invariant: calling context
     /*@NonNull*/ PptTopLevel ppt = node.getPpt1();
@@ -110,6 +111,7 @@ public class PptCountVisitor extends PrintAllVisitor {
   }
 
   /** Anytime something matches, we should score it has correct */
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

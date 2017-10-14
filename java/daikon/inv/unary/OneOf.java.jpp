@@ -340,11 +340,13 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   public ONEOFSCALAR instantiate_dyn(/*>>> @Prototype ONEOFSCALAR this,*/ PptSlice slice) {
     return new ONEOFSCALAR(slice);
   }
@@ -371,6 +373,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   @SuppressWarnings("interning") // clone method re-does interning
   /*@SideEffectFree*/
+  @Override
   public ONEOFSCALAR clone(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = elts.clone();
@@ -383,10 +386,12 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return result;
   }
 
+  @Override
   public int num_elts() {
     return num_elts;
   }
 
+  @Override
   public Object elt() {
     return elt(0);
   }
@@ -525,6 +530,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return sb.toString();
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return ONEOFSCALAR_STRING + varNames() + ": falsified=" + falsified
       + ", num_elts=" + num_elts
@@ -563,6 +569,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ OutputFormat format) {
     sort_rep();
 
@@ -741,6 +748,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
 #if defined(ELTSTRING) || defined(STRINGSEQUENCE)
   /*@Pure*/
+  @Override
   public boolean isValidEscExpression() {
     // format_esc will look at the particulars and decide
     return true;
@@ -1403,20 +1411,24 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
 #if defined(IS_ELT)
 
+  @Override
   public InvariantStatus add_modified(INTARRAY a, int count) {
     return runValue(a, count, true);
   }
 
+  @Override
   public InvariantStatus check_modified(INTARRAY a, int count) {
     return runValue(a, count, false);
   }
 
 #else
 
+  @Override
   public InvariantStatus add_modified(INT a, int count) {
     return runValue(a, count, true);
   }
 
+  @Override
   public InvariantStatus check_modified(INT a, int count) {
     return runValue(a, count, false);
   }
@@ -1529,11 +1541,13 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 #if defined(IS_ELT)
   // It is possible to have seen many (array) samples, but no (INT)
   // array element values.
+  @Override
   public boolean enoughSamples(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return num_elts > 0;
   }
 #endif
 
+  @Override
   protected double computeConfidence() {
     // This is not ideal.
     if (num_elts == 0) {
@@ -1549,6 +1563,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
@@ -1562,6 +1577,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
 #if defined(IS_NUMERIC)
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -1601,7 +1617,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
         Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
         for (String s : vsValidValues) {
-          setValidValues.add(new NUMWRAPPER(s));
+          setValidValues.add(NUMWRAPPER.valueOf(s));
         }
         Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
         for (INT e : elts) {
@@ -1689,17 +1705,20 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         && v.aux.getInt(VarInfoAux.MINIMUM_LENGTH) == 1) {
       #if defined(SEQUENCE)
       #define BASETYPE Long
+      #define NEW_BASETYPE Long.valueOf
       #elif defined(FLOATSEQUENCE)
       #define BASETYPE Double
+      #define NEW_BASETYPE Double.valueOf
       #else
       #define BASETYPE String
+      #define NEW_BASETYPE
       #endif
 
       @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<BASETYPE> setValidValues = new TreeSet<BASETYPE>();
       for (String s : vsValidValues) {
-        setValidValues.add(new BASETYPE(s));
+        setValidValues.add(NEW_BASETYPE(s));
       }
       Set<BASETYPE> setValuesInvariant = new TreeSet<BASETYPE>();
       for (INT e : elts) {
@@ -1720,6 +1739,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   }
 #elif defined(IS_ELT_NUMERIC)
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -1735,7 +1755,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
       for (String s : vsValidValues) {
-        setValidValues.add(new NUMWRAPPER(s));
+        setValidValues.add(NUMWRAPPER.valueOf(s));
       }
       Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
       for (INT e : elts) {
@@ -1808,11 +1828,13 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
    * Oneof can merge different formulas from lower points to create a single formula at an upper
    * point.
    */
+  @Override
   public boolean mergeFormulasOk() {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant o) {
     ONEOFSCALAR other = (ONEOFSCALAR) o;
     if (num_elts != other.num_elts) {
@@ -1896,6 +1918,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant o) {
     if (o instanceof ONEOFSCALAR) {
       ONEOFSCALAR other = (ONEOFSCALAR) o;
@@ -1958,6 +1981,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   // uninteresting.  OneOf invariants that indicate exactly one value
   // are interesting.
   /*@Pure*/
+  @Override
   public boolean isInteresting() {
     if (num_elts() > 1) {
       return false;
@@ -1966,6 +1990,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
   }
 
+  @Override
   public boolean hasUninterestingConstant() {
 #if defined(SCALAR) || defined(ELT)
     for (int i = 0; i < num_elts; i++) {
@@ -1998,6 +2023,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
     return (num_elts == 1);
   }
@@ -2042,6 +2068,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
    * @param parent_ppt slice that will contain the new invariant
    */
   @SuppressWarnings("interning") // cloning requires re-interning
+  @Override
   public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
@@ -2100,6 +2127,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
    * Returns true if every element in this invariant is contained in the specified state. For
    * example if x = 1 and the state contains 1 and 2, true will be returned.
    */
+  @Override
   public boolean state_match(Object state) {
 
     if (num_elts == 0) {

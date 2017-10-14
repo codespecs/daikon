@@ -61,11 +61,13 @@ public final class CompleteOneOfScalar extends SingleScalar {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   public CompleteOneOfScalar instantiate_dyn(
       /*>>> @Prototype CompleteOneOfScalar this,*/ PptSlice slice) {
     return new CompleteOneOfScalar(slice);
@@ -73,6 +75,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
 
   /** Return description of invariant. Only Daikon format is implemented. */
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied CompleteOneOfScalar this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       String out = var().name() + " has values: ";
@@ -86,11 +89,13 @@ public final class CompleteOneOfScalar extends SingleScalar {
   }
 
   /** Check to see if a only contains printable ascii characters */
+  @Override
   public InvariantStatus add_modified(long a, int count) {
     return check_modified(a, count);
   }
 
   /** Check to see if a only contains printable ascii characters */
+  @Override
   public InvariantStatus check_modified(long a, int count) {
     for (Info val : vals) {
       if (val.val == a) {
@@ -103,6 +108,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   protected double computeConfidence() {
     ValueSet vs = ppt.var_infos[0].get_value_set();
     // System.out.printf ("%s value set = %s%n", ppt.var_infos[0].name(), vs);
@@ -118,6 +124,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
    * are obviously printable (or not) from their values.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     return super.isObviousStatically(vis);
   }
@@ -127,6 +134,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
    * presumed to be false.
    */
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant o) {
     return false;
   }

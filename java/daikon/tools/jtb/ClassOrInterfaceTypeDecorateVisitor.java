@@ -40,6 +40,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   // f2 -> MethodDeclarator()
   // f3 -> [ "throws" NameList() ]
   // f4 -> ( Block() | ";" )
+  @Override
   public void visit(MethodDeclaration n) {
 
     // A shallow clone, which is what we want.
@@ -67,6 +68,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   // f5 -> [ ExplicitConstructorInvocation() ]
   // f6 -> ( BlockStatement() )*
   // f7 -> "}"
+  @Override
   public void visit(ConstructorDeclaration n) {
 
     // A shallow clone, which is what we want.
@@ -95,6 +97,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   // f3 -> [ ExtendsList(isInterface) ]
   // f4 -> [ ImplementsList(isInterface) ]
   // f5 -> ClassOrInterfaceBody(isInterface)
+  @Override
   public void visit(ClassOrInterfaceDeclaration n) {
 
     // A shallow clone, which is what we want.
@@ -127,6 +130,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     final List<TypeParameter> params = new ArrayList<TypeParameter>();
     n.accept(
         new DepthFirstVisitor() {
+          @Override
           public void visit(TypeParameter n) {
             params.add(n);
           }
@@ -184,6 +188,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   // f0 -> <IDENTIFIER>
   // f1 -> [ TypeArguments() ]
   // f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
+  @Override
   public void visit(ClassOrInterfaceType t) {
     t.f0.accept(this);
     t.f1.accept(this); // NO NEED TO DO THIS?

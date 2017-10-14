@@ -60,6 +60,7 @@ public class ReadTrace {
 
     /** Process the sample, by adding it to the {@code samples} map. */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
+    @Override
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
 

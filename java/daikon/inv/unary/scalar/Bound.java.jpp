@@ -262,11 +262,13 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** LOWERBOUND is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -277,11 +279,13 @@ public class LOWERBOUND extends SINGLESCALAR {
     }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   public LOWERBOUND instantiate_dyn(/*>>> @Prototype LOWERBOUND this,*/ PptSlice slice) {
     return new LOWERBOUND(slice);
   }
 
   /*@SideEffectFree*/
+  @Override
   public LOWERBOUND clone(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     LOWERBOUND result = (LOWERBOUND) super.clone();
     result.core = core.clone();
@@ -293,6 +297,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     return core.MIN();          // i.e., MIN1
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     return LOWERBOUNDSTR + varNames() + ": "
       + core.repr();
@@ -300,6 +305,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
 #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
     String name = var().name_using(format);
     PptTopLevel pptt = ppt.parent;
@@ -347,6 +353,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 #else
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) {
@@ -544,6 +551,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
 #endif
 
+  @Override
   public InvariantStatus add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //              + "add(" + value + ", " + modified + ", " + count + ")");
@@ -566,6 +574,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 #endif
   }
 
+  @Override
   public InvariantStatus check_modified(LONG value, int count) {
 #ifndef IS_ELT
     return core.check(value);
@@ -579,20 +588,24 @@ public class LOWERBOUND extends SINGLESCALAR {
 #endif
   }
 
+  @Override
   public boolean enoughSamples(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     return core.enoughSamples();
   }
 
+  @Override
   protected double computeConfidence() {
     return core.computeConfidence();
   }
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
     return core.isExact();
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
@@ -601,11 +614,13 @@ public class LOWERBOUND extends SINGLESCALAR {
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   // Use hasUninterestingConstant() instead. -SMcC 2/26/2003
   /*@Pure*/
+  @Override
   public boolean isInteresting() {
     return (-1 < MIN1 && MIN1 < 2);
   }
 #endif
 
+  @Override
   public boolean hasUninterestingConstant() {
     // If the constant bound is not in some small range of interesting
     // values (by default {-1, 0, 1, 2}), call it uninteresting.
@@ -623,6 +638,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var = vis[0];
     if ((var.derived instanceof SequenceLength)
@@ -645,6 +661,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -767,6 +784,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
 #ifdef IS_ELT
     // N.B. "x[] elements >= 200" is not mutually exclusive with "x[]
@@ -799,6 +817,7 @@ public class LOWERBOUND extends SINGLESCALAR {
    * Bound can merge different formulas from lower points to create a single formula at an upper
    * point. See merge() below.
    */
+  @Override
   public boolean mergeFormulasOk() {
     return true;
   }
@@ -813,6 +832,7 @@ public class LOWERBOUND extends SINGLESCALAR {
    *     variable order in parent_ppt.
    * @param parent_ppt slice that will contain the new invariant
    */
+  @Override
   public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child

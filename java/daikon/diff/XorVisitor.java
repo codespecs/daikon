@@ -18,6 +18,7 @@ public class XorVisitor extends DepthFirstVisitor {
   public static final Logger debug = Logger.getLogger("daikon.diff.XorVisitor");
 
   /** Every node has at least one non-null ppt. Add one of the non-null ppt to the result. */
+  @Override
   public void visit(PptNode node) {
     PptTopLevel ppt1 = node.getPpt1();
     PptTopLevel ppt2 = node.getPpt2();
@@ -32,6 +33,7 @@ public class XorVisitor extends DepthFirstVisitor {
   /**
    * If one invariant is null and the other is not, add the non-null invariant to the result set.
    */
+  @Override
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode has already been visited
   /*@RequiresNonNull("currentPpt")*/

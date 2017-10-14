@@ -32,6 +32,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
     return value;
   }
 
+  @Override
   public String getDTraceValueString(Object val) {
     if (isArray) {
       if (val instanceof NonsensicalObject) {
@@ -72,16 +73,19 @@ public class DaikonClassInfo extends DaikonVariableInfo {
   }
 
   /** Returns function since essentially this is a call to a pure function */
+  @Override
   public VarKind get_var_kind() {
     return VarKind.FUNCTION;
   }
 
   /** Returns the name of this field */
+  @Override
   public String get_relative_name() {
     // need to skip the leading "."
     return DaikonVariableInfo.class_suffix_relative_name;
   }
 
+  @Override
   public EnumSet<VarFlags> get_var_flags() {
     EnumSet<VarFlags> flags = super.get_var_flags().clone();
     flags.add(VarFlags.SYNTHETIC);

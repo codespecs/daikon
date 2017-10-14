@@ -50,21 +50,25 @@ public class Positive extends SingleScalar {
   }
 
   /** returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   public Positive instantiate_dyn(/*>>> @Prototype Positive this,*/ PptSlice slice) {
     return new Positive(slice);
   }
 
   // A printed representation for user output
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied Positive this,*/ OutputFormat format) {
     return var().name() + " > 0";
   }
 
+  @Override
   public InvariantStatus check_modified(long v, int count) {
     if (v <= 0) {
       return InvariantStatus.FALSIFIED;
@@ -72,10 +76,12 @@ public class Positive extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(long v, int count) {
     return check_modified(v, count);
   }
 
+  @Override
   protected double computeConfidence() {
     // Assume that every variable has a .5 chance of being positive by
     // chance.  Then a set of n values have a have (.5)^n chance of all
@@ -84,6 +90,7 @@ public class Positive extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof Positive;
     return true;

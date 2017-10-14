@@ -24,6 +24,7 @@ public final class SequenceMax extends UnaryDerivation {
     super(vi);
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
     if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
@@ -42,17 +43,20 @@ public final class SequenceMax extends UnaryDerivation {
     }
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     return VarInfo.make_scalar_seq_func("max", null, base, 0);
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceMax);
   }
 
   /** Returns the ESC name */
   /*@SideEffectFree*/
+  @Override
   public String esc_name(String index) {
     return String.format("max(%s)", base.esc_name());
   }

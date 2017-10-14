@@ -14,7 +14,7 @@ DAIKONDIR = ${DAIKONDIR_DEFAULT}
 # Test that the directory exists.  There must be a better way to do this.
 DAIKONDIR:=$(wildcard ${DAIKONDIR})
 ifndef DAIKONDIR
-  $(error Environment variable DAIKONDIR is not set to an existing directory; is set to $DAIKONDIR)
+  $(error Environment variable DAIKONDIR is not set to an existing directory; is set to ${DAIKONDIR}.  DAIKONDIR_DEFAULT=${DAIKONDIR_DEFAULT})
 endif
 
 # Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
@@ -788,20 +788,23 @@ tags-without-generated-files: clean-generated-files
 ### Code quality (static checks of the code)
 ###
 
+# See version numbers at https://github.com/google/error-prone/releases
+ERRORPRONE_VERSION := 2.1.1
+
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 errorprone-nocompile:
-	${MAKE} lib/error_prone_ant-2.0.21.jar
-#	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
-	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF ${JAVA_FILES_FOR_STYLE}
+	${MAKE} lib/error_prone_ant-${ERRORPRONE_VERSION}.jar
+#	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
+	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF ${JAVA_FILES_FOR_STYLE}
 # To create a patch file to apply changes:
-#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # This didn't create the file though its output claimed it did:
-#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-2.0.21.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:BoxedPrimitiveConstructor -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:BoxedPrimitiveConstructor -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # To apply the patch, see instructions in the Error Prone output.
 
-lib/error_prone_ant-2.0.21.jar:
-	(cd lib && wget https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/2.0.21/error_prone_ant-2.0.21.jar)
+lib/error_prone_ant-${ERRORPRONE_VERSION}.jar:
+	(cd lib && curl -s -O https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/error_prone_ant-${ERRORPRONE_VERSION}.jar)
 
 findbugs: .findbugs-output
 .PHONY: findbugs

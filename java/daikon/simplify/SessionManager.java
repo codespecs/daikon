@@ -173,6 +173,7 @@ public class SessionManager {
 
     private boolean finished = false;
 
+    @Override
     @SuppressWarnings("nullness") // tricky, but I think it's OK
     public void run() {
       debugln("Worker: run");

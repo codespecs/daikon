@@ -56,6 +56,7 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
   private static final Logger debug =
     Logger.getLogger("daikon.derive.binary." + SCALARSEQUENCESINTERSECTIONFACTORY_STRING);
 
+  @Override
   public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo seq1, VarInfo seq2) {
 
     if (!SCALARSEQUENCESINTERSECTION.dkconfig_enabled) {

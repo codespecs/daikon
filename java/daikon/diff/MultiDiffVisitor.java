@@ -41,12 +41,14 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     spinfoMode = true;
   }
 
+  @Override
   public void visit(RootNode node) {
 
     total++;
     super.visit(node);
   }
 
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
@@ -239,6 +241,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     }
   }
 
+  @Override
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return true; // super.shouldPrint (inv1, inv2) &&
     //    inv1.format().toString().indexOf(">") == -1 &&

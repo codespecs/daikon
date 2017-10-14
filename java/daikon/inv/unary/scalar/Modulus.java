@@ -53,11 +53,13 @@ public class Modulus extends SingleScalar {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** Modulus is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) return false;
@@ -66,15 +68,18 @@ public class Modulus extends SingleScalar {
   }
 
   /** Instantiate an invariant on the specified slice */
+  @Override
   protected Modulus instantiate_dyn(/*>>> @Prototype Modulus this,*/ PptSlice slice) {
     return new Modulus(slice);
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied Modulus this*/) {
     return "Modulus" + varNames() + ": " + "modulus=" + modulus + ",remainder=" + remainder;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied Modulus this,*/ OutputFormat format) {
     String name = var().name_using(format);
 
@@ -117,6 +122,7 @@ public class Modulus extends SingleScalar {
     return format_unimplemented(format);
   }
 
+  @Override
   public InvariantStatus check_modified(long value, int count) {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been
@@ -152,6 +158,7 @@ public class Modulus extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(long value, int count) {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been
@@ -198,8 +205,7 @@ public class Modulus extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
-  //  public InvariantStatus check_modified(long value, int count) {}
-
+  @Override
   protected double computeConfidence() {
     if (modulus == 1) {
       return Invariant.CONFIDENCE_NEVER;
@@ -213,6 +219,7 @@ public class Modulus extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     Modulus otherModulus = (Modulus) other;
 
@@ -230,6 +237,7 @@ public class Modulus extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
     if ((modulus == 0) || (modulus == 1)) {
       return false;
@@ -267,6 +275,7 @@ public class Modulus extends SingleScalar {
    * </pre>
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // Do not show x-1 = a (mod b).  There must be a different mod

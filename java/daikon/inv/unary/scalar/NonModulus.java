@@ -58,6 +58,7 @@ public class NonModulus extends SingleScalar {
   }
 
   /** NonModulus is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) return false;
@@ -66,27 +67,32 @@ public class NonModulus extends SingleScalar {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice */
+  @Override
   protected NonModulus instantiate_dyn(/*>>> @Prototype NonModulus this,*/ PptSlice slice) {
     return new NonModulus(slice);
   }
 
   /*@SideEffectFree*/
+  @Override
   public NonModulus clone(/*>>>@GuardSatisfied NonModulus this*/) {
     NonModulus result = (NonModulus) super.clone();
     result.elements = new TreeSet<Long>(this.elements);
     return result;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied NonModulus this*/) {
     return "NonModulus" + varNames() + ": " + "m=" + modulus + ",r=" + remainder;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied NonModulus this,*/ OutputFormat format) {
     updateResults();
     String name = var().name_using(format);
@@ -150,11 +156,13 @@ public class NonModulus extends SingleScalar {
     results_accurate = true;
   }
 
+  @Override
   public InvariantStatus check_modified(long value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
   // XXX have to deal with flowing this; maybe it should live at all ppts?
+  @Override
   public InvariantStatus add_modified(long value, int count) {
     if (elements.add(Intern.internedLong(value))
         && results_accurate
@@ -163,6 +171,7 @@ public class NonModulus extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   protected double computeConfidence() {
     updateResults();
     if (no_result_yet) {
@@ -174,6 +183,7 @@ public class NonModulus extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant o) {
     NonModulus other = (NonModulus) o;
 
@@ -198,6 +208,7 @@ public class NonModulus extends SingleScalar {
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant o) {
     updateResults();
     if (no_result_yet) return false;

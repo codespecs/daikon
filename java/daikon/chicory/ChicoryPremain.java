@@ -442,6 +442,7 @@ public class ChicoryPremain {
       return (name.replace(".", "/") + ".class");
     }
 
+    @Override
     protected Class<?> loadClass(
         /*@BinaryName*/ String name, boolean resolve) throws java.lang.ClassNotFoundException {
 

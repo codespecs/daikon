@@ -12,6 +12,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
+  @Override
   public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {
     // System.out.println("SequenceMinMaxSumFactory.instantiate(" + vi.name + ")");
 

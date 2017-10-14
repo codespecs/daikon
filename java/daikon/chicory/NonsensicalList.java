@@ -23,16 +23,19 @@ public class NonsensicalList extends AbstractList<Object> implements List<Object
   }
 
   /*@Pure*/
+  @Override
   public Object get(/*>>>@GuardSatisfied NonsensicalList this,*/ int index) {
     return NonsensicalObject.getInstance();
   }
 
   /*@Pure*/
+  @Override
   public int size(/*>>>@GuardSatisfied NonsensicalList this*/) {
     return 0;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied NonsensicalList this*/) {
     return "NonsensicalList";
   }

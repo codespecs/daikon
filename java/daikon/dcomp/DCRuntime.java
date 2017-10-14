@@ -2332,6 +2332,7 @@ public final class DCRuntime {
     static final long serialVersionUID = 20050923L;
 
     /*@Pure*/
+    @Override
     public int compareTo(/*>>>@GuardSatisfied DVSet this,*/ DVSet s1) {
       if (s1.size() == 0) {
         return 1;
@@ -2985,6 +2986,7 @@ public final class DCRuntime {
     }
 
     /** Return the tag associated with this field */
+    @Override
     Object get_tag(Object parent, Object obj) {
       Object tag;
       // jhp - not sure why these are not null...
@@ -3029,6 +3031,7 @@ public final class DCRuntime {
     }
 
     /** Gets the tag for this static reference */
+    @Override
     public Object get_tag(Object parent, Object obj) {
 
       // assert parent == null && obj == null;
@@ -3065,6 +3068,7 @@ public final class DCRuntime {
     }
 
     /** Returns a list of object tags */
+    @Override
     public Object get_tag(Object parent, Object obj) {
 
       // Object is an array of objects containing each item
@@ -3098,6 +3102,7 @@ public final class DCRuntime {
       field_num = fi.get_field_num();
     }
 
+    @Override
     public Object get_tag(Object parent, Object obj) {
 
       // obj is the wrapper for the primitive
@@ -3121,6 +3126,7 @@ public final class DCRuntime {
       assert !fi.isStatic() && !fi.isPrimitive();
     }
 
+    @Override
     public Object get_tag(Object parent, Object obj) {
       return obj;
     }
