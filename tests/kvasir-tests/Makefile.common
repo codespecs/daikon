@@ -72,6 +72,9 @@ endif
 ifeq ($(OS_REL),25)
 	GOAL := goal-Fedora25
 endif
+ifeq ($(OS_REL),26)
+	GOAL := goal-Fedora26
+endif
 endif
 
 goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
