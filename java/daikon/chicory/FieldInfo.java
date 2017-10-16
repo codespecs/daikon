@@ -65,7 +65,9 @@ public class FieldInfo extends DaikonVariableInfo {
         //                   field_num);
         return;
       }
-      if (Modifier.isStatic(f.getModifiers())) continue;
+      if (Modifier.isStatic(f.getModifiers())) {
+        continue;
+      }
       if (f.getType().isPrimitive()) field_num++;
     }
     throw new Error("Can't find " + field + " in " + field.getDeclaringClass());
@@ -79,7 +81,9 @@ public class FieldInfo extends DaikonVariableInfo {
       @SuppressWarnings("nullness") // clazz != object and so superclass != null
       int field_cnt = num_prim_fields(clazz.getSuperclass());
       for (Field f : clazz.getDeclaredFields()) {
-        if (Modifier.isStatic(f.getModifiers())) continue;
+        if (Modifier.isStatic(f.getModifiers())) {
+          continue;
+        }
         if (f.getType().isPrimitive()) field_cnt++;
       }
       return field_cnt;
@@ -88,6 +92,7 @@ public class FieldInfo extends DaikonVariableInfo {
 
   /** Returns true iff the corresponding field is static. */
   /*@Pure*/
+  @Override
   public boolean isStatic() {
     return is_static;
   }
@@ -98,6 +103,7 @@ public class FieldInfo extends DaikonVariableInfo {
     return is_final;
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public Object getMyValFromParentVal(Object val) {
     if (isArray) {
@@ -147,6 +153,7 @@ public class FieldInfo extends DaikonVariableInfo {
    * Returns the kind of this variable. Statics are top level variables, instance variables are
    * fields.
    */
+  @Override
   public VarKind get_var_kind() {
     if (isStatic() || is_outer_this) {
       return VarKind.VARIABLE;
@@ -159,6 +166,7 @@ public class FieldInfo extends DaikonVariableInfo {
    * Returns the name of this field. Since statics are top level, they have no relative name. Fields
    * return their field name.
    */
+  @Override
   public /*@Nullable*/ String get_relative_name() {
     if (isStatic() || is_outer_this) {
       return null;
@@ -184,6 +192,7 @@ public class FieldInfo extends DaikonVariableInfo {
   */
 
   /** static final fields are NOMOD. */
+  @Override
   public EnumSet<VarFlags> get_var_flags() {
     EnumSet<VarFlags> flags = super.get_var_flags();
     int modbits = field.getModifiers();

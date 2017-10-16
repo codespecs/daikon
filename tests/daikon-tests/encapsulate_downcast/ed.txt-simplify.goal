@@ -51,8 +51,8 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 ===========================================================================
 misc.Person.Person(java.lang.String, int, int):::EXIT
 (EQ (hash (select |_name| |this|)) (hash |__orig__name|))
+(EQ (select |toString| (select |_name| |this|)) (select |toString| |name|))
 (EQ (select |_height| |this|) |__orig__height|)
 (EQ (select |_weight| |this|) |__orig__weight|)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: name.toString is printable
-(EQ (select |toString| (select |_name| |this|)) (select |toString| |name|))
 (EQ (select |toString| |name|) (select |toString| |__orig__name|))
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: name.toString is printable

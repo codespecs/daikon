@@ -7,8 +7,9 @@ import plume.*;
  * conditions:
  *
  * <ul>
- *   <li>the Invariant is a Comparison (which reports &lt;, &gt;, =, &le;, or &ge;)
- *   <li>the relationship reported by the comparison is = (not &lt;, &le;, &gt;, or &ge;)
+ *   <li>the Invariant is an EqualityComparison (its relationship is =, not &lt;, &le;, &gt;, or
+ *       &ge;).
+ *   <li>the invariant is statistically satisfied (its confidence is above the limit)
  * </ul>
  *
  * This does not consider PairwiseIntComparison to be an equality invariant.
@@ -20,9 +21,10 @@ public final class IsEqualityComparison implements Filter<Invariant> {
 
   private IsEqualityComparison() {}
 
+  @Override
   public boolean accept(Invariant inv) {
-    if (!(inv instanceof Comparison)) return false;
-    double chance_conf = ((Comparison) inv).eq_confidence();
+    if (!(inv instanceof EqualityComparison)) return false;
+    double chance_conf = ((EqualityComparison) inv).eq_confidence();
     return chance_conf > Invariant.dkconfig_confidence_limit;
   }
 

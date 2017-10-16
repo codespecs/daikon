@@ -61,6 +61,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFacto
   //   base1 is the sequence
   //   base2 and base3 are the scalars
 
+  @Override
   public TernaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
 
     // check if the derivations are globally disabled

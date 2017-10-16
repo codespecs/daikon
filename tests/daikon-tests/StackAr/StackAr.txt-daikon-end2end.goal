@@ -28,6 +28,7 @@ this.topOfStack <= size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -62,6 +63,7 @@ return == false
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT;condition="orig(topOfStack == -1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -73,7 +75,6 @@ this.topOfStack == -1
 return == true
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
 this.theArray.getClass().getName().length() != size(this.theArray[])
@@ -81,6 +82,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT;condition="not(orig(topOfStack == -1))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -92,7 +94,6 @@ this.theArray.getClass().getName().length() == 18
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
 this.topOfStack <= size(this.theArray[])-1
@@ -103,6 +104,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT;condition="topOfStack == -1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -114,7 +116,6 @@ this.topOfStack == -1
 return == true
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
 this.theArray.getClass().getName().length() != size(this.theArray[])
@@ -122,6 +123,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT;condition="not(topOfStack == -1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -133,7 +135,6 @@ this.theArray.getClass().getName().length() == 18
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
 this.topOfStack <= size(this.theArray[])-1
@@ -166,6 +167,7 @@ this.topOfStack >= 0
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -204,6 +206,7 @@ this.topOfStack < size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="orig(topOfStack == -1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -214,7 +217,6 @@ this.theArray[].getClass().getName() elements == null
 this.topOfStack == -1
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
 this.theArray.getClass().getName().length() != size(this.theArray[])
@@ -222,6 +224,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="not(orig(topOfStack == -1))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -232,7 +235,6 @@ this.theArray.getClass().getName().length() == 18
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
 this.topOfStack <= size(this.theArray[])-1
@@ -243,6 +245,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="topOfStack == -1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -253,7 +256,6 @@ this.theArray[].getClass().getName() elements == null
 this.topOfStack == -1
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
 this.theArray.getClass().getName().length() != size(this.theArray[])
@@ -261,6 +263,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="not(topOfStack == -1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -271,7 +274,6 @@ this.theArray.getClass().getName().length() == 18
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
 this.topOfStack <= size(this.theArray[])-1
@@ -282,6 +284,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="orig(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.topOfStack == size(this.theArray[])-1
@@ -293,13 +296,13 @@ this.theArray[] elements != null
 return == true
 this.theArray.getClass().getName().length() == 18
 this.theArray[this.topOfStack+1..] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack != this.theArray.getClass().getName().length()
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
 this.theArray.getClass().getName().length() != size(this.theArray[])
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="not(orig(topOfStack == theArray.length - 1))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -311,7 +314,6 @@ this.theArray.getClass().getName().length() == 18
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
@@ -321,6 +323,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="topOfStack == theArray.length - 1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.topOfStack == size(this.theArray[])-1
@@ -332,13 +335,13 @@ this.theArray[] elements != null
 return == true
 this.theArray.getClass().getName().length() == 18
 this.theArray[this.topOfStack+1..] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack != this.theArray.getClass().getName().length()
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
 this.theArray.getClass().getName().length() != size(this.theArray[])
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT;condition="not(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -350,7 +353,6 @@ this.theArray.getClass().getName().length() == 18
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
@@ -397,6 +399,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -437,7 +440,6 @@ this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
 this.topOfStack == -1
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= size(this.theArray[])-1
 orig(this.topOfStack) < this.theArray.getClass().getName().length()
@@ -457,6 +459,7 @@ this.topOfStack < size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT;condition="topOfStack == -1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -467,7 +470,6 @@ this.theArray[].getClass().getName() elements == null
 this.topOfStack == -1
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= size(this.theArray[])-1
 orig(this.topOfStack) < this.theArray.getClass().getName().length()
@@ -479,6 +481,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT;condition="orig(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(this.topOfStack) == size(this.theArray[])-1
 orig(this.topOfStack) == orig(size(this.theArray[]))-1
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -491,12 +494,12 @@ this.topOfStack == -1
 orig(this.theArray[]) elements != null
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.theArray.getClass().getName().length() > size(this.theArray[])
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT;condition="not(orig(topOfStack == theArray.length - 1))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -511,7 +514,6 @@ size(this.theArray[]) >= 1
 this.theArray[0..this.topOfStack] == []
 orig(this.theArray[0..this.topOfStack]) elements != null
 orig(this.theArray[0..this.topOfStack]) elements are equal
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] is a subset of orig(this.theArray[])
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack < size(this.theArray[])-1
@@ -526,6 +528,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT;condition="topOfStack == theArray.length - 1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.topOfStack == size(this.theArray[])-1
@@ -535,10 +538,10 @@ this.theArray.getClass().getName() == java.lang.Object[].class
 this.theArray[] == []
 this.theArray[].getClass().getName() == []
 this.theArray.getClass().getName().length() == 18
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT;condition="not(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -550,7 +553,6 @@ this.topOfStack == -1
 this.theArray.getClass().getName().length() == 18
 size(this.theArray[]) >= 1
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack < size(this.theArray[])-1
 orig(this.topOfStack) < this.theArray.getClass().getName().length()
@@ -617,6 +619,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -675,7 +678,6 @@ this.theArray[orig(this.topOfStack)] == null
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -687,6 +689,7 @@ DataStructures.StackAr.pop():::EXIT;condition="not(orig(topOfStack == -1))"
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT;condition="topOfStack == -1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -698,13 +701,13 @@ this.theArray.getClass().getName().length() == 18
 size(this.theArray[]) one of { 2, 3, 20 }
 this.theArray[0..this.topOfStack] == []
 this.theArray[0..orig(this.topOfStack)] == [null]
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] is a subset of orig(this.theArray[])
 this.theArray[] elements == this.theArray[orig(this.topOfStack)]
 this.theArray[0..orig(this.topOfStack)] is a subsequence of orig(this.theArray[])
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT;condition="not(topOfStack == -1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[this.topOfStack] == this.theArray[orig(this.topOfStack)-1]
@@ -723,7 +726,6 @@ this.theArray[orig(this.topOfStack)] == null
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -738,6 +740,7 @@ this.theArray[this.topOfStack..orig(this.topOfStack)-1] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT;condition="orig(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(this.topOfStack) == size(this.theArray[])-1
 orig(this.topOfStack) == orig(size(this.theArray[]))-1
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -754,7 +757,6 @@ this.theArray[this.topOfStack+1..] == [null]
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[orig(this.topOfStack)] == null
 this.theArray[orig(this.topOfStack)+1..] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - size(this.theArray[]) + 2 == 0
 this.theArray[this.topOfStack..orig(this.topOfStack)-1] elements == this.theArray[this.topOfStack]
 this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStack)]
@@ -763,6 +765,7 @@ orig(this.theArray[this.topOfStack..]) elements == orig(this.theArray[this.topOf
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT;condition="not(orig(topOfStack == theArray.length - 1))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -780,7 +783,6 @@ orig(this.theArray[0..this.topOfStack]) contains no duplicates
 orig(this.theArray[0..this.topOfStack]) elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] is a subset of orig(this.theArray[])
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack < this.theArray.getClass().getName().length()
@@ -796,6 +798,7 @@ this.theArray[this.topOfStack+1..orig(this.topOfStack)] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT;condition="not(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -810,7 +813,6 @@ this.theArray[orig(this.topOfStack)] == null
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -822,6 +824,7 @@ this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStac
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT;condition="isEmpty()"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -833,13 +836,13 @@ this.theArray.getClass().getName().length() == 18
 size(this.theArray[]) one of { 2, 3, 20 }
 this.theArray[0..this.topOfStack] == []
 this.theArray[0..orig(this.topOfStack)] == [null]
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] is a subset of orig(this.theArray[])
 this.theArray[] elements == this.theArray[orig(this.topOfStack)]
 this.theArray[0..orig(this.topOfStack)] is a subsequence of orig(this.theArray[])
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT;condition="not(isEmpty())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[this.topOfStack] == this.theArray[orig(this.topOfStack)-1]
@@ -858,7 +861,6 @@ this.theArray[orig(this.topOfStack)] == null
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -873,6 +875,7 @@ this.theArray[this.topOfStack..orig(this.topOfStack)-1] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT;condition="not(orig(isEmpty()))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -890,7 +893,6 @@ orig(this.theArray[0..this.topOfStack]) contains no duplicates
 orig(this.theArray[0..this.topOfStack]) elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -1221,6 +1223,7 @@ DataStructures.StackAr.push(java.lang.Object):::EXCEPTION97;condition="orig(isFu
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1257,7 +1260,6 @@ x.getClass().getName().length() one of { 16, 22, 24 }
 x.getClass().getName().length() == 0  (mod 2)
 orig(this.theArray[post(this.topOfStack)..]) elements == null
 this.theArray[orig(this.topOfStack)+1..this.topOfStack-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack - orig(this.topOfStack) - 1 == 0
@@ -1302,6 +1304,7 @@ this.theArray[orig(this.topOfStack)..this.topOfStack-1] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="not(topOfStack == -1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1318,7 +1321,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[0..this.topOfStack] elements != null
 orig(this.theArray[post(this.topOfStack)..]) elements == null
 this.theArray[orig(this.topOfStack)+1..this.topOfStack-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack - orig(this.topOfStack) - 1 == 0
@@ -1342,6 +1344,7 @@ orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="not(orig(topOfStack == theArray.length - 1))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1360,7 +1363,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[0..this.topOfStack] elements != null
 orig(this.theArray[post(this.topOfStack)..]) elements == null
 this.theArray[orig(this.topOfStack)+1..this.topOfStack-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack - orig(this.topOfStack) - 1 == 0
@@ -1384,6 +1386,7 @@ orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="topOfStack == theArray.length - 1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack == size(this.theArray[])-1
 this.topOfStack == orig(size(this.theArray[]))-1
 orig(x) == this.theArray[this.topOfStack]
@@ -1401,7 +1404,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[this.topOfStack+1..] == []
 orig(this.theArray[post(this.topOfStack)..]) == [null]
 orig(this.theArray[post(this.topOfStack)..]) elements == null
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
@@ -1421,6 +1423,7 @@ orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="not(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1437,7 +1440,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[0..this.topOfStack] elements != null
 orig(this.theArray[post(this.topOfStack)..]) elements == null
 this.theArray[orig(this.topOfStack)+1..this.topOfStack-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 this.theArray[] is a superset of orig(this.theArray[])
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
@@ -1460,6 +1462,7 @@ orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="not(isEmpty())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1476,7 +1479,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[0..this.topOfStack] elements != null
 orig(this.theArray[post(this.topOfStack)..]) elements == null
 this.theArray[orig(this.topOfStack)+1..this.topOfStack-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack - orig(this.topOfStack) - 1 == 0
@@ -1500,6 +1502,7 @@ orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="orig(isEmpty())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1518,7 +1521,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[0..this.topOfStack-1] == []
 orig(this.theArray[0..post(this.topOfStack)]) == [null]
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack <= size(this.theArray[])-1
@@ -1539,6 +1541,7 @@ size(this.theArray[])-1 != x.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="not(orig(isEmpty()))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1561,7 +1564,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[0..this.topOfStack] elements != null
 orig(this.theArray[post(this.topOfStack)..]) elements == null
 this.theArray[orig(this.topOfStack)+1..this.topOfStack-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack - orig(this.topOfStack) - 1 == 0
@@ -1586,6 +1588,7 @@ this.theArray[orig(this.topOfStack)..this.topOfStack-1] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="isFull()"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack == size(this.theArray[])-1
 this.topOfStack == orig(size(this.theArray[]))-1
 orig(x) == this.theArray[this.topOfStack]
@@ -1604,7 +1607,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[this.topOfStack+1..] == []
 orig(this.theArray[post(this.topOfStack)..]) == [null]
 orig(this.theArray[post(this.topOfStack)..]) elements == null
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
@@ -1624,6 +1626,7 @@ orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="not(isFull())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1642,7 +1645,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[0..this.topOfStack] elements != null
 orig(this.theArray[post(this.topOfStack)..]) elements == null
 this.theArray[orig(this.topOfStack)+1..this.topOfStack-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 this.theArray[] is a superset of orig(this.theArray[])
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
@@ -1665,6 +1667,7 @@ orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT;condition="not(orig(isFull()))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(x) == this.theArray[this.topOfStack]
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
@@ -1683,7 +1686,6 @@ x.getClass().getName().length() == 0  (mod 2)
 this.theArray[0..this.topOfStack] elements != null
 orig(this.theArray[post(this.topOfStack)..]) elements == null
 this.theArray[orig(this.topOfStack)+1..this.topOfStack-1] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack - orig(this.topOfStack) - 1 == 0
@@ -1869,6 +1871,7 @@ DataStructures.StackAr.top():::EXIT75;condition="not(orig(isEmpty()))"
 ===========================================================================
 DataStructures.StackAr.top():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -1913,7 +1916,6 @@ return.getClass().getName().length() one of { 16, 22, 24 }
 return.getClass().getName().length() == 0  (mod 2)
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return.getClass().getName() in this.theArray[].getClass().getName()
 this.topOfStack <= size(this.theArray[])-1
 (this.topOfStack >> return.getClass().getName().length() == 0)
@@ -1944,6 +1946,7 @@ this.topOfStack >= 0
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="topOfStack == -1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -1955,7 +1958,6 @@ this.topOfStack == -1
 return == null
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] elements == return
 this.topOfStack <= size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
@@ -1964,6 +1966,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="not(topOfStack == -1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 return == this.theArray[this.topOfStack]
@@ -1982,7 +1985,6 @@ this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return.getClass().getName() in this.theArray[].getClass().getName()
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
@@ -2000,6 +2002,7 @@ size(this.theArray[])-1 != return.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="orig(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.topOfStack == size(this.theArray[])-1
@@ -2014,7 +2017,6 @@ return.getClass().getName().length() one of { 16, 22, 24 }
 return.getClass().getName().length() == 0  (mod 2)
 this.theArray[this.topOfStack+1..] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return.getClass().getName() in this.theArray[].getClass().getName()
 this.topOfStack != this.theArray.getClass().getName().length()
 (this.topOfStack >> return.getClass().getName().length() == 0)
@@ -2028,6 +2030,7 @@ size(this.theArray[]) != return.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="not(orig(topOfStack == theArray.length - 1))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -2042,7 +2045,6 @@ this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return in this.theArray[]
 return.getClass().getName() in this.theArray[].getClass().getName()
 this.topOfStack <= this.theArray.getClass().getName().length()
@@ -2061,6 +2063,7 @@ size(this.theArray[])-1 != return.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="topOfStack == theArray.length - 1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.topOfStack == size(this.theArray[])-1
@@ -2075,7 +2078,6 @@ return.getClass().getName().length() one of { 16, 22, 24 }
 return.getClass().getName().length() == 0  (mod 2)
 this.theArray[this.topOfStack+1..] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return.getClass().getName() in this.theArray[].getClass().getName()
 this.topOfStack != this.theArray.getClass().getName().length()
 (this.topOfStack >> return.getClass().getName().length() == 0)
@@ -2089,6 +2091,7 @@ size(this.theArray[]) != return.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="not(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -2103,7 +2106,6 @@ this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return in this.theArray[]
 return.getClass().getName() in this.theArray[].getClass().getName()
 this.topOfStack <= this.theArray.getClass().getName().length()
@@ -2122,6 +2124,7 @@ size(this.theArray[])-1 != return.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="isEmpty()"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -2133,7 +2136,6 @@ this.topOfStack == -1
 return == null
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] elements == return
 this.topOfStack <= size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
@@ -2142,6 +2144,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="not(isEmpty())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 return == this.theArray[this.topOfStack]
@@ -2160,7 +2163,6 @@ this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return.getClass().getName() in this.theArray[].getClass().getName()
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
@@ -2178,6 +2180,7 @@ size(this.theArray[])-1 != return.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="orig(isEmpty())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -2189,7 +2192,6 @@ this.topOfStack == -1
 return == null
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] elements == return
 this.topOfStack <= size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
@@ -2198,6 +2200,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.top():::EXIT;condition="not(orig(isEmpty()))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 return == this.theArray[this.topOfStack]
@@ -2216,7 +2219,6 @@ this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 return.getClass().getName() in this.theArray[].getClass().getName()
 (this.topOfStack >> this.theArray.getClass().getName().length() == 0)
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
@@ -2560,6 +2562,7 @@ this.theArray[this.topOfStack+1..orig(this.topOfStack)] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -2671,7 +2674,6 @@ return.getClass().getName().length() one of { 16, 24 }
 return.getClass().getName().length() == 0  (mod 8)
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack <= size(this.theArray[])-1
@@ -2710,6 +2712,7 @@ this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStac
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="topOfStack == -1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -2722,7 +2725,6 @@ return.getClass().getName() is printable
 this.theArray.getClass().getName().length() == 18
 return.getClass().getName().length() one of { 16, 24 }
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= size(this.theArray[])-1
 return.getClass().getName() in orig(this.theArray[].getClass().getName())
@@ -2741,6 +2743,7 @@ orig(this.topOfStack) == (size(this.theArray[])-1 >>> return.getClass().getName(
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="not(topOfStack == -1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[this.topOfStack] == this.theArray[orig(this.topOfStack)-1]
@@ -2765,7 +2768,6 @@ this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -2790,6 +2792,7 @@ this.theArray[this.topOfStack..orig(this.topOfStack)-1] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="orig(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(this.topOfStack) == size(this.theArray[])-1
 orig(this.topOfStack) == orig(size(this.theArray[]))-1
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -2802,7 +2805,6 @@ this.theArray.getClass().getName().length() == 18
 return.getClass().getName().length() one of { 16, 24 }
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[orig(this.topOfStack)+1..] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= this.theArray.getClass().getName().length()
 return.getClass().getName() in orig(this.theArray[].getClass().getName())
@@ -2814,6 +2816,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="not(orig(topOfStack == theArray.length - 1))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -2831,7 +2834,6 @@ this.theArray[0..orig(this.topOfStack)] contains no duplicates
 orig(this.theArray[0..this.topOfStack]) contains no duplicates
 orig(this.theArray[0..this.topOfStack]) elements != null
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] is a subset of orig(this.theArray[])
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack < this.theArray.getClass().getName().length()
@@ -2856,6 +2858,7 @@ this.theArray[this.topOfStack+1..orig(this.topOfStack)] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="topOfStack == theArray.length - 1"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.topOfStack == size(this.theArray[])-1
@@ -2866,10 +2869,10 @@ this.theArray[] == []
 this.theArray[].getClass().getName() == []
 return == null
 this.theArray.getClass().getName().length() == 18
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="not(topOfStack == theArray.length - 1)"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -2885,7 +2888,6 @@ return.getClass().getName().length() == 0  (mod 8)
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -2905,6 +2907,7 @@ size(this.theArray[])-1 != return.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="isEmpty()"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
@@ -2917,7 +2920,6 @@ return.getClass().getName() is printable
 this.theArray.getClass().getName().length() == 18
 return.getClass().getName().length() one of { 16, 24 }
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= size(this.theArray[])-1
 return.getClass().getName() in orig(this.theArray[].getClass().getName())
@@ -2936,6 +2938,7 @@ orig(this.topOfStack) == (size(this.theArray[])-1 >>> return.getClass().getName(
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="not(isEmpty())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[this.topOfStack] == this.theArray[orig(this.topOfStack)-1]
@@ -2960,7 +2963,6 @@ this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -2985,6 +2987,7 @@ this.theArray[this.topOfStack..orig(this.topOfStack)-1] is a subsequence of orig
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="orig(isEmpty())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -2996,7 +2999,6 @@ this.topOfStack == -1
 return == null
 this.theArray.getClass().getName().length() == 18
 this.theArray[0..this.topOfStack] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= size(this.theArray[])-1
 (size(this.theArray[]) >> this.theArray.getClass().getName().length() == 0)
 this.theArray.getClass().getName().length() != size(this.theArray[])
@@ -3004,6 +3006,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="not(orig(isEmpty()))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -3026,7 +3029,6 @@ orig(this.theArray[0..this.topOfStack]) elements != null
 this.theArray[this.topOfStack+1..orig(this.topOfStack)] == [null]
 this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] == []
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -3047,6 +3049,7 @@ this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStac
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="isFull()"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] == orig(this.theArray[])
 this.topOfStack == orig(this.topOfStack)
 this.topOfStack == size(this.theArray[])-1
@@ -3057,10 +3060,10 @@ this.theArray[] == []
 this.theArray[].getClass().getName() == []
 return == null
 this.theArray.getClass().getName().length() == 18
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="not(isFull())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -3076,7 +3079,6 @@ return.getClass().getName().length() == 0  (mod 8)
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= this.theArray.getClass().getName().length()
 this.topOfStack < size(this.theArray[])-1
@@ -3096,6 +3098,7 @@ size(this.theArray[])-1 != return.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="orig(isFull())"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 orig(this.topOfStack) == size(this.theArray[])-1
 orig(this.topOfStack) == orig(size(this.theArray[]))-1
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
@@ -3108,7 +3111,6 @@ this.theArray.getClass().getName().length() == 18
 return.getClass().getName().length() one of { 16, 24 }
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[orig(this.topOfStack)+1..] == []
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack <= this.theArray.getClass().getName().length()
 return.getClass().getName() in orig(this.theArray[].getClass().getName())
@@ -3120,6 +3122,7 @@ this.theArray.getClass().getName().length() != size(this.theArray[])
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT;condition="not(orig(isFull()))"
 this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray.getClass().getName().length() == orig(this.theArray.getClass().getName()).length()
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
@@ -3137,7 +3140,6 @@ this.theArray[0..orig(this.topOfStack)] contains no duplicates
 orig(this.theArray[0..this.topOfStack]) contains no duplicates
 orig(this.theArray[0..this.topOfStack]) elements != null
 this.theArray.getClass().getName() != return.getClass().getName()
-this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.theArray[] is a subset of orig(this.theArray[])
 this.topOfStack <= orig(this.topOfStack)
 this.topOfStack < this.theArray.getClass().getName().length()

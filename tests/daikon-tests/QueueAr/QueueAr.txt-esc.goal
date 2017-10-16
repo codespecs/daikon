@@ -56,7 +56,6 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable
 this.theArray[\old(this.front)] == null
 \typeof(this.theArray) != \typeof(\result)
-\typeof(this.theArray) == \old(\typeof(this.theArray))
 this.currentSize - \old(this.currentSize) + 1 == 0
 (this.theArray.length-1 == 0) ==> (this.currentSize == 0)
 this.currentSize <= this.theArray.length-1
@@ -94,7 +93,6 @@ this.theArray[this.currentSize] == this.theArray[\old(this.back)]
 this.currentSize == 0
 (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null))
-\typeof(this.theArray) == \old(\typeof(this.theArray))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.currentSize]))
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
@@ -119,7 +117,6 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 this.currentSize >= 1
 this.theArray[this.front] != null
 \old(this.theArray[\new(this.back)]) == null
-\typeof(this.theArray) == \old(\typeof(this.theArray))
 \typeof(this.theArray) != \old(\typeof(x))
 !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \old(\typeof(x))))
 (this.front >> this.currentSize == 0)
@@ -221,7 +218,6 @@ modifies this.theArray[this.currentSize], this.theArray[this.currentSize-1], thi
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == null)
 (\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable)
 (\result != null)  ==>  (\typeof(this.theArray) != \typeof(\result))
-\typeof(this.theArray) == \old(\typeof(this.theArray))
 (\result != null)  ==>  (!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \typeof(\result))))
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::ENTER
@@ -261,7 +257,6 @@ modifies this.theArray[this.currentSize], this.theArray[this.currentSize-1], thi
 (this.currentSize == 0)  ==>  ((\forall int i; (this.currentSize <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.front])))
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.back])
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.front])
-\typeof(this.theArray) == \old(\typeof(this.theArray))
 ===========================================================================
 DataStructures.QueueAr.isFull():::ENTER
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.currentSize this.front this.back size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.currentSize] this.theArray[this.currentSize-1] this.theArray[this.currentSize..] this.theArray[this.currentSize+1..] this.theArray[0..this.currentSize] this.theArray[0..this.currentSize-1] this.theArray[this.front] this.theArray[this.front-1] this.theArray[this.front..] this.theArray[this.front+1..] this.theArray[0..this.front] this.theArray[0..this.front-1] this.theArray[this.back] this.theArray[this.back-1] this.theArray[this.back..] this.theArray[this.back+1..] this.theArray[0..this.back] this.theArray[0..this.back-1]
@@ -279,7 +274,6 @@ modifies this.theArray[this.currentSize], this.theArray[this.currentSize-1], thi
 (\result == true)  ==>  (warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[] contains no duplicates)
 (\result == true)  ==>  (\nonnullelements(this.theArray))
 (\result == true)  ==>  ((\forall int i; (this.currentSize <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != null)))
-\typeof(this.theArray) == \old(\typeof(this.theArray))
 ===========================================================================
 DataStructures.QueueAr.makeEmpty():::ENTER
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.currentSize this.front this.back size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.currentSize] this.theArray[this.currentSize-1] this.theArray[this.currentSize..] this.theArray[this.currentSize+1..] this.theArray[0..this.currentSize] this.theArray[0..this.currentSize-1] this.theArray[this.front] this.theArray[this.front-1] this.theArray[this.front..] this.theArray[this.front+1..] this.theArray[0..this.front] this.theArray[0..this.front-1] this.theArray[this.back] this.theArray[this.back-1] this.theArray[this.back..] this.theArray[this.back+1..] this.theArray[0..this.back] this.theArray[0..this.back-1]
@@ -303,7 +297,6 @@ this.theArray[this.currentSize] == this.theArray[\old(this.back)]
 this.currentSize == 0
 (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null))
-\typeof(this.theArray) == \old(\typeof(this.theArray))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.currentSize]))
 this.currentSize <= this.back
 this.currentSize <= \old(this.currentSize)

@@ -39,6 +39,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   }
 
   // throw out Program points that are Conditional,
+  @Override
   public void visit(PptNode node) {
     PptTopLevel ppt = node.getPpt1();
     if ((ppt instanceof PptConditional)) {
@@ -49,6 +50,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   }
 
   /** Anytime a consequent matches a target, we should score it as correct */
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

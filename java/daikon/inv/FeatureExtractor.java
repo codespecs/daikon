@@ -773,6 +773,7 @@ public final class FeatureExtractor {
     // Compares an Object to this
     // Throws ClassCastException if argument is not an IntDoublePair
     /*@Pure*/
+    @Override
     public int compareTo(/*>>>@GuardSatisfied IntDoublePair this,*/ IntDoublePair p) {
       if (this.number < p.number) {
         return -1;

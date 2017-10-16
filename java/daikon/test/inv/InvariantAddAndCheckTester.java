@@ -247,7 +247,9 @@ public class InvariantAddAndCheckTester extends TestCase {
       //  else {
       //  invariantTestCases.add(currentCase);
       String results = AddAndCheckTestCase.runTest(commands);
-      if (results == null) break;
+      if (results == null) {
+        break;
+      }
       if (!(results.length() == 0)) {
         //  output.print(currentCase.getDiffString());
         output.append(results);
@@ -266,7 +268,9 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     while (true) {
       String commands = AddAndCheckTestCase.generateTest(input);
-      if (commands == null) break;
+      if (commands == null) {
+        break;
+      }
       output.append(commands);
     }
     return output.toString();

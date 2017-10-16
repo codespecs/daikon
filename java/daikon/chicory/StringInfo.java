@@ -23,6 +23,7 @@ public class StringInfo extends DaikonVariableInfo {
   }
 
   /** Returns a String that contains a string representation of val, used for dtrace information. */
+  @Override
   @SuppressWarnings("unchecked")
   public String getDTraceValueString(Object val) {
     if (isArray) {
@@ -119,15 +120,18 @@ public class StringInfo extends DaikonVariableInfo {
   }
 
   /** toString is a function */
+  @Override
   public VarKind get_var_kind() {
     return VarKind.FUNCTION;
   }
 
-  /** Returns the name of this function. May return null. */
+  /** Returns the name of this function. */
+  @Override
   public String get_relative_name() {
     return "toString()";
   }
 
+  @Override
   public EnumSet<VarFlags> get_var_flags() {
     EnumSet<VarFlags> flags = super.get_var_flags().clone();
     flags.add(VarFlags.SYNTHETIC);

@@ -54,6 +54,7 @@ class NullReplacer extends DepthFirstVisitor {
    * This method should not be directly used by user of this class; however it must be public to
    * full-fill the visitor interface. If n represents null then it is replaced by "0".
    */
+  @Override
   public void visit(NodeToken n) {
     if (n.beginLine == columnshiftline) {
       n.beginColumn = n.beginColumn - columnshift;

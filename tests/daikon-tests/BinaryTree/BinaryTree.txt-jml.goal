@@ -22,8 +22,8 @@ x.getClass().getName() == DataStructures.MyInteger.class.getName()
 DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT
     Variables: this this.root x x.getClass().getName() return return.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName())
 this.root == \old(this.root)
-(\result != null)  ==>  (\result.getClass().getName() == DataStructures.MyInteger.class.getName())
 (\result != null)  ==>  (\result.getClass().getName() == \old(x.getClass().getName()))
+(\result != null)  ==>  (\result.getClass().getName() == DataStructures.MyInteger.class.getName())
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
     Variables: this this.root x x.getClass().getName() t

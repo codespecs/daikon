@@ -28,6 +28,7 @@ RUN yum -q -y upgrade && yum -q -y install \
   java-1.8.0-openjdk-devel \
 && yum -q -y install \
   ctags \
+  curl \
   gcc-c++ \
   graphviz \
   netpbm \
@@ -36,4 +37,5 @@ RUN yum -q -y upgrade && yum -q -y install \
   texinfo \
   texinfo-tex \
   texlive \
+  wget \
 && yum -q clean all

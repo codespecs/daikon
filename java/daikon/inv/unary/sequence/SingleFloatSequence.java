@@ -25,6 +25,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
   }
 
   /** Returns whether or not the specified types are valid. */
+  @Override
   public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1)
         && vis[0].file_rep_type.baseIsFloat()
@@ -34,6 +35,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
+  @Override
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
@@ -49,6 +51,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);

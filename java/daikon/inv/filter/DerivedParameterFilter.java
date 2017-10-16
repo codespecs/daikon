@@ -9,6 +9,7 @@ import daikon.inv.*;
  * true.
  */
 public class DerivedParameterFilter extends InvariantFilter {
+  @Override
   public String getDescription() {
     return "Suppress parameter-derived postcondition invariants";
   }
@@ -32,6 +33,7 @@ public class DerivedParameterFilter extends InvariantFilter {
    * it is either a parameter, or a variable derived from a parameter, when we think that the
    * parameter itself may have changed by virtue of not having a "param == orig(param)" invariant.
    */
+  @Override
   boolean shouldDiscardInvariant(Invariant inv) {
     if (inv.ppt.parent.ppt_name.isExitPoint()) {
       PrintInvariants.debugFiltering.fine("\tconsidering DPF for vars " + inv.ppt.varNames());

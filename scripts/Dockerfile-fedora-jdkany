@@ -20,12 +20,14 @@ RUN dnf -qy upgrade && dnf -qy install \
   m4 \
   make \
   redhat-lsb \
+  rsync \
   tar \
   unzip \
   which \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel \
 && dnf -qy install \
+  curl \
   ctags \
   gcc-c++ \
   graphviz \
@@ -35,4 +37,5 @@ RUN dnf -qy upgrade && dnf -qy install \
   texinfo \
   texinfo-tex \
   texlive \
+  wget \
 && dnf -q clean all

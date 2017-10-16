@@ -79,6 +79,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqIntEqual"
   #define COMPAREQUALS(a,b) (a == b)
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "pairwiseEqual"
   #define PAIRWISEINTEQUAL PairwiseIntEqual
@@ -87,6 +88,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqFloatEqual"
   #define COMPAREQUALS(a,b) (a == b)
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "pairwiseEqual"
   #define PAIRWISEINTEQUAL PairwiseFloatEqual
@@ -95,6 +97,7 @@ The correct way to build the system is to run 'make'.
   #define SEQSEQINTEQUALstring "SeqSeqStringEqual"
   #define COMPAREQUALS(a,b) (a == b)
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "pairwiseEqual"
   // #define PAIRWISEINTEQUAL PairwiseStringEqual
@@ -104,6 +107,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqIntGreaterThan
   #define COMPAREQUALS(a,b) (a < b)
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define EQUALSstringDBC "lexLT"
   #define PAIRWISEINTEQUAL PairwiseIntLessThan
@@ -113,6 +117,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqFloatGreaterThan
   #define COMPAREQUALS(a,b) (a < b)
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define EQUALSstringDBC "lexLT"
   #define PAIRWISEINTEQUAL PairwiseFloatLessThan
@@ -122,6 +127,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqStringGreaterThan
   #define COMPAREQUALS(a,b) (a < b)
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define EQUALSstringDBC "lexLT"
   // #define PAIRWISEINTEQUAL PairwiseStringLessThan
@@ -131,6 +137,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqIntLessThan
   #define COMPAREQUALS(a,b) (a > b)
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define EQUALSstringDBC "lexGT"
   #define PAIRWISEINTEQUAL PairwiseIntGreaterThan
@@ -140,6 +147,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqFloatLessThan
   #define COMPAREQUALS(a,b) (a > b)
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define EQUALSstringDBC "lexGT"
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
@@ -149,6 +157,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqStringLessThan
   #define COMPAREQUALS(a,b) (a > b)
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define EQUALSstringDBC "lexGT"
   // #define PAIRWISEINTEQUAL PairwiseStringGreaterThan
@@ -158,6 +167,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqIntGreaterEqual
   #define COMPAREQUALS(a,b) (a <= b)
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define EQUALSstringDBC "lexLTE"
   #define PAIRWISEINTEQUAL PairwiseIntLessEqual
@@ -167,6 +177,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqFloatGreaterEqual
   #define COMPAREQUALS(a,b) (a <= b)
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define EQUALSstringDBC "lexLTE"
   #define PAIRWISEINTEQUAL PairwiseFloatLessEqual
@@ -176,6 +187,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqStringGreaterEqual
   #define COMPAREQUALS(a,b) (a <= b)
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define EQUALSstringDBC "lexLTE"
   // #define PAIRWISEINTEQUAL PairwiseStringLessEqual
@@ -185,6 +197,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqIntLessEqual
   #define COMPAREQUALS(a,b) (a >= b)
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define EQUALSstringDBC "lexGTE"
   #define PAIRWISEINTEQUAL PairwiseIntGreaterEqual
@@ -194,6 +207,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqFloatLessEqual
   #define COMPAREQUALS(a,b) (a >= b)
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define EQUALSstringDBC "lexGTE"
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterEqual
@@ -203,6 +217,7 @@ The correct way to build the system is to run 'make'.
   #define SEQCOMPAR_SWAP SeqSeqStringLessEqual
   #define COMPAREQUALS(a,b) (a >= b)
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define EQUALSstringDBC "lexGTE"
   // #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
@@ -244,17 +259,21 @@ import typequals.*;
 /**
  * Represents invariants between two sequences of PRIMITIVE values. If order matters for each
  * variable (which it does by default), then the sequences are compared lexically. Prints as
- * <code>x[] EQUALShtml y[] lexically</code>.
+ * {@code x[] EQUALScode y[] lexically}.
  *
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
  * <p>If order doesn't matter for each variable, then the sequences are compared to see if they are
- * set equivalent. Prints as <code>x[] == y[]</code>.
+ * set equivalent. Prints as {@code x[] == y[]}.
  *
 #endif
  * <p>If the auxiliary information (e.g., order matters) doesn't match between two variables, then
  * this invariant cannot apply to those variables.
  */
-public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
+public class SEQSEQINTEQUAL extends SUPERCLASS
+#if defined (EQUAL) || defined(EQUALFLOAT) || defined (EQUALSTRING)
+  implements EqualityComparison
+#endif
+{
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -299,11 +318,13 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** Non-Equal SeqComparison is only valid on integral types */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -337,11 +358,13 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /** Instantiates the invariant on the specified slice */
+  @Override
   protected SEQSEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.hasOrder() && slice.var_infos[1].aux.hasOrder();
     return new SEQSEQINTEQUAL(slice, has_order);
   }
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     return this;
@@ -350,6 +373,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
     #endif
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
     return SEQSEQINTEQUALstring + varNames() + ": ,orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
@@ -357,6 +381,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied SEQSEQINTEQUAL this,*/ OutputFormat format) {
     // System.out.println("Calling " + SEQSEQINTEQUALstring + ".format for: " + repr());
 
@@ -451,6 +476,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
     #endif
   }
 
+  @Override
   public InvariantStatus check_modified(
       PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
@@ -475,6 +501,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     if (logDetail()) {
       log("add_modified (%s, %s)", ArraysMDE.toString(v1), ArraysMDE.toString(v2));
@@ -482,6 +509,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
         return check_modified(v1, v2, count);
   }
 
+  @Override
   protected double computeConfidence() {
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     // It's an equality invariant
@@ -495,21 +523,22 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
 #endif
   }
 
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
   // For Comparison interface
+  @Override
   public double eq_confidence() {
-    #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return getConfidence();
-    #else
-      return Invariant.CONFIDENCE_NEVER;
-    #endif
   }
+#endif
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant o) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant o) {
     return false;
   }
@@ -519,6 +548,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
    * avoid circular isObvious relations.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically(this.ppt.var_infos);
@@ -532,6 +562,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
    * avoid circular isObvious relations.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (logOn()) {
       log("Considering dynamically_someInEquality");
@@ -544,6 +575,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     #ifdef NUMERIC
       VarInfo var1 = vis[0];
@@ -561,6 +593,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -695,6 +728,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
     return null;
   }
 
+  @Override
   public void repCheck() {
     super.repCheck();
     /*
@@ -730,6 +764,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }

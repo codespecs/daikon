@@ -18,15 +18,15 @@ import typequals.*;
  * assumed to hold and is always considered to be statistically justified.
  *
  * <p>The main use for a dummy invariant is to represent a splitting condition that appears in a
- * <code>.spinfo</code> file. The <code>.spinfo</code> file can indicate an arbitrary Java
- * expression, which might not be equivalent to any invariant in Daikon's grammar.
+ * {@code .spinfo} file. The {@code .spinfo} file can indicate an arbitrary Java expression, which
+ * might not be equivalent to any invariant in Daikon's grammar.
  *
  * <p>Ordinarily, Daikon uses splitting conditions to split data, then seeks to use that split data
  * to form conditional invariants out of its standard built-in invariants. If you wish the
  * expression in the .spinfo file to be printed as an invariant, whether or not it is itself
- * discovered by Daikon during invariant detection, then the configuration option <code>
- * daikon.split.PptSplitter.dummy_invariant_level</code> must be set, and formatting information
- * must be supplied in the splitter info file.
+ * discovered by Daikon during invariant detection, then the configuration option {@code
+ * daikon.split.PptSplitter.dummy_invariant_level} must be set, and formatting information must be
+ * supplied in the splitter info file.
  */
 public class DummyInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -62,7 +62,7 @@ public class DummyInvariant extends Invariant {
       /*@Nullable*/ String jml,
       /*@Nullable*/ String dbc,
       /*@Nullable*/ String csharp,
-      boolean desired) {
+      boolean valid) {
     super(ppt);
     daikonFormat = daikonStr;
     javaFormat = java;
@@ -71,7 +71,7 @@ public class DummyInvariant extends Invariant {
     jmlFormat = jml;
     dbcFormat = dbc;
     csharpFormat = csharp;
-    valid = desired;
+    this.valid = valid;
   }
 
   public /*@Prototype*/ DummyInvariant(
@@ -82,7 +82,7 @@ public class DummyInvariant extends Invariant {
       /*@Nullable*/ String jml,
       /*@Nullable*/ String dbc,
       /*@Nullable*/ String csharp,
-      boolean desired) {
+      boolean valid) {
     super();
     daikonFormat = daikonStr;
     javaFormat = java;
@@ -91,7 +91,7 @@ public class DummyInvariant extends Invariant {
     jmlFormat = jml;
     dbcFormat = dbc;
     csharpFormat = csharp;
-    valid = desired;
+    this.valid = valid;
   }
 
   public DummyInvariant instantiate(PptTopLevel parent, VarInfo[] vars) {
@@ -123,7 +123,9 @@ public class DummyInvariant extends Invariant {
       int i = 0;
       while (it.hasNext()) {
         newVars[i++] = it.next();
-        if (i == sliceSize) break;
+        if (i == sliceSize) {
+          break;
+        }
       }
     }
     vars = newVars;
@@ -182,6 +184,7 @@ public class DummyInvariant extends Invariant {
     return inv;
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
@@ -191,6 +194,7 @@ public class DummyInvariant extends Invariant {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();
@@ -283,22 +287,27 @@ public class DummyInvariant extends Invariant {
     }
   }
 
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     throw new Error("Not implemented");
   }
 
+  @Override
   public boolean isSameFormula(Invariant other) {
     throw new Error("Not implemented");
   }
 
+  @Override
   public boolean enabled(/*>>> @Prototype DummyInvariant this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
+  @Override
   public boolean valid_types(/*>>> @Prototype DummyInvariant this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
+  @Override
   protected /*@NonPrototype*/ DummyInvariant instantiate_dyn(
       /*>>> @Prototype DummyInvariant this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");

@@ -37,6 +37,9 @@ public class HtmlToTexinfoTest extends TestCase {
     testJavadocHtmlToTexinfo(
         "Split bi-implications {@code a <==> b} into two separate implications {@code a ==> b} and {@code b ==> a})",
         "Split bi-implications @code{a <==> b} into two separate implications @code{a ==> b} and @code{b ==> a})");
+    testJavadocHtmlToTexinfo(
+        "     * {@code {e1, e2, e3, ...} subset of x[]}.",
+        "     * @code{@{e1, e2, e3, ...@} subset of x[]}.");
   }
 
   private void testJavadocHtmlToTexinfo(String in, String expected) {

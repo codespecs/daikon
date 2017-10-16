@@ -56,10 +56,12 @@ public final class CLASSNAME extends BinaryDerivation {
   /** Boolean. True iff SequencesJoin derived variables should be generated. */
   public static boolean dkconfig_enabled = false;
 
+  @Override
   public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return base1;
   }
 
+  @Override
   public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return base2;
   }
@@ -80,6 +82,7 @@ public final class CLASSNAME extends BinaryDerivation {
    *
    * @param full_vt the value tuple of a program point to compute the derived value from
    */
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
@@ -119,10 +122,10 @@ public final class CLASSNAME extends BinaryDerivation {
       Object e1 = null;
       Object e2 = null;
       if (val1 instanceof PRIMITIVE[]) {
-        e1 = new NUMWRAPPER(((PRIMITIVE[]) val1)[i]);
+        e1 = NUMWRAPPER.valueOf(((PRIMITIVE[]) val1)[i]);
       }
       if (val2 instanceof PRIMITIVE[]) {
-        e2 = new NUMWRAPPER(((PRIMITIVE[]) val2)[i]);
+        e2 = NUMWRAPPER.valueOf(((PRIMITIVE[]) val2)[i]);
       }
       if (val1 instanceof Object[]) {
         e1 = ((Object[]) val1)[i];
@@ -130,10 +133,10 @@ public final class CLASSNAME extends BinaryDerivation {
       if (val2 instanceof Object[]) {
         e2 = ((Object[]) val2)[i];
       }
-      if (e1 == null) e1 = new NUMWRAPPER(0);
-      if (e2 == null) e2 = new NUMWRAPPER(0);
+      if (e1 == null) e1 = NUMWRAPPER.valueOf(0);
+      if (e2 == null) e2 = NUMWRAPPER.valueOf(0);
       // Loses top 8 bits, but we're just mixing two hashCodes.
-      result[i] = (e1.hashCode() << 8) + e2.hashCode();
+      result[i] = ((long) e1.hashCode() << 8L) + e2.hashCode();
     }
 
     /*
@@ -174,6 +177,7 @@ public final class CLASSNAME extends BinaryDerivation {
     return new ValueAndModified(Intern.intern(result), mod);
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     VarInfo var1 = var1();
     VarInfo var2 = var2();
@@ -196,17 +200,20 @@ public final class CLASSNAME extends BinaryDerivation {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return "[" + CLASSSTRING + " of " + var1().name() + " " + var2().name() + "]";
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof CLASSNAME);
   }
 
   /** Returns the ESC name */
   /*@SideEffectFree*/
+  @Override
   public String esc_name(String index) {
     return String.format("join[%s,%s]", var1().esc_name(), var2().esc_name());
   }

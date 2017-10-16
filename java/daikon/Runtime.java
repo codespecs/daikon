@@ -296,8 +296,7 @@ public final class Runtime {
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
-              @SuppressWarnings(
-                  "lock") // TODO: Fix Checker Framework issue 523 and remove this @SuppressWarnings.
+              @SuppressWarnings("lock") // non-final field
               @Override
               public void run() {
                 if (!dtrace_closed) {

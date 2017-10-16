@@ -16,8 +16,8 @@ DataStructures.BinarySearchTree.find(DataStructures.Comparable):::ENTER
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT
 (EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
-(EQ (typeof |return|) |T_DataStructures.MyInteger|)
 (EQ (typeof |return|) (typeof |__orig__x|))
+(EQ (typeof |return|) |T_DataStructures.MyInteger|)
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 (NEQ (hash |x|) null)

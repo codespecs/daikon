@@ -22,6 +22,7 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
     this.printUninteresting = printUninteresting;
   }
 
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

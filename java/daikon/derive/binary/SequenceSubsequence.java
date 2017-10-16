@@ -53,6 +53,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
@@ -68,6 +69,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   /** Returns the lower bound of the slice */
+  @Override
   public Quantify.Term get_lower_bound() {
     if (from_start) {
       return new Quantify.Constant(0);
@@ -77,6 +79,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   /** Returns the upper bound of the slice */
+  @Override
   public Quantify.Term get_upper_bound() {
     if (from_start) {
       return new Quantify.VarPlusOffset(sclvar(), index_shift);
@@ -86,11 +89,13 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   /** Returns the array variable for this slice */
+  @Override
   public VarInfo get_array_var() {
     return seqvar();
   }
 
   /*@SideEffectFree*/
+  @Override
   public String csharp_name(String index) {
     // String lower = get_lower_bound().csharp_name();
     // String upper = get_upper_bound().csharp_name();
@@ -101,6 +106,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
 
   /** Returns the ESC name */
   /*@SideEffectFree*/
+  @Override
   public String esc_name(String index) {
     return String.format(
         "%s[%s..%s]",
@@ -108,6 +114,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   /** returns the JML name for the slice */
+  @Override
   @SuppressWarnings("nullness")
   public String jml_name(String index) {
 
@@ -132,6 +139,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   /** Adds one to the default complexity if index_shift is not 0 */
+  @Override
   public int complexity() {
     return super.complexity() + ((index_shift != 0) ? 1 : 0);
   }

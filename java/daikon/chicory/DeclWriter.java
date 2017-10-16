@@ -257,7 +257,9 @@ public class DeclWriter extends DaikonWriter {
       Member member = mi.member;
 
       // Don't want to instrument these types of methods
-      if (!shouldInstrumentMethod(member)) continue;
+      if (!shouldInstrumentMethod(member)) {
+        continue;
+      }
 
       // Gset the root of the method's traversal pattern
       RootInfo enterRoot = mi.traversalEnter;
@@ -505,6 +507,7 @@ public class DeclWriter extends DaikonWriter {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied VarRelation this*/) {
       return String.format(
           "VarRelation %s (%s->%s) %s [%s]",

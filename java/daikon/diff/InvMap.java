@@ -102,6 +102,7 @@ public class InvMap implements Serializable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied InvMap this*/) {
     String result = "";
     for (PptTopLevel ppt : pptIterable()) {

@@ -112,7 +112,6 @@ DataStructures.DisjSets.unionDisjoint(int, int):::ENTER
 ===========================================================================
 DataStructures.DisjSets.unionDisjoint(int, int):::EXIT
 (EQ (hash (select |s| |this|)) (hash (select |s| |__orig__this|)))
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan.format_simplify_explicit() needs to be implemented: this.s[] > orig(this.s[]) (lexically)
 (EQ |__orig__root1| (select (select elems (select |s| |this|)) |__orig__root2|))
 (EQ (arrayLength (select |s| |this|)) (arrayLength (select |s| |__orig__this|)))
 (EQ (select (select elems (select |s| |this|)) |__orig__root1|) (select (select elems (select |s| |__orig__this|)) |root1|))
@@ -122,6 +121,7 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan.format_simpli
 (EQ (select (select elems (select |s| |this|)) |__orig__root1|) -1)
 (EXISTS (i0) (AND (>= i0 |__orig__root1|) (<= i0 (- (arrayLength (select |s| |this|)) 1)) (EQ (select (select elems (select |s| |this|)) i0) -1) ))
 (EXISTS (i0) (AND (>= i0 0) (<= i0 |__orig__root1|) (EQ (select (select elems (select |s| |this|)) i0) -1) ))
+warning: method daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan.format_simplify_explicit() needs to be implemented: this.s[] > orig(this.s[]) (lexically)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |s| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |s| |__orig__this|)) 1)) (EQ |i| |j|)) (>= (select (select elems (select |s| |this|)) |i|) (select (select elems (select |s| |__orig__this|)) |j|))))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |s| |__orig__this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |s| |this|)) 1)) (EQ |i| |j|))  (EQ (select (select elems (select |s| |__orig__this|)) |i|) (|java-bitwise-or| (select (select elems (select |s| |this|)) |j|) (select (select elems (select |s| |__orig__this|)) |i|))) ))
 SuperSet.format_simplify_explicit(this.s[] is a superset of orig(this.s[])): sub_name=null, super_name=[(select |s| |this|), 0, (- (arrayLength (select |s| |this|)) 1)], for this.s[] is a superset of orig(this.s[])

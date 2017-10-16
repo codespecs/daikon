@@ -100,7 +100,7 @@ public final class FileIO {
 
   /**
    * Boolean. When true, don't print a warning about unmatched procedure entries, which are ignored
-   * by Daikon (unless the <code>--nohierarchy</code> command-line argument is provided).
+   * by Daikon (unless the {@code --nohierarchy} command-line argument is provided).
    */
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
 
@@ -193,6 +193,7 @@ public final class FileIO {
       this.id = id;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied ParentRelation this*/) {
       return parent_ppt_name + "[" + id + "] " + rel_type;
     };
@@ -300,7 +301,9 @@ public final class FileIO {
     while ((line = state.reader.readLine()) != null) {
       debug_decl.log("read line %s%n", line);
       line = line.trim();
-      if (line.length() == 0) break;
+      if (line.length() == 0) {
+        break;
+      }
 
       scanner = new Scanner(line);
       /*@Interned*/ String record = scanner.next().intern();
@@ -771,9 +774,13 @@ public final class FileIO {
     StringBuilderDelimited result = new StringBuilderDelimited(lineSep);
     for (; ; ) {
       String line = reader.readLine();
-      if (line == null || line.equals("")) break;
+      if (line == null || line.equals("")) {
+        break;
+      }
       result.append(line);
-      if (isComment(line)) continue;
+      if (isComment(line)) {
+        continue;
+      }
       ProglangType.list_implementors.add(line.intern());
     }
     return result.toString();
@@ -854,6 +861,7 @@ public final class FileIO {
     // Return true if the invocations print the same
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied Invocation this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
@@ -865,11 +873,13 @@ public final class FileIO {
     }
 
     /*@Pure*/
+    @Override
     public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Invocation this*/) {
       return this.format().hashCode();
     }
@@ -942,9 +952,15 @@ public final class FileIO {
         Arrays.sort(dir_files);
         boolean hasEnd = false;
         for (String f : dir_files) {
-          if (f.endsWith(".end")) hasEnd = true;
-          if (f.endsWith(".end") || f.endsWith(".start")) continue;
-          if (files.contains(f)) continue;
+          if (f.endsWith(".end")) {
+            hasEnd = true;
+          }
+          if (f.endsWith(".end") || f.endsWith(".start")) {
+            continue;
+          }
+          if (files.contains(f)) {
+            continue;
+          }
           files.add(f);
           System.out.println("Reading " + f);
           read_data_trace_file(
@@ -954,7 +970,9 @@ public final class FileIO {
               false,
               ppts_may_be_new);
         }
-        if (hasEnd) break;
+        if (hasEnd) {
+          break;
+        }
         try {
           Thread.sleep(1000);
         } catch (java.lang.InterruptedException e) {
@@ -1894,7 +1912,9 @@ public final class FileIO {
       assert (!vi.is_static_constant) || (vi.value_index == -1)
       // : "Bad value_index " + vi.value_index + " when static_constant_value = " + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
       ;
-      if (vi.is_static_constant) continue;
+      if (vi.is_static_constant) {
+        continue;
+      }
       assert val_index == vi.value_index
       // : "Differing val_index = " + val_index
       // + " and vi.value_index = " + vi.value_index
@@ -2613,6 +2633,7 @@ public final class FileIO {
     }
 
     /*@SideEffectFree*/
+    @Override
     public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/) {
       try {
         return (VarDefinition) super.clone();
@@ -2928,7 +2949,9 @@ public final class FileIO {
     String[] stack = ppt_name.split("[|]");
     List<String> nd_stack = new ArrayList<String>();
     for (String si : stack) {
-      if (nd_stack.contains(si)) continue;
+      if (nd_stack.contains(si)) {
+        continue;
+      }
       nd_stack.add(si);
     }
     return UtilMDE.join(nd_stack, "|").intern();

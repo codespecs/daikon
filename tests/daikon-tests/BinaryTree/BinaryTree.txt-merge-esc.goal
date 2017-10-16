@@ -77,8 +77,8 @@ public class BinarySearchTree<E extends Comparable>
 
   /*@ requires x != null; */
   /*@ requires \typeof(x) == \type(DataStructures.MyInteger); */
-  /*@ ensures \typeof(\result) == \type(DataStructures.MyInteger); */
   /*@ ensures \typeof(\result) == \old(\typeof(x)); */
+  /*@ ensures \typeof(\result) == \type(DataStructures.MyInteger); */
   /**
    * Find an item in the tree.
    * @param x the item to search for.

@@ -242,7 +242,9 @@ public class NISuppression {
 
       // See if this antecedent can be used with the ones we have found so far
       VarInfo[] cvis = consider_inv(inv, s, vis);
-      if (cvis == null) continue;
+      if (cvis == null) {
+        continue;
+      }
 
       // If this is the last suppressor
       if ((idx + 1) == suppressors.length) {
@@ -328,7 +330,9 @@ public class NISuppression {
       }
       // See if this antecedent can be used with the ones we have found so far
       VarInfo[] cvis = consider_inv(inv, s, vis);
-      if (cvis == null) continue;
+      if (cvis == null) {
+        continue;
+      }
 
       // If this is the last suppressor
       if ((idx + 1) == suppressors.length) {
@@ -578,6 +582,7 @@ public class NISuppression {
 
   /** Returns {@code "suppressor && suppressor ... ==> suppressee"}. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied NISuppression this*/) {
     return (UtilMDE.join(suppressors, " && ") + " ==> " + suppressee);
   }

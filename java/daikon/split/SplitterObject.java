@@ -216,6 +216,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied SplitterObject this*/) {
     return (className
         + ": "
@@ -228,6 +229,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /*@Pure*/
+  @Override
   public int compareTo(/*>>>@GuardSatisfied SplitterObject this,*/ SplitterObject o) {
     return this.guid - o.getGUID();
   }

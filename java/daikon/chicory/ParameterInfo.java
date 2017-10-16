@@ -88,11 +88,13 @@ public class ParameterInfo extends DaikonVariableInfo {
   }
 
   /** Parameters are not enclosed in other variable, so they are of kind VARIABLE. */
+  @Override
   public VarKind get_var_kind() {
     return VarKind.VARIABLE;
   }
 
   /** Add IS_PARM to list of variable flags */
+  @Override
   public EnumSet<VarFlags> get_var_flags() {
     // System.out.printf ("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();

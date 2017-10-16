@@ -23,6 +23,7 @@ public final class SequenceSum extends UnaryDerivation {
     super(vi);
   }
 
+  @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
     if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
@@ -50,11 +51,13 @@ public final class SequenceSum extends UnaryDerivation {
     }
   }
 
+  @Override
   protected VarInfo makeVarInfo() {
     return VarInfo.make_scalar_seq_func("sum", null, base, 0);
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceSum);
   }

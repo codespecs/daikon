@@ -116,18 +116,34 @@ public class LogicalCompare {
           || inv instanceof UpperBoundFloat
           || inv instanceof EltLowerBoundFloat
           || inv instanceof EltUpperBoundFloat) {
-        if (filters['b'] && inv.hasUninterestingConstant()) continue;
-        if (filters['B']) continue;
+        if (filters['b'] && inv.hasUninterestingConstant()) {
+          continue;
+        }
+        if (filters['B']) {
+          continue;
+        }
       }
       if (inv instanceof OneOf || inv instanceof OneOfString || inv instanceof OneOfFloat) {
-        if (filters['o'] && inv.hasUninterestingConstant()) continue;
-        if (filters['O']) continue;
+        if (filters['o'] && inv.hasUninterestingConstant()) {
+          continue;
+        }
+        if (filters['O']) {
+          continue;
+        }
       }
       // test used to be "(filters['m'] && inv.ppt.num_mod_samples() == 0)"
-      if (filters['m'] && inv.ppt.num_samples() == 0) continue;
-      if (filters['j'] && !inv.justified()) continue;
-      if (filters['p'] && isPost && shouldDiscardInvariant(inv)) continue;
-      if (filters['i'] && !isPost && inv instanceof Implication) continue;
+      if (filters['m'] && inv.ppt.num_samples() == 0) {
+        continue;
+      }
+      if (filters['j'] && !inv.justified()) {
+        continue;
+      }
+      if (filters['p'] && isPost && shouldDiscardInvariant(inv)) {
+        continue;
+      }
+      if (filters['i'] && !isPost && inv instanceof Implication) {
+        continue;
+      }
       String simp = inv.format_using(OutputFormat.SIMPLIFY);
       if (simp.indexOf("format_simplify") != -1
           || simp.indexOf("OutputFormat:Simplify") != -1
@@ -136,8 +152,12 @@ public class LogicalCompare {
         System.out.println("Bad Simplify formatting:\n  " + inv.format() + "\n  " + simp);
         continue;
       }
-      if (inv.format_using(OutputFormat.DAIKON).indexOf("warning: too few samples") != -1) continue;
-      if (inv.isGuardingPredicate) continue;
+      if (inv.format_using(OutputFormat.DAIKON).indexOf("warning: too few samples") != -1) {
+        continue;
+      }
+      if (inv.isGuardingPredicate) {
+        continue;
+      }
       //       System.err.println("Keeping   " + inv.format());
       new_invs.add(guarded_inv);
     }
@@ -155,7 +175,7 @@ public class LogicalCompare {
       if (vi.isDerivedParamAndUninteresting()) {
         // Exception: let invariants like "orig(arg) == arg" through.
         if (IsEqualityComparison.it.accept(inv)) {
-          Comparison comp = (Comparison) inv;
+          EqualityComparison comp = (EqualityComparison) inv;
           VarInfo var1 = comp.var1();
           VarInfo var2 = comp.var2();
           boolean vars_are_same =
@@ -260,7 +280,9 @@ public class LogicalCompare {
           System.out.println(inv.summarize());
           System.out.println();
         }
-        if (true) continue;
+        if (true) {
+          continue;
+        }
       }
 
       if (result == 'T') {
@@ -565,6 +587,7 @@ public class LogicalCompare {
    * progrmmatically. Termination of the program with a message to the user is indicated by throwing
    * Daikon.TerminationMessage.
    *
+   * @param args command-line arguments, like those of {@link #main}
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */

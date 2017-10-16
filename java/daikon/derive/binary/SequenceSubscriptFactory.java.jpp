@@ -71,6 +71,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
   //   base1 is the sequence
   //   base2 is the scalar
 
+  @Override
   public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2) {
 
     Debug debug = null;

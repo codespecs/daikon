@@ -118,6 +118,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
   /*@Pure*/
+  @Override
   public int compareTo(/*>>>@GuardSatisfied DiscardCode this,*/ DiscardCode o) {
     if (this.enumValue < o.enumValue) {
       return -1;
@@ -148,6 +149,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    *     "Variable Filter", "Filtered"}
    */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied DiscardCode this*/) {
     if (this.enumValue == -1) return "Not discarded";
     else if (this.enumValue == 0) return "Obvious";

@@ -53,15 +53,25 @@ export JDKVER=jdkany
 export PROJECT=daikon
 create_upload_docker_image
 
-export OS=fedora23
+export OS=fedora24
 export JDKVER=jdk8
 export PROJECT=daikon
 create_upload_docker_image
 
-export OS=fedora23
+export OS=fedora24
 export JDKVER=jdkany
 export PROJECT=daikon
 create_upload_docker_image
+
+# export OS=fedora23
+# export JDKVER=jdk8
+# export PROJECT=daikon
+# create_upload_docker_image
+#
+# export OS=fedora23
+# export JDKVER=jdkany
+# export PROJECT=daikon
+# create_upload_docker_image
 
 export OS=centos
 export JDKVER=jdk8

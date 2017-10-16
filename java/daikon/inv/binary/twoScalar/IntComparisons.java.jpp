@@ -81,6 +81,7 @@
   #define INTEQUALstring "IntEqual"
   #define EQUALS(a,b) (a == b)
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
   #define PAIRWISE_COMPARE PairwiseIntEqual
@@ -91,6 +92,7 @@
   #define INTEQUALstring "FloatEqual"
   #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
   #define PAIRWISE_COMPARE PairwiseFloatEqual
@@ -101,6 +103,7 @@
   #define INTEQUALstring "StringEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a == b))
   #define EQUALShtml ==
+  #define EQUALScode ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
 #if 0
@@ -114,6 +117,7 @@
   #define INTEQUALstring "IntNonEqual"
   #define EQUALS(a,b) (a != b)
   #define EQUALShtml !=
+  #define EQUALScode !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugIntNonEqual
@@ -123,6 +127,7 @@
   #define INTEQUALstring "FloatNonEqual"
   #define EQUALS(a,b) (Global.fuzzy.ne(a, b))
   #define EQUALShtml !=
+  #define EQUALScode !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugIntNonEqual
@@ -132,6 +137,7 @@
   #define INTEQUALstring "StringNonEqual"
   #define EQUALS(a,b) (a != b)
   #define EQUALShtml !=
+  #define EQUALScode !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugStringNonEqual
@@ -143,6 +149,7 @@
   #define INTEQUALstring "IntLessThan"
   #define EQUALS(a,b) (a < b)
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
   #define PAIRWISE_COMPARE PairwiseIntLessThan
@@ -154,6 +161,7 @@
   #define INTEQUALstring "FloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
   #define PAIRWISE_COMPARE PairwiseFloatLessThan
@@ -165,6 +173,7 @@
   #define INTEQUALstring "StringLessThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) < 0))
   #define EQUALShtml &lt;
+  #define EQUALScode <
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
 #if 0
@@ -179,6 +188,7 @@
   #define INTEQUALstring "IntLessEqual"
   #define EQUALS(a,b) (a <= b)
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
   #define PAIRWISE_COMPARE PairwiseIntLessEqual
@@ -190,6 +200,7 @@
   #define INTEQUALstring "FloatLessEqual"
   #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
   #define PAIRWISE_COMPARE PairwiseFloatLessEqual
@@ -201,6 +212,7 @@
   #define INTEQUALstring "StringLessEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) <= 0))
   #define EQUALShtml &le;
+  #define EQUALScode <=
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
 #if 0
@@ -215,6 +227,7 @@
   #define INTEQUALstring "IntGreaterThan"
   #define EQUALS(a,b) (a > b)
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
   #define PAIRWISE_COMPARE PairwiseIntGreaterThan
@@ -226,6 +239,7 @@
   #define INTEQUALstring "FloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
   #define PAIRWISE_COMPARE PairwiseFloatGreaterThan
@@ -237,6 +251,7 @@
   #define INTEQUALstring "StringGreaterThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) > 0))
   #define EQUALShtml &gt;
+  #define EQUALScode >
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
 #if 0
@@ -251,6 +266,7 @@
   #define INTEQUALstring "IntGreaterEqual"
   #define EQUALS(a,b) (a >= b)
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define INVEQUALSstring "<="
   #define PAIRWISE_COMPARE PairwiseIntGreaterEqual
@@ -262,8 +278,10 @@
   #define INTEQUALstring "FloatGreaterEqual"
   #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
+  #define INVEQUALScode <=
   #define INVEQUALSstring "<="
   #define PAIRWISE_COMPARE PairwiseFloatGreaterEqual
   #define DEBUGINTEQUAL debugIntGreaterEqual
@@ -274,8 +292,10 @@
   #define INTEQUALstring "StringGreaterEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) >= 0))
   #define EQUALShtml &ge;
+  #define EQUALScode >=
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
+  #define INVEQUALScode <=
   #define INVEQUALSstring "<="
 #if 0
   // #define PAIRWISE_COMPARE PairwiseStringGreaterEqual
@@ -326,8 +346,8 @@
   #define UB_MAX min()
 #endif
 
-#if (defined(EQUAL) || defined(EQUALFLOAT))
-  #define IMPLEMENTSCOMPARISON implements Comparison
+#if defined(EQUAL_OP)
+  #define IMPLEMENTSCOMPARISON implements EqualityComparison
 #else
   #define IMPLEMENTSCOMPARISON
 #endif
@@ -364,7 +384,7 @@ import typequals.*;
 */
 
 /**
- * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as <code>x EQUALShtml y</code>.
+ * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as {@code x EQUALScode y}.
  */
 public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
@@ -401,11 +421,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   /** Returns whether or not this invariant is enabled */
+  @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
   /** Returns whether or not the specified var types are valid for INTEQUAL */
+  @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -553,6 +575,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   /** Instantiate an invariant on the specified slice */
+  @Override
   protected INTEQUAL instantiate_dyn(/*>>> @Prototype INTEQUAL this,*/ PptSlice slice) {
     #if defined (NONEQUAL)
     // System.out.printf ("Instantiating non-equal on %s and %s%n",
@@ -568,6 +591,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 #endif
 
+  @Override
   protected Invariant resurrect_done_swapped() {
     #if defined (EQUAL_OP) || defined (NONEQUAL_OP)
       // we don't care if things swap; we have symmetry
@@ -583,6 +607,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
 #if (defined(EQUAL_OP) || defined(NONEQUAL_OP))
   /*@Pure*/
+  @Override
   public boolean is_symmetric() {
     return true;
   }
@@ -617,11 +642,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     return null;
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return INTEQUALstring + varNames();
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied INTEQUAL this,*/ OutputFormat format) {
 
     String var1name = var1().name_using(format);
@@ -728,6 +755,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     return format_unimplemented(format);
   }
 
+  @Override
   public InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     if (!(EQUALS(v1, v2))) {
       return InvariantStatus.FALSIFIED;
@@ -735,6 +763,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     if (logDetail() || debug.isLoggable(Level.FINE)) {
       log(
@@ -752,6 +781,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   // presumably be transitive, but it's not guaranteed to be so when using
   // this method and not dropping out all variables whose values are ever
   // missing.
+  @Override
   protected double computeConfidence() {
     // Should perhaps check number of samples and be unjustified if too few
     // samples.
@@ -779,12 +809,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
 #if defined(EQUAL_OP)
+  @Override
   public boolean enoughSamples(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return (ppt.num_samples() > 0);
   }
-#endif
 
-  // For Comparison interface
+  // For Comparison interface, which is satisfied only by exact equalities.
+  @Override
   public double eq_confidence() {
     if (isExact()) {
       return getConfidence();
@@ -792,8 +823,10 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       return Invariant.CONFIDENCE_NEVER;
     }
   }
+#endif
 
   /*@Pure*/
+  @Override
   public boolean isExact() {
     #if defined(EQUAL_OP)
       return true;
@@ -812,6 +845,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   //   super.destroy();
   // }
 
+  @Override
   public InvariantStatus add(
       /*@Interned*/ Object v1, /*@Interned*/ Object v2, int mod_index, int count) {
     if (debug.isLoggable(Level.FINE)) {
@@ -832,11 +866,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
   /*@Pure*/
+  @Override
   public boolean isExclusiveFormula(Invariant other) {
 
     // Also ought to check against LinearBinary, etc.
@@ -964,6 +1000,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    * rather than the cartesian product on the equality set.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically(this.ppt.var_infos);
@@ -978,6 +1015,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    * rather than the cartesian product on the equality set.
    */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousDynamically(this.ppt.var_infos);
@@ -988,6 +1026,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #endif
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // JHP: We might consider adding a check over bounds.   If
@@ -1291,6 +1330,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
   /** Returns the non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
@@ -1334,6 +1374,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #else
   /** Returns the non-instantiating suppressions for this invariant. */
   /*@Pure*/
+  @Override
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }

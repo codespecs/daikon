@@ -20,8 +20,10 @@ import org.checkerframework.dataflow.qual.*;
  * Runtime support for Chicory, the Daikon front end for Java. This class is a collection of
  * methods; it should never be instantiated.
  */
-@SuppressWarnings(
-    "initialization.fields.uninitialized") // library initialized in code added by run-time instrumentation
+@SuppressWarnings({
+  "initialization.fields.uninitialized", // library initialized in code added by run-time instrumentation
+  "JavaLangClash" // same class name as one in java.lang.
+})
 public class Runtime {
   /** Unique id for method entry/exit (so they can be matched up) */
   public static AtomicInteger nonce = new AtomicInteger();
@@ -388,7 +390,9 @@ public class Runtime {
         /*@NonNull*/ Stack<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
         while (!callstack.empty()) {
           ci = callstack.pop();
-          if (ci.nonce == nonce) break;
+          if (ci.nonce == nonce) {
+            break;
+          }
         }
         if (ci == null) {
           synchronized (SharedData.methods) {
@@ -486,7 +490,9 @@ public class Runtime {
           class_info = SharedData.new_classes.removeFirst();
         }
       }
-      if (class_info == null) break;
+      if (class_info == null) {
+        break;
+      }
 
       if (debug) System.out.println("processing class " + class_info.class_name);
       if (first_class) {
@@ -525,6 +531,7 @@ public class Runtime {
    * Indicates that no more output should be printed to the dtrace file. The file is closed and iff
    * dtraceLimitTerminate is true the program is terminated.
    */
+  @SuppressWarnings("StaticGuardedByInstance")
   public static void noMoreOutput() {
     // The incrementRecords method (which calls this) is called inside a
     // synchronized block, but re-synchronize just to be sure, or in case
@@ -681,8 +688,8 @@ public class Runtime {
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
-              @SuppressWarnings(
-                  "lock") // TODO: Fix Checker Framework issue 523 and remove this @SuppressWarnings.
+              @Override
+              @SuppressWarnings("lock") // non-final field
               public void run() {
                 if (!dtrace_closed) {
                   // When the program being instrumented exits, the buffers
@@ -800,14 +807,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied BooleanWrap this*/) {
       return Boolean.toString(val);
     }
 
+    @Override
     public Boolean getJavaWrapper() {
-      return new Boolean(val);
+      return val;
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return boolean.class;
     }
@@ -821,14 +831,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied ByteWrap this*/) {
       return Byte.toString(val);
     }
 
+    @Override
     public Byte getJavaWrapper() {
       return val;
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return byte.class;
     }
@@ -843,14 +856,17 @@ public class Runtime {
     }
     // Print characters as integers.
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied CharWrap this*/) {
       return Integer.toString(val);
     }
 
+    @Override
     public Character getJavaWrapper() {
       return val;
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return char.class;
     }
@@ -864,14 +880,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied FloatWrap this*/) {
       return Float.toString(val);
     }
 
+    @Override
     public Float getJavaWrapper() {
       return val;
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return float.class;
     }
@@ -885,14 +904,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied IntWrap this*/) {
       return Integer.toString(val);
     }
 
+    @Override
     public Integer getJavaWrapper() {
       return val;
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return int.class;
     }
@@ -906,14 +928,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied LongWrap this*/) {
       return Long.toString(val);
     }
 
+    @Override
     public Long getJavaWrapper() {
       return val;
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return long.class;
     }
@@ -927,14 +952,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied ShortWrap this*/) {
       return Short.toString(val);
     }
 
+    @Override
     public Short getJavaWrapper() {
       return val;
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return short.class;
     }
@@ -948,14 +976,17 @@ public class Runtime {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied DoubleWrap this*/) {
       return Double.toString(val);
     }
 
+    @Override
     public Double getJavaWrapper() {
       return val;
     }
 
+    @Override
     public Class<?> primitiveClass() {
       return double.class;
     }

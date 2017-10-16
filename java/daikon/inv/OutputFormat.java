@@ -15,10 +15,12 @@ public enum OutputFormat {
   DAIKON("Daikon"),
   /** Design-By-Contract for Java (used by Parasoft JContract) */
   DBCJAVA("DBC") {
+    @Override
     public String ensures_tag() {
       return "@post";
     }
 
+    @Override
     public String requires_tag() {
       return "@pre";
     }
@@ -34,13 +36,14 @@ public enum OutputFormat {
   /** C# Code Contract */
   CSHARPCONTRACT("CSharpContract");
 
-  String name;
+  final String name;
 
   OutputFormat(String name) {
     this.name = name;
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied OutputFormat this*/) {
     return "OutputFormat:" + name;
   }

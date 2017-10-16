@@ -91,8 +91,8 @@ import typequals.*;
    * Floating-point number between 0 and 0.1, representing the maximum relative difference between
    * two floats for fuzzy comparisons. Larger values will result in floats that are relatively
    * farther apart being treated as equal. A value of 0 essentially disables fuzzy comparisons.
-   * Specifically, if <code>abs (1 - f1/f2)</code> is less than or equal to this value, then the two
-   * doubles (<code>f1</code> and <code>f2</code>) will be treated as equal by Daikon.
+   * Specifically, if {@code abs(1 - f1/f2)} is less than or equal to this value, then the two
+   * doubles ({@code f1} and {@code f2}) will be treated as equal by Daikon.
    */
   public static double dkconfig_fuzzy_ratio = 0.0001;
 
@@ -411,6 +411,7 @@ import typequals.*;
 
   /** Do nothing special, Overridden to remove exception from declaration. */
   /*@SideEffectFree*/
+  @Override
   public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     try {
       Invariant result = (Invariant) super.clone();
@@ -902,6 +903,7 @@ import typequals.*;
   /** Compare based on arity, then printed representation. */
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
     /*@Pure*/
+    @Override
     public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       if (inv1 == inv2) return 0;
 
@@ -912,10 +914,10 @@ import typequals.*;
       if (inv2 instanceof GuardingImplication) inv2 = ((GuardingImplication) inv2).right;
 
       // Put equality invariants first
-      if ((inv1 instanceof Comparison) && (!(inv2 instanceof Comparison))) {
+      if ((inv1 instanceof EqualityComparison) && (!(inv2 instanceof EqualityComparison))) {
         return -1;
       }
-      if ((!(inv1 instanceof Comparison)) && (inv2 instanceof Comparison)) {
+      if ((!(inv1 instanceof EqualityComparison)) && (inv2 instanceof EqualityComparison)) {
         return 1;
       }
 
@@ -1384,6 +1386,7 @@ import typequals.*;
   // comparing the predicate, then the consequent.
   public static final class ClassVarnameComparator implements Comparator<Invariant> {
     /*@Pure*/
+    @Override
     public int compare(Invariant inv1, Invariant inv2) {
 
       if (inv1 instanceof Implication && inv2 instanceof Implication) {
@@ -1457,6 +1460,7 @@ import typequals.*;
     Comparator<Invariant> classVarnameComparator = new ClassVarnameComparator();
 
     /*@Pure*/
+    @Override
     public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       int compareClassVarname = classVarnameComparator.compare(inv1, inv2);
 
@@ -1509,6 +1513,7 @@ import typequals.*;
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
+    @Override
     public boolean equals(
         /*>>>@GuardSatisfied Match this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
@@ -1519,6 +1524,7 @@ import typequals.*;
     }
 
     /*@Pure*/
+    @Override
     public int hashCode(/*>>>@GuardSatisfied Match this*/) {
       return (inv.getClass().hashCode());
     }
@@ -1569,7 +1575,9 @@ import typequals.*;
     Invariant guardingPredicate = null;
     for (VarInfo vi : mustBeGuarded) {
       Invariant currentGuard = vi.createGuardingPredicate(install);
-      if (currentGuard == null) continue;
+      if (currentGuard == null) {
+        continue;
+      }
       debugGuarding.fine(String.format("VarInfo %s guard is %s", vi, currentGuard));
       if (guardingPredicate == null) {
         guardingPredicate = currentGuard;
@@ -1872,6 +1880,7 @@ import typequals.*;
 
   // Receiver must be fully initialized
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied Invariant this*/) {
     return format();
   }

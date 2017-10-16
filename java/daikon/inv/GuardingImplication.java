@@ -9,8 +9,8 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * This is a special implication invariant that guards any invariants that are over variables that
- * are sometimes missing. For example, if the invariant <code>a.x = 0</code> is true, the guarded
- * implication is <code>a != null \rArr; a.x = 0</code>.
+ * are sometimes missing. For example, if the invariant {@code a.x = 0} is true, the guarded
+ * implication is {@code a != null => a.x = 0}.
  */
 public class GuardingImplication extends Implication {
   // We are Serializable, so we specify a version to allow changes to
@@ -43,15 +43,18 @@ public class GuardingImplication extends Implication {
   }
 
   /*@Pure*/
+  @Override
   public boolean isWorthPrinting() {
     return right.isWorthPrinting();
     // return !right.isObvious();
   }
 
+  @Override
   public boolean enoughSamples(/*>>>@GuardSatisfied GuardingImplication this*/) {
     return right.enoughSamples();
   }
 
+  @Override
   public double computeConfidence() {
     return right.computeConfidence();
   }

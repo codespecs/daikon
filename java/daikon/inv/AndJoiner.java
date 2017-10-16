@@ -29,15 +29,18 @@ public class AndJoiner extends Joiner {
     super(ppt, left, right);
   }
 
+  @Override
   protected double computeConfidence() {
     return Invariant.confidence_and(left.computeConfidence(), right.computeConfidence());
   }
 
+  @Override
   public String repr(/*>>>@GuardSatisfied AndJoiner this*/) {
     return "[" + left.repr() + " and " + right.repr() + "]";
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied AndJoiner this,*/ OutputFormat format) {
     List<Invariant> invs = conjuncts();
     List<String> invStrings = new ArrayList<String>(invs.size());
@@ -74,6 +77,7 @@ public class AndJoiner extends Joiner {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     // Don't call super.isObviousDynamically(vis);
 
@@ -93,6 +97,7 @@ public class AndJoiner extends Joiner {
   }
 
   /*@Pure*/
+  @Override
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     DiscardInfo leftObvious = left.isObviousStatically(vis);
     DiscardInfo rightObvious = right.isObviousStatically(vis);
@@ -113,18 +118,22 @@ public class AndJoiner extends Joiner {
   }
 
   /*@Pure*/
+  @Override
   public boolean isSameInvariant(Invariant other) {
     return super.isSameInvariant(other);
   }
 
+  @Override
   public boolean enabled(/*>>> @Prototype AndJoiner this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
+  @Override
   public boolean valid_types(/*>>> @Prototype AndJoiner this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
+  @Override
   protected /*@NonPrototype*/ AndJoiner instantiate_dyn(
       /*>>> @Prototype AndJoiner this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");

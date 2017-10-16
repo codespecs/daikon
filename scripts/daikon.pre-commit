@@ -16,7 +16,7 @@ fi
 # This is to handle non-.java files, since the above already handled .java files.
 # May need to remove files that are allowed to have trailing whitespace or are
 # not text files.
-CHANGED_FILES=`git diff --staged --name-only --diff-filter=ACM | grep -v '.class$' | grep -v '.gz$' | grep -v '.jar$' | grep -v '.png$' | grep -v '.xcf$'  | grep -v '/api/'  | grep -v '/.git/' | grep -v examples/c-examples  | grep -v kvasir-tests` || true
+CHANGED_FILES=`git diff --staged --name-only --diff-filter=ACM | grep -v '.class$' | grep -v '.gz$' | grep -v '.jar$' | grep -v '.png$' | grep -v '.txt-jaif.goal$' | grep -v '.txt-merge-esc.goal$' | grep -v '.txt-merge-jml.goal$' | grep -v '.xcf$' | grep -v '/api/' | grep -v '/.git/' | grep -v examples/c-examples  | grep -v kvasir-tests` || true
 if [ ! -z "$CHANGED_FILES" ]; then
     # echo "CHANGED_FILES: ${CHANGED_FILES}"
     FILES_WITH_TRAILING_SPACES=`grep -l -s '[[:blank:]]$' ${CHANGED_FILES} 2>&1` || true

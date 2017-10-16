@@ -28,7 +28,7 @@ import typequals.*;
 // invariants for one member of each Equal set, the leader.
 //
 // During postProcessing, each instance of Equality instantiates into
-// displaying several equality Comparison invariants ("x == y", "x ==
+// displaying several EqualityComparison invariants ("x == y", "x ==
 // z").  Equality invariants have leaders, which are the canonical
 // forms of their variables.  In the previous example, x is the
 // leader.  Equality invariants sort their variables by index ordering
@@ -40,10 +40,10 @@ import typequals.*;
 
 /**
  * Keeps track of sets of variables that are equal. Other invariants are instantiated for only one
- * member of the Equality set, the leader. If variables <code>x</code>, <code>y</code>, and <code>z
- * </code> are members of the Equality set and <code>x</code> is chosen as the leader, then the
- * Equality will internally convert into binary comparison invariants that print as <code>x == y
- * </code> and <code>x == z</code>.
+ * member of the Equality set, the leader. If variables {@code x}, {@code y}, and {@code z} are
+ * members of the Equality set and {@code x} is chosen as the leader, then the Equality will
+ * internally convert into binary comparison invariants that print as {@code x == y} and {@code x ==
+ * z}.
  */
 public final /*(at)Interned*/ class Equality extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -140,9 +140,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * Always return JUSTIFIED because we aggregate Comparison invariants that are all justified to
-   * the confidence_limit threshold.
+   * Always return JUSTIFIED because we aggregate EqualityComparison invariants that are all
+   * justified to the confidence_limit threshold.
    */
+  @Override
   public double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
@@ -161,6 +162,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // convert to normal two-way IntEqual type invariants.  However,
   // they can be called if desired.
 
+  @Override
   public String repr(/*>>>@GuardSatisfied Equality this*/) {
     return "Equality: size="
         + size()
@@ -173,6 +175,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String format_using(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
@@ -209,7 +212,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     String leaderName = leader.name();
     List<String> clauses = new ArrayList<String>();
     for (VarInfo var : vars) {
-      if (leader == var) continue;
+      if (leader == var) {
+        continue;
+      }
       clauses.add(String.format("(%s == %s)", leaderName, var.name()));
     }
     return UtilMDE.join(clauses, " && ");
@@ -248,9 +253,15 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     int numprinted = 0;
     for (int j = 0; j < equal_vars.size(); j++) {
       VarInfo other = equal_vars.get(j);
-      if (other == leader) continue;
-      if (leader.prestate_name().equals(other.name())) continue;
-      if (other.prestate_name().equals(leader.name())) continue;
+      if (other == leader) {
+        continue;
+      }
+      if (leader.prestate_name().equals(other.name())) {
+        continue;
+      }
+      if (other.prestate_name().equals(leader.name())) {
+        continue;
+      }
       if (numprinted > 0) {
         result += Global.lineSep;
       }
@@ -287,7 +298,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     String leaderName = leader.simplify_name();
     if (leader.rep_type.isArray()) {
       for (VarInfo var : vars) {
-        if (var == leader) continue;
+        if (var == leader) {
+          continue;
+        }
         String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(), leader, var);
         String a = format_elt(form[1]);
         String b = format_elt(form[2]);
@@ -295,7 +308,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
     } else {
       for (VarInfo var : vars) {
-        if (var == leader) continue;
+        if (var == leader) {
+          continue;
+        }
         String a = format_elt(leaderName);
         String b = format_elt(var.simplify_name());
         result.append(" (EQ ");
@@ -318,7 +333,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     String leaderName = leader.name_using(format);
     List<String> clauses = new ArrayList<String>();
     for (VarInfo var : vars) {
-      if (leader == var) continue;
+      if (leader == var) {
+        continue;
+      }
       if (leader.rep_type.isArray()) {
         clauses.add(
             String.format(
@@ -342,6 +359,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied Equality this*/) {
     return repr();
   }
@@ -373,7 +391,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     }
     for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
       VarInfo vi = i.next();
-      if (vi == leader) continue;
+      if (vi == leader) {
+        continue;
+      }
       assert vi.comparableNWay(leader);
       Object viValue = vi.getValueOrNull(vt);
       int viMod = vi.getModified(vt);
@@ -424,12 +444,14 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     throw new UnsupportedOperationException();
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
   /*@Pure*/
+  @Override
   public boolean isSameFormula(Invariant other) {
     throw new UnsupportedOperationException(
         "Equality.isSameFormula(): this method should not be called");
@@ -456,7 +478,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       debugPostProcess.fine("  var1: " + leader.name());
     }
     for (int i = 0; i < varArray.length; i++) {
-      if (varArray[i] == leader) continue;
+      if (varArray[i] == leader) {
+        continue;
+      }
       if (debugPostProcess.isLoggable(Level.FINE)) {
         debugPostProcess.fine("  var2: " + varArray[i].name());
       }
@@ -474,7 +498,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
             break;
           }
         }
-        if (allEqual) continue;
+        if (allEqual) {
+          continue;
+        }
       }
 
       parent.create_equality_inv(leader, varArray[i], numSamples());
@@ -524,6 +550,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     leaderCache = newLeader;
   }
 
+  @Override
   public void repCheck() {
     super.repCheck();
     VarInfo leader = leader();
@@ -533,14 +560,17 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     }
   }
 
+  @Override
   public boolean enabled(/*>>> @Prototype Equality this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
+  @Override
   public boolean valid_types(/*>>> @Prototype Equality this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
+  @Override
   protected /*@NonPrototype*/ Equality instantiate_dyn(
       /*>>> @Prototype Equality this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");

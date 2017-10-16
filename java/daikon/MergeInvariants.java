@@ -296,7 +296,9 @@ public final class MergeInvariants {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
         // System.out.printf ("found child %s from pmap %d\n", child, j);
-        if (child == null) continue;
+        if (child == null) {
+          continue;
+        }
         if (child.equality_view == null) {
           System.out.println(
               "equality_view == null in child ppt: "

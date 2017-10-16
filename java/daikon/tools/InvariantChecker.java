@@ -90,6 +90,7 @@ public class InvariantChecker {
    * progrmmatically. Termination of the program with a message to the user is indicated by throwing
    * Daikon.TerminationMessage.
    *
+   * @param args command-line arguments, like those of {@link #main}
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -361,6 +362,7 @@ public class InvariantChecker {
      * invariant is falsified or weakened.
      */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
+    @Override
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
 

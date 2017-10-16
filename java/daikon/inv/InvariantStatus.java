@@ -19,6 +19,7 @@ public final /*@Interned*/ class InvariantStatus {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied InvariantStatus this*/) {
     return status;
   }

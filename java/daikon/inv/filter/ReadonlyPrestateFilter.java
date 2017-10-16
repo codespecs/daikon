@@ -11,6 +11,7 @@ import java.util.logging.Level;
  * daikon.VarInfo.VarFlags#IS_READONLY}.
  */
 public class ReadonlyPrestateFilter extends InvariantFilter {
+  @Override
   public String getDescription() {
     return "Suppress invariants indicate that a readonly variable was unmodified";
   }
@@ -22,6 +23,7 @@ public class ReadonlyPrestateFilter extends InvariantFilter {
     isOn = dkconfig_enabled;
   }
 
+  @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
       PrintInvariants.debugFiltering.fine("\tEntering UnmodRPF.shouldDiscard");
@@ -34,7 +36,7 @@ public class ReadonlyPrestateFilter extends InvariantFilter {
       return false;
     }
 
-    Comparison comp = (Comparison) invariant;
+    EqualityComparison comp = (EqualityComparison) invariant;
     VarInfo var1 = comp.var1();
     VarInfo var2 = comp.var2();
 

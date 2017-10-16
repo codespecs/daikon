@@ -50,6 +50,7 @@ six170.HuffmanCodec.addToMap(java.util.Map, six170.HuffmanTree, java.util.List):
 assignable bitStack[subTree.symbol.frequency], bitStack[subTree.symbol.frequency-1], bitStack[subTree.symbol.frequency..], bitStack[subTree.symbol.frequency+1..], bitStack[0..subTree.symbol.frequency], bitStack[0..subTree.symbol.frequency-1]
 subTree.symbol == \old(subTree.symbol)
 ((subTree.symbol != null) && (\old(subTree.symbol) != null))  ==>  (subTree.symbol.symbol == \old(subTree.symbol.symbol))
+((subTree.symbol != null) && (subTree.symbol.symbol != null) && (\old(subTree.symbol) != null) && (\old(subTree.symbol.symbol) != null))  ==>  (subTree.symbol.symbol.getClass().getName() == \old(subTree.symbol.symbol.getClass().getName()))
 ((subTree.symbol != null) && (\old(subTree.symbol) != null))  ==>  (subTree.symbol.frequency == \old(subTree.symbol.frequency))
 subTree.left == \old(subTree.left)
 ((subTree.left != null) && (\old(subTree.left) != null))  ==>  (subTree.left.symbol == \old(subTree.left.symbol))
@@ -67,7 +68,6 @@ daikon.Quant.noDups(bitStack)
 daikon.Quant.eltsNotEqual(bitStack, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(bitStack), "java.lang.Boolean")
 ((subTree.symbol != null) && (subTree.symbol.symbol != null))  ==>  (subTree.symbol.symbol.getClass().getName() != \old(encodingMap.getClass().getName()))
-((subTree.symbol != null) && (subTree.symbol.symbol != null) && (\old(subTree.symbol) != null) && (\old(subTree.symbol.symbol) != null))  ==>  (subTree.symbol.symbol.getClass().getName() == \old(subTree.symbol.symbol.getClass().getName()))
 ((subTree.symbol != null) && (subTree.symbol.symbol != null))  ==>  (subTree.symbol.symbol.getClass().getName() != \old(bitStack.getClass().getName()))
 (subTree.symbol != null)  ==>  ((!(daikon.Quant.size(bitStack)-1 == 0)) || (subTree.symbol.frequency == 0))
 (subTree.symbol != null)  ==>  ((!(\old(daikon.Quant.size(bitStack)) == 0)) || (subTree.symbol.frequency == 0))
@@ -120,6 +120,7 @@ six170.HuffmanCodec.decode(java.util.List):::EXIT
     Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputBitStream inputBitStream[] inputBitStream[].getClass().getName() inputBitStream.getClass().getName() return return[] return[].getClass().getName() return.getClass().getName() orig(this) orig(this.encodingMap) orig(this.encodingMap.getClass().getName()) orig(this.decodingTree) orig(this.decodingTree.symbol) orig(this.decodingTree.symbol.symbol) orig(this.decodingTree.symbol.symbol.getClass().getName()) orig(this.decodingTree.symbol.frequency) orig(this.decodingTree.left) orig(this.decodingTree.left.symbol) orig(this.decodingTree.left.left) orig(this.decodingTree.left.right) orig(this.decodingTree.right) orig(this.decodingTree.right.symbol) orig(this.decodingTree.right.left) orig(this.decodingTree.right.right) orig(inputBitStream) orig(inputBitStream[]) orig(inputBitStream[].getClass().getName()) orig(inputBitStream.getClass().getName()) size(inputBitStream[]) size(inputBitStream[])-1 size(return[]) size(return[])-1 orig(size(inputBitStream[])) orig(size(inputBitStream[]))-1 inputBitStream[this.decodingTree.symbol.frequency] inputBitStream[this.decodingTree.symbol.frequency-1] inputBitStream[this.decodingTree.symbol.frequency..] inputBitStream[this.decodingTree.symbol.frequency+1..] inputBitStream[0..this.decodingTree.symbol.frequency] inputBitStream[0..this.decodingTree.symbol.frequency-1] return[this.decodingTree.symbol.frequency] return[this.decodingTree.symbol.frequency-1] return[this.decodingTree.symbol.frequency..] return[this.decodingTree.symbol.frequency+1..] return[0..this.decodingTree.symbol.frequency] return[0..this.decodingTree.symbol.frequency-1] orig(inputBitStream[post(this.decodingTree.symbol.frequency)]) orig(inputBitStream[post(this.decodingTree.symbol.frequency)-1]) orig(inputBitStream[post(this.decodingTree.symbol.frequency)..]) orig(inputBitStream[post(this.decodingTree.symbol.frequency)+1..]) orig(inputBitStream[0..post(this.decodingTree.symbol.frequency)]) orig(inputBitStream[0..post(this.decodingTree.symbol.frequency)-1]) inputBitStream[orig(this.decodingTree.symbol.frequency)] inputBitStream[orig(this.decodingTree.symbol.frequency)-1] inputBitStream[orig(this.decodingTree.symbol.frequency)..] inputBitStream[orig(this.decodingTree.symbol.frequency)+1..] inputBitStream[0..orig(this.decodingTree.symbol.frequency)] inputBitStream[0..orig(this.decodingTree.symbol.frequency)-1] return[orig(this.decodingTree.symbol.frequency)] return[orig(this.decodingTree.symbol.frequency)-1] return[orig(this.decodingTree.symbol.frequency)..] return[orig(this.decodingTree.symbol.frequency)+1..] return[0..orig(this.decodingTree.symbol.frequency)] return[0..orig(this.decodingTree.symbol.frequency)-1] orig(inputBitStream[this.decodingTree.symbol.frequency]) orig(inputBitStream[this.decodingTree.symbol.frequency-1]) orig(inputBitStream[this.decodingTree.symbol.frequency..]) orig(inputBitStream[this.decodingTree.symbol.frequency+1..]) orig(inputBitStream[0..this.decodingTree.symbol.frequency]) orig(inputBitStream[0..this.decodingTree.symbol.frequency-1])
 assignable this.decodingTree.symbol.symbol, this.decodingTree.symbol.frequency, inputBitStream[this.decodingTree.symbol.frequency], inputBitStream[this.decodingTree.symbol.frequency-1], inputBitStream[this.decodingTree.symbol.frequency..], inputBitStream[this.decodingTree.symbol.frequency+1..], inputBitStream[0..this.decodingTree.symbol.frequency], inputBitStream[0..this.decodingTree.symbol.frequency-1]
 this.encodingMap == \old(this.encodingMap)
+this.encodingMap.getClass().getName() == \old(this.encodingMap.getClass().getName())
 this.decodingTree == \old(this.decodingTree)
 this.decodingTree.symbol == \old(this.decodingTree.symbol)
 this.decodingTree.symbol == \old(this.decodingTree.left.symbol)
@@ -131,11 +132,10 @@ this.decodingTree.right == \old(this.decodingTree.right)
 this.decodingTree.right.left == \old(this.decodingTree.right.left)
 this.decodingTree.right.right == \old(this.decodingTree.right.right)
 daikon.Quant.pairwiseEqual(inputBitStream, \old(inputBitStream))
+\result.getClass().getName() == \old(inputBitStream.getClass().getName())
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(inputBitStream), "java.lang.Boolean")
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(\result), "java.lang.Character")
 \result.getClass().getName() == java.util.ArrayList.class.getName()
-this.encodingMap.getClass().getName() == \old(this.encodingMap.getClass().getName())
-\result.getClass().getName() == \old(inputBitStream.getClass().getName())
 \old(daikon.Quant.size(inputBitStream)) == (daikon.Quant.size(inputBitStream)-1 | \old(daikon.Quant.size(inputBitStream)))
 ===========================================================================
 six170.HuffmanCodec.encode(java.util.List):::ENTER
@@ -147,6 +147,7 @@ six170.HuffmanCodec.encode(java.util.List):::EXIT
     Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputStream inputStream[] inputStream[].getClass().getName() inputStream.getClass().getName() return return[] return[].getClass().getName() return.getClass().getName() orig(this) orig(this.encodingMap) orig(this.encodingMap.getClass().getName()) orig(this.decodingTree) orig(this.decodingTree.symbol) orig(this.decodingTree.symbol.symbol) orig(this.decodingTree.symbol.symbol.getClass().getName()) orig(this.decodingTree.symbol.frequency) orig(this.decodingTree.left) orig(this.decodingTree.left.symbol) orig(this.decodingTree.left.left) orig(this.decodingTree.left.right) orig(this.decodingTree.right) orig(this.decodingTree.right.symbol) orig(this.decodingTree.right.left) orig(this.decodingTree.right.right) orig(inputStream) orig(inputStream[]) orig(inputStream[].getClass().getName()) orig(inputStream.getClass().getName()) size(inputStream[]) size(inputStream[])-1 size(return[]) size(return[])-1 orig(size(inputStream[])) orig(size(inputStream[]))-1 inputStream[this.decodingTree.symbol.frequency] inputStream[this.decodingTree.symbol.frequency-1] inputStream[this.decodingTree.symbol.frequency..] inputStream[this.decodingTree.symbol.frequency+1..] inputStream[0..this.decodingTree.symbol.frequency] inputStream[0..this.decodingTree.symbol.frequency-1] return[this.decodingTree.symbol.frequency] return[this.decodingTree.symbol.frequency-1] return[this.decodingTree.symbol.frequency..] return[this.decodingTree.symbol.frequency+1..] return[0..this.decodingTree.symbol.frequency] return[0..this.decodingTree.symbol.frequency-1] orig(inputStream[post(this.decodingTree.symbol.frequency)]) orig(inputStream[post(this.decodingTree.symbol.frequency)-1]) orig(inputStream[post(this.decodingTree.symbol.frequency)..]) orig(inputStream[post(this.decodingTree.symbol.frequency)+1..]) orig(inputStream[0..post(this.decodingTree.symbol.frequency)]) orig(inputStream[0..post(this.decodingTree.symbol.frequency)-1]) inputStream[orig(this.decodingTree.symbol.frequency)] inputStream[orig(this.decodingTree.symbol.frequency)-1] inputStream[orig(this.decodingTree.symbol.frequency)..] inputStream[orig(this.decodingTree.symbol.frequency)+1..] inputStream[0..orig(this.decodingTree.symbol.frequency)] inputStream[0..orig(this.decodingTree.symbol.frequency)-1] return[orig(this.decodingTree.symbol.frequency)] return[orig(this.decodingTree.symbol.frequency)-1] return[orig(this.decodingTree.symbol.frequency)..] return[orig(this.decodingTree.symbol.frequency)+1..] return[0..orig(this.decodingTree.symbol.frequency)] return[0..orig(this.decodingTree.symbol.frequency)-1] orig(inputStream[this.decodingTree.symbol.frequency]) orig(inputStream[this.decodingTree.symbol.frequency-1]) orig(inputStream[this.decodingTree.symbol.frequency..]) orig(inputStream[this.decodingTree.symbol.frequency+1..]) orig(inputStream[0..this.decodingTree.symbol.frequency]) orig(inputStream[0..this.decodingTree.symbol.frequency-1])
 assignable this.decodingTree.symbol.symbol, this.decodingTree.symbol.frequency, inputStream[this.decodingTree.symbol.frequency], inputStream[this.decodingTree.symbol.frequency-1], inputStream[this.decodingTree.symbol.frequency..], inputStream[this.decodingTree.symbol.frequency+1..], inputStream[0..this.decodingTree.symbol.frequency], inputStream[0..this.decodingTree.symbol.frequency-1]
 this.encodingMap == \old(this.encodingMap)
+this.encodingMap.getClass().getName() == \old(this.encodingMap.getClass().getName())
 this.decodingTree == \old(this.decodingTree)
 this.decodingTree.symbol == \old(this.decodingTree.symbol)
 this.decodingTree.symbol == \old(this.decodingTree.left.symbol)
@@ -158,11 +159,10 @@ this.decodingTree.right == \old(this.decodingTree.right)
 this.decodingTree.right.left == \old(this.decodingTree.right.left)
 this.decodingTree.right.right == \old(this.decodingTree.right.right)
 daikon.Quant.pairwiseEqual(inputStream, \old(inputStream))
+\result.getClass().getName() == \old(inputStream.getClass().getName())
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(inputStream), "java.lang.Character")
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(\result), "java.lang.Boolean")
 \result.getClass().getName() == java.util.ArrayList.class.getName()
-this.encodingMap.getClass().getName() == \old(this.encodingMap.getClass().getName())
-\result.getClass().getName() == \old(inputStream.getClass().getName())
 daikon.Quant.size(\result) == (daikon.Quant.size(\result)-1 | daikon.Quant.size(\result))
 ===========================================================================
 six170.HuffmanCodec.extractSmallest(java.util.List):::ENTER
@@ -205,8 +205,8 @@ frequency >= 1
 six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object, int):::EXIT
     Variables: this this.symbol this.symbol.getClass().getName() this.frequency symbol symbol.getClass().getName() frequency orig(symbol) orig(symbol.getClass().getName()) orig(frequency)
 this.symbol == \old(symbol)
-this.frequency == \old(frequency)
 this.symbol.getClass().getName() == \old(symbol.getClass().getName())
+this.frequency == \old(frequency)
 ===========================================================================
 six170.HuffmanSymbol.frequency():::ENTER
     Variables: this this.symbol this.symbol.getClass().getName() this.frequency
@@ -214,10 +214,10 @@ six170.HuffmanSymbol.frequency():::ENTER
 six170.HuffmanSymbol.frequency():::EXIT
     Variables: this this.symbol this.symbol.getClass().getName() this.frequency return orig(this) orig(this.symbol) orig(this.symbol.getClass().getName()) orig(this.frequency)
 this.symbol == \old(this.symbol)
+this.symbol.getClass().getName() == \old(this.symbol.getClass().getName())
 this.frequency == \result
 \result == \old(this.frequency)
 \result >= 1
-this.symbol.getClass().getName() == \old(this.symbol.getClass().getName())
 ===========================================================================
 six170.HuffmanSymbol.symbol():::ENTER
     Variables: this this.symbol this.symbol.getClass().getName() this.frequency
@@ -225,15 +225,16 @@ six170.HuffmanSymbol.symbol():::ENTER
 six170.HuffmanSymbol.symbol():::EXIT
     Variables: this this.symbol this.symbol.getClass().getName() this.frequency return return.getClass().getName() orig(this) orig(this.symbol) orig(this.symbol.getClass().getName()) orig(this.frequency)
 this.symbol == \result
+this.symbol.getClass().getName() == \result.getClass().getName()
 this.frequency == \old(this.frequency)
 \result == \old(this.symbol)
+\result.getClass().getName() == \old(this.symbol.getClass().getName())
 \result != null
 \result.getClass().getName() == java.lang.Character.class.getName()
-this.symbol.getClass().getName() == \result.getClass().getName()
-\result.getClass().getName() == \old(this.symbol.getClass().getName())
 ===========================================================================
 six170.HuffmanTree:::OBJECT
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right
+((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == this.right.symbol.symbol.getClass().getName())
 (this.symbol != null)  ==>  (this.symbol.symbol != null)
 ((this.symbol != null) && (this.symbol.symbol != null))  ==>  (this.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 (this.symbol != null)  ==>  (this.symbol.frequency >= 1)
@@ -243,7 +244,6 @@ six170.HuffmanTree:::OBJECT
 ((this.right != null) && (this.right.symbol != null))  ==>  (this.right.symbol.symbol != null)
 ((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 ((this.right != null) && (this.right.symbol != null))  ==>  (this.right.symbol.frequency >= 1)
-((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == this.right.symbol.symbol.getClass().getName())
 ((this.left != null) && (this.left.symbol != null) && (this.right != null) && (this.right.symbol != null))  ==>  ((this.left.symbol.frequency >> this.right.symbol.frequency == 0))
 ((this.left != null) && (this.left.symbol != null) && (this.right != null) && (this.right.symbol != null))  ==>  (this.left.symbol.frequency <= this.right.symbol.frequency)
 ===========================================================================
@@ -258,20 +258,21 @@ six170.HuffmanTree.HuffmanTree(six170.HuffmanSymbol):::EXIT
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right symbol symbol.symbol symbol.symbol.getClass().getName() symbol.frequency orig(symbol) orig(symbol.symbol) orig(symbol.symbol.getClass().getName()) orig(symbol.frequency)
 this.symbol == \old(symbol)
 this.symbol.symbol == symbol.symbol
+this.symbol.symbol.getClass().getName() == symbol.symbol.getClass().getName()
 this.symbol.frequency == symbol.frequency
 this.left == this.right
 symbol.symbol == \old(symbol.symbol)
+symbol.symbol.getClass().getName() == \old(symbol.symbol.getClass().getName())
 symbol.frequency == \old(symbol.frequency)
 this.symbol != null
 this.left == null
 symbol.symbol != null
 symbol.symbol.getClass().getName() == java.lang.Character.class.getName()
 symbol.frequency >= 1
-this.symbol.symbol.getClass().getName() == symbol.symbol.getClass().getName()
-symbol.symbol.getClass().getName() == \old(symbol.symbol.getClass().getName())
 ===========================================================================
 six170.HuffmanTree.HuffmanTree(six170.HuffmanTree, six170.HuffmanTree):::ENTER
     Variables: left left.symbol left.symbol.symbol left.symbol.symbol.getClass().getName() left.symbol.frequency left.left left.left.symbol left.left.left left.left.right left.right left.right.symbol left.right.left left.right.right right right.symbol right.symbol.symbol right.symbol.symbol.getClass().getName() right.symbol.frequency right.left right.left.symbol right.left.left right.left.right right.right right.right.symbol right.right.left right.right.right
+((left.symbol != null) && (left.symbol.symbol != null) && (right.symbol != null) && (right.symbol.symbol != null))  ==>  (left.symbol.symbol.getClass().getName() == right.symbol.symbol.getClass().getName())
 left != null
 (left.symbol != null)  ==>  (left.symbol.symbol != null)
 ((left.symbol != null) && (left.symbol.symbol != null))  ==>  (left.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
@@ -280,7 +281,6 @@ right != null
 (right.symbol != null)  ==>  (right.symbol.symbol != null)
 ((right.symbol != null) && (right.symbol.symbol != null))  ==>  (right.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 (right.symbol != null)  ==>  (right.symbol.frequency >= 1)
-((left.symbol != null) && (left.symbol.symbol != null) && (right.symbol != null) && (right.symbol.symbol != null))  ==>  (left.symbol.symbol.getClass().getName() == right.symbol.symbol.getClass().getName())
 ((left.symbol != null) && (right.symbol != null))  ==>  ((left.symbol.frequency >> right.symbol.frequency == 0))
 ((left.symbol != null) && (right.symbol != null))  ==>  (left.symbol.frequency <= right.symbol.frequency)
 ===========================================================================
@@ -289,6 +289,7 @@ six170.HuffmanTree.HuffmanTree(six170.HuffmanTree, six170.HuffmanTree):::EXIT
 this.left == \old(left)
 this.left.symbol == left.symbol
 ((this.left.symbol != null) && (left.symbol != null))  ==>  (this.left.symbol.symbol == left.symbol.symbol)
+((this.left.symbol != null) && (this.left.symbol.symbol != null) && (left.symbol != null) && (left.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == left.symbol.symbol.getClass().getName())
 ((this.left.symbol != null) && (left.symbol != null))  ==>  (this.left.symbol.frequency == left.symbol.frequency)
 this.left.left == left.left
 ((this.left.left != null) && (left.left != null))  ==>  (this.left.left.symbol == left.left.symbol)
@@ -301,6 +302,7 @@ this.left.right == left.right
 this.right == \old(right)
 this.right.symbol == right.symbol
 ((this.right.symbol != null) && (right.symbol != null))  ==>  (this.right.symbol.symbol == right.symbol.symbol)
+((this.right.symbol != null) && (this.right.symbol.symbol != null) && (right.symbol != null) && (right.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == right.symbol.symbol.getClass().getName())
 ((this.right.symbol != null) && (right.symbol != null))  ==>  (this.right.symbol.frequency == right.symbol.frequency)
 this.right.left == right.left
 ((this.right.left != null) && (right.left != null))  ==>  (this.right.left.symbol == right.left.symbol)
@@ -312,6 +314,8 @@ this.right.right == right.right
 ((this.right.right != null) && (right.right != null))  ==>  (this.right.right.right == right.right.right)
 left.symbol == \old(left.symbol)
 ((left.symbol != null) && (\old(left.symbol) != null))  ==>  (left.symbol.symbol == \old(left.symbol.symbol))
+((left.symbol != null) && (left.symbol.symbol != null) && (right.symbol != null) && (right.symbol.symbol != null))  ==>  (left.symbol.symbol.getClass().getName() == right.symbol.symbol.getClass().getName())
+((left.symbol != null) && (left.symbol.symbol != null) && (\old(left.symbol) != null) && (\old(left.symbol.symbol) != null))  ==>  (left.symbol.symbol.getClass().getName() == \old(left.symbol.symbol.getClass().getName()))
 ((left.symbol != null) && (\old(left.symbol) != null))  ==>  (left.symbol.frequency == \old(left.symbol.frequency))
 left.left == \old(left.left)
 ((left.left != null) && (\old(left.left) != null))  ==>  (left.left.symbol == \old(left.left.symbol))
@@ -323,6 +327,7 @@ left.right == \old(left.right)
 ((left.right != null) && (\old(left.right) != null))  ==>  (left.right.right == \old(left.right.right))
 right.symbol == \old(right.symbol)
 ((right.symbol != null) && (\old(right.symbol) != null))  ==>  (right.symbol.symbol == \old(right.symbol.symbol))
+((right.symbol != null) && (right.symbol.symbol != null) && (\old(right.symbol) != null) && (\old(right.symbol.symbol) != null))  ==>  (right.symbol.symbol.getClass().getName() == \old(right.symbol.symbol.getClass().getName()))
 ((right.symbol != null) && (\old(right.symbol) != null))  ==>  (right.symbol.frequency == \old(right.symbol.frequency))
 right.left == \old(right.left)
 ((right.left != null) && (\old(right.left) != null))  ==>  (right.left.symbol == \old(right.left.symbol))
@@ -341,13 +346,8 @@ this.right != null
 (right.symbol != null)  ==>  (right.symbol.symbol != null)
 ((right.symbol != null) && (right.symbol.symbol != null))  ==>  (right.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 (right.symbol != null)  ==>  (right.symbol.frequency >= 1)
-((this.left.symbol != null) && (this.left.symbol.symbol != null) && (left.symbol != null) && (left.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == left.symbol.symbol.getClass().getName())
-((this.right.symbol != null) && (this.right.symbol.symbol != null) && (right.symbol != null) && (right.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == right.symbol.symbol.getClass().getName())
-((left.symbol != null) && (left.symbol.symbol != null) && (right.symbol != null) && (right.symbol.symbol != null))  ==>  (left.symbol.symbol.getClass().getName() == right.symbol.symbol.getClass().getName())
-((left.symbol != null) && (left.symbol.symbol != null) && (\old(left.symbol) != null) && (\old(left.symbol.symbol) != null))  ==>  (left.symbol.symbol.getClass().getName() == \old(left.symbol.symbol.getClass().getName()))
 ((left.symbol != null) && (right.symbol != null))  ==>  ((left.symbol.frequency >> right.symbol.frequency == 0))
 ((left.symbol != null) && (right.symbol != null))  ==>  (left.symbol.frequency <= right.symbol.frequency)
-((right.symbol != null) && (right.symbol.symbol != null) && (\old(right.symbol) != null) && (\old(right.symbol.symbol) != null))  ==>  (right.symbol.symbol.getClass().getName() == \old(right.symbol.symbol.getClass().getName()))
 ===========================================================================
 six170.HuffmanTree.frequency():::ENTER
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right
@@ -356,6 +356,7 @@ six170.HuffmanTree.frequency():::EXIT51
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right return orig(this) orig(this.symbol) orig(this.symbol.symbol) orig(this.symbol.symbol.getClass().getName()) orig(this.symbol.frequency) orig(this.left) orig(this.left.symbol) orig(this.left.symbol.symbol) orig(this.left.symbol.symbol.getClass().getName()) orig(this.left.symbol.frequency) orig(this.left.left) orig(this.left.left.symbol) orig(this.left.left.left) orig(this.left.left.right) orig(this.left.right) orig(this.left.right.symbol) orig(this.left.right.left) orig(this.left.right.right) orig(this.right) orig(this.right.symbol) orig(this.right.symbol.symbol) orig(this.right.symbol.symbol.getClass().getName()) orig(this.right.symbol.frequency) orig(this.right.left) orig(this.right.left.symbol) orig(this.right.left.left) orig(this.right.left.right) orig(this.right.right) orig(this.right.right.symbol) orig(this.right.right.left) orig(this.right.right.right)
 assignable this.left.symbol, this.left.symbol.symbol, this.left.symbol.frequency, this.left.left, this.left.left.symbol, this.left.left.left, this.left.left.right, this.left.right, this.left.right.symbol, this.left.right.left, this.left.right.right, this.right.symbol, this.right.symbol.symbol, this.right.symbol.frequency, this.right.left, this.right.left.symbol, this.right.left.left, this.right.left.right, this.right.right, this.right.right.symbol, this.right.right.left, this.right.right.right
 this.symbol.symbol == \old(this.symbol.symbol)
+this.symbol.symbol.getClass().getName() == \old(this.symbol.symbol.getClass().getName())
 this.symbol.frequency == \result
 this.left == this.right
 this.left == \old(this.right)
@@ -364,13 +365,14 @@ this.symbol != null
 this.symbol.symbol != null
 this.symbol.symbol.getClass().getName() == java.lang.Character.class.getName()
 this.left == null
-this.symbol.symbol.getClass().getName() == \old(this.symbol.symbol.getClass().getName())
 ===========================================================================
 six170.HuffmanTree.frequency():::EXIT53
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right return orig(this) orig(this.symbol) orig(this.symbol.symbol) orig(this.symbol.symbol.getClass().getName()) orig(this.symbol.frequency) orig(this.left) orig(this.left.symbol) orig(this.left.symbol.symbol) orig(this.left.symbol.symbol.getClass().getName()) orig(this.left.symbol.frequency) orig(this.left.left) orig(this.left.left.symbol) orig(this.left.left.left) orig(this.left.left.right) orig(this.left.right) orig(this.left.right.symbol) orig(this.left.right.left) orig(this.left.right.right) orig(this.right) orig(this.right.symbol) orig(this.right.symbol.symbol) orig(this.right.symbol.symbol.getClass().getName()) orig(this.right.symbol.frequency) orig(this.right.left) orig(this.right.left.symbol) orig(this.right.left.left) orig(this.right.left.right) orig(this.right.right) orig(this.right.right.symbol) orig(this.right.right.left) orig(this.right.right.right)
 assignable this.symbol.symbol, this.symbol.frequency
 this.left.symbol == \old(this.left.symbol)
 ((this.left.symbol != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.symbol == \old(this.left.symbol.symbol))
+((this.left.symbol != null) && (this.left.symbol.symbol != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == this.right.symbol.symbol.getClass().getName())
+((this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left.symbol != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.frequency == \old(this.left.symbol.frequency))
 this.left.left == \old(this.left.left)
 ((this.left.left != null) && (\old(this.left.left) != null))  ==>  (this.left.left.symbol == \old(this.left.left.symbol))
@@ -382,6 +384,7 @@ this.left.right == \old(this.left.right)
 ((this.left.right != null) && (\old(this.left.right) != null))  ==>  (this.left.right.right == \old(this.left.right.right))
 this.right.symbol == \old(this.right.symbol)
 ((this.right.symbol != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.symbol == \old(this.right.symbol.symbol))
+((this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ((this.right.symbol != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.frequency == \old(this.right.symbol.frequency))
 this.right.left == \old(this.right.left)
 ((this.right.left != null) && (\old(this.right.left) != null))  ==>  (this.right.left.symbol == \old(this.right.left.symbol))
@@ -401,12 +404,9 @@ this.right != null
 ((this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 (this.right.symbol != null)  ==>  (this.right.symbol.frequency >= 1)
 \result >= 2
-((this.left.symbol != null) && (this.left.symbol.symbol != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == this.right.symbol.symbol.getClass().getName())
-((this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left.symbol != null) && (this.right.symbol != null))  ==>  ((this.left.symbol.frequency >> this.right.symbol.frequency == 0))
 ((this.left.symbol != null) && (this.right.symbol != null))  ==>  (this.left.symbol.frequency <= this.right.symbol.frequency)
 (this.left.symbol != null)  ==>  (this.left.symbol.frequency < \result)
-((this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 (this.right.symbol != null)  ==>  (this.right.symbol.frequency < \result)
 ((this.left.symbol != null) && (this.right.symbol != null))  ==>  (this.left.symbol.frequency + this.right.symbol.frequency - \result == 0)
 ===========================================================================
@@ -414,11 +414,13 @@ six170.HuffmanTree.frequency():::EXIT
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right return orig(this) orig(this.symbol) orig(this.symbol.symbol) orig(this.symbol.symbol.getClass().getName()) orig(this.symbol.frequency) orig(this.left) orig(this.left.symbol) orig(this.left.symbol.symbol) orig(this.left.symbol.symbol.getClass().getName()) orig(this.left.symbol.frequency) orig(this.left.left) orig(this.left.left.symbol) orig(this.left.left.left) orig(this.left.left.right) orig(this.left.right) orig(this.left.right.symbol) orig(this.left.right.left) orig(this.left.right.right) orig(this.right) orig(this.right.symbol) orig(this.right.symbol.symbol) orig(this.right.symbol.symbol.getClass().getName()) orig(this.right.symbol.frequency) orig(this.right.left) orig(this.right.left.symbol) orig(this.right.left.left) orig(this.right.left.right) orig(this.right.right) orig(this.right.right.symbol) orig(this.right.right.left) orig(this.right.right.right)
 this.symbol == \old(this.symbol)
 ((this.symbol != null) && (\old(this.symbol) != null))  ==>  (this.symbol.symbol == \old(this.symbol.symbol))
+((this.symbol != null) && (this.symbol.symbol != null) && (\old(this.symbol) != null) && (\old(this.symbol.symbol) != null))  ==>  (this.symbol.symbol.getClass().getName() == \old(this.symbol.symbol.getClass().getName()))
 (this.symbol != null)  ==>  (this.symbol.frequency == \result)
 ((this.symbol != null) && (\old(this.symbol) != null))  ==>  (this.symbol.frequency == \old(this.symbol.frequency))
 this.left == \old(this.left)
 ((this.left != null) && (\old(this.left) != null))  ==>  (this.left.symbol == \old(this.left.symbol))
 ((this.left != null) && (this.left.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.symbol == \old(this.left.symbol.symbol))
+((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left != null) && (this.left.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.frequency == \old(this.left.symbol.frequency))
 ((this.left != null) && (\old(this.left) != null))  ==>  (this.left.left == \old(this.left.left))
 ((this.left != null) && (this.left.left != null) && (\old(this.left) != null) && (\old(this.left.left) != null))  ==>  (this.left.left.symbol == \old(this.left.left.symbol))
@@ -431,6 +433,7 @@ this.left == \old(this.left)
 this.right == \old(this.right)
 ((this.right != null) && (\old(this.right) != null))  ==>  (this.right.symbol == \old(this.right.symbol))
 ((this.right != null) && (this.right.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.symbol == \old(this.right.symbol.symbol))
+((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ((this.right != null) && (this.right.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.frequency == \old(this.right.symbol.frequency))
 ((this.right != null) && (\old(this.right) != null))  ==>  (this.right.left == \old(this.right.left))
 ((this.right != null) && (this.right.left != null) && (\old(this.right) != null) && (\old(this.right.left) != null))  ==>  (this.right.left.symbol == \old(this.right.left.symbol))
@@ -464,10 +467,7 @@ this.right == \old(this.right)
 (this.symbol == null)  ==>  (this.right.symbol.symbol != null)
 (this.symbol == null)  ==>  (this.right.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 \result >= 1
-((this.symbol != null) && (this.symbol.symbol != null) && (\old(this.symbol) != null) && (\old(this.symbol.symbol) != null))  ==>  (this.symbol.symbol.getClass().getName() == \old(this.symbol.symbol.getClass().getName()))
-((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left != null) && (this.left.symbol != null))  ==>  (this.left.symbol.frequency < \result)
-((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ((this.right != null) && (this.right.symbol != null))  ==>  (this.right.symbol.frequency < \result)
 ((this.left != null) && (this.left.symbol != null) && (this.right != null) && (this.right.symbol != null))  ==>  (this.left.symbol.frequency + this.right.symbol.frequency - \result == 0)
 ===========================================================================
@@ -478,10 +478,12 @@ six170.HuffmanTree.left():::EXIT
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right return return.symbol return.symbol.symbol return.symbol.symbol.getClass().getName() return.symbol.frequency return.left return.left.symbol return.left.left return.left.right return.right return.right.symbol return.right.left return.right.right orig(this) orig(this.symbol) orig(this.symbol.symbol) orig(this.symbol.symbol.getClass().getName()) orig(this.symbol.frequency) orig(this.left) orig(this.left.symbol) orig(this.left.symbol.symbol) orig(this.left.symbol.symbol.getClass().getName()) orig(this.left.symbol.frequency) orig(this.left.left) orig(this.left.left.symbol) orig(this.left.left.left) orig(this.left.left.right) orig(this.left.right) orig(this.left.right.symbol) orig(this.left.right.left) orig(this.left.right.right) orig(this.right) orig(this.right.symbol) orig(this.right.symbol.symbol) orig(this.right.symbol.symbol.getClass().getName()) orig(this.right.symbol.frequency) orig(this.right.left) orig(this.right.left.symbol) orig(this.right.left.left) orig(this.right.left.right) orig(this.right.right) orig(this.right.right.symbol) orig(this.right.right.left) orig(this.right.right.right)
 this.symbol == \old(this.symbol)
 ((this.symbol != null) && (\old(this.symbol) != null))  ==>  (this.symbol.symbol == \old(this.symbol.symbol))
+((this.symbol != null) && (this.symbol.symbol != null) && (\old(this.symbol) != null) && (\old(this.symbol.symbol) != null))  ==>  (this.symbol.symbol.getClass().getName() == \old(this.symbol.symbol.getClass().getName()))
 ((this.symbol != null) && (\old(this.symbol) != null))  ==>  (this.symbol.frequency == \old(this.symbol.frequency))
 this.left == \result
 ((this.left != null) && (\result != null))  ==>  (this.left.symbol == \result.symbol)
 ((this.left != null) && (this.left.symbol != null) && (\result != null) && (\result.symbol != null))  ==>  (this.left.symbol.symbol == \result.symbol.symbol)
+((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \result.symbol.symbol.getClass().getName())
 ((this.left != null) && (this.left.symbol != null) && (\result != null) && (\result.symbol != null))  ==>  (this.left.symbol.frequency == \result.symbol.frequency)
 ((this.left != null) && (\result != null))  ==>  (this.left.left == \result.left)
 ((this.left != null) && (this.left.left != null) && (\result != null) && (\result.left != null))  ==>  (this.left.left.symbol == \result.left.symbol)
@@ -494,6 +496,8 @@ this.left == \result
 this.right == \old(this.right)
 ((this.right != null) && (\old(this.right) != null))  ==>  (this.right.symbol == \old(this.right.symbol))
 ((this.right != null) && (this.right.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.symbol == \old(this.right.symbol.symbol))
+((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \result.symbol.symbol.getClass().getName())
+((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ((this.right != null) && (this.right.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.frequency == \old(this.right.symbol.frequency))
 ((this.right != null) && (\old(this.right) != null))  ==>  (this.right.left == \old(this.right.left))
 ((this.right != null) && (this.right.left != null) && (\old(this.right) != null) && (\old(this.right.left) != null))  ==>  (this.right.left.symbol == \old(this.right.left.symbol))
@@ -506,6 +510,7 @@ this.right == \old(this.right)
 \result == \old(this.left)
 ((\result != null) && (\old(this.left) != null))  ==>  (\result.symbol == \old(this.left.symbol))
 ((\result != null) && (\result.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null))  ==>  (\result.symbol.symbol == \old(this.left.symbol.symbol))
+((\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (\result.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((\result != null) && (\result.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null))  ==>  (\result.symbol.frequency == \old(this.left.symbol.frequency))
 ((\result != null) && (\old(this.left) != null))  ==>  (\result.left == \old(this.left.left))
 ((\result != null) && (\result.left != null) && (\old(this.left) != null) && (\old(this.left.left) != null))  ==>  (\result.left.symbol == \old(this.left.left.symbol))
@@ -518,13 +523,8 @@ this.right == \old(this.right)
 ((\result != null) && (\result.symbol != null))  ==>  (\result.symbol.symbol != null)
 ((\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (\result.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 ((\result != null) && (\result.symbol != null))  ==>  (\result.symbol.frequency >= 1)
-((this.symbol != null) && (this.symbol.symbol != null) && (\old(this.symbol) != null) && (\old(this.symbol.symbol) != null))  ==>  (this.symbol.symbol.getClass().getName() == \old(this.symbol.symbol.getClass().getName()))
-((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \result.symbol.symbol.getClass().getName())
-((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \result.symbol.symbol.getClass().getName())
-((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ((this.right != null) && (this.right.symbol != null) && (\result != null) && (\result.symbol != null))  ==>  ((\result.symbol.frequency >> this.right.symbol.frequency == 0))
 ((this.right != null) && (this.right.symbol != null) && (\result != null) && (\result.symbol != null))  ==>  (this.right.symbol.frequency >= \result.symbol.frequency)
-((\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (\result.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ===========================================================================
 six170.HuffmanTree.right():::ENTER
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right
@@ -533,10 +533,13 @@ six170.HuffmanTree.right():::EXIT
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right return return.symbol return.symbol.symbol return.symbol.symbol.getClass().getName() return.symbol.frequency return.left return.left.symbol return.left.left return.left.right return.right return.right.symbol return.right.left return.right.right orig(this) orig(this.symbol) orig(this.symbol.symbol) orig(this.symbol.symbol.getClass().getName()) orig(this.symbol.frequency) orig(this.left) orig(this.left.symbol) orig(this.left.symbol.symbol) orig(this.left.symbol.symbol.getClass().getName()) orig(this.left.symbol.frequency) orig(this.left.left) orig(this.left.left.symbol) orig(this.left.left.left) orig(this.left.left.right) orig(this.left.right) orig(this.left.right.symbol) orig(this.left.right.left) orig(this.left.right.right) orig(this.right) orig(this.right.symbol) orig(this.right.symbol.symbol) orig(this.right.symbol.symbol.getClass().getName()) orig(this.right.symbol.frequency) orig(this.right.left) orig(this.right.left.symbol) orig(this.right.left.left) orig(this.right.left.right) orig(this.right.right) orig(this.right.right.symbol) orig(this.right.right.left) orig(this.right.right.right)
 this.symbol == \old(this.symbol)
 ((this.symbol != null) && (\old(this.symbol) != null))  ==>  (this.symbol.symbol == \old(this.symbol.symbol))
+((this.symbol != null) && (this.symbol.symbol != null) && (\old(this.symbol) != null) && (\old(this.symbol.symbol) != null))  ==>  (this.symbol.symbol.getClass().getName() == \old(this.symbol.symbol.getClass().getName()))
 ((this.symbol != null) && (\old(this.symbol) != null))  ==>  (this.symbol.frequency == \old(this.symbol.frequency))
 this.left == \old(this.left)
 ((this.left != null) && (\old(this.left) != null))  ==>  (this.left.symbol == \old(this.left.symbol))
 ((this.left != null) && (this.left.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.symbol == \old(this.left.symbol.symbol))
+((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \result.symbol.symbol.getClass().getName())
+((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left != null) && (this.left.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.frequency == \old(this.left.symbol.frequency))
 ((this.left != null) && (\old(this.left) != null))  ==>  (this.left.left == \old(this.left.left))
 ((this.left != null) && (this.left.left != null) && (\old(this.left) != null) && (\old(this.left.left) != null))  ==>  (this.left.left.symbol == \old(this.left.left.symbol))
@@ -549,6 +552,7 @@ this.left == \old(this.left)
 this.right == \result
 ((this.right != null) && (\result != null))  ==>  (this.right.symbol == \result.symbol)
 ((this.right != null) && (this.right.symbol != null) && (\result != null) && (\result.symbol != null))  ==>  (this.right.symbol.symbol == \result.symbol.symbol)
+((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \result.symbol.symbol.getClass().getName())
 ((this.right != null) && (this.right.symbol != null) && (\result != null) && (\result.symbol != null))  ==>  (this.right.symbol.frequency == \result.symbol.frequency)
 ((this.right != null) && (\result != null))  ==>  (this.right.left == \result.left)
 ((this.right != null) && (this.right.left != null) && (\result != null) && (\result.left != null))  ==>  (this.right.left.symbol == \result.left.symbol)
@@ -561,6 +565,7 @@ this.right == \result
 \result == \old(this.right)
 ((\result != null) && (\old(this.right) != null))  ==>  (\result.symbol == \old(this.right.symbol))
 ((\result != null) && (\result.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null))  ==>  (\result.symbol.symbol == \old(this.right.symbol.symbol))
+((\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (\result.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ((\result != null) && (\result.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null))  ==>  (\result.symbol.frequency == \old(this.right.symbol.frequency))
 ((\result != null) && (\old(this.right) != null))  ==>  (\result.left == \old(this.right.left))
 ((\result != null) && (\result.left != null) && (\old(this.right) != null) && (\old(this.right.left) != null))  ==>  (\result.left.symbol == \old(this.right.left.symbol))
@@ -573,13 +578,8 @@ this.right == \result
 ((\result != null) && (\result.symbol != null))  ==>  (\result.symbol.symbol != null)
 ((\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (\result.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 ((\result != null) && (\result.symbol != null))  ==>  (\result.symbol.frequency >= 1)
-((this.symbol != null) && (this.symbol.symbol != null) && (\old(this.symbol) != null) && (\old(this.symbol.symbol) != null))  ==>  (this.symbol.symbol.getClass().getName() == \old(this.symbol.symbol.getClass().getName()))
-((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \result.symbol.symbol.getClass().getName())
-((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left != null) && (this.left.symbol != null) && (\result != null) && (\result.symbol != null))  ==>  ((this.left.symbol.frequency >> \result.symbol.frequency == 0))
 ((this.left != null) && (this.left.symbol != null) && (\result != null) && (\result.symbol != null))  ==>  (this.left.symbol.frequency <= \result.symbol.frequency)
-((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \result.symbol.symbol.getClass().getName())
-((\result != null) && (\result.symbol != null) && (\result.symbol.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (\result.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ===========================================================================
 six170.HuffmanTree.symbol():::ENTER
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right
@@ -590,6 +590,8 @@ assignable this.symbol.symbol, this.symbol.frequency
 this.symbol == \result
 this.left.symbol == \old(this.left.symbol)
 ((this.left.symbol != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.symbol == \old(this.left.symbol.symbol))
+((this.left.symbol != null) && (this.left.symbol.symbol != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == this.right.symbol.symbol.getClass().getName())
+((this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left.symbol != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.frequency == \old(this.left.symbol.frequency))
 this.left.left == \old(this.left.left)
 ((this.left.left != null) && (\old(this.left.left) != null))  ==>  (this.left.left.symbol == \old(this.left.left.symbol))
@@ -601,6 +603,7 @@ this.left.right == \old(this.left.right)
 ((this.left.right != null) && (\old(this.left.right) != null))  ==>  (this.left.right.right == \old(this.left.right.right))
 this.right.symbol == \old(this.right.symbol)
 ((this.right.symbol != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.symbol == \old(this.right.symbol.symbol))
+((this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ((this.right.symbol != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.frequency == \old(this.right.symbol.frequency))
 this.right.left == \old(this.right.left)
 ((this.right.left != null) && (\old(this.right.left) != null))  ==>  (this.right.left.symbol == \old(this.right.left.symbol))
@@ -620,37 +623,36 @@ this.right != null
 ((this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.right.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 (this.right.symbol != null)  ==>  (this.right.symbol.frequency >= 1)
 \result == null
-((this.left.symbol != null) && (this.left.symbol.symbol != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == this.right.symbol.symbol.getClass().getName())
-((this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left.symbol != null) && (this.right.symbol != null))  ==>  ((this.left.symbol.frequency >> this.right.symbol.frequency == 0))
 ((this.left.symbol != null) && (this.right.symbol != null))  ==>  (this.left.symbol.frequency <= this.right.symbol.frequency)
-((this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ===========================================================================
 six170.HuffmanTree.symbol():::EXIT65
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right return return.getClass().getName() orig(this) orig(this.symbol) orig(this.symbol.symbol) orig(this.symbol.symbol.getClass().getName()) orig(this.symbol.frequency) orig(this.left) orig(this.left.symbol) orig(this.left.symbol.symbol) orig(this.left.symbol.symbol.getClass().getName()) orig(this.left.symbol.frequency) orig(this.left.left) orig(this.left.left.symbol) orig(this.left.left.left) orig(this.left.left.right) orig(this.left.right) orig(this.left.right.symbol) orig(this.left.right.left) orig(this.left.right.right) orig(this.right) orig(this.right.symbol) orig(this.right.symbol.symbol) orig(this.right.symbol.symbol.getClass().getName()) orig(this.right.symbol.frequency) orig(this.right.left) orig(this.right.left.symbol) orig(this.right.left.left) orig(this.right.left.right) orig(this.right.right) orig(this.right.right.symbol) orig(this.right.right.left) orig(this.right.right.right)
 assignable this.left.symbol, this.left.symbol.symbol, this.left.symbol.frequency, this.left.left, this.left.left.symbol, this.left.left.left, this.left.left.right, this.left.right, this.left.right.symbol, this.left.right.left, this.left.right.right, this.right.symbol, this.right.symbol.symbol, this.right.symbol.frequency, this.right.left, this.right.left.symbol, this.right.left.left, this.right.left.right, this.right.right, this.right.right.symbol, this.right.right.left, this.right.right.right
 this.symbol.symbol == \result
+this.symbol.symbol.getClass().getName() == \result.getClass().getName()
 this.symbol.frequency == \old(this.symbol.frequency)
 this.left == this.right
 this.left == \old(this.right)
 \result == \old(this.symbol.symbol)
+\result.getClass().getName() == \old(this.symbol.symbol.getClass().getName())
 this.symbol != null
 this.symbol.frequency >= 1
 this.left == null
 \result != null
 \result.getClass().getName() == java.lang.Character.class.getName()
-this.symbol.symbol.getClass().getName() == \result.getClass().getName()
-\result.getClass().getName() == \old(this.symbol.symbol.getClass().getName())
 ===========================================================================
 six170.HuffmanTree.symbol():::EXIT
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right return return.getClass().getName() orig(this) orig(this.symbol) orig(this.symbol.symbol) orig(this.symbol.symbol.getClass().getName()) orig(this.symbol.frequency) orig(this.left) orig(this.left.symbol) orig(this.left.symbol.symbol) orig(this.left.symbol.symbol.getClass().getName()) orig(this.left.symbol.frequency) orig(this.left.left) orig(this.left.left.symbol) orig(this.left.left.left) orig(this.left.left.right) orig(this.left.right) orig(this.left.right.symbol) orig(this.left.right.left) orig(this.left.right.right) orig(this.right) orig(this.right.symbol) orig(this.right.symbol.symbol) orig(this.right.symbol.symbol.getClass().getName()) orig(this.right.symbol.frequency) orig(this.right.left) orig(this.right.left.symbol) orig(this.right.left.left) orig(this.right.left.right) orig(this.right.right) orig(this.right.right.symbol) orig(this.right.right.left) orig(this.right.right.right)
 this.symbol == \old(this.symbol)
 (this.symbol != null)  ==>  (this.symbol.symbol == \result)
 ((this.symbol != null) && (\old(this.symbol) != null))  ==>  (this.symbol.symbol == \old(this.symbol.symbol))
+((this.symbol != null) && (this.symbol.symbol != null) && (\result != null))  ==>  (this.symbol.symbol.getClass().getName() == \result.getClass().getName())
 ((this.symbol != null) && (\old(this.symbol) != null))  ==>  (this.symbol.frequency == \old(this.symbol.frequency))
 this.left == \old(this.left)
 ((this.left != null) && (\old(this.left) != null))  ==>  (this.left.symbol == \old(this.left.symbol))
 ((this.left != null) && (this.left.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.symbol == \old(this.left.symbol.symbol))
+((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
 ((this.left != null) && (this.left.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.frequency == \old(this.left.symbol.frequency))
 ((this.left != null) && (\old(this.left) != null))  ==>  (this.left.left == \old(this.left.left))
 ((this.left != null) && (this.left.left != null) && (\old(this.left) != null) && (\old(this.left.left) != null))  ==>  (this.left.left.symbol == \old(this.left.left.symbol))
@@ -663,6 +665,7 @@ this.left == \old(this.left)
 this.right == \old(this.right)
 ((this.right != null) && (\old(this.right) != null))  ==>  (this.right.symbol == \old(this.right.symbol))
 ((this.right != null) && (this.right.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.symbol == \old(this.right.symbol.symbol))
+((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
 ((this.right != null) && (this.right.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null))  ==>  (this.right.symbol.frequency == \old(this.right.symbol.frequency))
 ((this.right != null) && (\old(this.right) != null))  ==>  (this.right.left == \old(this.right.left))
 ((this.right != null) && (this.right.left != null) && (\old(this.right) != null) && (\old(this.right.left) != null))  ==>  (this.right.left.symbol == \old(this.right.left.symbol))
@@ -672,6 +675,7 @@ this.right == \old(this.right)
 ((this.right != null) && (this.right.right != null) && (\old(this.right) != null) && (\old(this.right.right) != null))  ==>  (this.right.right.symbol == \old(this.right.right.symbol))
 ((this.right != null) && (this.right.right != null) && (\old(this.right) != null) && (\old(this.right.right) != null))  ==>  (this.right.right.left == \old(this.right.right.left))
 ((this.right != null) && (this.right.right != null) && (\old(this.right) != null) && (\old(this.right.right) != null))  ==>  (this.right.right.right == \old(this.right.right.right))
+((\result != null) && (\old(this.symbol) != null) && (\old(this.symbol.symbol) != null))  ==>  (\result.getClass().getName() == \old(this.symbol.symbol.getClass().getName()))
 (this.symbol != null)  <==>  (\result != null)
 (this.symbol != null)  <==>  (this.left == null)
 (this.symbol != null)  <==>  (this.right == null)
@@ -694,7 +698,3 @@ this.right == \old(this.right)
 (this.symbol == null)  ==>  (this.right.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 (this.symbol == null)  ==>  (this.symbol == \result)
 (\result != null)  ==>  (\result.getClass().getName() == java.lang.Character.class.getName())
-((this.symbol != null) && (this.symbol.symbol != null) && (\result != null))  ==>  (this.symbol.symbol.getClass().getName() == \result.getClass().getName())
-((this.left != null) && (this.left.symbol != null) && (this.left.symbol.symbol != null) && (\old(this.left) != null) && (\old(this.left.symbol) != null) && (\old(this.left.symbol.symbol) != null))  ==>  (this.left.symbol.symbol.getClass().getName() == \old(this.left.symbol.symbol.getClass().getName()))
-((this.right != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null) && (\old(this.right) != null) && (\old(this.right.symbol) != null) && (\old(this.right.symbol.symbol) != null))  ==>  (this.right.symbol.symbol.getClass().getName() == \old(this.right.symbol.symbol.getClass().getName()))
-((\result != null) && (\old(this.symbol) != null) && (\old(this.symbol.symbol) != null))  ==>  (\result.getClass().getName() == \old(this.symbol.symbol.getClass().getName()))

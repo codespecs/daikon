@@ -337,7 +337,9 @@ public class PptName implements Serializable {
     }
     int non_digit;
     for (non_digit = FileIO.exit_suffix.length(); non_digit < point.length(); non_digit++) {
-      if (!Character.isDigit(point.charAt(non_digit))) break;
+      if (!Character.isDigit(point.charAt(non_digit))) {
+        break;
+      }
     }
     return point.substring(FileIO.exit_suffix.length(), non_digit);
   }
@@ -452,12 +454,14 @@ public class PptName implements Serializable {
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied PptName this*/) {
     return fullname;
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied PptName this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
@@ -471,6 +475,7 @@ public class PptName implements Serializable {
   }
 
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
     return fullname.hashCode();
   }

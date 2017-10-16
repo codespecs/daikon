@@ -17,7 +17,8 @@ public class HtmlToTexinfo {
 
   static {
     // Javadoc actually permits matched braces.  Expand this in the future when needed.
-    javadocAtCode = Pattern.compile("\\{@code ([^{}]*?)\\}");
+    // javadocAtCode = Pattern.compile("\\{@code ([^{}]*?)\\}");
+    javadocAtCode = Pattern.compile("\\{@code[ \n]+([^{}]*?(\\{[^{}]*?\\}[^{}]*?)?)\\}");
   }
 
   /**
@@ -33,7 +34,9 @@ public class HtmlToTexinfo {
     while (m.find(pos)) {
       result.append(htmlToTexinfo(s.substring(pos, m.start())));
       result.append("@code{");
-      result.append(s.substring(m.start(1), m.end(1)));
+      String codeText = s.substring(m.start(1), m.end(1));
+      String codeTextQuoted = codeText.replace("{", "@{").replace("}", "@}");
+      result.append(codeTextQuoted);
       result.append("}");
       pos = m.end();
     }

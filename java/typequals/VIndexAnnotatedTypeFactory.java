@@ -8,7 +8,7 @@ import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
 import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.framework.type.treeannotator.TreeAnnotator;
-import org.checkerframework.javacutil.AnnotationUtils;
+import org.checkerframework.javacutil.AnnotationBuilder;
 import org.checkerframework.javacutil.InternalUtils;
 import org.checkerframework.javacutil.TypesUtils;
 
@@ -22,7 +22,7 @@ public class VIndexAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
   public VIndexAnnotatedTypeFactory(BaseTypeChecker checker) {
     super(checker);
-    VINDEXTOP = AnnotationUtils.fromClass(elements, VIndexTop.class);
+    VINDEXTOP = AnnotationBuilder.fromClass(elements, VIndexTop.class);
     this.postInit();
   }
 

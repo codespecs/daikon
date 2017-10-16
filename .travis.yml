@@ -17,7 +17,7 @@ env:
   - OS=ubuntu JDKVER=jdkany GROUP=kvasir
 ## Fedora 23 is old, don't bother testing it any more.
 #  - OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
-## It's not trivial to install JDK7 on current Fedora.
+## It's not trivial to install JDK7 on Fedora 24 and later, so test only JDK 8.
 #  - OS=fedora JDKVER=jdk7 GROUP=quick-txt-diff
 #  - OS=fedora JDKVER=jdk7 GROUP=nonquick-txt-diff
 #  - OS=fedora JDKVER=jdk7 GROUP=non-txt-diff

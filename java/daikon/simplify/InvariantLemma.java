@@ -24,11 +24,13 @@ public class InvariantLemma extends Lemma {
     invariant = inv;
   }
 
+  @Override
   public String summarize(/*>>>@GuardSatisfied InvariantLemma this*/) {
     return summary + " from " + from;
   }
 
   /** If this lemma came from an invariant, get its class. */
+  @Override
   public Class<? extends Invariant> invClass() {
     Class<? extends Invariant> c;
     if (invariant instanceof GuardingImplication) {

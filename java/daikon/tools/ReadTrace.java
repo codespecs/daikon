@@ -26,7 +26,7 @@ import org.checkerframework.checker.nullness.qual.*;
  */
 public class ReadTrace {
 
-  /** The argument is an array data trace file names. */
+  /** @param args data trace file names */
   public static void main(String[] args) {
     CollectDataProcessor processor = new CollectDataProcessor();
     PptMap ppts = new PptMap();
@@ -50,16 +50,17 @@ public class ReadTrace {
   }
 
   /**
-   * Populates the <code>samples</code> map with all the data read from the file. This is only
-   * reasonable for small trace files, since all the data will be retained in memory!
+   * Populates the {@code samples} map with all the data read from the file. This is only reasonable
+   * for small trace files, since all the data will be retained in memory!
    */
   public static class CollectDataProcessor extends FileIO.Processor {
 
     public Map<PptTopLevel, List<ValueTuple>> samples =
         new LinkedHashMap<PptTopLevel, List<ValueTuple>>();
 
-    /** Process the sample, by adding it to the <code>samples</code> map. */
+    /** Process the sample, by adding it to the {@code samples} map. */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
+    @Override
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
 

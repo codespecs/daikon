@@ -70,6 +70,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Returns whether or not the specified types are valid. All subclasses accept a scalar in one
    * parameter and an array over the same scalar type in the other.
    */
+  @Override
   public boolean valid_types(VarInfo[] vis) {
 
     if (vis.length != 2) {
@@ -96,11 +97,13 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * essentially symmetric. Subclasses can override if necessary.
    */
   /*@Pure*/
+  @Override
   public boolean is_symmetric() {
     return true;
   }
 
   // Check if swap occurred and call one of the other two methods
+  @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
     // assert ArraysMDE.fn_is_permutation(permutation);
@@ -151,6 +154,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return vis[scl_index()];
   }
 
+  @Override
   public InvariantStatus check(
       /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     assert !falsified;
@@ -166,6 +170,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return InvariantStatus.NO_CHANGE;
   }
 
+  @Override
   public InvariantStatus add(
       /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     assert !falsified;

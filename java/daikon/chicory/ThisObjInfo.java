@@ -40,11 +40,13 @@ public class ThisObjInfo extends DaikonVariableInfo {
   }
 
   /** 'this' is a top level variable */
+  @Override
   public VarKind get_var_kind() {
     return VarKind.VARIABLE;
   }
 
   /** Add IS_PARAM to list of variable flags, because the receiver "this" is a formal parameter. */
+  @Override
   public EnumSet<VarFlags> get_var_flags() {
     // System.out.printf ("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();

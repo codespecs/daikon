@@ -4,6 +4,8 @@ import daikon.Chicory;
 import daikon.util.SimpleLog;
 import java.io.*;
 import java.lang.instrument.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
@@ -114,6 +116,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
    * entries and exits. Because Chicory is invoked as a javaagent, the transform method is called by
    * the Java runtime each time a new class is loaded.
    */
+  @Override
   public byte /*@Nullable*/ [] transform(
       ClassLoader loader,
       /*@InternalForm*/ String className,
@@ -223,8 +226,11 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
       JavaClass njc = cg.getJavaClass();
       if (Chicory.debug) {
-        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), "/tmp/ret/");
-        njc.dump("/tmp/ret/" + njc.getClassName() + ".class");
+        Path dir = Files.createTempDirectory("chicory-debug");
+        Path file = dir.resolve(njc.getClassName() + ".class");
+        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
+        Files.createDirectories(dir);
+        njc.dump(file.toFile());
       }
 
       if (c_info.shouldInclude) {
@@ -428,370 +434,347 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
     boolean shouldInclude = false;
 
     try {
-      pool = cg.getConstantPool();
-
       // Loop through each method in the class
       Method[] methods = cg.getMethods();
       for (int i = 0; i < methods.length; i++) {
-        MethodGen mg = new MethodGen(methods[i], cg.getClassName(), pool);
-        MethodContext context = new MethodContext(cg, mg);
 
-        // check for the class static initializer method
-        if (mg.getName().equals("<clinit>")) {
-          if (Chicory.checkStaticInit) {
-            cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
-            cg.update();
-          }
-          if (!Chicory.instrument_clinit) {
-            continue;
-          }
-        }
+        // The class data in StackMapUtils is not thread safe,
+        // allow only one method at a time to be instrumented.
+        // DynComp does this by creating a new instrumentation object
+        // for each class - probably a cleaner solution.
+        synchronized (this) {
+          pool = cg.getConstantPool();
+          MethodGen mg = new MethodGen(methods[i], cg.getClassName(), pool);
+          MethodContext context = new MethodContext(cg, mg);
 
-        // If method is synthetic... (default constructors and <clinit> are not synthetic)
-        if ((Const.ACC_SYNTHETIC & mg.getAccessFlags()) > 0) {
-          continue;
-        }
-
-        // Get the instruction list and skip methods with no instructions
-        InstructionList il = mg.getInstructionList();
-        if (il == null) {
-          continue;
-        }
-
-        fix_local_variable_table(mg);
-
-        if (Chicory.debug) {
-          Type[] arg_types = mg.getArgumentTypes();
-          String[] arg_names = mg.getArgumentNames();
-          LocalVariableGen[] local_vars = mg.getLocalVariables();
-          String types = "", names = "", locals = "";
-
-          for (int j = 0; j < arg_types.length; j++) {
-            types = types + arg_types[j] + " ";
-          }
-          for (int j = 0; j < arg_names.length; j++) {
-            names = names + arg_names[j] + " ";
-          }
-          for (int j = 0; j < local_vars.length; j++) {
-            locals = locals + local_vars[j].getName() + " ";
-          }
-          debug_instrument.log("%nMethod = %s%n", mg);
-          debug_instrument.log("arg_types(%d): %s%n", arg_types.length, types);
-          debug_instrument.log("arg_names(%d): %s%n", arg_names.length, names);
-          debug_instrument.log("localvars(%d): %s%n", local_vars.length, locals);
-          debug_instrument.log("Original code: %s%n", mg.getMethod().getCode());
-          debug_instrument.log("ClassInfo: %s%n", class_info);
-          debug_instrument.log("MethodGen: %s%n", mg);
-          dump_code_attributes(mg);
-        }
-
-        // Get existing StackMapTable (if present)
-        fetch_current_stack_map_table(mg, cg.getMajor());
-
-        // Create a MethodInfo that describes this methods arguments
-        // and exit line numbers (information not available via reflection)
-        // and add it to the list for this class.
-        MethodInfo mi = (create_method_info(class_info, mg));
-
-        print_stack_map_table("After create_method_info");
-
-        if (mi == null) // method filtered out!
-        continue;
-
-        // Create a map of Uninitialized_variable_info offsets to
-        // InstructionHandles.  We will use this map after we
-        // complete instrumentation to update the offsets due
-        // to code modification and expansion.
-        // The offsets point to 'new' instructions; since we do
-        // not modify these, their Instruction Handles will remain
-        // unchanged throught the instrumentaion process.
-        process_uninitialized_variable_info(il, true);
-
-        if (!shouldInclude) {
-          debug_transform.log("Class %s included [%s]%n", cg.getClassName(), mi);
-        }
-        shouldInclude = true; // at least one method not filtered out
-
-        method_infos.add(mi);
-
-        synchronized (SharedData.methods) {
-          cur_method_info_index = SharedData.methods.size();
-          SharedData.methods.add(mi);
-        }
-
-        // Remember the start of the original Code.
-        InstructionHandle try_start = il.getStart();
-
-        // Add nonce local to matchup enter/exits
-        String entry_ppt_name =
-            DaikonWriter.methodEntryName(
-                fullClassName, getArgTypes(mg), mg.toString(), mg.getName());
-        add_entry_instrumentation(
-            il, context, !shouldFilter(fullClassName, mg.getName(), entry_ppt_name));
-
-        print_stack_map_table("After add_entry_instrumentation");
-
-        debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
-
-        // Need to see if there are any switches after this location.
-        // If so, we may need to update the corresponding stackmap if
-        // the amount of the switch padding changed.
-        modify_stack_maps_for_switches(il.getStart(), il);
-
-        Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
-        Iterator<Integer> exitIter = mi.exit_locations.iterator();
-        Iterator<Integer> throwIter = mi.throw_locations.iterator();
-
-        List<InstructionHandle> throw_ils = new ArrayList<InstructionHandle>();
-        // Loop through each instruction looking for the returns and throws
-        for (InstructionHandle ih = il.getStart(); ih != null; ) {
-          Instruction inst = ih.getInstruction();
-
-          // If this is a return instruction, insert method exit instrumentation
-          InstructionList new_il =
-              generate_return_instrumentation(
-                  fullClassName, inst, context, shouldIncIter, exitIter);
-
-          // If not return maybe it is a throw
-          if (new_il == null) {
-            new_il =
-                generate_throw_instrumentation(
-                    fullClassName, inst, context, shouldIncIter, throwIter);
-            if (new_il != null) throw_ils.add(ih);
-          }
-
-          // Remember the next instruction to process
-          InstructionHandle next_ih = ih.getNext();
-
-          // If this instruction was processed, insert the new instruction
-          // list before it. If this instruction was the target of any jumps,
-          // change the target to be the first instruction in the new list.
-          if (new_il != null) {
-            if (next_ih != null) {
-              // This return or throw is not at the end of the method.
-              // That means that the following instruction is a branch
-              // target and that means it has a StackMap entry. (Java7)
-              // We need to adjust its offset to account for our inserted code.
-
-              // If there was no orgiinal StackMapTable (smta == null)
-              // then class was compiled for Java 5.
-              if (smta != null) {
-                int len = (new_il.getByteCode()).length;
-                il.setPositions();
-                int current_offset = next_ih.getPosition();
-
-                if (Chicory.debug) {
-                  debug_instrument.log(
-                      "Current offset: %d Inserted length: %d%n", current_offset, len);
-                  //debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
-                  //dump_code_attributes(mg);
-                }
-
-                // find stack map for current location
-                StackMapEntry stack_map = find_stack_map_equal(current_offset);
-                stack_map.updateByteCodeOffset(len);
-              }
+          // check for the class static initializer method
+          if (mg.getName().equals("<clinit>")) {
+            if (Chicory.checkStaticInit) {
+              cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
+              cg.update();
             }
-
-            InstructionHandle new_start = il.insert(ih, new_il);
-            // debug_instrument.log("old start = %s, new_start = %s%n", ih, new_start);
-            il.redirectBranches(ih, new_start);
-
-            // Fix up line numbers to point at the new code
-            if (ih.hasTargeters()) {
-              for (InstructionTargeter it : ih.getTargeters()) {
-                if (it instanceof LineNumberGen) {
-                  it.updateTarget(ih, new_start);
-                }
-              }
-            }
-
-            // Need to see if there are any switches after this location.
-            // If so, we may need to update the corresponding stackmap if
-            // the amount of the switch padding changed.
-            modify_stack_maps_for_switches(next_ih, il);
-          }
-          // Go on to the next instruction in the list
-          ih = next_ih;
-        }
-
-        // Wrap the user's code with a try-catch-block to catch delegated Exceptions
-        print_stack_map_table("Final before adding try-catch-blocks");
-        // Remember the end of the original Code.
-        InstructionHandle try_end = il.getEnd();
-        InstructionList catch_il = generate_internal_catch_instrumentation(fullClassName, context);
-        // Is the method the constructor?
-        if (mg.getName().equals("<init>")) {
-          // first command must be super (implicit or direct)
-          if (try_start.getNext().getInstruction().getOpcode() == Const.INVOKESPECIAL) {
-            try_start = try_start.getNext().getNext();
-            // It is tricky to figure out when the object has been completely initialized.
-            // It looks like Philipp tried but in the end decided to only handle the simple case. (markro)
-            //                //find last putfield
-            //                InstructionHandle endOfConstruct = null;
-            //                // Loop through each instruction looking for the putfield
-            //                for (InstructionHandle tmpRun = try_start; tmpRun != null; ) {
-            //                    Short tmpCode = tmpRun.getInstruction().getOpcode();
-            //                    if(tmpCode == Const.PUTFIELD || tmpCode == Const.PUTSTATIC){
-            //                        endOfConstruct = tmpRun;
-            //                    }
-            //                    tmpRun = tmpRun.getNext();
-            //                }
-            //                if(endOfConstruct != null){
-            //                    try_start = endOfConstruct.getNext();
-            //                }
-          } else {
-            catch_il = null;
-          }
-        }
-
-        if (catch_il != null) {
-          // Not sure when try_start could ever be null. (markro)
-          try_start = (try_start == null ? il.getStart() : try_start);
-          // Remember the Size of the OriginalCode, to calculate the Offset in the StackMap
-          int tagetIS = il.getByteCode().length;
-          InstructionHandle handler = il.append(try_end, catch_il);
-
-          // Add our handler to the ExceptionTable.
-          // If there were throws in the code, we need to divide the code into
-          // multiple ranges (omitting the throw statements) so that we do not
-          // catch them and trace/log them twice.
-          if (!throw_ils.isEmpty()) {
-            InstructionHandle run_start = try_start;
-            for (InstructionHandle run_ih : throw_ils) {
-              mg.addExceptionHandler(
-                  run_start,
-                  run_ih.getPrev(),
-                  handler,
-                  ObjectType.getInstance("java.lang.Throwable"));
-              run_start = run_ih.getNext();
-            }
-            if (!run_start.equals(handler) || run_start.getPosition() >= 0)
-              mg.addExceptionHandler(
-                  run_start, try_end, handler, ObjectType.getInstance("java.lang.Throwable"));
-          } else {
-            // No throws, just one handler for the entire range.
-            mg.addExceptionHandler(
-                try_start, try_end, handler, ObjectType.getInstance("java.lang.Throwable"));
-          }
-
-          // Add a new StackMapEntry for our handle-block.
-          StackMapEntry[] new_map = new StackMapEntry[stack_map_table.length + 1];
-          StackMapType stack_throwable_type =
-              new StackMapType(
-                  Const.ITEM_Object, pool.addClass("java.lang.Throwable"), pool.getConstantPool());
-          StackMapType[] stack_throwable_type_entry = {stack_throwable_type};
-
-          // The new handle-block will require a new StackMap entry.
-          // This entry needs to include information about the local
-          // stack items.  To do this, we need to process all the
-          // StackMap entries prior to the handle-block to calculate
-          // the localItem state for the new StackMap entry.
-          Stack<StackMapType> localItems_types = new Stack<StackMapType>();
-
-          // Start with Parameters as locals
-          int newLocalCnt = mg.getArgumentNames().length;
-          // ADD THIS
-          if (!mg.isStatic()) {
-            newLocalCnt++;
-            localItems_types.push(
-                new StackMapType(
-                    Const.ITEM_Object, pool.addClass(mg.getClassName()), pool.getConstantPool()));
-          }
-          // ADD PARAMETERS
-          for (int tt = 0; tt < mg.getArgumentTypes().length; tt++) {
-            Type runType = mg.getArgumentTypes()[tt];
-            // if(!runType.getClass().equals(ObjectType.class) ){ //&& !runType.getClass().equals(BasicType.class)
-            //   continue;
-            // }
-            if (runType.getClass().equals(BasicType.class)) {
-              Byte tmpTag = STACKMAP_TYPE.get(runType);
-              if (tmpTag == null) {
-                // ERROR
-                continue;
-              }
-              localItems_types.push(new StackMapType(tmpTag, -1, pool.getConstantPool()));
+            if (!Chicory.instrument_clinit) {
               continue;
             }
-            localItems_types.push(
+          }
+
+          // If method is synthetic... (default constructors and <clinit> are not synthetic)
+          if ((Const.ACC_SYNTHETIC & mg.getAccessFlags()) > 0) {
+            continue;
+          }
+
+          // Get the instruction list and skip methods with no instructions
+          InstructionList il = mg.getInstructionList();
+          if (il == null) {
+            continue;
+          }
+
+          if (Chicory.debug) {
+            Type[] arg_types = mg.getArgumentTypes();
+            String[] arg_names = mg.getArgumentNames();
+            LocalVariableGen[] local_vars = mg.getLocalVariables();
+            String types = "", names = "", locals = "";
+
+            for (int j = 0; j < arg_types.length; j++) {
+              types = types + arg_types[j] + " ";
+            }
+            for (int j = 0; j < arg_names.length; j++) {
+              names = names + arg_names[j] + " ";
+            }
+            for (int j = 0; j < local_vars.length; j++) {
+              locals = locals + local_vars[j].getName() + " ";
+            }
+            debug_instrument.log("%nMethod = %s%n", mg);
+            debug_instrument.log("arg_types(%d): %s%n", arg_types.length, types);
+            debug_instrument.log("arg_names(%d): %s%n", arg_names.length, names);
+            debug_instrument.log("localvars(%d): %s%n", local_vars.length, locals);
+            debug_instrument.log("Original code: %s%n", mg.getMethod().getCode());
+            debug_instrument.log("ClassInfo: %s%n", class_info);
+            debug_instrument.log("MethodGen: %s%n", mg);
+            dump_code_attributes(mg);
+          }
+
+          // Get existing StackMapTable (if present)
+          fetch_current_stack_map_table(mg, cg.getMajor());
+
+          fix_local_variable_table(mg);
+
+          // Create a MethodInfo that describes this methods arguments
+          // and exit line numbers (information not available via reflection)
+          // and add it to the list for this class.
+          MethodInfo mi = (create_method_info(class_info, mg));
+
+          print_stack_map_table("After create_method_info");
+
+          if (mi == null) // method filtered out!
+          continue;
+
+          // Create a map of Uninitialized_variable_info offsets to
+          // InstructionHandles.  We will use this map after we
+          // complete instrumentation to update the offsets due
+          // to code modification and expansion.
+          // The offsets point to 'new' instructions; since we do
+          // not modify these, their Instruction Handles will remain
+          // unchanged throught the instrumentaion process.
+          process_uninitialized_variable_info(il, true);
+
+          if (!shouldInclude) {
+            debug_transform.log("Class %s included [%s]%n", cg.getClassName(), mi);
+          }
+          shouldInclude = true; // at least one method not filtered out
+
+          method_infos.add(mi);
+
+          synchronized (SharedData.methods) {
+            cur_method_info_index = SharedData.methods.size();
+            SharedData.methods.add(mi);
+          }
+
+          // Remember the start of the original Code.
+          InstructionHandle try_start = il.getStart();
+
+          // Add nonce local to matchup enter/exits
+          String entry_ppt_name =
+              DaikonWriter.methodEntryName(
+                  fullClassName, getArgTypes(mg), mg.toString(), mg.getName());
+          add_entry_instrumentation(
+              il, context, !shouldFilter(fullClassName, mg.getName(), entry_ppt_name));
+
+          print_stack_map_table("After add_entry_instrumentation");
+
+          debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+
+          // Need to see if there are any switches after this location.
+          // If so, we may need to update the corresponding stackmap if
+          // the amount of the switch padding changed.
+          modify_stack_maps_for_switches(il.getStart(), il);
+
+          Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
+          Iterator<Integer> exitIter = mi.exit_locations.iterator();
+          Iterator<Integer> throwIter = mi.throw_locations.iterator();
+
+          List<InstructionHandle> throw_ils = new ArrayList<InstructionHandle>();
+          // Loop through each instruction looking for the returns and throws
+          for (InstructionHandle ih = il.getStart(); ih != null; ) {
+            Instruction inst = ih.getInstruction();
+
+            // If this is a return instruction, insert method exit instrumentation
+            InstructionList new_il =
+                generate_return_instrumentation(
+                    fullClassName, inst, context, shouldIncIter, exitIter);
+
+            // If not return maybe it is a throw
+            if (new_il == null) {
+              new_il =
+                  generate_throw_instrumentation(
+                      fullClassName, inst, context, shouldIncIter, throwIter);
+              if (new_il != null) throw_ils.add(ih);
+            }
+
+            // Remember the next instruction to process
+            InstructionHandle next_ih = ih.getNext();
+
+            // If this instruction was processed, insert the new instruction
+            // list before it. If this instruction was the target of any jumps,
+            // change the target to be the first instruction in the new list.
+            if (new_il != null) {
+              if (next_ih != null) {
+                // This return or throw is not at the end of the method.
+                // That means that the following instruction is a branch
+                // target and that means it has a StackMap entry. (Java7)
+                // We need to adjust its offset to account for our inserted code.
+
+                // If there was no orgiinal StackMapTable (smta == null)
+                // then class was compiled for Java 5.
+                if (smta != null) {
+                  int len = (new_il.getByteCode()).length;
+                  il.setPositions();
+                  int current_offset = next_ih.getPosition();
+
+                  if (Chicory.debug) {
+                    debug_instrument.log(
+                        "Current offset: %d Inserted length: %d%n", current_offset, len);
+                    //debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+                    //dump_code_attributes(mg);
+                  }
+
+                  // find stack map for current location
+                  StackMapEntry stack_map = find_stack_map_equal(current_offset);
+                  stack_map.updateByteCodeOffset(len);
+                }
+              }
+
+              InstructionHandle new_start = il.insert(ih, new_il);
+              // debug_instrument.log("old start = %s, new_start = %s%n", ih, new_start);
+              il.redirectBranches(ih, new_start);
+
+              // Fix up line numbers to point at the new code
+              if (ih.hasTargeters()) {
+                for (InstructionTargeter it : ih.getTargeters()) {
+                  if (it instanceof LineNumberGen) {
+                    it.updateTarget(ih, new_start);
+                  }
+                }
+              }
+
+              // Need to see if there are any switches after this location.
+              // If so, we may need to update the corresponding stackmap if
+              // the amount of the switch padding changed.
+              modify_stack_maps_for_switches(next_ih, il);
+            }
+            // Go on to the next instruction in the list
+            ih = next_ih;
+          }
+
+          // Wrap the user's code with a try-catch-block to catch delegated Exceptions
+          print_stack_map_table("Final before adding try-catch-blocks");
+          // Remember the end of the original Code.
+          InstructionHandle try_end = il.getEnd();
+          InstructionList catch_il =
+              generate_internal_catch_instrumentation(fullClassName, context);
+          // Is the method the constructor?
+          if (mg.getName().equals("<init>")) {
+            // first command must be super (implicit or direct)
+            if (try_start.getNext().getInstruction().getOpcode() == Const.INVOKESPECIAL) {
+              try_start = try_start.getNext().getNext();
+              // It is tricky to figure out when the object has been completely initialized.
+              // It looks like Philipp tried but in the end decided to only handle the simple case. (markro)
+              //                //find last putfield
+              //                InstructionHandle endOfConstruct = null;
+              //                // Loop through each instruction looking for the putfield
+              //                for (InstructionHandle tmpRun = try_start; tmpRun != null; ) {
+              //                    Short tmpCode = tmpRun.getInstruction().getOpcode();
+              //                    if(tmpCode == Const.PUTFIELD || tmpCode == Const.PUTSTATIC){
+              //                        endOfConstruct = tmpRun;
+              //                    }
+              //                    tmpRun = tmpRun.getNext();
+              //                }
+              //                if(endOfConstruct != null){
+              //                    try_start = endOfConstruct.getNext();
+              //                }
+            } else {
+              catch_il = null;
+            }
+          }
+
+          if (catch_il != null) {
+            // Not sure when try_start could ever be null. (markro)
+            try_start = (try_start == null ? il.getStart() : try_start);
+            // Remember the Size of the OriginalCode, to calculate the Offset in the StackMap
+            int tagetIS = il.getByteCode().length;
+            InstructionHandle handler = il.append(try_end, catch_il);
+
+            // Add our handler to the ExceptionTable.
+            // If there were throws in the code, we need to divide the code into
+            // multiple ranges (omitting the throw statements) so that we do not
+            // catch them and trace/log them twice.
+            if (!throw_ils.isEmpty()) {
+              InstructionHandle run_start = try_start;
+              for (InstructionHandle run_ih : throw_ils) {
+                mg.addExceptionHandler(
+                    run_start,
+                    run_ih.getPrev(),
+                    handler,
+                    ObjectType.getInstance("java.lang.Throwable"));
+                run_start = run_ih.getNext();
+              }
+              if (!run_start.equals(handler) || run_start.getPosition() >= 0)
+                mg.addExceptionHandler(
+                    run_start, try_end, handler, ObjectType.getInstance("java.lang.Throwable"));
+            } else {
+              // No throws, just one handler for the entire range.
+              mg.addExceptionHandler(
+                  try_start, try_end, handler, ObjectType.getInstance("java.lang.Throwable"));
+            }
+
+            // Add a new StackMapEntry for our handle-block.
+            StackMapEntry[] new_map = new StackMapEntry[stack_map_table.length + 1];
+            StackMapType stack_throwable_type =
                 new StackMapType(
                     Const.ITEM_Object,
-                    pool.addClass(runType.getSignature()),
-                    pool.getConstantPool()));
-          }
+                    pool.addClass("java.lang.Throwable"),
+                    pool.getConstantPool());
+            StackMapType[] stack_throwable_type_entry = {stack_throwable_type};
 
-          boolean fullFrameFound = false;
-          // Keep track of the count of locals
-          int runLocalCnt = newLocalCnt;
-          int offset = 0;
+            // The new handle-block will require a new StackMap entry.
+            // This entry needs to include information about the local
+            // stack items.  To do this, we need to process all the
+            // StackMap entries prior to the handle-block to calculate
+            // the localItem state for the new StackMap entry.
+            Stack<StackMapType> localItems_types = new Stack<StackMapType>();
 
-          // traverse the stackframe table and create the stack for the new entry.
-          for (int j = 0; j < stack_map_table.length; j++) {
-            StackMapEntry runSME = stack_map_table[j];
-            if ((offset - 1) <= try_start.getPosition()) {
-              newLocalCnt = runLocalCnt;
+            // Start with Parameters as locals
+            int newLocalCnt = mg.getArgumentNames().length;
+            // ADD THIS
+            if (!mg.isStatic()) {
+              newLocalCnt++;
+              localItems_types.push(
+                  new StackMapType(
+                      Const.ITEM_Object, pool.addClass(mg.getClassName()), pool.getConstantPool()));
             }
-
-            int runFrameType = runSME.getFrameType();
-            if (runFrameType >= Const.APPEND_FRAME && runFrameType <= Const.APPEND_FRAME_MAX) {
-              int addCnt = runFrameType - (Const.APPEND_FRAME - 1);
-              localItems_types.addAll(Arrays.asList(runSME.getTypesOfLocals()));
-              runLocalCnt += addCnt;
-            }
-
-            if (runFrameType >= Const.CHOP_FRAME && runFrameType <= Const.CHOP_FRAME_MAX) {
-              int delCnt = (Const.CHOP_FRAME_MAX + 1) - runFrameType;
-              for (int k = 0; k < delCnt; k++) {
-                localItems_types.pop();
+            // ADD PARAMETERS
+            for (int tt = 0; tt < mg.getArgumentTypes().length; tt++) {
+              Type runType = mg.getArgumentTypes()[tt];
+              // if(!runType.getClass().equals(ObjectType.class) ){ //&& !runType.getClass().equals(BasicType.class)
+              //   continue;
+              // }
+              if (runType.getClass().equals(BasicType.class)) {
+                Byte tmpTag = STACKMAP_TYPE.get(runType);
+                if (tmpTag == null) {
+                  // ERROR
+                  continue;
+                }
+                localItems_types.push(new StackMapType(tmpTag, -1, pool.getConstantPool()));
+                continue;
               }
-              runLocalCnt -= delCnt;
+              localItems_types.push(
+                  new StackMapType(
+                      Const.ITEM_Object,
+                      pool.addClass(runType.getSignature()),
+                      pool.getConstantPool()));
             }
 
-            if (runFrameType == Const.FULL_FRAME) {
-              localItems_types.clear();
-              localItems_types.addAll(Arrays.asList(runSME.getTypesOfLocals()));
-              runLocalCnt = localItems_types.size();
-              fullFrameFound = true;
-            }
+            boolean fullFrameFound = false;
+            // Keep track of the count of locals
+            int runLocalCnt = newLocalCnt;
+            int offset = 0;
 
-            offset += runSME.getByteCodeOffset() + 1;
-            new_map[j] = runSME;
-          }
-          int goalOffset = tagetIS - offset;
-          //            Are the locals the same?
-          //            create SAME_LOCALS_1_STACK_ITEM_FRAME
-          if (newLocalCnt == runLocalCnt && !mg.getName().equals("<init>")) {
-            int tmpTag =
-                (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset)
-                        > Const.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX
-                    ? Const.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED
-                    : (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset);
-            new_map[stack_map_table.length] =
-                new StackMapEntry(
-                    tmpTag, goalOffset, null, stack_throwable_type_entry, pool.getConstantPool());
-            //        new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
-            //            null, 1, stack_throwable_type_entry, pool.getConstantPool());
-          } else {
-            if (localItems_types.size() >= newLocalCnt || mg.getName().equals("<init>")) {
-              // Create FULL-FRAME-Entry
-              int localsCnt = newLocalCnt;
-              while (localItems_types.size() > localsCnt) {
-                localItems_types.pop();
+            // traverse the stackframe table and create the stack for the new entry.
+            for (int j = 0; j < stack_map_table.length; j++) {
+              StackMapEntry runSME = stack_map_table[j];
+              if ((offset - 1) <= try_start.getPosition()) {
+                newLocalCnt = runLocalCnt;
               }
-              StackMapType[] newlocalItems_types = new StackMapType[localsCnt];
 
-              newlocalItems_types = localItems_types.toArray(newlocalItems_types);
+              int runFrameType = runSME.getFrameType();
+              if (runFrameType >= Const.APPEND_FRAME && runFrameType <= Const.APPEND_FRAME_MAX) {
+                int addCnt = runFrameType - (Const.APPEND_FRAME - 1);
+                localItems_types.addAll(Arrays.asList(runSME.getTypesOfLocals()));
+                runLocalCnt += addCnt;
+              }
 
-              new_map[stack_map_table.length] =
-                  new StackMapEntry(
-                      Const.FULL_FRAME,
-                      goalOffset,
-                      newlocalItems_types,
-                      stack_throwable_type_entry,
-                      pool.getConstantPool());
-            } else {
-              //ERROR but keep a valid Stackframe
-              // Need to find out if it happens
+              if (runFrameType >= Const.CHOP_FRAME && runFrameType <= Const.CHOP_FRAME_MAX) {
+                int delCnt = (Const.CHOP_FRAME_MAX + 1) - runFrameType;
+                for (int k = 0; k < delCnt; k++) {
+                  localItems_types.pop();
+                }
+                runLocalCnt -= delCnt;
+              }
+
+              if (runFrameType == Const.FULL_FRAME) {
+                localItems_types.clear();
+                localItems_types.addAll(Arrays.asList(runSME.getTypesOfLocals()));
+                runLocalCnt = localItems_types.size();
+                fullFrameFound = true;
+              }
+
+              offset += runSME.getByteCodeOffset() + 1;
+              new_map[j] = runSME;
+            }
+            int goalOffset = tagetIS - offset;
+            //            Are the locals the same?
+            //            create SAME_LOCALS_1_STACK_ITEM_FRAME
+            if (newLocalCnt == runLocalCnt && !mg.getName().equals("<init>")) {
               int tmpTag =
                   (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset)
                           > Const.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX
@@ -800,50 +783,85 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
               new_map[stack_map_table.length] =
                   new StackMapEntry(
                       tmpTag, goalOffset, null, stack_throwable_type_entry, pool.getConstantPool());
-              //            new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
-              //                null, 1, stack_throwable_type_entry, pool.getConstantPool());
+              //        new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
+              //            null, 1, stack_throwable_type_entry, pool.getConstantPool());
+            } else {
+              if (localItems_types.size() >= newLocalCnt || mg.getName().equals("<init>")) {
+                // Create FULL-FRAME-Entry
+                int localsCnt = newLocalCnt;
+                while (localItems_types.size() > localsCnt) {
+                  localItems_types.pop();
+                }
+                StackMapType[] newlocalItems_types = new StackMapType[localsCnt];
+
+                newlocalItems_types = localItems_types.toArray(newlocalItems_types);
+
+                new_map[stack_map_table.length] =
+                    new StackMapEntry(
+                        Const.FULL_FRAME,
+                        goalOffset,
+                        newlocalItems_types,
+                        stack_throwable_type_entry,
+                        pool.getConstantPool());
+              } else {
+                //ERROR but keep a valid Stackframe
+                // Need to find out if it happens
+                int tmpTag =
+                    (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset)
+                            > Const.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX
+                        ? Const.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED
+                        : (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset);
+                new_map[stack_map_table.length] =
+                    new StackMapEntry(
+                        tmpTag,
+                        goalOffset,
+                        null,
+                        stack_throwable_type_entry,
+                        pool.getConstantPool());
+                //            new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
+                //                null, 1, stack_throwable_type_entry, pool.getConstantPool());
+              }
+            }
+
+            stack_map_table = new_map;
+          }
+
+          // Update the Uninitialized_variable_info offsets before
+          // we write out the new StackMapTable.
+          process_uninitialized_variable_info(il, false);
+          create_new_stack_map_attribute(mg);
+
+          remove_local_variable_type_table(mg);
+
+          // Update the instruction list
+          mg.setInstructionList(il);
+          mg.update();
+
+          // Update the max stack
+          mg.setMaxStack();
+          mg.update();
+
+          // Update the method in the class
+          try {
+            cg.replaceMethod(methods[i], mg.getMethod());
+          } catch (Exception e) {
+            if ((e.getMessage()).startsWith("Branch target offset too large")) {
+              System.out.printf(
+                  "Chicory warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
+                  cg.getClassName(), mg.getName());
+              continue;
+            } else {
+              throw e;
             }
           }
 
-          stack_map_table = new_map;
-        }
-
-        // Update the Uninitialized_variable_info offsets before
-        // we write out the new StackMapTable.
-        process_uninitialized_variable_info(il, false);
-        create_new_stack_map_attribute(mg);
-
-        remove_local_variable_type_table(mg);
-
-        // Update the instruction list
-        mg.setInstructionList(il);
-        mg.update();
-
-        // Update the max stack
-        mg.setMaxStack();
-        mg.update();
-
-        // Update the method in the class
-        try {
-          cg.replaceMethod(methods[i], mg.getMethod());
-        } catch (Exception e) {
-          if ((e.getMessage()).startsWith("Branch target offset too large")) {
-            System.out.printf(
-                "Chicory warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
-                cg.getClassName(), mg.getName());
-            continue;
-          } else {
-            throw e;
+          if (Chicory.debug) {
+            debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+            dump_code_attributes(mg);
           }
-        }
-
-        if (Chicory.debug) {
-          debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
-          dump_code_attributes(mg);
+          cg.update();
         }
       }
-
-      cg.update();
     } catch (Exception e) {
       System.out.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
@@ -1219,8 +1237,6 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
 
     int new_index = 1;
     if (len_part2 > 0) {
-      // We need to check for len_part2 being too large,
-      // Daikon issue #30.
       new_map[1] =
           new StackMapEntry(
               ((len_part2 - 1) > Const.SAME_FRAME_MAX

@@ -18,6 +18,7 @@ public class CmdRaw implements Cmd {
   }
 
   /** For documentation, read the class overview. */
+  @Override
   public void apply(final /*@GuardedBy("<self>")*/ Session s) {
 
     synchronized (s) {
@@ -28,6 +29,7 @@ public class CmdRaw implements Cmd {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied CmdRaw this*/) {
     return "CmdRaw: " + cmd;
   }

@@ -77,8 +77,8 @@ x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT
 this.root == orig(this.root)
-return.getClass().getName() == DataStructures.MyInteger.class
 return.getClass().getName() == orig(x.getClass().getName())
+return.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 (this.root == null)  ==>  (t == null)

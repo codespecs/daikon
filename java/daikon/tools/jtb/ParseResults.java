@@ -36,6 +36,7 @@ public class ParseResults {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied ParseResults this*/) {
     return "package name: " + packageName + ", " + "file name: " + fileName;
   }

@@ -129,6 +129,7 @@ public class DeclReader {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied DeclVarInfo this*/) {
       return String.format("%s [%s] %s", type, rep_type, name);
     }
@@ -249,6 +250,7 @@ public class DeclReader {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied DeclPpt this*/) {
       return name;
     }
@@ -269,7 +271,9 @@ public class DeclReader {
 
     try {
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
-        if (!line.equals("DECLARE")) continue;
+        if (!line.equals("DECLARE")) {
+          continue;
+        }
 
         // Read the declaration
         read_decl(decl_file);

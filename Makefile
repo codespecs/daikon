@@ -199,6 +199,7 @@ dcomp-jdk:
 reformat:
 	cd java && $(MAKE) reformat
 
+
 ### Kvasir (C/C++ front end)
 
 ifeq ($(shell uname -m),x86_64)
@@ -253,6 +254,7 @@ endif
 endif
 endif
 endif
+
 
 ### Rebuild everything; used for monthly releases, for example
 
@@ -321,6 +323,7 @@ nightly-test-except-doc-pdf:
 	$(MAKE) javadoc doc-all-except-pdf
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
+
 
 ### Tags
 
@@ -731,6 +734,8 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 ###
 
 showvars:
+	@echo "DAIKONDIR =" $(DAIKONDIR)
+	@echo "DAIKONDIR_DEFAULT =" $(DAIKONDIR_DEFAULT)
 	@echo "DAIKON_JAVA_FILES =" $(DAIKON_JAVA_FILES)
 	@echo "WWW_FILES =" $(WWW_FILES)
 	@echo "CUR_RELEASE_NAME =" $(CUR_RELEASE_NAME)

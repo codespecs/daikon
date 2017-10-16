@@ -51,6 +51,7 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
     }
   }
 
+  @Override
   public void visit(NodeToken n) {
     if (debugInsert) {
       System.out.println(

@@ -25,10 +25,12 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
     super(ps, verbose, printEmptyPpts, printUninteresting);
   }
 
+  @Override
   public void visit(PptNode node) {
     super.visit(node);
   }
 
+  @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
@@ -51,6 +53,7 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
    * Returns true if the pair of invariants should be printed, depending on their type,
    * relationship, and printability.
    */
+  @Override
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
     if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING

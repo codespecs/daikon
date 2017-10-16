@@ -257,6 +257,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /** Creates and returns a copy of this. */
   // Default implementation to quiet Findbugs.
   /*@SideEffectFree*/
+  @Override
   public VarInfoAux clone(
       /*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
     VarInfoAux result = (VarInfoAux) super.clone();
@@ -265,17 +266,20 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.toString();
   }
 
   /*@Pure*/
+  @Override
   public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.hashCode();
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
+  @Override
   public boolean equals(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
@@ -386,7 +390,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
       int tokInfo = tok.nextToken();
       while (tokInfo != StreamTokenizer.TT_EOF) {
-        if (tok.ttype != '"') continue;
+        if (tok.ttype != '"') {
+          continue;
+        }
         assert tok.sval != null
             : "@AssumeAssertion(nullness)"; // tok.type == '"' guarantees not null
         lValues.add(tok.sval.trim());
@@ -413,10 +419,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return map.get(key);
   }
 
-  /**
-   * Return <code>true</code> if the value for the given key is defined, and <code>false</code>
-   * otherwise.
-   */
+  /** Return {@code true} if the value for the given key is defined, and {@code false} otherwise. */
   public boolean hasValue(String key) {
     return map.containsKey(key);
   }
@@ -437,7 +440,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Converts the integer <code>value</code> to a String before invoking {@link #setValue(String,
+   * Converts the integer {@code value} to a String before invoking {@link #setValue(String,
    * String)}.
    */
   public VarInfoAux setInt(String key, int value) {

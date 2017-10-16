@@ -128,6 +128,7 @@ public class PptRelation implements Serializable {
   }
 
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
@@ -446,7 +447,9 @@ public class PptRelation implements Serializable {
     // Note that static constants don't have orig versions (since they are
     // known to be the same), so we connect to the post version instead.
     for (VarInfo vp : parent.var_infos) {
-      if (vp.derived != null) continue;
+      if (vp.derived != null) {
+        continue;
+      }
       if (vp.isStaticConstant()) {
         boolean found = rel.relate(vp, vp.name());
         // Static constants are not always placed at each level in hierarchy
@@ -472,7 +475,9 @@ public class PptRelation implements Serializable {
 
     // Loop through each derived parent (ENTER) variable
     for (VarInfo vp : parent.var_infos) {
-      if (vp.derived == null) continue;
+      if (vp.derived == null) {
+        continue;
+      }
 
       // Get a child version of each of the bases of the derivation
       VarInfo[] vp_bases = vp.derived.getBases();
@@ -485,7 +490,9 @@ public class PptRelation implements Serializable {
 
       // Loop through the child (exit) looking for a matching derived variable
       for (VarInfo vc : child.var_infos) {
-        if (vc.derived == null) continue;
+        if (vc.derived == null) {
+          continue;
+        }
         assert vp.derived != null : "@AssumeAssertion(nullness): bug in Nullness Checker";
         if (vc.derived.isSameFormula(vp.derived)) {
           assert vc.derived != null;
@@ -502,7 +509,9 @@ public class PptRelation implements Serializable {
     // Make sure every non-static ENTER variable was found in the EXIT point
     boolean all_found = true;
     for (VarInfo vp : parent.var_infos) {
-      if (vp.isStaticConstant()) continue;
+      if (vp.isStaticConstant()) {
+        continue;
+      }
       if (!rel.parent_to_child_map.containsKey(vp)) {
         System.out.println(
             "No match for "
@@ -797,8 +806,12 @@ public class PptRelation implements Serializable {
 
     // Loop over each ppt and process each non-leaf with splitters
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.ppt_name.isNumberedExitPoint()) continue;
-      if (!ppt.has_splitters()) continue;
+      if (ppt.ppt_name.isNumberedExitPoint()) {
+        continue;
+      }
+      if (!ppt.has_splitters()) {
+        continue;
+      }
 
       // System.out.printf ("processing splitter '%s' [%s] %b%n", ppt.name(),
       //                    ppt.ppt_name.getPoint(),
@@ -815,7 +828,9 @@ public class PptRelation implements Serializable {
         // Create a list of children for this splitter
         child_loop:
         for (PptRelation rel : ppt.children) {
-          if (!rel.child.has_splitters()) break;
+          if (!rel.child.has_splitters()) {
+            break;
+          }
           for (PptSplitter csplit : rel.child.splitters) {
             if (ppt_split.splitter == csplit.splitter) {
               split_children.add(new SplitChild(rel, csplit));
@@ -878,14 +893,18 @@ public class PptRelation implements Serializable {
       for (ParentRelation pr : ppt.parent_relations) {
         // Skip all relations in subexits.  These relations will be handled
         // in the combined exit point.
-        if (ppt.is_subexit()) continue;
+        if (ppt.is_subexit()) {
+          continue;
+        }
 
         PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
         if (parent == null) {
           throw new RuntimeException(
               "parent ppt " + pr.parent_ppt_name + " not found for ppt " + ppt.name());
         }
-        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) continue;
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
         // System.out.printf ("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));
@@ -958,8 +977,12 @@ public class PptRelation implements Serializable {
 
     // Loop over each ppt and process each non-leaf with splitters
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.is_subexit()) continue;
-      if (!ppt.has_splitters()) continue;
+      if (ppt.is_subexit()) {
+        continue;
+      }
+      if (!ppt.has_splitters()) {
+        continue;
+      }
 
       // System.out.printf ("processing splitter %s%n", ppt.name());
 
@@ -974,7 +997,9 @@ public class PptRelation implements Serializable {
         // Create a list of children for this splitter
         child_loop:
         for (PptRelation rel : ppt.children) {
-          if (!rel.child.has_splitters()) break;
+          if (!rel.child.has_splitters()) {
+            break;
+          }
           for (PptSplitter csplit : rel.child.splitters) {
             if (ppt_split.splitter == csplit.splitter) {
               split_children.add(new SplitChild(rel, csplit));

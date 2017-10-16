@@ -181,6 +181,7 @@ public abstract class DaikonVariableInfo
 
   /** Returns a string representation of this node. */
   /*@SideEffectFree*/
+  @Override
   public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     return getClass().getName() + ":" + getName();
   }
@@ -215,6 +216,7 @@ public abstract class DaikonVariableInfo
    * Return an iterator over all the node's children. Don't modify the list of children through the
    * iterator, as an unmodifiable list is used to generate the iterator.
    */
+  @Override
   public Iterator<DaikonVariableInfo> iterator() {
     return Collections.unmodifiableList(children).iterator();
   }
@@ -386,8 +388,10 @@ public abstract class DaikonVariableInfo
     for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++) {
       Class<?> type = arguments[i];
       String name = argnamesiter.next();
-      if (type.getName().equals("daikon.dcomp.DCompMarker")) continue;
-      if (type.getName().equals("java.lang.DCompMarker")) continue;
+      if ((type.getName().equals("daikon.dcomp.DCompMarker"))
+          || (type.getName().equals("java.lang.DCompMarker"))) {
+        continue;
+      }
       debug_vars.indent("processing parameter '%s'%n", name);
       DaikonVariableInfo theChild =
           addParamDeclVar(cinfo, type, name, offset, depth, i, param_offset);
@@ -1234,6 +1238,7 @@ public abstract class DaikonVariableInfo
 
   /** Compares based on the name of the variable. */
   /*@Pure*/
+  @Override
   public int compareTo(/*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv) {
     return name.compareTo(dv.name);
   }

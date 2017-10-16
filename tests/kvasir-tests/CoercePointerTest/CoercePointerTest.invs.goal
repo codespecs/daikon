@@ -7,11 +7,11 @@
 ..main():::EXIT
 ::junk == orig(::junk)
 ::junk.baz_int == orig(::junk.baz_int)
+::junk.baz_str == orig(::junk.baz_str)
 ::junk has only one value
 ::junk.baz_int == 0
 ::junk.baz_str == ""
 return == 0
-::junk.baz_str == orig(::junk.baz_str)
 ===========================================================================
 ..normal_view():::ENTER
 ::junk has only one value
@@ -30,11 +30,14 @@ f[0] has only one value
 ..normal_view():::EXIT
 ::junk == orig(::junk)
 ::junk.baz_int == orig(::junk.baz_int)
+::junk.baz_str == orig(::junk.baz_str)
 f->foo_baz == orig(f->foo_baz)
 f->foo_baz->baz_int == orig(f->foo_baz->baz_int)
+f->foo_baz->baz_str == orig(f->foo_baz->baz_str)
 f->foo_baz[0] == orig(f->foo_baz[0])
 f->foo_double == orig(f->foo_double)
 f->foo_int == orig(f->foo_int)
+f->foo_str == orig(f->foo_str)
 f[0] == orig(f[0])
 ::junk has only one value
 ::junk.baz_int == 0
@@ -47,9 +50,6 @@ f->foo_double == 2.718
 f->foo_int == 42
 f->foo_str == "f->foo_str"
 f[0] has only one value
-::junk.baz_str == orig(::junk.baz_str)
-f->foo_baz->baz_str == orig(f->foo_baz->baz_str)
-f->foo_str == orig(f->foo_str)
 ===========================================================================
 ..view_bar():::ENTER
 ::junk has only one value
@@ -62,6 +62,7 @@ b[0] has only one value
 ..view_bar():::EXIT
 ::junk == orig(::junk)
 ::junk.baz_int == orig(::junk.baz_int)
+::junk.baz_str == orig(::junk.baz_str)
 b->bar_int == orig(b->bar_int)
 b[0] == orig(b[0])
 ::junk has only one value
@@ -69,7 +70,6 @@ b[0] == orig(b[0])
 ::junk.baz_str == ""
 b->bar_int == 123456
 b[0] has only one value
-::junk.baz_str == orig(::junk.baz_str)
 ===========================================================================
 ..view_bar_as_foo():::ENTER
 ::junk has only one value
@@ -88,11 +88,14 @@ bar_as_foo[0] has only one value
 ..view_bar_as_foo():::EXIT
 ::junk == orig(::junk)
 ::junk.baz_int == orig(::junk.baz_int)
+::junk.baz_str == orig(::junk.baz_str)
 bar_as_foo->foo_baz == orig(bar_as_foo->foo_baz)
 bar_as_foo->foo_baz->baz_int == orig(bar_as_foo->foo_baz->baz_int)
+bar_as_foo->foo_baz->baz_str == orig(bar_as_foo->foo_baz->baz_str)
 bar_as_foo->foo_baz[0] == orig(bar_as_foo->foo_baz[0])
 bar_as_foo->foo_double == orig(bar_as_foo->foo_double)
 bar_as_foo->foo_int == orig(bar_as_foo->foo_int)
+bar_as_foo->foo_str == orig(bar_as_foo->foo_str)
 bar_as_foo[0] == orig(bar_as_foo[0])
 ::junk has only one value
 ::junk.baz_int == 0
@@ -105,9 +108,6 @@ bar_as_foo->foo_double == 2.718
 bar_as_foo->foo_int == 42
 bar_as_foo->foo_str == "f->foo_str"
 bar_as_foo[0] has only one value
-::junk.baz_str == orig(::junk.baz_str)
-bar_as_foo->foo_baz->baz_str == orig(bar_as_foo->foo_baz->baz_str)
-bar_as_foo->foo_str == orig(bar_as_foo->foo_str)
 ===========================================================================
 ..view_foo():::ENTER
 ::junk has only one value
@@ -126,11 +126,14 @@ f[0] has only one value
 ..view_foo():::EXIT
 ::junk == orig(::junk)
 ::junk.baz_int == orig(::junk.baz_int)
+::junk.baz_str == orig(::junk.baz_str)
 f->foo_baz == orig(f->foo_baz)
 f->foo_baz->baz_int == orig(f->foo_baz->baz_int)
+f->foo_baz->baz_str == orig(f->foo_baz->baz_str)
 f->foo_baz[0] == orig(f->foo_baz[0])
 f->foo_double == orig(f->foo_double)
 f->foo_int == orig(f->foo_int)
+f->foo_str == orig(f->foo_str)
 f[0] == orig(f[0])
 ::junk has only one value
 ::junk.baz_int == 0
@@ -143,9 +146,6 @@ f->foo_double == 2.718
 f->foo_int == 42
 f->foo_str == "f->foo_str"
 f[0] has only one value
-::junk.baz_str == orig(::junk.baz_str)
-f->foo_baz->baz_str == orig(f->foo_baz->baz_str)
-f->foo_str == orig(f->foo_str)
 ===========================================================================
 ..view_foo_and_bar():::ENTER
 ::junk has only one value
@@ -167,13 +167,16 @@ f[0] has only one value
 ..view_foo_and_bar():::EXIT
 ::junk == orig(::junk)
 ::junk.baz_int == orig(::junk.baz_int)
+::junk.baz_str == orig(::junk.baz_str)
 b->bar_int == orig(b->bar_int)
 b[0] == orig(b[0])
 f->foo_baz == orig(f->foo_baz)
 f->foo_baz->baz_int == orig(f->foo_baz->baz_int)
+f->foo_baz->baz_str == orig(f->foo_baz->baz_str)
 f->foo_baz[0] == orig(f->foo_baz[0])
 f->foo_double == orig(f->foo_double)
 f->foo_int == orig(f->foo_int)
+f->foo_str == orig(f->foo_str)
 f[0] == orig(f[0])
 ::junk has only one value
 ::junk.baz_int == 0
@@ -188,6 +191,3 @@ f->foo_double == 2.718
 f->foo_int == 42
 f->foo_str == "f->foo_str"
 f[0] has only one value
-::junk.baz_str == orig(::junk.baz_str)
-f->foo_baz->baz_str == orig(f->foo_baz->baz_str)
-f->foo_str == orig(f->foo_str)

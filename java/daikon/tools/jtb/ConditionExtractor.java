@@ -51,6 +51,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f1 -> "package"
   // f2 -> Name()
   // f3 -> ";"
+  @Override
   public void visit(PackageDeclaration n) {
     packageName = Ast.format(n.f2);
     super.visit(n);
@@ -62,6 +63,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f3 -> [ ExtendsList(isInterface) ]
   // f4 -> [ ImplementsList(isInterface) ]
   // f5 -> ClassOrInterfaceBody(isInterface)
+  @Override
   public void visit(ClassOrInterfaceDeclaration n) {
 
     if (!Ast.isInterface(n)) { // Not sure if this is needed; added during JTB udpate.
@@ -71,6 +73,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   }
 
   /** Stores the field name, if it is a boolean. */
+  @Override
   public void visit(FieldDeclaration n) {
     // Grammar production:
     // f0 -> Type()
@@ -96,6 +99,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * 'replace' statements when the condition makes a call to that function. Here we keep track of
    * the fact that we have reached a method declaration.
    */
+  @Override
   public void visit(MethodDeclaration n) {
     // after the next non-empty statement, the variable
     // enterMethod is set to false
@@ -108,6 +112,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f0 -> <IDENTIFIER>
   // f1 -> FormalParameters()
   // f2 -> ( "[" "]" )*
+  @Override
   public void visit(MethodDeclarator n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
@@ -126,6 +131,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f5 -> [ ExplicitConstructorInvocation() ]
   // f6 -> ( BlockStatement() )*
   // f7 -> "}"
+  @Override
   public void visit(ConstructorDeclaration n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
@@ -146,6 +152,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f6 -> "}"
 
   /** Extracts the values for the different cases and creates splitting conditions out of them. */
+  @Override
   public void visit(SwitchStatement n) {
     String switchExpression = Ast.format(n.f2);
     Collection<String> caseValues = getCaseValues(n.f5);
@@ -189,6 +196,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f4 -> Statement()
   // f5 -> [ "else" Statement() ]
   /* Extract the condition in an 'if' statement */
+  @Override
   public void visit(IfStatement n) {
     addCondition(Ast.format(n.f2));
     super.visit(n);
@@ -200,6 +208,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f3 -> ")"
   // f4 -> Statement()
   /* Extract the condition in an 'while' statement */
+  @Override
   public void visit(WhileStatement n) {
     super.visit(n);
     addCondition(Ast.format(n.f2));
@@ -213,6 +222,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f5 -> ")"
   // f6 -> ";"
   /* Extract the condition in an 'DoStatement' statement */
+  @Override
   public void visit(DoStatement n) {
     super.visit(n);
     addCondition(Ast.format(n.f4));
@@ -224,6 +234,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f3 -> ")"
   // f4 -> Statement()
   /* Extract the condition in an 'for' statement */
+  @Override
   public void visit(ForStatement n) {
     super.visit(n);
     if (n.f2.which == 1) {
@@ -256,6 +267,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * If this statement is a return statement of boolean type, then
    * it is included as a condition.
    */
+  @Override
   public void visit(Statement n) {
     // if we just entered the function and this is a return statement,
     // then it's a one-liner. Save the statement

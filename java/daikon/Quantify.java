@@ -98,10 +98,12 @@ public class Quantify {
       this.name = name;
     }
     /*@SideEffectFree*/
+    @Override
     public String name(/*>>>@GuardSatisfied FreeVar this*/) {
       return name;
     }
     /*@SideEffectFree*/
+    @Override
     public String simplify_name() {
       return "|" + name + "|";
     }
@@ -115,6 +117,7 @@ public class Quantify {
       this.val = val;
     }
     /*@SideEffectFree*/
+    @Override
     public String name(/*>>>@GuardSatisfied Constant this*/) {
       return "" + val;
     }
@@ -134,14 +137,17 @@ public class Quantify {
       this.offset = offset;
     }
     /*@SideEffectFree*/
+    @Override
     public String toString(/*>>>@GuardSatisfied Length this*/) {
       return name();
     }
     /*@SideEffectFree*/
+    @Override
     public String name(/*>>>@GuardSatisfied Length this*/) {
       return name_with_offset("size(" + sequence.name() + ")", offset);
     }
     /*@SideEffectFree*/
+    @Override
     public String esc_name() {
       VarInfo arr_var = get_check_array_var("ESC");
       if (arr_var.isPrestate()) {
@@ -153,6 +159,7 @@ public class Quantify {
       }
     }
     /*@SideEffectFree*/
+    @Override
     public String jml_name() {
       VarInfo arr_var = get_check_array_var("JML");
       if (arr_var.isPrestate()) {
@@ -166,6 +173,7 @@ public class Quantify {
       }
     }
     /*@SideEffectFree*/
+    @Override
     public String jml_name(boolean in_prestate) {
       if (!in_prestate) return jml_name();
 
@@ -180,6 +188,7 @@ public class Quantify {
       }
     }
     /*@SideEffectFree*/
+    @Override
     public String simplify_name() {
       VarInfo arr_var = get_check_array_var("Simplify");
       String length = String.format("(arrayLength %s)", arr_var.simplify_name());
@@ -192,6 +201,7 @@ public class Quantify {
       }
     }
     /*@SideEffectFree*/
+    @Override
     public String csharp_name() {
       VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
       return name_with_offset(arr_var.csharp_name() + ".Count()", offset);
@@ -238,21 +248,25 @@ public class Quantify {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String name(/*>>>@GuardSatisfied VarPlusOffset this*/) {
       return name_with_offset(var.name(), offset);
     }
 
     /*@SideEffectFree*/
+    @Override
     public String esc_name() {
       return name_with_offset(var.esc_name(), offset);
     }
 
     /*@SideEffectFree*/
+    @Override
     public String jml_name() {
       return name_with_offset(var.jml_name(), offset);
     }
 
     /*@SideEffectFree*/
+    @Override
     public String jml_name(boolean in_prestate) {
       if (!in_prestate) return jml_name();
 
@@ -265,6 +279,7 @@ public class Quantify {
     }
 
     /*@SideEffectFree*/
+    @Override
     public String simplify_name() {
       if (offset < 0) {
         return String.format("(- %s %d)", var.simplify_name(), -offset);
@@ -315,7 +330,9 @@ public class Quantify {
       VarInfo vi = vars[ii];
 
       // If this variable is not an array, there is not much to do
-      if (!vi.file_rep_type.isArray()) continue;
+      if (!vi.file_rep_type.isArray()) {
+        continue;
+      }
 
       // Get a unique free variable name
       String idx_name;
@@ -455,7 +472,9 @@ public class Quantify {
         conditions = new StringBuffer();
         for (int i = 0; i < qrets.length; i++) {
           Term idx = qrets[i].index;
-          if (idx == null) continue;
+          if (idx == null) {
+            continue;
+          }
           VarInfo vi = qrets[i].var;
           Term low = vi.get_lower_bound();
           Term high = vi.get_upper_bound();
@@ -524,7 +543,9 @@ public class Quantify {
         // Term[] boundv = qret.bound_vars.get(i);
         // Term idx_var = boundv[0];
         QuantifyReturn qret = qrets[i];
-        if (qret.index == null) continue;
+        if (qret.index == null) {
+          continue;
+        }
         String idx_var_name = qret.index.simplify_name();
         String lower_bound = qret.var.get_lower_bound().simplify_name();
         String idx_expr = "(- " + idx_var_name + " " + lower_bound + ")";

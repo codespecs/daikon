@@ -17,6 +17,7 @@ public class ConsequentCVFPairComparator implements Comparator<Invariant> {
       new ConsequentPairComparator(new Invariant.ClassVarnameFormulaComparator());
 
   /*@Pure*/
+  @Override
   public int compare(Invariant inv1, Invariant inv2) {
     return c.compare(inv1, inv2);
   }
