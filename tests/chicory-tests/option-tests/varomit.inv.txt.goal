@@ -68,6 +68,7 @@ DataStructures.StackAr.push(java.lang.Object):::EXCEPTION
 this == orig(this)
 this.topOfStack == orig(this.topOfStack)
 x == orig(x)
+x.getClass().getName() == orig(x.getClass().getName())
 orig(this) == orig(x)
 this.topOfStack == -1
 exception has only one value
@@ -75,7 +76,6 @@ exception.getClass().getName() == DataStructures.Overflow.class
 orig(this) has only one value
 orig(x) has only one value
 orig(x.getClass().getName()) == DataStructures.StackAr.class
-x.getClass().getName() == orig(x.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXCEPTION97
 ===========================================================================

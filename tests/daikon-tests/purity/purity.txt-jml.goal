@@ -66,10 +66,9 @@ this.list1 == \old(this.list1)
 daikon.Quant.pairwiseEqual(this.list1, \old(this.list1))
 this.list2 == \old(this.list2)
 daikon.Quant.pairwiseEqual(this.list2, \old(this.list2))
-this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 this.list2.getClass().getName() == \old(this.list2.getClass().getName())
 this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
-this.sum() == \old(this.sum())
+this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2))
 this.shift % 5 == 0
 \result != null
@@ -93,10 +92,9 @@ this.list1 == \old(this.list1)
 daikon.Quant.pairwiseEqual(this.list1, \old(this.list1))
 this.list2 == \old(this.list2)
 daikon.Quant.pairwiseEqual(this.list2, \old(this.list2))
-this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 this.list2.getClass().getName() == \old(this.list2.getClass().getName())
 this.getNum().getClass().getName() == \result.getClass().getName()
-this.sum() == \old(this.sum())
+this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 \result.getClass().getName() == \old(this.getNum().getClass().getName())
 daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2))
 this.shift % 5 == 0
@@ -123,6 +121,7 @@ this.list2 == \old(this.list2)
 daikon.Quant.pairwiseEqual(this.list2, \old(this.list2))
 this.list2.getClass().getName() == \old(this.list2.getClass().getName())
 this.getShift() == \result
+this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
 this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 this.retrieve(this.list1) == \result
 this.retrieve(this.list2) == \result
@@ -156,13 +155,11 @@ daikon.Quant.pairwiseEqual(this.list2, \old(this.list2))
 this.list2.getClass().getName() == \old(this.list2.getClass().getName())
 this.getValue() == \result
 this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
-this.sum() == \old(this.sum())
+this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 \result == \old(this.value)
 \result == \old(this.getValue())
 daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2))
 this.shift % 5 == 0
-this.list2.getClass().getName() == \old(this.list2.getClass().getName())
-this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
 (!(\result == 0)) || (this.scale(this.value) == 0)
 (!(this.scale(this.value) == 0)) || (\result == 0)
 this.scale(this.shift) >= \result
@@ -189,7 +186,7 @@ daikon.Quant.pairwiseEqual(this.list2, \old(this.list2))
 this.list2.getClass().getName() == \old(this.list2.getClass().getName())
 this.isHeavy() == \result
 this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
-this.sum() == \old(this.sum())
+this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 \result == \old(this.heavy)
 \result == \old(this.isHeavy())
 daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2))
@@ -213,8 +210,6 @@ daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2))
 (this.shift == 5 || this.shift == 10)  ==>  (this.shift != this.scale(this.value))
 (this.shift == 5 || this.shift == 10)  ==>  (this.shift % 5 == 0)
 (this.shift == 5 || this.shift == 10)  ==>  (this.value + 15 * this.shift - this.scale(this.shift) - 50 == 0)
-this.list2.getClass().getName() == \old(this.list2.getClass().getName())
-this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
 ===========================================================================
 misc.Purity.retrieve(java.util.List):::ENTER
     Variables: this this.value this.shift this.heavy this.list1 this.list1[] this.list1[].getClass().getName() this.list2 this.list2[] this.list2[].getClass().getName() this.list2.getClass().getName() this.getValue() this.getShift() this.isHeavy() this.getNum() this.getNum().getClass().getName() this.getJWrap() this.scale(this.value) this.scale(this.shift) this.scale(this.getValue()) this.scale(this.getShift()) this.sum(this.getNum()) this.sum(this.getJWrap()) this.retrieve(this.list1) this.retrieve(this.list2) l l[] l[].getClass().getName() l.getClass().getName() size(this.list1[]) size(this.list1[])-1 size(this.list2[]) size(this.list2[])-1 size(l[]) size(l[])-1 this.list1[this.value] this.list1[this.value-1] this.list1[this.value..] this.list1[this.value+1..] this.list1[0..this.value] this.list1[0..this.value-1] this.list2[this.value] this.list2[this.value-1] this.list2[this.value..] this.list2[this.value+1..] this.list2[0..this.value] this.list2[0..this.value-1] l[this.value] l[this.value-1] l[this.value..] l[this.value+1..] l[0..this.value] l[0..this.value-1] this.list1[this.shift] this.list1[this.shift-1] this.list1[this.shift..] this.list1[this.shift+1..] this.list1[0..this.shift] this.list1[0..this.shift-1] this.list2[this.shift] this.list2[this.shift-1] this.list2[this.shift..] this.list2[this.shift+1..] this.list2[0..this.shift] this.list2[0..this.shift-1] l[this.shift] l[this.shift-1] l[this.shift..] l[this.shift+1..] l[0..this.shift] l[0..this.shift-1] this.list1[this.getValue()] this.list1[this.getValue()-1] this.list1[this.getValue()..] this.list1[this.getValue()+1..] this.list1[0..this.getValue()] this.list1[0..this.getValue()-1] this.list1[this.getShift()] this.list1[this.getShift()-1] this.list1[this.getShift()..] this.list1[this.getShift()+1..] this.list1[0..this.getShift()] this.list1[0..this.getShift()-1] this.list1[this.scale(this.value)] this.list1[this.scale(this.value)-1] this.list1[this.scale(this.value)..] this.list1[this.scale(this.value)+1..] this.list1[0..this.scale(this.value)] this.list1[0..this.scale(this.value)-1] this.list1[this.scale(this.shift)] this.list1[this.scale(this.shift)-1] this.list1[this.scale(this.shift)..] this.list1[this.scale(this.shift)+1..] this.list1[0..this.scale(this.shift)] this.list1[0..this.scale(this.shift)-1] this.list1[this.scale(this.getValue())] this.list1[this.scale(this.getValue())-1] this.list1[this.scale(this.getValue())..] this.list1[this.scale(this.getValue())+1..] this.list1[0..this.scale(this.getValue())] this.list1[0..this.scale(this.getValue())-1] this.list1[this.scale(this.getShift())] this.list1[this.scale(this.getShift())-1] this.list1[this.scale(this.getShift())..] this.list1[this.scale(this.getShift())+1..] this.list1[0..this.scale(this.getShift())] this.list1[0..this.scale(this.getShift())-1] this.list1[this.sum(this.getNum())] this.list1[this.sum(this.getNum())-1] this.list1[this.sum(this.getNum())..] this.list1[this.sum(this.getNum())+1..] this.list1[0..this.sum(this.getNum())] this.list1[0..this.sum(this.getNum())-1] this.list1[this.sum(this.getJWrap())] this.list1[this.sum(this.getJWrap())-1] this.list1[this.sum(this.getJWrap())..] this.list1[this.sum(this.getJWrap())+1..] this.list1[0..this.sum(this.getJWrap())] this.list1[0..this.sum(this.getJWrap())-1] this.list1[this.retrieve(this.list1)] this.list1[this.retrieve(this.list1)-1] this.list1[this.retrieve(this.list1)..] this.list1[this.retrieve(this.list1)+1..] this.list1[0..this.retrieve(this.list1)] this.list1[0..this.retrieve(this.list1)-1] this.list1[this.retrieve(this.list2)] this.list1[this.retrieve(this.list2)-1] this.list1[this.retrieve(this.list2)..] this.list1[this.retrieve(this.list2)+1..] this.list1[0..this.retrieve(this.list2)] this.list1[0..this.retrieve(this.list2)-1] this.list2[this.getValue()] this.list2[this.getValue()-1] this.list2[this.getValue()..] this.list2[this.getValue()+1..] this.list2[0..this.getValue()] this.list2[0..this.getValue()-1] this.list2[this.getShift()] this.list2[this.getShift()-1] this.list2[this.getShift()..] this.list2[this.getShift()+1..] this.list2[0..this.getShift()] this.list2[0..this.getShift()-1] this.list2[this.scale(this.value)] this.list2[this.scale(this.value)-1] this.list2[this.scale(this.value)..] this.list2[this.scale(this.value)+1..] this.list2[0..this.scale(this.value)] this.list2[0..this.scale(this.value)-1] this.list2[this.scale(this.shift)] this.list2[this.scale(this.shift)-1] this.list2[this.scale(this.shift)..] this.list2[this.scale(this.shift)+1..] this.list2[0..this.scale(this.shift)] this.list2[0..this.scale(this.shift)-1] this.list2[this.scale(this.getValue())] this.list2[this.scale(this.getValue())-1] this.list2[this.scale(this.getValue())..] this.list2[this.scale(this.getValue())+1..] this.list2[0..this.scale(this.getValue())] this.list2[0..this.scale(this.getValue())-1] this.list2[this.scale(this.getShift())] this.list2[this.scale(this.getShift())-1] this.list2[this.scale(this.getShift())..] this.list2[this.scale(this.getShift())+1..] this.list2[0..this.scale(this.getShift())] this.list2[0..this.scale(this.getShift())-1] this.list2[this.sum(this.getNum())] this.list2[this.sum(this.getNum())-1] this.list2[this.sum(this.getNum())..] this.list2[this.sum(this.getNum())+1..] this.list2[0..this.sum(this.getNum())] this.list2[0..this.sum(this.getNum())-1] this.list2[this.sum(this.getJWrap())] this.list2[this.sum(this.getJWrap())-1] this.list2[this.sum(this.getJWrap())..] this.list2[this.sum(this.getJWrap())+1..] this.list2[0..this.sum(this.getJWrap())] this.list2[0..this.sum(this.getJWrap())-1] this.list2[this.retrieve(this.list1)] this.list2[this.retrieve(this.list1)-1] this.list2[this.retrieve(this.list1)..] this.list2[this.retrieve(this.list1)+1..] this.list2[0..this.retrieve(this.list1)] this.list2[0..this.retrieve(this.list1)-1] this.list2[this.retrieve(this.list2)] this.list2[this.retrieve(this.list2)-1] this.list2[this.retrieve(this.list2)..] this.list2[this.retrieve(this.list2)+1..] this.list2[0..this.retrieve(this.list2)] this.list2[0..this.retrieve(this.list2)-1] l[this.getValue()] l[this.getValue()-1] l[this.getValue()..] l[this.getValue()+1..] l[0..this.getValue()] l[0..this.getValue()-1] l[this.getShift()] l[this.getShift()-1] l[this.getShift()..] l[this.getShift()+1..] l[0..this.getShift()] l[0..this.getShift()-1] l[this.scale(this.value)] l[this.scale(this.value)-1] l[this.scale(this.value)..] l[this.scale(this.value)+1..] l[0..this.scale(this.value)] l[0..this.scale(this.value)-1] l[this.scale(this.shift)] l[this.scale(this.shift)-1] l[this.scale(this.shift)..] l[this.scale(this.shift)+1..] l[0..this.scale(this.shift)] l[0..this.scale(this.shift)-1] l[this.scale(this.getValue())] l[this.scale(this.getValue())-1] l[this.scale(this.getValue())..] l[this.scale(this.getValue())+1..] l[0..this.scale(this.getValue())] l[0..this.scale(this.getValue())-1] l[this.scale(this.getShift())] l[this.scale(this.getShift())-1] l[this.scale(this.getShift())..] l[this.scale(this.getShift())+1..] l[0..this.scale(this.getShift())] l[0..this.scale(this.getShift())-1] l[this.sum(this.getNum())] l[this.sum(this.getNum())-1] l[this.sum(this.getNum())..] l[this.sum(this.getNum())+1..] l[0..this.sum(this.getNum())] l[0..this.sum(this.getNum())-1] l[this.sum(this.getJWrap())] l[this.sum(this.getJWrap())-1] l[this.sum(this.getJWrap())..] l[this.sum(this.getJWrap())+1..] l[0..this.sum(this.getJWrap())] l[0..this.sum(this.getJWrap())-1] l[this.retrieve(this.list1)] l[this.retrieve(this.list1)-1] l[this.retrieve(this.list1)..] l[this.retrieve(this.list1)+1..] l[0..this.retrieve(this.list1)] l[0..this.retrieve(this.list1)-1] l[this.retrieve(this.list2)] l[this.retrieve(this.list2)-1] l[this.retrieve(this.list2)..] l[this.retrieve(this.list2)+1..] l[0..this.retrieve(this.list2)] l[0..this.retrieve(this.list2)-1]
@@ -245,13 +240,10 @@ daikon.Quant.pairwiseEqual(this.list2, \old(this.list2))
 this.list2.getClass().getName() == \old(this.list2.getClass().getName())
 this.list2.getClass().getName() == \old(l.getClass().getName())
 this.getShift() == \result
+this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
 this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 this.retrieve(this.list1) == \result
 this.retrieve(this.list2) == \result
-this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
-this.sum() == \old(this.sum())
-this.retrieve() == \result
-this.retrieve() == \result
 daikon.Quant.pairwiseEqual(l, \old(l))
 \result == \old(this.shift)
 \result == \old(this.getShift())
@@ -265,7 +257,6 @@ daikon.Quant.eltsEqual(daikon.Quant.typeArray(l), "java.lang.Integer")
 \result == 0 || \result == 5 || \result == 10
 \result % 5 == 0
 daikon.Quant.memberOf(this.getNum().getClass().getName() , daikon.Quant.typeArray(l) )
-this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
 this.sum(this.getNum()) != daikon.Quant.size(l)-1
 \result <= daikon.Quant.size(this.list1)-1
 \result < daikon.Quant.size(l)-1
@@ -291,28 +282,19 @@ this.list1 == \old(this.list1)
 daikon.Quant.pairwiseEqual(this.list1, \old(this.list1))
 this.list2 == \old(this.list2)
 daikon.Quant.pairwiseEqual(this.list2, \old(this.list2))
+this.list2.getClass().getName() == \old(this.list2.getClass().getName())
+this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
 this.scale(this.value) == \result
 this.scale(this.getValue()) == \result
 this.sum(this.getNum()) == \old(this.sum(this.getJWrap()))
 \result == \old(this.scale(this.value))
 \result == \old(this.scale(this.getValue()))
-this.list2.getClass().getName() == \old(this.list2.getClass().getName())
-this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
-this.scale() == \result
-this.scale() == \result
-this.sum() == \old(this.sum())
-\result == \old(this.scale())
-\result == \old(this.scale())
 daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2))
 this.shift % 5 == 0
 (!(\result == 0)) || (this.value == 0)
 (!(this.value == 0)) || (\result == 0)
-this.list2.getClass().getName() == \old(this.list2.getClass().getName())
-this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
 (!(\result == 0)) || (this.sum(this.getNum()) == 0)
 (!(this.sum(this.getNum()) == 0)) || (\result == 0)
-(!(\result == 0)) || (this.sum() == 0)
-(!(this.sum() == 0)) || (\result == 0)
 ===========================================================================
 misc.Purity.sum(java.lang.Number):::ENTER
     Variables: this this.value this.shift this.heavy this.list1 this.list1[] this.list1[].getClass().getName() this.list2 this.list2[] this.list2[].getClass().getName() this.list2.getClass().getName() this.getValue() this.getShift() this.isHeavy() this.getNum() this.getNum().getClass().getName() this.getJWrap() this.scale(this.value) this.scale(this.shift) this.scale(this.getValue()) this.scale(this.getShift()) this.sum(this.getNum()) this.sum(this.getJWrap()) this.retrieve(this.list1) this.retrieve(this.list2) n n.getClass().getName() size(this.list1[]) size(this.list1[])-1 size(this.list2[]) size(this.list2[])-1 this.list1[this.value] this.list1[this.value-1] this.list1[this.value..] this.list1[this.value+1..] this.list1[0..this.value] this.list1[0..this.value-1] this.list2[this.value] this.list2[this.value-1] this.list2[this.value..] this.list2[this.value+1..] this.list2[0..this.value] this.list2[0..this.value-1] this.list1[this.shift] this.list1[this.shift-1] this.list1[this.shift..] this.list1[this.shift+1..] this.list1[0..this.shift] this.list1[0..this.shift-1] this.list2[this.shift] this.list2[this.shift-1] this.list2[this.shift..] this.list2[this.shift+1..] this.list2[0..this.shift] this.list2[0..this.shift-1] this.list1[this.getValue()] this.list1[this.getValue()-1] this.list1[this.getValue()..] this.list1[this.getValue()+1..] this.list1[0..this.getValue()] this.list1[0..this.getValue()-1] this.list1[this.getShift()] this.list1[this.getShift()-1] this.list1[this.getShift()..] this.list1[this.getShift()+1..] this.list1[0..this.getShift()] this.list1[0..this.getShift()-1] this.list1[this.scale(this.value)] this.list1[this.scale(this.value)-1] this.list1[this.scale(this.value)..] this.list1[this.scale(this.value)+1..] this.list1[0..this.scale(this.value)] this.list1[0..this.scale(this.value)-1] this.list1[this.scale(this.shift)] this.list1[this.scale(this.shift)-1] this.list1[this.scale(this.shift)..] this.list1[this.scale(this.shift)+1..] this.list1[0..this.scale(this.shift)] this.list1[0..this.scale(this.shift)-1] this.list1[this.scale(this.getValue())] this.list1[this.scale(this.getValue())-1] this.list1[this.scale(this.getValue())..] this.list1[this.scale(this.getValue())+1..] this.list1[0..this.scale(this.getValue())] this.list1[0..this.scale(this.getValue())-1] this.list1[this.scale(this.getShift())] this.list1[this.scale(this.getShift())-1] this.list1[this.scale(this.getShift())..] this.list1[this.scale(this.getShift())+1..] this.list1[0..this.scale(this.getShift())] this.list1[0..this.scale(this.getShift())-1] this.list1[this.sum(this.getNum())] this.list1[this.sum(this.getNum())-1] this.list1[this.sum(this.getNum())..] this.list1[this.sum(this.getNum())+1..] this.list1[0..this.sum(this.getNum())] this.list1[0..this.sum(this.getNum())-1] this.list1[this.sum(this.getJWrap())] this.list1[this.sum(this.getJWrap())-1] this.list1[this.sum(this.getJWrap())..] this.list1[this.sum(this.getJWrap())+1..] this.list1[0..this.sum(this.getJWrap())] this.list1[0..this.sum(this.getJWrap())-1] this.list1[this.retrieve(this.list1)] this.list1[this.retrieve(this.list1)-1] this.list1[this.retrieve(this.list1)..] this.list1[this.retrieve(this.list1)+1..] this.list1[0..this.retrieve(this.list1)] this.list1[0..this.retrieve(this.list1)-1] this.list1[this.retrieve(this.list2)] this.list1[this.retrieve(this.list2)-1] this.list1[this.retrieve(this.list2)..] this.list1[this.retrieve(this.list2)+1..] this.list1[0..this.retrieve(this.list2)] this.list1[0..this.retrieve(this.list2)-1] this.list2[this.getValue()] this.list2[this.getValue()-1] this.list2[this.getValue()..] this.list2[this.getValue()+1..] this.list2[0..this.getValue()] this.list2[0..this.getValue()-1] this.list2[this.getShift()] this.list2[this.getShift()-1] this.list2[this.getShift()..] this.list2[this.getShift()+1..] this.list2[0..this.getShift()] this.list2[0..this.getShift()-1] this.list2[this.scale(this.value)] this.list2[this.scale(this.value)-1] this.list2[this.scale(this.value)..] this.list2[this.scale(this.value)+1..] this.list2[0..this.scale(this.value)] this.list2[0..this.scale(this.value)-1] this.list2[this.scale(this.shift)] this.list2[this.scale(this.shift)-1] this.list2[this.scale(this.shift)..] this.list2[this.scale(this.shift)+1..] this.list2[0..this.scale(this.shift)] this.list2[0..this.scale(this.shift)-1] this.list2[this.scale(this.getValue())] this.list2[this.scale(this.getValue())-1] this.list2[this.scale(this.getValue())..] this.list2[this.scale(this.getValue())+1..] this.list2[0..this.scale(this.getValue())] this.list2[0..this.scale(this.getValue())-1] this.list2[this.scale(this.getShift())] this.list2[this.scale(this.getShift())-1] this.list2[this.scale(this.getShift())..] this.list2[this.scale(this.getShift())+1..] this.list2[0..this.scale(this.getShift())] this.list2[0..this.scale(this.getShift())-1] this.list2[this.sum(this.getNum())] this.list2[this.sum(this.getNum())-1] this.list2[this.sum(this.getNum())..] this.list2[this.sum(this.getNum())+1..] this.list2[0..this.sum(this.getNum())] this.list2[0..this.sum(this.getNum())-1] this.list2[this.sum(this.getJWrap())] this.list2[this.sum(this.getJWrap())-1] this.list2[this.sum(this.getJWrap())..] this.list2[this.sum(this.getJWrap())+1..] this.list2[0..this.sum(this.getJWrap())] this.list2[0..this.sum(this.getJWrap())-1] this.list2[this.retrieve(this.list1)] this.list2[this.retrieve(this.list1)-1] this.list2[this.retrieve(this.list1)..] this.list2[this.retrieve(this.list1)+1..] this.list2[0..this.retrieve(this.list1)] this.list2[0..this.retrieve(this.list1)-1] this.list2[this.retrieve(this.list2)] this.list2[this.retrieve(this.list2)-1] this.list2[this.retrieve(this.list2)..] this.list2[this.retrieve(this.list2)+1..] this.list2[0..this.retrieve(this.list2)] this.list2[0..this.retrieve(this.list2)-1]
@@ -335,26 +317,19 @@ this.list1 == \old(this.list1)
 daikon.Quant.pairwiseEqual(this.list1, \old(this.list1))
 this.list2 == \old(this.list2)
 daikon.Quant.pairwiseEqual(this.list2, \old(this.list2))
+this.list2.getClass().getName() == \old(this.list2.getClass().getName())
+this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
+this.getNum().getClass().getName() == \old(n.getClass().getName())
 this.sum(this.getNum()) == \result
 this.sum(this.getJWrap()) == \result
 \result == \old(this.sum(this.getNum()))
 \result == \old(this.sum(this.getJWrap()))
-this.list2.getClass().getName() == \old(this.list2.getClass().getName())
-this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
-this.getNum().getClass().getName() == \old(n.getClass().getName())
-this.sum() == \result
-this.sum() == \result
-\result == \old(this.sum())
-\result == \old(this.sum())
 daikon.Quant.size(this.list1) == \old(daikon.Quant.size(this.list2))
 this.shift % 5 == 0
 \result % 2 == 0
 (!(\result == 0)) || (this.value == 0)
 (!(this.value == 0)) || (\result == 0)
 2 * this.value - \result == 0
-this.list2.getClass().getName() == \old(this.list2.getClass().getName())
-this.getNum().getClass().getName() == \old(this.getNum().getClass().getName())
-this.getNum().getClass().getName() == \old(n.getClass().getName())
 (!(\result == 0)) || (this.scale(this.value) == 0)
 (!(this.scale(this.value) == 0)) || (\result == 0)
 \result != daikon.Quant.size(this.list1)
