@@ -65,7 +65,7 @@ ifeq ($(OS_REL),7.3.1611)
        GOAL := goal-CentOS-Std
 endif
 # other versions of CentOS will use goal-CentOS if it exists
-# otherwise the default goal file - which may be incorrect?
+# otherwise the default goal file
 endif
 
 ifeq ($(OS_ID),Fedora)
@@ -79,10 +79,22 @@ ifeq ($(OS_REL),26)
 	GOAL := goal-Fedora26
 endif
 # other versions of Fedora will use goal-Fedora if it exists
-# otherwise the default goal file - which may be incorrect?
+# otherwise the default goal file
 endif
 
-# Function to compute goal filename extension.
+# We test Kvasir on three different OS platforms: Ubuntu, Fedora and CentOS.
+# The code above has set $(GOAL) to a value that represents the current OS type
+# and version number; e.g. 'goal-Fedora25'.
+# (Note that there are currently no goal files specific to Ubuntu.)
+
+# The function below identifies the correct goal file based on:
+# the test case => $(1)
+# the OS => $(OS_ID)
+# the OS version => $(OS_REL)
+# There are three general steps:
+#   if a OS type and version specific goal file exists [$(1).$(GOAL)] - use it
+#   else, if a generic OS goal file exists [$(1).goal-Fedora for example] - use it
+#   otherwise, use the default goal file [$(1).goal]
 goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 				$(1).$(GOAL), \
 				$(if $(findstring CentOS, $(OS_ID)), \
