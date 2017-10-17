@@ -140,8 +140,7 @@ public class AnnotateNullable {
         /*@NonNull*/ List<PptTopLevel> static_methods =
             class_map.get(ppt.name().replace(":::CLASS", ""));
         int child_cnt = 0;
-        // TODO: Once Checker Framework issue 565 has been fixed
-        // ( https://github.com/typetools/checker-framework/issues/565 ),
+        // TODO: Once Checker Framework issue 565 has been fixed (https://tinyurl.com/cfissue/565),
         // change the following two lines back to
         // for (PptRelation child_rel : ppt.children) {
         for (int i = 0; i < ppt.children.size(); i++) {

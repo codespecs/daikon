@@ -258,7 +258,7 @@ The correct way to build the system is to run 'make'.
    * x.getClass().toString() for each element x in the array. If an element of the array is null,
    * its slot in the returned array is null.
    */
-  @SuppressWarnings("nullness") // https://github.com/typetools/checker-framework/issues/58
+  @SuppressWarnings("nullness") // https://tinyurl.com/cfissue/58
   /*@SideEffectFree*/
   public static /*@PolyNull*//*("elt")*/ String /*@PolyNull*//*("container")*/ [] typeArray(/*@PolyNull*//*("elt")*/ _TYPE /*@PolyNull*//*("container")*/ [] seq) {
     if (seq == null) return null;
