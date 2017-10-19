@@ -696,11 +696,9 @@ public class Runtime {
     try {
       synchronized (SharedData.all_classes) {
         for (ClassInfo cinfo : SharedData.all_classes) {
-          if (cinfo.clazz == null) cinfo.initViaReflection();
-
-          assert cinfo.clazz != null
-              : "@AssumeAssertion(nullness): checker bug: flow problem (postcondition)";
-
+          if (cinfo.clazz == null) {
+            cinfo.initViaReflection();
+          }
           if (cinfo.clazz.equals(type)) {
             return cinfo;
           }

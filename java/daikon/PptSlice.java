@@ -389,7 +389,6 @@ public abstract class PptSlice extends Ppt {
    * Returns true if the invariant is true in this slice. This can occur if the invariant exists in
    * this slice, is suppressed, or is obvious statically.
    */
-  @SuppressWarnings("nullness") // checker bug with flow and static fields
   /*@Pure*/
   public boolean is_inv_true(Invariant inv) {
 

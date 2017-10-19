@@ -1636,7 +1636,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // just apply to all arrays.
     if (v.isDerived() && (v.derived instanceof SequenceLength)
       && (num_elts == 1) && (elts[0] == 0)) {
-      @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ VarInfo b = v.derived.getBase(0);
       if (!b.isDerived()) {
         if (logOn()) {
@@ -1648,7 +1647,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
 
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
-      @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
         String discardString = v.name() + " is derived with shift!=0 (shift==" + sl.shift + ")";

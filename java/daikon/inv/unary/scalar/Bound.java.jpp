@@ -744,7 +744,6 @@ public class LOWERBOUND extends SINGLESCALAR {
       // now no longer even instantiated.  However, the commented-out
       // assertion below would break reading old .inv files, so we'll
       // still do the check at runtime for the moment.
-      @SuppressWarnings("nullness") // checker bug: flow
       int vshift = ((SequenceLength) v.derived).shift;
       // assert vshift == 0;
       if (vshift == 0 && MIN1 == 0) {

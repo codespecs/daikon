@@ -210,9 +210,7 @@ public class CLASSNAME extends SUPERCLASS {
         && (var1.derived instanceof SequenceLength)
         && var2.isDerived()
         && (var2.derived instanceof SequenceLength)) {
-      @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ SequenceLength sl1 = (SequenceLength) var1.derived;
-      @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ SequenceLength sl2 = (SequenceLength) var2.derived;
       if (sl1.base == sl2.base) {
         String discardString = var1.name()+" and "+var2.name()+" derived from "+

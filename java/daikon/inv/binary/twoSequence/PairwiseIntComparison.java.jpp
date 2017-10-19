@@ -372,9 +372,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE)) {
       return null;
     }
-    @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
-    @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
     if ((der1.from_start != der2.from_start)
         || (der1.index_shift != der2.index_shift))
