@@ -3529,20 +3529,24 @@ class DCInstrument extends StackMapUtils {
 
   /**
    * Compute the StackMapTypes of the live variables of the current method at a specific location
-   * within the method.
+   * within the method. There may be gaps ("Bogus" or non-live slots) so we can't just count the
+   * number of live variables, we must find the max index of all the live variables.
    */
   protected StackMapType[] calculate_live_local_types(int location) {
-    int local_map_index = 0;
+    int max_local_index = -1;
     StackMapType[] local_map_types = new StackMapType[mgen.getMaxLocals()];
+    Arrays.fill(local_map_types, new StackMapType(Const.ITEM_Bogus, -1, pool.getConstantPool()));
     for (LocalVariableGen lv : mgen.getLocalVariables()) {
       if (location >= lv.getStart().getPosition()) {
         //if (lv.getLivePastEnd() || location < lv.getEnd().getPosition()) {
         if (location < lv.getEnd().getPosition()) {
-          local_map_types[local_map_index++] = generate_StackMapType_from_Type(lv.getType());
+          int i = lv.getIndex();
+          local_map_types[i] = generate_StackMapType_from_Type(lv.getType());
+          max_local_index = Math.max(max_local_index, i);
         }
       }
     }
-    return Arrays.copyOf(local_map_types, local_map_index);
+    return Arrays.copyOf(local_map_types, max_local_index + 1);
   }
 
   /**
