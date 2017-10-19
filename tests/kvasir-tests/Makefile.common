@@ -57,12 +57,12 @@ ifeq (washington,$(findstring washington,$(shell uname -n)))
 	GOAL := goal-CentOS-UWCSE
 else
 # Standard version of CentOS
-       GOAL := goal-CentOS-Std
+       GOAL := goal-CentOS-nonUWCSE
 endif
 endif
 ifeq ($(OS_REL),7.3.1611)
 # Standard version of CentOS
-       GOAL := goal-CentOS-Std
+       GOAL := goal-CentOS-nonUWCSE
 endif
 # other versions of CentOS will use goal-CentOS if it exists
 # otherwise the default goal file
