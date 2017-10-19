@@ -423,8 +423,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       code.append(returnType + " retval_instrument = ");
 
       // Assign some initial value to retval_instrument, otherwise
-      // compiler
-      // issues a "might not have been initialized" error.
+      // compiler issues a "might not have been initialized" error.
       if (returnType.equals("boolean")) {
         code.append("false");
       } else if (returnType.equals("char")) {

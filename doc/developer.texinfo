@@ -2147,16 +2147,23 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 
 The default version of the Java JDK on the majority of the CSE
 machines is now JDK 8.  However, for the time being, we wish to continue
-to use JDK 7 for our distribution process; the intention is to maximize
-compatibility with our existing code base.  You will find a suitable
-version (for an AMD64 based machine) at @file{/homes/gws/markro/jdk7}.
+to distribute JDK 7 @file{.class} files as part of our distribution process;
+the intention is to maximize compatibility with our existing code base.
+Thus, all of our Makefiles invoke @samp{javac} with @samp{-source 7 -target 7}
+to ensure this is the case.  In addition, we wish to release Checker
+Framework enabled @file{.class} files.  You should install the latest version
+of the Checker Framework tools from @uref{https://checkerframework.org} and
+set the @env{CHECKERFRAMEWORK} environment variable as described in the
+@uref{https://checkerframework.org/manual/#installation, ,Installation}
+section of the manual.
 
 @need 1000
 The recommended setup for the distribution process:
 @itemize
 @item get a fresh copy of your Bash shell (e.g., log out and log back in)
+@item set @env{CHECKERFRAMEWORK} as described above
 @item set @env{DAIKONDIR} as you would normally
-@item @command{export JAVA_HOME=/homes/gws/markro/jdk7}
+@item set @env{JAVA_HOME} to point to JDK 8
 @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
 This should fulfill most of the directory layout requirements noted above.
@@ -2247,6 +2254,7 @@ git log v$DAIKONVERSION..HEAD
 @c git log  -v -r "last(tagged())::"
 @c @end example
 
+@need 1000
 In addition, you should run the same command in your Fjalar clone:
 
 @smallexample
@@ -2309,8 +2317,8 @@ in the process.
 @node    Distribution steps
 @section Steps for making the distribution
 
-Use JDK@tie{}7 for the release process. Make sure the @env{CHECKERFRAMEWORK} environment
-variable is not defined.
+Use the Checker Framework Java compiler for the release process. Make sure the @env{CHECKERFRAMEWORK} environment
+variable is properly set.
 
 @enumerate
 
@@ -2476,7 +2484,8 @@ rm -rf /tmp/$USER/stage-daikon
 git clone --depth 3 https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
-export JAVA_HOME=/homes/gws/markro/jdk7
+export JAVA_HOME=/homes/gws/markro/jdk8
+export CHECKERFRAMEWORK=<path to lastest version of Checker Framework tools>
 source scripts/daikon.bashrc
 make staging
 @end example

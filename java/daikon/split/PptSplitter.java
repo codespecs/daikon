@@ -368,8 +368,7 @@ public class PptSplitter implements Serializable {
                 System.out.println("  " + child_ppt.constants.getConstant(cvi));
               }
             }
-            @SuppressWarnings(
-                "lock:cannot.dereference") // https://github.com/typetools/checker-framework/issues/755
+            @SuppressWarnings("lock:cannot.dereference") // https://tinyurl.com/cfissue/755
             String eq_inv_ppt = eq_inv.ppt.toString();
             assert eq_inv.ppt.equals(child_ppt.findSlice(cvis_non_canonical));
 
