@@ -90,11 +90,7 @@ public class ChicoryPremain {
     if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
       try {
-        castNonNull(Runtime.comp_info)
-            .read(
-                castNonNull(
-                    Chicory
-                        .comparability_file)); // @SuppressWarnings("nullness") // bug: flow should figure this out (mark DeclReader constructor as pure?
+        castNonNull(Runtime.comp_info).read(castNonNull(Chicory.comparability_file));
       } catch (FileNotFoundException e) {
         System.err.printf("%nCould not find comparability file: %s%n", Chicory.comparability_file);
         Runtime.chicoryLoaderInstantiationError = true;

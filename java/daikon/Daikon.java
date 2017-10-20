@@ -1492,8 +1492,6 @@ public final class Daikon {
                   + ".get_proto() returned null but should have returned an Invariant");
         }
         if (!(inv_as_object instanceof Invariant)) {
-          @SuppressWarnings(
-              "nullness") // looks like a Checker Framework bug, since inv_as_object is known to be non-null at this point
           Class<?> cls = inv_as_object.getClass();
           throw new Daikon.TerminationMessage(
               invariantClassName
@@ -1737,8 +1735,6 @@ public final class Daikon {
         // add parents for override relations
         // exit_ppt.parents has not been loaded at this point
         for (VarParent pi : postvar.parents) {
-          assert pi.parent_ppt != null
-              : "@AssumeAssertion(nullness)"; // Checker Framework bug:  parent_ppt is declared as @NonNull
           PptTopLevel parentppt = ppts.get(pi.parent_ppt);
           if (parentppt != null) {
             if (!parentppt.is_object() && !parentppt.is_class()) {

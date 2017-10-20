@@ -1069,8 +1069,6 @@ public class PptTopLevel extends Ppt {
         if (val == null) { // temporary, for debugging
           System.out.printf("Null value at index %s in ValueTuple %s, ValueSet=%s%n", i, vt, vs);
         }
-        assert val != null
-            : "@AssumeAssertion(nullness) : bug in checker; see test case checker/tests/nullness/EnsuresNonNullIfTest3.java";
         vs.add(val);
       }
     }
