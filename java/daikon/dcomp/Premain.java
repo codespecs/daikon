@@ -129,6 +129,17 @@ public class Premain {
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
+
+    // check that we got the latest version of BCEL 6.1 that includes LocalVariable fix.
+    try {
+      Class<?> c = loader.loadClass("org.apache.bcel.generic.LocalVariableGen");
+      c.getMethod("getLiveToEnd", (Class<?>[]) null);
+    } catch (Exception e) {
+      System.err.printf("%nBCEL jar found is not the version included with the Daikon release.%n");
+      System.exit(1);
+    }
+
+    // now turn on instrumentation
     inst.addTransformer((ClassFileTransformer) transformer);
 
     // Initialize the static tag array
