@@ -36,9 +36,9 @@ import org.checkerframework.dataflow.qual.*;
  * comparability.
  */
 @SuppressWarnings({
-  "nullness",
+  "nullness", // nullness properties in this file are hairy; save for later
   "interning"
-}) // nullness properties in this file are hairy; save for later
+})
 public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

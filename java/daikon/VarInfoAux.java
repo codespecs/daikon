@@ -408,7 +408,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public String getValue(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@KeyFor("this.map")*/ String key) {
-    assert map.containsKey(key) : "@AssumeAssertion(keyfor) Map does not contain key " + key;
     return map.get(key);
   }
 

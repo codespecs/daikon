@@ -234,7 +234,7 @@ public class InstructionUtils {
           } else { // If we've seen it, it may be a leader or redundant.
             assert leaders.containsKey(var);
             assert timeKilled.containsKey(var)
-                : "@AssumeAssertion(keyfor): keys of leaders and timeKilled are the same";
+                : "@AssumeAssertion(keyfor): correlated maps: keys of leaders and timeKilled are the same";
             if (timeKilled.get(var) >= leaders.get(var)) {
               // It was killed by a killer instruction.
               // Make it a leader.

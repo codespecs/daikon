@@ -935,9 +935,9 @@ public final class Daikon {
                   "Field ClassLoader.classes was not made accessible");
             }
             @SuppressWarnings({
-              "unchecked",
-              "nullness"
-            }) // type of ClassLoader.classes field is known, and is non-null
+              "unchecked", // type of ClassLoader.classes field is known,
+              "nullness" // and is non-null
+            })
             /*@NonNull*/ List<Class<?>> classes = (List<Class<?>>) classesAsObject;
             for (int i = 0; i < classes.size(); i++) {
               Class<?> loadedClass = classes.get(i);

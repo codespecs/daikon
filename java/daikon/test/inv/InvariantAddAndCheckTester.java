@@ -75,7 +75,7 @@ import typequals.*;
  * <p>Note: no test case should contain the character ';' in any way other than to divide arguments
  * with in a command line.
  */
-@SuppressWarnings("nullness")
+@SuppressWarnings("nullness") // test code
 public class InvariantAddAndCheckTester extends TestCase {
 
   /**

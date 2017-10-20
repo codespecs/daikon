@@ -42,10 +42,12 @@ public class CreateSpinfoC {
         writer.close();
       } catch (IOException e) {
         System.out.println(e.getMessage());
-        if (temp != null) temp.delete();
+        if (temp != null) {
+          temp.delete();
+        }
         System.exit(1);
+        throw new Error("unreachable");
       }
-      assert temp != null : "@AssumeAssertion(nullness)";
       try {
         parser = new CParser(new FileInputStream(temp));
         TranslationUnit root = CParser.TranslationUnit();

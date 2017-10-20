@@ -26,7 +26,7 @@ import org.checkerframework.checker.signature.qual.*;
  *
  * <p>The input file format is documented in the developer manual.
  */
-@SuppressWarnings("nullness")
+@SuppressWarnings("nullness") // test code
 public class SampleTester extends TestCase {
 
   public static final Logger debug = Logger.getLogger("daikon.test.SampleTester");
