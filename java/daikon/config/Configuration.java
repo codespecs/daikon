@@ -280,7 +280,7 @@ public final class Configuration implements Serializable {
           throw new RuntimeException("Didn't find valueOf in " + type);
         }
         try {
-          @SuppressWarnings("nullness") // "valueOf" is static, so first arg is null
+          @SuppressWarnings("nullness") // static method, so null first arg is OK: valueOf()
           Object tmp_value = valueOf.invoke(null, unparsed);
           value = tmp_value;
         } catch (IllegalArgumentException e) {
