@@ -2061,7 +2061,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
           Object obj = i.next();
           _TYPE_NAME[] oneEltArray = COLLECT_TYPE(obj, fields, fieldsStartIdx + 1);
           if (oneEltArray == null) {
-            throw new Error("bad fields: " + obj.getClass() + " " + fields + " " + fieldsStartIdx + 1);
+            throw new Error("bad fields: " + obj.getClass() + " " + Arrays.toString(fields) + " " + (fieldsStartIdx + 1));
           }
           //assert oneEltArray.length == 1;
           intermediate[index++] = oneEltArray[0];
@@ -2076,7 +2076,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
           Object obj = Array.get(fieldObj, i);
           _TYPE_NAME[] oneEltArray = COLLECT_TYPE(obj, fields, fieldsStartIdx + 1);
           if (oneEltArray == null) {
-            throw new Error("bad fields: " + obj.getClass() + " " + fields + " " + fieldsStartIdx + 1);
+            throw new Error("bad fields: " + obj.getClass() + " " + Arrays.toString(fields) + " " + (fieldsStartIdx + 1));
           }
           //assert oneEltArray.length == 1;
           intermediate[i] = oneEltArray[0];
