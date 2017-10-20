@@ -85,7 +85,7 @@ public class InvDef {
     try {
       Method swap_method = cls.getMethod("swap_class", (Class<?>[]) null);
       if (swap) {
-        @SuppressWarnings("nullness") // "swap_class" is static, so null first argument is OK
+        @SuppressWarnings("nullness") // static method, so null first arg is OK: swap_class()
         Class<? extends Invariant> tmp_cls =
             asInvClass(swap_method.invoke(null, (Object /*@Nullable*/ []) null));
         cls = tmp_cls;
