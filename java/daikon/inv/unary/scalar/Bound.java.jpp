@@ -648,7 +648,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
     #if defined(LOWER) || defined(LOWERFLOAT) || defined(UPPER) || defined(UPPERFLOAT)
     if (var.aux.hasValue(VARINFOAUX_MINIMUM_VALUE)) {
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
       int minVal = var.aux.getInt(VARINFOAUX_MINIMUM_VALUE);
       if (minVal == MIN1) {
         return new DiscardInfo(this, DiscardCode.obvious,
