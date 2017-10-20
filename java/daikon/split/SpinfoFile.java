@@ -161,7 +161,6 @@ public class SpinfoFile {
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param replaceStatements the List into which the ReplaceStatements are added
    */
-  @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
   private void readReplaceStatements(
       /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
       List<ReplaceStatement> replaceStatements)

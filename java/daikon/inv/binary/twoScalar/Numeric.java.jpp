@@ -407,9 +407,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return null;
     }
 
-    @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
-    @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
 
     // Both of the indices must be either from the start or up to the end.
@@ -450,9 +448,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return null;
     }
 
-    @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
 
     // Make sure the shifts match

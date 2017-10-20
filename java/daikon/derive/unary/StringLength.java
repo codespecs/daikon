@@ -57,7 +57,6 @@ public final class StringLength extends UnaryDerivation {
 
   /** Returns the ESC name */
   @Override
-  @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String csharp_name(String index) {
     return String.format("%s.Length", base.csharp_name());
@@ -65,7 +64,6 @@ public final class StringLength extends UnaryDerivation {
 
   /** Returns the ESC name */
   @Override
-  @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format("%s.length()", base.esc_name());
@@ -73,14 +71,12 @@ public final class StringLength extends UnaryDerivation {
 
   /** Returns the JML name */
   @Override
-  @SuppressWarnings("nullness")
   public String jml_name(String index) {
     return String.format("%s.length()", base.jml_name());
   }
 
   /** Returns the simplify name */
   @Override
-  @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String simplify_name() {
     return String.format("(stringLength %s)", base.simplify_name());

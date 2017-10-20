@@ -931,7 +931,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         && var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
       int minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE),
           maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
           minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE),
@@ -947,7 +947,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #if defined(LESSTHAN_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
     if (var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)) {
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
       int maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
           minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE);
 
@@ -970,7 +970,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #if defined(GREATERTHAN_OP) || defined(GREATEREQUAL_OP) || defined(NONEQUAL_OP)
     if (var1.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
       int maxB = var2.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
           minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE);
 
@@ -1209,9 +1209,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT)) {
       return null;
     }
-    @SuppressWarnings("nullness") // checker bug in flow
     /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    @SuppressWarnings("nullness") // checker bug in flow
     /*@NonNull*/ SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
     if (der1.index_shift != der2.index_shift) {
       return null;
@@ -1247,8 +1245,6 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     if (!v2.isDerived() || !(v2.derived instanceof SequenceLength)) {
       return null;
     }
-    assert v1.derived != null : "@AssumeAssertion(nullness): checker bug: flow";
-    assert v2.derived != null : "@AssumeAssertion(nullness): checker bug: flow";
     if (!v1.derived.isSameFormula(v2.derived)) {
       return null;
     }
@@ -1295,9 +1291,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT)) {
       return null;
     }
-    @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
 
     // The sequence vars must be equal (or the same)

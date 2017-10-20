@@ -493,7 +493,6 @@ public class PptRelation implements Serializable {
         if (vc.derived == null) {
           continue;
         }
-        assert vp.derived != null : "@AssumeAssertion(nullness): bug in Nullness Checker";
         if (vc.derived.isSameFormula(vp.derived)) {
           assert vc.derived != null;
           VarInfo[] vc_bases = vc.derived.getBases();
@@ -995,10 +994,6 @@ public class PptRelation implements Serializable {
           break;
         }
 
-        assert ppt != null
-            : "@AssumeAssertion(nullness): bug in Nullness Checker"; // also, accesses of ppt worked earlier
-        assert ppt.children != null
-            : "@AssumeAssertion(nullness): bug in Nullness Checker"; // The "children" field is declared to be non-null
         // If we didn't find a matching splitter at each child, can't merge
         // this point.  Just remove it from the list of splitters
         if (split_children.size() != ppt.children.size()) {

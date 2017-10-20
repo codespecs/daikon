@@ -1598,9 +1598,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       if (num_elts == 1
           && v.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
           && v.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+        @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
         int min = v.aux.getInt(VarInfoAux.MINIMUM_VALUE);
-        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+        @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
         int max = v.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
         if (min == max && min == elts[0]) {
           return new DiscardInfo(
@@ -1613,7 +1613,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       // We can check if all values in the list match with the ones we know about
       // (useful for booleans and numeric enumerations).
       if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+        @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
         Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
         for (String s : vsValidValues) {
@@ -1636,7 +1636,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // just apply to all arrays.
     if (v.isDerived() && (v.derived instanceof SequenceLength)
       && (num_elts == 1) && (elts[0] == 0)) {
-      @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ VarInfo b = v.derived.getBase(0);
       if (!b.isDerived()) {
         if (logOn()) {
@@ -1648,7 +1647,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
 
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
-      @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
         String discardString = v.name() + " is derived with shift!=0 (shift==" + sl.shift + ")";
@@ -1714,7 +1712,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       #define NEW_BASETYPE
       #endif
 
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
       String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<BASETYPE> setValidValues = new TreeSet<BASETYPE>();
       for (String s : vsValidValues) {
@@ -1751,7 +1749,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
       for (String s : vsValidValues) {
@@ -1800,7 +1798,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifierIf with qualifier args
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<INT> setValidValues = new TreeSet<INT>();
       for (String s : vsValidValues) {

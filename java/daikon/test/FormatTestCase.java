@@ -56,7 +56,7 @@ class FormatTestCase {
     private int goalLineNumber;
 
     /** A cached copy of the result achieved by invoking the output method. */
-    private /*@MonotonicNonNull*/ String resultCache;
+    private /*@MonotonicNonNull*/ String resultCache = null;
 
     /** A string containing the format that this particular test case represented. */
     private String formatString;
@@ -82,7 +82,6 @@ class FormatTestCase {
       this.outputProducerArgs = outputProducerArgs;
       this.goalOutput = goalOutput;
       this.goalLineNumber = goalLineNumber;
-      resultCache = null;
       this.formatString = formatString;
     }
 
@@ -92,12 +91,15 @@ class FormatTestCase {
      * @param inv the Invariant object on which to invoke the function
      * @return a String representing the output
      */
+    @SuppressWarnings("nullness") // reflective call is always to format_using so result is non-null
     public String createTestOutput(Invariant inv) {
       try {
         if (resultCache == null) {
           resultCache = (String) outputProducer.invoke(inv, outputProducerArgs);
         }
-        if (FileIO.new_decl_format) resultCache = VarInfo.old_var_names(resultCache);
+        if (FileIO.new_decl_format) {
+          resultCache = VarInfo.old_var_names(resultCache);
+        }
         return resultCache;
       } catch (IllegalAccessException e) {
         throw new RuntimeException(e.toString());
