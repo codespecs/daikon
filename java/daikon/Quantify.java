@@ -488,7 +488,8 @@ public class Quantify {
           if (flags.contains(QuantFlags.ELEMENT_WISE) && (i >= 1)) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term _idx = _boundv[0], _low = _boundv[1];
-            @SuppressWarnings("nullness")
+            @SuppressWarnings(
+                "nullness") // if variable is a sequence (is it?), then index is non-null
             /*@NonNull*/ Term _idx = qrets[i - 1].index;
             Term _low = qrets[i - 1].var.get_lower_bound();
             if (_low.simplify_name().equals(low.simplify_name())) {
@@ -503,7 +504,8 @@ public class Quantify {
               && (flags.contains(QuantFlags.ADJACENT) || flags.contains(QuantFlags.DISTINCT))) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term prev_idx = _boundv[0];
-            @SuppressWarnings("nullness")
+            @SuppressWarnings(
+                "nullness") // if variable is a sequence (is it?), then index is non-null
             /*@NonNull*/ Term prev_idx = qrets[i - 1].index;
             if (flags.contains(QuantFlags.ADJACENT)) {
               conditions.append(

@@ -2512,6 +2512,7 @@ public final class FileIO {
     /** Type of the variable (required) */
     public VarKind kind = null;
     /** Variable that contains this variable (optional) */
+    // seems non-null for arrays/sequences
     public /*@Nullable*/ String enclosing_var;
     /** the simple (not fully specified) name of this variable (optional) */
     public /*@Nullable*/ String relative_name = null;

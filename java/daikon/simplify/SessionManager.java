@@ -185,7 +185,8 @@ public class SessionManager {
             mgr.wait(0);
           } catch (InterruptedException e) {
           }
-          assert mgr.pending != null : "@AssumeAssertion(nullness)";
+          assert mgr.pending != null
+              : "@AssumeAssertion(nullness): bug? might not be true if interrupted?";
           // session != null && mgr.pending != null;
         }
         error = null;

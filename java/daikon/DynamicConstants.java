@@ -116,7 +116,7 @@ public class DynamicConstants implements Serializable {
     // being set?
     /**
      * The value of the constant, or the previous constant value if constant==false and
-     * previous_constant==true. Null iff count=0.
+     * previously_constant==true. Null iff count=0.
      */
     public /*@MonotonicNonNull*/ /*@Interned*/ Object val = null;
 
@@ -134,12 +134,12 @@ public class DynamicConstants implements Serializable {
 
     /**
      * Whether or not this was constant at the beginning of this sample. At the beginning of the
-     * add() method, all newly non constant variables are marked (constant=false). It is sometimes
+     * add() method, all newly non-constant variables are marked (constant=false). It is sometimes
      * useful within the remainder of processing that sample to know that a variable was constant at
-     * the beginning. The field previous_constant is set to true when constant is set to false, and
-     * then is itself set to false at the end of the add() method.
+     * the beginning. The field previously_constant is set to true when constant is set to false,
+     * and then is itself set to false at the end of the add() method.
      */
-    boolean previous_constant = false;
+    boolean previously_constant = false;
 
     /**
      * Whether or not this was always missing at the beginning of this sample. At the beginning of
@@ -156,11 +156,11 @@ public class DynamicConstants implements Serializable {
       // always_missing=true and previous_missing=false.
       // assert (always_missing ? previous_missing : true) : toString();
 
-      assert !(constant && previous_constant) : toString();
+      assert !(constant && previously_constant) : toString();
 
       // Whereas values can be null, null is never the value for a dynamic
       // constant.
-      assert ((constant || previous_constant)
+      assert ((constant || previously_constant)
               ? (val != null && count > 0)
               : (val == null && count == 0))
           : toString();
@@ -176,7 +176,7 @@ public class DynamicConstants implements Serializable {
      */
     /*@Pure*/
     public boolean is_prev_constant() {
-      return constant || previous_constant;
+      return constant || previously_constant;
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -216,8 +216,8 @@ public class DynamicConstants implements Serializable {
               + always_missing
               + ", constant="
               + constant
-              + ", previous_constant="
-              + previous_constant
+              + ", previously_constant="
+              + previously_constant
               + ", previous_missing="
               + previous_missing
               + "]");
@@ -302,7 +302,7 @@ public class DynamicConstants implements Serializable {
       if (missing(con.vi, vt) || (con.val != con.vi.getValue(vt))) {
         i.remove();
         con.constant = false;
-        con.previous_constant = true;
+        con.previously_constant = true;
         assert all_vars[con.vi.varinfo_index].constant == false;
         non_con.add(con);
       } else {
@@ -369,9 +369,9 @@ public class DynamicConstants implements Serializable {
     // Create slices over newly non-constant and non-missing variables
     instantiate_new_views(non_con, non_missing);
 
-    // Turn off previous_constant on all newly non-constants
+    // Turn off previously_constant on all newly non-constants
     for (Constant con : non_con) {
-      con.previous_constant = false;
+      con.previously_constant = false;
       @SuppressWarnings("nullness") // reinitialization
       /*@NonNull*/ Object nullValue = null;
       con.val = nullValue;
@@ -750,7 +750,7 @@ public class DynamicConstants implements Serializable {
       if (con.always_missing || con.previous_missing) {
         continue;
       }
-      if (con.constant || con.previous_constant) {
+      if (con.constant || con.previously_constant) {
         continue;
       }
       if (!con.vi.isCanonical()) {
@@ -985,7 +985,7 @@ public class DynamicConstants implements Serializable {
     List<Constant> noncons = con_list;
     for (Constant con : con_list) {
       con.constant = false;
-      con.previous_constant = true;
+      con.previously_constant = true;
     }
     con_list = new ArrayList<Constant>();
 
