@@ -55,7 +55,7 @@ jobs:
               SLUGOWNER=codespecs
             fi
 
-            curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+            curl -LO --retry 3 https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
 
             git ls-remote https://github.com/${SLUGOWNER}/daikon-typecheck.git &>-
             if [ "$?" -eq 0 ]; then
