@@ -1785,11 +1785,11 @@ This takes priority over the @option{--var-select-pattern} argument.
 @end table
 
 All of the regular expressions used by Daikon use
-@uref{http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#sum,,Java's regular expression syntax}.
+@uref{https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#sum,,Java's regular expression syntax}.
 Multiple items can be matched by using the logical or operator (@samp{|}),
 for example @code{var1|var2|var3}.
 Java's regular expression syntax is similar to Perl's but
-@uref{http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#jcc,,not
+@uref{https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#jcc,,not
 exactly the same}.
 
 The @var{...-omit-pattern} arguments take precedence:  if a name matches
