@@ -1398,7 +1398,7 @@ instrumented source files in @file{daikon-instrumented}.
 
 This creates @file{daikon-output/test_bday-combined.dtrace}, a trace
 file containing the values of variables at each invocation. (The
-filename is formed from the name of the test program, with
+file name is formed from the name of the test program, with
 @file{-combined} appended because it contains the trace information
 from all the instrumented modules invoked from the program).
 
@@ -1788,11 +1788,11 @@ This takes priority over the @option{--var-select-pattern} argument.
 @end table
 
 All of the regular expressions used by Daikon use
-@uref{http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#sum,,Java's regular expression syntax}.
+@uref{https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#sum,,Java's regular expression syntax}.
 Multiple items can be matched by using the logical or operator (@samp{|}),
 for example @code{var1|var2|var3}.
 Java's regular expression syntax is similar to Perl's but
-@uref{http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#jcc,,not
+@uref{https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#jcc,,not
 exactly the same}.
 
 The @var{...-omit-pattern} arguments take precedence:  if a name matches
@@ -2071,6 +2071,24 @@ source rather than a single location.  This concept is represented in
 Daikon by the dataflow hierarchy, see
 @ref{Dataflow hierarchy,,,developer,Daikon Developer Manual}.
 
+The Java instrumenter Chicory selects names for program
+points that include an indication of the argument and return types for
+each method.  These signatures are presented in @code{Class.getName} format: one
+character for each primitive type (@samp{B} for byte, @samp{C} for
+character, @samp{Z} for boolean, etc.);
+@samp{L@var{classname};} for object types; and a @samp{[}
+prefix for each level of array nesting.
+
+
+@menu
+* OBJECT and CLASS program points::
+@end menu
+
+
+@node    OBJECT and CLASS program points
+@subsection OBJECT and CLASS program points
+@cindex program point
+
 @cindex :::OBJECT program point
 @cindex OBJECT program point
 @cindex :::CLASS program point
@@ -2079,7 +2097,7 @@ Daikon by the dataflow hierarchy, see
 @cindex representation invariants
 @cindex class invariants
 
-Two other program point tags that have special meaning to Daikon's hierarchy
+Two program point tags that have special meaning to Daikon's hierarchy
 organization are @code{:::OBJECT} and @code{:::CLASS}.
 The @code{:::OBJECT} tag indicates object invariants (sometimes called
 representation invariants or class invariants) over all the instance
@@ -2105,13 +2123,12 @@ the class invariant holds.  @option{ESC/Java} and @option{JML} require an explic
 @dfn{helper} annotation to indicate a private method for which the class
 invariant does not hold.)
 
-The Java instrumenter Chicory selects names for program
-points that include an indication of the argument and return types for
-each method.  These signatures are presented in @code{Class.getName} format: one
-character for each primitive type (@samp{B} for byte, @samp{C} for
-character, @samp{Z} for boolean (so as not to clash with byte), etc.);
-@samp{L@var{classname};} for object types; and a @samp{[}
-prefix for each level of array nesting.
+A trace file does not contain samples for the @code{:::OBJECT} and
+@code{:::CLASS} program points.  Variable values for these artificial
+program points are constructed from samples that do appear in a trace file.
+For example, an object invariant is a property that holds at entry to and
+exit from every public method of the class, so the @code{:::OBJECT} program
+point is constructed from samples at those points.
 
 
 @node    Variable names
@@ -9321,7 +9338,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  ifndef preinclude XTerm cl dirname cnt mwdefines url linux von
 @c  LocalWords:  libc Leitner Quinonez Rodric Rabbah DDTRACEAPPEND createItem
 @c  LocalWords:  maxPhase largestlet anag adjacentdups specfirstword DynComp's
-@c  LocalWords:  maxdepthspec jdk dcomp BuildJDK FIFOs EXIT75 clinit
+@c  LocalWords:  maxdepthspec jdk dcomp BuildJDK FIFOs EXIT75 clinit VM
 @c  LocalWords:  amd Itanium Yuan schoolDays breakDays DCompInstrumented OSTYPE
 @c  LocalWords:  AnnotateNullable instrumenter toolset JHP pm PptMap loophead
 @c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
@@ -9350,4 +9367,8 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  LIB2 CVC4 unformattable LinkageError SquarePanel Donohue
 @c  LocalWords:  SecurityManager setSecurityManager omitpattern Software''
 @c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB LVTT LVT
-@c  LocalWords:  ClassFormatError javautil ArrayList17
+@c  LocalWords:  ClassFormatError javautil ArrayList17 Simulink Stateflow
+@c  LocalWords:  untyped splitter filename substring boolean splitters CVC
+@c  LocalWords:  dimensionality consequents UNRETURNED getter globals
+@c  LocalWords:  typedefs celeriacArg Inserter comparator roundoff bitwise
+@c  LocalWords:  Kellen Florian Laure Raytheon

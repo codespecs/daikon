@@ -804,7 +804,7 @@ errorprone-nocompile:
 # To apply the patch, see instructions in the Error Prone output.
 
 lib/error_prone_ant-${ERRORPRONE_VERSION}.jar:
-	(cd lib && curl -s -O https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/error_prone_ant-${ERRORPRONE_VERSION}.jar)
+	(cd lib && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/error_prone_ant-${ERRORPRONE_VERSION}.jar)
 
 findbugs: .findbugs-output
 .PHONY: findbugs
@@ -1250,7 +1250,7 @@ JAVADOC_DEST  = api
 # "Multiple sources of package comments found for package"
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
-                -linkoffline http://docs.oracle.com/javase/8/docs/api/ http://docs.oracle.com/javase/8/docs/api/ \
+                -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
                 -docletpath "${CLASSPATH}" \
                 -classpath "$(subst ${DAIKONDIR}/java:,${CLASSPATH_JARS}:${CLASSPATH_JARS2}:,${CLASSPATH})"
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead

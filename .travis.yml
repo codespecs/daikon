@@ -41,7 +41,7 @@ before_script:
 - docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null 2>&1 || true
 
 script:
-- docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && git clone --quiet -b $TRAVIS_BRANCH --depth 10 https://github.com/$TRAVIS_REPO_SLUG.git daikon && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
+- docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && (git clone --quiet --depth 9 -b $TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git daikon || git clone --quiet --depth 9 -b $TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git daikon) && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
 
 jobs:
   include:
@@ -55,7 +55,7 @@ jobs:
               SLUGOWNER=codespecs
             fi
 
-            curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+            curl -LO --retry 3 https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
 
             git ls-remote https://github.com/${SLUGOWNER}/daikon-typecheck.git &>-
             if [ "$?" -eq 0 ]; then
