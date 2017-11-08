@@ -96,7 +96,7 @@ public class ClassInfo {
                 : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
             // System.out.printf("compare %s to pure %s%n",
             //                  mi.member.toString() , pureMeth);
-            if (mi.member.getName().equals(pureMeth)) {
+            if (mi.member.toString().trim().equals(pureMeth)) {
               foundMatch = true;
               break;
             }
