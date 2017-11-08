@@ -271,7 +271,7 @@ In order to run Daikon, you must have a Java 7 (or later) JDK, including a
 Java Virtual Machine} and a Java compiler.
 
 If you wish to analyze C or C++ programs, you need a C or C++
-compiler such as @command{GCC}.
+compiler such as @command{gcc}.
 
 If you wish to edit the Daikon source code and re-compile Daikon,
 @pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
@@ -1048,8 +1048,11 @@ involving unrelated variables (see @ref{DynComp for C/C++}).
 
 To use the C/C++ front end Kvasir with your program, first make sure that
 your program has been compiled with DWARF-2 format debugging
-information, such as by giving the @option{-gdwarf-2} flag to @command{GCC} when
-compiling.  Then, run your program as usual, but prepend
+information, such as by giving the @option{-gdwarf-2} flag to @command{gcc} when
+compiling.  Some versions of @command{gcc} now output position independent
+code by default.  Kvasir cannot properly process these binaries.
+You must add the @option{-no-pie} option to disable this feature.
+Then, run your program as usual, but prepend
 @command{kvasir-dtrace} to the command line.
 
 Kvasir will produce two output files:
@@ -1104,7 +1107,7 @@ cd $DAIKONDIR/examples/c-examples/wordplay
 Compile the program with DWARF-2 debugging information enabled
 (and all optimizations disabled).
 @example
-gcc -gdwarf-2 wordplay.c -o wordplay
+gcc -gdwarf-2 -no-pie wordplay.c -o wordplay
 @end example
 
 Kvasir can also be used for programs constructed by compiling a number
@@ -3172,10 +3175,10 @@ Encountered "__extension__ typedef struct @{  ...
 
 @noindent
 then your program uses non-standard C syntax.  The @samp{__extension__}
-keyword is supported only by the @command{GCC} compiler, and isn't handled by
+keyword is supported only by the @command{gcc} compiler, and isn't handled by
 the @command{CreateSpinfoC} program.  You could extend the @command{CreateSpinfoC} program
-to handle non-standard @command{GCC} extensions, or you could remove non-standard
-@command{GCC} extensions from your program.  The extensions might also result from
+to handle non-standard @command{gcc} extensions, or you could remove non-standard
+@command{gcc} extensions from your program.  The extensions might also result from
 standard libraries rather than your own program --- removing a
 directives such as @samp{#include <stdio.h>} when preprocessing may also
 resolve the problem.
@@ -4453,6 +4456,8 @@ included in the Daikon distribution).
 To use Kvasir, first compile your program using the DWARF-2 debugging
 format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}) and
 without optimizations (e.g., supply the @option{-O0} option to @command{gcc}).
+Also, some versions of @command{gcc} now output position independent code by default.
+You must add the @option{-no-pie} option to disable this feature.
 Then, prefix your command line by @command{kvasir-dtrace}.  For example,
 if you normally run your program with the command
 @example
@@ -4506,8 +4511,11 @@ and any flags that affect calling conventions, such as
 @item
 Include debugging information, by supplying the @option{-g} flag.
 The debugging information must be in the DWARF-2 format.
-DWARF-2 is the default format for debugging information in @command{GCC} 3 and later, and
+DWARF-2 is the default format for debugging information in @command{gcc} 3 and later, and
 otherwise is produced by supplying the @option{-gdwarf-2} command line option.
+@item
+Kvasir cannot properly process position independent binaries.
+You must add the @option{-no-pie} option to disable this feature.
 @end itemize
 
 In the second step of using Kvasir, run your program as you normally
@@ -5860,7 +5868,7 @@ file.txt} to compress a text file (but start with a small one first).
 @noindent
 (This example assumes that you have compiled the @file{bzip2} example (in
 @file{$DAIKONDIR/@/examples/@/c-examples/@/bzip2} of the distribution) by
-saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
+saying @command{gcc -gdwarf-2 -no-pie bzip2.c -o bzip2}, and that
 @env{$DAIKON} stands for the command that invokes Daikon, for
 instance @command{java -Xmx512m daikon.Daikon --config_option
 daikon.@/derive.@/Derivation.@/disable_derived_variables=true}.)
@@ -6031,7 +6039,7 @@ running under a Linux kernel in 64-bit mode.
 The Itanium or IA-64 architecture is not supported.
 
 Kvasir requires that your program have debugging
-information available in the DWARF-2 format, as produced by @command{GCC} version
+information available in the DWARF-2 format, as produced by @command{gcc} version
 3 and later.  For the best results, the programs used by Kvasir should be
 compiled without optimization.
 
@@ -6060,10 +6068,10 @@ arrays with all of their elements or the option to flatten
 multidimensional arrays into multiple single-dimensional arrays.
 
 @item
-Kvasir behaves somewhat differently with different versions of @command{GCC}@.
+Kvasir behaves somewhat differently with different versions of @command{gcc}@.
 If feasible, we recommend that you use Kvasir with version 4.7 (or newer).
 Incompatibilities
-between Kvasir and the debugging information produced by older @command{GCC}
+between Kvasir and the debugging information produced by older @command{gcc}
 versions can lead to incorrect output and, in some cases, can cause Kvasir to crash.
 
 @item
