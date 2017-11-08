@@ -41,6 +41,10 @@ PRINT_INV := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar dai
 
 default: summary
 
+# Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
+OS_ID := $(shell lsb_release -si)
+OS_REL := $(shell lsb_release -sr)
+
 # Function to compute goal filename extension.  If we are on x86_64 then
 # use filename.test.goal.  If not x86_64 (which we assume means 386) then
 # if filename.test.goal.386 exists, use it; otherwise, use filename.test.goal.
@@ -74,6 +78,12 @@ CFLAGS += -std=gnu89
 endif
 C_EXT ?= c
 COMPILER := $(CC)
+endif
+
+ifneq ($(OS_ID),CentOS)
+# Ubuntu (17.10) sets -pie on by default
+# we must turn it back off
+CFLAGS += -no-pie
 endif
 
 SOURCES ?= $(NAME).$(C_EXT)

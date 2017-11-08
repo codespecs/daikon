@@ -12,9 +12,6 @@ CFLAGS += -gdwarf-2
 # Ubuntu sets -fstack-protector-strong on by default
 # we turn if back off to get baseline results to match Fedora.
 CFLAGS += -fno-stack-protector
-# Ubuntu (17.10) sets -pie on by default
-# we must turn it back off
-CFLAGS += -no-pie
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
@@ -139,6 +136,12 @@ else
 C_EXT ?= c
 COMPILER := $(CC)
 CFLAGS += -std=gnu89
+endif
+
+ifneq ($(OS_ID),CentOS)
+# Ubuntu (17.10) sets -pie on by default
+# we must turn it back off
+CFLAGS += -no-pie
 endif
 
 SOURCES ?= $(NAME).$(C_EXT)
