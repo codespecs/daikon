@@ -12,6 +12,9 @@ CFLAGS += -gdwarf-2
 # Ubuntu sets -fstack-protector-strong on by default
 # we turn if back off to get baseline results to match Fedora.
 CFLAGS += -fno-stack-protector
+# Ubuntu (17.10) sets -pie on by default
+# we must turn it back off
+CFLAGS += -no-pie
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
@@ -82,10 +85,19 @@ endif
 # otherwise the default goal file
 endif
 
+# The lastest version of Ubuntu (17.10) uses a gcc that gets
+# almost the same results as the one on Fedora26. However,
+# there are enough differences that we need additional goal files.
+ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),17.10)
+	GOAL := goal-Ubuntu1710
+endif
+# other versions of Ubuntu will use the default goal file
+endif
+
 # We test Kvasir on three different OS platforms: Ubuntu, Fedora and CentOS.
 # The code above has set $(GOAL) to a value that represents the current OS type
 # and version number; e.g. 'goal-Fedora25'.
-# (Note that there are currently no goal files specific to Ubuntu.)
 
 # The function below identifies the correct goal file based on:
 # the test case => $(1)

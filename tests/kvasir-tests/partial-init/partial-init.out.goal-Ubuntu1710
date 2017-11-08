@@ -1,0 +1,32 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./partial-init
+==PID== 
+Global:
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 01010000 00000000 00000000 00000000 
+Dynamic:
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 0101==PID== Syscall param write(buf) points to uninitialised byte(s)
+==PID==    at <HEAP_ADDR>: write (write.c:26)
+==PID==    by <STATIC_ADDR>: print_bits (partial-init.c:19)
+==PID==    by <STATIC_ADDR>: test_bits (partial-init.c:35)
+==PID==    by <STATIC_ADDR>: main (partial-init.c:46)
+==PID==  Address <STACK_ADDR> is on thread 1's stack
+==PID==  in frame #1, created by print_bits (partial-init.c:8)
+==PID== 
+0000 00000000 00000000 00000000 
+Stack:
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 0101==PID== Syscall param write(buf) points to uninitialised byte(s)
+==PID==    at <HEAP_ADDR>: write (write.c:26)
+==PID==    by <STATIC_ADDR>: print_bits (partial-init.c:19)
+==PID==    by <STATIC_ADDR>: test_bits (partial-init.c:35)
+==PID==    by <STATIC_ADDR>: main (partial-init.c:48)
+==PID==  Address <STACK_ADDR> is on thread 1's stack
+==PID==  in frame #1, created by print_bits (partial-init.c:8)
+==PID== 
+0000 00000000 00000000 00000000 
+==PID== 
+==PID== ERROR SUMMARY: 56 errors from 2 contexts (suppressed: 0 from 0)
