@@ -6001,7 +6001,9 @@ cd $DAIKONDIR
 make kvasir
 @end example
 
-You may see warnings during this process.  These can be ignored.  If you
+You may see warnings during this process.  These can be ignored.
+
+If you
 receive an error of the form:
 
 @example
@@ -6012,8 +6014,19 @@ compilation terminated.
 @end example
 
 @noindent
-it is most likely caused by the package @file{binutils-dev} not being
-installed.
+then install the package @file{binutils-dev}.
+
+If you receive an error of the form:
+
+@example
+readelf.c:72:10: fatal error: zlib.h: No such file or directory
+ #include <zlib.h>
+          ^~~~~~~~
+compilation terminated.
+@end example
+
+@noindent
+then install the package @file{zlib1g-dev}.
 
 Once Kvasir has been installed, it can be used via the
 @file{kvasir-dtrace} script in the @file{$DAIKONDIR/scripts} directory; if
