@@ -6001,7 +6001,7 @@ cd $DAIKONDIR
 make kvasir
 @end example
 
-You may see warnings during this process.  These can be ignored.  If you
+You may see warnings during this process.  You can ignore these.  If you
 receive an error of the form:
 
 @example
@@ -6016,7 +6016,7 @@ it is most likely caused by the package @file{binutils-dev} not being
 installed.
 
 Once Kvasir has been installed, it can be used via the
-@file{kvasir-dtrace} script in the @file{$DAIKONDIR/scripts} directory; if
+@file{kvasir-dtrace} script in the @file{$DAIKONDIR/scripts} directory.  If
 you have set up the Daikon environment according to the instructions
 above, it should already be in your @env{PATH}.  For instructions on using
 Kvasir, see @ref{Kvasir}.
