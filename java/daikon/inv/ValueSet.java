@@ -9,9 +9,9 @@ import plume.*;
 // (Actually, maybe it will just subclass that.)
 
 /**
- * ValueSet stores a set of unique integers. When adding a value, for efficiency its hash code is
- * added rather than the value itself. If the set size exceeds a specified limit, then its rep is
- * nulled.
+ * ValueSet stores a set of values. The implementation only stores integers. When adding a value,
+ * for efficiency its hash code is added rather than the value itself. If the set size exceeds a
+ * specified limit, then its rep is nulled.
  *
  * <p>This class is used for efficient justification tests.
  *
