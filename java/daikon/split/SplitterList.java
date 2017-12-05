@@ -41,7 +41,7 @@ public abstract class SplitterList {
         splits_strings[i] = splits[i].condition();
       }
       Global.debugSplit.fine(
-          "Registering splitters for " + pptname + ":" + plume.ArraysMDE.toString(splits_strings));
+          "Registering splitters for " + pptname + ":" + Arrays.toString(splits_strings));
     }
 
     if (ppt_splitters.containsKey(pptname)) {
@@ -54,7 +54,7 @@ public abstract class SplitterList {
       assert !ppt_splitters.containsKey(pptname);
       // assert ! ppt_splitters.containsKey(pptname)
       //               : "SplitterList already contains " + pptname
-      //               + " which maps to" + lineSep + " " + ArraysMDE.toString(get_raw(pptname))
+      //               + " which maps to" + lineSep + " " + Arrays.toString(get_raw(pptname))
       //               + lineSep + " which is " + formatSplitters(get_raw(pptname));
       ppt_splitters.put(pptname, splits);
     }

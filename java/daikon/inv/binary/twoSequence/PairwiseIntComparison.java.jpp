@@ -214,6 +214,7 @@ import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.suppress.*;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -504,8 +505,8 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
                                         int count) {
       if (logDetail()) {
-        log(debug, "saw add_modified (" + ArraysMDE.toString(a1)
-             + ", " + ArraysMDE.toString(a2) + ")");
+        log(debug, "saw add_modified (" + Arrays.toString(a1)
+             + ", " + Arrays.toString(a2) + ")");
       }
       return check_modified(a1, a2, count);
     }

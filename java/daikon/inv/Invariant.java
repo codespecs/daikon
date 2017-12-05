@@ -458,7 +458,7 @@ import typequals.*;
           result.format(),
           getClass().getName(),
           format(),
-          ArraysMDE.toString(permutation),
+          Arrays.toString(permutation),
           ppt,
           new_ppt);
       // result.log (UtilMDE.backTrace());
@@ -484,7 +484,7 @@ import typequals.*;
           "Created %s via clone_and_permute from %s using permutation %s old_ppt = %s",
           result.format(),
           format(),
-          ArraysMDE.toString(permutation),
+          Arrays.toString(permutation),
           VarInfo.arrayToString(ppt.var_infos)
           // + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos)
           );
@@ -530,7 +530,7 @@ import typequals.*;
           "Created %s via resurrect from %s using permutation %s old_ppt = %s new_ppt = %s",
           result.format(),
           format(),
-          ArraysMDE.toString(permutation),
+          Arrays.toString(permutation),
           VarInfo.arrayToString(ppt.var_infos),
           VarInfo.arrayToString(new_ppt.var_infos));
     }

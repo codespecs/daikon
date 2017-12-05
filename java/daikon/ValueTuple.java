@@ -432,15 +432,15 @@ public final class ValueTuple implements Cloneable {
           if (val instanceof String) {
             sb.append("\"" + val + "\"");
           } else if (val instanceof long[]) {
-            sb.append(ArraysMDE.toString((long[]) val));
+            sb.append(Arrays.toString((long[]) val));
           } else if (val instanceof int[]) {
             // shouldn't reach this case -- should be long[], not int[]
-            // sb.append(ArraysMDE.toString((int[])val));
+            // sb.append(Arrays.toString((int[])val));
             throw new Error("should be long[], not int[]");
           } else if (val instanceof double[]) {
-            sb.append(ArraysMDE.toString((double[]) val));
+            sb.append(Arrays.toString((double[]) val));
           } else if (val instanceof String[]) {
-            sb.append(ArraysMDE.toString((String[]) val));
+            sb.append(Arrays.toString((String[]) val));
           } else {
             sb.append(val);
           }
@@ -475,10 +475,10 @@ public final class ValueTuple implements Cloneable {
   public static String valToString(/*@Nullable*/ Object val) {
     if (val == null) return "null";
     if (val instanceof long[]) {
-      return (ArraysMDE.toString((long[]) val));
+      return (Arrays.toString((long[]) val));
     } else if (val instanceof int[]) {
       // shouldn't reach this case -- should be long[], not int[]
-      return (ArraysMDE.toString((int[]) val));
+      return (Arrays.toString((int[]) val));
     } else {
       return (val.toString());
     }

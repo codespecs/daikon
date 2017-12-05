@@ -354,11 +354,10 @@ public class NISuppressor {
                   Debug.toString(ppt.constants.constant_value(v2)),
                   valid));
         }
+        Object const1 = ppt.constants.constant_value(v1);
+        Object const2 = ppt.constants.constant_value(v2);
         current_state_str =
-            "true over constants "
-                + ppt.constants.constant_value(v1)
-                + " and "
-                + ppt.constants.constant_value(v2);
+            "true over constants " + Debug.toString(const1) + " and " + Debug.toString(const2);
         if (!valid) current_state_str = "not " + current_state_str;
         return (state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID));
       }

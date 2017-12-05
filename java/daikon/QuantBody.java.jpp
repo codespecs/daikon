@@ -1972,7 +1972,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     //assert fieldStr != null && !"".equals(fieldStr);
     String[] fieldNames = fieldStr.split("\\.");
     _TYPE[] retval = COLLECT_TYPE(object, fieldNames, 0);
-    //System.err.println("%%% fieldArray returned: " + plume.ArraysMDE.toString(retval));
+    //System.err.println("%%% fieldArray returned: " + plume.Arrays.toString(retval));
     return retval;
   }
 

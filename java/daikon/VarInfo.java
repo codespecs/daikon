@@ -2690,15 +2690,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public static String arrayToString(VarInfo[] vis) {
 
     if (vis == null) return "null";
-    ArrayList<String> vars = new ArrayList<String>(vis.length);
+    StringBuilderDelimited sb = new StringBuilderDelimited(", ");
     for (int i = 0; i < vis.length; i++) {
       if (vis[i] == null) {
-        vars.add("null");
+        sb.append("null");
       } else {
-        vars.add(vis[i].name());
+        sb.append(vis[i].name());
       }
     }
-    return UtilMDE.join(vars, ", ");
+    return sb.toString();
   }
 
   /** Returns a string containing the names of the vars in the list. */
