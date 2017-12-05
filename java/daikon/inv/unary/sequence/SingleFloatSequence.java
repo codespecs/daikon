@@ -40,7 +40,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
-    // System.out.println("SingleFloatSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
+    // System.out.println("SingleFloatSequence.add(" + Arrays.toString(value) + ", " + modified + ", " + count + ")");
     double[] value = (double[]) val;
     if (value == null) {
     } else if (mod_index == 0) {

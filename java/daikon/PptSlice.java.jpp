@@ -705,7 +705,7 @@ public final class PPTSLICE1 extends PptSlice {
         debugMerge.fine("-- Processing child " + ppt.name() + " (" + rel.getRelationType() + ")");
         debugMerge.fine("-- -- child vars = " + VarInfo.arrayToString(cvis_sorted));
         debugMerge.fine("-- -- parent vars = " + VarInfo.arrayToString(var_infos));
-        debugMerge.fine("-- -- permute = " + ArraysMDE.toString(permute));
+        debugMerge.fine("-- -- permute = " + Arrays.toString(permute));
       }
 
       // Add each invariant (permuted to match the parent varinfos)
@@ -728,7 +728,7 @@ public final class PPTSLICE1 extends PptSlice {
               "Created %s from %s using permute %s cvis_sorted = %s cvis = %s for ppt %s",
               inv,
               orig_inv,
-              ArraysMDE.toString(permute),
+              Arrays.toString(permute),
               VarInfo.arrayToString(cvis_sorted),
               VarInfo.arrayToString(child_vars),
               parent.name());

@@ -693,9 +693,9 @@ public final class Debug {
   public static String toString(/*@Nullable*/ Object val) {
     if (val == null) return "none";
     if (val instanceof String) return "\"" + val + "\"";
-    if (val instanceof long[]) return ArraysMDE.toString((long[]) val);
-    if (val instanceof String[]) return ArraysMDE.toString((String[]) val);
-    if (val instanceof double[]) return ArraysMDE.toString((double[]) val);
+    if (val instanceof long[]) return Arrays.toString((long[]) val);
+    if (val instanceof String[]) return Arrays.toString((String[]) val);
+    if (val instanceof double[]) return Arrays.toString((double[]) val);
     if (val instanceof VarInfo[]) return VarInfo.arrayToString((VarInfo[]) val);
     return (val.toString());
   }
@@ -796,7 +796,7 @@ public final class Debug {
     debugTrack.fine("Track Classes: " + ArraysMDE.toString(debugTrackClass, false));
     String vars_out = "";
     for (int ii = 0; ii < debugTrackVars.length; ii++) {
-      vars_out += ArraysMDE.toString(debugTrackVars[ii]) + " ";
+      vars_out += Arrays.toString(debugTrackVars[ii]) + " ";
     }
     debugTrack.fine("Track Vars: " + vars_out);
     debugTrack.fine("Track Ppts: " + ArraysMDE.toString(debugTrackPpt, false));

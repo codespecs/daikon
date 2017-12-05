@@ -349,8 +349,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     if (Debug.logDetail()) {
-      log("testing values %s, %s", ArraysMDE.toString (x),
-           ArraysMDE.toString(y));
+      log("testing values %s, %s", Arrays.toString (x),
+           Arrays.toString(y));
     }
 
     try {

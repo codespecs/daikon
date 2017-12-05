@@ -231,7 +231,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
-    // System.out.println ("common: " + ArraysMDE.toString (a));
+    // System.out.println ("common: " + Arrays.toString (a));
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect == null) {

@@ -224,7 +224,7 @@ public final class CLASSNAME extends SUPERCLASS {
 
     //if (logOn()) {
     //  VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
-    //  log ("max=" + vs.max() + " array=" + ArraysMDE.toString (a));
+    //  log ("max=" + vs.max() + " array=" + Arrays.toString (a));
     //}
 
     return (check_modified(a, count));

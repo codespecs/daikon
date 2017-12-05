@@ -49,7 +49,7 @@ public abstract class SingleStringSequence extends UnaryInvariant {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
-    // System.out.println("SingleStringSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
+    // System.out.println("SingleStringSequence.add(" + Arrays.toString(value) + ", " + modified + ", " + count + ")");
     /*@Interned*/ String[] value = (/*@Interned*/ String[]) val;
     if (value == null) {
     } else if (mod_index == 0) {

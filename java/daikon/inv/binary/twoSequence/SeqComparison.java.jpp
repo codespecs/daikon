@@ -504,7 +504,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     if (logDetail()) {
-      log("add_modified (%s, %s)", ArraysMDE.toString(v1), ArraysMDE.toString(v2));
+      log("add_modified (%s, %s)", Arrays.toString(v1), Arrays.toString(v2));
     }
         return check_modified(v1, v2, count);
   }
