@@ -93,9 +93,6 @@ public final class Daikon {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. Controls whether invariants are reported over floating-point values. */
-  public static boolean dkconfig_enable_floats = true;
-
   /** Boolean. Just print the total number of possible invariants and exit. */
   public static boolean dkconfig_calc_possible_invs;
 
