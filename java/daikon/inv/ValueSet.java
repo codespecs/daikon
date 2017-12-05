@@ -56,9 +56,9 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       return new ValueSet.ValueSetScalar(DEFAULT_MAX_VALUES);
     } else if (rep_type == ProglangType.INT_ARRAY) {
       return new ValueSet.ValueSetScalarArray(DEFAULT_MAX_VALUES);
-    } else if (Daikon.dkconfig_enable_floats && rep_type == ProglangType.DOUBLE) {
+    } else if (rep_type == ProglangType.DOUBLE) {
       return new ValueSet.ValueSetFloat(DEFAULT_MAX_VALUES);
-    } else if (Daikon.dkconfig_enable_floats && rep_type == ProglangType.DOUBLE_ARRAY) {
+    } else if (rep_type == ProglangType.DOUBLE_ARRAY) {
       return new ValueSet.ValueSetFloatArray(DEFAULT_MAX_VALUES);
     } else if (rep_type == ProglangType.STRING) {
       return new ValueSet.ValueSetString(DEFAULT_MAX_VALUES);

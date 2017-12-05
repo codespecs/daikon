@@ -1166,12 +1166,12 @@ public class DynamicConstants implements Serializable {
       }
       inv = OneOfSequence.get_proto().instantiate(slice1);
     } else if (rep_type == ProglangType.DOUBLE) {
-      if (!Daikon.dkconfig_enable_floats || !OneOfFloat.dkconfig_enabled) {
+      if (!OneOfFloat.dkconfig_enabled) {
         return;
       }
       inv = OneOfFloat.get_proto().instantiate(slice1);
     } else if (rep_type == ProglangType.DOUBLE_ARRAY) {
-      if (!Daikon.dkconfig_enable_floats || !OneOfFloatSequence.dkconfig_enabled) {
+      if (!OneOfFloatSequence.dkconfig_enabled) {
         return;
       }
       inv = OneOfFloatSequence.get_proto().instantiate(slice1);

@@ -46,7 +46,7 @@ public final class CompleteOneOfString extends SingleString {
   /*@Unused(when=Prototype.class)*/
   public List<Info> vals;
 
-  /** Boolean. True iff PrintableString invariants should be considered. */
+  /** Boolean. True iff CompleteOneOfString invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   public CompleteOneOfString(PptSlice slice) {

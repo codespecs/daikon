@@ -77,8 +77,8 @@ public final class Daikon {
    */
   public static int dkconfig_progress_delay = 1000;
 
-  public static final String release_version = "5.5.15";
-  public static final String release_date = "October 3, 2017";
+  public static final String release_version = "5.6.1";
+  public static final String release_date = "December 4, 2017";
   public static final String release_string =
       "Daikon version "
           + release_version
@@ -93,9 +93,6 @@ public final class Daikon {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. Controls whether invariants are reported over floating-point values. */
-  public static boolean dkconfig_enable_floats = true;
-
   /** Boolean. Just print the total number of possible invariants and exit. */
   public static boolean dkconfig_calc_possible_invs;
 

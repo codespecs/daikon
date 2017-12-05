@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.6.0 (December 4, 2017)
+
+Support was added for Ubuntu 17.10.  Please see User Guide notes about using
+the -no-pie option on gcc.
+
+DynComp:
+- Fixed a few DynComp bugs.
+
+===========================================================================
+
 5.5.14 (October 3, 2017)
 
 Chicory:

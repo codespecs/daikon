@@ -4079,14 +4079,10 @@ public class PptTopLevel extends Ppt {
       //           ((SeqComparisonString) invEquals).can_be_eq = true;
       //         }
       //         debugPostProcess.fine ("  seqStringEqual");
-    } else if (Daikon.dkconfig_enable_floats) {
-      if (rep_is_float) {
-        invEquals = FloatEqual.get_proto().instantiate(newSlice);
-      } else if (rep == ProglangType.DOUBLE_ARRAY) {
-        invEquals = SeqSeqFloatEqual.get_proto().instantiate(newSlice);
-      }
-    } else {
-      throw new Error("No known EqualityComparison invariant to convert equality into");
+    } else if (rep_is_float) {
+      invEquals = FloatEqual.get_proto().instantiate(newSlice);
+    } else if (rep == ProglangType.DOUBLE_ARRAY) {
+      invEquals = SeqSeqFloatEqual.get_proto().instantiate(newSlice);
     }
 
     if (invEquals != null) {
