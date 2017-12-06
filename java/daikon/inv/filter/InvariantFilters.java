@@ -75,7 +75,7 @@ public class InvariantFilters {
 
     addPropertyFilter(new ReadonlyPrestateFilter());
 
-    addPropertyFilter(new StringFilter());
+    addPropertyFilter(new DotNetStringFilter());
   }
 
   private static /*@MonotonicNonNull*/ InvariantFilters default_filters = null;
