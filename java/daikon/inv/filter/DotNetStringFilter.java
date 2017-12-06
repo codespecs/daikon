@@ -25,12 +25,12 @@ import java.util.logging.Level;
  *   <li>{@code string.IsNullOrWhitespace(...)} if {@code string.IsNullOrEmpty(...)} is inferred.
  * </ul>
  */
-public class StringFilter extends InvariantFilter {
+public class DotNetStringFilter extends InvariantFilter {
 
-  /** Boolean. If true, StringFilter is initially turned on. */
+  /** Boolean. If true, DotNetStringFilter is initially turned on. See its Javadoc. */
   public static boolean dkconfig_enabled = false;
 
-  public StringFilter() {
+  public DotNetStringFilter() {
     isOn = dkconfig_enabled;
   }
 
@@ -200,7 +200,7 @@ public class StringFilter extends InvariantFilter {
   boolean shouldDiscardInvariant(Invariant invariant) {
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      PrintInvariants.debugFiltering.fine("\tEntering StringFilter.shouldDiscard");
+      PrintInvariants.debugFiltering.fine("\tEntering DotNetStringFilter.shouldDiscard");
     }
 
     return shouldDiscardDerivedStringFrameCondition(invariant)
