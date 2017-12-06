@@ -11,6 +11,7 @@ import daikon.inv.unary.UnaryInvariant;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -104,8 +105,7 @@ class FormatTestCase {
       } catch (IllegalAccessException e) {
         throw new RuntimeException(e.toString());
       } catch (InvocationTargetException e) {
-        System.out.println(
-            "***" + inv.getClass() + "***" + plume.ArraysMDE.toString(outputProducerArgs));
+        System.out.println("***" + inv.getClass() + "***" + Arrays.toString(outputProducerArgs));
         System.out.println("^^^" + e.toString());
         System.out.println("^^^" + e.getMessage());
         System.out.println("^^^" + e.getCause());
@@ -948,7 +948,7 @@ class FormatTestCase {
             "Error in populating invariant with add_modified ("
                 + addModified.toString()
                 + "applied to "
-                + plume.ArraysMDE.toString(params)
+                + Arrays.toString(params)
                 + "):"
                 + lineSep
                 + "START TARGETEXCEPTION="
@@ -963,7 +963,7 @@ class FormatTestCase {
             "Error in populating invariant with add_modified ("
                 + addModified.toString()
                 + "applied to "
-                + plume.ArraysMDE.toString(params)
+                + Arrays.toString(params)
                 + "): "
                 + e.toString());
       }

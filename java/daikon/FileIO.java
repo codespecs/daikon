@@ -825,7 +825,7 @@ public final class FileIO {
         if (canonical_hashcode.equals(
             val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is little point.  val can be null, so it cannot be the receiver.
         pw.print("<hashcode>");
-        else if (val instanceof int[]) pw.print(ArraysMDE.toString((int[]) val));
+        else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
         else if (val instanceof String) pw.print(UtilMDE.escapeNonASCII((String) val));
         else pw.print(val);
       }

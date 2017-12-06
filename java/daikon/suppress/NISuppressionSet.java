@@ -170,7 +170,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
                 "processing slice "
-                    + Debug.toString(vis)
+                    + VarInfo.arrayToString(vis)
                     + " in ppt "
                     + ppt.name()
                     + " with "
@@ -225,7 +225,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
                 "processing slice "
-                    + Debug.toString(vis)
+                    + VarInfo.arrayToString(vis)
                     + " in ppt "
                     + ppt.name()
                     + " with "
@@ -281,7 +281,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
             if (NIS.debug.isLoggable(Level.FINE)) {
               NIS.debug.fine(
                   "processing slice "
-                      + Debug.toString(vis)
+                      + VarInfo.arrayToString(vis)
                       + " in ppt "
                       + ppt.name()
                       + " with "
@@ -620,6 +620,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
-    return UtilMDE.join(suppression_set, ", ");
+    return "{ " + UtilMDE.join(suppression_set, ", ") + " }";
   }
 }

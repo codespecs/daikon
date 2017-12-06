@@ -33,6 +33,7 @@ package daikon.inv.unary.sequence;
 import daikon.*;
 import daikon.inv.*;
 import plume.*;
+import java.util.Arrays;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -231,7 +232,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
-    // System.out.println ("common: " + ArraysMDE.toString (a));
+    // System.out.println ("common: " + Arrays.toString (a));
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect == null) {

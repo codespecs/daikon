@@ -584,7 +584,11 @@ public class NISuppression {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied NISuppression this*/) {
-    return (UtilMDE.join(suppressors, " && ") + " ==> " + suppressee);
+    String suppressorsString =
+        (suppressors.length == 1)
+            ? suppressors[0].toString()
+            : "(" + UtilMDE.join(suppressors, " && ") + ")";
+    return suppressorsString + " ==> " + suppressee;
   }
 
   /** Returns a string describing each of the antecedents for each suppressor. */

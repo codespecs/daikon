@@ -430,7 +430,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
                 + "] split from leader "
                 + leader.name()
                 + " ["
-                + leaderValue
+                + Debug.toString(leaderValue)
                 + ","
                 + leaderMod
                 + "]");

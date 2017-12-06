@@ -69,7 +69,7 @@ public abstract class PptSlice extends Ppt {
     assert this instanceof PptSliceEquality || arity() == var_infos.length;
 
     if (debugGeneral.isLoggable(Level.FINE)) {
-      debugGeneral.fine(ArraysMDE.toString(var_infos));
+      debugGeneral.fine(Arrays.toString(var_infos));
     }
   }
 

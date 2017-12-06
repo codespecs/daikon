@@ -56,7 +56,7 @@ public abstract class SingleScalarSequence extends SingleSequence {
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val) : "not interned: " + val + "/" + val.getClass();
     assert Intern.isInterned(val);
-    // System.out.println("SingleScalarSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
+    // System.out.println("SingleScalarSequence.add(" + Arrays.toString(value) + ", " + modified + ", " + count + ")");
     long[] value = (long[]) val;
     if (value == null) {
       return InvariantStatus.NO_CHANGE;

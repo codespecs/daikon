@@ -3,6 +3,7 @@ package daikon.test;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.*;
+import daikon.VarInfo;
 import daikon.inv.*;
 import gnu.getopt.*;
 import java.io.*;
@@ -457,7 +458,7 @@ public class SampleTester extends TestCase {
     }
     PptSlice slice = ppt.findSlice(vis);
     if (slice == null) {
-      System.out.println("No invariants found for vars: " + Debug.toString(vis));
+      System.out.println("No invariants found for vars: " + VarInfo.arrayToString(vis));
       return true;
     }
 

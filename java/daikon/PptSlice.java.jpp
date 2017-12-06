@@ -378,7 +378,7 @@ public final class PPTSLICE1 extends PptSlice {
             "Falsified from sample: "
                 + var_infos[0].name()
                 + " = "
-                + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1));
+            + Debug.toString(val1));
       }
     }
     return result;
@@ -414,7 +414,7 @@ public final class PPTSLICE1 extends PptSlice {
                             "Falsified from sample: "
                             + var_infos[0].name()
                             + " = " + val1 + "," + var_infos[1].name()
-                            + " = " + ArraysMDE.toString(val2));
+                            + " = " + Debug.toString(val2));
         }
       }
     } else {
@@ -443,9 +443,9 @@ public final class PPTSLICE1 extends PptSlice {
           } else {
             DiscReasonMap.put(inv, DiscardCode.bad_sample,
                     "Falsified from sample: " + var_infos[0].name()
-                    + " = " + (array1 ? ArraysMDE.toString(val1) : val1)
+                    + " = " + Debug.toString(val1)
                     + "," + var_infos[1].name()
-                    + " = " + (array2 ? ArraysMDE.toString(val2) : val2));
+                    + " = " + Debug.toString(val2));
           }
         }
       }
@@ -482,11 +482,11 @@ public final class PPTSLICE1 extends PptSlice {
         // there are in the future, I don't want this to break.
         DiscReasonMap.put(inv, DiscardCode.bad_sample,
           "Falsified from sample: " + var_infos[0].name() + " = "
-          + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1)
+          + Debug.toString(val1)
           + "," + var_infos[1].name() + " = "
-          + (var_infos[1].rep_type.isArray() ? ArraysMDE.toString(val2) : val2)
+          + Debug.toString(val2)
           + "," + var_infos[2].name() + " = "
-          + (var_infos[2].rep_type.isArray() ? ArraysMDE.toString(val3) : val3));
+          + Debug.toString(val3));
       }
     }
     return result;
@@ -659,7 +659,7 @@ public final class PPTSLICE1 extends PptSlice {
       if (slice_missing(ppt, cvis)) {
         if (debugMerge.isLoggable(Level.FINE)) {
           debugMerge.fine(
-              "-- slice ignored (missing) " + ppt.name() + " vars " + Debug.toString(cvis_sorted));
+              "-- slice ignored (missing) " + ppt.name() + " vars " + VarInfo.arrayToString(cvis_sorted));
         }
         continue;
       }
@@ -688,7 +688,7 @@ public final class PPTSLICE1 extends PptSlice {
         }
         if (debugMerge.isLoggable(Level.FINE)) {
           debugMerge.fine(
-              "-- slice not found " + ppt.name() + " vars " + Debug.toString(cvis_sorted));
+              "-- slice not found " + ppt.name() + " vars " + VarInfo.arrayToString(cvis_sorted));
         }
         return;
       }
@@ -705,7 +705,7 @@ public final class PPTSLICE1 extends PptSlice {
         debugMerge.fine("-- Processing child " + ppt.name() + " (" + rel.getRelationType() + ")");
         debugMerge.fine("-- -- child vars = " + VarInfo.arrayToString(cvis_sorted));
         debugMerge.fine("-- -- parent vars = " + VarInfo.arrayToString(var_infos));
-        debugMerge.fine("-- -- permute = " + ArraysMDE.toString(permute));
+        debugMerge.fine("-- -- permute = " + Arrays.toString(permute));
       }
 
       // Add each invariant (permuted to match the parent varinfos)
@@ -728,7 +728,7 @@ public final class PPTSLICE1 extends PptSlice {
               "Created %s from %s using permute %s cvis_sorted = %s cvis = %s for ppt %s",
               inv,
               orig_inv,
-              ArraysMDE.toString(permute),
+              Arrays.toString(permute),
               VarInfo.arrayToString(cvis_sorted),
               VarInfo.arrayToString(child_vars),
               parent.name());

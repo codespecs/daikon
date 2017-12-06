@@ -3283,8 +3283,10 @@ public class PptTopLevel extends Ppt {
     // Put out this item
     l.fine(
         String.format(
-            "%s %s[%08X]: %s: %d: %s",
-            indent_str, ppt_name, System.identityHashCode(this), rel_type, num_samples(), var_rel));
+            // Version that outputs the hash code too:
+            // "%s %s[%08X]: %s: %d: %s",
+            // indent_str, ppt_name, System.identityHashCode(this), rel_type, num_samples(), var_rel));
+            "%s %s: %s: %d: %s", indent_str, ppt_name, rel_type, num_samples(), var_rel));
 
     // Put out each slice.
     if (false) {
@@ -3354,12 +3356,11 @@ public class PptTopLevel extends Ppt {
 
     Daikon.debugProgress.fine(
         String.format(
-            "Merging ppt %s[%08X] with %d children, %d parents, " + "%d variables",
-            name,
-            System.identityHashCode(this),
-            children.size(),
-            parents.size(),
-            var_infos.length));
+            // Version that outputs the hash code too.
+            // "Merging ppt %s[%08X] with %d children, %d parents, " + "%d variables",
+            // name, System.identityHashCode(this), children.size(), parents.size(), var_infos.length));
+            "Merging ppt %s with %d children, %d parents, " + "%d variables",
+            name, children.size(), parents.size(), var_infos.length));
 
     // If we don't have any children, there is nothing to do.
     if (children.size() == 0) {

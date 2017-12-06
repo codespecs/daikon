@@ -109,7 +109,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfSequence
   #define ONEOFSCALAR_STRING "OneOfSequence"
   #define SINGLESCALAR SingleScalarSequence
-  #define TOSTRING(x) ArraysMDE.toString(x)
+  #define TOSTRING(x) Arrays.toString(x)
   #define TOSTRINGELEMENT(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
@@ -123,7 +123,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfFloatSequence
   #define ONEOFSCALAR_STRING "OneOfSequenceFloat"
   #define SINGLESCALAR SingleFloatSequence
-  #define TOSTRING(x) ArraysMDE.toString(x)
+  #define TOSTRING(x) Arrays.toString(x)
   #define TOSTRINGELEMENT(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define ELT_EQUALS(a,b) (((a) == (b)) || (Double.isNaN(a) &&Double.isNaN(b)))
@@ -137,7 +137,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfStringSequence
   #define ONEOFSCALAR_STRING "OneOfStringSequence"
   #define SINGLESCALAR SingleStringSequence
-  #define TOSTRING(x) ArraysMDE.toString(x)
+  #define TOSTRING(x) Arrays.toString(x)
   #define TOSTRINGELEMENT(x) ((x == null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))

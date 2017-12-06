@@ -2,7 +2,6 @@ package daikon.dcomp;
 
 import daikon.DynComp;
 import daikon.chicory.*;
-import daikon.util.ArraysMDE;
 import daikon.util.SimpleLog;
 import daikon.util.WeakIdentityHashMap;
 import java.io.PrintWriter;
@@ -1223,7 +1222,7 @@ public final class DCRuntime {
       merge_dv.log("this: %s%n", obj);
       // For some reason the following line causes DynComp to behave incorrectly.
       // I have not take the time to investigate.
-      // merge_dv.log("arguments: %s%n", ArraysMDE.toString(args));
+      // merge_dv.log("arguments: %s%n", Arrays.toString(args));
     }
 
     // Map from an Object to the Daikon variable that currently holds
@@ -1280,7 +1279,7 @@ public final class DCRuntime {
 
     if (merge_dv.enabled()) {
       merge_dv.log("this: %s%n", obj);
-      merge_dv.log("arguments: %s%n", ArraysMDE.toString(args));
+      merge_dv.log("arguments: %s%n", Arrays.toString(args));
     }
 
     // Map from an Object to the Daikon variable that currently holds

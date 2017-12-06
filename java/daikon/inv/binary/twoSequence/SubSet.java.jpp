@@ -293,8 +293,8 @@ public class SUBSET extends TWOSEQUENCE {
   @Override
   public InvariantStatus add_modified(LONG[] a1, LONG[] a2, int count) {
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine(ArraysMDE.toString(a1));
-      debug.fine(ArraysMDE.toString(a2));
+      debug.fine(Arrays.toString(a1));
+      debug.fine(Arrays.toString(a2));
     }
     return check_modified(a1, a2, count);
   }

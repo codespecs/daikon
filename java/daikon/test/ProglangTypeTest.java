@@ -1,6 +1,7 @@
 package daikon.test;
 
 import daikon.*;
+import java.util.Arrays;
 import java.util.Comparator;
 import junit.framework.*;
 import plume.ArraysMDE;
@@ -34,7 +35,7 @@ public class ProglangTypeTest extends TestCase {
     String[] b1 = (String[]) b;
     boolean result = comparrcomparator.compare(a1, b1) == 0;
     if (!result) {
-      System.out.println("Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(b));
+      System.out.println("Arrays differ: " + Arrays.toString(a1) + ", " + Arrays.toString(b));
     }
     return result;
   }

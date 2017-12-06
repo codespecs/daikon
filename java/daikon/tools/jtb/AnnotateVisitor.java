@@ -881,7 +881,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // System.out.println("element_type_fields(" + ppt + ")");
     HashMap<String, String> result = new HashMap<String, String>();
     // FieldDeclaration[] fdecls = cfv.fieldDeclarations();
-    // System.out.println("fields: " + ArraysMDE.toString(fields));
+    // System.out.println("fields: " + Arrays.toString(fields));
     for (String field : allFieldNames) {
       // System.out.printf("element_type_fields (%s) field: %s%n", ppt, field);
       VarInfo vi = findVar(field, ppt);

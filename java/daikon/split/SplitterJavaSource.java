@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.regex.*;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
-import plume.ArraysMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -700,7 +699,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
     Global.debugSplit.fine(
-        "TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
+        "TokenExtractor.extractTokens(" + condition + ") ==> " + Arrays.toString(tokens));
     Set<String> variables = new LinkedHashSet<String>();
 
     for (int i = 0; i < tokens.length; i++) {
