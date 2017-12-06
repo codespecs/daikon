@@ -2,9 +2,8 @@
 # Makefile that runs tests that checks various chicory options.
 #
 
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
-# DAIKONDIR is where the 'daikon' project is cloned
-DAIKONDIR?=${DAIKONDIR_DEFAULT}
+# DAIKONDIR is the clone of the 'daikon' project.
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 
 # StackAr sources are used for option testing
 SRC_DIR = $(DAIKONDIR)/tests/sources

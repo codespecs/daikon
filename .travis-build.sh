@@ -27,9 +27,6 @@ set -o pipefail
 
 export SHELLOPTS
 
-# TODO: The tests ought to work even if $DAIKONDIR is not set.
-export DAIKONDIR=`pwd`
-
 ./.travis-build-without-test.sh
 
 # The JDK was built already; there is no need to rebuild it again.

@@ -1,10 +1,9 @@
 ###########################################################################
 # Read Makefile in parent directory to see what this all means
 
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
-# DAIKONDIR is where the 'daikon' project is cloned
-DAIKONDIR?=${DAIKONDIR_DEFAULT}
-SCRIPTS?=$(DAIKONDIR)/scripts
+# DAIKONDIR is the clone of the 'daikon' project.
+DAIKONDIR=$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+SCRIPTS=$(DAIKONDIR)/scripts
 
 # Help system
 default help: help-recurse

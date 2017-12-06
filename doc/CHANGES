@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.6.2 (January 2, 2018)
+
+It is no longer necessary to set the DAIKONDIR environment variable to when
+using or building Daikon.
+
+===========================================================================
+
 5.6.0 (December 4, 2017)
 
 Support was added for Ubuntu 17.10.  Please see User Guide notes about using

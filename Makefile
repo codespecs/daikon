@@ -1,12 +1,8 @@
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
-
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-# Don't take value from user, because we want operations to apply to this directory.
-# DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
-DAIKONDIR = ${DAIKONDIR_DEFAULT}
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 
 ##########################################################################
 ### Variables
@@ -735,7 +731,6 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 
 showvars:
 	@echo "DAIKONDIR =" $(DAIKONDIR)
-	@echo "DAIKONDIR_DEFAULT =" $(DAIKONDIR_DEFAULT)
 	@echo "DAIKON_JAVA_FILES =" $(DAIKON_JAVA_FILES)
 	@echo "WWW_FILES =" $(WWW_FILES)
 	@echo "CUR_RELEASE_NAME =" $(CUR_RELEASE_NAME)

@@ -1,4 +1,6 @@
 ###########################################################################
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
+PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
 MERNSTDIR ?= /homes/gws/mernst
 BIBDIR ?= ~/bib
 # This should include every file with "usesDaikon" or "\"Invariant dectection\""
@@ -6,7 +8,6 @@ BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invari
 BPHOME ?= ${MERNSTDIR}/bin/src/perl/bibtex2web/lib
 export BPHOME
 BWBIN = ${BPHOME}/../bin
-PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
 ###########################################################################
 
 # Files in $pag/www/daikon/pubs-sources/

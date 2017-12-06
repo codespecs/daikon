@@ -1,7 +1,5 @@
 ### User customizations
 
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
-
 # Put user-specific changes (such as changes to the JAVAC variable:
 #   JAVAC ?= jikes -g +E +F
 # ) in your own Makefile.user file in this directory.
@@ -9,13 +7,7 @@ DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 -include Makefile.user
 
 # Don't let the user override this; it should refer to the current directory.
-DAIKONDIR = ${DAIKONDIR_DEFAULT}
-
-# Test that the directory exists.  There must be a better way to do this.
-DAIKONDIR:=$(wildcard ${DAIKONDIR})
-ifndef DAIKONDIR
-  $(error Environment variable DAIKONDIR is not set to an existing directory; is set to ${DAIKONDIR}.  DAIKONDIR_DEFAULT=${DAIKONDIR_DEFAULT})
-endif
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 
 # Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
 ifeq "$(wildcard ${DAIKONDIR}/scripts)" "${DAIKONDIR}/scripts"
@@ -652,8 +644,8 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	# change relevant imports (make sure to get "import static" as well)
 	perl -p -i -e 's/^(import .*)plume/\1daikon.util/g' daikon/util/*.java
 	# for debugging
-	echo "DAIKONDIR = ${DAIKONDIR}"
-	echo "CLASSPATH = ${CLASSPATH}"
+	@echo "DAIKONDIR = ${DAIKONDIR}"
+	@echo "CLASSPATH = ${CLASSPATH}"
 	$(JAVAC_COMMAND) daikon/util/*.java
 	touch daikon/util/.timestamp-daikonutil
 
@@ -1340,7 +1332,6 @@ showvars:
 	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
-	@echo DAIKONDIR_DEFAULT = "${DAIKONDIR_DEFAULT}"
 	@echo DAIKONDIR = "${DAIKONDIR}"
 	@echo DAIKONBIN = ${DAIKONBIN}
 	@echo PLUMEBIN = ${PLUMEBIN}

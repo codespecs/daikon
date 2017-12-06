@@ -139,14 +139,8 @@ ifdef ESC_ON
 endif
 
 
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
-# DAIKONDIR is where the 'daikon' project is cloned
-DAIKONDIR?=${DAIKONDIR_DEFAULT}
-# Test that the directory exists.  There must be a better way to do this.
-DAIKONDIR:=$(wildcard ${DAIKONDIR})
-ifndef DAIKONDIR
-  $(error Environment variable DAIKONDIR is not set to an existing directory)
-endif
+# DAIKONDIR is the clone of the 'daikon' project.
+DAIKONDIR:=$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 
 # COMMON_HERE is where the Makefile.common is located.
 COMMON_HERE?=${DAIKONDIR}/tests

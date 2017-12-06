@@ -3,7 +3,6 @@
 ## (This file should be kept in synch with daikon.bashrc and daikonenv.bat.)
 
 ## Wherever you source this file, you should set two environment variables:
-##   DAIKONDIR      absolute pathname of the "daikon" directory
 ##   JAVA_HOME      absolute pathname of the directory containing the JDK
 ##                  (or "none" if you don't have it)
 ## Optionally, you may set the following environment variables:
@@ -23,15 +22,8 @@ else if (! -d $JAVA_HOME && $JAVA_HOME != "none") then
   exit 2
 endif
 
-if (! $?DAIKONDIR) then
-  echo "DAIKONDIR environment variable is not set."
-  echo "Please fix this before proceeding.  Aborting daikon.cshrc ."
-  exit 2
-else if (! -d $DAIKONDIR) then
-  echo "DAIKONDIR is set to non-existent directory: $DAIKONDIR"
-  echo "Please fix this before proceeding.  Aborting daikon.cshrc ."
-  exit 2
-endif
+scriptdir=`/bin/dirname $0`       # may be relative path
+DAIKONDIR=`cd $scriptdir && pwd`    # ensure absolute path
 
 if (! $?DAIKONBIN) then
   if ( -d ${DAIKONDIR}/bin ) then
