@@ -2,10 +2,13 @@
 
 # Read Makefile.common for what all of this means
 
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+
 # Basics
 ESC_ON:=1
 INSTRUMENT:=infer
-SOURCES:=$(DAIKONDIR)/java
+SOURCES:=$(current_dir)../../../java
 
 # Input for daikon under test
 INPUTS_DECLS:=${PWD}/inputs/print_tokens2.decls

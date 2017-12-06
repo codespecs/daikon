@@ -1,5 +1,9 @@
 # This is a -*- makefile -*-, Emacs
 
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+DAIKONDIR := $(abspath $(current_dir)/../..)
+
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
 else

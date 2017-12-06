@@ -5,9 +5,8 @@
 # equal the goal output.  This is done for several different options
 # of Diff.
 
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
-# DAIKONDIR is where the 'daikon' project is cloned
-DAIKONDIR?=${DAIKONDIR_DEFAULT}
+# DAIKONDIR is the clone of the 'daikon' project.
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 # Standard setting of classpath to include everything be correct
 # for both Windows, Mac, and Linux

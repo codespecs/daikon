@@ -578,7 +578,7 @@ As noted above, when running any Java program (such as Daikon or Chicory),
 the @env{CLASSPATH} must be specified in Windows format.  Your initial
 install of the Java JDK will have set the basics for the @env{CLASSPATH}.
 When you installed Daikon, you were instructed to place into your
-shell initialization file commands to set @env{DAIKONDIR} and @env{JAVA_HOME}
+shell initialization file commands to set @env{JAVA_HOME}
 and then @command{source $DAIKONDIR/scripts/daikon.bashrc}.  This will
 set @env{CLASSPATH} properly each time you start a Bash shell.  The
 result should be a value for @env{CLASSPATH} that looks something like:
@@ -3880,7 +3880,7 @@ Specifies arguments to be passed to Daikon if the @option{--daikon} or
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
 Chicory requires this jar file in order to execute.  By default Chicory
 looks for the jar file in the classpath and in @file{$DAIKONDIR/java}
-(where @env{DAIKONDIR} is an environment variable that points to the
+(where @env{DAIKONDIR} is the
 complete installation of Daikon).
 
 Chicory can also use the @file{daikon.jar} file for this purpose.  If it

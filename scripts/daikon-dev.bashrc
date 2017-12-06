@@ -3,27 +3,7 @@
 
 export LC_ALL=${LC_ALL:-en_US}
 
-export DAIKONPARENT=${DAIKONPARENT:-${HOME}/research/invariants}
-export DAIKONDIR=${DAIKONPARENT}/daikon
-
-if [ ! -d "${DAIKONDIR}" ]; then
-  echo "*****"
-  echo "daikon-dev.bashrc cannot find ${DAIKONDIR}"
-  echo "Please check out Daikon to correct this problem."
-  echo "Or, if you've checked it out to a different location, set the"
-  echo "DAIKONPARENT environment variable to point to the directory that"
-  echo "contains the 'invariants' directory."
-  echo "*****"
-  # Default to Michael Ernst's version of Daikon, just so references to
-  # ${INV} don't die, preventing this script from completing.
-  if [ -d /afs/csail.mit.edu/u/m/mernst/research/invariants ]; then
-    export DAIKONDIR=/afs/csail.mit.edu/u/m/mernst/research/invariants
-  else
-    # If we couldn't find suitable scripts anywhere, we can't do anything
-    # sensible, so get out before we do any damage.
-    return 1;
-  fi
-fi
+DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export DAIKONBIN=${DAIKONDIR}/scripts
 export PLUMEBIN=${DAIKONDIR}/plume-lib/bin

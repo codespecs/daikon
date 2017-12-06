@@ -5,7 +5,6 @@ REM Set up environment variables to run Daikon in a Windows NT command window.
 REM (This file should be kept in synch with daikon.bashrc and daikon.cshrc.)
 
 REM Wherever you source this file, you should set two environment variables:
-REM   DAIKONDIR      absolute pathname of the "daikon" directory
 REM   JAVA_HOME      absolute pathname of the directory containing the JDK
 REM Optionally, you may set the following environment variables:
 REM   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
@@ -26,17 +25,8 @@ if "%JAVA_HOME%"=="" (
   )
 )
 
-if "%DAIKONDIR%"=="" (
-  echo DAIKONDIR environment variable is not set.
-  echo Please fix this before proceeding.  Aborting daikonenv.bat .
-  exit /b 2
-) else (
-  if not exist "%DAIKONDIR%" (
-    echo DAIKONDIR is set to non-existent directory: %DAIKONDIR%
-    echo Please fix this before proceeding.  Aborting daikonenv.bat .
-    exit /b 2
-  )
-)
+SET scriptpath=%~dp0
+SET DAIKONDIR=%mypath:~0,-1%
 
 if "$DAIKONBIN"=="" (
   if exist "%DAIKONDIR%\bin" (
