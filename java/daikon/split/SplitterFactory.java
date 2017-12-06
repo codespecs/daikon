@@ -40,24 +40,14 @@ public class SplitterFactory {
 
   /**
    * String. Specifies which Java compiler is used to compile Splitters. This can be the full path
-   * name or whatever is used on the command line.
-   *
-   * <p>By default, $DAIKONDIR/java is part of the classpath. This is useful when working from the
-   * sources directly.
-   *
-   * <p>The default value is "javac -classpath $DAIKONDIR/daikon.jar:$DAIKONDIR/java" (with
-   * appropriate classpath separator for the operating system).
+   * name or whatever is used on the command line. Uses the current classpath.
    */
   public static String dkconfig_compiler
       // "-source 6 -target 6" is a hack for when using a Java 8 compiler but
       // a -Java 6 or Java 7 runtime.  A better solution would be to add
       // these command-line arguments only when running
       // SplitterFactoryTestUpdater, but that program does not support that.
-      =
-      "javac -nowarn -source 6 -target 6 -classpath "
-          + new File(System.getenv("DAIKONDIR"), "java")
-          + File.pathSeparatorChar
-          + new File(System.getenv("DAIKONDIR"), "daikon.jar");
+      = "javac -nowarn -source 6 -target 6 -classpath " + System.getProperty("java.class.path");
 
   /**
    * Positive integer. Specifies the Splitter compilation timeout, in seconds, after which the
