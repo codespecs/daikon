@@ -2,9 +2,7 @@
 
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile.common
 
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
-DAIKONDIR := $(abspath $(current_dir)/../../..)
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
@@ -15,8 +13,8 @@ endif
 CC := gcc
 CXX := g++
 CFLAGS += -gdwarf-2
-# Ubuntu sets -fstack-protector-strong on by default
-# we turn if back off to get baseline results to match Fedora.
+# Ubuntu sets -fstack-protector-strong on by default.
+# We turn if back off to get baseline results to match Fedora.
 CFLAGS += -fno-stack-protector
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
@@ -39,9 +37,11 @@ DIFF_NAME ?= $(shell basename `pwd`)
 BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
+CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar:${DAIKONDIR}/daikon.jar
+
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true
-PRINT_INV := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
+DAIKON := java -Xmx2500M -XX:MaxPermSize=960M -cp ${CLASSPATH} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true
+PRINT_INV := java -Xmx2500M -XX:MaxPermSize=960M -cp ${CLASSPATH} daikon.PrintInvariants
 
 default: summary
 

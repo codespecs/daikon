@@ -2,9 +2,7 @@
 
 # Read Makefile.common for what all of this means
 
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
-DAIKONDIR := $(abspath $(current_dir)/../../..)
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 
 MAIN_CLASS:=misc.PurityTester
 

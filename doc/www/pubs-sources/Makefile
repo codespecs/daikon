@@ -1,7 +1,5 @@
 ###########################################################################
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
-DAIKONDIR := $(abspath ${current_dir}/../../..)
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
 MERNSTDIR ?= /homes/gws/mernst
 BIBDIR ?= ~/bib
