@@ -9,7 +9,7 @@ import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.framework.type.treeannotator.TreeAnnotator;
 import org.checkerframework.javacutil.AnnotationBuilder;
-import org.checkerframework.javacutil.InternalUtils;
+import org.checkerframework.javacutil.TreeUtils;
 import org.checkerframework.javacutil.TypesUtils;
 
 /**
@@ -45,7 +45,7 @@ public class VIndexAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     public Void visitBinary(BinaryTree tree, AnnotatedTypeMirror type) {
       if (!type.isAnnotatedInHierarchy(VINDEXTOP)
           && tree.getKind() == Tree.Kind.PLUS
-          && TypesUtils.isDeclaredOfName(InternalUtils.typeOf(tree), "int")) {
+          && TypesUtils.isDeclaredOfName(TreeUtils.typeOf(tree), "int")) {
         AnnotatedTypeMirror lExpr = getAnnotatedType(tree.getLeftOperand());
         AnnotatedTypeMirror rExpr = getAnnotatedType(tree.getRightOperand());
         Set<? extends AnnotationMirror> lubs =
