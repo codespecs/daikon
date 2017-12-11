@@ -94,7 +94,7 @@ public final class SequenceLength extends UnaryDerivation {
   }
 
   @Override
-  @SuppressWarnings("keyfor") // need EnsuresQualifier feature
+  @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
   protected VarInfo makeVarInfo() {
     VarInfo v = VarInfo.make_scalar_seq_func("size", ProglangType.INT, base, shift);
 
