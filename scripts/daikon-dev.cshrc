@@ -4,7 +4,7 @@
 if (! $?LC_ALL) setenv LC_ALL en_US
 
 scriptdir=`/bin/dirname $0`       # may be relative path
-DAIKONDIR=`cd $scriptdir && pwd`    # ensure absolute path
+DAIKONDIR=`cd $scriptdir/.. && pwd`    # ensure absolute path
 
 setenv DAIKONBIN ${DAIKONDIR}/scripts
 setenv PLUMEBIN ${DAIKONDIR}/plume-lib/bin

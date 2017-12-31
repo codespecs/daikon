@@ -23,7 +23,7 @@ else if (! -d $JAVA_HOME && $JAVA_HOME != "none") then
 endif
 
 scriptdir=`/bin/dirname $0`       # may be relative path
-DAIKONDIR=`cd $scriptdir && pwd`    # ensure absolute path
+DAIKONDIR=`cd $scriptdir/.. && pwd`    # ensure absolute path
 
 if (! $?DAIKONBIN) then
   if ( -d ${DAIKONDIR}/bin ) then

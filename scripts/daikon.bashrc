@@ -22,7 +22,7 @@ elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
   return 2
 fi
 
-DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 if [ -z "$DAIKONBIN" ]; then
   if [ -d ${DAIKONDIR}/bin ]; then
