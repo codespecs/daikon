@@ -13,12 +13,20 @@ while (<>) {
 
         # Valgrind AMD64/Linux locations
 
+# Valgrind 3.13.0 has caused this address range to change.
+# I've left in old pattern as I am unsure if changes are for all platforms.
         s/0xff([0-9a-f]{7,10})(?![0-9a-f])/<STACK_ADDR>/ig;  # stack
+# New pattern for Valgrind 3.13.0
+        s/0x1ff([0-9a-f]{7,10})(?![0-9a-f])/<STACK_ADDR>/ig;  # stack
 
         # These addresses are reported by kvasir when it gets confused
         # about structs being passed by value (in regs or on the stack).
         # We pretend they're statics just to get consistent results.
+# Valgrind 3.13.0 has caused this address range to change.
+# I've left in old pattern as I am unsure if changes are for all platforms.
         s/0x8[01]([0-9a-f]{7})(?![0-9a-f])/<STATIC_ADDR>/ig;
+# New pattern for Valgrind 3.13.0
+        s/0x10[01]([0-9a-f]{7})(?![0-9a-f])/<STATIC_ADDR>/ig;
 
         # There is no easy way to differentiate between dynamically
         # allocated data (re malloc) and dynamically loaded code and data.
