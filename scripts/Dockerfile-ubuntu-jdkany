@@ -29,6 +29,7 @@ RUN apt-get -qqy update && apt-get -qqy install \
   g++ \
   graphviz \
   libc6-dbg \
+  lsb-release \
   texi2html \
   texinfo \
   texlive \
