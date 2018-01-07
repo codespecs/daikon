@@ -7,27 +7,30 @@ services:
 
 # jdkany contains extra packages that permit it to be used to build the manual
 env:
-  - OS=ubuntu JDKVER=jdk7 GROUP=quick-txt-diff
-  - OS=ubuntu JDKVER=jdk7 GROUP=nonquick-txt-diff
-  - OS=ubuntu JDKVER=jdk7 GROUP=non-txt-diff
-  - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
-  - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
-  - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
-  - OS=ubuntu JDKVER=jdkany GROUP=misc
-  - OS=ubuntu JDKVER=jdkany GROUP=kvasir
+  global:
+    - THIS_REPO=daikon
+  matrix:
+    - OS=ubuntu JDKVER=jdk7 GROUP=quick-txt-diff
+    - OS=ubuntu JDKVER=jdk7 GROUP=nonquick-txt-diff
+    - OS=ubuntu JDKVER=jdk7 GROUP=non-txt-diff
+    - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
+    - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
+    - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
+    - OS=ubuntu JDKVER=jdkany GROUP=misc
+    - OS=ubuntu JDKVER=jdkany GROUP=kvasir
 ## Fedora 23 is old, don't bother testing it any more.
 #  - OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
 ## It's not trivial to install JDK7 on Fedora 24 and later, so test only JDK 8.
 #  - OS=fedora JDKVER=jdk7 GROUP=quick-txt-diff
 #  - OS=fedora JDKVER=jdk7 GROUP=nonquick-txt-diff
 #  - OS=fedora JDKVER=jdk7 GROUP=non-txt-diff
-  - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
-  - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
-  - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
-  - OS=fedora JDKVER=jdkany GROUP=misc
-  - OS=fedora JDKVER=jdkany GROUP=kvasir
-  - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
-  - OS=centos JDKVER=jdkany GROUP=kvasir
+    - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
+    - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
+    - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
+    - OS=fedora JDKVER=jdkany GROUP=misc
+    - OS=fedora JDKVER=jdkany GROUP=kvasir
+    - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
+    - OS=centos JDKVER=jdkany GROUP=kvasir
 
 # Currently-failing jobs
 # This section is temporary and should be commented out when no jobs are failing.
@@ -43,7 +46,42 @@ before_script:
 # The fcntl line works around a bug where Travis truncates logs and fails.
 script:
 - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
-- docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && (git clone --quiet --depth 9 -b $TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git daikon || git clone --quiet --depth 9 -b $TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git daikon) && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
+- REMOTE_ORIGIN_URL=`git config --get remote.origin.url`
+- echo "THIS_REPO=${THIS_REPO}"
+- echo "JDKVER=${JDKVER}"
+- echo "GROUP=${GROUP}"
+- echo "BUILDJDK=${BUILDJDK}"
+- echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
+- echo "REMOTE_ORIGIN_URL=${REMOTE_ORIGIN_URL}"
+- echo "TRAVIS_EVENT_TYPE=${TRAVIS_EVENT_TYPE}"
+- echo "TRAVIS_COMMIT=${TRAVIS_COMMIT}"
+- echo "TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST}"
+- echo "TRAVIS_PULL_REQUEST_BRANCH=${TRAVIS_PULL_REQUEST_BRANCH}"
+- echo "TRAVIS_PULL_REQUEST_SHA=${TRAVIS_PULL_REQUEST_SHA}"
+- echo "TRAVIS_REPO_SLUG=${TRAVIS_REPO_SLUG}"
+- >-
+  docker run mdernst/$OS-for-daikon-$JDKVER /bin/bash -c "true &&
+     if [ $TRAVIS_EVENT_TYPE = pull_request ] ; then
+       git clone --quiet --depth 9 $REMOTE_ORIGIN_URL $THIS_REPO || git clone --quiet --depth 9 $REMOTE_ORIGIN_URL $THIS_REPO
+       cd $THIS_REPO
+       git fetch origin +refs/pull/$TRAVIS_PULL_REQUEST/merge
+       git checkout -qf $TRAVIS_PULL_REQUEST_SHA
+       git checkout -qf FETCH_HEAD
+       git config user.email noone@cares.com
+       git config user.name Noone Cares
+       git remote add theupstream https://github.com/$TRAVIS_REPO_SLUG.git
+       git pull --depth 9 theupstream $TRAVIS_BRANCH || git pull --depth 9 theupstream $TRAVIS_BRANCH
+     else
+       git clone --quiet --depth 9 -b $TRAVIS_BRANCH $REMOTE_ORIGIN_URL $THIS_REPO || git clone --quiet --depth 9 -b $TRAVIS_BRANCH $REMOTE_ORIGIN_URL $THIS_REPO
+       cd $THIS_REPO
+       git checkout -qf $TRAVIS_COMMIT
+     fi &&
+     export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` &&
+     java -version &&
+     javac -version &&
+     export TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG &&
+     export TRAVIS_BUILD_DIR=$TRAVIS_BUILD_DIR &&
+     ./.travis-build.sh $GROUP"
 
 jobs:
   include:
@@ -61,10 +99,10 @@ jobs:
 
             git ls-remote https://github.com/${SLUGOWNER}/daikon-typecheck.git &>-
             if [ "$?" -eq 0 ]; then
-              sh trigger-travis.sh ${SLUGOWNER} daikon-typecheck $TRAVISTOKEN
+              sh trigger-travis.sh ${SLUGOWNER} daikon-typecheck $TRAVIS_ACCESS_TOKEN
             fi
 
           fi
 
 git:
-  depth: 10
+  depth: 9
