@@ -596,7 +596,7 @@ class FormatTestCase {
         VarInfo hashcode = new VarInfo(vardef);
         vardef = new FileIO.VarDefinition(base_name + "[..]", VarInfo.VarKind.ARRAY, type);
         vardef.arr_dims = 1;
-        vardef.enclosing_var = base_name;
+        vardef.enclosing_var_name = base_name;
         result = new VarInfo(vardef);
         result.enclosing_var = hashcode;
         assert result.enclosing_var.enclosing_var == null;

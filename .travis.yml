@@ -43,6 +43,7 @@ env:
 # The "docker run" command will pull if needed.
 # Running this first gives two tries in case of network lossage.
 before_script:
+- python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
 - timeout 5m docker pull mdernst/$OS-for-daikon-$JDKVER || true
 
 # The git commands are tried twice, in case of temporary network failure.
