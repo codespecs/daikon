@@ -38,6 +38,7 @@ env:
 #     - env: OS=centos JDKVER=jdkany GROUP=kvasir
 
 before_script:
+- python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
 - docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null 2>&1 || true
 
 # The fcntl line works around a bug where Travis truncates logs and fails.
