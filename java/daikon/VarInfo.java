@@ -2555,7 +2555,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       for (VarInfo vi : get_all_enclosing_vars()) {
         if (false && var_flags.contains(VarFlags.CLASSNAME)) {
           System.err.printf(
-              "%s filerep type = %s, canbemissing = %b\n", vi, vi.file_rep_type, vi.canBeMissing);
+              "%s file_rep_type = %s, canbemissing = %b\n", vi, vi.file_rep_type, vi.canBeMissing);
         }
         if (!vi.file_rep_type.isHashcode()) {
           continue;
