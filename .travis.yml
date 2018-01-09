@@ -43,7 +43,7 @@ env:
 # The "docker run" command will pull if needed.
 # Running this first gives two tries in case of network lossage.
 before_script:
-- timeout 5m docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null 2>&1 || true
+- timeout 5m docker pull mdernst/$OS-for-daikon-$JDKVER || true
 
 # The git commands are tried twice, in case of temporary network failure.
 # The fcntl line works around a bug where Travis truncates logs and fails.
