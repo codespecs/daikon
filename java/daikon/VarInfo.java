@@ -417,8 +417,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     //                   vardef.enclosing_var);
 
     // Find and set the enclosing variable (if any)
-    if (vardef.enclosing_var != null) {
-      enclosing_var = ppt.find_var_by_name(vardef.enclosing_var);
+    if (vardef.enclosing_var_name != null) {
+      enclosing_var = ppt.find_var_by_name(vardef.enclosing_var_name);
       if (enclosing_var == null) {
         for (int i = 0; i < ppt.var_infos.length; i++) {
           System.out.printf("var = '%s'%n", ppt.var_infos[i]);
@@ -426,7 +426,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         throw new RuntimeException(
             String.format(
                 "enclosing variable '%s' for variable '%s' " + "in ppt '%s' cannot be found",
-                vardef.enclosing_var, vardef.name, ppt.name));
+                vardef.enclosing_var_name, vardef.name, ppt.name));
       }
     }
 
@@ -744,11 +744,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       // Fix the VarDefinition enclosing variable, if any, to point to the
       // prestate version.  This code does not affect the VarInfo yet, but
       // the side-effected VarDefinition will be passed to "new VarInfo".
-      if (result_vardef.enclosing_var != null) {
+      if (result_vardef.enclosing_var_name != null) {
         assert vi.enclosing_var != null
             : "@AssumeAssertion(nullness): dependent: result_vardef was copied from vi and their enclosing_var fields are the same";
-        result_vardef.enclosing_var = vi.enclosing_var.prestate_name();
-        assert result_vardef.enclosing_var != null : "" + result_vardef;
+        result_vardef.enclosing_var_name = vi.enclosing_var.prestate_name();
+        assert result_vardef.enclosing_var_name != null : "" + result_vardef;
       }
 
       // Build the prestate VarInfo from the VarDefinition.

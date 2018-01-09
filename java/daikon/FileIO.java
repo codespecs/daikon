@@ -321,7 +321,7 @@ public final class FileIO {
         if (record == "var-kind") { // interned
           vardef.parse_var_kind(scanner);
         } else if (record == "enclosing-var") { // interned
-          vardef.parse_enclosing_var(scanner);
+          vardef.parse_enclosing_var_name(scanner);
         } else if (record == "reference-type") { // interned
           vardef.parse_reference_type(scanner);
         } else if (record == "array") { // interned
@@ -2499,7 +2499,7 @@ public final class FileIO {
    * variable definition block in the trace file. More detailed information about each of the fields
    * can be found in the 'Variable declarations' section of the 'File Formats' appendix of the
    * Daikon developers manual. Specifics can also be found in the 'parse_[field]' methods of the
-   * class (eg, parse_var_kind, parse_enclosing_var, etc).
+   * class (eg, parse_var_kind, parse_enclosing_var_name, etc).
    */
   @SuppressWarnings(
       "nullness") // undocumented class needs documentation before annotating with nullness
@@ -2511,9 +2511,9 @@ public final class FileIO {
     public String name;
     /** Type of the variable (required) */
     public VarKind kind = null;
-    /** Variable that contains this variable (optional) */
+    /** Name of variable that contains this variable (optional) */
     // seems non-null for arrays/sequences
-    public /*@Nullable*/ String enclosing_var;
+    public /*@Nullable*/ String enclosing_var_name;
     /** the simple (not fully specified) name of this variable (optional) */
     public /*@Nullable*/ String relative_name = null;
     /** Type of reference for structure/class variables */
@@ -2582,7 +2582,7 @@ public final class FileIO {
           : String.format(
               "incompatible kind=%s and function_args=%s for VarDefinition %s",
               kind, function_args, name);
-      if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var == null) {
+      if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var_name == null) {
         throw new AssertionError("enclosing-var not specified for variable " + name);
       }
     }
@@ -2635,8 +2635,8 @@ public final class FileIO {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
       name = name.intern();
-      if (enclosing_var != null) {
-        enclosing_var = enclosing_var.intern();
+      if (enclosing_var_name != null) {
+        enclosing_var_name = enclosing_var_name.intern();
       }
       if (relative_name != null) {
         relative_name = relative_name.intern();
@@ -2666,8 +2666,8 @@ public final class FileIO {
     }
 
     /** Parses the enclosing-var record */
-    public void parse_enclosing_var(Scanner scanner) {
-      enclosing_var = need(scanner, "enclosing variable name");
+    public void parse_enclosing_var_name(Scanner scanner) {
+      enclosing_var_name = need(scanner, "enclosing variable name");
       need_eol(scanner);
     }
 
