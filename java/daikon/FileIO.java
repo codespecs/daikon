@@ -557,7 +557,7 @@ public final class FileIO {
     String proglang_type_string_and_aux = file.readLine();
     String file_rep_type_string = file.readLine();
     String comparability_string = file.readLine();
-    if ( // (varname == null) || // just check varname above
+    if ( // (varname == null) || // already returned null if varname==null
     (proglang_type_string_and_aux == null)
         || (file_rep_type_string == null)
         || (comparability_string == null))

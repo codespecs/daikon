@@ -462,7 +462,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   public void setup_derived_function(String name, VarInfo... bases) {
 
-    // Copy variable info from the first base
+    // Copy variable info from the base.
+    // Might some of these need to be overridden later, because they are just guesses?
     VarInfo base = bases[0];
     ref_type = null;
     var_flags = base.var_flags.clone();
@@ -1879,6 +1880,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private static final Logger debugEnableAssertions =
       Logger.getLogger("daikon.VarInfo.enableAssertions");
 
+  // This is problematic because it also enables some debugging output.
+  // I need something that only enables assertions.
   // Slightly gross implementation, using a logger; but the command-line
   // options processing code already exists for it:
   // --dbg daikon.VarInfo
@@ -3997,7 +4000,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
             .intern(); // interning bugfix
 
     // If there is a parent ppt (set in setup_derived_base), set the
-    // parent variable accordingly.  If all of the original variables, used
+    // parent variable accordingly.  If all of the original variables used
     // the default name, this can as well.  Otherwise, build the parent
     // name.
     for (VarParent parent : vi.parents) {
@@ -4109,7 +4112,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Create a VarInfo that is a function over one or more other variables. the type, rep_type, etc
+   * Create a VarInfo that is a function over one or more other variables. The type, rep_type, etc.
    * of the new function are taken from the first variable.
    */
   public static VarInfo make_function(String function_name, VarInfo... vars) {

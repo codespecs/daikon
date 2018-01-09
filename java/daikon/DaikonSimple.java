@@ -559,10 +559,10 @@ public class DaikonSimple {
       if (class_ppt != null) add(class_ppt, class_vt, nonce);
     }
 
-    // The method iterates through all of the invariants in the ppt
-    // and manually adds the sample to the invariant and removing the
-    // invariant if it is falsified
-
+    /**
+     * The method iterates through all of the invariants in the ppt and manually adds the sample to
+     * the invariant and removing the invariant if it is falsified.
+     */
     private void add(PptTopLevel ppt, ValueTuple vt, int nonce) {
 
       // if this is a numbered exit, apply to the combined exit as well
