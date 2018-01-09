@@ -43,6 +43,7 @@ env:
 before_script:
 - docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null 2>&1 || true
 
+# The git commands are tried twice, in case of temporary network failure.
 # The fcntl line works around a bug where Travis truncates logs and fails.
 script:
 - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
@@ -66,7 +67,6 @@ script:
        cd $THIS_REPO
        git fetch origin +refs/pull/$TRAVIS_PULL_REQUEST/merge
        git checkout -qf $TRAVIS_PULL_REQUEST_SHA
-       git checkout -qf FETCH_HEAD
        git config user.email noone@cares.com
        git config user.name Noone Cares
        git remote add theupstream https://github.com/$TRAVIS_REPO_SLUG.git
