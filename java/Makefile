@@ -77,7 +77,7 @@ endif
 # If actually checking, override to checker.jar.
 # CHECKERJAR ?= ${DAIKONDIR}/java/lib/plume.jar
 # Version of javac that supports pluggable type-checking.
-JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac
+JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac ${JAVACHECK_EXTRA_ARGS}
 
 ### end of user customizations
 
