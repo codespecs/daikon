@@ -737,7 +737,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       String type, String name, VarInfo varInfo, String condition) throws ParseException {
     if ((type.equals("int") || varInfo.type.isArray())
         && varInfo.file_rep_type != ProglangType.HASHCODE) {
-      ArrayDeque<Boolean> inArrayIndex = new ArrayDeque<Boolean>();
+      Deque<Boolean> inArrayIndex = new ArrayDeque<Boolean>();
       inArrayIndex.push(Boolean.FALSE);
       NodeToken[] tokens = TokenExtractor.extractTokens(condition);
       for (int i = 0; i < tokens.length; i++) {
@@ -749,7 +749,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
           inArrayIndex.push(Boolean.FALSE);
         } else if (tokens[i].kind == RPAREN) {
           inArrayIndex.pop();
-        } else if (inArrayIndex.peek().booleanValue() && tokens[i].tokenImage.equals(name)) {
+        } else if (inArrayIndex.getFirst().booleanValue() && tokens[i].tokenImage.equals(name)) {
           if (type.equals("int") || type.equals("int_index")) {
             // Note the type can only equal "int_index" if the variable
             // was already visited by this if statement since it appears

@@ -37,8 +37,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // to decide whether the return statement should be included as a conditional.
   // Return statements are included as conditionals iff the return type is "boolean"
   // Must be a stack rather than a single variable for the case of helper classes.
-  private ArrayDeque<Object> resultTypes =
-      new ArrayDeque<Object>(); // elements are ResultType or String
+  private Deque<Object> resultTypes = new ArrayDeque<Object>(); // elements are ResultType or String
 
   // key = methodname (as String); value = conditional expressions (as Strings)
   HashMap<String, List<String>> conditions = new HashMap<String, List<String>>();
@@ -280,7 +279,7 @@ class ConditionExtractor extends DepthFirstVisitor {
         enterMethod = false;
       }
       if (resultTypes.peek() instanceof ResultType) {
-        ResultType resultType = (ResultType) resultTypes.peek();
+        ResultType resultType = (ResultType) resultTypes.getFirst();
         if (resultType.f0.choice instanceof Type) {
           Type type = (Type) resultType.f0.choice;
           if (Ast.isPrimitive(type)) {

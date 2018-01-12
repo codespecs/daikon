@@ -881,7 +881,7 @@ public final class FileIO {
 
   // I could save some Object overhead by using two parallel stacks
   // instead of Invocation objects; but that's not worth it.
-  static ArrayDeque<Invocation> call_stack = new ArrayDeque<Invocation>();
+  static Deque<Invocation> call_stack = new ArrayDeque<Invocation>();
   static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
 
   /**

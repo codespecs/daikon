@@ -77,7 +77,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   public List<NodeToken> addedComments = new ArrayList<NodeToken>();
 
-  private ArrayDeque<ClassFieldInfo> cfis = new ArrayDeque<ClassFieldInfo>();
+  private Deque<ClassFieldInfo> cfis = new ArrayDeque<ClassFieldInfo>();
 
   private PptNameMatcher pptMatcher;
 

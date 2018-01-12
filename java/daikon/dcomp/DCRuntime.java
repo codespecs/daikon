@@ -80,7 +80,7 @@ public final class DCRuntime {
   /** Class to hold per-thread data */
   private static class ThreadData {
     /** Tag stack */
-    ArrayDeque<Object> tag_stack;
+    Deque<Object> tag_stack;
 
     int tag_stack_depth;
 

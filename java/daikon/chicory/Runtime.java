@@ -120,8 +120,8 @@ public class Runtime {
   }
 
   /** Stack of active methods. */
-  private static /*@GuardedBy("Runtime.class")*/ Map<Thread, ArrayDeque<CallInfo>>
-      thread_to_callstack = new LinkedHashMap<Thread, ArrayDeque<CallInfo>>();
+  private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Deque<CallInfo>> thread_to_callstack =
+      new LinkedHashMap<Thread, Deque<CallInfo>>();
 
   /**
    * Sample count at a call site to begin sampling. All previous calls will be recorded. Sampling
@@ -237,7 +237,7 @@ public class Runtime {
           capture = (mi.call_cnt % 10000) == 0;
         }
         Thread t = Thread.currentThread();
-        ArrayDeque<CallInfo> callstack = thread_to_callstack.get(t);
+        Deque<CallInfo> callstack = thread_to_callstack.get(t);
         if (callstack == null) {
           callstack = new ArrayDeque<CallInfo>();
           thread_to_callstack.put(t, callstack);
@@ -317,8 +317,7 @@ public class Runtime {
       if (sample_start > 0) {
         CallInfo ci = null;
         @SuppressWarnings("nullness") // map: key was put in map by enter()
-        /*@NonNull*/ ArrayDeque<CallInfo> callstack =
-            thread_to_callstack.get(Thread.currentThread());
+        /*@NonNull*/ Deque<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
         while (!callstack.isEmpty()) {
           ci = callstack.pop();
           if (ci.nonce == nonce) {

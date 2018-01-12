@@ -16,13 +16,13 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
   // A map from token images to "ungenerified" versions of the classes
   // or interfaces that the given identifiers extend.
-  HashMap<String, ArrayDeque<ClassOrInterfaceType>> shadowingMap =
-      new HashMap<String, ArrayDeque<ClassOrInterfaceType>>();
+  HashMap<String, Deque<ClassOrInterfaceType>> shadowingMap =
+      new HashMap<String, Deque<ClassOrInterfaceType>>();
 
   // For debugging purposes.
   private void printShadowingMap() {
     System.out.println("Shadowing map:");
-    for (Map.Entry</*@KeyFor("shadowingMap")*/ String, ArrayDeque<ClassOrInterfaceType>> e :
+    for (Map.Entry</*@KeyFor("shadowingMap")*/ String, Deque<ClassOrInterfaceType>> e :
         shadowingMap.entrySet()) {
       System.out.print("  " + e.getKey() + " stack: ");
       for (ClassOrInterfaceType t : e.getValue()) {
@@ -44,7 +44,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   public void visit(MethodDeclaration n) {
 
     // A shallow clone, which is what we want.
-    HashMap<String, ArrayDeque<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
+    HashMap<String, Deque<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
 
     if (n.f0.present()) {
       augmentShadowingMap((TypeParameters) n.f0.node);
@@ -72,7 +72,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   public void visit(ConstructorDeclaration n) {
 
     // A shallow clone, which is what we want.
-    HashMap<String, ArrayDeque<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
+    HashMap<String, Deque<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
 
     if (n.f0.present()) {
       augmentShadowingMap((TypeParameters) n.f0.node);
@@ -101,7 +101,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   public void visit(ClassOrInterfaceDeclaration n) {
 
     // A shallow clone, which is what we want.
-    HashMap<String, ArrayDeque<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
+    HashMap<String, Deque<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
 
     n.f0.accept(this);
     n.f1.accept(this);
@@ -159,7 +159,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
       assert b.f1.unGenerifiedVersionOfThis != null;
 
-      ArrayDeque<ClassOrInterfaceType> s = shadowingMap.get(n.f0.tokenImage);
+      Deque<ClassOrInterfaceType> s = shadowingMap.get(n.f0.tokenImage);
       if (s == null) {
         s = new ArrayDeque<ClassOrInterfaceType>();
         shadowingMap.put(n.f0.tokenImage, s);
@@ -170,7 +170,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
       // No explicit bound means that bound is java.lang.Object.
 
-      ArrayDeque<ClassOrInterfaceType> s = shadowingMap.get(n.f0.tokenImage);
+      Deque<ClassOrInterfaceType> s = shadowingMap.get(n.f0.tokenImage);
       if (s == null) {
         s = new ArrayDeque<ClassOrInterfaceType>();
         shadowingMap.put(n.f0.tokenImage, s);
@@ -227,10 +227,10 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // 2. Only the first <IDENTIFIER> may possibly be associated
     //    with a type argument. If we find it in typeParametersInScope,
     //    we replace t with [...]
-    for (Map.Entry</*@KeyFor("shadowingMap")*/ String, ArrayDeque<ClassOrInterfaceType>> entry :
+    for (Map.Entry</*@KeyFor("shadowingMap")*/ String, Deque<ClassOrInterfaceType>> entry :
         shadowingMap.entrySet()) {
       if (entry.getKey().equals(n.f0.tokenImage)) {
-        ClassOrInterfaceType c = entry.getValue().peek();
+        ClassOrInterfaceType c = entry.getValue().getFirst();
         //System.out.println("c:" + Ast.format(c));
         List<Node> cSequence = c.f2.nodes;
         //System.out.print("cSequence:");
@@ -265,17 +265,17 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
   // Makes a copy of the stacks and of the map. The
   // ClassOrInterfaceType objects are not copied.
-  private static HashMap<String, ArrayDeque<ClassOrInterfaceType>> copy(
-      HashMap<String, ArrayDeque<ClassOrInterfaceType>> m) {
+  private static HashMap<String, Deque<ClassOrInterfaceType>> copy(
+      HashMap<String, Deque<ClassOrInterfaceType>> m) {
 
-    HashMap<String, ArrayDeque<ClassOrInterfaceType>> newMap =
-        new HashMap<String, ArrayDeque<ClassOrInterfaceType>>();
+    HashMap<String, Deque<ClassOrInterfaceType>> newMap =
+        new HashMap<String, Deque<ClassOrInterfaceType>>();
 
-    for (Map.Entry</*@KeyFor("m")*/ String, ArrayDeque<ClassOrInterfaceType>> e : m.entrySet()) {
+    for (Map.Entry</*@KeyFor("m")*/ String, Deque<ClassOrInterfaceType>> e : m.entrySet()) {
       String key = e.getKey();
-      ArrayDeque<ClassOrInterfaceType> oldStack = e.getValue();
-      @SuppressWarnings("unchecked")
-      ArrayDeque<ClassOrInterfaceType> newStack = oldStack.clone();
+      Deque<ClassOrInterfaceType> oldStack = e.getValue();
+      Deque<ClassOrInterfaceType> newStack =
+          new ArrayDeque<ClassOrInterfaceType>(oldStack); // clone
       newMap.put(key, newStack);
     }
 
