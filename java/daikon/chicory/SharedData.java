@@ -23,9 +23,9 @@ public class SharedData {
    * information for any new classes are printed out and the class is then removed from the list.
    */
   // The order of this list depends on the order of loading by the JVM.
-  // Declared as LinkedList instead of List to permit use of removeFirst().
-  public static final /*@GuardedBy("<self>")*/ LinkedList<ClassInfo> new_classes =
-      new LinkedList<ClassInfo>();
+  // Declared as ArrayDeque instead of List to permit use of removeFirst().
+  public static final /*@GuardedBy("<self>")*/ ArrayDeque<ClassInfo> new_classes =
+      new ArrayDeque<ClassInfo>();
 
   /** List of all instrumented classes */
   public static final /*@GuardedBy("<self>")*/ List<ClassInfo> all_classes =

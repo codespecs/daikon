@@ -100,7 +100,7 @@ public class SessionManager {
   private static String proverBackground() {
     if (prover_background == null) {
       try {
-        StringBuffer result = new StringBuffer("");
+        StringBuilder result = new StringBuilder("");
         String fileName;
         if (daikon.inv.Invariant.dkconfig_simplify_define_predicates) {
           fileName = "daikon-background-defined.txt";
@@ -241,7 +241,7 @@ public class SessionManager {
     m.request(cc);
     assert !cc.valid;
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     for (int i = 0; i < 20000; i++) {
       buf.append("(EQ (select a " + i + ") " + (int) (200000 * Math.random()) + ")");

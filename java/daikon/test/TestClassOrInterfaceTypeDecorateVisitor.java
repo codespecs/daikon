@@ -31,7 +31,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     }
 
     public String collectionResults() {
-      StringBuffer b = new StringBuffer();
+      StringBuilder b = new StringBuilder();
       b.append("Collection results:\n");
       for (int i = 0; i < generifieds.size(); i++) {
         MethodDeclaration m =
@@ -114,7 +114,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
       */
   }
 
-  private static StringBuffer expectedAnswerBuffer = new StringBuffer();
+  private static StringBuilder expectedAnswerBuffer = new StringBuilder();
   private static final String lineSep = System.getProperty("line.separator");
 
   static {

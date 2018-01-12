@@ -20,7 +20,7 @@ import org.checkerframework.dataflow.qual.*;
 class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** The text contents of the splitter file, a java class. */
-  private StringBuffer fileText = new StringBuffer();
+  private StringBuilder fileText = new StringBuilder();
 
   /** The name of the class from which this Ppt is from. */
   private String className;
@@ -137,8 +137,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     Global.debugSplit.fine("<<exit>>  SplitterJavaSource");
   }
 
-  /** Returns a StringBuffer with the file text for the java file written by this. */
-  public StringBuffer getFileText() {
+  /** Returns a StringBuilder with the file text for the java file written by this. */
+  public StringBuilder getFileText() {
     return fileText;
   }
 
@@ -737,7 +737,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       String type, String name, VarInfo varInfo, String condition) throws ParseException {
     if ((type.equals("int") || varInfo.type.isArray())
         && varInfo.file_rep_type != ProglangType.HASHCODE) {
-      Stack<Boolean> inArrayIndex = new Stack<Boolean>();
+      ArrayDeque<Boolean> inArrayIndex = new ArrayDeque<Boolean>();
       inArrayIndex.push(Boolean.FALSE);
       NodeToken[] tokens = TokenExtractor.extractTokens(condition);
       for (int i = 0; i < tokens.length; i++) {

@@ -185,8 +185,8 @@ public class CLASSNAME extends SUPERCLASS {
     } else {
       idx = "j";
     }
-    StringBuffer pre_buf = new StringBuffer("");
-    StringBuffer end_buf = new StringBuffer("");
+    StringBuilder pre_buf = new StringBuilder("");
+    StringBuilder end_buf = new StringBuilder("");
     for (int i = 0; i < intersect.length; i++) {
       pre_buf.append("(EXISTS ("+idx + i + ") (AND ");
       pre_buf.append("(>= "+idx + i + " " + name[1] + ") ");

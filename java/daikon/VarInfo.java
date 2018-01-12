@@ -355,7 +355,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     type = vardef.declared_type;
     var_flags = vardef.flags;
     lang_flags = vardef.lang_flags;
-    parents = new LinkedList<VarParent>(vardef.parents);
+    parents = new ArrayList<VarParent>(vardef.parents);
 
     // If a static constant value was specified, set it
     if (vardef.static_constant_value != null) {
@@ -625,7 +625,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     this.is_static_constant = is_static_constant;
     this.static_constant_value = static_constant_value;
     this.aux = aux;
-    this.parents = new LinkedList<VarParent>();
+    this.parents = new ArrayList<VarParent>();
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("Var " + name + " aux: " + aux);
@@ -703,7 +703,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     enclosing_var = vi.enclosing_var;
     arr_dims = vi.arr_dims;
     function_args = vi.function_args;
-    parents = new LinkedList<VarParent>();
+    parents = new ArrayList<VarParent>();
     for (VarParent parent : vi.parents) {
       parents.add(
           new VarParent(parent.parent_ppt, parent.parent_relation_id, parent.parent_variable));
@@ -1598,7 +1598,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   /*@Pure*/
   public boolean isValidEscExpression() {
-    // "myVector.length" is invalid
+    // "myList.length" is invalid
     if (derived instanceof SequenceLength) {
       SequenceLength sl = (SequenceLength) derived;
       if (!sl.base.type.isArray()) {
@@ -1609,7 +1609,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       }
     }
 
-    // "myVector[]" is invalid, as is myVector[foo] (when myVector is a list
+    // "myList[]" is invalid, as is myList[foo] (when myList is a list
     // of some sort and not an array)
     if (FileIO.new_decl_format) {
       for (VarInfo vi = this; vi != null; vi = vi.enclosing_var) {

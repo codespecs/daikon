@@ -1060,7 +1060,7 @@ public final class FeatureExtractor {
   }
 
   private static String shift(String vector) {
-    StringBuffer answer = new StringBuffer();
+    StringBuilder answer = new StringBuilder();
     StringTokenizer tokens = new StringTokenizer(vector);
     tokens.nextToken();
     while (tokens.hasMoreTokens()) {

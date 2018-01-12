@@ -203,7 +203,7 @@ public class DynamicConstants implements Serializable {
     /*@SideEffectFree*/
     public String toString(/*>>>@GuardSatisfied Constant this*/) {
 
-      StringBuffer out = new StringBuffer();
+      StringBuilder out = new StringBuilder();
       out.append(vi.name());
       if (val == null) {
         out.append(" (val missing)");
@@ -670,7 +670,7 @@ public class DynamicConstants implements Serializable {
         if (slice.invs.size() > 0) slice_cnt[slice.arity()]++;
         inv_cnt[slice.arity()] += slice.invs.size();
         if (Debug.logDetail()) {
-          StringBuffer sb = new StringBuffer();
+          StringBuilder sb = new StringBuilder();
           for (int j = 0; j < slice.arity(); j++) {
             VarInfo v = slice.var_infos[j];
             sb.append(v.name() + " [" + v.file_rep_type + "] [" + v.comparability + "] ");

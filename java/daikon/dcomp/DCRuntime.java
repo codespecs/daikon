@@ -80,12 +80,12 @@ public final class DCRuntime {
   /** Class to hold per-thread data */
   private static class ThreadData {
     /** Tag stack */
-    Stack<Object> tag_stack;
+    ArrayDeque<Object> tag_stack;
 
     int tag_stack_depth;
 
     ThreadData() {
-      tag_stack = new Stack<Object>();
+      tag_stack = new ArrayDeque<Object>();
       tag_stack_depth = 0;
     }
   }
@@ -729,7 +729,7 @@ public final class DCRuntime {
       System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);
     }
     if (debug) System.out.printf("Exception exit from %s%n", caller_name());
-    while (!td.tag_stack.empty()) {
+    while (!td.tag_stack.isEmpty()) {
       if (td.tag_stack.pop() == method_marker) {
         if (debug_tag_frame) System.out.printf("%n");
         return;

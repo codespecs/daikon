@@ -57,7 +57,7 @@ public class StringInfo extends DaikonVariableInfo {
       return "nonsensical" + DaikonWriter.lineSep + "2";
     }
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     buf.append("[");
     for (Iterator<?> iter = theValues.iterator(); iter.hasNext(); ) {

@@ -443,7 +443,7 @@ public class LogicalCompare {
 
     if (opt_show_sets) {
       System.out.println("Background assumptions:");
-      LemmaStack.printLemmas(System.out, Lemma.lemmasVector());
+      LemmaStack.printLemmas(System.out, Lemma.lemmasList());
       System.out.println("");
 
       List<Lemma> v = new ArrayList<Lemma>();

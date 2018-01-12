@@ -296,7 +296,7 @@ public class TraceSelect {
   }
 
   private static String calcOut(String strFileName) {
-    StringBuffer product = new StringBuffer();
+    StringBuilder product = new StringBuilder();
     int index = strFileName.indexOf('.');
     if (index >= 0) {
       product.append(strFileName.substring(0, index));

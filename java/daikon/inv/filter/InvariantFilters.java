@@ -44,7 +44,7 @@ public class InvariantFilters {
   // actually like is to order them in order of something like
   // [probability of eliminating an inv]/[expected running time]...in
   // other words, based on a benefit to cost measurement.  hence, this
-  // will become a list (in particular a Vector).  This does increase
+  // will become a list (in particular a ArrayList).  This does increase
   // the running time of lookups based on the descriptions from O(log
   // n) to O(n), but that functionality isn't used a whole lot and
   // there are only ~10 filters anyway.

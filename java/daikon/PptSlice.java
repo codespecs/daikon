@@ -319,7 +319,7 @@ public abstract class PptSlice extends Ppt {
   @SuppressWarnings("purity") // string creation
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     for (VarInfo vi : var_infos) {
       sb.append(" " + vi.name());
     }

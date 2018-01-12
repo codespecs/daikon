@@ -234,8 +234,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    *     failed
    */
   private static /*@Nullable*/ String performTest(LineNumberReader commands) {
-    StringBuffer output = new StringBuffer();
-    //  List invariantTestCases = new Vector();
+    StringBuilder output = new StringBuilder();
+    //  List invariantTestCases = new ArrayList();
     boolean noTestFailed = true;
 
     while (true) {
@@ -264,7 +264,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   private static String generateCommands(LineNumberReader input) {
-    StringBuffer output = new StringBuffer();
+    StringBuilder output = new StringBuilder();
 
     while (true) {
       String commands = AddAndCheckTestCase.generateTest(input);
@@ -388,7 +388,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static Method outputProducer;
 
     /** Contains error messages if any test commands fail. */
-    private static StringBuffer results;
+    private static StringBuilder results;
 
     /** The token that divides the different arguments to a test command. */
     private static final String argDivider = ";";
@@ -454,7 +454,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static boolean initFields(LineNumberReader commands, boolean generatingCommands) {
 
-      results = new StringBuffer();
+      results = new StringBuilder();
 
       @SuppressWarnings("signature") // user input, should be checked
       /*@BinaryName*/ String className = getNextRealLine(commands);

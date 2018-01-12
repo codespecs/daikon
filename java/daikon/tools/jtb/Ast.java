@@ -99,7 +99,7 @@ public class Ast {
   // into
   //  a statement; // a comment //
   public static String quickFixForInternalComment(String s) {
-    StringBuffer b = new StringBuffer();
+    StringBuilder b = new StringBuilder();
     String[] split = UtilMDE.splitLines(s);
     for (int i = 0; i < split.length; i++) {
       String line = split[i];
@@ -569,6 +569,7 @@ public class Ast {
   }
 
   /** Adds the comment to the first regular token in the tree, before the ith special token. */
+  @SuppressWarnings("JdkObsolete") // JTB uses Vector
   public static void addNthSpecial(NodeToken n, NodeToken s, int i) {
     if (n.specialTokens == null) {
       n.specialTokens = new Vector<NodeToken>();
@@ -1182,7 +1183,7 @@ public class Ast {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
 
     Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);

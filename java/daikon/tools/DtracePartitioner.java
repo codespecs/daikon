@@ -71,7 +71,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    * callee is responsible for checking if the returned String is a blank line.
    */
   private String grabNextInvocation() throws IOException {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     while (br.ready()) {
       String line = br.readLine();
       assert line != null; // because br.ready() = true

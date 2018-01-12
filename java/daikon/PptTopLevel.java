@@ -2653,7 +2653,7 @@ public class PptTopLevel extends Ppt {
 
     // Now pivot the other invariants
     Collection<PptSlice> slices = viewsAsCollection();
-    List<PptSlice> pivoted = new LinkedList<PptSlice>();
+    List<PptSlice> pivoted = new ArrayList<PptSlice>();
 
     // PptSlice newSlice = slice.cloneAndInvs(leader, newLeader);
 
@@ -2878,7 +2878,7 @@ public class PptTopLevel extends Ppt {
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length - 1; checking >= 0; checking--) {
       Invariant inv = invs[checking];
-      StringBuffer bg = new StringBuffer("(AND ");
+      StringBuilder bg = new StringBuilder("(AND ");
       for (int i = 0; i < present.length; i++) {
         if (present[i] && (i != checking)) {
           bg.append(" ");
@@ -3079,7 +3079,7 @@ public class PptTopLevel extends Ppt {
     return Collections.unmodifiableList(result);
   }
 
-  /** Vector version of getInvariants(). */
+  /** ArrayList version of getInvariants(). */
   public List<Invariant> invariants_vector() {
     return new ArrayList<Invariant>(getInvariants());
   }
@@ -3255,7 +3255,7 @@ public class PptTopLevel extends Ppt {
 
   /** Debug method to display all slices. */
   public String debugSlices() {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     result.append("Slices for: " + this.ppt_name);
     for (PptSlice slice : viewsAsCollection()) {
       result.append(Global.lineSep + slice.toString());
@@ -4239,7 +4239,7 @@ public class PptTopLevel extends Ppt {
       if (show_tern_slices) {
         for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext(); ) {
           PptSlice slice = j.next();
-          StringBuffer sb = new StringBuffer();
+          StringBuilder sb = new StringBuilder();
           for (int k = 0; k < slice.arity(); k++) {
             VarInfo v = slice.var_infos[k];
             sb.append(

@@ -667,7 +667,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       } else if (name.equals("this")) {
         return "Daikon_this";
       } else {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < name.length(); i++) {
           char c = name.charAt(i);
           if (Character.isLetterOrDigit(c)) buf.append(c);
@@ -3488,16 +3488,16 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     //       // build the "\forall ..." predicate
     //       String[] result = new String[roots.length + 2];
-    //       StringBuffer int_list, conditions, closing;
-    //       StringBuffer tempResult;
+    //       StringBuilder int_list, conditions, closing;
+    //       StringBuilder tempResult;
     //       {
-    //         tempResult = new StringBuffer();
+    //         tempResult = new StringBuilder();
     //         // "i, j, ..."
-    //         int_list = new StringBuffer();
+    //         int_list = new StringBuilder();
     //         // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
     //         // if elementwise, also do "(i-ai) == (b-bi) && ..."
-    //         conditions = new StringBuffer();
-    //         closing = new StringBuffer();
+    //         conditions = new StringBuilder();
+    //         closing = new StringBuilder();
     //         for (int i = 0; i < qret.bound_vars.size(); i++) {
     //           int_list.setLength(0);
     //           conditions.setLength(0);
@@ -3642,13 +3642,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
       // build the forall predicate
       String[] result = new String[(includeIndex ? 2 : 1) * roots.length + 2];
-      StringBuffer int_list, conditions;
+      StringBuilder int_list, conditions;
       {
         // "i j ..."
-        int_list = new StringBuffer();
+        int_list = new StringBuilder();
         // "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
         // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
-        conditions = new StringBuffer();
+        conditions = new StringBuilder();
         for (int i = 0; i < qret.bound_vars.size(); i++) {
           VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
@@ -3783,14 +3783,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         QuantifyReturn qret, boolean elementwise, boolean forall, OutputFormat format) {
       // build the "\forall ..." predicate
       String[] result = new String[qret.root_primes.length + 2];
-      StringBuffer int_list, conditions, closing;
+      StringBuilder int_list, conditions, closing;
       {
         // "i, j, ..."
-        int_list = new StringBuffer();
+        int_list = new StringBuilder();
         // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
         // if elementwise, also do "(i-ai) == (b-bi) && ..."
-        conditions = new StringBuffer();
-        closing = new StringBuffer();
+        conditions = new StringBuilder();
+        closing = new StringBuilder();
         for (int i = 0; i < qret.bound_vars.size(); i++) {
           VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
@@ -3896,7 +3896,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      */
     protected static String quant_element_conditions(
         VarInfoName _idx, VarInfoName _low, VarInfoName idx, VarInfoName low, OutputFormat format) {
-      StringBuffer conditions = new StringBuffer();
+      StringBuilder conditions = new StringBuilder();
 
       if (ZERO.equals(_low)) {
         conditions.append(_idx.name_using(format, null));

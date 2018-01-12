@@ -43,7 +43,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // With Vector search, this func was a hotspot (38%), so use a Map.
+  // With ArrayList search, this func was a hotspot (38%), so use a Map.
   private static HashMap</*@Interned*/ String, List<ProglangType>> all_known_types =
       new HashMap</*@Interned*/ String, List<ProglangType>>();
 
@@ -717,7 +717,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
 
   /**
    * Return true if these two types can be sensibly compared to one another, and if non-integral,
-   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to a Vector,
+   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to a ArrayList,
    * but not the other way around. This is a transitive method, but not reflexive.
    */
   public boolean comparableOrSuperclassOf(ProglangType other) {
@@ -739,7 +739,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   public String format(/*>>>@GuardSatisfied ProglangType this*/) {
     if (dimensions == 0) return base;
 
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append(base);
     for (int i = 0; i < dimensions; i++) {
       sb.append("[]");

@@ -77,7 +77,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   public List<NodeToken> addedComments = new ArrayList<NodeToken>();
 
-  private Stack<ClassFieldInfo> cfis = new Stack<ClassFieldInfo>();
+  private ArrayDeque<ClassFieldInfo> cfis = new ArrayDeque<ClassFieldInfo>();
 
   private PptNameMatcher pptMatcher;
 
@@ -123,7 +123,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     String lineString = javaFileLines.get(linenumber);
     int column =
         getTabbedIndex(nt.beginColumn - 1, /* because in jtb cols start at 1 */ lineString);
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append(lineString.substring(0, column));
     sb.append(comment);
     if (comment.endsWith("\n")) {
@@ -716,7 +716,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       PrimaryExpression pe = (PrimaryExpression) ns.elementAt(0);
       // System.out.println("pe:" + Ast.format(pe));
       // for (int i = 0; i<ns.size(); i++) {
-      //   System.out.println("ns #" + i + ": " + ns.elementAt(i));
+      //   System.out.println("ns #" + i + ": " + ns.get(i));
       // }
       if (ns.size() == 2) {
         NodeOptional no = (NodeOptional) ns.elementAt(1);

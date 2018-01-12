@@ -176,7 +176,7 @@ public class SplitterFactory {
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
-      StringBuffer fileContents;
+      StringBuilder fileContents;
       try {
         SplitterJavaSource splitterWriter =
             new SplitterJavaSource(

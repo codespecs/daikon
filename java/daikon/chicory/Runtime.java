@@ -120,8 +120,8 @@ public class Runtime {
   }
 
   /** Stack of active methods. */
-  private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Stack<CallInfo>> thread_to_callstack =
-      new LinkedHashMap<Thread, Stack<CallInfo>>();
+  private static /*@GuardedBy("Runtime.class")*/ Map<Thread, ArrayDeque<CallInfo>>
+      thread_to_callstack = new LinkedHashMap<Thread, ArrayDeque<CallInfo>>();
 
   /**
    * Sample count at a call site to begin sampling. All previous calls will be recorded. Sampling
@@ -237,9 +237,9 @@ public class Runtime {
           capture = (mi.call_cnt % 10000) == 0;
         }
         Thread t = Thread.currentThread();
-        Stack<CallInfo> callstack = thread_to_callstack.get(t);
+        ArrayDeque<CallInfo> callstack = thread_to_callstack.get(t);
         if (callstack == null) {
-          callstack = new Stack<CallInfo>();
+          callstack = new ArrayDeque<CallInfo>();
           thread_to_callstack.put(t, callstack);
         }
         callstack.push(new CallInfo(nonce, capture));
@@ -317,8 +317,9 @@ public class Runtime {
       if (sample_start > 0) {
         CallInfo ci = null;
         @SuppressWarnings("nullness") // map: key was put in map by enter()
-        /*@NonNull*/ Stack<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
-        while (!callstack.empty()) {
+        /*@NonNull*/ ArrayDeque<CallInfo> callstack =
+            thread_to_callstack.get(Thread.currentThread());
+        while (!callstack.isEmpty()) {
           ci = callstack.pop();
           if (ci.nonce == nonce) {
             break;
@@ -927,7 +928,7 @@ public class Runtime {
   // escapeNonJava(), but repeated here to make this class self-contained.
   /** Quote \, ", \n, and \r characters in the target; return a new string. */
   public static String quote(String orig) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     // The previous escape (or escaped) character was seen right before
     // this position.  Alternately:  from this character forward, the string
     // should be copied out verbatim (until the next escaped character).

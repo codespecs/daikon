@@ -463,13 +463,13 @@ public class Quantify {
       QuantifyReturn[] qrets = quantify(vars);
 
       // build the forall predicate
-      StringBuffer int_list, conditions;
+      StringBuilder int_list, conditions;
       {
         // "i j ..."
-        int_list = new StringBuffer();
+        int_list = new StringBuilder();
         // "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
         // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
-        conditions = new StringBuffer();
+        conditions = new StringBuilder();
         for (int i = 0; i < qrets.length; i++) {
           Term idx = qrets[i].index;
           if (idx == null) {

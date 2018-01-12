@@ -89,7 +89,7 @@ class ReplaceStatement {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied ReplaceStatement this*/) {
-    StringBuffer params = new StringBuffer();
+    StringBuilder params = new StringBuilder();
     for (int i = 0; i < parameters.length; i++) {
       params.append(parameters[i].toString());
     }

@@ -70,7 +70,7 @@ public abstract class Ppt implements Serializable {
   @SuppressWarnings("purity") // Impure side effects do not escape (string creation)
   /*@SideEffectFree*/
   public static String varNames(VarInfo[] infos) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append("(");
     if (infos.length == 0) {
       sb.append("<implication slice>");

@@ -188,25 +188,25 @@ public abstract class DaikonVariableInfo
 
   /** Returns a string representative of this node and its children */
   public String treeString() {
-    return getStringBuffer(new StringBuffer("--")).toString();
+    return getStringBuilder(new StringBuilder("--")).toString();
   }
 
   /**
-   * Return a StringBuffer that contains the name of this node and all ancestors of this node.
+   * Return a StringBuilder that contains the name of this node and all ancestors of this node.
    * Longer indentations correspond to further distance in the tree.
    *
    * @param offset the offset to begin each line with
-   * @return StringBuffer that contains all children of this node
+   * @return StringBuilder that contains all children of this node
    */
-  private StringBuffer getStringBuffer(StringBuffer offset) {
-    StringBuffer theBuf = new StringBuffer();
+  private StringBuilder getStringBuilder(StringBuilder offset) {
+    StringBuilder theBuf = new StringBuilder();
 
     theBuf.append(offset + name + DaikonWriter.lineSep);
 
-    StringBuffer childOffset = new StringBuffer(offset);
+    StringBuilder childOffset = new StringBuilder(offset);
     childOffset.append("--");
     for (DaikonVariableInfo info : children) {
-      theBuf.append(info.getStringBuffer(childOffset));
+      theBuf.append(info.getStringBuilder(childOffset));
     }
 
     return theBuf;
@@ -356,7 +356,7 @@ public abstract class DaikonVariableInfo
       return "nonsensical";
     }
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     buf.append("[");
     for (Iterator<Object> iter = theValues.iterator(); iter.hasNext(); ) {
@@ -514,7 +514,7 @@ public abstract class DaikonVariableInfo
 
       Class<?> fieldType = classField.getType();
 
-      StringBuffer buf = new StringBuffer();
+      StringBuilder buf = new StringBuilder();
       DaikonVariableInfo newChild = thisInfo.addDeclVar(classField, offset, buf);
 
       debug_vars.indent("--Created DaikonVariable %s%n", newChild);
@@ -544,7 +544,7 @@ public abstract class DaikonVariableInfo
         //Pure methods with no parameters
         for (MethodInfo meth : typeInfo.method_infos) {
           if (meth.isPure() && meth.arg_names.length == 0) {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             DaikonVariableInfo newChild =
                 thisInfo.addPureMethodDecl(
                     cinfo, meth, new DaikonVariableInfo[] {}, offset, depth, buf);
@@ -582,7 +582,7 @@ public abstract class DaikonVariableInfo
               // Add node if the class variable can be used as the pure method's parameter
               if (UtilMDE.isSubtype(sibClass, meth.arg_types[0])) {
                 DaikonVariableInfo[] arg = {sib};
-                StringBuffer buf = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
                 DaikonVariableInfo newChild =
                     thisInfo.addPureMethodDecl(cinfo, meth, arg, offset, depth, buf);
                 String newOffset = buf.toString();
@@ -640,7 +640,7 @@ public abstract class DaikonVariableInfo
       DaikonVariableInfo[] args,
       String offset,
       int depth,
-      StringBuffer buf) {
+      StringBuilder buf) {
     String arr_str = "";
     if (isArray) {
       arr_str = "[]";
@@ -708,7 +708,7 @@ public abstract class DaikonVariableInfo
    *
    * @return the newly created DaikonVariableInfo object, whose parent is this
    */
-  protected DaikonVariableInfo addDeclVar(Field field, String offset, StringBuffer buf) {
+  protected DaikonVariableInfo addDeclVar(Field field, String offset, StringBuilder buf) {
     debug_vars.log("enter addDeclVar(field):%n");
     debug_vars.log("  field: %s, offset: %s%n", field, offset);
     String arr_str = "";

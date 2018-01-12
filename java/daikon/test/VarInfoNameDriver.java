@@ -42,7 +42,7 @@ public class VarInfoNameDriver {
 
       // tokenize arguments
       StringTokenizer tok = new StringTokenizer(command);
-      LinkedList<String> list = new LinkedList<String>();
+      ArrayDeque<String> list = new ArrayDeque<String>();
       while (tok.hasMoreTokens()) {
         list.add(tok.nextToken());
       }

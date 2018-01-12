@@ -77,7 +77,7 @@ endif
 # If actually checking, override to checker.jar.
 # CHECKERJAR ?= ${DAIKONDIR}/java/lib/plume.jar
 # Version of javac that supports pluggable type-checking.
-JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac
+JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac ${JAVACHECK_EXTRA_ARGS}
 
 ### end of user customizations
 
@@ -730,22 +730,18 @@ clean:
 	-rm -rf daikon/util
 	-rm -f daikon/chicory/Test.log
 
-dist_clean: clean
-	-rm -f TAGS
-
-veryclean: very_clean
-
-very-clean: very_clean
+clean-generated-files:
+	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 # Could/should remove plume-lib here, too.
-very_clean: dist_clean clean-generated-files
+veryclean: very_clean
+very-clean: very_clean
+very_clean: clean-generated-files
+	-rm -f TAGS
 	-rm -rf dcomp_premain.jar dcomp_rt.jar $(DCOMP_RT)
 	-rm -rf api
 	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
 
-
-clean-generated-files:
-	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 run:	all
 	${JAVA} daikon.Daikon
@@ -781,14 +777,14 @@ tags-without-generated-files: clean-generated-files
 ###
 
 # See version numbers at https://github.com/google/error-prone/releases
-ERRORPRONE_VERSION := 2.1.1
+ERRORPRONE_VERSION := 2.2.0
 
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 errorprone-nocompile:
 	${MAKE} lib/error_prone_ant-${ERRORPRONE_VERSION}.jar
 #	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
-	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF ${JAVA_FILES_FOR_STYLE}
+	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
 # To create a patch file to apply changes:
 #	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # This didn't create the file though its output claimed it did:

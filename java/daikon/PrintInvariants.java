@@ -503,7 +503,7 @@ public final class PrintInvariants {
 
     // Iterate over the PptTopLevels in ppts
     for (PptTopLevel ppt : ppts_sorted) {
-      StringBuffer toPrint = new StringBuffer();
+      StringBuilder toPrint = new StringBuilder();
       toPrint.append(print_reasons_from_ppt(ppt, ppts));
 
       // A little hack so that PptTopLevels without discarded Invariants of
@@ -591,7 +591,7 @@ public final class PrintInvariants {
       toPrint += (ppt.name() + lineSep);
     }
 
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     for (DiscardInfo nextInfo :
         DiscReasonMap.returnMatches_from_ppt(new InvariantInfo(ppt.name(), discVars, discClass))) {
       sb.append(dashes + nextInfo.format() + lineSep);
@@ -1294,7 +1294,7 @@ public final class PrintInvariants {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
 
     if (PptSplitter.debug.isLoggable(Level.FINE)) {
       PptSplitter.debug.fine("Joiner View for ppt " + ppt.name);
@@ -1532,7 +1532,7 @@ public final class PrintInvariants {
 
     boolean print_invs = false;
 
-    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
     Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
 
     // Not Map, because keys are nullable

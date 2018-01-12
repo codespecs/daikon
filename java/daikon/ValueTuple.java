@@ -416,7 +416,7 @@ public final class ValueTuple implements Cloneable {
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied ValueTuple this,*/ VarInfo /*@Nullable*/ [] vis) {
-    StringBuffer sb = new StringBuffer("[");
+    StringBuilder sb = new StringBuilder("[");
     assert vals.length == mods.length;
     assert vis == null || vals.length == vis.length;
     for (int i = 0; i < vals.length; i++) {
@@ -463,7 +463,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   public static String valsToString(/*@Nullable*/ Object[] vals) {
-    StringBuffer sb = new StringBuffer("[");
+    StringBuilder sb = new StringBuilder("[");
     for (int i = 0; i < vals.length; i++) {
       if (i > 0) sb.append(", ");
       sb.append(valToString(vals[i]));

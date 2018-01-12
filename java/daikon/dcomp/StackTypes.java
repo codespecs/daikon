@@ -56,7 +56,7 @@ public final class StackTypes {
   @Override
   public String toString(/*>>>@GuardSatisfied StackTypes this*/) {
 
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
 
     for (int i = 0; i < os_arr.length; i++) {
       if (os_arr[i] != null) {

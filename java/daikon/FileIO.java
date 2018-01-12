@@ -881,7 +881,7 @@ public final class FileIO {
 
   // I could save some Object overhead by using two parallel stacks
   // instead of Invocation objects; but that's not worth it.
-  static Stack<Invocation> call_stack = new Stack<Invocation>();
+  static ArrayDeque<Invocation> call_stack = new ArrayDeque<Invocation>();
   static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
 
   /**
@@ -1770,7 +1770,7 @@ public final class FileIO {
 
     int unmatched_count = call_stack.size() + call_hashmap.size();
 
-    if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
+    if ((!call_stack.isEmpty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.print(
           "No return from procedure observed " + UtilMDE.nplural(unmatched_count, "time") + ".");
@@ -1794,7 +1794,7 @@ public final class FileIO {
         }
       }
 
-      if (!call_stack.empty()) {
+      if (!call_stack.isEmpty()) {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           System.out.println(
               "Remaining " + UtilMDE.nplural(unmatched_count, "stack") + " call summarized below.");
@@ -2153,7 +2153,7 @@ public final class FileIO {
       // Set invoc
       {
         if (nonce == null) {
-          if (call_stack.empty()) {
+          if (call_stack.isEmpty()) {
             // Not Daikon.TerminationMessage:  caller knows context such as
             // file name and line number.
             throw new Error("Function exit without corresponding entry: " + ppt.name());
@@ -2590,7 +2590,7 @@ public final class FileIO {
     /** Initialize from the 'variable <em>name</em>' record. Scanner should be pointing at name. */
     public VarDefinition(ParseState state, Scanner scanner) {
       this.state = state;
-      this.parents = new LinkedList<VarParent>();
+      this.parents = new ArrayList<VarParent>();
       name = need(scanner, "name");
       need_eol(scanner);
       if (state.varcomp_format == VarComparability.IMPLICIT) {
@@ -2602,7 +2602,7 @@ public final class FileIO {
 
     public VarDefinition(String name, VarKind kind, ProglangType type) {
       this.state = null;
-      this.parents = new LinkedList<VarParent>();
+      this.parents = new ArrayList<VarParent>();
       this.name = name;
       this.kind = kind;
       this.rep_type = type;
