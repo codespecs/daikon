@@ -419,7 +419,7 @@ public final class Runtime {
   // escapeNonJava(), but repeated here to make this class self-contained.
   /** Quote \, ", \n, and \r characters in the target; return a new string. */
   public static String quote(String orig) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     // The previous escape (or escaped) character was seen right before
     // this position.  Alternately:  from this character forward, the string
     // should be copied out verbatim (until the next escaped character).

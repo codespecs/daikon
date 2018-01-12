@@ -169,10 +169,10 @@ public class ExtractConsequent {
           entry : cluster_to_conditions.entrySet()) {
         String predicate = entry.getKey();
         Map<String, HashedConsequent> conditions = entry.getValue();
-        StringBuffer conjunctionJava = new StringBuffer();
-        StringBuffer conjunctionDaikon = new StringBuffer();
-        StringBuffer conjunctionESC = new StringBuffer();
-        StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
+        StringBuilder conjunctionJava = new StringBuilder();
+        StringBuilder conjunctionDaikon = new StringBuilder();
+        StringBuilder conjunctionESC = new StringBuilder();
+        StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
         int count = 0;
         for (Map.Entry</*@KeyFor("conditions")*/ String, HashedConsequent> entry2 :
             conditions.entrySet()) {
@@ -233,7 +233,7 @@ public class ExtractConsequent {
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
-    StringBuffer combined = new StringBuffer(inv);
+    StringBuilder combined = new StringBuilder(inv);
     combined.append(lineSep + "\tDAIKON_FORMAT ");
     combined.append(daikonStr);
     combined.append(lineSep + "\tESC_FORMAT ");

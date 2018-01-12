@@ -252,8 +252,8 @@ public class PptSliceEquality extends PptSlice {
   @Override
   public List<Invariant> add(ValueTuple vt, int count) {
 
-    LinkedList<Equality> allNewInvs = new LinkedList<Equality>();
-    LinkedList<Invariant> weakenedInvs = new LinkedList<Invariant>();
+    ArrayList<Equality> allNewInvs = new ArrayList<Equality>();
+    ArrayList<Invariant> weakenedInvs = new ArrayList<Invariant>();
 
     // Loop through each existing equality invariant
     for (Invariant invar : invs) {
@@ -310,7 +310,7 @@ public class PptSliceEquality extends PptSlice {
   /**
    * Dummy value that's incomparable to everything else to indicate missings in createEqualityInvs.
    */
-  private static final Object dummyMissing = new Object(); // StringBuffer("Dummy missing");
+  private static final Object dummyMissing = new Object();
 
   /**
    * Create a List of Equality invariants based on the values given by vt for the VarInfos in vis.
@@ -440,7 +440,7 @@ public class PptSliceEquality extends PptSlice {
     assert key != null;
     List<VarInfo> elements = map.get(key);
     if (elements == null) {
-      elements = new LinkedList<VarInfo>();
+      elements = new ArrayList<VarInfo>();
       map.put(key, elements);
     }
     elements.add(value);
@@ -460,7 +460,7 @@ public class PptSliceEquality extends PptSlice {
   public List<Invariant> copyInvsFromLeader(VarInfo leader, List<VarInfo> newVis) {
 
     List<Invariant> falsified_invs = new ArrayList<Invariant>();
-    List<PptSlice> newSlices = new LinkedList<PptSlice>();
+    List<PptSlice> newSlices = new ArrayList<PptSlice>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(
           "copyInvsFromLeader: "
@@ -633,7 +633,7 @@ public class PptSliceEquality extends PptSlice {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
-    StringBuffer result = new StringBuffer("PptSliceEquality: [");
+    StringBuilder result = new StringBuilder("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append(inv.repr());
       result.append(lineSep);

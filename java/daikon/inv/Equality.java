@@ -191,7 +191,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   public String format_daikon(/*>>>@GuardSatisfied Equality this*/) {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     boolean start = true;
     for (VarInfo var : vars) {
       if (!start) {
@@ -293,7 +293,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   public String format_simplify(/*>>>@GuardSatisfied Equality this*/) {
-    StringBuffer result = new StringBuffer("(AND");
+    StringBuilder result = new StringBuilder("(AND");
     VarInfo leader = leader();
     String leaderName = leader.simplify_name();
     if (leader.rep_type.isArray()) {
@@ -385,7 +385,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       numSamples += count;
     }
 
-    List<VarInfo> result = new LinkedList<VarInfo>();
+    List<VarInfo> result = new ArrayList<VarInfo>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("Doing add at " + this.ppt.parent.name() + " for " + this);
     }

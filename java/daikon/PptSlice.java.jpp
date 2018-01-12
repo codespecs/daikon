@@ -556,7 +556,7 @@ public final class PPTSLICE1 extends PptSlice {
     PPTSLICE1 result = new PPTSLICE1(this.parent, vis_sorted);
 
     // re-parent the invariants and copy them out.
-    List<Invariant> newInvs = new LinkedList<Invariant>();
+    List<Invariant> newInvs = new ArrayList<Invariant>();
     for (Invariant inv : invs) {
       assert inv.ppt == this;
       Invariant newInv = inv.transfer(result, permutation);

@@ -123,7 +123,7 @@ public class DtraceNonceFixer {
 
     //    System.out.println (invo);
 
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     StringTokenizer st = new StringTokenizer(invo, lineSep);
 
     if (!st.hasMoreTokens()) {
@@ -179,7 +179,7 @@ public class DtraceNonceFixer {
    * consecutive blank lines.
    */
   private static String grabNextInvocation(BufferedReader br) throws IOException {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     while (br.ready()) {
       String line = br.readLine();
       assert line != null; // because br.ready() = true

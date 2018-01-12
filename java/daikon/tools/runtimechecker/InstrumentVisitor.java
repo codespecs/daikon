@@ -91,6 +91,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /** If makeAllFieldsPublic == true, then it makes this field declaration public. */
+  @SuppressWarnings("JdkObsolete") // JTB uses Vector
   @Override
   public void visit(FieldDeclaration fd) {
 
@@ -232,7 +233,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     List<PptTopLevel> matching_ppts = pptMatcher.getMatches(pptmap, ctor);
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     NodeListOptional ctorBody = ctor.f6;
 
@@ -368,7 +369,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     InstrumentHandler.debug.fine("Method: " + name);
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     code.append("{");
 
@@ -484,7 +485,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     /*@NonNull*/ ClassOrInterfaceBody c =
         (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
 
-    StringBuffer modifiers_declaration_stringbuffer = new StringBuffer();
+    StringBuilder modifiers_declaration_stringbuffer = new StringBuilder();
     modifiers_declaration_stringbuffer.append(Ast.format(modifiers));
     modifiers_declaration_stringbuffer.append(" ");
     modifiers_declaration_stringbuffer.append(Ast.format(wrapper));
@@ -511,7 +512,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   // vioTime can be the name of a variable (which should be in scope)
   // or a string, but if it's a string, then you should write it as
   // something like: \"<ENTER>\"
-  private void appendInvariantChecks(List<Invariant> invs, StringBuffer code, String vioTime) {
+  private void appendInvariantChecks(List<Invariant> invs, StringBuilder code, String vioTime) {
     for (Invariant inv : invs) {
 
       InstrumentHandler.debug.fine("inv type: " + inv.getClass().getName());
@@ -572,7 +573,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
   }
 
-  private void appendInvariantChecks_checker(List<InvProp> ips, StringBuffer code) {
+  private void appendInvariantChecks_checker(List<InvProp> ips, StringBuilder code) {
 
     for (InvProp ip : ips) {
 
@@ -625,7 +626,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private ClassOrInterfaceBodyDeclaration getInvariantsDecl() {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append("public static java.util.Set getDaikonInvariants() {");
     code.append("  return new java.util.HashSet(java.util.Arrays.asList(daikonProperties));");
     code.append("}");
@@ -638,7 +639,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private ClassOrInterfaceBodyDeclaration staticPropertyDecl() {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     code.append("private static daikon.tools.runtimechecker.Property[] daikonProperties;");
     return (ClassOrInterfaceBodyDeclaration)
@@ -650,7 +651,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private ClassOrInterfaceBodyDeclaration staticPropertyInit() {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     code.append("static {\n");
     code.append("try {\n");
@@ -687,7 +688,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   private ClassOrInterfaceBodyDeclaration checkObjectInvariants_instrumentDeclaration(
       String classname) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "private void checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time) {");
     String objectPptname = classname + ":::OBJECT";
@@ -707,7 +708,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
   private ClassOrInterfaceBodyDeclaration checkClassInvariantsInstrumentDeclaration(
       String classname) {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "private static void checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time) {");
     String classPptname = classname + ":::CLASS";
@@ -725,9 +726,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             code.toString());
   }
 
-  private StringBuffer checkObjectInvariants_instrumentDeclaration_checker(
+  private StringBuilder checkObjectInvariants_instrumentDeclaration_checker(
       String classname, boolean majorProperties) {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -748,9 +749,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer checkClassInvariantsInstrumentDeclaration_checker(
+  private StringBuilder checkClassInvariantsInstrumentDeclaration_checker(
       String classname, boolean majorProperties) {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check" + (majorProperties ? "Major" : "Minor") + "ClassInvariants() {");
     String classPptname = classname + ":::CLASS";
@@ -831,7 +832,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   //    orders catch clauses in the order in which they appear in
   //    declaredThrowable. This can cause compilation to fail. ]]
   private void exitChecks(
-      StringBuffer code,
+      StringBuilder code,
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       List<String> declaredThrowables,
@@ -900,7 +901,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private void checkPreconditions(
-      StringBuffer code, List<PptTopLevel> matching_ppts, PptMap pptmap) {
+      StringBuilder code, List<PptTopLevel> matching_ppts, PptMap pptmap) {
     for (PptTopLevel ppt : matching_ppts) {
       if (ppt.ppt_name.isEnterPoint()) {
         List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
@@ -910,14 +911,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
   }
 
-  private StringBuffer checkPreconditions_checker_method(
+  private StringBuilder checkPreconditions_checker_method(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       String methodName,
       List<String> parameters,
       boolean majorProperties) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -946,7 +947,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer checkPostconditions_checker_method(
+  private StringBuilder checkPostconditions_checker_method(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       String methodName,
@@ -954,7 +955,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       List<String> parameters,
       boolean majorProperties) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -984,14 +985,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer checkPreconditions_checker_constructor(
+  private StringBuilder checkPreconditions_checker_constructor(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       String methodName,
       List<String> parameters,
       boolean majorProperties) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -1018,14 +1019,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer checkPostconditions_checker_constructor(
+  private StringBuilder checkPostconditions_checker_constructor(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       String methodName,
       List<String> parameters,
       boolean majorProperties) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -1055,7 +1056,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private static Property toProperty(Invariant inv) {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     String daikonrep = inv.format_using(OutputFormat.DAIKON);
 
@@ -1179,7 +1180,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
   }
 
-  private StringBuffer createEmptyDeclaration(Method m) {
+  private StringBuilder createEmptyDeclaration(Method m) {
 
     List<String> parameters = new ArrayList<String>();
     int paramCounter = 0;
@@ -1187,7 +1188,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       parameters.add(Ast.classnameForSourceOutput(c) + " param" + paramCounter++);
     }
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     for (String s : new String[] {"Major", "Minor"}) {
       code.append(
@@ -1219,7 +1220,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer createEmptyDeclaration(Constructor<?> c) {
+  private StringBuilder createEmptyDeclaration(Constructor<?> c) {
 
     List<String> parameters = new ArrayList<String>();
     int paramCounter = 0;
@@ -1227,7 +1228,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       parameters.add(Ast.classnameForSourceOutput(cls) + " param" + paramCounter++);
     }
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     Package pacg = c.getDeclaringClass().getPackage();
     String packageName = (pacg == null ? "" : pacg.getName());

@@ -130,7 +130,7 @@ public class VarInfoNameTest extends TestCase {
       }
     }
     if (actual.length > goal.length) {
-      StringBuffer extra = new StringBuffer();
+      StringBuilder extra = new StringBuilder();
       for (int i = goal.length; i < actual.length; i++) {
         extra.append("\t");
         extra.append(actual[i]);

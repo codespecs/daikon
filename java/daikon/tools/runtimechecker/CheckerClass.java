@@ -12,7 +12,7 @@ import org.checkerframework.checker.nullness.qual.*;
 public class CheckerClass {
 
   String name;
-  StringBuffer code;
+  StringBuilder code;
   ClassOrInterfaceBody fclassbody;
 
   public CheckerClass(ClassOrInterfaceBody clazz) {
@@ -48,7 +48,7 @@ public class CheckerClass {
 
     String imports = Ast.format(clazzCU.f1);
 
-    code = new StringBuffer();
+    code = new StringBuilder();
     if (!packageName.equals("")) {
       code.append("package " + packageName + ";");
     }
@@ -73,7 +73,7 @@ public class CheckerClass {
     return name;
   }
 
-  public void addDeclaration(StringBuffer decl) {
+  public void addDeclaration(StringBuilder decl) {
     code.append(decl);
   }
 }

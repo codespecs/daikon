@@ -207,7 +207,7 @@ class FormatTestCase {
    * @return a String representing the goal output file object
    */
   public String generateGoalOutput(LineNumberReader theInputFile) throws IOException {
-    StringBuffer output = new StringBuffer();
+    StringBuilder output = new StringBuilder();
     int currentLine = theInputFile.getLineNumber();
 
     // System.out.println("Generating goal output");
@@ -257,7 +257,7 @@ class FormatTestCase {
    * @return a String representing the difference between the test result and the desired result
    */
   public String getDiffString() {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     String currentDiffString;
 
     for (int i = 0; i < testCases.size(); i++) {

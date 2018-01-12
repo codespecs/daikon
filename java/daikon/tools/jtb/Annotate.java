@@ -191,7 +191,7 @@ public class Annotate {
           //   // an easy way to do this in Java.)
           //   Process p = System.exec("find . -type f -name '*.java' -print");
           //   p.waitFor();
-          //   StringBufferInputStream sbis
+          //   StringBuilderInputStream sbis
           //   break;
         case 's':
           slashslash = true;

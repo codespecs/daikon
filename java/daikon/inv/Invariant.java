@@ -631,8 +631,8 @@ import typequals.*;
 
   // Not used as of 1/31/2000
   // // For use by subclasses.
-  // /** Put a string representation of the variable names in the StringBuffer. */
-  // public void varNames(StringBuffer sb) {
+  // /** Put a string representation of the variable names in the StringBuilder. */
+  // public void varNames(StringBuilder sb) {
   //   // sb.append(this.getClass().getName());
   //   ppt.varNames(sb);
   // }
@@ -853,7 +853,7 @@ import typequals.*;
    */
   public static String simplify_format_string(String s) {
     if (s == null) return "null";
-    StringBuffer buf = new StringBuffer("|_string_");
+    StringBuilder buf = new StringBuilder("|_string_");
     if (s.length() > 150) {
       // Simplify can't handle long strings (its input routines have a
       // 4000-character limit for |...| identifiers, but it gets an
@@ -865,7 +865,7 @@ import typequals.*;
       int p2 = 50 + summ_length / 2;
       int p3 = 50 + 3 * summ_length / 4;
       int p4 = 50 + summ_length;
-      StringBuffer summ_buf = new StringBuffer(s.substring(0, 50));
+      StringBuilder summ_buf = new StringBuilder(s.substring(0, 50));
       summ_buf.append("...");
       summ_buf.append(Integer.toHexString(s.substring(50, p1).hashCode()));
       summ_buf.append(Integer.toHexString(s.substring(p1, p2).hashCode()));
@@ -1192,7 +1192,7 @@ import typequals.*;
       int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("  isObviousStatically_SomeInEquality: ");
         for (int i = 0; i < vis.length; i++) {
           sb.append(assigned[i].name() + " ");
@@ -1330,7 +1330,7 @@ import typequals.*;
     if (position == vis.length) {
       // base case
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("  isObviousDynamically_SomeInEquality: ");
         for (int i = 0; i < vis.length; i++) {
           sb.append(assigned[i].name() + " ");
@@ -1911,7 +1911,7 @@ import typequals.*;
   // [[ This method doesn't belong here. But where? ]]
   public static String formatFuzzy(String method, VarInfo v1, VarInfo v2, OutputFormat format) {
 
-    StringBuffer results = new StringBuffer();
+    StringBuilder results = new StringBuilder();
     return results
         .append("daikon.Quant.fuzzy.")
         .append(method)

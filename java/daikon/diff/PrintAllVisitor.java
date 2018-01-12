@@ -27,7 +27,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
    * Stores the output generated when visiting invariant nodes. This output cannot be printed
    * directly to the print stream, because the Ppt output must come before the Invariant output.
    */
-  private StringBuffer bufOutput = new StringBuffer();
+  private StringBuilder bufOutput = new StringBuilder();
 
   public PrintAllVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     this.ps = ps;

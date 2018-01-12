@@ -464,7 +464,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     // Not so efficient an implementation, but simple;
     // and how often will we need to print this anyway?
     sort_rep();
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append("{ ");
     for (int i = 0; i < num_elts; i++) {
       if (i != 0) {
@@ -1286,7 +1286,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       }
     }
 #elif defined(IS_SEQUENCE)
-    StringBuffer resultBuf = new StringBuffer();
+    StringBuilder resultBuf = new StringBuilder();
     for (int i = 0; i < num_elts; i++) {
       INT seq = elts[i];
       String offset = null;
@@ -1315,7 +1315,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       } else
 #endif
       {
-        StringBuffer contentsBuf = new StringBuffer();
+        StringBuilder contentsBuf = new StringBuilder();
         for (int j = 0; j < seq.length; j++) {
           if (j + 3 < seq.length
               && ELT_EQUALS(seq[j], seq[j + 1])
@@ -1466,7 +1466,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
     if (status == InvariantStatus.FALSIFIED) {
       if (logOn() && mutate) {
-        StringBuffer eltString = new StringBuffer();
+        StringBuilder eltString = new StringBuilder();
         for (int i = 0; i < num_elts; i++) {
           eltString.append(TOSTRING(elts[i]) + " ");
         }

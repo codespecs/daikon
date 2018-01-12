@@ -68,7 +68,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
       NodeListOptional fds = fd.f2;
       if (fds.present()) {
         for (int j = 0; j < fds.size(); j++) {
-          // System.out.println("" + j + ": " + fds.elementAt(j));
+          // System.out.println("" + j + ": " + fds.get(j));
           NodeSequence ns = (NodeSequence) fds.elementAt(j);
           if (ns.size() != 2) {
             System.out.println("Bad length " + ns.size() + " for NodeSequence");

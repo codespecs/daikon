@@ -63,7 +63,7 @@ public abstract class SplitterList {
   // This is only used by the debugging output in SplitterList.put().
   public static String formatSplitters(Splitter[] splits) {
     if (splits == null) return "null";
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append("[");
     for (int i = 0; i < splits.length; i++) {
       if (i != 0) sb.append(", ");
@@ -95,8 +95,8 @@ public abstract class SplitterList {
   //   public static Splitter[] get(String pptName) {
   //     String pptName_ = pptName;        // debugging
   //     Splitter[] result;
-  //     Vector splitterArrays = new Vector();
-  //     Vector splitters = new Vector();
+  //     ArrayList splitterArrays = new ArrayList();
+  //     ArrayList splitters = new ArrayList();
   //
   //     result = get_raw(pptName);
   //     if (result != null)
@@ -144,7 +144,7 @@ public abstract class SplitterList {
   //     } else {
   //       int counter = 0;
   //       for (int i = 0; i < splitterArrays.size(); i++) {
-  //         Splitter[] tempsplitters = (Splitter[])splitterArrays.elementAt(i);
+  //         Splitter[] tempsplitters = (Splitter[])splitterArrays.get(i);
   //         for (int j = 0; j < tempsplitters.length; j++) {
   //           splitters.addElement(tempsplitters[j]);
   //           counter++;

@@ -136,7 +136,7 @@ public class PptRelation implements Serializable {
   /** Return a string containing all of the parent&rarr;child var relations. */
   public String parent_to_child_var_string() {
 
-    StringBuffer var_str = new StringBuffer();
+    StringBuilder var_str = new StringBuilder();
     for (VarInfo pv : parent_to_child_map.keySet()) {
       VarInfo cv = parent_to_child_map.get(pv);
       if (var_str.length() > 0) var_str.append(", ");

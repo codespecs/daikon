@@ -69,17 +69,17 @@ public class PptNameMatcher {
         NodeSequence seq = (NodeSequence) intermediateSequence.elementAt(0);
         NodeSequence seqOrig = (NodeSequence) intermediateSequenceOrig.elementAt(0);
 
-        List<Node> singleElementVector = seq.nodes;
-        List<Node> singleElementVectorOrig = seqOrig.nodes;
+        List<Node> singleElementList = seq.nodes;
+        List<Node> singleElementListOrig = seqOrig.nodes;
         // Replace the ClassOrInterfaceType with its ungenerified version.
 
         //     System.out.println("@0");
         //     param.accept(new TreeDumper());
 
-        // ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementVector.get(0);
-        ClassOrInterfaceType tOrig = (ClassOrInterfaceType) singleElementVectorOrig.get(0);
+        // ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementList.get(0);
+        ClassOrInterfaceType tOrig = (ClassOrInterfaceType) singleElementListOrig.get(0);
         assert tOrig.unGenerifiedVersionOfThis != null;
-        singleElementVector.set(0, tOrig.unGenerifiedVersionOfThis);
+        singleElementList.set(0, tOrig.unGenerifiedVersionOfThis);
         // Return getType of the ungenerified version of p.
 
         // tOrig.unGenerifiedVersionOfThis may have line/col numbering
