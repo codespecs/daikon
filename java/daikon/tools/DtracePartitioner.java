@@ -43,12 +43,12 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
 
   /** Not implemented, because this class does not modify the underlying trace file. */
   @Override
-  public void remove() {
+  public void remove(/*>>>@GuardSatisfied DtracePartitioner this*/) {
     throw new UnsupportedOperationException("Can not remove");
   }
 
   @Override
-  public String next() {
+  public String next(/*>>>@GuardSatisfied DtracePartitioner this*/) {
     try {
       String ret = grabNextInvocation();
       if (ret.indexOf("EXIT") != -1) {

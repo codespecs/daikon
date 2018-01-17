@@ -218,7 +218,7 @@ public class PptTopLevel extends Ppt {
     }
 
     @Override
-    public PptConditional next() {
+    public PptConditional next(/*>>>@GuardSatisfied CondIterator this*/) {
 
       if (!hasNext()) {
         throw new NoSuchElementException();
@@ -237,7 +237,7 @@ public class PptTopLevel extends Ppt {
     }
 
     @Override
-    public void remove() {
+    public void remove(/*>>>@GuardSatisfied CondIterator this*/) {
       throw new UnsupportedOperationException("Remove unsupported in CondIterator");
     }
   }
@@ -3132,7 +3132,7 @@ public class PptTopLevel extends Ppt {
     }
 
     @Override
-    public Iterator<Invariant> next() {
+    public Iterator<Invariant> next(/*>>>@GuardSatisfied ViewsIteratorIterator this*/) {
       if (vitor.hasNext()) {
         return vitor.next().invs.iterator();
       } else {
@@ -3146,7 +3146,7 @@ public class PptTopLevel extends Ppt {
     }
 
     @Override
-    public void remove() {
+    public void remove(/*>>>@GuardSatisfied ViewsIteratorIterator this*/) {
       throw new UnsupportedOperationException();
     }
   }

@@ -107,13 +107,13 @@ public class PptMap implements Serializable {
       }
 
       @Override
-      public PptTopLevel next() {
+      public PptTopLevel next(/*>>>@GuardSatisfied PptMap this*/) {
         iter_view.next(); // to check for concurrent modifications
         return iter_sort.next();
       }
 
       @Override
-      public void remove() {
+      public void remove(/*>>>@GuardSatisfied PptMap this*/) {
         throw new UnsupportedOperationException();
       }
     };
@@ -158,7 +158,7 @@ public class PptMap implements Serializable {
       }
 
       @Override
-      public PptTopLevel next() {
+      public PptTopLevel next(/*>>>@GuardSatisfied Iterator<PptConditional> this*/) {
         if ((cond_iterator != null) && cond_iterator.hasNext()) {
           return (cond_iterator.next());
         }
@@ -169,7 +169,7 @@ public class PptMap implements Serializable {
       }
 
       @Override
-      public void remove() {
+      public void remove(/*>>>@GuardSatisfied Iterator<PptConditional> this*/) {
         throw new UnsupportedOperationException();
       }
     };
