@@ -211,7 +211,7 @@ public class PptTopLevel extends Ppt {
     @SuppressWarnings(
         "flowexpr.parse.error") // Checker Framework bug: splitters is a field in this class
     /*@EnsuresNonNullIf(result=true, expression="splitters")*/
-    public boolean hasNext() {
+    public boolean hasNext(/*>>>@GuardSatisfied CondIterator this*/) {
       if (splitters == null) return false;
       if (splitter_index >= splitters.size()) return false;
       return true;
@@ -3127,7 +3127,7 @@ public class PptTopLevel extends Ppt {
     }
 
     @Override
-    public boolean hasNext() {
+    public boolean hasNext(/*>>>@GuardSatisfied ViewsIteratorIterator this*/) {
       return (vitor.hasNext() || (implication_iterator != null));
     }
 
