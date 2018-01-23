@@ -103,20 +103,20 @@ public class PptMap implements Serializable {
     final Iterator<PptTopLevel> iter_sort = sorted.iterator();
     return new Iterator<PptTopLevel>() {
       @Override
-      public boolean hasNext(/*>>>@ GuardSatisfied Iterator<PptTopLevel> this*/) {
+      public boolean hasNext(/*>>> GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         boolean result = iter_view.hasNext();
         assert result == iter_sort.hasNext();
         return result;
       }
 
       @Override
-      public PptTopLevel next(/*>>>@ GuardSatisfied Iterator<PptTopLevel> this*/) {
+      public PptTopLevel next(/*>>> GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         iter_view.next(); // to check for concurrent modifications
         return iter_sort.next();
       }
 
       @Override
-      public void remove(/*>>>@ GuardSatisfied Iterator<PptTopLevel> this*/) {
+      public void remove(/*>>> GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         throw new UnsupportedOperationException();
       }
     };
@@ -154,7 +154,7 @@ public class PptMap implements Serializable {
       /*@Nullable*/ Iterator<PptConditional> cond_iterator = null;
 
       @Override
-      public boolean hasNext(/*>>>@GuardSatisfied Iterator<PptConditional> this*/) {
+      public boolean hasNext(/*>>> GuardSatisfied Iterator<PptConditional> this*/ ) {
         if ((cond_iterator != null) && cond_iterator.hasNext()) {
           return true;
         }
@@ -164,7 +164,7 @@ public class PptMap implements Serializable {
       }
 
       @Override
-      public PptTopLevel next(/*>>>@GuardSatisfied Iterator<PptTopLevel> this*/) {
+      public PptTopLevel next(/*>>> GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         if ((cond_iterator != null) && cond_iterator.hasNext()) {
           return (cond_iterator.next());
         }
@@ -175,7 +175,7 @@ public class PptMap implements Serializable {
       }
 
       @Override
-      public void remove(/*>>>@GuardSatisfied Iterator<PptTopLevel> this*/) {
+      public void remove(/*>>> GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         throw new UnsupportedOperationException();
       }
     };
