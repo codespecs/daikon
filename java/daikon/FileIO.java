@@ -875,14 +875,14 @@ public final class FileIO {
     }
   }
 
-  // call_hashmap is for procedures with a (global, not per-procedure)
-  // nonce that indicates which returns are associated with which entries.
-  // call_stack is for functions without nonces.
-
   // I could save some Object overhead by using two parallel stacks
   // instead of Invocation objects; but that's not worth it.
-  static Deque<Invocation> call_stack = new ArrayDeque<Invocation>();
+
+  // Map key is a (global, not per-procedure) nonce.
+  // The nonce indicates which returns are associated with which entries.
   static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
+  // call_stack is for procedures without nonces.
+  static Deque<Invocation> call_stack = new ArrayDeque<Invocation>();
 
   /**
    * Reads data from {@code .dtrace} files. For each record in the files, calls the appropriate
@@ -1779,18 +1779,18 @@ public final class FileIO {
       }
       System.out.println();
       if (!call_hashmap.isEmpty()) {
+        // Put the invocations in sorted order for printing.
+        ArrayList<Invocation> invocations = new ArrayList<Invocation>();
+        for (/*@KeyFor("call_hashmap")*/ Integer i : UtilMDE.sortedKeySet(call_hashmap)) {
+          Invocation invok = call_hashmap.get(i);
+          assert invok != null;
+          invocations.add(invok);
+        }
         System.out.println("Unterminated calls:");
         if (dkconfig_verbose_unmatched_procedure_entries) {
-          // Print the invocations in sorted order.
-          ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-          for (/*@KeyFor("call_hashmap")*/ Integer i : UtilMDE.sortedKeySet(call_hashmap)) {
-            Invocation invok = call_hashmap.get(i);
-            assert invok != null;
-            invocations.add(invok);
-          }
           print_invocations_verbose(invocations);
         } else {
-          print_invocations_grouped(call_hashmap.values());
+          print_invocations_grouped(invocations);
         }
       }
 
@@ -1820,25 +1820,24 @@ public final class FileIO {
 
   /** Print the invocations in the collection, in order, and suppressing duplicates. */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
-    Map</*@Interned*/ Invocation, Integer> counter =
-        new HashMap</*@Interned*/ Invocation, Integer>();
+    Map</*@Interned*/ String, Integer> counter = new LinkedHashMap</*@Interned*/ String, Integer>();
 
     for (Invocation invok_noncanonical : invocations) {
       /*@Interned*/ Invocation invok = invok_noncanonical.canonicalize();
-      if (counter.containsKey(invok)) {
-        Integer oldCount = counter.get(invok);
+      String invokString = invok.format(false).intern();
+      if (counter.containsKey(invokString)) {
+        Integer oldCount = counter.get(invokString);
         Integer newCount = oldCount.intValue() + 1;
-        counter.put(invok, newCount);
+        counter.put(invokString, newCount);
       } else {
-        counter.put(invok, 1);
+        counter.put(invokString, 1);
       }
     }
 
     // Print the invocations in sorted order.
-    for (/*@KeyFor("counter")*//*@Interned*/ Invocation invok : UtilMDE.sortedKeySet(counter)) {
-      Integer count = counter.get(invok);
+    for (Map.Entry</*@Interned*/ String, Integer> invokEntry : counter.entrySet()) {
       System.out.println(
-          invok.format(false) + " : " + UtilMDE.nplural(count.intValue(), "invocation"));
+          invokEntry.getKey() + " : " + UtilMDE.nplural(invokEntry.getValue(), "invocation"));
     }
   }
 
