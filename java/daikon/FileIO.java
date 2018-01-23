@@ -1818,7 +1818,7 @@ public final class FileIO {
     }
   }
 
-  /** Print the invocations in the collection, in order, and suppressing duplicates. */
+  /** Print the invocations in the collection, in order, and coalescing duplicates. */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
     Map</*@Interned*/ String, Integer> counter = new LinkedHashMap</*@Interned*/ String, Integer>();
 
