@@ -44,7 +44,7 @@ env:
 # Running this first gives two tries in case of network lossage.
 before_script:
 - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
-- timeout 5m docker pull mdernst/$OS-for-daikon-$JDKVER || true
+- (timeout 5m docker pull mdernst/$OS-for-daikon-$JDKVER || [ $? -eq 124 ] && echo "docker pull timed out") || true
 
 # The git commands are tried twice, in case of temporary network failure.
 # The fcntl line works around a bug where Travis truncates logs and fails.
