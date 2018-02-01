@@ -5,6 +5,10 @@ import java.io.*;
 import java.util.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.lock.qual.*;
+*/
+
 /**
  * This class partitions Daikon trace files so that invocations of the same program point are
  * grouped together for use with random selection.
@@ -32,7 +36,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   }
 
   @Override
-  public boolean hasNext() {
+  public boolean hasNext(/*>>>@GuardSatisfied DtracePartitioner this*/) {
     try {
       return br.ready();
     } catch (IOException e) {
@@ -43,12 +47,12 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
 
   /** Not implemented, because this class does not modify the underlying trace file. */
   @Override
-  public void remove() {
+  public void remove(/*>>>@GuardSatisfied DtracePartitioner this*/) {
     throw new UnsupportedOperationException("Can not remove");
   }
 
   @Override
-  public String next() {
+  public String next(/*>>>@GuardSatisfied DtracePartitioner this*/) {
     try {
       String ret = grabNextInvocation();
       if (ret.indexOf("EXIT") != -1) {
@@ -70,7 +74,8 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    * invocation delimter. Note that multiple blank lines between invocations might occur, so the
    * callee is responsible for checking if the returned String is a blank line.
    */
-  private String grabNextInvocation() throws IOException {
+  private String grabNextInvocation(
+      /*>>>@GuardSatisfied DtracePartitioner this*/) throws IOException {
     StringBuilder sb = new StringBuilder();
     while (br.ready()) {
       String line = br.readLine();

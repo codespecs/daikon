@@ -91,6 +91,9 @@ public class PptMap implements Serializable {
    *     loop"), use {@link #pptIterable()} instead.
    * @see #pptIterable()
    */
+  // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
+  // https://bugs.openjdk.java.net/browse/JDK-8195646
+  @SuppressWarnings("lock") // JLS bug: can't write recevier annotation on method of anonymous class
   public Iterator<PptTopLevel> pptIterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
@@ -100,20 +103,20 @@ public class PptMap implements Serializable {
     final Iterator<PptTopLevel> iter_sort = sorted.iterator();
     return new Iterator<PptTopLevel>() {
       @Override
-      public boolean hasNext() {
+      public boolean hasNext(/*! >>>@GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         boolean result = iter_view.hasNext();
         assert result == iter_sort.hasNext();
         return result;
       }
 
       @Override
-      public PptTopLevel next() {
+      public PptTopLevel next(/*! >>>@GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         iter_view.next(); // to check for concurrent modifications
         return iter_sort.next();
       }
 
       @Override
-      public void remove() {
+      public void remove(/*! >>>@GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         throw new UnsupportedOperationException();
       }
     };
@@ -137,6 +140,9 @@ public class PptMap implements Serializable {
    *     loop"), use {@link #ppt_all_iterable()} instead.
    * @see #ppt_all_iterable()
    */
+  // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
+  // https://bugs.openjdk.java.net/browse/JDK-8195646
+  @SuppressWarnings("lock") // JLS bug: can't write recevier annotation on method of anonymous class
   public Iterator<PptTopLevel> ppt_all_iterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
@@ -148,7 +154,7 @@ public class PptMap implements Serializable {
       /*@Nullable*/ Iterator<PptConditional> cond_iterator = null;
 
       @Override
-      public boolean hasNext() {
+      public boolean hasNext(/*! >>>@GuardSatisfied Iterator<PptConditional> this*/ ) {
         if ((cond_iterator != null) && cond_iterator.hasNext()) {
           return true;
         }
@@ -158,7 +164,7 @@ public class PptMap implements Serializable {
       }
 
       @Override
-      public PptTopLevel next() {
+      public PptTopLevel next(/*! >>>@GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         if ((cond_iterator != null) && cond_iterator.hasNext()) {
           return (cond_iterator.next());
         }
@@ -169,7 +175,7 @@ public class PptMap implements Serializable {
       }
 
       @Override
-      public void remove() {
+      public void remove(/*! >>>@GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         throw new UnsupportedOperationException();
       }
     };
