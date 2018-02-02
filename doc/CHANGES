@@ -20,10 +20,15 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.6.2 (January 2, 2018)
+5.6.2 (February 2, 2018)
 
-It is no longer necessary to set the DAIKONDIR environment variable to when
+It is no longer necessary to set the DAIKONDIR environment variable when
 using or building Daikon.
+
+Fjalar/Kvasir:
+- We updated the underlying Valgrind infrastructure to version 3.13.0.
+- We updated the underlying Binutils infrastructure to version 2.29.1.
+- Improved Ubuntu 17.10 support.
 
 ===========================================================================
 
