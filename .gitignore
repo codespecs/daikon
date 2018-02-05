@@ -64,6 +64,7 @@ java/daikon/chicory/Test.log
 
 # Obtained via Git
 plume-lib
+checklink
 java/.run-google-java-format
 # Generated from plume-lib
 java/daikon/util

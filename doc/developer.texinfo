@@ -1886,12 +1886,8 @@ Daikon, @samp{jtb}, and plume.
 @item
 Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
-Path", then "Libraries", then "Add External Jars" and add @file{tools.jar},
-and the files in @file{daikon/java/lib/}, namely
-@file{java-getopt.jar},
-@file{junit-4.12.jar},
-and
-@file{plume.jar}.
+Path", then "Libraries", then "Add External Jars" and add @file{tools.jar}
+and all @file{.jar} files in @file{daikon/java/lib/}.
 (See your @env{CLASSPATH}
 environment variable for full pathnames to these files.)
 @end enumerate
@@ -2117,12 +2113,6 @@ A clone of
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
 @c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
 @c or:       export JAVA_HOME=/usr/lib/jvm/java
-
-@c Not necessary because the commands handle this for you.
-@c @item
-@c A clone of
-@c @uref{https://github.com/mernst/plume-lib} must be in
-@c @file{$DAIKONDIR/@/plume-lib}.
 
 @item
 File @file{~/private/.travis-access-token} must contain the text after
@@ -2517,7 +2507,8 @@ being down.  You can check such links by hand.
 If the URL is correct but cannot be checked (for example, because the website
 prohibits spiders or because the URL  redirects to another URL but you prefer
 to keep the first URL in your document), then you may need to add lines to
-an appropriate part of file @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
+an appropriate part of file @file{checklink-args.txt} in
+@url{https://github.com/plume-lib/checklink}.
 
 In most cases (and for most 404 errors), you should fix the document with
 the incorrect link.
@@ -2562,7 +2553,8 @@ The following fragments need to be fixed:
 @noindent
 This is probably caused by the way @command{makeinfo} deals with chapter splits via
 indirect references through stub files.  Two @command{suppress-fragment} entries in
-@file{../plume-lib/bin/checklink-args.txt} are required.  For the example above, these
+@file{checklink-args.txt} in @url{https://github.com/plume-lib/checklink}
+are required.  For the example above, these
 would be:
 @smallexample
 --suppress-fragment http://plse.cs.washington.edu/daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir

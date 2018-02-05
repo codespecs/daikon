@@ -96,7 +96,7 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
 ifeq "$(wildcard ${DAIKONDIR}/java/lib/plume.jar)" "${DAIKONDIR}/java/lib/plume.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
 endif
 ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
     CLASSPATH_JARS2 = ${CHECKERJAR}
@@ -642,7 +642,7 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	# change the package declarations
 	perl -p -i -e 's/package plume/package daikon.util/' daikon/util/*.java
 	# change relevant imports (make sure to get "import static" as well)
-	perl -p -i -e 's/^(import .*)plume/\1daikon.util/g' daikon/util/*.java
+	perl -p -i -e 's/^(import .*)plume\./\1daikon.util\./g' daikon/util/*.java
 	# for debugging
 	@echo "DAIKONDIR = ${DAIKONDIR}"
 	@echo "CLASSPATH = ${CLASSPATH}"

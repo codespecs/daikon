@@ -4,7 +4,7 @@
 
 # Add the basic jars to the classpath if they aren't already there
 ifeq "$(wildcard ${DAIKONDIR}/java/lib/plume.jar)" "${DAIKONDIR}/java/lib/plume.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
 endif
 
 # Add necessary items to the classpath if they are not already there

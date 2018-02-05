@@ -1,6 +1,5 @@
 package daikon.asm;
 
-import daikon.util.*;
 import java.util.*;
 
 /*>>>

@@ -4,7 +4,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.util.*;
+import daikon.util.Stopwatch;
 import java.io.*;
 import java.lang.instrument.*;
 import java.nio.file.Files;
@@ -14,6 +14,8 @@ import java.util.regex.*;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -63,9 +65,10 @@ public class Premain {
     // Because DynComp started Premain in a separate process, we must rescan
     // the options to setup the DynComp static variables.
     Options options = new Options(DynComp.usage_synopsis, DynComp.class, Premain.class);
-    String[] args = options.parse_or_usage(agentArgs.split("  *"));
+    String[] args = options.parse(true, agentArgs.split("  *"));
     if (args.length > 0) {
-      options.print_usage("Unexpected argument %s", args[0]);
+      System.out.printf("Unexpected argument %s%n", args[0]);
+      options.printUsage();
       System.exit(-1);
     }
     if (DynComp.rt_file != null && DynComp.rt_file.getName().equalsIgnoreCase("NONE")) {

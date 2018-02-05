@@ -3,10 +3,14 @@ package daikon;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.chicory.*;
-import daikon.util.*;
+import daikon.util.RegexUtil;
+import daikon.util.SimpleLog;
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Pattern;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -160,8 +164,8 @@ public class Chicory {
 
     // Parse our arguments
     Options options = new Options(synopsis, Chicory.class);
-    options.parse_options_after_arg(false);
-    String[] target_args = options.parse_or_usage(args);
+    options.setParseAfterArg(false);
+    String[] target_args = options.parse(true, args);
     boolean ok = check_args(options, target_args);
     if (!ok) System.exit(1);
 
@@ -173,7 +177,19 @@ public class Chicory {
     // were passed here.
 
     Chicory chicory = new Chicory();
-    chicory.start_target(options.get_options_str(), target_args);
+    chicory.start_target(getOptionsString(options), target_args);
+  }
+
+  // Gross hack, undo when Options package makes the `getOptionsString` method public.
+  @SuppressWarnings("nullness")
+  private static String getOptionsString(Options options) {
+    try {
+      Method method = options.getClass().getDeclaredMethod("getOptionsString");
+      method.setAccessible(true);
+      return (String) method.invoke(options);
+    } catch (Throwable e) {
+      throw new Error(e);
+    }
   }
 
   /**
@@ -184,11 +200,13 @@ public class Chicory {
 
     // Make sure arguments have legal values
     if (nesting_depth < 0) {
-      options.print_usage("nesting depth (%d) must not be negative", nesting_depth);
+      System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
+      options.printUsage();
       return false;
     }
     if (target_args.length == 0) {
-      options.print_usage("target program must be specified");
+      System.out.println("target program must be specified");
+      options.printUsage();
       return false;
     }
 

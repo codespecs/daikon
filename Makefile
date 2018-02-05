@@ -33,10 +33,10 @@ README_PATHS := README doc/README fjalar/README
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
                       doc/index.html doc/www/download/index.html
 
-# Scripts, such as Perl programs.  Why not just include all of them?
-# (Maybe to avoid problems with accidentally including things in the user's
-# checkout that are not needed by most users, but why not include
-# everything that's in repository?)
+# Scripts, such as Perl programs, that are included in the Daikon distribution.
+# Why not just include all of them?  (Maybe to avoid problems with
+# accidentally including things in the user's checkout that are not needed
+# by most users, but why not include everything that's in repository?)
 SCRIPT_FILES := Makefile \
 	daikon.cshrc daikon.bashrc daikonenv.bat \
 	dfepl dtrace-perl dtype-perl \
@@ -528,7 +528,7 @@ NEW_VER := $(shell cat doc/VERSION)
 NEW_RELEASE_NAME := daikon-$(NEW_VER)
 
 check-for-broken-doc-links:
-	checklink -q -r `grep -v '^#' ${DAIKONDIR}/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
+	${CHECKLINK}/checklink -q -r `grep -v '^#' ${CHECKLINK}/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
 
 HISTORY_DIR := $(STAGING_DIR)/history
 save-current-release:
@@ -588,6 +588,7 @@ update-dist-version-file:
 
 JAR_FILES = \
 $(INV_DIR)/java/lib/java-getopt.jar \
+$(INV_DIR)/java/lib/options-all-0.3.1.jar \
 $(INV_DIR)/java/lib/plume.jar
 
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
@@ -608,6 +609,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/options-all-0.3.1.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
@@ -738,9 +740,15 @@ showvars:
 	${MAKE} -C java showvars
 
 plume-lib:
-	rm -rf java/utilMDE java/lib/utilMDE.jar
 	# Don't use an ssh URL because can't pull from it in cron jobs
 	git clone ${GIT_OPTIONS} https://github.com/mernst/plume-lib.git plume-lib
+
+checklink:
+	# Don't use an ssh URL because can't pull from it in cron jobs
+	git clone ${GIT_OPTIONS} https://github.com/plume-lib/checklink.git checklink
+
+update-libs: plume-lib-update checklink-update
+.PHONY: update-libs
 
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
@@ -750,6 +758,13 @@ ifndef NONETWORK
 	# The "git pull" command fails under Fedora 23, for mysterious reasons.
 	if test -d plume-lib/.git ; then \
 		(cd plume-lib && git pull -q ${GIT_OPTIONS}) || true; fi
+endif
+
+.PHONY: checklink-update
+checklink-update: checklink
+ifndef NONETWORK
+	if test -d checklink/.git ; then \
+		(cd checklink && git pull -q ${GIT_OPTIONS}) || true; fi
 endif
 
 update-plume-jar: plume-lib-update

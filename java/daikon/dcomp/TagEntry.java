@@ -2,7 +2,8 @@ package daikon.dcomp;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.util.*;
+import daikon.util.SimpleLog;
+import daikon.util.WeakIdentityHashMap;
 import java.lang.ref.*;
 import java.util.*;
 

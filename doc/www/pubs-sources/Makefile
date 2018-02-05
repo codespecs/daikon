@@ -1,6 +1,7 @@
 ###########################################################################
 DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
+CHECKLINK ?= ${DAIKONDIR}/checklink
 MERNSTDIR ?= /homes/gws/mernst
 BIBDIR ?= ~/bib
 # This should include every file with "usesDaikon" or "\"Invariant dectection\""

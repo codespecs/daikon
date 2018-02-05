@@ -1,8 +1,11 @@
 package daikon.chicory;
 
-import daikon.util.*;
+import daikon.util.EntryReader;
+import daikon.util.Intern;
 import java.io.*;
 import java.util.*;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -334,7 +337,7 @@ public class DeclReader {
   public static void main(String[] args) throws IOException {
 
     Options options = new Options("DeclReader [options] decl-files...", DeclReader.class);
-    String[] files = options.parse_or_usage(args);
+    String[] files = options.parse(true, args);
     boolean print_each_set = !avg_size;
 
     if (files.length < 1) {

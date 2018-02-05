@@ -1,7 +1,7 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
-import daikon.util.*;
+import daikon.util.BCELUtil;
 import java.io.*;
 import java.lang.instrument.*;
 import java.security.*;

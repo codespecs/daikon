@@ -6,7 +6,8 @@ import static daikon.tools.nullness.NullnessUtils.castNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
-import daikon.util.*;
+import daikon.util.SimpleLog;
+import daikon.util.UtilMDE;
 import java.io.*;
 import java.io.File;
 import java.lang.instrument.*;
@@ -15,6 +16,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.jar.*;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -57,7 +60,7 @@ public class ChicoryPremain {
 
     // Parse our arguments using Chicory's argument parser
     Options options = new Options(Chicory.synopsis, Chicory.class, ChicoryPremain.class);
-    String[] target_args = options.parse_or_usage(agentArgs);
+    String[] target_args = options.parse(true, Options.tokenize(agentArgs));
     if (target_args.length > 0) {
       System.err.printf("Unexpected ChicoryPremain arguments %s%n", Arrays.toString(target_args));
       System.exit(1);

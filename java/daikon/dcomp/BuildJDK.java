@@ -4,8 +4,6 @@ package daikon.dcomp;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
-import daikon.util.Option;
-import daikon.util.Options;
 import java.io.*;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -15,6 +13,8 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /**
  * Converts each file in the JDK. Each method is doubled. The new methods are distinguished by a
@@ -127,7 +127,7 @@ public class BuildJDK {
 
     Options options = new Options(synopsis, BuildJDK.class, DynComp.class);
     // options.ignore_options_after_arg (true);
-    String[] cl_args = options.parse_or_usage(args);
+    String[] cl_args = options.parse(true, args);
     boolean ok = check_args(options, cl_args);
     if (!ok) System.exit(1);
     verbose = DynComp.verbose;
@@ -213,20 +213,24 @@ public class BuildJDK {
 
     if (classfiles) {
       if (target_args.length < 2) {
-        options.print_usage("must specify source jar and destination dir");
+        System.out.println("must specify source jar and destination dir");
+        options.printUsage();
         return false;
       }
       if (target_args.length < 3) {
-        options.print_usage("must specify classfiles to instrument");
+        System.out.println("must specify classfiles to instrument");
+        options.printUsage();
         return false;
       }
     } else {
       if (target_args.length < 2) {
-        options.print_usage("must specify source jar and destination dir");
+        System.out.println("must specify source jar and destination dir");
+        options.printUsage();
         return false;
       }
       if (target_args.length > 3) {
-        options.print_usage("too many arguments");
+        System.out.println("too many arguments");
+        options.printUsage();
         return false;
       }
     }

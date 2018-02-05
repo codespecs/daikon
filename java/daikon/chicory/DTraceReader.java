@@ -1,6 +1,6 @@
 package daikon.chicory;
 
-import daikon.util.*;
+import daikon.util.EntryReader;
 import java.io.*;
 import java.util.*;
 

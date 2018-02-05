@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import plume.Option;
-import plume.Options;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 import plume.SimpleLog;
 import plume.UtilMDE;
 
@@ -65,7 +65,7 @@ public class AnnotateNullable {
 
     Options options =
         new Options("plume.AnnotateNullable [options] " + "<inv_file>", AnnotateNullable.class);
-    String[] inv_files = options.parse_or_usage(args);
+    String[] inv_files = options.parse(true, args);
     assert inv_files.length == 1;
 
     // Read the serialized invariant file

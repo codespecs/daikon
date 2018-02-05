@@ -2,10 +2,14 @@ package daikon;
 
 import daikon.chicory.StreamRedirectThread;
 import daikon.dcomp.*;
-import daikon.util.*;
+import daikon.util.RegexUtil;
+import daikon.util.SimpleLog;
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Pattern;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -124,7 +128,7 @@ public class DynComp {
     // Parse our arguments
     Options options = new Options(synopsis, DynComp.class);
     // options.ignore_options_after_arg (true);
-    String[] target_args = options.parse_or_usage(args);
+    String[] target_args = options.parse(true, args);
     boolean ok = check_args(options, target_args);
     if (!ok) System.exit(1);
 
@@ -136,7 +140,19 @@ public class DynComp {
     // were passed here.
 
     DynComp dcomp = new DynComp();
-    dcomp.start_target(options.get_options_str(), target_args);
+    dcomp.start_target(getOptionsString(options), target_args);
+  }
+
+  // Gross hack, undo when Options package makes the `getOptionsString` method public.
+  @SuppressWarnings("nullness")
+  private static String getOptionsString(Options options) {
+    try {
+      Method method = options.getClass().getDeclaredMethod("getOptionsString");
+      method.setAccessible(true);
+      return (String) method.invoke(options);
+    } catch (Throwable e) {
+      throw new Error(e);
+    }
   }
 
   /**
@@ -147,11 +163,13 @@ public class DynComp {
 
     // Make sure arguments have legal values
     if (nesting_depth < 0) {
-      options.print_usage("nesting depth (%d) must not be negative", nesting_depth);
+      System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
+      options.printUsage();
       return false;
     }
     if (target_args.length == 0) {
-      options.print_usage("target program must be specified");
+      System.out.println("target program must be specified");
+      options.printUsage();
       return false;
     }
     if (rt_file != null && rt_file.getName().equalsIgnoreCase("NONE")) {
@@ -160,7 +178,8 @@ public class DynComp {
     }
     if (!no_jdk && rt_file != null && !rt_file.exists()) {
       // if --rt-file was given, but doesn't exist
-      options.print_usage("rt-file %s does not exist", rt_file);
+      System.out.printf("rt-file %s does not exist%n", rt_file);
+      options.printUsage();
       return false;
     }
 

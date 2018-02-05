@@ -7,7 +7,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.*;
-import plume.*;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -58,9 +59,10 @@ public class InvariantFormatTester extends TestCase {
 
     String usage = "java daikon.test.InvariantFormatTester";
     Options options = new Options(usage, InvariantFormatTester.class);
-    String[] other_args = options.parse_or_usage(args);
+    String[] other_args = options.parse(true, args);
     if (other_args.length > 0) {
-      options.print_usage("unexpected arguments");
+      System.out.println("unexpected arguments");
+      options.printUsage();
       return;
     }
 

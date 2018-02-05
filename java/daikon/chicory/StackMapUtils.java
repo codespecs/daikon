@@ -1,6 +1,7 @@
 package daikon.chicory;
 
-import daikon.util.*;
+import daikon.util.BCELUtil;
+import daikon.util.SimpleLog;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
