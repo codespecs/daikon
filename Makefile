@@ -765,13 +765,15 @@ ifndef NONETWORK
 endif
 
 update-plume-lib:
+	echo "entering update-plume-lib target"
 ifndef NONETWORK
 	if test -d utils/plume-lib/.git ; then \
-	  (echo "pulling plume-lib" && cd utils/plume-lib && pwd && git pull -v) \
+	  (echo "pulling plume-lib" && cd utils/plume-lib && pwd && (git pull -v || echo "git pull failed")) \
 	elif ! test -d utils/plume-lib ; then \
 	  (mkdir -p utils && git clone -q --depth 1 https://github.com/mernst/plume-lib.git utils/plume-lib) \
 	fi
 endif
+	echo "exiting update-plume-lib target"
 
 update-run-google-java-format:
 ifndef NONETWORK

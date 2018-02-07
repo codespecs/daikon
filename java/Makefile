@@ -610,6 +610,7 @@ plume-copy : daikon/util/README
 PLUMEJAVA=../utils/plume-lib/java
 PLUME=${PLUMEJAVA}/src/plume
 
+## These two rules create the directories if absent but don't update them.
 ../utils/plume-lib:
 	${MAKE} -C .. update-plume-lib
 
