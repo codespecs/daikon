@@ -742,7 +742,7 @@ showvars:
 	${MAKE} -C java showvars
 
 # If .git does not exist, then directory was created from a daikon archive file.
-# The "git pull" command fails under Fedora 23, for mysterious reasons.
+# The "git pull" command fails under Centos and Fedora 23, for mysterious reasons.
 update-libs: update-checklink update-html-tools update-plume-lib update-run-google-java-format
 .PHONY: update-libs update-checklink update-html-tools update-plume-lib update-run-google-java-format
 
@@ -765,15 +765,13 @@ ifndef NONETWORK
 endif
 
 update-plume-lib:
-	echo "entering update-plume-lib target"
 ifndef NONETWORK
 	if test -d utils/plume-lib/.git ; then \
-	  (echo "pulling plume-lib" && cd utils/plume-lib && pwd && (git pull -v || echo "git pull failed")) \
+	  (cd utils/plume-lib && (git pull -v || echo "git pull failed")) \
 	elif ! test -d utils/plume-lib ; then \
 	  (mkdir -p utils && git clone -q --depth 1 https://github.com/mernst/plume-lib.git utils/plume-lib) \
 	fi
 endif
-	echo "exiting update-plume-lib target"
 
 update-run-google-java-format:
 ifndef NONETWORK
