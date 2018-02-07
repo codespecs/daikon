@@ -17,6 +17,7 @@ else
 endif
 
 PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
+HTMLTOOLS ?= ${HOME}/bin/src/html-tools
 
 USER ?= daikonbuild
 
@@ -1265,7 +1266,7 @@ api: ../plume-lib $(JAVA_FILES)
 	@rm -f java-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMEBIN)/preplace '^ *&#64;cindex.*' ''
 	cp -pf ../doc/daikon-favicon.png $(JAVADOC_DEST)
-	cd $(JAVADOC_DEST) && $(PLUMEBIN)/add-favicon . daikon-favicon.png
+	cd $(JAVADOC_DEST) && $(HTMLTOOLS)/add-favicon . daikon-favicon.png
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/

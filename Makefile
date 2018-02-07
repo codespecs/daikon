@@ -4,6 +4,8 @@
 
 DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 
+HTMLTOOLS ?= ${HOME}/bin/src/html-tools
+
 ##########################################################################
 ### Variables
 ###
@@ -464,7 +466,7 @@ staging:
 	cp -p doc/daikon-favicon.png $(STAGING_DIR)
 	cp -p doc/images/daikon-logo.gif $(STAGING_DIR)
 	# This command updates the dates and sizes in the various index files
-	html-update-link-dates $(STAGING_DIR)/download/index.html
+	${HTMLTOOLS}/html-update-link-dates $(STAGING_DIR)/download/index.html
 	# all distributed files should belong to the group plse_www and be group writable.
 	# set the owner and other permissions to readonly
 	chgrp -R plse_www $(STAGING_DIR)

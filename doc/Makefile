@@ -3,14 +3,16 @@ all-except-pdf: config-options.texinfo invariants-doc.texinfo html-chap html
 
 TEXI2HTML ?= makeinfo --html
 
-daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
+HTMLTOOLS ?= ${HOME}/bin/src/html-tools
+
+daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 # Large split size fixes an apparent bug in makeinfo 4.11:
 # failing searches say
 #   Search failed: "  Indirect:"
 # instead of proper message.
 	makeinfo --split-size=1000000 $<
 
-developer.info: developer.texinfo 
+developer.info: developer.texinfo
 	makeinfo $<
 
 ifdef SKIP_JAVA
@@ -72,13 +74,13 @@ daikon-html:
 	${TEXI2HTML} --no-split daikon.texinfo
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
-	../plume-lib/bin/html-add-favicon daikon-favicon.png daikon.html
+	${HTMLTOOLS}/html-add-favicon daikon-favicon.png daikon.html
 
-developer.html: developer.texinfo 
+developer.html: developer.texinfo
 	${TEXI2HTML} --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
-	../plume-lib/bin/html-add-favicon daikon-favicon.png developer.html
+	${HTMLTOOLS}/html-add-favicon daikon-favicon.png developer.html
 
 html-chap: daikon/index.html developer/index.html
 
@@ -93,7 +95,7 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	mkdir daikon/images
 	cp images/*.png daikon/images
 	cp images/*.jpg daikon/images
-	../plume-lib/bin/add-favicon daikon ../daikon-favicon.png
+	${HTMLTOOLS}/add-favicon daikon ../daikon-favicon.png
 
 developer/index.html: developer.texinfo
 	rm -rf developer/*
@@ -103,11 +105,11 @@ developer/index.html: developer.texinfo
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
-	../plume-lib/bin/add-favicon developer ../daikon-favicon.png
+	${HTMLTOOLS}/add-favicon developer ../daikon-favicon.png
 
-pdf: daikon.pdf images/dfepl-flow.eps developer.pdf 
+pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
-daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
+daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 	makeinfo --pdf $<
 
 developer.pdf: developer.texinfo
@@ -119,12 +121,12 @@ developer.pdf: developer.texinfo
 clean: texi-clean
 	rm -f daikon.tmp \
 		daikon.info daikon.info-[0-9] \
-		daikon.log daikon.dvi daikon.pdf daikon.html 
+		daikon.log daikon.dvi daikon.pdf daikon.html
 	rm -f *.bak
 	rm -rf daikon/*
 	rm -f developer.tmp \
 		developer.info developer.info-[0-9] \
-		developer.log developer.dvi developer.pdf developer.html 
+		developer.log developer.dvi developer.pdf developer.html
 	rm -rf developer/*
 	rm -f images/dfepl-flow.{eps,pdf,jpg}
 # Obsolete files
