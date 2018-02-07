@@ -7,7 +7,7 @@ scriptdir=`/bin/dirname $0`       # may be relative path
 DAIKONDIR=`cd $scriptdir/.. && pwd`    # ensure absolute path
 
 setenv DAIKONBIN ${DAIKONDIR}/scripts
-setenv PLUMEBIN ${DAIKONDIR}/plume-lib/bin
+setenv PLUMEBIN ${DAIKONDIR}/utils/plume-lib/bin
 setenv INV ${DAIKONDIR}
 setenv inv ${INV}
 setenv DAIKONCLASS_SOURCES 1
@@ -29,7 +29,7 @@ setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
 
 # In general, Java programmers should not set CLASSPATH.
 # setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-# # Using ${INV}/plume-lib seems undesirable.  If a new version of plume-lib
+# # Using ${INV}/utils/plume-lib seems undesirable.  If a new version of plume-lib
 # # deprecates a method, then Daikon won't compile for developers; however,
 # # changing Daikon's source code would cause Daikon not to compile for ordinary
 # # users.

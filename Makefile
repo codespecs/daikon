@@ -51,7 +51,7 @@ SCRIPT_FILES := Makefile \
 PLUME_SCRIPT_FILES := java-cpp lines-from
 
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
-                $(addprefix plume-lib/bin/,$(PLUME_SCRIPT_FILES))
+                $(addprefix utils/plume-lib/bin/,$(PLUME_SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
@@ -174,7 +174,7 @@ compile-java:
 very-clean:
 	find . -type f -name "*~" -exec rm -f {} \;
 	${MAKE} -C ${DAIKONDIR} clean-everything
-	-cd plume-lib/java && $(MAKE) very-clean
+	-cd utils/plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
@@ -529,7 +529,7 @@ endif
 NEW_VER := $(shell cat doc/VERSION)
 NEW_RELEASE_NAME := daikon-$(NEW_VER)
 
-check-for-broken-doc-links:
+check-for-broken-doc-links: update-checklink
 	${CHECKLINK}/checklink -q -r `grep -v '^#' ${CHECKLINK}/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
 
 HISTORY_DIR := $(STAGING_DIR)/history
@@ -644,7 +644,7 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	cp -pR doc/www ${TMPDIR}/daikon/doc
 
 	# Plume-lib library
-	(cd plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/ && tar xf -))
+	(cd utils/plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/ && tar xf -))
 
 	# Auxiliary programs
 	mkdir ${TMPDIR}/daikon/scripts
@@ -741,40 +741,53 @@ showvars:
 	@echo "NEW_RELEASE_NAME =" $(NEW_RELEASE_NAME)
 	${MAKE} -C java showvars
 
-plume-lib:
-	# Don't use an ssh URL because can't pull from it in cron jobs
-	git clone ${GIT_OPTIONS} https://github.com/mernst/plume-lib.git plume-lib
+# If .git does not exist, then directory was created from a daikon archive file.
+# The "git pull" command fails under Fedora 23, for mysterious reasons.
+update-libs: update-checklink update-html-tools update-plume-lib update-run-google-java-format
+.PHONY: update-libs update-checklink update-html-tools update-plume-lib update-run-google-java-format
 
-checklink:
-	# Don't use an ssh URL because can't pull from it in cron jobs
-	git clone ${GIT_OPTIONS} https://github.com/plume-lib/checklink.git checklink
-
-update-libs: plume-lib-update checklink-update
-.PHONY: update-libs
-
-.PHONY: plume-lib-update
-plume-lib-update: plume-lib
+update-checklink:
 ifndef NONETWORK
-	# if plume-lib/.git does not exist, then directory was created
-	# from a daikon archive file - cannot do a git pull.
-	# The "git pull" command fails under Fedora 23, for mysterious reasons.
-	if test -d plume-lib/.git ; then \
-		(cd plume-lib && git pull -q ${GIT_OPTIONS}) || true; fi
+	if test -d utils/checklink/.git ; then \
+	  (cd utils/checklink && git pull -q) \
+	elif ! test -d utils/checklink ; then \
+	  (mkdir -p utils && git clone -q https://github.com/plume-lib/checklink.git utils/checklink) \
+	fi
 endif
 
-.PHONY: checklink-update
-checklink-update: checklink
+update-html-tools:
 ifndef NONETWORK
-	if test -d checklink/.git ; then \
-		(cd checklink && git pull -q ${GIT_OPTIONS}) || true; fi
+	if test -d utils/html-tools/.git ; then \
+	  (cd utils/html-tools && git pull -q) \
+	elif ! test -d utils/html-tools ; then \
+	  (mkdir -p utils && git clone -q https://github.com/plume-lib/html-tools.git utils/html-tools) \
+	fi
+endif
+
+update-plume-lib:
+ifndef NONETWORK
+	if test -d utils/plume-lib/.git ; then \
+	  (cd utils/plume-lib && git pull -q) \
+	elif ! test -d utils/plume-lib ; then \
+	  (mkdir -p utils && git clone -q https://github.com/mernst/plume-lib.git utils/plume-lib) \
+	fi
+endif
+
+update-run-google-java-format:
+ifndef NONETWORK
+	if test -d utils/run-google-java-format/.git ; then \
+	  (cd utils/run-google-java-format && git pull -q) \
+	elif ! test -d utils/run-google-java-format ; then \
+	  (mkdir -p utils && git clone -q https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format) \
+	fi
 endif
 
 update-plume-jar: plume-lib-update
 ifndef CHECKERFRAMEWORK
 	$(error CHECKERFRAMEWORK is not set)
 endif
-	make -D plume-lib/java clean jar verify-plume-jar-classfile-version
-	\cp -pf plume-lib/java/plume.jar java/lib/
+	make -D utils/plume-lib/java clean jar verify-plume-jar-classfile-version
+	\cp -pf utils/plume-lib/java/plume.jar java/lib/
 
 .PHONY: git-hooks
 git-hooks: .git/hooks/pre-commit .git/hooks/post-merge

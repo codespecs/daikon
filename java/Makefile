@@ -16,8 +16,8 @@ else
     DAIKONBIN ?= ${DAIKONDIR}/bin
 endif
 
-PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
-HTMLTOOLS ?= ${HOME}/bin/src/html-tools
+PLUMEBIN ?= ${DAIKONDIR}/utils/plume-lib/bin
+HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 
 USER ?= daikonbuild
 
@@ -420,8 +420,8 @@ AUTO_GENERATED_FILES_2 = \
 
 AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
-# Used as a prerequisite, not for the file names, so OK to include plume-lib-update.
-ALL_GENERATED_FILES = plume-lib-update ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+# Used as a prerequisite, not for the file names, so OK to include update-libs.
+ALL_GENERATED_FILES = update-libs ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 
 ###########################################################################
@@ -464,7 +464,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # Do not mark this target as .PHONY.  We want it to
 # always recompile, whether recompilation is necessary or not.  (Why?)
-all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check java_files.txt
+all_directly: ../utils/plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
@@ -482,11 +482,11 @@ java_files.txt: ${JAVA_FILES}
 	@echo ${JAVA_FILES} > java_files.txt
 
 .PHONY: plume-copy-and-check
-plume-copy-and-check: plume-lib-update plume-lib-compile plume-copy
+plume-copy-and-check: update-plume-lib plume-lib-compile plume-copy
 
 .PHONY : daikon compile_daikon
 daikon: compile_daikon junit
-compile_daikon : ../plume-lib $(AUTO_GENERATED_FILES)
+compile_daikon : ../utils/plume-lib $(AUTO_GENERATED_FILES)
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 	@chmod 444 ${AUTO_GENERATED_FILES}
@@ -603,33 +603,33 @@ dyncomp-jdk-only dcomp-jdk-only :
 .PHONY: plume-copy
 plume-copy : daikon/util/README
 
-PLUMEJAVA=../plume-lib/java
+PLUMEJAVA=../utils/plume-lib/java
 PLUME=${PLUMEJAVA}/src/plume
 
-../plume-lib:
-	${MAKE} -C .. plume-lib
+../utils/plume-lib:
+	${MAKE} -C .. update-plume-lib
 
 # Watch out if you have another copy of plume that is earlier on your classpath.
-.PHONY: plume-lib-update
-plume-lib-update:
-	${MAKE} -C .. plume-lib-update
+.PHONY: update-plume-lib
+update-plume-lib:
+	${MAKE} -C .. update-plume-lib
 
 # The class files are not used; this is just to sanity-check
 # ... but compilation takes too long, so don't bother with the sanity-check.
 plume-lib-compile:
-#	${MAKE} -C ../plume-lib/java compile
+#	${MAKE} -C ../utils/plume-lib/java compile
 
 # # A stable version of plume.jar is checked in, so that all this is not necessary.
-# lib/plume.jar: ../plume-lib/java/plume.jar
+# lib/plume.jar: ../utils/plume-lib/java/plume.jar
 # 	install -d lib
 # 	cp -p $< $@
 #
 # # The file is real, but the commands should always be re-run even if it exists.
-# .PHONY: ../plume-lib/java/plume.jar
-# ../plume-lib/java/plume.jar: ../plume-lib
-# 	$(MAKE) JAVAC=${JAVAC_FOR_CHECKER} JAVAC_TARGET_FLAGS="-target 5" -C ../plume-lib/java plume.jar
+# .PHONY: ../utils/plume-lib/java/plume.jar
+# ../utils/plume-lib/java/plume.jar: ../plume-lib
+# 	$(MAKE) JAVAC=${JAVAC_FOR_CHECKER} JAVAC_TARGET_FLAGS="-target 5" -C ../utils/plume-lib/java plume.jar
 
-daikon/util/README: plume-lib-update daikon/util/.timestamp-daikonutil
+daikon/util/README: update-plume-lib daikon/util/.timestamp-daikonutil
 
 daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
@@ -669,7 +669,7 @@ plume-import-check :
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES}
+all_except_daikon: ../utils/plume-lib ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -698,10 +698,10 @@ jikes:	all_via_jikes
 
 # These rules are undesirable, because Daikon.class (or Diff.class) might
 # be up to date even if other files aren't.
-daikon/Daikon.class: daikon/Daikon.java	../plume-lib ${AUTO_GENERATED_FILES}
+daikon/Daikon.class: daikon/Daikon.java	../utils/plume-lib ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Daikon.java
 
-daikon/Diff.class: Diff.java ../plume-lib ${AUTO_GENERATED_FILES}
+daikon/Diff.class: Diff.java ../utils/plume-lib ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Diff.java
 
 daikon/Runtime.class: daikon/Runtime.java
@@ -752,7 +752,7 @@ ETAGS := $(shell command -v etags 2> /dev/null)
 TAGS:	tags
 .PHONY: etags tags
 etags:	tags
-tags: ../plume-lib
+tags: ../utils/plume-lib
 ifndef ETAGS
 	$(error etags is not available, please install it)
 else
@@ -816,7 +816,7 @@ findbugs-cat:
 
 .PHONY: jar
 jar: ../daikon.jar
-../daikon.jar: ../plume-lib ${AUTO_GENERATED_FILES} compile
+../daikon.jar: ../utils/plume-lib ${AUTO_GENERATED_FILES} compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
@@ -840,21 +840,18 @@ audit:
 
 .PHONY: reformat check-format
 
-update-run-google-java-format:
-	@[ -d .run-google-java-format ] && (cd .run-google-java-format && git pull -q) || git clone -q https://github.com/plume-lib/run-google-java-format.git .run-google-java-format
-
 # Requires Java 8
 reformat:
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
-	${MAKE} update-run-google-java-format
-	@./.run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
+	${MAKE} -C .. update-run-google-java-format
+	@../utils/run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
 endif
 
 # Requires Java 8
 check-format:
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
-	${MAKE} update-run-google-java-format
-	@./.run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
+	${MAKE} -C .. update-run-google-java-format
+	@../utils/run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
 endif
 
 
@@ -1192,7 +1189,7 @@ check-serialize:
 junit:
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA} daikon.test.MasterUnitTester
-# Does not run daikon.util tests because plume-lib/java/Makefile does not
+# Does not run daikon.util tests because utils/plume-lib/java/Makefile does not
 # get copied over to Daikon.
 
 junit-all: junit
@@ -1257,7 +1254,7 @@ javadoc: api
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
 .PHONY: api
-api: ../plume-lib $(JAVA_FILES)
+api: ../utils/plume-lib $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
@@ -1270,11 +1267,11 @@ api: ../plume-lib $(JAVA_FILES)
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
-api-private: ../plume-lib $(AUTO_GENERATED_FILES)
+api-private: ../utils/plume-lib $(AUTO_GENERATED_FILES)
 	mkdir -p api
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
-	cd api && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
+	cd api && ../../utils/plume-lib/bin/preplace '^ *&#64;cindex.*' ''
 
 ## This doesn't seem necessary any more
 # javadoc-lookup: doc-javadoc-lookup
@@ -1284,7 +1281,7 @@ api-private: ../plume-lib $(AUTO_GENERATED_FILES)
 # 	find api -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
-../doc/invariants-doc.texinfo: ../plume-lib ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/invariants-doc.texinfo: ../utils/plume-lib ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1292,7 +1289,7 @@ api-private: ../plume-lib $(AUTO_GENERATED_FILES)
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
 
-../doc/config-options.texinfo: ../plume-lib ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/config-options.texinfo: ../utils/plume-lib ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1380,7 +1377,7 @@ ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
-jpp: ../plume-lib ${AUTO_GENERATED_FILES}
+jpp: ../utils/plume-lib ${AUTO_GENERATED_FILES}
 
 # Use this rule if you do not have cpp or for some other reason do not want
 # to refresh the automatically generated .java files.  You should not do

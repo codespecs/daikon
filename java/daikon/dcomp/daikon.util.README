@@ -3,10 +3,10 @@ COPIES OF PLUME-LIB IN DAIKON
 Daikon contains three copies of plume-lib
 (https://github.com/mernst/plume-lib).
 
-1. A clone of the git repository appears at daikon/plume-lib
+1. A clone of the git repository appears at daikon/utils/plume-lib
 The .java files in this copy are never compiled nor run.
 This copy is used for two purposes:
-1a. Shell scripts are run directly from daikon/plume-lib/bin.
+1a. Shell scripts are run directly from daikon/utils/plume-lib/bin.
 1b. Java files are copied from daikon/plume-lib/java/src/plume to
 daikon/java/daikon/util/.
 

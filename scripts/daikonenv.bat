@@ -43,7 +43,7 @@ if "$DAIKONBIN"=="" (
 )
 
 if "$PLUMEBIN"=="" (
-  set PLUMEBIN=%DAIKONDIR%\plume-lib\bin
+  set PLUMEBIN=%DAIKONDIR%\utils\plume-lib\bin
 )
 
 REM set DAIKONCLASS_SOURCES=1

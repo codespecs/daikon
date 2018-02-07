@@ -37,7 +37,7 @@ if [ -z "$DAIKONBIN" ]; then
 fi
 
 if [ -z "$PLUMEBIN" ]; then
-  export PLUMEBIN=${DAIKONDIR}/plume-lib/bin
+  export PLUMEBIN=${DAIKONDIR}/utils/plume-lib/bin
 fi
 
 # export DAIKONCLASS_SOURCES=1

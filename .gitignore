@@ -63,9 +63,7 @@ java/daikon/chicory/Test.inv.out.diff
 java/daikon/chicory/Test.log
 
 # Obtained via Git
-plume-lib
-checklink
-java/.run-google-java-format
+utils
 # Generated from plume-lib
 java/daikon/util
 
