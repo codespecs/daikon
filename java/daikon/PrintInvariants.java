@@ -1151,7 +1151,7 @@ public final class PrintInvariants {
    *
    * <p>If the content is null, prints nothing.
    */
-  private static void printXmlTagged(PrintWriter out, String tag, Object content) {
+  private static void printXmlTagged(PrintWriter out, String tag, /*@Nullable*/ Object content) {
     if (content == null) {
       return;
     }
