@@ -579,15 +579,11 @@ public final class PrintInvariants {
 
     String toPrint = "";
     String dashes =
-        "--------------------------------------------"
-            + "-------------------------------"
-            + lineSep;
+        "---------------------------------------------------------------------------" + lineSep;
 
     if (!(ppt instanceof PptConditional)) {
       toPrint +=
-          "==============================================="
-              + "============================"
-              + lineSep;
+          "===========================================================================" + lineSep;
       toPrint += (ppt.name() + lineSep);
     }
 
@@ -705,6 +701,9 @@ public final class PrintInvariants {
     }
     PrintWriter pw =
         new PrintWriter(new BufferedWriter(new OutputStreamWriter(out_stream, UTF_8)), true);
+    if (wrap_xml) {
+      pw.println("<INVARIANTS>");
+    }
 
     PptTopLevel combined_exit = null;
     boolean enable_exit_swap = true; // !Daikon.dkconfig_df_bottom_up;
@@ -779,6 +778,10 @@ public final class PrintInvariants {
       print_invariants_maybe(combined_exit, pw, all_ppts);
     }
 
+    if (wrap_xml) {
+      pw.println("</INVARIANTS>");
+    }
+
     pw.flush();
   }
 
@@ -849,7 +852,13 @@ public final class PrintInvariants {
     }
     // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
-    out.println("===========================================================================");
+    String DASHES = "===========================================================================";
+
+    if (wrap_xml) {
+      out.println("<!-- " + DASHES + " -->");
+    } else {
+      out.println(DASHES);
+    }
 
     print_invariants(ppt, out, all_ppts);
 
@@ -863,18 +872,28 @@ public final class PrintInvariants {
   }
 
   /**
-   * If Daikon.output_num_samples is enabled, prints the number of samples for the specified ppt.
-   * Also prints all of the variables for the ppt if Daikon.output_num_samples is enabled or the
-   * format is ESCJAVA, JML, or DBCJAVA.
+   * Prints the program point name. If Daikon.output_num_samples is enabled, prints the number of
+   * samples for the specified ppt. Also prints all of the variables for the ppt if
+   * Daikon.output_num_samples is enabled or the format is ESCJAVA, JML, or DBCJAVA.
    */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
 
-    if (Daikon.output_num_samples) {
-      out.println(ppt.name() + "  " + nplural(ppt.num_samples(), "sample"));
+    if (!wrap_xml) {
+      out.print(ppt.name());
     } else {
-      out.println(ppt.name());
+      out.println("<PPT>");
+      printXmlTagged(out, "PPTNAME", ppt.name());
     }
+    if (Daikon.output_num_samples) {
+      out.print("  ");
+      if (!wrap_xml) {
+        out.print(nplural(ppt.num_samples(), "sample"));
+      } else {
+        printXmlTagged(out, "SAMPLES", ppt.num_samples());
+      }
+    }
+    out.println();
 
     // Note that this code puts out the variable list using daikon formatting
     // for the names and not the output specific format.  It also includes
@@ -1103,21 +1122,54 @@ public final class PrintInvariants {
 
     if (wrap_xml) {
       out.print("<INVINFO>");
-      out.print("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
-      out.print("<INV> ");
-      out.print(inv_rep);
-      out.print(" </INV> ");
-      out.print(" <SAMPLES> " + Integer.toString(inv.ppt.num_samples()) + " </SAMPLES> ");
-      out.print(" <DAIKON> " + inv.format_using(OutputFormat.DAIKON) + " </DAIKON> ");
-      out.print(" <DAIKONCLASS> " + inv.getClass().toString() + " </DAIKONCLASS> ");
-      out.print(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
-      out.println("</INVINFO>");
+      out.print(" ");
+      printXmlTagged(out, "PARENT", inv.ppt.parent.ppt_name.getPoint());
+      out.print(" ");
+      printXmlTagged(out, "INV", inv_rep);
+      out.print(" ");
+      printXmlTagged(out, "SAMPLES", Integer.toString(inv.ppt.num_samples()));
+      out.print(" ");
+      printXmlTagged(out, "DAIKON", inv.format_using(OutputFormat.DAIKON));
+      out.print(" ");
+      printXmlTagged(out, "DAIKONCLASS", inv.getClass().toString());
+      out.print(" ");
+      printXmlTagged(out, "METHOD", inv.ppt.parent.ppt_name.getSignature());
+      out.print(" ");
+      out.print("</INVINFO>");
+      out.println();
     } else {
       out.println(inv_rep);
     }
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(inv.repr());
     }
+  }
+
+  /**
+   * Given an arbitrary string or object, prints an XML start tag, the string (or the object's
+   * {@code toString()}) XML-quoted, and then the XML end tag, all on one line.
+   *
+   * <p>If the content is null, prints nothing.
+   */
+  private static void printXmlTagged(PrintWriter out, String tag, Object content) {
+    if (content == null) {
+      return;
+    }
+    out.print("<");
+    out.print(tag);
+    out.print(">");
+    String quoted =
+        content
+            .toString()
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;");
+    out.print(quoted);
+    out.print("</");
+    out.print(tag);
+    out.print(">");
   }
 
   /**
@@ -1395,6 +1447,9 @@ public final class PrintInvariants {
         inv = guarded;
       }
       print_invariant(inv, out, index, ppt);
+    }
+    if (wrap_xml) {
+      out.println("</PPT>");
     }
 
     if (dkconfig_replace_prestate) {
