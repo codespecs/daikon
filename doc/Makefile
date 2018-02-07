@@ -68,7 +68,7 @@ daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images
 daikon-fast: daikon.texinfo
 	$(MAKE) daikon-html
 
-# These don't update -- they just ensure that the directory exists.
+## These two rules create the directories if absent but don't update them.
 ../utils/html-tools:
 	make -C .. update-html-tools
 
