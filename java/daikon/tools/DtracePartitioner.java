@@ -99,7 +99,13 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     return invocation.substring(0, invocation.indexOf(lineSep));
   }
 
-  /** Same as {@link #patchValues(List, boolean)} with second arg=false. */
+  /**
+   * Same as {@link #patchValues(List, boolean)} with second arg=false.
+   *
+   * @param enters a list of program point names
+   * @return an ArrayList containing all of the elements of 'enters'. The original order is NOT
+   *     guaranteed.
+   */
   public List<String> patchValues(List<String> enters) {
     return patchValues(enters, false);
   }
@@ -109,6 +115,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    *
    * <p>Modifies: none
    *
+   * @param enters a list of program point names
    * @param includeUnreturnedEnters ensures that any ENTER ppt invocations will definitely have a
    *     corresponding EXIT ppt invocation following them
    * @return an ArrayList containing all of the elements of 'enters'. The original order is NOT
