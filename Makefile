@@ -767,7 +767,7 @@ endif
 update-plume-lib:
 ifndef NONETWORK
 	if test -d utils/plume-lib/.git ; then \
-	  (cd utils/plume-lib && (git pull -v || echo "git pull failed")) \
+	  (cd utils/plume-lib && (git pull -q || echo "git pull failed")) \
 	elif ! test -d utils/plume-lib ; then \
 	  (mkdir -p utils && git clone -q --depth 1 https://github.com/mernst/plume-lib.git utils/plume-lib) \
 	fi
