@@ -742,7 +742,7 @@ showvars:
 	${MAKE} -C java showvars
 
 # If .git does not exist, then directory was created from a daikon archive file.
-# The "git pull" command fails under Fedora 23, for mysterious reasons.
+# The "git pull" command fails under Centos and Fedora 23, for mysterious reasons.
 update-libs: update-checklink update-html-tools update-plume-lib update-run-google-java-format
 .PHONY: update-libs update-checklink update-html-tools update-plume-lib update-run-google-java-format
 
@@ -751,7 +751,7 @@ ifndef NONETWORK
 	if test -d utils/checklink/.git ; then \
 	  (cd utils/checklink && git pull -q) \
 	elif ! test -d utils/checklink ; then \
-	  (mkdir -p utils && git clone -q https://github.com/plume-lib/checklink.git utils/checklink) \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink) \
 	fi
 endif
 
@@ -760,16 +760,16 @@ ifndef NONETWORK
 	if test -d utils/html-tools/.git ; then \
 	  (cd utils/html-tools && git pull -q) \
 	elif ! test -d utils/html-tools ; then \
-	  (mkdir -p utils && git clone -q https://github.com/plume-lib/html-tools.git utils/html-tools) \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools) \
 	fi
 endif
 
 update-plume-lib:
 ifndef NONETWORK
 	if test -d utils/plume-lib/.git ; then \
-	  (cd utils/plume-lib && git pull -q) \
+	  (cd utils/plume-lib && (git pull -q || echo "git pull failed")) \
 	elif ! test -d utils/plume-lib ; then \
-	  (mkdir -p utils && git clone -q https://github.com/mernst/plume-lib.git utils/plume-lib) \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/mernst/plume-lib.git utils/plume-lib) \
 	fi
 endif
 
@@ -778,7 +778,7 @@ ifndef NONETWORK
 	if test -d utils/run-google-java-format/.git ; then \
 	  (cd utils/run-google-java-format && git pull -q) \
 	elif ! test -d utils/run-google-java-format ; then \
-	  (mkdir -p utils && git clone -q https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format) \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format) \
 	fi
 endif
 

@@ -610,8 +610,12 @@ plume-copy : daikon/util/README
 PLUMEJAVA=../utils/plume-lib/java
 PLUME=${PLUMEJAVA}/src/plume
 
+## These two rules create the directories if absent but don't update them.
 ../utils/plume-lib:
 	${MAKE} -C .. update-plume-lib
+
+../utils/html-tools:
+	${MAKE} -C .. update-html-tools
 
 # Watch out if you have another copy of plume that is earlier on your classpath.
 .PHONY: update-plume-lib
@@ -1258,7 +1262,7 @@ javadoc: api
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
 .PHONY: api
-api: ../utils/plume-lib $(JAVA_FILES)
+api: ../utils/plume-lib ../utils/html-tools $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
