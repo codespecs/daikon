@@ -1,8 +1,8 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.util.UtilMDE;
 import java.lang.reflect.*;
+import org.plumelib.bcelutil.JvmUtil;
 
 /*>>>
 import org.checkerframework.checker.signature.qual.*;
@@ -167,7 +167,7 @@ public abstract class DaikonWriter {
     for (Class<?> arg : args) {
       if (arg_str.length() > 0) arg_str += ", ";
       if (arg.isArray()) {
-        arg_str += UtilMDE.fieldDescriptorToBinaryName(arg.getName());
+        arg_str += JvmUtil.fieldDescriptorToBinaryName(arg.getName());
       } else {
         arg_str += arg.getName();
       }

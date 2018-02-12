@@ -13,6 +13,7 @@ import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.plumelib.bcelutil.JvmUtil;
 import plume.UtilMDE;
 
 /*>>>
@@ -1360,7 +1361,7 @@ public class Ast {
     if (c.isPrimitive()) {
       return c.getName();
     } else if (c.isArray()) {
-      return UtilMDE.fieldDescriptorToBinaryName(c.getName());
+      return JvmUtil.fieldDescriptorToBinaryName(c.getName());
     } else {
       return c.getName();
     }

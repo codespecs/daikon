@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.plumelib.bcelutil.JvmUtil;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 import plume.SimpleLog;
-import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -413,9 +413,9 @@ public class AnnotateNullable {
     @SuppressWarnings(
         "signature") // application invariant: returnVar.type.toString() is a binary name (if returnVar is non-null), because we are processing a Java program
     String returnType =
-        returnVar == null ? "V" : UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
+        returnVar == null ? "V" : JvmUtil.binaryNameToFieldDescriptor(returnVar.type.toString());
 
-    return method + UtilMDE.arglistToJvm(java_args) + returnType;
+    return method + JvmUtil.arglistToJvm(java_args) + returnType;
   }
 
   /**
