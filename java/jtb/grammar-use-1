@@ -1,3 +1,6 @@
+# See documentation of this file in the README file.
+
+
 fgrep -rn AdditiveExpression
 tools/jtb/Ast.java
 

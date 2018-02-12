@@ -1,3 +1,6 @@
+# See documentation of this file in the README file.
+
+
 split/OrigFixer.java:59:  public void visit(PrimaryExpression n) {
 split/OrigFixer.java:61:      NodeToken origToken =  ((Name) n.f0.f0.choice).f0;
 split/OrigFixer.java:63:      NodeToken openParen =
