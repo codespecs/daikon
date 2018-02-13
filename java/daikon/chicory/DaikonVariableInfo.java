@@ -6,6 +6,7 @@ import daikon.util.UtilMDE;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
+import org.plumelib.bcelutil.JvmUtil;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -575,7 +576,7 @@ public abstract class DaikonVariableInfo
 
               // Get class type of the class variable
               try {
-                sibClass = UtilMDE.classForName(UtilMDE.binaryNameToClassGetName(sibType));
+                sibClass = UtilMDE.classForName(JvmUtil.binaryNameToClassGetName(sibType));
               } catch (ClassNotFoundException e) {
                 throw new Error(e);
               }
