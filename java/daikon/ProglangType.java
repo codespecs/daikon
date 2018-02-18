@@ -750,7 +750,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   public static String toString(ProglangType[] types) {
     StringBuilderDelimited out = new StringBuilderDelimited(", ");
     for (int i = 0; i < types.length; i++) {
-      out.add(types[i].toString());
+      out.append(types[i]);
     }
     return ("[" + out + "]");
   }
