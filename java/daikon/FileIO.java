@@ -767,7 +767,7 @@ public final class FileIO {
       if (line == null || line.equals("")) {
         break;
       }
-      result.append(line);
+      result.add(line);
       if (isComment(line)) {
         continue;
       }
@@ -1460,9 +1460,9 @@ public final class FileIO {
       // a blank line.  We can't depend on that, though.
       if (isComment(line)) {
         StringBuilderDelimited commentLines = new StringBuilderDelimited(lineSep);
-        commentLines.append(line);
+        commentLines.add(line);
         while (nextLineIsComment(reader)) {
-          commentLines.append(reader.readLine());
+          commentLines.add(reader.readLine());
         }
         state.payload = commentLines.toString();
         state.rtype = RecordType.COMMENT;
@@ -2865,7 +2865,7 @@ public final class FileIO {
       E /*@NonNull*/ [] all = enum_class.getEnumConstants();
       StringBuilderDelimited msg = new StringBuilderDelimited(", ");
       for (E e : all) {
-        msg.append(String.format("'%s'", e.name().toLowerCase()));
+        msg.add(String.format("'%s'", e.name().toLowerCase()));
       }
       decl_error(state, "'%s' found where %s expected", str, msg);
       throw new Error("execution cannot get to here, previous line threw an error");
