@@ -5,8 +5,7 @@ For external libraries in this directory, we supply both the original
 distribution (for completeness) and also, if the original distribution is
 not a .jar file, the .jar file (for use by Java).
 
-bcel-util.jar : https://github.com/plume-lib/bcel-util
-- using JDK 7, run "./gradlew build"
+bcel-util-all-0.0.4.jar : https://search.maven.org/#search%7Cga%7C1%7Cbcel-util
 
 java-getopt.jar : http://www.urbanophile.com/arenn/coding/download.html
 - GNU getopt 1.0.8 command-line option parser

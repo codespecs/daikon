@@ -589,7 +589,7 @@ update-dist-version-file:
 	@cat doc/VERSION
 
 JAR_FILES = \
-$(INV_DIR)/java/lib/bcel-util.jar \
+$(INV_DIR)/java/lib/bcel-util-all-0.0.4.jar \
 $(INV_DIR)/java/lib/java-getopt.jar \
 $(INV_DIR)/java/lib/options-all-0.3.1.jar \
 $(INV_DIR)/java/lib/plume.jar
@@ -611,10 +611,11 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/bcel-util.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/options-all-0.3.1.jar
+	# plume.jar goes first so it can be overridden by subsequent libraries
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/bcel-util-all-0.0.4.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/options-all-0.3.1.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \

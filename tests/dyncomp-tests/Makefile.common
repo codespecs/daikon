@@ -37,7 +37,7 @@ DIFF_NAME ?= $(shell basename `pwd`)
 BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
-CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/bcel-util.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar:${DAIKONDIR}/daikon.jar
+CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar:${DAIKONDIR}/daikon.jar
 
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
 DAIKON := java -Xmx2500M -XX:MaxPermSize=960M -cp ${CLASSPATH} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true
