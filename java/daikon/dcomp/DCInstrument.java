@@ -2399,6 +2399,7 @@ class DCInstrument extends StackMapUtils {
 
     // Create the interface type that indicates whether or not this method exists
     String cap_method_name = method_name.substring(0, 1).toUpperCase() + method_name.substring(1);
+    @SuppressWarnings("signature") // string manipulation
     ObjectType dcomp_interface = new ObjectType("daikon.dcomp.DComp" + cap_method_name);
 
     // For now only handle methods without any arguments
