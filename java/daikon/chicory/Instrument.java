@@ -105,13 +105,14 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
   @Override
   public byte /*@Nullable*/ [] transform(
       ClassLoader loader,
-      /*@InternalForm*/ String className,
+      /*@InternalFormForNonArray*/ String className,
       Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    String fullClassName = className.replace("/", ".");
+    @SuppressWarnings("signature") // string manipulation (checker should handle)
+    /*@BinaryNameForNonArray*/ String fullClassName = className.replace("/", ".");
     // String fullClassName = className;
 
     debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
@@ -342,7 +343,7 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
   }
 
   // create a <clinit> method, if none exists; guarantees we have this hook
-  private Method createClinit(ClassGen cg, String fullClassName) {
+  private Method createClinit(ClassGen cg, /*@BinaryNameForNonArray*/ String fullClassName) {
     InstructionFactory factory = new InstructionFactory(cg);
 
     InstructionList il = new InstructionList();
