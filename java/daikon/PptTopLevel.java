@@ -3325,9 +3325,9 @@ public class PptTopLevel extends Ppt {
       for (VarInfo v : vars) {
         String name = v.name();
         if (v.missingOutOfBounds()) name += "{MOB}";
-        set_str.append(name);
+        set_str.add(name);
       }
-      out.append("[" + set_str + "]");
+      out.add("[" + set_str + "]");
     }
 
     return (out.toString());

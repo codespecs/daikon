@@ -517,12 +517,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           boolean found = false;
           for (VarParent vp : vi.parents) {
             if (vp.parent_relation_id == p.parent_relation_id) {
-              args.append(vp.parent_variable);
+              args.add(vp.parent_variable);
               found = true;
             }
           }
           if (!found) {
-            args.append(vi.name());
+            args.add(vi.name());
           }
         }
         p.parent_variable = String.format("%s(%s)", name, args.toString());
@@ -2696,9 +2696,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     StringBuilderDelimited sb = new StringBuilderDelimited(", ");
     for (int i = 0; i < vis.length; i++) {
       if (vis[i] == null) {
-        sb.append("null");
+        sb.add("null");
       } else {
-        sb.append(vis[i].name());
+        sb.add(vis[i].name());
       }
     }
     return sb.toString();
