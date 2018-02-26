@@ -787,11 +787,11 @@ ifndef NONETWORK
 	fi
 endif
 
-update-plume-jar: plume-lib-update
+update-plume-jar: update-plume-lib
 ifndef CHECKERFRAMEWORK
 	$(error CHECKERFRAMEWORK is not set)
 endif
-	make -D utils/plume-lib/java clean jar verify-plume-jar-classfile-version
+	make -C utils/plume-lib/java clean jar verify-plume-jar-classfile-version
 	\cp -pf utils/plume-lib/java/plume.jar java/lib/
 
 .PHONY: git-hooks
