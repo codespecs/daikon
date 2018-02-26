@@ -1,6 +1,5 @@
 package daikon.chicory;
 
-import daikon.util.BCELUtil;
 import daikon.util.SimpleLog;
 import java.io.IOException;
 import java.util.Arrays;
@@ -9,6 +8,7 @@ import java.util.Map;
 import org.apache.bcel.Const;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
+import org.plumelib.bcelutil.BcelUtil;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -872,7 +872,7 @@ public abstract class StackMapUtils {
     initial_locals_count++;
 
     // Update the method's argument information.
-    arg_types = BCELUtil.postpendToArray(arg_types, arg_type);
+    arg_types = BcelUtil.postpendToArray(arg_types, arg_type);
     String[] arg_names = add_string(mgen.getArgumentNames(), arg_name);
     mgen.setArgumentTypes(arg_types);
     mgen.setArgumentNames(arg_names);
