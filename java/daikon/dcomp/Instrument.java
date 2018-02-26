@@ -1,13 +1,13 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
-import daikon.util.BCELUtil;
 import java.io.*;
 import java.lang.instrument.*;
 import java.security.*;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
+import org.plumelib.bcelutil.BcelUtil;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -55,7 +55,7 @@ public class Instrument implements ClassFileTransformer {
     boolean in_jdk = false;
 
     // Check if class is in JDK
-    if (BCELUtil.in_jdk_internalform(className)) {
+    if (BcelUtil.inJdkInternalform(className)) {
       // If we are not using an instrumented JDK, then skip this class.
       if (DynComp.no_jdk) {
         return null;
@@ -102,7 +102,7 @@ public class Instrument implements ClassFileTransformer {
         if (DynComp.debug) {
           System.out.printf("Dumping %s to %s%n", njc.getClassName(), debug_bin_dir);
           njc.dump(new File(debug_bin_dir, njc.getClassName() + ".class"));
-          BCELUtil.dump(njc, debug_bin_dir);
+          BcelUtil.dump(njc, debug_bin_dir);
         }
         return (njc.getBytes());
       }

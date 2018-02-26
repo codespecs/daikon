@@ -7,6 +7,8 @@ not a .jar file, the .jar file (for use by Java).
 
 bcel-util-all-0.0.4.jar : https://search.maven.org/#search%7Cga%7C1%7Cbcel-util
 
+commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
+
 java-getopt.jar : http://www.urbanophile.com/arenn/coding/download.html
 - GNU getopt 1.0.8 command-line option parser
 - Distributed with java files alongside class files in the jar file.

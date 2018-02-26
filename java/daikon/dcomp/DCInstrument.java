@@ -5,7 +5,6 @@ import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
 import daikon.chicory.MethodInfo;
 import daikon.chicory.StackMapUtils;
-import daikon.util.BCELUtil;
 import daikon.util.EntryReader;
 import daikon.util.SimpleLog;
 import java.io.*;
@@ -19,6 +18,7 @@ import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.*;
 import org.apache.bcel.verifier.structurals.*;
 import org.apache.commons.io.*;
+import org.plumelib.bcelutil.BcelUtil;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -361,12 +361,12 @@ class DCInstrument extends StackMapUtils {
         }
 
         // Remove any LVTT tables
-        BCELUtil.remove_local_variable_type_tables(mg);
+        BcelUtil.removeLocalVariableTypeTables(mg);
         // In future version of BCEL the line above
         // will probably be replace by:
         // mg.removeLocalVariableTypeTable();
 
-        if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
+        if (double_client && !BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg)) {
           // doubling
           try {
             if (has_code) {
@@ -394,7 +394,7 @@ class DCInstrument extends StackMapUtils {
               // add the java.lang.DCompMarker argument
               add_dcomp_arg(mg);
               // Remove any LVTT tables
-              BCELUtil.remove_local_variable_type_tables(mg);
+              BcelUtil.removeLocalVariableTypeTables(mg);
               // try again
               gen.addMethod(mg.getMethod());
             } else {
@@ -404,7 +404,7 @@ class DCInstrument extends StackMapUtils {
         } else {
           // replacing
           gen.replaceMethod(m, mg.getMethod());
-          if (BCELUtil.is_main(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
+          if (BcelUtil.isMain(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
         }
         debug_transform.exdent();
       } catch (Throwable t) {
@@ -558,16 +558,16 @@ class DCInstrument extends StackMapUtils {
         }
 
         // Remove any LVTT tables
-        BCELUtil.remove_local_variable_type_tables(mg);
+        BcelUtil.removeLocalVariableTypeTables(mg);
         // In future version of BCEL the line above
         // will probably be replace by:
         // mg.removeLocalVariableTypeTable();
 
-        if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
+        if (double_client && !BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg)) {
           gen.addMethod(mg.getMethod());
         } else {
           gen.replaceMethod(m, mg.getMethod());
-          if (BCELUtil.is_main(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
+          if (BcelUtil.isMain(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
         }
         debug_transform.exdent();
       } catch (Throwable t) {
@@ -644,7 +644,7 @@ class DCInstrument extends StackMapUtils {
         // Don't modify class initialization methods.  They can't affect
         // user comparability and there isn't any way to get a second
         // copy of them.
-        if (BCELUtil.is_clinit(m)) {
+        if (BcelUtil.isClinit(m)) {
           continue;
         }
 
@@ -700,7 +700,7 @@ class DCInstrument extends StackMapUtils {
         }
 
         // Remove any LVTT tables
-        BCELUtil.remove_local_variable_type_tables(mg);
+        BcelUtil.removeLocalVariableTypeTables(mg);
         // In future version of BCEL the line above
         // will probably be replace by:
         // mg.removeLocalVariableTypeTable();
@@ -779,7 +779,7 @@ class DCInstrument extends StackMapUtils {
         // Don't modify class initialization methods.  They can't affect
         // user comparability and there isn't any way to get a second
         // copy of them.
-        if (BCELUtil.is_clinit(m)) {
+        if (BcelUtil.isClinit(m)) {
           continue;
         }
 
@@ -833,7 +833,7 @@ class DCInstrument extends StackMapUtils {
         }
 
         // Remove any LVTT tables
-        BCELUtil.remove_local_variable_type_tables(mg);
+        BcelUtil.removeLocalVariableTypeTables(mg);
         // In future version of BCEL the line above
         // will probably be replace by:
         // mg.removeLocalVariableTypeTable();
@@ -1056,7 +1056,7 @@ class DCInstrument extends StackMapUtils {
     // initialized - but this is hard to determine without a full
     // analysis of the code.  Hence, we just skip these methods.
     if (!mg.isStatic()) {
-      if (BCELUtil.is_constructor(mg)) {
+      if (BcelUtil.isConstructor(mg)) {
         global_catch_il = null;
         global_exception_handler = null;
         return;
@@ -1357,7 +1357,7 @@ class DCInstrument extends StackMapUtils {
     il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
 
     // Push the object.  Null if this is a static method or a constructor
-    if (mg.isStatic() || (method_name.equals("enter") && BCELUtil.is_constructor(mg))) {
+    if (mg.isStatic() || (method_name.equals("enter") && BcelUtil.isConstructor(mg))) {
       il.append(new ACONST_NULL());
     } else { // must be an instance method
       il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
@@ -1443,7 +1443,7 @@ class DCInstrument extends StackMapUtils {
     //                                 tag_frame_local.getIndex()));
 
     // Push the object.  Null if this is a static method or a constructor
-    if (mg.isStatic() || (method_name.equals("enter_refs_only") && BCELUtil.is_constructor(mg))) {
+    if (mg.isStatic() || (method_name.equals("enter_refs_only") && BcelUtil.isConstructor(mg))) {
       il.append(new ACONST_NULL());
     } else { // must be an instance method
       il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
@@ -2118,7 +2118,7 @@ class DCInstrument extends StackMapUtils {
           // call at runtime.
           // These is just a hack to get through PASCALI corpus.
           String super_class = gen.getSuperclassName();
-          if ((!super_class.equals("java.lang.Object")) && (BCELUtil.in_jdk(super_class))) {
+          if ((!super_class.equals("java.lang.Object")) && (BcelUtil.inJdk(super_class))) {
             callee_instrumented = false;
           }
         }
@@ -2171,7 +2171,7 @@ class DCInstrument extends StackMapUtils {
 
       // Add the DCompMarker argument so that it calls the instrumented version
       il.append(new ACONST_NULL());
-      Type[] new_arg_types = BCELUtil.postpendToArray(arg_types, dcomp_marker);
+      Type[] new_arg_types = BcelUtil.postpendToArray(arg_types, dcomp_marker);
       il.append(
           ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
 
@@ -2233,7 +2233,7 @@ class DCInstrument extends StackMapUtils {
           // call at runtime.
           // These is just a hack to get through PASCALI corpus.
           String super_class = gen.getSuperclassName();
-          if ((!super_class.equals("java.lang.Object")) && (BCELUtil.in_jdk(super_class))) {
+          if ((!super_class.equals("java.lang.Object")) && (BcelUtil.inJdk(super_class))) {
             callee_instrumented = false;
           }
         }
@@ -2284,7 +2284,7 @@ class DCInstrument extends StackMapUtils {
 
       // Add the DCompMarker argument so that it calls the instrumented version
       il.append(new ACONST_NULL());
-      Type[] new_arg_types = BCELUtil.postpendToArray(arg_types, dcomp_marker);
+      Type[] new_arg_types = BcelUtil.postpendToArray(arg_types, dcomp_marker);
       il.append(
           ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
 
@@ -2322,7 +2322,7 @@ class DCInstrument extends StackMapUtils {
     // if (classname.startsWith("minst.Minst")) return false;
 
     // If its not a JDK class, presume its instrumented.
-    if (!BCELUtil.in_jdk(classname)) return true;
+    if (!BcelUtil.inJdk(classname)) return true;
 
     // We have decided not to use the instrumented version of Random as
     // the method generates values based on an initial seed value.
@@ -2391,7 +2391,7 @@ class DCInstrument extends StackMapUtils {
     InstructionList il = new InstructionList();
 
     Type[] arg_types = invoke.getArgumentTypes(pool);
-    Type[] new_arg_types = BCELUtil.postpendToArray(arg_types, dcomp_marker);
+    Type[] new_arg_types = BcelUtil.postpendToArray(arg_types, dcomp_marker);
     String method_name = invoke.getMethodName(pool);
     Type ret_type = invoke.getReturnType(pool);
     String classname = invoke.getClassName(pool);
@@ -2585,7 +2585,7 @@ class DCInstrument extends StackMapUtils {
       // Add the DCompMarker argument so that the instrumented version
       // will be used
       il.append(new ACONST_NULL());
-      Type[] new_arg_types = BCELUtil.postpendToArray(arg_types, dcomp_marker);
+      Type[] new_arg_types = BcelUtil.postpendToArray(arg_types, dcomp_marker);
       il.append(
           ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
 
@@ -3137,7 +3137,7 @@ class DCInstrument extends StackMapUtils {
     debug_track.log("Considering tracking ppt %s %s%n", classname, pptname);
 
     // Don't track any JDK classes
-    if (BCELUtil.in_jdk(classname)) {
+    if (BcelUtil.inJdk(classname)) {
       debug_track.log("  jdk class, return false%n");
       return false;
     }
@@ -4231,13 +4231,13 @@ class DCInstrument extends StackMapUtils {
    */
   public boolean tag_fields_ok(/*@ClassGetName*/ String classname) {
 
-    if (BCELUtil.is_constructor(mgen))
+    if (BcelUtil.isConstructor(mgen))
       if (!constructor_is_initialized) {
         return false;
       }
 
     if (!jdk_instrumented) {
-      if (BCELUtil.in_jdk(classname)) {
+      if (BcelUtil.inJdk(classname)) {
         return false;
       }
     }
@@ -4705,10 +4705,10 @@ class DCInstrument extends StackMapUtils {
   public void add_dcomp_arg(MethodGen mg) {
 
     // Don't modify main or the JVM won't be able to find it.
-    if (BCELUtil.is_main(mg)) return;
+    if (BcelUtil.isMain(mg)) return;
 
     // Don't modify class init methods, they don't take arguments
-    if (BCELUtil.is_clinit(mg)) return;
+    if (BcelUtil.isClinit(mg)) return;
 
     // Add the dcomp marker argument to indicate this is the
     // instrumented version of the method.
@@ -4799,7 +4799,7 @@ class DCInstrument extends StackMapUtils {
     il.append(InstructionFactory.createReturn(ret_type));
 
     // Create the method
-    Type[] arg_types = BCELUtil.postpendToArray(mg.getArgumentTypes(), dcomp_marker);
+    Type[] arg_types = BcelUtil.postpendToArray(mg.getArgumentTypes(), dcomp_marker);
     String[] arg_names = add_string(mg.getArgumentNames(), "marker");
     MethodGen dcomp_mg =
         new MethodGen(
