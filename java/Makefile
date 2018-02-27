@@ -873,7 +873,7 @@ endif
 # override (not augment) any other use of -Alint in this Makefile.
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 7 rather than version 8).
-CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK}/checker/lib/javadoc.astub
+CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK}/checker/resources/javadoc.astub
 
 ## All of the following targets need to depend on "compile".
 
