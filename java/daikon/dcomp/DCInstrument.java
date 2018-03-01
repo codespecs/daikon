@@ -3449,7 +3449,7 @@ class DCInstrument extends InstructionListUtils {
     throw new Error("couldn't find any typed instructions");
   }
 
-    /**
+  /**
    * Returns whether or not the invoke specified invokes a native method. This requires that the
    * class that contains the method to be loaded.
    */

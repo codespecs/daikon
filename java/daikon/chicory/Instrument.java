@@ -32,7 +32,6 @@ import org.apache.bcel.generic.InstructionList;
 import org.apache.bcel.generic.InstructionTargeter;
 import org.apache.bcel.generic.LineNumberGen;
 import org.apache.bcel.generic.LocalVariableGen;
-import org.apache.bcel.generic.LocalVariableInstruction;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUSH;
@@ -140,7 +139,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     /*@BinaryNameForNonArray*/ String fullClassName = className.replace("/", ".");
     // String fullClassName = className;
 
-// new Throwable().printStackTrace();
+    // new Throwable().printStackTrace();
 
     debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
 
@@ -281,7 +280,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         Instruction inst = ih.getInstruction();
 
         // Get the translation for this instruction (if any)
-        InstructionList new_il = xform_clinit(cg, cg.getConstantPool(), fullClassName, inst, context);
+        InstructionList new_il =
+            xform_clinit(cg, cg.getConstantPool(), fullClassName, inst, context);
 
         // Remember the next instruction to process
         InstructionHandle next_ih = ih.getNext();
