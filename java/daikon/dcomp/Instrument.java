@@ -114,4 +114,21 @@ public class Instrument implements ClassFileTransformer {
       throw new RuntimeException("Unexpected error", e);
     }
   }
+
+  /**
+   * Returns whether or not the specified class is part of dcomp itself (and thus should not be
+   * instrumented). Some Daikon classes that are used by DynComp are included here as well.
+   */
+  /*@Pure*/
+  private static boolean is_dcomp(String classname) {
+
+    if ((classname.startsWith("daikon/dcomp/") && !classname.startsWith("daikon/dcomp/Test"))
+        || classname.startsWith("daikon/chicory/")) {
+      return true;
+    }
+    if (classname.equals("daikon/PptTopLevel$PptType")) return true;
+    if (classname.startsWith("org/plumelib/bcelutil")) return true;
+    if (classname.startsWith("daikon/util/UtilMDE")) return true;
+    return false;
+  }
 }
