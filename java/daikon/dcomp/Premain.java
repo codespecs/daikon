@@ -133,7 +133,7 @@ public class Premain {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
 
-    // check that we got the latest version of BCEL 6.1 that includes LocalVariable fix.
+    // check that we got a newer version of BCEL that includes the LocalVariable fix.
     try {
       Class<?> c = loader.loadClass("org.apache.bcel.generic.LocalVariableGen");
       c.getMethod("getLiveToEnd", (Class<?>[]) null);
