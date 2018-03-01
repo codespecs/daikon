@@ -12,6 +12,7 @@ import org.plumelib.bcelutil.BcelUtil;
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
 */
 
 public class Instrument implements ClassFileTransformer {
