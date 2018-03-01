@@ -5,10 +5,16 @@ import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.logging.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

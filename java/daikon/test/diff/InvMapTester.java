@@ -3,7 +3,9 @@ package daikon.test.diff;
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.Invariant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import junit.framework.*;
 
 /*>>>

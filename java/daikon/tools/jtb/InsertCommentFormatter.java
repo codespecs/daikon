@@ -1,9 +1,9 @@
 package daikon.tools.jtb;
 
-import java.util.*;
+import java.util.List;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.*;
+import plume.UtilMDE;
 
 /**
  * InsertCommentFormatter is a visitor that does not actually insert comments, but instead corrects

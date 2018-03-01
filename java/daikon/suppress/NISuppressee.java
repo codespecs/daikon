@@ -5,9 +5,10 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
 import daikon.inv.unary.*;
-import java.lang.reflect.*;
-import java.util.*;
-import plume.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

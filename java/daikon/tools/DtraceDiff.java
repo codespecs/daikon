@@ -7,10 +7,17 @@ import static daikon.tools.nullness.NullnessUtils.*;
 import daikon.*;
 import daikon.config.Configuration;
 import gnu.getopt.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import plume.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+import plume.RegexUtil;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

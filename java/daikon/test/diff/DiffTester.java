@@ -8,9 +8,11 @@ import daikon.inv.unary.scalar.*;
 import daikon.split.*;
 import daikon.split.misc.*;
 import daikon.test.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import junit.framework.*;
 
 @SuppressWarnings("nullness") // testing code

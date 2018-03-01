@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
 import daikon.test.*;
-import java.util.*;
+import java.util.Arrays;
 import junit.framework.*;
 
 /*>>>

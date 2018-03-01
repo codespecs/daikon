@@ -36,7 +36,15 @@ package daikon.chicory;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.Reader;
+import java.io.Writer;
 
 /**
  * StreamRedirectThread is a thread that copies its input to its output and terminates when it

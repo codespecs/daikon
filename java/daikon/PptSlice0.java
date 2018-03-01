@@ -3,8 +3,8 @@ package daikon;
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 
 import daikon.inv.*;
-import java.util.*;
-import plume.*;
+import java.util.HashSet;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

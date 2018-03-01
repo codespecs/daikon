@@ -4,8 +4,11 @@ import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.util.SimpleLog;
 import daikon.util.WeakIdentityHashMap;
-import java.lang.ref.*;
-import java.util.*;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

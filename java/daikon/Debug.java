@@ -1,11 +1,13 @@
 package daikon;
 
 import daikon.inv.*;
-import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import plume.ArraysMDE;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

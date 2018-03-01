@@ -2,9 +2,11 @@ package daikon.inv.unary.string;
 
 import daikon.*;
 import daikon.inv.*;
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

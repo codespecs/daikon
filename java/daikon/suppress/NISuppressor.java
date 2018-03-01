@@ -6,10 +6,9 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.unary.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.logging.*;
-import plume.*;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

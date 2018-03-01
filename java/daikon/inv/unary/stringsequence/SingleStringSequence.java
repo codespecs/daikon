@@ -3,7 +3,7 @@ package daikon.inv.unary.stringsequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.UnaryInvariant;
-import plume.*;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

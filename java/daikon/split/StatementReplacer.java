@@ -1,7 +1,8 @@
 package daikon.split;
 
 import daikon.tools.jtb.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;

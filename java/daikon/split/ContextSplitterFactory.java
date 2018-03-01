@@ -1,10 +1,20 @@
 package daikon.split;
 
 import daikon.split.misc.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.logging.Logger;
-import plume.*;
+import plume.EntryReader;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

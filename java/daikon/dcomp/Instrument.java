@@ -1,9 +1,11 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
-import java.io.*;
-import java.lang.instrument.*;
-import java.security.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.IllegalClassFormatException;
+import java.security.ProtectionDomain;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;

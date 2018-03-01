@@ -5,8 +5,7 @@ import static daikon.inv.Invariant.asInvClass;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Method;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

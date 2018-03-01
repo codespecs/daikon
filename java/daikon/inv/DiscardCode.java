@@ -1,7 +1,8 @@
 package daikon.inv;
 
 import daikon.inv.filter.*;
-import java.io.*;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

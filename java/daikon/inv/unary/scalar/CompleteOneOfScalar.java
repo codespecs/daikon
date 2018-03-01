@@ -3,8 +3,8 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import java.io.Serializable;
-import java.util.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

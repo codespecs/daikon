@@ -1,7 +1,8 @@
 package daikon.inv;
 
 import daikon.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import plume.UtilMDE;
 
 /*>>>

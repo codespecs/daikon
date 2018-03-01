@@ -1,9 +1,17 @@
 // DtracePartitioner.java
 package daikon.tools;
 
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+import plume.Partitioner;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

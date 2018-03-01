@@ -2,7 +2,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import plume.*;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

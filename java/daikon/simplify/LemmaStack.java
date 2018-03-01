@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

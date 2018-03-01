@@ -1,9 +1,11 @@
 package daikon;
 
 import daikon.derive.*;
-import java.util.*;
+import java.util.Arrays;
 import java.util.logging.Logger;
-import plume.*;
+import plume.ArraysMDE;
+import plume.Intern;
+import plume.MathMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

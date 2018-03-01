@@ -2,8 +2,10 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
-import java.util.*;
-import plume.*;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import plume.Intern;
+import plume.MathMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

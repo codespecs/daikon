@@ -2,7 +2,7 @@ package daikon.derive.ternary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import plume.ArraysMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

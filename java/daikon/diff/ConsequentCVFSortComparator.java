@@ -1,7 +1,7 @@
 package daikon.diff;
 
 import daikon.inv.*;
-import java.util.*;
+import java.util.Comparator;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

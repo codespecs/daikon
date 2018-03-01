@@ -7,10 +7,18 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.logging.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.Stopwatch;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

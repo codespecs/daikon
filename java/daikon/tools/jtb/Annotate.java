@@ -5,14 +5,16 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import daikon.*;
 import daikon.inv.OutputFormat;
 import gnu.getopt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
 import java.util.logging.Logger;
 import jtb.*;
 import jtb.syntaxtree.*;
-import plume.*;
+import plume.UtilMDE;
 
 /**
  * Merge Daikon-generated invariants into Java source code as ESC/JML/DBC annotations. All original

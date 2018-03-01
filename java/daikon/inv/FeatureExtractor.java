@@ -4,11 +4,26 @@ import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;
 import daikon.diff.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.text.*;
-import java.util.*;
-import plume.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
+import plume.EntryReader;
+import plume.Pair;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

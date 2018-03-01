@@ -2,8 +2,8 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.Invariant;
-import java.io.*;
-import java.text.*;
+import java.io.PrintStream;
+import java.text.DecimalFormat;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

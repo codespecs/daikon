@@ -1,6 +1,6 @@
 package daikon.inv;
 
-import plume.*;
+import plume.Filter;
 
 /**
  * This Filter returns true if its argument is an Invariant which satisfies the following

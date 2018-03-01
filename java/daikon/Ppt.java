@@ -4,8 +4,9 @@ package daikon;
 
 import daikon.inv.Invariant; // for emptyInvList
 import java.io.Serializable;
-import java.util.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

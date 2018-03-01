@@ -4,8 +4,13 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.*;
-import java.io.*;
-import java.util.*;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.StringTokenizer;
 import plume.UtilMDE;
 
 /*>>>

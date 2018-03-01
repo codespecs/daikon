@@ -5,10 +5,18 @@ import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 import daikon.inv.*;
 import daikon.inv.ternary.threeScalar.*;
 import daikon.suppress.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

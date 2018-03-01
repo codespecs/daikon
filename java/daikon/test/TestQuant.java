@@ -1,10 +1,9 @@
 package daikon.test;
 
 import daikon.*;
-import java.io.*;
-import java.util.*;
+import java.util.Arrays;
 import junit.framework.*;
-import plume.*;
+import plume.TestPlume;
 
 @SuppressWarnings("nullness") // testing code
 public final class TestQuant extends TestCase {

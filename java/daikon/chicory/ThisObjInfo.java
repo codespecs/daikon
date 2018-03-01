@@ -1,6 +1,6 @@
 package daikon.chicory;
 
-import java.util.*;
+import java.util.EnumSet;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -5,12 +5,22 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import daikon.*;
 import daikon.inv.*;
 import gnu.getopt.*;
-import java.io.*;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.*;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.logging.Logger;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import plume.UtilMDE;
 
 /*>>>

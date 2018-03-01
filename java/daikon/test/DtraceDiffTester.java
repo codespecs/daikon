@@ -2,7 +2,6 @@ package daikon.test;
 
 import daikon.*;
 import daikon.tools.DtraceDiff;
-import java.lang.reflect.*;
 import java.net.URL;
 import junit.framework.*;
 

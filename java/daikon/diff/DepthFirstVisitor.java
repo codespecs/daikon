@@ -1,6 +1,6 @@
 package daikon.diff;
 
-import java.util.*;
+import java.util.Iterator;
 
 /**
  * Provides default methods which visit each node in the tree in depth-first order. Other visitors

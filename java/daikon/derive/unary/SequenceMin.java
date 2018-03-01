@@ -2,7 +2,8 @@ package daikon.derive.unary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import plume.ArraysMDE;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

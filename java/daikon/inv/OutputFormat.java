@@ -1,7 +1,6 @@
 package daikon.inv;
 
 import daikon.*;
-import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

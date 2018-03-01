@@ -2,11 +2,15 @@
 
 package daikon;
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintWriter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
-import java.util.regex.*;
-import plume.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+import plume.FuzzyFloat;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -5,7 +5,7 @@ import daikon.diff.*;
 import daikon.inv.*;
 import daikon.inv.unary.scalar.*;
 import daikon.test.*;
-import java.util.*;
+import java.util.Comparator;
 import junit.framework.*;
 
 @SuppressWarnings("nullness") // testing code

@@ -1,6 +1,8 @@
 package daikon.chicory;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The StringInfo class is a subtype of DaikonVariableInfo used for variable types that can be

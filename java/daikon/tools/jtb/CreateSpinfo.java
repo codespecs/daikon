@@ -4,15 +4,19 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.*;
 import gnu.getopt.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
-import plume.*;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
