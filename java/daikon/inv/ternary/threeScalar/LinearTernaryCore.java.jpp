@@ -931,59 +931,59 @@ public final class CLASSNAME implements Serializable, Cloneable {
    *     The first three elements are null if no triple of elements is NaN-free.
    * @return the maximum separation found
    */
- double maxsep_triples(/*@Nullable*/ Point[] pa) {
+  double maxsep_triples(/*@Nullable*/ Point[] pa) {
 
-   // cache values for the (square of the) distance between each pair of
-   // points, to avoid duplicating work
-   double[][] separations = new double[pa.length][pa.length];
-   for (int i = 0; i < pa.length - 1; i++) {
-     for (int j = i + 1; j < pa.length; j++) {
-       separations[i][j] = separation(pa[i], pa[j]);
-     }
-   }
+    // cache values for the (square of the) distance between each pair of
+    // points, to avoid duplicating work
+    double[][] separations = new double[pa.length][pa.length];
+    for (int i = 0; i < pa.length - 1; i++) {
+      for (int j = i + 1; j < pa.length; j++) {
+        separations[i][j] = separation(pa[i], pa[j]);
+      }
+    }
 
-   Point p1 = null;
-   Point p2 = null;
-   Point p3 = null;
+    Point p1 = null;
+    Point p2 = null;
+    Point p3 = null;
 
-   // max_separation is the separation metric for the most separated
-   // triple of points.  We use the sum of the separations as the
-   // metric.  (The metric "min of the three separations" does not work
-   // because it doesn't choose a unique set of points, making the
-   // result dependent on the order in which the points are seen; more
-   // seriously, it may choose a collinear set of points even when a
-   // non-collinear set exists.)
-   double max_separation = Double.MIN_VALUE;
+    // max_separation is the separation metric for the most separated
+    // triple of points.  We use the sum of the separations as the
+    // metric.  (The metric "min of the three separations" does not work
+    // because it doesn't choose a unique set of points, making the
+    // result dependent on the order in which the points are seen; more
+    // seriously, it may choose a collinear set of points even when a
+    // non-collinear set exists.)
+    double max_separation = Double.MIN_VALUE;
 
-   for (int i = 0; i < pa.length - 2; i++) {
-     for (int j = i + 1; j < pa.length - 1; j++) {
-       double sep_i_j = separations[i][j];
-       for (int k = j + 1; k < pa.length; k++) {
+    for (int i = 0; i < pa.length - 2; i++) {
+      for (int j = i + 1; j < pa.length - 1; j++) {
+        double sep_i_j = separations[i][j];
+        for (int k = j + 1; k < pa.length; k++) {
 
-         // using the sum of separations is valid, as long as
-         // separation is the actual distance between points and not
-         // the square of the distance
-         double separation = sep_i_j + separations[i][k] + separations[j][k];
-         if (separation > max_separation) {
-           max_separation = separation;
-           p1 = pa[i];
-           p2 = pa[j];
-           p3 = pa[k];
-         }
-       }
-     }
-   }
+          // using the sum of separations is valid, as long as
+          // separation is the actual distance between points and not
+          // the square of the distance
+          double separation = sep_i_j + separations[i][k] + separations[j][k];
+          if (separation > max_separation) {
+            max_separation = separation;
+            p1 = pa[i];
+            p2 = pa[j];
+            p3 = pa[k];
+          }
+        }
+      }
+    }
 
-   pa[0] = p1;
-   pa[1] = p2;
-   pa[2] = p3;
+    pa[0] = p1;
+    pa[1] = p2;
+    pa[2] = p3;
 
-   if (Debug.logDetail()) {
-     wrapper.log("maxsep_triples = %s %s %s", pa[0], pa[1], pa[2]);
-   }
-   return max_separation;
+    if (Debug.logDetail()) {
+      wrapper.log("maxsep_triples = %s %s %s", pa[0], pa[1], pa[2]);
+    }
+    return max_separation;
 
- }
+  }
 
 
   // Given ((x0,y0,z0),(x1,y1,z1), (x2,y2,z2), calculate a, b, c and d
