@@ -13,11 +13,16 @@ import daikon.simplify.LemmaStack;
 import daikon.simplify.SimpUtil;
 import daikon.suppress.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.*;
-import plume.*;
+import java.util.regex.Pattern;
+import plume.ArraysMDE;
+import plume.MathMDE;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;

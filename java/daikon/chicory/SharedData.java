@@ -1,6 +1,9 @@
 package daikon.chicory;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;

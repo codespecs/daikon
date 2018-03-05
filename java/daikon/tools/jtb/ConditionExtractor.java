@@ -1,6 +1,13 @@
 package daikon.tools.jtb;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 

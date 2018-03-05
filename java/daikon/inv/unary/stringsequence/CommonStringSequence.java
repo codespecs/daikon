@@ -2,7 +2,8 @@ package daikon.inv.unary.stringsequence;
 
 import daikon.*;
 import daikon.inv.*;
-import plume.*;
+import plume.ArraysMDE;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

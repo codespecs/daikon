@@ -3,7 +3,10 @@ package daikon.diff;
 import daikon.*;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

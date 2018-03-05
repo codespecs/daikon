@@ -2,9 +2,11 @@
 
 package daikon.tools;
 
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+import plume.UtilMDE;
 
 /**
  * This tool fixes a Dtrace file whose invocation nonces became inaccurate as a result of a {@code

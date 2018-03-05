@@ -1,6 +1,6 @@
 package daikon.tools.jtb;
 
-import java.util.*;
+import java.util.Enumeration;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 

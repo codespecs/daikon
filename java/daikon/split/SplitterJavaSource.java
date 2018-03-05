@@ -1,8 +1,15 @@
 package daikon.split;
 
 import daikon.*;
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 

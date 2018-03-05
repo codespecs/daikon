@@ -1,9 +1,7 @@
 package daikon.test;
 
 import daikon.tools.jtb.*;
-import java.util.*;
 import junit.framework.*;
-import plume.*;
 
 /** Tests that Annotate respects tabs. */
 public final class TestAnnotate extends TestCase {

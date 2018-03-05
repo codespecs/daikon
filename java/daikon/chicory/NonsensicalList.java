@@ -1,6 +1,7 @@
 package daikon.chicory;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

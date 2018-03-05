@@ -1,8 +1,10 @@
 package daikon.chicory;
 
 import daikon.util.EntryReader;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

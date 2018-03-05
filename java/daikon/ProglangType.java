@@ -1,8 +1,18 @@
 package daikon;
 
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.LineNumberReader;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import plume.Intern;
+import plume.StringBuilderDelimited;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

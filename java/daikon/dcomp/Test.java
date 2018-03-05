@@ -2,8 +2,8 @@ package daikon.dcomp;
 
 import static java.lang.System.out;
 
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

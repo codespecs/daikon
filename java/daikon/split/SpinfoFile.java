@@ -1,9 +1,13 @@
 package daikon.split;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.List;
 import jtb.ParseException;
-import plume.*;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

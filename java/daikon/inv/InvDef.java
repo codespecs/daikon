@@ -4,9 +4,8 @@ import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;
 import daikon.inv.binary.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

@@ -2,7 +2,7 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.Invariant;
-import java.io.*;
+import java.io.PrintStream;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

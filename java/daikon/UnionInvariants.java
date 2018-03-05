@@ -1,8 +1,7 @@
 package daikon;
 
 import gnu.getopt.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
 import plume.UtilMDE;
 
 /**

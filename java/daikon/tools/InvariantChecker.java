@@ -5,11 +5,23 @@ import daikon.inv.*;
 import daikon.inv.filter.InvariantFilters;
 import daikon.split.PptSplitter;
 import gnu.getopt.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OptionalDataException;
+import java.io.PrintStream;
+import java.io.StreamCorruptedException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -1,6 +1,9 @@
 package daikon.asm;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

@@ -3,7 +3,7 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.derive.unary.SequenceLength;
 import daikon.inv.*;
-import plume.*;
+import plume.MathMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

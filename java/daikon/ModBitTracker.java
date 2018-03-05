@@ -1,8 +1,8 @@
 package daikon;
 
 import java.io.Serializable;
-import java.util.*;
-import plume.*;
+import java.util.Arrays;
+import java.util.BitSet;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

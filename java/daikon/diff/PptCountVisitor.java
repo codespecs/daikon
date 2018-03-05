@@ -3,8 +3,11 @@ package daikon.diff;
 import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
-import java.io.*;
-import java.util.*;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

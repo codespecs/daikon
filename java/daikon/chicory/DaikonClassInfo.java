@@ -4,7 +4,8 @@
 
 package daikon.chicory;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * The DaikonClassInfo class is a subtype of DaikonVariableInfo used for variables which represent

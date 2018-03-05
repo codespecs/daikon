@@ -2,7 +2,6 @@ package daikon;
 
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
-import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

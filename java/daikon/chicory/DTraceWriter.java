@@ -2,8 +2,11 @@ package daikon.chicory;
 
 import daikon.Chicory;
 import java.io.PrintStream;
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

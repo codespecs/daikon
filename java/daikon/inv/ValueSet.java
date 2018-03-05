@@ -2,7 +2,8 @@ package daikon.inv;
 
 import daikon.*;
 import java.io.Serializable;
-import plume.*;
+import plume.LimitedSizeIntSet;
+import plume.UtilMDE;
 
 // This is the successor to ValueTracker1.
 // It is a thin wrapper around LimitedSizeIntSet.

@@ -8,14 +8,19 @@ import daikon.inv.OutputFormat;
 import daikon.inv.binary.BinaryInvariant;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.unary.UnaryInvariant;
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import plume.*;
 import plume.Intern;
 
 /*>>>

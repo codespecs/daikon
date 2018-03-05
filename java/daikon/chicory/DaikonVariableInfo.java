@@ -3,9 +3,20 @@ package daikon.chicory;
 import daikon.Chicory;
 import daikon.util.SimpleLog;
 import daikon.util.UtilMDE;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.regex.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
 import org.plumelib.bcelutil.JvmUtil;
 
 /*>>>

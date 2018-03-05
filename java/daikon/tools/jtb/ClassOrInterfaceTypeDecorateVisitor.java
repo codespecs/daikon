@@ -1,11 +1,14 @@
 package daikon.tools.jtb;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.StringWriter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

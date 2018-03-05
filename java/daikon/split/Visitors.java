@@ -1,6 +1,7 @@
 package daikon.split;
 
-import java.io.*;
+import java.io.Reader;
+import java.io.StringReader;
 import jtb.JavaParser;
 import jtb.JavaParserConstants;
 import jtb.ParseException;

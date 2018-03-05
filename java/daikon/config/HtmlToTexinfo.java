@@ -2,7 +2,7 @@ package daikon.config;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import plume.*;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.regex.qual.*;

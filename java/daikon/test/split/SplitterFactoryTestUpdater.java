@@ -2,9 +2,16 @@ package daikon.test.split;
 
 import daikon.*;
 import daikon.split.*;
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

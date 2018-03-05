@@ -1,10 +1,17 @@
 package daikon.config;
 
 import com.sun.javadoc.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import plume.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -13,7 +20,7 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * InvariantDoclet is a JavaDoc doclet that collects information about the invariants defined within
+ * InvariantDoclet is a Javadoc doclet that collects information about the invariants defined within
  * Daikon. Class documentation is collected about each class that is derived (either directly or
  * indirectly) from daikon.inv.Invariant. To specify the output format, use one of the following:
  *

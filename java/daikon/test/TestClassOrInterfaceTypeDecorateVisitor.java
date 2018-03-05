@@ -1,8 +1,9 @@
 package daikon.test;
 
 import daikon.tools.jtb.*;
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;

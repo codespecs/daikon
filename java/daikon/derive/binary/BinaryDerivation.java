@@ -2,7 +2,7 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import plume.ArraysMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

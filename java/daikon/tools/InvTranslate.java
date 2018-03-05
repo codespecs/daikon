@@ -3,9 +3,11 @@ package daikon.tools;
 import daikon.*;
 import daikon.inv.*;
 import gnu.getopt.*;
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

@@ -4,7 +4,6 @@ import daikon.FileIO;
 import daikon.LogHelper;
 import junit.framework.*;
 import junit.textui.*;
-import plume.*;
 
 /**
  * This class runs all the Daikon unit tests. These tests are small, fast to run, and certainly not

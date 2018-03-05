@@ -2,8 +2,9 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.Invariant;
-import java.io.*;
-import java.util.*;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

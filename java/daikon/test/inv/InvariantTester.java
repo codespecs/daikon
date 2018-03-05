@@ -5,7 +5,8 @@ import daikon.config.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.test.*;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Random;
 import junit.framework.*;
 
 @SuppressWarnings("nullness") // testing code

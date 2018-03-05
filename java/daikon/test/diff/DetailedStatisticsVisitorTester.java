@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
 import daikon.test.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import junit.framework.*;
 
 /*>>>

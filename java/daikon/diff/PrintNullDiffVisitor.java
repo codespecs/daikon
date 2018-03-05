@@ -3,7 +3,7 @@
 package daikon.diff;
 
 import daikon.inv.*;
-import java.io.*;
+import java.io.PrintStream;
 
 /**
  * <B>PrintNullDiffVIsitor</B> is a NodeVisitor that only reports an invariant as different when its
