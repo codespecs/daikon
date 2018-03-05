@@ -1236,12 +1236,6 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     public InstructionFactory ifact;
     public MethodGen mgen;
 
-    public MethodContext(ClassGen cg) {
-      this.cg = cg;
-      ifact = new InstructionFactory(cg);
-      cpg = cg.getConstantPool();
-    }
-
     public MethodContext(ClassGen cg, MethodGen mgen) {
       this.cg = cg;
       ifact = new InstructionFactory(cg);
