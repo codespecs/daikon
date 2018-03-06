@@ -72,7 +72,9 @@ import daikon.inv.binary.twoSequence.*;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import plume.ArraysMDE;
+import plume.Intern;
+import plume.Pair;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

@@ -171,7 +171,7 @@ import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
 import java.util.*;
-import plume.*;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

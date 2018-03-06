@@ -33,7 +33,7 @@ package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
-import plume.*;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

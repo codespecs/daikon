@@ -49,7 +49,6 @@ package daikon.derive.ternary;
 import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
 import java.util.*;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

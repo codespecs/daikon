@@ -100,7 +100,8 @@ import daikon.suppress.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.logging.Logger;
-import plume.*;
+import plume.ArraysMDE;
+import plume.MathMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

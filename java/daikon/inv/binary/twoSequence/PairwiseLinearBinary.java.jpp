@@ -35,6 +35,7 @@ import daikon.inv.DiscardCode;
 import daikon.inv.DiscardInfo;
 import daikon.inv.binary.twoScalar.*;
 import java.util.*;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

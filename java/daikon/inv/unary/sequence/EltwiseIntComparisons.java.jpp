@@ -140,7 +140,7 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import java.util.*;
-import plume.*;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

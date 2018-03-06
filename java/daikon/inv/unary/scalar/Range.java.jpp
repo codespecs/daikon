@@ -67,7 +67,8 @@ import daikon.inv.unary.sequence.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import plume.Intern;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

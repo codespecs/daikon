@@ -38,7 +38,8 @@ package PACKAGE;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.BinaryInvariant;
-import plume.*;
+import plume.ArraysMDE;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

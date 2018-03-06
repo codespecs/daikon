@@ -4,6 +4,8 @@ package daikon;
 
 import java.util.*;
 import java.lang.reflect.*;
+import plume.ArraysMDE;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
