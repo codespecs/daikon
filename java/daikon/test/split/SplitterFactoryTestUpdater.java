@@ -194,7 +194,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("import java.io.*;");
     ps.println("import java.util.*;");
     ps.println("import junit.framework.*;");
-    ps.println("import plume.*;");
+    ps.println("import plume.UtilMDE;");
     ps.println();
     ps.println("/*>>>");
     ps.println("import org.checkerframework.checker.nullness.qual.*;");

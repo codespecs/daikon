@@ -140,7 +140,7 @@ import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Logger;
-import plume.*;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

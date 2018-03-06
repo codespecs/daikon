@@ -28,7 +28,8 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import plume.Intern;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

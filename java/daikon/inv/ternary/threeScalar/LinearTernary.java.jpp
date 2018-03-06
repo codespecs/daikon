@@ -52,7 +52,6 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.NIS;
 import java.util.*;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

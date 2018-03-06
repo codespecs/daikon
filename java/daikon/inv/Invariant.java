@@ -1904,7 +1904,7 @@ import typequals.*;
   }
 
   /**
-   * Used throught Java family formatting of invariants.
+   * Used throughout Java family formatting of invariants.
    *
    * <p>Returns
    *

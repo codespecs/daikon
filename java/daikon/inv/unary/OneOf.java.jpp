@@ -216,7 +216,9 @@ import java.util.*;
   import java.util.regex.*;
 #endif
 import org.plumelib.bcelutil.JvmUtil;
-import plume.*;
+import plume.ArraysMDE;
+import plume.Intern;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

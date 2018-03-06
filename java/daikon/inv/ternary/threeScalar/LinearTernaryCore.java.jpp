@@ -45,7 +45,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import plume.ArraysMDE;
+import plume.MathMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -386,7 +387,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * coefficients are relatively close to the original coefficients (within the ratio defined by
    * Global.fuzzy) then the new coefficients are used.
    *
-   * @see FuzzyFloat
+   * @see plume.FuzzyFloat
    */
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
 

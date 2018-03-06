@@ -4,6 +4,9 @@ package daikon;
 
 import java.util.*;
 import java.lang.reflect.*;
+import plume.ArraysMDE;
+import plume.Intern;
+import plume.FuzzyFloat;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -67,7 +70,7 @@ import org.checkerframework.framework.qual.PolyAll;
 public final class Quant {
   private Quant() { throw new Error("do not instantiate"); }
 
-  public static plume.FuzzyFloat fuzzy = new plume.FuzzyFloat();
+  public static FuzzyFloat fuzzy = new FuzzyFloat();
 
   /**
    * Returns the size of the array or collection. If the argument is null or not an array or

@@ -56,7 +56,8 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import plume.ArraysMDE;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

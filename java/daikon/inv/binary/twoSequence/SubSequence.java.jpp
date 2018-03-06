@@ -87,7 +87,9 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import plume.ArraysMDE;
+import plume.Pair;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

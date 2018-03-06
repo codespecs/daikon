@@ -30,7 +30,6 @@ import daikon.*;
 import daikon.derive.unary.SequenceLength;
 import daikon.inv.*;
 import java.util.*;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

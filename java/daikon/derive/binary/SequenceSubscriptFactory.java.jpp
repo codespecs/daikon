@@ -53,7 +53,6 @@ import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
 import java.util.*;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

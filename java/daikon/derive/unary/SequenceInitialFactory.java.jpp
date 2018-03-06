@@ -24,7 +24,6 @@ package daikon.derive.unary;
 
 import daikon.*;
 import java.util.logging.Logger;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

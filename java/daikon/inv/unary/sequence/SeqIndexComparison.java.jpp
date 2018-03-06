@@ -158,7 +158,7 @@ import daikon.suppress.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Logger;
-import plume.*;
+import plume.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
