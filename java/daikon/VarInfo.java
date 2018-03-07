@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import plume.ArraysMDE;
-import plume.Filter;
 import plume.StringBuilderDelimited;
 import plume.UtilMDE;
 
@@ -1441,19 +1440,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
               + vt);
     }
     return (String[]) raw;
-  }
-
-  static final class UsesVarFilter implements Filter<Invariant> {
-    VarInfo var;
-
-    public UsesVarFilter(VarInfo var) {
-      this.var = var;
-    }
-
-    @Override
-    public boolean accept(Invariant inv) {
-      return inv.usesVar(var);
-    }
   }
 
   /** Whether this VarInfo is the leader of its equality set. */
