@@ -187,7 +187,7 @@ public class LogicalCompare {
       // ppt has to be a PptSlice, not a PptTopLevel
       if (vi.isDerivedParamAndUninteresting()) {
         // Exception: let invariants like "orig(arg) == arg" through.
-        if (IsEqualityComparison.it.accept(inv)) {
+        if (inv.isEqualityComparison()) {
           EqualityComparison comp = (EqualityComparison) inv;
           VarInfo var1 = comp.var1();
           VarInfo var2 = comp.var2();

@@ -1933,6 +1933,24 @@ import typequals.*;
     return (Class<? extends Invariant>) x;
   }
 
+  /**
+   * Returns true if this is an equality comparison. That is, returns true if this Invariant
+   * satisfies the following conditions:
+   *
+   * <ul>
+   *   <li>the Invariant is an EqualityComparison (its relationship is =, not &lt;, &le;, &gt;, or
+   *       &ge;).
+   *   <li>the invariant is statistically satisfied (its confidence is above the limit)
+   * </ul>
+   *
+   * This does not consider PairwiseIntComparison to be an equality invariant.
+   */
+  public boolean isEqualityComparison() {
+    if (!(this instanceof EqualityComparison)) return false;
+    double chance_conf = ((EqualityComparison) this).eq_confidence();
+    return chance_conf > Invariant.dkconfig_confidence_limit;
+  }
+
   /** @exception RuntimeException if representation invariant on this is broken */
   public void checkRep() {
     // very partial initial implementation
