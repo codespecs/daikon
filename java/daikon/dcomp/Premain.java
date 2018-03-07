@@ -15,6 +15,7 @@ import java.lang.instrument.Instrumentation;
 import java.nio.file.Files;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
@@ -179,7 +180,7 @@ public class Premain {
         if (DynComp.verbose) {
           System.out.printf(
               "Comparability sets written in %ds%n",
-              TimeUnit.NANOSECONDS.toSeconds(stopTime - startTime));
+              TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime));
         }
       }
 
@@ -196,7 +197,7 @@ public class Premain {
         if (DynComp.verbose) {
           System.out.printf(
               "Comparability sets written in %ds%n",
-              TimeUnit.NANOSECONDS.toSeconds(stopTime - startTime));
+              TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime));
         }
       } else {
         // Writing comparability sets to standard output?
@@ -212,11 +213,13 @@ public class Premain {
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
-      Stopwatch watch = new Stopwatch();
+      long startTime = System.nanoTime();
       DCRuntime.print_decl_file(decl_fp);
       decl_fp.close();
       if (DynComp.verbose) {
-        System.out.printf("Decl file written in %s%n", watch.format());
+        System.out.printf(
+            "Decl file written in %ds%n",
+            TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime));
         System.out.printf("comp_list = %,d%n", DCRuntime.comp_list_ms);
         System.out.printf("ppt name  = %,d%n", DCRuntime.ppt_name_ms);
         System.out.printf("decl vars = %,d%n", DCRuntime.decl_vars_ms);
