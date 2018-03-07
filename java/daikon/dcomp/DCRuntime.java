@@ -1963,7 +1963,6 @@ public final class DCRuntime {
   static long ppt_name_ms = 0;
   static long decl_vars_ms = 0;
   static long total_ms = 0;
-  // static Stopwatch watch = new Stopwatch();
 
   /**
    * Prints a decl ENTER/EXIT records with comparability. Returns the list of comparabile DVSets for
@@ -1971,40 +1970,30 @@ public final class DCRuntime {
    */
   public static List<DVSet> print_decl(PrintWriter ps, MethodInfo mi) {
 
-    // long start = System.currentTimeMillis();
-    // watch.reset();
-
     time_decl.reset_start_time();
     time_decl.indent("Print decls for method '%s'", mi.method_name);
     List<DVSet> l = get_comparable(mi.traversalEnter);
-    // comp_list_ms += watch.snapshot(); watch.reset();
     if (l == null) return null;
     time_decl.log_time("got %d comparable sets", l.size());
 
     // Print the enter point
     ps.println("DECLARE");
     ps.println(clean_decl_name(DaikonWriter.methodEntryName(mi.member)));
-    // ppt_name_ms += watch.snapshot();  watch.reset();
     print_decl_vars(ps, l, mi.traversalEnter);
-    // decl_vars_ms += watch.snapshot();  watch.reset();
     ps.println();
     time_decl.log_time("after enter");
 
     // Print the exit points
     l = get_comparable(mi.traversalExit);
-    // comp_list_ms += watch.snapshot();  watch.reset();
 
     time_decl.log_time("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
       ps.println("DECLARE");
       ps.println(clean_decl_name(DaikonWriter.methodExitName(mi.member, ii)));
-      // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log_time("after exit clean_decl_name");
       print_decl_vars(ps, l, mi.traversalExit);
       ps.println();
-      // decl_vars_ms += watch.snapshot();  watch.reset();
-
     }
 
     // total_ms += System.currentTimeMillis() - start;

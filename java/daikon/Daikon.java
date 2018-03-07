@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -50,7 +51,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import plume.EntryReader;
 import plume.RegexUtil;
-import plume.Stopwatch;
 import plume.UtilMDE;
 
 /*>>>
@@ -352,8 +352,6 @@ public final class Daikon {
   static {
     daikon.Runtime.no_dtrace = true;
   }
-
-  private static Stopwatch stopwatch = new Stopwatch();
 
   static String usage =
       UtilMDE.joinLines(
@@ -1775,7 +1773,7 @@ public final class Daikon {
   /*@RequiresNonNull("fileio_progress")*/
   // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     try {
       if (!Daikon.dkconfig_quiet) {
         System.out.print("Reading declaration files ");
@@ -1796,7 +1794,9 @@ public final class Daikon {
       // e.printStackTrace();
       throw new Daikon.TerminationMessage(e, "Error parsing decl file");
     } finally {
-      debugProgress.fine("Time spent on read_declaration_files: " + stopwatch.format());
+      long duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent on read_declaration_files: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
   }
 
@@ -1804,7 +1804,7 @@ public final class Daikon {
     if (PptSplitter.dkconfig_disable_splitting || spinfo_files.isEmpty()) {
       return;
     }
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     try {
       System.out.print("Reading splitter info files ");
       create_splitters(spinfo_files);
@@ -1818,12 +1818,14 @@ public final class Daikon {
       e.printStackTrace();
       throw new Error(e);
     } finally {
-      debugProgress.fine("Time spent on load_spinfo_files: " + stopwatch.format());
+      long duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent on load_spinfo_files: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
   }
 
   private static void load_map_files(PptMap all_ppts, Set<File> map_files) {
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     if (!PptSplitter.dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
@@ -1831,7 +1833,9 @@ public final class Daikon {
       System.out.print("\r(read ");
       System.out.print(UtilMDE.nplural(map_files.size(), "map (context) file"));
       System.out.println(")");
-      debugProgress.fine("Time spent on load_map_files: " + stopwatch.format());
+      long duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent on load_map_files: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
   }
 
@@ -1988,7 +1992,7 @@ public final class Daikon {
       new Thread((Runnable) monitor).start();
     }
 
-    stopwatch.reset();
+    long startTime = System.nanoTime();
 
     // Preprocessing
     setup_NISuppression();
@@ -2022,7 +2026,9 @@ public final class Daikon {
       // e.printStackTrace();
       throw new Error(e);
     } finally {
-      debugProgress.fine("Time spent on read_data_trace_files: " + stopwatch.format());
+      long duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent on read_data_trace_files: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
 
     if (monitor != null) {
@@ -2081,23 +2087,27 @@ public final class Daikon {
     // Postprocessing
 
     debugProgress.fine("Create Combined Exits ... ");
-    stopwatch.reset();
+    startTime = System.nanoTime();
     create_combined_exits(all_ppts);
-    debugProgress.fine("Create Combined Exits ... done [" + stopwatch.format() + "]");
+    long duration = System.nanoTime() - startTime;
+    debugProgress.fine(
+        "Create Combined Exits ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
 
     // Post process dynamic constants
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
       debugProgress.fine("Constant Post Processing ... ");
-      stopwatch.reset();
+      startTime = System.nanoTime();
       for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         if (ppt.constants != null) ppt.constants.post_process();
       }
-      debugProgress.fine("Constant Post Processing ... done [" + stopwatch.format() + "]");
+      duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Constant Post Processing ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
     }
 
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
-    stopwatch.reset();
+    startTime = System.nanoTime();
     assert FileIO.new_decl_format != null
         : "@AssumeAssertion(nullness): read data, so new_decl_format is set";
     if (FileIO.new_decl_format) {
@@ -2105,26 +2115,32 @@ public final class Daikon {
     } else {
       PptRelation.init_hierarchy(all_ppts);
     }
-    debugProgress.fine("Init Hierarchy ... done [" + stopwatch.format() + "]");
+    duration = System.nanoTime() - startTime;
+    debugProgress.fine(
+        "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
 
     // Calculate invariants at all non-leaf ppts
     if (use_dataflow_hierarchy) {
       debugProgress.fine("createUpperPpts ... ");
-      stopwatch.reset();
+      startTime = System.nanoTime();
       // calculates invariants; does not actually create any ppts
       createUpperPpts(all_ppts);
-      debugProgress.fine("createUpperPpts ... done [" + stopwatch.format() + "]");
+      duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "createUpperPpts ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
     }
 
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization && !Daikon.dkconfig_undo_opts) {
       debugProgress.fine("Equality Post Process ... ");
-      stopwatch.reset();
+      startTime = System.nanoTime();
       for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         // ppt.equality_view can be null here
         ppt.postProcessEquality();
       }
-      debugProgress.fine("Equality Post Process ... done [" + stopwatch.format() + "]");
+      duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Equality Post Process ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
     }
 
     // undo optimizations; results in a more redundant but more complete
@@ -2145,7 +2161,7 @@ public final class Daikon {
     isInferencing = false;
 
     // Add implications
-    stopwatch.reset();
+    startTime = System.nanoTime();
     fileio_progress.clear();
     if (!PptSplitter.dkconfig_disable_splitting) {
       debugProgress.fine("Adding Implications ... ");
@@ -2153,7 +2169,9 @@ public final class Daikon {
         // debugProgress.fine ("  Adding implications for " + ppt.name);
         ppt.addImplications();
       }
-      debugProgress.fine("Time spent adding implications: " + stopwatch.format());
+      duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent adding implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
   }
 
@@ -2206,13 +2224,14 @@ public final class Daikon {
   private static void suppressWithSimplify(PptMap all_ppts) {
     System.out.print("Invoking Simplify to identify redundant invariants");
     System.out.flush();
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       ppt.mark_implied_via_simplify(all_ppts);
       System.out.print(".");
       System.out.flush();
     }
-    System.out.println(stopwatch.format());
+    long duration = System.nanoTime() - startTime;
+    System.out.println(TimeUnit.NANOSECONDS.toSeconds(duration));
 
     // Make sure the Simplify process and helper threads are finished
     if (PptTopLevel.getProverStack() != null) {

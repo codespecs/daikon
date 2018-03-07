@@ -43,11 +43,11 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import plume.IterableIterator;
 import plume.SimpleLog;
-import plume.Stopwatch;
 import plume.StringBuilderDelimited;
 import plume.UtilMDE;
 
@@ -3408,10 +3408,8 @@ public class PptTopLevel extends Ppt {
 
     if (debugMerge.isLoggable(Level.FINE)) debugMerge.fine("Processing ppt " + name());
 
-    @SuppressWarnings("nullness") // dependent: non-null if debugMerge.isLoggable(Level.FINE)
-    /*@NonNull*/ Stopwatch watch = null;
+    long startTime = System.nanoTime();
     if (debugTimeMerge.isLoggable(Level.FINE)) {
-      watch = new Stopwatch();
       if (children.size() == 1) {
         debugTimeMerge.fine(
             "Timing merge of 1 child (" + children.get(0).child.name + " under ppt " + name);
@@ -3586,7 +3584,10 @@ public class PptTopLevel extends Ppt {
     // System.out.printf ("New equality set = %s\n", equality_view);
 
     if (debugTimeMerge.isLoggable(Level.FINE)) {
-      debugTimeMerge.fine("    equality sets etc = " + watch.stop_start());
+      long duration = System.nanoTime() - startTime;
+      debugTimeMerge.fine(
+          "    equality sets etc = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
+      startTime = System.nanoTime();
     }
 
     // Merge the invariants
@@ -3597,13 +3598,17 @@ public class PptTopLevel extends Ppt {
     }
 
     if (debugTimeMerge.isLoggable(Level.FINE)) {
-      debugTimeMerge.fine("    merge invariants = " + watch.stop_start());
+      long duration = System.nanoTime() - startTime;
+      debugTimeMerge.fine(
+          "    merge invariants = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
+      startTime = System.nanoTime();
     }
 
     // Merge the conditionals
     merge_conditionals();
     if (debugTimeMerge.isLoggable(Level.FINE)) {
-      debugTimeMerge.fine("    conditionals = " + watch.stop_start());
+      long duration = System.nanoTime() - startTime;
+      debugTimeMerge.fine("    conditionals = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
     }
 
     // Mark this ppt as merged, so we don't process it multiple times
@@ -3617,7 +3622,9 @@ public class PptTopLevel extends Ppt {
       }
     }
     if (debugTimeMerge.isLoggable(Level.FINE)) {
-      debugTimeMerge.fine("    removing child invs = " + watch.stop_start());
+      long duration = System.nanoTime() - startTime;
+      debugTimeMerge.fine(
+          "    removing child invs = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
     }
 
     // Remove the relations since we don't need it anymore
