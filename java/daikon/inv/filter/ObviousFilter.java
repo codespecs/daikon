@@ -23,7 +23,7 @@ public class ObviousFilter extends InvariantFilter {
   @SuppressWarnings("nullness") // condition hidden in local variable
   /*@EnsuresNonNullIf(result=true, expression="#1.isObvious()")*/
   boolean shouldDiscardInvariant(Invariant invariant) {
-    // if ((invariant.ppt.arity() == 1) || IsEqualityComparison.it.accept(invariant)) {
+    // if ((invariant.ppt.arity() == 1) || invariant.isEqualityComparison()) {
     DiscardInfo discard = invariant.isObvious();
     if (discard != null) {
       invariant.log("discard because %s", discard.discardString());

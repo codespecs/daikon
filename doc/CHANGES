@@ -3399,7 +3399,7 @@ for more information.
 
 3.1.1 (01 July 2004)
 
-Modified Java formatting to used FuzzyFloat comparisons rather than
+Modified Java formatting to use FuzzyFloat comparisons rather than
 directly comparing floating point numbers.  By default, FuzzyFloat
 comparisons are used when generating invariants.  More information on
 fuzzy comparisons is available in the 'List of configuration options'

@@ -28,7 +28,7 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
       PrintInvariants.debugFiltering.fine("\tEntering UmVEF.shouldDiscard");
     }
 
-    if (!IsEqualityComparison.it.accept(invariant)) {
+    if (!invariant.isEqualityComparison()) {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine(
             "\tUnmodVarEqF thinks this isn't an equality comparison");

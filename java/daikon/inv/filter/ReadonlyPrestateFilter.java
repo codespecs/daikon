@@ -29,7 +29,7 @@ public class ReadonlyPrestateFilter extends InvariantFilter {
       PrintInvariants.debugFiltering.fine("\tEntering UnmodRPF.shouldDiscard");
     }
 
-    if (!IsEqualityComparison.it.accept(invariant)) {
+    if (!invariant.isEqualityComparison()) {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine("\tUnmodRPF thinks this isn't an equality comparison");
       }
