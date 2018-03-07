@@ -4,7 +4,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.util.Stopwatch;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -170,7 +169,7 @@ public class Premain {
         assert DynComp.comparability_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter compare_out = open(DynComp.comparability_file);
-        Stopwatch watch = new Stopwatch();
+        long startTime = System.nanoTime();
         if (DynComp.no_primitives) {
           DCRuntime.print_all_comparable_refs_only(compare_out);
         } else {
@@ -178,7 +177,9 @@ public class Premain {
         }
         compare_out.close();
         if (DynComp.verbose) {
-          System.out.printf("Comparability sets written in %s%n", watch.format());
+          System.out.printf(
+              "Comparability sets written in %ds%n",
+              TimeUnit.NANOSECONDS.toSeconds(stopTime - startTime));
         }
       }
 
@@ -189,11 +190,13 @@ public class Premain {
         assert DynComp.trace_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter trace_out = open(DynComp.trace_file);
-        Stopwatch watch = new Stopwatch();
+        long startTime = System.nanoTime();
         DCRuntime.trace_all_comparable(trace_out);
         trace_out.close();
         if (DynComp.verbose) {
-          System.out.printf("Comparability sets written in %s%n", watch.format());
+          System.out.printf(
+              "Comparability sets written in %ds%n",
+              TimeUnit.NANOSECONDS.toSeconds(stopTime - startTime));
         }
       } else {
         // Writing comparability sets to standard output?
