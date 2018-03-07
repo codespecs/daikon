@@ -47,7 +47,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import plume.IterableIterator;
-import plume.SimpleLog;
 import plume.StringBuilderDelimited;
 import plume.UtilMDE;
 
@@ -170,7 +169,7 @@ public class PptTopLevel extends Ppt {
   /** Debug tracer for NIS suppression statistics */
   public static final Logger debugNISStats = Logger.getLogger("daikon.PptTopLevel.NISStats");
 
-  public static final SimpleLog debug_varinfo = new SimpleLog(false);
+  // public static final SimpleLog debug_varinfo = new SimpleLog(false);
 
   // These used to appear in Ppt, were moved down to PptToplevel
   public final String name;
@@ -386,7 +385,7 @@ public class PptTopLevel extends Ppt {
   /*@EnsuresNonNull({"mbtracker", "views", "value_sets"})*/
   private void init_vars(/*>>> @UnderInitialization(Ppt.class) @Raw PptTopLevel this*/) {
 
-    debug_varinfo.log_tb("initializing var_infos %s", Arrays.toString(var_infos));
+    // debug_varinfo.log_tb("initializing var_infos %s", Arrays.toString(var_infos));
 
     int val_idx = 0;
     num_static_constant_vars = 0;

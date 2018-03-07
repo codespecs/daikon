@@ -3,7 +3,6 @@ package daikon.chicory;
 import daikon.Chicory;
 import daikon.FileIO;
 import daikon.PptTopLevel.PptType;
-import daikon.util.SimpleLog;
 import java.io.PrintStream;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
@@ -462,7 +461,7 @@ public class DeclWriter extends DaikonWriter {
     /** Number that identifies this relation within this ppt */
     int id;
 
-    static SimpleLog debug = new SimpleLog(false);
+    // static SimpleLog debug = new SimpleLog(false);
 
     /** Create a VarRelation */
     public VarRelation(
@@ -476,7 +475,7 @@ public class DeclWriter extends DaikonWriter {
       this.local_prefix = local_prefix;
       this.parent_prefix = parent_prefix;
       this.local_variable = local_variable;
-      debug.log("Created %s", this);
+      // debug.log("Created %s", this);
     }
 
     /** Create a var relation with the matching names */

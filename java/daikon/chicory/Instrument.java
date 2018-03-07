@@ -1,7 +1,6 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.util.SimpleLog;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
@@ -65,12 +64,12 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
   /** Debug information about which classes are transformed and why */
-  protected static SimpleLog debug_transform = new SimpleLog(false);
+  // protected static SimpleLog debug_transform = new SimpleLog(false);
 
   public Instrument() {
     super();
-    debug_transform.enabled = Chicory.debug_transform;
-    debug_instrument.enabled = Chicory.debug;
+    // debug_transform.enabled = Chicory.debug_transform;
+    // debug_instrument.enabled = Chicory.debug;
   }
 
   // uses Runtime.ppt_omit_pattern and Runtime.ppt_select_pattern
@@ -87,8 +86,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       Matcher mMethod = pattern.matcher(methodName);
 
       if (mPpt.find() || mClass.find() || mMethod.find()) {
-        debug_transform.log(
-            "not instrumenting %s, it matches ppt_omit regex %s%n", pptName, pattern);
+        // debug_transform.log(
+        //     "not instrumenting %s, it matches ppt_omit regex %s%n", pptName, pattern);
 
         // debug_transform.log("filtering 1 true on --- " + pptName);
 
@@ -109,8 +108,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         // System.out.println("--->" + regex);
 
         if (mPpt.find() || mClass.find() || mMethod.find()) {
-          debug_transform.log(
-              "instrumenting %s, it matches ppt_select regex %s%n", pptName, pattern);
+          // debug_transform.log(
+          //     "instrumenting %s, it matches ppt_select regex %s%n", pptName, pattern);
 
           // System.out.println("filtering 2 false on --- " + pptName);
           return false; // don't filter out
@@ -146,7 +145,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     // new Throwable().printStackTrace();
 
-    debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
+    // debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
 
     // Don't instrument boot classes.  They are uninteresting and will
     // not be able to access daikon.chicory.Runtime (because it is not
@@ -161,31 +160,31 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     if (Chicory.boot_classes != null) {
       Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
       if (matcher.find()) {
-        debug_transform.log(
-            "ignoring sys class %s, " + "matches boot_classes regex", fullClassName);
+        // debug_transform.log(
+        //     "ignoring sys class %s, " + "matches boot_classes regex", fullClassName);
         return null;
       }
     } else if (loader == null) {
-      debug_transform.log("ignoring system class %s, class loader == null", fullClassName);
+      // debug_transform.log("ignoring system class %s, class loader == null", fullClassName);
       return null;
     } else if (loader.getParent() == null) {
-      debug_transform.log("ignoring system class %s, parent loader == null\n", fullClassName);
+      // debug_transform.log("ignoring system class %s, parent loader == null\n", fullClassName);
       return null;
     } else if (fullClassName.startsWith("sun.reflect")) {
-      debug_transform.log("ignoring system class %s, in sun.reflect package", fullClassName);
+      // debug_transform.log("ignoring system class %s, in sun.reflect package", fullClassName);
       return null;
     } else if (fullClassName.startsWith("com.sun")) {
-      debug_transform.log("Class from com.sun package %s with nonnull loaders\n", fullClassName);
+      // debug_transform.log("Class from com.sun package %s with nonnull loaders\n", fullClassName);
     }
 
     // Don't intrument our code
     if (is_chicory(className)) {
-      debug_transform.log("Not considering chicory class %s%n", fullClassName);
+      // debug_transform.log("Not considering chicory class %s%n", fullClassName);
       return null;
     }
 
-    debug_transform.log(
-        "transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
+    // debug_transform.log(
+    //     "transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
 
     // Parse the bytes of the classfile, die on any errors
     JavaClass c;
@@ -260,7 +259,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         // njc.dump(filename);
         return (njc.getBytes());
       } else {
-        debug_transform.log("not including class %s (filtered out)", className);
+        // debug_transform.log("not including class %s (filtered out)", className);
         // No changes to the bytecodes
         return null;
       }
@@ -492,7 +491,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
           process_uninitialized_variable_info(il, true);
 
           if (!shouldInclude) {
-            debug_transform.log("Class %s included [%s]%n", cg.getClassName(), mi);
+            // debug_transform.log("Class %s included [%s]%n", cg.getClassName(), mi);
           }
           shouldInclude = true; // at least one method not filtered out
 
@@ -589,7 +588,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     class_info.set_method_infos(method_infos);
 
     if (shouldInclude) {
-      debug_transform.log("Added trace info to class %s%n", class_info);
+      // debug_transform.log("Added trace info to class %s%n", class_info);
       synchronized (SharedData.new_classes) {
         SharedData.new_classes.add(class_info);
       }
@@ -597,7 +596,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         SharedData.all_classes.add(class_info);
       }
     } else { // not included
-      debug_transform.log("Trace info not added to class %s%n", class_info);
+      // debug_transform.log("Trace info not added to class %s%n", class_info);
     }
 
     class_info.shouldInclude = shouldInclude;

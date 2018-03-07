@@ -5,7 +5,6 @@ import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
 import daikon.chicory.MethodInfo;
 import daikon.util.EntryReader;
-import daikon.util.SimpleLog;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -77,10 +76,10 @@ class DCInstrument extends InstructionListUtils {
   protected static ObjectType javalangObject = new ObjectType("java.lang.Object");
 
   // Debug loggers
-  protected static SimpleLog debug_transform = new SimpleLog(false);
-  protected static SimpleLog debug_native = new SimpleLog(false);
-  protected static SimpleLog debug_dup = new SimpleLog(false);
-  protected static SimpleLog debug_track = new SimpleLog(false);
+  // protected static SimpleLog debug_transform = new SimpleLog(false);
+  // protected static SimpleLog debug_native = new SimpleLog(false);
+  // protected static SimpleLog debug_dup = new SimpleLog(false);
+  // protected static SimpleLog debug_track = new SimpleLog(false);
 
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<String>();
@@ -240,10 +239,10 @@ class DCInstrument extends InstructionListUtils {
     }
     // System.out.printf ("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
-    debug_transform.enabled = DynComp.debug_transform || Premain.debug_dcinstrument;
-    debug_instrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
-    debug_native.enabled = DynComp.debug;
-    debug_track.enabled = Premain.debug_dcinstrument;
+    // debug_transform.enabled = DynComp.debug_transform || Premain.debug_dcinstrument;
+    // debug_instrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
+    // debug_native.enabled = DynComp.debug;
+    // debug_track.enabled = Premain.debug_dcinstrument;
   }
 
   /**
@@ -260,19 +259,19 @@ class DCInstrument extends InstructionListUtils {
     if (classname.startsWith("daikon.chicory")
         || classname.startsWith("daikon.util")
         || (classname.startsWith("daikon.dcomp") && !classname.startsWith("daikon.dcomp.Test"))) {
-      debug_transform.log("Skipping DynComp class %s%n", gen.getClassName());
+      // debug_transform.log("Skipping DynComp class %s%n", gen.getClassName());
       return null;
     }
 
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      debug_transform.log("Not instrumenting annotation %s%n", gen.getClassName());
+      // debug_transform.log("Not instrumenting annotation %s%n", gen.getClassName());
       return gen.getJavaClass().copy();
     }
 
-    debug_transform.log("%nInstrumenting class %s%n", gen.getClassName());
-    debug_transform.indent();
+    // debug_transform.log("%nInstrumenting class %s%n", gen.getClassName());
+    // debug_transform.indent();
 
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo(gen.getClassName(), loader);
@@ -288,7 +287,7 @@ class DCInstrument extends InstructionListUtils {
       // will be created in this class.
       Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
       if (eq == null) {
-        debug_transform.log("Added equals method");
+        // debug_transform.log("Added equals method");
         add_equals_method(gen);
       }
 
@@ -317,13 +316,13 @@ class DCInstrument extends InstructionListUtils {
 
         MethodGen mg = new MethodGen(m, gen.getClassName(), pool);
         mgen = mg; // copy to global
-        debug_transform.log("  Processing method %s, track=%b", m, track);
-        debug_transform.indent();
+        // debug_transform.log("  Processing method %s, track=%b", m, track);
+        // debug_transform.indent();
 
         // Skip methods defined in Object
         if (!double_client) {
           if (is_object_method(mg.getName(), mg.getArgumentTypes())) {
-            debug_transform.log("Skipped Object method %s%n", mg.getName());
+            // debug_transform.log("Skipped Object method %s%n", mg.getName());
             continue;
           }
         }
@@ -416,9 +415,9 @@ class DCInstrument extends InstructionListUtils {
           gen.replaceMethod(m, mg.getMethod());
           if (BcelUtil.isMain(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
         }
-        debug_transform.exdent();
+        // debug_transform.exdent();
       } catch (Throwable t) {
-        if (debug_instrument.enabled) t.printStackTrace();
+        // if (debug_instrument.enabled) t.printStackTrace();
         throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
       }
     }
@@ -429,13 +428,13 @@ class DCInstrument extends InstructionListUtils {
     // Keep track of when the class is initialized (so we don't look
     // for fields in uninitialized classes)
     track_class_init();
-    debug_transform.exdent();
+    // debug_transform.exdent();
 
     // The code that builds the list of daikon variables for each ppt
     // needs to know what classes are instrumented.  Its looks in the
     // Chicory runtime for this information.
     if (track_class) {
-      debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
+      // debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
       synchronized (daikon.chicory.SharedData.all_classes) {
         daikon.chicory.SharedData.all_classes.add(class_info);
       }
@@ -458,19 +457,19 @@ class DCInstrument extends InstructionListUtils {
     if (classname.startsWith("daikon.chicory")
         || classname.startsWith("daikon.util")
         || (classname.startsWith("daikon.dcomp") && !classname.startsWith("daikon.dcomp.Test"))) {
-      debug_transform.log("(refs_only)Skipping DynComp class %s%n", gen.getClassName());
+      // debug_transform.log("(refs_only)Skipping DynComp class %s%n", gen.getClassName());
       return null;
     }
 
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      debug_transform.log("(refs_only)Not instrumenting annotation %s%n", gen.getClassName());
+      // debug_transform.log("(refs_only)Not instrumenting annotation %s%n", gen.getClassName());
       return gen.getJavaClass().copy();
     }
 
-    debug_transform.log("%nInstrumenting class(refs_only) %s%n", gen.getClassName());
-    debug_transform.indent();
+    // debug_transform.log("%nInstrumenting class(refs_only) %s%n", gen.getClassName());
+    // debug_transform.indent();
 
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo(gen.getClassName(), loader);
@@ -486,7 +485,7 @@ class DCInstrument extends InstructionListUtils {
       // will be created in this class.
       Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
       if (eq == null) {
-        debug_transform.log("(refs_only)Added equals method");
+        // debug_transform.log("(refs_only)Added equals method");
         add_equals_method(gen);
       }
 
@@ -516,13 +515,13 @@ class DCInstrument extends InstructionListUtils {
 
         MethodGen mg = new MethodGen(m, gen.getClassName(), pool);
         mgen = mg; // copy to global
-        debug_transform.log("  Processing method %s, track=%b", m, track);
-        debug_transform.indent();
+        // debug_transform.log("  Processing method %s, track=%b", m, track);
+        // debug_transform.indent();
 
         // Skip methods defined in Object
         if (!double_client) {
           if (is_object_method(mg.getName(), mg.getArgumentTypes())) {
-            debug_transform.log("Skipped object method %s%n", mg.getName());
+            // debug_transform.log("Skipped object method %s%n", mg.getName());
             continue;
           }
         }
@@ -579,9 +578,9 @@ class DCInstrument extends InstructionListUtils {
           gen.replaceMethod(m, mg.getMethod());
           if (BcelUtil.isMain(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
         }
-        debug_transform.exdent();
+        // debug_transform.exdent();
       } catch (Throwable t) {
-        if (debug_instrument.enabled) t.printStackTrace();
+        // if (debug_instrument.enabled) t.printStackTrace();
         throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
       }
     }
@@ -592,7 +591,7 @@ class DCInstrument extends InstructionListUtils {
     // Keep track of when the class is initialized (so we don't look
     // for fields in uninitialized classes)
     track_class_init();
-    debug_transform.exdent();
+    // debug_transform.exdent();
 
     // The code that builds the list of daikon variables for each ppt
     // needs to know what classes are instrumented.  Its looks in the
@@ -621,11 +620,11 @@ class DCInstrument extends InstructionListUtils {
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      debug_transform.log("Not instrumenting annotation %s%n", gen.getClassName());
+      // debug_transform.log("Not instrumenting annotation %s%n", gen.getClassName());
       return gen.getJavaClass().copy();
     }
 
-    debug_transform.log("%nInstrumenting class(JDK) %s%n", gen.getClassName());
+    // debug_transform.log("%nInstrumenting class(JDK) %s%n", gen.getClassName());
 
     // properly account for object methods
     handle_object(gen);
@@ -637,7 +636,7 @@ class DCInstrument extends InstructionListUtils {
       // will be created in this class.
       Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
       if (eq == null) {
-        debug_transform.log("Added equals method");
+        // debug_transform.log("Added equals method");
         add_equals_method(gen);
       }
 
@@ -658,7 +657,7 @@ class DCInstrument extends InstructionListUtils {
           continue;
         }
 
-        debug_transform.log("  Processing method %s", m);
+        // debug_transform.log("  Processing method %s", m);
 
         MethodGen mg = new MethodGen(m, gen.getClassName(), pool);
         mgen = mg; // copy to global
@@ -718,7 +717,7 @@ class DCInstrument extends InstructionListUtils {
         gen.addMethod(mg.getMethod());
 
       } catch (Throwable t) {
-        if (debug_instrument.enabled) t.printStackTrace();
+        // if (debug_instrument.enabled) t.printStackTrace();
         skip_method(mgen);
         if (!DynComp.quit_if_error) {
           System.out.printf(
@@ -756,11 +755,11 @@ class DCInstrument extends InstructionListUtils {
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      debug_transform.log("(refs_only)Not instrumenting annotation %s%n", gen.getClassName());
+      // debug_transform.log("(refs_only)Not instrumenting annotation %s%n", gen.getClassName());
       return gen.getJavaClass().copy();
     }
 
-    debug_transform.log("%nInstrumenting class(JDK refs_only) %s%n", gen.getClassName());
+    // debug_transform.log("%nInstrumenting class(JDK refs_only) %s%n", gen.getClassName());
 
     // properly account for object methods
     handle_object(gen);
@@ -772,7 +771,7 @@ class DCInstrument extends InstructionListUtils {
       // will be created in this class.
       Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
       if (eq == null) {
-        debug_transform.log("(refs_only)Added equals method");
+        // debug_transform.log("(refs_only)Added equals method");
         add_equals_method(gen);
       }
 
@@ -793,7 +792,7 @@ class DCInstrument extends InstructionListUtils {
           continue;
         }
 
-        debug_transform.log("  Processing method %s", m);
+        // debug_transform.log("  Processing method %s", m);
 
         MethodGen mg = new MethodGen(m, gen.getClassName(), pool);
         mgen = mg; // copy to global
@@ -851,7 +850,7 @@ class DCInstrument extends InstructionListUtils {
         gen.addMethod(mg.getMethod());
 
       } catch (Throwable t) {
-        if (debug_instrument.enabled) t.printStackTrace();
+        // if (debug_instrument.enabled) t.printStackTrace();
         skip_method(mgen);
         System.out.printf(
             "Unexpected error processing %s.%s: %s%n", gen.getClassName(), m.getName(), t);
@@ -915,12 +914,12 @@ class DCInstrument extends InstructionListUtils {
     while (ih != null) {
       handle_offsets[index++] = ih.getPosition();
 
-      if (debug_instrument.enabled) {
-        debug_instrument.log("inst: %s %n", ih);
-        for (InstructionTargeter it : ih.getTargeters()) {
-          debug_instrument.log("targeter: %s %n", it);
-        }
-      }
+      // if (debug_instrument.enabled) {
+      //   debug_instrument.log("inst: %s %n", ih);
+      //   for (InstructionTargeter it : ih.getTargeters()) {
+      //     debug_instrument.log("targeter: %s %n", it);
+      //   }
+      // }
 
       ih = ih.getNext();
     }
@@ -928,7 +927,7 @@ class DCInstrument extends InstructionListUtils {
     index = 0;
     // Loop through each instruction, making substitutions
     for (ih = orig_start; ih != null; ) {
-      debug_instrument.log("instrumenting instruction %s%n", ih);
+      // debug_instrument.log("instrumenting instruction %s%n", ih);
       InstructionList new_il = null;
 
       // Remember the next instruction to process
@@ -995,7 +994,7 @@ class DCInstrument extends InstructionListUtils {
     InstructionList il = mg.getInstructionList();
     OperandStack stack = null;
     for (InstructionHandle ih = il.getStart(); ih != null; ) {
-      debug_instrument.log("(refs_only)instrumenting instruction %s%n", ih);
+      // debug_instrument.log("(refs_only)instrumenting instruction %s%n", ih);
       // ih.getInstruction().toString(pool.getConstantPool()));
       InstructionList new_il = null;
 
@@ -1007,7 +1006,7 @@ class DCInstrument extends InstructionListUtils {
 
       // Get the translation for this instruction (if any)
       new_il = xform_inst_refs_only(mg, ih, stack);
-      debug_instrument.log("  (refs_only)new inst: %s%n", new_il);
+      // debug_instrument.log("  (refs_only)new inst: %s%n", new_il);
 
       // If this instruction was modified, replace it with the new
       // instruction list. If this instruction was the target of any
@@ -1102,8 +1101,8 @@ class DCInstrument extends InstructionListUtils {
 
     int exc_offset = exc.getPosition();
 
-    debug_instrument.log(
-        "New ExceptionHandler: %x %x %x %n", start.getPosition(), end.getPosition(), exc_offset);
+    // debug_instrument.log(
+    //     "New ExceptionHandler: %x %x %x %n", start.getPosition(), end.getPosition(), exc_offset);
 
     // This is a trick to get running_offset set to
     // value of last stack map entry.
@@ -1296,7 +1295,7 @@ class DCInstrument extends InstructionListUtils {
             string_arg,
             Const.INVOKESTATIC));
     il.append(InstructionFactory.createStore(object_arr, tag_frame_local.getIndex()));
-    debug_instrument.log("Store Tag frame local at index %d%n", tag_frame_local.getIndex());
+    // debug_instrument.log("Store Tag frame local at index %d%n", tag_frame_local.getIndex());
 
     return il;
   }
@@ -2716,7 +2715,7 @@ class DCInstrument extends InstructionListUtils {
 
     // Push the tag frame and the index of this local
     il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
-    debug_instrument.log("CreateLoad %s %d%n", object_arr, tag_frame_local.getIndex());
+    // debug_instrument.log("CreateLoad %s %d%n", object_arr, tag_frame_local.getIndex());
     il.append(ifact.createConstant(lvi.getIndex()));
 
     // Call the runtime method to handle loading/storing the local/parameter
@@ -2953,7 +2952,7 @@ class DCInstrument extends InstructionListUtils {
       cinit_gen.setMaxStack();
       gen.replaceMethod(cinit, cinit_gen.getMethod());
     } catch (Throwable t) {
-      if (debug_instrument.enabled) t.printStackTrace();
+      // if (debug_instrument.enabled) t.printStackTrace();
       throw new Error(
           "Unexpected error processing " + gen.getClassName() + "." + cinit.getName(), t);
     }
@@ -3093,11 +3092,11 @@ class DCInstrument extends InstructionListUtils {
    */
   public boolean should_track(/*@ClassGetName*/ String classname, String pptname) {
 
-    debug_track.log("Considering tracking ppt %s %s%n", classname, pptname);
+    // debug_track.log("Considering tracking ppt %s %s%n", classname, pptname);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(classname)) {
-      debug_track.log("  jdk class, return false%n");
+      // debug_track.log("  jdk class, return false%n");
       return false;
     }
 
@@ -3112,7 +3111,7 @@ class DCInstrument extends InstructionListUtils {
       // System.out.printf ("should_track: pattern '%s' on ppt '%s'\n",
       //                    p, pptname);
       if (p.matcher(pptname).find()) {
-        debug_track.log("  Omitting program point %s%n", pptname);
+        // debug_track.log("  Omitting program point %s%n", pptname);
         return false;
       }
     }
@@ -3123,15 +3122,15 @@ class DCInstrument extends InstructionListUtils {
     // One of the select patterns must match the ppt or the class to include
     for (Pattern p : DynComp.ppt_select_pattern) {
       if (p.matcher(pptname).find()) {
-        debug_track.log("  matched pptname%n");
+        // debug_track.log("  matched pptname%n");
         return true;
       }
       if (p.matcher(classname).find()) {
-        debug_track.log(" matched classname%n");
+        // debug_track.log(" matched classname%n");
         return true;
       }
     }
-    debug_track.log(" No Match%n");
+    // debug_track.log(" No Match%n");
     return false;
   }
 
@@ -3179,7 +3178,7 @@ class DCInstrument extends InstructionListUtils {
    */
   InstructionList dup_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (debug_dup.enabled) debug_dup.log("DUP -> %s [... %s]%n", "dup", stack_contents(stack, 2));
+    // if (debug_dup.enabled) debug_dup.log("DUP -> %s [... %s]%n", "dup", stack_contents(stack, 2));
     if (is_primitive(top)) {
       return build_il(dcr_call("dup", Type.VOID, Type.NO_ARGS), inst);
     }
@@ -3194,8 +3193,8 @@ class DCInstrument extends InstructionListUtils {
    */
   InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (debug_dup.enabled)
-      debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
+    // if (debug_dup.enabled)
+    //   debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
     if (!is_primitive(top)) return null;
     String method = "dup_x1";
     if (!is_primitive(stack.peek(1))) method = "dup";
@@ -3230,7 +3229,7 @@ class DCInstrument extends InstructionListUtils {
         op = null;
       }
     }
-    if (debug_dup.enabled) debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    // if (debug_dup.enabled) debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
 
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
@@ -3250,7 +3249,7 @@ class DCInstrument extends InstructionListUtils {
     else if (is_primitive(top) || is_primitive(stack.peek(1))) op = "dup";
     else // both of the top two items are not primitive, nothing to dup
     op = null;
-    if (debug_dup.enabled) debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
+    // if (debug_dup.enabled) debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
     }
@@ -3270,7 +3269,7 @@ class DCInstrument extends InstructionListUtils {
       else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
       else op = "dup";
     }
-    if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    // if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
     }
@@ -3327,7 +3326,7 @@ class DCInstrument extends InstructionListUtils {
         op = null; // nothing to dup
       }
     }
-    if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    // if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
     }
@@ -3564,7 +3563,7 @@ class DCInstrument extends InstructionListUtils {
     Type[] arg_types = mg.getArgumentTypes();
     String[] arg_names = mg.getArgumentNames();
 
-    debug_native.log("Native call %s%n", mg);
+    // debug_native.log("Native call %s%n", mg);
 
     // Build local variables for each argument to the method
     if (!mg.isStatic()) mg.addLocalVariable("this", new ObjectType(mg.getClassName()), null, null);
@@ -3657,7 +3656,7 @@ class DCInstrument extends InstructionListUtils {
     Type[] arg_types = mg.getArgumentTypes();
     String[] arg_names = mg.getArgumentNames();
 
-    debug_native.log("Native call %s%n", mg);
+    // debug_native.log("Native call %s%n", mg);
 
     // Build local variables for each argument to the method
     if (!mg.isStatic()) mg.addLocalVariable("this", new ObjectType(mg.getClassName()), null, null);
@@ -4079,7 +4078,7 @@ class DCInstrument extends InstructionListUtils {
    */
   public void add_dcomp_interface(ClassGen gen) {
     gen.addInterface("daikon.dcomp.DCompInstrumented");
-    debug_transform.log("Added interface DCompInstrumented");
+    // debug_transform.log("Added interface DCompInstrumented");
 
     InstructionList il = new InstructionList();
     int flags = Const.ACC_PUBLIC;

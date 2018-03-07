@@ -6,7 +6,6 @@ import static daikon.tools.nullness.NullnessUtils.castNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
-import daikon.util.SimpleLog;
 import daikon.util.UtilMDE;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -99,7 +98,7 @@ public class ChicoryPremain {
     Runtime.ppt_select_pattern = Chicory.ppt_select_pattern;
     Runtime.sample_start = Chicory.sample_start;
     DaikonVariableInfo.std_visibility = Chicory.std_visibility;
-    DaikonVariableInfo.debug_vars.enabled = Chicory.debug_decl_print;
+    // DaikonVariableInfo.debug_vars.enabled = Chicory.debug_decl_print;
     if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
       try {
@@ -341,7 +340,7 @@ public class ChicoryPremain {
    */
   public static class ChicoryLoader extends ClassLoader {
 
-    public static final SimpleLog debug = new SimpleLog(Chicory.verbose);
+    // public static final SimpleLog debug = new SimpleLog(Chicory.verbose);
 
     public ChicoryLoader() throws IOException {
 
@@ -382,7 +381,7 @@ public class ChicoryPremain {
         System.exit(1);
       } else {
         JarFile bcel_jar = new JarFile(extract_jar_path(plse));
-        debug.log("Daikon BCEL found in jar %s%n", bcel_jar.getName());
+        // debug.log("Daikon BCEL found in jar %s%n", bcel_jar.getName());
       }
     }
 
