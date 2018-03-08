@@ -136,7 +136,7 @@ public class PptMap implements Serializable {
    * @see #pptIterator()
    */
   public Iterable<PptTopLevel> pptIterable() {
-    return new IterableIterator<PptTopLevel>(pptIterator());
+    return UtilPlume.iteratorToIterable(pptIterator());
   }
 
   /**
