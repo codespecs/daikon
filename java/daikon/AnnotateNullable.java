@@ -10,7 +10,6 @@ import java.util.Map;
 import org.plumelib.bcelutil.JvmUtil;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
-import plume.SimpleLog;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -36,9 +35,8 @@ public class AnnotateNullable {
   // Why is this variable static?
   static PptMap ppts = new PptMap(); // dummy value, to satisfy Nullness Checker
 
-  static SimpleLog verbose = new SimpleLog(/*enabled=*/ false);
-
-  static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
+  // static SimpleLog verbose = new SimpleLog(/*enabled=*/ false);
+  // static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
 
   /** Map from a class name to the list of static functions for that class. */
   static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<String, List<PptTopLevel>>();
@@ -72,7 +70,7 @@ public class AnnotateNullable {
     File inv_file = new File(inv_files[0]);
     ppts = FileIO.read_serialized_pptmap(inv_file, true);
     Daikon.all_ppts = ppts;
-    verbose.log("Finished reading %d program points", ppts.size());
+    // verbose.log("Finished reading %d program points", ppts.size());
 
     // Setup the list of proto invariants and initialize NIS suppressions
     Daikon.setup_proto_invs();
@@ -244,7 +242,7 @@ public class AnnotateNullable {
         if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
           continue;
         }
-        debug.log("processing static method %s, type %s", child, child.type);
+        // debug.log("processing static method %s, type %s", child, child.type);
         process_method(child);
       }
     } else {
@@ -265,7 +263,7 @@ public class AnnotateNullable {
       if (child.type == PptType.ENTER) {
         continue;
       }
-      debug.log("processing method %s, type %s", child, child.type);
+      // debug.log("processing method %s, type %s", child, child.type);
       process_method(child);
     }
 

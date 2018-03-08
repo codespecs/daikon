@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import plume.Stopwatch;
 import plume.UtilMDE;
 
 /*>>>
@@ -32,7 +31,6 @@ public class NISuppression {
   NISuppressee suppressee;
 
   private boolean debug = false;
-  static Stopwatch watch = new Stopwatch(false);
 
   public NISuppression(NISuppressor[] suppressor_set, NISuppressee suppressee) {
 
@@ -214,12 +212,9 @@ public class NISuppression {
     // Recursively check each combination of possible antecedents that
     // match our suppressors for suppressions
     VarInfo vis[] = new VarInfo[suppressee.var_count];
-    // watch.clear();
-    // watch.start();
     // int old_size = unsuppressed_invs.size();
     Invariant[] cinvs = new Invariant[antecedents.length];
     find_unsuppressed_invs(unsuppressed_invs, antecedents, vis, 0, false, cinvs);
-    // watch.stop();
     if (debug) System.out.println("  unsuppressed invariants: " + unsuppressed_invs);
   }
 

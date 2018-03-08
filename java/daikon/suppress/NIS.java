@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.Stopwatch;
 import plume.UtilMDE;
 
 /*>>>
@@ -180,7 +180,7 @@ public class NIS {
   static int still_suppressed_cnt = 0;
 
   /** Total time spent in NIS processing */
-  public static Stopwatch watch = new Stopwatch(false);
+  public static long duration = 0;
 
   /** First execution of dump_stats(). Used to dump a header. */
   static boolean first_time = true;
@@ -314,9 +314,10 @@ public class NIS {
       return;
     }
 
+    long startTime = 0;
     // Count the number of falsified invariants that are antecedents
     if (keep_stats) {
-      watch.start();
+      startTime = System.nanoTime();
       if (PptTopLevel.first_pass_with_sample && suppressor_map.containsKey(inv.getClass())) {
         false_invs++;
       }
@@ -333,7 +334,7 @@ public class NIS {
     }
 
     if (keep_stats) {
-      watch.stop();
+      duration += (System.nanoTime() - startTime);
     }
   }
 
@@ -423,7 +424,7 @@ public class NIS {
   public static void clear_stats() {
 
     keep_stats = true;
-    watch.clear();
+    duration = 0;
     false_invs = 0;
     false_cnts = 0;
     suppressions_processed = 0;
@@ -481,7 +482,7 @@ public class NIS {
               + " : "
               + still_suppressed_cnt
               + " : "
-              + watch.elapsedMillis()
+              + TimeUnit.NANOSECONDS.toMillis(duration)
               + " msecs "
               // + build_ants_msecs + " " + process_ants_msecs + " : "
               + ppt.name);

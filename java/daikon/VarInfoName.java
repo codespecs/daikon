@@ -1860,7 +1860,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       String formatted = term.name_using(format, v);
       String collectType = (v.type.baseIsPrimitive() ? v.type.base() : "Object");
       return "daikon.Quant.getElement_" + collectType + "(" + formatted + ", " + index + ")";
-      //       // XXX temporary fix: sometimes long is passed as index (plume.StopWatch).
+      //       // XXX temporary fix: sometimes long is passed as index.
       //       // I can't find where the VarInfo for "index" is found. Wherever that is,
       //       // we should check if its type is long, and do the casting only for that
       //       // case.

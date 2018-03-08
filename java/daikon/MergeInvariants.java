@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.Stopwatch;
 import plume.UtilMDE;
 
 /*>>>
@@ -40,8 +40,6 @@ public final class MergeInvariants {
   public static final Logger debugProgress = Logger.getLogger("daikon.MergeInvariants.progress");
 
   public static /*@Nullable*/ File output_inv_file;
-
-  private static Stopwatch stopwatch = new Stopwatch();
 
   private static String usage =
       UtilMDE.joinLines(
@@ -379,13 +377,14 @@ public final class MergeInvariants {
     }
 
     // Implications
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     // System.out.println("Creating implications ");
     debugProgress.fine("Adding Implications ... ");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
       if (ppt.num_samples() > 0) ppt.addImplications();
     }
-    debugProgress.fine("Time spent in implications: " + stopwatch.format());
+    long duration = System.nanoTime() - startTime;
+    debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information

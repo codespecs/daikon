@@ -4,7 +4,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.util.Stopwatch;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +15,7 @@ import java.lang.instrument.Instrumentation;
 import java.nio.file.Files;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
@@ -170,7 +170,7 @@ public class Premain {
         assert DynComp.comparability_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter compare_out = open(DynComp.comparability_file);
-        Stopwatch watch = new Stopwatch();
+        long startTime = System.nanoTime();
         if (DynComp.no_primitives) {
           DCRuntime.print_all_comparable_refs_only(compare_out);
         } else {
@@ -178,7 +178,9 @@ public class Premain {
         }
         compare_out.close();
         if (DynComp.verbose) {
-          System.out.printf("Comparability sets written in %s%n", watch.format());
+          long duration = System.nanoTime() - startTime;
+          System.out.printf(
+              "Comparability sets written in %ds%n", TimeUnit.NANOSECONDS.toSeconds(duration));
         }
       }
 
@@ -189,11 +191,14 @@ public class Premain {
         assert DynComp.trace_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter trace_out = open(DynComp.trace_file);
-        Stopwatch watch = new Stopwatch();
+        long startTime = System.nanoTime();
         DCRuntime.trace_all_comparable(trace_out);
         trace_out.close();
         if (DynComp.verbose) {
-          System.out.printf("Comparability sets written in %s%n", watch.format());
+          long duration = System.nanoTime() - startTime;
+          System.out.printf(
+              "Traced comparability sets written in %ds%n",
+              TimeUnit.NANOSECONDS.toSeconds(duration));
         }
       } else {
         // Writing comparability sets to standard output?
@@ -209,11 +214,12 @@ public class Premain {
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
-      Stopwatch watch = new Stopwatch();
+      long startTime = System.nanoTime();
       DCRuntime.print_decl_file(decl_fp);
       decl_fp.close();
       if (DynComp.verbose) {
-        System.out.printf("Decl file written in %s%n", watch.format());
+        long duration = System.nanoTime() - startTime;
+        System.out.printf("Decl file written in %ds%n", TimeUnit.NANOSECONDS.toSeconds(duration));
         System.out.printf("comp_list = %,d%n", DCRuntime.comp_list_ms);
         System.out.printf("ppt name  = %,d%n", DCRuntime.ppt_name_ms);
         System.out.printf("decl vars = %,d%n", DCRuntime.decl_vars_ms);

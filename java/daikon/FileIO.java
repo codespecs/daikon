@@ -46,7 +46,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import plume.SimpleLog;
 import plume.StringBuilderDelimited;
 import plume.UtilMDE;
 
@@ -198,7 +197,7 @@ public final class FileIO {
   /** Debug tracer for printing variable values. */
   public static final Logger debugVars = Logger.getLogger("daikon.FileIO.vars");
 
-  public static final SimpleLog debug_decl = new SimpleLog(false);
+  // public static final SimpleLog debug_decl = new SimpleLog(false);
 
   /** Parents in the ppt/variable hierarchy for a particular program point. */
   public static final class ParentRelation implements java.io.Serializable {
@@ -319,7 +318,7 @@ public final class FileIO {
 
     // Read the records that define this program point
     while ((line = state.reader.readLine()) != null) {
-      debug_decl.log("read line %s%n", line);
+      // debug_decl.log("read line %s%n", line);
       line = line.trim();
       if (line.length() == 0) {
         break;
