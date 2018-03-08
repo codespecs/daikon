@@ -67,7 +67,7 @@ import daikon.inv.unary.sequence.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.Intern;
+import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
 
 /*>>>

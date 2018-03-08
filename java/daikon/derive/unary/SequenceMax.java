@@ -3,7 +3,7 @@ package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
 import org.plumelib.util.ArraysPlume;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

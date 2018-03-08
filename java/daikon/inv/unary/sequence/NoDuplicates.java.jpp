@@ -44,7 +44,7 @@ import daikon.inv.unary.scalar.*;
 import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.*;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

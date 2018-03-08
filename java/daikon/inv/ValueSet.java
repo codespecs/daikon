@@ -2,7 +2,7 @@ package daikon.inv;
 
 import daikon.*;
 import java.io.Serializable;
-import plume.LimitedSizeIntSet;
+import org.plumelib.util.LimitedSizeIntSet;
 import org.plumelib.util.UtilPlume;
 
 // This is the successor to ValueTracker1.

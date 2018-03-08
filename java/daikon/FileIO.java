@@ -46,7 +46,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import plume.StringBuilderDelimited;
+import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
 /*>>>

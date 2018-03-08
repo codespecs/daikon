@@ -46,8 +46,8 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.IterableIterator;
-import plume.StringBuilderDelimited;
+import org.plumelib.util.IterableIterator;
+import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
 /*>>>

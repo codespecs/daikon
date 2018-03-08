@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import plume.IterableIterator;
+import org.plumelib.util.IterableIterator;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

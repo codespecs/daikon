@@ -219,7 +219,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

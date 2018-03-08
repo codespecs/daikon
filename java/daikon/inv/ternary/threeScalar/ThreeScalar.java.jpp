@@ -28,7 +28,7 @@ package daikon.inv.ternary.threeScalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.ternary.TernaryInvariant;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

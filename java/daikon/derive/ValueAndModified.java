@@ -1,7 +1,7 @@
 package daikon.derive;
 
 import daikon.*;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

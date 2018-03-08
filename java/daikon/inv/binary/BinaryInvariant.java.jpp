@@ -72,7 +72,7 @@ import daikon.inv.*;
 import daikon.inv.InvariantStatus;
 import daikon.inv.binary.*;
 import org.plumelib.util.ArraysPlume;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

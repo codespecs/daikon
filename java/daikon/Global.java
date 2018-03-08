@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import plume.FuzzyFloat;
+import org.plumelib.util.FuzzyFloat;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

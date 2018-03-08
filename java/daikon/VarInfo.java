@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
-import plume.StringBuilderDelimited;
+import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
 /*>>>

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import plume.IterableIterator;
+import org.plumelib.util.IterableIterator;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

@@ -22,8 +22,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.plumelib.util.EntryReader;
 import org.plumelib.util.UtilPlume;
-import plume.EntryReader;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
