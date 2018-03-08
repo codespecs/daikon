@@ -29,6 +29,9 @@ options-all-0.3.1.jar : https://github.com/plume-lib/options
 plume.jar : https://github.com/mernst/plume-lib.git
 - To update plume.jar, run:  make -C $DAIKONDIR update-plume-jar
 
-daikon-util-0.0.1.jar : Just like plume-util-0.0.1.jar, but with package
+daikon-util.jar : Just like plume-util-*.jar, but with package
 changed to daikon.util.  To create, run:
-java -jar ~/java/jarjar/jarjar-command/build/libs/jarjar-command-1.0.0.jar process daikon-util-rules.txt plume-util-0.0.1.jar into daikon-util-0.0.1.jar
+java \
+-cp $HOME/java/jarjar/jarjar-command/build/libs/jarjar-command-1.0.0.jar:${HOME}/java/jarjar/jarjar-core/build/libs/jarjar-core-1.0.0.jar:${HOME}/tmp/jopt-simple-5.0.4.jar:${HOME}/tmp/asm-6.0/lib/asm-commons-6.0.jar:${HOME}/tmp/asm-6.0/lib/asm-6.0.jar:${HOME}/tmp/slf4j-1.7.25/slf4j-simple-1.7.25.jar:${HOME}/tmp/slf4j-1.7.25/slf4j-api-1.7.25.jar \
+com.tonicsystems.jarjar.Main \
+--rules daikon-util-rules.txt plume-util-*.jar --output daikon-util.jar
