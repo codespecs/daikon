@@ -19,8 +19,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.*;
-import org.plumelib.util.StrTok;
 import org.plumelib.util.UtilPlume;
+import plume.StrTok;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

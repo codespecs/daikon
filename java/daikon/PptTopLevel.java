@@ -46,7 +46,6 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.plumelib.util.IterableIterator;
 import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
@@ -277,7 +276,7 @@ public class PptTopLevel extends Ppt {
    * @see #cond_iterator()
    */
   public Iterable<PptConditional> cond_iterable() {
-    return new IterableIterator<PptConditional>(new CondIterator());
+    return UtilPlume.iteratorToIterable(new CondIterator());
   }
 
   /** Returns whether or not this ppt has any splitters. */
