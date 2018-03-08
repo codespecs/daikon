@@ -64,8 +64,6 @@ java/daikon/chicory/Test.log
 
 # Obtained via Git
 utils
-# Generated from plume-lib
-java/daikon/util
 
 # Documentation (including WWW pages and the manual)
 doc/.fix-dev-menu

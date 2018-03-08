@@ -35,3 +35,19 @@ java \
 -cp $HOME/java/jarjar/jarjar-command/build/libs/jarjar-command-1.0.0.jar:${HOME}/java/jarjar/jarjar-core/build/libs/jarjar-core-1.0.0.jar:${HOME}/tmp/jopt-simple-5.0.4.jar:${HOME}/tmp/asm-6.0/lib/asm-commons-6.0.jar:${HOME}/tmp/asm-6.0/lib/asm-6.0.jar:${HOME}/tmp/slf4j-1.7.25/slf4j-simple-1.7.25.jar:${HOME}/tmp/slf4j-1.7.25/slf4j-api-1.7.25.jar \
 com.tonicsystems.jarjar.Main \
 --rules daikon-util-rules.txt plume-util-*.jar --output daikon-util.jar
+
+Motivation for daikon-util.jar:
+The daikon.util classes are used only by the run-time support for
+instrumentation tools (that is, anything that might run in the same JVM as
+a target program), namely Chicory and DynComp.  All other parts of Daikon
+use plume-lib.
+Suppose that both DynComp and the target program both used plume-lib.
+If DynComp instrumented plume-lib, then an infinite recursion would
+result; if DynComp did not instrument plume-lib, then DynComp would
+miss some computations of the target program.  Thus, DynComp needs to
+be completely separate from the target program -- they should share no
+code.  To enable DynComp to work properly on a program that uses
+plume-lib, DynComp must not use plume-lib.  Therefore, DynComp uses a
+renamed version of plume-lib that is not used by any other program,
+including Daikon itself.  DynComp can instrument the plume package,
+but it does not instrument daikon.util.
