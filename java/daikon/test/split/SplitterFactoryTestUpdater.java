@@ -11,7 +11,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -159,7 +159,7 @@ public class SplitterFactoryTestUpdater {
     // file.renameTo(to) fails if the two files are on different file systems
     // (e.g., /tmp and /scratch may be different).
     // So read and write the file directly rather than using renameTo().
-    UtilMDE.writeFile(to, UtilMDE.readFile(from));
+    UtilPlume.writeFile(to, UtilPlume.readFile(from));
   }
 
   /** Writes the new code for "SplitterFactoryTest.java". */
@@ -169,7 +169,7 @@ public class SplitterFactoryTestUpdater {
       // Delete the file, in case it is unwriteable (in which case deleting
       // works, but overwriting does not).
       new File(splitDir + "SplitterFactoryTest.java").delete();
-      BufferedWriter writer = UtilMDE.bufferedFileWriter(splitDir + "SplitterFactoryTest.java");
+      BufferedWriter writer = UtilPlume.bufferedFileWriter(splitDir + "SplitterFactoryTest.java");
       writer.write(code);
       writer.flush();
     } catch (IOException e) {
@@ -194,7 +194,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("import java.io.*;");
     ps.println("import java.util.*;");
     ps.println("import junit.framework.*;");
-    ps.println("import plume.UtilMDE;");
+    ps.println("import org.plumelib.util.UtilPlume;");
     ps.println();
     ps.println("/*>>>");
     ps.println("import org.checkerframework.checker.nullness.qual.*;");
@@ -230,7 +230,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("  private static boolean saveFiles = false;");
     ps.println();
     ps.println("  private static String usage =");
-    ps.println("    UtilMDE.joinLines(");
+    ps.println("    UtilPlume.joinLines(");
     ps.println("      \"Usage:  java daikon.tools.CreateSpinfo FILE.java ...\",");
     ps.println(
         "      \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
@@ -329,9 +329,9 @@ public class SplitterFactoryTestUpdater {
       ps.println("    createSplitterFiles(");
       ps.println(
           "        \""
-              + UtilMDE.java_source(spinfoFileLists.get(i).get(0))
+              + UtilPlume.java_source(spinfoFileLists.get(i).get(0))
               + "\", \""
-              + UtilMDE.java_source(declsFileLists.get(i).get(0))
+              + UtilPlume.java_source(declsFileLists.get(i).get(0))
               + "\");");
     }
     ps.println("  }");
@@ -341,7 +341,7 @@ public class SplitterFactoryTestUpdater {
   private static void appendTests(PrintStream ps) {
     ps.println("  /** Returns true iff files are the same (ignoring extra white space). */");
     ps.println("  public static void assertEqualFiles(String f1, String f2) {");
-    ps.println("    if (!UtilMDE.equalFiles(f1, f2)) {");
+    ps.println("    if (!UtilPlume.equalFiles(f1, f2)) {");
     ps.println("      fail(\"Files \" + f1 + \" and \" + f2 + \" differ.\");");
     ps.println("    }");
     ps.println("  }");

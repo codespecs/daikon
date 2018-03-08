@@ -51,7 +51,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import plume.EntryReader;
 import plume.RegexUtil;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -354,7 +354,7 @@ public final class Daikon {
   }
 
   static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           release_string,
           "Daikon invariant detector, copyright 1998-2018",
           // " by Michael Ernst <mernst@cs.washington.edu>",
@@ -396,7 +396,7 @@ public final class Daikon {
       super(e.getMessage());
     }
     //    public TerminationMessage(Exception e) {
-    //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
+    //      super(e.getMessage() + lineSep + UtilPlume.backTrace(e)); }
     public TerminationMessage(Throwable e, String msg) {
       super(
           ((e.getMessage() != null && msg.contains(e.getMessage()))
@@ -1117,7 +1117,7 @@ public final class Daikon {
 
           inv_file = new File(inv_filename);
 
-          if (!UtilMDE.canCreateAndWrite(inv_file)) {
+          if (!UtilPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.TerminationMessage(
                 "Cannot write to serialization output file " + inv_file);
           }
@@ -1168,7 +1168,7 @@ public final class Daikon {
           String inv_filename = basename.substring(0, base_end) + ".inv.gz";
 
           inv_file = new File(inv_filename);
-          if (!UtilMDE.canCreateAndWrite(inv_file)) {
+          if (!UtilPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.TerminationMessage("Cannot write to file " + inv_file);
           }
         }
@@ -1785,7 +1785,7 @@ public final class Daikon {
       fileio_progress.clear();
       if (!Daikon.dkconfig_quiet && decl_files.size() > 0) {
         System.out.print("\r(read ");
-        System.out.print(UtilMDE.nplural(decl_files.size(), "decls file"));
+        System.out.print(UtilPlume.nplural(decl_files.size(), "decls file"));
         System.out.println(")");
       }
       return all_ppts;
@@ -1809,9 +1809,9 @@ public final class Daikon {
       System.out.print("Reading splitter info files ");
       create_splitters(spinfo_files);
       System.out.print("\r(read ");
-      System.out.print(UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
+      System.out.print(UtilPlume.nplural(spinfo_files.size(), "spinfo file"));
       System.out.print(", ");
-      System.out.print(UtilMDE.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
+      System.out.print(UtilPlume.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
@@ -1831,7 +1831,7 @@ public final class Daikon {
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
           map_files, ContextSplitterFactory.dkconfig_granularity);
       System.out.print("\r(read ");
-      System.out.print(UtilMDE.nplural(map_files.size(), "map (context) file"));
+      System.out.print(UtilPlume.nplural(map_files.size(), "map (context) file"));
       System.out.println(")");
       long duration = System.nanoTime() - startTime;
       debugProgress.fine(
@@ -1862,7 +1862,7 @@ public final class Daikon {
     }
     if (pconds != null) {
       Global.debugSplit.fine(
-          "Got " + UtilMDE.nplural(pconds.length, "splitter") + " for " + ppt.name());
+          "Got " + UtilPlume.nplural(pconds.length, "splitter") + " for " + ppt.name());
       ppt.addConditions(pconds);
     }
 
@@ -1925,7 +1925,7 @@ public final class Daikon {
       if (dkconfig_progress_delay == -1) return;
       // "display("");" is wrong becuase it leaves the timestamp and writes
       // spaces across the screen.
-      String status = UtilMDE.rpad("", dkconfig_progress_display_width - 1);
+      String status = UtilPlume.rpad("", dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.print("\r"); // return to beginning of line
       System.out.flush();
@@ -1953,7 +1953,7 @@ public final class Daikon {
     public void display(String message) {
       if (dkconfig_progress_delay == -1) return;
       String status =
-          UtilMDE.rpad(
+          UtilPlume.rpad(
               "[" + df.format(new Date()) + "]: " + message, dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.flush();
@@ -2003,7 +2003,7 @@ public final class Daikon {
       if (!Daikon.dkconfig_quiet) {
         System.out.println(
             "Processing trace data; reading "
-                + UtilMDE.nplural(dtrace_files.size(), "dtrace file")
+                + UtilPlume.nplural(dtrace_files.size(), "dtrace file")
                 + ":");
       }
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
@@ -2060,7 +2060,7 @@ public final class Daikon {
     if ((use_dataflow_hierarchy && FileIO.samples_processed == unmatched_count)
         || (FileIO.samples_processed == 0)) {
       throw new Daikon.TerminationMessage(
-          "No samples found for any of " + UtilMDE.nplural(all_ppts.size(), "program point"));
+          "No samples found for any of " + UtilPlume.nplural(all_ppts.size(), "program point"));
     }
 
     // ppt_stats (all_ppts);
@@ -2343,7 +2343,7 @@ public final class Daikon {
       for (File file : decl_files) {
 
         // Open the file
-        LineNumberReader fp = UtilMDE.lineNumberFileReader(file);
+        LineNumberReader fp = UtilPlume.lineNumberFileReader(file);
 
         // Read each ppt name from the file
         for (String line = fp.readLine(); line != null; line = fp.readLine()) {

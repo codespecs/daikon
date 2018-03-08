@@ -68,7 +68,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import plume.Intern;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -153,7 +153,7 @@ public abstract class RANGE extends SUPERCLASS {
       v1 = var1.name_using(format);
     }
 
-    fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
+    fmt_str = UtilPlume.replaceString(fmt_str, "%var1%", v1);
     return fmt_str;
   }
 

@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -586,7 +586,7 @@ public class NISuppression {
     String suppressorsString =
         (suppressors.length == 1)
             ? suppressors[0].toString()
-            : "(" + UtilMDE.join(suppressors, " && ") + ")";
+            : "(" + UtilPlume.join(suppressors, " && ") + ")";
     return suppressorsString + " ==> " + suppressee;
   }
 

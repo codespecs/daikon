@@ -71,7 +71,7 @@ public final class Runtime {
   /// Classname utilities
   ///
 
-  // This section is lifted from plume/UtilMDE.java and should be kept
+  // This section is lifted from plume/UtilPlume.java and should be kept
   // in synch with that version.
 
   private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<String, String>(8);
@@ -415,7 +415,7 @@ public final class Runtime {
     ps.print((ch == null) ? "null" : quote(ch));
   }
 
-  // Lifted directly from plume/UtilMDE.java, where it is called
+  // Lifted directly from plume/UtilPlume.java, where it is called
   // escapeNonJava(), but repeated here to make this class self-contained.
   /** Quote \, ", \n, and \r characters in the target; return a new string. */
   public static String quote(String orig) {

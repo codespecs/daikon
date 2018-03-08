@@ -171,7 +171,7 @@ import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
 import java.util.*;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -273,8 +273,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
         if (format == OutputFormat.CSHARPCONTRACT) {
           #if defined(STRING)
-            fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", var1().csharp_name());
-            fmt_str = UtilMDE.replaceString(fmt_str, "%var2%", var2().csharp_name());
+            fmt_str = UtilPlume.replaceString(fmt_str, "%var1%", var1().csharp_name());
+            fmt_str = UtilPlume.replaceString(fmt_str, "%var2%", var2().csharp_name());
             return fmt_str;
           #else
             v1 = var1().csharp_name();
@@ -326,8 +326,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // inseparable from the regex library, and we don't want to have to
     // escape v1 with something like
     // v1.replaceAll("([\\$\\\\])", "\\\\$1")
-    fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
-    fmt_str = UtilMDE.replaceString(fmt_str, "%var2%", v2);
+    fmt_str = UtilPlume.replaceString(fmt_str, "%var1%", v1);
+    fmt_str = UtilPlume.replaceString(fmt_str, "%var2%", v2);
 
     if (false && (format == OutputFormat.DAIKON)) {
       fmt_str = "[" + getClass() + "]" + fmt_str + " ("

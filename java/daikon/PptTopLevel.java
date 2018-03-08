@@ -48,7 +48,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import plume.IterableIterator;
 import plume.StringBuilderDelimited;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -365,7 +365,7 @@ public class PptTopLevel extends Ppt {
     in.defaultReadObject();
     if (name != null) {
       try {
-        UtilMDE.setFinalField(this, "name", name.intern());
+        UtilPlume.setFinalField(this, "name", name.intern());
       } catch (Exception e) {
         throw new Error("unexpected error setting name", e);
       }
@@ -504,7 +504,7 @@ public class PptTopLevel extends Ppt {
     }
     BitSet b1 = mbtracker.get(vi1.value_index);
     BitSet b2 = mbtracker.get(vi2.value_index);
-    int num_slice_samples = UtilMDE.intersectionCardinality(b1, b2);
+    int num_slice_samples = UtilPlume.intersectionCardinality(b1, b2);
     return num_slice_samples;
   }
 
@@ -522,7 +522,7 @@ public class PptTopLevel extends Ppt {
     BitSet b1 = mbtracker.get(vi1.value_index);
     BitSet b2 = mbtracker.get(vi2.value_index);
     BitSet b3 = mbtracker.get(vi3.value_index);
-    int num_slice_samples = UtilMDE.intersectionCardinality(b1, b2, b3);
+    int num_slice_samples = UtilPlume.intersectionCardinality(b1, b2, b3);
     return num_slice_samples;
   }
 
@@ -2573,7 +2573,7 @@ public class PptTopLevel extends Ppt {
 
     debugConditional.fine(
         "Applying "
-            + UtilMDE.nplural(((splits == null) ? 0 : splits.length), "split")
+            + UtilPlume.nplural(((splits == null) ? 0 : splits.length), "split")
             + " to "
             + name());
 
@@ -3128,7 +3128,7 @@ public class PptTopLevel extends Ppt {
 
   /** Iterate over all of the invariants at this ppt (but not any implications). */
   public Iterator<Invariant> invariants_iterator() {
-    return new UtilMDE.MergedIterator<Invariant>(views_iterator_iterator());
+    return new UtilPlume.MergedIterator<Invariant>(views_iterator_iterator());
   }
 
   /** An iterator whose elements are themselves iterators that return invariants. */

@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import plume.OrderedPairIterator;
 import plume.Pair;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -632,7 +632,7 @@ public class PptSplitter implements Serializable {
   private boolean at_same_ppt(List<Invariant> invs1, List<Invariant> invs2) {
     PptSlice ppt = null;
     Iterator<Invariant> itor =
-        new UtilMDE.MergedIterator2<Invariant>(invs1.iterator(), invs2.iterator());
+        new UtilPlume.MergedIterator2<Invariant>(invs1.iterator(), invs2.iterator());
     for (; itor.hasNext(); ) {
       Invariant inv = itor.next();
       if (ppt == null) {

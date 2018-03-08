@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -68,7 +68,7 @@ public class LogicalCompare {
   private static /*@MonotonicNonNull*/ LemmaStack lemmas;
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
           "           WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]",
           "  -h, --" + Daikon.help_SWITCH,
@@ -534,7 +534,7 @@ public class LogicalCompare {
   private static void readExtraAssumptions(String filename) {
     File file = new File(filename);
     try {
-      LineNumberReader reader = UtilMDE.lineNumberFileReader(file);
+      LineNumberReader reader = UtilPlume.lineNumberFileReader(file);
       String line;
       String ppt_name = null;
       while ((line = reader.readLine()) != null) {

@@ -47,7 +47,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import plume.StringBuilderDelimited;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -851,7 +851,7 @@ public final class FileIO {
             val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is little point.  val can be null, so it cannot be the receiver.
         pw.print("<hashcode>");
         else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
-        else if (val instanceof String) pw.print(UtilMDE.escapeNonASCII((String) val));
+        else if (val instanceof String) pw.print(UtilPlume.escapeNonASCII((String) val));
         else pw.print(val);
       }
       pw.println();
@@ -1271,7 +1271,7 @@ public final class FileIO {
 
       if (count_lines) {
         Daikon.progress = "Checking size of " + filename;
-        total_lines = UtilMDE.count_lines(raw_filename);
+        total_lines = UtilPlume.count_lines(raw_filename);
       } else {
         // System.out.printf ("no count %b %d %s %d %d\n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
@@ -1297,7 +1297,7 @@ public final class FileIO {
           reader = new LineNumberReader(new InputStreamReader(stream, UTF_8));
         }
       } else {
-        reader = UtilMDE.lineNumberFileReader(raw_filename);
+        reader = UtilPlume.lineNumberFileReader(raw_filename);
       }
 
       varcomp_format = VarComparability.IMPLICIT;
@@ -1798,7 +1798,7 @@ public final class FileIO {
     if ((!call_stack.isEmpty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.print(
-          "No return from procedure observed " + UtilMDE.nplural(unmatched_count, "time") + ".");
+          "No return from procedure observed " + UtilPlume.nplural(unmatched_count, "time") + ".");
       if (Daikon.use_dataflow_hierarchy) {
         System.out.print("  Unmatched entries are ignored!");
       }
@@ -1806,7 +1806,7 @@ public final class FileIO {
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
         ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-        for (/*@KeyFor("call_hashmap")*/ Integer i : UtilMDE.sortedKeySet(call_hashmap)) {
+        for (/*@KeyFor("call_hashmap")*/ Integer i : UtilPlume.sortedKeySet(call_hashmap)) {
           Invocation invok = call_hashmap.get(i);
           assert invok != null;
           invocations.add(invok);
@@ -1822,7 +1822,9 @@ public final class FileIO {
       if (!call_stack.isEmpty()) {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           System.out.println(
-              "Remaining " + UtilMDE.nplural(unmatched_count, "stack") + " call summarized below.");
+              "Remaining "
+                  + UtilPlume.nplural(unmatched_count, "stack")
+                  + " call summarized below.");
           print_invocations_verbose(call_stack);
         } else {
           print_invocations_grouped(call_stack);
@@ -1862,7 +1864,7 @@ public final class FileIO {
     // Print the invocations in sorted order.
     for (Map.Entry</*@Interned*/ String, Integer> invokEntry : counter.entrySet()) {
       System.out.println(
-          invokEntry.getKey() + " : " + UtilMDE.nplural(invokEntry.getValue(), "invocation"));
+          invokEntry.getKey() + " : " + UtilPlume.nplural(invokEntry.getValue(), "invocation"));
     }
   }
 
@@ -2313,7 +2315,7 @@ public final class FileIO {
 
   public static void write_serialized_pptmap(PptMap map, File file) throws IOException {
     SerialFormat record = new SerialFormat(map, Configuration.getInstance());
-    UtilMDE.writeObject(record, file);
+    UtilPlume.writeObject(record, file);
   }
 
   /**
@@ -2325,7 +2327,7 @@ public final class FileIO {
       throws IOException {
 
     try {
-      Object obj = UtilMDE.readObject(file);
+      Object obj = UtilPlume.readObject(file);
       if (obj instanceof FileIO.SerialFormat) {
         SerialFormat record = (SerialFormat) obj;
         if (use_saved_config) {
@@ -2956,6 +2958,6 @@ public final class FileIO {
       }
       nd_stack.add(si);
     }
-    return UtilMDE.join(nd_stack, "|").intern();
+    return UtilPlume.join(nd_stack, "|").intern();
   }
 }

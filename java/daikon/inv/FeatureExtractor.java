@@ -23,7 +23,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import plume.EntryReader;
 import plume.Pair;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -59,7 +59,7 @@ public final class FeatureExtractor {
   //   -p             do not output if no positive feature vectors are present
 
   private static String USAGE =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Arguments:",
           "-u FileName:\tan invMap inv file with useful invariants",
           "-n FileName:\tan invMap inv file with nonuseful invariants",
@@ -505,7 +505,7 @@ public final class FeatureExtractor {
   // compacts an SVMlight file to remove repeats.
 
   private static void compactSVMFeatureFile(File input, File output) throws IOException {
-    BufferedReader br = UtilMDE.bufferedFileReader(input);
+    BufferedReader br = UtilPlume.bufferedFileReader(input);
     HashSet<String> vectors = new HashSet<String>();
     ArrayList<String> outputData = new ArrayList<String>();
     while (br.ready()) {
@@ -529,7 +529,7 @@ public final class FeatureExtractor {
 
   // compacts an SVMfu file to remove repeats.
   private static void compactSVMfuFeatureFile(File input, File output) throws IOException {
-    BufferedReader br = UtilMDE.bufferedFileReader(input);
+    BufferedReader br = UtilPlume.bufferedFileReader(input);
     HashSet<String> vectors = new HashSet<String>();
     br.readLine();
     while (br.ready()) vectors.add(br.readLine());
@@ -545,7 +545,7 @@ public final class FeatureExtractor {
 
   // Reads an InvMap from a file that contains a serialized InvMap.
   private static InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
-    Object o = UtilMDE.readObject(file);
+    Object o = UtilPlume.readObject(file);
     if (o instanceof InvMap) {
       return (InvMap) o;
     } else {
@@ -808,7 +808,7 @@ public final class FeatureExtractor {
   public static final class CombineFiles {
 
     private static String USAGE =
-        UtilMDE.joinLines(
+        UtilPlume.joinLines(
             "Arguments:",
             "-i FileName:\ta SVMfu or C5 input file (with .data)",
             "-t Type:\tFormat, one of C5 or SVMfu",
@@ -958,7 +958,7 @@ public final class FeatureExtractor {
   public static final class ClassifyInvariants {
 
     private static String USAGE =
-        UtilMDE.joinLines(
+        UtilPlume.joinLines(
             "Arguments:",
             "-d FileName:\tSVMfu or C5 training data (with .data)",
             "-s FileName:\tSVMfu or C5 test data (with .data)",

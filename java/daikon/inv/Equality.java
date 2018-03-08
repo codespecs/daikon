@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -223,7 +223,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
       clauses.add(String.format("(%s == %s)", leaderName, var.name()));
     }
-    return UtilMDE.join(clauses, " && ");
+    return UtilPlume.join(clauses, " && ");
   }
 
   public String format_esc(/*>>>@GuardSatisfied Equality this*/) {
@@ -361,7 +361,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         }
       }
     }
-    return UtilMDE.join(clauses, " && ");
+    return UtilPlume.join(clauses, " && ");
   }
 
   /*@SideEffectFree*/

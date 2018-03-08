@@ -39,7 +39,7 @@ import java.util.logging.Logger;
 import daikon.*;
 import daikon.derive.*;
 import plume.Intern;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -102,7 +102,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     } else if (index_shift > 0) {
       shift = "+" + index_shift;
     }
-    return (UtilMDE.replaceString(seqvar().name(), "[]", "") + "[" + sclvar().name() + shift + "]");
+    return (UtilPlume.replaceString(seqvar().name(), "[]", "") + "[" + sclvar().name() + shift + "]");
   }
 
   @Override

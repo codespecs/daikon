@@ -2,7 +2,7 @@ package daikon.inv.unary.stringsequence;
 
 import daikon.*;
 import daikon.inv.*;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 import plume.Intern;
 
 /*>>>
@@ -124,8 +124,9 @@ public class CommonStringSequence extends SingleStringSequence {
       String[] tmp = new String[intersect.length];
       int size = 0;
       for (int i = 1; i < a.length; i++) {
-        if ((ArraysMDE.indexOf(intersect, a[i]) != -1)
-            && ((size == 0) || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), a[i]) == -1)))
+        if ((ArraysPlume.indexOf(intersect, a[i]) != -1)
+            && ((size == 0)
+                || (ArraysPlume.indexOf(ArraysPlume.subarray(tmp, 0, size), a[i]) == -1)))
           tmp[size++] = a[i];
       }
 
@@ -147,15 +148,16 @@ public class CommonStringSequence extends SingleStringSequence {
       /*@Interned*/ String[] tmp = new /*@Interned*/ String[intersect.length];
       int size = 0;
       for (int i = 1; i < a.length; i++) {
-        if ((ArraysMDE.indexOf(intersect, a[i]) != -1)
-            && ((size == 0) || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), a[i]) == -1)))
+        if ((ArraysPlume.indexOf(intersect, a[i]) != -1)
+            && ((size == 0)
+                || (ArraysPlume.indexOf(ArraysPlume.subarray(tmp, 0, size), a[i]) == -1)))
           tmp[size++] = a[i];
       }
 
       if (size == 0) {
         return InvariantStatus.FALSIFIED;
       }
-      intersect = Intern.intern(ArraysMDE.subarray(tmp, 0, size));
+      intersect = Intern.intern(ArraysPlume.subarray(tmp, 0, size));
     }
     elts++;
     return InvariantStatus.NO_CHANGE;

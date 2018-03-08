@@ -6,7 +6,7 @@ import static daikon.tools.nullness.NullnessUtils.castNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
-import daikon.util.UtilMDE;
+import daikon.util.UtilPlume;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -192,7 +192,7 @@ public class ChicoryPremain {
 
     BufferedReader reader;
     try {
-      reader = UtilMDE.bufferedFileReader(purityFile);
+      reader = UtilPlume.bufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
       System.err.printf(
           "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());

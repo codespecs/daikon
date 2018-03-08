@@ -2,7 +2,7 @@ package daikon;
 
 import gnu.getopt.*;
 import java.io.File;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /**
  * UnionInvariants is a command-line tool that will read in one (or more) {@code .inv} files
@@ -23,7 +23,7 @@ public final class UnionInvariants {
 
   // Non-empty program points in the input files must be distinct.
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.UnionInvariants [OPTION]... FILE.inv[.gz] [FILE.inv[.gz] ...]",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -88,7 +88,7 @@ public final class UnionInvariants {
           System.out.println("Inv filename = " + inv_filename);
           inv_file = new File(inv_filename);
 
-          if (!UtilMDE.canCreateAndWrite(inv_file)) {
+          if (!UtilPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.TerminationMessage(
                 "Cannot write to serialization output file " + inv_file);
           }

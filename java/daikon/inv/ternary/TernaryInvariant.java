@@ -28,7 +28,7 @@ public abstract class TernaryInvariant extends Invariant {
   @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 3;
-    // assert ArraysMDE.fn_is_permutation(permutation);
+    // assert ArraysPlume.fn_is_permutation(permutation);
     throw new Error("to implement");
   }
 

@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.MathMDE;
+import org.plumelib.util.MathPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -409,7 +409,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     // Put the coefficients in lowest terms by dividing by the gcd.
     // If the gcd is 1, no harm done -- divide by 1.
     // Type is double to ensure floating-point division.
-    double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var), Stand_const);
+    double myGCD = MathPlume.gcd(MathPlume.gcd(i_var, j_var), Stand_const);
     double standard_i_var = i_var / myGCD;
     double standard_j_var = j_var / myGCD;
     double standard_Stand_const = Stand_const / myGCD;

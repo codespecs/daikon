@@ -13,7 +13,7 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS SingleScalarSequence
   #define PRIMITIVE long
   #define CLASSSTRING "CommonSequence"
-  #define INDEXOF ArraysMDE.indexOf
+  #define INDEXOF ArraysPlume.indexOf
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define BASE_IS_INTEGRAL baseIsIntegral()
 #elif defined(TYPEDOUBLE)
@@ -33,7 +33,7 @@ package daikon.inv.unary.sequence;
 import daikon.*;
 import daikon.inv.*;
 import java.util.Arrays;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 import plume.Intern;
 
 /*>>>
@@ -247,7 +247,7 @@ public class CLASSNAME extends SUPERCLASS {
       // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
       int ii = INDEXOF(intersect, a[i]);
       if ((ii != -1)
-        && (INDEXOF(ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
+        && (INDEXOF(ArraysPlume.subarray(tmp,0,size), a[i]) == -1)) {
         //System.out.println ("adding " + intersect[ii] + " at " + size);
 
         // Carefully add the existing intersect value and not a[i].  These
@@ -260,7 +260,7 @@ public class CLASSNAME extends SUPERCLASS {
       return InvariantStatus.FALSIFIED;
     }
 
-    intersect = ArraysMDE.subarray(tmp, 0, size);
+    intersect = ArraysPlume.subarray(tmp, 0, size);
 
     intersect = Intern.intern(intersect);
     elts++;

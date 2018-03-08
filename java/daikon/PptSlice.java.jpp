@@ -56,7 +56,7 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 import plume.Intern;
 
 /*>>>
@@ -436,7 +436,7 @@ public final class PPTSLICE1 extends PptSlice {
           if (array1 && array2 && (!( (inv instanceof SeqSeqIntEqual)
               || (inv instanceof SeqSeqFloatEqual)
               || (inv instanceof SeqSeqStringEqual) ))
-              && ArraysMDE.length(val1) != ArraysMDE.length(val2)) {
+              && ArraysPlume.length(val1) != ArraysPlume.length(val2)) {
             // No need to print out two potentially huge arrays if the
             // reason for discard was because of different array lengths
             DiscReasonMap.put(inv, DiscardCode.bad_sample,
@@ -539,7 +539,7 @@ public final class PPTSLICE1 extends PptSlice {
       assert vis_sorted[i].varinfo_index <= vis_sorted[i + 1].varinfo_index;
     }
 
-    assert ArraysMDE.fn_is_permutation(permutation);
+    assert ArraysPlume.fn_is_permutation(permutation);
     // Assert that the permutation represents the rearrangement
     for (int i = 0; i < ARITY; i++) {
       // the variable that used to be at position "i" is now found at

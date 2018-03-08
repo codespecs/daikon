@@ -8,7 +8,7 @@ import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import junit.framework.*;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
 
@@ -92,12 +92,12 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     */
 
     String result = ungenerifiedCollector.collectionResults().trim();
-    String[] result_arr = UtilMDE.splitLines(result);
+    String[] result_arr = UtilPlume.splitLines(result);
     String expected = expectedAnswerBuffer.toString().trim();
-    String[] expected_arr = UtilMDE.splitLines(expected);
+    String[] expected_arr = UtilPlume.splitLines(expected);
 
-    // UtilMDE.writeFile(new File("expected.txt"), expected);
-    // UtilMDE.writeFile(new File("result.txt"), result);
+    // UtilPlume.writeFile(new File("expected.txt"), expected);
+    // UtilPlume.writeFile(new File("result.txt"), result);
 
     assert expected_arr.length == result_arr.length
         : String.format(

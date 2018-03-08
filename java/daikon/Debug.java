@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
-import plume.UtilMDE;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -100,8 +100,8 @@ public final class Debug {
   public static /*@Nullable*/ String function_binary_method = null
       // "java.lang.Math.max("
       // "java.lang.Math.min("
-      // "plume.MathMDE.logicalXor("
-      // "plume.MathMDE.gcd("
+      // "plume.MathPlume.logicalXor("
+      // "plume.MathPlume.gcd("
       ;
 
   /**
@@ -385,7 +385,7 @@ public final class Debug {
     } else {
       @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
       /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
-      class_str = UtilMDE.replaceString(inv_class.getName(), packageName, "");
+      class_str = UtilPlume.replaceString(inv_class.getName(), packageName, "");
     }
 
     String vars = "";
@@ -477,7 +477,7 @@ public final class Debug {
     if (inv_class != null) {
       @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
       /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
-      class_str = UtilMDE.replaceString(inv_class.getName(), packageName, "");
+      class_str = UtilPlume.replaceString(inv_class.getName(), packageName, "");
     }
 
     // Get a string with all of the variable names.  Each is separated by ': '.
@@ -778,7 +778,7 @@ public final class Debug {
     // If classes were specified, get each class
     if (classes != null) {
       String[] class_arr = classes.split("\\|");
-      debugTrackClass = ArraysMDE.concat(debugTrackClass, class_arr);
+      debugTrackClass = ArraysPlume.concat(debugTrackClass, class_arr);
     }
 
     // If vars were specified, get each var
@@ -795,18 +795,18 @@ public final class Debug {
     // if a ppt was specified, add it to the array of tracked ppts
     if (ppt != null) {
       String[] newPpt = new String[] {ppt};
-      debugTrackPpt = ArraysMDE.concat(debugTrackPpt, newPpt);
+      debugTrackPpt = ArraysPlume.concat(debugTrackPpt, newPpt);
     }
 
     System.out.println();
     debugTrack.fine("After --track: " + def);
-    debugTrack.fine("Track Classes: " + ArraysMDE.toString(debugTrackClass, false));
+    debugTrack.fine("Track Classes: " + ArraysPlume.toString(debugTrackClass, false));
     String vars_out = "";
     for (int ii = 0; ii < debugTrackVars.length; ii++) {
       vars_out += Arrays.toString(debugTrackVars[ii]) + " ";
     }
     debugTrack.fine("Track Vars: " + vars_out);
-    debugTrack.fine("Track Ppts: " + ArraysMDE.toString(debugTrackPpt, false));
+    debugTrack.fine("Track Ppts: " + ArraysPlume.toString(debugTrackPpt, false));
 
     return null;
   }

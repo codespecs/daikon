@@ -4,7 +4,7 @@ package daikon;
 
 import java.util.*;
 import java.lang.reflect.*;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 import plume.Intern;
 import plume.FuzzyFloat;
 

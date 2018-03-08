@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import plume.ArraysMDE;
-import plume.MathMDE;
-import plume.UtilMDE;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.MathPlume;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
@@ -466,7 +466,7 @@ import typequals.*;
           Arrays.toString(permutation),
           ppt,
           new_ppt);
-      // result.log (UtilMDE.backTrace());
+      // result.log (UtilPlume.backTrace());
     }
     //if (debug.isLoggable(Level.FINE))
     //    debug.fine ("Invariant.transfer to " + new_ppt.name() + " "
@@ -958,7 +958,7 @@ import typequals.*;
           int name2in1 = inv1.ppt.parent.indexOf(name2);
           int cmp1 = (name1in2 == -1) ? 0 : vis1[i].varinfo_index - name1in2;
           int cmp2 = (name2in1 == -1) ? 0 : vis2[i].varinfo_index - name2in1;
-          int cmp = MathMDE.sign(cmp1) + MathMDE.sign(cmp2);
+          int cmp = MathPlume.sign(cmp1) + MathPlume.sign(cmp2);
           if (cmp != 0) return cmp;
         }
       }
@@ -1264,7 +1264,7 @@ import typequals.*;
       /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis) {
     assert !Daikon.isInferencing;
     assert vis.length <= 3 : "Unexpected more-than-ternary invariant";
-    if (!ArraysMDE.noDuplicates(vis)) {
+    if (!ArraysPlume.noDuplicates(vis)) {
       log("Two or more variables are equal %s", format());
       return new DiscardInfo(this, DiscardCode.obvious, "Two or more variables are equal");
     }
@@ -1283,7 +1283,7 @@ import typequals.*;
    */
   /*@Pure*/
   public boolean isReflexive(/*>>> @NonPrototype Invariant this*/) {
-    return !ArraysMDE.noDuplicates(ppt.var_infos);
+    return !ArraysPlume.noDuplicates(ppt.var_infos);
   }
 
   /**
@@ -1627,7 +1627,7 @@ import typequals.*;
       // debugGuarding.fine (guardingSet.toString());
     }
 
-    return UtilMDE.removeDuplicates(guardingList);
+    return UtilPlume.removeDuplicates(guardingList);
   }
 
   // This is called only from finally_print_the_invariants().
@@ -1900,7 +1900,7 @@ import typequals.*;
         strings.add(invs[i].format());
       }
     }
-    return UtilMDE.join(strings, ", ");
+    return UtilPlume.join(strings, ", ");
   }
 
   /**

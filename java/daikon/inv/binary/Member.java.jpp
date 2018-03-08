@@ -22,7 +22,7 @@ The correct way to build the system is to run 'make'.
   #define ARBITRARYSUBSEQUENCE SequenceScalarArbitrarySubsequence
   #define SUBSEQUENCE SubSequence
   #define SEQUENCEINITIAL SequenceInitial
-  #define INDEXOF ArraysMDE.indexOf
+  #define INDEXOF ArraysPlume.indexOf
 #elif defined(STRING)
   #undef STRING
   #define IS_STRING
@@ -41,7 +41,7 @@ The correct way to build the system is to run 'make'.
 #endif
   #define SUBSEQUENCE SubSequence
   #define SEQUENCEINITIAL SequenceInitial
-  #define INDEXOF ArraysMDE.indexOf
+  #define INDEXOF ArraysPlume.indexOf
 #elif defined(FLOAT)
   #define CLASSNAME MemberFloat
   #define SEQUENCESCALAR SequenceFloat
@@ -72,7 +72,7 @@ import daikon.inv.binary.twoSequence.*;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 import plume.Intern;
 import plume.Pair;
 

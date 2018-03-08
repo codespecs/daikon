@@ -20,7 +20,7 @@ import jtb.syntaxtree.*;
 import jtb.visitor.DepthFirstVisitor;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -452,7 +452,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       code.append("retval_instrument = ");
     }
 
-    code.append("internal$" + name + "(" + UtilMDE.join(parameters, ", ") + ");");
+    code.append("internal$" + name + "(" + UtilPlume.join(parameters, ", ") + ");");
 
     exitChecks(code, matching_ppts, pptmap, declaredThrowables, isStatic);
 
@@ -930,7 +930,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "("
             + "Object thiz"
             + (parameters.size() > 0 ? ", " : "")
-            + UtilMDE.join(parameters, ", ")
+            + UtilPlume.join(parameters, ", ")
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -968,7 +968,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "Object thiz "
             + (returnType.equals("void") ? "" : ", " + returnType + " checker_returnval")
             + (parameters.size() > 0 ? ", " : "")
-            + UtilMDE.join(parameters, ", ")
+            + UtilPlume.join(parameters, ", ")
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -1002,7 +1002,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "Preconditions_"
             + methodName
             + "("
-            + UtilMDE.join(parameters, ", ")
+            + UtilPlume.join(parameters, ", ")
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -1038,7 +1038,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "("
             + "Object thiz "
             + (parameters.size() > 0 ? ", " : "")
-            + UtilMDE.join(parameters, ", ")
+            + UtilPlume.join(parameters, ", ")
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -1088,7 +1088,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     code.append("<INVINFO>");
     code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
     code.append("<DAIKON>" + daikonrep + "</DAIKON>");
-    code.append("<INV>" + plume.UtilMDE.escapeNonJava(javarep) + "</INV>");
+    code.append("<INV>" + plume.UtilPlume.escapeNonJava(javarep) + "</INV>");
     code.append("<DAIKONCLASS>" + inv.getClass().toString() + "</DAIKONCLASS>");
     code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature() + "</METHOD>");
     code.append("</INVINFO>");
@@ -1202,7 +1202,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "("
               + "Object thiz"
               + (parameters.size() > 0 ? ", " : "")
-              + UtilMDE.join(parameters, ", ")
+              + UtilPlume.join(parameters, ", ")
               + ") { /* no properties for this member */ }");
 
       code.append(
@@ -1216,7 +1216,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                   ? ""
                   : (", " + Ast.classnameForSourceOutput(m.getReturnType()) + " checker_returnval"))
               + (parameters.size() > 0 ? ", " : "")
-              + UtilMDE.join(parameters, ", ")
+              + UtilPlume.join(parameters, ", ")
               + ") { /* no properties for this member */ }");
     }
 
@@ -1249,7 +1249,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "Preconditions_"
               + baseClassName
               + "("
-              + UtilMDE.join(parameters, ", ")
+              + UtilPlume.join(parameters, ", ")
               + ") { /* no properties for this member */ }");
 
       code.append(
@@ -1260,7 +1260,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "("
               + "Object thiz "
               + (parameters.size() > 0 ? ", " : "")
-              + UtilMDE.join(parameters, ", ")
+              + UtilPlume.join(parameters, ", ")
               + ") { /* no properties for this member */ }");
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -125,7 +125,7 @@ public class InvTranslate {
       String value = var_map.get(key);
       mappings.add(key + "->" + value);
     }
-    out.append(UtilMDE.join(mappings, ", "));
+    out.append(UtilPlume.join(mappings, ", "));
 
     out.append(" [Quality=" + quality + "]");
     if ((inv1 != null) && (inv2 != null)) {

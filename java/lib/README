@@ -28,3 +28,7 @@ options-all-0.3.1.jar : https://github.com/plume-lib/options
 
 plume.jar : https://github.com/mernst/plume-lib.git
 - To update plume.jar, run:  make -C $DAIKONDIR update-plume-jar
+
+daikon-util-0.0.1.jar : Just like plume-util-0.0.1.jar, but with package
+changed to daikon.util.  To create, run:
+java -jar ~/java/jarjar/jarjar-command/build/libs/jarjar-command-1.0.0.jar process daikon-util-rules.txt plume-util-0.0.1.jar into daikon-util-0.0.1.jar

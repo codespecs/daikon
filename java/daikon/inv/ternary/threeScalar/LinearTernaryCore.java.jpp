@@ -45,8 +45,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
-import plume.MathMDE;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.MathPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -189,7 +189,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    */
   public void permute(int[] permutation) {
     assert permutation.length == 3;
-    assert ArraysMDE.fn_is_permutation(permutation);
+    assert ArraysPlume.fn_is_permutation(permutation);
     // Fix a, b, c
     double[] clever = new double[] { a, b, c };
     double[] pclever = new double[3];
@@ -1061,15 +1061,15 @@ public final class CLASSNAME implements Serializable, Cloneable {
     // Put the coefficients in lowest terms by dividing by the gcd.
     // If the gcd is 1, no harm done -- divide by 1.
     // Type is double to ensure floating-point division.
-    double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , MathMDE.gcd(k_var, Stand_const));
+    double myGCD = MathPlume.gcd(MathPlume.gcd(i_var, j_var) , MathPlume.gcd(k_var, Stand_const));
     double standard_i_var = i_var / myGCD;
     double standard_j_var = j_var / myGCD;
     double standard_k_var = k_var / myGCD;
     double standard_Stand_const = Stand_const / myGCD;
 
     if (wrapper != null) {
-      wrapper.log("Preliminary: %s %s GCD: %s", i_var, j_var, MathMDE.gcd(i_var, j_var));
-      wrapper.log("Preliminary: %s %s GCD: %s", k_var, Stand_const, MathMDE.gcd(k_var, Stand_const));
+      wrapper.log("Preliminary: %s %s GCD: %s", i_var, j_var, MathPlume.gcd(i_var, j_var));
+      wrapper.log("Preliminary: %s %s GCD: %s", k_var, Stand_const, MathPlume.gcd(k_var, Stand_const));
       wrapper.log("GCD: %s", myGCD);
     }
 

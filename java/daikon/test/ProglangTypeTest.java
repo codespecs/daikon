@@ -4,7 +4,7 @@ import daikon.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import junit.framework.*;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 
 @SuppressWarnings("nullness") // testing code
 public class ProglangTypeTest extends TestCase {
@@ -19,10 +19,10 @@ public class ProglangTypeTest extends TestCase {
   }
 
   @SuppressWarnings("interning") // bug in interned checker wrt defaults & genercis
-  static Comparator<long[]> longarrcomparator = new ArraysMDE.LongArrayComparatorLexical();
+  static Comparator<long[]> longarrcomparator = new ArraysPlume.LongArrayComparatorLexical();
 
   static Comparator<String[]> comparrcomparator =
-      new ArraysMDE.ComparableArrayComparatorLexical<String>();
+      new ArraysPlume.ComparableArrayComparatorLexical<String>();
 
   // Runtime type of first argument is long[]
   boolean longarrcomp(Object a, long[] b) {

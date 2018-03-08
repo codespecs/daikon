@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -626,6 +626,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
-    return "{ " + UtilMDE.join(suppression_set, ", ") + " }";
+    return "{ " + UtilPlume.join(suppression_set, ", ") + " }";
   }
 }

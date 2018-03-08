@@ -1255,7 +1255,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     }
     if (classname.equals("daikon/PptTopLevel$PptType")) return true;
     if (classname.startsWith("org/plumelib/bcelutil")) return true;
-    if (classname.startsWith("daikon/util/UtilMDE")) return true;
+    if (classname.startsWith("daikon/util/UtilPlume")) return true;
     return false;
   }
 }

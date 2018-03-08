@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -53,7 +53,7 @@ public class DaikonSimple {
   // public static File inv_file = null;
 
   private static String usage =
-      UtilMDE.join(
+      UtilPlume.join(
           new String[] {
             "",
             "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> <dtrace_file>",

@@ -13,9 +13,9 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define NUMERIC
   #define IS_INT
-  #define ARRAYCOMPARATOR new ArraysMDE.LongArrayComparatorLexical()
-  #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset(v1, v2) && \
-                                      ArraysMDE.isSubset(v2, v1))
+  #define ARRAYCOMPARATOR new ArraysPlume.LongArrayComparatorLexical()
+  #define ELEM_MATCH_COMPARE(v1, v2) (ArraysPlume.isSubset(v1, v2) && \
+                                      ArraysPlume.isSubset(v2, v1))
   #define SUBSEQUENCE SubSequence
   #define BASE_IS_TYPE baseIsIntegral()
   #define BASE_IS_SCALAR baseIsScalar()
@@ -55,9 +55,9 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS TwoSequenceString
   #define PRIMITIVE String
   #define IS_STRING
-  #define ARRAYCOMPARATOR new ArraysMDE.StringArrayComparatorLexical()
-  #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset(v1, v2) && \
-                                      ArraysMDE.isSubset(v2, v1))
+  #define ARRAYCOMPARATOR new ArraysPlume.StringArrayComparatorLexical()
+  #define ELEM_MATCH_COMPARE(v1, v2) (ArraysPlume.isSubset(v1, v2) && \
+                                      ArraysPlume.isSubset(v2, v1))
   #define SUBSEQUENCE SubSequenceString
   #define BASE_IS_TYPE baseIsString()
   #define BASE_IS_SCALAR baseIsString()
@@ -246,7 +246,7 @@ import daikon.inv.*;
 import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 import plume.Intern;
 
 /*>>>

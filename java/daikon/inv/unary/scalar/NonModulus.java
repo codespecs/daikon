@@ -5,7 +5,7 @@ import daikon.inv.*;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import plume.Intern;
-import plume.MathMDE;
+import org.plumelib.util.MathPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -146,7 +146,7 @@ public class NonModulus extends SingleScalar {
     } else {
       // Do I want to communicate back some information about the smallest
       // possible modulus?
-      long[] result = MathMDE.nonmodulus_strict_long(elements.iterator());
+      long[] result = MathPlume.nonmodulus_strict_long(elements.iterator());
       if (result == null) {
         no_result_yet = true;
       } else {
@@ -169,7 +169,7 @@ public class NonModulus extends SingleScalar {
     if (elements.add(Intern.internedLong(value))
         && results_accurate
         && (!no_result_yet)
-        && (MathMDE.mod_positive(value, modulus) == remainder)) results_accurate = false;
+        && (MathPlume.mod_positive(value, modulus) == remainder)) results_accurate = false;
     return InvariantStatus.NO_CHANGE;
   }
 

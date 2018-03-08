@@ -97,7 +97,7 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
 ifeq "$(wildcard ${DAIKONDIR}/java/lib/plume.jar)" "${DAIKONDIR}/java/lib/plume.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java/lib/commons-exec-1.3.jar:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java/lib/commons-exec-1.3.jar:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/plume-util-0.0.1.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
 endif
 ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
     CLASSPATH_JARS2 = ${CHECKERJAR}
@@ -664,13 +664,13 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 .PHONY: plume-import-check
 plume-import-check :
 	@echo -n "Checking that imports of plume and daikon.util are correct..."
-	@if [ -n "`grep '^import plume' $(INSTRUMENTATION_JAVA_FILES)`" ]; then \
+	@if [ -n "`grep '^import org.plumelib.util' $(INSTRUMENTATION_JAVA_FILES)`" ]; then \
 	echo ""; \
-	echo "*** ERROR: Do not import plume from DynComp code. It will be"; \
+	echo "*** ERROR: Do not import org.plumelib.util from DynComp code. It would be"; \
 	echo " instrumented when DynComp or Chicory is run. Please use the"; \
 	echo " (identical) daikon.util package, which will not be instrumented."; \
 	echo "The following files import from plume:"; \
-	grep -n '^import plume' $(INSTRUMENTATION_JAVA_FILES); \
+	grep -n '^import org.plumelib.util' $(INSTRUMENTATION_JAVA_FILES); \
 	else \
 	echo "done"; \
 	fi

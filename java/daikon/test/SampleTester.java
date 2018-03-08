@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.*;
 import plume.StrTok;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -48,7 +48,7 @@ public class SampleTester extends TestCase {
   VarInfo[] vars;
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
