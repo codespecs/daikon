@@ -1259,9 +1259,9 @@
         @ ensures \old(DataStructures.RedBlackTree.grand.color) == (org.plumelib.util.MathPlume.gcd(DataStructures.RedBlackTree.current.color, DataStructures.RedBlackTree.grand.color));
         @ ensures DataStructures.RedBlackTree.grand.left.color == (java.lang.Math.pow(\old(DataStructures.RedBlackTree.grand.left.color), DataStructures.RedBlackTree.grand.color));
         @ ensures DataStructures.RedBlackTree.grand.left.color == (java.lang.Math.max(\old(DataStructures.RedBlackTree.current.left.color), \old(DataStructures.RedBlackTree.grand.left.color)));
+        @ ensures DataStructures.RedBlackTree.grand.left.color == (org.plumelib.util.MathPlume.gcd(\old(DataStructures.RedBlackTree.current.left.color), \old(DataStructures.RedBlackTree.grand.left.color)));
         @ ensures DataStructures.RedBlackTree.grand.left.color == (\old(DataStructures.RedBlackTree.current.left.color) | \old(DataStructures.RedBlackTree.grand.left.color));
         @ ensures (DataStructures.RedBlackTree.grand.left.color != 0) == ((\old(DataStructures.RedBlackTree.current.left.color) != 0) || (\old(DataStructures.RedBlackTree.grand.left.color) != 0));
-        @ ensures DataStructures.RedBlackTree.grand.left.color == (org.plumelib.util.MathPlume.gcd(\old(DataStructures.RedBlackTree.current.left.color), \old(DataStructures.RedBlackTree.grand.left.color)));
         @ ensures DataStructures.RedBlackTree.grand.right.color == (java.lang.Math.pow(\old(DataStructures.RedBlackTree.grand.right.color), DataStructures.RedBlackTree.grand.color));
         @*/
         /**
