@@ -29,7 +29,7 @@ orig(maxset) > j[return-1]
 orig(maxset) > orig(j[post(return)-1])
 size(j[])-1 <= orig(j[post(return)-1])
 j[return-1] - orig(j[post(return)-1]) - 1 == 0
-return == (plume.MathMDE.gcd(j[return-1], orig(j[post(return)-1])))
+return == (org.plumelib.util.MathPlume.gcd(j[return-1], orig(j[post(return)-1])))
 ===========================================================================
 ..amatch():::ENTER
 lin one of { "UW=Fq9MPD@sF6X@g|76zA\":NFc_4vtv%>/L>/W\n", "j+X+RpIPzC8;tLH#@;j+X+RpIPzC8;tLH#@;\n" }

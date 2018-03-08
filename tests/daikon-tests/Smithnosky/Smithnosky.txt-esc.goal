@@ -185,7 +185,7 @@ this.aXb == this.a**2
 (this.aXb & \old(this.aXb)) == 0
 warning: method daikon.inv.ternary.threeScalar.FunctionBinary$MultiplyLong_zxy.format(OutputFormat:ESC/Java) needs to be implemented: orig(this.aXb) == (this.a * this.c)
 warning: method daikon.inv.ternary.threeScalar.FunctionBinary$DivisionLong_yzx.format(OutputFormat:ESC/Java) needs to be implemented: this.c == (orig(this.aXb) / this.a)
-warning: method daikon.inv.ternary.threeScalar.FunctionBinary$GcdLong_xyz.format(OutputFormat:ESC/Java) needs to be implemented: this.a == (plume.MathMDE.gcd(this.aXb, orig(this.aXb)))
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$GcdLong_xyz.format(OutputFormat:ESC/Java) needs to be implemented: this.a == (org.plumelib.util.MathPlume.gcd(this.aXb, orig(this.aXb)))
 ===========================================================================
 misc.Smithnosky.incC():::ENTER
     Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
