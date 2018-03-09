@@ -2,8 +2,8 @@ package daikon.derive.unary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.ArraysMDE;
-import plume.Intern;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;
@@ -34,11 +34,11 @@ public final class SequenceMin extends UnaryDerivation {
     if (val instanceof long[]) {
       long[] val_array = (long[]) val;
       if (val_array.length == 0) return ValueAndModified.MISSING_NONSENSICAL;
-      return new ValueAndModified(Intern.internedLong(ArraysMDE.min(val_array)), source_mod);
+      return new ValueAndModified(Intern.internedLong(ArraysPlume.min(val_array)), source_mod);
     } else if (val instanceof double[]) {
       double[] val_array = (double[]) val;
       if (val_array.length == 0) return ValueAndModified.MISSING_NONSENSICAL;
-      return new ValueAndModified(Intern.internedDouble(ArraysMDE.min(val_array)), source_mod);
+      return new ValueAndModified(Intern.internedDouble(ArraysPlume.min(val_array)), source_mod);
 
     } else {
       return ValueAndModified.MISSING_NONSENSICAL;

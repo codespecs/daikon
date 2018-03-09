@@ -572,7 +572,7 @@ The test ensures that the method only appears once in the output.
   public static _TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, _TYPE /*@PolyNull*/ [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
-    return plume.ArraysMDE._TYPE_ARG concat(seq1, seq2);
+    return ArraysPlume._TYPE_ARG concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
@@ -580,7 +580,7 @@ The test ensures that the method only appears once in the output.
   public static CAST_TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, COMPATIBLE /*@PolyNull*/ [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
-    // Cannot just use plume.ArraysMDE.concat because the two arrays
+    // Cannot just use ArraysPlume.concat because the two arrays
     // have different types.  This essentially inlines that method.
     int newLength = seq1.length + seq2.length;
     CAST_TYPE[] retval = new CAST_TYPE[newLength];
@@ -636,7 +636,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return plume.ArraysMDE.subarray(intermediate, 0, length);
+    return ArraysPlume.subarray(intermediate, 0, length);
   }
 
 #ifdef COMPATIBLE
@@ -651,7 +651,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return plume.ArraysMDE.subarray(intermediate, 0, length);
+    return ArraysPlume.subarray(intermediate, 0, length);
   }
 #endif
 
@@ -671,7 +671,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return plume.ArraysMDE.subarray(intermediate, 0, length);
+    return ArraysPlume.subarray(intermediate, 0, length);
   }
 
 #ifdef COMPATIBLE
@@ -686,7 +686,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return plume.ArraysMDE.subarray(intermediate, 0, length);
+    return ArraysPlume.subarray(intermediate, 0, length);
   }
 #endif
 
@@ -912,7 +912,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
   /*@Pure*/
   public static boolean noDups(_TYPE /*@Nullable*/ [] seq) {
     if (seq == null) return false;
-    return plume.ArraysMDE.noDuplicates(seq);
+    return ArraysPlume.noDuplicates(seq);
   }
 
  /** Returns true iff elt is in array arr. */
@@ -972,7 +972,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
       return new _TYPE[] { };
     }
     int length = sliceEnd - sliceStart + 1;
-    return plume.ArraysMDE.subarray(seq, sliceStart, length);
+    return ArraysPlume.subarray(seq, sliceStart, length);
   }
 
   /*@Pure*/

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -174,7 +174,7 @@ public class InvariantDoclet {
     out.println(prefix + cd + is_abstract);
     String comment = cd.commentText();
     comment = "         " + comment;
-    comment = UtilMDE.replaceString(comment, lineSep, lineSep + "        ");
+    comment = UtilPlume.replaceString(comment, lineSep, lineSep + "        ");
     out.println(comment);
 
     //put out each derived class
@@ -296,7 +296,9 @@ public class InvariantDoclet {
         for (FieldDoc f : config_vars) {
           out.print("    @item ");
           out.println(
-              "@samp{" + UtilMDE.replaceString(f.qualifiedName(), Configuration.PREFIX, "") + "}");
+              "@samp{"
+                  + UtilPlume.replaceString(f.qualifiedName(), Configuration.PREFIX, "")
+                  + "}");
         }
         out.println("    @end itemize");
       }
@@ -347,9 +349,9 @@ public class InvariantDoclet {
           /*@ClassGetName*/ String classname = fullname.substring(0, i);
           Class<?> c;
           try {
-            c = UtilMDE.classForName(classname);
+            c = UtilPlume.classForName(classname);
           } catch (Throwable e) {
-            System.err.printf("Exception in UtilMDE.classForName(%s): %s", fullname, e);
+            System.err.printf("Exception in UtilPlume.classForName(%s): %s", fullname, e);
             return -1;
           }
           Field f = c.getField(enable_name);

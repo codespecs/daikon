@@ -2,7 +2,7 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -60,8 +60,8 @@ public abstract class BinaryDerivation extends Derivation {
   @Override
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
     BinaryDerivation result = this.clone();
-    result.base1 = new_vars[ArraysMDE.indexOf(old_vars, result.base1)];
-    result.base2 = new_vars[ArraysMDE.indexOf(old_vars, result.base2)];
+    result.base1 = new_vars[ArraysPlume.indexOf(old_vars, result.base1)];
+    result.base2 = new_vars[ArraysPlume.indexOf(old_vars, result.base2)];
     return result;
   }
 

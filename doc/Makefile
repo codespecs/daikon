@@ -25,7 +25,7 @@ ifdef SKIP_JAVA
 config-options.texinfo:
 invariants-doc.texinfo:
 else
-config-options.texinfo: ../java/daikon/util/SimpleLog.class
+config-options.texinfo:
 	cd ../java && $(MAKE) ../doc/config-options.texinfo
 
 invariants-doc.texinfo:
@@ -36,12 +36,6 @@ invariants-doc.texinfo:
 .PHONY : config-options.texinfo
 .PHONY : invariants-doc.texinfo
 endif
-
-../java/daikon/util/SimpleLog.class: ../java/daikon/util/SimpleLog.java
-	make -C ../java
-
-../java/daikon/util/SimpleLog.java:
-	make -C ../java plume-copy
 
 images/%.eps: images/%.dot
 	dot -Tps $< >$@

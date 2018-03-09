@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import plume.EntryReader;
-import plume.UtilMDE;
+import org.plumelib.util.EntryReader;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -160,11 +160,11 @@ public final class Configuration implements Serializable {
     assert fieldname != null;
     assert value != null;
 
-    // Use UtilMDE version of class.forName so that we can refer to
+    // Use UtilPlume version of class.forName so that we can refer to
     // inner classes using '.' as well as '$'
     Class<?> clazz;
     try {
-      clazz = UtilMDE.classForName(classname);
+      clazz = UtilPlume.classForName(classname);
     } catch (ClassNotFoundException e) {
       throw new ConfigException(
           String.format(

@@ -26,7 +26,7 @@ import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import org.plumelib.bcelutil.JvmUtil;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -113,7 +113,7 @@ public class Ast {
   //  a statement; // a comment //
   public static String quickFixForInternalComment(String s) {
     StringBuilder b = new StringBuilder();
-    String[] split = UtilMDE.splitLines(s);
+    String[] split = UtilPlume.splitLines(s);
     for (int i = 0; i < split.length; i++) {
       String line = split[i];
       b.append(line);
@@ -682,11 +682,11 @@ public class Ast {
 
   public static String removeWhitespace(String arg) {
     arg = arg.trim();
-    arg = UtilMDE.removeWhitespaceAround(arg, ".");
-    arg = UtilMDE.removeWhitespaceAround(arg, "(");
-    arg = UtilMDE.removeWhitespaceAround(arg, ")");
-    arg = UtilMDE.removeWhitespaceAround(arg, "[");
-    arg = UtilMDE.removeWhitespaceBefore(arg, "]");
+    arg = UtilPlume.removeWhitespaceAround(arg, ".");
+    arg = UtilPlume.removeWhitespaceAround(arg, "(");
+    arg = UtilPlume.removeWhitespaceAround(arg, ")");
+    arg = UtilPlume.removeWhitespaceAround(arg, "[");
+    arg = UtilPlume.removeWhitespaceBefore(arg, "]");
     return arg;
   }
 

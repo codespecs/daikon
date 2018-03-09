@@ -7,7 +7,7 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 import jtb.ParseException;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -57,7 +57,7 @@ public class SpinfoFile {
     this.tempDir = tempDir;
     this.spinfoFileName = spinfoFile.toString();
     try {
-      LineNumberReader reader = UtilMDE.lineNumberFileReader(spinfoFile);
+      LineNumberReader reader = UtilPlume.lineNumberFileReader(spinfoFile);
       parseFile(reader);
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);

@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /**
  * This tool fixes a Dtrace file whose invocation nonces became inaccurate as a result of a {@code
@@ -23,7 +23,7 @@ public class DtraceNonceFixer {
   private static final String lineSep = System.getProperty("line.separator");
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: DtraceNonceFixer FILENAME",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
           "The output file will be FILENAME_fixed and another output included",
@@ -57,8 +57,8 @@ public class DtraceNonceFixer {
         (args[0].endsWith(".gz")) ? (args[0] + "_fixed.gz") : (args[0] + "_fixed");
 
     try {
-      BufferedReader br1 = UtilMDE.bufferedFileReader(args[0]);
-      PrintWriter out = new PrintWriter(UtilMDE.bufferedFileWriter(outputFilename));
+      BufferedReader br1 = UtilPlume.bufferedFileReader(args[0]);
+      PrintWriter out = new PrintWriter(UtilPlume.bufferedFileWriter(outputFilename));
 
       // maxNonce - the biggest nonce ever found in the file
       // correctionFactor - the amount to add to each observed nonce
@@ -93,8 +93,8 @@ public class DtraceNonceFixer {
       String allFixedFilename =
           (outputFilename.endsWith(".gz")) ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
 
-      BufferedReader br2 = UtilMDE.bufferedFileReader(outputFilename);
-      out = new PrintWriter(UtilMDE.bufferedFileWriter(allFixedFilename));
+      BufferedReader br2 = UtilPlume.bufferedFileReader(outputFilename);
+      out = new PrintWriter(UtilPlume.bufferedFileWriter(allFixedFilename));
 
       while (br2.ready()) {
         String nextInvo = grabNextInvocation(br2);

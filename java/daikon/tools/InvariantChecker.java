@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -47,7 +47,7 @@ public class InvariantChecker {
   private static final String verbose_SWITCH = "verbose";
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.InvariantChecker [OPTION]... <inv_file> " + "<dtrace_file>",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",

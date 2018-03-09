@@ -144,7 +144,7 @@ public class PptSlice0 extends PptSlice {
   // public Implication getImplication(Implication imp) {
   //   initInvariantsSeen();
   //   ImplicationWrapper resultWrapper
-  //     = (ImplicationWrapper) UtilMDE.getFromSet(
+  //     = (ImplicationWrapper) UtilPlume.getFromSet(
   //              invariantsSeen, new ImplicationWrapper(imp));
   //   if (resultWrapper == null) {
   //     return null;

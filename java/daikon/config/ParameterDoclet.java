@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -37,19 +37,19 @@ public class ParameterDoclet {
       if ("--texinfo".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilMDE.bufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(UtilPlume.bufferedFileWriter(fname));
         pd.writeTexInfo(outf);
         outf.close();
       } else if ("--text".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilMDE.bufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(UtilPlume.bufferedFileWriter(fname));
         pd.writeText(outf);
         outf.close();
       } else if ("--list".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilMDE.bufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(UtilPlume.bufferedFileWriter(fname));
         pd.writeList(outf);
         outf.close();
       }
@@ -221,7 +221,7 @@ public class ParameterDoclet {
       @SuppressWarnings("signature") // application invariant
       /*@ClassGetName*/ String classname = field.substring(0, i);
       String fieldname = field.substring(i + 1);
-      Class<?> c = UtilMDE.classForName(classname);
+      Class<?> c = UtilPlume.classForName(classname);
       Field f = c.getField(Configuration.PREFIX + fieldname);
       Object value = f.get(null);
       return "The default value is `" + value + "'.";
@@ -257,7 +257,7 @@ public class ParameterDoclet {
 
       for (
       /*@KeyFor("categories[c].fields")*/ String field :
-          UtilMDE.sortedKeySet(categories[c].fields)) {
+          UtilPlume.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
@@ -294,7 +294,7 @@ public class ParameterDoclet {
 
       for (
       /*@KeyFor("categories[c].fields")*/ String field :
-          UtilMDE.sortedKeySet(categories[c].fields)) {
+          UtilPlume.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
@@ -312,7 +312,7 @@ public class ParameterDoclet {
 
   public void writeList(PrintWriter out) {
     for (int c = 0; c < categories.length; c++) {
-      for (String field : UtilMDE.sortedKeySet(categories[c].fields)) {
+      for (String field : UtilPlume.sortedKeySet(categories[c].fields)) {
         out.println(field);
       }
     }

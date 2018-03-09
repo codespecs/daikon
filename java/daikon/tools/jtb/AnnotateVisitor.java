@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.EntryReader;
+import org.plumelib.util.EntryReader;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -989,7 +990,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // PrintInvariants.print_modified_vars(ppt, pw) returns possibly
     // several lines. In such a case, we're only interested in the second
     // one, which contains the "modified" or "assignable" clause.
-    String[] splitModVars = plume.UtilMDE.splitLines(retval.modifiedVars);
+    String[] splitModVars = UtilPlume.splitLines(retval.modifiedVars);
     if (splitModVars.length > 1) {
       for (int i = 0; i < splitModVars.length; i++) {
         if (splitModVars[i].startsWith("modifies ") || splitModVars[i].startsWith("assignable ")) {

@@ -3,7 +3,7 @@ package daikon.tools.jtb;
 import java.util.List;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /**
  * InsertCommentFormatter is a visitor that does not actually insert comments, but instead corrects
@@ -40,7 +40,7 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
 
   private static int numLines(NodeToken n) {
     String image = n.tokenImage;
-    return UtilMDE.count(image, lineSep);
+    return UtilPlume.count(image, lineSep);
   }
 
   private static int numColumns(NodeToken n) {

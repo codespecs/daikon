@@ -7,6 +7,7 @@ import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -311,7 +312,7 @@ public class PptNameMatcher {
     assert lparen > 0;
     assert rparen > lparen;
     String ppt_args_string = pptFullMethodName.substring(lparen + 1, rparen);
-    String[] ppt_args = plume.UtilMDE.split(ppt_args_string, ", ");
+    String[] ppt_args = UtilPlume.split(ppt_args_string, ", ");
     if ((ppt_args.length == 1) && (ppt_args[0].equals(""))) {
       ppt_args = new String[0];
     }

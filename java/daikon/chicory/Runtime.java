@@ -940,7 +940,7 @@ public class Runtime {
   /// Copied code
   ///
 
-  // Lifted directly from plume/UtilMDE.java, where it is called
+  // Lifted directly from plume/UtilPlume.java, where it is called
   // escapeNonJava(), but repeated here to make this class self-contained.
   /** Quote \, ", \n, and \r characters in the target; return a new string. */
   public static String quote(String orig) {

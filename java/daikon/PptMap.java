@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import plume.IterableIterator;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -136,7 +136,7 @@ public class PptMap implements Serializable {
    * @see #pptIterator()
    */
   public Iterable<PptTopLevel> pptIterable() {
-    return new IterableIterator<PptTopLevel>(pptIterator());
+    return UtilPlume.iteratorToIterable(pptIterator());
   }
 
   /**
@@ -195,7 +195,7 @@ public class PptMap implements Serializable {
    * @see #ppt_all_iterator()
    */
   public Iterable<PptTopLevel> ppt_all_iterable() {
-    return new IterableIterator<PptTopLevel>(ppt_all_iterator());
+    return UtilPlume.iteratorToIterable(ppt_all_iterator());
   }
 
   /** Iterate over the PptTopLevels and trim them. */

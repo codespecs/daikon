@@ -23,7 +23,7 @@ Further documentation can be found in:
 5.6.4
 
 The plume-lib utilities have moved from daikon/plume-lib to
-daikon/utils/plume-lib.  Two other libraries, checklink, and html-tools,
+daikon/utils/plume-lib.  Two other libraries, checklink and html-tools,
 are also used.
 
 ===========================================================================

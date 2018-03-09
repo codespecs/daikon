@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

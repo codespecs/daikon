@@ -3,9 +3,9 @@ package daikon;
 import daikon.derive.*;
 import java.util.Arrays;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
-import plume.Intern;
-import plume.MathMDE;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
+import org.plumelib.util.MathPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -175,11 +175,11 @@ public final class ValueTuple implements Cloneable {
   //  * no modified, no unmodified, no missing
   //    impossible
 
-  public static final int TUPLEMOD_VALUES = MathMDE.pow(2, MODBIT_VALUES);
-  public static final int UNMODIFIED_BITVAL = MathMDE.pow(2, UNMODIFIED);
-  public static final int MODIFIED_BITVAL = MathMDE.pow(2, MODIFIED);
-  public static final int MISSING_NONSENSICAL_BITVAL = MathMDE.pow(2, MISSING_NONSENSICAL);
-  public static final int MISSING_FLOW_BITVAL = MathMDE.pow(2, MISSING_FLOW);
+  public static final int TUPLEMOD_VALUES = MathPlume.pow(2, MODBIT_VALUES);
+  public static final int UNMODIFIED_BITVAL = MathPlume.pow(2, UNMODIFIED);
+  public static final int MODIFIED_BITVAL = MathPlume.pow(2, MODIFIED);
+  public static final int MISSING_NONSENSICAL_BITVAL = MathPlume.pow(2, MISSING_NONSENSICAL);
+  public static final int MISSING_FLOW_BITVAL = MathPlume.pow(2, MISSING_FLOW);
   // Various slices of the 8 (=TUPLEMOD_VALUES) possible tuplemod values.
   // The arrays are filled up in a static block below.
   // (As of 1/9/2000, tuplemod_modified_not_missing is used only in
@@ -401,8 +401,8 @@ public final class ValueTuple implements Cloneable {
 
   /** Return a new ValueTuple containing this one's first len elements. */
   public ValueTuple trim(int len) {
-    /*@Nullable*/ /*@Interned*/ Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
-    int[] new_mods = ArraysMDE.subarray(mods, 0, len);
+    /*@Nullable*/ /*@Interned*/ Object[] new_vals = ArraysPlume.subarray(vals, 0, len);
+    int[] new_mods = ArraysPlume.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
   }
 

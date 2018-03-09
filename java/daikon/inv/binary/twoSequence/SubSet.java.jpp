@@ -12,7 +12,7 @@ The correct way to build the system is to run 'make'.
   #define TWOSEQUENCE TwoSequence
   #define LONG long
   #define SUBSEQUENCE SubSequence
-  #define IS_SUBSET(a,b) ArraysMDE.isSubset(a,b)
+  #define IS_SUBSET(a,b) ArraysPlume.isSubset(a,b)
   #define BASE_IS_TYPE baseIsScalar()
   #define PAIRWISE_EQ PairwiseIntEqual
   #define SEQSEQ_EQ SeqSeqIntEqual
@@ -54,7 +54,7 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

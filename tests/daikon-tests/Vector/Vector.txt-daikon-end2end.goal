@@ -70,7 +70,7 @@ this.elementData[0..orig(this.elementCount)-1] == orig(this.elementData[0..this.
 (this.elementCount == 1)  ==>  (size(this.elementData[]) >= 1)
 (this.elementCount == 1)  ==>  (size(this.elementData[])-1 is a bitwise subset of orig(size(this.elementData[]))-1)
 (this.elementCount == 1)  ==>  (this.capacityIncrement >= orig(this.elementCount))
-(this.elementCount == 1)  ==>  (this.elementCount == (plume.MathMDE.gcd(size(this.elementData[]), orig(size(this.elementData[]))-1)))
+(this.elementCount == 1)  ==>  (this.elementCount == (org.plumelib.util.MathPlume.gcd(size(this.elementData[]), orig(size(this.elementData[]))-1)))
 (this.elementCount == 1)  ==>  (this.elementData[0..orig(this.elementCount)-1] == [])
 (this.elementCount == 1)  ==>  (this.elementData[0..this.elementCount-1] elements == this.elementData[this.elementCount-1])
 (this.elementCount >= 2)  <==>  (orig(this.elementCount) >= 1)
@@ -119,7 +119,7 @@ size(this.elementData[]) >= orig(size(this.elementData[]))
 size(this.elementData[])-1 >= orig(size(this.elementData[]))-1
 size(this.elementData[])-1 is a bitwise subset of orig(size(this.elementData[]))-1
 this.elementData[0..this.elementCount-1] elements == this.elementData[this.elementCount-1]
-this.elementCount == (plume.MathMDE.gcd(size(this.elementData[]), orig(size(this.elementData[]))-1))
+this.elementCount == (org.plumelib.util.MathPlume.gcd(size(this.elementData[]), orig(size(this.elementData[]))-1))
 ===========================================================================
 javautil.Vector13.addElement(java.lang.Object):::EXIT;condition="not(orig(elementCount == 0))"
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
@@ -1088,7 +1088,7 @@ this.elementData[0..orig(index)-1] == orig(this.elementData[0..index-1])
 (this.elementCount == 1)  ==>  (size(this.elementData[])-1 is a bitwise subset of orig(size(this.elementData[]))-1)
 (this.elementCount == 1)  ==>  (this.capacityIncrement >= orig(index))
 (this.elementCount == 1)  ==>  (this.capacityIncrement >= orig(this.elementCount))
-(this.elementCount == 1)  ==>  (this.elementCount == (plume.MathMDE.gcd(size(this.elementData[]), orig(size(this.elementData[]))-1)))
+(this.elementCount == 1)  ==>  (this.elementCount == (org.plumelib.util.MathPlume.gcd(size(this.elementData[]), orig(size(this.elementData[]))-1)))
 (this.elementCount == 1)  ==>  (this.elementData[0..orig(index)-1] == [])
 (this.elementCount == 1)  ==>  (this.elementData[0..orig(index)] elements == this.elementData[orig(index)])
 (this.elementCount == 1)  ==>  (this.elementData[0..orig(index)] elements == this.elementData[this.elementCount-1])
@@ -1146,7 +1146,7 @@ size(this.elementData[]) >= orig(size(this.elementData[]))
 size(this.elementData[])-1 >= orig(size(this.elementData[]))-1
 size(this.elementData[])-1 is a bitwise subset of orig(size(this.elementData[]))-1
 this.elementData[0..orig(index)] elements == this.elementData[orig(index)]
-this.elementCount == (plume.MathMDE.gcd(size(this.elementData[]), orig(size(this.elementData[]))-1))
+this.elementCount == (org.plumelib.util.MathPlume.gcd(size(this.elementData[]), orig(size(this.elementData[]))-1))
 ===========================================================================
 javautil.Vector13.insertElementAt(java.lang.Object, int):::EXIT;condition="not(orig(elementCount == 0))"
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())

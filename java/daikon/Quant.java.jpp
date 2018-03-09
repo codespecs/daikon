@@ -4,9 +4,9 @@ package daikon;
 
 import java.util.*;
 import java.lang.reflect.*;
-import plume.ArraysMDE;
-import plume.Intern;
-import plume.FuzzyFloat;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
+import org.plumelib.util.FuzzyFloat;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

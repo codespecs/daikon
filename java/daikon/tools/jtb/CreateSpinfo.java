@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -49,7 +49,7 @@ public class CreateSpinfo {
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",
           "  -o outputfile   Put all output in specified file",
           "  -h              Display this usage message");
@@ -201,7 +201,7 @@ public class CreateSpinfo {
   private static void filterConditions(Map<String, List<String>> conditionMap) {
     for (String key : conditionMap.keySet()) {
       List<String> conditions = conditionMap.get(key);
-      conditions = UtilMDE.removeDuplicates(conditions);
+      conditions = UtilPlume.removeDuplicates(conditions);
       conditions.remove("true");
       conditions.remove("false");
       conditionMap.put(key, conditions);
@@ -247,14 +247,14 @@ public class CreateSpinfo {
       output.println("REPLACE");
       for (
       /*@KeyFor("replaceStatements")*/ String declaration :
-          UtilMDE.sortedKeySet(replaceStatements)) {
+          UtilPlume.sortedKeySet(replaceStatements)) {
         output.println(declaration);
         String replacement = replaceStatements.get(declaration);
         output.println(removeNewlines(replacement));
       }
       output.println();
     }
-    for (/*@KeyFor("conditions")*/ String method : UtilMDE.sortedKeySet(conditions)) {
+    for (/*@KeyFor("conditions")*/ String method : UtilPlume.sortedKeySet(conditions)) {
       List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {
@@ -276,10 +276,10 @@ public class CreateSpinfo {
    * single space.
    */
   private static String removeNewlines(String target) {
-    String[] lines = UtilMDE.splitLines(target);
+    String[] lines = UtilPlume.splitLines(target);
     for (int i = 0; i < lines.length; i++) {
       lines[i] = lines[i].trim();
     }
-    return UtilMDE.join(lines, " ");
+    return UtilPlume.join(lines, " ");
   }
 }

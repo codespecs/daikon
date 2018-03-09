@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jtb.ParseException;
+import org.plumelib.util.UtilPlume;
 import plume.FileCompiler;
-import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -197,7 +197,7 @@ public class SplitterFactory {
       /*@BinaryName*/ String fileName_bn = fileName;
       splitObj.setClassName(fileName_bn);
       try {
-        BufferedWriter writer = UtilMDE.bufferedFileWriter(fileAddress + ".java");
+        BufferedWriter writer = UtilPlume.bufferedFileWriter(fileAddress + ".java");
         if (dkconfig_delete_splitters_on_exit) {
           (new File(fileAddress + ".java")).deleteOnExit();
           (new File(fileAddress + ".class")).deleteOnExit();
@@ -329,7 +329,7 @@ public class SplitterFactory {
    */
   private static String createTempDir() {
     try {
-      File tmpDir = UtilMDE.createTempDir("daikon", "split");
+      File tmpDir = UtilPlume.createTempDir("daikon", "split");
       if (dkconfig_delete_splitters_on_exit) {
         tmpDir.deleteOnExit();
       }

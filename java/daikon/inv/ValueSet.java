@@ -2,8 +2,8 @@ package daikon.inv;
 
 import daikon.*;
 import java.io.Serializable;
-import plume.LimitedSizeIntSet;
-import plume.UtilMDE;
+import org.plumelib.util.LimitedSizeIntSet;
+import org.plumelib.util.UtilPlume;
 
 // This is the successor to ValueTracker1.
 // It is a thin wrapper around LimitedSizeIntSet.
@@ -111,7 +111,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       if (val > max_val) {
         max_val = val;
       }
-      add(UtilMDE.hash(val));
+      add(UtilPlume.hash(val));
     }
 
     @Override
@@ -166,7 +166,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       if (Double.isNaN(val)) {
         can_be_NaN = true;
       }
-      add(UtilMDE.hash(val));
+      add(UtilPlume.hash(val));
     }
 
     @Override
@@ -237,7 +237,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       elem_cnt += val.length;
       if (val.length > 1) multi_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
-      add(UtilMDE.hash((long[]) v1));
+      add(UtilPlume.hash((long[]) v1));
     }
 
     @Override
@@ -315,7 +315,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       elem_cnt += val.length;
       if (val.length > 1) multi_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
-      add(UtilMDE.hash(val));
+      add(UtilPlume.hash(val));
     }
 
     @Override
@@ -383,7 +383,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     @Override
     public void add(Object v1) {
       assert v1 != null;
-      add(UtilMDE.hash((String) v1));
+      add(UtilPlume.hash((String) v1));
     }
 
     @Override
@@ -414,7 +414,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       String[] val = (String[]) v1;
       elem_cnt += val.length;
       if (val.length > 1) multi_arr_cnt++;
-      add(UtilMDE.hash(val));
+      add(UtilPlume.hash(val));
     }
 
     @Override

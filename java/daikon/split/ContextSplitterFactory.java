@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
-import plume.EntryReader;
+import org.plumelib.util.EntryReader;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -1003,7 +1003,7 @@ public class NIS {
       for (int i = 0; i < vis.length; i++) {
         names[i] = vis[i].name();
       }
-      return suppressee + "[" + UtilMDE.join(names, ", ") + "]";
+      return suppressee + "[" + UtilPlume.join(names, ", ") + "]";
     }
   }
 

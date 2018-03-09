@@ -10,8 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
-import plume.Partitioner;
-import plume.UtilMDE;
+import org.plumelib.util.Partitioner;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -35,7 +35,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     try {
       this.fileName = filename;
       // System.out.printf ("trying with file %s%n", fileName);
-      br = UtilMDE.bufferedFileReader(fileName);
+      br = UtilPlume.bufferedFileReader(fileName);
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -158,7 +158,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       // look for EXIT half of invocations and augment
       // the values of nonceMap so that the map eventually
       // maps nonces --> full invocations with ENTER / EXIT
-      br = UtilMDE.bufferedFileReader(fileName);
+      br = UtilPlume.bufferedFileReader(fileName);
       while (br.ready()) {
         String nextInvo = grabNextInvocation();
         if (nextInvo.indexOf("EXIT") == -1) {

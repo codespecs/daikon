@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -87,7 +87,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   public boolean usesVar(VarInfo vi) {
-    return (ArraysMDE.indexOfEq(var_infos, vi) != -1);
+    return (ArraysPlume.indexOfEq(var_infos, vi) != -1);
   }
 
   // This is only called from inv.filter.VariableFilter.
@@ -199,7 +199,7 @@ public abstract class PptSlice extends Ppt {
         }
       }
     }
-    assert ArraysMDE.fn_is_permutation(permutation);
+    assert ArraysPlume.fn_is_permutation(permutation);
   }
 
   /** Return an approximation of the number of samples seen on this slice */

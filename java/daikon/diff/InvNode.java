@@ -1,7 +1,7 @@
 package daikon.diff;
 
 import daikon.inv.Invariant;
-import plume.Pair;
+import org.plumelib.util.Pair;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

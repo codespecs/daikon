@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -90,7 +90,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     // a quoted string
     if (name.startsWith("\"") && name.endsWith("\"")) {
       String content = name.substring(1, name.length() - 1);
-      if (content.equals(UtilMDE.escapeNonJava(UtilMDE.unescapeNonJava(content)))) {
+      if (content.equals(UtilPlume.escapeNonJava(UtilPlume.unescapeNonJava(content)))) {
         return (new Simple(name)).intern();
       }
     }
@@ -1045,7 +1045,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     private String elts_repr_commas(/*>>>@GuardSatisfied FunctionOfN this*/) {
-      return UtilMDE.join(elts_repr(), ", ");
+      return UtilPlume.join(elts_repr(), ", ");
     }
 
     @Override
@@ -1123,7 +1123,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       for (VarInfoName vin : args) {
         elts.add(vin.identifier_name());
       }
-      return function + "_of_" + UtilMDE.join(elts, "_comma_") + "___";
+      return function + "_of_" + UtilPlume.join(elts, "_comma_") + "___";
     }
 
     /** Shortcut getter to avoid repeated type casting. */

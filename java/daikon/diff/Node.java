@@ -3,7 +3,7 @@ package daikon.diff;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import plume.Pair;
+import org.plumelib.util.Pair;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -15,7 +15,7 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -42,7 +42,7 @@ public final class MergeInvariants {
   public static /*@Nullable*/ File output_inv_file;
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.MergeInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -142,7 +142,7 @@ public final class MergeInvariants {
 
           output_inv_file = new File(output_inv_filename);
 
-          if (!UtilMDE.canCreateAndWrite(output_inv_file)) {
+          if (!UtilPlume.canCreateAndWrite(output_inv_file)) {
             throw new Daikon.TerminationMessage(
                 "Cannot write to serialization output file " + output_inv_file);
           }
@@ -187,7 +187,7 @@ public final class MergeInvariants {
     if (inv_files.size() < 2) {
       throw new Daikon.TerminationMessage(
           "Must specify at least two inv files; only specified "
-              + UtilMDE.nplural(inv_files.size(), "file"));
+              + UtilPlume.nplural(inv_files.size(), "file"));
     }
 
     // Setup the default for guarding

@@ -3,7 +3,7 @@ package daikon.split.misc;
 import daikon.*;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
-import plume.ArraysMDE;
+import org.plumelib.util.ArraysPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -57,7 +57,7 @@ public final class CallerContextSplitter extends Splitter {
   @Override
   public boolean test(ValueTuple vt) {
     long caller = caller_varinfo.getIntValue(vt);
-    return (ArraysMDE.indexOf(ids, caller) >= 0);
+    return (ArraysPlume.indexOf(ids, caller) >= 0);
   }
 
   @Override

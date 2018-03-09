@@ -41,8 +41,8 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import plume.RegexUtil;
-import plume.UtilMDE;
+import org.plumelib.util.RegexUtil;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -255,7 +255,7 @@ public final class PrintInvariants {
   }
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -478,9 +478,9 @@ public final class PrintInvariants {
     }
   }
 
-  // To avoid the leading "UtilMDE." on all calls.
+  // To avoid the leading "UtilPlume." on all calls.
   private static String nplural(int n, String noun) {
-    return UtilMDE.nplural(n, noun);
+    return UtilPlume.nplural(n, noun);
   }
 
   /**

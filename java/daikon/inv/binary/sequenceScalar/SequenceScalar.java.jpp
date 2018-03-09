@@ -38,8 +38,8 @@ package PACKAGE;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.BinaryInvariant;
-import plume.ArraysMDE;
-import plume.Intern;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -107,7 +107,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
-    // assert ArraysMDE.fn_is_permutation(permutation);
+    // assert ArraysPlume.fn_is_permutation(permutation);
     if (permutation[0] == 1) {
       return resurrect_done_swapped();
     } else {

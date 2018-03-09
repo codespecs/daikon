@@ -29,9 +29,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.ArraysMDE;
-import plume.StringBuilderDelimited;
-import plume.UtilMDE;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.StringBuilderDelimited;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
@@ -406,7 +406,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
     // Sadly, String.join is only available from Java 8:
     // https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#join-java.lang.CharSequence-java.lang.Iterable-
-    final String auxstr = UtilMDE.join(auxstrs, ", ");
+    final String auxstr = UtilPlume.join(auxstrs, ", ");
 
     try {
       aux = VarInfoAux.parse(auxstr);
@@ -495,7 +495,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     for (VarInfo vi : bases) {
       arg_names.add(vi.name());
     }
-    str_name = String.format("%s(%s)", name, UtilMDE.join(arg_names, ",")).intern();
+    str_name = String.format("%s(%s)", name, UtilPlume.join(arg_names, ",")).intern();
 
     // The parent ppt is the same as the base if each varinfo in the
     // derivation has the same parent
@@ -947,7 +947,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       if (der == null) {
         continue;
       }
-      if (ArraysMDE.indexOf(der.getBases(), this) >= 0) {
+      if (ArraysPlume.indexOf(der.getBases(), this) >= 0) {
         result.add(der);
       }
     }
@@ -2539,7 +2539,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!FileIO.new_decl_format) {
       List<VarInfo> result = var_info_name.accept(new GuardingVisitor()); // vin ok
       result.remove(ppt.find_var_by_name(var_info_name.name())); // vin ok
-      assert !ArraysMDE.any_null(result);
+      assert !ArraysPlume.any_null(result);
       return result;
     } else { // new format
       List<VarInfo> result = new ArrayList<VarInfo>();
@@ -2716,7 +2716,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         vars.add(v.name());
       }
     }
-    return UtilMDE.join(vars, ", ");
+    return UtilPlume.join(vars, ", ");
   }
 
   public ValueSet get_value_set() {

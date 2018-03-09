@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
-import plume.MultiRandSelector;
-import plume.UtilMDE;
+import org.plumelib.util.MultiRandSelector;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -49,7 +49,7 @@ public class TraceSelect {
   private static String /*@MonotonicNonNull*/ [] sampleNames;
 
   private static final String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
           "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
@@ -201,7 +201,7 @@ public class TraceSelect {
         // but now add a '-p' in the front so it's all good
         sampleNames[num_reps] = filePrefix + ".inv";
 
-        PrintWriter pwOut = new PrintWriter(UtilMDE.bufferedFileWriter(filePrefix));
+        PrintWriter pwOut = new PrintWriter(UtilPlume.bufferedFileWriter(filePrefix));
 
         for (String toPrint : al) {
           pwOut.println(toPrint);

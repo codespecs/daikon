@@ -16,8 +16,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
-import plume.RegexUtil;
-import plume.UtilMDE;
+import org.plumelib.util.RegexUtil;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -30,7 +30,7 @@ import org.checkerframework.checker.nullness.qual.*;
 public class DtraceDiff {
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: DtraceDiff [OPTION]... [DECLS1]... DTRACE1 [DECLS2]... DTRACE2",
           "DTRACE1 and DTRACE2 are the data trace files to be compared.",
           "You may optionally specify corresponding DECLS files for each one.",
