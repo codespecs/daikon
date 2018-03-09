@@ -1,5 +1,6 @@
 package daikon.test;
 
+import static java.io.StreamTokenizer.TT_WORD;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.*;
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +22,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.*;
-import plume.StrTok;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -321,6 +323,23 @@ public class SampleTester extends TestCase {
     }
   }
 
+  /** Requires that the StreamTokenizer has just read a word. Returns that word. */
+  private String readString(StreamTokenizer stok) {
+    int ttype;
+    try {
+      ttype = stok.nextToken();
+    } catch (IOException e) {
+      throw new Error(e);
+    }
+    if (ttype == TT_WORD || ttype == '"') {
+      return stok.sval;
+    } else if (ttype > 0) {
+      return String.valueOf((char) ttype);
+    } else {
+      throw new Error("Expected string.  Got ttype = " + ttype);
+    }
+  }
+
   /** Processes a single assertion. If the assertion is false, throws an error. */
   private void proc_assert(String assertion) throws IOException {
 
@@ -333,32 +352,32 @@ public class SampleTester extends TestCase {
     }
 
     // Create a tokenizer over the assertion string
-    StrTok stok = new StrTok(assert_string);
+    StreamTokenizer stok = new StreamTokenizer(new StringReader(assert_string));
     stok.commentChar('#');
     stok.quoteChar('"');
-    stok.set_error_handler(
-        new StrTok.ErrorHandler() {
-          @Override
-          public void tok_error(String s) {
-            parse_error(s);
-          }
-        });
+
+    int ttype;
 
     // Get the assertion name
-    String name = stok.nextToken();
+    ttype = stok.nextToken();
+    assert ttype == TT_WORD;
+    String name = stok.sval;
+
+    String delimiter = "";
 
     // Get the arguments (enclosed in parens, separated by commas)
-    stok.need("(");
+    delimiter = readString(stok);
+    assert delimiter.equals("(") : "delimiter = " + delimiter;
+
     List<String> args = new ArrayList<String>(10);
     do {
-      String arg = stok.nextToken();
-      if (!stok.isWord() && !stok.isQString()) {
-        parse_error(String.format("%s found where argument expected", arg));
-      }
+      String arg = readString(stok);
       args.add(arg);
-    } while (stok.nextToken() == ","); // interned
-    if (stok.token() != ")") // interned
-    parse_error(String.format("%s found where ')' expected", stok.token()));
+      delimiter = readString(stok);
+    } while (delimiter.equals(","));
+    if (!delimiter.equals(")")) {
+      parse_error(String.format("%s found where ')' expected", delimiter));
+    }
 
     // process the specific assertion
     boolean result = false;
@@ -399,20 +418,16 @@ public class SampleTester extends TestCase {
     Class<?> cls = null;
     String format = null;
 
-    // If the first argument is a quoted string
+    // First argument is a classname or a quoted string
     String arg0 = args.get(0);
-    if (arg0.startsWith("\"")) {
-      format = arg0.substring(1, arg0.length() - 1);
-      debug.fine(String.format("Looking for format: '%s' in ppt %s", format, ppt));
-    } else { // must be a classname
-      try {
-        @SuppressWarnings("signature") // user input (?); throws exception if fails
-        /*@ClassGetName*/ String arg0_cgn = arg0;
-        cls = Class.forName(arg0_cgn);
-      } catch (Exception e) {
-        throw new RuntimeException("Can't find class " + arg0, e);
-      }
+    try {
       debug.fine("Looking for " + cls);
+      @SuppressWarnings("signature") // user input (?); throws exception if fails
+      /*@ClassGetName*/ String arg0_cgn = arg0;
+      cls = Class.forName(arg0_cgn);
+    } catch (Exception e) {
+      format = arg0;
+      debug.fine(String.format("Looking for format: '%s' in ppt %s", format, ppt));
     }
 
     // Build a vis to match the specified variables
