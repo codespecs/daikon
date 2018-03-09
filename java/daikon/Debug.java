@@ -100,8 +100,8 @@ public final class Debug {
   public static /*@Nullable*/ String function_binary_method = null
       // "java.lang.Math.max("
       // "java.lang.Math.min("
-      // "plume.MathPlume.logicalXor("
-      // "plume.MathPlume.gcd("
+      // "org.plumelib.util.MathPlume.logicalXor("
+      // "org.plumelib.util.MathPlume.gcd("
       ;
 
   /**

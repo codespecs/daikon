@@ -1088,7 +1088,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     code.append("<INVINFO>");
     code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
     code.append("<DAIKON>" + daikonrep + "</DAIKON>");
-    code.append("<INV>" + plume.UtilPlume.escapeNonJava(javarep) + "</INV>");
+    code.append("<INV>" + UtilPlume.escapeNonJava(javarep) + "</INV>");
     code.append("<DAIKONCLASS>" + inv.getClass().toString() + "</DAIKONCLASS>");
     code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature() + "</METHOD>");
     code.append("</INVINFO>");

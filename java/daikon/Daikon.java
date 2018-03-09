@@ -49,9 +49,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.plumelib.util.EntryReader;
+import org.plumelib.util.RegexUtil;
 import org.plumelib.util.UtilPlume;
-import plume.EntryReader;
-import plume.RegexUtil;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

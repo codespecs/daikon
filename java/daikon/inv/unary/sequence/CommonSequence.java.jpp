@@ -34,7 +34,7 @@ import daikon.*;
 import daikon.inv.*;
 import java.util.Arrays;
 import org.plumelib.util.ArraysPlume;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

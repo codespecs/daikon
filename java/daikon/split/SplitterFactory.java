@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jtb.ParseException;
-import plume.FileCompiler;
 import org.plumelib.util.UtilPlume;
+import plume.FileCompiler;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

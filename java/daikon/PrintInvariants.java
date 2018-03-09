@@ -41,7 +41,7 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import plume.RegexUtil;
+import org.plumelib.util.RegexUtil;
 import org.plumelib.util.UtilPlume;
 
 /*>>>

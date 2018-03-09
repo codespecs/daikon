@@ -1,6 +1,6 @@
 package daikon.diff;
 
-import plume.Pair;
+import org.plumelib.util.Pair;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

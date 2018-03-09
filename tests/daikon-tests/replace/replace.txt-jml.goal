@@ -32,7 +32,7 @@ daikon.Quant.eltsEqual(\old(j), \old(daikon.Quant.getElement_int(j, \new(return)
 \old(maxset) > \old(daikon.Quant.getElement_int(j, \new(return)-1))
 daikon.Quant.size(j)-1 <= \old(daikon.Quant.getElement_int(j, \new(return)-1))
 daikon.Quant.getElement_int(j, return-1) - \old(daikon.Quant.getElement_int(j, \new(return)-1)) - 1 == 0
-return == (plume.MathMDE.gcd(daikon.Quant.getElement_int(j, return-1), \old(daikon.Quant.getElement_int(j, \new(return)-1))))
+return == (org.plumelib.util.MathPlume.gcd(daikon.Quant.getElement_int(j, return-1), \old(daikon.Quant.getElement_int(j, \new(return)-1))))
 ===========================================================================
 ..amatch():::ENTER
     Variables: lin offset pat j

@@ -88,7 +88,7 @@ return == 1
 this.numer != this.denom
 this.denom < rn.denom
 rn.denom >= return
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
 this.denom >= 1
@@ -1097,7 +1097,7 @@ this.terms.wrapped[].getClass().getName() == [PolyCalc.RatTerm]
 size(this.terms.wrapped[]) == 1
 size(this.terms.wrapped[]) >= size(p.terms.wrapped[])
 size(this.terms.wrapped[])-1 >= size(p.terms.wrapped[])-1
-size(this.terms.wrapped[]) == (plume.MathMDE.gcd(size(p.terms.wrapped[]), size(return.terms.wrapped[])))
+size(this.terms.wrapped[]) == (org.plumelib.util.MathPlume.gcd(size(p.terms.wrapped[]), size(return.terms.wrapped[])))
 size(this.terms.wrapped[])-1 == (size(p.terms.wrapped[])-1 * size(return.terms.wrapped[])-1)
 ===========================================================================
 PolyCalc.RatPoly.sub(PolyCalc.RatPoly):::EXIT

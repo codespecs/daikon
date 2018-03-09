@@ -1680,7 +1680,7 @@ orig(result[0]) is a bitwise subset of num[0]
 (orig(num[0]) == 0) ==> (result[0] == 0)
 num[0] == (java.lang.Math.max(result[0], orig(num[0])))
 num[0] == (result[0] | orig(num[0]))
-orig(num[0]) == (plume.MathMDE.gcd(num[0], orig(result[0])))
+orig(num[0]) == (org.plumelib.util.MathPlume.gcd(num[0], orig(result[0])))
 ===========================================================================
 scan.c.yy_flex_alloc():::ENTER
 size one of { 56, 16386 }

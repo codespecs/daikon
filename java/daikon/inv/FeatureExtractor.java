@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import plume.EntryReader;
-import plume.Pair;
+import org.plumelib.util.EntryReader;
+import org.plumelib.util.Pair;
 import org.plumelib.util.UtilPlume;
 
 /*>>>

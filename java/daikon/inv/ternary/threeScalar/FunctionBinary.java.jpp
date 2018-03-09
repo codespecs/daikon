@@ -478,11 +478,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
         func = "min";
       else if (methodname[0].equals("java.lang.Math.max("))
         func = "max";
-      else if (methodname[0].equals("plume.MathPlume.gcd("))
+      else if (methodname[0].equals("org.plumelib.util.MathPlume.gcd("))
         func = "gcd";
       else if (methodname[0].equals("java.lang.Math.pow("))
         func = "pow";
-      else if (methodname[0].equals("plume.MathPlume.logicalXor("))
+      else if (methodname[0].equals("org.plumelib.util.MathPlume.logicalXor("))
         func = "|java-logical-xor|";
     } else {
       assert methodname[0].equals("");
@@ -543,11 +543,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
         func = "Math.Min";
       else if (methodname[0].equals("java.lang.Math.max("))
         func = "Math.Max";
-      else if (methodname[0].equals("plume.MathPlume.gcd("))
+      else if (methodname[0].equals("org.plumelib.util.MathPlume.gcd("))
         return result + " == CSharpDaikonLib.Extensions.GCD(" + arg1 + ", " + arg2 + ")";
       else if (methodname[0].equals("java.lang.Math.pow("))
         return result + " == " + arg1 + ".Pow(" + arg2 + ")";
-      else if (methodname[0].equals("plume.MathPlume.logicalXor("))
+      else if (methodname[0].equals("org.plumelib.util.MathPlume.logicalXor("))
         return result + " == (" + arg1 + " ^ " + arg2 + ")";
     } else {
       assert methodname[0].equals("");
@@ -719,7 +719,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) ^ (arg2 != 0)) ? 1 : 0)
   // #define METHOD_NAME {"", " ^ ", ""}
-  #define METHOD_NAME {"plume.MathPlume.logicalXor(", ", ", ")"}
+  #define METHOD_NAME {"org.plumelib.util.MathPlume.logicalXor(", ", ", ")"}
   #undef EXTRA_INV_DOC
   #define EXTRA_INV_DOC For logical operations, Daikon treats 0 as false and all other values as true.
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
@@ -748,7 +748,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define FTYPE FTYPE_Gcd
   // #define EQUALITY_SUPPRESS 1
   #define FUNC(arg1,arg2) MathPlume.gcd(arg1, arg2)
-  #define METHOD_NAME {"plume.MathPlume.gcd(", ", ", ")"}
+  #define METHOD_NAME {"org.plumelib.util.MathPlume.gcd(", ", ", ")"}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION Mod

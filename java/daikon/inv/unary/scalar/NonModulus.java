@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import plume.Intern;
+import org.plumelib.util.Intern;
 import org.plumelib.util.MathPlume;
 
 /*>>>

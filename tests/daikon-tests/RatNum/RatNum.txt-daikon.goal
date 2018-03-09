@@ -88,7 +88,7 @@ return == 1
 this.numer != this.denom
 this.denom < rn.denom
 rn.denom >= return
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
 this.denom >= 1

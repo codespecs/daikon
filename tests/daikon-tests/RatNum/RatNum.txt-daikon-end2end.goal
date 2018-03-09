@@ -942,7 +942,7 @@ return == 1
 this.numer != this.denom
 this.denom < rn.denom
 rn.denom >= return
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96;condition="not(denom < 0)"
 ===========================================================================
@@ -951,14 +951,14 @@ rn.numer >= -1
 rn.denom >= 1
 return == 1
 this.denom < rn.denom
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96;condition="orig((denom == 0))"
 rn.numer >= -1
 rn.denom >= 1
 return == 1
 this.denom < rn.denom
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96;condition="not((this.denom != 0)&&(this.numer < 0))"
 this.denom == 0
@@ -968,7 +968,7 @@ return == 1
 this.numer != this.denom
 this.denom < rn.denom
 rn.denom >= return
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96;condition="not(orig((this.denom != 0)&&(this.numer < 0)))"
 this.denom == 0
@@ -978,7 +978,7 @@ return == 1
 this.numer != this.denom
 this.denom < rn.denom
 rn.denom >= return
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96;condition="(this.denom == 0)||(this.numer > 0)"
 this.denom == 0
@@ -988,7 +988,7 @@ return == 1
 this.numer != this.denom
 this.denom < rn.denom
 rn.denom >= return
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96;condition="orig((this.denom == 0)||(this.numer > 0))"
 this.denom == 0
@@ -998,21 +998,21 @@ return == 1
 this.numer != this.denom
 this.denom < rn.denom
 rn.denom >= return
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96;condition="orig(rn.isNaN())"
 rn.numer >= -1
 rn.denom >= 1
 return == 1
 this.denom < rn.denom
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96;condition="rn.isNaN()"
 rn.numer >= -1
 rn.denom >= 1
 return == 1
 this.denom < rn.denom
-return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
 (this.numer <= -1)  <==>  (this.numer < rn.denom)
@@ -2146,9 +2146,9 @@ arg.denom == 1  (mod 2)
 this.denom <= arg.denom
 (return.denom == 0) ==> (arg.numer == 0)
 return.numer % arg.denom == 0
-this.denom == (plume.MathMDE.gcd(this.numer, arg.denom))
-this.denom == (plume.MathMDE.gcd(arg.numer, arg.denom))
-this.denom == (plume.MathMDE.gcd(arg.denom, return.denom))
+this.denom == (org.plumelib.util.MathPlume.gcd(this.numer, arg.denom))
+this.denom == (org.plumelib.util.MathPlume.gcd(arg.numer, arg.denom))
+this.denom == (org.plumelib.util.MathPlume.gcd(arg.denom, return.denom))
 ===========================================================================
 PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189;condition="orig(denom != 1)"
 arg.denom >= 1
@@ -2161,9 +2161,9 @@ arg.denom == 1  (mod 2)
 this.denom <= arg.denom
 (return.denom == 0) ==> (arg.numer == 0)
 return.numer % arg.denom == 0
-this.denom == (plume.MathMDE.gcd(this.numer, arg.denom))
-this.denom == (plume.MathMDE.gcd(arg.numer, arg.denom))
-this.denom == (plume.MathMDE.gcd(arg.denom, return.denom))
+this.denom == (org.plumelib.util.MathPlume.gcd(this.numer, arg.denom))
+this.denom == (org.plumelib.util.MathPlume.gcd(arg.numer, arg.denom))
+this.denom == (org.plumelib.util.MathPlume.gcd(arg.denom, return.denom))
 ===========================================================================
 PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189;condition="arg.isNaN()"
 arg.numer >= -1
