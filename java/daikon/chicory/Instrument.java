@@ -1151,9 +1151,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     int last_line_number = 0;
     boolean foundLine;
 
-    for (Iterator<InstructionHandle> ii = il.iterator(); ii.hasNext(); ) {
-      InstructionHandle ih = ii.next();
-
+    for (InstructionHandle ih : il) {
       foundLine = false;
 
       if (ih.hasTargeters()) {
