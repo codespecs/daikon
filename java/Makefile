@@ -1330,11 +1330,12 @@ list_java_files: showvar_JAVA_FILES
 ###
 
 ## First, a file not generated via java-cpp.
-daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.java
-	${JAVAC_COMMAND} $<
+daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.java daikon/split/TokenReplacer.java
+	${JAVAC_COMMAND} $^
 	rm -f $@
-# Has expected errors while compiling splitter files
-	${JAVA} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1
+# Has expected errors while compiling splitter files.
+# Suppress output unless whole command fails.
+	(${JAVA} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1) || ${JAVA} daikon.test.split.SplitterFactoryTestUpdater
 	chmod a-w $@
 
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}

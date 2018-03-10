@@ -421,7 +421,7 @@ public class SampleTester extends TestCase {
     // First argument is a classname or a quoted string
     String arg0 = args.get(0);
     try {
-      debug.fine("Looking for " + cls);
+      debug.fine("Looking for " + arg0);
       @SuppressWarnings("signature") // user input (?); throws exception if fails
       /*@ClassGetName*/ String arg0_cgn = arg0;
       cls = Class.forName(arg0_cgn);
