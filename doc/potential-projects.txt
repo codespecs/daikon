@@ -1,0 +1,57 @@
+For ideas about how to improve Daikon, you can see its issue tracker:
+  https://github.com/codespecs/daikon/issues
+and these files in the current directory:
+  todo.txt
+  bugs.txt
+
+This file contains a few projects of moderate size that may be particularly interesting.
+
+===========================================================================
+
+Evaluate performance and usability costs of abstraction over types
+
+A programmer often needs to write code that is polymorphic:  it operates over multiple datatypes.  For instance, a graph algorithm might need to work whether the data in the graph is integers or floating-point values.
+
+Programming languages provide abstraction mechanisms for creating polymorphic code, such as C++'s templates and Java's generics.  These mechanisms have the benefit of reducing code duplication.  They also have costs, such as increasing indirection (making the code harder to understand) and reducing performance (due to creation of wrapper objects).
+
+As a result, programmers still frequently perform manual specialization:  they maintain multiple copies of code.  Oracle recognizes these tradeoffs.  They wish to "Stop making users choose between performance and abstraction" (http://www.oracle.com/technetwork/java/jvmls2016-goetz-3126134.pdf).  Project Valhalla will improve the situation and is planned for a future version of Java, but is not yet available.  Likewise, the book _Java Generics and Colections_ (http://shop.oreilly.com/product/9780596527754.do) says, "you should measure performance to justify such a design" (of specializing or not).  In a 2007 experiment, specializing Quicksort improved performance by 25% (https://dl.acm.org/citation.cfm?id=1297909).  However, the JIT compiler has improved in the meanwhile, and there have been few recent studies of the performance impacts.
+
+The goal of this project is to evaluate the costs and benefits of multiple ways of writing code, such as:
+ * maintaining multiple copies of the code that are specialized to different datatypes
+ * using Java abstractions (classes, generics) to avoid code duplication
+ * using a preprocessor to generate Java code, which avoids duplication and achieves good performance but complicates the build system and makes it harder to use an IDE
+
+A good case study for this is the Daikon invariant detector (https://plse.cs.washington.edu/daikon/), a machine-learning tool that infers specifications for programs.  It is actively maintained and the maintainers are interested in improving it.  It currently uses a preprocessor, which makes it easy for you to compare all the different approaches.
+
+===========================================================================
+
+Infer invariants over exceptional executions
+
+The Daikon invariant detector (https://plse.cs.washington.edu/daikon/) is a machine-learning tool that infers specifications for programs.
+It automatically reports facts about your program, such as
+ * “x.field > abs(y)”;
+ * “y = 2*x+3”;
+ * “array a is sorted”;
+ * “for all list objects lst, lst.next.prev = lst”;
+ * “for all treenode objects n, n.left.value < n.right.value”;
+ * “p != null => p.content in myArray”;
+
+However, it ignores any procedure call that throws an exception.  Thus, it cannot report useful information about exceptional executions, such as what causes a program to throws an exception or what properties are true after the exception is thrown.
+
+This project would extend Daikon to handle exeptional execution.
+
+The project has these components:
+ * defining the feature.  What is the relationship between normal and exceptional executions?  Should summary information about *all* executions ever be output, or should they be kept strictly separate?  What about information about different types of exceptions?  Defining the feature is an interesting challenge.  At least three designs have been proposed, but each has limitations.
+ * Adjust Daikon's implementation.  This may be as easy as defining new "exception exit points" and adding them to Daikon's existing program point hierarchy.
+ * Change front ends that create Daikon input files, so that they output information about exceptions.
+ * Evaluate the results.
+
+===========================================================================
+
+Parallelize Daikon
+
+Daikon runs in a single thread.  However, its algorithms process each program point (such as a method entry or exit) in isolation.  Because most computers have multible CPUs, Daikon could be made to run faster by using multiple threads, each of which processes just some program points.
+
+This is an interesting exercise for someone who is interested in concurrency and parallelism.
+
+===========================================================================
