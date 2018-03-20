@@ -594,8 +594,7 @@ $(INV_DIR)/java/lib/commons-exec-1.3.jar \
 $(INV_DIR)/java/lib/java-getopt.jar \
 $(INV_DIR)/java/lib/options-all-0.3.1.jar \
 $(INV_DIR)/java/lib/plume-util-0.0.1.jar \
-$(INV_DIR)/java/lib/daikon-util.jar \
-$(INV_DIR)/java/lib/plume.jar
+$(INV_DIR)/java/lib/daikon-util.jar
 
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
 ## "make -C java clean; make daikon.jar".
@@ -614,8 +613,6 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 
-	# plume.jar goes first so it can be overridden by subsequent libraries
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/bcel-util-all-0.0.4.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/commons-exec-1.3.jar
@@ -787,13 +784,6 @@ ifndef NONETWORK
 	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format) \
 	fi
 endif
-
-update-plume-jar: update-plume-lib
-ifndef CHECKERFRAMEWORK
-	$(error CHECKERFRAMEWORK is not set)
-endif
-	make -C utils/plume-lib/java clean jar verify-plume-jar-classfile-version
-	\cp -pf utils/plume-lib/java/plume.jar java/lib/
 
 .PHONY: git-hooks
 git-hooks: .git/hooks/pre-commit .git/hooks/post-merge
