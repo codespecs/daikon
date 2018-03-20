@@ -70,8 +70,7 @@ public class Instrument implements ClassFileTransformer {
 
       // We're not in a JDK class
       // Don't instrument our own classes
-      if ((className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/Test"))
-          || className.startsWith("daikon/chicory/")) {
+      if (is_dcomp(className)) {
         return null;
       }
     }
@@ -129,7 +128,7 @@ public class Instrument implements ClassFileTransformer {
     }
     if (classname.equals("daikon/PptTopLevel$PptType")) return true;
     if (classname.startsWith("org/plumelib/bcelutil")) return true;
-    if (classname.startsWith("daikon/util/UtilPlume")) return true;
+    if (classname.startsWith("daikon/util")) return true;
     return false;
   }
 }
