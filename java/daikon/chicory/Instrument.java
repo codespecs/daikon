@@ -245,7 +245,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       if (Chicory.debug) {
         Path dir = Files.createTempDirectory("chicory-debug");
         Path file = dir.resolve(njc.getClassName() + ".class");
-        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
+        //debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
         Files.createDirectories(dir);
         njc.dump(file.toFile());
       }
