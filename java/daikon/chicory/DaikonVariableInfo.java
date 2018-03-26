@@ -160,7 +160,7 @@ public abstract class DaikonVariableInfo
 
     if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray) {
       debug_array.log("%s is not an array", theName);
-      debug_array.tb();
+      debug_array.logStackTrace();
     }
   }
 
