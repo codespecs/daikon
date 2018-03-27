@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import org.plumelib.bcelutil.JvmUtil;
+import org.plumelib.bcelutil.SimpleLog;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -55,9 +56,9 @@ public abstract class DaikonVariableInfo
   protected final boolean isArray;
 
   /** Print debug information about the variables */
-  // static SimpleLog debug_vars = new SimpleLog(false);
+  static SimpleLog debug_vars = new SimpleLog(false);
 
-  // private static SimpleLog debug_array = new SimpleLog(true);
+  private static SimpleLog debug_array = new SimpleLog(true);
 
   /** Default string for comparability info. */
   private static final String compareInfoDefaultString = "22";
@@ -151,14 +152,15 @@ public abstract class DaikonVariableInfo
     this.typeName = typeName.intern();
     this.repTypeName = repTypeName.intern();
 
-    // debug_vars.log(
-    //     "Construct DaikonVariableInfo: %s : %s : %s", this.getClass().getName(), name, typeName);
+    debug_vars.log(
+        "Construct DaikonVariableInfo: %s : %s : %s", this.getClass().getName(), name, typeName);
 
     children = new ArrayList<DaikonVariableInfo>();
     isArray = arr;
 
     if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray) {
-      // debug_array.log_tb("%s is not an array", theName);
+      debug_array.log("%s is not an array", theName);
+      debug_array.logStackTrace();
     }
   }
 
@@ -186,7 +188,7 @@ public abstract class DaikonVariableInfo
     assert info.repTypeName != null : "Child's representation type name should not be null";
     assert info.compareInfoString != null : "Child's comparability information should not be null";
 
-    // debug_vars.log("Adding %s to %s", info, this);
+    debug_vars.log("Adding %s to %s", info, this);
     children.add(info);
   }
 
@@ -393,7 +395,7 @@ public abstract class DaikonVariableInfo
             ? ((Constructor<?>) method).getParameterTypes()
             : ((Method) method).getParameterTypes();
 
-    // debug_vars.log("enter addParameters%n");
+    debug_vars.log("enter addParameters%n");
     Iterator<String> argnamesiter = argnames.iterator();
     int param_offset = 0;
     for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++) {
@@ -403,16 +405,17 @@ public abstract class DaikonVariableInfo
           || (type.getName().equals("java.lang.DCompMarker"))) {
         continue;
       }
-      // debug_vars.indent("processing parameter '%s'%n", name);
+      debug_vars.log("processing parameter '%s'%n", name);
+      debug_vars.indent();
       DaikonVariableInfo theChild =
           addParamDeclVar(cinfo, type, name, offset, depth, i, param_offset);
       param_offset++;
       if ((type == Double.TYPE) || (type == Long.TYPE)) param_offset++;
       assert cinfo.clazz != null : "@AssumeAssertion(nullness): need to check justification";
       theChild.addChildNodes(cinfo, type, name, offset, depth);
-      // debug_vars.exdent();
+      debug_vars.exdent();
     }
-    // debug_vars.log("exit addParameters%n");
+    debug_vars.log("exit addParameters%n");
   }
 
   /**
@@ -428,7 +431,7 @@ public abstract class DaikonVariableInfo
     //DaikonVariableInfo corresponding to the "this" object
     DaikonVariableInfo thisInfo;
 
-    // debug_vars.log("addClassVars: %s : %s : %s: [%s]%n", this, cinfo, type, offset);
+    debug_vars.log("addClassVars: %s : %s : %s: [%s]%n", this, cinfo, type, offset);
 
     //must be at the first level of recursion (not lower) to print "this" field
     if (!dontPrintInstanceVars && offset.equals("")) {
@@ -465,14 +468,14 @@ public abstract class DaikonVariableInfo
     // if (fields.length > 50)
     //    System.out.printf ("%d fields in %s%n", fields.length, type);
 
-    // debug_vars.log(
-    //     "%s: [%s] %d dontPrintInstanceVars = %b, " + "inArray = %b%n",
-    //     type, offset, fields.size(), dontPrintInstanceVars, isArray);
+    debug_vars.log(
+        "%s: [%s] %d dontPrintInstanceVars = %b, " + "inArray = %b%n",
+        type, offset, fields.size(), dontPrintInstanceVars, isArray);
 
     for (Field classField : fields) {
       boolean is_static = Modifier.isStatic(classField.getModifiers());
 
-      // debug_vars.log("considering field %s -> %s%n", offset, classField);
+      debug_vars.log("considering field %s -> %s%n", offset, classField);
 
       // Skip some fields
 
@@ -483,7 +486,7 @@ public abstract class DaikonVariableInfo
       // expose the outer class fields of an inner class to Daikon.
 
       if (!is_static && dontPrintInstanceVars) {
-        // debug_vars.log("--field !static and instance var %b%n", dontPrintInstanceVars);
+        debug_vars.log("--field !static and instance var %b%n", dontPrintInstanceVars);
         continue;
       }
 
@@ -502,7 +505,7 @@ public abstract class DaikonVariableInfo
 
       // Don't print arrays of the same static field
       if (is_static && isArray) {
-        // debug_vars.log("--field static and inArray%n");
+        debug_vars.log("--field static and inArray%n");
         continue;
       }
 
@@ -510,14 +513,14 @@ public abstract class DaikonVariableInfo
       if (is_static) {
         String full_name = classField.getDeclaringClass().getName() + "." + classField.getName();
         if (ppt_statics.contains(full_name) && (depth <= 0)) {
-          // debug_vars.log("already included static %s (no children)", full_name);
+          debug_vars.log("already included static %s (no children)", full_name);
 
           continue;
         }
       }
 
       if (!isFieldVisible(cinfo.clazz, classField)) {
-        // debug_vars.log("--field not visible%n");
+        debug_vars.log("--field not visible%n");
         continue;
       }
 
@@ -528,11 +531,12 @@ public abstract class DaikonVariableInfo
       StringBuilder buf = new StringBuilder();
       DaikonVariableInfo newChild = thisInfo.addDeclVar(classField, offset, buf);
 
-      // debug_vars.indent("--Created DaikonVariable %s%n", newChild);
+      debug_vars.log("--Created DaikonVariable %s%n", newChild);
+      debug_vars.indent();
 
       String newOffset = buf.toString();
       newChild.addChildNodes(cinfo, fieldType, classField.getName(), newOffset, depth);
-      // debug_vars.exdent();
+      debug_vars.exdent();
     }
 
     // If appropriate, print out decls information for pure methods
@@ -560,7 +564,8 @@ public abstract class DaikonVariableInfo
                 thisInfo.addPureMethodDecl(
                     cinfo, meth, new DaikonVariableInfo[] {}, offset, depth, buf);
             String newOffset = buf.toString();
-            // debug_vars.indent("Pure method");
+            debug_vars.log("Pure method");
+            debug_vars.indent();
             assert meth.member != null
                 : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
             newChild.addChildNodes(
@@ -569,7 +574,7 @@ public abstract class DaikonVariableInfo
                 meth.member.getName(),
                 newOffset,
                 depth);
-            // debug_vars.exdent();
+            debug_vars.exdent();
           }
         }
 
@@ -597,7 +602,8 @@ public abstract class DaikonVariableInfo
                 DaikonVariableInfo newChild =
                     thisInfo.addPureMethodDecl(cinfo, meth, arg, offset, depth, buf);
                 String newOffset = buf.toString();
-                // debug_vars.indent("Pure method");
+                debug_vars.log("Pure method");
+                debug_vars.indent();
                 assert meth.member != null
                     : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
                 newChild.addChildNodes(
@@ -606,14 +612,14 @@ public abstract class DaikonVariableInfo
                     meth.member.getName(),
                     newOffset,
                     depth);
-                // debug_vars.exdent();
+                debug_vars.exdent();
               }
             }
           }
         }
       }
     }
-    // debug_vars.log("exit addClassVars%n");
+    debug_vars.log("exit addClassVars%n");
   }
 
   /**
@@ -630,7 +636,7 @@ public abstract class DaikonVariableInfo
       int depth,
       int argNum,
       int param_offset) {
-    // debug_vars.log("enter addParamDeclVar%n");
+    debug_vars.log("enter addParamDeclVar%n");
     // add this variable to the tree as a child of curNode
     DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum, type, param_offset);
 
@@ -639,7 +645,7 @@ public abstract class DaikonVariableInfo
     boolean ignore = newChild.check_for_dup_names();
     if (!ignore) newChild.checkForDerivedVariables(type, name, offset);
 
-    // debug_vars.log("exit addParamDeclVar%n");
+    debug_vars.log("exit addParamDeclVar%n");
     return newChild;
   }
 
@@ -720,8 +726,8 @@ public abstract class DaikonVariableInfo
    * @return the newly created DaikonVariableInfo object, whose parent is this
    */
   protected DaikonVariableInfo addDeclVar(Field field, String offset, StringBuilder buf) {
-    // debug_vars.log("enter addDeclVar(field):%n");
-    // debug_vars.log("  field: %s, offset: %s%n", field, offset);
+    debug_vars.log("enter addDeclVar(field):%n");
+    debug_vars.log("  field: %s, offset: %s%n", field, offset);
     String arr_str = "";
     if (isArray) arr_str = "[]";
 
@@ -816,7 +822,7 @@ public abstract class DaikonVariableInfo
       field.setAccessible(false);
     }
 
-    // debug_vars.log("exit addDeclVar(field)%n");
+    debug_vars.log("exit addDeclVar(field)%n");
     return newField;
   }
 
@@ -1089,8 +1095,8 @@ public abstract class DaikonVariableInfo
   protected void addChildNodes(
       ClassInfo cinfo, Class<?> type, String theName, String offset, int depthRemaining) {
 
-    // debug_vars.log("enter addChildNodes:%n");
-    // debug_vars.log("  name: %s, offset: %s%n", theName, offset);
+    debug_vars.log("enter addChildNodes:%n");
+    debug_vars.log("  name: %s, offset: %s%n", theName, offset);
 
     if (type.isPrimitive()) return;
 
@@ -1123,9 +1129,10 @@ public abstract class DaikonVariableInfo
 
         addChild(newChild);
 
-        // debug_vars.indent("Array variable");
+        debug_vars.log("Array variable");
+        debug_vars.indent();
         newChild.addChildNodes(cinfo, eltType, "", offset + theName + "[]", depthRemaining);
-        // debug_vars.exdent();
+        debug_vars.exdent();
       }
       // array is 1-dimensional and element type is a regular class
       else {
@@ -1152,7 +1159,7 @@ public abstract class DaikonVariableInfo
     }
     // regular old class type
     else {
-      // debug_vars.log("**Depth Remaining = %d%n", depthRemaining);
+      debug_vars.log("**Depth Remaining = %d%n", depthRemaining);
 
       if (depthRemaining <= 0) {
         // don't recurse any more!
@@ -1162,7 +1169,7 @@ public abstract class DaikonVariableInfo
         addClassVars(cinfo, false, type, offset + theName + ".", depthRemaining - 1);
       }
     }
-    // debug_vars.log("exit addChildNodes%n");
+    debug_vars.log("exit addChildNodes%n");
   }
 
   /**
@@ -1318,7 +1325,7 @@ public abstract class DaikonVariableInfo
   private boolean check_for_dup_names() {
 
     if (ppt_statics.contains(name)) {
-      // debug_vars.log("ignoring already included variable %s [%s]", name, getClass());
+      debug_vars.log("ignoring already included variable %s [%s]", name, getClass());
       if (false && !isStatic()) {
         System.out.printf("ignoring already included variable %s [%s]", name, getClass());
       }

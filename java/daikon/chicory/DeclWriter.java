@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.plumelib.bcelutil.SimpleLog;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -461,7 +462,7 @@ public class DeclWriter extends DaikonWriter {
     /** Number that identifies this relation within this ppt */
     int id;
 
-    // static SimpleLog debug = new SimpleLog(false);
+    static SimpleLog debug = new SimpleLog(false);
 
     /** Create a VarRelation */
     public VarRelation(
@@ -475,7 +476,7 @@ public class DeclWriter extends DaikonWriter {
       this.local_prefix = local_prefix;
       this.parent_prefix = parent_prefix;
       this.local_variable = local_variable;
-      // debug.log("Created %s", this);
+      debug.log("Created %s", this);
     }
 
     /** Create a var relation with the matching names */
