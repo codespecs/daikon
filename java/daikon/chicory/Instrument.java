@@ -90,7 +90,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         debug_transform.log(
             "not instrumenting %s, it matches ppt_omit regex %s%n", pptName, pattern);
 
-        debug_transform.log("filtering 1 true on --- " + pptName);
+        debug_transform.log("filtering 1 true on --- %s", pptName);
 
         // omit takes priority over include
         return true;
