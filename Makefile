@@ -4,7 +4,8 @@
 
 DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 
-HTMLTOOLS ?= ${HOME}/bin/src/html-tools
+HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
+CHECKLINK ?= ${DAIKONDIR}/utils/checklink
 
 ##########################################################################
 ### Variables
