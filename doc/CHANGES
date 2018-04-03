@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.6.4
+5.6.4 (April 3, 2018)
 
 Eliminate reliance on plume.jar file, in favor of smaller libraries
 (checklink, html-tools, options, plume-util, etc.).
