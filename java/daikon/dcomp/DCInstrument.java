@@ -370,11 +370,7 @@ class DCInstrument extends InstructionListUtils {
           mg.removeLocalVariables();
         }
 
-        // Remove any LVTT tables
-        BcelUtil.removeLocalVariableTypeTables(mg);
-        // In future version of BCEL the line above
-        // will probably be replace by:
-        // mg.removeLocalVariableTypeTable();
+        remove_local_variable_type_table(mg);
 
         if (double_client && !BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg)) {
           // doubling
@@ -403,8 +399,7 @@ class DCInstrument extends InstructionListUtils {
               mg = new MethodGen(m, gen.getClassName(), pool);
               // add the java.lang.DCompMarker argument
               add_dcomp_arg(mg);
-              // Remove any LVTT tables
-              BcelUtil.removeLocalVariableTypeTables(mg);
+              remove_local_variable_type_table(mg);
               // try again
               gen.addMethod(mg.getMethod());
             } else {
@@ -567,11 +562,7 @@ class DCInstrument extends InstructionListUtils {
           mg.removeLocalVariables();
         }
 
-        // Remove any LVTT tables
-        BcelUtil.removeLocalVariableTypeTables(mg);
-        // In future version of BCEL the line above
-        // will probably be replace by:
-        // mg.removeLocalVariableTypeTable();
+        remove_local_variable_type_table(mg);
 
         if (double_client && !BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg)) {
           gen.addMethod(mg.getMethod());
@@ -709,11 +700,7 @@ class DCInstrument extends InstructionListUtils {
           mg.removeLocalVariables();
         }
 
-        // Remove any LVTT tables
-        BcelUtil.removeLocalVariableTypeTables(mg);
-        // In future version of BCEL the line above
-        // will probably be replace by:
-        // mg.removeLocalVariableTypeTable();
+        remove_local_variable_type_table(mg);
 
         gen.addMethod(mg.getMethod());
 
@@ -842,11 +829,7 @@ class DCInstrument extends InstructionListUtils {
           mg.removeLocalVariables();
         }
 
-        // Remove any LVTT tables
-        BcelUtil.removeLocalVariableTypeTables(mg);
-        // In future version of BCEL the line above
-        // will probably be replace by:
-        // mg.removeLocalVariableTypeTable();
+        remove_local_variable_type_table(mg);
 
         gen.addMethod(mg.getMethod());
 
