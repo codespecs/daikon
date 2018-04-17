@@ -489,7 +489,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
           // The offsets point to 'new' instructions; since we do
           // not modify these, their Instruction Handles will remain
           // unchanged throught the instrumentaion process.
-          process_uninitialized_variable_info(il, true);
+          build_unitialized_NEW_map(il);
 
           if (!shouldInclude) {
             debug_transform.log("Class %s included [%s]%n", cg.getClassName(), mi);
@@ -544,7 +544,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
           // Update the Uninitialized_variable_info offsets before
           // we write out the new StackMapTable.
-          process_uninitialized_variable_info(il, false);
+          update_uninitialized_NEW_offsets(il);
 
           create_new_stack_map_attribute(mg);
 
@@ -700,64 +700,6 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     }
 
     return null;
-  }
-
-  /**
-   * Either save or update the uninitialized_variable_info offsets. If 'save' is true, build a
-   * HashMap of offsets to InsturctionHandles. If 'save' is false, update the offsets using the
-   * HashMap.
-   */
-  private void process_uninitialized_variable_info(InstructionList il, boolean save) {
-    il.setPositions();
-    if (save) {
-      // UNDONE: Should this be a sparse array?
-      // We allocate one entry for each byte of the instruction list.
-      offset_map = new InstructionHandle[il.getEnd().getPosition()];
-    }
-    for (int i = 0; i < stack_map_table.length; i++) {
-      int max_types;
-      StackMapType[] types;
-      StackMapEntry stack_map = stack_map_table[i];
-
-      max_types = stack_map.getNumberOfLocals();
-      if (max_types > 0) {
-        types = stack_map.getTypesOfLocals();
-        process_uninitialized_variable_items(max_types, types, il, save);
-      }
-
-      max_types = stack_map.getNumberOfStackItems();
-      if (max_types > 0) {
-        types = stack_map.getTypesOfStackItems();
-        process_uninitialized_variable_items(max_types, types, il, save);
-      }
-    }
-  }
-
-  private void process_uninitialized_variable_items(
-      int max_types, StackMapType[] types, InstructionList il, boolean save) {
-    for (int j = 0; j < max_types; j++) {
-      if (types[j].getType() == Const.ITEM_NewObject) {
-        int offset = types[j].getIndex();
-        if (save) {
-          // Initial pass over StackMapTable
-          // build the offset_map
-          InstructionHandle ih = il.findHandle(offset);
-          assert (ih != null) : " no InstructionHandle for offset";
-          InstructionHandle ih2 = offset_map[offset];
-          if (ih2 != null) {
-            assert (ih.equals(ih2)) : " InstructionHandles don't match";
-          } else {
-            offset_map[offset] = ih;
-          }
-        } else {
-          // Final pass over StackMapTable
-          // update the offsets
-          InstructionHandle ih = offset_map[offset];
-          assert (ih != null) : " no InstructionHandle for offset";
-          types[j].setIndex(ih.getPosition());
-        }
-      }
-    }
   }
 
   /**
