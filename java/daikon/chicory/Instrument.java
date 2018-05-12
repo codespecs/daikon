@@ -246,7 +246,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       if (Chicory.debug) {
         Path dir = Files.createTempDirectory("chicory-debug");
         Path file = dir.resolve(njc.getClassName() + ".class");
-        // debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
+        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
         Files.createDirectories(dir);
         njc.dump(file.toFile());
       }
@@ -457,13 +457,13 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
             for (int j = 0; j < local_vars.length; j++) {
               locals = locals + local_vars[j].getName() + " ";
             }
-            // debug_instrument.log("%nMethod = %s%n", mg);
-            // debug_instrument.log("arg_types(%d): %s%n", arg_types.length, types);
-            // debug_instrument.log("arg_names(%d): %s%n", arg_names.length, names);
-            // debug_instrument.log("localvars(%d): %s%n", local_vars.length, locals);
-            // debug_instrument.log("Original code: %s%n", mg.getMethod().getCode());
-            // debug_instrument.log("ClassInfo: %s%n", class_info);
-            // debug_instrument.log("MethodGen: %s%n", mg);
+            debug_instrument.log("%nMethod = %s%n", mg);
+            debug_instrument.log("arg_types(%d): %s%n", arg_types.length, types);
+            debug_instrument.log("arg_names(%d): %s%n", arg_names.length, names);
+            debug_instrument.log("localvars(%d): %s%n", local_vars.length, locals);
+            debug_instrument.log("Original code: %s%n", mg.getMethod().getCode());
+            debug_instrument.log("ClassInfo: %s%n", class_info);
+            debug_instrument.log("MethodGen: %s%n", mg);
             dump_code_attributes(mg);
           }
 
@@ -512,7 +512,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
           print_stack_map_table("After add_entry_instrumentation");
 
-          // debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+          debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
 
           // Need to see if there are any switches after this location.
           // If so, we may need to update the corresponding stackmap if
@@ -573,7 +573,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
           }
 
           if (Chicory.debug) {
-            // debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+            debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
             dump_code_attributes(mg);
           }
           cg.update();
@@ -1025,9 +1025,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     int param_offset = 1;
     if (mgen.isStatic()) param_offset = 0;
     if (Chicory.debug) {
-      // debug_instrument.log("create_method_info1 %s%n", arg_names.length);
+      debug_instrument.log("create_method_info1 %s%n", arg_names.length);
       for (int ii = 0; ii < arg_names.length; ii++) {
-        // debug_instrument.log("arg: %s%n", arg_names[ii]);
+        debug_instrument.log("arg: %s%n", arg_names[ii]);
       }
     }
 
@@ -1060,9 +1060,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     }
 
     if (Chicory.debug) {
-      // debug_instrument.log("create_method_info2 %s%n", arg_names.length);
+      debug_instrument.log("create_method_info2 %s%n", arg_names.length);
       for (int ii = 0; ii < arg_names.length; ii++) {
-        // debug_instrument.log("arg: %s%n", arg_names[ii]);
+        debug_instrument.log("arg: %s%n", arg_names[ii]);
       }
     }
 
@@ -1121,7 +1121,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
           // only do incremental lines if we don't have the line generator
           if (line_number == last_line_number && foundLine == false) {
-            // debug_instrument.log("Could not find line... at %d%n", line_number);
+            debug_instrument.log("Could not find line... at %d%n", line_number);
             line_number++;
           }
 
@@ -1166,7 +1166,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       int con_index = a.getNameIndex();
       Constant c = pool.getConstant(con_index);
       String att_name = ((ConstantUtf8) c).getBytes();
-      // debug_instrument.log("Attribute Index: %s Name: %s%n", con_index, att_name);
+      debug_instrument.log("Attribute Index: %s Name: %s%n", con_index, att_name);
     }
   }
 
