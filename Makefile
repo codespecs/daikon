@@ -4,7 +4,8 @@
 
 DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 
-HTMLTOOLS ?= ${HOME}/bin/src/html-tools
+HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
+CHECKLINK ?= ${DAIKONDIR}/utils/checklink
 
 ##########################################################################
 ### Variables
@@ -650,7 +651,8 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	cp -pR doc/www ${TMPDIR}/daikon/doc
 
 	# Plume-lib library
-	(cd utils/plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/ && tar xf -))
+	mkdir ${TMPDIR}/daikon/utils
+	(cd utils/plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
 
 	# Auxiliary programs
 	mkdir ${TMPDIR}/daikon/scripts

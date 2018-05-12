@@ -12,8 +12,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
@@ -155,7 +157,7 @@ public class Chicory {
   /** Flag to initiate a purity analysis and use results to create add vars */
   private static boolean purityAnalysis = false;
 
-  // private static final SimpleLog basic = new SimpleLog(false);
+  private static final SimpleLog basic = new SimpleLog(false);
 
   /** Synopsis for the chicory command line */
   public static final String synopsis = "daikon.Chicory [options] target [target-args]";
@@ -175,8 +177,8 @@ public class Chicory {
     if (!ok) System.exit(1);
 
     // Turn on basic logging if the debug was selected
-    // basic.enabled = debug;
-    // basic.log("target_args = %s%n", Arrays.toString(target_args));
+    basic.enabled = debug;
+    basic.log("target_args = %s%n", Arrays.toString(target_args));
 
     // Start the target.  Pass the same options to the premain as
     // were passed here.
@@ -248,12 +250,12 @@ public class Chicory {
 
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
-    // basic.log("classpath = '%s'\n", cp);
+    basic.log("classpath = '%s'\n", cp);
     if (cp == null) cp = ".";
 
     // The the separator for items in the class path
     String separator = System.getProperty("path.separator");
-    // basic.log("separator = %s\n", separator);
+    basic.log("separator = %s\n", separator);
     if (separator == null) {
       separator = ";"; //should work for windows at least...
     } else {

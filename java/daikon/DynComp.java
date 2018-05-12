@@ -6,8 +6,10 @@ import daikon.util.RegexUtil;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
@@ -113,7 +115,7 @@ public class DynComp {
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
-  // private static final SimpleLog basic = new SimpleLog(false);
+  private static final SimpleLog basic = new SimpleLog(false);
 
   /** Synopsis for the dcomp command line */
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
@@ -133,8 +135,8 @@ public class DynComp {
     if (!ok) System.exit(1);
 
     // Turn on basic logging if the debug was selected
-    // basic.enabled = debug;
-    // basic.log("target_args = %s%n", Arrays.toString(target_args));
+    basic.enabled = debug;
+    basic.log("target_args = %s%n", Arrays.toString(target_args));
 
     // Start the target.  Pass the same options to the premain as
     // were passed here.
@@ -203,12 +205,12 @@ public class DynComp {
 
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
-    // basic.log("classpath = '%s'\n", cp);
+    basic.log("classpath = '%s'\n", cp);
     if (cp == null) cp = ".";
 
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
-    // basic.log("path_separator = %s\n", path_separator);
+    basic.log("path_separator = %s\n", path_separator);
     if (path_separator == null) {
       path_separator = ";"; //should work for windows at least...
     } else if (!RegexUtil.isRegex(path_separator)) {
