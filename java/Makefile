@@ -75,8 +75,6 @@ endif
 ifdef CHECKERFRAMEWORK
   CHECKERJAR ?= ${CHECKERFRAMEWORK}/checker/dist/checker.jar
 endif
-# If actually checking, override to checker.jar.
-# CHECKERJAR ?= ${DAIKONDIR}/java/lib/plume.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac ${JAVACHECK_EXTRA_ARGS}
 
@@ -96,8 +94,8 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
 # These jar files only exist for the development version, not the
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
-ifeq "$(wildcard ${DAIKONDIR}/java/lib/plume.jar)" "${DAIKONDIR}/java/lib/plume.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java/lib/commons-exec-1.3.jar:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/plume-util-0.0.1.jar:${DAIKONDIR}/java/lib/daikon-util.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
+ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-util.jar)" "${DAIKONDIR}/java/lib/daikon-util.jar"
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java/lib/commons-exec-1.3.jar:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/plume-util-0.0.1.jar:${DAIKONDIR}/java/lib/daikon-util.jar:${DAIKONDIR}/java/lib/junit-4.12.jar
 endif
 ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
     CLASSPATH_JARS2 = ${CHECKERJAR}
@@ -608,21 +606,6 @@ dyncomp-jdk-only dcomp-jdk-only :
 .PHONY: update-plume-lib
 update-plume-lib:
 	${MAKE} -C .. update-plume-lib
-
-# The class files are not used; this is just to sanity-check
-# ... but compilation takes too long, so don't bother with the sanity-check.
-plume-lib-compile:
-#	${MAKE} -C ../utils/plume-lib/java compile
-
-# # A stable version of plume.jar is checked in, so that all this is not necessary.
-# lib/plume.jar: ../utils/plume-lib/java/plume.jar
-# 	install -d lib
-# 	cp -p $< $@
-#
-# # The file is real, but the commands should always be re-run even if it exists.
-# .PHONY: ../utils/plume-lib/java/plume.jar
-# ../utils/plume-lib/java/plume.jar: ../plume-lib
-# 	$(MAKE) JAVAC=${JAVAC_FOR_CHECKER} JAVAC_TARGET_FLAGS="-target 5" -C ../utils/plume-lib/java plume.jar
 
 # Checks that daikon.util, rather than plume, is imported by source files
 # that do instrumentation.  Should also check that daikon.util is never

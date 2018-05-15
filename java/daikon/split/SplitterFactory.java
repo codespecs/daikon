@@ -12,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jtb.ParseException;
 import org.plumelib.util.UtilPlume;
-import plume.FileCompiler;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
