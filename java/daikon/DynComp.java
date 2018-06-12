@@ -251,11 +251,10 @@ public class DynComp {
 
     // If we didn't find a premain, give up
     if (premain == null) {
-      System.err.printf("Can't find dcomp_premain.jar on the classpath\n");
-      System.err.printf("or in $DAIKONDIR/java\n");
-      System.err.printf("It should be found in directory where Daikon was " + "installed\n");
-      System.err.printf("Use the --premain switch to specify its location\n");
-      System.err.printf("or change your classpath to include it\n");
+      System.err.printf("Can't find dcomp_premain.jar on the classpath or in $DAIKONDIR/java .\n");
+      System.err.printf("It should be found in the directory where Daikon was installed.\n");
+      System.err.printf("Use the --premain switch to specify its location,\n");
+      System.err.printf("or change your classpath to include it.\n");
       System.exit(1);
     }
 
