@@ -254,39 +254,45 @@ public class Chicory {
     if (cp == null) cp = ".";
 
     // The the separator for items in the class path
-    String separator = System.getProperty("path.separator");
-    basic.log("separator = %s\n", separator);
-    if (separator == null) {
-      separator = ";"; //should work for windows at least...
-    } else {
-      if (!RegexUtil.isRegex(separator)) {
-        throw new Daikon.TerminationMessage(
-            "Bad regexp " + separator + " for path.separator: " + RegexUtil.regexError(separator));
-      }
+    String path_separator = System.getProperty("path.separator");
+    basic.log("path_separator = %s\n", path_separator);
+    if (path_separator == null) {
+      path_separator = ";"; //should work for windows at least...
+    } else if (!RegexUtil.isRegex(path_separator)) {
+      throw new Daikon.TerminationMessage(
+          "Bad regexp "
+              + path_separator
+              + " for path.separator: "
+              + RegexUtil.regexError(path_separator));
     }
 
     // Look for ChicoryPremain.jar along the classpath
     if (premain == null) {
-      String[] cpath = cp.split(separator);
+      String[] cpath = cp.split(path_separator);
       for (String path : cpath) {
         File poss_premain = new File(path, "ChicoryPremain.jar");
-        if (poss_premain.canRead()) premain = poss_premain;
+        if (poss_premain.canRead()) {
+          premain = poss_premain;
+          break;
+        }
       }
     }
 
     // If not on the classpath look in ${DAIKONDIR}/java
+    String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
-      String daikon_dir = System.getenv("DAIKONDIR");
       if (daikon_dir != null) {
         String file_separator = System.getProperty("file.separator");
         File poss_premain = new File(daikon_dir + file_separator + "java", "ChicoryPremain.jar");
-        if (poss_premain.canRead()) premain = poss_premain;
+        if (poss_premain.canRead()) {
+          premain = poss_premain;
+        }
       }
     }
 
     // If not found, try the daikon.jar file itself
     if (premain == null) {
-      for (String path : cp.split(separator)) {
+      for (String path : cp.split(path_separator)) {
         File poss_premain = new File(path);
         if (poss_premain.getName().equals("daikon.jar")) {
           if (poss_premain.canRead()) {
@@ -298,8 +304,13 @@ public class Chicory {
 
     // If we didn't find a premain, give up
     if (premain == null) {
-      System.err.printf("Can't find ChicoryPremain.jar on the classpath or in $DAIKONDIR/java .\n");
-      System.err.printf("It should be found in directory where Daikon was installed.\n");
+      System.err.printf("Can't find ChicoryPremain.jar on the classpath");
+      if (daikon_dir == null) {
+        System.err.printf(" and $DAIKONDIR is not set.\n");
+      } else {
+        System.err.printf(" or in $DAIKONDIR/java .\n");
+      }
+      System.err.printf("It should be found in the directory where Daikon was installed.\n");
       System.err.printf("Use the --premain switch to specify its location,\n");
       System.err.printf("or change your classpath to include it.\n");
       System.exit(1);

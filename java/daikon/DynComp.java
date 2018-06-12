@@ -240,18 +240,25 @@ public class DynComp {
     }
 
     // If not on the classpath look in ${DAIKONDIR}/java
+    String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
-      String daikon_dir = System.getenv("DAIKONDIR");
       if (daikon_dir != null) {
         String file_separator = System.getProperty("file.separator");
         File poss_premain = new File(daikon_dir + file_separator + "java", "dcomp_premain.jar");
-        if (poss_premain.canRead()) premain = poss_premain;
+        if (poss_premain.canRead()) {
+          premain = poss_premain;
+        }
       }
     }
 
     // If we didn't find a premain, give up
     if (premain == null) {
-      System.err.printf("Can't find dcomp_premain.jar on the classpath or in $DAIKONDIR/java .\n");
+      System.err.printf("Can't find dcomp_premain.jar on the classpath");
+      if (daikon_dir == null) {
+        System.err.printf(" and $DAIKONDIR is not set.\n");
+      } else {
+        System.err.printf(" or in $DAIKONDIR/java .\n");
+      }
       System.err.printf("It should be found in the directory where Daikon was installed.\n");
       System.err.printf("Use the --premain switch to specify its location,\n");
       System.err.printf("or change your classpath to include it.\n");
@@ -279,7 +286,6 @@ public class DynComp {
 
       // If not on the classpath look in ${DAIKONDIR}/java
       if (rt_file == null) {
-        String daikon_dir = System.getenv("DAIKONDIR");
         if (daikon_dir != null) {
           String file_separator = System.getProperty("file.separator");
           File poss_rt = new File(daikon_dir + file_separator + "java", "dcomp_rt.jar");
@@ -289,7 +295,12 @@ public class DynComp {
 
       // If we didn't find a rt-file, give up
       if (rt_file == null) {
-        System.err.printf("Can't find dcomp_rt.jar on the classpath " + "or in $DAIKONDIR/java\n");
+        System.err.printf("Can't find dcomp_rt.jar on the classpath");
+        if (daikon_dir == null) {
+          System.err.printf(" and $DAIKONDIR is not set.\n");
+        } else {
+          System.err.printf(" or in $DAIKONDIR/java .\n");
+        }
         System.err.printf("Probably you forgot to build it.\n");
         System.err.printf(
             "See the Daikon manual, section \"Instrumenting the "
