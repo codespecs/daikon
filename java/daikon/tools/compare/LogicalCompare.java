@@ -278,7 +278,7 @@ public class LogicalCompare {
           List<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
           for (Set<Class<? extends Invariant>> classes : sets) {
             @SuppressWarnings(
-                "nullness") // application invariant: context; might be able to rewrite types to make consequences a List<InvariantLemma>";
+                "nullness") // application invariant: context; might be able to rewrite types to make consequences a List<InvariantLemma>"
             /*@NonNull*/ Class<? extends Invariant> inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
