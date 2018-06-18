@@ -2034,8 +2034,15 @@ class DCInstrument extends InstructionListUtils {
       // Lambda method in which case we don't want to add the dcomp_marker.
       // Might lose something in 'normal' cases, but no easy way to detect.
       if (invoke instanceof INVOKEINTERFACE) {
-        // System.out.printf("invoke interface: %s%n", classname+"."+method_name);
+        // System.out.printf("invoke interface host: %s%n", gen.getClassName()+"."+mgen.getName());
+        // System.out.printf("invoke interface targ: %s%n", classname+"."+method_name);
         if (classname.startsWith("java.util.stream")) {
+          callee_instrumented = false;
+        }
+        // In a similar fashion, when the Java runtime is processing annotations, there might
+        // be an invoke (via reflection) of java.lang.annotation.Annotations.annotationType
+        // that should not have the dcomp_marker added.
+        if (classname.startsWith("java.lang.annotation")) {
           callee_instrumented = false;
         }
       }
