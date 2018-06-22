@@ -126,7 +126,8 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
       case REL_SAME_JUST1_UNJUST2:
       case REL_SAME_UNJUST1_JUST2:
         assert inv1 != null && inv2 != null
-            : "@AssumeAssertion(nullness)"; // application invariant about return value of determineRelationship
+            : "@AssumeAssertion(nullness)"; // application invariant about return value of
+        // determineRelationship
         freq[type][relationship] += calculateConfidenceDifference(inv1, inv2);
         break;
       default:

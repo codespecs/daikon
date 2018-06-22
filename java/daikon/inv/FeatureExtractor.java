@@ -219,15 +219,13 @@ public final class FeatureExtractor {
     ArrayList<Invariant> nonusefulResult = new ArrayList<Invariant>();
     for (String useful : usefuls)
       for (Iterator<Invariant> invs = readInvMap(new File(useful)).invariantIterator();
-          invs.hasNext();
-          ) {
+          invs.hasNext(); ) {
         usefulResult.add(invs.next());
       }
 
     for (String nonuseful : nonusefuls)
       for (Iterator<Invariant> invs = readInvMap(new File(nonuseful)).invariantIterator();
-          invs.hasNext();
-          ) {
+          invs.hasNext(); ) {
         nonusefulResult.add(invs.next());
       }
 

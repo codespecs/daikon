@@ -98,7 +98,8 @@ public class InstructionUtils {
         } else {
           // Add it to redundants.
           @SuppressWarnings(
-              "nullness") // map: varName in varsUsedPreviously => all map keys OK, inserted on previous iteration
+              "nullness") // map: varName in varsUsedPreviously => all map keys OK, inserted on
+          // previous iteration
           boolean dummy = // to afford a place for the @SuppressWarnings annotation
               redundants.get(leaders.get(varName)).add(varFullName);
         }

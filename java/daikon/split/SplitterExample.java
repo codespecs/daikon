@@ -39,7 +39,8 @@ public final class SplitterExample extends Splitter {
   }
 
   @SuppressWarnings(
-      "nullness:contracts.precondition.override.invalid") // application invariant about private variable
+      "nullness:contracts.precondition.override.invalid") // application invariant about private
+  // variable
   /*@RequiresNonNull("x_varinfo")*/
   @Override
   public boolean test(ValueTuple vt) {

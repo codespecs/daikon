@@ -38,7 +38,8 @@ import org.checkerframework.dataflow.qual.*;
  * methods; it should never be instantiated.
  */
 @SuppressWarnings({
-  "initialization.fields.uninitialized", // library initialized in code added by run-time instrumentation
+  "initialization.fields.uninitialized", // library initialized in code added by run-time
+  // instrumentation
   "JavaLangClash" // same class name as one in java.lang.
 })
 public class Runtime {

@@ -278,7 +278,8 @@ public class LogicalCompare {
           List<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
           for (Set<Class<? extends Invariant>> classes : sets) {
             @SuppressWarnings(
-                "nullness") // application invariant: context; might be able to rewrite types to make consequences a List<InvariantLemma>"
+                "nullness") // application invariant: context; might be able to rewrite types to
+            // make consequences a List<InvariantLemma>"
             /*@NonNull*/ Class<? extends Invariant> inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
@@ -797,7 +798,8 @@ public class LogicalCompare {
         if (app_ppt.num_samples() > 0) {
           if (test_ppt_names.contains(name)
               && castNonNull(test_ppts.get(name)).num_samples()
-                  > 0) { // correlated maps: test_ppts.get(name) is non-null because test_ppt_names.contains(name) is true
+                  > 0) { // correlated maps: test_ppts.get(name) is non-null because
+            // test_ppt_names.contains(name) is true
             common_names.add(name);
           } else {
             System.out.println(name + " was used but not tested");

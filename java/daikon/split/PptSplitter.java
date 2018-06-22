@@ -505,8 +505,7 @@ public class PptSplitter implements Serializable {
     // but this is easier for now.
     for (Iterator</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> ii =
             different_invs_vec.iterator();
-        ii.hasNext();
-        ) {
+        ii.hasNext(); ) {
       /*@Nullable*/ Invariant[] diff_invs = ii.next();
       if (diff_invs[0] != null) {
         assert diff_invs[1] == null;
@@ -690,8 +689,7 @@ public class PptSplitter implements Serializable {
     List</*@Nullable*/ Invariant[]> result = new ArrayList</*@Nullable*/ Invariant[]>();
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
-        opi.hasNext();
-        ) {
+        opi.hasNext(); ) {
       Pair</*@Nullable*/ Invariant, /*@Nullable*/ Invariant> pair = opi.next();
       if ((pair.a == null) || (pair.b == null)
       // || (icfp.compare(pair.a, pair.b) != 0)

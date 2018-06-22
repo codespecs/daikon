@@ -235,7 +235,8 @@ public final class FileIO {
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringBuilderDelimited accepts null values.
   @SuppressWarnings(
-      "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is ensured by call to reset()
+      "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is
+  // ensured by call to reset()
   /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
@@ -848,8 +849,9 @@ public final class FileIO {
 
         Object val = vals[j];
         if (canonical_hashcode.equals(
-            val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is little point.  val can be null, so it cannot be the receiver.
-        pw.print("<hashcode>");
+            val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is
+          // little point.  val can be null, so it cannot be the receiver.
+          pw.print("<hashcode>");
         else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
         else if (val instanceof String) pw.print(UtilPlume.escapeNonASCII((String) val));
         else pw.print(val);

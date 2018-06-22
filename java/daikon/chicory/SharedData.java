@@ -19,7 +19,8 @@ import org.checkerframework.dataflow.qual.*;
  * synchronized statements.
  */
 @SuppressWarnings(
-    "initialization.fields.uninitialized") // library initialized in code added by run-time instrumentation
+    "initialization.fields.uninitialized") // library initialized in code added by run-time
+// instrumentation
 public class SharedData {
   /**
    * List of classes recently transformed. This list is examined in each enter/exit and the decl

@@ -36,7 +36,8 @@ public final class ReturnTrueSplitter extends Splitter {
   }
 
   @SuppressWarnings(
-      "nullness:contracts.precondition.override.invalid") // application invariant about private variable
+      "nullness:contracts.precondition.override.invalid") // application invariant about private
+  // variable
   /*@RequiresNonNull("return_varinfo")*/
   @Override
   public boolean test(ValueTuple vt) {

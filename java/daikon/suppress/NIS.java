@@ -526,8 +526,8 @@ public class NIS {
 
             // use the following count update when splitting the hybrid method by the
             // number of total suppressions associated with the falsified invariants
-            @SuppressWarnings(
-                "nullness") // map:  same keys in suppressor_map and suppressor_map_suppression_count
+            @SuppressWarnings("nullness") // map:  same keys in suppressor_map and
+            // suppressor_map_suppression_count
             int map_count = suppressor_map_suppression_count.get(inv.getClass());
             count += map_count;
             suppressions_processed_falsified += map_count;
