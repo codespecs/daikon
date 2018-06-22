@@ -144,7 +144,7 @@ public class InvMap implements Serializable {
   private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
     FileIO.new_decl_format = (Boolean) ois.readObject();
-    // System.out.printf ("Restoring new_decl_format to %b%n",
+    // System.out.printf("Restoring new_decl_format to %b%n",
     //                   FileIO.new_decl_format);
   }
 }

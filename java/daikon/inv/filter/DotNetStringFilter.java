@@ -147,7 +147,7 @@ public class DotNetStringFilter extends InvariantFilter {
       OneOfScalar i = (OneOfScalar) invariant;
 
       if (isNullOrEmptyVar(i.var()) && i.getElts()[0] == 0) {
-        //invariant encodes !string.IsNullOrEmpty()
+        // invariant encodes !string.IsNullOrEmpty()
 
         for (Invariant other : i.var().ppt.getInvariants()) {
           if (!other.is_false() && other instanceof OneOfScalar) {
@@ -176,7 +176,7 @@ public class DotNetStringFilter extends InvariantFilter {
       OneOfScalar i = (OneOfScalar) invariant;
 
       if (isNullOrWhitespaceVar(i.var()) && i.getElts()[0] == 1) {
-        //invariant encodes !string.IsNullOrEmpty()
+        // invariant encodes !string.IsNullOrEmpty()
 
         for (Invariant other : i.var().ppt.getInvariants()) {
           if (!other.is_false() && other instanceof OneOfScalar) {

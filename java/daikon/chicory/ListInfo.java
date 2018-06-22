@@ -21,8 +21,8 @@ public class ListInfo extends DaikonVariableInfo {
     listType = theType;
   }
 
-  //use the "toArray" method to get an array
-  //convert the array to a List
+  // use the "toArray" method to get an array
+  // convert the array to a List
   @Override
   public Object getMyValFromParentVal(Object value) {
 
@@ -39,7 +39,7 @@ public class ListInfo extends DaikonVariableInfo {
 
     if (value != null && !(value instanceof NonsensicalObject)) {
 
-      //TODO why can't we just cast to List and call toArray directly?
+      // TODO why can't we just cast to List and call toArray directly?
 
       try {
         arrayVal = arrayMethod.invoke(value, new Object[0]);

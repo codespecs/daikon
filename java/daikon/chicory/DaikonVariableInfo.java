@@ -300,12 +300,12 @@ public abstract class DaikonVariableInfo
     if (theValue instanceof Runtime.PrimitiveWrapper) {
       return getPrimitiveValueString(theValue);
     } else if (!hashArray && (type.isArray())) {
-      //show the full array
+      // show the full array
       return getValueStringOfArray(theValue);
     } else if (theValue instanceof NonsensicalObject) {
       return "nonsensical";
     } else {
-      //basically, show the hashcode of theValue
+      // basically, show the hashcode of theValue
       return getObjectHashCode(theValue);
     }
   }
@@ -318,7 +318,7 @@ public abstract class DaikonVariableInfo
             + "This object is type: "
             + obj.getClass().getName();
 
-    //use wrapper classes toString methods to print value
+    // use wrapper classes toString methods to print value
     return (obj.toString());
   }
 
@@ -375,11 +375,11 @@ public abstract class DaikonVariableInfo
     for (Iterator<Object> iter = theValues.iterator(); iter.hasNext(); ) {
       Object elementVal = iter.next();
 
-      //hash arrays...
-      //don't want to print arrays within arrays
+      // hash arrays...
+      // don't want to print arrays within arrays
       buf.append(getValueStringOfObject(elementVal, true));
 
-      //put space between elements in array
+      // put space between elements in array
       if (iter.hasNext()) buf.append(" ");
     }
     buf.append("]");
@@ -428,18 +428,18 @@ public abstract class DaikonVariableInfo
   protected void addClassVars(
       ClassInfo cinfo, boolean dontPrintInstanceVars, Class<?> type, String offset, int depth) {
 
-    //DaikonVariableInfo corresponding to the "this" object
+    // DaikonVariableInfo corresponding to the "this" object
     DaikonVariableInfo thisInfo;
 
     debug_vars.log("addClassVars: %s : %s : %s: [%s]%n", this, cinfo, type, offset);
 
-    //must be at the first level of recursion (not lower) to print "this" field
+    // must be at the first level of recursion (not lower) to print "this" field
     if (!dontPrintInstanceVars && offset.equals("")) {
       // "this" variable
       thisInfo = new ThisObjInfo(type);
       addChild(thisInfo);
 
-      //.class variable
+      // .class variable
       if (shouldAddRuntimeClass(type)) {
         DaikonVariableInfo thisClass =
             new DaikonClassInfo(
@@ -455,7 +455,7 @@ public abstract class DaikonVariableInfo
     }
 
     // Get the fields
-    // System.out.printf ("getting fields for %s%n", type);
+    // System.out.printf("getting fields for %s%n", type);
 
     // We need to get fields of superclass(es) as well.
     List<Field> fields = new ArrayList<Field>();
@@ -466,7 +466,7 @@ public abstract class DaikonVariableInfo
     }
 
     // if (fields.length > 50)
-    //    System.out.printf ("%d fields in %s%n", fields.length, type);
+    //    System.out.printf("%d fields in %s%n", fields.length, type);
 
     debug_vars.log(
         "%s: [%s] %d dontPrintInstanceVars = %b, " + "inArray = %b%n",
@@ -556,7 +556,7 @@ public abstract class DaikonVariableInfo
       }
 
       if (typeInfo != null) {
-        //Pure methods with no parameters
+        // Pure methods with no parameters
         for (MethodInfo meth : typeInfo.method_infos) {
           if (meth.isPure() && meth.arg_names.length == 0) {
             StringBuilder buf = new StringBuilder();
@@ -567,7 +567,7 @@ public abstract class DaikonVariableInfo
             debug_vars.log("Pure method");
             debug_vars.indent();
             assert meth.member != null
-                : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
+                : "@AssumeAssertion(nullness): member of method_infos have .member field"; // dependent type
             newChild.addChildNodes(
                 cinfo,
                 ((Method) meth.member).getReturnType(),
@@ -650,7 +650,7 @@ public abstract class DaikonVariableInfo
   }
 
   /** Adds the decl info for a pure method. */
-  //TODO factor out shared code with printDeclVar
+  // TODO factor out shared code with printDeclVar
   protected DaikonVariableInfo addPureMethodDecl(
       ClassInfo curClass,
       MethodInfo minfo,
@@ -668,7 +668,7 @@ public abstract class DaikonVariableInfo
 
     boolean changedAccess = false;
 
-    //we want to access all fields...
+    // we want to access all fields...
     if (!meth.isAccessible()) {
       changedAccess = true;
       meth.setAccessible(true);
@@ -790,7 +790,7 @@ public abstract class DaikonVariableInfo
         }
       }
 
-      // System.out.printf ("static final value = %s%n", value);
+      // System.out.printf("static final value = %s%n", value);
 
       // in this case, we don't want to print this variable to
       // the dtrace file
@@ -802,11 +802,11 @@ public abstract class DaikonVariableInfo
           newField.dtraceShouldPrintChildren = false;
         }
       }
-      //else
-      //{
+      // else
+      // {
       // don't print anything
       // because this field wasn't declared with an actual "hardcoded" constant
-      //}
+      // }
 
     }
 
@@ -888,7 +888,7 @@ public abstract class DaikonVariableInfo
       // System.out.println ("type is object " + type);
       return true;
     } else if (Modifier.isAbstract(type.getModifiers())) {
-      // System.out.printf ("Type [%s] is abstract %Xh %Xh %s%n", type,
+      // System.out.printf("Type [%s] is abstract %Xh %Xh %s%n", type,
       //                   type.getModifiers(), Modifier.ABSTRACT,
       //                   Modifier.toString (type.getModifiers()));
       return true;
@@ -921,7 +921,7 @@ public abstract class DaikonVariableInfo
       // If the field is in any instrumented class it is always visible
       synchronized (SharedData.all_classes) {
         for (ClassInfo ci : SharedData.all_classes) {
-          // System.out.printf ("comparing %s vs %s%n", ci.class_name,
+          // System.out.printf("comparing %s vs %s%n", ci.class_name,
           // fclass.getName());
           if (ci.class_name.equals(fclass.getName())) {
             return true;
@@ -956,7 +956,7 @@ public abstract class DaikonVariableInfo
     Package p = field.getDeclaringClass().getPackage();
     String pkgName = (p == null ? null : p.getName());
 
-    //System.out.printf("Package name for type  %s is %s%n", type, pkgName);
+    // System.out.printf("Package name for type  %s is %s%n", type, pkgName);
 
     StringBuilder ret = new StringBuilder();
 
@@ -975,11 +975,11 @@ public abstract class DaikonVariableInfo
   protected void checkForDerivedVariables(Class<?> type, String theName, String offset) {
     checkForListDecl(type, theName, offset); // implements java.util.List?
 
-    //Not fully implemented yet, don't call
-    //checkForImplicitList(cinfo, type, name, offset, depth);
+    // Not fully implemented yet, don't call
+    // checkForImplicitList(cinfo, type, name, offset, depth);
 
-    checkForRuntimeClass(type, theName, offset); //.class var
-    checkForString(type, theName, offset); //.tostring var
+    checkForRuntimeClass(type, theName, offset); // .class var
+    checkForString(type, theName, offset); // .tostring var
   }
 
   /** Determines if type implements list and prints associated decls, if necessary. */
@@ -988,7 +988,7 @@ public abstract class DaikonVariableInfo
       return;
     }
 
-    // System.out.printf ("checking %s %sto for list implementation = %b%n",
+    // System.out.printf("checking %s %sto for list implementation = %b%n",
     //                    type, theName, implementsList (type));
 
     if (implementsList(type)) {
@@ -1022,7 +1022,7 @@ public abstract class DaikonVariableInfo
   protected void checkForRuntimeClass(Class<?> type, String theName, String offset) {
     if (!shouldAddRuntimeClass(type)) return;
 
-    String postString = ""; //either array braces or an empty string
+    String postString = ""; // either array braces or an empty string
 
     if (theName.contains("[]") || offset.contains("[]")) postString = "[]";
 
@@ -1044,7 +1044,7 @@ public abstract class DaikonVariableInfo
   private void checkForString(Class<?> type, String theName, String offset) {
     if (!type.equals(String.class)) return;
 
-    String postString = ""; //either array braces or an empty string
+    String postString = ""; // either array braces or an empty string
     if (isArray) postString = "[]";
 
     // add DaikonVariableInfo type
@@ -1179,7 +1179,7 @@ public abstract class DaikonVariableInfo
    */
   public static boolean systemClass(Class<?> type) {
     String class_name = type.getName();
-    // System.out.printf ("type name is %s%n", class_name);
+    // System.out.printf("type name is %s%n", class_name);
     return (class_name.startsWith("java.") || class_name.startsWith("javax."));
   }
 

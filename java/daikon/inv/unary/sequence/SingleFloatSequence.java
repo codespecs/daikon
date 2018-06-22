@@ -40,7 +40,8 @@ public abstract class SingleFloatSequence extends SingleSequence {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
-    // System.out.println("SingleFloatSequence.add(" + Arrays.toString(value) + ", " + modified + ", " + count + ")");
+    // System.out.println("SingleFloatSequence.add(" + Arrays.toString(value) + ", " + modified + ",
+    // " + count + ")");
     double[] value = (double[]) val;
     if (value == null) {
     } else if (mod_index == 0) {
@@ -167,7 +168,8 @@ public abstract class SingleFloatSequence extends SingleSequence {
 //                        or (inv2.max_justified and not inv1.max_justified))
 //         max_different = (inv1.max_justified and inv2.max_justified
 //                          and (inv1.max != inv2.max))
-//         # print "max_different=%s" % (max_different,), inv1.max_justified, inv2.max_justified, inv1.max, inv2.max
+//         # print "max_different=%s" % (max_different,), inv1.max_justified, inv2.max_justified,
+//                                      inv1.max, inv2.max
 //         nzj1 = inv1.nonzero_justified()
 //         nzj2 = inv1.nonzero_justified()
 //         zero_different = (nzj1 and not nzj2) or (nzj2 and not nzj1)

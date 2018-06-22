@@ -294,18 +294,18 @@ public class Property implements Serializable {
     if (annoStrings == null) {
       return new Property[] {};
     }
-    //Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
+    // Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
     Set<Property> annos = new HashSet<Property>();
     for (String location : annoStrings) {
       if (location == null || location.equals("")) {
         continue;
       }
       String[] cutUp = location.split("<INVINFO>");
-      //Matcher m = p.matcher(location);
+      // Matcher m = p.matcher(location);
       for (int splits = 0; splits < cutUp.length; splits++) {
-        //while (m.find()) {
+        // while (m.find()) {
         try {
-          //String s = m.group(1);
+          // String s = m.group(1);
           String s = cutUp[splits];
           Property anno = Property.get("<INVINFO>" + s);
           // [[[ explain this! ]]]
@@ -504,7 +504,8 @@ public class Property implements Serializable {
     } else if (kind == Kind.objectInvariant || kind == Kind.classInvariant) {
       ret = 1.0;
       //         } else if (properties != null
-      //                 && (properties.methodAnnos(this.method()).length < ANNOS_PER_METHOD_FOR_GOOD_QUALITY)) {
+      //                 && (properties.methodAnnos(this.method()).length
+      //                     < ANNOS_PER_METHOD_FOR_GOOD_QUALITY)) {
       //             ret = 0.9;
     } else {
       ret = 0.2;

@@ -5,10 +5,6 @@ package daikon.diff;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.ClassNotFoundException;
-import java.lang.IllegalAccessException;
-import java.lang.InstantiationException;
-import java.lang.NoSuchMethodException;
 import java.lang.reflect.InvocationTargetException;
 
 /**

@@ -55,7 +55,7 @@ public final class SplitDtrace {
         "Number of DECLARE statements: " + declNum + " and number of records is: " + recNum);
 
     DecimalFormat formatter = new DecimalFormat("000");
-    //for (int i = 1; i<=100; i++) writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
+    // for (int i = 1; i<=100; i++) writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
     writeDtrace(filename, "second-half", recNum / 2, 2 + recNum);
   }
 
@@ -136,7 +136,7 @@ public final class SplitDtrace {
   }
 
   @SuppressWarnings(
-      "purity") // non-deterministic call to trim is used only for equals() and does not affect result
+      "purity") // non-deterministic call to trim is used only for equals(), does not affect result
   /*@Pure*/
   static boolean isEmpty(String l) {
     return l.trim().equals("") || l.startsWith("#");
@@ -149,7 +149,7 @@ public final class SplitDtrace {
       if (!isEmpty(line)) {
         break;
       }
-    } //eat white space
+    } // eat white space
     while (line != null) {
       line = line.trim();
       if (isEmpty(line)) {

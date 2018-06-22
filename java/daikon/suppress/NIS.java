@@ -566,7 +566,7 @@ public class NIS {
       inv_cnt++;
     }
 
-    // System.out.printf ("Invariants for ppt %s: %d\n", ppt, inv_cnt);
+    // System.out.printf("Invariants for ppt %s: %d\n", ppt, inv_cnt);
     if (false_cnt == 0) {
       return;
     }
@@ -574,7 +574,7 @@ public class NIS {
     if (debugAnt.isLoggable(Level.FINE)) {
       debugAnt.fine("at ppt " + ppt.name + " false_cnt = " + false_cnt);
     }
-    //false_invs = false_cnt;
+    // false_invs = false_cnt;
 
     if (debugAnt.isLoggable(Level.FINE)) ppt.debug_invs(debugAnt);
 
@@ -815,7 +815,7 @@ public class NIS {
           comp_ants.put(vc, ants);
         }
         ants.add(inv);
-        //if (Debug.logOn())
+        // if (Debug.logOn())
         //  inv.log ("Added to antecedent map " + inv.format() + " compare = "
         //           + vc);
       }

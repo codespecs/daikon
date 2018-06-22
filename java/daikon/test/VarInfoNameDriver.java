@@ -478,7 +478,8 @@ public class VarInfoNameDriver {
   //   }
   //   static { handlers.put("quantify_format_jml_elem", new QuantifyFormatJMLElementwise()); }
 
-  //   // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise,boolean forall)
+  //   // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise,boolean
+  // forall)
   //   private static class QuantifyFormatJMLExists implements Handler {
   //     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
   //       assert args.length >= 1;

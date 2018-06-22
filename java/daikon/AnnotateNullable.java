@@ -116,7 +116,7 @@ public class AnnotateNullable {
       @SuppressWarnings("keyfor") // appliction invariant:  KeyFor and substring
       // @KeyFor because class_map has entry per class, and this method is in some class
       /*@KeyFor("class_map")*/ String classname = name.substring(0, lastdot);
-      // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
+      // System.out.printf("classname for ppt %s is '%s'%n", name, classname);
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
       static_methods.add(ppt);
@@ -375,7 +375,7 @@ public class AnnotateNullable {
       // These are fields and can only be annotated where they are declared.
       VarInfo evar = vi.get_enclosing_var();
       if ((evar != null) && (!evar.name().equals("this"))) {
-        // System.out.printf ("  enclosed %s %s%n", vi.type, vi.name());
+        // System.out.printf("  enclosed %s %s%n", vi.type, vi.name());
         continue;
       }
 
@@ -400,7 +400,7 @@ public class AnnotateNullable {
     @SuppressWarnings("nullness") // Java method, so getSignature() != null
     /*@NonNull*/ String java_sig = ppt.ppt_name.getSignature();
     String java_args = java_sig.replace(method, "");
-    // System.out.printf ("m/s/a = %s %s %s%n", method, java_sig, java_args);
+    // System.out.printf("m/s/a = %s %s %s%n", method, java_sig, java_args);
     if (method.equals(ppt.ppt_name.getShortClassName())) method = "<init>";
 
     // Problem:  I need the return type, but Chicory does not output it.

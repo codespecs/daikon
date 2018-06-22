@@ -271,10 +271,10 @@ public class Runtime {
           dtrace_writer.methodEntry(mi, nonce, obj, args);
         }
         // long duration = System.currentTimeMillis() - start;
-        //System.out.println ("Enter " + mi + " " + duration + "ms"
+        // System.out.println ("Enter " + mi + " " + duration + "ms"
         //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
       } else {
-        //System.out.println ("skipped " + mi
+        // System.out.println ("skipped " + mi
         //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
       }
     } finally {
@@ -405,7 +405,7 @@ public class Runtime {
       throw new Error("initNotify(" + className + ") when initSet already contains " + className);
     }
 
-    //System.out.println("initialized ---> " + name);
+    // System.out.println("initialized ---> " + name);
     initSet.add(className);
   }
 
@@ -466,7 +466,8 @@ public class Runtime {
     // This should only print a percentage if dtraceLimit is not its
     // default value.
     // if (printedRecords%1000 == 0)
-    //     System.out.printf("printed=%d, percent printed=%f%n", printedRecords, (float)(100.0*(float)printedRecords/(float)dtraceLimit));
+    //     System.out.printf("printed=%d, percent printed=%f%n", printedRecords,
+    //                       (float)(100.0*(float)printedRecords/(float)dtraceLimit));
 
     if (printedRecords >= dtraceLimit) {
       noMoreOutput();
@@ -529,7 +530,7 @@ public class Runtime {
       @SuppressWarnings("nullness") // unannotated: java.net.Socket is not yet annotated
       /*@NonNull*/ SocketAddress dummy = null;
       daikonSocket.bind(dummy);
-      //System.out.println("Attempting to connect to Daikon on port --- " + port);
+      // System.out.println("Attempting to connect to Daikon on port --- " + port);
       daikonSocket.connect(new InetSocketAddress(InetAddress.getLocalHost(), port), 5000);
     } catch (UnknownHostException e) {
       System.out.println(
@@ -583,7 +584,7 @@ public class Runtime {
       dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
       dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
 
-      //System.out.println("limit = " + dtraceLimit + " terminate " + dtraceLimitTerminate);
+      // System.out.println("limit = " + dtraceLimit + " terminate " + dtraceLimitTerminate);
 
       // 8192 is the buffer size in BufferedReader
       BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
@@ -727,7 +728,7 @@ public class Runtime {
       return getClassInfoFromClass(type);
     }
 
-    // throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");
+    // throw new RuntimeException("Class " + type.getName() + " is not in Runtime's class list");
     return null;
   }
 
@@ -1019,7 +1020,7 @@ public class Runtime {
   @SuppressWarnings("signature") // conversion routine
   public static String fieldDescriptorToBinaryName(/*@FieldDescriptor*/ String classname) {
 
-    //System.out.println(classname);
+    // System.out.println(classname);
 
     int dims = 0;
     while (classname.startsWith("[")) {
@@ -1028,14 +1029,14 @@ public class Runtime {
     }
 
     String result;
-    //array of reference type
+    // array of reference type
     if (classname.startsWith("L") && classname.endsWith(";")) {
       result = classname.substring(1, classname.length() - 1);
       result = result.replace('/', '.');
     } else {
-      if (dims > 0) //array of primitives
+      if (dims > 0) // array of primitives
       result = primitiveClassesFromJvm.get(classname);
-      else //just a primitive
+      else // just a primitive
       result = classname;
 
       if (result == null) {

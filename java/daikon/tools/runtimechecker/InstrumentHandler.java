@@ -107,7 +107,7 @@ public class InstrumentHandler extends CommandHandler {
 
     // Compile original sources (because daikon.tools.jtb.Ast accesses
     // them via reflection).
-    //compile(arguments.javaFileNames, "");
+    // compile(arguments.javaFileNames, "");
 
     // Create filenames including temp directory and package directories.
     List<ParseResults> parseResults =

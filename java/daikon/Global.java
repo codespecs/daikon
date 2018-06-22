@@ -204,7 +204,7 @@ public final class Global {
   // used only if debugPrintDtrace is true.  Users need not set this.
   public static /*@MonotonicNonNull*/ PrintWriter dtraceWriter = null;
 
-  //Global Fuzzy Float comparator to use
+  // Global Fuzzy Float comparator to use
   public static FuzzyFloat fuzzy = new FuzzyFloat();
 
   /* Map of statistics for each ppt. */

@@ -245,7 +245,10 @@ class TagEntry extends WeakReference<Object> {
       this.tracer = newTracer;
       this.trace_loc = tloc;
     }
-    //    if (this.tracer != null) { System.out.println("Tracer not null"); this.tracer.reroute(this); }
+    //    if (this.tracer != null) {
+    //       System.out.println("Tracer not null");
+    //       this.tracer.reroute(this);
+    //    }
     //    this.tracer = newTracer;
   }
 

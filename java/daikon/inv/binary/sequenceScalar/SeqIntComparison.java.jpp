@@ -431,7 +431,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
       }
       if (inv instanceof SEQINTEQUAL) {
         SEQINTEQUAL other = (SEQINTEQUAL) inv;
-        // System.out.printf ("considering %s seqvar=%s, other=%s%n", other.format(),
+        // System.out.printf("considering %s seqvar=%s, other=%s%n", other.format(),
         // seqvar().name(), other.seqvar().name());
         if (pptt.is_subsequence(seqvar(), other.seqvar()) && (sclvar(vis) == other.sclvar())) {
           // System.out.println ("is subsequence");

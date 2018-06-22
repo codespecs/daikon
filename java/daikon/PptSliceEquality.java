@@ -285,7 +285,7 @@ public class PptSliceEquality extends PptSlice {
           }
         }
 
-        //Debug print the new leaders
+        // Debug print the new leaders
         if (Debug.logOn()) {
           for (VarInfo nileader : newInvsLeaders) {
             Debug.log(

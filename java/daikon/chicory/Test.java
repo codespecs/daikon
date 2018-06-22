@@ -10,7 +10,7 @@ class Test {
 
   int t1 = 55;
 
-  //public Test() {
+  // public Test() {
   // }
 
   public static void main(String[] args) {

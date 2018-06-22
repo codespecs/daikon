@@ -480,7 +480,7 @@ public final class FileIO {
     ppt_name = ppt_name.intern();
     VarInfo[] vi_array = read_VarInfos(state, ppt_name);
 
-    // System.out.printf ("Ppt %s with %d variables\n", ppt_name,
+    // System.out.printf("Ppt %s with %d variables\n", ppt_name,
     //                   vi_array.length);
 
     // This program point name has already been encountered.
@@ -528,7 +528,7 @@ public final class FileIO {
     //      return newppt;
     //    }
 
-    //TODO: add a new config variable to turn this accessibility flag processing on?
+    // TODO: add a new config variable to turn this accessibility flag processing on?
     PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
     // newppt.ppt_name.setVisibility("package-protected");
     return newppt;
@@ -839,7 +839,7 @@ public final class FileIO {
       pw.print("    ");
 
       // [adonovan] is this sound? Let me know if not (sorry).
-      //assert ppt.var_infos.length == vals.length;
+      // assert ppt.var_infos.length == vals.length;
 
       for (int j = 0; j < vals.length; j++) {
         if (j != 0) pw.print(", ");
@@ -936,7 +936,7 @@ public final class FileIO {
       throws IOException {
 
     for (String filename : files) {
-      // System.out.printf ("processing filename %s%n", filename);
+      // System.out.printf("processing filename %s%n", filename);
       try {
         read_data_trace_file(filename, all_ppts, processor, false, ppts_may_be_new);
       } catch (Daikon.TerminationMessage e) {
@@ -1054,9 +1054,9 @@ public final class FileIO {
 
     ServerSocket daikonServer;
     try {
-      daikonServer = new ServerSocket(0); //bind to any free port
+      daikonServer = new ServerSocket(0); // bind to any free port
 
-      //tell Chicory what port we have!
+      // tell Chicory what port we have!
       System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
 
       daikonServer.setReceiveBufferSize(64000);
@@ -1069,7 +1069,8 @@ public final class FileIO {
     try {
       daikonServer.setSoTimeout(5000);
 
-      //System.out.println("waiting for chicory connection on port " + daikonServer.getLocalPort());
+      // System.out.println("waiting for chicory connection on port " +
+      // daikonServer.getLocalPort());
       chicSocket = daikonServer.accept();
     } catch (IOException e) {
       throw new RuntimeException("Unable to connect to Chicory", e);
@@ -1273,7 +1274,7 @@ public final class FileIO {
         Daikon.progress = "Checking size of " + filename;
         total_lines = UtilPlume.count_lines(raw_filename);
       } else {
-        // System.out.printf ("no count %b %d %s %d %d\n", is_decl_file,
+        // System.out.printf("no count %b %d %s %d %d\n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
         //  Daikon.dkconfig_progress_delay, (new File(raw_filename)).length());
       }
@@ -1283,7 +1284,7 @@ public final class FileIO {
         // "-" means read from the standard input stream
         Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
         reader = new LineNumberReader(file_reader);
-      } else if (raw_filename.equals("+")) { //socket comm with Chicory
+      } else if (raw_filename.equals("+")) { // socket comm with Chicory
         InputStream chicoryInput = connectToChicory();
         InputStreamReader chicReader = new InputStreamReader(chicoryInput, UTF_8);
         reader = new LineNumberReader(chicReader);
@@ -1419,7 +1420,7 @@ public final class FileIO {
               data_trace_state.vt,
               data_trace_state.nonce);
         } catch (Error e) {
-          //e.printStackTrace();
+          // e.printStackTrace();
           if (!dkconfig_continue_after_file_exception) {
             throw new Daikon.TerminationMessage(e, data_trace_state);
           } else {
@@ -1522,7 +1523,7 @@ public final class FileIO {
       // If we have gotten to here and new_decl_format is not set, presume
       // it is the old format
       if (new_decl_format == null) {
-        // System.out.printf ("setting new_decl_format to false%n");
+        // System.out.printf("setting new_decl_format to false%n");
         new_decl_format = Boolean.FALSE;
       }
 
@@ -1563,11 +1564,11 @@ public final class FileIO {
       if (new_decl_format) ppt_name = unescape_decl(line); // interning bugfix: no need to intern
       ppt_name = user_mod_ppt_name(ppt_name);
       if (!ppt_included(ppt_name)) {
-        // System.out.printf ("skipping ppt %s\n", line);
+        // System.out.printf("skipping ppt %s\n", line);
         while ((line != null) && !line.equals("")) line = reader.readLine();
         continue;
       }
-      // System.out.printf ("Not skipping ppt  %s\n", line);
+      // System.out.printf("Not skipping ppt  %s\n", line);
 
       if (state.is_decl_file) {
         if ((!new_decl_format) && line.startsWith("ppt ")) {
@@ -1913,7 +1914,8 @@ public final class FileIO {
               + " values";
       VarInfo vi = vis[vi_index];
       assert (!vi.is_static_constant) || (vi.value_index == -1)
-      // : "Bad value_index " + vi.value_index + " when static_constant_value = " + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
+      // : "Bad value_index " + vi.value_index + " when static_constant_value = " +
+      // vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
       ;
       if (vi.is_static_constant) {
         continue;
@@ -2010,7 +2012,8 @@ public final class FileIO {
       }
       int mod = ValueTuple.parseModified(line);
 
-      // System.out.println("Mod is " + mod + " at " + data_trace_state.filename + " line " + reader.getLineNumber());
+      // System.out.println("Mod is " + mod + " at " + data_trace_state.filename + " line " +
+      // reader.getLineNumber());
       // System.out.pringln("  for variable " + vi.name()
       //                   + " for program point " + ppt.name());
 
@@ -2205,7 +2208,7 @@ public final class FileIO {
           // nonce != null
           if (!call_hashmap.containsKey(nonce)) {
             if (dkconfig_ignore_missing_enter) {
-              //System.out.printf ("Didn't find call with nonce %d to match %s" +
+              // System.out.printf("Didn't find call with nonce %d to match %s" +
               //                   " ending at %s line %d\n", nonce, ppt.name(),
               //                   data_trace_state.filename,
               //                   data_trace_state.reader.getLineNumber());
@@ -2334,11 +2337,11 @@ public final class FileIO {
           Configuration.getInstance().overlap(record.config);
         }
         FileIO.new_decl_format = record.new_decl_format;
-        // System.err.printf ("Setting FileIO.new_decl_format to %b%n",
+        // System.err.printf("Setting FileIO.new_decl_format to %b%n",
         //                   FileIO.new_decl_format);
         return record.map;
       } else if (obj instanceof InvMap) {
-        // System.err.printf ("Restoring an InvMap%n");
+        // System.err.printf("Restoring an InvMap%n");
         InvMap invs = (InvMap) obj;
         PptMap ppts = new PptMap();
         for (PptTopLevel ppt : invs.pptIterable()) {
@@ -2742,7 +2745,7 @@ public final class FileIO {
 
       flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
       while (scanner.hasNext()) flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
-      // System.out.printf ("flags for %s are %s%n", name, flags);
+      // System.out.printf("flags for %s are %s%n", name, flags);
     }
 
     /** Parse the langauge specific flags record. Multiple flags can be specified. */
@@ -2947,7 +2950,7 @@ public final class FileIO {
       return ppt_name;
     }
 
-    // System.out.printf ("removing stack dups (%b)in fileio%n",
+    // System.out.printf("removing stack dups (%b)in fileio%n",
     //                    dkconfig_rm_stack_dups);
 
     String[] stack = ppt_name.split("[|]");

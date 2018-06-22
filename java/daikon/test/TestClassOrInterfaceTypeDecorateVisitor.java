@@ -82,9 +82,9 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     /*
      for (int ii = 0; ii < result.length(); ii++) {
       if (result.charAt(ii) !=  expected.charAt(ii)) {
-        System.out.printf ("diff at offset %d: '%c' - '%c'%n", ii,
+        System.out.printf("diff at offset %d: '%c' - '%c'%n", ii,
                            result.charAt(ii), expected.charAt(ii));
-        System.out.printf ("last:%n%s%n%s%n", result.substring (ii-50, ii+2),
+        System.out.printf("last:%n%s%n%s%n", result.substring (ii-50, ii+2),
                            expected.substring (ii-50, ii+2));
         break;
       }

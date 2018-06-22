@@ -504,12 +504,12 @@ public final class PPTSLICE1 extends PptSlice {
       // in some cases (see NIS.apply_samples), a suppressed invariant is
       // added and them later removed when the suppression is found
       // if (invariant.is_ni_suppressed()) {
-        // System.out.printf ("suppressed invariant %s is being added to ppt %s "
+        // System.out.printf("suppressed invariant %s is being added to ppt %s "
         //                    + "with %d samples%n", invariant.format(), this,
         //                    this.num_samples());
         // NISuppressionSet ss = invariant.get_ni_suppressions();
         // ss.suppressed (invariant.ppt);
-        // System.out.printf ("suppression = %s%n", ss);
+        // System.out.printf("suppression = %s%n", ss);
         // throw new Error();
      // }
     }

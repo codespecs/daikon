@@ -34,7 +34,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   public DtracePartitioner(String filename) {
     try {
       this.fileName = filename;
-      // System.out.printf ("trying with file %s%n", fileName);
+      // System.out.printf("trying with file %s%n", fileName);
       br = UtilPlume.bufferedFileReader(fileName);
 
     } catch (IOException e) {

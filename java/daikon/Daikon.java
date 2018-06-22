@@ -287,7 +287,7 @@ public final class Daikon {
   public static final String var_omit_regexp_SWITCH = "var-omit-pattern";
   // Configuration options
   public static final String server_SWITCH =
-      "server"; //YOAV: server mode for Daikon: reads dtrace files as they appear
+      "server"; // YOAV: server mode for Daikon: reads dtrace files as they appear
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
   // Debugging
@@ -321,7 +321,7 @@ public final class Daikon {
   }
 
   public static /*@MonotonicNonNull*/ File server_dir =
-      null; //YOAV: the directory from which we read the dtrace files
+      null; // YOAV: the directory from which we read the dtrace files
 
   // A PptMap (mapping String -> PptTopLevel) that contains all the program points.
   // Set in mainHelper().
@@ -1520,7 +1520,7 @@ public final class Daikon {
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      // System.out.printf ("considering ppt %s parents: %s, children: %s\n",
+      // System.out.printf("considering ppt %s parents: %s, children: %s\n",
       //                     ppt.name, ppt.parents, ppt.children);
       if (ppt.parents.size() == 0) {
         ppt.mergeInvs();
@@ -1552,7 +1552,7 @@ public final class Daikon {
     if (!Daikon.using_DaikonSimple) {
       // Initialize equality sets on leaf nodes
       setupEquality(ppt);
-      // System.out.printf ("initialized equality %s for ppt %s%n",
+      // System.out.printf("initialized equality %s for ppt %s%n",
       //                    ppt.equality_view, ppt.name());
 
       // Recursively initialize ppts created by splitters
@@ -1598,10 +1598,10 @@ public final class Daikon {
         // vars instead of taking the first n.
         int len = ppt.num_tracevars + ppt.num_static_constant_vars;
         VarInfo[] exit_vars = new VarInfo[len];
-        // System.out.printf ("new decl fmt = %b%n", FileIO.new_decl_format);
+        // System.out.printf("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
           exit_vars[j] = new VarInfo(ppt.var_infos[j]);
-          // System.out.printf ("exitNN name '%s', exit name '%s'%n",
+          // System.out.printf("exitNN name '%s', exit name '%s'%n",
           //                   ppt.var_infos[j].name(), exit_vars[j].name());
           exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
           exit_vars[j].value_index = ppt.var_infos[j].value_index;
@@ -1748,7 +1748,7 @@ public final class Daikon {
         // Add to new_vis
         new_vis[new_vis_index] = origvar;
         new_vis_index++;
-        //System.out.printf ("adding origvar %s to ppt %s%n", origvar.name(),
+        // System.out.printf("adding origvar %s to ppt %s%n", origvar.name(),
         //                   exit_ppt.name());
       }
       assert new_vis_index == exit_ppt.num_orig_vars;
@@ -2071,16 +2071,16 @@ public final class Daikon {
 
     // Print equality set info
     //     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-    //       System.out.printf ("ppt: %s", ppt.name);
+    //       System.out.printf("ppt: %s", ppt.name);
     //       if ((ppt.equality_view == null) || (ppt.equality_view.invs == null))
     //       continue;
     //       for (Invariant inv : ppt.equality_view.invs) {
     //       Equality e = (Equality) inv;
-    //       System.out.printf ("    equality set = %s", e);
+    //       System.out.printf("    equality set = %s", e);
     //       }
     //     }
 
-    // System.out.printf ("printing ternary invariants");
+    // System.out.printf("printing ternary invariants");
     // PrintInvariants.print_all_ternary_invs (all_ppts);
     // System.exit(0);
 
@@ -2328,7 +2328,8 @@ public final class Daikon {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100)) {
-      // The number should already have been checked, so use Error instead of Daikon.TerminationMessage
+      // The number should already have been checked, so use Error instead of
+      // Daikon.TerminationMessage.
       throw new Error("ppt_perc of " + ppt_perc + " is out of range 1..100");
     }
     if (ppt_perc == 100) {
@@ -2402,12 +2403,12 @@ public final class Daikon {
   /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
   public static void undoOpts(PptMap all_ppts) {
 
-    //undo suppressions
+    // undo suppressions
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       NIS.create_suppressed_invs(ppt);
     }
 
-    //undo equality sets
+    // undo equality sets
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       PptSliceEquality sliceEquality = ppt.equality_view;
 

@@ -41,7 +41,7 @@ public class SplitterFactoryTestUpdater {
   private static ArrayList<ArrayList<File>> declsFileLists = new ArrayList<ArrayList<File>>();
   private static ArrayList<String> classNames = new ArrayList<String>();
 
-  private SplitterFactoryTestUpdater() {} //blocks public constructor
+  private SplitterFactoryTestUpdater() {} // blocks public constructor
 
   /**
    * If one has changed the test cases used below, for best results run {@code rm *.java.goal} while
@@ -151,7 +151,8 @@ public class SplitterFactoryTestUpdater {
     }
     // canWrite() requires that the file already exists.  So comment this out.
     // if (! to.canWrite()) {
-    //   throw new Error("Cannot write " + toName + " = " + to.getAbsoluteFile() + " when copying from " + fromName);
+    //   throw new Error("Cannot write " + toName + " = " + to.getAbsoluteFile()
+    //                   + " when copying from " + fromName);
     // }
     if (to.exists()) {
       to.delete();

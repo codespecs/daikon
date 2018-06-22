@@ -525,19 +525,19 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public void pivot() {
     VarInfo newLeader = null;
     for (VarInfo var : vars) {
-      // System.out.printf ("  processing %s\n", var);
+      // System.out.printf("  processing %s\n", var);
       if (newLeader == null) {
         newLeader = var;
       } else if (newLeader.isDerivedParamAndUninteresting()
           && !var.isDerivedParamAndUninteresting()) {
-        // System.out.printf ("%s derived and uninteresting, %s is leader%n",
+        // System.out.printf("%s derived and uninteresting, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
       } else if (var.isDerivedParamAndUninteresting()
           && !newLeader.isDerivedParamAndUninteresting()) {
         // do nothing
       } else if (var.derivedDepth() < newLeader.derivedDepth()) {
-        // System.out.printf ("%s greater depth, %s is leader%n",
+        // System.out.printf("%s greater depth, %s is leader%n",
         //                    newLeader, var);
         newLeader = var;
       } else if (var.derivedDepth() > newLeader.derivedDepth()) {
@@ -545,12 +545,12 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
       // if we got here, this is the "all other things being equal" case
       else if (var.complexity() < newLeader.complexity()) {
-        // System.out.printf ("%s greater comlexity, %s is leader%n",
+        // System.out.printf("%s greater comlexity, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
       }
     }
-    // System.out.printf ("%s complexity = %d, %s complexity = %d\n", leaderCache,
+    // System.out.printf("%s complexity = %d, %s complexity = %d\n", leaderCache,
     //                    leaderCache.complexity(), newLeader,
     //                    newLeader.complexity());
     leaderCache = newLeader;

@@ -255,7 +255,7 @@ public class PptSplitter implements Serializable {
   private void add_implications_pair() {
 
     for (PptTopLevel pchild : ppts) {
-      // System.out.printf ("splitter child = %s%n", pchild.name());
+      // System.out.printf("splitter child = %s%n", pchild.name());
       if (pchild.equality_view == null) {
         System.out.printf("this: %s\n", this);
         System.out.printf("pchild: %s[%08X]\n", pchild, System.identityHashCode(pchild));
@@ -482,7 +482,7 @@ public class PptSplitter implements Serializable {
           orig_invs.put(dummy1, dummy1);
           orig_invs.put(dummy2, dummy2);
           @SuppressWarnings(
-              "keyfor") // BUG in Daikon, possibly, because these are not keys, I think; need to investigate
+              "keyfor") // BUG in Daikon, possibly, because these are not keys; need to investigate
           /*@KeyFor("orig_invs")*/ Invariant[] dummy_pair =
               new /*@KeyFor("orig_invs")*/ Invariant[] {dummy1, dummy2};
           exclusive_invs_vec.add(dummy_pair);
@@ -535,7 +535,8 @@ public class PptSplitter implements Serializable {
     // We pick the first one that is neither obvious nor suppressed.
     // If all are either obvious or suppressed, we just pick the first
     // one in the list.
-    // TODO: Why do we want canonical predicate invariants?  How will they be used?  It seems that different elements of this list have different semantics.
+    // TODO: Why do we want canonical predicate invariants?  How will they be used?  It seems that
+    // different elements of this list have different semantics.
     // TODO: After this loop, might the two canonical invariants not be exclusive with one another?
     // TODO: con_invs should probably be renamed to canon_invs.
     /*NNC:@MonotonicNonNull*/ Invariant[] con_invs = new Invariant[2];
@@ -646,7 +647,8 @@ public class PptSplitter implements Serializable {
     return true;
   }
 
-  // TODO: Should this only include invariants such that all of their variables are defined everywhere?
+  // TODO: Should this only include invariants such that all of their variables are defined
+  // everywhere?
   /**
    * Determine which elements of invs1 are mutually exclusive with elements of invs2. Result
    * elements are pairs of List<Invariant>. All the arguments should be over the same program point.

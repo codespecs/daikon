@@ -80,7 +80,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     Global.debugSplit.fine("modified condition = " + condition);
     vars = makeVariableManagerArray(varInfos, condition, className);
 
-    //extra white space at the end of lines used only to increase readability.
+    // extra white space at the end of lines used only to increase readability.
     add("import daikon.*;");
     add("import daikon.inv.*;");
     add("import daikon.split.*;");

@@ -605,13 +605,13 @@ class FormatTestCase {
         result = new VarInfo(vardef);
         result.enclosing_var = hashcode;
         assert result.enclosing_var.enclosing_var == null;
-        // System.out.printf ("Created %s [%s]%n", result, hashcode);
+        // System.out.printf("Created %s [%s]%n", result, hashcode);
       } else {
         FileIO.VarDefinition vardef =
             new FileIO.VarDefinition(name, VarInfo.VarKind.VARIABLE, type);
         result = new VarInfo(vardef);
         assert result.enclosing_var == null;
-        // System.out.printf ("Created %s%n", result);
+        // System.out.printf("Created %s%n", result);
       }
     } else {
       result = new VarInfo(name, type, type, VarComparabilityNone.it, VarInfoAux.getDefault());
@@ -685,13 +685,15 @@ class FormatTestCase {
         // if (!InvariantFormatTester.isComment(currentLine) &&
         //    !InvariantFormatTester.isWhitespace(currentLine)) {
 
-        // if current line is not whitespace then we have a valid line (that is, end hasn't been reached
+        // if current line is not whitespace then we have a valid line (that is, end hasn't been
+        // reached
         if (!InvariantFormatTester.isWhitespace(currentLine)) {
           // System.out.println(InvariantFormatTester.isComment(currentLine));
           Object[] sample = new Object[types.length];
           for (int i = 0; i < types.length; i++) {
             // Parse each line according to a type in the paramTypes array
-            // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine + "\"");
+            // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine
+            // + "\"");
             sample[i] = types[i].parse_value(currentLine, commands, "test case");
             currentLine = commands.readLine();
           }
@@ -740,7 +742,8 @@ class FormatTestCase {
   //            // array to the result of the parser method
 
   //            arrayFunction =
-  //              Array.class.getMethod("set", new Class [] {Object.class, int.class, Object.class});
+  //              Array.class.getMethod("set", new Class [] {Object.class, int.class,
+  //                                    Object.class});
 
   //            Object arrayFunctionParams[] = new Object [3];
   //            arrayFunctionParams[0] = (Object)sample;
@@ -764,7 +767,8 @@ class FormatTestCase {
   //              arrayFunction.invoke(null,arrayFunctionParams);
   //            }
   //            catch (Exception e) {
-  //              throw new RuntimeException("Error in invoking arrayFunction to put result in sample");
+  //              throw new RuntimeException(
+  //                      "Error in invoking arrayFunction to put result in sample");
   //            }
   //          }
   //          else
@@ -794,7 +798,8 @@ class FormatTestCase {
   //              subTypeName.substring(1, subTypeName.length());
 
   //            arrayFunctionName = "set" + capsSubTypeName;
-  //            arrayFunction = Array.class.getMethod(arrayFunctionName, new Class [] {Object.class, int.class, subType});
+  //            arrayFunction = Array.class.getMethod(arrayFunctionName,
+  //                                              new Class [] {Object.class, int.class, subType});
 
   //            for (int i = 0; i<arrayLength; i++) {
   //              arrayFunction.invoke(null, new Object [] {result, i), temp[i]};
@@ -923,8 +928,10 @@ class FormatTestCase {
 
       //        System.out.println("Sample #" + (i+1) + " of " + samples.size());
       //        System.out.println("P0: " + params[0] + lineSep + "P1: " + params[1]);
-      //        System.out.println("P0 is array: " + params[0].getClass().isArray() + " type: " + params[0].getClass().getComponentType());
-      //        System.out.println("P1 is array: " + params[1].getClass().isArray() + " type: " + params[1].getClass().getComponentType());
+      //        System.out.println("P0 is array: " + params[0].getClass().isArray() + " type: " +
+      // params[0].getClass().getComponentType());
+      //        System.out.println("P1 is array: " + params[1].getClass().isArray() + " type: " +
+      // params[1].getClass().getComponentType());
 
       //        for (int y = 0; y<sampleSize; y++) {
       //          try {

@@ -280,7 +280,7 @@ public abstract class PptSlice extends Ppt {
    */
   public void repCheck() {
 
-    // System.out.printf ("Checking slice %s\n", this);
+    // System.out.printf("Checking slice %s\n", this);
 
     // Make sure that each variable is a leader.  There is one exception to this
     // rule.  Post processing of equality sets creates equality invariants between the
@@ -288,7 +288,7 @@ public abstract class PptSlice extends Ppt {
     // in binary (two variable) slices if it is in the same equality set as the
     // other variable.
     for (VarInfo vi : var_infos) {
-      // System.out.printf ("equality set for vi %s = %s\n", vi, vi.equalitySet);
+      // System.out.printf("equality set for vi %s = %s\n", vi, vi.equalitySet);
       if (!vi.isCanonical()) {
         assert var_infos.length == 2 : this + " - " + vi;
         assert var_infos[0].canonicalRep() == var_infos[1].canonicalRep() : this + " - " + vi;

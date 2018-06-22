@@ -27,7 +27,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
     function_args = receiverName;
   }
 
-  //.class variables are derived, so just keep the parent value
+  // .class variables are derived, so just keep the parent value
   @Override
   public Object getMyValFromParentVal(Object value) {
     return value;
