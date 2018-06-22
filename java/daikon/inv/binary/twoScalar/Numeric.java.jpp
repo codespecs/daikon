@@ -662,7 +662,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       result.add(ShiftZero.get_proto(false));
       result.add(ShiftZero.get_proto(true));
     #endif
-    // System.out.printf ("%s get proto: %s\n", CLASSNAME.class, result);
+    // System.out.printf("%s get proto: %s\n", CLASSNAME.class, result);
     return result;
   }
 

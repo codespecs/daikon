@@ -102,7 +102,7 @@ public abstract class DaikonWriter {
   private static String methodName(
       String fullClassName, String[] types, String name, String short_name, String point) {
 
-    //System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n",
+    // System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n",
     //                  fullClassName, name, short_name);
 
     boolean isConstructor = name.equals("<init>") || name.equals("");
@@ -129,10 +129,10 @@ public abstract class DaikonWriter {
       System.out.printf("methodName1 final ppt name = '%s'%n", pptname);
     }
 
-    //Throwable t = new Throwable("debug");
-    //t.fillInStackTrace();
+    // Throwable t = new Throwable("debug");
+    // t.fillInStackTrace();
     // t.printStackTrace();
-    // System.out.printf ("ppt name = %s%n", pptname);
+    // System.out.printf("ppt name = %s%n", pptname);
 
     return pptname;
 
@@ -141,7 +141,7 @@ public abstract class DaikonWriter {
     // group reference.
     String paramTypesString = paramTypes.toString().replace("$", "\\$");
     name = name.replaceFirst("\\(.*\\)", paramTypesString);
-    // System.out.printf ("params = %s, newname = %s, short_name = %s%n",
+    // System.out.printf("params = %s, newname = %s, short_name = %s%n",
     //                   paramTypesString, name, short_name);
 
     return methodName(name, short_name, isConstructor, point);
@@ -216,7 +216,7 @@ public abstract class DaikonWriter {
     name = name.replace(",", ", ");
     if (Chicory.debug_ppt_names) System.out.printf("  spaces '%s'%n", name);
 
-    // System.out.printf ("'%s' to '%s'%n", method.toString(), name);
+    // System.out.printf("'%s' to '%s'%n", method.toString(), name);
     return (name + ":::" + point);
   }
 

@@ -257,7 +257,7 @@ public class Chicory {
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s\n", path_separator);
     if (path_separator == null) {
-      path_separator = ";"; //should work for windows at least...
+      path_separator = ";"; // should work for windows at least...
     } else if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.TerminationMessage(
           "Bad regexp "
@@ -367,7 +367,7 @@ public class Chicory {
         throw new RuntimeException("After 100 lines of output, " + "Daikon port not received");
       }
 
-      //continue reading daikon output in separate thread
+      // continue reading daikon output in separate thread
       daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
       daikon_out.start();
     }
@@ -377,9 +377,10 @@ public class Chicory {
     cmdlist.add("java");
 
     if (RemoteDebug) {
-      //-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
+      // -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
       cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
-      //cmdlist.add("-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
+      // cmdlist.add("-Xdebug -Xnoagent
+      // -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
     }
 
     cmdlist.add("-cp");
@@ -497,8 +498,8 @@ public class Chicory {
               heap_size, cp, daikon_args, output_dir, dtrace_file);
     }
 
-    //System.out.println("daikon command is " + daikon_cmd);
-    //System.out.println("daikon command cmdstr " + cmdstr);
+    // System.out.println("daikon command is " + daikon_cmd);
+    // System.out.println("daikon command cmdstr " + cmdstr);
 
     if (verbose) System.out.printf("\nExecuting daikon: %s\n", cmdstr);
 
@@ -560,7 +561,7 @@ public class Chicory {
       if (dirName != null) {
         File directory = new File(dirName);
 
-        //make the output directory if non-existent
+        // make the output directory if non-existent
         if (!directory.exists()) directory.mkdir();
       }
 
@@ -597,9 +598,9 @@ public class Chicory {
     return (str.trim());
   }
 
-  //parses the single string into arguments
+  // parses the single string into arguments
   public String[] parseDaikonArgs(String arg) {
-    //TODO deal with quotation marks...
+    // TODO deal with quotation marks...
     return arg.split(" ");
   }
 }

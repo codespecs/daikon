@@ -1297,7 +1297,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       String[] bounds_name;
       String length = var().get_simplify_size_name();
       // if ((length == null) && var().name.isApplySizeSafe())
-      //  System.out.printf ("var %s, type %s, is_array %b%n", var().name(),
+      //  System.out.printf("var %s, type %s, is_array %b%n", var().name(),
       //                     var().type, var().type.isArray());
       if (length != null) {
         length = "(EQ " + length + " "+ simplify_format_long(seq.length) + ")";
@@ -1361,7 +1361,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
             String value = TOSTRING_SIMPLIFY(seq[j]);
             contentsBuf.append(" (EQ " + nth + " " + value + ")");
             // if (nth.contains ("--orig__a"))
-            //   System.out.printf ("regular orig__a%n");
+            //   System.out.printf("regular orig__a%n");
 
           }
         }

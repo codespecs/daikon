@@ -169,7 +169,8 @@ public abstract class SingleFloat extends UnaryInvariant {
 //                        or (inv2.max_justified and not inv1.max_justified))
 //         max_different = (inv1.max_justified and inv2.max_justified
 //                          and (inv1.max != inv2.max))
-//         # print "max_different=%s" % (max_different,), inv1.max_justified, inv2.max_justified, inv1.max, inv2.max
+//         # print "max_different=%s" % (max_different,), inv1.max_justified, inv2.max_justified,
+//                                      inv1.max, inv2.max
 //         nzj1 = inv1.nonzero_justified()
 //         nzj2 = inv1.nonzero_justified()
 //         zero_different = (nzj1 and not nzj2) or (nzj2 and not nzj1)

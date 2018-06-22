@@ -468,7 +468,7 @@ import typequals.*;
           new_ppt);
       // result.log (UtilPlume.backTrace());
     }
-    //if (debug.isLoggable(Level.FINE))
+    // if (debug.isLoggable(Level.FINE))
     //    debug.fine ("Invariant.transfer to " + new_ppt.name() + " "
     //                 + result.repr());
 
@@ -946,7 +946,8 @@ import typequals.*;
         }
       } else {
         // // Debugging
-        // System.out.println("ICFP: different parents for " + inv1.format() + ", " + inv2.format());
+        // System.out.println("ICFP: different parents for " + inv1.format() + ", " +
+        // inv2.format());
 
         for (int i = 0; i < vis1.length; i++) {
           String name1 = vis1[i].name();

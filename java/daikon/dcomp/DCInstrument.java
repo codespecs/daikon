@@ -237,7 +237,7 @@ class DCInstrument extends InstructionListUtils {
     } else {
       dcomp_marker = new ObjectType("daikon.dcomp.DCompMarker");
     }
-    // System.out.printf ("DCInstrument %s%n", orig_class.getClassName());
+    // System.out.printf("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
     debug_transform.enabled = DynComp.debug_transform || Premain.debug_dcinstrument;
     debug_instrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
@@ -588,7 +588,7 @@ class DCInstrument extends InstructionListUtils {
     // needs to know what classes are instrumented.  Its looks in the
     // Chicory runtime for this information.
     if (track_class) {
-      // System.out.printf ("adding class %s to all class list%n", class_info);
+      // System.out.printf("adding class %s to all class list%n", class_info);
       synchronized (daikon.chicory.SharedData.all_classes) {
         daikon.chicory.SharedData.all_classes.add(class_info);
       }
@@ -1245,7 +1245,7 @@ class DCInstrument extends InstructionListUtils {
     // It seems incorrect to reset the MaxLocals based on the code
     // at this point.  We have added special locals that won't
     // be included.  Commented out 5/14/2014 - markro.
-    //mg.setMaxLocals();
+    // mg.setMaxLocals();
     // allocate an extra slot to save the tag frame depth for debugging
     int frame_size = mg.getMaxLocals() + 1;
 
@@ -1263,7 +1263,7 @@ class DCInstrument extends InstructionListUtils {
     }
     for (int ii = plist.size() - 1; ii >= 0; ii--) {
       params += (char) (plist.get(ii) + '0');
-      //Character.forDigit (plist.get(ii), Character.MAX_RADIX);
+      // Character.forDigit (plist.get(ii), Character.MAX_RADIX);
     }
 
     // Create code to create/init the tag frame and store in tag_frame_local
@@ -1342,13 +1342,13 @@ class DCInstrument extends InstructionListUtils {
         LocalVariableGen return_local = get_return_local(mg, ret_type);
         if (ret_type instanceof BasicType) {
           il.append(new ACONST_NULL());
-          //il.append (create_wrapper (c, ret_type, return_local.getIndex()));
+          // il.append (create_wrapper (c, ret_type, return_local.getIndex()));
         } else {
           il.append(InstructionFactory.createLoad(Type.OBJECT, return_local.getIndex()));
         }
       }
 
-      //push line number
+      // push line number
       il.append(ifact.createConstant(line));
     }
 
@@ -1428,13 +1428,13 @@ class DCInstrument extends InstructionListUtils {
         LocalVariableGen return_local = get_return_local(mg, ret_type);
         if (ret_type instanceof BasicType) {
           il.append(new ACONST_NULL());
-          //il.append (create_wrapper (c, ret_type, return_local.getIndex()));
+          // il.append (create_wrapper (c, ret_type, return_local.getIndex()));
         } else {
           il.append(InstructionFactory.createLoad(Type.OBJECT, return_local.getIndex()));
         }
       }
 
-      //push line number
+      // push line number
       il.append(ifact.createConstant(line));
     }
 
@@ -2059,7 +2059,7 @@ class DCInstrument extends InstructionListUtils {
             callee_instrumented = false;
           }
 
-          //UNDONE:
+          // UNDONE:
           // This is actually a general problem.  Correct solution would seem
           // to be a variation of "has_instrumented" to find target of virtual
           // call at runtime.
@@ -2080,7 +2080,7 @@ class DCInstrument extends InstructionListUtils {
 
     if (is_object_method(method_name, invoke.getArgumentTypes(pool))) callee_instrumented = false;
 
-    // System.out.printf ("handle invoke %s, method = %s, ignore_toString = %b%n",
+    // System.out.printf("handle invoke %s, method = %s, ignore_toString = %b%n",
     //                     invoke, method_name, ignore_toString);
 
     // Replace calls to Object's equals method with calls to our
@@ -2130,7 +2130,7 @@ class DCInstrument extends InstructionListUtils {
 
       // Add a tag for the return type if it is primitive
       if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
-        // System.out.printf ("push tag for return  type of %s%n",
+        // System.out.printf("push tag for return  type of %s%n",
         //                   invoke.getReturnType(pool));
         il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
       }
@@ -2174,7 +2174,7 @@ class DCInstrument extends InstructionListUtils {
             callee_instrumented = false;
           }
 
-          //UNDONE:
+          // UNDONE:
           // This is actually a general problem.  Correct solution would seem
           // to be a variation of "has_instrumented" to find target of virtual
           // call at runtime.
@@ -2259,7 +2259,7 @@ class DCInstrument extends InstructionListUtils {
   /** Returns whether or not the specified classname is instrumented */
   boolean callee_instrumented(/*@ClassGetName*/ String classname) {
 
-    // System.out.printf ("Checking callee instrumented on %s\n", classname);
+    // System.out.printf("Checking callee instrumented on %s\n", classname);
 
     // Our copy of daikon.util is not instrumented.  It would be odd, though,
     // to see calls to this.
@@ -2757,7 +2757,7 @@ class DCInstrument extends InstructionListUtils {
   LocalVariableGen get_tmp2_local(MethodGen mg, Type typ) {
 
     String name = "dcomp_$tmp_" + typ;
-    // System.out.printf ("local var name = %s%n", name);
+    // System.out.printf("local var name = %s%n", name);
 
     // See if the local has already been created
     for (LocalVariableGen lv : mg.getLocalVariables()) {
@@ -2871,7 +2871,7 @@ class DCInstrument extends InstructionListUtils {
         case Const.LRETURN:
         case Const.RETURN:
           // log ("Exit at line %d%n", line_number);
-          //only do incremental lines if we don't have the line generator
+          // only do incremental lines if we don't have the line generator
           if (line_number == last_line_number && foundLine == false) {
             line_number++;
           }
@@ -3065,7 +3065,7 @@ class DCInstrument extends InstructionListUtils {
     String[] sa = method_id.split(":");
     String m_classname = sa[0];
     String m_name = sa[1];
-    // System.out.printf ("has_specified_method: %s:%s - %s.%s\n", m_classname,
+    // System.out.printf("has_specified_method: %s:%s - %s.%s\n", m_classname,
     //                    m_name, classname, m.getName());
 
     if (!m_classname.equals(classname)) return false;
@@ -3097,7 +3097,7 @@ class DCInstrument extends InstructionListUtils {
 
     // If any of the omit patterns match, exclude the ppt
     for (Pattern p : DynComp.ppt_omit_pattern) {
-      // System.out.printf ("should_track: pattern '%s' on ppt '%s'\n",
+      // System.out.printf("should_track: pattern '%s' on ppt '%s'\n",
       //                    p, pptname);
       if (p.matcher(pptname).find()) {
         debug_track.log("  Omitting program point %s%n", pptname);
@@ -3126,7 +3126,7 @@ class DCInstrument extends InstructionListUtils {
   /** Constructs a ppt entry name from a Method. */
   public static String methodEntryName(String fullClassName, Method m) {
 
-    // System.out.printf ("classname = %s, method = %s, short_name = %s%n",
+    // System.out.printf("classname = %s, method = %s, short_name = %s%n",
     //                   fullClassName, m, m.getName());
 
     // Get an array of the type names
@@ -3579,7 +3579,8 @@ class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
     }
 
-    // System.out.printf ("%s: atc = %d, anc = %d%n", mg.getName(), arg_types.length, arg_names.length);
+    // System.out.printf("%s: atc = %d, anc = %d%n", mg.getName(), arg_types.length,
+    // arg_names.length);
 
     // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
     if (mg.getName().equals("getCallerClass")
@@ -3916,10 +3917,10 @@ class DCInstrument extends InstructionListUtils {
         } else { // building jdk
           String full_name = full_name(jc, f);
           if (static_map.containsKey(full_name)) {
-            // System.out.printf ("Reusing static field %s value %d%n",
+            // System.out.printf("Reusing static field %s value %d%n",
             //                    full_name, static_map.get(full_name));
           } else {
-            // System.out.printf ("Allocating new static field %s%n",
+            // System.out.printf("Allocating new static field %s%n",
             //                    full_name);
             static_map.put(full_name, static_map.size() + 1);
           }
@@ -4313,7 +4314,7 @@ class DCInstrument extends InstructionListUtils {
       String[] key_val = line.split("  *");
       assert !static_map.containsKey(key_val[0]) : key_val[0] + " " + key_val[1];
       static_map.put(key_val[0], Integer.valueOf(key_val[1]));
-      // System.out.printf ("Adding %s %s to static map%n", key_val[0],
+      // System.out.printf("Adding %s %s to static map%n", key_val[0],
       //                   key_val[1]);
     }
   }

@@ -60,7 +60,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // Restore shadowing map because we're going out of scope from
     // the TypeParameters declared in this method.
     shadowingMap = oldShadowingMap;
-    //printShadowingMap();
+    // printShadowingMap();
   }
 
   // f0 -> [ TypeParameters() ]
@@ -91,7 +91,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // Restore shadowing map because we're going out of scope from
     // the TypeParameters declared in this method.
     shadowingMap = oldShadowingMap;
-    //printShadowingMap();
+    // printShadowingMap();
   }
 
   // f0 -> ( "class" | "interface" )
@@ -121,7 +121,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // Restore shadowing map because we're going out of scope from
     // the TypeParameters declared in this method.
     shadowingMap = oldShadowingMap;
-    //printShadowingMap();
+    // printShadowingMap();
   }
 
   public void augmentShadowingMap(TypeParameters n) {
@@ -184,7 +184,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
       s.push(objectType);
     }
 
-    //printShadowingMap();
+    // printShadowingMap();
   }
 
   // ClassOrInterfaceType:
@@ -199,7 +199,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
     // Make a copy of the ClassOrInterfaceType.
     StringWriter w = new StringWriter();
-    //t.accept(new TreeFormatter());
+    // t.accept(new TreeFormatter());
     t.accept(new TreeDumper(w));
     ClassOrInterfaceType n =
         (ClassOrInterfaceType) Ast.create("ClassOrInterfaceType", w.toString());
@@ -234,11 +234,11 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
         shadowingMap.entrySet()) {
       if (entry.getKey().equals(n.f0.tokenImage)) {
         ClassOrInterfaceType c = entry.getValue().getFirst();
-        //System.out.println("c:" + Ast.format(c));
+        // System.out.println("c:" + Ast.format(c));
         List<Node> cSequence = c.f2.nodes;
-        //System.out.print("cSequence:");
+        // System.out.print("cSequence:");
         for (Node n2 : cSequence) {
-          //System.out.print(Ast.format(n2) + " ");
+          // System.out.print(Ast.format(n2) + " ");
         }
         // Prepend all-but-first identifiers to the list of identifiers in f2.
         // Prepending in reverse order ensures the right prepending order.
@@ -251,18 +251,18 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     }
 
     {
-      //StringWriter sw = new StringWriter();
-      //n.accept(new TreeFormatter());
-      //t.accept(new TreeDumper(sw));
-      //System.out.print("t::::");
-      //System.out.println(sw.toString().trim());
+      // StringWriter sw = new StringWriter();
+      // n.accept(new TreeFormatter());
+      // t.accept(new TreeDumper(sw));
+      // System.out.print("t::::");
+      // System.out.println(sw.toString().trim());
     }
     {
-      //StringWriter sw = new StringWriter();
-      //n.accept(new TreeFormatter());
-      //n.accept(new TreeDumper(sw));
-      //System.out.print("n::::");
-      //System.out.println(sw.toString().trim());
+      // StringWriter sw = new StringWriter();
+      // n.accept(new TreeFormatter());
+      // n.accept(new TreeDumper(sw));
+      // System.out.print("n::::");
+      // System.out.println(sw.toString().trim());
     }
   }
 

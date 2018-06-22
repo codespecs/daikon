@@ -102,7 +102,7 @@ public final class FileCompiler {
    */
   public String compileFiles(List<String> fileNames) throws IOException {
 
-    // System.out.printf ("compileFiles: %s%n", fileNames);
+    // System.out.printf("compileFiles: %s%n", fileNames);
 
     // Start a process to compile all of the files (in one command)
     String compile_errors = compile_source(fileNames);
@@ -167,7 +167,7 @@ public final class FileCompiler {
       resultHandler.waitFor();
       exitValue = resultHandler.getExitValue();
     } catch (InterruptedException e) {
-      //Ignore exception, but watchdog.killedProcess() records that the process timed out.
+      // Ignore exception, but watchdog.killedProcess() records that the process timed out.
     }
     boolean timedOut = executor.isFailure(exitValue) && watchdog.killedProcess();
 

@@ -161,7 +161,7 @@ public class PptRelation implements Serializable {
     for (VarInfo vp : parent.var_infos) {
       boolean relate_var = relate(vp, vp.name());
       if (!relate_var && !vp.isStaticConstant()) {
-        // System.out.printf ("no relation for '%s' from %s-%s with vars %s%n",
+        // System.out.printf("no relation for '%s' from %s-%s with vars %s%n",
         //                   vp.name(), parent.name(), child.name(),
         //                   child.varNames());
         relate_all = false;
@@ -378,13 +378,13 @@ public class PptRelation implements Serializable {
       ParentRelation pr, PptTopLevel parent, PptTopLevel child) {
 
     assert pr != null && parent != null && child != null;
-    // System.out.printf ("Parent Relation %s[%d] to %s%n", pr.parent_ppt_name,
+    // System.out.printf("Parent Relation %s[%d] to %s%n", pr.parent_ppt_name,
     //                   pr.id, child.name());
 
     PptRelation rel = new PptRelation(parent, child, pr.rel_type);
     for (VarInfo vc : child.var_infos) {
       for (VarParent pi : vc.parents) {
-        // System.out.printf ("--child variable %s, ppt %s[%d], parent_var %s%n",
+        // System.out.printf("--child variable %s, ppt %s[%d], parent_var %s%n",
         //                    vc.name(), pi.parent_ppt, pi.parent_relation_id,
         //                    pi.parent_variable);
         if (pi.parent_relation_id != pr.id) {
@@ -400,7 +400,7 @@ public class PptRelation implements Serializable {
         }
         // parent_name = parent_name.replace ("[..]", "[]");
 
-        // System.out.printf ("---parent name %s%n", parent_name);
+        // System.out.printf("---parent name %s%n", parent_name);
         VarInfo vp = parent.find_var_by_name(parent_name);
         if (vp == null) {
           throw new RuntimeException(
@@ -531,7 +531,7 @@ public class PptRelation implements Serializable {
       for (VarInfo vc : child.var_infos) {
         System.out.println("    " + vc.name());
       }
-      //throw new Error("Missing orig variable in EXIT");
+      // throw new Error("Missing orig variable in EXIT");
     }
     return rel;
   }
@@ -691,7 +691,7 @@ public class PptRelation implements Serializable {
         // Else if an exitNN point, parent is combined exit point
       } else if (pname.isExitPoint()) {
         PptTopLevel parent = all_ppts.get(pname.makeExit());
-        // System.out.printf ("Parent of %s is %s%n", pname.name(),
+        // System.out.printf("Parent of %s is %s%n", pname.name(),
         //                   parent.name());
         if (parent != null) rel = newCombinedExitExitNNRel(parent, ppt);
       }
@@ -817,7 +817,7 @@ public class PptRelation implements Serializable {
         continue;
       }
 
-      // System.out.printf ("processing splitter '%s' [%s] %b%n", ppt.name(),
+      // System.out.printf("processing splitter '%s' [%s] %b%n", ppt.name(),
       //                    ppt.ppt_name.getPoint(),
       //                    ppt.ppt_name.isNumberedExitPoint());
 
@@ -909,7 +909,7 @@ public class PptRelation implements Serializable {
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;
         }
-        // System.out.printf ("processing hierarchy rel from '%s' to '%s'%n",
+        // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));
       }
@@ -974,7 +974,7 @@ public class PptRelation implements Serializable {
         continue;
       }
 
-      // System.out.printf ("processing splitter %s%n", ppt.name());
+      // System.out.printf("processing splitter %s%n", ppt.name());
 
       // Loop over each splitter
       splitter_loop:

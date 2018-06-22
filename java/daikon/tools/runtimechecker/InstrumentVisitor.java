@@ -232,7 +232,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // Find declared throwables.
     List<String> declaredThrowables = getDeclaredThrowables(ctor.f3);
 
-    //System.out.println(Ast.formatEntireTree(ctor));
+    // System.out.println(Ast.formatEntireTree(ctor));
 
     List<PptTopLevel> matching_ppts = pptMatcher.getMatches(pptmap, ctor);
 
@@ -286,7 +286,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // if an exception is thrown.
     code.append("boolean methodThrewSomething_instrument = false;");
 
-    //code.append("try {");
+    // code.append("try {");
 
     // Insert original constructor code.
     // [[ TODO: should I use the daikon dumper that Mike found? ]]
@@ -303,7 +303,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     // Replace constructor body with instrumented code.
     BlockStatement newCtorBody = (BlockStatement) Ast.create("BlockStatement", code.toString());
-    //newCtorBody.accept(new TreeFormatter(2, 0));
+    // newCtorBody.accept(new TreeFormatter(2, 0));
     ctor.f6 = new NodeListOptional(newCtorBody);
   }
 
@@ -446,7 +446,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       code.append(";");
     }
 
-    //code.append("try {");
+    // code.append("try {");
 
     if (!returnType.equals("void")) {
       code.append("retval_instrument = ");
@@ -790,7 +790,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       if (inv instanceof FunctionBinary) {
         FunctionBinary fb = (FunctionBinary) inv;
         if (fb.isLshift() || fb.isRshiftSigned() || fb.isRshiftUnsigned()) {
-          // System.err.println("Warning: shift operation skipped: " + inv.format_using(OutputFormat.JAVA));
+          // System.err.println("Warning: shift operation skipped: " +
+          // inv.format_using(OutputFormat.JAVA));
           continue;
         }
       }
@@ -1165,7 +1166,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       //             for (Constructor cons : c.getDeclaredConstructors()) {
       //                 if (!visitedConstructors.contains(cons)) {
       //                     assert cons.equals(getDefaultConstructor(c))
-      //                                       : "cons=" + cons + ", visitedConstructors=" + visitedConstructors);
+      //                        : "cons=" + cons + ", visitedConstructors=" + visitedConstructors);
       //                 }
       //             }
 

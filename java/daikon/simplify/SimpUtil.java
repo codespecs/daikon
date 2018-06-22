@@ -36,7 +36,7 @@ public class SimpUtil {
       } else if (c == ')') {
         // XXX not with strings
         //         if (paren <= 0)
-        //           assert paren > 0 : //                             "too deep at char " + i + " in '" + s + "'";
+        //           assert paren > 0 : // "too deep at char " + i + " in '" + s + "'";
         paren--;
         // This check is only sensible for some callers; it needs a flag.
         //         if (paren == 0 && i < cs.length -1)

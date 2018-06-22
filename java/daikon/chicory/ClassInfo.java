@@ -47,8 +47,8 @@ public class ClassInfo {
   public boolean shouldInclude = false;
 
   /** Mapping from field name to string representation of its value* */
-  //only for static final primitives
-  //which are declared by a CONSTANT VALUE in the code
+  // only for static final primitives
+  // which are declared by a CONSTANT VALUE in the code
   public Map<String, String> staticMap = new HashMap<String, String>();
 
   /** Create ClassInfo with specified name */
@@ -75,10 +75,10 @@ public class ClassInfo {
 
     // get the reflection class
     try {
-      //clazz = Class.forName (class_name);
-      //change class loading
+      // clazz = Class.forName (class_name);
+      // change class loading
 
-      //TODO referring class?
+      // TODO referring class?
       clazz = Class.forName(class_name, false, loader);
 
     } catch (Exception e) {
@@ -95,7 +95,7 @@ public class ClassInfo {
           boolean foundMatch = false;
           for (MethodInfo mi : method_infos) {
             assert mi.member != null
-                : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
+                : "@AssumeAssertion(nullness): member of method_infos have .member field"; // dependent type
             // System.out.printf("compare %s to pure %s%n",
             //                  mi.member.toString() , pureMeth);
             if (mi.member.toString().trim().equals(pureMeth)) {

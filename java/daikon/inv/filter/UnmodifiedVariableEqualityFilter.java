@@ -46,7 +46,7 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
     }
 
     if (var1.is_prestate_version(var2) || var2.is_prestate_version(var1)) {
-      // System.err.printf ("prestate: var1 (%s) = var2 (%s)%n", var1, var2);
+      // System.err.printf("prestate: var1 (%s) = var2 (%s)%n", var1, var2);
       return true;
     }
 

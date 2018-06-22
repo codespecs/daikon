@@ -123,7 +123,8 @@ public class ModBitTracker implements Serializable, Cloneable {
    * returned value!
    */
   @SuppressWarnings(
-      "nullness") // application invariant: index[varindex] is an index for a non-null BitSet in modbits_arrays
+      "nullness") // application invariant: index[varindex] is an index for a non-null BitSet in
+  // modbits_arrays
   public BitSet get(int varindex) {
     return modbits_arrays[index[varindex]];
   }

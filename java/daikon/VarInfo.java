@@ -426,7 +426,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     if (vardef == null) return;
 
-    // System.out.printf ("enclosing var for %s is %s%n", str_name,
+    // System.out.printf("enclosing var for %s is %s%n", str_name,
     //                   vardef.enclosing_var);
 
     // Find and set the enclosing variable (if any)
@@ -618,7 +618,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert comparability != null;
     // COMPARABILITY TEST
     // assert
-    //   comparability.alwaysComparable() || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions()
+    //   comparability.alwaysComparable() || ((VarComparabilityImplicit)comparability).dimensions ==
+    // file_rep_type.dimensions()
     //   : "Types dimensions incompatibility: "
     //     + type
     //     + " vs. "
@@ -1027,7 +1028,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /*@Pure*/
   public boolean isDerivedParam() {
     if (isDerivedParamCached != null) {
-      // System.out.printf ("var %s is-derived-param = %b\n", name(),
+      // System.out.printf("var %s is-derived-param = %b\n", name(),
       //                   isDerivedParamCached);
       return isDerivedParamCached.booleanValue();
     }
@@ -1074,7 +1075,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       }
     }
 
-    // System.out.printf ("var %s is-derived-param = %b\n", name(), result);
+    // System.out.printf("var %s is-derived-param = %b\n", name(), result);
     isDerivedParamCached = result ? Boolean.TRUE : Boolean.FALSE;
     return result;
   }
@@ -1084,13 +1085,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * valid in the new decl format.
    */
   private /*@Nullable*/ VarInfo enclosing_param() {
-    // System.out.printf ("Considering %s\n", this);
+    // System.out.printf("Considering %s\n", this);
     assert FileIO.new_decl_format;
     if (isPrestate()) {
       return postState.enclosing_param();
     }
     for (VarInfo evi = this; evi != null; evi = evi.enclosing_var) {
-      // System.out.printf ("%s isParam=%b\n", evi, evi.isParam());
+      // System.out.printf("%s isParam=%b\n", evi, evi.isParam());
       if (evi.isParam()) {
         return evi;
       }
@@ -1603,8 +1604,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       SequenceLength sl = (SequenceLength) derived;
       if (!sl.base.type.isArray()) {
         // VarInfo base = sl.base;
-        // System.out.printf ("%s is not an array%n", base);
-        // System.out.printf ("type = %s%n", base.type);
+        // System.out.printf("%s is not an array%n", base);
+        // System.out.printf("type = %s%n", base.type);
         return false;
       }
     }
@@ -1695,14 +1696,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public static boolean compare_vars(
       VarInfo vari, int vari_shift, VarInfo varj, int varj_shift, boolean test_lessequal) {
 
-    // System.out.printf ("comparing variables %s and %s in ppt %s%n",
+    // System.out.printf("comparing variables %s and %s in ppt %s%n",
     //        vari.name(), varj.name(), vari.ppt.name());
     // Throwable stack = new Throwable("debug traceback");
     // stack.fillInStackTrace();
     // stack.printStackTrace();
 
     assert !Daikon.isInferencing;
-    // System.out.println("compare_vars(" + vari.name + ", " + vari_shift + ", "+ varj.name + ", " + varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
+    // System.out.println("compare_vars(" + vari.name + ", " + vari_shift + ", "+ varj.name + ", " +
+    // varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
     if (vari == varj) {
       // same variable
       return (test_lessequal ? (vari_shift <= varj_shift) : (vari_shift >= varj_shift));
@@ -1848,7 +1850,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           // if (a == 1) {  // match } for vim
           if (-a / b == 1) {
             // this = v2 + c/b
-            //int add = - ((int) b);
+            // int add = - ((int) b);
             int add = (int) c / (int) b;
             return lb.var2().var_info_name.applyAdd(add); // vin ok
           }
@@ -2023,7 +2025,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!Daikon.ignore_comparability) {
       if (!VarComparability.comparable(seqvar.comparability.elementType(), sclvar.comparability)) {
         // System.out.printf("eltsCompatible: eltcomp(%s;%s)=%s, sclcomp(%s)=%s%n",
-        //                   seqvar, seqvar.comparability.elementType(), seqvar.comparability.elementType(), sclvar, sclvar.comparability);
+        //                   seqvar, seqvar.comparability.elementType(),
+        //                   seqvar.comparability.elementType(), sclvar, sclvar.comparability);
         return false;
       }
     }
@@ -2262,7 +2265,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         // Not "shouldBeGuarded(ppt.findVar(viname))" because that
         // unnecessarily computes ppt.findVar(viname), if
         // dkconfig_guardNulls is "always".
-        //System.out.printf ("viname = %s, applyPreMaybe=%s, findvar=%s%n",
+        // System.out.printf("viname = %s, applyPreMaybe=%s, findvar=%s%n",
         //                   viname, applyPreMaybe(viname),
         //                   ppt.findVar(applyPreMaybe(viname)));
         if (Daikon.dkconfig_guardNulls == "always") // interned
@@ -2802,7 +2805,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Set this variable as a parameter */
   public void set_is_param() {
-    // System.out.printf ("setting is_param for %s %n", name());
+    // System.out.printf("setting is_param for %s %n", name());
     if (FileIO.new_decl_format) {
       var_flags.add(VarFlags.IS_PARAM);
     }
@@ -2896,7 +2899,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return get_base_array().enclosing_var;
     } else {
       Elements elems = (new ElementsFinder(var_info_name)).elems(); // vin ok
-      // System.out.printf ("term.name() = %s\n", elems.term.name());
+      // System.out.printf("term.name() = %s\n", elems.term.name());
       return ppt.find_var_by_name(elems.term.name());
     }
   }
@@ -3158,7 +3161,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /*@SideEffectFree*/
   public String esc_name(/*@Nullable*/ String index) {
 
-    // System.out.printf ("esc_name for %s, flags %s, enclosing-var %s "
+    // System.out.printf("esc_name for %s, flags %s, enclosing-var %s "
     //                  + " poststate %s index %s rname %s ppt %s%n", str_name,
     //                    var_flags, enclosing_var, postState, index,
     //                    relative_name, ppt.name());
@@ -3183,7 +3186,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return str_name;
       case FUNCTION:
-        //function_args      assert function_args == null : "function args not implemented";
+        // function_args      assert function_args == null : "function args not implemented";
         if (var_flags.contains(VarFlags.CLASSNAME)) {
           return ("\\typeof(" + enclosing_var.esc_name(index) + ")");
         }
@@ -3260,7 +3263,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return str_name;
       case FUNCTION:
-        //function_args      assert function_args == null : "function args not implemented";
+        // function_args      assert function_args == null : "function args not implemented";
         if (var_flags.contains(VarFlags.CLASSNAME)) {
           if (arr_dims > 0) {
             return String.format("daikon.Quant.typeArray(%s)", enclosing_var.jml_name(index));
@@ -3318,7 +3321,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         assert relative_name != null : this;
         return String.format("(select |%s| %s)", relative_name, enclosing_var.simplify_name(index));
       case FUNCTION:
-        //function_args      assert function_args == null : "function args not implemented";
+        // function_args      assert function_args == null : "function args not implemented";
         if (var_flags.contains(VarFlags.CLASSNAME)) {
           return ("(typeof " + enclosing_var.simplify_name(index) + ")");
         }
@@ -3388,7 +3391,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!file_rep_type.isArray() || isDerived()) {
       result = null;
     } else {
-      // System.out.printf ("Getting size name for %s [%s]\n", name(),
+      // System.out.printf("Getting size name for %s [%s]\n", name(),
       //                    get_length());
       result = get_length().simplify_name().intern();
     }
@@ -3546,7 +3549,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
               simplify_index_name,
               free,
               index_off);
-      // System.out.printf ("sNth: index %s, free %b, off %d, result '%s'\n",
+      // System.out.printf("sNth: index %s, free %b, off %d, result '%s'\n",
       //                     simplify_index_name, free, index_off,
       //                     select.simplify_name());
       return select.simplify_name();
@@ -3610,7 +3613,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     // Return the array properly indexed
-    // System.err.printf ("lower bound type = %s [%s] %s\n", lower,
+    // System.err.printf("lower bound type = %s [%s] %s\n", lower,
     //                   lower.getClass(), complete_index);
     return simplify_name(complete_index);
   }
@@ -3732,7 +3735,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   public int complexity() {
     if (!FileIO.new_decl_format) {
-      // System.out.printf ("%s - %s\n", this, var_info_name.repr());
+      // System.out.printf("%s - %s\n", this, var_info_name.repr());
       return var_info_name.inOrderTraversal().size(); // vin ok
     }
 
@@ -3761,7 +3764,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     // int old_cnt = var_info_name.inOrderTraversal().size();
     // if (cnt != old_cnt)
-    //   System.out.printf ("var %s, new cnt = %d, old cnt = %d [%s]\n",
+    //   System.out.printf("var %s, new cnt = %d, old cnt = %d [%s]\n",
     //                 name(), cnt, old_cnt, var_info_name.inOrderTraversal());
     return cnt;
   }
@@ -3867,7 +3870,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!rep_type.isArray()) return false;
 
     // If $Field or $Type appears before $Elements, false.
-    // System.out.printf ("%s flatten %s%n", name(), name);
+    // System.out.printf("%s flatten %s%n", name(), name);
     for (VarInfoName node : (new VarInfoName.InorderFlattener(var_info_name)).nodes()) {
       if (node instanceof VarInfoName.Field) {
         return false;
@@ -3918,12 +3921,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     } else {
       List<VarInfoName> traversal = new VarInfoName.InorderFlattener(var_info_name).nodes();
       if (traversal.size() <= 1) {
-        // System.out.printf ("size <= 1, traversal = %s%n", traversal);
+        // System.out.printf("size <= 1, traversal = %s%n", traversal);
         return null;
       } else {
         VarInfo enclosing_vi = ppt.find_var_by_name(traversal.get(1).name());
         // if (enclosing_vi == null)
-        //  System.out.printf ("Can't find '%s' in %s%n",
+        //  System.out.printf("Can't find '%s' in %s%n",
         //                      traversal.get(1).name(), ppt.varNames());
         return enclosing_vi;
       }
@@ -4021,10 +4024,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
             apply_subscript(
                 seq.parent_var_name(rid), String.format(parent_format, begin_pname, end_pname));
         parent.parent_variable = res;
-        // System.out.printf ("-- set parent var from '%s' '%s' '%s' '%s'%n",
+        // System.out.printf("-- set parent var from '%s' '%s' '%s' '%s'%n",
         //       seq.parent_var_name(), parent_format, begin_pname, end_pname);
       }
-      // System.out.printf ("Parent for %s:%s is %s:%s%n",
+      // System.out.printf("Parent for %s:%s is %s:%s%n",
       //                ((seq.ppt != null)? seq.ppt.name() : "none"), vi.name(),
       //                  vi.parent_ppt, vi.parent_variable);
     }
@@ -4318,7 +4321,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       if ((derived != null) && (derived instanceof SequenceSubsequence)) {
         if (name().contains("-1")) {
           SequenceSubsequence ss = (SequenceSubsequence) derived;
-          // System.out.printf ("checking %s[%08X] with derived %s[%08X]%n",
+          // System.out.printf("checking %s[%08X] with derived %s[%08X]%n",
           //                   this, System.identityHashCode (this), derived,
           //                   System.identityHashCode (derived));
           assert ss.index_shift == -1

@@ -212,7 +212,7 @@ public class DynComp {
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s\n", path_separator);
     if (path_separator == null) {
-      path_separator = ";"; //should work for windows at least...
+      path_separator = ";"; // should work for windows at least...
     } else if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.TerminationMessage(
           "Bad regexp "
@@ -231,7 +231,7 @@ public class DynComp {
         } else {
           poss_premain = new File(path, "dcomp_premain.jar");
         }
-        // System.out.printf ("looking for file %s%n", poss_premain);
+        // System.out.printf("looking for file %s%n", poss_premain);
         if (poss_premain.canRead()) {
           premain = poss_premain;
           break;

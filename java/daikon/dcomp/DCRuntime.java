@@ -483,7 +483,7 @@ public final class DCRuntime {
       }
     }
 
-    // System.out.printf ("has_instrumented: %s %s %s%n", c, method_name,
+    // System.out.printf("has_instrumented: %s %s %s%n", c, method_name,
     //                   dcompmarker);
 
     Class<?>[] args = new Class<?>[] {dcompmarker};
@@ -493,7 +493,7 @@ public final class DCRuntime {
         m = c.getDeclaredMethod(method_name, args);
       } catch (Exception e) {
       }
-      // System.out.printf ("Class %s instrumented %s = %s%n", c, method_name, m);
+      // System.out.printf("Class %s instrumented %s = %s%n", c, method_name, m);
       if (m != null) {
         return true;
       }
@@ -590,7 +590,7 @@ public final class DCRuntime {
     }
 
     int frame_size = ((int) params.charAt(0)) - '0';
-    //Character.digit (params.charAt(0), Character.MAX_RADIX);
+    // Character.digit (params.charAt(0), Character.MAX_RADIX);
     Object[] tag_frame = new Object[frame_size];
     if (debug_tag_frame) {
       System.out.printf(
@@ -598,7 +598,7 @@ public final class DCRuntime {
     }
     for (int ii = 1; ii < params.length(); ii++) {
       int offset = params.charAt(ii) - '0';
-      //Character.digit (params.charAt(ii), Character.MAX_RADIX);
+      // Character.digit (params.charAt(ii), Character.MAX_RADIX);
       assert td.tag_stack.peek() != method_marker;
       tag_frame[offset] = td.tag_stack.pop();
       if (debug_tag_frame) {
@@ -616,7 +616,7 @@ public final class DCRuntime {
       System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);
     }
 
-    //debug_print_call_stack();
+    // debug_print_call_stack();
 
     return tag_frame;
   }
@@ -1566,10 +1566,10 @@ public final class DCRuntime {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
         ArrayInfo ai = (ArrayInfo) child;
-        // System.out.printf ("child array type %s = %s%n", ai, ai.getType());
+        // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
-        // System.out.printf ("found arr_tag %s for arr %s\n", arr_tags, tag);
-        // System.out.printf ("tag values = %s%n", Arrays.toString (arr_tags));
+        // System.out.printf("found arr_tag %s for arr %s\n", arr_tags, tag);
+        // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
       } else { // not a primitive array
         child_obj = child.getMyValFromParentVal(tag);
@@ -1728,10 +1728,10 @@ public final class DCRuntime {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
         ArrayInfo ai = (ArrayInfo) child;
-        // System.out.printf ("child array type %s = %s%n", ai, ai.getType());
+        // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
-        // System.out.printf ("found arr_tag %s for arr %s\n", arr_tags, tag);
-        // System.out.printf ("tag values = %s%n", Arrays.toString (arr_tags));
+        // System.out.printf("found arr_tag %s for arr %s\n", arr_tags, tag);
+        // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
       } else { // not a primitive array
         child_obj = child.getMyValFromParentVal(tag);
@@ -1893,7 +1893,7 @@ public final class DCRuntime {
       if (!dv.declShouldPrint()) {
         continue;
       }
-      // System.out.printf ("      processing dv %s [%s]%n", dv,
+      // System.out.printf("      processing dv %s [%s]%n", dv,
       //                    dv.getTypeName());
       if (dv.isHashcode()) {
         hashcode_var_cnt++;
@@ -2048,11 +2048,11 @@ public final class DCRuntime {
       // variables.  If it does, it is indicating index comparability
       boolean hashcode_vars = false;
       boolean non_hashcode_vars = false;
-      // System.out.printf ("Checking dv set %s%n", set);
+      // System.out.printf("Checking dv set %s%n", set);
       for (DaikonVariableInfo dv : set) {
         if (dv.isHashcode() || dv.isHashcodeArray()) hashcode_vars = true;
         else non_hashcode_vars = true;
-        // System.out.printf ("dv = %s, hashcode_var = %b%n",
+        // System.out.printf("dv = %s, hashcode_var = %b%n",
         //                   dv, dv.isHashcode() || dv.isHashcodeArray());
       }
       debug_decl_print.log(
@@ -2078,7 +2078,8 @@ public final class DCRuntime {
           dv_comp_map.put(dv, base_comp + 1);
           DaikonVariableInfo array_child = dv.array_child();
           if (array_child != null) {
-            // System.out.printf ("array_index_map put: %s, %d%n", array_child.getName(), base_comp);
+            // System.out.printf("array_index_map put: %s, %d%n", array_child.getName(),
+            // base_comp);
             arr_index_map.put(array_child.getName(), base_comp);
           }
         } else {
@@ -2106,7 +2107,7 @@ public final class DCRuntime {
       if ((dv instanceof RootInfo) || (dv instanceof StaticObjInfo) || !dv.declShouldPrint()) {
         continue;
       }
-      // System.out.printf ("Output dv: %s ", dv);
+      // System.out.printf("Output dv: %s ", dv);
       ps.println(dv.getName());
       ps.println(dv.getTypeName());
       ps.println(dv.getRepTypeName());
@@ -2121,7 +2122,7 @@ public final class DCRuntime {
           name = name.substring(0, name.length() - ".toString".length());
         }
         Integer index_comp = arr_index_map.get(name);
-        // System.out.printf ("compare: %d [ %s ] ", comp, index_comp);
+        // System.out.printf("compare: %d [ %s ] ", comp, index_comp);
         if (index_comp != null) {
           // System.out.println(comp + "[" + index_comp + "]");
           ps.println(comp + "[" + index_comp + "]");
@@ -2471,7 +2472,7 @@ public final class DCRuntime {
       if (mi.traversalEnter == null) {
         // mi.initViaReflection();
         mi.init_traversal(depth);
-        // System.out.printf ("Warning: Method %s never executed%n", mi);
+        // System.out.printf("Warning: Method %s never executed%n", mi);
       }
     }
 
@@ -2873,9 +2874,9 @@ public final class DCRuntime {
     Object tag = new Constant();
     debug_primitive.log("push literal constant tag: %s%n", tag);
     td.tag_stack.push(tag);
-    //System.out.printf ("tag_stack size: %d%n", td.tag_stack.size());
+    // System.out.printf("tag_stack size: %d%n", td.tag_stack.size());
 
-    //debug_print_call_stack();
+    // debug_print_call_stack();
   }
 
   /**
@@ -3009,7 +3010,7 @@ public final class DCRuntime {
     Object get_tag(Object parent, Object obj) {
       Object tag;
       // jhp - not sure why these are not null...
-      //assert parent == null && obj == null
+      // assert parent == null && obj == null
       //  : " parent/obj = " + obj_str(parent) + "/" + obj_str(obj);
       try {
         ThreadData td = thread_to_data.get(Thread.currentThread());

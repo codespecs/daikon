@@ -98,11 +98,12 @@ public class ParentFilter extends InvariantFilter {
       }
       if (Debug.logDetail()) inv.log("Found parent slice: %s", pslice.name());
 
-      // System.out.printf ("  found parent slice (%d invs): %s%n", pslice.invs.size(), pslice.name());
+      // System.out.printf("  found parent slice (%d invs): %s%n", pslice.invs.size(),
+      // pslice.name());
 
       // Look for a matching invariant in the parent slice.
       for (Invariant pinv : pslice.invs) {
-        // System.out.printf ("  inv in parent slice: %s%n", pinv.format());
+        // System.out.printf("  inv in parent slice: %s%n", pinv.format());
         if (pinv.isGuardingPredicate) {
           continue;
         }

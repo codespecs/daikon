@@ -249,7 +249,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       // Create a new test case
       //  FormatTestCase currentCase = FormatTestCase.instantiate(commands, generateGoals);
 
-      //if (currentCase == null)
+      // if (currentCase == null)
       //  break;
       //  else {
       //  invariantTestCases.add(currentCase);

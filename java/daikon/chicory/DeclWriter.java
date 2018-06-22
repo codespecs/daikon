@@ -642,7 +642,7 @@ public class DeclWriter extends DaikonWriter {
       if ((relation == null) && (relations != null)) {
         relation = find_relation(cinfo, is_static_method, parent, var);
         if (relation != null) {
-          // System.out.printf ("Found relation %s, variable %s%n", relation,
+          // System.out.printf("Found relation %s, variable %s%n", relation,
           //                   var);
           int index = relations.indexOf(relation);
           assert (index != -1) : "Relation " + relation + " not found in " + relations;
@@ -662,7 +662,7 @@ public class DeclWriter extends DaikonWriter {
           int index = relations.indexOf(relation);
           assert (index != -1) : "Relation " + relation + " not found in " + relations;
           relation = relations.get(index);
-          // System.out.printf ("Found class relation %s for cinfo %s%n",
+          // System.out.printf("Found class relation %s for cinfo %s%n",
           //                   relation, cinfo);
         } else {
           System.out.printf("No class relation found for cinfo %s%n", cinfo);
@@ -719,7 +719,7 @@ public class DeclWriter extends DaikonWriter {
 
     // Get the type (class) of this variable
     String decl_type = var.getTypeNameOnly();
-    // System.out.printf ("Looking for hierarchy type %s%n", decl_type);
+    // System.out.printf("Looking for hierarchy type %s%n", decl_type);
 
     // If this ppt is the object ppt for this type, don't create a relation
     // to it.
@@ -735,10 +735,10 @@ public class DeclWriter extends DaikonWriter {
     // are static variables.
     for (ClassInfo ci : SharedData.all_classes) {
       if (ci.class_name.equals(decl_type)) {
-        // System.out.printf ("*Found match for %s : %s%n", decl_type, ci);
+        // System.out.printf("*Found match for %s : %s%n", decl_type, ci);
         String ppt_marker = ":::OBJECT";
         if (is_static_method && (var instanceof StaticObjInfo)) {
-          // System.out.printf ("num_class_vars for classinfo %s%n", ci);
+          // System.out.printf("num_class_vars for classinfo %s%n", ci);
           if (num_class_vars(ci) == 0) {
             return null;
           }

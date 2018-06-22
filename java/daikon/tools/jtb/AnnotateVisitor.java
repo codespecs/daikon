@@ -338,7 +338,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     // if (debug) {
-    //   System.out.printf("get_requires_and_ensures(%s):%n  => requires=%s%n  => ensures=%s%n", n, requires_invs, ensures_invs);
+    //   System.out.printf("get_requires_and_ensures(%s):%n  => requires=%s%n  => ensures=%s%n", n,
+    //                     requires_invs, ensures_invs);
     // }
 
     return new /*@Nullable*/ InvariantsAndModifiedVars[] {requires_invs, ensures_invs};
@@ -433,7 +434,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     // Grammar production for ClassOrInterfaceBodyDeclaration:
     // f0 -> Initializer()
-    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) |
+    // ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
     //       | ";"
 
     super.visit(n); // call "accept(this)" on each field

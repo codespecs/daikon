@@ -27,7 +27,8 @@ public class MinusVisitor extends DepthFirstVisitor {
   /** Possibly add the first invariant to the result set. */
   @Override
   @SuppressWarnings(
-      "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode has already been visited
+      "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode
+  // has already been visited
   /*@RequiresNonNull("currentPpt")*/
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();

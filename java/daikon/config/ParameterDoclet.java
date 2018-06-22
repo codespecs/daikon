@@ -198,7 +198,7 @@ public class ParameterDoclet {
 
   /** Add (name, desc) pair to the map field 'fields' for the appropriate category. */
   public void process(String fullname, String name, String desc) {
-    // System.out.printf ("%s - %s%n", fullname, name);
+    // System.out.printf("%s - %s%n", fullname, name);
 
     if ("".equals(desc.trim())) {
       desc = NO_DESCRIPTION;

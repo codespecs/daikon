@@ -106,7 +106,8 @@ public class InvDef {
   //    * suppressees and we always know the correct permuation in that
   //    * instance.
   //    */
-  //   public InvDef (int v1_index, int v2_index, int v3_index, Class<? extends Invariant> inv_class) {
+  //   public InvDef (int v1_index, int v2_index, int v3_index, Class<? extends Invariant>
+  // inv_class) {
   //
   //     assert v1_index < v2_index;
   //     assert v2_index < v3_index;

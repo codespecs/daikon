@@ -578,7 +578,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   @Override
   protected INTEQUAL instantiate_dyn(/*>>> @Prototype INTEQUAL this,*/ PptSlice slice) {
     #if defined (NONEQUAL)
-    // System.out.printf ("Instantiating non-equal on %s and %s%n",
+    // System.out.printf("Instantiating non-equal on %s and %s%n",
     //                     slice.var_infos[0], slice.var_infos[1]);
     #endif
     return new INTEQUAL(slice);
@@ -635,7 +635,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     // If the invariant is suppressed, create it
     if ((suppressions != null) && suppressions.suppressed(ppt)) {
       INTEQUAL inv = proto.instantiate_dyn(ppt);
-      // System.out.printf ("%s is suppressed in ppt %s%n", inv.format(), ppt.name());
+      // System.out.printf("%s is suppressed in ppt %s%n", inv.format(), ppt.name());
       return inv;
     }
 

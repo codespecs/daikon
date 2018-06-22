@@ -212,7 +212,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         throw e;
       }
     }
-    // System.out.println("esc_name = " + esc_name_cached + " for " + name() + " of class " + this.getClass().getName());
+    // System.out.println("esc_name = " + esc_name_cached + " for " + name() + " of class " +
+    // this.getClass().getName());
     return esc_name_cached;
   }
 
@@ -293,7 +294,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         throw e;
       }
     }
-    // System.out.println("jml_name = " + jml_name_cached + " for " + name() + " of class " + this.getClass().getName());
+    // System.out.println("jml_name = " + jml_name_cached + " for " + name() + " of class " +
+    // this.getClass().getName());
     return jml_name_cached;
   }
 
@@ -354,7 +356,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         throw e;
       }
     }
-    // System.out.println("identifier_name = " + identifier_name_cached + " for " + name() + " of class " + this.getClass().getName());
+    // System.out.println("identifier_name = " + identifier_name_cached + " for " + name() + " of
+    // class " + this.getClass().getName());
     return identifier_name_cached;
   }
 
@@ -384,7 +387,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     // profiling when it was determined that the interns are unique
     // anyway.
     if (repr_cached == null) {
-      repr_cached = repr_impl(); //.intern();
+      repr_cached = repr_impl(); // .intern();
     }
     return repr_cached;
   }
@@ -467,7 +470,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return true;
     }
     if (this instanceof VarInfoName.Prestate
-        && ((VarInfoName.Prestate) this).term.name() == "this") { //interned
+        && ((VarInfoName.Prestate) this).term.name() == "this") { // interned
       return true;
     }
 
@@ -1104,7 +1107,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       assert v.isDerived();
       Derivation derived = v.derived;
       assert derived instanceof BinaryDerivation;
-      //|| derived instanceof TernaryDerivation);
+      // || derived instanceof TernaryDerivation);
       assert args.size() == 2;
       VarInfo arg1VarInfo = ((BinaryDerivation) derived).base1;
       VarInfo arg2VarInfo = ((BinaryDerivation) derived).base2;
@@ -1331,9 +1334,10 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       String[] splits = null;
       boolean isStatic = false;
       String packageNamePrefix = null;
-      //if (isStatic) {
+      // if (isStatic) {
       if (term_name_no_brackets.startsWith(packageName + ".")) {
-        //           throw new Error("packageName=" + packageName + ", term_name_no_brackets=" + term_name_no_brackets);
+        //           throw new Error("packageName=" + packageName + ", term_name_no_brackets=" +
+        //                           term_name_no_brackets);
         //         }
         // Before splitting, remove the package name.
         packageNamePrefix = (packageName.equals("") ? "" : packageName + ".");
@@ -3277,7 +3281,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
             index_vin = VarInfoName.parse(index_base);
           }
           // if (index_base.contains ("a"))
-          //  System.out.printf ("selectNth: '%s' '%s'%n", index_base,
+          //  System.out.printf("selectNth: '%s' '%s'%n", index_base,
           //                     index_vin);
         } else {
           index_vin = new Simple(index_off + "");
@@ -3285,7 +3289,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         VarInfoName to_replace = unquants.get(0);
         VarInfoName[] replace_result = replace(root, to_replace, index_vin);
         // if ((index_base != null) && index_base.contains ("a"))
-        //   System.out.printf ("root = %s, to_replace = %s, index_vin = %s%n",
+        //   System.out.printf("root = %s, to_replace = %s, index_vin = %s%n",
         //                      root, to_replace, index_vin);
         return replace_result[0];
       } else {
@@ -3421,15 +3425,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      * other elements are jml-named strings for the provided roots (with sequenced subscripted by
      * one of the new bound variables).
      */
-    //     public static String[] format_jml(VarInfoName[] roots) {
-    //       return format_jml(roots, false);
-    //     }
-    //     public static String[] format_jml(VarInfoName[] roots, boolean elementwise) {
-    //       return format_jml(roots, elementwise, true);
-    //     }
-    //     public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
-    //       return format_java_style(roots, elementwise, forall, OutputFormat.JML);
-    //     }
+    // public static String[] format_jml(VarInfoName[] roots) {
+    //   return format_jml(roots, false);
+    // }
+    // public static String[] format_jml(VarInfoName[] roots, boolean elementwise) {
+    //   return format_jml(roots, elementwise, true);
+    // }
+    // public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
+    //   return format_java_style(roots, elementwise, forall, OutputFormat.JML);
+    // }
 
     /* CP: Quantification for DBC: We would like quantified expression
      * to always return a boolean value, and in the previous
@@ -3487,10 +3491,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     //     public static String[] format_dbc(VarInfoName[] roots, VarInfo[] varinfos) {
     //       return format_dbc(roots, true, varinfos);
     //     }
-    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise, VarInfo[] varinfos) {
+    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise,
+    //                                       VarInfo[] varinfos) {
     //       return format_dbc(roots, elementwise, true, varinfos);
     //     }
-    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise, boolean forall, VarInfo[] varinfos) {
+    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise,
+    //                                       boolean forall, VarInfo[] varinfos) {
     //       assert roots != null;
 
     //       QuantifyReturn qret = quantify(roots);
@@ -3556,10 +3562,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     //               conditions.append("))");
     //             }
     //           }
-    //           tempResult.append(" for (int " + int_list + " ; " + conditions + "; " + closing + ") ");
+    //           tempResult.append(" for (int " + int_list + " ; " + conditions + "; " + closing +
+    // ") ");
     //         }
     //       }
-    //       //result[0] = "{ for (int " + int_list + " ; " + conditions + "; " + closing + ") $assert ("; //@TX
+    //       //result[0] = "{ for (int " + int_list + " ; " + conditions + "; "
+    //                     + closing + ") $assert ("; //@TX
     //       result[0] = "{ " + tempResult + " $assert ("; //@TX
     //       result[result.length - 1] = "); }";
 
@@ -3748,7 +3756,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     //     public static String[] format_jml(QuantifyReturn qret, boolean elementwise) {
     //       return format_java_style(qret, elementwise, true, OutputFormat.JML);
     //     }
-    //     public static String[] format_jml(QuantifyReturn qret, boolean elementwise, boolean forall) {
+    //     public static String[] format_jml(QuantifyReturn qret, boolean elementwise, boolean
+    // forall) {
     //       return format_java_style(qret, elementwise, forall, OutputFormat.JML);
     //     }
 

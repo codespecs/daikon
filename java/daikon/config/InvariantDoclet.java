@@ -90,12 +90,12 @@ public class InvariantDoclet {
     @SuppressWarnings("keyfor") // the loop below makes all these keys to cmap
     /*@KeyFor("cmap")*/ ClassDoc[] clazzes = root.classes();
 
-    //go through all of the classes and intialize the map
+    // go through all of the classes and intialize the map
     for (ClassDoc cd : clazzes) {
       cmap.put(cd, new TreeSet</*@KeyFor("cmap")*/ ClassDoc>());
     }
 
-    //go through the list again and put in the derived class information
+    // go through the list again and put in the derived class information
     for (ClassDoc cd : clazzes) {
       ClassDoc super_c = cd.superclass();
       if (super_c != null) {
@@ -110,17 +110,17 @@ public class InvariantDoclet {
     }
 
     if (dump_class_tree) {
-      //loop through each class in order
+      // loop through each class in order
       for (ClassDoc cd : cmap.keySet()) {
 
-        //if this is a top level class
+        // if this is a top level class
         if ((cd.superclass() == null) || (cmap.get(cd.superclass()) == null)) {
           process_class_tree_txt(System.out, cd, 0);
         }
       }
     }
 
-    //do the specified work
+    // do the specified work
     String[][] options = root.options();
     for (int i = 0; i < options.length; i++) {
       String[] optset = options[i];
@@ -163,12 +163,12 @@ public class InvariantDoclet {
 
     String prefix = "";
 
-    //create the prefix string
+    // create the prefix string
     for (int i = 0; i < indent; i++) {
       prefix += "+";
     }
 
-    //put out this class
+    // put out this class
     String is_abstract = "";
     if (cd.isAbstract()) is_abstract = " (Abstract)";
     out.println(prefix + cd + is_abstract);
@@ -177,7 +177,7 @@ public class InvariantDoclet {
     comment = UtilPlume.replaceString(comment, lineSep, lineSep + "        ");
     out.println(comment);
 
-    //put out each derived class
+    // put out each derived class
     Set</*@KeyFor("cmap")*/ ClassDoc> derived = cmap.get(cd);
     for (ClassDoc dc : derived) {
       process_class_tree_txt(out, dc, indent + 1);
@@ -274,7 +274,7 @@ public class InvariantDoclet {
         out.println("@samp{" + dc + ".enabled}.");
       }
 
-      //get a list of any other configuration variables
+      // get a list of any other configuration variables
       List<FieldDoc> config_vars = find_fields(dc, Configuration.PREFIX);
       for (int i = 0; i < config_vars.size(); i++) {
         FieldDoc f = config_vars.get(i);
