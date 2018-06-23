@@ -48,8 +48,6 @@ public class LinearTernaryCoreTest extends TestCase {
 
   public void test_set_tri_linear() {
     one_test_set_tri_linear(new int[][] {{1, 2, 1}, {2, 1, 7}, {3, 3, 7}}, 4, -2, -1, 1);
-    //     # like the above, but swap y and z; results in division-by-zero problem
-    //     # tri_linear_relationship((1,1,2),(2,7,1),(3,7,3))
     one_test_set_tri_linear(
         new int[][] {{1, 2, 6}, {2, 1, -4}, {3, 3, 7}},
         //    -3, 7, -1, -5);
