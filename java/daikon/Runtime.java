@@ -321,8 +321,10 @@ public final class Runtime {
   // //   SomeClass.daikonPrint
   // // because daikonPrint doesn't (yet) exist in SomeClass.java.
   // // Later we will fix up all references to this.
-  // public static void daikonPrint_dummy(Object x, PrintStream ps, int depth, String prefix, String target) {
-  //   throw new Error("Unreplaced call to DaikonRuntime.daikonPrint_dummy(" + x + ", " + ps + ", " + depth + ", " + prefix + ", " + target + ")");
+  // public static void daikonPrint_dummy(Object x, PrintStream ps, int depth, String prefix, String
+  // target) {
+  //   throw new Error("Unreplaced call to DaikonRuntime.daikonPrint_dummy(" + x + ", " + ps + ", "
+  // + depth + ", " + prefix + ", " + target + ")");
   // }
 
   // Some of these functions could be open-coded, but I don't want to get

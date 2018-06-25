@@ -133,7 +133,7 @@ public class ContextSplitterFactory {
         }
 
         // Example line:
-        //   0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP meth
+        // 0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP meth
         // where this ^ is a tab and the rest are single spaces
         long id;
         String fromclass, frommeth, fromfile;

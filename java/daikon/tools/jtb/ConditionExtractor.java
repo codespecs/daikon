@@ -237,7 +237,8 @@ class ConditionExtractor extends DepthFirstVisitor {
 
   // f0 -> "for"
   // f1 -> "("
-  // f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+  // f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ]
+  // ";" [ ForUpdate() ] )
   // f3 -> ")"
   // f4 -> Statement()
   /* Extract the condition in an 'for' statement */

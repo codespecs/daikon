@@ -227,14 +227,6 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return result;
   }
 
-  //     def comparable(self, other):
-  //         base1 = self.base
-  //         base2 = other.base
-  //         return ((self.dimensionality == other.dimensionality)
-  //                 and ((base1 == base2)
-  //                      or ((base1 == "integral") and (base2 in integral_types)) // interned strings
-  //                      or ((base2 == "integral") and (base1 in integral_types)))) // interned strings
-
   /**
    * Returns the type of elements of this. They may themselves be arrays if this is
    * multidimensional.
@@ -350,7 +342,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
           && (((val & 0x80000000L) == 0x80000000L) && ((val & 0xFFFFFFFF00000000L) == 0))) {
         long orig = val;
         val |= 0xFFFFFFFF00000000L;
-        // System.out.printf ("Warning: converted %d to %d\n", orig, val);
+        // System.out.printf("Warning: converted %d to %d\n", orig, val);
       }
       return val;
     }

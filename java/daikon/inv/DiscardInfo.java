@@ -38,7 +38,8 @@ public final class DiscardInfo {
   //  */
   // private String className;
 
-  // public DiscardInfo(String className, String discardFormat, DiscardCode discardCode, String discardString) {
+  // public DiscardInfo(String className, String discardFormat, DiscardCode discardCode,
+  //                    String discardString) {
   //   this.discardCode = discardCode;
   //   this.discardString = discardString;
   //   this.discardFormat = discardFormat;

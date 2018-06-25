@@ -30,7 +30,7 @@ public class DTraceReader extends DeclReader {
 
       for (String line = dtrace_file.readLine(); line != null; line = dtrace_file.readLine()) {
 
-        // System.out.printf ("Reading line %s%n", line);
+        // System.out.printf("Reading line %s%n", line);
 
         // Skip comments
         if (line.trim().startsWith("//") || line.trim().startsWith("#")) {

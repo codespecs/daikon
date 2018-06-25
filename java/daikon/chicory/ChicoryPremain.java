@@ -1,6 +1,6 @@
 package daikon.chicory;
 
-//import harpoon.ClassFile.HMethod;
+// import harpoon.ClassFile.HMethod;
 
 import static daikon.tools.nullness.NullnessUtils.castNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -119,10 +119,10 @@ public class ChicoryPremain {
       System.err.println("Executing a purity analysis is currently disabled");
       System.exit(1);
 
-      //runPurityAnalysis(Chicory.target_program);
-      //writePurityFile(Chicory.target_program + ".pure",
+      // runPurityAnalysis(Chicory.target_program);
+      // writePurityFile(Chicory.target_program + ".pure",
       //                Chicory.config_dir);
-      //doPurity = true;
+      // doPurity = true;
     } else if (Chicory.get_purity_file() != null) {
       readPurityFile(Chicory.get_purity_file(), Chicory.config_dir);
       doPurity = true;
@@ -139,7 +139,7 @@ public class ChicoryPremain {
           loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
       @SuppressWarnings("unchecked")
       Class<Instrument> c = (Class<Instrument>) transformer.getClass();
-      // System.out.printf ("Classloader of tranformer = %s%n",
+      // System.out.printf("Classloader of tranformer = %s%n",
       //                    c.getClassLoader());
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
@@ -219,7 +219,7 @@ public class ChicoryPremain {
 
       if (line != null) {
         pureMethods.add(line.trim());
-        // System.out.printf ("Adding '%s' to list of pure methods\n",
+        // System.out.printf("Adding '%s' to list of pure methods\n",
         //                   line);
       }
     } while (line != null);
@@ -229,7 +229,7 @@ public class ChicoryPremain {
     } catch (IOException e) {
     }
 
-    // System.out.printf ("leaving purify file\n");
+    // System.out.printf("leaving purify file\n");
 
   }
 
@@ -294,7 +294,7 @@ public class ChicoryPremain {
   public static boolean isMethodPure(Member member) {
     assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
 
-    //TODO just use Set.contains(member.toString()) ?
+    // TODO just use Set.contains(member.toString()) ?
     for (String methName : pureMethods) {
       if (methName.equals(member.toString())) {
         return true;
@@ -396,10 +396,10 @@ public class ChicoryPremain {
       }
 
       if (url1.getProtocol().equals("jar")) {
-        // System.out.printf ("url1 = %s, file=%s, path=%s, protocol=%s, %s%n",
+        // System.out.printf("url1 = %s, file=%s, path=%s, protocol=%s, %s%n",
         //                  url1, url1.getFile(), url1.getPath(),
         //                  url1.getProtocol(), url1.getClass());
-        // System.out.printf ("url2 = %s, file=%s, path=%s, protocol=%s, %s%n",
+        // System.out.printf("url2 = %s, file=%s, path=%s, protocol=%s, %s%n",
         //                    url2, url2.getFile(), url2.getPath(),
         //                    url2.getProtocol(), url1.getClass());
         String jar1 = extract_jar_path(url1);

@@ -65,8 +65,8 @@ public class InstrumentHandler extends CommandHandler {
   private String instrumented_directory = "instrumented-classes";
   private String checkersOutputDirName = "checker-classes";
 
-  @SuppressWarnings(
-      "enhancedfor.type.incompatible") // Checker Framework bug exposed on line "for (TypeDeclaration decl : oneFile.roots) {"
+  @SuppressWarnings("enhancedfor.type.incompatible") // Checker Framework bug exposed on line "for
+  // (TypeDeclaration decl : oneFile.roots) {"
   @Override
   public boolean handle(String[] args) {
 
@@ -107,7 +107,7 @@ public class InstrumentHandler extends CommandHandler {
 
     // Compile original sources (because daikon.tools.jtb.Ast accesses
     // them via reflection).
-    //compile(arguments.javaFileNames, "");
+    // compile(arguments.javaFileNames, "");
 
     // Create filenames including temp directory and package directories.
     List<ParseResults> parseResults =

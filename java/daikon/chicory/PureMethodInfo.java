@@ -133,7 +133,8 @@ public class PureMethodInfo extends DaikonVariableInfo {
     // Without this synchronization, other threads would observe that
     // startPure has been called and wouldn't do any output.
     synchronized (Runtime.class) {
-      // Initialization is unnecessary, but without it the Rawness Checker issues an error at the return statement.
+      // Initialization is unnecessary, but without it the Rawness Checker issues an error at the
+      // return statement.
       Object retVal = null;
       try {
         // TODO is this the best way to handle this problem?

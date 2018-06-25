@@ -168,7 +168,7 @@ public final class CLASSNAME extends SUPERCLASS {
         // Only happenes in internal format tests
         esc_name = var().name().replace("[]", "");
       } else {
-        // System.out.printf ("term = %s, var = %s%n", term.name, var().name);
+        // System.out.printf("term = %s, var = %s%n", term.name, var().name);
         esc_name = term.esc_name();
       }
       if (var().type.isArray()) {

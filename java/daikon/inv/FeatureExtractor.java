@@ -219,13 +219,15 @@ public final class FeatureExtractor {
     ArrayList<Invariant> nonusefulResult = new ArrayList<Invariant>();
     for (String useful : usefuls)
       for (Iterator<Invariant> invs = readInvMap(new File(useful)).invariantIterator();
-          invs.hasNext();
-          ) usefulResult.add(invs.next());
+          invs.hasNext(); ) {
+        usefulResult.add(invs.next());
+      }
 
     for (String nonuseful : nonusefuls)
       for (Iterator<Invariant> invs = readInvMap(new File(nonuseful)).invariantIterator();
-          invs.hasNext();
-          ) nonusefulResult.add(invs.next());
+          invs.hasNext(); ) {
+        nonusefulResult.add(invs.next());
+      }
 
     return Pair.of(usefulResult, nonusefulResult);
   }
@@ -338,7 +340,7 @@ public final class FeatureExtractor {
       } else {
         throw new IOException("Feature " + current.number + " not included in .names file");
       }
-      //names.println(current.number + ": continuous.");
+      // names.println(current.number + ": continuous.");
     }
     names.println("|End of .names file");
     names.close();
@@ -558,14 +560,14 @@ public final class FeatureExtractor {
     HashMap<Object, Integer> answer = new HashMap<Object, Integer>();
     Integer counter = 0;
 
-    //get a set of all Invariant classes
+    // get a set of all Invariant classes
     File top = new File(CLASSES);
     List<Class<? extends Invariant>> classes = getInvariantClasses(top);
 
     for (Class<? extends Invariant> currentClass : classes) {
       Field[] fields = currentClass.getFields();
       Method[] methods = currentClass.getMethods();
-      //handle the class
+      // handle the class
       counter = counter.intValue() + 1;
       answer.put(currentClass, counter);
 
@@ -573,10 +575,10 @@ public final class FeatureExtractor {
         for (int iC = 0; iC < NUM_VARS; iC++) {
           counter = counter.intValue() + 1;
           answer.put("Var#" + iC + "_" + currentClass.getName() + "Bool", counter);
-        } //reserve space for all the variables
+        } // reserve space for all the variables
       }
 
-      //handle all the fields
+      // handle all the fields
       for (int j = 0; j < fields.length; j++) {
         if (answer.get(fields[j]) == null) {
           //          if ((Boolean.TYPE.equals(fields[j].getType())) ||
@@ -600,7 +602,7 @@ public final class FeatureExtractor {
         }
       }
 
-      //handle all the methods with 0 parameters
+      // handle all the methods with 0 parameters
       for (int j = 0; j < methods.length; j++) {
         if ((answer.get(methods[j].getName()) == null)
             && (methods[j].getParameterTypes().length == 0)) {
@@ -732,7 +734,7 @@ public final class FeatureExtractor {
       }
     }
 
-    //cleanup answer
+    // cleanup answer
     TreeSet<IntDoublePair> final_answer = new TreeSet<IntDoublePair>();
     HashSet<Integer> index = new HashSet<Integer>();
     for (IntDoublePair current : answer) {
@@ -778,7 +780,7 @@ public final class FeatureExtractor {
       }
     }
 
-    //returns a valid hashCode
+    // returns a valid hashCode
     @Override
     /*@Pure*/
     public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {

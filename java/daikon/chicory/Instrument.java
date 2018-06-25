@@ -382,7 +382,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     return invokeList;
   }
 
-  //Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
+  // Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
   InstructionHandle[] offset_map;
 
   /**

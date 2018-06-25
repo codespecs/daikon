@@ -274,13 +274,17 @@ public final class TestAst extends TestCase {
     //
     // decl = methodDecls.get(22);
     // assert decl.f2.f0.tokenImage.equals("foo1") : decl.f2.f0.tokenImage;
-    // checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::ENTER", decl, matcher);
-    // checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::EXIT12", decl, matcher);
+    // checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::ENTER", decl,
+    // matcher);
+    // checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::EXIT12", decl,
+    // matcher);
     //
     // decl = methodDecls.get(23);
     // assert decl.f2.f0.tokenImage.equals("foo2") : decl.f2.f0.tokenImage;
-    // checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::ENTER", decl, matcher);
-    // checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::EXIT14", decl, matcher);
+    // checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::ENTER", decl,
+    // matcher);
+    // checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::EXIT14", decl,
+    // matcher);
 
   }
 }

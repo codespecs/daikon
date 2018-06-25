@@ -50,10 +50,10 @@ public class PptFile {
         assert line.trim().length() != 0;
         assert !line.startsWith("====================") : "line " + reader.getLineNumber();
         name = line;
-        //System.out.println("NAME " + name);
+        // System.out.println("NAME " + name);
         readingPptName = false;
       } else {
-        //System.out.println("LINE " + line);
+        // System.out.println("LINE " + line);
         if (line.startsWith("====================")) {
           // End of record.
           assert name != null : "@AssumeAssertion(nullness): was set on previous loop iteration";

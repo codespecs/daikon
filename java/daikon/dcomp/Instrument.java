@@ -44,7 +44,7 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // System.out.printf ("transform on %s%n", className);
+    // System.out.printf("transform on %s%n", className);
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) return null;

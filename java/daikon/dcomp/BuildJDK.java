@@ -1,4 +1,3 @@
-
 package daikon.dcomp;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -293,7 +292,7 @@ public class BuildJDK {
       Enumeration<JarEntry> entries = jfile.entries();
       while (entries.hasMoreElements()) {
         JarEntry entry = entries.nextElement();
-        // System.out.printf ("processing entry %s%n", entry);
+        // System.out.printf("processing entry %s%n", entry);
         final String entryName = entry.getName();
         if (!entryName.startsWith(prefixOfFilesToInclude) && !entryName.startsWith("META-INF")) {
           continue;

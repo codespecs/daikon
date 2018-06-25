@@ -88,7 +88,8 @@ class StatementReplacer extends DepthFirstVisitor {
     if (replacements >= MAXREPLACEMENTS) {
       return originalExpression;
     } else {
-      // System.out.println("makeReplacements(" + originalExpression + ") ==> " + replacedExpression);
+      // System.out.println("makeReplacements(" + originalExpression + ") ==> " +
+      // replacedExpression);
       return replacedExpression;
     }
   }

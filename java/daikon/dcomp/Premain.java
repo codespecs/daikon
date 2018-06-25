@@ -108,16 +108,16 @@ public class Premain {
         if (line == null) {
           break;
         }
-        // System.out.printf ("adding '%s'%n", line);
+        // System.out.printf("adding '%s'%n", line);
         pre_instrumented.add(line);
       }
     }
 
     // Find out what classes are already loaded
-    //Class<?>[] loaded_classes = inst.getAllLoadedClasses();
-    //for (Class<?> loaded_class : loaded_classes) {
-    // System.out.printf ("loaded class = %s\n", loaded_class.getName());
-    //}
+    // Class<?>[] loaded_classes = inst.getAllLoadedClasses();
+    // for (Class<?> loaded_class : loaded_classes) {
+    // System.out.printf("loaded class = %s\n", loaded_class.getName());
+    // }
 
     // Setup the shutdown hook
     Thread shutdown_thread = new ShutdownThread();
@@ -132,7 +132,7 @@ public class Premain {
           loader.loadClass("daikon.dcomp.Instrument").getDeclaredConstructor().newInstance();
       @SuppressWarnings("unchecked")
       Class<Instrument> c = (Class<Instrument>) transformer.getClass();
-      // System.out.printf ("Classloader of tranformer = %s%n",
+      // System.out.printf("Classloader of tranformer = %s%n",
       //                    c.getClassLoader());
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
@@ -232,8 +232,8 @@ public class Premain {
   public static PrintWriter open(File filename) {
     try {
       return new PrintWriter(Files.newBufferedWriter(filename.toPath(), UTF_8));
-      //return new PrintWriter (filename);
-      //return new PrintStream (new BufferedWriter
+      // return new PrintWriter (filename);
+      // return new PrintStream (new BufferedWriter
       //            (new Outpu32tStreamWriter (new FileOutputStream(filename))));
     } catch (Exception e) {
       throw new Error("Can't open " + filename, e);

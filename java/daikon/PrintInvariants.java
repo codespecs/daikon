@@ -739,7 +739,7 @@ public final class PrintInvariants {
     int ii = 0;
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       ppts[ii++] = ppt;
-      // System.out.printf ("considering ppt %s%n", ppts[ii-1].name());
+      // System.out.printf("considering ppt %s%n", ppts[ii-1].name());
     }
 
     for (int i = 0; i < ppts.length; i++) {
@@ -1456,9 +1456,9 @@ public final class PrintInvariants {
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   private static void finally_print_the_invariants(
       List<Invariant> invariants, PrintWriter out, PptTopLevel ppt) {
-    //System.out.printf ("Ppt %s%n", ppt.name());
-    //for (VarInfo vi : ppt.var_infos)
-    // System.out.printf ("  var %s canbemissing = %b%n", vi, vi.canBeMissing);
+    // System.out.printf("Ppt %s%n", ppt.name());
+    // for (VarInfo vi : ppt.var_infos)
+    // System.out.printf("  var %s canbemissing = %b%n", vi, vi.canBeMissing);
 
     int index = 0;
     for (Invariant inv : invariants) {
@@ -1694,7 +1694,7 @@ public final class PrintInvariants {
     }
     System.out.printf("%d physical invariants%n", inv_cnt);
 
-    //undo suppressions
+    // undo suppressions
     for (PptTopLevel ppt : ppts.pptIterable()) {
       NIS.create_suppressed_invs(ppt);
     }

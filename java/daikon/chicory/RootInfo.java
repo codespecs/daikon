@@ -12,7 +12,7 @@ import java.util.Arrays;
 @SuppressWarnings("nullness") // to do
 public class RootInfo extends DaikonVariableInfo {
   private RootInfo() {
-    //the root needs no name, etc. but set them to preserve nullness property
+    // the root needs no name, etc. but set them to preserve nullness property
     super(" RootInfo Object ", " RootInfo Object type ", " RootInfo Object reptype ");
   }
 

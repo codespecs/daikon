@@ -468,7 +468,7 @@ import typequals.*;
           new_ppt);
       // result.log (UtilPlume.backTrace());
     }
-    //if (debug.isLoggable(Level.FINE))
+    // if (debug.isLoggable(Level.FINE))
     //    debug.fine ("Invariant.transfer to " + new_ppt.name() + " "
     //                 + result.repr());
 
@@ -946,7 +946,8 @@ import typequals.*;
         }
       } else {
         // // Debugging
-        // System.out.println("ICFP: different parents for " + inv1.format() + ", " + inv2.format());
+        // System.out.println("ICFP: different parents for " + inv1.format() + ", " +
+        // inv2.format());
 
         for (int i = 0; i < vis1.length; i++) {
           String name1 = vis1[i].name();
@@ -1959,27 +1960,3 @@ import typequals.*;
     }
   }
 }
-
-//     def format(self, args=None):
-//         if self.one_of:
-//             # If it can be None, print it only if it is always None and
-//             # is an invariant over non-derived variable.
-//             if self.can_be_None:
-//                 if ((len(self.one_of) == 1)
-//                     and self.var_infos):
-//                     some_nonderived = false
-//                     for vi in self.var_infos:
-//                      some_nonderived = some_nonderived or not vi.is_derived
-//                     if some_nonderived:
-//                         return "%s = uninit" % (args,)
-//             elif len(self.one_of) == 1:
-//                 return "%s = %s" % (args, self.one_of[0])
-//             ## Perhaps I should unconditionally return this value;
-//             ## otherwise I end up printing ranges more often than small
-//             ## numbers of values (because when few values and many samples,
-//             ## the range always looks justified).
-//             # If few samples, don't try to infer a function over the values;
-//             # just return the list.
-//             elif (len(self.one_of) <= 3) or (self.samples < 100):
-//                 return "%s in %s" % (args, util.format_as_set(self.one_of))
-//         return None

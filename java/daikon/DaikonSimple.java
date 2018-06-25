@@ -138,7 +138,7 @@ public class DaikonSimple {
     SimpleProcessor processor = new SimpleProcessor();
     FileIO.read_data_trace_files(dtrace_files, all_ppts, processor, true);
 
-    //System.exit(0);
+    // System.exit(0);
 
     // Print out the invariants for each program point (sort first)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
