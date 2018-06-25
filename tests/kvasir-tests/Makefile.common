@@ -62,6 +62,10 @@ else
        GOAL := goal-CentOS-nonUWCSE
 endif
 endif
+ifeq ($(OS_REL),7.4.1708)
+# Standard version of CentOS
+       GOAL := goal-CentOS-nonUWCSE
+endif
 ifeq ($(OS_REL),7.3.1611)
 # Standard version of CentOS
        GOAL := goal-CentOS-nonUWCSE
