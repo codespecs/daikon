@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.6.6 (July 2, 2018)
+
+DynComp:
+- Fix issue #129 - Too many parameters for an annotation method.
+
+Fjalar/Kvasir:
+- Fix issue #27 - Incorrect categorization of some SIMD instructions.
+
+===========================================================================
+
 5.6.4 (April 3, 2018)
 
 Eliminate reliance on plume.jar file, in favor of smaller libraries
