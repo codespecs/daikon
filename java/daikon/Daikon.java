@@ -77,7 +77,7 @@ public final class Daikon {
    */
   public static int dkconfig_progress_delay = 1000;
 
-  public static final String release_version = "5.6.6";
+  public static final String release_version = "5.6.7";
   public static final String release_date = "July 2, 2018";
   public static final String release_string =
       "Daikon version "
