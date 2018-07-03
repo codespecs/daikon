@@ -6641,7 +6641,7 @@ It can be used on any programming language that can be compiled to LLVM.
 
 A front end for @nospellcheck{WS-BPEL} process definitions, named Takuan,
 is distributed
-separately; see @uref{https://neptuno.uca.es/redmine/projects/takuan-website}.
+separately; see @uref{http://web.archive.org/web/20160528161316/https://neptuno.uca.es/redmine/projects/takuan-website}.
 
 @cindex CITADEL front end for Eiffel
 @cindex front end for Eiffel
