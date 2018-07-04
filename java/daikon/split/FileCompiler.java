@@ -82,6 +82,19 @@ public final class FileCompiler {
   }
 
   /**
+   * Creates a new FileCompiler. Compared to {@link #FileCompiler(String,long)}, this constructor
+   * permits spaces and other special characters in the command and arguments.
+   *
+   * @param compiler a list of Strings representing a command that runs a Java compiler (it could be
+   *     the full path name or whatever is used on the commandline), plus any command-line options
+   * @param timeLimit the maximum permitted compilation time, in msec
+   */
+  @SuppressWarnings("value") // no index checker list support
+  public FileCompiler(/*(at)MinLen(1)*/ ArrayList<String> compiler, /*@Positive*/ long timeLimit) {
+    this(compiler.toArray(new String[0]), timeLimit);
+  }
+
+  /**
    * Creates a new FileCompiler.
    *
    * @param compiler a command that runs a Java compiler; for instance, it could be the full path
