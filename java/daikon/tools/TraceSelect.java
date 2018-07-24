@@ -229,7 +229,7 @@ public class TraceSelect {
       }
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new Error(e);
     }
   }
 
