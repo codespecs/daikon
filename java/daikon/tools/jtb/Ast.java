@@ -310,7 +310,7 @@ public class Ast {
       if (isInner((ClassOrInterfaceDeclaration) n1)) {
         // TODO: This works for anonymous classes (maybe), but is wrong for
         // non-anonymous inner classes.
-        className = "$inner" + "." + className;
+        className = "$inner." + className;
         currentNode = b;
       } else {
         String s = ((ClassOrInterfaceDeclaration) n1).f1.tokenImage;

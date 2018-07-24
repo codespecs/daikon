@@ -163,7 +163,7 @@ public class SampleTester extends TestCase {
   public void proc_sample_file(InputStream commands, String filename) throws IOException {
 
     if (PrintInvariants.dkconfig_print_inv_class) {
-      System.out.println("Warning: turning off " + "PrintInvariants.dkconfig_print_inv_class");
+      System.out.println("Warning: turning off PrintInvariants.dkconfig_print_inv_class");
       PrintInvariants.dkconfig_print_inv_class = false;
     }
 

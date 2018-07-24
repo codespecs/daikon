@@ -90,7 +90,7 @@ public class NonModulus extends SingleScalar {
 
   @Override
   public String repr(/*>>>@GuardSatisfied NonModulus this*/) {
-    return "NonModulus" + varNames() + ": " + "m=" + modulus + ",r=" + remainder;
+    return "NonModulus" + varNames() + ": m=" + modulus + ",r=" + remainder;
   }
 
   /*@SideEffectFree*/
