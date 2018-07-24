@@ -440,7 +440,7 @@ public class DtraceDiff {
       FileIO.ParseState state1, String dtracefile1, FileIO.ParseState state2, String dtracefile2) {
     throw new DiffError(
         String.format(
-            "Mismatched program point:%n" + "  ppt %s at %s:%d%n" + "  ppt %s at %s:%d",
+            "Mismatched program point:%n  ppt %s at %s:%d%n  ppt %s at %s:%d",
             state1.ppt.name,
             dtracefile1,
             state1.get_linenum(),
@@ -454,7 +454,7 @@ public class DtraceDiff {
       FileIO.ParseState state1, String dtracefile1, FileIO.ParseState state2, String dtracefile2) {
     throw new DiffError(
         String.format(
-            "Mismatched program point declaration:%n" + "  ppt %s at %s:%d%n" + "  ppt %s at %s:%d",
+            "Mismatched program point declaration:%n  ppt %s at %s:%d%n  ppt %s at %s:%d",
             state1.ppt.name,
             dtracefile1,
             state1.get_linenum(),

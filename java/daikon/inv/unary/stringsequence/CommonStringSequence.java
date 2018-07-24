@@ -66,7 +66,7 @@ public class CommonStringSequence extends SingleStringSequence {
 
   @Override
   public String repr(/*>>>@GuardSatisfied CommonStringSequence this*/) {
-    return "CommonStringSequence " + varNames() + ": " + "elts=\"" + elts;
+    return "CommonStringSequence " + varNames() + ": elts=\"" + elts;
   }
 
   private String printIntersect(/*>>>@GuardSatisfied CommonStringSequence this*/) {

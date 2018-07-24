@@ -75,7 +75,7 @@ public class Modulus extends SingleScalar {
 
   @Override
   public String repr(/*>>>@GuardSatisfied Modulus this*/) {
-    return "Modulus" + varNames() + ": " + "modulus=" + modulus + ",remainder=" + remainder;
+    return "Modulus" + varNames() + ": modulus=" + modulus + ",remainder=" + remainder;
   }
 
   /*@SideEffectFree*/

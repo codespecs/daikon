@@ -316,7 +316,7 @@ public class LogicalCompare {
               for (Lemma lem : assume) {
                 System.out.println("    " + lem.formula);
               }
-              System.out.println("    ----------------------" + "--------------------");
+              System.out.println("    ------------------------------------------");
               System.out.println("    " + inv.formula);
             }
           }
@@ -549,7 +549,7 @@ public class LogicalCompare {
           }
         } else if (line.startsWith("(")) {
           if (ppt_name == null) {
-            System.err.println("Must specify PPT_NAME before " + "giving a formula");
+            System.err.println("Must specify PPT_NAME before giving a formula");
             throw new Error();
           }
           String formula, comment;
@@ -573,7 +573,7 @@ public class LogicalCompare {
         } else {
           System.err.println("Can't parse " + line + " in assumptions file");
           System.err.println(
-              "Should be `PPT_NAME <ppt_name>' or a Simplify " + "formula (starting with `(')");
+              "Should be `PPT_NAME <ppt_name>' or a Simplify formula (starting with `(')");
           throw new Error();
         }
       }
@@ -622,9 +622,8 @@ public class LogicalCompare {
           new LongOpt("timing", LongOpt.NO_ARGUMENT, null, 0),
         };
 
-    Configuration.getInstance().apply("daikon.inv.Invariant." + "simplify_define_predicates=true");
-    Configuration.getInstance()
-        .apply("daikon.simplify.Session." + "simplify_max_iterations=2147483647");
+    Configuration.getInstance().apply("daikon.inv.Invariant.simplify_define_predicates=true");
+    Configuration.getInstance().apply("daikon.simplify.Session.simplify_max_iterations=2147483647");
 
     extra_assumptions = new LinkedHashMap<String, List<Lemma>>();
 

@@ -257,7 +257,7 @@ public class InstrumentHandler extends CommandHandler {
     String invfile = args[argindex];
     argindex++;
     if (!(invfile.endsWith(".inv") || invfile.endsWith(".inv.gz"))) {
-      System.out.println("Error: first argument must be a" + "file ending in .inv or .inv.gz.");
+      System.out.println("Error: first argument must be a file ending in .inv or .inv.gz.");
       return errorWhileReadingArguments;
     }
     if (argindex >= args.length) {

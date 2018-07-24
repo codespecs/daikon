@@ -42,7 +42,7 @@ public class ParseResults {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied ParseResults this*/) {
-    return "package name: " + packageName + ", " + "file name: " + fileName;
+    return "package name: " + packageName + ", file name: " + fileName;
   }
 
   /** If one of the files declares an interfaces, an error will occur. */
