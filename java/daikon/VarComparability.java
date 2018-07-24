@@ -97,7 +97,7 @@ public abstract class VarComparability {
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass()) {
       throw new Error(
           String.format(
-              "Trying to compare VarComparabilities " + "of different types: %s (%s) and %s (%s)",
+              "Trying to compare VarComparabilities of different types: %s (%s) and %s (%s)",
               type1.toString(), type1.getClass(), type2.toString(), type2.getClass()));
     }
 

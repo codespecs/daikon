@@ -28,14 +28,14 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   // reading from the file as a lazy iterator
   private BufferedReader br;
   // the name of the Daikon trace file
-  private String fileName;
+  private String filename;
 
   /** @param filename the Daikon trace file to be partitioned */
   public DtracePartitioner(String filename) {
     try {
-      this.fileName = filename;
-      // System.out.printf("trying with file %s%n", fileName);
-      br = UtilPlume.bufferedFileReader(fileName);
+      this.filename = filename;
+      // System.out.printf("trying with file %s%n", filename);
+      br = UtilPlume.bufferedFileReader(filename);
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -158,7 +158,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       // look for EXIT half of invocations and augment
       // the values of nonceMap so that the map eventually
       // maps nonces --> full invocations with ENTER / EXIT
-      br = UtilPlume.bufferedFileReader(fileName);
+      br = UtilPlume.bufferedFileReader(filename);
       while (br.ready()) {
         String nextInvo = grabNextInvocation();
         if (nextInvo.indexOf("EXIT") == -1) {
