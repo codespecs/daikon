@@ -79,7 +79,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
 
-    bufPrint("  " + "<");
+    bufPrint("  <");
 
     if (inv1 == null) {
       bufPrint(null);
@@ -114,7 +114,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
 
-    //    bufPrint("  " + "<");
+    //    bufPrint("  <");
 
     if (inv1 != null && inv2 != null && (inv1.format().equals(inv2.format()))) {
       return;

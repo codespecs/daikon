@@ -367,13 +367,69 @@ public final class Daikon {
           "  For a list of flags, see the Daikon manual, which appears in the ",
           "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
 
+  /** Indicates the need for Daikon to terminate. */
+  public abstract static class DaikonTerminationException extends RuntimeException {
+    static final long serialVersionUID = 20180729L;
+
+    public DaikonTerminationException() {
+      super();
+    }
+
+    public DaikonTerminationException(String message) {
+      super(message);
+    }
+
+    public DaikonTerminationException(Throwable e) {
+      super(e);
+    }
+
+    public DaikonTerminationException(String message, Throwable e) {
+      super(message, e);
+    }
+  }
+
+  /** Indicates that Daikon has terminated normally. */
+  public static class NormalTermination extends DaikonTerminationException {
+    static final long serialVersionUID = 20180729L;
+
+    public NormalTermination(String message) {
+      super(message);
+    }
+
+    public NormalTermination() {
+      super();
+    }
+  }
+
   /**
-   * Thrown to indicate that main should not print a stack trace, but only print the message itself
-   * to the user. Code in Daikon should throw this Exception in cases of user error, an throw other
-   * exceptions in cases of a Daikon bug or a system problem (like unpredictable IOExceptions). If
-   * the string is null, then this is normal termination, not an error; no message is printed.
+   * Indicates that Daikon has terminated abnormally, indicating a bug in Daikon. Also used to
+   * indicate a situation that should not happen.
    */
-  public static class TerminationMessage extends RuntimeException {
+  public static class BugInDaikon extends DaikonTerminationException {
+    static final long serialVersionUID = 20180729L;
+
+    public BugInDaikon(String message) {
+      super(message);
+    }
+
+    public BugInDaikon(Throwable e) {
+      super(e);
+    }
+
+    public BugInDaikon(String message, Throwable e) {
+      super(message, e);
+    }
+  }
+
+  /**
+   * Indicates a user error. Thrown to indicate that main should not print a stack trace, but only
+   * print the message itself to the user.
+   *
+   * <p>Code in Daikon should throw other exceptions such as BugInDaikon in cases of a Daikon bug or
+   * a system problem (like unpredictable IOExceptions). If the string is null, then this is normal
+   * termination, not an error; no message is printed.
+   */
+  public static class UserError extends DaikonTerminationException {
     static final long serialVersionUID = 20050923L;
 
     public static String error_at_line_file(LineNumberReader reader, String filename, Throwable e) {
@@ -392,12 +448,12 @@ public final class Daikon {
     }
 
     /// Constructors that take a Throwable
-    public TerminationMessage(Throwable e) {
+
+    public UserError(Throwable e) {
       super(e.getMessage());
     }
-    //    public TerminationMessage(Exception e) {
-    //      super(e.getMessage() + lineSep + UtilPlume.backTrace(e)); }
-    public TerminationMessage(Throwable e, String msg) {
+
+    public UserError(Throwable e, String msg) {
       super(
           ((e.getMessage() != null && msg.contains(e.getMessage()))
               ? msg
@@ -405,37 +461,38 @@ public final class Daikon {
           e);
     }
 
-    public TerminationMessage(Throwable e, FileIO.ParseState state) {
+    public UserError(Throwable e, FileIO.ParseState state) {
       this(e, error_at_line_file(state.reader, state.filename, e));
     }
 
-    public TerminationMessage(Throwable e, LineNumberReader reader, String filename) {
+    public UserError(Throwable e, LineNumberReader reader, String filename) {
       this(e, error_at_line_file(reader, filename, e));
     }
 
-    public TerminationMessage(Throwable e, String msg, LineNumberReader reader, String filename) {
+    public UserError(Throwable e, String msg, LineNumberReader reader, String filename) {
       this(e, error_at_line_file(reader, filename, msg));
     }
 
     /// Constructors that do not take a Throwable
-    public TerminationMessage() {
+
+    public UserError() {
       super("");
     }
 
-    public TerminationMessage(String s) {
+    public UserError(String s) {
       super(s);
     }
 
-    public TerminationMessage(String msg, FileIO.ParseState state) {
+    public UserError(String msg, FileIO.ParseState state) {
       super(error_at_line_file(state.reader, state.filename, msg));
     }
 
-    public TerminationMessage(String msg, LineNumberReader reader, String filename) {
+    public UserError(String msg, LineNumberReader reader, String filename) {
       super(error_at_line_file(reader, filename, msg));
     }
     // This constructor is too error-prone:  it leads to throwing away
     // subsequent args if there are not enough % directives in the string.
-    // public TerminationMessage(String format, /*@Nullable*/ Object... args) {
+    // public UserError(String format, /*@Nullable*/ Object... args) {
     //   super (String.format (format, args));
     // }
   }
@@ -447,39 +504,48 @@ public final class Daikon {
   public static void main(final String[] args) {
     try {
       mainHelper(args);
-    } catch (Configuration.ConfigException e) {
-      // I don't think this can happen.  -MDE
-      System.err.println();
-      System.err.println(e.getMessage());
-      System.exit(1);
-    } catch (TerminationMessage e) {
-      handleTerminationMessage(e);
-    }
-    // Any exception other than TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
-    // (TerminationMessages should be clear enough not to need a stack trace.)
-  }
-
-  /** Print a termination message and exit the JVM. */
-  public static void handleTerminationMessage(TerminationMessage e) {
-    System.err.println();
-    if (e.getMessage() != null) {
-      System.err.println(e.getMessage());
-      if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
-      System.exit(1);
-    } else {
-      if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
-      System.exit(0);
+    } catch (DaikonTerminationException e) {
+      handleDaikonTerminationException(e);
     }
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see TerminationMessage
+   * Handle DaikonTerminationExceptions. Others are left to be handled by the default handler, which
+   * prints a more informative stack trace.
+   */
+  public static void handleDaikonTerminationException(DaikonTerminationException e) {
+    if (e instanceof NormalTermination) {
+      System.out.println();
+      if (e.getMessage() != null) {
+        System.out.println(e.getMessage());
+      }
+      System.exit(0);
+    } else if (e instanceof UserError) {
+      System.err.println();
+      System.err.println(e.getMessage());
+      if (Debug.dkconfig_show_stack_trace) {
+        e.printStackTrace();
+      }
+      System.exit(1);
+    } else if (e instanceof BugInDaikon) {
+      System.err.println();
+      System.err.println("Bug in Daikon.  Please report.");
+      e.printStackTrace(System.err);
+      System.err.println("Bug in Daikon.  Please report.");
+      System.exit(2);
+    } else {
+      // This caes should never be executed.
+      System.err.println();
+      System.err.println("Bug in Daikon.  Please report.");
+      e.printStackTrace(System.err);
+      System.err.println("Bug in Daikon.  Please report.");
+      System.exit(2);
+    }
+  }
+
+  /**
+   * This does the work of {@link main()}, but it never calls System.exit, so it is appropriate to
+   * be called progrmmatically.
    */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public static void mainHelper(final String[] args) {
@@ -494,7 +560,7 @@ public final class Daikon {
     Set<File> map_files = files.map;
     if (server_dir == null && (decls_files.size() == 0) && (dtrace_files.size() == 0)) {
       System.out.println("No .decls or .dtrace files specified");
-      throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
+      throw new Daikon.UserError("No .decls or .dtrace files specified");
     }
 
     // Never disable splitting for csharp format.
@@ -694,7 +760,7 @@ public final class Daikon {
       } catch (InterruptedException e) {
       }
       if (fileio_progress.getState() != Thread.State.TERMINATED) {
-        throw new TerminationMessage("Can't stop fileio_progress thead");
+        throw new BugInDaikon("Can't stop fileio_progress thead");
       }
     }
     fileio_progress = null;
@@ -743,9 +809,9 @@ public final class Daikon {
   // Return {decls, dtrace, spinfo, map} files.
   protected static FileOptions read_options(String[] args, String usage) {
     if (args.length == 0) {
-      System.out.println("Daikon error: no files supplied on command line.");
+      System.out.println("Error: no files supplied on command line.");
       System.out.println(usage);
-      throw new Daikon.TerminationMessage();
+      throw new Daikon.UserError();
     }
 
     // LinkedHashSet because it can be confusing to users if files (of the
@@ -803,15 +869,14 @@ public final class Daikon {
           // Control output
           if (help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (no_text_output_SWITCH.equals(option_name)) {
             no_text_output = true;
           } else if (format_SWITCH.equals(option_name)) {
             String format_name = getOptarg(g);
             Daikon.output_format = OutputFormat.get(format_name);
             if (Daikon.output_format == null) {
-              throw new Daikon.TerminationMessage(
-                  "Unknown output format:  --format " + format_name);
+              throw new Daikon.UserError("Unknown output format:  --format " + format_name);
             }
           } else if (show_progress_SWITCH.equals(option_name)) {
             show_progress = true;
@@ -835,7 +900,7 @@ public final class Daikon {
                 // on the end (eg, a date, or ".gz").
                 File file = new File(filename);
                 if (!file.exists()) {
-                  throw new Daikon.TerminationMessage("File " + filename + " not found.");
+                  throw new Daikon.UserError("File " + filename + " not found.");
                 }
                 if (filename.indexOf(".decls") != -1) {
                   decl_files.add(file);
@@ -846,7 +911,7 @@ public final class Daikon {
                 } else if (filename.indexOf(".map") != -1) {
                   map_files.add(file);
                 } else {
-                  throw new Daikon.TerminationMessage("Unrecognized file extension: " + filename);
+                  throw new Daikon.UserError("Unrecognized file extension: " + filename);
                 }
               }
             } catch (IOException e) {
@@ -858,7 +923,7 @@ public final class Daikon {
             String f = getOptarg(g);
             for (int i = 0; i < f.length(); i++) {
               if ("0rs".indexOf(f.charAt(i)) == -1) {
-                throw new Daikon.TerminationMessage(
+                throw new Daikon.UserError(
                     "omit_from_output flag letter '" + f.charAt(i) + "' is unknown");
               }
               omit_types[f.charAt(i)] = true;
@@ -869,7 +934,7 @@ public final class Daikon {
           else if (conf_limit_SWITCH.equals(option_name)) {
             double limit = Double.parseDouble(getOptarg(g));
             if ((limit < 0.0) || (limit > 1.0)) {
-              throw new Daikon.TerminationMessage(conf_limit_SWITCH + " must be between [0..1]");
+              throw new Daikon.UserError(conf_limit_SWITCH + " must be between [0..1]");
             }
             Configuration.getInstance()
                 .apply("daikon.inv.Invariant.confidence_limit", String.valueOf(limit));
@@ -878,8 +943,7 @@ public final class Daikon {
               String list_type_string = getOptarg(g);
               ProglangType.list_implementors.add(list_type_string);
             } catch (Exception e) {
-              throw new Daikon.TerminationMessage(
-                  "Problem parsing " + list_type_SWITCH + " option: " + e);
+              throw new Daikon.UserError("Problem parsing " + list_type_SWITCH + " option: " + e);
             }
             break;
           } else if (user_defined_invariant_SWITCH.equals(option_name)) {
@@ -887,7 +951,7 @@ public final class Daikon {
               String user_defined_invariant_string = getOptarg(g);
               Matcher m = classGetNamePattern.matcher(user_defined_invariant_string);
               if (!m.matches()) {
-                throw new Daikon.TerminationMessage(
+                throw new Daikon.UserError(
                     "Bad argument "
                         + user_defined_invariant_string
                         + " for "
@@ -898,7 +962,7 @@ public final class Daikon {
               /*@ClassGetName*/ String cname = user_defined_invariant_string;
               userDefinedInvariants.add(cname);
             } catch (Exception e) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Problem parsing " + user_defined_invariant_SWITCH + " option: " + e);
             }
             break;
@@ -919,15 +983,14 @@ public final class Daikon {
             try {
               f = ClassLoader.class.getDeclaredField("classes");
             } catch (NoSuchFieldException e) {
-              throw new Daikon.TerminationMessage("Didn't find field ClassLoader.classes");
+              throw new Daikon.BugInDaikon("Didn't find field ClassLoader.classes");
             }
             f.setAccessible(true);
             Object classesAsObject;
             try {
               classesAsObject = f.get(Thread.currentThread().getContextClassLoader());
             } catch (IllegalAccessException e) {
-              throw new Daikon.TerminationMessage(
-                  "Field ClassLoader.classes was not made accessible");
+              throw new Daikon.BugInDaikon("Field ClassLoader.classes was not made accessible");
             }
             @SuppressWarnings({
               "unchecked", // type of ClassLoader.classes field is known
@@ -942,7 +1005,7 @@ public final class Daikon {
                 try {
                   Field field = invType.getField("dkconfig_enabled");
                   if (field.getType() != Boolean.TYPE) {
-                    throw new Daikon.TerminationMessage(
+                    throw new Daikon.BugInDaikon(
                         "Field "
                             + invType
                             + ".dkconfig_enabled has type "
@@ -959,7 +1022,7 @@ public final class Daikon {
                   // System.out.println(
                   //     "Class " + invType + " does not have a dkconfig_enabled field");
                 } catch (IllegalAccessException e) {
-                  throw new Daikon.TerminationMessage(
+                  throw new Daikon.BugInDaikon(
                       "IllegalAccessException for field " + invType + ".dkconfig_enabled");
                 }
               }
@@ -973,14 +1036,14 @@ public final class Daikon {
           // Process only part of the trace file
           else if (ppt_regexp_SWITCH.equals(option_name)) {
             if (ppt_regexp != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "multiple --"
                       + ppt_regexp_SWITCH
                       + " regular expressions supplied on command line");
             }
             String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -992,14 +1055,14 @@ public final class Daikon {
             break;
           } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
             if (ppt_omit_regexp != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "multiple --"
                       + ppt_omit_regexp_SWITCH
                       + " regular expressions supplied on command line");
             }
             String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -1011,14 +1074,14 @@ public final class Daikon {
             break;
           } else if (var_regexp_SWITCH.equals(option_name)) {
             if (var_regexp != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "multiple --"
                       + var_regexp_SWITCH
                       + " regular expressions supplied on command line");
             }
             String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -1030,14 +1093,14 @@ public final class Daikon {
             break;
           } else if (var_omit_regexp_SWITCH.equals(option_name)) {
             if (var_omit_regexp != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "multiple --"
                       + var_omit_regexp_SWITCH
                       + " regular expressions supplied on command line");
             }
             String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -1064,7 +1127,7 @@ public final class Daikon {
               InputStream stream = new FileInputStream(config_file);
               Configuration.getInstance().apply(stream);
             } catch (IOException e) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   // Is this the only possible reason for an IOException?
                   "Could not open config file " + config_file);
             }
@@ -1074,7 +1137,7 @@ public final class Daikon {
             try {
               Configuration.getInstance().apply(item);
             } catch (daikon.config.Configuration.ConfigException e) {
-              throw new Daikon.TerminationMessage(e);
+              throw new Daikon.UserError(e);
             }
             break;
           } else if (debugAll_SWITCH.equals(option_name)) {
@@ -1085,30 +1148,29 @@ public final class Daikon {
             LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
             String error = Debug.add_track(getOptarg(g));
             if (error != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Error parsing track argument '" + getOptarg(g) + "' - " + error);
             }
           } else if (disc_reason_SWITCH.equals(option_name)) {
             try {
               PrintInvariants.discReasonSetup(getOptarg(g));
             } catch (IllegalArgumentException e) {
-              throw new Daikon.TerminationMessage(e);
+              throw new Daikon.UserError(e);
             }
           } else if (mem_stat_SWITCH.equals(option_name)) {
             use_mem_monitor = true;
           } else {
-            throw new Daikon.TerminationMessage(
-                "Unknown option " + option_name + " on command line");
+            throw new Daikon.UserError("Unknown option " + option_name + " on command line");
           }
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case 'o':
           String inv_filename = getOptarg(g);
 
           if (inv_file != null) {
-            throw new Daikon.TerminationMessage(
+            throw new Daikon.UserError(
                 "multiple serialization output files supplied on command line: "
                     + inv_file
                     + " "
@@ -1118,19 +1180,17 @@ public final class Daikon {
           inv_file = new File(inv_filename);
 
           if (!UtilPlume.canCreateAndWrite(inv_file)) {
-            throw new Daikon.TerminationMessage(
-                "Cannot write to serialization output file " + inv_file);
+            throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
           //
         case '?':
           // break; // getopt() already printed an error
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
           //
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 
@@ -1146,7 +1206,7 @@ public final class Daikon {
 
       File file = new File(filename);
       if (!file.exists()) {
-        throw new Daikon.TerminationMessage("File " + file + " not found.");
+        throw new Daikon.UserError("File " + file + " not found.");
       }
       filename = file.toString();
 
@@ -1169,7 +1229,7 @@ public final class Daikon {
 
           inv_file = new File(inv_filename);
           if (!UtilPlume.canCreateAndWrite(inv_file)) {
-            throw new Daikon.TerminationMessage("Cannot write to file " + inv_file);
+            throw new Daikon.UserError("Cannot write to file " + inv_file);
           }
         }
       } else if (filename.indexOf(".spinfo") != -1) {
@@ -1177,7 +1237,7 @@ public final class Daikon {
       } else if (filename.indexOf(".map") != -1) {
         map_files.add(file);
       } else {
-        throw new Daikon.TerminationMessage("Unrecognized file type: " + file);
+        throw new Daikon.UserError("Unrecognized file type: " + file);
       }
     }
 
@@ -1458,7 +1518,7 @@ public final class Daikon {
       try {
         invClass = Class.forName(invariantClassName);
       } catch (ClassNotFoundException e) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Cannot load class "
                 + invariantClassName
                 + " in "
@@ -1469,10 +1529,10 @@ public final class Daikon {
       try {
         get_proto_method = invClass.getMethod("get_proto");
       } catch (NoSuchMethodException e) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "No get_proto() method in user-defined invariant class " + invariantClassName);
       } catch (SecurityException e) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             e,
             "SecurityException while looking up get_proto() method in user-defined invariant class "
                 + invariantClassName);
@@ -1482,13 +1542,13 @@ public final class Daikon {
         @SuppressWarnings("nullness") // null argument is OK because get_proto_method is static
         Object inv_as_object = get_proto_method.invoke(null);
         if (inv_as_object == null) {
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.UserError(
               invariantClassName
                   + ".get_proto() returned null but should have returned an Invariant");
         }
         if (!(inv_as_object instanceof Invariant)) {
           Class<?> cls = inv_as_object.getClass();
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.UserError(
               invariantClassName
                   + ".get_proto() returned object of the wrong type.  It should have been a subclass of invariant, but was "
                   + cls
@@ -1497,7 +1557,7 @@ public final class Daikon {
         }
         inv = (Invariant) inv_as_object;
       } catch (Exception e) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             e, "Exception while invoking " + invariantClassName + ".get_proto()");
       }
       proto_invs.add(inv);
@@ -1692,8 +1752,7 @@ public final class Daikon {
 
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
     if (entry_ppt == null) {
-      throw new Daikon.TerminationMessage(
-          "exit found with no corresponding entry: " + exit_ppt.name());
+      throw new Daikon.UserError("exit found with no corresponding entry: " + exit_ppt.name());
     }
 
     // Add "orig(...)" (prestate) variables to the program point.
@@ -1792,7 +1851,7 @@ public final class Daikon {
     } catch (IOException e) {
       // System.out.println();
       // e.printStackTrace();
-      throw new Daikon.TerminationMessage(e, "Error parsing decl file");
+      throw new Daikon.UserError(e, "Error parsing decl file");
     } finally {
       long duration = System.nanoTime() - startTime;
       debugProgress.fine(
@@ -2036,7 +2095,7 @@ public final class Daikon {
     }
 
     if (FileIO.dkconfig_read_samples_only) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.NormalTermination(
           String.format("Finished reading %d samples", FileIO.samples_processed));
     }
 
@@ -2051,7 +2110,7 @@ public final class Daikon {
                 + ((FileIO.omitted_declarations == 1) ? "declaration was" : "declarations were")
                 + " omitted by regexps (e.g., --ppt-select-pattern).";
       }
-      throw new Daikon.TerminationMessage(message);
+      throw new Daikon.UserError(message);
     }
 
     // System.out.println("samples processed: " + FileIO.samples_processed);
@@ -2059,7 +2118,7 @@ public final class Daikon {
     int unmatched_count = FileIO.call_stack.size() + FileIO.call_hashmap.size();
     if ((use_dataflow_hierarchy && FileIO.samples_processed == unmatched_count)
         || (FileIO.samples_processed == 0)) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "No samples found for any of " + UtilPlume.nplural(all_ppts.size(), "program point"));
     }
 
@@ -2328,9 +2387,8 @@ public final class Daikon {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100)) {
-      // The number should already have been checked, so use Error instead of
-      // Daikon.TerminationMessage.
-      throw new Error("ppt_perc of " + ppt_perc + " is out of range 1..100");
+      // The number should already have been checked, so don't use UserError.
+      throw new BugInDaikon("ppt_perc of " + ppt_perc + " is out of range 1..100");
     }
     if (ppt_perc == 100) {
       return null;
@@ -2357,7 +2415,7 @@ public final class Daikon {
           // Just read "DECLARE", so next line has ppt name.
           String ppt_name = fp.readLine();
           if (ppt_name == null) {
-            throw new Daikon.TerminationMessage("File " + file + " terminated prematurely");
+            throw new Daikon.UserError("File " + file + " terminated prematurely");
           }
           ppts.add(ppt_name);
         }
@@ -2374,7 +2432,7 @@ public final class Daikon {
     // exits from a method or enters without exits, etc)
     int ppt_cnt = (ppts.size() * ppt_perc) / 100;
     if (ppt_cnt == 0) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "ppt_perc of " + ppt_perc + "% results in processing 0 out of " + ppts.size() + " ppts");
     }
     for (Iterator<String> i = ppts.iterator(); i.hasNext(); ) {

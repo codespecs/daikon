@@ -105,20 +105,14 @@ public class Annotate {
   public static void main(String[] args) throws Exception {
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    */
   public static void mainHelper(final String[] args) throws Exception {
     boolean slashslash = false;
@@ -148,7 +142,7 @@ public class Annotate {
 
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (no_reflection_SWITCH.equals(option_name)) {
             useReflection = false;
           } else if (max_invariants_pp_SWITCH.equals(option_name)) {
@@ -171,7 +165,7 @@ public class Annotate {
             String format_name = Daikon.getOptarg(g);
             Daikon.output_format = OutputFormat.get(format_name);
             if (Daikon.output_format == null) {
-              throw new Daikon.TerminationMessage("Bad argument:  --format " + format_name);
+              throw new Daikon.UserError("Bad argument:  --format " + format_name);
             }
             if (Daikon.output_format == OutputFormat.JML) {
               setLightweight = false;
@@ -179,12 +173,12 @@ public class Annotate {
               setLightweight = true;
             }
           } else {
-            throw new Daikon.TerminationMessage("Unknown long option received: " + option_name);
+            throw new Daikon.UserError("Unknown long option received: " + option_name);
           }
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case 'i':
           insert_inexpressible = true;
           break;
@@ -213,13 +207,13 @@ public class Annotate {
     int argindex = g.getOptind();
 
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Error: No .inv file or .java file arguments supplied." + Global.lineSep + usage);
     }
     String invfile = args[argindex];
     argindex++;
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Error: No .java file arguments supplied." + Global.lineSep + usage);
     }
     PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile), /*use saved config=*/ true);
@@ -229,7 +223,7 @@ public class Annotate {
     for (; argindex < args.length; argindex++) {
       String javafilename = args[argindex];
       if (!(javafilename.endsWith(".java") || javafilename.endsWith(".java-random-tabs"))) {
-        throw new Daikon.TerminationMessage("File does not end in .java: " + javafilename);
+        throw new Daikon.UserError("File does not end in .java: " + javafilename);
       }
       File outputFile;
       if (Daikon.output_format == OutputFormat.ESCJAVA) {
@@ -263,7 +257,7 @@ public class Annotate {
       } catch (ParseException e) {
         // e.printStackTrace();
         System.err.println(javafilename + ": " + e);
-        throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
+        throw new Daikon.UserError("ParseException in applyVisitorInsertComments");
       }
 
       debug.fine("Processing file " + javafilename);
@@ -285,7 +279,7 @@ public class Annotate {
       } catch (Error e) {
         String message = e.getMessage();
         if (message != null && message.startsWith("Didn't find class ")) {
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.UserError(
               message
                   + "."
                   + Global.lineSep

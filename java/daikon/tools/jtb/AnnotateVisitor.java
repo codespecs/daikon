@@ -906,7 +906,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       VarInfo elt_vi = ppt.find_var_by_name(elt_varname);
       if (elt_vi == null) {
         debug_field_problem(elt_varname, ppt);
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Annotate: Daikon knows nothing about variable " + elt_varname + " at " + ppt);
       }
       // et_varname variable represents the types of the elements.
@@ -922,7 +922,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       VarInfo et_vi = ppt.find_var_by_name(et_varname);
       if (et_vi == null) {
         debug_field_problem(et_varname, ppt);
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Annotate: Daikon knows nothing about variable "
                 + et_varname
                 + " at "

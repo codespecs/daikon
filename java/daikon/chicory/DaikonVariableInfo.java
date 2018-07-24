@@ -469,7 +469,7 @@ public abstract class DaikonVariableInfo
     //    System.out.printf("%d fields in %s%n", fields.length, type);
 
     debug_vars.log(
-        "%s: [%s] %d dontPrintInstanceVars = %b, " + "inArray = %b%n",
+        "%s: [%s] %d dontPrintInstanceVars = %b, inArray = %b%n",
         type, offset, fields.size(), dontPrintInstanceVars, isArray);
 
     for (Field classField : fields) {

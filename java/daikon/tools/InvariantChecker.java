@@ -87,24 +87,19 @@ public class InvariantChecker {
           ClassNotFoundException {
     try {
       if (args.length == 0) {
-        throw new Daikon.TerminationMessage(usage);
+        throw new Daikon.UserError(usage);
       }
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
    */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
@@ -133,7 +128,7 @@ public class InvariantChecker {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (conf_SWITCH.equals(option_name)) {
             doConf = true;
           } else if (filter_SWITCH.equals(option_name)) {
@@ -143,7 +138,7 @@ public class InvariantChecker {
           } else if (dir_SWITCH.equals(option_name)) {
             dir_file = new File(Daikon.getOptarg(g));
             if (!dir_file.exists() || !dir_file.isDirectory()) {
-              throw new Daikon.TerminationMessage("Error reading the directory " + dir_file);
+              throw new Daikon.UserError("Error reading the directory " + dir_file);
             }
 
           } else if (output_SWITCH.equals(option_name)) {
@@ -161,7 +156,7 @@ public class InvariantChecker {
             LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
             String error = Debug.add_track(Daikon.getOptarg(g));
             if (error != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Error parsing track argument '" + Daikon.getOptarg(g) + "' - " + error);
             }
           } else {
@@ -170,7 +165,7 @@ public class InvariantChecker {
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case '?':
           break; // getopt() already printed an error
         default:
@@ -196,8 +191,7 @@ public class InvariantChecker {
         String filename = file.toString();
         if (filename.indexOf(".inv") != -1) {
           if (inv_file != null) {
-            throw new Daikon.TerminationMessage(
-                "multiple inv files specified" + Global.lineSep + usage);
+            throw new Daikon.UserError("multiple inv files specified" + Global.lineSep + usage);
           }
           inv_file = file;
         } else if (filename.indexOf(".dtrace") != -1) {
@@ -208,7 +202,7 @@ public class InvariantChecker {
       }
       if (dir_file == null) {
         if (inv_file == null) {
-          throw new Daikon.TerminationMessage("No inv file specified" + Global.lineSep + usage);
+          throw new Daikon.UserError("No inv file specified" + Global.lineSep + usage);
         }
         checkInvariants(inv_file);
         return;
@@ -218,7 +212,7 @@ public class InvariantChecker {
     // Yoav additions:
     File[] filesInDir = dir_file.listFiles();
     if (filesInDir == null || filesInDir.length == 0) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "The directory " + dir_file + " is empty" + Global.lineSep + usage);
     }
     ArrayList<File> invariants = new ArrayList<File>();
@@ -228,7 +222,7 @@ public class InvariantChecker {
       }
     }
     if (invariants.size() == 0) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Did not find any invariant files in the directory " + dir_file + Global.lineSep + usage);
     }
     ArrayList<File> dtraces = new ArrayList<File>();
@@ -238,7 +232,7 @@ public class InvariantChecker {
       }
     }
     if (dtraces.size() == 0) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Did not find any dtrace files in the directory " + dir_file + Global.lineSep + usage);
     }
 
@@ -317,7 +311,7 @@ public class InvariantChecker {
           // String n = invariant2str(ppt, inv);
           // if (!allInvariants.contains(inv) && allInvariantsStr.contains(n)) {
           //   throw new
-          //     Daikon.TerminationMessage("Two invariants have the same ppt.name+inv.rep:"+n);
+          //     Daikon.UserError("Two invariants have the same ppt.name+inv.rep:"+n);
           // }
           allInvariants.add(inv);
           // allInvariantsStr.add(n);

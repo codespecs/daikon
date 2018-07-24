@@ -144,7 +144,7 @@ public final class Configuration implements Serializable {
 
     int dot = name.lastIndexOf('.');
     if (dot == -1) {
-      throw new daikon.Daikon.TerminationMessage(
+      throw new daikon.Daikon.UserError(
           "Configuration option name must contain a period (.): " + name);
     }
 

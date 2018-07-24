@@ -76,7 +76,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       System.out.println("IO Error while reading class data " + fileName);
       return null;
     } catch (UnsupportedClassVersionError ucve) { // should be more general?
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Wrong Java version while reading file "
               + fileName
               + ": "

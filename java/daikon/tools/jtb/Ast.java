@@ -68,7 +68,7 @@ public class Ast {
       root = parser.CompilationUnit();
     } catch (ParseException e) {
       e.printStackTrace();
-      throw new Daikon.TerminationMessage("ParseException in applyVisitorReformat");
+      throw new Daikon.UserError("ParseException in applyVisitorReformat");
     }
     root.accept(visitor);
     // This is unfortunately necessary because TreeDumper dies if line or
@@ -163,7 +163,7 @@ public class Ast {
     } catch (Exception e) {
       System.err.println("create(" + type + ", \"" + stringRep + "\")");
       e.printStackTrace();
-      throw new Daikon.TerminationMessage("Error in Ast.create");
+      throw new Daikon.UserError("Error in Ast.create");
     }
     return n;
   }

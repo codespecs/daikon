@@ -133,8 +133,7 @@ public class DeclWriter extends DaikonWriter {
 
       // Gset the root of the method's traversal pattern
       RootInfo enterRoot = mi.traversalEnter;
-      assert enterRoot != null
-          : "Traversal pattern not initialized " + "at method " + mi.method_name;
+      assert enterRoot != null : "Traversal pattern not initialized at method " + mi.method_name;
 
       printMethod(enterRoot, methodEntryName(member), comp_info);
 
@@ -268,8 +267,7 @@ public class DeclWriter extends DaikonWriter {
 
       // Gset the root of the method's traversal pattern
       RootInfo enterRoot = mi.traversalEnter;
-      assert enterRoot != null
-          : "Traversal pattern not initialized " + "at method " + mi.method_name;
+      assert enterRoot != null : "Traversal pattern not initialized at method " + mi.method_name;
 
       String entryName =
           (member != null
@@ -284,8 +282,7 @@ public class DeclWriter extends DaikonWriter {
       for (Integer exitLoc : theExits) {
         // Get the root of the method's traversal pattern
         RootInfo exitRoot = mi.traversalExit;
-        assert enterRoot != null
-            : "Traversal pattern not initialized at " + "method " + mi.method_name;
+        assert enterRoot != null : "Traversal pattern not initialized at method " + mi.method_name;
 
         String exitName =
             (member != null

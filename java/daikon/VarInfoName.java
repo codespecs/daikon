@@ -1668,7 +1668,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     @Override
     protected String dbc_name_impl(VarInfo v) {
-      return "(warning: DBC format cannot express a Poststate" + " [repr=" + repr() + "])";
+      return "(warning: DBC format cannot express a Poststate [repr=" + repr() + "])";
     }
 
     @Override
@@ -1818,7 +1818,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     @Override
     protected String esc_name_impl() {
       throw new UnsupportedOperationException(
-          "ESC cannot format an unquantified sequence of elements" + " [repr=" + repr() + "]");
+          "ESC cannot format an unquantified sequence of elements [repr=" + repr() + "]");
     }
 
     protected String esc_name_impl(String index) {
@@ -3255,8 +3255,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         /*@Interned*/ VarInfoName[] replace_result = replace(root, to_replace, index_vin);
         return replace_result[0];
       } else {
-        throw new Error(
-            "Can't handle multi-dim array in " + "VarInfoName.QuantHelper.select_nth()");
+        throw new Error("Can't handle multi-dim array in VarInfoName.QuantHelper.select_nth()");
       }
     }
 
@@ -3293,8 +3292,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         //                      root, to_replace, index_vin);
         return replace_result[0];
       } else {
-        throw new Error(
-            "Can't handle multi-dim array in " + "VarInfoName.QuantHelper.select_nth()");
+        throw new Error("Can't handle multi-dim array in VarInfoName.QuantHelper.select_nth()");
       }
     }
 
@@ -3701,7 +3699,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           }
         }
       }
-      result[0] = "(FORALL (" + int_list + ") " + "(IMPLIES (AND " + conditions + ") ";
+      result[0] = "(FORALL (" + int_list + ") (IMPLIES (AND " + conditions + ") ";
 
       // stringify the terms
       for (int i = 0; i < qret.root_primes.length; i++) {

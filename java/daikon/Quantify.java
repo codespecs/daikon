@@ -216,8 +216,8 @@ public class Quantify {
     }
 
     /**
-     * Looks up the array variable which is the base of this array. Throws a TerminationMessage
-     * exception if one does not exist.
+     * Looks up the array variable which is the base of this array. Throws an exception if one does
+     * not exist.
      */
     @SuppressWarnings("sideeffectfree") // throws exception in case of error
     /*@SideEffectFree*/
@@ -225,7 +225,7 @@ public class Quantify {
       VarInfo arr_var = sequence.get_base_array_hashcode();
       if (arr_var != null) return arr_var;
 
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           String.format(
               "Error: Can't create %s expression for the size of an array: "
                   + "No base array (hashcode) variable declared for array '%s'"
@@ -522,7 +522,7 @@ public class Quantify {
           }
         }
       }
-      quantification = "(FORALL (" + int_list + ") " + "(IMPLIES (AND " + conditions + ") ";
+      quantification = "(FORALL (" + int_list + ") (IMPLIES (AND " + conditions + ") ";
 
       // stringify the terms
       List<String> avi_list = new ArrayList<String>(vars.length);

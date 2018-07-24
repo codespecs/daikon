@@ -286,20 +286,14 @@ public final class PrintInvariants {
       mainHelper(args);
     } catch (Configuration.ConfigException e) {
       System.err.println(e.getMessage());
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
@@ -332,7 +326,7 @@ public final class PrintInvariants {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
             if (ppt_regexp != null) {
               throw new Error(
@@ -342,7 +336,7 @@ public final class PrintInvariants {
             }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -359,7 +353,7 @@ public final class PrintInvariants {
             } catch (IllegalArgumentException e) {
               assert e.getMessage() != null
                   : "@AssumeAssertion(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
-              throw new Daikon.TerminationMessage(e.getMessage());
+              throw new Daikon.UserError(e.getMessage());
             }
           } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
             Daikon.suppress_redundant_invariants_with_simplify = true;
@@ -367,8 +361,7 @@ public final class PrintInvariants {
             String format_name = Daikon.getOptarg(g);
             Daikon.output_format = OutputFormat.get(format_name);
             if (Daikon.output_format == null) {
-              throw new Daikon.TerminationMessage(
-                  "Unknown output format:  --format " + format_name);
+              throw new Daikon.UserError("Unknown output format:  --format " + format_name);
             }
           } else if (PrintInvariants.print_csharp_metadata_SWITCH.equals(option_name)) {
             PrintInvariants.print_csharp_metadata = true;
@@ -404,7 +397,7 @@ public final class PrintInvariants {
             LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
             String error = Debug.add_track(Daikon.getOptarg(g));
             if (error != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Error parsing track argument '" + Daikon.getOptarg(g) + "' - " + error);
             }
           } else if (Daikon.wrap_xml_SWITCH.equals(option_name)) {
@@ -415,7 +408,7 @@ public final class PrintInvariants {
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case '?':
           break; // getopt() already printed an error
         default:
@@ -433,7 +426,7 @@ public final class PrintInvariants {
     int fileIndex = g.getOptind();
     if (args.length - fileIndex != 1) {
       System.out.println(usage);
-      throw new Daikon.TerminationMessage("Wrong number of arguments (expected 1)");
+      throw new Daikon.UserError("Wrong number of arguments (expected 1)");
     }
 
     // Read in the invariants
@@ -1517,7 +1510,7 @@ public final class PrintInvariants {
 
       System.out.println();
       System.out.printf(
-          "%s - %d samples, %d slices, %d invariants " + "(%d linearternary)%n",
+          "%s - %d samples, %d slices, %d invariants (%d linearternary)%n",
           ppt.name(), ppt.num_samples(), slice_cnt, inv_cnt, lt_cnt);
       System.out.println(
           "    total slice count = " + total_slice_cnt + ", total_inv_cnt = " + total_inv_cnt);
