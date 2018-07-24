@@ -2,7 +2,7 @@ package daikon;
 
 import static daikon.FileIO.ParentRelation;
 import static daikon.PptRelation.PptRelationType;
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
 import daikon.derive.*;
 import daikon.derive.binary.*;

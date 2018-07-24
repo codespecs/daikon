@@ -2,7 +2,7 @@ package daikon.chicory;
 
 // import harpoon.ClassFile.HMethod;
 
-import static daikon.tools.nullness.NullnessUtils.castNonNull;
+import static daikon.tools.nullness.NullnessUtil.castNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;

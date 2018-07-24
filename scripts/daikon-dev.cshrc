@@ -6,8 +6,8 @@ if (! $?LC_ALL) setenv LC_ALL en_US
 scriptdir=`/bin/dirname $0`       # may be relative path
 DAIKONDIR=`cd $scriptdir/.. && pwd`    # ensure absolute path
 
-setenv DAIKONBIN ${DAIKONDIR}/scripts
-setenv PLUMEBIN ${DAIKONDIR}/utils/plume-lib/bin
+setenv DAIKONSCRIPTS ${DAIKONDIR}/scripts
+setenv PLUMESCRIPTS ${DAIKONDIR}/utils/plume-scripts
 setenv INV ${DAIKONDIR}
 setenv inv ${INV}
 setenv DAIKONCLASS_SOURCES 1
@@ -27,21 +27,12 @@ setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
 
-# In general, Java programmers should not set CLASSPATH.
-# setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-# # Using ${INV}/utils/plume-lib seems undesirable.  If a new version of plume-lib
-# # deprecates a method, then Daikon won't compile for developers; however,
-# # changing Daikon's source code would cause Daikon not to compile for ordinary
-# # users.
-# # setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}:${INV}/plume-lib/java/junit-4.12.jar:${INV}/plume-lib/java/plume.jar
-# unsetenv DAIKON_LIBS
-
 setenv LACKWIT_HOME ${INV}/front-end/c/lackwit
 
 # Remove duplicates so path and classpath don't get too long
-if (-x ${PLUMEBIN}/path-remove.pl) then
-  if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | ${PLUMEBIN}/path-remove.pl`
-  setenv PATH `echo $PATH | ${PLUMEBIN}/path-remove.pl`
+if (-x ${PLUMESCRIPTS}/path-remove.pl) then
+  if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | ${PLUMESCRIPTS}/path-remove.pl`
+  setenv PATH `echo $PATH | ${PLUMESCRIPTS}/path-remove.pl`
 endif
 
 # Enable use of group bibliographies, and the "bibfind" command.

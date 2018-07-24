@@ -25,20 +25,18 @@ endif
 scriptdir=`/bin/dirname $0`       # may be relative path
 DAIKONDIR=`cd $scriptdir/.. && pwd`    # ensure absolute path
 
-if (! $?DAIKONBIN) then
-  if ( -d ${DAIKONDIR}/bin ) then
-    setenv DAIKONBIN ${DAIKONDIR}/bin
-  else if ( -d ${DAIKONDIR}/scripts ) then
-    setenv DAIKONBIN ${DAIKONDIR}/scripts
+if (! $?DAIKONSCRIPTS) then
+  if ( -d ${DAIKONDIR}/scripts ) then
+    setenv DAIKONSCRIPTS ${DAIKONDIR}/scripts
   else
-    echo "Cannot choose a value for environment variable DAIKONBIN."
+    echo "Cannot choose a value for environment variable DAIKONSCRIPTS."
     echo "Please fix this before proceeding.  Aborting daikon.cshrc ."
     exit 2
   endif
 endif
 
-if (! $?PLUMEBIN) then
-  setenv PLUMEBIN ${DAIKONDIR}/utils/plume-lib/bin
+if (! $?PLUMESCRIPTS) then
+  setenv PLUMESCRIPTS ${DAIKONDIR}/utils/plume-scripts
 endif
 
 # setenv DAIKONCLASS_SOURCES 1
@@ -84,11 +82,11 @@ endif
 if ($?debuglogin) echo "daikon.cshrc about to add scripts to path"
 
 ## Add the Daikon binaries to your path
-set path = (${DAIKONBIN} ${PLUMEBIN} $path)
+set path = (${DAIKONSCRIPTS} ${PLUMESCRIPTS} $path)
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if ($?PERLLIB) then
-  setenv PERLLIB ${DAIKONBIN}:${PLUMEBIN}:${PERLLIB}
+  setenv PERLLIB ${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERLLIB}
 else
-  setenv PERLLIB ${DAIKONBIN}:${PLUMEBIN}
+  setenv PERLLIB ${DAIKONSCRIPTS}:${PLUMESCRIPTS}
 endif
