@@ -3,8 +3,8 @@ package daikon;
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 
 import daikon.inv.*;
-import java.util.*;
-import plume.*;
+import java.util.HashSet;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -144,7 +144,7 @@ public class PptSlice0 extends PptSlice {
   // public Implication getImplication(Implication imp) {
   //   initInvariantsSeen();
   //   ImplicationWrapper resultWrapper
-  //     = (ImplicationWrapper) UtilMDE.getFromSet(
+  //     = (ImplicationWrapper) UtilPlume.getFromSet(
   //              invariantsSeen, new ImplicationWrapper(imp));
   //   if (resultWrapper == null) {
   //     return null;

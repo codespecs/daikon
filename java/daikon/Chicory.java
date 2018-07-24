@@ -3,10 +3,21 @@ package daikon;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.chicory.*;
-import daikon.util.*;
-import java.io.*;
-import java.util.*;
+import daikon.util.RegexUtil;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
+import org.plumelib.bcelutil.SimpleLog;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -161,8 +172,8 @@ public class Chicory {
 
     // Parse our arguments
     Options options = new Options(synopsis, Chicory.class);
-    options.parse_options_after_arg(false);
-    String[] target_args = options.parse_or_usage(args);
+    options.setParseAfterArg(false);
+    String[] target_args = options.parse(true, args);
     boolean ok = check_args(options, target_args);
     if (!ok) System.exit(1);
 
@@ -174,7 +185,19 @@ public class Chicory {
     // were passed here.
 
     Chicory chicory = new Chicory();
-    chicory.start_target(options.get_options_str(), target_args);
+    chicory.start_target(getOptionsString(options), target_args);
+  }
+
+  // Gross hack, undo when Options package makes the `getOptionsString` method public.
+  @SuppressWarnings("nullness")
+  private static String getOptionsString(Options options) {
+    try {
+      Method method = options.getClass().getDeclaredMethod("getOptionsString");
+      method.setAccessible(true);
+      return (String) method.invoke(options);
+    } catch (Throwable e) {
+      throw new Error(e);
+    }
   }
 
   /**
@@ -185,11 +208,13 @@ public class Chicory {
 
     // Make sure arguments have legal values
     if (nesting_depth < 0) {
-      options.print_usage("nesting depth (%d) must not be negative", nesting_depth);
+      System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
+      options.printUsage();
       return false;
     }
     if (target_args.length == 0) {
-      options.print_usage("target program must be specified");
+      System.out.println("target program must be specified");
+      options.printUsage();
       return false;
     }
 
@@ -230,39 +255,45 @@ public class Chicory {
     if (cp == null) cp = ".";
 
     // The the separator for items in the class path
-    String separator = System.getProperty("path.separator");
-    basic.log("separator = %s\n", separator);
-    if (separator == null) {
-      separator = ";"; //should work for windows at least...
-    } else {
-      if (!RegexUtil.isRegex(separator)) {
-        throw new Daikon.TerminationMessage(
-            "Bad regexp " + separator + " for path.separator: " + RegexUtil.regexError(separator));
-      }
+    String path_separator = System.getProperty("path.separator");
+    basic.log("path_separator = %s\n", path_separator);
+    if (path_separator == null) {
+      path_separator = ";"; // should work for windows at least...
+    } else if (!RegexUtil.isRegex(path_separator)) {
+      throw new Daikon.TerminationMessage(
+          "Bad regexp "
+              + path_separator
+              + " for path.separator: "
+              + RegexUtil.regexError(path_separator));
     }
 
     // Look for ChicoryPremain.jar along the classpath
     if (premain == null) {
-      String[] cpath = cp.split(separator);
+      String[] cpath = cp.split(path_separator);
       for (String path : cpath) {
         File poss_premain = new File(path, "ChicoryPremain.jar");
-        if (poss_premain.canRead()) premain = poss_premain;
+        if (poss_premain.canRead()) {
+          premain = poss_premain;
+          break;
+        }
       }
     }
 
     // If not on the classpath look in ${DAIKONDIR}/java
+    String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
-      String daikon_dir = System.getenv("DAIKONDIR");
       if (daikon_dir != null) {
         String file_separator = System.getProperty("file.separator");
         File poss_premain = new File(daikon_dir + file_separator + "java", "ChicoryPremain.jar");
-        if (poss_premain.canRead()) premain = poss_premain;
+        if (poss_premain.canRead()) {
+          premain = poss_premain;
+        }
       }
     }
 
     // If not found, try the daikon.jar file itself
     if (premain == null) {
-      for (String path : cp.split(separator)) {
+      for (String path : cp.split(path_separator)) {
         File poss_premain = new File(path);
         if (poss_premain.getName().equals("daikon.jar")) {
           if (poss_premain.canRead()) {
@@ -274,11 +305,15 @@ public class Chicory {
 
     // If we didn't find a premain, give up
     if (premain == null) {
-      System.err.printf("Can't find ChicoryPremain.jar on the classpath\n");
-      System.err.printf("or in $DAIKONDIR/java\n");
-      System.err.printf("It should be find in directory where Daikon was " + " installed\n");
-      System.err.printf("Use the --premain switch to specify its location\n");
-      System.err.printf("or change your classpath to include it\n");
+      System.err.printf("Can't find ChicoryPremain.jar on the classpath");
+      if (daikon_dir == null) {
+        System.err.printf(" and $DAIKONDIR is not set.\n");
+      } else {
+        System.err.printf(" or in $DAIKONDIR/java .\n");
+      }
+      System.err.printf("It should be found in the directory where Daikon was installed.\n");
+      System.err.printf("Use the --premain switch to specify its location,\n");
+      System.err.printf("or change your classpath to include it.\n");
       System.exit(1);
     }
 
@@ -292,13 +327,13 @@ public class Chicory {
     if (daikon_online) {
       runDaikon();
 
-      @SuppressWarnings("nullness") // getErrorStream is non-null because we didn't redirect it.
+      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       StreamRedirectThread tmp_daikon_err =
           new StreamRedirectThread("stderr", daikon_proc.getErrorStream(), System.err);
       daikon_err = tmp_daikon_err;
       daikon_err.start();
 
-      @SuppressWarnings("nullness") // getInputStream is non-null because we didn't redirect it.
+      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       /*@NonNull*/ InputStream daikonStdOut = daikon_proc.getInputStream();
       // daikonReader escapes, so it is not closed in this method.
       BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut, UTF_8));
@@ -333,7 +368,7 @@ public class Chicory {
         throw new RuntimeException("After 100 lines of output, " + "Daikon port not received");
       }
 
-      //continue reading daikon output in separate thread
+      // continue reading daikon output in separate thread
       daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
       daikon_out.start();
     }
@@ -343,10 +378,11 @@ public class Chicory {
     cmdlist.add("java");
 
     if (remote_debug) {
-      //-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
+      // -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
       cmdlist.add("-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y");
-      //cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
-      //cmdlist.add("-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
+      // cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
+      // cmdlist.add("-Xdebug -Xnoagent
+      // -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
     }
 
     cmdlist.add("-cp");
@@ -382,7 +418,7 @@ public class Chicory {
       System.exit(1);
     }
 
-    @SuppressWarnings("nullness") // getOutputStream is non-null because we didn't redirect it.
+    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread stdin_thread =
         new StreamRedirectThread("stdin", System.in, chicory_proc.getOutputStream(), false);
     stdin_thread.start();
@@ -469,8 +505,8 @@ public class Chicory {
           cmdstr.replace(
               "java", "java -agentlib:jdwp=transport=dt_socket,server=y,address=8001,suspend=y");
     }
-    //System.out.println("daikon command is " + daikon_cmd);
-    //System.out.println("daikon command cmdstr " + cmdstr);
+    // System.out.println("daikon command is " + daikon_cmd);
+    // System.out.println("daikon command cmdstr " + cmdstr);
 
     if (verbose) System.out.printf("\nExecuting daikon: %s\n", cmdstr);
 
@@ -493,11 +529,11 @@ public class Chicory {
   public int redirect_wait(Process p) {
 
     // Create the redirect theads and start them
-    @SuppressWarnings("nullness") // getErrorStream is non-null because we didn't redirect it.
+    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err);
 
-    @SuppressWarnings("nullness") // getInputStream is non-null because we didn't redirect it.
+    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out);
 
@@ -532,7 +568,7 @@ public class Chicory {
       if (dirName != null) {
         File directory = new File(dirName);
 
-        //make the output directory if non-existent
+        // make the output directory if non-existent
         if (!directory.exists()) directory.mkdir();
       }
 
@@ -569,9 +605,9 @@ public class Chicory {
     return (str.trim());
   }
 
-  //parses the single string into arguments
+  // parses the single string into arguments
   public String[] parseDaikonArgs(String arg) {
-    //TODO deal with quotation marks...
+    // TODO deal with quotation marks...
     return arg.split(" ");
   }
 }

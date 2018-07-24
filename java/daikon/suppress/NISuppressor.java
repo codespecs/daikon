@@ -6,10 +6,9 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.unary.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.logging.*;
-import plume.*;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -106,7 +105,7 @@ public class NISuppressor {
     try {
       Method swap_method = cls.getMethod("swap_class", (Class<?>[]) null);
       if (swap) {
-        @SuppressWarnings("nullness") // "swap_class" is static, so null first argument is OK
+        @SuppressWarnings("nullness") // static method, so null first arg is OK: swap_class()
         Class<? extends Invariant> tmp_cls =
             asInvClass(swap_method.invoke(null, (Object /*@Nullable*/ []) null));
         cls = tmp_cls;
@@ -235,7 +234,7 @@ public class NISuppressor {
       // If the underlying inariant can't be instantiated over these variables,
       // this can't possibly be true
       if (!instantiate_ok(new VarInfo[] {v1})) {
-        // System.out.printf ("suppressor %s invalid over variable %s\n",
+        // System.out.printf("suppressor %s invalid over variable %s\n",
         //                   this, v1);
         return (state = NIS.SuppressState.INVALID);
       }
@@ -309,7 +308,7 @@ public class NISuppressor {
       // If the underlying inariant can't be instantiated over these variables,
       // this can't possibly be true
       if (!instantiate_ok(new VarInfo[] {v1, v2})) {
-        // System.out.printf ("suppressor %s invalid over variables %s & %s\n",
+        // System.out.printf("suppressor %s invalid over variables %s & %s\n",
         //                  this, v1, v2);
         return (state = NIS.SuppressState.INVALID);
       }
@@ -354,11 +353,10 @@ public class NISuppressor {
                   Debug.toString(ppt.constants.constant_value(v2)),
                   valid));
         }
+        Object const1 = ppt.constants.constant_value(v1);
+        Object const2 = ppt.constants.constant_value(v2);
         current_state_str =
-            "true over constants "
-                + ppt.constants.constant_value(v1)
-                + " and "
-                + ppt.constants.constant_value(v2);
+            "true over constants " + Debug.toString(const1) + " and " + Debug.toString(const2);
         if (!valid) current_state_str = "not " + current_state_str;
         return (state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID));
       }

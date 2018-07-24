@@ -25,7 +25,7 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
   @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
     // System.out.println("OnlyConstantVariablesFilter: " + invariant.format());
-    if (IsEqualityComparison.it.accept(invariant)) {
+    if (invariant.isEqualityComparison()) {
       return false;
     }
     if (invariant instanceof OneOf) {

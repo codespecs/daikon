@@ -41,14 +41,13 @@ public class LinearTernaryCoreTest extends TestCase {
     }
     //  System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c + " " + goal_d);
     //  System.out.println("actual: " + coef[0] + " " + coef[1] + " " + coef[2] + " " + coef[3]);
-    // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c - ltc.c));
+    // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c
+    // - ltc.c));
     assert coef[0] == goal_a && coef[1] == goal_b && coef[2] == goal_c && coef[3] == goal_d;
   }
 
   public void test_set_tri_linear() {
     one_test_set_tri_linear(new int[][] {{1, 2, 1}, {2, 1, 7}, {3, 3, 7}}, 4, -2, -1, 1);
-    //     # like the above, but swap y and z; results in division-by-zero problem
-    //     # tri_linear_relationship((1,1,2),(2,7,1),(3,7,3))
     one_test_set_tri_linear(
         new int[][] {{1, 2, 6}, {2, 1, -4}, {3, 3, 7}},
         //    -3, 7, -1, -5);
@@ -111,8 +110,8 @@ public class LinearTernaryCoreTest extends TestCase {
     one_test_format(-1, 1, -2, 0, "- x + y - 2 * z == 0");
     one_test_format(-1, -1, 2, 3, "- x - y + 2 * z + 3 == 0");
     one_test_format(3, -2, 0, -3, "3 * x - 2 * y - 3 == 0");
-    //hmmm, we can't actually have this test because there are never any double coeffs, they're not
-    //calculated as such and are converted to ints
+    // hmmm, we can't actually have this test because there are never any double coeffs, they're not
+    // calculated as such and are converted to ints
     //  one_test_format(3.2, -2.2, 1.4, -3.4, "3.2 * x - 2.2 * y + 1.4 * z - 3.4 == 0");
     one_test_format(3.0, -2.0, 2.0, -3.0, "3 * x - 2 * y + 2 * z - 3 == 0");
     one_test_format(-1.0, 1.0, 0.0, 0.0, "- x + y == 0");

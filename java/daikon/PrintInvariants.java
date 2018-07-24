@@ -14,14 +14,35 @@ import daikon.inv.filter.*;
 import daikon.split.PptSplitter;
 import daikon.suppress.*;
 import gnu.getopt.*;
-import java.io.*;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OptionalDataException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.*;
+import java.io.PrintWriter;
+import java.io.StreamCorruptedException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.*;
-import plume.*;
+import java.util.regex.Pattern;
+import org.plumelib.util.RegexUtil;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -234,7 +255,7 @@ public final class PrintInvariants {
   }
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -457,9 +478,9 @@ public final class PrintInvariants {
     }
   }
 
-  // To avoid the leading "UtilMDE." on all calls.
+  // To avoid the leading "UtilPlume." on all calls.
   private static String nplural(int n, String noun) {
-    return UtilMDE.nplural(n, noun);
+    return UtilPlume.nplural(n, noun);
   }
 
   /**
@@ -503,7 +524,7 @@ public final class PrintInvariants {
 
     // Iterate over the PptTopLevels in ppts
     for (PptTopLevel ppt : ppts_sorted) {
-      StringBuffer toPrint = new StringBuffer();
+      StringBuilder toPrint = new StringBuilder();
       toPrint.append(print_reasons_from_ppt(ppt, ppts));
 
       // A little hack so that PptTopLevels without discarded Invariants of
@@ -579,19 +600,15 @@ public final class PrintInvariants {
 
     String toPrint = "";
     String dashes =
-        "--------------------------------------------"
-            + "-------------------------------"
-            + lineSep;
+        "---------------------------------------------------------------------------" + lineSep;
 
     if (!(ppt instanceof PptConditional)) {
       toPrint +=
-          "==============================================="
-              + "============================"
-              + lineSep;
+          "===========================================================================" + lineSep;
       toPrint += (ppt.name() + lineSep);
     }
 
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     for (DiscardInfo nextInfo :
         DiscReasonMap.returnMatches_from_ppt(new InvariantInfo(ppt.name(), discVars, discClass))) {
       sb.append(dashes + nextInfo.format() + lineSep);
@@ -705,6 +722,9 @@ public final class PrintInvariants {
     }
     PrintWriter pw =
         new PrintWriter(new BufferedWriter(new OutputStreamWriter(out_stream, UTF_8)), true);
+    if (wrap_xml) {
+      pw.println("<INVARIANTS>");
+    }
 
     PptTopLevel combined_exit = null;
     boolean enable_exit_swap = true; // !Daikon.dkconfig_df_bottom_up;
@@ -719,7 +739,7 @@ public final class PrintInvariants {
     int ii = 0;
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       ppts[ii++] = ppt;
-      // System.out.printf ("considering ppt %s%n", ppts[ii-1].name());
+      // System.out.printf("considering ppt %s%n", ppts[ii-1].name());
     }
 
     for (int i = 0; i < ppts.length; i++) {
@@ -777,6 +797,10 @@ public final class PrintInvariants {
     // print a last remaining combined exit point (if any)
     if (enable_exit_swap && combined_exit != null) {
       print_invariants_maybe(combined_exit, pw, all_ppts);
+    }
+
+    if (wrap_xml) {
+      pw.println("</INVARIANTS>");
     }
 
     pw.flush();
@@ -849,7 +873,13 @@ public final class PrintInvariants {
     }
     // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
-    out.println("===========================================================================");
+    String DASHES = "===========================================================================";
+
+    if (wrap_xml) {
+      out.println("<!-- " + DASHES + " -->");
+    } else {
+      out.println(DASHES);
+    }
 
     print_invariants(ppt, out, all_ppts);
 
@@ -863,18 +893,28 @@ public final class PrintInvariants {
   }
 
   /**
-   * If Daikon.output_num_samples is enabled, prints the number of samples for the specified ppt.
-   * Also prints all of the variables for the ppt if Daikon.output_num_samples is enabled or the
-   * format is ESCJAVA, JML, or DBCJAVA.
+   * Prints the program point name. If Daikon.output_num_samples is enabled, prints the number of
+   * samples for the specified ppt. Also prints all of the variables for the ppt if
+   * Daikon.output_num_samples is enabled or the format is ESCJAVA, JML, or DBCJAVA.
    */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
 
-    if (Daikon.output_num_samples) {
-      out.println(ppt.name() + "  " + nplural(ppt.num_samples(), "sample"));
+    if (!wrap_xml) {
+      out.print(ppt.name());
     } else {
-      out.println(ppt.name());
+      out.println("<PPT>");
+      printXmlTagged(out, "PPTNAME", ppt.name());
     }
+    if (Daikon.output_num_samples) {
+      out.print("  ");
+      if (!wrap_xml) {
+        out.print(nplural(ppt.num_samples(), "sample"));
+      } else {
+        printXmlTagged(out, "SAMPLES", ppt.num_samples());
+      }
+    }
+    out.println();
 
     // Note that this code puts out the variable list using daikon formatting
     // for the names and not the output specific format.  It also includes
@@ -1103,21 +1143,54 @@ public final class PrintInvariants {
 
     if (wrap_xml) {
       out.print("<INVINFO>");
-      out.print("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
-      out.print("<INV> ");
-      out.print(inv_rep);
-      out.print(" </INV> ");
-      out.print(" <SAMPLES> " + Integer.toString(inv.ppt.num_samples()) + " </SAMPLES> ");
-      out.print(" <DAIKON> " + inv.format_using(OutputFormat.DAIKON) + " </DAIKON> ");
-      out.print(" <DAIKONCLASS> " + inv.getClass().toString() + " </DAIKONCLASS> ");
-      out.print(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
-      out.println("</INVINFO>");
+      out.print(" ");
+      printXmlTagged(out, "PARENT", inv.ppt.parent.ppt_name.getPoint());
+      out.print(" ");
+      printXmlTagged(out, "INV", inv_rep);
+      out.print(" ");
+      printXmlTagged(out, "SAMPLES", Integer.toString(inv.ppt.num_samples()));
+      out.print(" ");
+      printXmlTagged(out, "DAIKON", inv.format_using(OutputFormat.DAIKON));
+      out.print(" ");
+      printXmlTagged(out, "DAIKONCLASS", inv.getClass().toString());
+      out.print(" ");
+      printXmlTagged(out, "METHOD", inv.ppt.parent.ppt_name.getSignature());
+      out.print(" ");
+      out.print("</INVINFO>");
+      out.println();
     } else {
       out.println(inv_rep);
     }
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(inv.repr());
     }
+  }
+
+  /**
+   * Given an arbitrary string or object, prints an XML start tag, the string (or the object's
+   * {@code toString()}) XML-quoted, and then the XML end tag, all on one line.
+   *
+   * <p>If the content is null, prints nothing.
+   */
+  private static void printXmlTagged(PrintWriter out, String tag, /*@Nullable*/ Object content) {
+    if (content == null) {
+      return;
+    }
+    out.print("<");
+    out.print(tag);
+    out.print(">");
+    String quoted =
+        content
+            .toString()
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;");
+    out.print(quoted);
+    out.print("</");
+    out.print(tag);
+    out.print(">");
   }
 
   /**
@@ -1294,7 +1367,7 @@ public final class PrintInvariants {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
 
     if (PptSplitter.debug.isLoggable(Level.FINE)) {
       PptSplitter.debug.fine("Joiner View for ppt " + ppt.name);
@@ -1375,7 +1448,6 @@ public final class PrintInvariants {
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);
     if (false && ppt.constants != null) {
-      assert ppt.constants != null : "@AssumeAssertion(nullness) checker bug: flow";
       ppt.constants.print_missing(out);
     }
   }
@@ -1384,9 +1456,9 @@ public final class PrintInvariants {
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   private static void finally_print_the_invariants(
       List<Invariant> invariants, PrintWriter out, PptTopLevel ppt) {
-    //System.out.printf ("Ppt %s%n", ppt.name());
-    //for (VarInfo vi : ppt.var_infos)
-    // System.out.printf ("  var %s canbemissing = %b%n", vi, vi.canBeMissing);
+    // System.out.printf("Ppt %s%n", ppt.name());
+    // for (VarInfo vi : ppt.var_infos)
+    // System.out.printf("  var %s canbemissing = %b%n", vi, vi.canBeMissing);
 
     int index = 0;
     for (Invariant inv : invariants) {
@@ -1396,6 +1468,9 @@ public final class PrintInvariants {
         inv = guarded;
       }
       print_invariant(inv, out, index, ppt);
+    }
+    if (wrap_xml) {
+      out.println("</PPT>");
     }
 
     if (dkconfig_replace_prestate) {
@@ -1533,7 +1608,7 @@ public final class PrintInvariants {
 
     boolean print_invs = false;
 
-    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
     Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
 
     // Not Map, because keys are nullable
@@ -1619,7 +1694,7 @@ public final class PrintInvariants {
     }
     System.out.printf("%d physical invariants%n", inv_cnt);
 
-    //undo suppressions
+    // undo suppressions
     for (PptTopLevel ppt : ppts.pptIterable()) {
       NIS.create_suppressed_invs(ppt);
     }

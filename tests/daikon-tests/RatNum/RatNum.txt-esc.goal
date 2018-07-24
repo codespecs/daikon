@@ -110,7 +110,7 @@ rn.denom >= 1
 this.numer != this.denom
 this.denom < rn.denom
 rn.denom >= \result
-warning: method daikon.inv.ternary.threeScalar.FunctionBinary$GcdLong_zxy.format(OutputFormat:ESC/Java) needs to be implemented: return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$GcdLong_zxy.format(OutputFormat:ESC/Java) needs to be implemented: return == (org.plumelib.util.MathPlume.gcd(rn.numer, rn.denom))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
     Variables: this this.numer this.denom rn rn.numer rn.denom return orig(this) orig(this.numer) orig(this.denom) orig(rn) orig(rn.numer) orig(rn.denom)

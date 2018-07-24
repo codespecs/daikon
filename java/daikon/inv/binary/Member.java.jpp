@@ -22,7 +22,7 @@ The correct way to build the system is to run 'make'.
   #define ARBITRARYSUBSEQUENCE SequenceScalarArbitrarySubsequence
   #define SUBSEQUENCE SubSequence
   #define SEQUENCEINITIAL SequenceInitial
-  #define INDEXOF ArraysMDE.indexOf
+  #define INDEXOF ArraysPlume.indexOf
 #elif defined(STRING)
   #undef STRING
   #define IS_STRING
@@ -41,7 +41,7 @@ The correct way to build the system is to run 'make'.
 #endif
   #define SUBSEQUENCE SubSequence
   #define SEQUENCEINITIAL SequenceInitial
-  #define INDEXOF ArraysMDE.indexOf
+  #define INDEXOF ArraysPlume.indexOf
 #elif defined(FLOAT)
   #define CLASSNAME MemberFloat
   #define SEQUENCESCALAR SequenceFloat
@@ -69,9 +69,12 @@ import daikon.derive.ternary.*;
 import daikon.derive.unary.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
+import org.plumelib.util.Pair;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -369,7 +372,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
     InvariantStatus is = check_modified(a, i, count);
     if (debug.isLoggable(Level.FINE) && (is == InvariantStatus.FALSIFIED)) {
       debug.fine(
-          "Member destroyed:  " + format() + " because " + i + " not in " + ArraysMDE.toString(a));
+          "Member destroyed:  " + format() + " because " + i + " not in " + Arrays.toString(a));
     }
     return is;
   }

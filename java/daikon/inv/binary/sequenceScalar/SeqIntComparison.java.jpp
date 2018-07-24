@@ -140,7 +140,7 @@ import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -322,7 +322,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
     /*if (logDetail() || debug.isLoggable(Level.FINE))
-      log(debug,"(" + EQUALSstring + " " + ArraysMDE.toString(a)
+      log(debug,"(" + EQUALSstring + " " + Arrays.toString(a)
       + " " + x);*/
     for (int i = 0; i < a.length; i++) {
       #if (!defined(EQUAL) && !defined(EQUALFLOAT))
@@ -431,7 +431,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
       }
       if (inv instanceof SEQINTEQUAL) {
         SEQINTEQUAL other = (SEQINTEQUAL) inv;
-        // System.out.printf ("considering %s seqvar=%s, other=%s%n", other.format(),
+        // System.out.printf("considering %s seqvar=%s, other=%s%n", other.format(),
         // seqvar().name(), other.seqvar().name());
         if (pptt.is_subsequence(seqvar(), other.seqvar()) && (sclvar(vis) == other.sclvar())) {
           // System.out.println ("is subsequence");

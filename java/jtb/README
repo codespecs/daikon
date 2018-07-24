@@ -82,7 +82,7 @@ tools/jtb/PptNameMatcher.java
 tools/runtimechecker/CheckerClass.java
 tools/runtimechecker/InstrumentVisitor.java
 
-The file grammar-use-1 shows, for each grammar production, the files the
+The file grammar-use-1 shows, for each grammar production, the
 files that use that rule.  The file grammar-use-2 shows, sorted by file
 name, each line that references a grammar productions.  When you make a
 parser update, then for each of the grammar rules that were modified,

@@ -112,14 +112,8 @@ sub is_module {
     }
 }
 
-unless (exists $ENV{"DAIKONDIR"}) {
-    my $str = "The DAIKONDIR environment variable was not found.\n";
-    $str .= "Please make sure it is set to the location of the ";
-    $str .= "daikon/ directory.\n";
-    $str .= "Usually, you would do this by running the daikon.bashrc or ";
-    $str .= "daikon.cshrc script\nin your shell startup file.\n";
-    die $str;
-}
+use File::Basename;
+my $dirname = dirname(__FILE__);
 
 my $opt_parse = new Getopt::Long::Parser;
 $opt_parse->configure("bundling_override");
@@ -321,7 +315,7 @@ $output_opt .= ",$dtrace_basedir,$dtrace_style,$dtrace_append";
 $output_opt .= ",-D,$reference_depth,$accessor_depth,$list_depth";
 
 my $deparse_opt = "-MO=-qq,DeparseDaikon$types$output_opt";
-my $perl_lib = "-I$ENV{DAIKONDIR}/front-end/perl/lib";
+my $perl_lib = "-I$dirname/front-end/perl/lib";
 
 my $local_types;
 my %types_converted;

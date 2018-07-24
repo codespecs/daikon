@@ -34,7 +34,8 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -87,16 +88,16 @@ public final class SCALARSEQUENCESUNION extends BinaryDerivation {
     int size = 0;
     for (int i = 0; i < val1_array.length; i++) {
       SCALAR v = val1_array[i];
-      if ((size == 0) || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v) == -1))
+      if ((size == 0) || (ArraysPlume.indexOf(ArraysPlume.subarray(tmp, 0, size), v) == -1))
         tmp[size++] = v;
     }
     for (int i = 0; i < val2_array.length; i++) {
       SCALAR v = val2_array[i];
-      if ((size == 0) || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v) == -1))
+      if ((size == 0) || (ArraysPlume.indexOf(ArraysPlume.subarray(tmp, 0, size), v) == -1))
         tmp[size++] = v;
     }
 
-    SCALAR[] union = ArraysMDE.subarray(tmp, 0, size);
+    SCALAR[] union = ArraysPlume.subarray(tmp, 0, size);
     union = Intern.intern(union);
 
     int mod =

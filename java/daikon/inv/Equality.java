@@ -2,10 +2,16 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.Quantify.QuantFlags;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -191,7 +197,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   public String format_daikon(/*>>>@GuardSatisfied Equality this*/) {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     boolean start = true;
     for (VarInfo var : vars) {
       if (!start) {
@@ -217,7 +223,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
       clauses.add(String.format("(%s == %s)", leaderName, var.name()));
     }
-    return UtilMDE.join(clauses, " && ");
+    return UtilPlume.join(clauses, " && ");
   }
 
   public String format_esc(/*>>>@GuardSatisfied Equality this*/) {
@@ -293,7 +299,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   public String format_simplify(/*>>>@GuardSatisfied Equality this*/) {
-    StringBuffer result = new StringBuffer("(AND");
+    StringBuilder result = new StringBuilder("(AND");
     VarInfo leader = leader();
     String leaderName = leader.simplify_name();
     if (leader.rep_type.isArray()) {
@@ -355,7 +361,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         }
       }
     }
-    return UtilMDE.join(clauses, " && ");
+    return UtilPlume.join(clauses, " && ");
   }
 
   /*@SideEffectFree*/
@@ -385,7 +391,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       numSamples += count;
     }
 
-    List<VarInfo> result = new LinkedList<VarInfo>();
+    List<VarInfo> result = new ArrayList<VarInfo>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("Doing add at " + this.ppt.parent.name() + " for " + this);
     }
@@ -430,7 +436,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
                 + "] split from leader "
                 + leader.name()
                 + " ["
-                + leaderValue
+                + Debug.toString(leaderValue)
                 + ","
                 + leaderMod
                 + "]");
@@ -519,19 +525,19 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public void pivot() {
     VarInfo newLeader = null;
     for (VarInfo var : vars) {
-      // System.out.printf ("  processing %s\n", var);
+      // System.out.printf("  processing %s\n", var);
       if (newLeader == null) {
         newLeader = var;
       } else if (newLeader.isDerivedParamAndUninteresting()
           && !var.isDerivedParamAndUninteresting()) {
-        // System.out.printf ("%s derived and uninteresting, %s is leader%n",
+        // System.out.printf("%s derived and uninteresting, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
       } else if (var.isDerivedParamAndUninteresting()
           && !newLeader.isDerivedParamAndUninteresting()) {
         // do nothing
       } else if (var.derivedDepth() < newLeader.derivedDepth()) {
-        // System.out.printf ("%s greater depth, %s is leader%n",
+        // System.out.printf("%s greater depth, %s is leader%n",
         //                    newLeader, var);
         newLeader = var;
       } else if (var.derivedDepth() > newLeader.derivedDepth()) {
@@ -539,12 +545,12 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
       // if we got here, this is the "all other things being equal" case
       else if (var.complexity() < newLeader.complexity()) {
-        // System.out.printf ("%s greater comlexity, %s is leader%n",
+        // System.out.printf("%s greater comlexity, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
       }
     }
-    // System.out.printf ("%s complexity = %d, %s complexity = %d\n", leaderCache,
+    // System.out.printf("%s complexity = %d, %s complexity = %d\n", leaderCache,
     //                    leaderCache.complexity(), newLeader,
     //                    newLeader.complexity());
     leaderCache = newLeader;

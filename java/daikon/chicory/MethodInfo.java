@@ -1,7 +1,11 @@
 package daikon.chicory;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -145,9 +149,9 @@ public class MethodInfo {
         Class<?> c = primitive_classes.get(aname);
 
         if (c == null) {
-          //c = Class.forName (aname);
-          //change class loading
-          //TODO referring class?
+          // c = Class.forName (aname);
+          // change class loading
+          // TODO referring class?
           c = Class.forName(aname, false, this.class_info.clazz.getClassLoader());
         }
 
@@ -226,13 +230,13 @@ public class MethodInfo {
   public void init_traversal(int depth) {
 
     traversalEnter = RootInfo.enter_process(this, depth);
-    // System.out.printf ("Method %s.%s: %n ", class_info.clazz.getName(),
+    // System.out.printf("Method %s.%s: %n ", class_info.clazz.getName(),
     //                    this);
-    // System.out.printf ("Enter daikon variable tree%n%s%n",
+    // System.out.printf("Enter daikon variable tree%n%s%n",
     //                    traversalEnter.treeString());
 
     traversalExit = RootInfo.exit_process(this, depth);
-    // System.out.printf ("Exit daikon variable tree%n%s%n",
+    // System.out.printf("Exit daikon variable tree%n%s%n",
     //                    traversalExit.treeString());
   }
 

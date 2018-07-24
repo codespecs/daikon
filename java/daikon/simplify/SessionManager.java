@@ -2,7 +2,10 @@ package daikon.simplify;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,7 +103,7 @@ public class SessionManager {
   private static String proverBackground() {
     if (prover_background == null) {
       try {
-        StringBuffer result = new StringBuffer("");
+        StringBuilder result = new StringBuilder("");
         String fileName;
         if (daikon.inv.Invariant.dkconfig_simplify_define_predicates) {
           fileName = "daikon-background-defined.txt";
@@ -185,7 +188,8 @@ public class SessionManager {
             mgr.wait(0);
           } catch (InterruptedException e) {
           }
-          assert mgr.pending != null : "@AssumeAssertion(nullness)";
+          assert mgr.pending != null
+              : "@AssumeAssertion(nullness): bug? might not be true if interrupted?";
           // session != null && mgr.pending != null;
         }
         error = null;
@@ -240,7 +244,7 @@ public class SessionManager {
     m.request(cc);
     assert !cc.valid;
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     for (int i = 0; i < 20000; i++) {
       buf.append("(EQ (select a " + i + ") " + (int) (200000 * Math.random()) + ")");

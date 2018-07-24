@@ -2,9 +2,18 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.*;
-import java.io.*;
-import java.util.*;
-import plume.IterableIterator;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -78,7 +87,7 @@ public class InvMap implements Serializable {
    * @see #invariantIterator()
    */
   public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/) {
-    return new IterableIterator<PptTopLevel>(pptIterator());
+    return UtilPlume.iteratorToIterable(pptIterator());
   }
 
   // Returns a sorted iterator over the Ppts using c as the comparator
@@ -135,7 +144,7 @@ public class InvMap implements Serializable {
   private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
     FileIO.new_decl_format = (Boolean) ois.readObject();
-    // System.out.printf ("Restoring new_decl_format to %b%n",
+    // System.out.printf("Restoring new_decl_format to %b%n",
     //                   FileIO.new_decl_format);
   }
 }

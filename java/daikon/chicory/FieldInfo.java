@@ -1,9 +1,10 @@
 package daikon.chicory;
 
 import daikon.dcomp.DCRuntime;
-import java.lang.reflect.*;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.lang.reflect.Modifier;
+import java.util.EnumSet;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -61,7 +62,7 @@ public class FieldInfo extends DaikonVariableInfo {
     field_num = num_prim_fields(superclass);
     for (Field f : clazz.getDeclaredFields()) {
       if (f.equals(field)) {
-        // System.out.printf ("field %s has field num %d\n", field,
+        // System.out.printf("field %s has field num %d\n", field,
         //                   field_num);
         return;
       }

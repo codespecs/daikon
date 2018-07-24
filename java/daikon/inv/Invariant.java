@@ -13,11 +13,16 @@ import daikon.simplify.LemmaStack;
 import daikon.simplify.SimpUtil;
 import daikon.suppress.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.*;
-import plume.*;
+import java.util.regex.Pattern;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.MathPlume;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
@@ -458,12 +463,12 @@ import typequals.*;
           result.format(),
           getClass().getName(),
           format(),
-          ArraysMDE.toString(permutation),
+          Arrays.toString(permutation),
           ppt,
           new_ppt);
-      // result.log (UtilMDE.backTrace());
+      // result.log (UtilPlume.backTrace());
     }
-    //if (debug.isLoggable(Level.FINE))
+    // if (debug.isLoggable(Level.FINE))
     //    debug.fine ("Invariant.transfer to " + new_ppt.name() + " "
     //                 + result.repr());
 
@@ -484,7 +489,7 @@ import typequals.*;
           "Created %s via clone_and_permute from %s using permutation %s old_ppt = %s",
           result.format(),
           format(),
-          ArraysMDE.toString(permutation),
+          Arrays.toString(permutation),
           VarInfo.arrayToString(ppt.var_infos)
           // + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos)
           );
@@ -530,7 +535,7 @@ import typequals.*;
           "Created %s via resurrect from %s using permutation %s old_ppt = %s new_ppt = %s",
           result.format(),
           format(),
-          ArraysMDE.toString(permutation),
+          Arrays.toString(permutation),
           VarInfo.arrayToString(ppt.var_infos),
           VarInfo.arrayToString(new_ppt.var_infos));
     }
@@ -631,8 +636,8 @@ import typequals.*;
 
   // Not used as of 1/31/2000
   // // For use by subclasses.
-  // /** Put a string representation of the variable names in the StringBuffer. */
-  // public void varNames(StringBuffer sb) {
+  // /** Put a string representation of the variable names in the StringBuilder. */
+  // public void varNames(StringBuilder sb) {
   //   // sb.append(this.getClass().getName());
   //   ppt.varNames(sb);
   // }
@@ -853,7 +858,7 @@ import typequals.*;
    */
   public static String simplify_format_string(String s) {
     if (s == null) return "null";
-    StringBuffer buf = new StringBuffer("|_string_");
+    StringBuilder buf = new StringBuilder("|_string_");
     if (s.length() > 150) {
       // Simplify can't handle long strings (its input routines have a
       // 4000-character limit for |...| identifiers, but it gets an
@@ -865,7 +870,7 @@ import typequals.*;
       int p2 = 50 + summ_length / 2;
       int p3 = 50 + 3 * summ_length / 4;
       int p4 = 50 + summ_length;
-      StringBuffer summ_buf = new StringBuffer(s.substring(0, 50));
+      StringBuilder summ_buf = new StringBuilder(s.substring(0, 50));
       summ_buf.append("...");
       summ_buf.append(Integer.toHexString(s.substring(50, p1).hashCode()));
       summ_buf.append(Integer.toHexString(s.substring(p1, p2).hashCode()));
@@ -941,7 +946,8 @@ import typequals.*;
         }
       } else {
         // // Debugging
-        // System.out.println("ICFP: different parents for " + inv1.format() + ", " + inv2.format());
+        // System.out.println("ICFP: different parents for " + inv1.format() + ", " +
+        // inv2.format());
 
         for (int i = 0; i < vis1.length; i++) {
           String name1 = vis1[i].name();
@@ -953,7 +959,7 @@ import typequals.*;
           int name2in1 = inv1.ppt.parent.indexOf(name2);
           int cmp1 = (name1in2 == -1) ? 0 : vis1[i].varinfo_index - name1in2;
           int cmp2 = (name2in1 == -1) ? 0 : vis2[i].varinfo_index - name2in1;
-          int cmp = MathMDE.sign(cmp1) + MathMDE.sign(cmp2);
+          int cmp = MathPlume.sign(cmp1) + MathPlume.sign(cmp2);
           if (cmp != 0) return cmp;
         }
       }
@@ -1192,7 +1198,7 @@ import typequals.*;
       int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("  isObviousStatically_SomeInEquality: ");
         for (int i = 0; i < vis.length; i++) {
           sb.append(assigned[i].name() + " ");
@@ -1259,7 +1265,7 @@ import typequals.*;
       /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis) {
     assert !Daikon.isInferencing;
     assert vis.length <= 3 : "Unexpected more-than-ternary invariant";
-    if (!ArraysMDE.noDuplicates(vis)) {
+    if (!ArraysPlume.noDuplicates(vis)) {
       log("Two or more variables are equal %s", format());
       return new DiscardInfo(this, DiscardCode.obvious, "Two or more variables are equal");
     }
@@ -1278,7 +1284,7 @@ import typequals.*;
    */
   /*@Pure*/
   public boolean isReflexive(/*>>> @NonPrototype Invariant this*/) {
-    return !ArraysMDE.noDuplicates(ppt.var_infos);
+    return !ArraysPlume.noDuplicates(ppt.var_infos);
   }
 
   /**
@@ -1330,7 +1336,7 @@ import typequals.*;
     if (position == vis.length) {
       // base case
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("  isObviousDynamically_SomeInEquality: ");
         for (int i = 0; i < vis.length; i++) {
           sb.append(assigned[i].name() + " ");
@@ -1622,7 +1628,7 @@ import typequals.*;
       // debugGuarding.fine (guardingSet.toString());
     }
 
-    return UtilMDE.removeDuplicates(guardingList);
+    return UtilPlume.removeDuplicates(guardingList);
   }
 
   // This is called only from finally_print_the_invariants().
@@ -1895,11 +1901,11 @@ import typequals.*;
         strings.add(invs[i].format());
       }
     }
-    return UtilMDE.join(strings, ", ");
+    return UtilPlume.join(strings, ", ");
   }
 
   /**
-   * Used throught Java family formatting of invariants.
+   * Used throughout Java family formatting of invariants.
    *
    * <p>Returns
    *
@@ -1911,7 +1917,7 @@ import typequals.*;
   // [[ This method doesn't belong here. But where? ]]
   public static String formatFuzzy(String method, VarInfo v1, VarInfo v2, OutputFormat format) {
 
-    StringBuffer results = new StringBuffer();
+    StringBuilder results = new StringBuilder();
     return results
         .append("daikon.Quant.fuzzy.")
         .append(method)
@@ -1928,6 +1934,24 @@ import typequals.*;
     return (Class<? extends Invariant>) x;
   }
 
+  /**
+   * Returns true if this is an equality comparison. That is, returns true if this Invariant
+   * satisfies the following conditions:
+   *
+   * <ul>
+   *   <li>the Invariant is an EqualityComparison (its relationship is =, not &lt;, &le;, &gt;, or
+   *       &ge;).
+   *   <li>the invariant is statistically satisfied (its confidence is above the limit)
+   * </ul>
+   *
+   * This does not consider PairwiseIntComparison to be an equality invariant.
+   */
+  public boolean isEqualityComparison() {
+    if (!(this instanceof EqualityComparison)) return false;
+    double chance_conf = ((EqualityComparison) this).eq_confidence();
+    return chance_conf > Invariant.dkconfig_confidence_limit;
+  }
+
   /** @exception RuntimeException if representation invariant on this is broken */
   public void checkRep() {
     // very partial initial implementation
@@ -1936,27 +1960,3 @@ import typequals.*;
     }
   }
 }
-
-//     def format(self, args=None):
-//         if self.one_of:
-//             # If it can be None, print it only if it is always None and
-//             # is an invariant over non-derived variable.
-//             if self.can_be_None:
-//                 if ((len(self.one_of) == 1)
-//                     and self.var_infos):
-//                     some_nonderived = false
-//                     for vi in self.var_infos:
-//                      some_nonderived = some_nonderived or not vi.is_derived
-//                     if some_nonderived:
-//                         return "%s = uninit" % (args,)
-//             elif len(self.one_of) == 1:
-//                 return "%s = %s" % (args, self.one_of[0])
-//             ## Perhaps I should unconditionally return this value;
-//             ## otherwise I end up printing ranges more often than small
-//             ## numbers of values (because when few values and many samples,
-//             ## the range always looks justified).
-//             # If few samples, don't try to infer a function over the values;
-//             # just return the list.
-//             elif (len(self.one_of) <= 3) or (self.samples < 100):
-//                 return "%s in %s" % (args, util.format_as_set(self.one_of))
-//         return None

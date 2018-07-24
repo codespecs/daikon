@@ -8,9 +8,8 @@
 # to recreate them.  If we should need to recreate them, the source
 # files are in drawlet_src.zip in this directory
 
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
-# DAIKONDIR is where the 'daikon' project is cloned
-DAIKONDIR?=${DAIKONDIR_DEFAULT}
+# DAIKONDIR is the clone of the 'daikon' project.
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class
@@ -113,7 +112,7 @@ test_d2:
 update-goals:
 
 clean:
-	/bin/rm -rf *.inv.gz *.diff *.txt 
+	/bin/rm -rf *.inv.gz *.diff *.txt
 
 show-vars:
 	@echo PPT_OPTION = $(PPT_OPTION)

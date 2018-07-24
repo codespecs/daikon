@@ -1,6 +1,8 @@
 package daikon.chicory;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The StringInfo class is a subtype of DaikonVariableInfo used for variable types that can be
@@ -44,7 +46,7 @@ public class StringInfo extends DaikonVariableInfo {
    */
   public static String getStringList(List<?> theValues) {
     if (theValues == null) {
-      //buf.append("null");
+      // buf.append("null");
       return "null" + DaikonWriter.lineSep + "1";
     }
 
@@ -53,11 +55,11 @@ public class StringInfo extends DaikonVariableInfo {
     // How can this happen, given the declared type of theValues?
     // || theValues instanceof NonsensicalObject
     ) {
-      //buf.append("nonsensical");
+      // buf.append("nonsensical");
       return "nonsensical" + DaikonWriter.lineSep + "2";
     }
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     buf.append("[");
     for (Iterator<?> iter = theValues.iterator(); iter.hasNext(); ) {
@@ -109,12 +111,12 @@ public class StringInfo extends DaikonVariableInfo {
     return retString;
   }
 
-  //encodes a string: surrounds in quotes and removes line breaks
+  // encodes a string: surrounds in quotes and removes line breaks
   private String getString(String stringRef) {
     return ("\"" + encodeString(stringRef) + "\"");
   }
 
-  //removes endlines in string
+  // removes endlines in string
   private static String encodeString(String input) {
     return Runtime.quote(input);
   }

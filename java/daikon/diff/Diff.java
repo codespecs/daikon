@@ -3,13 +3,25 @@ package daikon.diff;
 import daikon.*;
 import daikon.inv.*;
 import gnu.getopt.*;
-import java.io.*;
-import java.lang.NoSuchMethodException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OptionalDataException;
+import java.io.StreamCorruptedException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.OrderedPairIterator;
+import org.plumelib.util.Pair;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -40,7 +52,7 @@ public final class Diff {
   public static final Logger debug = Logger.getLogger("daikon.diff.Diff");
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage:",
           "    java daikon.diff.Diff [flags...] file1 [file2]",
           "  file1 and file2 are serialized invariants produced by Daikon.",
@@ -281,7 +293,7 @@ public final class Diff {
           }
           String outputFilename = Daikon.getOptarg(g);
           outputFile = new File(outputFilename);
-          if (!UtilMDE.canCreateAndWrite(outputFile)) {
+          if (!UtilPlume.canCreateAndWrite(outputFile)) {
             throw new Error("Cannot write to file " + outputFile);
           }
           break;
@@ -519,7 +531,7 @@ public final class Diff {
       if (outputFile != null) {
         MinusVisitor v = new MinusVisitor();
         root.accept(v);
-        UtilMDE.writeObject(v.getResult(), outputFile);
+        UtilPlume.writeObject(v.getResult(), outputFile);
         // System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
@@ -531,7 +543,7 @@ public final class Diff {
         XorVisitor v = new XorVisitor();
         root.accept(v);
         InvMap resultMap = v.getResult();
-        UtilMDE.writeObject(resultMap, outputFile);
+        UtilPlume.writeObject(resultMap, outputFile);
         if (debug.isLoggable(Level.FINE)) {
           debug.fine("Result: " + resultMap.toString());
         }
@@ -546,7 +558,7 @@ public final class Diff {
       if (outputFile != null) {
         UnionVisitor v = new UnionVisitor();
         root.accept(v);
-        UtilMDE.writeObject(v.getResult(), outputFile);
+        UtilPlume.writeObject(v.getResult(), outputFile);
         // System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
@@ -560,7 +572,7 @@ public final class Diff {
 
   /** Reads an InvMap from a file that contains a serialized InvMap or PptMap. */
   private InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
-    Object o = UtilMDE.readObject(file);
+    Object o = UtilPlume.readObject(file);
     if (o instanceof InvMap) {
       return (InvMap) o;
     } else {
@@ -591,12 +603,12 @@ public final class Diff {
       }
 
       // List<Invariant> invs = ppt.getInvariants();
-      List<Invariant> invs = UtilMDE.sortList(ppt.getInvariants(), PptTopLevel.icfp);
+      List<Invariant> invs = UtilPlume.sortList(ppt.getInvariants(), PptTopLevel.icfp);
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
-          List<Invariant> invsCond = UtilMDE.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
+          List<Invariant> invsCond = UtilPlume.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
           // List<Invariant> invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }
@@ -823,7 +835,7 @@ public final class Diff {
       if (targetName.equals(somePptName)) {
         @SuppressWarnings("nullness") // map: iterating over keySet
         /*@NonNull*/ PptTopLevel repl = manip.get(somePptName);
-        return UtilMDE.sortList(repl.getInvariants(), PptTopLevel.icfp);
+        return UtilPlume.sortList(repl.getInvariants(), PptTopLevel.icfp);
       }
     }
     //    System.out.println ("Could not find the left hand side of implication!!!");

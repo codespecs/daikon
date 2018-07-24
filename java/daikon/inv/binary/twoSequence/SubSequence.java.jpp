@@ -45,7 +45,7 @@ The correct way to build the system is to run 'make'.
   #define SEQUENCESCALARINTERSECTION SequenceScalarIntersection
   #define SEQUENCESPREDICATE SequencesPredicate
   #define SEQUENCESCALARUNION SequenceScalarUnion
-  #define INDEX_OF(a, b) ArraysMDE.indexOf(a, b)
+  #define INDEX_OF(a, b) ArraysPlume.indexOf(a, b)
   #define BASE_IS_TYPE baseIsScalar()
   #define SEQSEQ_EQ SeqSeqIntEqual
   #define PAIRWISE_EQ PairwiseIntEqual
@@ -87,7 +87,9 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Pair;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -258,8 +260,8 @@ public class CLASSNAME extends SUPERCLASS {
       + "(<= (+ " + shift + " " + aS + ") " + bS + ") "  // 2
       + "(FORALL (" + index + ") (IMPLIES (AND (<= 0 " + index + ") (< " + index + " " + aS + ")) " // 3
       + "(EQ "
-      + UtilMDE.replaceString(aE, aI, "(+ " + aL + " " + index + ")") + " "
-      + UtilMDE.replaceString(bE, bI, "(+ (+ " + bL + " " + index + ") " + shift + ")") + ")))))";
+      + UtilPlume.replaceString(aE, aI, "(+ " + aL + " " + index + ")") + " "
+      + UtilPlume.replaceString(bE, bI, "(+ (+ " + bL + " " + index + ") " + shift + ")") + ")))))";
 
     // So, when this in sensible, we know that both the length and
     // subseq statements hold.

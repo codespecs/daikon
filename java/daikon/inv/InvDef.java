@@ -4,9 +4,8 @@ import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;
 import daikon.inv.binary.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -85,7 +84,7 @@ public class InvDef {
     try {
       Method swap_method = cls.getMethod("swap_class", (Class<?>[]) null);
       if (swap) {
-        @SuppressWarnings("nullness") // "swap_class" is static, so null first argument is OK
+        @SuppressWarnings("nullness") // static method, so null first arg is OK: swap_class()
         Class<? extends Invariant> tmp_cls =
             asInvClass(swap_method.invoke(null, (Object /*@Nullable*/ []) null));
         cls = tmp_cls;
@@ -107,7 +106,8 @@ public class InvDef {
   //    * suppressees and we always know the correct permuation in that
   //    * instance.
   //    */
-  //   public InvDef (int v1_index, int v2_index, int v3_index, Class<? extends Invariant> inv_class) {
+  //   public InvDef (int v1_index, int v2_index, int v3_index, Class<? extends Invariant>
+  // inv_class) {
   //
   //     assert v1_index < v2_index;
   //     assert v2_index < v3_index;

@@ -10,10 +10,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -81,7 +90,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     // a quoted string
     if (name.startsWith("\"") && name.endsWith("\"")) {
       String content = name.substring(1, name.length() - 1);
-      if (content.equals(UtilMDE.escapeNonJava(UtilMDE.unescapeNonJava(content)))) {
+      if (content.equals(UtilPlume.escapeNonJava(UtilPlume.unescapeNonJava(content)))) {
         return (new Simple(name)).intern();
       }
     }
@@ -203,7 +212,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         throw e;
       }
     }
-    // System.out.println("esc_name = " + esc_name_cached + " for " + name() + " of class " + this.getClass().getName());
+    // System.out.println("esc_name = " + esc_name_cached + " for " + name() + " of class " +
+    // this.getClass().getName());
     return esc_name_cached;
   }
 
@@ -284,7 +294,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         throw e;
       }
     }
-    // System.out.println("jml_name = " + jml_name_cached + " for " + name() + " of class " + this.getClass().getName());
+    // System.out.println("jml_name = " + jml_name_cached + " for " + name() + " of class " +
+    // this.getClass().getName());
     return jml_name_cached;
   }
 
@@ -345,7 +356,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         throw e;
       }
     }
-    // System.out.println("identifier_name = " + identifier_name_cached + " for " + name() + " of class " + this.getClass().getName());
+    // System.out.println("identifier_name = " + identifier_name_cached + " for " + name() + " of
+    // class " + this.getClass().getName());
     return identifier_name_cached;
   }
 
@@ -375,7 +387,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     // profiling when it was determined that the interns are unique
     // anyway.
     if (repr_cached == null) {
-      repr_cached = repr_impl(); //.intern();
+      repr_cached = repr_impl(); // .intern();
     }
     return repr_cached;
   }
@@ -458,7 +470,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return true;
     }
     if (this instanceof VarInfoName.Prestate
-        && ((VarInfoName.Prestate) this).term.name() == "this") { //interned
+        && ((VarInfoName.Prestate) this).term.name() == "this") { // interned
       return true;
     }
 
@@ -667,7 +679,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       } else if (name.equals("this")) {
         return "Daikon_this";
       } else {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < name.length(); i++) {
           char c = name.charAt(i);
           if (Character.isLetterOrDigit(c)) buf.append(c);
@@ -1036,7 +1048,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     private String elts_repr_commas(/*>>>@GuardSatisfied FunctionOfN this*/) {
-      return UtilMDE.join(elts_repr(), ", ");
+      return UtilPlume.join(elts_repr(), ", ");
     }
 
     @Override
@@ -1095,7 +1107,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       assert v.isDerived();
       Derivation derived = v.derived;
       assert derived instanceof BinaryDerivation;
-      //|| derived instanceof TernaryDerivation);
+      // || derived instanceof TernaryDerivation);
       assert args.size() == 2;
       VarInfo arg1VarInfo = ((BinaryDerivation) derived).base1;
       VarInfo arg2VarInfo = ((BinaryDerivation) derived).base2;
@@ -1114,7 +1126,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       for (VarInfoName vin : args) {
         elts.add(vin.identifier_name());
       }
-      return function + "_of_" + UtilMDE.join(elts, "_comma_") + "___";
+      return function + "_of_" + UtilPlume.join(elts, "_comma_") + "___";
     }
 
     /** Shortcut getter to avoid repeated type casting. */
@@ -1322,9 +1334,10 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       String[] splits = null;
       boolean isStatic = false;
       String packageNamePrefix = null;
-      //if (isStatic) {
+      // if (isStatic) {
       if (term_name_no_brackets.startsWith(packageName + ".")) {
-        //           throw new Error("packageName=" + packageName + ", term_name_no_brackets=" + term_name_no_brackets);
+        //           throw new Error("packageName=" + packageName + ", term_name_no_brackets=" +
+        //                           term_name_no_brackets);
         //         }
         // Before splitting, remove the package name.
         packageNamePrefix = (packageName.equals("") ? "" : packageName + ".");
@@ -1851,7 +1864,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       String formatted = term.name_using(format, v);
       String collectType = (v.type.baseIsPrimitive() ? v.type.base() : "Object");
       return "daikon.Quant.getElement_" + collectType + "(" + formatted + ", " + index + ")";
-      //       // XXX temporary fix: sometimes long is passed as index (plume.StopWatch).
+      //       // XXX temporary fix: sometimes long is passed as index.
       //       // I can't find where the VarInfo for "index" is found. Wherever that is,
       //       // we should check if its type is long, and do the casting only for that
       //       // case.
@@ -3268,7 +3281,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
             index_vin = VarInfoName.parse(index_base);
           }
           // if (index_base.contains ("a"))
-          //  System.out.printf ("selectNth: '%s' '%s'%n", index_base,
+          //  System.out.printf("selectNth: '%s' '%s'%n", index_base,
           //                     index_vin);
         } else {
           index_vin = new Simple(index_off + "");
@@ -3276,7 +3289,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         VarInfoName to_replace = unquants.get(0);
         VarInfoName[] replace_result = replace(root, to_replace, index_vin);
         // if ((index_base != null) && index_base.contains ("a"))
-        //   System.out.printf ("root = %s, to_replace = %s, index_vin = %s%n",
+        //   System.out.printf("root = %s, to_replace = %s, index_vin = %s%n",
         //                      root, to_replace, index_vin);
         return replace_result[0];
       } else {
@@ -3412,15 +3425,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      * other elements are jml-named strings for the provided roots (with sequenced subscripted by
      * one of the new bound variables).
      */
-    //     public static String[] format_jml(VarInfoName[] roots) {
-    //       return format_jml(roots, false);
-    //     }
-    //     public static String[] format_jml(VarInfoName[] roots, boolean elementwise) {
-    //       return format_jml(roots, elementwise, true);
-    //     }
-    //     public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
-    //       return format_java_style(roots, elementwise, forall, OutputFormat.JML);
-    //     }
+    // public static String[] format_jml(VarInfoName[] roots) {
+    //   return format_jml(roots, false);
+    // }
+    // public static String[] format_jml(VarInfoName[] roots, boolean elementwise) {
+    //   return format_jml(roots, elementwise, true);
+    // }
+    // public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
+    //   return format_java_style(roots, elementwise, forall, OutputFormat.JML);
+    // }
 
     /* CP: Quantification for DBC: We would like quantified expression
      * to always return a boolean value, and in the previous
@@ -3478,26 +3491,28 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     //     public static String[] format_dbc(VarInfoName[] roots, VarInfo[] varinfos) {
     //       return format_dbc(roots, true, varinfos);
     //     }
-    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise, VarInfo[] varinfos) {
+    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise,
+    //                                       VarInfo[] varinfos) {
     //       return format_dbc(roots, elementwise, true, varinfos);
     //     }
-    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise, boolean forall, VarInfo[] varinfos) {
+    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise,
+    //                                       boolean forall, VarInfo[] varinfos) {
     //       assert roots != null;
 
     //       QuantifyReturn qret = quantify(roots);
 
     //       // build the "\forall ..." predicate
     //       String[] result = new String[roots.length + 2];
-    //       StringBuffer int_list, conditions, closing;
-    //       StringBuffer tempResult;
+    //       StringBuilder int_list, conditions, closing;
+    //       StringBuilder tempResult;
     //       {
-    //         tempResult = new StringBuffer();
+    //         tempResult = new StringBuilder();
     //         // "i, j, ..."
-    //         int_list = new StringBuffer();
+    //         int_list = new StringBuilder();
     //         // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
     //         // if elementwise, also do "(i-ai) == (b-bi) && ..."
-    //         conditions = new StringBuffer();
-    //         closing = new StringBuffer();
+    //         conditions = new StringBuilder();
+    //         closing = new StringBuilder();
     //         for (int i = 0; i < qret.bound_vars.size(); i++) {
     //           int_list.setLength(0);
     //           conditions.setLength(0);
@@ -3547,10 +3562,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     //               conditions.append("))");
     //             }
     //           }
-    //           tempResult.append(" for (int " + int_list + " ; " + conditions + "; " + closing + ") ");
+    //           tempResult.append(" for (int " + int_list + " ; " + conditions + "; " + closing +
+    // ") ");
     //         }
     //       }
-    //       //result[0] = "{ for (int " + int_list + " ; " + conditions + "; " + closing + ") $assert ("; //@TX
+    //       //result[0] = "{ for (int " + int_list + " ; " + conditions + "; "
+    //                     + closing + ") $assert ("; //@TX
     //       result[0] = "{ " + tempResult + " $assert ("; //@TX
     //       result[result.length - 1] = "); }";
 
@@ -3642,13 +3659,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
       // build the forall predicate
       String[] result = new String[(includeIndex ? 2 : 1) * roots.length + 2];
-      StringBuffer int_list, conditions;
+      StringBuilder int_list, conditions;
       {
         // "i j ..."
-        int_list = new StringBuffer();
+        int_list = new StringBuilder();
         // "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
         // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
-        conditions = new StringBuffer();
+        conditions = new StringBuilder();
         for (int i = 0; i < qret.bound_vars.size(); i++) {
           VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
@@ -3739,7 +3756,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     //     public static String[] format_jml(QuantifyReturn qret, boolean elementwise) {
     //       return format_java_style(qret, elementwise, true, OutputFormat.JML);
     //     }
-    //     public static String[] format_jml(QuantifyReturn qret, boolean elementwise, boolean forall) {
+    //     public static String[] format_jml(QuantifyReturn qret, boolean elementwise, boolean
+    // forall) {
     //       return format_java_style(qret, elementwise, forall, OutputFormat.JML);
     //     }
 
@@ -3783,14 +3801,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         QuantifyReturn qret, boolean elementwise, boolean forall, OutputFormat format) {
       // build the "\forall ..." predicate
       String[] result = new String[qret.root_primes.length + 2];
-      StringBuffer int_list, conditions, closing;
+      StringBuilder int_list, conditions, closing;
       {
         // "i, j, ..."
-        int_list = new StringBuffer();
+        int_list = new StringBuilder();
         // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
         // if elementwise, also do "(i-ai) == (b-bi) && ..."
-        conditions = new StringBuffer();
-        closing = new StringBuffer();
+        conditions = new StringBuilder();
+        closing = new StringBuilder();
         for (int i = 0; i < qret.bound_vars.size(); i++) {
           VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
@@ -3896,7 +3914,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      */
     protected static String quant_element_conditions(
         VarInfoName _idx, VarInfoName _low, VarInfoName idx, VarInfoName low, OutputFormat format) {
-      StringBuffer conditions = new StringBuffer();
+      StringBuilder conditions = new StringBuilder();
 
       if (ZERO.equals(_low)) {
         conditions.append(_idx.name_using(format, null));

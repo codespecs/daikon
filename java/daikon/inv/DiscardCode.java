@@ -1,7 +1,8 @@
 package daikon.inv;
 
 import daikon.inv.filter.*;
-import java.io.*;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -103,7 +104,8 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     this.enumValue = -1;
   }
 
-  // Makes it easier to add a new DiscardCode type by simply constructing it as a field with the next non-used integer value
+  // Makes it easier to add a new DiscardCode type by simply constructing it as a field with the
+  // next non-used integer value.
   private DiscardCode(int enumValue) {
     this.enumValue = enumValue;
   }
@@ -191,7 +193,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     else if (enumValue == 11) return exact;
     else if (enumValue == 12) return var_filtered;
     else if (enumValue == 13) return filtered;
-    else { //this should never happen
+    else { // this should never happen
       // return null;
       throw new Error("impossible");
     }

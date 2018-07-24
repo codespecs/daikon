@@ -9,8 +9,15 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.unary.*;
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -75,7 +82,7 @@ import typequals.*;
  * <p>Note: no test case should contain the character ';' in any way other than to divide arguments
  * with in a command line.
  */
-@SuppressWarnings("nullness")
+@SuppressWarnings("nullness") // test code
 public class InvariantAddAndCheckTester extends TestCase {
 
   /**
@@ -234,15 +241,15 @@ public class InvariantAddAndCheckTester extends TestCase {
    *     failed
    */
   private static /*@Nullable*/ String performTest(LineNumberReader commands) {
-    StringBuffer output = new StringBuffer();
-    //  List invariantTestCases = new Vector();
+    StringBuilder output = new StringBuilder();
+    //  List invariantTestCases = new ArrayList();
     boolean noTestFailed = true;
 
     while (true) {
       // Create a new test case
       //  FormatTestCase currentCase = FormatTestCase.instantiate(commands, generateGoals);
 
-      //if (currentCase == null)
+      // if (currentCase == null)
       //  break;
       //  else {
       //  invariantTestCases.add(currentCase);
@@ -264,7 +271,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   private static String generateCommands(LineNumberReader input) {
-    StringBuffer output = new StringBuffer();
+    StringBuilder output = new StringBuilder();
 
     while (true) {
       String commands = AddAndCheckTestCase.generateTest(input);
@@ -388,7 +395,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static Method outputProducer;
 
     /** Contains error messages if any test commands fail. */
-    private static StringBuffer results;
+    private static StringBuilder results;
 
     /** The token that divides the different arguments to a test command. */
     private static final String argDivider = ";";
@@ -454,7 +461,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static boolean initFields(LineNumberReader commands, boolean generatingCommands) {
 
-      results = new StringBuffer();
+      results = new StringBuilder();
 
       @SuppressWarnings("signature") // user input, should be checked
       /*@BinaryName*/ String className = getNextRealLine(commands);

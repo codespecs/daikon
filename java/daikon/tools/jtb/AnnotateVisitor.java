@@ -9,13 +9,21 @@ import daikon.inv.OutputFormat;
 import daikon.inv.unary.sequence.EltNonZero;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
-import java.util.regex.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.EntryReader;
+import org.plumelib.util.EntryReader;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -77,7 +85,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   public List<NodeToken> addedComments = new ArrayList<NodeToken>();
 
-  private Stack<ClassFieldInfo> cfis = new Stack<ClassFieldInfo>();
+  private Deque<ClassFieldInfo> cfis = new ArrayDeque<ClassFieldInfo>();
 
   private PptNameMatcher pptMatcher;
 
@@ -123,7 +131,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     String lineString = javaFileLines.get(linenumber);
     int column =
         getTabbedIndex(nt.beginColumn - 1, /* because in jtb cols start at 1 */ lineString);
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append(lineString.substring(0, column));
     sb.append(comment);
     if (comment.endsWith("\n")) {
@@ -336,7 +344,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     // if (debug) {
-    //   System.out.printf("get_requires_and_ensures(%s):%n  => requires=%s%n  => ensures=%s%n", n, requires_invs, ensures_invs);
+    //   System.out.printf("get_requires_and_ensures(%s):%n  => requires=%s%n  => ensures=%s%n", n,
+    //                     requires_invs, ensures_invs);
     // }
 
     return new /*@Nullable*/ InvariantsAndModifiedVars[] {requires_invs, ensures_invs, throw_invs};
@@ -433,7 +442,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     // Grammar production for ClassOrInterfaceBodyDeclaration:
     // f0 -> Initializer()
-    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) |
+    // ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
     //       | ";"
 
     super.visit(n); // call "accept(this)" on each field
@@ -740,7 +750,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       PrimaryExpression pe = (PrimaryExpression) ns.elementAt(0);
       // System.out.println("pe:" + Ast.format(pe));
       // for (int i = 0; i<ns.size(); i++) {
-      //   System.out.println("ns #" + i + ": " + ns.elementAt(i));
+      //   System.out.println("ns #" + i + ": " + ns.get(i));
       // }
       if (ns.size() == 2) {
         NodeOptional no = (NodeOptional) ns.elementAt(1);
@@ -905,7 +915,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // System.out.println("element_type_fields(" + ppt + ")");
     HashMap<String, String> result = new HashMap<String, String>();
     // FieldDeclaration[] fdecls = cfv.fieldDeclarations();
-    // System.out.println("fields: " + ArraysMDE.toString(fields));
+    // System.out.println("fields: " + Arrays.toString(fields));
     for (String field : allFieldNames) {
       // System.out.printf("element_type_fields (%s) field: %s%n", ppt, field);
       VarInfo vi = findVar(field, ppt);
@@ -1006,7 +1016,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // PrintInvariants.print_modified_vars(ppt, pw) returns possibly
     // several lines. In such a case, we're only interested in the second
     // one, which contains the "modified" or "assignable" clause.
-    String[] splitModVars = plume.UtilMDE.splitLines(retval.modifiedVars);
+    String[] splitModVars = UtilPlume.splitLines(retval.modifiedVars);
     if (splitModVars.length > 1) {
       for (int i = 0; i < splitModVars.length; i++) {
         if (splitModVars[i].startsWith("modifies ") || splitModVars[i].startsWith("assignable ")) {

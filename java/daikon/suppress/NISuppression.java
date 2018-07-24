@@ -5,9 +5,12 @@ import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
-import java.lang.reflect.*;
-import java.util.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -28,7 +31,6 @@ public class NISuppression {
   NISuppressee suppressee;
 
   private boolean debug = false;
-  static Stopwatch watch = new Stopwatch(false);
 
   public NISuppression(NISuppressor[] suppressor_set, NISuppressee suppressee) {
 
@@ -210,12 +212,9 @@ public class NISuppression {
     // Recursively check each combination of possible antecedents that
     // match our suppressors for suppressions
     VarInfo vis[] = new VarInfo[suppressee.var_count];
-    // watch.clear();
-    // watch.start();
     // int old_size = unsuppressed_invs.size();
     Invariant[] cinvs = new Invariant[antecedents.length];
     find_unsuppressed_invs(unsuppressed_invs, antecedents, vis, 0, false, cinvs);
-    // watch.stop();
     if (debug) System.out.println("  unsuppressed invariants: " + unsuppressed_invs);
   }
 
@@ -584,7 +583,11 @@ public class NISuppression {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied NISuppression this*/) {
-    return (UtilMDE.join(suppressors, " && ") + " ==> " + suppressee);
+    String suppressorsString =
+        (suppressors.length == 1)
+            ? suppressors[0].toString()
+            : "(" + UtilPlume.join(suppressors, " && ") + ")";
+    return suppressorsString + " ==> " + suppressee;
   }
 
   /** Returns a string describing each of the antecedents for each suppressor. */

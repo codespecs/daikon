@@ -1,16 +1,14 @@
 package daikon.test;
 
 import daikon.*;
-import java.io.*;
-import java.util.*;
+import java.util.Arrays;
 import junit.framework.*;
-import plume.*;
 
 @SuppressWarnings("nullness") // testing code
 public final class TestQuant extends TestCase {
 
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(TestPlume.class));
+    junit.textui.TestRunner.run(new TestSuite(TestQuant.class));
   }
 
   public TestQuant(String name) {
@@ -18,7 +16,11 @@ public final class TestQuant extends TestCase {
   }
 
   public static final void assert_arrays_equals(int[] a1, int[] a2) {
-    TestPlume.assert_arrays_equals(a1, a2);
+    boolean result = Arrays.equals(a1, a2);
+    if (!result) {
+      System.out.println("Arrays differ: " + Arrays.toString(a1) + ", " + Arrays.toString(a2));
+    }
+    assert result;
   }
 
   private static int[] removeAdjacentDups(int[] a) {

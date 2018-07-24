@@ -2,7 +2,7 @@ package daikon.config;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.regex.qual.*;
@@ -48,31 +48,33 @@ public class HtmlToTexinfo {
   public static String htmlToTexinfo(String s) {
 
     // Remove leading spaces, which throw off Info.
-    s = UtilMDE.replaceString(s, lineSep + " ", lineSep);
+    s = UtilPlume.replaceString(s, lineSep + " ", lineSep);
 
-    s = UtilMDE.replaceString(s, "{", "@{");
-    s = UtilMDE.replaceString(s, "}", "@}");
+    s = UtilPlume.replaceString(s, "{", "@{");
+    s = UtilPlume.replaceString(s, "}", "@}");
     s = s.replaceAll("(@p?x?ref)@\\{(.*)@\\}", "$1{$2}");
-    s = UtilMDE.replaceString(s, "<br>", "@*");
-    s = UtilMDE.replaceString(s, lineSep + lineSep + "<p>", lineSep + lineSep);
-    s = UtilMDE.replaceString(s, "<p>", "@*@*");
+    s = UtilPlume.replaceString(s, "<br>", "@*");
+    s = UtilPlume.replaceString(s, lineSep + lineSep + "<p>", lineSep + lineSep);
+    s = UtilPlume.replaceString(s, "<p>", "@*@*");
     // Sadly, Javadoc prohibits the <samp> tag.  Use <tt> instead.
-    s = UtilMDE.replaceString(s, "<samp>", "@samp{");
-    s = UtilMDE.replaceString(s, "</samp>", "}");
-    s = UtilMDE.replaceString(s, "<code>", "@code{");
-    s = UtilMDE.replaceString(s, "</code>", "}");
-    s = UtilMDE.replaceString(s, lineSep + "<pre>" + lineSep, lineSep + "@example" + lineSep);
-    s = UtilMDE.replaceString(s, "<pre>" + lineSep, lineSep + "@example" + lineSep);
-    s = UtilMDE.replaceString(s, lineSep + "<pre>", lineSep + "@example" + lineSep);
-    s = UtilMDE.replaceString(s, "<pre>", lineSep + "@example" + lineSep);
-    s = UtilMDE.replaceString(s, lineSep + "</pre>" + lineSep, lineSep + "@end example" + lineSep);
-    s = UtilMDE.replaceString(s, "</pre>" + lineSep, lineSep + "@end example" + lineSep);
-    s = UtilMDE.replaceString(s, lineSep + "</pre>", lineSep + "@end example" + lineSep);
-    s = UtilMDE.replaceString(s, "</pre>", lineSep + "@end example" + lineSep);
+    s = UtilPlume.replaceString(s, "<samp>", "@samp{");
+    s = UtilPlume.replaceString(s, "</samp>", "}");
+    s = UtilPlume.replaceString(s, "<code>", "@code{");
+    s = UtilPlume.replaceString(s, "</code>", "}");
+    s = UtilPlume.replaceString(s, lineSep + "<pre>" + lineSep, lineSep + "@example" + lineSep);
+    s = UtilPlume.replaceString(s, "<pre>" + lineSep, lineSep + "@example" + lineSep);
+    s = UtilPlume.replaceString(s, lineSep + "<pre>", lineSep + "@example" + lineSep);
+    s = UtilPlume.replaceString(s, "<pre>", lineSep + "@example" + lineSep);
+    s =
+        UtilPlume.replaceString(
+            s, lineSep + "</pre>" + lineSep, lineSep + "@end example" + lineSep);
+    s = UtilPlume.replaceString(s, "</pre>" + lineSep, lineSep + "@end example" + lineSep);
+    s = UtilPlume.replaceString(s, lineSep + "</pre>", lineSep + "@end example" + lineSep);
+    s = UtilPlume.replaceString(s, "</pre>", lineSep + "@end example" + lineSep);
     // Catch-all for parameters, filenames, etc. for which there
     // is no specific HTML formatting.
-    s = UtilMDE.replaceString(s, "<tt>", "@code{");
-    s = UtilMDE.replaceString(s, "</tt>", "}");
+    s = UtilPlume.replaceString(s, "<tt>", "@code{");
+    s = UtilPlume.replaceString(s, "</tt>", "}");
 
     // Other HTML formatting to handle in the future
     // BLOCKQUOTE, "\n\n",        ""
@@ -88,14 +90,14 @@ public class HtmlToTexinfo {
     // A,          "", ""
     // SUP,        "^", ""
 
-    s = UtilMDE.replaceString(s, "&gt;", ">");
-    s = UtilMDE.replaceString(s, "&ge;", ">=");
-    s = UtilMDE.replaceString(s, "&lt;", "<");
-    s = UtilMDE.replaceString(s, "&le;", "<=");
-    s = UtilMDE.replaceString(s, "&rArr;", "->");
+    s = UtilPlume.replaceString(s, "&gt;", ">");
+    s = UtilPlume.replaceString(s, "&ge;", ">=");
+    s = UtilPlume.replaceString(s, "&lt;", "<");
+    s = UtilPlume.replaceString(s, "&le;", "<=");
+    s = UtilPlume.replaceString(s, "&rArr;", "->");
 
     // &amp must come last
-    s = UtilMDE.replaceString(s, "&amp;", "&");
+    s = UtilPlume.replaceString(s, "&amp;", "&");
 
     return s;
   }

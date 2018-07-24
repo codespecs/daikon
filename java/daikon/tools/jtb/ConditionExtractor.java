@@ -1,6 +1,13 @@
 package daikon.tools.jtb;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
@@ -37,7 +44,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // to decide whether the return statement should be included as a conditional.
   // Return statements are included as conditionals iff the return type is "boolean"
   // Must be a stack rather than a single variable for the case of helper classes.
-  private Stack<Object> resultTypes = new Stack<Object>(); // elements are ResultType or String
+  private Deque<Object> resultTypes = new ArrayDeque<Object>(); // elements are ResultType or String
 
   // key = methodname (as String); value = conditional expressions (as Strings)
   HashMap<String, List<String>> conditions = new HashMap<String, List<String>>();
@@ -157,7 +164,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     String switchExpression = Ast.format(n.f2);
     Collection<String> caseValues = getCaseValues(n.f5);
     // a condition for the default case. A 'not' of all the different cases.
-    StringBuffer defaultString = new StringBuffer();
+    StringBuilder defaultString = new StringBuilder();
     for (String switchValue : caseValues) {
       switchValue = switchValue.trim();
       if (!switchValue.equals(":")) {
@@ -230,7 +237,8 @@ class ConditionExtractor extends DepthFirstVisitor {
 
   // f0 -> "for"
   // f1 -> "("
-  // f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+  // f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ]
+  // ";" [ ForUpdate() ] )
   // f3 -> ")"
   // f4 -> Statement()
   /* Extract the condition in an 'for' statement */
@@ -279,7 +287,7 @@ class ConditionExtractor extends DepthFirstVisitor {
         enterMethod = false;
       }
       if (resultTypes.peek() instanceof ResultType) {
-        ResultType resultType = (ResultType) resultTypes.peek();
+        ResultType resultType = (ResultType) resultTypes.getFirst();
         if (resultType.f0.choice instanceof Type) {
           Type type = (Type) resultType.f0.choice;
           if (Ast.isPrimitive(type)) {

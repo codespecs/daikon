@@ -2,9 +2,11 @@ package daikon.split;
 
 import daikon.Daikon;
 import daikon.inv.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -63,7 +65,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   static /*@Nullable*/ Class<?> defineSplitterClass(
       /*@BinaryName*/ String className, String fileName) {
     try {
-      return UtilMDE.defineClassFromFile(className, fileName);
+      return UtilPlume.defineClassFromFile(className, fileName);
     } catch (FileNotFoundException e) {
       if (!PptSplitter.dkconfig_suppressSplitterErrors) {
         System.out.println(

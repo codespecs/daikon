@@ -16,20 +16,14 @@ BEGIN {
     }
 }
 
-unless (exists $ENV{"DAIKONDIR"}) {
-    my $str = "The DAIKONDIR environment variable was not found.\n";
-    $str .= "Please make sure it is set to the location of the ";
-    $str .= "daikon/ directory.\n";
-    $str .= "Usually, you would do this by running the daikon.bashrc or ";
-    $str .= "daikon.cshrc script\nin your shell startup file.\n";
-    die $str;
-}
+use File::Basename;
+my $dirname = dirname(__FILE__);
 
 my @locs = ('daikon-instrumented', 'lib/daikon-instrumented',
             'blib/lib/daikon-instrumented', '../blib/lib/daikon-instrumented');
 
 my $perl = $EXECUTABLE_NAME;
-my $perl_lib = "-I$ENV{DAIKONDIR}/front-end/perl/lib";
+my $perl_lib = "-I$dirname/front-end/perl/lib";
 
 my @args = ($perl_lib, @ARGV);
 

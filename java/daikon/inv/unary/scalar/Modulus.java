@@ -3,7 +3,7 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.derive.unary.SequenceLength;
 import daikon.inv.*;
-import plume.*;
+import org.plumelib.util.MathPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -140,7 +140,7 @@ public class Modulus extends SingleScalar {
         return InvariantStatus.FALSIFIED;
       }
     } else {
-      long new_modulus_long = Math.abs(MathMDE.gcd(modulus, value1 - value));
+      long new_modulus_long = Math.abs(MathPlume.gcd(modulus, value1 - value));
       int new_modulus;
       if (new_modulus_long > Integer.MAX_VALUE || (new_modulus_long < Integer.MIN_VALUE)) {
         new_modulus = 1;
@@ -182,9 +182,9 @@ public class Modulus extends SingleScalar {
         return InvariantStatus.FALSIFIED;
       }
       modulus = new_modulus;
-      remainder = MathMDE.mod_positive(value, modulus);
+      remainder = MathPlume.mod_positive(value, modulus);
     } else {
-      long new_modulus_long = Math.abs(MathMDE.gcd(modulus, value1 - value));
+      long new_modulus_long = Math.abs(MathPlume.gcd(modulus, value1 - value));
       int new_modulus;
       if (new_modulus_long > Integer.MAX_VALUE || (new_modulus_long < Integer.MIN_VALUE)) {
         new_modulus = 1;

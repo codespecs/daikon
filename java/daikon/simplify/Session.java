@@ -2,8 +2,15 @@ package daikon.simplify;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -99,12 +106,12 @@ public class Session {
       }
 
       // set up command stream
-      @SuppressWarnings("nullness") // getOutputStream is non-null because we didn't redirect
+      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       PrintStream tmp_input = new PrintStream(process.getOutputStream());
       input = tmp_input;
 
       // set up result stream
-      @SuppressWarnings("nullness") // getInputStream is non-null because we didn't redirect
+      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       /*@NonNull*/ InputStream is = process.getInputStream();
       output = new BufferedReader(new InputStreamReader(is, UTF_8));
 

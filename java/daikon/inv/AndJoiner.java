@@ -1,8 +1,9 @@
 package daikon.inv;
 
 import daikon.*;
-import java.util.*;
-import plume.UtilMDE;
+import java.util.ArrayList;
+import java.util.List;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -48,14 +49,14 @@ public class AndJoiner extends Joiner {
       invStrings.add(inv.format_using(format));
     }
     if (format == OutputFormat.DAIKON) {
-      return UtilMDE.join(invStrings, " and ");
+      return UtilPlume.join(invStrings, " and ");
     } else if (format == OutputFormat.ESCJAVA
         || format.isJavaFamily()
         || format == OutputFormat.CSHARPCONTRACT) {
       // Forrest
-      return "(" + UtilMDE.join(invStrings, ") && (") + ")";
+      return "(" + UtilPlume.join(invStrings, ") && (") + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
-      return "(AND" + UtilMDE.join(invStrings, " ") + ")";
+      return "(AND" + UtilPlume.join(invStrings, " ") + ")";
     } else {
       return format_unimplemented(format);
     }

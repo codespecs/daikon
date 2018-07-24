@@ -1,17 +1,20 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
-import daikon.util.*;
-import java.io.*;
-import java.lang.instrument.*;
-import java.security.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.IllegalClassFormatException;
+import java.security.ProtectionDomain;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
+import org.plumelib.bcelutil.BcelUtil;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
 */
 
 public class Instrument implements ClassFileTransformer {
@@ -35,13 +38,13 @@ public class Instrument implements ClassFileTransformer {
   @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
   public byte /*@Nullable*/ [] transform(
       ClassLoader loader,
-      /*@InternalForm*/ String className,
+      /*@InternalFormForNonArray*/ String className,
       Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // System.out.printf ("transform on %s%n", className);
+    // System.out.printf("transform on %s%n", className);
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) return null;
@@ -55,7 +58,7 @@ public class Instrument implements ClassFileTransformer {
     boolean in_jdk = false;
 
     // Check if class is in JDK
-    if (BCELUtil.in_jdk_internalform(className)) {
+    if (BcelUtil.inJdkInternalform(className)) {
       // If we are not using an instrumented JDK, then skip this class.
       if (DynComp.no_jdk) {
         return null;
@@ -67,8 +70,7 @@ public class Instrument implements ClassFileTransformer {
 
       // We're not in a JDK class
       // Don't instrument our own classes
-      if ((className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/Test"))
-          || className.startsWith("daikon/chicory/")) {
+      if (is_dcomp(className)) {
         return null;
       }
     }
@@ -102,7 +104,7 @@ public class Instrument implements ClassFileTransformer {
         if (DynComp.debug) {
           System.out.printf("Dumping %s to %s%n", njc.getClassName(), debug_bin_dir);
           njc.dump(new File(debug_bin_dir, njc.getClassName() + ".class"));
-          BCELUtil.dump(njc, debug_bin_dir);
+          BcelUtil.dump(njc, debug_bin_dir);
         }
         return (njc.getBytes());
       }
@@ -111,5 +113,22 @@ public class Instrument implements ClassFileTransformer {
       e.printStackTrace();
       throw new RuntimeException("Unexpected error", e);
     }
+  }
+
+  /**
+   * Returns whether or not the specified class is part of dcomp itself (and thus should not be
+   * instrumented). Some Daikon classes that are used by DynComp are included here as well.
+   */
+  /*@Pure*/
+  private static boolean is_dcomp(String classname) {
+
+    if ((classname.startsWith("daikon/dcomp/") && !classname.startsWith("daikon/dcomp/Test"))
+        || classname.startsWith("daikon/chicory/")) {
+      return true;
+    }
+    if (classname.equals("daikon/PptTopLevel$PptType")) return true;
+    if (classname.startsWith("org/plumelib/bcelutil")) return true;
+    if (classname.startsWith("daikon/util")) return true;
+    return false;
   }
 }

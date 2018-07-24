@@ -1,6 +1,8 @@
 package daikon.chicory;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Arrays;
 @SuppressWarnings("nullness") // to do
 public class RootInfo extends DaikonVariableInfo {
   private RootInfo() {
-    //the root needs no name, etc. but set them to preserve nullness property
+    // the root needs no name, etc. but set them to preserve nullness property
     super(" RootInfo Object ", " RootInfo Object type ", " RootInfo Object reptype ");
   }
 
@@ -21,7 +23,7 @@ public class RootInfo extends DaikonVariableInfo {
 
   /** Creates a RootInfo object for a method entry program point. */
   public static RootInfo enter_process(MethodInfo mi, int depth) {
-    debug_vars.clear("Building enter tree for %s:%s%n", mi.method_name, mi);
+    // debug_vars.clear("Building enter tree for %s:%s%n", mi.method_name, mi);
 
     RootInfo root = new RootInfo();
 
@@ -48,14 +50,14 @@ public class RootInfo extends DaikonVariableInfo {
     root.addParameters(
         mi.class_info, mi.member, Arrays.<String>asList(mi.arg_names), /*offset = */ "", depth);
 
-    debug_vars.log("exit enter_process%n");
+    // debug_vars.log("exit enter_process%n");
 
     return root;
   }
 
   /** Creates a RootInfo object for a method exit program point. */
   public static RootInfo exit_process(MethodInfo mi, int depth) {
-    debug_vars.clear("Building exit tree for %s%n", mi);
+    // debug_vars.clear("Building exit tree for %s%n", mi);
 
     RootInfo root = new RootInfo();
 
@@ -79,14 +81,14 @@ public class RootInfo extends DaikonVariableInfo {
       }
     }
 
-    debug_vars.log("exit exit_process%n");
+    // debug_vars.log("exit exit_process%n");
 
     return root;
   }
 
   /** Creates a RootInfo object for a method exception exit program point. */
   public static RootInfo exception_process(MethodInfo mi, int depth) {
-    debug_vars.clear("Building exception exit tree for %s%n", mi);
+    // debug_vars.clear("Building exception exit tree for %s%n", mi);
 
     RootInfo root = new RootInfo();
 
@@ -109,7 +111,7 @@ public class RootInfo extends DaikonVariableInfo {
             "exception" + class_suffix, classClassName, stringClassName, null, false);
     retInfo.addChild(childClass);
 
-    debug_vars.log("exit exception_process%n");
+    // debug_vars.log("exit exception_process%n");
 
     return root;
   }
@@ -142,7 +144,7 @@ public class RootInfo extends DaikonVariableInfo {
    * the "this" object.
    */
   public static RootInfo getObjectPpt(ClassInfo cinfo, int depth) {
-    debug_vars.clear("enter getObjectPpt: %s%n", cinfo);
+    // debug_vars.clear("enter getObjectPpt: %s%n", cinfo);
 
     RootInfo root = new RootInfo();
 
@@ -152,14 +154,14 @@ public class RootInfo extends DaikonVariableInfo {
     root.addClassVars(
         cinfo, /*dontPrintInstanceVars = */ false, cinfo.clazz, /*offset = */ "", depth);
 
-    debug_vars.log("exit getObjectPpt%n");
+    // debug_vars.log("exit getObjectPpt%n");
 
     return root;
   }
 
   /** Creates a RootInfo object for a class program point. This will just include static fields. */
   public static RootInfo getClassPpt(ClassInfo cinfo, int depth) {
-    debug_vars.clear("enter getClassPpt: %s%n", cinfo);
+    // debug_vars.clear("enter getClassPpt: %s%n", cinfo);
 
     RootInfo root = new RootInfo();
 
@@ -169,7 +171,7 @@ public class RootInfo extends DaikonVariableInfo {
     root.addClassVars(
         cinfo, /*dontPrintInstanceVars = */ true, cinfo.clazz, /*offset = */ "", depth);
 
-    debug_vars.log("exit getClassPpt%n");
+    // debug_vars.log("exit getClassPpt%n");
 
     return root;
   }

@@ -2,8 +2,6 @@ package daikon.chicory;
 
 import static java.lang.System.out;
 
-import java.io.*;
-
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
@@ -12,7 +10,7 @@ class Test {
 
   int t1 = 55;
 
-  //public Test() {
+  // public Test() {
   // }
 
   public static void main(String[] args) {

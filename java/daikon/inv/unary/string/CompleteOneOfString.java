@@ -2,9 +2,11 @@ package daikon.inv.unary.string;
 
 import daikon.*;
 import daikon.inv.*;
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -46,7 +48,7 @@ public final class CompleteOneOfString extends SingleString {
   /*@Unused(when=Prototype.class)*/
   public List<Info> vals;
 
-  /** Boolean. True iff PrintableString invariants should be considered. */
+  /** Boolean. True iff CompleteOneOfString invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   public CompleteOneOfString(PptSlice slice) {

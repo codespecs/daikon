@@ -3,8 +3,8 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import java.io.Serializable;
-import java.util.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -104,14 +104,14 @@ public final class CompleteOneOfScalar extends SingleScalar {
       }
     }
     vals.add(new Info(a, count));
-    // System.out.printf ("check_modified %s%n", format());
+    // System.out.printf("check_modified %s%n", format());
     return InvariantStatus.NO_CHANGE;
   }
 
   @Override
   protected double computeConfidence() {
     ValueSet vs = ppt.var_infos[0].get_value_set();
-    // System.out.printf ("%s value set = %s%n", ppt.var_infos[0].name(), vs);
+    // System.out.printf("%s value set = %s%n", ppt.var_infos[0].name(), vs);
     if (vs.size() > 0) {
       return Invariant.CONFIDENCE_JUSTIFIED;
     } else {

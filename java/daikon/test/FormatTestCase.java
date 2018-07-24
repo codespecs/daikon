@@ -8,14 +8,20 @@ import daikon.inv.OutputFormat;
 import daikon.inv.binary.BinaryInvariant;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.unary.UnaryInvariant;
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import plume.*;
-import plume.Intern;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -56,7 +62,7 @@ class FormatTestCase {
     private int goalLineNumber;
 
     /** A cached copy of the result achieved by invoking the output method. */
-    private /*@MonotonicNonNull*/ String resultCache;
+    private /*@MonotonicNonNull*/ String resultCache = null;
 
     /** A string containing the format that this particular test case represented. */
     private String formatString;
@@ -82,7 +88,6 @@ class FormatTestCase {
       this.outputProducerArgs = outputProducerArgs;
       this.goalOutput = goalOutput;
       this.goalLineNumber = goalLineNumber;
-      resultCache = null;
       this.formatString = formatString;
     }
 
@@ -92,18 +97,20 @@ class FormatTestCase {
      * @param inv the Invariant object on which to invoke the function
      * @return a String representing the output
      */
+    @SuppressWarnings("nullness") // reflective call is always to format_using so result is non-null
     public String createTestOutput(Invariant inv) {
       try {
         if (resultCache == null) {
           resultCache = (String) outputProducer.invoke(inv, outputProducerArgs);
         }
-        if (FileIO.new_decl_format) resultCache = VarInfo.old_var_names(resultCache);
+        if (FileIO.new_decl_format) {
+          resultCache = VarInfo.old_var_names(resultCache);
+        }
         return resultCache;
       } catch (IllegalAccessException e) {
         throw new RuntimeException(e.toString());
       } catch (InvocationTargetException e) {
-        System.out.println(
-            "***" + inv.getClass() + "***" + plume.ArraysMDE.toString(outputProducerArgs));
+        System.out.println("***" + inv.getClass() + "***" + Arrays.toString(outputProducerArgs));
         System.out.println("^^^" + e.toString());
         System.out.println("^^^" + e.getMessage());
         System.out.println("^^^" + e.getCause());
@@ -205,7 +212,7 @@ class FormatTestCase {
    * @return a String representing the goal output file object
    */
   public String generateGoalOutput(LineNumberReader theInputFile) throws IOException {
-    StringBuffer output = new StringBuffer();
+    StringBuilder output = new StringBuilder();
     int currentLine = theInputFile.getLineNumber();
 
     // System.out.println("Generating goal output");
@@ -255,7 +262,7 @@ class FormatTestCase {
    * @return a String representing the difference between the test result and the desired result
    */
   public String getDiffString() {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     String currentDiffString;
 
     for (int i = 0; i < testCases.size(); i++) {
@@ -594,17 +601,17 @@ class FormatTestCase {
         VarInfo hashcode = new VarInfo(vardef);
         vardef = new FileIO.VarDefinition(base_name + "[..]", VarInfo.VarKind.ARRAY, type);
         vardef.arr_dims = 1;
-        vardef.enclosing_var = base_name;
+        vardef.enclosing_var_name = base_name;
         result = new VarInfo(vardef);
         result.enclosing_var = hashcode;
         assert result.enclosing_var.enclosing_var == null;
-        // System.out.printf ("Created %s [%s]%n", result, hashcode);
+        // System.out.printf("Created %s [%s]%n", result, hashcode);
       } else {
         FileIO.VarDefinition vardef =
             new FileIO.VarDefinition(name, VarInfo.VarKind.VARIABLE, type);
         result = new VarInfo(vardef);
         assert result.enclosing_var == null;
-        // System.out.printf ("Created %s%n", result);
+        // System.out.printf("Created %s%n", result);
       }
     } else {
       result = new VarInfo(name, type, type, VarComparabilityNone.it, VarInfoAux.getDefault());
@@ -678,13 +685,15 @@ class FormatTestCase {
         // if (!InvariantFormatTester.isComment(currentLine) &&
         //    !InvariantFormatTester.isWhitespace(currentLine)) {
 
-        // if current line is not whitespace then we have a valid line (that is, end hasn't been reached
+        // if current line is not whitespace then we have a valid line (that is, end hasn't been
+        // reached
         if (!InvariantFormatTester.isWhitespace(currentLine)) {
           // System.out.println(InvariantFormatTester.isComment(currentLine));
           Object[] sample = new Object[types.length];
           for (int i = 0; i < types.length; i++) {
             // Parse each line according to a type in the paramTypes array
-            // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine + "\"");
+            // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine
+            // + "\"");
             sample[i] = types[i].parse_value(currentLine, commands, "test case");
             currentLine = commands.readLine();
           }
@@ -733,7 +742,8 @@ class FormatTestCase {
   //            // array to the result of the parser method
 
   //            arrayFunction =
-  //              Array.class.getMethod("set", new Class [] {Object.class, int.class, Object.class});
+  //              Array.class.getMethod("set", new Class [] {Object.class, int.class,
+  //                                    Object.class});
 
   //            Object arrayFunctionParams[] = new Object [3];
   //            arrayFunctionParams[0] = (Object)sample;
@@ -757,7 +767,8 @@ class FormatTestCase {
   //              arrayFunction.invoke(null,arrayFunctionParams);
   //            }
   //            catch (Exception e) {
-  //              throw new RuntimeException("Error in invoking arrayFunction to put result in sample");
+  //              throw new RuntimeException(
+  //                      "Error in invoking arrayFunction to put result in sample");
   //            }
   //          }
   //          else
@@ -787,7 +798,8 @@ class FormatTestCase {
   //              subTypeName.substring(1, subTypeName.length());
 
   //            arrayFunctionName = "set" + capsSubTypeName;
-  //            arrayFunction = Array.class.getMethod(arrayFunctionName, new Class [] {Object.class, int.class, subType});
+  //            arrayFunction = Array.class.getMethod(arrayFunctionName,
+  //                                              new Class [] {Object.class, int.class, subType});
 
   //            for (int i = 0; i<arrayLength; i++) {
   //              arrayFunction.invoke(null, new Object [] {result, i), temp[i]};
@@ -916,8 +928,10 @@ class FormatTestCase {
 
       //        System.out.println("Sample #" + (i+1) + " of " + samples.size());
       //        System.out.println("P0: " + params[0] + lineSep + "P1: " + params[1]);
-      //        System.out.println("P0 is array: " + params[0].getClass().isArray() + " type: " + params[0].getClass().getComponentType());
-      //        System.out.println("P1 is array: " + params[1].getClass().isArray() + " type: " + params[1].getClass().getComponentType());
+      //        System.out.println("P0 is array: " + params[0].getClass().isArray() + " type: " +
+      // params[0].getClass().getComponentType());
+      //        System.out.println("P1 is array: " + params[1].getClass().isArray() + " type: " +
+      // params[1].getClass().getComponentType());
 
       //        for (int y = 0; y<sampleSize; y++) {
       //          try {
@@ -946,7 +960,7 @@ class FormatTestCase {
             "Error in populating invariant with add_modified ("
                 + addModified.toString()
                 + "applied to "
-                + plume.ArraysMDE.toString(params)
+                + Arrays.toString(params)
                 + "):"
                 + lineSep
                 + "START TARGETEXCEPTION="
@@ -961,7 +975,7 @@ class FormatTestCase {
             "Error in populating invariant with add_modified ("
                 + addModified.toString()
                 + "applied to "
-                + plume.ArraysMDE.toString(params)
+                + Arrays.toString(params)
                 + "): "
                 + e.toString());
       }

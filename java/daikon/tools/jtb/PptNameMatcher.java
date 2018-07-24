@@ -1,11 +1,13 @@
 package daikon.tools.jtb;
 
 import daikon.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -56,7 +58,7 @@ public class PptNameMatcher {
 
         // Make a copy of param (because we may modify it: we may
         // remove some generics stuff).
-        //p.accept(new TreeFormatter());
+        // p.accept(new TreeFormatter());
         FormalParameter param = (FormalParameter) Ast.create("FormalParameter", Ast.format(p));
 
         Type type2 = param.f2;
@@ -69,17 +71,17 @@ public class PptNameMatcher {
         NodeSequence seq = (NodeSequence) intermediateSequence.elementAt(0);
         NodeSequence seqOrig = (NodeSequence) intermediateSequenceOrig.elementAt(0);
 
-        List<Node> singleElementVector = seq.nodes;
-        List<Node> singleElementVectorOrig = seqOrig.nodes;
+        List<Node> singleElementList = seq.nodes;
+        List<Node> singleElementListOrig = seqOrig.nodes;
         // Replace the ClassOrInterfaceType with its ungenerified version.
 
         //     System.out.println("@0");
         //     param.accept(new TreeDumper());
 
-        // ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementVector.get(0);
-        ClassOrInterfaceType tOrig = (ClassOrInterfaceType) singleElementVectorOrig.get(0);
+        // ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementList.get(0);
+        ClassOrInterfaceType tOrig = (ClassOrInterfaceType) singleElementListOrig.get(0);
         assert tOrig.unGenerifiedVersionOfThis != null;
-        singleElementVector.set(0, tOrig.unGenerifiedVersionOfThis);
+        singleElementList.set(0, tOrig.unGenerifiedVersionOfThis);
         // Return getType of the ungenerified version of p.
 
         // tOrig.unGenerifiedVersionOfThis may have line/col numbering
@@ -310,7 +312,7 @@ public class PptNameMatcher {
     assert lparen > 0;
     assert rparen > lparen;
     String ppt_args_string = pptFullMethodName.substring(lparen + 1, rparen);
-    String[] ppt_args = plume.UtilMDE.split(ppt_args_string, ", ");
+    String[] ppt_args = UtilPlume.split(ppt_args_string, ", ");
     if ((ppt_args.length == 1) && (ppt_args[0].equals(""))) {
       ppt_args = new String[0];
     }

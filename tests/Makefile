@@ -34,10 +34,10 @@ else
   MPARG ?=
 endif
 
-all diffs: txt-diff non-txt-diff results
+all diffs: txt-diff non-txt-diff dyncomp-tests results
 
 # These do not use DynComp
-non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests 
+non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests
 
 
 quick: quick-txt-diff diff-tests results
@@ -86,7 +86,7 @@ very-clean: clean
 	$(MAKE) -C kvasir-tests clean-all
 
 # output display; can be called from children (they will set BASE)
-BASE?=chicory-tests daikon-tests diff-tests merge-invariants-tests parser-tests
+BASE?=chicory-tests daikon-tests diff-tests merge-invariants-tests parser-tests dyncomp-tests
 # removes fields before the size (ie, permissions, owner, group).
 PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; print "$$1\t$$2\t$$3\n"; if ($$1 > 0) { $$failure++; } END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
 # args to 'find' program, to find files containg results

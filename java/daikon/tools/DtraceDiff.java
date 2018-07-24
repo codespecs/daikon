@@ -7,10 +7,17 @@ import static daikon.tools.nullness.NullnessUtils.*;
 import daikon.*;
 import daikon.config.Configuration;
 import gnu.getopt.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import plume.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+import org.plumelib.util.RegexUtil;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -23,7 +30,7 @@ import org.checkerframework.checker.nullness.qual.*;
 public class DtraceDiff {
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: DtraceDiff [OPTION]... [DECLS1]... DTRACE1 [DECLS2]... DTRACE2",
           "DTRACE1 and DTRACE2 are the data trace files to be compared.",
           "You may optionally specify corresponding DECLS files for each one.",
@@ -68,7 +75,7 @@ public class DtraceDiff {
       mainHelper(args);
       return true;
     } catch (DiffError de) {
-      // System.out.printf ("Diff error for args %s: %s%n",
+      // System.out.printf("Diff error for args %s: %s%n",
       //                     Arrays.toString(args), de.getMessage());
       return false;
     }
@@ -205,7 +212,7 @@ public class DtraceDiff {
             throw new RuntimeException("Unknown long option received: " + option_name);
           }
 
-          //short options
+          // short options
         case 'h':
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
@@ -239,7 +246,7 @@ public class DtraceDiff {
   public static void dtraceDiff(
       Set<File> declsfile1, String dtracefile1, Set<File> declsfile2, String dtracefile2) {
 
-    // System.out.printf ("dtrace files = %s, %s\n", dtracefile1, dtracefile2);
+    // System.out.printf("dtrace files = %s, %s\n", dtracefile1, dtracefile2);
     FileIO.resetNewDeclFormat();
 
     try {
@@ -367,7 +374,7 @@ public class DtraceDiff {
 
   private static boolean values_are_equal(VarInfo vi, Object val1, Object val2) {
     ProglangType type = vi.file_rep_type;
-    // System.out.printf ("values_are_equal type = %s%n", type);
+    // System.out.printf("values_are_equal type = %s%n", type);
     if (type.isArray()) {
       // array case
       if (type.isPointerFileRep()) {
@@ -403,7 +410,7 @@ public class DtraceDiff {
         String[] v2 = (String[]) val2;
         if (v1.length != v2.length) return false;
         for (int i = 0; i < v1.length; i++) {
-          // System.out.printf ("string array[%d] %s %s%n", i, v1[i], v2[i]);
+          // System.out.printf("string array[%d] %s %s%n", i, v1[i], v2[i]);
           if ((v1[i] == null) && (v2[i] == null)) {
             // nothing to do
           } else if ((v1[i] == null) || (v2[i] == null)) {

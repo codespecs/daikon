@@ -11,10 +11,23 @@ import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.string.*;
 import daikon.simplify.*;
 import gnu.getopt.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -55,7 +68,7 @@ public class LogicalCompare {
   private static /*@MonotonicNonNull*/ LemmaStack lemmas;
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
           "           WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]",
           "  -h, --" + Daikon.help_SWITCH,
@@ -174,7 +187,7 @@ public class LogicalCompare {
       // ppt has to be a PptSlice, not a PptTopLevel
       if (vi.isDerivedParamAndUninteresting()) {
         // Exception: let invariants like "orig(arg) == arg" through.
-        if (IsEqualityComparison.it.accept(inv)) {
+        if (inv.isEqualityComparison()) {
           EqualityComparison comp = (EqualityComparison) inv;
           VarInfo var1 = comp.var1();
           VarInfo var2 = comp.var2();
@@ -265,7 +278,8 @@ public class LogicalCompare {
           List<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
           for (Set<Class<? extends Invariant>> classes : sets) {
             @SuppressWarnings(
-                "nullness") // application invariant: context; might be able to rewrite types to make consequences a List<InvariantLemma>";
+                "nullness") // application invariant: context; might be able to rewrite types to
+            // make consequences a List<InvariantLemma>"
             /*@NonNull*/ Class<? extends Invariant> inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
@@ -443,7 +457,7 @@ public class LogicalCompare {
 
     if (opt_show_sets) {
       System.out.println("Background assumptions:");
-      LemmaStack.printLemmas(System.out, Lemma.lemmasVector());
+      LemmaStack.printLemmas(System.out, Lemma.lemmasList());
       System.out.println("");
 
       List<Lemma> v = new ArrayList<Lemma>();
@@ -521,7 +535,7 @@ public class LogicalCompare {
   private static void readExtraAssumptions(String filename) {
     File file = new File(filename);
     try {
-      LineNumberReader reader = UtilMDE.lineNumberFileReader(file);
+      LineNumberReader reader = UtilPlume.lineNumberFileReader(file);
       String line;
       String ppt_name = null;
       while ((line = reader.readLine()) != null) {
@@ -784,7 +798,8 @@ public class LogicalCompare {
         if (app_ppt.num_samples() > 0) {
           if (test_ppt_names.contains(name)
               && castNonNull(test_ppts.get(name)).num_samples()
-                  > 0) { // correlated maps: test_ppts.get(name) is non-null because test_ppt_names.contains(name) is true
+                  > 0) { // correlated maps: test_ppts.get(name) is non-null because
+            // test_ppt_names.contains(name) is true
             common_names.add(name);
           } else {
             System.out.println(name + " was used but not tested");

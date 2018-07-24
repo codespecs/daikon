@@ -5,14 +5,16 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import daikon.*;
 import daikon.inv.OutputFormat;
 import gnu.getopt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
 import java.util.logging.Logger;
 import jtb.*;
 import jtb.syntaxtree.*;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /**
  * Merge Daikon-generated invariants into Java source code as ESC/JML/DBC annotations. All original
@@ -76,7 +78,7 @@ public class Annotate {
   public static final String no_reflection_SWITCH = "no_reflection";
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",
           "  -h   Display this usage message",
           "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",
@@ -191,7 +193,7 @@ public class Annotate {
           //   // an easy way to do this in Java.)
           //   Process p = System.exec("find . -type f -name '*.java' -print");
           //   p.waitFor();
-          //   StringBufferInputStream sbis
+          //   StringBuilderInputStream sbis
           //   break;
         case 's':
           slashslash = true;

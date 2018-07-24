@@ -2,7 +2,7 @@ package daikon.derive.unary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

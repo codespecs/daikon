@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -115,10 +114,11 @@ public class LemmaStack {
     }
   }
 
+  @SuppressWarnings("JdkObsolete")
   public LemmaStack() throws SimplifyError {
     startProver();
     lemmas = new Stack<Lemma>();
-    if (daikon.inv.Invariant.dkconfig_simplify_define_predicates) pushLemmas(Lemma.lemmasVector());
+    if (daikon.inv.Invariant.dkconfig_simplify_define_predicates) pushLemmas(Lemma.lemmasList());
   }
 
   /** Pop a lemma from our and Simplify's stacks. */

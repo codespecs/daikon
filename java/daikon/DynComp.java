@@ -2,10 +2,16 @@ package daikon;
 
 import daikon.chicory.StreamRedirectThread;
 import daikon.dcomp.*;
-import daikon.util.*;
-import java.io.*;
-import java.util.*;
+import daikon.util.RegexUtil;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
+import org.plumelib.bcelutil.SimpleLog;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -124,7 +130,7 @@ public class DynComp {
     // Parse our arguments
     Options options = new Options(synopsis, DynComp.class);
     // options.ignore_options_after_arg (true);
-    String[] target_args = options.parse_or_usage(args);
+    String[] target_args = options.parse(true, args);
     boolean ok = check_args(options, target_args);
     if (!ok) System.exit(1);
 
@@ -136,7 +142,19 @@ public class DynComp {
     // were passed here.
 
     DynComp dcomp = new DynComp();
-    dcomp.start_target(options.get_options_str(), target_args);
+    dcomp.start_target(getOptionsString(options), target_args);
+  }
+
+  // Gross hack, undo when Options package makes the `getOptionsString` method public.
+  @SuppressWarnings("nullness")
+  private static String getOptionsString(Options options) {
+    try {
+      Method method = options.getClass().getDeclaredMethod("getOptionsString");
+      method.setAccessible(true);
+      return (String) method.invoke(options);
+    } catch (Throwable e) {
+      throw new Error(e);
+    }
   }
 
   /**
@@ -147,11 +165,13 @@ public class DynComp {
 
     // Make sure arguments have legal values
     if (nesting_depth < 0) {
-      options.print_usage("nesting depth (%d) must not be negative", nesting_depth);
+      System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
+      options.printUsage();
       return false;
     }
     if (target_args.length == 0) {
-      options.print_usage("target program must be specified");
+      System.out.println("target program must be specified");
+      options.printUsage();
       return false;
     }
     if (rt_file != null && rt_file.getName().equalsIgnoreCase("NONE")) {
@@ -160,7 +180,8 @@ public class DynComp {
     }
     if (!no_jdk && rt_file != null && !rt_file.exists()) {
       // if --rt-file was given, but doesn't exist
-      options.print_usage("rt-file %s does not exist", rt_file);
+      System.out.printf("rt-file %s does not exist%n", rt_file);
+      options.printUsage();
       return false;
     }
 
@@ -191,7 +212,7 @@ public class DynComp {
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s\n", path_separator);
     if (path_separator == null) {
-      path_separator = ";"; //should work for windows at least...
+      path_separator = ";"; // should work for windows at least...
     } else if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.TerminationMessage(
           "Bad regexp "
@@ -210,7 +231,7 @@ public class DynComp {
         } else {
           poss_premain = new File(path, "dcomp_premain.jar");
         }
-        // System.out.printf ("looking for file %s%n", poss_premain);
+        // System.out.printf("looking for file %s%n", poss_premain);
         if (poss_premain.canRead()) {
           premain = poss_premain;
           break;
@@ -219,22 +240,28 @@ public class DynComp {
     }
 
     // If not on the classpath look in ${DAIKONDIR}/java
+    String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
-      String daikon_dir = System.getenv("DAIKONDIR");
       if (daikon_dir != null) {
         String file_separator = System.getProperty("file.separator");
         File poss_premain = new File(daikon_dir + file_separator + "java", "dcomp_premain.jar");
-        if (poss_premain.canRead()) premain = poss_premain;
+        if (poss_premain.canRead()) {
+          premain = poss_premain;
+        }
       }
     }
 
     // If we didn't find a premain, give up
     if (premain == null) {
-      System.err.printf("Can't find dcomp_premain.jar on the classpath\n");
-      System.err.printf("or in $DAIKONDIR/java\n");
-      System.err.printf("It should be found in directory where Daikon was " + "installed\n");
-      System.err.printf("Use the --premain switch to specify its location\n");
-      System.err.printf("or change your classpath to include it\n");
+      System.err.printf("Can't find dcomp_premain.jar on the classpath");
+      if (daikon_dir == null) {
+        System.err.printf(" and $DAIKONDIR is not set.\n");
+      } else {
+        System.err.printf(" or in $DAIKONDIR/java .\n");
+      }
+      System.err.printf("It should be found in the directory where Daikon was installed.\n");
+      System.err.printf("Use the --premain switch to specify its location,\n");
+      System.err.printf("or change your classpath to include it.\n");
       System.exit(1);
     }
 
@@ -259,7 +286,6 @@ public class DynComp {
 
       // If not on the classpath look in ${DAIKONDIR}/java
       if (rt_file == null) {
-        String daikon_dir = System.getenv("DAIKONDIR");
         if (daikon_dir != null) {
           String file_separator = System.getProperty("file.separator");
           File poss_rt = new File(daikon_dir + file_separator + "java", "dcomp_rt.jar");
@@ -269,7 +295,12 @@ public class DynComp {
 
       // If we didn't find a rt-file, give up
       if (rt_file == null) {
-        System.err.printf("Can't find dcomp_rt.jar on the classpath " + "or in $DAIKONDIR/java\n");
+        System.err.printf("Can't find dcomp_rt.jar on the classpath");
+        if (daikon_dir == null) {
+          System.err.printf(" and $DAIKONDIR is not set.\n");
+        } else {
+          System.err.printf(" or in $DAIKONDIR/java .\n");
+        }
         System.err.printf("Probably you forgot to build it.\n");
         System.err.printf(
             "See the Daikon manual, section \"Instrumenting the "
@@ -324,11 +355,11 @@ public class DynComp {
   public int redirect_wait(Process p) {
 
     // Create the redirect theads and start them
-    @SuppressWarnings("nullness") // ErrorStream is non-null because we didn't redirect above.
+    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
 
-    @SuppressWarnings("nullness") // InputStream is non-null because we didn't redirect above.
+    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
 

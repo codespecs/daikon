@@ -59,7 +59,7 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -168,7 +168,7 @@ public final class CLASSNAME extends SUPERCLASS {
         // Only happenes in internal format tests
         esc_name = var().name().replace("[]", "");
       } else {
-        // System.out.printf ("term = %s, var = %s%n", term.name, var().name);
+        // System.out.printf("term = %s, var = %s%n", term.name, var().name);
         esc_name = term.esc_name();
       }
       if (var().type.isArray()) {
@@ -224,7 +224,7 @@ public final class CLASSNAME extends SUPERCLASS {
 
     //if (logOn()) {
     //  VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
-    //  log ("max=" + vs.max() + " array=" + ArraysMDE.toString (a));
+    //  log ("max=" + vs.max() + " array=" + Arrays.toString (a));
     //}
 
     return (check_modified(a, count));

@@ -2,7 +2,7 @@ package daikon.derive.unary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -34,7 +34,7 @@ public abstract class UnaryDerivation extends Derivation {
   @Override
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
     UnaryDerivation result = this.clone();
-    result.base = new_vars[ArraysMDE.indexOf(old_vars, result.base)];
+    result.base = new_vars[ArraysPlume.indexOf(old_vars, result.base)];
     return result;
   }
 

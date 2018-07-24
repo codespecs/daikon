@@ -1,6 +1,10 @@
 package daikon;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -322,7 +326,7 @@ public class Quantify {
         simples.add(name);
       }
     }
-    // System.out.printf ("simple names = %s\n", simples);
+    // System.out.printf("simple names = %s\n", simples);
 
     // Loop through each of the variables, choosing an index for each
     char tmp = 'i';
@@ -463,13 +467,13 @@ public class Quantify {
       QuantifyReturn[] qrets = quantify(vars);
 
       // build the forall predicate
-      StringBuffer int_list, conditions;
+      StringBuilder int_list, conditions;
       {
         // "i j ..."
-        int_list = new StringBuffer();
+        int_list = new StringBuilder();
         // "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
         // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
-        conditions = new StringBuffer();
+        conditions = new StringBuilder();
         for (int i = 0; i < qrets.length; i++) {
           Term idx = qrets[i].index;
           if (idx == null) {
@@ -488,7 +492,8 @@ public class Quantify {
           if (flags.contains(QuantFlags.ELEMENT_WISE) && (i >= 1)) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term _idx = _boundv[0], _low = _boundv[1];
-            @SuppressWarnings("nullness")
+            @SuppressWarnings(
+                "nullness") // if variable is a sequence (is it?), then index is non-null
             /*@NonNull*/ Term _idx = qrets[i - 1].index;
             Term _low = qrets[i - 1].var.get_lower_bound();
             if (_low.simplify_name().equals(low.simplify_name())) {
@@ -503,7 +508,8 @@ public class Quantify {
               && (flags.contains(QuantFlags.ADJACENT) || flags.contains(QuantFlags.DISTINCT))) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term prev_idx = _boundv[0];
-            @SuppressWarnings("nullness")
+            @SuppressWarnings(
+                "nullness") // if variable is a sequence (is it?), then index is non-null
             /*@NonNull*/ Term prev_idx = qrets[i - 1].index;
             if (flags.contains(QuantFlags.ADJACENT)) {
               conditions.append(
@@ -526,7 +532,7 @@ public class Quantify {
           Term index = qret.index;
           VarInfo arr_var = qret.var.get_array_var();
           arr_var_indexed = arr_var.simplify_name(index.simplify_name());
-          // System.out.printf ("vi = %s, arr_var = %s\n", vi, arr_var);
+          // System.out.printf("vi = %s, arr_var = %s\n", vi, arr_var);
         } else {
           arr_var_indexed = qret.var.simplify_name();
         }

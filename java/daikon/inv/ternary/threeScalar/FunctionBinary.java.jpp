@@ -16,7 +16,7 @@
   #define PRIMITIVE_CNAME Long
   #define EQUAL(a,b) ((a) == (b))
   #define IS_INTEGRAL isIntegral()
-  #define POW MathMDE.pow
+  #define POW MathPlume.pow
   #define EQUALITY IntEqual
   #define LESS_EQUAL IntLessEqual
   #define LESS_THAN  IntLessThan
@@ -100,7 +100,8 @@ import daikon.suppress.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.MathPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -350,7 +351,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   protected Invariant resurrect_done(int[] permutation) {
 
     assert permutation.length == 3;
-    assert ArraysMDE.fn_is_permutation(permutation);
+    assert ArraysPlume.fn_is_permutation(permutation);
 
     int[] new_order = new int[3];
     int[] old_order = var_indices[get_var_order()];
@@ -477,11 +478,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
         func = "min";
       else if (methodname[0].equals("java.lang.Math.max("))
         func = "max";
-      else if (methodname[0].equals("plume.MathMDE.gcd("))
+      else if (methodname[0].equals("org.plumelib.util.MathPlume.gcd("))
         func = "gcd";
       else if (methodname[0].equals("java.lang.Math.pow("))
         func = "pow";
-      else if (methodname[0].equals("plume.MathMDE.logicalXor("))
+      else if (methodname[0].equals("org.plumelib.util.MathPlume.logicalXor("))
         func = "|java-logical-xor|";
     } else {
       assert methodname[0].equals("");
@@ -542,11 +543,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
         func = "Math.Min";
       else if (methodname[0].equals("java.lang.Math.max("))
         func = "Math.Max";
-      else if (methodname[0].equals("plume.MathMDE.gcd("))
+      else if (methodname[0].equals("org.plumelib.util.MathPlume.gcd("))
         return result + " == CSharpDaikonLib.Extensions.GCD(" + arg1 + ", " + arg2 + ")";
       else if (methodname[0].equals("java.lang.Math.pow("))
         return result + " == " + arg1 + ".Pow(" + arg2 + ")";
-      else if (methodname[0].equals("plume.MathMDE.logicalXor("))
+      else if (methodname[0].equals("org.plumelib.util.MathPlume.logicalXor("))
         return result + " == (" + arg1 + " ^ " + arg2 + ")";
     } else {
       assert methodname[0].equals("");
@@ -718,7 +719,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) ^ (arg2 != 0)) ? 1 : 0)
   // #define METHOD_NAME {"", " ^ ", ""}
-  #define METHOD_NAME {"plume.MathMDE.logicalXor(", ", ", ")"}
+  #define METHOD_NAME {"org.plumelib.util.MathPlume.logicalXor(", ", ", ")"}
   #undef EXTRA_INV_DOC
   #define EXTRA_INV_DOC For logical operations, Daikon treats 0 as false and all other values as true.
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
@@ -746,8 +747,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define FUNCTION Gcd
   #define FTYPE FTYPE_Gcd
   // #define EQUALITY_SUPPRESS 1
-  #define FUNC(arg1,arg2) MathMDE.gcd(arg1, arg2)
-  #define METHOD_NAME {"plume.MathMDE.gcd(", ", ", ")"}
+  #define FUNC(arg1,arg2) MathPlume.gcd(arg1, arg2)
+  #define METHOD_NAME {"org.plumelib.util.MathPlume.gcd(", ", ", ")"}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION Mod

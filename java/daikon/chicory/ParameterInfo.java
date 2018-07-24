@@ -1,7 +1,6 @@
 package daikon.chicory;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.util.EnumSet;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;
@@ -73,7 +72,7 @@ public class ParameterInfo extends DaikonVariableInfo {
 
   @Override
   public Object getMyValFromParentVal(Object value) {
-    //a parameter has no parent value
+    // a parameter has no parent value
     throw new RuntimeException("Parameters have no parent value");
   }
 
@@ -96,7 +95,7 @@ public class ParameterInfo extends DaikonVariableInfo {
   /** Add IS_PARM to list of variable flags */
   @Override
   public EnumSet<VarFlags> get_var_flags() {
-    // System.out.printf ("%s is a parameter%n", this);
+    // System.out.printf("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();
     var_flags.add(VarFlags.IS_PARAM);
     return var_flags;

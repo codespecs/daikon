@@ -5,11 +5,23 @@ import daikon.inv.*;
 import daikon.inv.filter.InvariantFilters;
 import daikon.split.PptSplitter;
 import gnu.getopt.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OptionalDataException;
+import java.io.PrintStream;
+import java.io.StreamCorruptedException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -35,7 +47,7 @@ public class InvariantChecker {
   private static final String verbose_SWITCH = "verbose";
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.InvariantChecker [OPTION]... <inv_file> " + "<dtrace_file>",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -61,14 +73,14 @@ public class InvariantChecker {
   static int error_cnt = 0;
   static int sample_cnt = 0;
 
-  static /*@Nullable*/ File dir_file; //Yoav added
+  static /*@Nullable*/ File dir_file; // Yoav added
   static boolean doFilter;
   static boolean doConf;
   static boolean quiet = true;
-  static HashSet<Invariant> failedInvariants = new HashSet<Invariant>(); //Yoav added
-  static HashSet<Invariant> testedInvariants = new HashSet<Invariant>(); //Yoav added
-  static HashSet<Invariant> activeInvariants = new HashSet<Invariant>(); //Yoav added
-  static LinkedHashSet<String> outputComma = new LinkedHashSet<String>(); //Yoav added
+  static HashSet<Invariant> failedInvariants = new HashSet<Invariant>(); // Yoav added
+  static HashSet<Invariant> testedInvariants = new HashSet<Invariant>(); // Yoav added
+  static HashSet<Invariant> activeInvariants = new HashSet<Invariant>(); // Yoav added
+  static LinkedHashSet<String> outputComma = new LinkedHashSet<String>(); // Yoav added
 
   public static void main(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
@@ -282,30 +294,33 @@ public class InvariantChecker {
     // Read the invariant file
     PptMap ppts = FileIO.read_serialized_pptmap(inv_file, true);
 
-    //Yoav: make sure we have unique invariants
+    // Yoav: make sure we have unique invariants
     InvariantFilters fi = InvariantFilters.defaultFilters();
-    //Set<String> allInvariantsStr = new HashSet<String>();
+    // Set<String> allInvariantsStr = new HashSet<String>();
     Set<Invariant> allInvariants = new HashSet<Invariant>();
     for (PptTopLevel ppt : ppts.all_ppts())
       for (PptSlice slice : ppt.views_iterable()) {
         for (Invariant inv : slice.invs) {
           if (doConf && inv.getConfidence() < Invariant.dkconfig_confidence_limit) {
-            // System.out.printf ("inv ignored (conf): %s:%s\n", inv.ppt.name(),
+            // System.out.printf("inv ignored (conf): %s:%s\n", inv.ppt.name(),
             //                   inv.format());
             continue;
           }
 
           if (doFilter && fi.shouldKeep(inv) == null) {
-            // System.out.printf ("inv ignored (filter): %s:%s\n",
+            // System.out.printf("inv ignored (filter): %s:%s\n",
             //                     inv.ppt.name(), inv.format());
             continue;
           }
           activeInvariants.add(inv);
 
-          //String n = invariant2str(ppt, inv);
-          //if (!allInvariants.contains(inv) && allInvariantsStr.contains(n)) throw new Daikon.TerminationMessage("Two invariants have the same ppt.name+inv.rep:"+n);
+          // String n = invariant2str(ppt, inv);
+          // if (!allInvariants.contains(inv) && allInvariantsStr.contains(n)) {
+          //   throw new
+          //     Daikon.TerminationMessage("Two invariants have the same ppt.name+inv.rep:"+n);
+          // }
           allInvariants.add(inv);
-          //allInvariantsStr.add(n);
+          // allInvariantsStr.add(n);
         }
       }
 
@@ -369,8 +384,6 @@ public class InvariantChecker {
       debug.fine("processing sample from: " + ppt.name);
 
       // Add orig and derived variables
-      assert vt.vals != null
-          : "@AssumeAssertion(nullness): bug: Checker Framework bug:  vals is a non-null array, but is reported as nullable";
       FileIO.compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
       FileIO.compute_derived_variables(ppt, vt.vals, vt.mods);
 
@@ -381,9 +394,10 @@ public class InvariantChecker {
       if (ppt.ppt_name.isEnterPoint()) {
         assert nonce != null : "@AssumeAssertion(nullness): nonce exists for enter & exit points";
         if (dir_file != null) {
-          //Yoav: I had to do a hack to handle the case that several dtrace files are concatenated together,
-          // and Sung's dtrace files have unterminated calls, and when concatenating two files you can have the same nonce.
-          // So I have to remove the nonce found from the call_map
+          // Yoav: I had to do a hack to handle the case that several dtrace files are concatenated
+          // together, and Sung's dtrace files have unterminated calls, and when concatenating two
+          // files you can have the same nonce.
+          // So I have to remove the nonce found from the call_map.
           call_map.remove(nonce);
         } else {
           assert call_map.get(nonce) == null;
@@ -485,14 +499,14 @@ public class InvariantChecker {
             continue;
           }
 
-          //Yoav added
+          // Yoav added
           if (!activeInvariants.contains(inv)) {
-            // System.out.printf ("skipping invariant %s:%s\n", inv.ppt.name(),
+            // System.out.printf("skipping invariant %s:%s\n", inv.ppt.name(),
             //                   inv.format());
             continue;
           }
 
-          //String invRep = invariant2str(ppt, inv);
+          // String invRep = invariant2str(ppt, inv);
           testedInvariants.add(inv);
 
           InvariantStatus status = inv.add_sample(vt, 1);

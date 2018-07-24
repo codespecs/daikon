@@ -323,7 +323,7 @@ public class Violation implements Serializable {
             + "vios: "
             + vios;
 
-    StringBuffer retval = new StringBuffer();
+    StringBuilder retval = new StringBuilder();
     for (int i = 0; i < onEntry.length; i++) {
       retval.append(onEntry[i].toNiceString(prefix, confidenceThreshold));
     }

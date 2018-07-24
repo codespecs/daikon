@@ -3,7 +3,8 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.derive.*;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -69,12 +70,12 @@ public final class SequencesConcat extends BinaryDerivation {
     if (var1().rep_type == ProglangType.INT_ARRAY) {
       // val1 instanceof long[] || val2 instanceof long[]
       long[] result =
-          ArraysMDE.concat(
+          ArraysPlume.concat(
               val1 == null ? null : (long[]) val1, val2 == null ? null : (long[]) val2);
       return new ValueAndModified(Intern.intern(result), mod);
     } else if (var1().rep_type == ProglangType.DOUBLE_ARRAY) {
       double[] result =
-          ArraysMDE.concat(
+          ArraysPlume.concat(
               val1 == null ? null : (double[]) val1, val2 == null ? null : (double[]) val2);
       return new ValueAndModified(Intern.intern(result), mod);
 
@@ -82,7 +83,7 @@ public final class SequencesConcat extends BinaryDerivation {
       // val1 instanceof String[] || val2 instanceof String[]
       @SuppressWarnings("interning") // object invariant: array elements are interned
       /*@Interned*/ String[] result =
-          ArraysMDE.concat(
+          ArraysPlume.concat(
               val1 == null ? null : (/*@Interned*/ String[]) val1,
               val2 == null ? null : (/*@Interned*/ String[]) val2);
       return new ValueAndModified(Intern.intern(result), mod);

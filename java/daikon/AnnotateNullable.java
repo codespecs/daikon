@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import plume.Option;
-import plume.Options;
-import plume.SimpleLog;
-import plume.UtilMDE;
+import org.plumelib.bcelutil.JvmUtil;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -36,9 +35,8 @@ public class AnnotateNullable {
   // Why is this variable static?
   static PptMap ppts = new PptMap(); // dummy value, to satisfy Nullness Checker
 
-  static SimpleLog verbose = new SimpleLog(/*enabled=*/ false);
-
-  static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
+  // static SimpleLog verbose = new SimpleLog(/*enabled=*/ false);
+  // static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
 
   /** Map from a class name to the list of static functions for that class. */
   static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<String, List<PptTopLevel>>();
@@ -65,14 +63,14 @@ public class AnnotateNullable {
 
     Options options =
         new Options("plume.AnnotateNullable [options] " + "<inv_file>", AnnotateNullable.class);
-    String[] inv_files = options.parse_or_usage(args);
+    String[] inv_files = options.parse(true, args);
     assert inv_files.length == 1;
 
     // Read the serialized invariant file
     File inv_file = new File(inv_files[0]);
     ppts = FileIO.read_serialized_pptmap(inv_file, true);
     Daikon.all_ppts = ppts;
-    verbose.log("Finished reading %d program points", ppts.size());
+    // verbose.log("Finished reading %d program points", ppts.size());
 
     // Setup the list of proto invariants and initialize NIS suppressions
     Daikon.setup_proto_invs();
@@ -117,7 +115,7 @@ public class AnnotateNullable {
       @SuppressWarnings("keyfor") // appliction invariant:  KeyFor and substring
       // @KeyFor because class_map has entry per class, and this method is in some class
       /*@KeyFor("class_map")*/ String classname = name.substring(0, lastdot);
-      // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
+      // System.out.printf("classname for ppt %s is '%s'%n", name, classname);
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
       static_methods.add(ppt);
@@ -139,8 +137,7 @@ public class AnnotateNullable {
         /*@NonNull*/ List<PptTopLevel> static_methods =
             class_map.get(ppt.name().replace(":::CLASS", ""));
         int child_cnt = 0;
-        // TODO: Once Checker Framework issue 565 has been fixed
-        // ( https://github.com/typetools/checker-framework/issues/565 ),
+        // TODO: Once Checker Framework issue 565 has been fixed (https://tinyurl.com/cfissue/565),
         // change the following two lines back to
         // for (PptRelation child_rel : ppt.children) {
         for (int i = 0; i < ppt.children.size(); i++) {
@@ -244,7 +241,7 @@ public class AnnotateNullable {
         if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
           continue;
         }
-        debug.log("processing static method %s, type %s", child, child.type);
+        // debug.log("processing static method %s, type %s", child, child.type);
         process_method(child);
       }
     } else {
@@ -265,7 +262,7 @@ public class AnnotateNullable {
       if (child.type == PptType.ENTER) {
         continue;
       }
-      debug.log("processing method %s, type %s", child, child.type);
+      // debug.log("processing method %s, type %s", child, child.type);
       process_method(child);
     }
 
@@ -381,7 +378,7 @@ public class AnnotateNullable {
       // These are fields and can only be annotated where they are declared.
       VarInfo evar = vi.get_enclosing_var();
       if ((evar != null) && (!evar.name().equals("this"))) {
-        // System.out.printf ("  enclosed %s %s%n", vi.type, vi.name());
+        // System.out.printf("  enclosed %s %s%n", vi.type, vi.name());
         continue;
       }
 
@@ -406,7 +403,7 @@ public class AnnotateNullable {
     @SuppressWarnings("nullness") // Java method, so getSignature() != null
     /*@NonNull*/ String java_sig = ppt.ppt_name.getSignature();
     String java_args = java_sig.replace(method, "");
-    // System.out.printf ("m/s/a = %s %s %s%n", method, java_sig, java_args);
+    // System.out.printf("m/s/a = %s %s %s%n", method, java_sig, java_args);
     if (method.equals(ppt.ppt_name.getShortClassName())) method = "<init>";
 
     // Problem:  I need the return type, but Chicory does not output it.
@@ -415,19 +412,20 @@ public class AnnotateNullable {
     // change Chicory to output it.
     VarInfo returnVar = ppt.find_var_by_name("return");
     @SuppressWarnings(
-        "signature") // application invariant: returnVar.type.toString() is a binary name (if returnVar is non-null), because we are processing a Java program
+        "signature") // application invariant: returnVar.type.toString() is a binary name (if
+    // returnVar is non-null), because we are processing a Java program
     String returnType =
-        returnVar == null ? "V" : UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
+        returnVar == null ? "V" : JvmUtil.binaryNameToFieldDescriptor(returnVar.type.toString());
     // Or an throw point
     if (returnVar == null) {
       returnVar = ppt.find_var_by_name("exception");
       returnType =
           returnVar == null
               ? "V"
-              : "V throws " + UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
+              : "V throws " + JvmUtil.binaryNameToFieldDescriptor(returnVar.type.toString());
     }
 
-    return method + UtilMDE.arglistToJvm(java_args) + returnType;
+    return method + JvmUtil.arglistToJvm(java_args) + returnType;
   }
 
   /**

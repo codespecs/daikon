@@ -3,7 +3,7 @@ package daikon;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -360,7 +360,7 @@ public class PptName implements Serializable {
       if (cls == null) return false;
 
       @SuppressWarnings("signature") // cls is allowed to be arbitrary, especially for non-Java code
-      String class_name = UtilMDE.fullyQualifiedNameToSimpleName(cls);
+      String class_name = UtilPlume.fullyQualifiedNameToSimpleName(cls);
       assert method != null; // for nullness checker
       int arg_start = method.indexOf('(');
       String method_name = method;
@@ -490,7 +490,7 @@ public class PptName implements Serializable {
       if (cls != null) cls = cls.intern();
       if (method != null) {
         // method = method.intern();
-        UtilMDE.setFinalField(this, "method", method.intern());
+        UtilPlume.setFinalField(this, "method", method.intern());
       }
       if (point != null) point = point.intern();
     } catch (NoSuchFieldException e) {

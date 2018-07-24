@@ -1,7 +1,6 @@
 package daikon.tools.runtimechecker;
 
 import daikon.tools.jtb.*;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import jtb.syntaxtree.*;
@@ -24,7 +23,7 @@ public class CheckerClasses {
   }
 
   @SuppressWarnings("interned")
-  public void addDeclaration(ClassOrInterfaceBody clazz, StringBuffer decl) {
+  public void addDeclaration(ClassOrInterfaceBody clazz, StringBuilder decl) {
 
     for (CheckerClass c : classes) {
       if (c.fclassbody == clazz) {
@@ -33,7 +32,7 @@ public class CheckerClasses {
     }
   }
 
-  public void addDeclaration(ConstructorDeclaration clazz, StringBuffer decl) {
+  public void addDeclaration(ConstructorDeclaration clazz, StringBuilder decl) {
 
     @SuppressWarnings(
         "nullness") // application invariant: a constructor is always in a class or interface
@@ -42,7 +41,7 @@ public class CheckerClasses {
     addDeclaration(body, decl);
   }
 
-  public void addDeclaration(MethodDeclaration clazz, StringBuffer decl) {
+  public void addDeclaration(MethodDeclaration clazz, StringBuilder decl) {
 
     @SuppressWarnings(
         "nullness") // application invariant: a method is always in a class or interface

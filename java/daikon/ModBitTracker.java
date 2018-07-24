@@ -1,8 +1,8 @@
 package daikon;
 
 import java.io.Serializable;
-import java.util.*;
-import plume.*;
+import java.util.Arrays;
+import java.util.BitSet;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -123,7 +123,8 @@ public class ModBitTracker implements Serializable, Cloneable {
    * returned value!
    */
   @SuppressWarnings(
-      "nullness") // application invariant: index[varindex] is an index for a non-null BitSet in modbits_arrays
+      "nullness") // application invariant: index[varindex] is an index for a non-null BitSet in
+  // modbits_arrays
   public BitSet get(int varindex) {
     return modbits_arrays[index[varindex]];
   }

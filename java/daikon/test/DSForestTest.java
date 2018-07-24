@@ -1,8 +1,8 @@
 package daikon.test;
 
 import daikon.asm.DSForest;
-import java.io.*;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import junit.framework.TestCase;
 
 @SuppressWarnings("nullness") // testing code

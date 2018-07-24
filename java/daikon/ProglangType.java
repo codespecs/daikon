@@ -1,8 +1,18 @@
 package daikon;
 
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.LineNumberReader;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import org.plumelib.util.Intern;
+import org.plumelib.util.StringBuilderDelimited;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -43,7 +53,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // With Vector search, this func was a hotspot (38%), so use a Map.
+  // With ArrayList search, this func was a hotspot (38%), so use a Map.
   private static HashMap</*@Interned*/ String, List<ProglangType>> all_known_types =
       new HashMap</*@Interned*/ String, List<ProglangType>>();
 
@@ -217,14 +227,6 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return result;
   }
 
-  //     def comparable(self, other):
-  //         base1 = self.base
-  //         base2 = other.base
-  //         return ((self.dimensionality == other.dimensionality)
-  //                 and ((base1 == base2)
-  //                      or ((base1 == "integral") and (base2 in integral_types)) // interned strings
-  //                      or ((base2 == "integral") and (base1 in integral_types)))) // interned strings
-
   /**
    * Returns the type of elements of this. They may themselves be arrays if this is
    * multidimensional.
@@ -340,7 +342,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
           && (((val & 0x80000000L) == 0x80000000L) && ((val & 0xFFFFFFFF00000000L) == 0))) {
         long orig = val;
         val |= 0xFFFFFFFF00000000L;
-        // System.out.printf ("Warning: converted %d to %d\n", orig, val);
+        // System.out.printf("Warning: converted %d to %d\n", orig, val);
       }
       return val;
     }
@@ -403,7 +405,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         System.out.printf(
             "Proceeding anyway.  Please report a bug in the tool that made the data trace file.");
       }
-      value = UtilMDE.unescapeNonJava(value);
+      value = UtilPlume.unescapeNonJava(value);
       return value.intern();
     } else if (base == BASE_CHAR) {
       // This will fail if the character is output as an integer
@@ -412,7 +414,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       if (value.length() == 1) {
         c = value.charAt(0);
       } else if ((value.length() == 2) && (value.charAt(0) == '\\')) {
-        c = UtilMDE.unescapeNonJava(value).charAt(0);
+        c = UtilPlume.unescapeNonJava(value).charAt(0);
       } else if ((value.length() == 4) && (value.charAt(0) == '\\')) {
         Byte b = Byte.decode("0" + value.substring(1));
         return Intern.internedLong(b.longValue());
@@ -717,7 +719,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
 
   /**
    * Return true if these two types can be sensibly compared to one another, and if non-integral,
-   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to a Vector,
+   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to a ArrayList,
    * but not the other way around. This is a transitive method, but not reflexive.
    */
   public boolean comparableOrSuperclassOf(ProglangType other) {
@@ -739,7 +741,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   public String format(/*>>>@GuardSatisfied ProglangType this*/) {
     if (dimensions == 0) return base;
 
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append(base);
     for (int i = 0; i < dimensions; i++) {
       sb.append("[]");
@@ -750,7 +752,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   public static String toString(ProglangType[] types) {
     StringBuilderDelimited out = new StringBuilderDelimited(", ");
     for (int i = 0; i < types.length; i++) {
-      out.append(types[i]);
+      out.add(types[i].toString());
     }
     return ("[" + out + "]");
   }

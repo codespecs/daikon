@@ -1,9 +1,11 @@
 package daikon;
 
 import daikon.derive.*;
-import java.util.*;
+import java.util.Arrays;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
+import org.plumelib.util.MathPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -173,11 +175,11 @@ public final class ValueTuple implements Cloneable {
   //  * no modified, no unmodified, no missing
   //    impossible
 
-  public static final int TUPLEMOD_VALUES = MathMDE.pow(2, MODBIT_VALUES);
-  public static final int UNMODIFIED_BITVAL = MathMDE.pow(2, UNMODIFIED);
-  public static final int MODIFIED_BITVAL = MathMDE.pow(2, MODIFIED);
-  public static final int MISSING_NONSENSICAL_BITVAL = MathMDE.pow(2, MISSING_NONSENSICAL);
-  public static final int MISSING_FLOW_BITVAL = MathMDE.pow(2, MISSING_FLOW);
+  public static final int TUPLEMOD_VALUES = MathPlume.pow(2, MODBIT_VALUES);
+  public static final int UNMODIFIED_BITVAL = MathPlume.pow(2, UNMODIFIED);
+  public static final int MODIFIED_BITVAL = MathPlume.pow(2, MODIFIED);
+  public static final int MISSING_NONSENSICAL_BITVAL = MathPlume.pow(2, MISSING_NONSENSICAL);
+  public static final int MISSING_FLOW_BITVAL = MathPlume.pow(2, MISSING_FLOW);
   // Various slices of the 8 (=TUPLEMOD_VALUES) possible tuplemod values.
   // The arrays are filled up in a static block below.
   // (As of 1/9/2000, tuplemod_modified_not_missing is used only in
@@ -399,8 +401,8 @@ public final class ValueTuple implements Cloneable {
 
   /** Return a new ValueTuple containing this one's first len elements. */
   public ValueTuple trim(int len) {
-    /*@Nullable*/ /*@Interned*/ Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
-    int[] new_mods = ArraysMDE.subarray(mods, 0, len);
+    /*@Nullable*/ /*@Interned*/ Object[] new_vals = ArraysPlume.subarray(vals, 0, len);
+    int[] new_mods = ArraysPlume.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
   }
 
@@ -416,7 +418,7 @@ public final class ValueTuple implements Cloneable {
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied ValueTuple this,*/ VarInfo /*@Nullable*/ [] vis) {
-    StringBuffer sb = new StringBuffer("[");
+    StringBuilder sb = new StringBuilder("[");
     assert vals.length == mods.length;
     assert vis == null || vals.length == vis.length;
     for (int i = 0; i < vals.length; i++) {
@@ -432,15 +434,15 @@ public final class ValueTuple implements Cloneable {
           if (val instanceof String) {
             sb.append("\"" + val + "\"");
           } else if (val instanceof long[]) {
-            sb.append(ArraysMDE.toString((long[]) val));
+            sb.append(Arrays.toString((long[]) val));
           } else if (val instanceof int[]) {
             // shouldn't reach this case -- should be long[], not int[]
-            // sb.append(ArraysMDE.toString((int[])val));
+            // sb.append(Arrays.toString((int[])val));
             throw new Error("should be long[], not int[]");
           } else if (val instanceof double[]) {
-            sb.append(ArraysMDE.toString((double[]) val));
+            sb.append(Arrays.toString((double[]) val));
           } else if (val instanceof String[]) {
-            sb.append(ArraysMDE.toString((String[]) val));
+            sb.append(Arrays.toString((String[]) val));
           } else {
             sb.append(val);
           }
@@ -463,7 +465,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   public static String valsToString(/*@Nullable*/ Object[] vals) {
-    StringBuffer sb = new StringBuffer("[");
+    StringBuilder sb = new StringBuilder("[");
     for (int i = 0; i < vals.length; i++) {
       if (i > 0) sb.append(", ");
       sb.append(valToString(vals[i]));
@@ -475,10 +477,10 @@ public final class ValueTuple implements Cloneable {
   public static String valToString(/*@Nullable*/ Object val) {
     if (val == null) return "null";
     if (val instanceof long[]) {
-      return (ArraysMDE.toString((long[]) val));
+      return (Arrays.toString((long[]) val));
     } else if (val instanceof int[]) {
       // shouldn't reach this case -- should be long[], not int[]
-      return (ArraysMDE.toString((int[]) val));
+      return (Arrays.toString((int[]) val));
     } else {
       return (val.toString());
     }

@@ -43,7 +43,7 @@ public class Lemma implements Comparable<Lemma> {
   }
 
   /** Convenience function to give you lemmas[], but as a vector. */
-  public static List<Lemma> lemmasVector() {
+  public static List<Lemma> lemmasList() {
     List<Lemma> v = new ArrayList<Lemma>();
     for (int i = 0; i < lemmas.length; i++) {
       v.add(lemmas[i]);
@@ -184,7 +184,7 @@ public class Lemma implements Comparable<Lemma> {
         "(FORALL (x y) (IFF (EQ (MOD (+ x y) 2) 0) (IFF (EQ (MOD x 2) 0) (EQ (MOD y 2) 0))))"),
     new Lemma("-1 is odd", "(EQ (MOD -1 2) 1)"),
     //     new Lemma("x | (x + 1) == x + 1 if x is even",
-    //               "(FORALL (x) (IMPLIES (EQ (MOD x 2) 0) (EQ (+ x 1) (|java-bitwise-or| x (+ x 1)))))"),
+    //       "(FORALL (x) (IMPLIES (EQ (MOD x 2) 0) (EQ (+ x 1) (|java-bitwise-or| x (+ x 1)))))"),
     //     new Lemma("x & (x + 1) == x if x is even",
     //               "(FORALL (x) (IMPLIES (EQ (MOD x 2) 0) (EQ x (|java-&| x (+ x 1)))))"),
     // Facts about max and min, also from the Simplify source

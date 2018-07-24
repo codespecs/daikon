@@ -5,8 +5,7 @@ import static daikon.inv.Invariant.asInvClass;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Method;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -134,7 +133,7 @@ public abstract class BinaryInvariant extends Invariant {
     try {
       Method swap_method = cls.getMethod("swap_class", (Class<?>[]) null);
       if (fswap) {
-        @SuppressWarnings("nullness") // "swap_class" is static, so null first argument is OK
+        @SuppressWarnings("nullness") // static method, so null first arg is OK: swap_class()
         Class<? extends Invariant> tmp_cls =
             asInvClass(swap_method.invoke(null, (Object /*@Nullable*/ []) null));
         cls = tmp_cls;

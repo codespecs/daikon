@@ -1,9 +1,13 @@
 package daikon.split;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.List;
 import jtb.ParseException;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -53,7 +57,7 @@ public class SpinfoFile {
     this.tempDir = tempDir;
     this.spinfoFileName = spinfoFile.toString();
     try {
-      LineNumberReader reader = UtilMDE.lineNumberFileReader(spinfoFile);
+      LineNumberReader reader = UtilPlume.lineNumberFileReader(spinfoFile);
       parseFile(reader);
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
@@ -161,7 +165,6 @@ public class SpinfoFile {
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param replaceStatements the List into which the ReplaceStatements are added
    */
-  @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
   private void readReplaceStatements(
       /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
       List<ReplaceStatement> replaceStatements)

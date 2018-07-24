@@ -1,7 +1,7 @@
 package daikon.diff;
 
 import daikon.PptTopLevel;
-import plume.*;
+import org.plumelib.util.Pair;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -28,8 +28,8 @@ orig(maxset) > orig(j[post(return)-1])
 size(j[])-1 <= orig(j[post(return)-1])
 orig(size(j[])) <= j[return-1]
 j[return-1] - orig(j[post(return)-1]) - 1 == 0
-return == (plume.MathMDE.gcd(j[return-1], orig(j[post(return)-1])))
-orig(size(j[])) == (plume.MathMDE.gcd(j[return-1], orig(j[post(return)-1])))
+return == (org.plumelib.util.MathPlume.gcd(j[return-1], orig(j[post(return)-1])))
+orig(size(j[])) == (org.plumelib.util.MathPlume.gcd(j[return-1], orig(j[post(return)-1])))
 ===========================================================================
 ..amatch():::ENTER
 j == 0

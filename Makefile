@@ -1,12 +1,11 @@
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
-
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-# Don't take value from user, because we want operations to apply to this directory.
-# DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
-DAIKONDIR = ${DAIKONDIR_DEFAULT}
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+
+HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
+CHECKLINK ?= ${DAIKONDIR}/utils/checklink
 
 ##########################################################################
 ### Variables
@@ -37,10 +36,10 @@ README_PATHS := README doc/README fjalar/README
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
                       doc/index.html doc/www/download/index.html
 
-# Scripts, such as Perl programs.  Why not just include all of them?
-# (Maybe to avoid problems with accidentally including things in the user's
-# checkout that are not needed by most users, but why not include
-# everything that's in repository?)
+# Scripts, such as Perl programs, that are included in the Daikon distribution.
+# Why not just include all of them?  (Maybe to avoid problems with
+# accidentally including things in the user's checkout that are not needed
+# by most users, but why not include everything that's in repository?)
 SCRIPT_FILES := Makefile \
 	daikon.cshrc daikon.bashrc daikonenv.bat \
 	dfepl dtrace-perl dtype-perl \
@@ -53,7 +52,7 @@ SCRIPT_FILES := Makefile \
 PLUME_SCRIPT_FILES := java-cpp lines-from
 
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
-                $(addprefix plume-lib/bin/,$(PLUME_SCRIPT_FILES))
+                $(addprefix utils/plume-lib/bin/,$(PLUME_SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
@@ -176,7 +175,7 @@ compile-java:
 very-clean:
 	find . -type f -name "*~" -exec rm -f {} \;
 	${MAKE} -C ${DAIKONDIR} clean-everything
-	-cd plume-lib/java && $(MAKE) very-clean
+	-cd utils/plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
@@ -468,7 +467,7 @@ staging:
 	cp -p doc/daikon-favicon.png $(STAGING_DIR)
 	cp -p doc/images/daikon-logo.gif $(STAGING_DIR)
 	# This command updates the dates and sizes in the various index files
-	html-update-link-dates $(STAGING_DIR)/download/index.html
+	${HTMLTOOLS}/html-update-link-dates $(STAGING_DIR)/download/index.html
 	# all distributed files should belong to the group plse_www and be group writable.
 	# set the owner and other permissions to readonly
 	chgrp -R plse_www $(STAGING_DIR)
@@ -531,8 +530,8 @@ endif
 NEW_VER := $(shell cat doc/VERSION)
 NEW_RELEASE_NAME := daikon-$(NEW_VER)
 
-check-for-broken-doc-links:
-	checklink -q -r `grep -v '^#' ${DAIKONDIR}/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
+check-for-broken-doc-links: update-checklink
+	${CHECKLINK}/checklink -q -r `grep -v '^#' ${CHECKLINK}/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
 
 HISTORY_DIR := $(STAGING_DIR)/history
 save-current-release:
@@ -591,8 +590,12 @@ update-dist-version-file:
 	@cat doc/VERSION
 
 JAR_FILES = \
+$(INV_DIR)/java/lib/bcel-util-all-0.0.4.jar \
+$(INV_DIR)/java/lib/commons-exec-1.3.jar \
 $(INV_DIR)/java/lib/java-getopt.jar \
-$(INV_DIR)/java/lib/plume.jar
+$(INV_DIR)/java/lib/options-all-0.3.1.jar \
+$(INV_DIR)/java/lib/plume-util-0.0.1.jar \
+$(INV_DIR)/java/lib/daikon-util.jar
 
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
 ## "make -C java clean; make daikon.jar".
@@ -612,7 +615,11 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/bcel-util-all-0.0.4.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/commons-exec-1.3.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/options-all-0.3.1.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume-util-0.0.1.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/daikon-util.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
@@ -644,7 +651,8 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	cp -pR doc/www ${TMPDIR}/daikon/doc
 
 	# Plume-lib library
-	(cd plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/ && tar xf -))
+	mkdir ${TMPDIR}/daikon/utils
+	(cd utils/plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
 
 	# Auxiliary programs
 	mkdir ${TMPDIR}/daikon/scripts
@@ -682,9 +690,6 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	# Maybe I should do  $(MAKE) javadoc
 	# Don't do  $(MAKE) clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
-
-	# Plume library
-	## (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/plume-lib/java/plume.jar)
 
 	## Front ends
 	mkdir ${TMPDIR}/daikon/front-end
@@ -735,34 +740,52 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 
 showvars:
 	@echo "DAIKONDIR =" $(DAIKONDIR)
-	@echo "DAIKONDIR_DEFAULT =" $(DAIKONDIR_DEFAULT)
 	@echo "DAIKON_JAVA_FILES =" $(DAIKON_JAVA_FILES)
 	@echo "WWW_FILES =" $(WWW_FILES)
 	@echo "CUR_RELEASE_NAME =" $(CUR_RELEASE_NAME)
 	@echo "NEW_RELEASE_NAME =" $(NEW_RELEASE_NAME)
 	${MAKE} -C java showvars
 
-plume-lib:
-	rm -rf java/utilMDE java/lib/utilMDE.jar
-	# Don't use an ssh URL because can't pull from it in cron jobs
-	git clone ${GIT_OPTIONS} https://github.com/mernst/plume-lib.git plume-lib
+# If .git does not exist, then directory was created from a daikon archive file.
+# The "git pull" command fails under Centos and Fedora 23, for mysterious reasons.
+update-libs: update-checklink update-html-tools update-plume-lib update-run-google-java-format
+.PHONY: update-libs update-checklink update-html-tools update-plume-lib update-run-google-java-format
 
-.PHONY: plume-lib-update
-plume-lib-update: plume-lib
+update-checklink:
 ifndef NONETWORK
-	# if plume-lib/.git does not exist, then directory was created
-	# from a daikon archive file - cannot do a git pull.
-	# The "git pull" command fails under Fedora 23, for mysterious reasons.
-	if test -d plume-lib/.git ; then \
-		(cd plume-lib && git pull -q ${GIT_OPTIONS}) || true; fi
+	if test -d utils/checklink/.git ; then \
+	  (cd utils/checklink && git pull -q) \
+	elif ! test -d utils/checklink ; then \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink) \
+	fi
 endif
 
-update-plume-jar: plume-lib-update
-ifndef CHECKERFRAMEWORK
-	$(error CHECKERFRAMEWORK is not set)
+update-html-tools:
+ifndef NONETWORK
+	if test -d utils/html-tools/.git ; then \
+	  (cd utils/html-tools && git pull -q) \
+	elif ! test -d utils/html-tools ; then \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools) \
+	fi
 endif
-	make -D plume-lib/java clean jar verify-plume-jar-classfile-version
-	\cp -pf plume-lib/java/plume.jar java/lib/
+
+update-plume-lib:
+ifndef NONETWORK
+	if test -d utils/plume-lib/.git ; then \
+	  (cd utils/plume-lib && (git pull -q || echo "git pull failed")) \
+	elif ! test -d utils/plume-lib ; then \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/mernst/plume-lib.git utils/plume-lib) \
+	fi
+endif
+
+update-run-google-java-format:
+ifndef NONETWORK
+	if test -d utils/run-google-java-format/.git ; then \
+	  (cd utils/run-google-java-format && git pull -q) \
+	elif ! test -d utils/run-google-java-format ; then \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format) \
+	fi
+endif
 
 .PHONY: git-hooks
 git-hooks: .git/hooks/pre-commit .git/hooks/post-merge

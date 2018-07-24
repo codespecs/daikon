@@ -1,7 +1,6 @@
 package daikon;
 
 import java.util.logging.Logger;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

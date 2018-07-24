@@ -71,7 +71,7 @@ public final class Runtime {
   /// Classname utilities
   ///
 
-  // This section is lifted from plume/UtilMDE.java and should be kept
+  // This section is lifted from plume/UtilPlume.java and should be kept
   // in synch with that version.
 
   private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<String, String>(8);
@@ -321,8 +321,10 @@ public final class Runtime {
   // //   SomeClass.daikonPrint
   // // because daikonPrint doesn't (yet) exist in SomeClass.java.
   // // Later we will fix up all references to this.
-  // public static void daikonPrint_dummy(Object x, PrintStream ps, int depth, String prefix, String target) {
-  //   throw new Error("Unreplaced call to DaikonRuntime.daikonPrint_dummy(" + x + ", " + ps + ", " + depth + ", " + prefix + ", " + target + ")");
+  // public static void daikonPrint_dummy(Object x, PrintStream ps, int depth, String prefix, String
+  // target) {
+  //   throw new Error("Unreplaced call to DaikonRuntime.daikonPrint_dummy(" + x + ", " + ps + ", "
+  // + depth + ", " + prefix + ", " + target + ")");
   // }
 
   // Some of these functions could be open-coded, but I don't want to get
@@ -415,11 +417,11 @@ public final class Runtime {
     ps.print((ch == null) ? "null" : quote(ch));
   }
 
-  // Lifted directly from plume/UtilMDE.java, where it is called
+  // Lifted directly from plume/UtilPlume.java, where it is called
   // escapeNonJava(), but repeated here to make this class self-contained.
   /** Quote \, ", \n, and \r characters in the target; return a new string. */
   public static String quote(String orig) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     // The previous escape (or escaped) character was seen right before
     // this position.  Alternately:  from this character forward, the string
     // should be copied out verbatim (until the next escaped character).

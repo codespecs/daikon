@@ -1,7 +1,11 @@
 package daikon.tools;
 
 import daikon.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -65,8 +69,6 @@ public class ReadTrace {
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
 
       // Add orig and derived variables to the ValueTuple
-      assert vt.vals != null
-          : "@AssumeAssertion(nullness): bug: Checker Framework bug:  vals is a non-null array, but is reported as nullable";
       FileIO.compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
       FileIO.compute_derived_variables(ppt, vt.vals, vt.mods);
 

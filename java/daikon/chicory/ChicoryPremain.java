@@ -1,20 +1,33 @@
 package daikon.chicory;
 
-//import harpoon.ClassFile.HMethod;
+// import harpoon.ClassFile.HMethod;
 
 import static daikon.tools.nullness.NullnessUtils.castNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
-import daikon.util.*;
-import java.io.*;
+import daikon.util.UtilPlume;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.lang.instrument.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Member;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.*;
-import java.util.jar.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.jar.JarFile;
+import org.plumelib.bcelutil.SimpleLog;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -57,7 +70,7 @@ public class ChicoryPremain {
 
     // Parse our arguments using Chicory's argument parser
     Options options = new Options(Chicory.synopsis, Chicory.class, ChicoryPremain.class);
-    String[] target_args = options.parse_or_usage(agentArgs);
+    String[] target_args = options.parse(true, Options.tokenize(agentArgs));
     if (target_args.length > 0) {
       System.err.printf("Unexpected ChicoryPremain arguments %s%n", Arrays.toString(target_args));
       System.exit(1);
@@ -90,11 +103,7 @@ public class ChicoryPremain {
     if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
       try {
-        castNonNull(Runtime.comp_info)
-            .read(
-                castNonNull(
-                    Chicory
-                        .comparability_file)); // @SuppressWarnings("nullness") // bug: flow should figure this out (mark DeclReader constructor as pure?
+        castNonNull(Runtime.comp_info).read(castNonNull(Chicory.comparability_file));
       } catch (FileNotFoundException e) {
         System.err.printf("%nCould not find comparability file: %s%n", Chicory.comparability_file);
         Runtime.chicoryLoaderInstantiationError = true;
@@ -110,10 +119,10 @@ public class ChicoryPremain {
       System.err.println("Executing a purity analysis is currently disabled");
       System.exit(1);
 
-      //runPurityAnalysis(Chicory.target_program);
-      //writePurityFile(Chicory.target_program + ".pure",
+      // runPurityAnalysis(Chicory.target_program);
+      // writePurityFile(Chicory.target_program + ".pure",
       //                Chicory.config_dir);
-      //doPurity = true;
+      // doPurity = true;
     } else if (Chicory.get_purity_file() != null) {
       readPurityFile(Chicory.get_purity_file(), Chicory.config_dir);
       doPurity = true;
@@ -130,7 +139,7 @@ public class ChicoryPremain {
           loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
       @SuppressWarnings("unchecked")
       Class<Instrument> c = (Class<Instrument>) transformer.getClass();
-      // System.out.printf ("Classloader of tranformer = %s%n",
+      // System.out.printf("Classloader of tranformer = %s%n",
       //                    c.getClassLoader());
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
@@ -184,7 +193,7 @@ public class ChicoryPremain {
 
     BufferedReader reader;
     try {
-      reader = UtilMDE.bufferedFileReader(purityFile);
+      reader = UtilPlume.bufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
       System.err.printf(
           "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());
@@ -210,7 +219,7 @@ public class ChicoryPremain {
 
       if (line != null) {
         pureMethods.add(line.trim());
-        // System.out.printf ("Adding '%s' to list of pure methods\n",
+        // System.out.printf("Adding '%s' to list of pure methods\n",
         //                   line);
       }
     } while (line != null);
@@ -220,7 +229,7 @@ public class ChicoryPremain {
     } catch (IOException e) {
     }
 
-    // System.out.printf ("leaving purify file\n");
+    // System.out.printf("leaving purify file\n");
 
   }
 
@@ -285,7 +294,7 @@ public class ChicoryPremain {
   public static boolean isMethodPure(Member member) {
     assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
 
-    //TODO just use Set.contains(member.toString()) ?
+    // TODO just use Set.contains(member.toString()) ?
     for (String methName : pureMethods) {
       if (methName.equals(member.toString())) {
         return true;
@@ -316,12 +325,14 @@ public class ChicoryPremain {
    *   <li>an interim 6.0 version
    *   <li>the offical 6.0 release version
    *   <li>the offical 6.1 release version
+   *   <li>the PLSE 6.1 release version (includes LocalVariableGen fix)
+   *   <li>the offical 6.2 release version (includes LocalVariableGen fix)
    * </ul>
    *
-   * We are looking for the latter one. All but the interim versions use the package name of
-   * org.apache.bcel while the interim version uses the package name of org.apache.commons.bcel6.
-   * Also, there are two classes present in the 6.1 release version that are not in any other
-   * version. Thus, we can identify the correct version of BCEL by the presence of the class:
+   * Currently, only DynComp cares about the LocalVariableGen fix, so we are looking for the offical
+   * 6.1 release version (or newer) and DynComp will check for the fixed version later. There are
+   * two classes present in 6.1 and subsequent releases that are not in previous versions. Thus, we
+   * can identify the correct version of BCEL by the presence of the class:
    * org.apache.bcel.classfile.ConstantModule.class
    *
    * <p>Earlier versions of Chicory inspected all version of BCEL found on the path and selected the
@@ -385,10 +396,10 @@ public class ChicoryPremain {
       }
 
       if (url1.getProtocol().equals("jar")) {
-        // System.out.printf ("url1 = %s, file=%s, path=%s, protocol=%s, %s%n",
+        // System.out.printf("url1 = %s, file=%s, path=%s, protocol=%s, %s%n",
         //                  url1, url1.getFile(), url1.getPath(),
         //                  url1.getProtocol(), url1.getClass());
-        // System.out.printf ("url2 = %s, file=%s, path=%s, protocol=%s, %s%n",
+        // System.out.printf("url2 = %s, file=%s, path=%s, protocol=%s, %s%n",
         //                    url2, url2.getFile(), url2.getPath(),
         //                    url2.getProtocol(), url1.getClass());
         String jar1 = extract_jar_path(url1);

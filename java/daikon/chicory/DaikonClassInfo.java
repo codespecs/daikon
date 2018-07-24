@@ -4,7 +4,8 @@
 
 package daikon.chicory;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * The DaikonClassInfo class is a subtype of DaikonVariableInfo used for variables which represent
@@ -26,7 +27,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
     function_args = receiverName;
   }
 
-  //.class variables are derived, so just keep the parent value
+  // .class variables are derived, so just keep the parent value
   @Override
   public Object getMyValFromParentVal(Object value) {
     return value;

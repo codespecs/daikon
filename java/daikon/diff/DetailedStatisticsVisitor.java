@@ -1,10 +1,12 @@
 package daikon.diff;
 
 import daikon.inv.*;
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -124,7 +126,8 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
       case REL_SAME_JUST1_UNJUST2:
       case REL_SAME_UNJUST1_JUST2:
         assert inv1 != null && inv2 != null
-            : "@AssumeAssertion(nullness)"; // application invariant about return value of determineRelationship
+            : "@AssumeAssertion(nullness)"; // application invariant about return value of
+        // determineRelationship
         freq[type][relationship] += calculateConfidenceDifference(inv1, inv2);
         break;
       default:
@@ -265,30 +268,30 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     pw.println("STATISTICS");
     pw.print("       ");
     for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
-      pw.print(UtilMDE.rpad(RELATIONSHIP_LABELS[rel], FIELD_WIDTH));
+      pw.print(UtilPlume.rpad(RELATIONSHIP_LABELS[rel], FIELD_WIDTH));
     }
-    pw.println(UtilMDE.rpad("TOTAL", FIELD_WIDTH));
+    pw.println(UtilPlume.rpad("TOTAL", FIELD_WIDTH));
 
     for (int type = 0; type < NUM_TYPES; type++) {
-      pw.print(UtilMDE.rpad(TYPE_LABELS[type], LABEL_WIDTH));
+      pw.print(UtilPlume.rpad(TYPE_LABELS[type], LABEL_WIDTH));
       for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
         int f = (int) freq[type][rel];
-        pw.print(UtilMDE.rpad(f, FIELD_WIDTH));
+        pw.print(UtilPlume.rpad(f, FIELD_WIDTH));
       }
-      int s = (int) ArraysMDE.sum(freq[type]);
-      pw.print(UtilMDE.rpad(s, FIELD_WIDTH));
+      int s = (int) ArraysPlume.sum(freq[type]);
+      pw.print(UtilPlume.rpad(s, FIELD_WIDTH));
       pw.println();
     }
 
-    pw.print(UtilMDE.rpad("TOTAL", LABEL_WIDTH));
+    pw.print(UtilPlume.rpad("TOTAL", LABEL_WIDTH));
     for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
       int sum = 0;
       for (int type = 0; type < NUM_TYPES; type++) {
         sum += freq[type][rel];
       }
-      pw.print(UtilMDE.rpad(sum, FIELD_WIDTH));
+      pw.print(UtilPlume.rpad(sum, FIELD_WIDTH));
     }
-    pw.print(UtilMDE.rpad((int) ArraysMDE.sum(freq), FIELD_WIDTH));
+    pw.print(UtilPlume.rpad((int) ArraysPlume.sum(freq), FIELD_WIDTH));
 
     pw.println();
 

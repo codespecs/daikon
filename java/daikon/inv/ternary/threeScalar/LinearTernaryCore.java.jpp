@@ -45,7 +45,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.MathPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -188,7 +189,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    */
   public void permute(int[] permutation) {
     assert permutation.length == 3;
-    assert ArraysMDE.fn_is_permutation(permutation);
+    assert ArraysPlume.fn_is_permutation(permutation);
     // Fix a, b, c
     double[] clever = new double[] { a, b, c };
     double[] pclever = new double[3];
@@ -386,7 +387,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * coefficients are relatively close to the original coefficients (within the ratio defined by
    * Global.fuzzy) then the new coefficients are used.
    *
-   * @see FuzzyFloat
+   * @see org.plumelib.util.FuzzyFloat
    */
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
 
@@ -931,59 +932,59 @@ public final class CLASSNAME implements Serializable, Cloneable {
    *     The first three elements are null if no triple of elements is NaN-free.
    * @return the maximum separation found
    */
- double maxsep_triples(/*@Nullable*/ Point[] pa) {
+  double maxsep_triples(/*@Nullable*/ Point[] pa) {
 
-   // cache values for the (square of the) distance between each pair of
-   // points, to avoid duplicating work
-   double[][] separations = new double[pa.length][pa.length];
-   for (int i = 0; i < pa.length - 1; i++) {
-     for (int j = i + 1; j < pa.length; j++) {
-       separations[i][j] = separation(pa[i], pa[j]);
-     }
-   }
+    // cache values for the (square of the) distance between each pair of
+    // points, to avoid duplicating work
+    double[][] separations = new double[pa.length][pa.length];
+    for (int i = 0; i < pa.length - 1; i++) {
+      for (int j = i + 1; j < pa.length; j++) {
+        separations[i][j] = separation(pa[i], pa[j]);
+      }
+    }
 
-   Point p1 = null;
-   Point p2 = null;
-   Point p3 = null;
+    Point p1 = null;
+    Point p2 = null;
+    Point p3 = null;
 
-   // max_separation is the separation metric for the most separated
-   // triple of points.  We use the sum of the separations as the
-   // metric.  (The metric "min of the three separations" does not work
-   // because it doesn't choose a unique set of points, making the
-   // result dependent on the order in which the points are seen; more
-   // seriously, it may choose a collinear set of points even when a
-   // non-collinear set exists.)
-   double max_separation = Double.MIN_VALUE;
+    // max_separation is the separation metric for the most separated
+    // triple of points.  We use the sum of the separations as the
+    // metric.  (The metric "min of the three separations" does not work
+    // because it doesn't choose a unique set of points, making the
+    // result dependent on the order in which the points are seen; more
+    // seriously, it may choose a collinear set of points even when a
+    // non-collinear set exists.)
+    double max_separation = Double.MIN_VALUE;
 
-   for (int i = 0; i < pa.length - 2; i++) {
-     for (int j = i + 1; j < pa.length - 1; j++) {
-       double sep_i_j = separations[i][j];
-       for (int k = j + 1; k < pa.length; k++) {
+    for (int i = 0; i < pa.length - 2; i++) {
+      for (int j = i + 1; j < pa.length - 1; j++) {
+        double sep_i_j = separations[i][j];
+        for (int k = j + 1; k < pa.length; k++) {
 
-         // using the sum of separations is valid, as long as
-         // separation is the actual distance between points and not
-         // the square of the distance
-         double separation = sep_i_j + separations[i][k] + separations[j][k];
-         if (separation > max_separation) {
-           max_separation = separation;
-           p1 = pa[i];
-           p2 = pa[j];
-           p3 = pa[k];
-         }
-       }
-     }
-   }
+          // using the sum of separations is valid, as long as
+          // separation is the actual distance between points and not
+          // the square of the distance
+          double separation = sep_i_j + separations[i][k] + separations[j][k];
+          if (separation > max_separation) {
+            max_separation = separation;
+            p1 = pa[i];
+            p2 = pa[j];
+            p3 = pa[k];
+          }
+        }
+      }
+    }
 
-   pa[0] = p1;
-   pa[1] = p2;
-   pa[2] = p3;
+    pa[0] = p1;
+    pa[1] = p2;
+    pa[2] = p3;
 
-   if (Debug.logDetail()) {
-     wrapper.log("maxsep_triples = %s %s %s", pa[0], pa[1], pa[2]);
-   }
-   return max_separation;
+    if (Debug.logDetail()) {
+      wrapper.log("maxsep_triples = %s %s %s", pa[0], pa[1], pa[2]);
+    }
+    return max_separation;
 
- }
+  }
 
 
   // Given ((x0,y0,z0),(x1,y1,z1), (x2,y2,z2), calculate a, b, c and d
@@ -1060,15 +1061,15 @@ public final class CLASSNAME implements Serializable, Cloneable {
     // Put the coefficients in lowest terms by dividing by the gcd.
     // If the gcd is 1, no harm done -- divide by 1.
     // Type is double to ensure floating-point division.
-    double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , MathMDE.gcd(k_var, Stand_const));
+    double myGCD = MathPlume.gcd(MathPlume.gcd(i_var, j_var) , MathPlume.gcd(k_var, Stand_const));
     double standard_i_var = i_var / myGCD;
     double standard_j_var = j_var / myGCD;
     double standard_k_var = k_var / myGCD;
     double standard_Stand_const = Stand_const / myGCD;
 
     if (wrapper != null) {
-      wrapper.log("Preliminary: %s %s GCD: %s", i_var, j_var, MathMDE.gcd(i_var, j_var));
-      wrapper.log("Preliminary: %s %s GCD: %s", k_var, Stand_const, MathMDE.gcd(k_var, Stand_const));
+      wrapper.log("Preliminary: %s %s GCD: %s", i_var, j_var, MathPlume.gcd(i_var, j_var));
+      wrapper.log("Preliminary: %s %s GCD: %s", k_var, Stand_const, MathPlume.gcd(k_var, Stand_const));
       wrapper.log("GCD: %s", myGCD);
     }
 
@@ -1122,7 +1123,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   public String cache_repr() {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     for (int i = 0; i < MINTRIPLES; i++) {
       if (i != 0) result.append("; ");
       result.append(point_repr(def_points[i]));

@@ -20,11 +20,55 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.6.0 (month? ?, 2017)
+5.6.x (?, ?, 2018)
 
 Chicory:
 - We now instrument exceptional exits.  That means that Daikon is able
   to infer invariants about when a Java method throws an exception.
+
+===========================================================================
+
+5.6.6 (July 2, 2018)
+
+DynComp:
+- Fix issue #129 - Too many parameters for an annotation method.
+
+Fjalar/Kvasir:
+- Fix issue #27 - Incorrect categorization of some SIMD instructions.
+
+===========================================================================
+
+5.6.4 (April 3, 2018)
+
+Eliminate reliance on plume.jar file, in favor of smaller libraries
+(checklink, html-tools, options, plume-util, etc.).
+
+Fjalar/Kvasir:
+- We updated the underlying Binutils infrastructure to version 2.30.
+
+The --wrap_xml command-line option now produces valid XML.
+
+===========================================================================
+
+5.6.2 (February 2, 2018)
+
+It is no longer necessary to set the DAIKONDIR environment variable when
+using or building Daikon.
+
+Fjalar/Kvasir:
+- We updated the underlying Valgrind infrastructure to version 3.13.0.
+- We updated the underlying Binutils infrastructure to version 2.29.1.
+- Improved Ubuntu 17.10 support.
+
+===========================================================================
+
+5.6.0 (December 4, 2017)
+
+Support was added for Ubuntu 17.10.  Please see User Guide notes about using
+the -no-pie option on gcc.
+
+DynComp:
+- Fixed a few DynComp bugs.
 
 ===========================================================================
 
@@ -3377,7 +3421,7 @@ for more information.
 
 3.1.1 (01 July 2004)
 
-Modified Java formatting to used FuzzyFloat comparisons rather than
+Modified Java formatting to use FuzzyFloat comparisons rather than
 directly comparing floating point numbers.  By default, FuzzyFloat
 comparisons are used when generating invariants.  More information on
 fuzzy comparisons is available in the 'List of configuration options'

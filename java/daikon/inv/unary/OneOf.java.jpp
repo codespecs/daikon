@@ -97,7 +97,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfString
   #define ONEOFSCALAR_STRING "OneOfString"
   #define SINGLESCALAR SingleString
-  #define TOSTRING(x) ((x == null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
+  #define TOSTRING(x) ((x == null) ? "null" : "\"" + UtilPlume.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name()
 #elif defined(SEQUENCE)
@@ -109,7 +109,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfSequence
   #define ONEOFSCALAR_STRING "OneOfSequence"
   #define SINGLESCALAR SingleScalarSequence
-  #define TOSTRING(x) ArraysMDE.toString(x)
+  #define TOSTRING(x) Arrays.toString(x)
   #define TOSTRINGELEMENT(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
@@ -123,7 +123,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfFloatSequence
   #define ONEOFSCALAR_STRING "OneOfSequenceFloat"
   #define SINGLESCALAR SingleFloatSequence
-  #define TOSTRING(x) ArraysMDE.toString(x)
+  #define TOSTRING(x) Arrays.toString(x)
   #define TOSTRINGELEMENT(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define ELT_EQUALS(a,b) (((a) == (b)) || (Double.isNaN(a) &&Double.isNaN(b)))
@@ -137,8 +137,8 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfStringSequence
   #define ONEOFSCALAR_STRING "OneOfStringSequence"
   #define SINGLESCALAR SingleStringSequence
-  #define TOSTRING(x) ArraysMDE.toString(x)
-  #define TOSTRINGELEMENT(x) ((x == null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
+  #define TOSTRING(x) Arrays.toString(x)
+  #define TOSTRINGELEMENT(x) ((x == null) ? "null" : "\"" + UtilPlume.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name()
@@ -185,7 +185,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR EltOneOfString
   #define ONEOFSCALAR_STRING "EltOneOfString"
   #define SINGLESCALAR SingleStringSequence
-  #define TOSTRING(x) ((x == null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
+  #define TOSTRING(x) ((x == null) ? "null" : "\"" + UtilPlume.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name() + " elements"
 #else
@@ -215,7 +215,10 @@ import java.util.*;
 #if defined(BASE_STRING)
   import java.util.regex.*;
 #endif
-import plume.*;
+import org.plumelib.bcelutil.JvmUtil;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -413,16 +416,16 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   @SuppressWarnings("interning") // generics bug in (at least interning) checker
 #if defined(STRING) || defined(ELTSTRING)
-  static Comparator<String> comparator = new UtilMDE.NullableStringComparator();
+  static Comparator<String> comparator = new UtilPlume.NullableStringComparator();
   #define COMPARATOR_ARG , comparator
 #elif defined(SEQUENCE)
-  static Comparator<long[]> comparator = new ArraysMDE.LongArrayComparatorLexical();
+  static Comparator<long[]> comparator = new ArraysPlume.LongArrayComparatorLexical();
 #define COMPARATOR_ARG , comparator
 #elif defined(FLOATSEQUENCE)
-  static Comparator<double[]> comparator = new ArraysMDE.DoubleArrayComparatorLexical();
+  static Comparator<double[]> comparator = new ArraysPlume.DoubleArrayComparatorLexical();
 #define COMPARATOR_ARG , comparator
 #elif defined(STRINGSEQUENCE)
-  static Comparator<String[]> comparator = new ArraysMDE.ComparableArrayComparatorLexical<String>(); // need to figure out proper generic type -MDE
+  static Comparator<String[]> comparator = new ArraysPlume.ComparableArrayComparatorLexical<String>(); // need to figure out proper generic type -MDE
   #define COMPARATOR_ARG , comparator
 #else
   #define COMPARATOR_ARG
@@ -464,7 +467,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     // Not so efficient an implementation, but simple;
     // and how often will we need to print this anyway?
     sort_rep();
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append("{ ");
     for (int i = 0; i < num_elts; i++) {
       if (i != 0) {
@@ -665,7 +668,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
             return varname + " == null";
           } else {
             if (str.startsWith("[")) {
-              str = UtilMDE.fieldDescriptorToBinaryName(str);
+              str = JvmUtil.fieldDescriptorToBinaryName(str);
             }
             if (PrintInvariants.dkconfig_static_const_infer) {
               PptTopLevel pptt = ppt.parent;
@@ -727,7 +730,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
     String type_str;
     if (str.startsWith("[")) {
-      type_str = UtilMDE.fieldDescriptorToBinaryName(str);
+      type_str = JvmUtil.fieldDescriptorToBinaryName(str);
     } else {
       type_str = str;
       if (type_str.startsWith("\"") && type_str.endsWith("\"")) {
@@ -943,7 +946,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       args_list.add(TOSTRING(elts[i]));
     #endif
     }
-    String args = UtilMDE.join(args_list, ", ");
+    String args = UtilPlume.join(args_list, ", ");
 
     if (num_elts == 0) { // If there are no elements, length must be 0.
       String varname = var().csharp_name();
@@ -1006,7 +1009,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         for (int i = 0; i < num_elts; i++) {
           e.add(TOSTRING(elts[i]));
         }
-        String exp = UtilMDE.join(e, ", ");
+        String exp = UtilPlume.join(e, ", ");
 
         if (var().is_array() && !var().isDerived()) {
             result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf(" + exp + "))";
@@ -1027,7 +1030,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
                  names.add(varname + " == typeof(" + str + ")");
              }
         }
-        result = UtilMDE.join(names, " || ");
+        result = UtilPlume.join(names, " || ");
     } else if (num_elts == 1) {
         String str = elts[0];
         result = (str == null || "null".equals(str))
@@ -1039,7 +1042,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
             String str = elts[i];
             names.add((str == null) ? "null" : TOSTRING(str));
         }
-        result = varname + ".OneOf(" + UtilMDE.join(names, ", ") + ")";
+        result = varname + ".OneOf(" + UtilPlume.join(names, ", ") + ")";
     }
 
   #endif
@@ -1159,7 +1162,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
           result += varname + " == null";
         } else {
           if (str.startsWith("[")) {
-            str = UtilMDE.fieldDescriptorToBinaryName(str);
+            str = JvmUtil.fieldDescriptorToBinaryName(str);
           }
           // ".class" (which is a suffix for a type name) and not
           // getClassSuffix (which is a suffix for an expression).
@@ -1226,7 +1229,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         if (value == null) {
           // do nothing
         } else if (value.startsWith("[")) {
-          value = UtilMDE.fieldDescriptorToBinaryName(value);
+          value = JvmUtil.fieldDescriptorToBinaryName(value);
         } else if (value.startsWith("\"") && value.endsWith("\"")) {
           value = value.substring(1, value.length()-1);
         }
@@ -1286,7 +1289,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       }
     }
 #elif defined(IS_SEQUENCE)
-    StringBuffer resultBuf = new StringBuffer();
+    StringBuilder resultBuf = new StringBuilder();
     for (int i = 0; i < num_elts; i++) {
       INT seq = elts[i];
       String offset = null;
@@ -1294,7 +1297,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       String[] bounds_name;
       String length = var().get_simplify_size_name();
       // if ((length == null) && var().name.isApplySizeSafe())
-      //  System.out.printf ("var %s, type %s, is_array %b%n", var().name(),
+      //  System.out.printf("var %s, type %s, is_array %b%n", var().name(),
       //                     var().type, var().type.isArray());
       if (length != null) {
         length = "(EQ " + length + " "+ simplify_format_long(seq.length) + ")";
@@ -1315,7 +1318,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       } else
 #endif
       {
-        StringBuffer contentsBuf = new StringBuffer();
+        StringBuilder contentsBuf = new StringBuilder();
         for (int j = 0; j < seq.length; j++) {
           if (j + 3 < seq.length
               && ELT_EQUALS(seq[j], seq[j + 1])
@@ -1358,7 +1361,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
             String value = TOSTRING_SIMPLIFY(seq[j]);
             contentsBuf.append(" (EQ " + nth + " " + value + ")");
             // if (nth.contains ("--orig__a"))
-            //   System.out.printf ("regular orig__a%n");
+            //   System.out.printf("regular orig__a%n");
 
           }
         }
@@ -1466,7 +1469,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
     if (status == InvariantStatus.FALSIFIED) {
       if (logOn() && mutate) {
-        StringBuffer eltString = new StringBuffer();
+        StringBuilder eltString = new StringBuilder();
         for (int i = 0; i < num_elts; i++) {
           eltString.append(TOSTRING(elts[i]) + " ");
         }
@@ -1598,10 +1601,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       if (num_elts == 1
           && v.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
           && v.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
-        int min = v.aux.getInt(VarInfoAux.MINIMUM_VALUE);
-        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
-        int max = v.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
+        @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
+        int min = v.aux.getInt(VarInfoAux.MINIMUM_VALUE),
+            max = v.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
         if (min == max && min == elts[0]) {
           return new DiscardInfo(
               this,
@@ -1613,7 +1615,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       // We can check if all values in the list match with the ones we know about
       // (useful for booleans and numeric enumerations).
       if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+        @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
         Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
         for (String s : vsValidValues) {
@@ -1636,7 +1638,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // just apply to all arrays.
     if (v.isDerived() && (v.derived instanceof SequenceLength)
       && (num_elts == 1) && (elts[0] == 0)) {
-      @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ VarInfo b = v.derived.getBase(0);
       if (!b.isDerived()) {
         if (logOn()) {
@@ -1648,7 +1649,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
 
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
-      @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
         String discardString = v.name() + " is derived with shift!=0 (shift==" + sl.shift + ")";
@@ -1714,7 +1714,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       #define NEW_BASETYPE
       #endif
 
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<BASETYPE> setValidValues = new TreeSet<BASETYPE>();
       for (String s : vsValidValues) {
@@ -1751,7 +1751,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
       for (String s : vsValidValues) {
@@ -1800,7 +1800,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
+      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<INT> setValidValues = new TreeSet<INT>();
       for (String s : vsValidValues) {

@@ -1,6 +1,6 @@
 package daikon.tools.jtb;
 
-import java.util.*;
+import java.util.Enumeration;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
@@ -53,12 +53,12 @@ public class OrigModifier extends DepthFirstVisitor {
 
     // First checks for and handles simple variables.
 
-    //test if optional list length is zero, if not, then it is not
-    //the name of a simple variable
+    // test if optional list length is zero, if not, then it is not
+    // the name of a simple variable
     if (n.f1.size() == 0) {
-      //checks if the nodeChoice's choice is Name
+      // checks if the nodeChoice's choice is Name
       if (n.f0.f0.choice instanceof Name) {
-        //checks if the Name is simple
+        // checks if the Name is simple
         if (((Name) n.f0.f0.choice).f1.size() == 0) {
           NodeToken variableToken = ((Name) n.f0.f0.choice).f0;
           variableToken.tokenImage = "orig(" + variableToken.tokenImage + ")";

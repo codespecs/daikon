@@ -1,5 +1,7 @@
 # This is a -*- makefile -*-, Emacs
 
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
 else
@@ -45,24 +47,31 @@ endif
 
 default: summary-w-daikon
 
+# Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
 OS_ID := $(shell lsb_release -si)
 OS_REL := $(shell lsb_release -sr)
 GOAL := goal
 
 ifeq ($(OS_ID),CentOS)
-ifeq ($(OS_REL),7.4.1708)
+ifeq ($(OS_REL),7.5.1804)
 ifeq (washington,$(findstring washington,$(shell uname -n)))
 # UW CSE version of CentOS
 	GOAL := goal-CentOS-UWCSE
 else
 # Standard version of CentOS
-	GOAL := goal-CentOS
+       GOAL := goal-CentOS-nonUWCSE
 endif
+endif
+ifeq ($(OS_REL),7.4.1708)
+# Standard version of CentOS
+       GOAL := goal-CentOS-nonUWCSE
 endif
 ifeq ($(OS_REL),7.3.1611)
 # Standard version of CentOS
-	GOAL := goal-CentOS
+       GOAL := goal-CentOS-nonUWCSE
 endif
+# other versions of CentOS will use goal-CentOS if it exists
+# otherwise the default goal file
 endif
 
 ifeq ($(OS_ID),Fedora)
@@ -75,11 +84,45 @@ endif
 ifeq ($(OS_REL),26)
 	GOAL := goal-Fedora26
 endif
+# other versions of Fedora will use goal-Fedora if it exists
+# otherwise the default goal file
 endif
 
+# The lastest version of Ubuntu (17.10) uses a gcc that gets
+# almost the same results as the one on Fedora26. However,
+# there are enough differences that we need additional goal files.
+ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),17.10)
+	GOAL := goal-Ubuntu1710
+endif
+# other versions of Ubuntu will use the default goal file
+endif
+
+# We test Kvasir on three different OS platforms: Ubuntu, Fedora and CentOS.
+# The code above has set $(GOAL) to a value that represents the current OS type
+# and version number; e.g. 'goal-Fedora25'.
+
+# The function below identifies the correct goal file based on:
+# the test case => $(1)
+# the OS => $(OS_ID)
+# the OS version => $(OS_REL)
+# There are three general steps:
+#   if a OS type and version specific goal file exists [$(1).$(GOAL)] - use it
+#   else, if a generic OS goal file exists [$(1).goal-Fedora for example] - use it
+#   otherwise, use the default goal file [$(1).goal]
 goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 				$(1).$(GOAL), \
-				$(1).goal)
+				$(if $(findstring CentOS, $(OS_ID)), \
+					$(if $(shell if [ -f $(1).goal-CentOS ] ; then echo true; fi), \
+						$(1).goal-CentOS, \
+						$(1).goal), \
+					$(if $(findstring Fedora, $(OS_ID)), \
+						$(if $(shell if [ -f $(1).goal-Fedora ] ; then echo true; fi), \
+							$(1).goal-Fedora, \
+							$(1).goal), \
+						$(1).goal) \
+				) \
+			)
 
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1
@@ -99,6 +142,12 @@ else
 C_EXT ?= c
 COMPILER := $(CC)
 CFLAGS += -std=gnu89
+endif
+
+ifneq ($(OS_ID),CentOS)
+# Ubuntu (17.10) sets -pie on by default
+# we must turn it back off
+CFLAGS += -no-pie
 endif
 
 SOURCES ?= $(NAME).$(C_EXT)

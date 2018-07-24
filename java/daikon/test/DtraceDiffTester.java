@@ -2,7 +2,6 @@ package daikon.test;
 
 import daikon.*;
 import daikon.tools.DtraceDiff;
-import java.lang.reflect.*;
 import java.net.URL;
 import junit.framework.*;
 
@@ -18,12 +17,12 @@ public class DtraceDiffTester extends TestCase {
   }
 
   private static boolean diff(String file1, String file2) {
-    //System.out.println("Diff: " + file1 + " " + file2);
+    // System.out.println("Diff: " + file1 + " " + file2);
     return DtraceDiff.mainTester(new String[] {find(file1), find(file2)});
   }
 
   private static boolean diff(String option, String optval, String file1, String file2) {
-    //System.out.println("Diff: " + file1 + " " + file2);
+    // System.out.println("Diff: " + file1 + " " + file2);
     return DtraceDiff.mainTester(new String[] {option, optval, find(file1), find(file2)});
   }
 

@@ -2,14 +2,29 @@ package daikon.dcomp;
 
 import daikon.DynComp;
 import daikon.chicory.*;
-import daikon.util.ArraysMDE;
-import daikon.util.SimpleLog;
 import daikon.util.WeakIdentityHashMap;
 import java.io.PrintWriter;
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.plumelib.bcelutil.SimpleLog;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -81,12 +96,12 @@ public final class DCRuntime {
   /** Class to hold per-thread data */
   private static class ThreadData {
     /** Tag stack */
-    Stack<Object> tag_stack;
+    Deque<Object> tag_stack;
 
     int tag_stack_depth;
 
     ThreadData() {
-      tag_stack = new Stack<Object>();
+      tag_stack = new ArrayDeque<Object>();
       tag_stack_depth = 0;
     }
   }
@@ -468,7 +483,7 @@ public final class DCRuntime {
       }
     }
 
-    // System.out.printf ("has_instrumented: %s %s %s%n", c, method_name,
+    // System.out.printf("has_instrumented: %s %s %s%n", c, method_name,
     //                   dcompmarker);
 
     Class<?>[] args = new Class<?>[] {dcompmarker};
@@ -478,7 +493,7 @@ public final class DCRuntime {
         m = c.getDeclaredMethod(method_name, args);
       } catch (Exception e) {
       }
-      // System.out.printf ("Class %s instrumented %s = %s%n", c, method_name, m);
+      // System.out.printf("Class %s instrumented %s = %s%n", c, method_name, m);
       if (m != null) {
         return true;
       }
@@ -575,7 +590,7 @@ public final class DCRuntime {
     }
 
     int frame_size = ((int) params.charAt(0)) - '0';
-    //Character.digit (params.charAt(0), Character.MAX_RADIX);
+    // Character.digit (params.charAt(0), Character.MAX_RADIX);
     Object[] tag_frame = new Object[frame_size];
     if (debug_tag_frame) {
       System.out.printf(
@@ -583,7 +598,7 @@ public final class DCRuntime {
     }
     for (int ii = 1; ii < params.length(); ii++) {
       int offset = params.charAt(ii) - '0';
-      //Character.digit (params.charAt(ii), Character.MAX_RADIX);
+      // Character.digit (params.charAt(ii), Character.MAX_RADIX);
       assert td.tag_stack.peek() != method_marker;
       tag_frame[offset] = td.tag_stack.pop();
       if (debug_tag_frame) {
@@ -601,7 +616,7 @@ public final class DCRuntime {
       System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);
     }
 
-    //debug_print_call_stack();
+    // debug_print_call_stack();
 
     return tag_frame;
   }
@@ -730,7 +745,7 @@ public final class DCRuntime {
       System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);
     }
     if (debug) System.out.printf("Exception exit from %s%n", caller_name());
-    while (!td.tag_stack.empty()) {
+    while (!td.tag_stack.isEmpty()) {
       if (td.tag_stack.pop() == method_marker) {
         if (debug_tag_frame) System.out.printf("%n");
         return;
@@ -1045,7 +1060,8 @@ public final class DCRuntime {
     }
 
     // Merge comparability information for the Daikon variables
-    merge_dv.indent("processing method %s:::ENTER%n", mi);
+    merge_dv.log("processing method %s:::ENTER%n", mi);
+    merge_dv.indent();
     process_all_vars(mi, mi.traversalEnter, tag_frame, obj, args, null);
     merge_dv.exdent();
 
@@ -1102,7 +1118,8 @@ public final class DCRuntime {
     }
 
     // Merge comparability information for the Daikon variables
-    merge_dv.indent("processing method %s:::ENTER%n", mi);
+    merge_dv.log("processing method %s:::ENTER%n", mi);
+    merge_dv.indent();
     process_all_vars_refs_only(mi, mi.traversalEnter, /*tag_frame, */ obj, args, null);
     merge_dv.exdent();
 
@@ -1223,7 +1240,7 @@ public final class DCRuntime {
       merge_dv.log("this: %s%n", obj);
       // For some reason the following line causes DynComp to behave incorrectly.
       // I have not take the time to investigate.
-      // merge_dv.log("arguments: %s%n", ArraysMDE.toString(args));
+      // merge_dv.log("arguments: %s%n", Arrays.toString(args));
     }
 
     // Map from an Object to the Daikon variable that currently holds
@@ -1280,7 +1297,7 @@ public final class DCRuntime {
 
     if (merge_dv.enabled()) {
       merge_dv.log("this: %s%n", obj);
-      merge_dv.log("arguments: %s%n", ArraysMDE.toString(args));
+      merge_dv.log("arguments: %s%n", Arrays.toString(args));
     }
 
     // Map from an Object to the Daikon variable that currently holds
@@ -1549,10 +1566,10 @@ public final class DCRuntime {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
         ArrayInfo ai = (ArrayInfo) child;
-        // System.out.printf ("child array type %s = %s%n", ai, ai.getType());
+        // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
-        // System.out.printf ("found arr_tag %s for arr %s\n", arr_tags, tag);
-        // System.out.printf ("tag values = %s%n", Arrays.toString (arr_tags));
+        // System.out.printf("found arr_tag %s for arr %s\n", arr_tags, tag);
+        // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
       } else { // not a primitive array
         child_obj = child.getMyValFromParentVal(tag);
@@ -1711,10 +1728,10 @@ public final class DCRuntime {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
         ArrayInfo ai = (ArrayInfo) child;
-        // System.out.printf ("child array type %s = %s%n", ai, ai.getType());
+        // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
-        // System.out.printf ("found arr_tag %s for arr %s\n", arr_tags, tag);
-        // System.out.printf ("tag values = %s%n", Arrays.toString (arr_tags));
+        // System.out.printf("found arr_tag %s for arr %s\n", arr_tags, tag);
+        // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
       } else { // not a primitive array
         child_obj = child.getMyValFromParentVal(tag);
@@ -1876,7 +1893,7 @@ public final class DCRuntime {
       if (!dv.declShouldPrint()) {
         continue;
       }
-      // System.out.printf ("      processing dv %s [%s]%n", dv,
+      // System.out.printf("      processing dv %s [%s]%n", dv,
       //                    dv.getTypeName());
       if (dv.isHashcode()) {
         hashcode_var_cnt++;
@@ -1909,8 +1926,8 @@ public final class DCRuntime {
   /** Calculates and prints the declarations for the specified class. */
   public static void print_class_decl(PrintWriter ps, ClassInfo ci) {
 
-    time_decl.reset_start_time();
-    time_decl.indent("Printing decl file for class %s%n", ci.class_name);
+    time_decl.log("Printing decl file for class %s%n", ci.class_name);
+    time_decl.indent();
     debug_decl_print.log("class %s%n", ci.class_name);
 
     // Make sure that two variables have the same comparability at all
@@ -1922,14 +1939,14 @@ public final class DCRuntime {
     ps.printf("%s:::CLASS%n", ci.class_name);
     print_decl_vars(ps, get_comparable(ci.traversalClass), ci.traversalClass);
     ps.printf("%n");
-    time_decl.log_time("printed class ppt");
+    time_decl.log("printed class ppt");
 
     // Write the object ppt
     ps.printf("DECLARE%n");
     ps.printf("%s:::OBJECT%n", ci.class_name);
     print_decl_vars(ps, get_comparable(ci.traversalObject), ci.traversalObject);
     ps.printf("%n");
-    time_decl.log_time("printed object ppt");
+    time_decl.log("printed object ppt");
 
     // Print the information for each enter/exit point
     for (MethodInfo mi : ci.method_infos) {
@@ -1941,7 +1958,8 @@ public final class DCRuntime {
       print_decl(ps, mi);
     }
 
-    time_decl.exdent_time("finished class %s%n", ci.class_name);
+    time_decl.log("finished class %s%n", ci.class_name);
+    time_decl.exdent();
   }
 
   static long comp_list_ms = 0;
@@ -1959,12 +1977,12 @@ public final class DCRuntime {
     // long start = System.currentTimeMillis();
     // watch.reset();
 
-    time_decl.reset_start_time();
-    time_decl.indent("Print decls for method '%s'", mi.method_name);
+    time_decl.log("Print decls for method '%s'", mi.method_name);
+    time_decl.indent();
     List<DVSet> l = get_comparable(mi.traversalEnter);
     // comp_list_ms += watch.snapshot(); watch.reset();
     if (l == null) return null;
-    time_decl.log_time("got %d comparable sets", l.size());
+    time_decl.log("got %d comparable sets", l.size());
 
     // Print the enter point
     ps.println("DECLARE");
@@ -1973,19 +1991,19 @@ public final class DCRuntime {
     print_decl_vars(ps, l, mi.traversalEnter);
     // decl_vars_ms += watch.snapshot();  watch.reset();
     ps.println();
-    time_decl.log_time("after enter");
+    time_decl.log("after enter");
 
     // Print the exit points
     l = get_comparable(mi.traversalExit);
     // comp_list_ms += watch.snapshot();  watch.reset();
 
-    time_decl.log_time("got exit comparable sets");
+    time_decl.log("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
       ps.println("DECLARE");
       ps.println(clean_decl_name(DaikonWriter.methodExitName(mi.member, ii)));
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
-      time_decl.log_time("after exit clean_decl_name");
+      time_decl.log("after exit clean_decl_name");
       print_decl_vars(ps, l, mi.traversalExit);
       ps.println();
       // decl_vars_ms += watch.snapshot();  watch.reset();
@@ -1993,7 +2011,8 @@ public final class DCRuntime {
     }
 
     // total_ms += System.currentTimeMillis() - start;
-    time_decl.exdent_time("Finished processing method '%s'", mi.method_name);
+    time_decl.log("Finished processing method '%s'", mi.method_name);
+    time_decl.exdent();
     return l;
   }
 
@@ -2029,11 +2048,11 @@ public final class DCRuntime {
       // variables.  If it does, it is indicating index comparability
       boolean hashcode_vars = false;
       boolean non_hashcode_vars = false;
-      // System.out.printf ("Checking dv set %s%n", set);
+      // System.out.printf("Checking dv set %s%n", set);
       for (DaikonVariableInfo dv : set) {
         if (dv.isHashcode() || dv.isHashcodeArray()) hashcode_vars = true;
         else non_hashcode_vars = true;
-        // System.out.printf ("dv = %s, hashcode_var = %b%n",
+        // System.out.printf("dv = %s, hashcode_var = %b%n",
         //                   dv, dv.isHashcode() || dv.isHashcodeArray());
       }
       debug_decl_print.log(
@@ -2059,7 +2078,8 @@ public final class DCRuntime {
           dv_comp_map.put(dv, base_comp + 1);
           DaikonVariableInfo array_child = dv.array_child();
           if (array_child != null) {
-            // System.out.printf ("array_index_map put: %s, %d%n", array_child.getName(), base_comp);
+            // System.out.printf("array_index_map put: %s, %d%n", array_child.getName(),
+            // base_comp);
             arr_index_map.put(array_child.getName(), base_comp);
           }
         } else {
@@ -2073,7 +2093,7 @@ public final class DCRuntime {
       if (hashcode_vars && non_hashcode_vars) base_comp++;
     }
 
-    time_decl.log_time("finished filling maps%n");
+    time_decl.log("finished filling maps%n");
 
     // Loop through each variable and print out its comparability
     // Use the dv_tree rather than sets so that we print out in the
@@ -2082,12 +2102,12 @@ public final class DCRuntime {
     // comparabilities will be different, but if an index is placed in the
     // array the comparabilities can be the same.
     List<DaikonVariableInfo> dv_list = dv_tree.tree_as_list();
-    time_decl.log_time("built tree as list with %d elements", dv_list.size());
+    time_decl.log("built tree as list with %d elements", dv_list.size());
     for (DaikonVariableInfo dv : dv_list) {
       if ((dv instanceof RootInfo) || (dv instanceof StaticObjInfo) || !dv.declShouldPrint()) {
         continue;
       }
-      // System.out.printf ("Output dv: %s ", dv);
+      // System.out.printf("Output dv: %s ", dv);
       ps.println(dv.getName());
       ps.println(dv.getTypeName());
       ps.println(dv.getRepTypeName());
@@ -2102,7 +2122,7 @@ public final class DCRuntime {
           name = name.substring(0, name.length() - ".toString".length());
         }
         Integer index_comp = arr_index_map.get(name);
-        // System.out.printf ("compare: %d [ %s ] ", comp, index_comp);
+        // System.out.printf("compare: %d [ %s ] ", comp, index_comp);
         if (index_comp != null) {
           // System.out.println(comp + "[" + index_comp + "]");
           ps.println(comp + "[" + index_comp + "]");
@@ -2117,7 +2137,7 @@ public final class DCRuntime {
       }
     }
 
-    time_decl.log_time("print_decl_vars end%n");
+    time_decl.log("print_decl_vars end%n");
     map_info.log("dv_comp_map size: %d%n", dv_comp_map.size());
     time_decl.exdent();
   }
@@ -2452,7 +2472,7 @@ public final class DCRuntime {
       if (mi.traversalEnter == null) {
         // mi.initViaReflection();
         mi.init_traversal(depth);
-        // System.out.printf ("Warning: Method %s never executed%n", mi);
+        // System.out.printf("Warning: Method %s never executed%n", mi);
       }
     }
 
@@ -2854,9 +2874,9 @@ public final class DCRuntime {
     Object tag = new Constant();
     debug_primitive.log("push literal constant tag: %s%n", tag);
     td.tag_stack.push(tag);
-    //System.out.printf ("tag_stack size: %d%n", td.tag_stack.size());
+    // System.out.printf("tag_stack size: %d%n", td.tag_stack.size());
 
-    //debug_print_call_stack();
+    // debug_print_call_stack();
   }
 
   /**
@@ -2990,7 +3010,7 @@ public final class DCRuntime {
     Object get_tag(Object parent, Object obj) {
       Object tag;
       // jhp - not sure why these are not null...
-      //assert parent == null && obj == null
+      // assert parent == null && obj == null
       //  : " parent/obj = " + obj_str(parent) + "/" + obj_str(obj);
       try {
         ThreadData td = thread_to_data.get(Thread.currentThread());

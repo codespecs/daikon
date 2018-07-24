@@ -1,8 +1,10 @@
 package daikon.chicory;
 
-import daikon.util.*;
-import java.io.*;
-import java.util.*;
+import daikon.util.EntryReader;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -28,7 +30,7 @@ public class DTraceReader extends DeclReader {
 
       for (String line = dtrace_file.readLine(); line != null; line = dtrace_file.readLine()) {
 
-        // System.out.printf ("Reading line %s%n", line);
+        // System.out.printf("Reading line %s%n", line);
 
         // Skip comments
         if (line.trim().startsWith("//") || line.trim().startsWith("#")) {

@@ -2,9 +2,12 @@ package daikon.dcomp;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.util.*;
-import java.lang.ref.*;
-import java.util.*;
+import daikon.util.WeakIdentityHashMap;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -42,7 +45,7 @@ class TagEntry extends WeakReference<Object> {
   public static final WeakIdentityHashMap<Object, TagEntry> object_map =
       new WeakIdentityHashMap<Object, TagEntry>();
 
-  private static SimpleLog debug = new SimpleLog(false);
+  // private static SimpleLog debug = new SimpleLog(false);
 
   /**
    * Parent in the tree that represents the set for this element. If this, this entry is the
@@ -90,7 +93,7 @@ class TagEntry extends WeakReference<Object> {
    */
   public static void union(Object obj1, Object obj2) {
     assert (obj1 != null) && (obj2 != null);
-    debug.log("union of '%s' and '%s'%n", obj1, obj2);
+    // debug.log("union of '%s' and '%s'%n", obj1, obj2);
 
     TagEntry o1 = get_entry(obj1), o2 = get_entry(obj2);
     TagEntry r1 = o1.find(), r2 = o2.find();
@@ -242,7 +245,10 @@ class TagEntry extends WeakReference<Object> {
       this.tracer = newTracer;
       this.trace_loc = tloc;
     }
-    //    if (this.tracer != null) { System.out.println("Tracer not null"); this.tracer.reroute(this); }
+    //    if (this.tracer != null) {
+    //       System.out.println("Tracer not null");
+    //       this.tracer.reroute(this);
+    //    }
     //    this.tracer = newTracer;
   }
 

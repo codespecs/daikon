@@ -4,9 +4,14 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.*;
-import java.io.*;
-import java.util.*;
-import plume.UtilMDE;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.StringTokenizer;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -204,7 +209,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     String lastPpt = "";
     // sort them so that multiple exits will end up being adjacent
     // to each other when they are from the same method
-    for (/*@KeyFor("lastMap")*/ String key : UtilMDE.sortedKeySet(lastMap)) {
+    for (/*@KeyFor("lastMap")*/ String key : UtilPlume.sortedKeySet(lastMap)) {
       ArrayList<String> al = lastMap.get(key);
       // don't print anything if there are no selective invariants
 

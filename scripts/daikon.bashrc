@@ -3,7 +3,6 @@
 ## (This file should be kept in synch with daikon.cshrc and daikonenv.bat.)
 
 ## Wherever you source this file, you should set two environment variables:
-##   DAIKONDIR      absolute pathname of the "daikon" directory
 ##   JAVA_HOME      absolute pathname of the directory containing the JDK
 ##                  (or "none" if you don't have it)
 ## Optionally, you may set the following environment variables:
@@ -23,15 +22,7 @@ elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
   return 2
 fi
 
-if [ -z "$DAIKONDIR" ]; then
-  echo "DAIKONDIR environment variable is not set."
-  echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
-  return 2
-elif [ ! -d "$DAIKONDIR" ]; then
-  echo "DAIKONDIR is set to non-existent directory: $DAIKONDIR"
-  echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
-  return 2
-fi
+DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 if [ -z "$DAIKONBIN" ]; then
   if [ -d ${DAIKONDIR}/bin ]; then
@@ -46,7 +37,7 @@ if [ -z "$DAIKONBIN" ]; then
 fi
 
 if [ -z "$PLUMEBIN" ]; then
-  export PLUMEBIN=${DAIKONDIR}/plume-lib/bin
+  export PLUMEBIN=${DAIKONDIR}/utils/plume-lib/bin
 fi
 
 # export DAIKONCLASS_SOURCES=1

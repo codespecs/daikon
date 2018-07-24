@@ -1,10 +1,17 @@
 package daikon.config;
 
 import com.sun.javadoc.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import plume.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -13,7 +20,7 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * InvariantDoclet is a JavaDoc doclet that collects information about the invariants defined within
+ * InvariantDoclet is a Javadoc doclet that collects information about the invariants defined within
  * Daikon. Class documentation is collected about each class that is derived (either directly or
  * indirectly) from daikon.inv.Invariant. To specify the output format, use one of the following:
  *
@@ -83,12 +90,12 @@ public class InvariantDoclet {
     @SuppressWarnings("keyfor") // the loop below makes all these keys to cmap
     /*@KeyFor("cmap")*/ ClassDoc[] clazzes = root.classes();
 
-    //go through all of the classes and intialize the map
+    // go through all of the classes and intialize the map
     for (ClassDoc cd : clazzes) {
       cmap.put(cd, new TreeSet</*@KeyFor("cmap")*/ ClassDoc>());
     }
 
-    //go through the list again and put in the derived class information
+    // go through the list again and put in the derived class information
     for (ClassDoc cd : clazzes) {
       ClassDoc super_c = cd.superclass();
       if (super_c != null) {
@@ -103,17 +110,17 @@ public class InvariantDoclet {
     }
 
     if (dump_class_tree) {
-      //loop through each class in order
+      // loop through each class in order
       for (ClassDoc cd : cmap.keySet()) {
 
-        //if this is a top level class
+        // if this is a top level class
         if ((cd.superclass() == null) || (cmap.get(cd.superclass()) == null)) {
           process_class_tree_txt(System.out, cd, 0);
         }
       }
     }
 
-    //do the specified work
+    // do the specified work
     String[][] options = root.options();
     for (int i = 0; i < options.length; i++) {
       String[] optset = options[i];
@@ -156,21 +163,21 @@ public class InvariantDoclet {
 
     String prefix = "";
 
-    //create the prefix string
+    // create the prefix string
     for (int i = 0; i < indent; i++) {
       prefix += "+";
     }
 
-    //put out this class
+    // put out this class
     String is_abstract = "";
     if (cd.isAbstract()) is_abstract = " (Abstract)";
     out.println(prefix + cd + is_abstract);
     String comment = cd.commentText();
     comment = "         " + comment;
-    comment = UtilMDE.replaceString(comment, lineSep, lineSep + "        ");
+    comment = UtilPlume.replaceString(comment, lineSep, lineSep + "        ");
     out.println(comment);
 
-    //put out each derived class
+    // put out each derived class
     Set</*@KeyFor("cmap")*/ ClassDoc> derived = cmap.get(cd);
     for (ClassDoc dc : derived) {
       process_class_tree_txt(out, dc, indent + 1);
@@ -267,7 +274,7 @@ public class InvariantDoclet {
         out.println("@samp{" + dc + ".enabled}.");
       }
 
-      //get a list of any other configuration variables
+      // get a list of any other configuration variables
       List<FieldDoc> config_vars = find_fields(dc, Configuration.PREFIX);
       for (int i = 0; i < config_vars.size(); i++) {
         FieldDoc f = config_vars.get(i);
@@ -289,7 +296,9 @@ public class InvariantDoclet {
         for (FieldDoc f : config_vars) {
           out.print("    @item ");
           out.println(
-              "@samp{" + UtilMDE.replaceString(f.qualifiedName(), Configuration.PREFIX, "") + "}");
+              "@samp{"
+                  + UtilPlume.replaceString(f.qualifiedName(), Configuration.PREFIX, "")
+                  + "}");
         }
         out.println("    @end itemize");
       }
@@ -340,9 +349,9 @@ public class InvariantDoclet {
           /*@ClassGetName*/ String classname = fullname.substring(0, i);
           Class<?> c;
           try {
-            c = UtilMDE.classForName(classname);
+            c = UtilPlume.classForName(classname);
           } catch (Throwable e) {
-            System.err.printf("Exception in UtilMDE.classForName(%s): %s", fullname, e);
+            System.err.printf("Exception in UtilPlume.classForName(%s): %s", fullname, e);
             return -1;
           }
           Field f = c.getField(enable_name);

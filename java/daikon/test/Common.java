@@ -1,7 +1,8 @@
 package daikon.test;
 
 import daikon.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /** A collection of useful helper methods that are common to many different individual tests. */
 public class Common {

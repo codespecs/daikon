@@ -3,11 +3,19 @@ package daikon;
 import daikon.split.PptSplitter;
 import daikon.suppress.NIS;
 import gnu.getopt.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OptionalDataException;
+import java.io.StreamCorruptedException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -33,10 +41,8 @@ public final class MergeInvariants {
 
   public static /*@Nullable*/ File output_inv_file;
 
-  private static Stopwatch stopwatch = new Stopwatch();
-
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.MergeInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -136,7 +142,7 @@ public final class MergeInvariants {
 
           output_inv_file = new File(output_inv_filename);
 
-          if (!UtilMDE.canCreateAndWrite(output_inv_file)) {
+          if (!UtilPlume.canCreateAndWrite(output_inv_file)) {
             throw new Daikon.TerminationMessage(
                 "Cannot write to serialization output file " + output_inv_file);
           }
@@ -181,7 +187,7 @@ public final class MergeInvariants {
     if (inv_files.size() < 2) {
       throw new Daikon.TerminationMessage(
           "Must specify at least two inv files; only specified "
-              + UtilMDE.nplural(inv_files.size(), "file"));
+              + UtilPlume.nplural(inv_files.size(), "file"));
     }
 
     // Setup the default for guarding
@@ -221,11 +227,11 @@ public final class MergeInvariants {
           PptMap pmap = FileIO.read_serialized_pptmap(file, true);
           for (PptTopLevel ppt : pmap.pptIterable()) {
             if (merge_ppts.containsName(ppt.name())) {
-              // System.out.printf ("Not adding ppt %s from %s\n", ppt, file);
+              // System.out.printf("Not adding ppt %s from %s\n", ppt, file);
               continue;
             }
             merge_ppts.add(ppt);
-            // System.out.printf ("Adding ppt %s from %s\n", ppt, file);
+            // System.out.printf("Adding ppt %s from %s\n", ppt, file);
 
             // Make sure that the parents of this ppt are already in
             // the map.  This will be true if all possible children of
@@ -278,7 +284,7 @@ public final class MergeInvariants {
         continue;
       }
 
-      // System.out.printf ("Including ppt %s, %d children\n", ppt,
+      // System.out.printf("Including ppt %s, %d children\n", ppt,
       //                   ppt.children.size());
 
       // Splitters should not have any children to begin with
@@ -295,7 +301,7 @@ public final class MergeInvariants {
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
-        // System.out.printf ("found child %s from pmap %d\n", child, j);
+        // System.out.printf("found child %s from pmap %d\n", child, j);
         if (child == null) {
           continue;
         }
@@ -371,13 +377,14 @@ public final class MergeInvariants {
     }
 
     // Implications
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     // System.out.println("Creating implications ");
     debugProgress.fine("Adding Implications ... ");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
       if (ppt.num_samples() > 0) ppt.addImplications();
     }
-    debugProgress.fine("Time spent in implications: " + stopwatch.format());
+    long duration = System.nanoTime() - startTime;
+    debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information

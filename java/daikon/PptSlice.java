@@ -2,10 +2,14 @@ package daikon;
 
 import daikon.inv.*;
 import daikon.suppress.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -69,7 +73,7 @@ public abstract class PptSlice extends Ppt {
     assert this instanceof PptSliceEquality || arity() == var_infos.length;
 
     if (debugGeneral.isLoggable(Level.FINE)) {
-      debugGeneral.fine(ArraysMDE.toString(var_infos));
+      debugGeneral.fine(Arrays.toString(var_infos));
     }
   }
 
@@ -83,7 +87,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   public boolean usesVar(VarInfo vi) {
-    return (ArraysMDE.indexOfEq(var_infos, vi) != -1);
+    return (ArraysPlume.indexOfEq(var_infos, vi) != -1);
   }
 
   // This is only called from inv.filter.VariableFilter.
@@ -195,7 +199,7 @@ public abstract class PptSlice extends Ppt {
         }
       }
     }
-    assert ArraysMDE.fn_is_permutation(permutation);
+    assert ArraysPlume.fn_is_permutation(permutation);
   }
 
   /** Return an approximation of the number of samples seen on this slice */
@@ -276,7 +280,7 @@ public abstract class PptSlice extends Ppt {
    */
   public void repCheck() {
 
-    // System.out.printf ("Checking slice %s\n", this);
+    // System.out.printf("Checking slice %s\n", this);
 
     // Make sure that each variable is a leader.  There is one exception to this
     // rule.  Post processing of equality sets creates equality invariants between the
@@ -284,7 +288,7 @@ public abstract class PptSlice extends Ppt {
     // in binary (two variable) slices if it is in the same equality set as the
     // other variable.
     for (VarInfo vi : var_infos) {
-      // System.out.printf ("equality set for vi %s = %s\n", vi, vi.equalitySet);
+      // System.out.printf("equality set for vi %s = %s\n", vi, vi.equalitySet);
       if (!vi.isCanonical()) {
         assert var_infos.length == 2 : this + " - " + vi;
         assert var_infos[0].canonicalRep() == var_infos[1].canonicalRep() : this + " - " + vi;
@@ -319,7 +323,7 @@ public abstract class PptSlice extends Ppt {
   @SuppressWarnings("purity") // string creation
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     for (VarInfo vi : var_infos) {
       sb.append(" " + vi.name());
     }
@@ -389,7 +393,6 @@ public abstract class PptSlice extends Ppt {
    * Returns true if the invariant is true in this slice. This can occur if the invariant exists in
    * this slice, is suppressed, or is obvious statically.
    */
-  @SuppressWarnings("nullness") // checker bug with flow and static fields
   /*@Pure*/
   public boolean is_inv_true(Invariant inv) {
 

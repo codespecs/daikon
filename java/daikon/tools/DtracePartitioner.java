@@ -1,9 +1,21 @@
 // DtracePartitioner.java
 package daikon.tools;
 
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+import org.plumelib.util.Partitioner;
+import org.plumelib.util.UtilPlume;
+
+/*>>>
+import org.checkerframework.checker.lock.qual.*;
+*/
 
 /**
  * This class partitions Daikon trace files so that invocations of the same program point are
@@ -22,8 +34,8 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   public DtracePartitioner(String filename) {
     try {
       this.fileName = filename;
-      // System.out.printf ("trying with file %s%n", fileName);
-      br = UtilMDE.bufferedFileReader(fileName);
+      // System.out.printf("trying with file %s%n", fileName);
+      br = UtilPlume.bufferedFileReader(fileName);
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -32,7 +44,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   }
 
   @Override
-  public boolean hasNext() {
+  public boolean hasNext(/*>>>@GuardSatisfied DtracePartitioner this*/) {
     try {
       return br.ready();
     } catch (IOException e) {
@@ -43,12 +55,12 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
 
   /** Not implemented, because this class does not modify the underlying trace file. */
   @Override
-  public void remove() {
+  public void remove(/*>>>@GuardSatisfied DtracePartitioner this*/) {
     throw new UnsupportedOperationException("Can not remove");
   }
 
   @Override
-  public String next() {
+  public String next(/*>>>@GuardSatisfied DtracePartitioner this*/) {
     try {
       String ret = grabNextInvocation();
       if (ret.indexOf("EXIT") != -1) {
@@ -70,8 +82,9 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    * invocation delimter. Note that multiple blank lines between invocations might occur, so the
    * callee is responsible for checking if the returned String is a blank line.
    */
-  private String grabNextInvocation() throws IOException {
-    StringBuffer sb = new StringBuffer();
+  private String grabNextInvocation(
+      /*>>>@GuardSatisfied DtracePartitioner this*/) throws IOException {
+    StringBuilder sb = new StringBuilder();
     while (br.ready()) {
       String line = br.readLine();
       assert line != null; // because br.ready() = true
@@ -94,7 +107,13 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     return invocation.substring(0, invocation.indexOf(lineSep));
   }
 
-  /** Same as {@link #patchValues(List, boolean)} with second arg=false. */
+  /**
+   * Same as {@link #patchValues(List, boolean)} with second arg=false.
+   *
+   * @param enters a list of program point names
+   * @return an ArrayList containing all of the elements of 'enters'. The original order is NOT
+   *     guaranteed.
+   */
   public List<String> patchValues(List<String> enters) {
     return patchValues(enters, false);
   }
@@ -104,6 +123,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    *
    * <p>Modifies: none
    *
+   * @param enters a list of program point names
    * @param includeUnreturnedEnters ensures that any ENTER ppt invocations will definitely have a
    *     corresponding EXIT ppt invocation following them
    * @return an ArrayList containing all of the elements of 'enters'. The original order is NOT
@@ -138,7 +158,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       // look for EXIT half of invocations and augment
       // the values of nonceMap so that the map eventually
       // maps nonces --> full invocations with ENTER / EXIT
-      br = UtilMDE.bufferedFileReader(fileName);
+      br = UtilPlume.bufferedFileReader(fileName);
       while (br.ready()) {
         String nextInvo = grabNextInvocation();
         if (nextInvo.indexOf("EXIT") == -1) {

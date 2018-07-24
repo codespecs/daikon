@@ -44,7 +44,7 @@ import daikon.inv.unary.scalar.*;
 import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.*;
-import plume.*;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -150,7 +150,7 @@ public class CLASSNAME extends SUPERCLASS {
   @Override
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     // if (logDetail())
-    //   log ("sample " + ArraysMDE.toString (a));
+    //   log ("sample " + Arrays.toString (a));
     for (int i = 1; i < a.length; i++) {
       for (int j = 0; j < i; j++) {
         if (EQUAL(a[i], a[j])) {
@@ -166,7 +166,7 @@ public class CLASSNAME extends SUPERCLASS {
     InvariantStatus status = check_modified(a, count);
     if (debug.isLoggable(Level.FINE) && (status == InvariantStatus.FALSIFIED)) {
       debug.fine("Destroying myself with: " + var().name());
-      debug.fine(ArraysMDE.toString(a));
+      debug.fine(Arrays.toString(a));
     }
     return status;
   }

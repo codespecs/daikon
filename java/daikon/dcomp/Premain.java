@@ -4,16 +4,23 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.util.*;
-import java.io.*;
-import java.lang.instrument.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.Instrumentation;
 import java.nio.file.Files;
-import java.security.*;
-import java.util.*;
-import java.util.regex.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -63,9 +70,10 @@ public class Premain {
     // Because DynComp started Premain in a separate process, we must rescan
     // the options to setup the DynComp static variables.
     Options options = new Options(DynComp.usage_synopsis, DynComp.class, Premain.class);
-    String[] args = options.parse_or_usage(agentArgs.split("  *"));
+    String[] args = options.parse(true, agentArgs.split("  *"));
     if (args.length > 0) {
-      options.print_usage("Unexpected argument %s", args[0]);
+      System.out.printf("Unexpected argument %s%n", args[0]);
+      options.printUsage();
       System.exit(-1);
     }
     if (DynComp.rt_file != null && DynComp.rt_file.getName().equalsIgnoreCase("NONE")) {
@@ -100,16 +108,16 @@ public class Premain {
         if (line == null) {
           break;
         }
-        // System.out.printf ("adding '%s'%n", line);
+        // System.out.printf("adding '%s'%n", line);
         pre_instrumented.add(line);
       }
     }
 
     // Find out what classes are already loaded
-    //Class<?>[] loaded_classes = inst.getAllLoadedClasses();
-    //for (Class<?> loaded_class : loaded_classes) {
-    // System.out.printf ("loaded class = %s\n", loaded_class.getName());
-    //}
+    // Class<?>[] loaded_classes = inst.getAllLoadedClasses();
+    // for (Class<?> loaded_class : loaded_classes) {
+    // System.out.printf("loaded class = %s\n", loaded_class.getName());
+    // }
 
     // Setup the shutdown hook
     Thread shutdown_thread = new ShutdownThread();
@@ -124,11 +132,22 @@ public class Premain {
           loader.loadClass("daikon.dcomp.Instrument").getDeclaredConstructor().newInstance();
       @SuppressWarnings("unchecked")
       Class<Instrument> c = (Class<Instrument>) transformer.getClass();
-      // System.out.printf ("Classloader of tranformer = %s%n",
+      // System.out.printf("Classloader of tranformer = %s%n",
       //                    c.getClassLoader());
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
+
+    // check that we got a newer version of BCEL that includes the LocalVariable fix.
+    try {
+      Class<?> c = loader.loadClass("org.apache.bcel.generic.LocalVariableGen");
+      c.getMethod("getLiveToEnd", (Class<?>[]) null);
+    } catch (Exception e) {
+      System.err.printf("%nBCEL jar found is not the version included with the Daikon release.%n");
+      System.exit(1);
+    }
+
+    // now turn on instrumentation
     inst.addTransformer((ClassFileTransformer) transformer);
 
     // Initialize the static tag array
@@ -151,7 +170,7 @@ public class Premain {
         assert DynComp.comparability_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter compare_out = open(DynComp.comparability_file);
-        Stopwatch watch = new Stopwatch();
+        long startTime = System.nanoTime();
         if (DynComp.no_primitives) {
           DCRuntime.print_all_comparable_refs_only(compare_out);
         } else {
@@ -159,7 +178,9 @@ public class Premain {
         }
         compare_out.close();
         if (DynComp.verbose) {
-          System.out.printf("Comparability sets written in %s%n", watch.format());
+          long duration = System.nanoTime() - startTime;
+          System.out.printf(
+              "Comparability sets written in %ds%n", TimeUnit.NANOSECONDS.toSeconds(duration));
         }
       }
 
@@ -170,11 +191,14 @@ public class Premain {
         assert DynComp.trace_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter trace_out = open(DynComp.trace_file);
-        Stopwatch watch = new Stopwatch();
+        long startTime = System.nanoTime();
         DCRuntime.trace_all_comparable(trace_out);
         trace_out.close();
         if (DynComp.verbose) {
-          System.out.printf("Comparability sets written in %s%n", watch.format());
+          long duration = System.nanoTime() - startTime;
+          System.out.printf(
+              "Traced comparability sets written in %ds%n",
+              TimeUnit.NANOSECONDS.toSeconds(duration));
         }
       } else {
         // Writing comparability sets to standard output?
@@ -190,11 +214,12 @@ public class Premain {
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
-      Stopwatch watch = new Stopwatch();
+      long startTime = System.nanoTime();
       DCRuntime.print_decl_file(decl_fp);
       decl_fp.close();
       if (DynComp.verbose) {
-        System.out.printf("Decl file written in %s%n", watch.format());
+        long duration = System.nanoTime() - startTime;
+        System.out.printf("Decl file written in %ds%n", TimeUnit.NANOSECONDS.toSeconds(duration));
         System.out.printf("comp_list = %,d%n", DCRuntime.comp_list_ms);
         System.out.printf("ppt name  = %,d%n", DCRuntime.ppt_name_ms);
         System.out.printf("decl vars = %,d%n", DCRuntime.decl_vars_ms);
@@ -207,8 +232,8 @@ public class Premain {
   public static PrintWriter open(File filename) {
     try {
       return new PrintWriter(Files.newBufferedWriter(filename.toPath(), UTF_8));
-      //return new PrintWriter (filename);
-      //return new PrintStream (new BufferedWriter
+      // return new PrintWriter (filename);
+      // return new PrintStream (new BufferedWriter
       //            (new Outpu32tStreamWriter (new FileOutputStream(filename))));
     } catch (Exception e) {
       throw new Error("Can't open " + filename, e);

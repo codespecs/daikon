@@ -5,10 +5,18 @@ import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 import daikon.inv.*;
 import daikon.inv.ternary.threeScalar.*;
 import daikon.suppress.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -252,8 +260,8 @@ public class PptSliceEquality extends PptSlice {
   @Override
   public List<Invariant> add(ValueTuple vt, int count) {
 
-    LinkedList<Equality> allNewInvs = new LinkedList<Equality>();
-    LinkedList<Invariant> weakenedInvs = new LinkedList<Invariant>();
+    ArrayList<Equality> allNewInvs = new ArrayList<Equality>();
+    ArrayList<Invariant> weakenedInvs = new ArrayList<Invariant>();
 
     // Loop through each existing equality invariant
     for (Invariant invar : invs) {
@@ -277,7 +285,7 @@ public class PptSliceEquality extends PptSlice {
           }
         }
 
-        //Debug print the new leaders
+        // Debug print the new leaders
         if (Debug.logOn()) {
           for (VarInfo nileader : newInvsLeaders) {
             Debug.log(
@@ -310,7 +318,7 @@ public class PptSliceEquality extends PptSlice {
   /**
    * Dummy value that's incomparable to everything else to indicate missings in createEqualityInvs.
    */
-  private static final Object dummyMissing = new Object(); // StringBuffer("Dummy missing");
+  private static final Object dummyMissing = new Object();
 
   /**
    * Create a List of Equality invariants based on the values given by vt for the VarInfos in vis.
@@ -440,7 +448,7 @@ public class PptSliceEquality extends PptSlice {
     assert key != null;
     List<VarInfo> elements = map.get(key);
     if (elements == null) {
-      elements = new LinkedList<VarInfo>();
+      elements = new ArrayList<VarInfo>();
       map.put(key, elements);
     }
     elements.add(value);
@@ -460,7 +468,7 @@ public class PptSliceEquality extends PptSlice {
   public List<Invariant> copyInvsFromLeader(VarInfo leader, List<VarInfo> newVis) {
 
     List<Invariant> falsified_invs = new ArrayList<Invariant>();
-    List<PptSlice> newSlices = new LinkedList<PptSlice>();
+    List<PptSlice> newSlices = new ArrayList<PptSlice>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(
           "copyInvsFromLeader: "
@@ -633,7 +641,7 @@ public class PptSliceEquality extends PptSlice {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
-    StringBuffer result = new StringBuffer("PptSliceEquality: [");
+    StringBuilder result = new StringBuilder("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append(inv.repr());
       result.append(lineSep);

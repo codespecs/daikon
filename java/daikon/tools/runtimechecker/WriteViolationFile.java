@@ -2,8 +2,11 @@ package daikon.tools.runtimechecker;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -67,7 +70,7 @@ class WriteViolationFile {
       // Permit access to method in default-access classes inside a package.
       main_method.setAccessible(true);
 
-      @SuppressWarnings("nullness") // "main" is static, so null first arg is OK
+      @SuppressWarnings("nullness") // static method, so null first arg is OK: main()
       Object dummy = main_method.invoke(null, new Object[] {main_args});
     } catch (IllegalAccessException e) {
       // This can't happen

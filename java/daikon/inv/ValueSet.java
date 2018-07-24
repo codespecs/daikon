@@ -2,16 +2,17 @@ package daikon.inv;
 
 import daikon.*;
 import java.io.Serializable;
-import plume.*;
+import org.plumelib.util.LimitedSizeIntSet;
+import org.plumelib.util.UtilPlume;
 
 // This is the successor to ValueTracker1.
 // It is a thin wrapper around LimitedSizeIntSet.
 // (Actually, maybe it will just subclass that.)
 
 /**
- * ValueSet stores a set of unique integers. When adding a value, for efficiency its hash code is
- * added rather than the value itself. If the set size exceeds a specified limit, then its rep is
- * nulled.
+ * ValueSet stores a set of values. The implementation only stores integers. When adding a value,
+ * for efficiency its hash code is added rather than the value itself. If the set size exceeds a
+ * specified limit, then its rep is nulled.
  *
  * <p>This class is used for efficient justification tests.
  *
@@ -56,9 +57,9 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       return new ValueSet.ValueSetScalar(DEFAULT_MAX_VALUES);
     } else if (rep_type == ProglangType.INT_ARRAY) {
       return new ValueSet.ValueSetScalarArray(DEFAULT_MAX_VALUES);
-    } else if (Daikon.dkconfig_enable_floats && rep_type == ProglangType.DOUBLE) {
+    } else if (rep_type == ProglangType.DOUBLE) {
       return new ValueSet.ValueSetFloat(DEFAULT_MAX_VALUES);
-    } else if (Daikon.dkconfig_enable_floats && rep_type == ProglangType.DOUBLE_ARRAY) {
+    } else if (rep_type == ProglangType.DOUBLE_ARRAY) {
       return new ValueSet.ValueSetFloatArray(DEFAULT_MAX_VALUES);
     } else if (rep_type == ProglangType.STRING) {
       return new ValueSet.ValueSetString(DEFAULT_MAX_VALUES);
@@ -110,7 +111,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       if (val > max_val) {
         max_val = val;
       }
-      add(UtilMDE.hash(val));
+      add(UtilPlume.hash(val));
     }
 
     @Override
@@ -165,7 +166,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       if (Double.isNaN(val)) {
         can_be_NaN = true;
       }
-      add(UtilMDE.hash(val));
+      add(UtilPlume.hash(val));
     }
 
     @Override
@@ -236,7 +237,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       elem_cnt += val.length;
       if (val.length > 1) multi_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
-      add(UtilMDE.hash((long[]) v1));
+      add(UtilPlume.hash((long[]) v1));
     }
 
     @Override
@@ -314,7 +315,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       elem_cnt += val.length;
       if (val.length > 1) multi_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
-      add(UtilMDE.hash(val));
+      add(UtilPlume.hash(val));
     }
 
     @Override
@@ -382,7 +383,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     @Override
     public void add(Object v1) {
       assert v1 != null;
-      add(UtilMDE.hash((String) v1));
+      add(UtilPlume.hash((String) v1));
     }
 
     @Override
@@ -413,7 +414,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       String[] val = (String[]) v1;
       elem_cnt += val.length;
       if (val.length > 1) multi_arr_cnt++;
-      add(UtilMDE.hash(val));
+      add(UtilPlume.hash(val));
     }
 
     @Override

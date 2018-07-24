@@ -5,13 +5,23 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import daikon.*;
 import daikon.inv.*;
 import gnu.getopt.*;
-import java.io.*;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.*;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.logging.Logger;
-import java.util.regex.*;
-import plume.UtilMDE;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -57,7 +67,7 @@ public class ExtractConsequent {
       new HashMap<String, Map<String, Map<String, HashedConsequent>>>();
 
   private static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Usage: java daikon.ExtractConsequent [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -169,10 +179,10 @@ public class ExtractConsequent {
           entry : cluster_to_conditions.entrySet()) {
         String predicate = entry.getKey();
         Map<String, HashedConsequent> conditions = entry.getValue();
-        StringBuffer conjunctionJava = new StringBuffer();
-        StringBuffer conjunctionDaikon = new StringBuffer();
-        StringBuffer conjunctionESC = new StringBuffer();
-        StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
+        StringBuilder conjunctionJava = new StringBuilder();
+        StringBuilder conjunctionDaikon = new StringBuilder();
+        StringBuilder conjunctionESC = new StringBuilder();
+        StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
         int count = 0;
         for (Map.Entry</*@KeyFor("conditions")*/ String, HashedConsequent> entry2 :
             conditions.entrySet()) {
@@ -233,7 +243,7 @@ public class ExtractConsequent {
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
-    StringBuffer combined = new StringBuffer(inv);
+    StringBuilder combined = new StringBuilder(inv);
     combined.append(lineSep + "\tDAIKON_FORMAT ");
     combined.append(daikonStr);
     combined.append(lineSep + "\tESC_FORMAT ");

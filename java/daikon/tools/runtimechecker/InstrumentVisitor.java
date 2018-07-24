@@ -6,18 +6,21 @@ import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.FunctionBinary;
 import daikon.tools.jtb.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.StringWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 import jtb.syntaxtree.*;
 import jtb.visitor.DepthFirstVisitor;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -91,6 +94,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /** If makeAllFieldsPublic == true, then it makes this field declaration public. */
+  @SuppressWarnings("JdkObsolete") // JTB uses Vector
   @Override
   public void visit(FieldDeclaration fd) {
 
@@ -228,11 +232,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // Find declared throwables.
     List<String> declaredThrowables = getDeclaredThrowables(ctor.f3);
 
-    //System.out.println(Ast.formatEntireTree(ctor));
+    // System.out.println(Ast.formatEntireTree(ctor));
 
     List<PptTopLevel> matching_ppts = pptMatcher.getMatches(pptmap, ctor);
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     NodeListOptional ctorBody = ctor.f6;
 
@@ -282,7 +286,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // if an exception is thrown.
     code.append("boolean methodThrewSomething_instrument = false;");
 
-    //code.append("try {");
+    // code.append("try {");
 
     // Insert original constructor code.
     // [[ TODO: should I use the daikon dumper that Mike found? ]]
@@ -299,7 +303,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     // Replace constructor body with instrumented code.
     BlockStatement newCtorBody = (BlockStatement) Ast.create("BlockStatement", code.toString());
-    //newCtorBody.accept(new TreeFormatter(2, 0));
+    // newCtorBody.accept(new TreeFormatter(2, 0));
     ctor.f6 = new NodeListOptional(newCtorBody);
   }
 
@@ -368,7 +372,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     InstrumentHandler.debug.fine("Method: " + name);
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     code.append("{");
 
@@ -423,8 +427,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       code.append(returnType + " retval_instrument = ");
 
       // Assign some initial value to retval_instrument, otherwise
-      // compiler
-      // issues a "might not have been initialized" error.
+      // compiler issues a "might not have been initialized" error.
       if (returnType.equals("boolean")) {
         code.append("false");
       } else if (returnType.equals("char")) {
@@ -443,13 +446,13 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       code.append(";");
     }
 
-    //code.append("try {");
+    // code.append("try {");
 
     if (!returnType.equals("void")) {
       code.append("retval_instrument = ");
     }
 
-    code.append("internal$" + name + "(" + UtilMDE.join(parameters, ", ") + ");");
+    code.append("internal$" + name + "(" + UtilPlume.join(parameters, ", ") + ");");
 
     exitChecks(code, matching_ppts, pptmap, declaredThrowables, isStatic);
 
@@ -485,7 +488,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     /*@NonNull*/ ClassOrInterfaceBody c =
         (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
 
-    StringBuffer modifiers_declaration_stringbuffer = new StringBuffer();
+    StringBuilder modifiers_declaration_stringbuffer = new StringBuilder();
     modifiers_declaration_stringbuffer.append(Ast.format(modifiers));
     modifiers_declaration_stringbuffer.append(" ");
     modifiers_declaration_stringbuffer.append(Ast.format(wrapper));
@@ -512,7 +515,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   // vioTime can be the name of a variable (which should be in scope)
   // or a string, but if it's a string, then you should write it as
   // something like: \"<ENTER>\"
-  private void appendInvariantChecks(List<Invariant> invs, StringBuffer code, String vioTime) {
+  private void appendInvariantChecks(List<Invariant> invs, StringBuilder code, String vioTime) {
     for (Invariant inv : invs) {
 
       InstrumentHandler.debug.fine("inv type: " + inv.getClass().getName());
@@ -573,7 +576,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
   }
 
-  private void appendInvariantChecks_checker(List<InvProp> ips, StringBuffer code) {
+  private void appendInvariantChecks_checker(List<InvProp> ips, StringBuilder code) {
 
     for (InvProp ip : ips) {
 
@@ -626,7 +629,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private ClassOrInterfaceBodyDeclaration getInvariantsDecl() {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append("public static java.util.Set getDaikonInvariants() {");
     code.append("  return new java.util.HashSet(java.util.Arrays.asList(daikonProperties));");
     code.append("}");
@@ -639,7 +642,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private ClassOrInterfaceBodyDeclaration staticPropertyDecl() {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     code.append("private static daikon.tools.runtimechecker.Property[] daikonProperties;");
     return (ClassOrInterfaceBodyDeclaration)
@@ -651,7 +654,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private ClassOrInterfaceBodyDeclaration staticPropertyInit() {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     code.append("static {\n");
     code.append("try {\n");
@@ -688,7 +691,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   private ClassOrInterfaceBodyDeclaration checkObjectInvariants_instrumentDeclaration(
       String classname) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "private void checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time) {");
     String objectPptname = classname + ":::OBJECT";
@@ -708,7 +711,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
   private ClassOrInterfaceBodyDeclaration checkClassInvariantsInstrumentDeclaration(
       String classname) {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "private static void checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time) {");
     String classPptname = classname + ":::CLASS";
@@ -726,9 +729,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             code.toString());
   }
 
-  private StringBuffer checkObjectInvariants_instrumentDeclaration_checker(
+  private StringBuilder checkObjectInvariants_instrumentDeclaration_checker(
       String classname, boolean majorProperties) {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -749,9 +752,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer checkClassInvariantsInstrumentDeclaration_checker(
+  private StringBuilder checkClassInvariantsInstrumentDeclaration_checker(
       String classname, boolean majorProperties) {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check" + (majorProperties ? "Major" : "Minor") + "ClassInvariants() {");
     String classPptname = classname + ":::CLASS";
@@ -787,7 +790,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       if (inv instanceof FunctionBinary) {
         FunctionBinary fb = (FunctionBinary) inv;
         if (fb.isLshift() || fb.isRshiftSigned() || fb.isRshiftUnsigned()) {
-          // System.err.println("Warning: shift operation skipped: " + inv.format_using(OutputFormat.JAVA));
+          // System.err.println("Warning: shift operation skipped: " +
+          // inv.format_using(OutputFormat.JAVA));
           continue;
         }
       }
@@ -832,7 +836,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   //    orders catch clauses in the order in which they appear in
   //    declaredThrowable. This can cause compilation to fail. ]]
   private void exitChecks(
-      StringBuffer code,
+      StringBuilder code,
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       List<String> declaredThrowables,
@@ -901,7 +905,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private void checkPreconditions(
-      StringBuffer code, List<PptTopLevel> matching_ppts, PptMap pptmap) {
+      StringBuilder code, List<PptTopLevel> matching_ppts, PptMap pptmap) {
     for (PptTopLevel ppt : matching_ppts) {
       if (ppt.ppt_name.isEnterPoint()) {
         List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
@@ -911,14 +915,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
   }
 
-  private StringBuffer checkPreconditions_checker_method(
+  private StringBuilder checkPreconditions_checker_method(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       String methodName,
       List<String> parameters,
       boolean majorProperties) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -927,7 +931,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "("
             + "Object thiz"
             + (parameters.size() > 0 ? ", " : "")
-            + UtilMDE.join(parameters, ", ")
+            + UtilPlume.join(parameters, ", ")
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -947,7 +951,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer checkPostconditions_checker_method(
+  private StringBuilder checkPostconditions_checker_method(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       String methodName,
@@ -955,7 +959,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       List<String> parameters,
       boolean majorProperties) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -965,7 +969,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "Object thiz "
             + (returnType.equals("void") ? "" : ", " + returnType + " checker_returnval")
             + (parameters.size() > 0 ? ", " : "")
-            + UtilMDE.join(parameters, ", ")
+            + UtilPlume.join(parameters, ", ")
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -985,21 +989,21 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer checkPreconditions_checker_constructor(
+  private StringBuilder checkPreconditions_checker_constructor(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       String methodName,
       List<String> parameters,
       boolean majorProperties) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
             + "Preconditions_"
             + methodName
             + "("
-            + UtilMDE.join(parameters, ", ")
+            + UtilPlume.join(parameters, ", ")
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -1019,14 +1023,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return code;
   }
 
-  private StringBuffer checkPostconditions_checker_constructor(
+  private StringBuilder checkPostconditions_checker_constructor(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
       String methodName,
       List<String> parameters,
       boolean majorProperties) {
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
     code.append(
         "public static void check"
             + (majorProperties ? "Major" : "Minor")
@@ -1035,7 +1039,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "("
             + "Object thiz "
             + (parameters.size() > 0 ? ", " : "")
-            + UtilMDE.join(parameters, ", ")
+            + UtilPlume.join(parameters, ", ")
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -1056,7 +1060,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private static Property toProperty(Invariant inv) {
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     String daikonrep = inv.format_using(OutputFormat.DAIKON);
 
@@ -1085,7 +1089,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     code.append("<INVINFO>");
     code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
     code.append("<DAIKON>" + daikonrep + "</DAIKON>");
-    code.append("<INV>" + plume.UtilMDE.escapeNonJava(javarep) + "</INV>");
+    code.append("<INV>" + UtilPlume.escapeNonJava(javarep) + "</INV>");
     code.append("<DAIKONCLASS>" + inv.getClass().toString() + "</DAIKONCLASS>");
     code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature() + "</METHOD>");
     code.append("</INVINFO>");
@@ -1162,7 +1166,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       //             for (Constructor cons : c.getDeclaredConstructors()) {
       //                 if (!visitedConstructors.contains(cons)) {
       //                     assert cons.equals(getDefaultConstructor(c))
-      //                                       : "cons=" + cons + ", visitedConstructors=" + visitedConstructors);
+      //                        : "cons=" + cons + ", visitedConstructors=" + visitedConstructors);
       //                 }
       //             }
 
@@ -1180,7 +1184,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
   }
 
-  private StringBuffer createEmptyDeclaration(Method m) {
+  private StringBuilder createEmptyDeclaration(Method m) {
 
     List<String> parameters = new ArrayList<String>();
     int paramCounter = 0;
@@ -1188,7 +1192,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       parameters.add(Ast.classnameForSourceOutput(c) + " param" + paramCounter++);
     }
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     for (String s : new String[] {"Major", "Minor"}) {
       code.append(
@@ -1199,7 +1203,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "("
               + "Object thiz"
               + (parameters.size() > 0 ? ", " : "")
-              + UtilMDE.join(parameters, ", ")
+              + UtilPlume.join(parameters, ", ")
               + ") { /* no properties for this member */ }");
 
       code.append(
@@ -1213,14 +1217,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                   ? ""
                   : (", " + Ast.classnameForSourceOutput(m.getReturnType()) + " checker_returnval"))
               + (parameters.size() > 0 ? ", " : "")
-              + UtilMDE.join(parameters, ", ")
+              + UtilPlume.join(parameters, ", ")
               + ") { /* no properties for this member */ }");
     }
 
     return code;
   }
 
-  private StringBuffer createEmptyDeclaration(Constructor<?> c) {
+  private StringBuilder createEmptyDeclaration(Constructor<?> c) {
 
     List<String> parameters = new ArrayList<String>();
     int paramCounter = 0;
@@ -1228,7 +1232,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       parameters.add(Ast.classnameForSourceOutput(cls) + " param" + paramCounter++);
     }
 
-    StringBuffer code = new StringBuffer();
+    StringBuilder code = new StringBuilder();
 
     Package pacg = c.getDeclaringClass().getPackage();
     String packageName = (pacg == null ? "" : pacg.getName());
@@ -1246,7 +1250,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "Preconditions_"
               + baseClassName
               + "("
-              + UtilMDE.join(parameters, ", ")
+              + UtilPlume.join(parameters, ", ")
               + ") { /* no properties for this member */ }");
 
       code.append(
@@ -1257,7 +1261,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "("
               + "Object thiz "
               + (parameters.size() > 0 ? ", " : "")
-              + UtilMDE.join(parameters, ", ")
+              + UtilPlume.join(parameters, ", ")
               + ") { /* no properties for this member */ }");
     }
 

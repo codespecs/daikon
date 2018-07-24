@@ -7,10 +7,18 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.logging.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -172,7 +180,7 @@ public class NIS {
   static int still_suppressed_cnt = 0;
 
   /** Total time spent in NIS processing */
-  public static Stopwatch watch = new Stopwatch(false);
+  public static long duration = 0;
 
   /** First execution of dump_stats(). Used to dump a header. */
   static boolean first_time = true;
@@ -306,9 +314,10 @@ public class NIS {
       return;
     }
 
+    long startTime = 0;
     // Count the number of falsified invariants that are antecedents
     if (keep_stats) {
-      watch.start();
+      startTime = System.nanoTime();
       if (PptTopLevel.first_pass_with_sample && suppressor_map.containsKey(inv.getClass())) {
         false_invs++;
       }
@@ -325,7 +334,7 @@ public class NIS {
     }
 
     if (keep_stats) {
-      watch.stop();
+      duration += (System.nanoTime() - startTime);
     }
   }
 
@@ -415,7 +424,7 @@ public class NIS {
   public static void clear_stats() {
 
     keep_stats = true;
-    watch.clear();
+    duration = 0;
     false_invs = 0;
     false_cnts = 0;
     suppressions_processed = 0;
@@ -473,7 +482,7 @@ public class NIS {
               + " : "
               + still_suppressed_cnt
               + " : "
-              + watch.elapsedMillis()
+              + TimeUnit.NANOSECONDS.toMillis(duration)
               + " msecs "
               // + build_ants_msecs + " " + process_ants_msecs + " : "
               + ppt.name);
@@ -517,8 +526,8 @@ public class NIS {
 
             // use the following count update when splitting the hybrid method by the
             // number of total suppressions associated with the falsified invariants
-            @SuppressWarnings(
-                "nullness") // map:  same keys in suppressor_map and suppressor_map_suppression_count
+            @SuppressWarnings("nullness") // map:  same keys in suppressor_map and
+            // suppressor_map_suppression_count
             int map_count = suppressor_map_suppression_count.get(inv.getClass());
             count += map_count;
             suppressions_processed_falsified += map_count;
@@ -557,7 +566,7 @@ public class NIS {
       inv_cnt++;
     }
 
-    // System.out.printf ("Invariants for ppt %s: %d\n", ppt, inv_cnt);
+    // System.out.printf("Invariants for ppt %s: %d\n", ppt, inv_cnt);
     if (false_cnt == 0) {
       return;
     }
@@ -565,7 +574,7 @@ public class NIS {
     if (debugAnt.isLoggable(Level.FINE)) {
       debugAnt.fine("at ppt " + ppt.name + " false_cnt = " + false_cnt);
     }
-    //false_invs = false_cnt;
+    // false_invs = false_cnt;
 
     if (debugAnt.isLoggable(Level.FINE)) ppt.debug_invs(debugAnt);
 
@@ -806,7 +815,7 @@ public class NIS {
           comp_ants.put(vc, ants);
         }
         ants.add(inv);
-        //if (Debug.logOn())
+        // if (Debug.logOn())
         //  inv.log ("Added to antecedent map " + inv.format() + " compare = "
         //           + vc);
       }
@@ -994,7 +1003,7 @@ public class NIS {
       for (int i = 0; i < vis.length; i++) {
         names[i] = vis[i].name();
       }
-      return suppressee + "[" + UtilMDE.join(names, ", ") + "]";
+      return suppressee + "[" + UtilPlume.join(names, ", ") + "]";
     }
   }
 

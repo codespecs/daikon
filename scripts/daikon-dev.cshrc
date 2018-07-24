@@ -3,30 +3,11 @@
 
 if (! $?LC_ALL) setenv LC_ALL en_US
 
-if (! $?DAIKONPARENT) setenv DAIKONPARENT ${HOME}/research
-setenv DAIKONDIR ${DAIKONPARENT}/invariants
-
-if (! -d ${DAIKONDIR}) then
-  echo "*****"
-  echo "daikon-dev.cshrc cannot find ${DAIKONDIR}"
-  echo "Please check out Daikon to correct this problem."
-  echo "Or, if you've checked it out to a different location, set the"
-  echo "DAIKONPARENT environment variable to point to the directory that"
-  echo "contains the 'invariants' directory."
-  echo "*****"
-  # Default to Michael Ernst's version of Daikon, just so references to
-  # ${INV} don't die, preventing this script from completing.
-  if (-d /afs/csail.mit.edu/u/m/mernst/research/invariants) then
-    setenv DAIKONDIR /afs/csail.mit.edu/u/m/mernst/research/invariants
-  else
-    # If we couldn't find suitable scripts anywhere, we can't do anything
-    # sensible, so get out before we do any damage.
-    exit 1;
-  endif
-endif
+scriptdir=`/bin/dirname $0`       # may be relative path
+DAIKONDIR=`cd $scriptdir/.. && pwd`    # ensure absolute path
 
 setenv DAIKONBIN ${DAIKONDIR}/scripts
-setenv PLUMEBIN ${DAIKONDIR}/plume-lib/bin
+setenv PLUMEBIN ${DAIKONDIR}/utils/plume-lib/bin
 setenv INV ${DAIKONDIR}
 setenv inv ${INV}
 setenv DAIKONCLASS_SOURCES 1
@@ -48,7 +29,7 @@ setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
 
 # In general, Java programmers should not set CLASSPATH.
 # setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-# # Using ${INV}/plume-lib seems undesirable.  If a new version of plume-lib
+# # Using ${INV}/utils/plume-lib seems undesirable.  If a new version of plume-lib
 # # deprecates a method, then Daikon won't compile for developers; however,
 # # changing Daikon's source code would cause Daikon not to compile for ordinary
 # # users.

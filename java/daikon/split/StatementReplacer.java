@@ -1,7 +1,8 @@
 package daikon.split;
 
 import daikon.tools.jtb.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
@@ -87,7 +88,8 @@ class StatementReplacer extends DepthFirstVisitor {
     if (replacements >= MAXREPLACEMENTS) {
       return originalExpression;
     } else {
-      // System.out.println("makeReplacements(" + originalExpression + ") ==> " + replacedExpression);
+      // System.out.println("makeReplacements(" + originalExpression + ") ==> " +
+      // replacedExpression);
       return replacedExpression;
     }
   }

@@ -1,7 +1,11 @@
 package daikon.asm;
 
-import daikon.util.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -94,7 +98,8 @@ public class InstructionUtils {
         } else {
           // Add it to redundants.
           @SuppressWarnings(
-              "nullness") // map: varName in varsUsedPreviously => all map keys OK, inserted on previous iteration
+              "nullness") // map: varName in varsUsedPreviously => all map keys OK, inserted on
+          // previous iteration
           boolean dummy = // to afford a place for the @SuppressWarnings annotation
               redundants.get(leaders.get(varName)).add(varFullName);
         }
@@ -234,7 +239,7 @@ public class InstructionUtils {
           } else { // If we've seen it, it may be a leader or redundant.
             assert leaders.containsKey(var);
             assert timeKilled.containsKey(var)
-                : "@AssumeAssertion(keyfor): keys of leaders and timeKilled are the same";
+                : "@AssumeAssertion(keyfor): correlated maps: keys of leaders and timeKilled are the same";
             if (timeKilled.get(var) >= leaders.get(var)) {
               // It was killed by a killer instruction.
               // Make it a leader.
@@ -264,14 +269,14 @@ public class InstructionUtils {
     int totalRedVars = 0;
     int totalVars = 0;
     Map<String, String> result = new LinkedHashMap<String, String>();
-    //Map<String, Set<String>> redundantVarsFinal = new LinkedHashMap<String, Set<String>>();
+    // Map<String, Set<String>> redundantVarsFinal = new LinkedHashMap<String, Set<String>>();
     for (Map.Entry</*@KeyFor("redundantVars")*/ String, Set<String>> e : redundantVars.entrySet()) {
       totalVars++;
       if (!e.getValue().isEmpty()) {
         for (String rvar : e.getValue()) {
           result.put(rvar, e.getKey());
         }
-        //redundantVarsFinal.put(e.getKey(), e.getValue());
+        // redundantVarsFinal.put(e.getKey(), e.getValue());
         cum_redsperleader += e.getValue().size();
         sam_redsperleader++;
         totalRedVars += e.getValue().size();
@@ -282,7 +287,7 @@ public class InstructionUtils {
 
     computeRVarsLoad(path, result);
 
-    //return redundantVarsFinal;
+    // return redundantVarsFinal;
     return result;
   }
 

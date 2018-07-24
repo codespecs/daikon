@@ -14,15 +14,40 @@ import daikon.config.Configuration;
 import daikon.derive.ValueAndModified;
 import daikon.diff.InvMap;
 import daikon.inv.Invariant;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.EOFException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.InvalidClassException;
+import java.io.LineNumberReader;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.StringWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URL;
 import java.nio.file.Files;
-import java.text.*;
-import java.util.*;
+import java.text.NumberFormat;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.*;
-import plume.*;
+import java.util.zip.GZIPInputStream;
+import org.plumelib.util.StringBuilderDelimited;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -50,8 +75,8 @@ public final class FileIO {
   // a number may follow it.
   public static final String exit_suffix = "EXIT";
   public static final String exit_tag = ppt_tag_separator + exit_suffix;
-  //public static final String throw_suffix = "THROW";
-  //public static final String throw_tag = ppt_tag_separator + throw_suffix;
+  // public static final String throw_suffix = "THROW";
+  // public static final String throw_tag = ppt_tag_separator + throw_suffix;
   public static final String exception_uncaught_suffix = "EXCEPTIONUNCAUGHT";
   public static final String exception_uncaught_tag = ppt_tag_separator + exception_uncaught_suffix;
   // EXCEPTION does not necessarily appear at the end of the program point name;
@@ -178,7 +203,7 @@ public final class FileIO {
   /** Debug tracer for printing variable values. */
   public static final Logger debugVars = Logger.getLogger("daikon.FileIO.vars");
 
-  public static final SimpleLog debug_decl = new SimpleLog(false);
+  // public static final SimpleLog debug_decl = new SimpleLog(false);
 
   /** Parents in the ppt/variable hierarchy for a particular program point. */
   public static final class ParentRelation implements java.io.Serializable {
@@ -216,8 +241,9 @@ public final class FileIO {
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringBuilderDelimited accepts null values.
   @SuppressWarnings(
-      "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is ensured by call to reset()
-  // can't do this since readLine is not deterministic: /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
+      "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is
+  // ensured by call to reset()
+  /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {
@@ -299,7 +325,7 @@ public final class FileIO {
 
     // Read the records that define this program point
     while ((line = state.reader.readLine()) != null) {
-      debug_decl.log("read line %s%n", line);
+      // debug_decl.log("read line %s%n", line);
       line = line.trim();
       if (line.length() == 0) {
         break;
@@ -327,7 +353,7 @@ public final class FileIO {
         if (record == "var-kind") { // interned
           vardef.parse_var_kind(scanner);
         } else if (record == "enclosing-var") { // interned
-          vardef.parse_enclosing_var(scanner);
+          vardef.parse_enclosing_var_name(scanner);
         } else if (record == "reference-type") { // interned
           vardef.parse_reference_type(scanner);
         } else if (record == "array") { // interned
@@ -397,10 +423,8 @@ public final class FileIO {
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
-      PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      assert existing_ppt != null
-          : "@AssumeAssertion(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
       if (state.ppts_may_be_new) {
         check_decl_match(state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -463,15 +487,13 @@ public final class FileIO {
     ppt_name = ppt_name.intern();
     VarInfo[] vi_array = read_VarInfos(state, ppt_name);
 
-    // System.out.printf ("Ppt %s with %d variables\n", ppt_name,
+    // System.out.printf("Ppt %s with %d variables\n", ppt_name,
     //                   vi_array.length);
 
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
-      PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      assert existing_ppt != null
-          : "@AssumeAssertion(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
       if (state.ppts_may_be_new) {
         check_decl_match(state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -513,7 +535,7 @@ public final class FileIO {
     //      return newppt;
     //    }
 
-    //TODO: add a new config variable to turn this accessibility flag processing on?
+    // TODO: add a new config variable to turn this accessibility flag processing on?
     PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
     // newppt.ppt_name.setVisibility("package-protected");
     return newppt;
@@ -567,7 +589,7 @@ public final class FileIO {
     String proglang_type_string_and_aux = file.readLine();
     String file_rep_type_string = file.readLine();
     String comparability_string = file.readLine();
-    if ( // (varname == null) || // just check varname above
+    if ( // (varname == null) || // already returned null if varname==null
     (proglang_type_string_and_aux == null)
         || (file_rep_type_string == null)
         || (comparability_string == null))
@@ -777,7 +799,7 @@ public final class FileIO {
       if (line == null || line.equals("")) {
         break;
       }
-      result.append(line);
+      result.add(line);
       if (isComment(line)) {
         continue;
       }
@@ -824,7 +846,7 @@ public final class FileIO {
       pw.print("    ");
 
       // [adonovan] is this sound? Let me know if not (sorry).
-      //assert ppt.var_infos.length == vals.length;
+      // assert ppt.var_infos.length == vals.length;
 
       for (int j = 0; j < vals.length; j++) {
         if (j != 0) pw.print(", ");
@@ -833,10 +855,11 @@ public final class FileIO {
 
         Object val = vals[j];
         if (canonical_hashcode.equals(
-            val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is little point.  val can be null, so it cannot be the receiver.
-        pw.print("<hashcode>");
-        else if (val instanceof int[]) pw.print(ArraysMDE.toString((int[]) val));
-        else if (val instanceof String) pw.print(UtilMDE.escapeNonASCII((String) val));
+            val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is
+          // little point.  val can be null, so it cannot be the receiver.
+          pw.print("<hashcode>");
+        else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
+        else if (val instanceof String) pw.print(UtilPlume.escapeNonASCII((String) val));
         else pw.print(val);
       }
       pw.println();
@@ -885,14 +908,14 @@ public final class FileIO {
     }
   }
 
-  // call_hashmap is for procedures with a (global, not per-procedure)
-  // nonce that indicates which returns are associated with which entries.
-  // call_stack is for functions without nonces.
-
   // I could save some Object overhead by using two parallel stacks
   // instead of Invocation objects; but that's not worth it.
-  static Stack<Invocation> call_stack = new Stack<Invocation>();
+
+  // Map key is a (global, not per-procedure) nonce.
+  // The nonce indicates which returns are associated with which entries.
   static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
+  // call_stack is for procedures without nonces.
+  static Deque<Invocation> call_stack = new ArrayDeque<Invocation>();
 
   /**
    * Reads data from {@code .dtrace} files. For each record in the files, calls the appropriate
@@ -921,7 +944,7 @@ public final class FileIO {
       throws IOException {
 
     for (String filename : files) {
-      // System.out.printf ("processing filename %s%n", filename);
+      // System.out.printf("processing filename %s%n", filename);
       try {
         read_data_trace_file(filename, all_ppts, processor, false, ppts_may_be_new);
       } catch (Daikon.TerminationMessage e) {
@@ -1039,9 +1062,9 @@ public final class FileIO {
 
     ServerSocket daikonServer;
     try {
-      daikonServer = new ServerSocket(0); //bind to any free port
+      daikonServer = new ServerSocket(0); // bind to any free port
 
-      //tell Chicory what port we have!
+      // tell Chicory what port we have!
       System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
 
       daikonServer.setReceiveBufferSize(64000);
@@ -1054,7 +1077,8 @@ public final class FileIO {
     try {
       daikonServer.setSoTimeout(5000);
 
-      //System.out.println("waiting for chicory connection on port " + daikonServer.getLocalPort());
+      // System.out.println("waiting for chicory connection on port " +
+      // daikonServer.getLocalPort());
       chicSocket = daikonServer.accept();
     } catch (IOException e) {
       throw new RuntimeException("Unable to connect to Chicory", e);
@@ -1256,9 +1280,9 @@ public final class FileIO {
 
       if (count_lines) {
         Daikon.progress = "Checking size of " + filename;
-        total_lines = UtilMDE.count_lines(raw_filename);
+        total_lines = UtilPlume.count_lines(raw_filename);
       } else {
-        // System.out.printf ("no count %b %d %s %d %d\n", is_decl_file,
+        // System.out.printf("no count %b %d %s %d %d\n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
         //  Daikon.dkconfig_progress_delay, (new File(raw_filename)).length());
       }
@@ -1268,7 +1292,7 @@ public final class FileIO {
         // "-" means read from the standard input stream
         Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
         reader = new LineNumberReader(file_reader);
-      } else if (raw_filename.equals("+")) { //socket comm with Chicory
+      } else if (raw_filename.equals("+")) { // socket comm with Chicory
         InputStream chicoryInput = connectToChicory();
         InputStreamReader chicReader = new InputStreamReader(chicoryInput, UTF_8);
         reader = new LineNumberReader(chicReader);
@@ -1282,7 +1306,7 @@ public final class FileIO {
           reader = new LineNumberReader(new InputStreamReader(stream, UTF_8));
         }
       } else {
-        reader = UtilMDE.lineNumberFileReader(raw_filename);
+        reader = UtilPlume.lineNumberFileReader(raw_filename);
       }
 
       varcomp_format = VarComparability.IMPLICIT;
@@ -1404,7 +1428,7 @@ public final class FileIO {
               data_trace_state.vt,
               data_trace_state.nonce);
         } catch (Error e) {
-          //e.printStackTrace();
+          // e.printStackTrace();
           if (!dkconfig_continue_after_file_exception) {
             throw new Daikon.TerminationMessage(e, data_trace_state);
           } else {
@@ -1470,9 +1494,9 @@ public final class FileIO {
       // a blank line.  We can't depend on that, though.
       if (isComment(line)) {
         StringBuilderDelimited commentLines = new StringBuilderDelimited(lineSep);
-        commentLines.append(line);
+        commentLines.add(line);
         while (nextLineIsComment(reader)) {
-          commentLines.append(reader.readLine());
+          commentLines.add(reader.readLine());
         }
         state.payload = commentLines.toString();
         state.rtype = RecordType.COMMENT;
@@ -1490,10 +1514,6 @@ public final class FileIO {
       // Check for the file format
       if (line.startsWith("decl-version")) {
         read_decl_version(state, line);
-        assert new_decl_format != null
-            : "@AssumeAssertion(nullness): bug in Checker Framework:  read_decl_version is annotated as @EnsuresNonNull(new_decl_format)";
-        assert FileIO.new_decl_format != null
-            : "@AssumeAssertion(nullness): bug in Checker Framework:  read_decl_version is annotated as @EnsuresNonNull(new_decl_format)";
         state.payload = (new_decl_format ? "2.0" : "1.0");
         state.payload = (FileIO.new_decl_format ? "2.0" : "1.0");
         state.rtype = RecordType.DECL_VERSION;
@@ -1511,7 +1531,7 @@ public final class FileIO {
       // If we have gotten to here and new_decl_format is not set, presume
       // it is the old format
       if (new_decl_format == null) {
-        // System.out.printf ("setting new_decl_format to false%n");
+        // System.out.printf("setting new_decl_format to false%n");
         new_decl_format = Boolean.FALSE;
       }
 
@@ -1526,8 +1546,6 @@ public final class FileIO {
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
           if (!state.all_ppts.containsName(state.ppt.name())) {
-            assert state.ppt != null
-                : "@AssumeAssertion(nullness): bug: not side-effected since check, and only pure methods have been called since";
             state.all_ppts.add(state.ppt);
             assert state.ppt != null; // for nullness checker
             try {
@@ -1554,11 +1572,11 @@ public final class FileIO {
       if (new_decl_format) ppt_name = unescape_decl(line); // interning bugfix: no need to intern
       ppt_name = user_mod_ppt_name(ppt_name);
       if (!ppt_included(ppt_name)) {
-        // System.out.printf ("skipping ppt %s\n", line);
+        // System.out.printf("skipping ppt %s\n", line);
         while ((line != null) && !line.equals("")) line = reader.readLine();
         continue;
       }
-      // System.out.printf ("Not skipping ppt  %s\n", line);
+      // System.out.printf("Not skipping ppt  %s\n", line);
 
       if (state.is_decl_file) {
         if ((!new_decl_format) && line.startsWith("ppt ")) {
@@ -1756,8 +1774,7 @@ public final class FileIO {
       return;
     }
 
-    @SuppressWarnings(
-        "flowexpr.parse.error") // https://github.com/typetools/checker-framework/issues/862
+    @SuppressWarnings("flowexpr.parse.error") // https://tinyurl.com/cfissue/862
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
@@ -1793,34 +1810,36 @@ public final class FileIO {
 
     int unmatched_count = call_stack.size() + call_hashmap.size();
 
-    if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
+    if ((!call_stack.isEmpty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.print(
-          "No return from procedure observed " + UtilMDE.nplural(unmatched_count, "time") + ".");
+          "No return from procedure observed " + UtilPlume.nplural(unmatched_count, "time") + ".");
       if (Daikon.use_dataflow_hierarchy) {
         System.out.print("  Unmatched entries are ignored!");
       }
       System.out.println();
       if (!call_hashmap.isEmpty()) {
+        // Put the invocations in sorted order for printing.
+        ArrayList<Invocation> invocations = new ArrayList<Invocation>();
+        for (/*@KeyFor("call_hashmap")*/ Integer i : UtilPlume.sortedKeySet(call_hashmap)) {
+          Invocation invok = call_hashmap.get(i);
+          assert invok != null;
+          invocations.add(invok);
+        }
         System.out.println("Unterminated calls:");
         if (dkconfig_verbose_unmatched_procedure_entries) {
-          // Print the invocations in sorted order.
-          ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-          for (/*@KeyFor("call_hashmap")*/ Integer i : UtilMDE.sortedKeySet(call_hashmap)) {
-            Invocation invok = call_hashmap.get(i);
-            assert invok != null;
-            invocations.add(invok);
-          }
           print_invocations_verbose(invocations);
         } else {
-          print_invocations_grouped(call_hashmap.values());
+          print_invocations_grouped(invocations);
         }
       }
 
-      if (!call_stack.empty()) {
+      if (!call_stack.isEmpty()) {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           System.out.println(
-              "Remaining " + UtilMDE.nplural(unmatched_count, "stack") + " call summarized below.");
+              "Remaining "
+                  + UtilPlume.nplural(unmatched_count, "stack")
+                  + " call summarized below.");
           print_invocations_verbose(call_stack);
         } else {
           print_invocations_grouped(call_stack);
@@ -1841,27 +1860,26 @@ public final class FileIO {
     }
   }
 
-  /** Print the invocations in the collection, in order, and suppressing duplicates. */
+  /** Print the invocations in the collection, in order, and coalescing duplicates. */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
-    Map</*@Interned*/ Invocation, Integer> counter =
-        new HashMap</*@Interned*/ Invocation, Integer>();
+    Map</*@Interned*/ String, Integer> counter = new LinkedHashMap</*@Interned*/ String, Integer>();
 
     for (Invocation invok_noncanonical : invocations) {
       /*@Interned*/ Invocation invok = invok_noncanonical.canonicalize();
-      if (counter.containsKey(invok)) {
-        Integer oldCount = counter.get(invok);
+      String invokString = invok.format(false).intern();
+      if (counter.containsKey(invokString)) {
+        Integer oldCount = counter.get(invokString);
         Integer newCount = oldCount.intValue() + 1;
-        counter.put(invok, newCount);
+        counter.put(invokString, newCount);
       } else {
-        counter.put(invok, 1);
+        counter.put(invokString, 1);
       }
     }
 
     // Print the invocations in sorted order.
-    for (/*@KeyFor("counter")*//*@Interned*/ Invocation invok : UtilMDE.sortedKeySet(counter)) {
-      Integer count = counter.get(invok);
+    for (Map.Entry</*@Interned*/ String, Integer> invokEntry : counter.entrySet()) {
       System.out.println(
-          invok.format(false) + " : " + UtilMDE.nplural(count.intValue(), "invocation"));
+          invokEntry.getKey() + " : " + UtilPlume.nplural(invokEntry.getValue(), "invocation"));
     }
   }
 
@@ -1910,7 +1928,8 @@ public final class FileIO {
               + " values";
       VarInfo vi = vis[vi_index];
       assert (!vi.is_static_constant) || (vi.value_index == -1)
-      // : "Bad value_index " + vi.value_index + " when static_constant_value = " + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
+      // : "Bad value_index " + vi.value_index + " when static_constant_value = " +
+      // vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
       ;
       if (vi.is_static_constant) {
         continue;
@@ -2007,7 +2026,8 @@ public final class FileIO {
       }
       int mod = ValueTuple.parseModified(line);
 
-      // System.out.println("Mod is " + mod + " at " + data_trace_state.filename + " line " + reader.getLineNumber());
+      // System.out.println("Mod is " + mod + " at " + data_trace_state.filename + " line " +
+      // reader.getLineNumber());
       // System.out.pringln("  for variable " + vi.name()
       //                   + " for program point " + ppt.name());
 
@@ -2176,7 +2196,7 @@ public final class FileIO {
       // Set invoc
       {
         if (nonce == null) {
-          if (call_stack.empty()) {
+          if (call_stack.isEmpty()) {
             // Not Daikon.TerminationMessage:  caller knows context such as
             // file name and line number.
             throw new Error("Function exit without corresponding entry: " + ppt.name());
@@ -2202,7 +2222,7 @@ public final class FileIO {
           // nonce != null
           if (!call_hashmap.containsKey(nonce)) {
             if (dkconfig_ignore_missing_enter) {
-              //System.out.printf ("Didn't find call with nonce %d to match %s" +
+              // System.out.printf("Didn't find call with nonce %d to match %s" +
               //                   " ending at %s line %d\n", nonce, ppt.name(),
               //                   data_trace_state.filename,
               //                   data_trace_state.reader.getLineNumber());
@@ -2312,7 +2332,7 @@ public final class FileIO {
 
   public static void write_serialized_pptmap(PptMap map, File file) throws IOException {
     SerialFormat record = new SerialFormat(map, Configuration.getInstance());
-    UtilMDE.writeObject(record, file);
+    UtilPlume.writeObject(record, file);
   }
 
   /**
@@ -2324,18 +2344,18 @@ public final class FileIO {
       throws IOException {
 
     try {
-      Object obj = UtilMDE.readObject(file);
+      Object obj = UtilPlume.readObject(file);
       if (obj instanceof FileIO.SerialFormat) {
         SerialFormat record = (SerialFormat) obj;
         if (use_saved_config) {
           Configuration.getInstance().overlap(record.config);
         }
         FileIO.new_decl_format = record.new_decl_format;
-        // System.err.printf ("Setting FileIO.new_decl_format to %b%n",
+        // System.err.printf("Setting FileIO.new_decl_format to %b%n",
         //                   FileIO.new_decl_format);
         return record.map;
       } else if (obj instanceof InvMap) {
-        // System.err.printf ("Restoring an InvMap%n");
+        // System.err.printf("Restoring an InvMap%n");
         InvMap invs = (InvMap) obj;
         PptMap ppts = new PptMap();
         for (PptTopLevel ppt : invs.pptIterable()) {
@@ -2522,7 +2542,7 @@ public final class FileIO {
    * variable definition block in the trace file. More detailed information about each of the fields
    * can be found in the 'Variable declarations' section of the 'File Formats' appendix of the
    * Daikon developers manual. Specifics can also be found in the 'parse_[field]' methods of the
-   * class (eg, parse_var_kind, parse_enclosing_var, etc).
+   * class (eg, parse_var_kind, parse_enclosing_var_name, etc).
    */
   @SuppressWarnings(
       "nullness") // undocumented class needs documentation before annotating with nullness
@@ -2534,8 +2554,9 @@ public final class FileIO {
     public String name;
     /** Type of the variable (required) */
     public VarKind kind = null;
-    /** Variable that contains this variable (optional) */
-    public /*@Nullable*/ String enclosing_var;
+    /** Name of variable that contains this variable (optional) */
+    // seems non-null for arrays/sequences
+    public /*@Nullable*/ String enclosing_var_name;
     /** the simple (not fully specified) name of this variable (optional) */
     public /*@Nullable*/ String relative_name = null;
     /** Type of reference for structure/class variables */
@@ -2604,7 +2625,7 @@ public final class FileIO {
           : String.format(
               "incompatible kind=%s and function_args=%s for VarDefinition %s",
               kind, function_args, name);
-      if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var == null) {
+      if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var_name == null) {
         throw new AssertionError("enclosing-var not specified for variable " + name);
       }
     }
@@ -2612,7 +2633,7 @@ public final class FileIO {
     /** Initialize from the 'variable <em>name</em>' record. Scanner should be pointing at name. */
     public VarDefinition(ParseState state, Scanner scanner) {
       this.state = state;
-      this.parents = new LinkedList<VarParent>();
+      this.parents = new ArrayList<VarParent>();
       name = need(scanner, "name");
       need_eol(scanner);
       if (state.varcomp_format == VarComparability.IMPLICIT) {
@@ -2624,7 +2645,7 @@ public final class FileIO {
 
     public VarDefinition(String name, VarKind kind, ProglangType type) {
       this.state = null;
-      this.parents = new LinkedList<VarParent>();
+      this.parents = new ArrayList<VarParent>();
       this.name = name;
       this.kind = kind;
       this.rep_type = type;
@@ -2657,8 +2678,8 @@ public final class FileIO {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
       name = name.intern();
-      if (enclosing_var != null) {
-        enclosing_var = enclosing_var.intern();
+      if (enclosing_var_name != null) {
+        enclosing_var_name = enclosing_var_name.intern();
       }
       if (relative_name != null) {
         relative_name = relative_name.intern();
@@ -2688,8 +2709,8 @@ public final class FileIO {
     }
 
     /** Parses the enclosing-var record */
-    public void parse_enclosing_var(Scanner scanner) {
-      enclosing_var = need(scanner, "enclosing variable name");
+    public void parse_enclosing_var_name(Scanner scanner) {
+      enclosing_var_name = need(scanner, "enclosing variable name");
       need_eol(scanner);
     }
 
@@ -2738,7 +2759,7 @@ public final class FileIO {
 
       flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
       while (scanner.hasNext()) flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
-      // System.out.printf ("flags for %s are %s%n", name, flags);
+      // System.out.printf("flags for %s are %s%n", name, flags);
     }
 
     /** Parse the langauge specific flags record. Multiple flags can be specified. */
@@ -2888,7 +2909,7 @@ public final class FileIO {
       E /*@NonNull*/ [] all = enum_class.getEnumConstants();
       StringBuilderDelimited msg = new StringBuilderDelimited(", ");
       for (E e : all) {
-        msg.append(String.format("'%s'", e.name().toLowerCase()));
+        msg.add(String.format("'%s'", e.name().toLowerCase()));
       }
       decl_error(state, "'%s' found where %s expected", str, msg);
       throw new Error("execution cannot get to here, previous line threw an error");
@@ -2943,7 +2964,7 @@ public final class FileIO {
       return ppt_name;
     }
 
-    // System.out.printf ("removing stack dups (%b)in fileio%n",
+    // System.out.printf("removing stack dups (%b)in fileio%n",
     //                    dkconfig_rm_stack_dups);
 
     String[] stack = ppt_name.split("[|]");
@@ -2954,6 +2975,6 @@ public final class FileIO {
       }
       nd_stack.add(si);
     }
-    return UtilMDE.join(nd_stack, "|").intern();
+    return UtilPlume.join(nd_stack, "|").intern();
   }
 }

@@ -1,7 +1,15 @@
 package daikon;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +40,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   // binary.  So could we make it a packed binary array?
 
   // All of the keys below should be @KeyFor("this.map") but that isn't a valid expression.
-  // See https://github.com/typetools/checker-framework/issues/877
+  // See https://tinyurl.com/cfissue/877
 
   /**
    * Whether the elements in this collection are all the meaningful elements, or whether there is a
@@ -302,7 +310,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   // another variable.  Then NonZero will not be instantiated over "this", and when the equality set
   // is broken, there will be no NonZero invariant to copy to the other variable.  We only need to
   // check equality for every aux field that might affect methods such as instantiate_ok.
-  @SuppressWarnings("keyfor") // https://github.com/typetools/checker-framework/issues/877
+  @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/877
   /*@Pure*/
   public boolean equals_for_instantiation(
       /*>>>@GuardSatisfied VarInfoAux this,*/
@@ -408,7 +416,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public String getValue(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@KeyFor("this.map")*/ String key) {
-    assert map.containsKey(key) : "@AssumeAssertion(keyfor) Map does not contain key " + key;
     return map.get(key);
   }
 

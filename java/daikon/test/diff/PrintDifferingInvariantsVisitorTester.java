@@ -3,7 +3,7 @@ package daikon.test.diff;
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import junit.framework.*;
 
 @SuppressWarnings("nullness") // testing code

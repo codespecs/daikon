@@ -13,7 +13,7 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS SingleScalarSequence
   #define PRIMITIVE long
   #define CLASSSTRING "CommonSequence"
-  #define INDEXOF ArraysMDE.indexOf
+  #define INDEXOF ArraysPlume.indexOf
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define BASE_IS_INTEGRAL baseIsIntegral()
 #elif defined(TYPEDOUBLE)
@@ -32,7 +32,9 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import plume.*;
+import java.util.Arrays;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -184,8 +186,8 @@ public class CLASSNAME extends SUPERCLASS {
     } else {
       idx = "j";
     }
-    StringBuffer pre_buf = new StringBuffer("");
-    StringBuffer end_buf = new StringBuffer("");
+    StringBuilder pre_buf = new StringBuilder("");
+    StringBuilder end_buf = new StringBuilder("");
     for (int i = 0; i < intersect.length; i++) {
       pre_buf.append("(EXISTS ("+idx + i + ") (AND ");
       pre_buf.append("(>= "+idx + i + " " + name[1] + ") ");
@@ -231,7 +233,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   @Override
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
-    // System.out.println ("common: " + ArraysMDE.toString (a));
+    // System.out.println ("common: " + Arrays.toString (a));
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect == null) {
@@ -245,7 +247,7 @@ public class CLASSNAME extends SUPERCLASS {
       // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
       int ii = INDEXOF(intersect, a[i]);
       if ((ii != -1)
-        && (INDEXOF(ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
+        && (INDEXOF(ArraysPlume.subarray(tmp,0,size), a[i]) == -1)) {
         //System.out.println ("adding " + intersect[ii] + " at " + size);
 
         // Carefully add the existing intersect value and not a[i].  These
@@ -258,7 +260,7 @@ public class CLASSNAME extends SUPERCLASS {
       return InvariantStatus.FALSIFIED;
     }
 
-    intersect = ArraysMDE.subarray(tmp, 0, size);
+    intersect = ArraysPlume.subarray(tmp, 0, size);
 
     intersect = Intern.intern(intersect);
     elts++;

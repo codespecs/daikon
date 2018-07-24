@@ -2,11 +2,15 @@
 
 package daikon;
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintWriter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
-import java.util.regex.*;
-import plume.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+import org.plumelib.util.FuzzyFloat;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -200,7 +204,7 @@ public final class Global {
   // used only if debugPrintDtrace is true.  Users need not set this.
   public static /*@MonotonicNonNull*/ PrintWriter dtraceWriter = null;
 
-  //Global Fuzzy Float comparator to use
+  // Global Fuzzy Float comparator to use
   public static FuzzyFloat fuzzy = new FuzzyFloat();
 
   /* Map of statistics for each ppt. */

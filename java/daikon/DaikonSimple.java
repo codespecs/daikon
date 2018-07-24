@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -53,7 +53,7 @@ public class DaikonSimple {
   // public static File inv_file = null;
 
   private static String usage =
-      UtilMDE.join(
+      UtilPlume.join(
           new String[] {
             "",
             "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> <dtrace_file>",
@@ -138,7 +138,7 @@ public class DaikonSimple {
     SimpleProcessor processor = new SimpleProcessor();
     FileIO.read_data_trace_files(dtrace_files, all_ppts, processor, true);
 
-    //System.exit(0);
+    // System.exit(0);
 
     // Print out the invariants for each program point (sort first)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
@@ -453,7 +453,6 @@ public class DaikonSimple {
 
       ValueTuple receiver_vt = new ValueTuple(values, mods);
 
-      // @SuppressWarnings(nullness):  bug: ValueTuple.vals should be @Nullable Object @NonNull [], so why is it reported otherwise?
       FileIO.compute_orig_variables(receiver, receiver_vt.vals, receiver_vt.mods, nonce);
       FileIO.compute_derived_variables(receiver, receiver_vt.vals, receiver_vt.mods);
 
@@ -470,7 +469,6 @@ public class DaikonSimple {
       this.all_ppts = all_ppts;
 
       // Add samples to orig and derived variables
-      // @SuppressWarnings(nullness):  bug: ValueTuple.vals should be @Nullable Object @NonNull [], so why is it reported otherwise?
       FileIO.compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
       FileIO.compute_derived_variables(ppt, vt.vals, vt.mods);
 
@@ -561,10 +559,10 @@ public class DaikonSimple {
       if (class_ppt != null) add(class_ppt, class_vt, nonce);
     }
 
-    // The method iterates through all of the invariants in the ppt
-    // and manually adds the sample to the invariant and removing the
-    // invariant if it is falsified
-
+    /**
+     * The method iterates through all of the invariants in the ppt and manually adds the sample to
+     * the invariant and removing the invariant if it is falsified.
+     */
     private void add(PptTopLevel ppt, ValueTuple vt, int nonce) {
 
       // if this is a numbered exit, apply to the combined exit as well

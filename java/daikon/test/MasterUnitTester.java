@@ -4,7 +4,6 @@ import daikon.FileIO;
 import daikon.LogHelper;
 import junit.framework.*;
 import junit.textui.*;
-import plume.*;
 
 /**
  * This class runs all the Daikon unit tests. These tests are small, fast to run, and certainly not
@@ -32,7 +31,9 @@ public class MasterUnitTester extends TestCase {
     TestSuite result = new TestSuite();
 
     // To determine what should be in this list:
-    //   find . -name '*Test*.java' | perl -pe 's/^\./      daikon.test/; s:/:.:g; s/.java/.class,/;' | grep -v MasterUnitTester | sort
+    //   find . -name '*Test*.java'
+    //     | perl -pe 's/^\./      daikon.test/; s:/:.:g; s/.java/.class,/;'
+    //     | grep -v MasterUnitTester | sort
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     Class<? extends TestCase>[] classes =

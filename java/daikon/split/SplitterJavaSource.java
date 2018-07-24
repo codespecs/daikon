@@ -1,11 +1,17 @@
 package daikon.split;
 
 import daikon.*;
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
-import plume.ArraysMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -21,7 +27,7 @@ import org.checkerframework.dataflow.qual.*;
 class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** The text contents of the splitter file, a java class. */
-  private StringBuffer fileText = new StringBuffer();
+  private StringBuilder fileText = new StringBuilder();
 
   /** The name of the class from which this Ppt is from. */
   private String className;
@@ -74,7 +80,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     Global.debugSplit.fine("modified condition = " + condition);
     vars = makeVariableManagerArray(varInfos, condition, className);
 
-    //extra white space at the end of lines used only to increase readability.
+    // extra white space at the end of lines used only to increase readability.
     add("import daikon.*;");
     add("import daikon.inv.*;");
     add("import daikon.split.*;");
@@ -138,8 +144,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     Global.debugSplit.fine("<<exit>>  SplitterJavaSource");
   }
 
-  /** Returns a StringBuffer with the file text for the java file written by this. */
-  public StringBuffer getFileText() {
+  /** Returns a StringBuilder with the file text for the java file written by this. */
+  public StringBuilder getFileText() {
     return fileText;
   }
 
@@ -700,7 +706,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
     Global.debugSplit.fine(
-        "TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
+        "TokenExtractor.extractTokens(" + condition + ") ==> " + Arrays.toString(tokens));
     Set<String> variables = new LinkedHashSet<String>();
 
     for (int i = 0; i < tokens.length; i++) {
@@ -738,7 +744,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       String type, String name, VarInfo varInfo, String condition) throws ParseException {
     if ((type.equals("int") || varInfo.type.isArray())
         && varInfo.file_rep_type != ProglangType.HASHCODE) {
-      Stack<Boolean> inArrayIndex = new Stack<Boolean>();
+      Deque<Boolean> inArrayIndex = new ArrayDeque<Boolean>();
       inArrayIndex.push(Boolean.FALSE);
       NodeToken[] tokens = TokenExtractor.extractTokens(condition);
       for (int i = 0; i < tokens.length; i++) {
@@ -750,7 +756,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
           inArrayIndex.push(Boolean.FALSE);
         } else if (tokens[i].kind == RPAREN) {
           inArrayIndex.pop();
-        } else if (inArrayIndex.peek().booleanValue() && tokens[i].tokenImage.equals(name)) {
+        } else if (inArrayIndex.getFirst().booleanValue() && tokens[i].tokenImage.equals(name)) {
           if (type.equals("int") || type.equals("int_index")) {
             // Note the type can only equal "int_index" if the variable
             // was already visited by this if statement since it appears

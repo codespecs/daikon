@@ -1,13 +1,14 @@
 package daikon.test;
 
 import daikon.tools.jtb.*;
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import junit.framework.*;
-import plume.UtilMDE;
+import org.plumelib.util.UtilPlume;
 
 public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
 
@@ -31,7 +32,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     }
 
     public String collectionResults() {
-      StringBuffer b = new StringBuffer();
+      StringBuilder b = new StringBuilder();
       b.append("Collection results:\n");
       for (int i = 0; i < generifieds.size(); i++) {
         MethodDeclaration m =
@@ -81,9 +82,9 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     /*
      for (int ii = 0; ii < result.length(); ii++) {
       if (result.charAt(ii) !=  expected.charAt(ii)) {
-        System.out.printf ("diff at offset %d: '%c' - '%c'%n", ii,
+        System.out.printf("diff at offset %d: '%c' - '%c'%n", ii,
                            result.charAt(ii), expected.charAt(ii));
-        System.out.printf ("last:%n%s%n%s%n", result.substring (ii-50, ii+2),
+        System.out.printf("last:%n%s%n%s%n", result.substring (ii-50, ii+2),
                            expected.substring (ii-50, ii+2));
         break;
       }
@@ -91,12 +92,12 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     */
 
     String result = ungenerifiedCollector.collectionResults().trim();
-    String[] result_arr = UtilMDE.splitLines(result);
+    String[] result_arr = UtilPlume.splitLines(result);
     String expected = expectedAnswerBuffer.toString().trim();
-    String[] expected_arr = UtilMDE.splitLines(expected);
+    String[] expected_arr = UtilPlume.splitLines(expected);
 
-    // UtilMDE.writeFile(new File("expected.txt"), expected);
-    // UtilMDE.writeFile(new File("result.txt"), result);
+    // UtilPlume.writeFile(new File("expected.txt"), expected);
+    // UtilPlume.writeFile(new File("result.txt"), result);
 
     assert expected_arr.length == result_arr.length
         : String.format(
@@ -114,7 +115,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
       */
   }
 
-  private static StringBuffer expectedAnswerBuffer = new StringBuffer();
+  private static StringBuilder expectedAnswerBuffer = new StringBuilder();
   private static final String lineSep = System.getProperty("line.separator");
 
   static {

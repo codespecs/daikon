@@ -6,14 +6,27 @@ import daikon.*;
 import daikon.inv.Equality;
 import daikon.inv.Invariant;
 import daikon.inv.filter.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.UtilMDE;
+import org.plumelib.bcelutil.JvmUtil;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -42,7 +55,7 @@ public class Ast {
     }
     writer.close();
 
-    //root.accept(new TreeDumper(output));
+    // root.accept(new TreeDumper(output));
   }
 
   // Reads an AST from the input stream, applies the visitor to the AST,
@@ -80,7 +93,7 @@ public class Ast {
     // This is incorrect. A "//" comment ending in a period, for example, will
     // cause the line after it to become part of the comment as well.
     // If not intended for human consumption, why remove whitespace?
-    //return removeWhitespace(w.toString());
+    // return removeWhitespace(w.toString());
     return removeWhitespace(quickFixForInternalComment(w.toString()));
   }
 
@@ -99,8 +112,8 @@ public class Ast {
   // into
   //  a statement; // a comment //
   public static String quickFixForInternalComment(String s) {
-    StringBuffer b = new StringBuffer();
-    String[] split = UtilMDE.splitLines(s);
+    StringBuilder b = new StringBuilder();
+    String[] split = UtilPlume.splitLines(s);
     for (int i = 0; i < split.length; i++) {
       String line = split[i];
       b.append(line);
@@ -247,7 +260,8 @@ public class Ast {
 
     // Grammar production for TypeDeclaration:
     // f0 -> ";"
-    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
+    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) |
+    // AnnotationTypeDeclaration(modifiers) )
 
     NodeChoice c = d.f0;
     if (c.which == 0) {
@@ -489,7 +503,9 @@ public class Ast {
           } else {
             node.addSpecial(comment);
           }
-          // System.out.println("comment (" + comment.beginLine + "," + comment.beginColumn + ") = " + comment.tokenImage + "; node (" + node.beginLine + "," + node.beginColumn + ")= " + node.tokenImage);
+          // System.out.println("comment (" + comment.beginLine + "," + comment.beginColumn + ") = "
+          // + comment.tokenImage + "; node (" + node.beginLine + "," + node.beginColumn + ")= " +
+          // node.tokenImage);
         }
       }
     }
@@ -548,16 +564,17 @@ public class Ast {
             }
             comment.beginLine = node.getSpecialAt(i).beginLine;
             comment.beginColumn = node.getSpecialAt(i).beginColumn;
-            //addNthSpecial(node, comment, i);
+            // addNthSpecial(node, comment, i);
           } else if (first && (node.numSpecials() > 0)) {
             comment.beginLine = node.getSpecialAt(0).beginLine;
             comment.beginColumn = node.getSpecialAt(0).beginColumn;
-            // System.out.println("findLineAndCol: set from special <<<" + node.getSpecialAt(0) + ">>>");
-            //addFirstSpecial(node, comment);
+            // System.out.println("findLineAndCol: set from special <<<" + node.getSpecialAt(0) +
+            // ">>>");
+            // addFirstSpecial(node, comment);
           } else {
             comment.beginLine = node.beginLine;
             comment.beginColumn = node.beginColumn;
-            //node.addSpecial(comment);
+            // node.addSpecial(comment);
           }
           // System.out.printf("comment placed at (%d,%d) = <<<%s>>> for node (%d,%d)= <<<%s>>>%n",
           //                   comment.beginLine, comment.beginColumn, comment.tokenImage.trim(),
@@ -569,6 +586,7 @@ public class Ast {
   }
 
   /** Adds the comment to the first regular token in the tree, before the ith special token. */
+  @SuppressWarnings("JdkObsolete") // JTB uses Vector
   public static void addNthSpecial(NodeToken n, NodeToken s, int i) {
     if (n.specialTokens == null) {
       n.specialTokens = new Vector<NodeToken>();
@@ -668,11 +686,11 @@ public class Ast {
 
   public static String removeWhitespace(String arg) {
     arg = arg.trim();
-    arg = UtilMDE.removeWhitespaceAround(arg, ".");
-    arg = UtilMDE.removeWhitespaceAround(arg, "(");
-    arg = UtilMDE.removeWhitespaceAround(arg, ")");
-    arg = UtilMDE.removeWhitespaceAround(arg, "[");
-    arg = UtilMDE.removeWhitespaceBefore(arg, "]");
+    arg = UtilPlume.removeWhitespaceAround(arg, ".");
+    arg = UtilPlume.removeWhitespaceAround(arg, "(");
+    arg = UtilPlume.removeWhitespaceAround(arg, ")");
+    arg = UtilPlume.removeWhitespaceAround(arg, "[");
+    arg = UtilPlume.removeWhitespaceBefore(arg, "]");
     return arg;
   }
 
@@ -742,7 +760,8 @@ public class Ast {
     for (int i = 0; i < meths.length; i++) {
 
       Method meth = meths[i];
-      // System.out.println("getMethod(" + c.getName() + ", " + getName(methoddecl) + ") checking " + meth.getName());
+      // System.out.println("getMethod(" + c.getName() + ", " + getName(methoddecl) + ") checking "
+      // + meth.getName());
       if (!typeMatch(meth.getName(), ast_methodname)) {
         continue;
       }
@@ -801,7 +820,7 @@ public class Ast {
     for (Iterator<FormalParameter> itor = ast_params.iterator(); itor.hasNext(); j++) {
       String ast_param = getType(itor.next());
       Class<?> param = params[j];
-      //System.out.println("Comparing " + param + " to " + ast_param + ":");
+      // System.out.println("Comparing " + param + " to " + ast_param + ":");
       if (!typeMatch(classnameForSourceOutput(param), ast_param)) {
         return false;
       }
@@ -820,7 +839,8 @@ public class Ast {
     if (c == null) {
       return false;
     }
-    // System.out.println("isOverride(" + getName(methdecl) + "): class=" + c.getName() + "; super=" + c.getSuperclass());
+    // System.out.println("isOverride(" + getName(methdecl) + "): class=" + c.getName() + "; super="
+    // + c.getSuperclass());
     return isOverride(c.getSuperclass(), methdecl);
   }
 
@@ -1182,7 +1202,7 @@ public class Ast {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
 
     Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
@@ -1249,7 +1269,8 @@ public class Ast {
   private static boolean isStaticInternal(Node n) {
     // Grammar production for ClassOrInterfaceBodyDeclaration
     // f0 -> Initializer()
-    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) |
+    // ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
     //       | ";"
     assert (n instanceof MethodDeclaration) || (n instanceof ClassOrInterfaceDeclaration);
 
@@ -1263,7 +1284,8 @@ public class Ast {
 
   public static boolean modifierPresent(Modifiers modifiers, String modifierString) {
     // Grammar production:
-    // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
+    // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" |
+    // "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
 
     NodeListOptional list = modifiers.f0;
     for (int i = 0; i < list.size(); i++) {
@@ -1359,7 +1381,7 @@ public class Ast {
     if (c.isPrimitive()) {
       return c.getName();
     } else if (c.isArray()) {
-      return UtilMDE.fieldDescriptorToBinaryName(c.getName());
+      return JvmUtil.fieldDescriptorToBinaryName(c.getName());
     } else {
       return c.getName();
     }

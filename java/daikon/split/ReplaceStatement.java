@@ -1,8 +1,10 @@
 package daikon.split;
 
 import daikon.tools.jtb.*;
-import java.io.*;
-import java.util.*;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
@@ -89,7 +91,7 @@ class ReplaceStatement {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied ReplaceStatement this*/) {
-    StringBuffer params = new StringBuffer();
+    StringBuilder params = new StringBuilder();
     for (int i = 0; i < parameters.length; i++) {
       params.append(parameters[i].toString());
     }

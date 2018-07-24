@@ -3,11 +3,20 @@ package daikon.test;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.*;
-import plume.*;
+import org.plumelib.options.Option;
+import org.plumelib.options.Options;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -58,9 +67,10 @@ public class InvariantFormatTester extends TestCase {
 
     String usage = "java daikon.test.InvariantFormatTester";
     Options options = new Options(usage, InvariantFormatTester.class);
-    String[] other_args = options.parse_or_usage(args);
+    String[] other_args = options.parse(true, args);
     if (other_args.length > 0) {
-      options.print_usage("unexpected arguments");
+      System.out.println("unexpected arguments");
+      options.printUsage();
       return;
     }
 

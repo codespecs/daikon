@@ -1,15 +1,10 @@
 Daikon todo list.
+(Also see other files in this directory.)
 
 Projects
 
-  - Optimize derived variables
-      - apply equality sets, constants, etc to the creation of derived
-        variables
-      - reduce the size of variables
-
-  - extend the hierarchy to subclasses and interfaces.
-
-  - Improve the splitting code and make it work for more than 2 children.
+  - conditional invariants:  Make the splitting code work for more than 2
+    children.
 
   - NIS enhancements
       - Optimize merging and checking falsified antecedents
@@ -17,46 +12,9 @@ Projects
       - support sample-dependent antecedents
       - Gather statistics on the power of the new invariants as antecedents.
         Remove invariants that are not justified
-      - Support some subset of derived variable suppressions.  
+      - Support some subset of derived variable suppressions.
       - Merge data from antecedents
 
-  - Testing
-      - Build better tests for NIS.  There's a number of internal
-        consistency checks that would probably find additional errors
-      - We could possibly test our suppressions and obvious checks against
-        simplify
-      - Perhaps an overall testing strategy that uses the simple 
-        incremental algorithm + simplify to create known correct output
-        that we could test against.  
-
-  - Analyze Daikon over a reasonable set of programs for memory use,
-    execution speed, and other interesting statistics (invariants by
-    class, percent invariants obvious by class, etc).  Make this easier
-    to do in the future
-
-  - Process daikon itself (at least the main directory) over a real test
-    case.  Fix problems encountered.  A start to this process is in
-    daikon/tests/daikon-tests/Daikon.  It is incomplete.
-
-  - Use ourselves as test case.  This requires daikon to work on
-    itself, but also will require other usability work.  In
-    particular, a good way to include results as asserts.
-
-===========================================================================
-
-Testing/Validation
-
-  - Create unit tests for more of Daikon.  Either by hand or by using
-    automated tools (such as Randoop)
-  - Add additional internal consistency checks that can be checked
-    during system tests
-  - Run Daikon on itself and add invariants (perhaps only class
-    invariants) as additional assertions.
-  - Add JSR308 style annotations for nullness, readonly, and possibly
-    other checks.
-  - Enhance track debugging to ensure that the specified ppt/class/variables
-    were reasonable and existed.
-      
 ===========================================================================
 
 Documentation
@@ -66,34 +24,14 @@ Documentation
     method @param and @return tags are now required.  To correct them all at
     once would be too large a task with too little concrete benefit.
     Whenever we edit a file/method for some other reason, we should ensure
-    that it has complete javadoc tags.
+    that it has complete javadoc tags.  A "changed warnings" tool could
+    help with this.
 
 ===========================================================================
 
 Front ends
 
   - Add support for loop invariants.
-
-  - C/C++ front end for Windows
-
-      - Similar conceptually to the existing front end for binaries on
-        linux (Kvasir, which is based on the Valgrind dynamic instrumentation
-        package for Linux)
-      - Probably based on DynamoRio or Pin (both of which are dynamic
-        instrumentation packages that support both Linux and Windows)
-      - Biggest issue is determining what variables are valid (ie, refer
-        to allocated/initialized memory).  Determining this is important so
-        that Daikon does not attempt to use invalid (eg, uninitialized) 
-        values in its inference.  Kvasir uses the memcheck package of
-        Valgrind to determine this.
-      - An alternative to memcheck would be to attempt to determine what
-        variables were actually accessed in the call rather than considering
-        all initialized variables in scope.  This could reduce the overhead
-        of the front end and the number of variables that Daikon needs
-        to consider.  It might miss interesting invariants (invariants over
-        variables that are not accessed in a call may still be interesting)
-        Its also possible that there might be heuristics short of a full
-        memcheck implementation that might produce reasonable results.
 
 ===========================================================================
 
@@ -107,7 +45,7 @@ External tools
       program in order to track all value flow in the program.  Both
       should be tested on a wider variety of programs.  Any bugs encountered
       should be fixed and the test suites enhanced to cover more cases.
-    
+
   - Mechanism to check invariants found by Daikon in programs (ie, add
     as assertions or some other mechanism).  Optimally it would be easy
     to read and edit.  Also it would be easy to update if new invariants
@@ -147,7 +85,7 @@ External tools
         important items
 
       - Regression errors (errors introduced into previously working
-        functionality by new features or other bug fixes) are a 
+        functionality by new features or other bug fixes) are a
         significant problem.  Breaking an existing feature is very likely
         to have serious ramifications for users.
 
@@ -163,32 +101,6 @@ External tools
 
 Performance/scalability
 
-  - Support for multiple processors 
-
-      - With the exception of I/O, Daikon is naturally parallel
-          - Each program point can be processed independently
-          - Post processing (such as processing the hierarchy and splitting)
-            can also be done in parallel
-      - One thread could read the input file (or socket) and then hand
-        off the input record to a worker thread.
-      - Significant speedups should be possible (I/O time is (at least for
-        significant input files) usually a small percentage of the total
-        time).
-
-  - Support for multiple computers (ie, splitting runs across a set of
-    computers over a network -- cloud computing)
-
-      - One process would read the input file (or socket) and then
-        send records to separate processes.
-      - A large number of processes (up to the number of program points
-        that are instrumented) could be supported.
-      - This would also largely eliminate memory constraints (since each
-        program point is handled in a separate process).
-
-  - Trace file binary format.  See a separate file in this directory.
-
-  - Trace file shows only changed variables, not every variable
-
   - implement per-call-site sampling.  This may help scalability dramatically.
 
   - Optimize derived variables
@@ -197,11 +109,6 @@ Performance/scalability
         variables.
       - Optionally limit derived variables to expressions seen in the
         program.
-
-  - Ignore unused variables. Currently Daikon outputs data about all
-    variables, but it would speed Daikon up to perform output only for
-    variables that a given procedure may read or write. As a side benefit,
-    this could also eliminate some irrelevant output.
 
 ===========================================================================
 
@@ -213,22 +120,11 @@ Algorithms
   - Statistically likely, but not entirely true, properties -- good for finding
     bugs or corner cases.  Related to splitting, or not?
 
-  - Advance the basic techniques so that fewer settings are required to
-    infer invariants and that less manual filtering is required.  Maybe
-    even exploring more heuristics to automatically set the options?
-
-  - Fix the usage of final statics and enums in Daikon.  It probably doesn't
-    make sense to include these as separate variables since they are
-    constants.  It might be both more efficient and provide better
-    output to examine the one-ofs and other sample dependent invariants
-    at the end of the run and substitute in constants where they
-    match.
-
-  - Reduce spurious (obvious and/or uninteresting) invariants in Daikon.   
+  - Reduce spurious (obvious and/or uninteresting) invariants in Daikon.
 
       Daikon's output is can be too voluminous to be useful to programmers
       in understanding a program.  Some mechanism to reduce the number
-      of invariants to a more manageable number could make Daikon 
+      of invariants to a more manageable number could make Daikon
       significantly more useful.  Some Java specific approaches are:
 
         - Remove obvious invariants over constants
@@ -248,7 +144,7 @@ Algorithms
       invariants.
 
       Change the input dtrace record format so that arrays of classes
-      or structs are represented directly in the input rather than 
+      or structs are represented directly in the input rather than
       creating a separate array for each class/structure member.  This
       would simplify the front end and also allow invariants over nested
       arrays and more complex data structures.
@@ -284,13 +180,13 @@ Algorithms
               has changed
             - Multiple antecedents can be falsified based on a single
               weakened invariant - (x = 3) invalidates (x = 0) and (x = 1)
-        - Checking suppressions before and after each sample 
+        - Checking suppressions before and after each sample
           rather than using a single pass could resolve this
 
       Suppressions can only use suppressee variables
         - All sets of variables that include the falsified
           antecedent must be considered
-        - More difficult and expensive to determine the relationship 
+        - More difficult and expensive to determine the relationship
           with derived variables
         - Consider (x[] = y[]) && (i = j) --> x[i] = y[j]
             - (x[] = y[]) is falsified
@@ -303,7 +199,7 @@ Algorithms
             must be considered
           - The only shortcut occurs when the suppression is still valid
             (processing can stop on the first valid suppression)
-          - Merging is particularly expensive, because all possible 
+          - Merging is particularly expensive, because all possible
             suppressions over all sets of variables must be considered
           - Iterating over possible antecedents rather than possible
             variable sets may be a solution
@@ -311,7 +207,7 @@ Algorithms
       - Suppressions can't merge data from antecedents
           - The linear ternary optimization requires the internal state
             from linear binary and the constant
-          - Antecedent invariants could be passed to an invariant 
+          - Antecedent invariants could be passed to an invariant
             specific setup routine
           - If any of the involved variables are sometimes missing, this
             is not necessarily sound
@@ -330,7 +226,7 @@ PPT hierarchy
       method pre- and post-conditions and methods with the class the
       contains them.  Extending the hierarchy to include subclasses
       and interfaces would provide more interesting invariants (e.g.,
-      interface invariants) and refine the results.  
+      interface invariants) and refine the results.
 
   - Add exception exit points to the ppt hierarchy.  This would allow us
     to calculate invariants that were specific to exceptions (perhaps by
@@ -338,7 +234,7 @@ PPT hierarchy
 
       - Daikon currently supports a program point hierarchy.  Invariants
         are dynamically determined at the leaves of the hierarchy (eg,
-        exit program points).  Higher points (such as classes) are 
+        exit program points).  Higher points (such as classes) are
         calulated by merging the invariants from each child (an invariant
         must be true at each child in order to be true at the parent).
 
@@ -356,8 +252,10 @@ PPT hierarchy
                         ---------
                 exception-exit  normal-exit
 
-      In Appendix A at the bottom of this file, you can find a proposal by
-      Mike and a counter-proposal by Jeff.
+      The biggest issue is defining the program point hierarchy; once
+      that is done, the implementation is more straightforward.
+      File todo-exception-ppt.txt contains a proposal by
+      Mike and a counter-proposal by Jeff.  Neither seems right to me!
 
   - better support for splitting (more than two splits, additional automatic
     splits, etc)
@@ -426,185 +324,3 @@ His paper says:
   of the overridden method and vice versa.
 
 ------------------------------------------------
-
-Appendix A - Supporting Exception exits in the Daikon PPT Hierarchy
-
-Goals:
- * Create more complete specifications, such as "exsures" clauses.
- * Create more accurate preconditions, since presently all entries
-   associated with exceptional exit are ignored.
- * Separate "expected" exceptions that don't necessarily indicate undesired
-   behavior (while running a test suite) from "unexpected" exceptions that
-   indicate a code failure.  (This is related to the above.)
- * Perhaps, get output even when there is never an
-   exit (a tail call to another routine, and eventually System.exit() is
-   called without any return having occurred.
-
-
-Mike's proposal:
-
-  Add new program points for exceptional exit.
-
-  Technique:
-
-  The general idea is to add a new exit point for each declared Exception,
-  plus one for undeclared Exceptions/Errors/Throwables.  
-
-  There will be three types of procedure exit:
-   * possibly many from return statements
-   * possibly many resulting from throwing different declared exceptions
-   * exactly one for throwing an undeclared exception (e.g., Error,
-     RuntimeException, Throwable)
-
-  What does the hierarchy look like?  For example, when combining exit points
-  into a single aggregate exit point, how should the new exceptional program
-  points factor in?  Undeclared exceptions should not be combined with normal
-  returns, but how should declared exceptions be handled?  Should there be 2
-  or 3 top-level exit points, and if 2, with what should declared exceptions
-  be combined (probably the normal returns)?  These decisions affect what
-  preconditions (and other invariants) are inferred for the routine.  I lean
-  somewhat toward:
-
-                      exit
-                  /          \
-         normalexit          declexception
-        /    |    \           /         \
-    exit1  exit2  exit3    declexc1  declexc2    error
-
-  with the error point completely unrelated to any other point in the
-  hierarchy.  But I haven't fully thought this through yet, so I welcome
-  comments.
-
-
-Jeff's Proposal:
-
-  It seems to me that the issue we are interested in with exceptions is
-  whether or not the 'normal' invariants are violated as a result of an
-  exception.  Are the invariants of an object not correctly set because
-  of error exit?  Does an error exit indicate that an intended
-  precondition was violated?
-
-  It is not clear to me that we can make the assumption that declaring
-  an exception implies that the invariants are maintained and the
-  preconditions are ok and that not declaring it implies otherwise.
-
-  Also, it seems that perhaps daikon can answer these questions and that
-  would be an interesting result in and of itself.
-
-  With the hierarchy as you have proposed, we exclude non-declared
-  errors from the combined exit point (and thus from the enter point and
-  object/class points).  We include declared errors at the combined exit
-  point and its parents.
-
-  It seems like it would be nice if we could easily see how the
-  invariants differ at each level dependeng on whether or not error
-  results were included.  That might nicely highlight unexpected
-  results.  For example, if someone declares an exception, but not does
-  not properly fix the invariants.  Consider an alternative hierarchy:
-
-                Combined Object
-                  /         \
-        normal-Object        Declexc-obj
-             |                    |
-             |   Combined Enter   |
-             |   /          \     |
-        normalenter          declexc-enter
-             |                    |
-             |    combined exit   |
-             |    /       \       |
-         normalexit     declexception         
-        /    |    \        /       \            
-    exit1  exit2  exit3  declexc1  declexc2    error
-
-  At each level we combine the error paths with the non-error paths.  If
-  the invariants match (eg, normal-enter and declared-exception-enter
-  have the same invariants), then everything would merge to the combined
-  point (and probably nothing would need to be printed at the two
-  contributing points).
-
-  I think the two versions of the hierarchy would look very similar when
-  the invariants were the same.  But when there were different
-  invariants, (ie, error side is different from non-error side), these
-  would be pointed out.  From the point of view of providing interesting
-  information I think this would be good.  It also seems that this might
-  be interesting for tools as well (eg, Carlos' error classifications).
-  One could argue that any difference between the two trees is possibly
-  indicative of a bug.
-
-  This approach is more work.  We would need to create exception
-  versions of each existing program point.  The creation of the
-  hierarchy would have to be changed as well.  I don't think bottom up
-  processing has to be changed significantly though.  I believe it
-  should handle without any trouble having multiple parents for a child.
-  There are also memory implications (because we need to create more
-  program points).  But there are similar memory implications in the
-  first hierarchy as well (there are a minimum of twice as many exit
-  points).
-
-  I'm not sure this is worth the extra effort, but it seems like it
-  might be worth considering.
-
-  Its also possible to extend this approach to non-declared exceptions
-  as well. I tend to think this is not worth it.  Though it could indicate
-  places where someone was assumming that that invariants were maintained and
-  they were not.
-
-
-Appendix B - Supporting exceptional exit points in a front end
-
-
-Technique:
-
-The general idea is to add a new exit point for each declared Exception,
-plus one for undeclared Exceptions/Errors/Throwables.  
-
-There will be three types of procedure exit:
- * possibly many from return statements
- * possibly many resulting from throwing different declared exceptions
- * exactly one for throwing an undeclared exception (e.g., Error,
-   RuntimeException, Throwable)
-
-
-Implementation:
-
-If a method declares that it throws DeclaredEx1, DeclaredEx2, and
-DeclaredEx3, then transform it as follows.  The exceptions must be
-ordered from most specific to most general, lest latter ones have no chance
-of getting caught.
-
-This code:
-
-  int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
-    body
-  }
-
-is transformed into one of the following:
-
-  int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
-    try {
-      body              // includes instrumentation for normal entry and exit
-    } catch (DeclaredEx1 e1) {
-      print exceptional exit program point
-      throw e1;         // rethrow
-    } catch (DeclaredEx2 e2) {
-      print exceptional exit program point
-      throw e2;         // rethrow
-    } catch (DeclaredEx3 e3) {
-      print exceptional exit program point
-      throw e3;         // rethrow
-    } catch (RuntimeException e4) {
-      print exceptional exit program point
-      throw e4;         // rethrow
-    } catch (Error e5) {
-      print exceptional exit program point
-      throw e5;         // rethrow
-    }
-  }
-
-A challenge is that this transformation must be done in bytecode, and
-with as little code duplication as possible..
-
-Also, note that the existing DynComp tool may already do something like
-this catching and rethrowing of exceptions.  See the various comments about
-cleaning up the tag stack on an exception exit from a method, such as in
-dcomp/DCRuntime.java .

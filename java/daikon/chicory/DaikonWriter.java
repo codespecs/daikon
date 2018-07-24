@@ -1,8 +1,12 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.util.UtilMDE;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import org.plumelib.bcelutil.JvmUtil;
 
 /*>>>
 import org.checkerframework.checker.signature.qual.*;
@@ -72,7 +76,7 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Given a method, returns the method exit program point name for Daikon Used when reflection
+   * Given a method, returns the method exit program point name for Daikon. Used when reflection
    * information is not available.
    *
    * @param fullClassName packageName.className
@@ -149,7 +153,7 @@ public abstract class DaikonWriter {
   private static String methodName(
       String fullClassName, String[] types, String name, String short_name, String point) {
 
-    //System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n",
+    // System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n",
     //                  fullClassName, name, short_name);
 
     boolean isConstructor = name.equals("<init>") || name.equals("");
@@ -176,10 +180,10 @@ public abstract class DaikonWriter {
       System.out.printf("methodName1 final ppt name = '%s'%n", pptname);
     }
 
-    //Throwable t = new Throwable("debug");
-    //t.fillInStackTrace();
+    // Throwable t = new Throwable("debug");
+    // t.fillInStackTrace();
     // t.printStackTrace();
-    // System.out.printf ("ppt name = %s%n", pptname);
+    // System.out.printf("ppt name = %s%n", pptname);
 
     return pptname;
 
@@ -188,7 +192,7 @@ public abstract class DaikonWriter {
     // group reference.
     String paramTypesString = paramTypes.toString().replace("$", "\\$");
     name = name.replaceFirst("\\(.*\\)", paramTypesString);
-    // System.out.printf ("params = %s, newname = %s, short_name = %s%n",
+    // System.out.printf("params = %s, newname = %s, short_name = %s%n",
     //                   paramTypesString, name, short_name);
 
     return methodName(name, short_name, isConstructor, point);
@@ -218,7 +222,7 @@ public abstract class DaikonWriter {
     for (Class<?> arg : args) {
       if (arg_str.length() > 0) arg_str += ", ";
       if (arg.isArray()) {
-        arg_str += UtilMDE.fieldDescriptorToBinaryName(arg.getName());
+        arg_str += JvmUtil.fieldDescriptorToBinaryName(arg.getName());
       } else {
         arg_str += arg.getName();
       }
@@ -263,7 +267,7 @@ public abstract class DaikonWriter {
     name = name.replace(",", ", ");
     if (Chicory.debug_ppt_names) System.out.printf("  spaces '%s'%n", name);
 
-    // System.out.printf ("'%s' to '%s'%n", method.toString(), name);
+    // System.out.printf("'%s' to '%s'%n", method.toString(), name);
     return (name + ":::" + point);
   }
 

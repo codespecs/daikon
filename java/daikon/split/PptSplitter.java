@@ -6,10 +6,20 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.suppress.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import plume.*;
+import org.plumelib.util.OrderedPairIterator;
+import org.plumelib.util.Pair;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -245,7 +255,7 @@ public class PptSplitter implements Serializable {
   private void add_implications_pair() {
 
     for (PptTopLevel pchild : ppts) {
-      // System.out.printf ("splitter child = %s%n", pchild.name());
+      // System.out.printf("splitter child = %s%n", pchild.name());
       if (pchild.equality_view == null) {
         System.out.printf("this: %s\n", this);
         System.out.printf("pchild: %s[%08X]\n", pchild, System.identityHashCode(pchild));
@@ -368,8 +378,7 @@ public class PptSplitter implements Serializable {
                 System.out.println("  " + child_ppt.constants.getConstant(cvi));
               }
             }
-            @SuppressWarnings(
-                "lock:cannot.dereference") // https://github.com/typetools/checker-framework/issues/755
+            @SuppressWarnings("lock:cannot.dereference") // https://tinyurl.com/cfissue/755
             String eq_inv_ppt = eq_inv.ppt.toString();
             assert eq_inv.ppt.equals(child_ppt.findSlice(cvis_non_canonical));
 
@@ -473,7 +482,7 @@ public class PptSplitter implements Serializable {
           orig_invs.put(dummy1, dummy1);
           orig_invs.put(dummy2, dummy2);
           @SuppressWarnings(
-              "keyfor") // BUG in Daikon, possibly, because these are not keys, I think; need to investigate
+              "keyfor") // BUG in Daikon, possibly, because these are not keys; need to investigate
           /*@KeyFor("orig_invs")*/ Invariant[] dummy_pair =
               new /*@KeyFor("orig_invs")*/ Invariant[] {dummy1, dummy2};
           exclusive_invs_vec.add(dummy_pair);
@@ -496,8 +505,7 @@ public class PptSplitter implements Serializable {
     // but this is easier for now.
     for (Iterator</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> ii =
             different_invs_vec.iterator();
-        ii.hasNext();
-        ) {
+        ii.hasNext(); ) {
       /*@Nullable*/ Invariant[] diff_invs = ii.next();
       if (diff_invs[0] != null) {
         assert diff_invs[1] == null;
@@ -526,7 +534,8 @@ public class PptSplitter implements Serializable {
     // We pick the first one that is neither obvious nor suppressed.
     // If all are either obvious or suppressed, we just pick the first
     // one in the list.
-    // TODO: Why do we want canonical predicate invariants?  How will they be used?  It seems that different elements of this list have different semantics.
+    // TODO: Why do we want canonical predicate invariants?  How will they be used?  It seems that
+    // different elements of this list have different semantics.
     // TODO: After this loop, might the two canonical invariants not be exclusive with one another?
     // TODO: con_invs should probably be renamed to canon_invs.
     /*NNC:@MonotonicNonNull*/ Invariant[] con_invs = new Invariant[2];
@@ -623,7 +632,7 @@ public class PptSplitter implements Serializable {
   private boolean at_same_ppt(List<Invariant> invs1, List<Invariant> invs2) {
     PptSlice ppt = null;
     Iterator<Invariant> itor =
-        new UtilMDE.MergedIterator2<Invariant>(invs1.iterator(), invs2.iterator());
+        new UtilPlume.MergedIterator2<Invariant>(invs1.iterator(), invs2.iterator());
     for (; itor.hasNext(); ) {
       Invariant inv = itor.next();
       if (ppt == null) {
@@ -637,7 +646,8 @@ public class PptSplitter implements Serializable {
     return true;
   }
 
-  // TODO: Should this only include invariants such that all of their variables are defined everywhere?
+  // TODO: Should this only include invariants such that all of their variables are defined
+  // everywhere?
   /**
    * Determine which elements of invs1 are mutually exclusive with elements of invs2. Result
    * elements are pairs of List<Invariant>. All the arguments should be over the same program point.
@@ -679,8 +689,7 @@ public class PptSplitter implements Serializable {
     List</*@Nullable*/ Invariant[]> result = new ArrayList</*@Nullable*/ Invariant[]>();
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
-        opi.hasNext();
-        ) {
+        opi.hasNext(); ) {
       Pair</*@Nullable*/ Invariant, /*@Nullable*/ Invariant> pair = opi.next();
       if ((pair.a == null) || (pair.b == null)
       // || (icfp.compare(pair.a, pair.b) != 0)

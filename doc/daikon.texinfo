@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.5.15
+@center Daikon version 5.6.7
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.5.15 release date
-@center October 3, 2017
+@c Print out the Daikon version 5.6.7 release date
+@center July 2, 2018
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.5.15, released October 3, 2017.
+It describes Daikon version 5.6.7, released July 2, 2018.
 
 @menu
 * Introduction::
@@ -271,7 +271,7 @@ In order to run Daikon, you must have a Java 7 (or later) JDK, including a
 Java Virtual Machine} and a Java compiler.
 
 If you wish to analyze C or C++ programs, you need a C or C++
-compiler such as @command{GCC}.
+compiler such as @command{gcc}.
 
 If you wish to edit the Daikon source code and re-compile Daikon,
 @pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
@@ -293,12 +293,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.15.tar.gz
-tar zxf daikon-5.5.15.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.6.7.tar.gz
+tar zxf daikon-5.6.7.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.5.15/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.6.7/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:
@@ -310,7 +310,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.5.15
+export DAIKONDIR=@var{daikonparent}/daikon-5.6.7
 # The absolute pathname of the directory that contains the Java JDK
 export JAVA_HOME=@var{/usr/lib/jvm/java}
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -401,12 +401,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.15.tar.gz
-tar zxf daikon-5.5.15.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.6.7.tar.gz
+tar zxf daikon-5.6.7.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.5.15/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.6.7/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:
@@ -416,7 +416,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.5.15
+export DAIKONDIR=@var{daikonparent}/daikon-5.6.7
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -578,7 +578,7 @@ As noted above, when running any Java program (such as Daikon or Chicory),
 the @env{CLASSPATH} must be specified in Windows format.  Your initial
 install of the Java JDK will have set the basics for the @env{CLASSPATH}.
 When you installed Daikon, you were instructed to place into your
-shell initialization file commands to set @env{DAIKONDIR} and @env{JAVA_HOME}
+shell initialization file commands to set @env{JAVA_HOME}
 and then @command{source $DAIKONDIR/scripts/daikon.bashrc}.  This will
 set @env{CLASSPATH} properly each time you start a Bash shell.  The
 result should be a value for @env{CLASSPATH} that looks something like:
@@ -1048,8 +1048,11 @@ involving unrelated variables (see @ref{DynComp for C/C++}).
 
 To use the C/C++ front end Kvasir with your program, first make sure that
 your program has been compiled with DWARF-2 format debugging
-information, such as by giving the @option{-gdwarf-2} flag to @command{GCC} when
-compiling.  Then, run your program as usual, but prepend
+information, such as by giving the @option{-gdwarf-2} flag to @command{gcc} when
+compiling.  Some versions of @command{gcc} now output position independent
+code by default.  Kvasir cannot properly process these binaries.
+You must add the @option{-no-pie} option to disable this feature.
+Then, run your program as usual, but prepend
 @command{kvasir-dtrace} to the command line.
 
 Kvasir will produce two output files:
@@ -1104,7 +1107,7 @@ cd $DAIKONDIR/examples/c-examples/wordplay
 Compile the program with DWARF-2 debugging information enabled
 (and all optimizations disabled).
 @example
-gcc -gdwarf-2 wordplay.c -o wordplay
+gcc -gdwarf-2 -no-pie wordplay.c -o wordplay
 @end example
 
 Kvasir can also be used for programs constructed by compiling a number
@@ -1395,7 +1398,7 @@ instrumented source files in @file{daikon-instrumented}.
 
 This creates @file{daikon-output/test_bday-combined.dtrace}, a trace
 file containing the values of variables at each invocation. (The
-filename is formed from the name of the test program, with
+file name is formed from the name of the test program, with
 @file{-combined} appended because it contains the trace information
 from all the instrumented modules invoked from the program).
 
@@ -1785,11 +1788,11 @@ This takes priority over the @option{--var-select-pattern} argument.
 @end table
 
 All of the regular expressions used by Daikon use
-@uref{http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#sum,,Java's regular expression syntax}.
+@uref{https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#sum,,Java's regular expression syntax}.
 Multiple items can be matched by using the logical or operator (@samp{|}),
 for example @code{var1|var2|var3}.
 Java's regular expression syntax is similar to Perl's but
-@uref{http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#jcc,,not
+@uref{https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#jcc,,not
 exactly the same}.
 
 The @var{...-omit-pattern} arguments take precedence:  if a name matches
@@ -2079,6 +2082,24 @@ exception exits from a procedure (for instance, because of multiple
 suffixing them with their line numbers; for instance,
 @code{StackAr.top():::EXCEPTION59}.
 
+The Java instrumenter Chicory selects names for program
+points that include an indication of the argument and return types for
+each method.  These signatures are presented in @code{Class.getName} format: one
+character for each primitive type (@samp{B} for byte, @samp{C} for
+character, @samp{Z} for boolean, etc.);
+@samp{L@var{classname};} for object types; and a @samp{[}
+prefix for each level of array nesting.
+
+
+@menu
+* OBJECT and CLASS program points::
+@end menu
+
+
+@node    OBJECT and CLASS program points
+@subsection OBJECT and CLASS program points
+@cindex program point
+
 @cindex :::OBJECT program point
 @cindex OBJECT program point
 @cindex :::CLASS program point
@@ -2087,7 +2108,7 @@ suffixing them with their line numbers; for instance,
 @cindex representation invariants
 @cindex class invariants
 
-Two other program point tags that have special meaning to Daikon's hierarchy
+Two program point tags that have special meaning to Daikon's hierarchy
 organization are @code{:::OBJECT} and @code{:::CLASS}.
 The @code{:::OBJECT} tag indicates object invariants (sometimes called
 representation invariants or class invariants) over all the instance
@@ -2113,13 +2134,12 @@ the class invariant holds.  @option{ESC/Java} and @option{JML} require an explic
 @dfn{helper} annotation to indicate a private method for which the class
 invariant does not hold.)
 
-The Java instrumenter Chicory selects names for program
-points that include an indication of the argument and return types for
-each method.  These signatures are presented in @code{Class.getName} format: one
-character for each primitive type (@samp{B} for byte, @samp{C} for
-character, @samp{Z} for boolean (so as not to clash with byte), etc.);
-@samp{L@var{classname};} for object types; and a @samp{[}
-prefix for each level of array nesting.
+A trace file does not contain samples for the @code{:::OBJECT} and
+@code{:::CLASS} program points.  Variable values for these artificial
+program points are constructed from samples that do appear in a trace file.
+For example, an object invariant is a property that holds at entry to and
+exit from every public method of the class, so the @code{:::OBJECT} program
+point is constructed from samples at those points.
 
 
 @node    Variable names
@@ -3184,10 +3204,10 @@ Encountered "__extension__ typedef struct @{  ...
 
 @noindent
 then your program uses non-standard C syntax.  The @samp{__extension__}
-keyword is supported only by the @command{GCC} compiler, and isn't handled by
+keyword is supported only by the @command{gcc} compiler, and isn't handled by
 the @command{CreateSpinfoC} program.  You could extend the @command{CreateSpinfoC} program
-to handle non-standard @command{GCC} extensions, or you could remove non-standard
-@command{GCC} extensions from your program.  The extensions might also result from
+to handle non-standard @command{gcc} extensions, or you could remove non-standard
+@command{gcc} extensions from your program.  The extensions might also result from
 standard libraries rather than your own program --- removing a
 directives such as @samp{#include <stdio.h>} when preprocessing may also
 resolve the problem.
@@ -3872,7 +3892,7 @@ Specifies arguments to be passed to Daikon if the @option{--daikon} or
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
 Chicory requires this jar file in order to execute.  By default Chicory
 looks for the jar file in the classpath and in @file{$DAIKONDIR/java}
-(where @env{DAIKONDIR} is an environment variable that points to the
+(where @env{DAIKONDIR} is the
 complete installation of Daikon).
 
 Chicory can also use the @file{daikon.jar} file for this purpose.  If it
@@ -3881,7 +3901,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.5.15.jar
+--premain=C:\lib\daikon-5.6.7.jar
 @end example
 
 @item --heap-size=@var{max_heap}
@@ -4465,6 +4485,8 @@ included in the Daikon distribution).
 To use Kvasir, first compile your program using the DWARF-2 debugging
 format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}) and
 without optimizations (e.g., supply the @option{-O0} option to @command{gcc}).
+Also, some versions of @command{gcc} now output position independent code by default.
+You must add the @option{-no-pie} option to disable this feature.
 Then, prefix your command line by @command{kvasir-dtrace}.  For example,
 if you normally run your program with the command
 @example
@@ -4518,8 +4540,11 @@ and any flags that affect calling conventions, such as
 @item
 Include debugging information, by supplying the @option{-g} flag.
 The debugging information must be in the DWARF-2 format.
-DWARF-2 is the default format for debugging information in @command{GCC} 3 and later, and
+DWARF-2 is the default format for debugging information in @command{gcc} 3 and later, and
 otherwise is produced by supplying the @option{-gdwarf-2} command line option.
+@item
+Kvasir cannot properly process position independent binaries.
+You must add the @option{-no-pie} option to disable this feature.
 @end itemize
 
 In the second step of using Kvasir, run your program as you normally
@@ -5872,7 +5897,7 @@ file.txt} to compress a text file (but start with a small one first).
 @noindent
 (This example assumes that you have compiled the @file{bzip2} example (in
 @file{$DAIKONDIR/@/examples/@/c-examples/@/bzip2} of the distribution) by
-saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
+saying @command{gcc -gdwarf-2 -no-pie bzip2.c -o bzip2}, and that
 @env{$DAIKON} stands for the command that invokes Daikon, for
 instance @command{java -Xmx512m daikon.Daikon --config_option
 daikon.@/derive.@/Derivation.@/disable_derived_variables=true}.)
@@ -5988,8 +6013,9 @@ cd $DAIKONDIR
 make kvasir
 @end example
 
-You may see warnings during this process.  These can be ignored.  If you
-receive an error of the form:
+You may see warnings during this process.  You can ignore these.
+
+If you receive an error of the form:
 
 @example
 readelf.c:53:17: fatal error: bfd.h: No such file or directory
@@ -5999,11 +6025,22 @@ compilation terminated.
 @end example
 
 @noindent
-it is most likely caused by the package @file{binutils-dev} not being
-installed.
+then install the package @file{binutils-dev}.
+
+If you receive an error of the form:
+
+@example
+readelf.c:72:10: fatal error: zlib.h: No such file or directory
+ #include <zlib.h>
+          ^~~~~~~~
+compilation terminated.
+@end example
+
+@noindent
+then install the package @file{zlib1g-dev}.
 
 Once Kvasir has been installed, it can be used via the
-@file{kvasir-dtrace} script in the @file{$DAIKONDIR/scripts} directory; if
+@file{kvasir-dtrace} script in the @file{$DAIKONDIR/scripts} directory.  If
 you have set up the Daikon environment according to the instructions
 above, it should already be in your @env{PATH}.  For instructions on using
 Kvasir, see @ref{Kvasir}.
@@ -6043,7 +6080,7 @@ running under a Linux kernel in 64-bit mode.
 The Itanium or IA-64 architecture is not supported.
 
 Kvasir requires that your program have debugging
-information available in the DWARF-2 format, as produced by @command{GCC} version
+information available in the DWARF-2 format, as produced by @command{gcc} version
 3 and later.  For the best results, the programs used by Kvasir should be
 compiled without optimization.
 
@@ -6072,10 +6109,10 @@ arrays with all of their elements or the option to flatten
 multidimensional arrays into multiple single-dimensional arrays.
 
 @item
-Kvasir behaves somewhat differently with different versions of @command{GCC}@.
+Kvasir behaves somewhat differently with different versions of @command{gcc}@.
 If feasible, we recommend that you use Kvasir with version 4.7 (or newer).
 Incompatibilities
-between Kvasir and the debugging information produced by older @command{GCC}
+between Kvasir and the debugging information produced by older @command{gcc}
 versions can lead to incorrect output and, in some cases, can cause Kvasir to crash.
 
 @item
@@ -6616,7 +6653,7 @@ It can be used on any programming language that can be compiled to LLVM.
 
 A front end for @nospellcheck{WS-BPEL} process definitions, named Takuan,
 is distributed
-separately; see @uref{https://neptuno.uca.es/redmine/projects/takuan-website}.
+separately; see @uref{http://web.archive.org/web/20160528161316/https://neptuno.uca.es/redmine/projects/takuan-website}.
 
 @cindex CITADEL front end for Eiffel
 @cindex front end for Eiffel
@@ -8151,7 +8188,7 @@ Either place the appropriate binary on your path, named @command{Simplify},
 or set set the @code{simplify.path} property to its absolute pathname.
 
 Note:  Older versions of the @command{Z3} theorem
-prover (@uref{http://z3.codeplex.com/})
+prover (@uref{https://archive.codeplex.com/?p=z3})
 can replace Simplify, but more recent versions do not support the Simplify
 syntax.  In the future, it would be nice to rewrite Daikon's theorem-prover
 interface to use the @nospellcheck{SMT-LIB2} language, so that a compatible
@@ -8865,7 +8902,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.5.15, released October 3, 2017.
+This manual describes Daikon version 5.6.7, released July 2, 2018.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGES,,@file{doc/CHANGES}}
 in the distribution; this section gives a
@@ -8880,7 +8917,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.5.15
+@cindex Daikon version 5.6.7
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
@@ -9328,7 +9365,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  ifndef preinclude XTerm cl dirname cnt mwdefines url linux von
 @c  LocalWords:  libc Leitner Quinonez Rodric Rabbah DDTRACEAPPEND createItem
 @c  LocalWords:  maxPhase largestlet anag adjacentdups specfirstword DynComp's
-@c  LocalWords:  maxdepthspec jdk dcomp BuildJDK FIFOs EXIT75 clinit
+@c  LocalWords:  maxdepthspec jdk dcomp BuildJDK FIFOs EXIT75 clinit VM
 @c  LocalWords:  amd Itanium Yuan schoolDays breakDays DCompInstrumented OSTYPE
 @c  LocalWords:  AnnotateNullable instrumenter toolset JHP pm PptMap loophead
 @c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
@@ -9357,4 +9394,8 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  LIB2 CVC4 unformattable LinkageError SquarePanel Donohue
 @c  LocalWords:  SecurityManager setSecurityManager omitpattern Software''
 @c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB LVTT LVT
-@c  LocalWords:  ClassFormatError javautil ArrayList17
+@c  LocalWords:  ClassFormatError javautil ArrayList17 Simulink Stateflow
+@c  LocalWords:  untyped splitter filename substring boolean splitters CVC
+@c  LocalWords:  dimensionality consequents UNRETURNED getter globals
+@c  LocalWords:  typedefs celeriacArg Inserter comparator roundoff bitwise
+@c  LocalWords:  Kellen Florian Laure Raytheon

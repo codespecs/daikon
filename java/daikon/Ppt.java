@@ -4,8 +4,9 @@ package daikon;
 
 import daikon.inv.Invariant; // for emptyInvList
 import java.io.Serializable;
-import java.util.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -70,7 +71,7 @@ public abstract class Ppt implements Serializable {
   @SuppressWarnings("purity") // Impure side effects do not escape (string creation)
   /*@SideEffectFree*/
   public static String varNames(VarInfo[] infos) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append("(");
     if (infos.length == 0) {
       sb.append("<implication slice>");
@@ -109,13 +110,14 @@ public abstract class Ppt implements Serializable {
   /** Returns the VarInfo with the specified name. Null if the name is not found. */
   /*@Pure*/
   public /*@Nullable*/ VarInfo find_var_by_name(String varname) {
-    // System.out.printf ("Ppt.find_var_by_name(%s): %s%n", varname, this);
+    // System.out.printf("Ppt.find_var_by_name(%s): %s%n", varname, this);
     int i = indexOf(varname);
     if (i == -1) {
       if (varname.contains("[]")) {
         return find_var_by_name(varname.replace("[]", "[..]"));
       }
-      // System.out.printf ("Ppt.find_var_by_name: Didn't find %s or %s in %s%n", varname, varname.replace ("[]", "[..]"), this);
+      // System.out.printf("Ppt.find_var_by_name: Didn't find %s or %s in %s%n", varname,
+      // varname.replace ("[]", "[..]"), this);
       return null;
     } else {
       return var_infos[i];

@@ -5,10 +5,16 @@ import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.logging.*;
-import plume.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -170,7 +176,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
                 "processing slice "
-                    + Debug.toString(vis)
+                    + VarInfo.arrayToString(vis)
                     + " in ppt "
                     + ppt.name()
                     + " with "
@@ -225,7 +231,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
                 "processing slice "
-                    + Debug.toString(vis)
+                    + VarInfo.arrayToString(vis)
                     + " in ppt "
                     + ppt.name()
                     + " with "
@@ -281,7 +287,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
             if (NIS.debug.isLoggable(Level.FINE)) {
               NIS.debug.fine(
                   "processing slice "
-                      + Debug.toString(vis)
+                      + VarInfo.arrayToString(vis)
                       + " in ppt "
                       + ppt.name()
                       + " with "
@@ -620,6 +626,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   /*@SideEffectFree*/
   @Override
   public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
-    return UtilMDE.join(suppression_set, ", ");
+    return "{ " + UtilPlume.join(suppression_set, ", ") + " }";
   }
 }

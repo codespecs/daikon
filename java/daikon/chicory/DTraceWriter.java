@@ -2,8 +2,11 @@ package daikon.chicory;
 
 import daikon.Chicory;
 import java.io.PrintStream;
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -36,7 +39,7 @@ public class DTraceWriter extends DaikonWriter {
   /** instance of a nonsensical list */
   private static List<Object> nonsenseList = NonsensicalList.getInstance();
 
-  //certain class names
+  // certain class names
   protected static final String classClassName = "java.lang.Class";
   protected static final String stringClassName = "java.lang.String";
 
@@ -62,14 +65,14 @@ public class DTraceWriter extends DaikonWriter {
       int nonceVal,
       /*@Nullable*/ Object obj,
       Object[] args) {
-    //don't print
+    // don't print
     if (Runtime.dtrace_closed) {
       return;
     }
 
     Member member = mi.member;
 
-    // gets the traversal pattern root for this method's entry
+    // get the root of the method's traversal pattern
     RootInfo root = mi.traversalEnter;
     if (root == null) {
       throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
@@ -92,7 +95,7 @@ public class DTraceWriter extends DaikonWriter {
 
   /** Prints an entry program point for a static initializer in the dtrace file. */
   public void clinitEntry(/*>>>@GuardSatisfied DTraceWriter this,*/ String pptname, int nonceVal) {
-    //don't print
+    // don't print
     if (Runtime.dtrace_closed) {
       return;
     }
@@ -124,8 +127,8 @@ public class DTraceWriter extends DaikonWriter {
           "Traversal pattern not initialized for method " + mi.method_name + " at line " + lineNum);
     }
 
-    //make sure the line number is valid
-    //i.e., it is one of the exit locations in the MethodInfo for this method
+    // make sure the line number is valid
+    // i.e., it is one of the exit locations in the MethodInfo for this method
     if (mi.exit_locations == null || !mi.exit_locations.contains(lineNum)) {
       throw new RuntimeException(
           "The line number "
@@ -173,7 +176,7 @@ public class DTraceWriter extends DaikonWriter {
 
   /** Prints an exit program point for a static initializer in the dtrace file. */
   public void clinitExit(/*>>>@GuardSatisfied DTraceWriter this,*/ String pptname, int nonceVal) {
-    //don't print
+    // don't print
     if (Runtime.dtrace_closed) {
       return;
     }
@@ -183,7 +186,7 @@ public class DTraceWriter extends DaikonWriter {
     Runtime.incrementRecords();
   }
 
-  //prints an invocation nonce entry in the dtrace
+  // prints an invocation nonce entry in the dtrace
   private void printNonce(/*>>>@GuardSatisfied DTraceWriter this,*/ int val) {
     outFile.println("this_invocation_nonce");
     outFile.println(val);
@@ -206,7 +209,7 @@ public class DTraceWriter extends DaikonWriter {
       Object[] args,
       Object thisObj,
       Object ret_val) {
-    //go through all of the node's children
+    // go through all of the node's children
     for (DaikonVariableInfo child : root) {
 
       Object val;
@@ -241,7 +244,7 @@ public class DTraceWriter extends DaikonWriter {
     }
   }
 
-  //traverse from the traversal pattern data structure and recurse
+  // traverse from the traversal pattern data structure and recurse
   private void traverseValue(
       /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
       DaikonVariableInfo curInfo,
@@ -261,8 +264,8 @@ public class DTraceWriter extends DaikonWriter {
       }
     }
 
-    //go through all of the current node's children
-    //and recurse on their values
+    // go through all of the current node's children
+    // and recurse on their values
     if (curInfo.dTraceShouldPrintChildren()) {
       for (DaikonVariableInfo child : curInfo) {
         Object childVal = child.getMyValFromParentVal(val);
@@ -445,7 +448,7 @@ public class DTraceWriter extends DaikonWriter {
     return arrList;
   }
 
-  //prints nonsensical and corresponding "modified" integer
+  // prints nonsensical and corresponding "modified" integer
   private void printNonsensical() {
     outFile.println("nonsensical");
     outFile.println("2");

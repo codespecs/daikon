@@ -5,8 +5,12 @@ For external libraries in this directory, we supply both the original
 distribution (for completeness) and also, if the original distribution is
 not a .jar file, the .jar file (for use by Java).
 
-GNU getopt 1.0.8 (java-getopt.jar)
-- Command line option parser
+bcel-util-all-0.0.4.jar : https://search.maven.org/#search%7Cga%7C1%7Cbcel-util
+
+commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
+
+java-getopt.jar : http://www.urbanophile.com/arenn/coding/download.html
+- GNU getopt 1.0.8 command-line option parser
 - Distributed with java files alongside class files in the jar file.
   The java files must be stripped from the jar, otherwise jikes tries
   to compile the java files inside the jar.
@@ -16,13 +20,34 @@ GNU getopt 1.0.8 (java-getopt.jar)
   4. "rm `find . -name *.java`"
   5. "cd .."
   6. "jar cf java-getopt.jar gnu/"
-- http://www.urbanophile.com/arenn/coding/download.html
 
-JUnit 4.12 (junit-4.12.jar)
-- Downloaded from: https://github.com/junit-team/junit4/wiki/Download-and-Install
+junit-4.12.jar : https://github.com/junit-team/junit4/wiki/Download-and-Install
 
-plume-lib (plume.jar)
-- A library of useful abstractions for programming.
-- https://github.com/mernst/plume-lib.git
-- Contains BCEL, Apache Commons IO, and the Checker Framework qualifiers.
+options-all-0.3.1.jar : https://github.com/plume-lib/options
+- using JDK 7, uncomment and run shadowJar task
+
+plume.jar : https://github.com/mernst/plume-lib.git
 - To update plume.jar, run:  make -C $DAIKONDIR update-plume-jar
+
+daikon-util.jar : Just like plume-util-*.jar, but with package
+changed to daikon.util.  To create, run:
+java \
+-cp $HOME/java/jarjar/jarjar-command/build/libs/jarjar-command-1.0.0.jar:${HOME}/java/jarjar/jarjar-core/build/libs/jarjar-core-1.0.0.jar:${HOME}/tmp/jopt-simple-5.0.4.jar:${HOME}/tmp/asm-6.0/lib/asm-commons-6.0.jar:${HOME}/tmp/asm-6.0/lib/asm-6.0.jar:${HOME}/tmp/slf4j-1.7.25/slf4j-simple-1.7.25.jar:${HOME}/tmp/slf4j-1.7.25/slf4j-api-1.7.25.jar \
+com.tonicsystems.jarjar.Main \
+--rules daikon-util-rules.txt plume-util-*.jar --output daikon-util.jar
+
+Motivation for daikon-util.jar:
+The daikon.util classes are used only by the run-time support for
+instrumentation tools (that is, anything that might run in the same JVM as
+a target program), namely Chicory and DynComp.  All other parts of Daikon
+use plume-lib.
+Suppose that both DynComp and the target program both used plume-lib.
+If DynComp instrumented plume-lib, then an infinite recursion would
+result; if DynComp did not instrument plume-lib, then DynComp would
+miss some computations of the target program.  Thus, DynComp needs to
+be completely separate from the target program -- they should share no
+code.  To enable DynComp to work properly on a program that uses
+plume-lib, DynComp must not use plume-lib.  Therefore, DynComp uses a
+renamed version of plume-lib that is not used by any other program,
+including Daikon itself.  DynComp can instrument the plume package,
+but it does not instrument daikon.util.

@@ -1,6 +1,6 @@
 package daikon.chicory;
 
-import java.util.*;
+import java.util.EnumSet;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -48,7 +48,7 @@ public class ThisObjInfo extends DaikonVariableInfo {
   /** Add IS_PARAM to list of variable flags, because the receiver "this" is a formal parameter. */
   @Override
   public EnumSet<VarFlags> get_var_flags() {
-    // System.out.printf ("%s is a parameter%n", this);
+    // System.out.printf("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();
     var_flags.add(VarFlags.IS_PARAM);
     var_flags.add(VarFlags.NON_NULL);

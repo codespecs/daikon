@@ -1,9 +1,26 @@
 package daikon.chicory;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.*;
+import java.net.SocketAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
@@ -21,7 +38,8 @@ import org.checkerframework.dataflow.qual.*;
  * methods; it should never be instantiated.
  */
 @SuppressWarnings({
-  "initialization.fields.uninitialized", // library initialized in code added by run-time instrumentation
+  "initialization.fields.uninitialized", // library initialized in code added by run-time
+  // instrumentation
   "JavaLangClash" // same class name as one in java.lang.
 })
 public class Runtime {
@@ -120,8 +138,8 @@ public class Runtime {
   }
 
   /** Stack of active methods. */
-  private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Stack<CallInfo>> thread_to_callstack =
-      new LinkedHashMap<Thread, Stack<CallInfo>>();
+  private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Deque<CallInfo>> thread_to_callstack =
+      new LinkedHashMap<Thread, Deque<CallInfo>>();
 
   /**
    * Sample count at a call site to begin sampling. All previous calls will be recorded. Sampling
@@ -237,9 +255,9 @@ public class Runtime {
           capture = (mi.call_cnt % 10000) == 0;
         }
         Thread t = Thread.currentThread();
-        Stack<CallInfo> callstack = thread_to_callstack.get(t);
+        Deque<CallInfo> callstack = thread_to_callstack.get(t);
         if (callstack == null) {
-          callstack = new Stack<CallInfo>();
+          callstack = new ArrayDeque<CallInfo>();
           thread_to_callstack.put(t, callstack);
         }
         callstack.push(new CallInfo(nonce, capture));
@@ -254,10 +272,10 @@ public class Runtime {
           dtrace_writer.methodEntry(mi, nonce, obj, args);
         }
         // long duration = System.currentTimeMillis() - start;
-        //System.out.println ("Enter " + mi + " " + duration + "ms"
+        // System.out.println ("Enter " + mi + " " + duration + "ms"
         //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
       } else {
-        //System.out.println ("skipped " + mi
+        // System.out.println ("skipped " + mi
         //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
       }
     } finally {
@@ -311,8 +329,8 @@ public class Runtime {
       if (sample_start > 0) {
         CallInfo ci = null;
         @SuppressWarnings("nullness") // map: key was put in map by enter()
-        /*@NonNull*/ Stack<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
-        while (!callstack.empty()) {
+        /*@NonNull*/ Deque<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
+        while (!callstack.isEmpty()) {
           ci = callstack.pop();
           if (ci.nonce == nonce) break;
         }
@@ -387,8 +405,8 @@ public class Runtime {
       if (sample_start > 0) {
         CallInfo ci = null;
         @SuppressWarnings("nullness") // map: key was put in map by enter()
-        /*@NonNull*/ Stack<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
-        while (!callstack.empty()) {
+        /*@NonNull*/ Deque<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
+        while (!callstack.isEmpty()) {
           ci = callstack.pop();
           if (ci.nonce == nonce) {
             break;
@@ -458,7 +476,7 @@ public class Runtime {
       throw new Error("initNotify(" + className + ") when initSet already contains " + className);
     }
 
-    //System.out.println("initialized ---> " + name);
+    // System.out.println("initialized ---> " + name);
     initSet.add(className);
   }
 
@@ -520,7 +538,8 @@ public class Runtime {
     // This should only print a percentage if dtraceLimit is not its
     // default value.
     // if (printedRecords%1000 == 0)
-    //     System.out.printf("printed=%d, percent printed=%f%n", printedRecords, (float)(100.0*(float)printedRecords/(float)dtraceLimit));
+    //     System.out.printf("printed=%d, percent printed=%f%n", printedRecords,
+    //                       (float)(100.0*(float)printedRecords/(float)dtraceLimit));
 
     if (printedRecords >= dtraceLimit) {
       noMoreOutput();
@@ -583,7 +602,7 @@ public class Runtime {
       @SuppressWarnings("nullness") // unannotated: java.net.Socket is not yet annotated
       /*@NonNull*/ SocketAddress dummy = null;
       daikonSocket.bind(dummy);
-      //System.out.println("Attempting to connect to Daikon on port --- " + port);
+      // System.out.println("Attempting to connect to Daikon on port --- " + port);
       daikonSocket.connect(new InetSocketAddress(InetAddress.getLocalHost(), port), 5000);
     } catch (UnknownHostException e) {
       System.out.println(
@@ -637,7 +656,7 @@ public class Runtime {
       dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
       dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
 
-      //System.out.println("limit = " + dtraceLimit + " terminate " + dtraceLimitTerminate);
+      // System.out.println("limit = " + dtraceLimit + " terminate " + dtraceLimitTerminate);
 
       // 8192 is the buffer size in BufferedReader
       BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
@@ -767,11 +786,9 @@ public class Runtime {
     try {
       synchronized (SharedData.all_classes) {
         for (ClassInfo cinfo : SharedData.all_classes) {
-          if (cinfo.clazz == null) cinfo.initViaReflection();
-
-          assert cinfo.clazz != null
-              : "@AssumeAssertion(nullness): checker bug: flow problem (postcondition)";
-
+          if (cinfo.clazz == null) {
+            cinfo.initViaReflection();
+          }
           if (cinfo.clazz.equals(type)) {
             return cinfo;
           }
@@ -783,7 +800,7 @@ public class Runtime {
       return getClassInfoFromClass(type);
     }
 
-    // throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");
+    // throw new RuntimeException("Class " + type.getName() + " is not in Runtime's class list");
     return null;
   }
 
@@ -996,11 +1013,11 @@ public class Runtime {
   /// Copied code
   ///
 
-  // Lifted directly from plume/UtilMDE.java, where it is called
+  // Lifted directly from plume/UtilPlume.java, where it is called
   // escapeNonJava(), but repeated here to make this class self-contained.
   /** Quote \, ", \n, and \r characters in the target; return a new string. */
   public static String quote(String orig) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     // The previous escape (or escaped) character was seen right before
     // this position.  Alternately:  from this character forward, the string
     // should be copied out verbatim (until the next escaped character).
@@ -1075,7 +1092,7 @@ public class Runtime {
   @SuppressWarnings("signature") // conversion routine
   public static String fieldDescriptorToBinaryName(/*@FieldDescriptor*/ String classname) {
 
-    //System.out.println(classname);
+    // System.out.println(classname);
 
     int dims = 0;
     while (classname.startsWith("[")) {
@@ -1084,14 +1101,14 @@ public class Runtime {
     }
 
     String result;
-    //array of reference type
+    // array of reference type
     if (classname.startsWith("L") && classname.endsWith(";")) {
       result = classname.substring(1, classname.length() - 1);
       result = result.replace('/', '.');
     } else {
-      if (dims > 0) //array of primitives
+      if (dims > 0) // array of primitives
       result = primitiveClassesFromJvm.get(classname);
-      else //just a primitive
+      else // just a primitive
       result = classname;
 
       if (result == null) {

@@ -9,9 +9,7 @@ import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
-import java.io.*;
-import java.util.*;
-import plume.*;
+import java.io.Serializable;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

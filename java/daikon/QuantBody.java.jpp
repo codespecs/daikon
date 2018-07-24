@@ -258,7 +258,7 @@ The correct way to build the system is to run 'make'.
    * x.getClass().toString() for each element x in the array. If an element of the array is null,
    * its slot in the returned array is null.
    */
-  @SuppressWarnings("nullness") // https://github.com/typetools/checker-framework/issues/58
+  @SuppressWarnings("nullness") // https://tinyurl.com/cfissue/58
   /*@SideEffectFree*/
   public static /*@PolyNull*//*("elt")*/ String /*@PolyNull*//*("container")*/ [] typeArray(/*@PolyNull*//*("elt")*/ _TYPE /*@PolyNull*//*("container")*/ [] seq) {
     if (seq == null) return null;
@@ -572,7 +572,7 @@ The test ensures that the method only appears once in the output.
   public static _TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, _TYPE /*@PolyNull*/ [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
-    return plume.ArraysMDE._TYPE_ARG concat(seq1, seq2);
+    return ArraysPlume._TYPE_ARG concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
@@ -580,7 +580,7 @@ The test ensures that the method only appears once in the output.
   public static CAST_TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, COMPATIBLE /*@PolyNull*/ [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
-    // Cannot just use plume.ArraysMDE.concat because the two arrays
+    // Cannot just use ArraysPlume.concat because the two arrays
     // have different types.  This essentially inlines that method.
     int newLength = seq1.length + seq2.length;
     CAST_TYPE[] retval = new CAST_TYPE[newLength];
@@ -636,7 +636,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return plume.ArraysMDE.subarray(intermediate, 0, length);
+    return ArraysPlume.subarray(intermediate, 0, length);
   }
 
 #ifdef COMPATIBLE
@@ -651,7 +651,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return plume.ArraysMDE.subarray(intermediate, 0, length);
+    return ArraysPlume.subarray(intermediate, 0, length);
   }
 #endif
 
@@ -671,7 +671,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return plume.ArraysMDE.subarray(intermediate, 0, length);
+    return ArraysPlume.subarray(intermediate, 0, length);
   }
 
 #ifdef COMPATIBLE
@@ -686,7 +686,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return plume.ArraysMDE.subarray(intermediate, 0, length);
+    return ArraysPlume.subarray(intermediate, 0, length);
   }
 #endif
 
@@ -912,7 +912,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
   /*@Pure*/
   public static boolean noDups(_TYPE /*@Nullable*/ [] seq) {
     if (seq == null) return false;
-    return plume.ArraysMDE.noDuplicates(seq);
+    return ArraysPlume.noDuplicates(seq);
   }
 
  /** Returns true iff elt is in array arr. */
@@ -972,7 +972,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
       return new _TYPE[] { };
     }
     int length = sliceEnd - sliceStart + 1;
-    return plume.ArraysMDE.subarray(seq, sliceStart, length);
+    return ArraysPlume.subarray(seq, sliceStart, length);
   }
 
   /*@Pure*/
@@ -1972,7 +1972,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     //assert fieldStr != null && !"".equals(fieldStr);
     String[] fieldNames = fieldStr.split("\\.");
     _TYPE[] retval = COLLECT_TYPE(object, fieldNames, 0);
-    //System.err.println("%%% fieldArray returned: " + plume.ArraysMDE.toString(retval));
+    //System.err.println("%%% fieldArray returned: " + plume.Arrays.toString(retval));
     return retval;
   }
 
@@ -2058,8 +2058,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
         _TYPE[] intermediate = new _TYPE[collection.size()];
         int index = 0;
         for (Iterator<?> i = collection.iterator() ; i.hasNext() ; ) {
-          _TYPE_NAME[] oneEltArray = COLLECT_TYPE(i.next(), fields, fieldsStartIdx + 1);
-          assert oneEltArray != null : "@AssumeAssertion(nullness)"; // not sure why
+          Object obj = i.next();
+          _TYPE_NAME[] oneEltArray = COLLECT_TYPE(obj, fields, fieldsStartIdx + 1);
+          if (oneEltArray == null) {
+            throw new Error("bad fields: " + (obj == null ? "null" : obj.getClass()) + " " + Arrays.toString(fields) + " " + (fieldsStartIdx + 1));
+          }
           //assert oneEltArray.length == 1;
           intermediate[index++] = oneEltArray[0];
         }
@@ -2070,9 +2073,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
         // collect elements across array
         _TYPE[] intermediate = new _TYPE[Array.getLength(fieldObj)];
         for (int i = 0 ; i < intermediate.length ; i++) {
-          _TYPE_NAME[] oneEltArray = COLLECT_TYPE(Array.get(fieldObj, i),
-                                             fields, fieldsStartIdx + 1);
-          assert oneEltArray != null : "@AssumeAssertion(nullness)"; // not sure why
+          Object obj = Array.get(fieldObj, i);
+          _TYPE_NAME[] oneEltArray = COLLECT_TYPE(obj, fields, fieldsStartIdx + 1);
+          if (oneEltArray == null) {
+            throw new Error("bad fields: " + (obj == null ? "null" : obj.getClass()) + " " + Arrays.toString(fields) + " " + (fieldsStartIdx + 1));
+          }
           //assert oneEltArray.length == 1;
           intermediate[i] = oneEltArray[0];
         }

@@ -1,9 +1,12 @@
 package daikon.split;
 
 import daikon.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.logging.Level;
-import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -41,7 +44,7 @@ public abstract class SplitterList {
         splits_strings[i] = splits[i].condition();
       }
       Global.debugSplit.fine(
-          "Registering splitters for " + pptname + ":" + plume.ArraysMDE.toString(splits_strings));
+          "Registering splitters for " + pptname + ":" + Arrays.toString(splits_strings));
     }
 
     if (ppt_splitters.containsKey(pptname)) {
@@ -54,7 +57,7 @@ public abstract class SplitterList {
       assert !ppt_splitters.containsKey(pptname);
       // assert ! ppt_splitters.containsKey(pptname)
       //               : "SplitterList already contains " + pptname
-      //               + " which maps to" + lineSep + " " + ArraysMDE.toString(get_raw(pptname))
+      //               + " which maps to" + lineSep + " " + Arrays.toString(get_raw(pptname))
       //               + lineSep + " which is " + formatSplitters(get_raw(pptname));
       ppt_splitters.put(pptname, splits);
     }
@@ -63,7 +66,7 @@ public abstract class SplitterList {
   // This is only used by the debugging output in SplitterList.put().
   public static String formatSplitters(Splitter[] splits) {
     if (splits == null) return "null";
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append("[");
     for (int i = 0; i < splits.length; i++) {
       if (i != 0) sb.append(", ");
@@ -95,8 +98,8 @@ public abstract class SplitterList {
   //   public static Splitter[] get(String pptName) {
   //     String pptName_ = pptName;        // debugging
   //     Splitter[] result;
-  //     Vector splitterArrays = new Vector();
-  //     Vector splitters = new Vector();
+  //     ArrayList splitterArrays = new ArrayList();
+  //     ArrayList splitters = new ArrayList();
   //
   //     result = get_raw(pptName);
   //     if (result != null)
@@ -144,13 +147,14 @@ public abstract class SplitterList {
   //     } else {
   //       int counter = 0;
   //       for (int i = 0; i < splitterArrays.size(); i++) {
-  //         Splitter[] tempsplitters = (Splitter[])splitterArrays.elementAt(i);
+  //         Splitter[] tempsplitters = (Splitter[])splitterArrays.get(i);
   //         for (int j = 0; j < tempsplitters.length; j++) {
   //           splitters.addElement(tempsplitters[j]);
   //           counter++;
   //         }
   //       }
-  //       Global.debugSplit.fine("SplitterList.get found " + counter + " splitters for " + pptName);
+  //       Global.debugSplit.fine("SplitterList.get found " + counter + " splitters for " +
+  //                              pptName);
   //     }
   //     return (Splitter[])splitters.toArray(new Splitter[0]);
   //   }

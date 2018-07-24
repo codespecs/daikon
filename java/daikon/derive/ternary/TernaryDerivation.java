@@ -2,7 +2,7 @@ package daikon.derive.ternary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -66,9 +66,9 @@ public abstract class TernaryDerivation extends Derivation {
   @Override
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
     TernaryDerivation result = this.clone();
-    result.base1 = new_vars[ArraysMDE.indexOf(old_vars, result.base1)];
-    result.base2 = new_vars[ArraysMDE.indexOf(old_vars, result.base2)];
-    result.base3 = new_vars[ArraysMDE.indexOf(old_vars, result.base3)];
+    result.base1 = new_vars[ArraysPlume.indexOf(old_vars, result.base1)];
+    result.base2 = new_vars[ArraysPlume.indexOf(old_vars, result.base2)];
+    result.base3 = new_vars[ArraysPlume.indexOf(old_vars, result.base3)];
     return result;
   }
 

@@ -27,6 +27,7 @@ java/dcomp_premain.jar
 java/*.class
 java/**/*.class
 java/lib/error_prone_ant-2.0.21.jar
+java/lib/error_prone_ant-2.2.0.jar
 # Temporary file used during compilation
 java/java_files.txt
 # Javadoc
@@ -62,10 +63,7 @@ java/daikon/chicory/Test.inv.out.diff
 java/daikon/chicory/Test.log
 
 # Obtained via Git
-plume-lib
-java/.run-google-java-format
-# Generated from plume-lib
-java/daikon/util
+utils
 
 # Documentation (including WWW pages and the manual)
 doc/.fix-dev-menu

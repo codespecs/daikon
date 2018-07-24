@@ -2,7 +2,8 @@ package daikon.derive.unary;
 
 import daikon.*;
 import daikon.derive.*;
-import plume.*;
+import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;
@@ -33,11 +34,11 @@ public final class SequenceMax extends UnaryDerivation {
     if (val instanceof long[]) {
       long[] val_array = (long[]) val;
       if (val_array.length == 0) return ValueAndModified.MISSING_NONSENSICAL;
-      return new ValueAndModified(Intern.internedLong(ArraysMDE.max(val_array)), source_mod);
+      return new ValueAndModified(Intern.internedLong(ArraysPlume.max(val_array)), source_mod);
     } else if (val instanceof double[]) {
       double[] val_array = (double[]) val;
       if (val_array.length == 0) return ValueAndModified.MISSING_NONSENSICAL;
-      return new ValueAndModified(Intern.internedDouble(ArraysMDE.max(val_array)), source_mod);
+      return new ValueAndModified(Intern.internedDouble(ArraysPlume.max(val_array)), source_mod);
     } else {
       return ValueAndModified.MISSING_NONSENSICAL;
     }

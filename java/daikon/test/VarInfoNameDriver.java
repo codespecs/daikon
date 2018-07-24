@@ -3,8 +3,18 @@ package daikon.test;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.*;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * This is called by VarInfoName to parse varInfoNameTest<em>foo</em> files and then apply various
@@ -42,7 +52,7 @@ public class VarInfoNameDriver {
 
       // tokenize arguments
       StringTokenizer tok = new StringTokenizer(command);
-      LinkedList<String> list = new LinkedList<String>();
+      Deque<String> list = new ArrayDeque<String>();
       while (tok.hasMoreTokens()) {
         list.add(tok.nextToken());
       }
@@ -468,7 +478,8 @@ public class VarInfoNameDriver {
   //   }
   //   static { handlers.put("quantify_format_jml_elem", new QuantifyFormatJMLElementwise()); }
 
-  //   // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise,boolean forall)
+  //   // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise,boolean
+  // forall)
   //   private static class QuantifyFormatJMLExists implements Handler {
   //     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
   //       assert args.length >= 1;

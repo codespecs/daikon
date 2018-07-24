@@ -1,7 +1,10 @@
 package daikon.tools.jtb;
 
-import java.util.*;
-import java.util.regex.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -192,18 +195,18 @@ public class Annotation {
     if (annoStrings == null) {
       return new Annotation[] {};
     }
-    //Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
+    // Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
     Set<Annotation> annos = new HashSet<Annotation>();
     for (String location : annoStrings) {
       if (location == null || location.equals("")) {
         continue;
       }
       String[] cutUp = location.split("<INVINFO>");
-      //Matcher m = p.matcher(location);
+      // Matcher m = p.matcher(location);
       for (int splits = 0; splits < cutUp.length; splits++) {
-        //while (m.find()) {
+        // while (m.find()) {
         try {
-          //String s = m.group(1);
+          // String s = m.group(1);
           String s = cutUp[splits];
           Annotation anno = Annotation.get("<INVINFO>" + s);
           // [[[ explain this! ]]]

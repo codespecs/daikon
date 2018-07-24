@@ -4,11 +4,26 @@ import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;
 import daikon.diff.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.text.*;
-import java.util.*;
-import plume.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
+import org.plumelib.util.EntryReader;
+import org.plumelib.util.Pair;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -44,7 +59,7 @@ public final class FeatureExtractor {
   //   -p             do not output if no positive feature vectors are present
 
   private static String USAGE =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           "Arguments:",
           "-u FileName:\tan invMap inv file with useful invariants",
           "-n FileName:\tan invMap inv file with nonuseful invariants",
@@ -204,13 +219,15 @@ public final class FeatureExtractor {
     ArrayList<Invariant> nonusefulResult = new ArrayList<Invariant>();
     for (String useful : usefuls)
       for (Iterator<Invariant> invs = readInvMap(new File(useful)).invariantIterator();
-          invs.hasNext();
-          ) usefulResult.add(invs.next());
+          invs.hasNext(); ) {
+        usefulResult.add(invs.next());
+      }
 
     for (String nonuseful : nonusefuls)
       for (Iterator<Invariant> invs = readInvMap(new File(nonuseful)).invariantIterator();
-          invs.hasNext();
-          ) nonusefulResult.add(invs.next());
+          invs.hasNext(); ) {
+        nonusefulResult.add(invs.next());
+      }
 
     return Pair.of(usefulResult, nonusefulResult);
   }
@@ -323,7 +340,7 @@ public final class FeatureExtractor {
       } else {
         throw new IOException("Feature " + current.number + " not included in .names file");
       }
-      //names.println(current.number + ": continuous.");
+      // names.println(current.number + ": continuous.");
     }
     names.println("|End of .names file");
     names.close();
@@ -490,7 +507,7 @@ public final class FeatureExtractor {
   // compacts an SVMlight file to remove repeats.
 
   private static void compactSVMFeatureFile(File input, File output) throws IOException {
-    BufferedReader br = UtilMDE.bufferedFileReader(input);
+    BufferedReader br = UtilPlume.bufferedFileReader(input);
     HashSet<String> vectors = new HashSet<String>();
     ArrayList<String> outputData = new ArrayList<String>();
     while (br.ready()) {
@@ -514,7 +531,7 @@ public final class FeatureExtractor {
 
   // compacts an SVMfu file to remove repeats.
   private static void compactSVMfuFeatureFile(File input, File output) throws IOException {
-    BufferedReader br = UtilMDE.bufferedFileReader(input);
+    BufferedReader br = UtilPlume.bufferedFileReader(input);
     HashSet<String> vectors = new HashSet<String>();
     br.readLine();
     while (br.ready()) vectors.add(br.readLine());
@@ -530,7 +547,7 @@ public final class FeatureExtractor {
 
   // Reads an InvMap from a file that contains a serialized InvMap.
   private static InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
-    Object o = UtilMDE.readObject(file);
+    Object o = UtilPlume.readObject(file);
     if (o instanceof InvMap) {
       return (InvMap) o;
     } else {
@@ -543,14 +560,14 @@ public final class FeatureExtractor {
     HashMap<Object, Integer> answer = new HashMap<Object, Integer>();
     Integer counter = 0;
 
-    //get a set of all Invariant classes
+    // get a set of all Invariant classes
     File top = new File(CLASSES);
     List<Class<? extends Invariant>> classes = getInvariantClasses(top);
 
     for (Class<? extends Invariant> currentClass : classes) {
       Field[] fields = currentClass.getFields();
       Method[] methods = currentClass.getMethods();
-      //handle the class
+      // handle the class
       counter = counter.intValue() + 1;
       answer.put(currentClass, counter);
 
@@ -558,10 +575,10 @@ public final class FeatureExtractor {
         for (int iC = 0; iC < NUM_VARS; iC++) {
           counter = counter.intValue() + 1;
           answer.put("Var#" + iC + "_" + currentClass.getName() + "Bool", counter);
-        } //reserve space for all the variables
+        } // reserve space for all the variables
       }
 
-      //handle all the fields
+      // handle all the fields
       for (int j = 0; j < fields.length; j++) {
         if (answer.get(fields[j]) == null) {
           //          if ((Boolean.TYPE.equals(fields[j].getType())) ||
@@ -585,7 +602,7 @@ public final class FeatureExtractor {
         }
       }
 
-      //handle all the methods with 0 parameters
+      // handle all the methods with 0 parameters
       for (int j = 0; j < methods.length; j++) {
         if ((answer.get(methods[j].getName()) == null)
             && (methods[j].getParameterTypes().length == 0)) {
@@ -717,7 +734,7 @@ public final class FeatureExtractor {
       }
     }
 
-    //cleanup answer
+    // cleanup answer
     TreeSet<IntDoublePair> final_answer = new TreeSet<IntDoublePair>();
     HashSet<Integer> index = new HashSet<Integer>();
     for (IntDoublePair current : answer) {
@@ -763,7 +780,7 @@ public final class FeatureExtractor {
       }
     }
 
-    //returns a valid hashCode
+    // returns a valid hashCode
     @Override
     /*@Pure*/
     public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
@@ -793,7 +810,7 @@ public final class FeatureExtractor {
   public static final class CombineFiles {
 
     private static String USAGE =
-        UtilMDE.joinLines(
+        UtilPlume.joinLines(
             "Arguments:",
             "-i FileName:\ta SVMfu or C5 input file (with .data)",
             "-t Type:\tFormat, one of C5 or SVMfu",
@@ -943,7 +960,7 @@ public final class FeatureExtractor {
   public static final class ClassifyInvariants {
 
     private static String USAGE =
-        UtilMDE.joinLines(
+        UtilPlume.joinLines(
             "Arguments:",
             "-d FileName:\tSVMfu or C5 training data (with .data)",
             "-s FileName:\tSVMfu or C5 test data (with .data)",
@@ -1060,7 +1077,7 @@ public final class FeatureExtractor {
   }
 
   private static String shift(String vector) {
-    StringBuffer answer = new StringBuffer();
+    StringBuilder answer = new StringBuilder();
     StringTokenizer tokens = new StringTokenizer(vector);
     tokens.nextToken();
     while (tokens.hasMoreTokens()) {

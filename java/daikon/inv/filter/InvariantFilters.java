@@ -4,7 +4,9 @@ import daikon.Daikon;
 import daikon.PrintInvariants;
 import daikon.VarInfo;
 import daikon.inv.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +46,7 @@ public class InvariantFilters {
   // actually like is to order them in order of something like
   // [probability of eliminating an inv]/[expected running time]...in
   // other words, based on a benefit to cost measurement.  hence, this
-  // will become a list (in particular a Vector).  This does increase
+  // will become a list (in particular a ArrayList).  This does increase
   // the running time of lookups based on the descriptions from O(log
   // n) to O(n), but that functionality isn't used a whole lot and
   // there are only ~10 filters anyway.
@@ -75,7 +77,7 @@ public class InvariantFilters {
 
     addPropertyFilter(new ReadonlyPrestateFilter());
 
-    addPropertyFilter(new StringFilter());
+    addPropertyFilter(new DotNetStringFilter());
   }
 
   private static /*@MonotonicNonNull*/ InvariantFilters default_filters = null;

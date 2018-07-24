@@ -43,15 +43,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import plume.EntryReader;
-import plume.RegexUtil;
-import plume.Stopwatch;
-import plume.UtilMDE;
+import org.plumelib.util.EntryReader;
+import org.plumelib.util.RegexUtil;
+import org.plumelib.util.UtilPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -77,8 +77,8 @@ public final class Daikon {
    */
   public static int dkconfig_progress_delay = 1000;
 
-  public static final String release_version = "5.5.15";
-  public static final String release_date = "October 3, 2017";
+  public static final String release_version = "5.6.7";
+  public static final String release_date = "July 2, 2018";
   public static final String release_string =
       "Daikon version "
           + release_version
@@ -93,9 +93,6 @@ public final class Daikon {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. Controls whether invariants are reported over floating-point values. */
-  public static boolean dkconfig_enable_floats = true;
-
   /** Boolean. Just print the total number of possible invariants and exit. */
   public static boolean dkconfig_calc_possible_invs;
 
@@ -129,7 +126,7 @@ public final class Daikon {
   // Problem with setting this to true:
   //  get no invariants over any value that can ever be missing
   // Problem with setting this to false:
-  //  due to different number of samples, IsEqualityComparison is
+  //  due to different number of samples, isEqualityComparison is
   //  non-transitive (that is specially handled in the code)
   public static final boolean invariants_check_canBeMissing = false;
 
@@ -290,7 +287,7 @@ public final class Daikon {
   public static final String var_omit_regexp_SWITCH = "var-omit-pattern";
   // Configuration options
   public static final String server_SWITCH =
-      "server"; //YOAV: server mode for Daikon: reads dtrace files as they appear
+      "server"; // YOAV: server mode for Daikon: reads dtrace files as they appear
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
   // Debugging
@@ -324,7 +321,7 @@ public final class Daikon {
   }
 
   public static /*@MonotonicNonNull*/ File server_dir =
-      null; //YOAV: the directory from which we read the dtrace files
+      null; // YOAV: the directory from which we read the dtrace files
 
   // A PptMap (mapping String -> PptTopLevel) that contains all the program points.
   // Set in mainHelper().
@@ -356,12 +353,10 @@ public final class Daikon {
     daikon.Runtime.no_dtrace = true;
   }
 
-  private static Stopwatch stopwatch = new Stopwatch();
-
   static String usage =
-      UtilMDE.joinLines(
+      UtilPlume.joinLines(
           release_string,
-          "Daikon invariant detector, copyright 1998-2017",
+          "Daikon invariant detector, copyright 1998-2018",
           // " by Michael Ernst <mernst@cs.washington.edu>",
           "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
           // "For licensing information, see the License section of the manual.",
@@ -401,7 +396,7 @@ public final class Daikon {
       super(e.getMessage());
     }
     //    public TerminationMessage(Exception e) {
-    //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
+    //      super(e.getMessage() + lineSep + UtilPlume.backTrace(e)); }
     public TerminationMessage(Throwable e, String msg) {
       super(
           ((e.getMessage() != null && msg.contains(e.getMessage()))
@@ -935,9 +930,9 @@ public final class Daikon {
                   "Field ClassLoader.classes was not made accessible");
             }
             @SuppressWarnings({
-              "unchecked",
-              "nullness"
-            }) // type of ClassLoader.classes field is known, and is non-null
+              "unchecked", // type of ClassLoader.classes field is known
+              "nullness" // ClassLoader.classes is non-null
+            })
             /*@NonNull*/ List<Class<?>> classes = (List<Class<?>>) classesAsObject;
             for (int i = 0; i < classes.size(); i++) {
               Class<?> loadedClass = classes.get(i);
@@ -1122,7 +1117,7 @@ public final class Daikon {
 
           inv_file = new File(inv_filename);
 
-          if (!UtilMDE.canCreateAndWrite(inv_file)) {
+          if (!UtilPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.TerminationMessage(
                 "Cannot write to serialization output file " + inv_file);
           }
@@ -1173,7 +1168,7 @@ public final class Daikon {
           String inv_filename = basename.substring(0, base_end) + ".inv.gz";
 
           inv_file = new File(inv_filename);
-          if (!UtilMDE.canCreateAndWrite(inv_file)) {
+          if (!UtilPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.TerminationMessage("Cannot write to file " + inv_file);
           }
         }
@@ -1492,8 +1487,6 @@ public final class Daikon {
                   + ".get_proto() returned null but should have returned an Invariant");
         }
         if (!(inv_as_object instanceof Invariant)) {
-          @SuppressWarnings(
-              "nullness") // looks like a Checker Framework bug, since inv_as_object is known to be non-null at this point
           Class<?> cls = inv_as_object.getClass();
           throw new Daikon.TerminationMessage(
               invariantClassName
@@ -1527,7 +1520,7 @@ public final class Daikon {
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      // System.out.printf ("considering ppt %s parents: %s, children: %s\n",
+      // System.out.printf("considering ppt %s parents: %s, children: %s\n",
       //                     ppt.name, ppt.parents, ppt.children);
       if (ppt.parents.size() == 0) {
         ppt.mergeInvs();
@@ -1559,7 +1552,7 @@ public final class Daikon {
     if (!Daikon.using_DaikonSimple) {
       // Initialize equality sets on leaf nodes
       setupEquality(ppt);
-      // System.out.printf ("initialized equality %s for ppt %s%n",
+      // System.out.printf("initialized equality %s for ppt %s%n",
       //                    ppt.equality_view, ppt.name());
 
       // Recursively initialize ppts created by splitters
@@ -1610,10 +1603,10 @@ public final class Daikon {
         // vars instead of taking the first n.
         int len = ppt.num_tracevars + ppt.num_static_constant_vars;
         VarInfo[] exit_vars = new VarInfo[len];
-        // System.out.printf ("new decl fmt = %b%n", FileIO.new_decl_format);
+        // System.out.printf("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
           exit_vars[j] = new VarInfo(ppt.var_infos[j]);
-          // System.out.printf ("exitNN name '%s', exit name '%s'%n",
+          // System.out.printf("exitNN name '%s', exit name '%s'%n",
           //                   ppt.var_infos[j].name(), exit_vars[j].name());
           exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
           exit_vars[j].value_index = ppt.var_infos[j].value_index;
@@ -1727,7 +1720,8 @@ public final class Daikon {
         // Fix comparability
         VarInfo postvar = exit_ppt.find_var_by_name(vi.name());
         if (postvar == null) {
-          System.out.printf("Can't find var %s in exit of ppt %s%n", vi, exit_ppt.name());
+          System.out.printf(
+              "Looking for postvar, can't find var %s in exit of ppt %s%n", vi, exit_ppt.name());
           for (VarInfo cvi : entry_ppt.var_infos) {
             System.out.printf("  entry var = %s%n", cvi);
           }
@@ -1742,8 +1736,6 @@ public final class Daikon {
         // add parents for override relations
         // exit_ppt.parents has not been loaded at this point
         for (VarParent pi : postvar.parents) {
-          assert pi.parent_ppt != null
-              : "@AssumeAssertion(nullness)"; // Checker Framework bug:  parent_ppt is declared as @NonNull
           PptTopLevel parentppt = ppts.get(pi.parent_ppt);
           if (parentppt != null) {
             if (!parentppt.is_object() && !parentppt.is_class()) {
@@ -1761,7 +1753,7 @@ public final class Daikon {
         // Add to new_vis
         new_vis[new_vis_index] = origvar;
         new_vis_index++;
-        //System.out.printf ("adding origvar %s to ppt %s%n", origvar.name(),
+        // System.out.printf("adding origvar %s to ppt %s%n", origvar.name(),
         //                   exit_ppt.name());
       }
       assert new_vis_index == exit_ppt.num_orig_vars;
@@ -1786,7 +1778,7 @@ public final class Daikon {
   /*@RequiresNonNull("fileio_progress")*/
   // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     try {
       if (!Daikon.dkconfig_quiet) {
         System.out.print("Reading declaration files ");
@@ -1798,7 +1790,7 @@ public final class Daikon {
       fileio_progress.clear();
       if (!Daikon.dkconfig_quiet && decl_files.size() > 0) {
         System.out.print("\r(read ");
-        System.out.print(UtilMDE.nplural(decl_files.size(), "decls file"));
+        System.out.print(UtilPlume.nplural(decl_files.size(), "decls file"));
         System.out.println(")");
       }
       return all_ppts;
@@ -1807,7 +1799,9 @@ public final class Daikon {
       // e.printStackTrace();
       throw new Daikon.TerminationMessage(e, "Error parsing decl file");
     } finally {
-      debugProgress.fine("Time spent on read_declaration_files: " + stopwatch.format());
+      long duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent on read_declaration_files: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
   }
 
@@ -1815,34 +1809,38 @@ public final class Daikon {
     if (PptSplitter.dkconfig_disable_splitting || spinfo_files.isEmpty()) {
       return;
     }
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     try {
       System.out.print("Reading splitter info files ");
       create_splitters(spinfo_files);
       System.out.print("\r(read ");
-      System.out.print(UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
+      System.out.print(UtilPlume.nplural(spinfo_files.size(), "spinfo file"));
       System.out.print(", ");
-      System.out.print(UtilMDE.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
+      System.out.print(UtilPlume.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
       e.printStackTrace();
       throw new Error(e);
     } finally {
-      debugProgress.fine("Time spent on load_spinfo_files: " + stopwatch.format());
+      long duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent on load_spinfo_files: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
   }
 
   private static void load_map_files(PptMap all_ppts, Set<File> map_files) {
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     if (!PptSplitter.dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
           map_files, ContextSplitterFactory.dkconfig_granularity);
       System.out.print("\r(read ");
-      System.out.print(UtilMDE.nplural(map_files.size(), "map (context) file"));
+      System.out.print(UtilPlume.nplural(map_files.size(), "map (context) file"));
       System.out.println(")");
-      debugProgress.fine("Time spent on load_map_files: " + stopwatch.format());
+      long duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent on load_map_files: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
   }
 
@@ -1869,7 +1867,7 @@ public final class Daikon {
     }
     if (pconds != null) {
       Global.debugSplit.fine(
-          "Got " + UtilMDE.nplural(pconds.length, "splitter") + " for " + ppt.name());
+          "Got " + UtilPlume.nplural(pconds.length, "splitter") + " for " + ppt.name());
       ppt.addConditions(pconds);
     }
 
@@ -1932,7 +1930,7 @@ public final class Daikon {
       if (dkconfig_progress_delay == -1) return;
       // "display("");" is wrong becuase it leaves the timestamp and writes
       // spaces across the screen.
-      String status = UtilMDE.rpad("", dkconfig_progress_display_width - 1);
+      String status = UtilPlume.rpad("", dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.print("\r"); // return to beginning of line
       System.out.flush();
@@ -1960,7 +1958,7 @@ public final class Daikon {
     public void display(String message) {
       if (dkconfig_progress_delay == -1) return;
       String status =
-          UtilMDE.rpad(
+          UtilPlume.rpad(
               "[" + df.format(new Date()) + "]: " + message, dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.flush();
@@ -1999,7 +1997,7 @@ public final class Daikon {
       new Thread((Runnable) monitor).start();
     }
 
-    stopwatch.reset();
+    long startTime = System.nanoTime();
 
     // Preprocessing
     setup_NISuppression();
@@ -2010,7 +2008,7 @@ public final class Daikon {
       if (!Daikon.dkconfig_quiet) {
         System.out.println(
             "Processing trace data; reading "
-                + UtilMDE.nplural(dtrace_files.size(), "dtrace file")
+                + UtilPlume.nplural(dtrace_files.size(), "dtrace file")
                 + ":");
       }
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
@@ -2033,7 +2031,9 @@ public final class Daikon {
       // e.printStackTrace();
       throw new Error(e);
     } finally {
-      debugProgress.fine("Time spent on read_data_trace_files: " + stopwatch.format());
+      long duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent on read_data_trace_files: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
 
     if (monitor != null) {
@@ -2065,7 +2065,7 @@ public final class Daikon {
     if ((use_dataflow_hierarchy && FileIO.samples_processed == unmatched_count)
         || (FileIO.samples_processed == 0)) {
       throw new Daikon.TerminationMessage(
-          "No samples found for any of " + UtilMDE.nplural(all_ppts.size(), "program point"));
+          "No samples found for any of " + UtilPlume.nplural(all_ppts.size(), "program point"));
     }
 
     // ppt_stats (all_ppts);
@@ -2076,39 +2076,43 @@ public final class Daikon {
 
     // Print equality set info
     //     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-    //       System.out.printf ("ppt: %s", ppt.name);
+    //       System.out.printf("ppt: %s", ppt.name);
     //       if ((ppt.equality_view == null) || (ppt.equality_view.invs == null))
     //       continue;
     //       for (Invariant inv : ppt.equality_view.invs) {
     //       Equality e = (Equality) inv;
-    //       System.out.printf ("    equality set = %s", e);
+    //       System.out.printf("    equality set = %s", e);
     //       }
     //     }
 
-    // System.out.printf ("printing ternary invariants");
+    // System.out.printf("printing ternary invariants");
     // PrintInvariants.print_all_ternary_invs (all_ppts);
     // System.exit(0);
 
     // Postprocessing
 
     debugProgress.fine("Create Combined Exits ... ");
-    stopwatch.reset();
+    startTime = System.nanoTime();
     create_combined_exits(all_ppts);
-    debugProgress.fine("Create Combined Exits ... done [" + stopwatch.format() + "]");
+    long duration = System.nanoTime() - startTime;
+    debugProgress.fine(
+        "Create Combined Exits ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
 
     // Post process dynamic constants
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
       debugProgress.fine("Constant Post Processing ... ");
-      stopwatch.reset();
+      startTime = System.nanoTime();
       for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         if (ppt.constants != null) ppt.constants.post_process();
       }
-      debugProgress.fine("Constant Post Processing ... done [" + stopwatch.format() + "]");
+      duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Constant Post Processing ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
     }
 
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
-    stopwatch.reset();
+    startTime = System.nanoTime();
     assert FileIO.new_decl_format != null
         : "@AssumeAssertion(nullness): read data, so new_decl_format is set";
     if (FileIO.new_decl_format) {
@@ -2116,26 +2120,32 @@ public final class Daikon {
     } else {
       PptRelation.init_hierarchy(all_ppts);
     }
-    debugProgress.fine("Init Hierarchy ... done [" + stopwatch.format() + "]");
+    duration = System.nanoTime() - startTime;
+    debugProgress.fine(
+        "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
 
     // Calculate invariants at all non-leaf ppts
     if (use_dataflow_hierarchy) {
       debugProgress.fine("createUpperPpts ... ");
-      stopwatch.reset();
+      startTime = System.nanoTime();
       // calculates invariants; does not actually create any ppts
       createUpperPpts(all_ppts);
-      debugProgress.fine("createUpperPpts ... done [" + stopwatch.format() + "]");
+      duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "createUpperPpts ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
     }
 
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization && !Daikon.dkconfig_undo_opts) {
       debugProgress.fine("Equality Post Process ... ");
-      stopwatch.reset();
+      startTime = System.nanoTime();
       for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         // ppt.equality_view can be null here
         ppt.postProcessEquality();
       }
-      debugProgress.fine("Equality Post Process ... done [" + stopwatch.format() + "]");
+      duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Equality Post Process ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
     }
 
     // undo optimizations; results in a more redundant but more complete
@@ -2156,7 +2166,7 @@ public final class Daikon {
     isInferencing = false;
 
     // Add implications
-    stopwatch.reset();
+    startTime = System.nanoTime();
     fileio_progress.clear();
     if (!PptSplitter.dkconfig_disable_splitting) {
       debugProgress.fine("Adding Implications ... ");
@@ -2164,7 +2174,9 @@ public final class Daikon {
         // debugProgress.fine ("  Adding implications for " + ppt.name);
         ppt.addImplications();
       }
-      debugProgress.fine("Time spent adding implications: " + stopwatch.format());
+      duration = System.nanoTime() - startTime;
+      debugProgress.fine(
+          "Time spent adding implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
     }
   }
 
@@ -2217,13 +2229,14 @@ public final class Daikon {
   private static void suppressWithSimplify(PptMap all_ppts) {
     System.out.print("Invoking Simplify to identify redundant invariants");
     System.out.flush();
-    stopwatch.reset();
+    long startTime = System.nanoTime();
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       ppt.mark_implied_via_simplify(all_ppts);
       System.out.print(".");
       System.out.flush();
     }
-    System.out.println(stopwatch.format());
+    long duration = System.nanoTime() - startTime;
+    System.out.println(TimeUnit.NANOSECONDS.toSeconds(duration));
 
     // Make sure the Simplify process and helper threads are finished
     if (PptTopLevel.getProverStack() != null) {
@@ -2265,7 +2278,6 @@ public final class Daikon {
 
     // Create the initial equality sets
     ppt.equality_view = new PptSliceEquality(ppt);
-    assert ppt.equality_view != null : "@AssumeAssertion(nullness): checker bug in flow";
     ppt.equality_view.instantiate_invariants();
   }
 
@@ -2321,7 +2333,8 @@ public final class Daikon {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100)) {
-      // The number should already have been checked, so use Error instead of Daikon.TerminationMessage
+      // The number should already have been checked, so use Error instead of
+      // Daikon.TerminationMessage.
       throw new Error("ppt_perc of " + ppt_perc + " is out of range 1..100");
     }
     if (ppt_perc == 100) {
@@ -2336,7 +2349,7 @@ public final class Daikon {
       for (File file : decl_files) {
 
         // Open the file
-        LineNumberReader fp = UtilMDE.lineNumberFileReader(file);
+        LineNumberReader fp = UtilPlume.lineNumberFileReader(file);
 
         // Read each ppt name from the file
         for (String line = fp.readLine(); line != null; line = fp.readLine()) {
@@ -2395,12 +2408,12 @@ public final class Daikon {
   /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
   public static void undoOpts(PptMap all_ppts) {
 
-    //undo suppressions
+    // undo suppressions
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       NIS.create_suppressed_invs(ppt);
     }
 
-    //undo equality sets
+    // undo equality sets
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       PptSliceEquality sliceEquality = ppt.equality_view;
 
