@@ -270,7 +270,7 @@ public class InvariantDoclet {
       // Note whether this invariant is turned off by default
       if (find_enabled(dc) == 0) {
         out.println();
-        out.println("This invariant is not enabled by default.  " + "See the configuration option");
+        out.println("This invariant is not enabled by default.  See the configuration option");
         out.println("@samp{" + dc + ".enabled}.");
       }
 

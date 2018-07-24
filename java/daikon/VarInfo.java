@@ -438,7 +438,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         throw new RuntimeException(
             String.format(
-                "enclosing variable '%s' for variable '%s' " + "in ppt '%s' cannot be found",
+                "enclosing variable '%s' for variable '%s' in ppt '%s' cannot be found",
                 vardef.enclosing_var_name, vardef.name, ppt.name));
       }
     }
@@ -452,7 +452,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         if (vi == null) {
           throw new RuntimeException(
               String.format(
-                  "function argument '%s' for variable '%s' " + " in ppt '%s' cannot be found",
+                  "function argument '%s' for variable '%s'  in ppt '%s' cannot be found",
                   varname, vardef.name, ppt.name));
         }
         function_args.add(vi);

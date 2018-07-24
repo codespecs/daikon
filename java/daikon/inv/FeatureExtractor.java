@@ -74,20 +74,14 @@ public final class FeatureExtractor {
           InvocationTargetException {
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    */
   public static void mainHelper(final String[] args)
       throws IOException, ClassNotFoundException, IllegalAccessException,
@@ -99,7 +93,7 @@ public final class FeatureExtractor {
 
     if (args.length == 0) {
       System.out.println(USAGE);
-      throw new Daikon.TerminationMessage("No arguments found");
+      throw new Daikon.UserError("No arguments found");
     }
 
     // First, parse the arguments
@@ -125,7 +119,7 @@ public final class FeatureExtractor {
         output_file = args[i + 1];
       } else if (args[i].equals("-s")) {
         if (output_words != null) {
-          throw new IOException("Invalid Argument List, repeated " + "output description file");
+          throw new IOException("Invalid Argument List, repeated output description file");
         }
         output_words = args[i + 1];
       } else if (args[i].equals("-t")) {
@@ -144,7 +138,7 @@ public final class FeatureExtractor {
     }
     if (output_file.equals(output_words)) {
       throw new IOException(
-          "Invalid Argumnent List, output and description files " + "cannot be the same");
+          "Invalid Argumnent List, output and description files cannot be the same");
     }
     // Step 1
     Pair<ArrayList<Invariant>, ArrayList<Invariant>> allInvariants =
@@ -307,7 +301,7 @@ public final class FeatureExtractor {
       } else if (key instanceof String) {
         name = (String) key;
       } else {
-        throw new RuntimeException(key + " object cannot be converted to " + "a feature.");
+        throw new RuntimeException(key + " object cannot be converted to a feature.");
       }
       numbersToNames.put(pair, name);
     }
@@ -821,27 +815,21 @@ public final class FeatureExtractor {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
       try {
         mainHelper(args);
-      } catch (Daikon.TerminationMessage e) {
-        Daikon.handleTerminationMessage(e);
+      } catch (Daikon.DaikonTerminationException e) {
+        Daikon.handleDaikonTerminationException(e);
       }
-      // Any exception other than Daikon.TerminationMessage gets propagated.
-      // This simplifies debugging by showing the stack trace.
     }
 
     /**
-     * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-     * progrmmatically. Termination of the program with a message to the user is indicated by
-     * throwing Daikon.TerminationMessage.
-     *
-     * @see #main(String[])
-     * @see daikon.Daikon.TerminationMessage
+     * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+     * appropriate to be called progrmmatically.
      */
     public static void mainHelper(final String[] args) throws IOException, ClassNotFoundException {
 
       // First parse the arguments
       if (args.length == 0) {
         System.out.println(USAGE);
-        throw new Daikon.TerminationMessage("No arguments found");
+        throw new Daikon.UserError("No arguments found");
       }
       ArrayList<String> inputs = new ArrayList<String>();
       boolean normalize = false;
@@ -920,10 +908,10 @@ public final class FeatureExtractor {
       int posrepeat = 1, negrepeat = 1;
       if (normalize) {
         if (posvectors.size() == 0) {
-          throw new IOException("There are no positive vectors, " + "cannot normalize");
+          throw new IOException("There are no positive vectors, cannot normalize");
         }
         if (negvectors.size() == 0) {
-          throw new IOException("There are no negative vectors, " + "cannot normalize");
+          throw new IOException("There are no negative vectors, cannot normalize");
         }
         if (posvectors.size() > negvectors.size()) {
           negrepeat = posvectors.size() / negvectors.size();
@@ -971,7 +959,7 @@ public final class FeatureExtractor {
       // First parse the arguments
       if (args.length == 0) {
         System.out.println(USAGE);
-        throw new Daikon.TerminationMessage("No arguments found");
+        throw new Daikon.UserError("No arguments found");
       }
       ArrayList<String> trains = new ArrayList<String>();
       ArrayList<String> tests = new ArrayList<String>();

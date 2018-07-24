@@ -57,20 +57,14 @@ public class CreateSpinfo {
   public static void main(String[] args) throws IOException {
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    */
   public static void mainHelper(final String[] args) throws IOException {
 
@@ -94,7 +88,7 @@ public class CreateSpinfo {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
@@ -108,7 +102,7 @@ public class CreateSpinfo {
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case '?':
           break; // getopt() already printed an error
         default:
@@ -120,7 +114,7 @@ public class CreateSpinfo {
     // The index of the first non-option argument -- the name of the file
     int argindex = g.getOptind();
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Error: No .java file arguments supplied." + Global.lineSep + usage);
     }
     if (outputfilename != null) {
@@ -182,7 +176,7 @@ public class CreateSpinfo {
       root = parser.CompilationUnit();
     } catch (ParseException e) {
       e.printStackTrace();
-      throw new Daikon.TerminationMessage("ParseException");
+      throw new Daikon.UserError("ParseException");
     }
     debug.fine("CreateSpinfo: processing file " + javaFileName);
     ConditionExtractor extractor = new ConditionExtractor();

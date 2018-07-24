@@ -61,20 +61,14 @@ public final class MergeInvariants {
           ClassNotFoundException {
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
@@ -102,7 +96,7 @@ public final class MergeInvariants {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (Daikon.config_option_SWITCH.equals(option_name)) {
             String item = Daikon.getOptarg(g);
             daikon.config.Configuration.getInstance().apply(item);
@@ -117,23 +111,23 @@ public final class MergeInvariants {
             LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
             String error = Debug.add_track(Daikon.getOptarg(g));
             if (error != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Error parsing track argument '" + Daikon.getOptarg(g) + "' - " + error);
             }
           } else {
-            throw new Daikon.TerminationMessage("Unknown long option received: " + option_name);
+            throw new Daikon.UserError("Unknown long option received: " + option_name);
           }
           break;
 
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
 
         case 'o':
           String output_inv_filename = Daikon.getOptarg(g);
 
           if (output_inv_file != null) {
-            throw new Daikon.TerminationMessage(
+            throw new Daikon.UserError(
                 "multiple serialization output files supplied on command line: "
                     + output_inv_file
                     + " "
@@ -143,7 +137,7 @@ public final class MergeInvariants {
           output_inv_file = new File(output_inv_filename);
 
           if (!UtilPlume.canCreateAndWrite(output_inv_file)) {
-            throw new Daikon.TerminationMessage(
+            throw new Daikon.UserError(
                 "Cannot write to serialization output file " + output_inv_file);
           }
           break;
@@ -167,25 +161,25 @@ public final class MergeInvariants {
     for (int i = g.getOptind(); i < args.length; i++) {
       File file = new File(args[i]);
       if (!file.exists()) {
-        throw new Daikon.TerminationMessage("File " + file + " not found.");
+        throw new Daikon.UserError("File " + file + " not found.");
       }
       if (file.toString().indexOf(".inv") != -1) {
         inv_files.add(file);
       } else if (file.toString().indexOf(".decls") != -1) {
         if (decl_file != null) {
-          throw new Daikon.TerminationMessage("Only one decl file may be specified");
+          throw new Daikon.UserError("Only one decl file may be specified");
         }
         decl_file = file;
       } else if (file.toString().indexOf(".spinfo") != -1) {
         splitter_files.add(file);
       } else {
-        throw new Daikon.TerminationMessage("Unrecognized file type: " + file);
+        throw new Daikon.UserError("Unrecognized file type: " + file);
       }
     }
 
     // Make sure at least two files were specified
     if (inv_files.size() < 2) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Must specify at least two inv files; only specified "
               + UtilPlume.nplural(inv_files.size(), "file"));
     }
@@ -213,8 +207,7 @@ public final class MergeInvariants {
     // if no decls file was specified
     if (decl_file == null) {
       if (splitter_files.size() > 0) {
-        throw new Daikon.TerminationMessage(
-            ".spinfo files may only be specified along " + "with a .decls file");
+        throw new Daikon.UserError(".spinfo files may only be specified along with a .decls file");
       }
 
       // Read in each of the maps again to build a template that contains all
@@ -408,7 +401,7 @@ public final class MergeInvariants {
         FileIO.write_serialized_pptmap(merge_ppts, output_inv_file);
       } catch (IOException e) {
         throw new RuntimeException(
-            "Error while writing .inv file " + "'" + output_inv_file + "': " + e.toString());
+            "Error while writing .inv file '" + output_inv_file + "': " + e.toString());
       }
     } else {
       // Print the invariants

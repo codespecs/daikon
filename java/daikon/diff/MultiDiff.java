@@ -22,20 +22,14 @@ public class MultiDiff {
           NoSuchMethodException, InvocationTargetException {
     try {
       mainHelper(args);
-    } catch (daikon.Daikon.TerminationMessage e) {
-      daikon.Daikon.handleTerminationMessage(e);
+    } catch (daikon.Daikon.DaikonTerminationException e) {
+      daikon.Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than daikon.Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * daikon.Daikon.TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    */
   public static void mainHelper(final String[] args)
       throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
