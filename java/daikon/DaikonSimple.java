@@ -83,8 +83,8 @@ public class DaikonSimple {
   }
 
   /**
-   * This does the work of {@link #main()}, but it never calls System.exit, so it is appropriate to
-   * be called progrmmatically.
+   * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
+   * called progrmmatically.
    *
    * <p>Difference from {@link daikon.Daikon#mainHelper(String[])}Helper: turn off optimization
    * flags (equality, dynamic constants, NIS suppression).
