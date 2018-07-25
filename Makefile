@@ -592,10 +592,11 @@ update-dist-version-file:
 JAR_FILES = \
 $(INV_DIR)/java/lib/bcel-util-all-0.0.4.jar \
 $(INV_DIR)/java/lib/commons-exec-1.3.jar \
+$(INV_DIR)/java/lib/daikon-util.jar \
 $(INV_DIR)/java/lib/java-getopt.jar \
 $(INV_DIR)/java/lib/options-all-0.3.1.jar \
 $(INV_DIR)/java/lib/plume-util-0.0.1.jar \
-$(INV_DIR)/java/lib/daikon-util.jar
+$(INV_DIR)/java/lib/require-javadoc-0.0.7.jar
 
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
 ## "make -C java clean; make daikon.jar".
@@ -617,9 +618,10 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/bcel-util-all-0.0.4.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/commons-exec-1.3.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/daikon-util.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/options-all-0.3.1.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume-util-0.0.1.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/daikon-util.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/require-javadoc-0.0.7.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \

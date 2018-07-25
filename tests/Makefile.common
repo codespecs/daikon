@@ -224,7 +224,7 @@ else
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/commons-exec-1.3.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/plume-util-0.0.1.jar:${DAIKONDIR}/java/lib/daikon-util.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar
+CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/commons-exec-1.3.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/plume-util-0.0.1.jar:${DAIKONDIR}/java/lib/daikon-util.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/require-javadoc-0.0.7.jar
 CPJUNIT := ${DAIKONDIR}/java/lib/junit-4.12.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)

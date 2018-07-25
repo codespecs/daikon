@@ -26,8 +26,7 @@ junit-4.12.jar : https://github.com/junit-team/junit4/wiki/Download-and-Install
 options-all-0.3.1.jar : https://github.com/plume-lib/options
 - using JDK 7, uncomment and run shadowJar task
 
-plume.jar : https://github.com/mernst/plume-lib.git
-- To update plume.jar, run:  make -C $DAIKONDIR update-plume-jar
+require-javadoc-0.0.7.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.0.7/
 
 daikon-util.jar : Just like plume-util-*.jar, but with package
 changed to daikon.util.  To create, run:
