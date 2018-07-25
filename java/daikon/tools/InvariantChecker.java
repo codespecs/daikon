@@ -48,7 +48,7 @@ public class InvariantChecker {
 
   private static String usage =
       UtilPlume.joinLines(
-          "Usage: java daikon.InvariantChecker [OPTION]... <inv_file> " + "<dtrace_file>",
+          "Usage: java daikon.InvariantChecker [OPTION]... <inv_file> <dtrace_file>",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
           "  --" + output_SWITCH + " output file",
