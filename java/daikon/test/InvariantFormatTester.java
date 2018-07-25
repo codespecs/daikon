@@ -115,7 +115,7 @@ public class InvariantFormatTester extends TestCase {
     // run the actual test
 
     if (!execute()) {
-      fail("At least one test failed." + " Inspect " + diff_file + " for error report.");
+      fail("At least one test failed. Inspect " + diff_file + " for error report.");
     }
   }
 

@@ -174,7 +174,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
       } catch (NumberFormatException e) {
         System.out.println(
-            "Should never get here... " + "NumberFormatException in filterOut: " + oneToken);
+            "Should never get here... NumberFormatException in filterOut: " + oneToken);
         continue;
       }
     }

@@ -33,20 +33,14 @@ public final class UnionInvariants {
   public static void main(final String[] args) throws Exception {
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    */
   public static void mainHelper(String[] args) throws Exception {
     File inv_file = null;
@@ -64,21 +58,21 @@ public final class UnionInvariants {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
             Daikon.suppress_redundant_invariants_with_simplify = true;
           } else {
-            throw new Daikon.TerminationMessage("Unknown option received: " + option_name);
+            throw new Daikon.UserError("Unknown option received: " + option_name);
           }
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case 'o':
           String inv_filename = Daikon.getOptarg(g);
 
           if (inv_file != null) {
-            throw new Daikon.TerminationMessage(
+            throw new Daikon.UserError(
                 "multiple serialization output files supplied on command line: "
                     + inv_file
                     + " "
@@ -89,8 +83,7 @@ public final class UnionInvariants {
           inv_file = new File(inv_filename);
 
           if (!UtilPlume.canCreateAndWrite(inv_file)) {
-            throw new Daikon.TerminationMessage(
-                "Cannot write to serialization output file " + inv_file);
+            throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
           //
@@ -106,7 +99,7 @@ public final class UnionInvariants {
     int fileIndex = g.getOptind();
     if ((inv_file == null) || (args.length - fileIndex == 0)) {
       System.out.println(usage);
-      throw new Daikon.TerminationMessage("Wrong number of args");
+      throw new Daikon.UserError("Wrong number of args");
     }
 
     PptMap result = new PptMap();

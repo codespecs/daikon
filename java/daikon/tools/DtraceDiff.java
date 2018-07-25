@@ -56,11 +56,9 @@ public class DtraceDiff {
   public static void main(String[] args) {
     try {
       mainHelper(args);
-    } catch (daikon.Daikon.TerminationMessage e) {
-      daikon.Daikon.handleTerminationMessage(e);
+    } catch (daikon.Daikon.DaikonTerminationException e) {
+      daikon.Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than daikon.Daikon.TerminationMessage gets
-    // propagated.  This simplifies debugging by showing the stack trace.
   }
 
   /**
@@ -82,13 +80,10 @@ public class DtraceDiff {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * daikon.Daikon.TerminationMessage.
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
    */
   public static void mainHelper(final String[] args) {
     Set<File> declsfile1 = new HashSet<File>();
@@ -118,7 +113,7 @@ public class DtraceDiff {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
             if (Daikon.ppt_regexp != null) {
               throw new Error(
@@ -128,7 +123,7 @@ public class DtraceDiff {
             }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -147,7 +142,7 @@ public class DtraceDiff {
             }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -166,7 +161,7 @@ public class DtraceDiff {
             }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -185,7 +180,7 @@ public class DtraceDiff {
             }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Bad regexp "
                       + regexp_string
                       + " for "
@@ -215,7 +210,7 @@ public class DtraceDiff {
           // short options
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
 
         case '?':
           break; // getopt() already printed an error
@@ -230,15 +225,15 @@ public class DtraceDiff {
       if (args[i].indexOf(".decls") != -1) {
         if (dtracefile1 == null) declsfile1.add(new File(args[i]));
         else if (dtracefile2 == null) declsfile2.add(new File(args[i]));
-        else throw new daikon.Daikon.TerminationMessage(usage);
+        else throw new daikon.Daikon.UserError(usage);
       } else { // presume any other file is a dtrace file
         if (dtracefile1 == null) dtracefile1 = args[i];
         else if (dtracefile2 == null) dtracefile2 = args[i];
-        else throw new daikon.Daikon.TerminationMessage(usage);
+        else throw new daikon.Daikon.UserError(usage);
       }
     }
     if ((dtracefile1 == null) || (dtracefile2 == null)) {
-      throw new daikon.Daikon.TerminationMessage(usage);
+      throw new daikon.Daikon.UserError(usage);
     }
     dtraceDiff(declsfile1, dtracefile1, declsfile2, dtracefile2);
   }
@@ -445,7 +440,7 @@ public class DtraceDiff {
       FileIO.ParseState state1, String dtracefile1, FileIO.ParseState state2, String dtracefile2) {
     throw new DiffError(
         String.format(
-            "Mismatched program point:%n" + "  ppt %s at %s:%d%n" + "  ppt %s at %s:%d",
+            "Mismatched program point:%n  ppt %s at %s:%d%n  ppt %s at %s:%d",
             state1.ppt.name,
             dtracefile1,
             state1.get_linenum(),
@@ -459,7 +454,7 @@ public class DtraceDiff {
       FileIO.ParseState state1, String dtracefile1, FileIO.ParseState state2, String dtracefile2) {
     throw new DiffError(
         String.format(
-            "Mismatched program point declaration:%n" + "  ppt %s at %s:%d%n" + "  ppt %s at %s:%d",
+            "Mismatched program point declaration:%n  ppt %s at %s:%d%n  ppt %s at %s:%d",
             state1.ppt.name,
             dtracefile1,
             state1.get_linenum(),

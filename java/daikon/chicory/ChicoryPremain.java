@@ -353,7 +353,7 @@ public class ChicoryPremain {
 
       if (plse_urls.size() == 0) {
         System.err.printf(
-            "%nBCEL 6.1 must be on the classpath.  " + "Normally it is found in daikon.jar .%n");
+            "%nBCEL 6.1 must be on the classpath.  Normally it is found in daikon.jar .%n");
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
@@ -371,13 +371,13 @@ public class ChicoryPremain {
       URL bcel = bcel_urls.get(0);
       URL plse = plse_urls.get(0);
       if (!plse.getProtocol().equals("jar")) {
-        System.err.printf("%nDaikon BCEL must be in jar file. " + " Found at %s%n", plse);
+        System.err.printf("%nDaikon BCEL must be in jar file.  Found at %s%n", plse);
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
       if (!same_location(bcel, plse)) {
         System.err.printf(
-            "%nDaikon BCEL (%s) is not first BCEL on the classpath " + "(%s).%n", plse, bcel);
+            "%nDaikon BCEL (%s) is not first BCEL on the classpath (%s).%n", plse, bcel);
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       } else {

@@ -88,7 +88,7 @@ public class Premain {
 
     if (DynComp.verbose) {
       System.out.format(
-          "In dcomp premain, agentargs ='%s', " + "Instrumentation = '%s'\n", agentArgs, inst);
+          "In dcomp premain, agentargs ='%s', Instrumentation = '%s'\n", agentArgs, inst);
       System.out.printf("Options settings: %n%s%n", options.settings());
     }
 

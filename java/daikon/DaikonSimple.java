@@ -77,24 +77,17 @@ public class DaikonSimple {
 
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
+   * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
+   * called progrmmatically.
    *
-   * <p>Difference from Daikon's mainHelper: turn off optimization flags (equality, dynamic
-   * constants, NIS suppression).
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
-   * @see daikon.Daikon#mainHelper(String[])
+   * <p>Difference from {@link daikon.Daikon#mainHelper(String[])}Helper: turn off optimization
+   * flags (equality, dynamic constants, NIS suppression).
    */
   public static void mainHelper(final String[] args) throws IOException, FileNotFoundException {
 
@@ -121,7 +114,7 @@ public class DaikonSimple {
     Set<String> dtrace_files = files.dtrace;
 
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
-      throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
+      throw new Daikon.UserError("No .decls or .dtrace files specified");
     }
 
     // Create the list of all invariant types

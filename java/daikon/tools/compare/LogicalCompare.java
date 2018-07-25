@@ -316,7 +316,7 @@ public class LogicalCompare {
               for (Lemma lem : assume) {
                 System.out.println("    " + lem.formula);
               }
-              System.out.println("    ----------------------" + "--------------------");
+              System.out.println("    ------------------------------------------");
               System.out.println("    " + inv.formula);
             }
           }
@@ -549,7 +549,7 @@ public class LogicalCompare {
           }
         } else if (line.startsWith("(")) {
           if (ppt_name == null) {
-            System.err.println("Must specify PPT_NAME before " + "giving a formula");
+            System.err.println("Must specify PPT_NAME before giving a formula");
             throw new Error();
           }
           String formula, comment;
@@ -573,7 +573,7 @@ public class LogicalCompare {
         } else {
           System.err.println("Can't parse " + line + " in assumptions file");
           System.err.println(
-              "Should be `PPT_NAME <ppt_name>' or a Simplify " + "formula (starting with `(')");
+              "Should be `PPT_NAME <ppt_name>' or a Simplify formula (starting with `(')");
           throw new Error();
         }
       }
@@ -589,21 +589,16 @@ public class LogicalCompare {
   public static void main(String[] args) throws FileNotFoundException, IOException, SimplifyError {
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
    */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, IOException, SimplifyError {
@@ -627,9 +622,8 @@ public class LogicalCompare {
           new LongOpt("timing", LongOpt.NO_ARGUMENT, null, 0),
         };
 
-    Configuration.getInstance().apply("daikon.inv.Invariant." + "simplify_define_predicates=true");
-    Configuration.getInstance()
-        .apply("daikon.simplify.Session." + "simplify_max_iterations=2147483647");
+    Configuration.getInstance().apply("daikon.inv.Invariant.simplify_define_predicates=true");
+    Configuration.getInstance().apply("daikon.simplify.Session.simplify_max_iterations=2147483647");
 
     extra_assumptions = new LinkedHashMap<String, List<Lemma>>();
 
@@ -643,7 +637,7 @@ public class LogicalCompare {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (option_name.equals("config-file")) {
             String config_file = Daikon.getOptarg(g);
             try {
@@ -691,10 +685,10 @@ public class LogicalCompare {
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case '?':
           // getopt() already printed an error
-          throw new Daikon.TerminationMessage("Bad argument");
+          throw new Daikon.UserError("Bad argument");
       }
     }
 
@@ -708,7 +702,7 @@ public class LogicalCompare {
     int num_args = args.length - g.getOptind();
 
     if (num_args < 2) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Must have at least two non-option arguments" + Global.lineSep + usage);
     }
 
@@ -746,11 +740,11 @@ public class LogicalCompare {
       PptTopLevel app_enter_ppt = app_ppts.get(enter_ppt_name);
       PptTopLevel test_enter_ppt = test_ppts.get(enter_ppt_name);
       if (app_enter_ppt == null) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             String.format("Ppt %s not found in %s", enter_ppt_name, app_filename));
       }
       if (test_enter_ppt == null) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             String.format("Ppt %s not found in %s", enter_ppt_name, test_filename));
       }
 
@@ -759,7 +753,7 @@ public class LogicalCompare {
       if (app_exit_ppt == null) {
         app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
         if (app_exit_ppt == null) {
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.UserError(
               String.format(
                   "Neither ppt %s nor ppt %s found in %s",
                   exit_ppt_name, app_enter_ppt.ppt_name.makeExit(), app_filename));
@@ -768,7 +762,7 @@ public class LogicalCompare {
       if (test_exit_ppt == null) {
         test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
         if (test_exit_ppt == null) {
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.UserError(
               String.format(
                   "Neither ppt %s nor ppt %s found in %s",
                   exit_ppt_name, test_enter_ppt.ppt_name.makeExit(), test_filename));
@@ -826,7 +820,7 @@ public class LogicalCompare {
             app_exit_ppt, test_exit_ppt);
       }
     } else {
-      throw new Daikon.TerminationMessage("Too many arguments" + Global.lineSep + usage);
+      throw new Daikon.UserError("Too many arguments" + Global.lineSep + usage);
     }
   }
 }
