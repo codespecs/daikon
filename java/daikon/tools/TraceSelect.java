@@ -264,7 +264,7 @@ public class TraceSelect {
     reinitializeDaikon();
     daikon.Daikon.main(daikonArgs);
     Runtime.getRuntime()
-        .exec("java daikon.PrintInvariants " + dtraceName + ".inv" + " > " + dtraceName + ".txt");
+        .exec("java daikon.PrintInvariants " + dtraceName + ".inv > " + dtraceName + ".txt");
 
     return;
   }

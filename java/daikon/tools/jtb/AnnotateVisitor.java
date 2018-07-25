@@ -271,7 +271,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       for (int i = cfi.ownedFieldNames.size() - 1; i >= 0; i--) {
         addComment(
             n.f5.f1,
-            javaLineComment("@ invariant" + " " + cfi.ownedFieldNames.get(i) + ".owner == this;"),
+            javaLineComment("@ invariant " + cfi.ownedFieldNames.get(i) + ".owner == this;"),
             true);
       }
     }
