@@ -629,7 +629,7 @@ JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ../utils/plume-lib ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
-	@chmod -w ${AUTO_GENERATED_FILES}
+	@chmod a-w ${AUTO_GENERATED_FILES}
 	$(MAKE) all_pass2
 
 .PHONY: all_pass2
@@ -1347,18 +1347,18 @@ avoid-jpp:
 # the status of the last command.
 
 # This rule does not work with make 3.77, but does work with make 3.78.
-JAVA_CPP ?= (rm -f $@; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
+JAVA_CPP ?= (rm -f $@; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< 2>&1 > $@ && chmod a-w $@)
 # Like the above, but also makes a backup file
-# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< > $@; chmod -w $@)
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< > $@; chmod a-w $@)
 
-# JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
+# JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod a-w $@)
 ## Here are alternate ways of writing the same command:
 ## I could use "define", but that's specific to GNU Make
 ## I can't do this because the CPP defined variable changes.
-# JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@; chmod -w $@)
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@; chmod a-w $@)
 ## These are used like:	$(JAVA_CPP_START) -DLOWER $(JAVA_CPP_END)
 # JAVA_CPP_START = (cp -pf $@ $@-bak; set -e; java-cpp $<
-# JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
+# JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod a-w $@)
 
 daikon/PptSlice1.java: daikon/PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)
