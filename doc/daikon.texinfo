@@ -377,6 +377,12 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @node       Windows installation
 @section    Windows installation
 
+If you use Windows, an easy way to use Daikon is to run it under Windows
+Subsystem for Linux (WSL).
+
+The remainder of this section describes how to proceed if you prefer to use
+Daikon under Windows.
+
 To perform a complete install on
 Windows, it is necessary to install the Cygwin toolset.
 After you have installed Daikon, you can run it using either Cygwin or
