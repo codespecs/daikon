@@ -211,8 +211,8 @@ CP_PARENTS := rsync -aR
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
 # they are on the path.
 ifeq (cygwin, $(OSTYPE))
-  JAVA := ${DAIKONDIR}/utils/plume-lib/bin/java-cygwin
-  JAVAC := ${DAIKONDIR}/utils/plume-lib/bin/javac-cygwin
+  JAVA := ${DAIKONDIR}/utils/plume-scripts/java-cygwin
+  JAVAC := ${DAIKONDIR}/utils/plume-scripts/javac-cygwin
 else
   ifeq (darwin, $(OSTYPE))
     JAVA  := java
@@ -477,7 +477,7 @@ ${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile $(MAIN_JAVA) $(MAIN2_
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
-	${DAIKONDIR}/utils/plume-lib/bin/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" $(JAVAC) \
+	${DAIKONDIR}/scripts/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" $(JAVAC) \
 		> $(ALL_LIST_FILE)
 
 

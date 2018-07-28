@@ -20,6 +20,11 @@ Further documentation can be found in:
 
 ===========================================================================
 
+Daikon no longer uses the plume-lib repository, but smaller ones such as
+plume-scripts.
+
+===========================================================================
+
 5.6.6 (July 2, 2018)
 
 DynComp:

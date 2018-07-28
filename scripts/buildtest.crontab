@@ -8,11 +8,11 @@
 USER=daikonuser
 MAILTO=daikon-developers@csail.mit.edu
 #MAILTO=mernst@csail.mit.edu
-CRONIC=/afs/csail.mit.edu/u/d/daikonuser/research/daikon/plume-lib/bin/cronic
+CRONIC=/afs/csail.mit.edu/u/d/daikonuser/research/daikon/plume-scripts/cronic
 AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 
 01 1 * * * cd $HOME/research/daikon/scripts; $AFS $CRONIC cvs -Q up
-02 1 * * * cd $HOME/research/daikon/plume-lib; $AFS $CRONIC git pull
+02 1 * * * cd $HOME/research/daikon/plume-scripts; $AFS $CRONIC git pull
 03 1 * * * $AFS crontab $HOME/research/daikon/scripts/buildtest.crontab
 55 1 * * * $AFS $HOME/research/daikon/scripts/buildtest-remove-old
 0 2 * * * $AFS $HOME/research/daikon/scripts/buildtest

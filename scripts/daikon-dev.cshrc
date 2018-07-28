@@ -6,8 +6,8 @@ if (! $?LC_ALL) setenv LC_ALL en_US
 scriptdir=`/bin/dirname $0`       # may be relative path
 DAIKONDIR=`cd $scriptdir/.. && pwd`    # ensure absolute path
 
-setenv DAIKONBIN ${DAIKONDIR}/scripts
-setenv PLUMEBIN ${DAIKONDIR}/utils/plume-lib/bin
+setenv DAIKONSCRIPTS ${DAIKONDIR}/scripts
+setenv PLUMESCRIPTS ${DAIKONDIR}/utils/plume-scripts
 setenv INV ${DAIKONDIR}
 setenv inv ${INV}
 setenv DAIKONCLASS_SOURCES 1
@@ -30,9 +30,9 @@ setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
 setenv LACKWIT_HOME ${INV}/front-end/c/lackwit
 
 # Remove duplicates so path and classpath don't get too long
-if (-x ${PLUMEBIN}/path-remove.pl) then
-  if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | ${PLUMEBIN}/path-remove.pl`
-  setenv PATH `echo $PATH | ${PLUMEBIN}/path-remove.pl`
+if (-x ${PLUMESCRIPTS}/path-remove.pl) then
+  if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | ${PLUMESCRIPTS}/path-remove.pl`
+  setenv PATH `echo $PATH | ${PLUMESCRIPTS}/path-remove.pl`
 endif
 
 # Enable use of group bibliographies, and the "bibfind" command.

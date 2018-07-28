@@ -1,0 +1,320 @@
+#!/usr/bin/env perl
+# java-cpp -- C preprocessor specialized for Java
+# Michael Ernst
+# Time-stamp: <2014-01-30 14:23:04 mernst>
+
+# This acts like the C preprocessor (cpp), but
+#  * it does not remove comments, and
+#  * it cleans up spacing in the processed file.
+# Its name comes from the fact that it is useful for running on a source
+# file with cpp macros, to create Java source code.
+
+# If last argument is a file, it is used as input.  Otherwise, input comes
+# from standard in.  Output goes to standard out.
+
+# (Implementation note:  I do want substitution to occur in comments.
+# Therefore, I do not use the -C (leave comments in) flag to cpp, or make
+# JAVACPP_DOUBLESLASHCOMMENT put the rest of the line in a string, both
+# of which would also avoid the problem but would prevent substitution.)
+
+# I'm not calling this jpp because someone else has probably already taken
+# that name.
+
+# This script started out as a 16-line csh script by Josh Kataoka.
+
+
+use English;
+use strict;
+use filetest 'access';  # needed for afs!
+$WARNING = 1;			# "-w" command-line switch
+
+my $debug = 0;
+# $debug = 1;
+my $cleanup_tmpfiles = 1;
+# $cleanup_tmpfiles = 0;
+
+my $system_temp_dir = -d '/tmp' ? '/tmp' : $ENV{TMP} || $ENV{TEMP} ||
+    die "Cannot determine system temporary directory, stopped";
+my $tmpfile_in = "$system_temp_dir/java-cpp-$$-in";
+my $tmpfile_out = "$system_temp_dir/java-cpp-$$-out";
+my $tmpfile_err = "$system_temp_dir/java-cpp-$$-err";
+
+if ($debug) {
+  print STDERR "// tmpfile_in  = $tmpfile_in\n";
+  print STDERR "// tmpfile_out = $tmpfile_out\n";
+  print STDERR "// tmpfile_err = $tmpfile_err\n";
+}
+
+my $file_handle_nonce = 'fh00';
+
+{
+  my $filename;
+  if ((scalar(@ARGV) > 0) && (-r $ARGV[$#ARGV])) {
+    $filename = pop @ARGV;	# remove last (filename) element
+  } else {
+    if ($ARGV[$#ARGV] !~ /^-/ and $ARGV[$#ARGV] =~ /\.jpp$/) {
+      # Hmm, looks like a filename, even though we can't read it.
+      die "Can't read $ARGV[$#ARGV], stopped";
+    }
+    if ($debug) {
+      print STDERR "// Last arg not a filename; reading from standard in.\n";
+    }
+    $filename = "-";
+  }
+
+  open(TMPFILE, ">$tmpfile_in") || die "Cannot open $tmpfile_in: $!\n";
+  escape_comments($filename);
+  close(TMPFILE);
+
+  my $argv = join(' ', @ARGV);
+  # Intentionally does not capture standard error; it goes straight through.
+  my $cpp_command = "cpp -ffreestanding -traditional $argv $tmpfile_in > $tmpfile_out 2> $tmpfile_err";
+  if ($debug) {
+    print STDERR "// running command: $cpp_command\n";
+  }
+  my $system_result = system($cpp_command);
+  if ($system_result != 0) {
+    rewrite_errors($tmpfile_err, $filename);
+    if (! $debug && $cleanup_tmpfiles) {
+      # unlink($tmpfile_in);
+      unlink($tmpfile_out);
+      # unlink($tmpfile_err);
+    }
+    die "java-cpp: cpp $argv $filename failed: $!\n  Actual command that failed: $cpp_command";
+  }
+
+  unescape_comments($tmpfile_out);
+  if ($cleanup_tmpfiles) {
+    unlink($tmpfile_in);
+    unlink($tmpfile_out);
+    unlink($tmpfile_err);
+  }
+}
+
+exit();
+
+
+###########################################################################
+### Subroutines
+###
+
+# Also processes #include directives.
+# Perhaps I should instead do this; the advantage would be correct
+# "#line" information.
+# ## Use of cpp for #include only:
+# cpp -C -nostdinc -undef
+
+sub escape_comments ( $ ) {
+  my ($filename) = @_;
+
+  # Indirect through this filehandle name in order to make this routine
+  # (escape_comments) re-entrant.
+  my $inhandle = $file_handle_nonce++;   # this is a string increment
+
+  if ($debug) {
+    print STDERR "// escape_comments: opening $filename\n";
+  }
+
+  no strict 'refs';
+  open($inhandle, $filename)
+    || die "escape_comments:  cannot open $filename: $!\n";
+
+  # my $JAVACPP_WHITESPACE_SEPARATOR = "JAVACPP_WHITESPACE_SEPARATOR";
+
+  while (<$inhandle>) {
+    # print STDERR "// top of escape_comments loop: $_";
+
+    s/^[ \t]+\#/\#/;
+
+    if (/^\#include "(.*)"/) {
+      escape_comments($1);
+      next;
+    }
+    s|//|JAVACPP_DOUBLESLASHCOMMENT|g;
+    s|/\*|JAVACPP_SLASHSTARCOMMENT|g;
+    s/\'/JAVACPP_SINGLEQUOTE/g;
+    # cpp 2.96 (Red Hat) compresses all multiple internal whitespace into one
+    # space, which loses space both preceding and within comments.  Don't do
+    # this inside cpp directives, however, and don't change leading space.
+    if (! /^[ \t]*\#/) {
+      my($leading_ws, $rest) = /^(\s*)(.*?)\z/s;
+      $rest =~ s/(\s{2,})/separate_spaces($1)/eg;
+      $_ = $leading_ws . $rest;
+    }
+    print TMPFILE;
+    # print STDERR "// bottom of escape_comments loop: $_";
+  }
+  close($inhandle);
+
+}
+
+# Insert "JAVACPP_WHITESPACE_SEPARATOR" in between each pair of
+# characters in the argument (which presumably consists only of
+# whitespace characters)
+sub separate_spaces {
+  my ($spaces) = @_;
+  my @spaces = split(//, $spaces);
+  return join "JAVACPP_WHITESPACE_SEPARATOR", @spaces;
+}
+
+
+sub unescape_comments ( $ ) {
+  my ($filename) = @_;
+
+  # Read by paragraphs, eliminating empty paragraphs.
+  # This causes records read from file to potentially have many trailing blanks.
+  $INPUT_RECORD_SEPARATOR = "";
+
+  open(CPPFILE, $filename)
+    || die "unescape_comments: cannot open $filename: $!\n";
+
+  my $post_return_space = "";
+  my $next_post_return_space = "";
+  my $post_else_space = "";
+  my $next_post_else_space = "";
+
+  while (<CPPFILE>) {
+    # print STDERR "// top of unescape_comments loop: <<<$_>>>";
+
+    s|JAVACPP_DOUBLESLASHCOMMENT|//|g;
+    s|JAVACPP_SLASHSTARCOMMENT|/\*|g;
+    s/JAVACPP_SINGLEQUOTE/\'/g;
+    # Change multiple contiguous spaces into one space, but not at
+    # beginning of line (cpp 2.96 (Red Hat) does this).
+    s/([^ \t\n] ) +/$1/g;
+    s/JAVACPP_WHITESPACE_SEPARATOR//og;
+
+    # Perform string contatenation required by use of -traditional cpp flag.
+    s/(\w) \#\# (\w)/$1$2/g;
+    # Perform stringization, but not just after "@link" or "@see".
+    s/(?!\@link)(.(?!\@see).... )\#(\w+)/$1"$2"/g;
+    # Undocumented workaround to enable a literal pound sign to be placed
+    # in the output, in case the stringizaton goes poorly.
+    s/JAVACPP_POUNDSIGN_NOSPACE */\#/g;
+    s/JAVACPP_POUNDSIGN/\#/g;
+
+    # Convert string concatenation ("a" + "b") into single string ("ab").
+    while (s/(".*)"  ?\+ "(.*")/$1$2/g) { }
+    # Remove "# 22" lines.  (Turn them into blank lines that are removed later.)
+    # The while loop is because there may be many such lines adjacent.
+    while (s/(^|\n)\# [0-9]+ ".*"[1-4, ]*($|\n)/$1$2/g) { }
+
+    ## This is no longer necessary, because I use "-traditional" cpp flag.
+    # ## Remove extra horizontal space
+    # ## (Some of these are cosmetic; others are necessary to get identical
+    # ## output under all versions of cpp.)
+    # # print STDERR "pre-horizontal: $_";
+    # # Remove all trailing space
+    # s/[ \t]+\n/\n/g;
+    # # Remove space before trailing semicolon
+    # s/ ;$/;/gm;
+    # # Remove space after package name
+    # s/^(package .*\.) ([^ ]*;)/$1$2/gm;
+    # # Remove all extra spaces in import list
+    # while (s/^(import [^ \n]*) (.*;)$/$1$2/m) { }
+    # # convert " );" to ");"; requires "=" somewhere earlier in line
+    # s/(=.*[^ \t\n\}]) (\);\n)/$1$2/g;
+    # # convert "(Foo )" to "(Foo)"
+    # s/\((\b[A-Za-z]\w*) \)/($1)/g;
+    # # convert "a .b" to "a.b".
+    # s/(\b[A-Za-z]\w*) \.([A-Za-z]\w*\b)/$1.$2/g;
+    # # convert "a. foo (" to "a.foo("
+    # # (Note single spaces, lowercase first letter.)
+    # # also: "a. FOO)" becomes "a.FOO)"
+    # s/(\b[A-Za-z]\w*|\))\. ([a-z]\w*) ?\(/$1.$2\(/g;
+    # s/(\b[A-Za-z]\w*)\. (\w+) ?(\)|;|\.[a-z])/$1.$2$3/g;
+    # # convert "new Foo. Bar(...)" to "new Foo.Bar(...)"
+    # s/(\bnew [A-Za-z]\w*)\. ([A-Za-z]\w*)\(/$1.$2\(/g;
+    # # convert " instanceof long [])" to " instanceof long[])"
+    # s/( instanceof \w+) ((\[\])*\))/$1$2/g;
+    # # convert "long []" to "long[]" (for cast, prototype, or declaration).
+    # # also "long[] " to "long[]".
+    # s/((?:\(|^ *|(?:(?:,|public|private|protected)(?: static)? ))\w+(?:\[\])*) ([\[\)])/$1$2/gm;
+    # # convert "new int[2 ]" to "new int[2]"; also "new int [", "new Foo ("
+    # s/(\bnew \w+) (\()/$1$2/g;
+    # s/(\bnew \w+) (\[)/$1$2/g;
+    # s/(\bnew \w+\[\w+) *(\])/$1$2/g;
+    # # convert "public PptSlice1 (" to "public PptSlice1("
+    # s/(^ *(?:public|private|protected)(?: static)? \w+) (\()/$1$2/gm;
+    # # convert "double [] val1_array =" to "double[] val1_array ="
+    # s/(^ *\w+) (\[\] \w+(;| *=))/$1$2/gm;
+    # # remove space before close paren, if there is an open w/o a space after it
+    # # and this is not a "for" loop.
+    # # old version: s/(\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
+    # s/(^ *(?!(?:\/\/ *)?for\b)[^ ].*\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
+    # # print STDERR "post-horizontal: $_";
+
+    # print STDERR "pre-vertical: $_";
+
+    ## Remove extra vertical space
+    # compress out duplicate blank lines
+    s/\n\n\n+/\n\n/g;
+    # Also remove blank lines before the start of the file.
+    # This substitution can only succeed for the very first record that is
+    # read, or for paragraphs that are completely eliminated.
+    s/^\n+//;
+
+    # This does not work:  it matches to *every* paragraph.
+    # # compress out blank lines at end (due to the above, this can be simpler)
+    # s/\n\n\z/\n/;
+    # Remove newline after "if" statement
+    # if no open curly brace or semicolon but 2 newlines.
+    if (/^[ \t]*if[ \t]*\([^\n\{;]*\n\n\z/) {
+      # not "chomp":  it removes all of the trailing newlines rather than one
+      s/\n\z//;
+    }
+
+    # print STDERR "post-vertical: $_";
+
+    # Remove newline after "return" statement if followed by 2 nelines and
+    # open curly brace.  But I have no way of knowing that open curly follows.
+    # Thus, the post_return_space hack.
+    if (/\breturn [^\n]*;\n\n\z/) {
+      s/\n\z//;
+      $next_post_return_space = "\n";
+    }
+    # Same for closing up space in "} else\n\n{"
+    if (/\} else\n\n\z/) {
+      s/\n\n\z//;
+      $next_post_else_space = "\n\n";
+      # Is the below for debugging?
+      # $next_post_else_space = "POST_ELSE_SPACE for <<<$_>>>\n";
+    }
+
+    # Skip if nothing to print (e.g., this paragraph was just a "# 22" line)
+    if (! /[^\n]/) { next; }
+
+    if (/^[ \t]*\}/) {
+      $post_return_space = "";
+    }
+    print $post_return_space;
+    $post_return_space = $next_post_return_space;
+    $next_post_return_space = "";
+
+    if (($post_else_space ne "") && /^[ \t]*\{/) {
+      s/^[ \t]*\{/ \{/;
+      $post_else_space = "";
+    }
+    print $post_else_space;
+    $post_else_space = $next_post_else_space;
+    $next_post_else_space = "";
+
+    print;
+  }
+
+  close(CPPFILE);
+}
+
+
+sub rewrite_errors ( $$ ) {
+  my ($tmp_filename, $orig_filename) = @_;
+
+  open(ERRFILE, $tmp_filename) || die "Cannot open $tmp_filename: $!\n";
+
+  while (<ERRFILE>) {
+    s/$tmpfile_in/$orig_filename/o;
+    print STDERR;
+  }
+
+  close(ERRFILE);
+}

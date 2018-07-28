@@ -1,6 +1,6 @@
 package daikon;
 
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
 import daikon.inv.*;
 import daikon.inv.ternary.threeScalar.*;

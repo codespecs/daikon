@@ -1,27 +1,30 @@
-// From plume-lib, but replace uses of "org.checkerframework.checker.nullness" by
-// "daikon.tools.nullness" and comment out nullness annotations and their
-// import statement.
+// From the Checker Framework, but replace uses of "org.checkerframework.checker.nullness" by
+// "daikon.tools.nullness" and comment out nullness annotations and their import statement.
 package daikon.tools.nullness;
 
 /*>>>
-import org.checkerframework.checker.nullness.qual.*;
+package org.checkerframework.checker.nullness;
+
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 */
 
 /**
- * Utilities class for the Nullness Checker.
+ * Utility class for the Nullness Checker.
  *
- * <p>To avoid the need to write the NullnessUtils class name, do:
+ * <p>To avoid the need to write the NullnessUtil class name, do:
  *
- * <pre>import static daikon.tools.nullness.NullnessUtils.castNonNull;</pre>
+ * <pre>import static daikon.tools.nullness.NullnessUtil.castNonNull;</pre>
  *
  * or
  *
- * <pre>import static daikon.tools.nullness.NullnessUtils.*;</pre>
+ * <pre>import static daikon.tools.nullness.NullnessUtil.*;</pre>
  *
  * <p><b>Runtime Dependency</b>
  *
- * <p>Please note that using this class introduces a Runtime dependency. This means that if you need
- * to distribute (or link to) the Checker Framework, along with your binaries.
+ * <p>Please note that using this class introduces a runtime dependency. This means that you need to
+ * distribute (or link to) Daikon, along with your binaries.
  *
  * <p>To eliminate this dependency, you can simply copy this class into your own project.
  */
@@ -29,9 +32,9 @@ import org.checkerframework.checker.nullness.qual.*;
   "nullness", // Nullness utilities are trusted regarding nullness.
   "cast" // Casts look redundant if Nullness Checker is not run.
 })
-public final class NullnessUtils {
+public final class NullnessUtil {
 
-  private NullnessUtils() {
+  private NullnessUtil() {
     throw new AssertionError("shouldn't be instantiated");
   }
 
@@ -44,9 +47,9 @@ public final class NullnessUtils {
    * be used either as a cast expression or as a statement. The Nullness Checker issues no warnings
    * in any of the following code:
    *
-   * <pre>
+   * <pre><code>
    *   // one way to use as a cast:
-   *   &#64;NonNull String s = castNonNull(possiblyNull1);
+   *  {@literal @}NonNull String s = castNonNull(possiblyNull1);
    *
    *   // another way to use as a cast:
    *   castNonNull(possiblyNull2).toString();
@@ -54,7 +57,7 @@ public final class NullnessUtils {
    *   // one way to use as a statement:
    *   castNonNull(possiblyNull3);
    *   possiblyNull3.toString();`
-   * </pre>
+   * }</code></pre>
    *
    * The {@code castNonNull} method is intended to be used in situations where the programmer
    * definitively knows that a given reference is not null, but the type system is unable to make
@@ -66,12 +69,11 @@ public final class NullnessUtils {
    * {@code null}. If the exception is ever thrown, then that indicates that the programmer misused
    * the method by using it in a circumstance where its argument can be null.
    *
-   * <p>
-   *
    * @param ref a reference of @Nullable type
    * @return the argument, casted to have the type qualifier @NonNull
    */
-  public static <T extends /*@Nullable*/ Object> /*@NonNull*/ T castNonNull(T ref) {
+  public static /*@EnsuresNonNull("#1")*/ <T extends /*@Nullable*/ Object>
+      /*@NonNull*/ T castNonNull(T ref) {
     assert ref != null : "Misuse of castNonNull: called with a null argument";
     return (/*@NonNull*/ T) ref;
   }
@@ -83,8 +85,8 @@ public final class NullnessUtils {
    *
    * @see #castNonNull(Object)
    */
-  public static <T extends /*@Nullable*/ Object> /*@NonNull*/ T /*@NonNull*/ [] castNonNullDeep(
-      T /*@Nullable*/ [] arr) {
+  public static /*@EnsuresNonNull("#1")*/ <T extends /*@Nullable*/ Object>
+      /*@NonNull*/ T /*@NonNull*/ [] castNonNullDeep(T /*@Nullable*/ [] arr) {
     return (/*@NonNull*/ T[]) castNonNullArray(arr);
   }
 
@@ -119,7 +121,7 @@ public final class NullnessUtils {
    *
    * @see #castNonNull(Object)
    */
-  public static <T extends /*@Nullable*/ Object>
+  public static /*@EnsuresNonNull("#1")*/ <T extends /*@Nullable*/ Object>
       /*@NonNull*/ T /*@NonNull*/ [][][][] castNonNullDeep(
       T /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] arr) {
     return (/*@NonNull*/ T[][][][]) castNonNullArray(arr);
@@ -132,7 +134,7 @@ public final class NullnessUtils {
    *
    * @see #castNonNull(Object)
    */
-  public static <T extends /*@Nullable*/ Object>
+  public static /*@EnsuresNonNull("#1")*/ <T extends /*@Nullable*/ Object>
       /*@NonNull*/ T /*@NonNull*/ [][][][][] castNonNullDeep(
       T /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] arr) {
     return (/*@NonNull*/ T[][][][][]) castNonNullArray(arr);
