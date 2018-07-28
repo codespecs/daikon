@@ -519,7 +519,7 @@ $(SCRATCH_FOR_DAIKON)/.copy-timestamp: ${ALL_LIST_FILE}
 	@echo
 	tar cf - -C $(SOURCES) `cat $(ALL_LIST_FILE)` \
 		| tar xf - -C $(SCRATCH_FOR_DAIKON)
-	find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.java' -exec chmod +w {} \;
+	find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.java' -exec chmod a+w {} \;
 	install -d ${RTC_SCRATCH}
 	tar cf - -C $(SOURCES) `cat $(ALL_LIST_FILE)` | tar xf - -C $(RTC_SCRATCH)
 	touch $(SCRATCH_FOR_DAIKON)/.copy-timestamp

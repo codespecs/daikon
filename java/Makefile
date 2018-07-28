@@ -629,7 +629,7 @@ JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ../utils/plume-lib ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
-	@chmod -w ${AUTO_GENERATED_FILES}
+	@chmod a-w ${AUTO_GENERATED_FILES}
 	$(MAKE) all_pass2
 
 .PHONY: all_pass2
@@ -734,22 +734,22 @@ tags-without-generated-files: clean-generated-files
 ###
 
 # See version numbers at https://github.com/google/error-prone/releases
-ERRORPRONE_VERSION := 2.2.0
+ERRORPRONE_VERSION := 2.3.1
 
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 errorprone-nocompile:
-	${MAKE} lib/error_prone_ant-${ERRORPRONE_VERSION}.jar
+	${MAKE} lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar
 #	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
-	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
+	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
 # To create a patch file to apply changes:
 #	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # This didn't create the file though its output claimed it did:
 #	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:BoxedPrimitiveConstructor -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # To apply the patch, see instructions in the Error Prone output.
 
-lib/error_prone_ant-${ERRORPRONE_VERSION}.jar:
-	(cd lib && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/error_prone_ant-${ERRORPRONE_VERSION}.jar)
+lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar:
+	(mkdir lib/tmp && cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/error_prone_ant-${ERRORPRONE_VERSION}.jar)
 
 findbugs: .findbugs-output
 .PHONY: findbugs
@@ -1347,18 +1347,18 @@ avoid-jpp:
 # the status of the last command.
 
 # This rule does not work with make 3.77, but does work with make 3.78.
-JAVA_CPP ?= (rm -f $@; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
+JAVA_CPP ?= (rm -f $@; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< 2>&1 > $@ && chmod a-w $@)
 # Like the above, but also makes a backup file
-# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< > $@; chmod -w $@)
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< > $@; chmod a-w $@)
 
-# JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
+# JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod a-w $@)
 ## Here are alternate ways of writing the same command:
 ## I could use "define", but that's specific to GNU Make
 ## I can't do this because the CPP defined variable changes.
-# JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@; chmod -w $@)
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@; chmod a-w $@)
 ## These are used like:	$(JAVA_CPP_START) -DLOWER $(JAVA_CPP_END)
 # JAVA_CPP_START = (cp -pf $@ $@-bak; set -e; java-cpp $<
-# JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
+# JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod a-w $@)
 
 daikon/PptSlice1.java: daikon/PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)
