@@ -90,7 +90,7 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
 ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-util.jar)" "${DAIKONDIR}/java/lib/daikon-util.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java/lib/commons-exec-1.3.jar:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/plume-util-0.0.1.jar:${DAIKONDIR}/java/lib/daikon-util.jar:${DAIKONDIR}/java/lib/junit-4.12.jar
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/*
 endif
 ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
     CLASSPATH_JARS2 = ${CHECKERJAR}
@@ -465,6 +465,7 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
+	echo "CLASSPATH = ${CLASSPATH}"
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
