@@ -449,8 +449,9 @@ public final class Daikon {
 
     /// Constructors that take a Throwable
 
+    // Requires that e.getMessage() != null.
     public UserError(Throwable e) {
-      super(e.getMessage());
+      super(e.getMessage() == null ? e.toString() : e.getMessage(), e);
     }
 
     public UserError(Throwable e, String msg) {
