@@ -4,7 +4,7 @@
 
 # Add the basic jars to the classpath if they aren't already there
 ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-util.jar)" "${DAIKONDIR}/java/lib/daikon-util.jar"
-    CLASSPATH_JARS = ${DAIKONDIR}/java/lib/*.jar
+    CLASSPATH_JARS = ${DAIKONDIR}/java/lib/*
 endif
 
 # Add necessary items to the classpath if they are not already there

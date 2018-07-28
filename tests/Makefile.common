@@ -224,8 +224,7 @@ else
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-DAIKONLIBS := 
-CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*.jar
+CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*
 CPJUNIT := ${DAIKONDIR}/java/lib/junit-4.12.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
