@@ -1,6 +1,6 @@
 package daikon.inv;
 
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
 import daikon.*;
 import daikon.Debug;

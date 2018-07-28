@@ -66,8 +66,8 @@ daikon-fast: daikon.texinfo
 ../utils/html-tools:
 	make -C .. update-html-tools
 
-../utils/plume-lib:
-	make -C .. update-html-tools
+../utils/plume-scripts:
+	make -C .. update-plume-scripts
 
 .PHONY: daikon-html
 # Does the actual work

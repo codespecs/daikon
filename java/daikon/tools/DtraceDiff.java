@@ -2,7 +2,7 @@
 
 package daikon.tools;
 
-import static daikon.tools.nullness.NullnessUtils.*;
+import static daikon.tools.nullness.NullnessUtil.*;
 
 import daikon.*;
 import daikon.config.Configuration;

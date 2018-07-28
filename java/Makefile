@@ -9,14 +9,9 @@
 # Don't let the user override this; it should refer to the current directory.
 DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 
-# Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
-ifeq "$(wildcard ${DAIKONDIR}/scripts)" "${DAIKONDIR}/scripts"
-    DAIKONBIN ?= ${DAIKONDIR}/scripts
-else
-    DAIKONBIN ?= ${DAIKONDIR}/bin
-endif
+DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 
-PLUMEBIN ?= ${DAIKONDIR}/utils/plume-lib/bin
+PLUMESCRIPTS ?= ${DAIKONDIR}/utils/plume-scripts
 HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 
 USER ?= daikonbuild
@@ -48,9 +43,9 @@ endif
 # But doclint is enabled by default starting with Java 8.
 ifeq (cygwin, $(OSTYPE))
   ## Make the classpath explicit on the command line so it can be processed by *-cygwin
-  JAVA ?= ${PLUMEBIN}/java-cygwin -ea -classpath "${CLASSPATH}"
-  JAVAC ?= ${PLUMEBIN}/javac-cygwin -classpath "${CLASSPATH}"
-  JAVADOC ?= ${PLUMEBIN}/javadoc-cygwin
+  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea -classpath "${CLASSPATH}"
+  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin -classpath "${CLASSPATH}"
+  JAVADOC ?= ${PLUMESCRIPTS}/javadoc-cygwin
   JAR ?= ${JAVA_HOME}/bin/jar
 else
   JAVA ?= java -ea
@@ -151,9 +146,9 @@ export CLASSPATH
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
-SORT_DIRECTORY_ORDER = ${PLUMEBIN}/sort-directory-order
+SORT_DIRECTORY_ORDER = ${PLUMESCRIPTS}/sort-directory-order
 ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
-  # Until "make ../plume-lib" has been run, sort-directory-order is not available.
+  # Until "make ../plume-scripts" has been run, sort-directory-order is not available.
   SORT_DIRECTORY_ORDER = sort
 endif
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SORT_DIRECTORY_ORDER})
@@ -466,7 +461,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # Do not mark this target as .PHONY.  We want it to
 # always recompile, whether recompilation is necessary or not.  (Why?)
-all_directly: ../utils/plume-lib ${AUTO_GENERATED_FILES} java_files.txt
+all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
@@ -485,7 +480,7 @@ java_files.txt: ${JAVA_FILES}
 
 .PHONY : daikon compile_daikon
 daikon: compile_daikon junit
-compile_daikon : ../utils/plume-lib $(AUTO_GENERATED_FILES)
+compile_daikon : ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 	@chmod 444 ${AUTO_GENERATED_FILES}
@@ -596,16 +591,16 @@ dyncomp-jdk-only dcomp-jdk-only :
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 ## These two rules create the directories if absent but don't update them.
-../utils/plume-lib:
-	${MAKE} -C .. update-plume-lib
+../utils/plume-scripts:
+	${MAKE} -C .. update-plume-scripts
 
 ../utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
 # Watch out if you have another copy of plume that is earlier on your classpath.
-.PHONY: update-plume-lib
-update-plume-lib:
-	${MAKE} -C .. update-plume-lib
+.PHONY: update-plume-scripts
+update-plume-scripts:
+	${MAKE} -C .. update-plume-scripts
 
 # Checks that daikon.util, rather than plume, is imported by source files
 # that do instrumentation.  Should also check that daikon.util is never
@@ -626,7 +621,7 @@ plume-import-check :
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ../utils/plume-lib ${AUTO_GENERATED_FILES}
+all_except_daikon: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod a-w ${AUTO_GENERATED_FILES}
@@ -655,10 +650,10 @@ jikes:	all_via_jikes
 
 # These rules are undesirable, because Daikon.class (or Diff.class) might
 # be up to date even if other files aren't.
-daikon/Daikon.class: daikon/Daikon.java	../utils/plume-lib ${AUTO_GENERATED_FILES}
+daikon/Daikon.class: daikon/Daikon.java	../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Daikon.java
 
-daikon/Diff.class: Diff.java ../utils/plume-lib ${AUTO_GENERATED_FILES}
+daikon/Diff.class: Diff.java ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Diff.java
 
 daikon/Runtime.class: daikon/Runtime.java
@@ -690,7 +685,7 @@ clean:
 clean-generated-files:
 	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
-# Could/should remove plume-lib here, too.
+# Could/should remove plume-scripts here, too.
 veryclean: very_clean
 very-clean: very_clean
 very_clean: clean-generated-files
@@ -708,7 +703,7 @@ ETAGS := $(shell command -v etags 2> /dev/null)
 TAGS:	tags
 .PHONY: etags tags
 etags:	tags
-tags: ../utils/plume-lib
+tags: ../utils/plume-scripts
 ifndef ETAGS
 	$(error etags is not available, please install it)
 else
@@ -772,7 +767,7 @@ findbugs-cat:
 
 .PHONY: jar
 jar: ../daikon.jar
-../daikon.jar: ../utils/plume-lib ${AUTO_GENERATED_FILES} compile
+../daikon.jar: ../utils/plume-scripts ${AUTO_GENERATED_FILES} compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
@@ -1206,34 +1201,34 @@ javadoc: api
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
 .PHONY: api
-api: ../utils/plume-lib ../utils/html-tools $(JAVA_FILES)
+api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		@java-files.txt
 	@rm -f java-files.txt
-	cd $(JAVADOC_DEST) && $(PLUMEBIN)/preplace '^ *&#64;cindex.*' ''
+	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
 	cp -pf ../doc/daikon-favicon.png $(JAVADOC_DEST)
 	cd $(JAVADOC_DEST) && $(HTMLTOOLS)/html-add-favicon . daikon-favicon.png
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
-api-private: ../utils/plume-lib $(AUTO_GENERATED_FILES)
+api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p api
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
-	cd api && ../../utils/plume-lib/bin/preplace '^ *&#64;cindex.*' ''
+	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
 ## This doesn't seem necessary any more
 # javadoc-lookup: doc-javadoc-lookup
 #
 # ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
 # doc-javadoc-lookup: api
-# 	find api -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
+# 	find api -name '*.html' | xargs -n 100 ${PLUMESCRIPTS}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
-../doc/invariants-doc.texinfo: ../utils/plume-lib ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/invariants-doc.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1241,7 +1236,7 @@ api-private: ../utils/plume-lib $(AUTO_GENERATED_FILES)
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
 
-../doc/config-options.texinfo: ../utils/plume-lib ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/config-options.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1279,8 +1274,8 @@ showvars:
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
 	@echo DAIKONDIR = "${DAIKONDIR}"
-	@echo DAIKONBIN = ${DAIKONBIN}
-	@echo PLUMEBIN = ${PLUMEBIN}
+	@echo DAIKONSCRIPTS = ${DAIKONSCRIPTS}
+	@echo PLUMESCRIPTS = ${PLUMESCRIPTS}
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo JAVA = ${JAVA}
 	@echo JAVAC = ${JAVAC}
@@ -1330,7 +1325,7 @@ ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
-jpp: ../utils/plume-lib ${AUTO_GENERATED_FILES}
+jpp: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 
 # Use this rule if you do not have cpp or for some other reason do not want
 # to refresh the automatically generated .java files.  You should not do
@@ -1347,9 +1342,9 @@ avoid-jpp:
 # the status of the last command.
 
 # This rule does not work with make 3.77, but does work with make 3.78.
-JAVA_CPP ?= (rm -f $@; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< 2>&1 > $@ && chmod a-w $@)
+JAVA_CPP ?= (rm -f $@; ${DAIKONSCRIPTS}/java-cpp -DDEFINEDVAR $< 2>&1 > $@ && chmod a-w $@)
 # Like the above, but also makes a backup file
-# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< > $@; chmod a-w $@)
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMESCRIPTS}/java-cpp -DDEFINEDVAR $< > $@; chmod a-w $@)
 
 # JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod a-w $@)
 ## Here are alternate ways of writing the same command:
