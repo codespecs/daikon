@@ -45,11 +45,10 @@ writable-abstracts:
 # A chmod command fails if there are no arguments.  But this might be
 # called when no *-abstract.html files exist.  So create a dummy file,
 # include it on the command line, and remove it afterward.  This is gross.
-# An alternative:
-#   ls | egrep '-abstract\.html$' | xargs --no-run-if-empty chmod -f +w
-# "--no-run-if-empty" is a GNU extension.
+# An alternative (but "--no-run-if-empty" is a GNU extension):
+#   ls | egrep '-abstract\.html$' | xargs --no-run-if-empty chmod -f a+w
 	@touch dummy-abstract.html
-	chmod -f +w *-abstract.html
+	chmod -f a+w *-abstract.html
 	@\rm -f dummy-abstract.html
 	@\rm -f abstracts-unsplit.html
 

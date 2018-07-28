@@ -72,9 +72,8 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
         return ret;
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new Error(e);
     }
-    throw new RuntimeException("Should never reach this statement");
   }
 
   /**
@@ -188,9 +187,8 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       return al;
 
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new Error(e);
     }
-    return enters;
   }
 
   private int calcNonce(String invocation) {
