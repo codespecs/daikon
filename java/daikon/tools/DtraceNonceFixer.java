@@ -106,7 +106,7 @@ public class DtraceNonceFixer {
       out.flush();
       out.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new Error(e);
     }
   }
 
