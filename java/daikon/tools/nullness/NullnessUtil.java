@@ -3,8 +3,6 @@
 package daikon.tools.nullness;
 
 /*>>>
-package org.checkerframework.checker.nullness;
-
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
