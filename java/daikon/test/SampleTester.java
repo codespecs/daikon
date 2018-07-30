@@ -82,7 +82,7 @@ public class SampleTester extends TestCase {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
 
           } else if (Daikon.config_option_SWITCH.equals(option_name)) {
             String item = Daikon.getOptarg(g);
@@ -98,7 +98,7 @@ public class SampleTester extends TestCase {
             LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
             String error = Debug.add_track(Daikon.getOptarg(g));
             if (error != null) {
-              throw new Daikon.TerminationMessage(
+              throw new Daikon.UserError(
                   "Error parsing track argument '" + Daikon.getOptarg(g) + "' - " + error);
             }
           } else {
@@ -108,7 +108,7 @@ public class SampleTester extends TestCase {
 
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
 
         case '?':
           break; // getopt() already printed an error
@@ -163,7 +163,7 @@ public class SampleTester extends TestCase {
   public void proc_sample_file(InputStream commands, String filename) throws IOException {
 
     if (PrintInvariants.dkconfig_print_inv_class) {
-      System.out.println("Warning: turning off " + "PrintInvariants.dkconfig_print_inv_class");
+      System.out.println("Warning: turning off PrintInvariants.dkconfig_print_inv_class");
       PrintInvariants.dkconfig_print_inv_class = false;
     }
 

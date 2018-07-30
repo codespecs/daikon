@@ -1,6 +1,6 @@
 package daikon.split;
 
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
 import daikon.*;
 import daikon.inv.*;
@@ -187,7 +187,7 @@ public class PptSplitter implements Serializable {
       // of the split.
       if (false) { // need to add a debugging switch
         System.out.println(
-            "Exception thrown in " + "PptSplitter.choose_conditional() for " + ppts[0].name());
+            "Exception thrown in PptSplitter.choose_conditional() for " + ppts[0].name());
         System.out.println("Vars = " + Debug.related_vars(ppts[0], vt));
       }
       return null;

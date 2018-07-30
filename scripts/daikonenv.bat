@@ -28,22 +28,18 @@ if "%JAVA_HOME%"=="" (
 SET scriptpath=%~dp0
 SET DAIKONDIR=%mypath:~0,-1%
 
-if "$DAIKONBIN"=="" (
-  if exist "%DAIKONDIR%\bin" (
-    set DAIKONBIN=%DAIKONDIR%\bin
+if "$DAIKONSCRIPTS"=="" (
+  if exist "%DAIKONDIR%\scripts" (
+    set DAIKONSCRIPTS=%DAIKONDIR%\scripts
   ) else (
-    if exist "%DAIKONDIR%\scripts" (
-      set DAIKONBIN=%DAIKONDIR%\scripts
-    ) else (
-      echo Cannot choose a value for environment variable DAIKONBIN.
-      echo Please fix this before proceeding.  Aborting daikonenv.bat .
-      exit /b 2
-    )
+    echo Cannot choose a value for environment variable DAIKONSCRIPTS.
+    echo Please fix this before proceeding.  Aborting daikonenv.bat .
+    exit /b 2
   )
 )
 
-if "$PLUMEBIN"=="" (
-  set PLUMEBIN=%DAIKONDIR%\utils\plume-lib\bin
+if "$PLUMESCRIPTS"=="" (
+  set PLUMESCRIPTS=%DAIKONDIR%\utils\plume-scripts
 )
 
 REM set DAIKONCLASS_SOURCES=1
@@ -65,11 +61,11 @@ REM tools.jar must be on your classpath.
 set CLASSPATH=%CLASSPATH%;%JAVA_HOME%\jre\lib\rt.jar;%JAVA_HOME%\lib\tools.jar
 
 REM Add the Daikon binaries to your path
-set PATH=%DAIKONBIN%;%DAIKONDIR%\front-end\java\src;%JAVA_HOME%\bin;%PATH%
+set PATH=%DAIKONSCRIPTS%;%DAIKONDIR%\front-end\java\src;%JAVA_HOME%\bin;%PATH%
 
 REM Indicate where to find Perl modules such as util_daikon.pm.
 if not "%PERLLIB%"=="" (
-  set PERLLIB=%DAIKONBIN%;%PLUMEBIN%;%PERLLIB%
+  set PERLLIB=%DAIKONSCRIPTS%;%PLUMESCRIPTS%;%PERLLIB%
 ) else (
-  set PERLLIB=%DAIKONBIN%;%PLUMEBIN%
+  set PERLLIB=%DAIKONSCRIPTS%;%PLUMESCRIPTS%
 )

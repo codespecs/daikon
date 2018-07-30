@@ -1,6 +1,6 @@
 package daikon.suppress;
 
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
 import daikon.*;
 import daikon.inv.*;
@@ -514,7 +514,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice)) {
             throw new Error(
                 String.format(
-                    "inv %s:%s already in new_invs " + "(slice %s)",
+                    "inv %s:%s already in new_invs (slice %s)",
                     inv.getClass(), inv.format(), slice));
           }
         }

@@ -82,21 +82,16 @@ public class ExtractConsequent {
       throws FileNotFoundException, IOException, ClassNotFoundException {
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
    */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -117,7 +112,7 @@ public class ExtractConsequent {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
             Daikon.suppress_redundant_invariants_with_simplify = true;
           } else if (Daikon.config_option_SWITCH.equals(option_name)) {
@@ -134,7 +129,7 @@ public class ExtractConsequent {
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case '?':
           break; // getopt() already printed an error
         default:
@@ -145,7 +140,7 @@ public class ExtractConsequent {
     // The index of the first non-option argument -- the name of the file
     int fileIndex = g.getOptind();
     if (args.length - fileIndex != 1) {
-      throw new Daikon.TerminationMessage("Wrong number of arguments." + Daikon.lineSep + usage);
+      throw new Daikon.UserError("Wrong number of arguments." + Daikon.lineSep + usage);
     }
     String filename = args[fileIndex];
     PptMap ppts =

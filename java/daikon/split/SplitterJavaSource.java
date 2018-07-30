@@ -188,7 +188,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /** Writes the body of the test method to fileText. */
   private void writeTestBody(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
-    add("    " + "/* writeTestBody: " + vars.length + " declarations */");
+    add("    /* writeTestBody: " + vars.length + " declarations */");
     for (int i = 0; i < vars.length; i++) {
       String type = vars[i].getType();
       String get_expr;
@@ -251,7 +251,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /** Writes the body of the repr method to fileText. */
   private void writeReprBody(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
-    add("    return " + "\"" + fileName + ": \"");
+    add("    return \"" + fileName + ": \"");
     for (int i = 0; i < vars.length; i++) {
       add(
           "      + \""

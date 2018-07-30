@@ -21,12 +21,12 @@ public class MemMonitor implements Runnable {
   long max_mem_usage;
   String filename;
 
-  public MemMonitor(String fileName) {
-    filename = fileName;
+  public MemMonitor(String filename) {
+    this.filename = filename;
     try {
-      fout = new PrintWriter(Files.newBufferedWriter(Paths.get(fileName), UTF_8));
+      fout = new PrintWriter(Files.newBufferedWriter(Paths.get(filename), UTF_8));
     } catch (java.io.IOException e) {
-      throw new Error("could not open " + fileName, e);
+      throw new Error("could not open " + filename, e);
     }
 
     keep_going = true;

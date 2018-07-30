@@ -56,27 +56,21 @@ public class TraceSelect {
   public static void main(String[] args) {
     try {
       mainHelper(args);
-    } catch (daikon.Daikon.TerminationMessage e) {
-      daikon.Daikon.handleTerminationMessage(e);
+    } catch (daikon.Daikon.DaikonTerminationException e) {
+      daikon.Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than daikon.Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * daikon.Daikon.TerminationMessage.
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
    */
   public static void mainHelper(final String[] args) {
     argles = args;
     if (args.length == 0) {
-      throw new daikon.Daikon.TerminationMessage(
-          "No arguments found." + daikon.Daikon.lineSep + usage);
+      throw new daikon.Daikon.UserError("No arguments found." + daikon.Daikon.lineSep + usage);
     }
 
     num_reps = Integer.parseInt(args[0]);
@@ -89,7 +83,7 @@ public class TraceSelect {
       // allows seed setting
       if (args[i].toUpperCase().equals("-SEED")) {
         if (i + 1 >= args.length) {
-          throw new daikon.Daikon.TerminationMessage("-SEED options requires argument");
+          throw new daikon.Daikon.UserError("-SEED options requires argument");
         }
         randObj = new Random(Long.parseLong(args[++i]));
         daikonArgStart = i + 1;
@@ -133,7 +127,7 @@ public class TraceSelect {
         if (fileName == null) {
           fileName = args[i];
         } else {
-          throw new daikon.Daikon.TerminationMessage("Only 1 dtrace file for input allowed");
+          throw new daikon.Daikon.UserError("Only 1 dtrace file for input allowed");
         }
 
         if (!knowArgStart) {
@@ -157,7 +151,7 @@ public class TraceSelect {
     sampleNames[0] = "-p";
 
     if (fileName == null) {
-      throw new daikon.Daikon.TerminationMessage("No .dtrace file name specified");
+      throw new daikon.Daikon.UserError("No .dtrace file name specified");
     }
 
     try {
@@ -235,7 +229,7 @@ public class TraceSelect {
       }
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new Error(e);
     }
   }
 
@@ -270,7 +264,7 @@ public class TraceSelect {
     reinitializeDaikon();
     daikon.Daikon.main(daikonArgs);
     Runtime.getRuntime()
-        .exec("java daikon.PrintInvariants " + dtraceName + ".inv" + " > " + dtraceName + ".txt");
+        .exec("java daikon.PrintInvariants " + dtraceName + ".inv > " + dtraceName + ".txt");
 
     return;
   }

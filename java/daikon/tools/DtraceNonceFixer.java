@@ -32,25 +32,20 @@ public class DtraceNonceFixer {
   public static void main(String[] args) {
     try {
       mainHelper(args);
-    } catch (daikon.Daikon.TerminationMessage e) {
-      daikon.Daikon.handleTerminationMessage(e);
+    } catch (daikon.Daikon.DaikonTerminationException e) {
+      daikon.Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than daikon.Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * daikon.Daikon.TerminationMessage.
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
    */
   public static void mainHelper(final String[] args) {
     if (args.length != 1) {
-      throw new daikon.Daikon.TerminationMessage(usage);
+      throw new daikon.Daikon.UserError(usage);
     }
 
     String outputFilename =
@@ -111,7 +106,7 @@ public class DtraceNonceFixer {
       out.flush();
       out.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new Error(e);
     }
   }
 

@@ -2050,7 +2050,7 @@ it twice) in order to generate formatted versions of the manual
 
 
 @node    Distribution
-@chapter Making a distribution
+@chapter Making a distribution (making a release)
 
 This section provides the instructions for publishing a Daikon distribution,
 a.k.a.@ making a release.
@@ -2318,6 +2318,9 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 @end itemize
 
 [Time: moments]
+
+@item
+Update dependencies in @file{daikon/java/lib/}.
 
 @end itemize
 
@@ -2609,9 +2612,9 @@ Run the following commands:
 
 @smallexample
 NEW_VERSION=`cat doc/VERSION`
-$PLUMEBIN/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
+$PLUMESCRIPTS/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
-$PLUMEBIN/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
+$PLUMESCRIPTS/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
 @end smallexample
 

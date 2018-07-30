@@ -377,6 +377,12 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @node       Windows installation
 @section    Windows installation
 
+If you use Windows, an easy way to use Daikon is to run it under Windows
+Subsystem for Linux (WSL).
+
+The remainder of this section describes how to proceed if you prefer to use
+Daikon under Windows.
+
 To perform a complete install on
 Windows, it is necessary to install the Cygwin toolset.
 After you have installed Daikon, you can run it using either Cygwin or
@@ -6623,9 +6629,9 @@ but it should always be safe to use this option.
 Before running @command{convertcsv.pl}, you may need to install
 @command{Text::CSV}, a Perl package that @command{convertcsv.pl} uses.
 You also need the
-@uref{https://raw.githubusercontent.com/mernst/plume-lib/master/bin/checkargs.pm,
-@file{checkargs.pm}} file, which is part of the plume-lib library
-(@url{https://github.com/mernst/plume-lib}).
+@uref{https://raw.githubusercontent.com/plume-lib/html-tools/master/checkargs.pm,
+@file{checkargs.pm}} file, which is part of the html-tools library
+(@url{https://github.com/plume-lib/html-tools}).
 
 
 @node    Other front ends
@@ -8674,9 +8680,9 @@ BCEL must be in the classpath.  Normally it is found in daikon.jar.
 
 @noindent
 then the problem is most likely that your classpath does not contain
-daikon.jar.  If you are running a Daikon version post 5.2.20, then it
+daikon.jar.  If you are running a Daikon version after 5.2.20, then it
 could be caused by your classpath containing a previous version of
-daikon.jar or plume.jar.
+daikon.jar.
 
 @node       VerifyError constant pool index error
 @subsection VerifyError constant pool index error

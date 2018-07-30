@@ -757,24 +757,6 @@ public class Runtime {
     out_thread = out;
   }
 
-  /** Wait for Daikon to terminate. */
-  public static void endDaikon() {
-    try {
-      int status = chicory_proc.waitFor();
-      System.out.println("daikon ended with status " + status);
-    } catch (InterruptedException e1) {
-      e1.printStackTrace();
-    }
-
-    try {
-      err_thread.join();
-      out_thread.join();
-    } catch (InterruptedException e) {
-    }
-
-    System.out.println("Finished endDaikon");
-  }
-
   /**
    * Gets the ClassInfo structure corresponding to type. Returns null if the class was not
    * instrumented.

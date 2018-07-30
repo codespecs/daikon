@@ -70,7 +70,7 @@ public class PptName implements Serializable {
     fullname = name.intern();
     int separatorPosition = name.indexOf(FileIO.ppt_tag_separator);
     if (separatorPosition == -1) {
-      throw new Daikon.TerminationMessage("no ppt_tag_separator in '" + name + "'");
+      throw new Daikon.UserError("no ppt_tag_separator in '" + name + "'");
       // // probably a lisp program, which was instrumented differently
       // cls = method = point = fn_name = null;
       // return;
@@ -86,7 +86,6 @@ public class PptName implements Serializable {
     }
     int dot = fn_name.lastIndexOf('.', lparen);
     if (dot == -1) {
-      // throw new Daikon.TerminationMessage("No dot in function name " + fn_name);
       method = fn_name;
       cls = null;
       return;

@@ -214,7 +214,7 @@ public class DynComp {
     if (path_separator == null) {
       path_separator = ";"; // should work for windows at least...
     } else if (!RegexUtil.isRegex(path_separator)) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.BugInDaikon(
           "Bad regexp "
               + path_separator
               + " for path.separator: "
@@ -373,7 +373,7 @@ public class DynComp {
         result = p.waitFor();
         break;
       } catch (InterruptedException e) {
-        System.out.printf("unexpected interrupt %s while waiting for " + "target to finish", e);
+        System.out.printf("unexpected interrupt %s while waiting for target to finish", e);
       }
     }
 
@@ -382,7 +382,7 @@ public class DynComp {
       err_thread.join();
       out_thread.join();
     } catch (InterruptedException e) {
-      System.out.printf("unexpected interrupt %s while waiting for " + "threads to join", e);
+      System.out.printf("unexpected interrupt %s while waiting for threads to join", e);
     }
 
     return result;

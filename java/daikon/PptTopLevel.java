@@ -2,7 +2,7 @@ package daikon;
 
 import static daikon.FileIO.ParentRelation;
 import static daikon.PptRelation.PptRelationType;
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
 import daikon.derive.*;
 import daikon.derive.binary.*;
@@ -822,8 +822,7 @@ public class PptTopLevel extends Ppt {
       VarInfo vi1 = var_infos[i1];
       if (vi1.isDerived()) {
         if (Global.debugDerive.isLoggable(Level.FINE)) {
-          Global.debugDerive.fine(
-              "Ternary first VarInfo: not worth " + "deriving from " + vi1.name());
+          Global.debugDerive.fine("Ternary first VarInfo: not worth deriving from " + vi1.name());
         }
         continue;
       }
@@ -2878,7 +2877,7 @@ public class PptTopLevel extends Ppt {
     if (proverStack.checkForContradiction() == 'T') {
       if (LemmaStack.dkconfig_remove_contradictions) {
         System.err.println(
-            "Warning: " + ppt_name + " background is contradictory, " + "removing some parts");
+            "Warning: " + ppt_name + " background is contradictory, removing some parts");
         proverStack.removeContradiction();
       } else {
         System.err.println("Warning: " + ppt_name + " background is contradictory, giving up");
@@ -3377,10 +3376,10 @@ public class PptTopLevel extends Ppt {
     Daikon.debugProgress.fine(
         String.format(
             // Version that outputs the hash code too.
-            // "Merging ppt %s[%08X] with %d children, %d parents, " + "%d variables",
+            // "Merging ppt %s[%08X] with %d children, %d parents, %d variables",
             // name, System.identityHashCode(this), children.size(), parents.size(),
             // var_infos.length));
-            "Merging ppt %s with %d children, %d parents, " + "%d variables",
+            "Merging ppt %s with %d children, %d parents, %d variables",
             name, children.size(), parents.size(), var_infos.length));
 
     // If we don't have any children, there is nothing to do.

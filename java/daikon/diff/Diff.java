@@ -136,20 +136,14 @@ public final class Diff {
           InvocationTargetException, NoSuchMethodException {
     try {
       mainHelper(args);
-    } catch (Daikon.TerminationMessage e) {
-      daikon.Daikon.handleTerminationMessage(e);
+    } catch (Daikon.DaikonTerminationException e) {
+      daikon.Daikon.handleDaikonTerminationException(e);
     }
-    // Any exception other than Daikon.TerminationMessage gets propagated.
-    // This simplifies debugging by showing the stack trace.
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
-   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
-   * Daikon.TerminationMessage.
-   *
-   * @see #main(String[])
-   * @see daikon.Daikon.TerminationMessage
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called progrmmatically.
    */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
@@ -204,7 +198,7 @@ public final class Diff {
           String optionName = longOpts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(optionName)) {
             System.out.println(usage);
-            throw new Daikon.TerminationMessage();
+            throw new Daikon.NormalTermination();
           } else if (INV_SORT_COMPARATOR1_SWITCH.equals(optionName)) {
             if (invSortComparator1Classname != null) {
               throw new Error(
@@ -248,7 +242,7 @@ public final class Diff {
           break;
         case 'h':
           System.out.println(usage);
-          throw new Daikon.TerminationMessage();
+          throw new Daikon.NormalTermination();
         case 'H':
           PrintAllVisitor.HUMAN_OUTPUT = true;
           break;
@@ -320,7 +314,7 @@ public final class Diff {
         case '?':
           // getopt() already printed an error
           System.out.println(usage);
-          throw new Daikon.TerminationMessage("Bad argument");
+          throw new Daikon.UserError("Bad argument");
         default:
           System.out.println("getopt() returned " + c);
           break;
@@ -462,7 +456,7 @@ public final class Diff {
       System.out.println("Precison: " + mcv2.calcPrecision());
       System.out.println("Recall: " + mcv2.calcRecall());
       System.out.println("Success");
-      throw new Daikon.TerminationMessage();
+      throw new Daikon.NormalTermination();
 
     } else if (numFiles > 2) {
 
@@ -494,7 +488,7 @@ public final class Diff {
       return;
     } else {
       System.out.println(usage);
-      throw new Daikon.TerminationMessage();
+      throw new Daikon.NormalTermination();
     }
 
     if (logging) System.err.println("Invariant Diff: Creating Tree");

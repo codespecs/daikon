@@ -119,8 +119,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     if (args.length == 1 && args[0].equalsIgnoreCase("--generate_goals")) {
       writeCommandFile();
     } else if (args.length > 0) {
-      throw new Daikon.TerminationMessage(
-          "Usage: java daikon.test.InvariantAddAndCheckTester" + " [--generate_goals]");
+      throw new Daikon.UserError(
+          "Usage: java daikon.test.InvariantAddAndCheckTester [--generate_goals]");
     } else {
       junit.textui.TestRunner.run(new TestSuite(InvariantAddAndCheckTester.class));
     }

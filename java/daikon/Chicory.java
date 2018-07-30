@@ -260,7 +260,7 @@ public class Chicory {
     if (path_separator == null) {
       path_separator = ";"; // should work for windows at least...
     } else if (!RegexUtil.isRegex(path_separator)) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Bad regexp "
               + path_separator
               + " for path.separator: "
@@ -351,7 +351,7 @@ public class Chicory {
         }
 
         if (line == null) {
-          throw new RuntimeException("Did not receive socket port from " + "Daikon!");
+          throw new RuntimeException("Did not receive socket port from Daikon!");
         } else {
           System.out.println(line);
 
@@ -365,7 +365,7 @@ public class Chicory {
       }
 
       if (daikon_port == -1) {
-        throw new RuntimeException("After 100 lines of output, " + "Daikon port not received");
+        throw new RuntimeException("After 100 lines of output, Daikon port not received");
       }
 
       // continue reading daikon output in separate thread
@@ -450,7 +450,7 @@ public class Chicory {
           daikonResult = daikon_proc.waitFor();
           break;
         } catch (InterruptedException e) {
-          System.out.printf("unexpected interrupt %s while waiting for " + "target to finish", e);
+          System.out.printf("unexpected interrupt %s while waiting for target to finish", e);
         }
       }
 
@@ -463,7 +463,7 @@ public class Chicory {
         daikon_err.join();
         daikon_out.join();
       } catch (InterruptedException e) {
-        System.out.printf("unexpected interrupt %s while waiting for " + "threads to join", e);
+        System.out.printf("unexpected interrupt %s while waiting for threads to join", e);
       }
 
       if (daikonResult != 0) {
@@ -547,7 +547,7 @@ public class Chicory {
         result = p.waitFor();
         break;
       } catch (InterruptedException e) {
-        System.out.printf("unexpected interrupt %s while waiting for " + "target to finish", e);
+        System.out.printf("unexpected interrupt %s while waiting for target to finish", e);
       }
     }
 
@@ -556,7 +556,7 @@ public class Chicory {
       err_thread.join();
       out_thread.join();
     } catch (InterruptedException e) {
-      System.out.printf("unexpected interrupt %s while waiting for " + "threads to join", e);
+      System.out.printf("unexpected interrupt %s while waiting for threads to join", e);
     }
 
     return result;

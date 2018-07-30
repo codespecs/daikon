@@ -7,7 +7,7 @@ import static daikon.VarInfo.LangFlags;
 import static daikon.VarInfo.RefType;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.VarKind;
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.config.Configuration;
@@ -480,7 +480,7 @@ public final class FileIO {
     // We have just read the "DECLARE" line.
     String ppt_name = state.reader.readLine();
     if (ppt_name == null) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "File ends with \"DECLARE\" with no following program point name", state);
     }
     ppt_name = user_mod_ppt_name(ppt_name);
@@ -553,7 +553,7 @@ public final class FileIO {
     while ((vi = read_VarInfo(state, ppt_name)) != null) {
       for (VarInfo vi2 : var_infos) {
         if (vi.name() == vi2.name()) {
-          throw new Daikon.TerminationMessage("Duplicate variable name " + vi.name(), state);
+          throw new Daikon.UserError("Duplicate variable name " + vi.name(), state);
         }
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
@@ -593,7 +593,7 @@ public final class FileIO {
     (proglang_type_string_and_aux == null)
         || (file_rep_type_string == null)
         || (comparability_string == null))
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "End of file "
               + filename
               + " while reading variable "
@@ -626,7 +626,7 @@ public final class FileIO {
     // workaround when it didn't have a warning. But this has never
     // worked, so it's fatal.
     else if ("String[]".equals(file_rep_type_string)) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Representation type 'String[]' should be "
               + "'java.lang.String[]' instead for variable "
               + varname,
@@ -657,7 +657,7 @@ public final class FileIO {
       rep_type = file_rep_type.fileTypeToRepType();
       aux = VarInfoAux.parse(aux_string);
     } catch (IOException e) {
-      throw new Daikon.TerminationMessage(e, file, filename);
+      throw new Daikon.UserError(e, file, filename);
     }
 
     if (static_constant_value_string != null) {
@@ -669,13 +669,13 @@ public final class FileIO {
     try {
       comparability = VarComparability.parse(varcomp_format, comparability_string, prog_type);
     } catch (Exception e) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           String.format(
-              "Error parsing comparability (%s) at line %d " + "in file %s",
+              "Error parsing comparability (%s) at line %d in file %s",
               e, file.getLineNumber(), filename));
     }
     if (!VarInfo.legalFileRepType(file_rep_type)) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Unsupported representation type "
               + file_rep_type.format()
               + " (parsed as "
@@ -687,7 +687,7 @@ public final class FileIO {
           filename);
     }
     if (!VarInfo.legalRepType(rep_type)) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Unsupported (converted) representation type "
               + file_rep_type.format()
               + " for variable "
@@ -699,7 +699,7 @@ public final class FileIO {
     if (!(comparability.alwaysComparable()
         || ((VarComparabilityImplicit) comparability).dimensions == file_rep_type.dimensions())) {
       System.err.println();
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Rep type "
               + file_rep_type.format()
               + " has "
@@ -740,7 +740,7 @@ public final class FileIO {
     } else { // old format
       comp_str = state.reader.readLine();
       if (comp_str == null) {
-        throw new Daikon.TerminationMessage("Found end of file, expected comparability", state);
+        throw new Daikon.UserError("Found end of file, expected comparability", state);
       }
     }
 
@@ -749,8 +749,7 @@ public final class FileIO {
     } else if (comp_str.equals("implicit")) {
       return VarComparability.IMPLICIT;
     } else {
-      throw new Daikon.TerminationMessage(
-          "Unrecognized VarComparability '" + comp_str + "'", state);
+      throw new Daikon.UserError("Unrecognized VarComparability '" + comp_str + "'", state);
     }
   }
 
@@ -947,22 +946,18 @@ public final class FileIO {
       // System.out.printf("processing filename %s%n", filename);
       try {
         read_data_trace_file(filename, all_ppts, processor, false, ppts_may_be_new);
-      } catch (Daikon.TerminationMessage e) {
+      } catch (Daikon.NormalTermination e) {
         throw e;
       } catch (Throwable e) {
-        String message = e.getMessage();
-        if (message != null && message.equals("Corrupt GZIP trailer")) {
-          System.out.println(
-              filename + " has a corrupt gzip trailer.  " + "All possible data was recovered.");
-        } else if (dkconfig_continue_after_file_exception) {
+        if (dkconfig_continue_after_file_exception) {
           System.out.println();
           System.out.println(
-              "WARNING: Error while processing " + "trace file - remaining records ignored");
+              "WARNING: Error while processing trace file; remaining records ignored.");
           System.out.print("Ignored backtrace:");
           e.printStackTrace(System.out);
           System.out.println();
         } else {
-          throw new Error(e);
+          throw e;
         }
       }
     }
@@ -1430,11 +1425,11 @@ public final class FileIO {
         } catch (Error e) {
           // e.printStackTrace();
           if (!dkconfig_continue_after_file_exception) {
-            throw new Daikon.TerminationMessage(e, data_trace_state);
+            throw new Daikon.UserError(e, data_trace_state);
           } else {
             System.out.println();
             System.out.println(
-                "WARNING: Error while processing " + "trace file - subsequent records ignored");
+                "WARNING: Error while processing trace file; subsequent records ignored.");
             System.out.print("Ignored backtrace:");
             e.printStackTrace(System.out);
             System.out.println();
@@ -1580,12 +1575,12 @@ public final class FileIO {
 
       if (state.is_decl_file) {
         if ((!new_decl_format) && line.startsWith("ppt ")) {
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.UserError(
               String.format(
                   "Declaration file %s is not version 2.0, but line %d looks like a version 2.0 declaration: %s%nPerhaps the file is missing a \"decl-version 2.0\" record at the beginning",
                   state.filename, state.reader.getLineNumber(), line));
         }
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             String.format(
                 "Declaration files should not contain samples, but file %s does at line %d: %s",
                 state.filename, state.reader.getLineNumber(), line));
@@ -1598,16 +1593,14 @@ public final class FileIO {
         @SuppressWarnings("nullness") // thrown exception always has a detail message
         /*@NonNull*/ String message = t.getMessage();
         // Augment the message with line number information.
-        // If it is not a Daikon.TerminationMessage, first add some context.
-        if (!(t instanceof Daikon.TerminationMessage)) {
+        if (!(t instanceof Daikon.UserError)) {
           message = String.format("Illegal program point name '%s' (%s)", ppt_name, message);
         }
-        // Can't side-effect a TerminationMessage, so create a new one.
-        throw new Daikon.TerminationMessage(message, reader, state.filename);
+        throw new Daikon.UserError(message, reader, state.filename);
       }
 
       if (state.all_ppts.size() == 0) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "No declarations were provided before the first sample.  Perhaps you did not supply the proper .decls file to Daikon.  (Or, there could be a bug in the front end that created the .dtrace file "
                 + state.filename
                 + ".)");
@@ -1615,7 +1608,7 @@ public final class FileIO {
 
       PptTopLevel ppt = state.all_ppts.get(ppt_name);
       if (ppt == null) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "No declaration was provided for program point " + ppt_name, state);
       }
 
@@ -1651,7 +1644,7 @@ public final class FileIO {
         assert NONCE_HEADER.equals(nonce_header);
         String nonce_number = reader.readLine();
         if (nonce_number == null) {
-          throw new Daikon.TerminationMessage("File ended while trying to read nonce", state);
+          throw new Daikon.UserError("File ended while trying to read nonce", state);
         }
         nonce = Integer.valueOf(nonce_number);
 
@@ -1679,8 +1672,7 @@ public final class FileIO {
           return;
         } else if (dkconfig_continue_after_file_exception) {
           System.out.println();
-          System.out.println(
-              "WARNING: IOException while processing " + "trace file - record ignored");
+          System.out.println("WARNING: IOException while processing trace file - record ignored");
           System.out.print("Ignored backtrace:");
           e.printStackTrace(System.out);
           System.out.println();
@@ -1746,7 +1738,7 @@ public final class FileIO {
       }
 
       if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
-        // not Daikon.TerminationMessage; caller has more info (e.g., filename)
+        // not Daikon.UserError; caller has more info (e.g., filename)
         throw new RuntimeException(
             "Bad program point name " + ppt.name + " is a combined exit point name");
       }
@@ -1945,7 +1937,7 @@ public final class FileIO {
 
       String line = reader.readLine();
       if (line == null) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Unexpected end of file at "
                 + data_trace_state.filename
                 + " line "
@@ -1964,12 +1956,12 @@ public final class FileIO {
         line = reader.readLine(); // value (discard it)
         line = reader.readLine(); // modbit
         if (line == null || !((line.equals("0") || line.equals("1") || line.equals("2")))) {
-          throw new Daikon.TerminationMessage("Bad modbit '" + line + "'", data_trace_state);
+          throw new Daikon.UserError("Bad modbit '" + line + "'", data_trace_state);
         }
         line = reader.readLine(); // next variable name
       }
       if (line == null) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Unexpected end of file at "
                 + data_trace_state.filename
                 + " line "
@@ -1981,7 +1973,7 @@ public final class FileIO {
       }
 
       if (!unescape_decl(line.trim()).equals(vi.str_name())) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Mismatch between .dtrace file and .decls file.  Expected variable "
                 + vi.name()
                 + ", got "
@@ -1992,7 +1984,7 @@ public final class FileIO {
       }
       line = reader.readLine();
       if (line == null) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Unexpected end of file at "
                 + data_trace_state.filename
                 + " line "
@@ -2008,7 +2000,7 @@ public final class FileIO {
       String value_rep = line;
       line = reader.readLine();
       if (line == null) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Unexpected end of file at "
                 + data_trace_state.filename
                 + " line "
@@ -2022,7 +2014,7 @@ public final class FileIO {
                 + ppt.name());
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
-        throw new Daikon.TerminationMessage("Bad modbit `" + line + "'", data_trace_state);
+        throw new Daikon.UserError("Bad modbit `" + line + "'", data_trace_state);
       }
       int mod = ValueTuple.parseModified(line);
 
@@ -2073,7 +2065,7 @@ public final class FileIO {
             // of "uninit".
             || value_rep.equals("uninit")
             || value_rep.equals("missing"))) {
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.UserError(
               "Modbit indicates nonsensical value for variable "
                   + vi.name()
                   + " with value \""
@@ -2114,11 +2106,11 @@ public final class FileIO {
             mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
             vi.canBeMissing = true;
           }
-        } catch (Daikon.TerminationMessage e) {
+        } catch (Daikon.UserError e) {
           throw e;
         } catch (Throwable e) {
           // e.printStackTrace(System.err); // for debugging
-          throw new Daikon.TerminationMessage(
+          throw new Daikon.UserError(
               e,
               "Error while parsing value "
                   + value_rep
@@ -2197,7 +2189,7 @@ public final class FileIO {
       {
         if (nonce == null) {
           if (call_stack.isEmpty()) {
-            // Not Daikon.TerminationMessage:  caller knows context such as
+            // Not Daikon.UserError:  caller knows context such as
             // file name and line number.
             throw new Error("Function exit without corresponding entry: " + ppt.name());
           }
@@ -2228,7 +2220,7 @@ public final class FileIO {
               //                   data_trace_state.reader.getLineNumber());
               return true;
             } else {
-              // Not Daikon.TerminationMessage:  caller knows context such as
+              // Not Daikon.UserError:  caller knows context such as
               // file name and line number.
               throw new Error(
                   String.format(
@@ -2430,7 +2422,7 @@ public final class FileIO {
 
     VarInfo[] existing_vars = existing_ppt.var_infos;
     if (existing_ppt.num_declvars != vi_array.length) {
-      throw new Daikon.TerminationMessage(
+      throw new Daikon.UserError(
           "Duplicate declaration of program point \""
               + existing_ppt.name()
               + "\" with a different number of VarInfo objects: "
@@ -2445,7 +2437,7 @@ public final class FileIO {
       String oldName = existing_vars[i].str_name();
       String newName = vi_array[i].str_name();
       if (!oldName.equals(newName)) {
-        throw new Daikon.TerminationMessage(
+        throw new Daikon.UserError(
             "Duplicate declaration of program point \""
                 + existing_ppt.name()
                 + "\" with two different VarInfo: old VarInfo="
@@ -2795,7 +2787,7 @@ public final class FileIO {
       if (!found) {
         decl_error(
             state,
-            "specified parent ppt '%s[%d]' for variable '%s' " + "is not a parent to this ppt",
+            "specified parent ppt '%s[%d]' for variable '%s' is not a parent to this ppt",
             parent_ppt,
             parent_relation_id,
             name);
@@ -2850,22 +2842,21 @@ public final class FileIO {
     }
 
     /**
-     * Helper function, returns the next string token unescaped and interned. Throw
-     * Daikon.TerminationMessage if there is no next token.
+     * Helper function, returns the next string token unescaped and interned. Throw Daikon.UserError
+     * if there is no next token.
      */
     public /*@Interned*/ String need(Scanner scanner, String description) {
       return (FileIO.need(state, scanner, description));
     }
 
-    /** Throws Daikon.TerminationMessage if the scanner is not at end of line */
+    /** Throws Daikon.UserError if the scanner is not at end of line */
     public void need_eol(Scanner scanner) {
       FileIO.need_eol(state, scanner);
     }
 
     /**
-     * Looks up the next token as a member of enum_class. Throws Daikon.TerminationMessage is thrown
-     * if there is no token or if it is not valid member of the class. Enums are presumed to be in
-     * in upper case.
+     * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no
+     * token or if it is not valid member of the class. Enums are presumed to be in in upper case.
      */
     public <E extends Enum<E>> E parse_enum_val(
         Scanner scanner, Class<E> enum_class, String descr) {
@@ -2874,8 +2865,8 @@ public final class FileIO {
   }
 
   /**
-   * Helper function, returns the next string token unescaped and interned. Throws
-   * Daikon.TerminationMessage if there is no next token.
+   * Helper function, returns the next string token unescaped and interned. Throws Daikon.UserError
+   * if there is no next token.
    */
   public static /*@Interned*/ String need(ParseState state, Scanner scanner, String description) {
     if (!scanner.hasNext()) {
@@ -2884,7 +2875,7 @@ public final class FileIO {
     return unescape_decl(scanner.next()).intern();
   }
 
-  /** Throws a Daikon.TerminationMessage if the scanner is not at end of line */
+  /** Throws a Daikon.UserError if the scanner is not at end of line */
   public static void need_eol(ParseState state, Scanner scanner) {
     if (scanner.hasNext()) {
       decl_error(state, "'%s' found where end-of-line expected", scanner.next());
@@ -2892,9 +2883,8 @@ public final class FileIO {
   }
 
   /**
-   * Looks up the next token as a member of enum_class. A Daikon.TerminationMessage is thrown if
-   * there is no token or if it is not valid member of the class. Enums are presumed to be in in
-   * upper case.
+   * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no token
+   * or if it is not valid member of the class. Enums are presumed to be in in upper case.
    */
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {
@@ -2921,7 +2911,7 @@ public final class FileIO {
     @SuppressWarnings(
         "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
     String msg = String.format(format, args) + state.line_file_message();
-    throw new Daikon.TerminationMessage(msg);
+    throw new Daikon.UserError(msg);
   }
 
   /** Call this to indicate a malformed declaration. */
@@ -2930,7 +2920,7 @@ public final class FileIO {
     @SuppressWarnings(
         "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
     String msg = String.format(format, args) + state.line_file_message();
-    throw new Daikon.TerminationMessage(cause, msg);
+    throw new Daikon.UserError(cause, msg);
   }
 
   /** Call this to indicate a malformed declaration. */
@@ -2939,7 +2929,7 @@ public final class FileIO {
     if (msg.startsWith("null at")) {
       msg = msg.substring(5);
     }
-    throw new Daikon.TerminationMessage(cause, msg);
+    throw new Daikon.UserError(cause, msg);
   }
 
   /** Returns whether the line is the start of a ppt declaration */

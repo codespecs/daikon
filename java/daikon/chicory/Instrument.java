@@ -180,8 +180,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     if (Chicory.boot_classes != null) {
       Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
       if (matcher.find()) {
-        debug_transform.log(
-            "ignoring sys class %s, " + "matches boot_classes regex", fullClassName);
+        debug_transform.log("ignoring sys class %s, matches boot_classes regex", fullClassName);
         return null;
       }
     } else if (loader == null) {

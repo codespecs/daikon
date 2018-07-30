@@ -24,20 +24,18 @@ fi
 
 DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
-if [ -z "$DAIKONBIN" ]; then
-  if [ -d ${DAIKONDIR}/bin ]; then
-    export DAIKONBIN=${DAIKONDIR}/bin
-  elif [ -d ${DAIKONDIR}/scripts ]; then
-    export DAIKONBIN=${DAIKONDIR}/scripts
+if [ -z "$DAIKONSCRIPTS" ]; then
+  if [ -d ${DAIKONDIR}/scripts ]; then
+    export DAIKONSCRIPTS=${DAIKONDIR}/scripts
   else
-    echo "Cannot choose a value for environment variable DAIKONBIN."
+    echo "Cannot choose a value for environment variable DAIKONSCRIPTS."
     echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
     return 2
   fi
 fi
 
-if [ -z "$PLUMEBIN" ]; then
-  export PLUMEBIN=${DAIKONDIR}/utils/plume-lib/bin
+if [ -z "$PLUMESCRIPTS" ]; then
+  export PLUMESCRIPTS=${DAIKONDIR}/utils/plume-scripts
 fi
 
 # export DAIKONCLASS_SOURCES=1
@@ -70,15 +68,15 @@ fi
 export PATH=$JAVA_HOME/bin:$PATH
 
 ## Add the Daikon binaries to your path
-export PATH=${DAIKONBIN}:${PLUMEBIN}:${PATH}
+export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PATH}
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERL5LIB ]; then
-  export PERL5LIB=${DAIKONBIN}:${PLUMEBIN}:${PERL5LIB}
+  export PERL5LIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERL5LIB}
 fi
 
 if [ $PERLLIB ]; then
-  export PERLLIB=${DAIKONBIN}:${PLUMEBIN}:${PERLLIB}
+  export PERLLIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERLLIB}
 else
-  export PERLLIB=${DAIKONBIN}:${PLUMEBIN}
+  export PERLLIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}
 fi

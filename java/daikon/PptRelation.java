@@ -466,7 +466,7 @@ public class PptRelation implements Serializable {
         boolean found = rel.relate(vp, vp.prestate_name());
         assert found
             : String.format(
-                "vp %s orig_name %s parent %s child %s " + "with vars %s",
+                "vp %s orig_name %s parent %s child %s with vars %s",
                 vp, vp.prestate_name(), parent.name(), child.name(), child.var_names());
       }
     }

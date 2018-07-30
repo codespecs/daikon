@@ -62,7 +62,7 @@ public class AnnotateNullable {
   public static void main(String[] args) throws IOException {
 
     Options options =
-        new Options("plume.AnnotateNullable [options] " + "<inv_file>", AnnotateNullable.class);
+        new Options("plume.AnnotateNullable [options] <inv_file>", AnnotateNullable.class);
     String[] inv_files = options.parse(true, args);
     assert inv_files.length == 1;
 
