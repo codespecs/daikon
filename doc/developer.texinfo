@@ -1255,15 +1255,14 @@ into an acyclic dataflow hierarchy.
 
 @itemize
 @item
-A program point that represents the @code{ENTRY}, @code{EXCEPTION}
-or @code{EXIT} of a static method will have a @code{parent} record that
-points to the @code{CLASS} program point for the containing class.
+A program point that represents the @code{ENTRY}, @code{EXCEPTION} or @code{EXIT} of a
+static method will have a @code{parent} record that points to the
+@code{CLASS} program point for the containing class.
 
 @item
-A program point that represents the @code{ENTRY}, @code{EXCEPTION}
-or @code{EXIT} of a non-static (instance) method will have a
-@code{parent} record that points to the @code{OBJECT} program point for
-the containing object.
+A program point that represents the @code{ENTRY}, @code{EXCEPTION} or @code{EXIT} of a
+non-static (instance) method will have a @code{parent} record that points to the
+@code{OBJECT} program point for the containing object.
 
 @item
 An @code{ENTER-EXIT} edge connects each method's @code{ENTER} program
@@ -1293,8 +1292,7 @@ hierarchy may result in some true invariants that are not reported at
 some program points.  However, the invariant will be present in some
 parent program point.  The dataflow hierarchy is used by default, but
 can be disabled by the @option{--nohierarchy} flag.  When dataflow is enabled,
-the only samples that are examined by Daikon are the @code{:::EXIT}
-and @code{:::EXCEPTION} program
+the only samples that are examined by Daikon are the @code{:::EXIT} and @code{:::EXCEPTION} program
 points (plus @samp{orig} variables) since these contain a complete view of
 the data, from which invariants at all other locations can be inferred.
 For example, Daikon does not need to examine data at @code{:::ENTER} or
