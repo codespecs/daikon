@@ -1,9 +1,7 @@
-The easiest way to build and run Daikon is to put either java/, or else
-daikon.jar, on your classpath.
-
-For external libraries in this directory, we supply both the original
-distribution (for completeness) and also, if the original distribution is
-not a .jar file, the .jar file (for use by Java).
+The easiest way to build and run Daikon is to put daikon.jar on your classpath.
+This directory contains dependences that are put in daikon.jar.
+All .jar files in this directory should contain Java 7 bytecodes,
+so that Daikon will run under Java 7.
 
 bcel-util-all-0.0.4.jar : https://search.maven.org/#search%7Cga%7C1%7Cbcel-util
 
