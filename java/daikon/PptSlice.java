@@ -199,7 +199,7 @@ public abstract class PptSlice extends Ppt {
         }
       }
     }
-    assert ArraysPlume.fn_is_permutation(permutation);
+    assert ArraysPlume.fnIsPermutation(permutation);
   }
 
   /** Return an approximation of the number of samples seen on this slice */

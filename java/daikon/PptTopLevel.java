@@ -46,6 +46,8 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
@@ -276,7 +278,7 @@ public class PptTopLevel extends Ppt {
    * @see #cond_iterator()
    */
   public Iterable<PptConditional> cond_iterable() {
-    return UtilPlume.iteratorToIterable(new CondIterator());
+    return CollectionsPlume.iteratorToIterable(new CondIterator());
   }
 
   /** Returns whether or not this ppt has any splitters. */
@@ -364,7 +366,7 @@ public class PptTopLevel extends Ppt {
     in.defaultReadObject();
     if (name != null) {
       try {
-        UtilPlume.setFinalField(this, "name", name.intern());
+        ReflectionPlume.setFinalField(this, "name", name.intern());
       } catch (Exception e) {
         throw new Error("unexpected error setting name", e);
       }
@@ -3126,7 +3128,7 @@ public class PptTopLevel extends Ppt {
 
   /** Iterate over all of the invariants at this ppt (but not any implications). */
   public Iterator<Invariant> invariants_iterator() {
-    return new UtilPlume.MergedIterator<Invariant>(views_iterator_iterator());
+    return new CollectionsPlume.MergedIterator<Invariant>(views_iterator_iterator());
   }
 
   /** An iterator whose elements are themselves iterators that return invariants. */

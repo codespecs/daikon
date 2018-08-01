@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.CollectionsPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -87,7 +87,7 @@ public class InvMap implements Serializable {
    * @see #invariantIterator()
    */
   public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/) {
-    return UtilPlume.iteratorToIterable(pptIterator());
+    return CollectionsPlume.iteratorToIterable(pptIterator());
   }
 
   // Returns a sorted iterator over the Ppts using c as the comparator
