@@ -7,7 +7,7 @@ import static daikon.VarInfo.LangFlags;
 import static daikon.VarInfo.RefType;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.VarKind;
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.config.Configuration;

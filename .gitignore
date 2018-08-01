@@ -26,8 +26,7 @@ java/ChicoryPremain.jar
 java/dcomp_premain.jar
 java/*.class
 java/**/*.class
-java/lib/error_prone_ant-2.0.21.jar
-java/lib/error_prone_ant-2.2.0.jar
+java/lib/tmp
 # Temporary file used during compilation
 java/java_files.txt
 # Javadoc

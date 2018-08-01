@@ -257,10 +257,8 @@ sub daikon_checkout {
   if (! $cvs_success) {
     return $cvs_success;
   }
-  print_log("Making plume.jar...");
-  $cmd = "make JAVA_HOME=/afs/csail.mit.edu/system/\@sys/java/latest JAVA=/afs/csail.mit.edu/system/\@sys/java/latest/bin/java JAVAC=/afs/csail.mit.edu/system/\@sys/java/latest/bin/javac JAVADOC=/afs/csail.mit.edu/system/\@sys/java/latest/bin/javadoc -C invariants plume-lib plume-lib/java/plume.jar ";
-  my $plume_lib_success = buildtest_cmd ($cmd, "daikon_checkout.out");
-  return $plume_lib_success;
+  # Success
+  return 1;
 }
 
 

@@ -52,7 +52,7 @@ SCRIPT_FILES := Makefile \
 PLUME_SCRIPT_FILES := java-cpp lines-from
 
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
-                $(addprefix utils/plume-lib/bin/,$(PLUME_SCRIPT_FILES))
+                $(addprefix utils/plume-scripts/,$(PLUME_SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
@@ -175,7 +175,6 @@ compile-java:
 very-clean:
 	find . -type f -name "*~" -exec rm -f {} \;
 	${MAKE} -C ${DAIKONDIR} clean-everything
-	-cd utils/plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
@@ -652,9 +651,9 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	cp -pR doc/developer ${TMPDIR}/daikon/doc
 	cp -pR doc/www ${TMPDIR}/daikon/doc
 
-	# Plume-lib library
+	# Utility libraries
 	mkdir ${TMPDIR}/daikon/utils
-	(cd utils/plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
+	(cd utils/plume-scripts; git archive --prefix=plume-scripts/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
 
 	# Auxiliary programs
 	mkdir ${TMPDIR}/daikon/scripts
@@ -750,8 +749,8 @@ showvars:
 
 # If .git does not exist, then directory was created from a daikon archive file.
 # The "git pull" command fails under Centos and Fedora 23, for mysterious reasons.
-update-libs: update-checklink update-html-tools update-plume-lib update-run-google-java-format
-.PHONY: update-libs update-checklink update-html-tools update-plume-lib update-run-google-java-format
+update-libs: update-checklink update-html-tools update-plume-scripts update-run-google-java-format
+.PHONY: update-libs update-checklink update-html-tools update-plume-scripts update-run-google-java-format
 
 update-checklink:
 ifndef NONETWORK
@@ -771,12 +770,12 @@ ifndef NONETWORK
 	fi
 endif
 
-update-plume-lib:
+update-plume-scripts:
 ifndef NONETWORK
-	if test -d utils/plume-lib/.git ; then \
-	  (cd utils/plume-lib && (git pull -q || echo "git pull failed")) \
-	elif ! test -d utils/plume-lib ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/mernst/plume-lib.git utils/plume-lib) \
+	if test -d utils/plume-scripts/.git ; then \
+	  (cd utils/plume-scripts && (git pull -q || echo "git pull failed")) \
+	elif ! test -d utils/plume-scripts ; then \
+	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts) \
 	fi
 endif
 

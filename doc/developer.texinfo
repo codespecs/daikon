@@ -2157,6 +2157,8 @@ The recommended setup for the distribution process:
 @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
 This should fulfill most of the directory layout requirements noted above.
+As of 7/30/2018, @file{/homes/gws/markro/jdk8} contains the current version
+of the Java 8 JDK, 1.8.0_181-b13.
 
 
 @need 1000
@@ -2589,9 +2591,9 @@ Run the following commands:
 
 @smallexample
 NEW_VERSION=`cat doc/VERSION`
-$PLUMEBIN/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
+$PLUMESCRIPTS/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
-$PLUMEBIN/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
+$PLUMESCRIPTS/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
 @end smallexample
 

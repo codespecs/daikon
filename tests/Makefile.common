@@ -211,8 +211,8 @@ CP_PARENTS := rsync -aR
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
 # they are on the path.
 ifeq (cygwin, $(OSTYPE))
-  JAVA := ${DAIKONDIR}/utils/plume-lib/bin/java-cygwin
-  JAVAC := ${DAIKONDIR}/utils/plume-lib/bin/javac-cygwin
+  JAVA := ${DAIKONDIR}/utils/plume-scripts/java-cygwin
+  JAVAC := ${DAIKONDIR}/utils/plume-scripts/javac-cygwin
 else
   ifeq (darwin, $(OSTYPE))
     JAVA  := java
@@ -224,7 +224,7 @@ else
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/bcel-util-all-0.0.4.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/commons-exec-1.3.jar:${DAIKONDIR}/java/lib/options-all-0.3.1.jar:${DAIKONDIR}/java/lib/plume-util-0.0.1.jar:${DAIKONDIR}/java/lib/daikon-util.jar:${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/require-javadoc-0.0.7.jar
+CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*
 CPJUNIT := ${DAIKONDIR}/java/lib/junit-4.12.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
@@ -476,7 +476,7 @@ ${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile $(MAIN_JAVA) $(MAIN2_
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
-	${DAIKONDIR}/utils/plume-lib/bin/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" $(JAVAC) \
+	${DAIKONDIR}/scripts/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" $(JAVAC) \
 		> $(ALL_LIST_FILE)
 
 
@@ -518,7 +518,7 @@ $(SCRATCH_FOR_DAIKON)/.copy-timestamp: ${ALL_LIST_FILE}
 	@echo
 	tar cf - -C $(SOURCES) `cat $(ALL_LIST_FILE)` \
 		| tar xf - -C $(SCRATCH_FOR_DAIKON)
-	find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.java' -exec chmod +w {} \;
+	find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.java' -exec chmod a+w {} \;
 	install -d ${RTC_SCRATCH}
 	tar cf - -C $(SOURCES) `cat $(ALL_LIST_FILE)` | tar xf - -C $(RTC_SCRATCH)
 	touch $(SCRATCH_FOR_DAIKON)/.copy-timestamp

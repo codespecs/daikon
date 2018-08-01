@@ -1,3 +1,3 @@
 #! /bin/csh -fv
-set path = ($inv/scripts $inv/utils/plume-lib/bin $pag/software/pkg/jdk/bin /usr/local/bin/ /usr/local/csail/bin /bin /usr/bin /usr/X11R6/bin)
+set path = ($inv/scripts $inv/utils/plume-scripts $pag/software/pkg/jdk/bin /usr/local/bin/ /usr/local/csail/bin /bin /usr/bin /usr/X11R6/bin)
 /usr/bin/env perl $HOME/research/daikon/scripts/buildtest.pl --nocleanup $*
