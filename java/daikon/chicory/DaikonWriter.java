@@ -129,7 +129,7 @@ public abstract class DaikonWriter {
    * @param lineNum the line number of a throw statement in the method or -1 for an uncaught
    *     exception
    * @return the decorated method exception name for Daikon
-   * @see #methodName(StringClassName, String[], String, String, String)
+   * @see #methodName(String, String[], String, String, String)
    */
   public static String methodExceptionName(
       String fullClassName, String[] types, String name, String short_name, int lineNum) {
