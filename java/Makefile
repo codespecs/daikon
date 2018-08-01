@@ -1218,7 +1218,7 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
-api-private: ../utils/plume-lib $(AUTO_GENERATED_FILES)
+api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
