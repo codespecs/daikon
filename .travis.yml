@@ -10,27 +10,27 @@ env:
   global:
     - THIS_REPO=daikon
   matrix:
-    - OS=ubuntu JDKVER=jdk7 GROUP=quick-txt-diff
-    - OS=ubuntu JDKVER=jdk7 GROUP=nonquick-txt-diff
-    - OS=ubuntu JDKVER=jdk7 GROUP=non-txt-diff
-    - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
-    - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
-    - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
+#     - OS=ubuntu JDKVER=jdk7 GROUP=quick-txt-diff
+#     - OS=ubuntu JDKVER=jdk7 GROUP=nonquick-txt-diff
+#     - OS=ubuntu JDKVER=jdk7 GROUP=non-txt-diff
+#     - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
+#     - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
+#     - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
     - OS=ubuntu JDKVER=jdkany GROUP=misc
-    - OS=ubuntu JDKVER=jdkany GROUP=kvasir
+#    - OS=ubuntu JDKVER=jdkany GROUP=kvasir
 ## Fedora 23 is old, don't bother testing it any more.
 #  - OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
 ## It's not trivial to install JDK7 on Fedora 24 and later, so test only JDK 8.
 #  - OS=fedora JDKVER=jdk7 GROUP=quick-txt-diff
 #  - OS=fedora JDKVER=jdk7 GROUP=nonquick-txt-diff
 #  - OS=fedora JDKVER=jdk7 GROUP=non-txt-diff
-    - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
-    - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
-    - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
+#     - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
+#     - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
+#     - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
     - OS=fedora JDKVER=jdkany GROUP=misc
-    - OS=fedora JDKVER=jdkany GROUP=kvasir
-    - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
-    - OS=centos JDKVER=jdkany GROUP=kvasir
+#     - OS=fedora JDKVER=jdkany GROUP=kvasir
+#     - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
+#     - OS=centos JDKVER=jdkany GROUP=kvasir
 
 # Currently-failing jobs
 # This section is temporary and should be commented out when no jobs are failing.
