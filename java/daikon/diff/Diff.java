@@ -19,9 +19,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.Pair;
-import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -603,7 +603,8 @@ public final class Diff {
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
-          List<Invariant> invsCond = CollectionsPlume.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
+          List<Invariant> invsCond =
+              CollectionsPlume.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
           // List<Invariant> invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }

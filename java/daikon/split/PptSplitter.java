@@ -17,9 +17,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.Pair;
-import org.plumelib.util.CollectionsPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
