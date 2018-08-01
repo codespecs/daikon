@@ -69,8 +69,8 @@ public final class FileIO {
 
   // Program point name tags
   public static final String ppt_tag_separator = ":::";
-  public static final String entry_suffix = "ENTER";
-  public static final String entry_tag = ppt_tag_separator + entry_suffix;
+  public static final String enter_suffix = "ENTER";
+  public static final String enter_tag = ppt_tag_separator + enter_suffix;
   // EXIT does not necessarily appear at the end of the program point name;
   // a number may follow it.
   public static final String exit_suffix = "EXIT";
@@ -2173,7 +2173,7 @@ public final class FileIO {
     VarInfo[] vis = ppt.var_infos;
     /*@Interned*/ String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
-    if (ppt_name.endsWith(entry_tag)) {
+    if (ppt_name.endsWith(enter_tag)) {
       Invocation invok = new Invocation(ppt, vals, mods);
       if (nonce == null) {
         call_stack.push(invok);

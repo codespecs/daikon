@@ -46,7 +46,7 @@ public abstract class DaikonWriter {
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(Member method) {
-    return methodName(method, daikon.FileIO.entry_suffix);
+    return methodName(method, daikon.FileIO.enter_suffix);
   }
 
   /**
@@ -61,7 +61,7 @@ public abstract class DaikonWriter {
    */
   public static String methodEntryName(
       String fullClassName, String[] types, String name, String short_name) {
-    return methodName(fullClassName, types, name, short_name, daikon.FileIO.entry_suffix);
+    return methodName(fullClassName, types, name, short_name, daikon.FileIO.enter_suffix);
   }
 
   /**
@@ -95,7 +95,7 @@ public abstract class DaikonWriter {
    * Constructs the program point name suffix for an exception exit
    *
    * @param lineNum the line number of a throw statement causing the exception exit or -1 for an
-   *     uncaught exception
+   *     uncaught propagated exception (one caused by some execution of some other statement)
    * @return the exception name suffix for Daikon
    */
   private static String exceptionSuffix(int lineNum) {
@@ -105,11 +105,11 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Given a method, returns the method exception program point name for Daikon
+   * Given a method, returns the method exception program point name for Daikon.
    *
    * @param method non-null method
-   * @param lineNum the line number of a throw statement in the method or -1 for an uncaught
-   *     exception
+   * @param lineNum the line number of a throw statement causing the exception exit or -1 for an
+   *     uncaught propagated exception (one caused by some execution of some other statement)
    * @return the decorated method exception name for Daikon
    */
   public static String methodExceptionName(Member method, int lineNum) {
