@@ -74,7 +74,7 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   cat /tmp/diff.txt
   cat /tmp/warnings.txt
   ## END FOR TESTING ONLY
-  python lint-diff.py --strip-diff=1 --strip-lint=2 /tmp/diff.txt /tmp/warnings.txt
+  python lint-diff.py --strip-diff=2 --strip-lint=1 /tmp/diff.txt /tmp/warnings.txt
 fi
 
 if [[ "${GROUP}" == "kvasir" || "${GROUP}" == "all" ]]; then
