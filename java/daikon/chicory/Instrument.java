@@ -57,8 +57,8 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
- * task is to add "hooks" into the other class at method entries and exits for instrumentation
- * purposes. (We now hook throws as well.)
+ * task is to add "hooks" into the other class at method entries, exits, and throws for
+ * instrumentation purposes.
  */
 @SuppressWarnings("nullness")
 class Instrument extends InstructionListUtils implements ClassFileTransformer {
