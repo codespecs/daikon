@@ -623,7 +623,7 @@ public final class PrintInvariants {
    * (arg==null) then show all discarded Invariants, otherwise just show the ones specified in arg,
    * where arg = <em>class-name</em>&lt;<em>var1</em>,<em>var2</em>,...&gt;@<em>ppt.name</em> e.g.:
    * OneOf&lt;x&gt;@foo():::ENTER would only show OneOf Invariants that involve x at the program
-   * point foo:::ENTER (any of the 3 params can be ommitted, e.g. OneOf@foo:::ENTER)
+   * point foo:::ENTER (any of the 3 params can be omitted, e.g. OneOf@foo:::ENTER)
    *
    * @throws IllegalArgumentException if arg is not of the proper syntax
    */

@@ -84,7 +84,7 @@ public class DaikonSimple {
 
   /**
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
-   * called progrmmatically.
+   * called programmatically.
    *
    * <p>Difference from {@link daikon.Daikon#mainHelper(String[])}Helper: turn off optimization
    * flags (equality, dynamic constants, NIS suppression).
@@ -195,7 +195,7 @@ public class DaikonSimple {
 
   // Note that some slightly inefficient code has been added to aid
   // in debugging. When creating binary and ternary views and debugging
-  // is on, the outer loops will not terminate prematurely on innapropriate
+  // is on, the outer loops will not terminate prematurely on inappropriate
   // (i.e., non-canonical) variables. This allows explicit debug statements
   // for each possible combination, simplifying determining why certain
   // slices were not created.
@@ -405,10 +405,10 @@ public class DaikonSimple {
     Integer last_nonce = -1;
 
     /**
-     * Creates a valuetuple for the receiver using the vt of the original. The method copies over
+     * Creates a ValueTuple for the receiver using the vt of the original. The method copies over
      * the values of variables shared by both program points and sets the rest of the variables in
-     * the receiver's valuetuple as missing. Also, adds the orig and derived variables to the
-     * receiver and returns the newly created valuetuple.
+     * the receiver's ValueTuple as missing. Also, adds the orig and derived variables to the
+     * receiver and returns the newly created ValueTuple.
      */
     private static ValueTuple copySample(
         PptTopLevel receiver, PptTopLevel original, ValueTuple vt, int nonce) {

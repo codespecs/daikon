@@ -339,7 +339,7 @@ public class PptTopLevel extends Ppt {
   /** The canonical VarInfo for the equality. */
   public Set<VarInfo> redundant_invs_equality = new LinkedHashSet<VarInfo>(0);
 
-  @SuppressWarnings("fields.uninitialized") // todo: initialization and helper methods
+  @SuppressWarnings("fields.uninitialized") // TODO: initialization and helper methods
   public PptTopLevel(
       String name,
       PptType type,
@@ -1719,7 +1719,7 @@ public class PptTopLevel extends Ppt {
     // if the invariant is not enabled.
     if (proto == null) return null;
 
-    // Get the slice and instantiate the possible antecedent oer it
+    // Get the slice and instantiate the possible antecedent over it
     PptSlice slice = get_temp_slice(v);
     Invariant antecedent_inv = proto.instantiate(slice);
     if (antecedent_inv == null) return null;
@@ -1761,7 +1761,7 @@ public class PptTopLevel extends Ppt {
     // if the invariant is not enabled.
     if (proto == null) return null;
 
-    // Get the slice and instantiate the possible antecedent oer it
+    // Get the slice and instantiate the possible antecedent over it
     PptSlice slice = get_temp_slice(v1, v2);
     Invariant antecedent_inv = proto.instantiate(slice);
     if (antecedent_inv == null) return null;
@@ -2080,7 +2080,7 @@ public class PptTopLevel extends Ppt {
 
   // Note that some slightly inefficient code has been added to aid
   // in debugging.  When creating binary and ternary views and debugging
-  // is on, the outer loops will not terminate prematurely on innapropriate
+  // is on, the outer loops will not terminate prematurely on inappropriate
   // (i.e., non-canonical) variables.  This allows explicit debug statements
   // for each possible combination, simplifying determining why certain
   // slices were not created.
@@ -2718,7 +2718,7 @@ public class PptTopLevel extends Ppt {
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Locating implied (same) invariants via the simplify theorem-prover
+  /// Locating implied (same) invariants via the Simplify theorem-prover
   ///
 
   // Created upon first use, then saved.  Do not eagerly initialize,
@@ -2778,7 +2778,7 @@ public class PptTopLevel extends Ppt {
     // expressible in Simplify
     Invariant[] invs;
     {
-      // Replace parwise equality with an equivalence set
+      // Replace pairwise equality with an equivalence set
       List<Invariant> all_noeq = invariants_vector();
       Collections.sort(all_noeq, icfp);
       List<Invariant> all = InvariantFilters.addEqualityInvariants(all_noeq);
@@ -2901,7 +2901,7 @@ public class PptTopLevel extends Ppt {
         if (present[i] && (i != checking)) {
           bg.append(" ");
           // format_using(OutputFormat.SIMPLIFY) is guaranteed to return
-          // a sensible result xfor invariants in invs[].
+          // a sensible result for invariants in invs[].
           bg.append(invs[i].format_using(OutputFormat.SIMPLIFY));
         }
       }
@@ -3097,7 +3097,7 @@ public class PptTopLevel extends Ppt {
     return Collections.unmodifiableList(result);
   }
 
-  /** ArrayList version of getInvariants(). */
+  /** ArrayList version of {@link #getInvariants()}. */
   public List<Invariant> invariants_vector() {
     return new ArrayList<Invariant>(getInvariants());
   }
@@ -3219,7 +3219,7 @@ public class PptTopLevel extends Ppt {
   //     // System.out.println("Number of invs in joiner_view: " + joiner_view.invs.size());
   //   }
 
-  /** Remove invariants that are marked for ommission in omitTypes. */
+  /** Remove invariants that are marked for omission in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {
     // Avoid concurrent modification exceptions using arrays
     Collection<PptSlice> viewsAsCollection = viewsAsCollection();

@@ -319,7 +319,7 @@ public class DynamicConstants implements Serializable {
 
     // Move any non-missing variables to the constant list and init their val.
     // If a variable is missing out of bounds, leave it on this list
-    // forever (guranteeing that invariants will never be instantiated over
+    // forever (guaranteeing that invariants will never be instantiated over
     // it).
     for (Iterator<Constant> i = missing_list.iterator(); i.hasNext(); ) {
       Constant con = i.next();
@@ -329,7 +329,7 @@ public class DynamicConstants implements Serializable {
       }
 
       if (missing(con.vi, vt)) {
-        // value is still missingg, nothing to do (we incremented its count above)
+        // value is still missing, nothing to do (we incremented its count above)
         continue;
       }
 
@@ -655,7 +655,7 @@ public class DynamicConstants implements Serializable {
       }
     }
 
-    // Debug print the created slies
+    // Debug print the created slices
     if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
       int[] slice_cnt = {0, 0, 0, 0};
       int[] inv_cnt = {0, 0, 0, 0};
@@ -809,7 +809,7 @@ public class DynamicConstants implements Serializable {
             debug.fine(String.format("considering slice %s %s %s", con1, con2, con3));
           }
 
-          // Look for a linearbinary over two variables.  If it doesn't
+          // Look for a LinearBinary over two variables.  If it doesn't
           // exist we don't create a LinearTernary
           Invariant lb = find_linear_binary(ppt.findSlice(con2.vi, con3.vi));
           if (lb == null) {

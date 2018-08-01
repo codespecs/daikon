@@ -332,7 +332,7 @@ public class DynComp {
       cmdlist.add(target_arg);
     }
     if (verbose) {
-      System.out.printf("\nExecuting target program: %s\n", args_to_string(cmdlist));
+      System.out.printf("%nExecuting target program: %s%n", args_to_string(cmdlist));
     }
     String[] cmdline = cmdlist.toArray(new String[cmdlist.size()]);
 
@@ -354,7 +354,7 @@ public class DynComp {
   /** Wait for stream redirect threads to complete */
   public int redirect_wait(Process p) {
 
-    // Create the redirect theads and start them
+    // Create the redirect threads and start them
     @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);

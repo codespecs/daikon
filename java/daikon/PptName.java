@@ -215,8 +215,8 @@ public class PptName implements Serializable {
 
   /**
    * @return something interesting and descriptive about the point in question, along the lines of
-   *     "ENTER" or "EXIT" or somesuch. The semantics of this method are not yet decided, so don't
-   *     try to do aynthing useful with this result. May be null. e.g. "EXIT84"
+   *     "ENTER" or "EXIT" or some such. The semantics of this method are not yet decided, so don't
+   *     try to do anything useful with this result. May be null. e.g. "EXIT84"
    */
   public /*@Nullable*/ String getPoint() {
     return point;

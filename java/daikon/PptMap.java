@@ -99,7 +99,7 @@ public class PptMap implements Serializable {
    */
   // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
   // https://bugs.openjdk.java.net/browse/JDK-8195646
-  @SuppressWarnings("lock") // JLS bug: can't write recevier annotation on method of anonymous class
+  @SuppressWarnings("lock") // JLS bug: can't write receiver annotation on method of anonymous class
   public Iterator<PptTopLevel> pptIterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
@@ -148,7 +148,7 @@ public class PptMap implements Serializable {
    */
   // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
   // https://bugs.openjdk.java.net/browse/JDK-8195646
-  @SuppressWarnings("lock") // JLS bug: can't write recevier annotation on method of anonymous class
+  @SuppressWarnings("lock") // JLS bug: can't write receiver annotation on method of anonymous class
   public Iterator<PptTopLevel> ppt_all_iterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
