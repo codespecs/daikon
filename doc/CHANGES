@@ -21,8 +21,9 @@ Further documentation can be found in:
 ===========================================================================
 
 Chicory:
-- We now instrument exceptional exits.  That means that Daikon is able
+- Chicory instruments exceptional exits.  That means that Daikon is able
   to infer invariants about when a Java method throws an exception.
+  The program point hierarchy is subject to change in the future.
 
 ===========================================================================
 
