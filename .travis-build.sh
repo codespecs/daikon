@@ -70,7 +70,7 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
   [ -s /tmp/diff.txt ] || (echo "/tmp/diff.txt is empty" && false)
   wget https://raw.githubusercontent.com/plume-lib/plume-scripts/master/lint-diff.py
-  python lint-diff.py --strip-diff=1 --strip-lint=2 /tmp/diff.txt /tmp/warnings.txt
+  python lint-diff.py --strip-diff=2 --strip-lint=1 /tmp/diff.txt /tmp/warnings.txt
 fi
 
 if [[ "${GROUP}" == "kvasir" || "${GROUP}" == "all" ]]; then
