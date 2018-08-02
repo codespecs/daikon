@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.plumelib.util.ArraysPlume;
+import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.MathPlume;
 import org.plumelib.util.UtilPlume;
 
@@ -1628,7 +1629,7 @@ import typequals.*;
       // debugGuarding.fine (guardingSet.toString());
     }
 
-    return UtilPlume.removeDuplicates(guardingList);
+    return CollectionsPlume.removeDuplicates(guardingList);
   }
 
   // This is called only from finally_print_the_invariants().
