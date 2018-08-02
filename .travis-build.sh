@@ -66,8 +66,6 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   # Documentation
   make javadoc doc-all
 
-  echo "TRAVIS_PULL_REQUEST = ${TRAVIS_PULL_REQUEST}"
-  echo "TRAVIS_PULL_REQUEST_BRANCH = ${TRAVIS_PULL_REQUEST_BRANCH}"
   (git diff "${TRAVIS_COMMIT_RANGE/.../..}" > /tmp/diff.txt 2>&1) || true
   (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
   [ -s /tmp/diff.txt ] || (echo "/tmp/diff.txt is empty" && false)
