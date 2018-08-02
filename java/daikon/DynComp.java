@@ -354,7 +354,7 @@ public class DynComp {
   /** Wait for stream redirect threads to complete */
   public int redirect_wait(Process p) {
 
-    // Create the redirect threads and start them
+    // Create the redirect threads and start them.
     @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
