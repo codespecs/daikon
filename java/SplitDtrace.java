@@ -14,7 +14,17 @@ import java.util.zip.ZipFile;
 import org.checkerframework.dataflow.qual.*;
 */
 
+/**
+ * Takes one argument: a .dtrace or dtrace.gz file. Splits it into 100 files: the first file
+ * contains the first 1% of the original file, the second contains 1-2%, ... until the last one
+ * contains 99-100%.
+ */
 public final class SplitDtrace {
+  /**
+   * Entry point for SplitDtrace, which splits a trace file into 100 parts.
+   *
+   * @param args one argument, the name of the .dtrace or .dtrace.gz file
+   */
   public static void main(String[] args) throws IOException {
     if (args.length != 1) {
       throw new RuntimeException(

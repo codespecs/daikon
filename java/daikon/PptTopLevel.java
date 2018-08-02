@@ -341,7 +341,7 @@ public class PptTopLevel extends Ppt {
   /** The canonical VarInfo for the equality. */
   public Set<VarInfo> redundant_invs_equality = new LinkedHashSet<VarInfo>(0);
 
-  @SuppressWarnings("fields.uninitialized") // TODO: initialization and helper methods
+  @SuppressWarnings("fields.uninitialized") // todo: initialization and helper methods
   public PptTopLevel(
       String name,
       PptType type,
