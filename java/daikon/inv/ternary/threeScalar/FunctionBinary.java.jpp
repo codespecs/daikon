@@ -351,7 +351,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   protected Invariant resurrect_done(int[] permutation) {
 
     assert permutation.length == 3;
-    assert ArraysPlume.fn_is_permutation(permutation);
+    assert ArraysPlume.fnIsPermutation(permutation);
 
     int[] new_order = new int[3];
     int[] old_order = var_indices[get_var_order()];

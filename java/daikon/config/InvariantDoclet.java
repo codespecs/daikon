@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -349,9 +350,9 @@ public class InvariantDoclet {
           /*@ClassGetName*/ String classname = fullname.substring(0, i);
           Class<?> c;
           try {
-            c = UtilPlume.classForName(classname);
+            c = ReflectionPlume.classForName(classname);
           } catch (Throwable e) {
-            System.err.printf("Exception in UtilPlume.classForName(%s): %s", fullname, e);
+            System.err.printf("Exception in ReflectionPlume.classForName(%s): %s", fullname, e);
             return -1;
           }
           Field f = c.getField(enable_name);

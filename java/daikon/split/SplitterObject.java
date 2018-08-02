@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.ReflectionPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -65,7 +65,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   static /*@Nullable*/ Class<?> defineSplitterClass(
       /*@BinaryName*/ String className, String fileName) {
     try {
-      return UtilPlume.defineClassFromFile(className, fileName);
+      return ReflectionPlume.defineClassFromFile(className, fileName);
     } catch (FileNotFoundException e) {
       if (!PptSplitter.dkconfig_suppressSplitterErrors) {
         System.out.println(

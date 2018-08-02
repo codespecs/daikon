@@ -2542,7 +2542,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!FileIO.new_decl_format) {
       List<VarInfo> result = var_info_name.accept(new GuardingVisitor()); // vin ok
       result.remove(ppt.find_var_by_name(var_info_name.name())); // vin ok
-      assert !ArraysPlume.any_null(result);
+      assert !ArraysPlume.anyNull(result);
       return result;
     } else { // new format
       List<VarInfo> result = new ArrayList<VarInfo>();

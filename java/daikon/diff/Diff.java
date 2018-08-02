@@ -19,6 +19,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.Pair;
 import org.plumelib.util.UtilPlume;
@@ -597,12 +598,13 @@ public final class Diff {
       }
 
       // List<Invariant> invs = ppt.getInvariants();
-      List<Invariant> invs = UtilPlume.sortList(ppt.getInvariants(), PptTopLevel.icfp);
+      List<Invariant> invs = CollectionsPlume.sortList(ppt.getInvariants(), PptTopLevel.icfp);
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
-          List<Invariant> invsCond = UtilPlume.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
+          List<Invariant> invsCond =
+              CollectionsPlume.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
           // List<Invariant> invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }
@@ -827,7 +829,7 @@ public final class Diff {
       if (targetName.equals(somePptName)) {
         @SuppressWarnings("nullness") // map: iterating over keySet
         /*@NonNull*/ PptTopLevel repl = manip.get(somePptName);
-        return UtilPlume.sortList(repl.getInvariants(), PptTopLevel.icfp);
+        return CollectionsPlume.sortList(repl.getInvariants(), PptTopLevel.icfp);
       }
     }
     //    System.out.println ("Could not find the left hand side of implication!!!");
