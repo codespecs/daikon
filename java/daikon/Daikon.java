@@ -1244,7 +1244,7 @@ public final class Daikon {
 
     // Set the fuzzy float comparison ratio.  This needs to be done after
     // any configuration options (which may set the ratio) are processed.
-    Global.fuzzy.set_rel_diff(Invariant.dkconfig_fuzzy_ratio);
+    Global.fuzzy.setRelativeRatio(Invariant.dkconfig_fuzzy_ratio);
 
     // Setup ppt_max_name based on the specified percentage of ppts to process
     if (dkconfig_ppt_perc != 100) {

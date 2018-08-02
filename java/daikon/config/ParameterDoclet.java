@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -221,7 +223,7 @@ public class ParameterDoclet {
       @SuppressWarnings("signature") // application invariant
       /*@ClassGetName*/ String classname = field.substring(0, i);
       String fieldname = field.substring(i + 1);
-      Class<?> c = UtilPlume.classForName(classname);
+      Class<?> c = ReflectionPlume.classForName(classname);
       Field f = c.getField(Configuration.PREFIX + fieldname);
       Object value = f.get(null);
       return "The default value is `" + value + "'.";
@@ -257,7 +259,7 @@ public class ParameterDoclet {
 
       for (
       /*@KeyFor("categories[c].fields")*/ String field :
-          UtilPlume.sortedKeySet(categories[c].fields)) {
+          CollectionsPlume.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
@@ -294,7 +296,7 @@ public class ParameterDoclet {
 
       for (
       /*@KeyFor("categories[c].fields")*/ String field :
-          UtilPlume.sortedKeySet(categories[c].fields)) {
+          CollectionsPlume.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
@@ -312,7 +314,7 @@ public class ParameterDoclet {
 
   public void writeList(PrintWriter out) {
     for (int c = 0; c < categories.length; c++) {
-      for (String field : UtilPlume.sortedKeySet(categories[c].fields)) {
+      for (String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
         out.println(field);
       }
     }

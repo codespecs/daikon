@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import org.plumelib.util.EntryReader;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.ReflectionPlume;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -160,11 +160,11 @@ public final class Configuration implements Serializable {
     assert fieldname != null;
     assert value != null;
 
-    // Use UtilPlume version of class.forName so that we can refer to
+    // Use ReflectionPlume version of class.forName so that we can refer to
     // inner classes using '.' as well as '$'
     Class<?> clazz;
     try {
-      clazz = UtilPlume.classForName(classname);
+      clazz = ReflectionPlume.classForName(classname);
     } catch (ClassNotFoundException e) {
       throw new ConfigException(
           String.format(
