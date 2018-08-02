@@ -69,7 +69,7 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   (git diff "${TRAVIS_COMMIT_RANGE/.../..}" > /tmp/diff.txt 2>&1) || true
   (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
   [ -s /tmp/diff.txt ] || (echo "/tmp/diff.txt is empty" && false)
-  wget https://raw.githubusercontent.com/plume-lib/plume-scripts/master/lint-diff.py
+  wget https://raw.githubusercontent.com/mernst/plume-scripts/master/lint-diff.py
   ## FOR TESTING ONLY
   cat /tmp/diff.txt
   cat /tmp/warnings.txt
