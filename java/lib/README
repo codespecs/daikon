@@ -4,9 +4,12 @@ All .jar files in this directory should contain Java 7 bytecodes,
 so that Daikon will run under Java 7.
 
 bcel-util-all-0.0.9.jar : https://github.com/plume-lib/bcel-util
-- clone repo
-- run ./gradlew shadowJar
-- copy jar file from build/libs
+To create, run:
+git clone https://github.com/plume-lib/bcel-util && \
+(cd bcel-util && \
+./gradlew shadowJar && \
+cp build/libs/bcel-util-all-0.0.9.jar ..) && \
+\rm -rf bcel-util
 
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
@@ -39,9 +42,12 @@ java-getopt.jar : http://www.urbanophile.com/arenn/coding/download.html
 junit-4.12.jar : https://github.com/junit-team/junit4/wiki/Download-and-Install
 
 options-all-0.3.1.jar : https://github.com/plume-lib/options
-- clone repo
-- run ./gradlew shadowJar
-- copy jar file from build/libs
+To create, run:
+git clone https://github.com/plume-lib/options && \
+(cd options && \
+./gradlew shadowJar && \
+cp build/libs/bcel-util-all-0.0.9.jar ..) && \
+\rm -rf options
 
 plume-util-0.1.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
 When you update this, remake daikon-util.jar (see above).
