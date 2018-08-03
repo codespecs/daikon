@@ -23,7 +23,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Class that builds and describes relations in the ppt hierachy. Building the relationship is
+ * Class that builds and describes relations in the ppt hierarchy. Building the relationship is
  * specific to each type of parent/child relationship (eg, method to object, exit to combined exit,
  * etc). The use of the relationship is general.
  *
@@ -41,7 +41,7 @@ public class PptRelation implements Serializable {
 
   /**
    * The different ppt/variable hierarchy relationships. Parent and User relations are specified in
-   * the declaration record of the ppt. ENTER_EXIT, EXIT_EXITNN, and PPT_COND are automtically
+   * the declaration record of the ppt. ENTER_EXIT, EXIT_EXITNN, and PPT_COND are automatically
    * constructed. MERGE_CHILD is not used by Daikon.
    */
   public enum PptRelationType {
@@ -652,7 +652,7 @@ public class PptRelation implements Serializable {
    * that children contains only the immediate descendants of the ppt.
    *
    * <p>This version should be used with the old version of declaration records. Use
-   * init_hierarchy_new() with new declararation records.
+   * init_hierarchy_new() with new declaration records.
    */
   public static void init_hierarchy(PptMap all_ppts) {
 

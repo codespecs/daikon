@@ -58,7 +58,7 @@ public class Quantify {
 
   /**
    * Class the represents terms that can be used in variable expressions. These include constants
-   * (such as 0 and 1), free variables used for quantification (i, j, etc), and normal daikon
+   * (such as 0 and 1), free variables used for quantification (i, j, etc), and normal Daikon
    * variables.
    */
   public abstract static class Term {
@@ -235,7 +235,7 @@ public class Quantify {
   }
 
   /**
-   * Represents a daikon variable with an optional integer offset. Usually used for the bounds of a
+   * Represents a Daikon variable with an optional integer offset. Usually used for the bounds of a
    * slice.
    */
   public static class VarPlusOffset extends Term {
