@@ -23,7 +23,7 @@ package daikon.inv.unary.sequence;
 import daikon.*;
 
 /*>>>
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /**

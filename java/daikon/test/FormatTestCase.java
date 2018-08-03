@@ -26,7 +26,7 @@ import org.plumelib.util.Intern;
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /**

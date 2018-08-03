@@ -9,7 +9,7 @@ import daikon.inv.unary.UnaryInvariant;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /** Invariants on a single sequence (array) variable, such as {@code a[] contains no duplicates}. */

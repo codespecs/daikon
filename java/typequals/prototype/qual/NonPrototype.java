@@ -1,4 +1,4 @@
-package typequals;
+package typequals.prototype.qual;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
