@@ -2591,9 +2591,9 @@ Run the following commands:
 
 @smallexample
 NEW_VERSION=`cat doc/VERSION`
-$PLUMESCRIPTS/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
+trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
-$PLUMESCRIPTS/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
+trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
 @end smallexample
 
