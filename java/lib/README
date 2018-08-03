@@ -40,6 +40,8 @@ cp build/libs/bcel-util-all-0.0.9.jar ..) && \
 plume-util-0.1.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
 When you update this, remake daikon-util.jar (see above).
 
+require-javadoc-0.0.7.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.0.7/
+
 ---------------------------------------------------------------------------
 
 Motivation for daikon-util.jar:
