@@ -6,7 +6,7 @@ import daikon.inv.InvariantStatus;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /** Exists simply to provide the do-nothing resusurrect_done method and abstract add method. */

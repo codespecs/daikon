@@ -29,7 +29,7 @@ import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /**

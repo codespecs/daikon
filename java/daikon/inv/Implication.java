@@ -11,7 +11,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 // Here Implication is reimplemented as an extension of the new general

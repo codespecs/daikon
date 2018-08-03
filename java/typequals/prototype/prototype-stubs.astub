@@ -1,4 +1,4 @@
-import typequals.Prototype;
+import typequals.prototype.qual.Prototype;
 
 package java.lang;
 

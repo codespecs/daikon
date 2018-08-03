@@ -10,7 +10,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /** Abstract base class for invariants over one variable of type {@code String[]}. */

@@ -14,7 +14,7 @@ import java.util.List;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /**

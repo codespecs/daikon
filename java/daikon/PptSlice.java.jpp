@@ -64,7 +64,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /** Contains all of the invariants over a particular set of ARITY variables. */
