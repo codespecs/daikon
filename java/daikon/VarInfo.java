@@ -3303,9 +3303,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return str_name;
       case RETURN:
         if (!name().contains("exception")) {
-          return ("\\result");
+          return "\\result";
         } else {
-          return ("Exception");
+          return "Exception";
         }
       default:
         throw new Error("can't drop through switch statement");

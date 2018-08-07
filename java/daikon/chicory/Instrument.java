@@ -57,8 +57,8 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
- * task is to add "hooks" into the other class at method entries and exits for instrumentation
- * purposes. (We now hook throws as well.)
+ * task is to add "hooks" into the other class at method entries, throws and exits for
+ * instrumentation purposes.
  */
 @SuppressWarnings("nullness")
 class Instrument extends InstructionListUtils implements ClassFileTransformer {
@@ -407,7 +407,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * Instrument all the methods in a class. For each method, add instrumentation code at the entry
    * and at each return from the method. In addition, changes each return statement to first place
    * the value being returned into a local and then return. This allows us to work around the JDI
-   * deficiency of not being able to query return values. (We now instrument throws as well.)
+   * deficiency of not being able to query return values. In a similar fashion, we assign the
+   * exception value from a throw statement to a local variable prior to the actual throw.
    *
    * @param fullClassName must be fully qualified: packageName.className
    */
@@ -849,8 +850,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   /**
    * If this is a return instruction, generate new il to assign the result to a local variable
-   * (return__$trace2_val) and then call Runtime.exit(). This il wil be inserted immediately before
-   * the return.
+   * (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This il wil be inserted
+   * immediately before the return.
    */
   private /*@Nullable*/ InstructionList generate_return_instrumentation(
       String fullClassName,
@@ -896,8 +897,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   /**
    * If this is a throw instruction, generate new il to assign the exception to a local variable
-   * (exception__$trace2_val) and then call Runtime.exceptionExit(). This il wil be inserted
-   * immediately before the throw.
+   * (exception__$trace2_val) and then call daikon.chicory.Runtime.exceptionExit(). This il wil be
+   * inserted immediately before the throw.
    */
   private /*@Nullable*/ InstructionList generate_throw_instrumentation(
       String fullClassName,
@@ -934,8 +935,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   /**
    * Used to generate code to process an uncaught exception that our instrumentation has caught.
    * First, assign the Exception to a local variable (exception__$trace2_val). Then call
-   * Runtime.exceptionExit with line number = -1 to indicate this was a delegated exception.
-   * Finally, reload the exception value and re-throw it.
+   * daikon.chicory.Runtime.exceptionExit with line number = -1 to indicate this was a delegated
+   * exception. Finally, reload the exception value and re-throw it.
    */
   private /*@Nullable*/ InstructionList generate_internal_catch_instrumentation(
       String fullClassName, MethodContext c) {
@@ -1030,7 +1031,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * Inserts instrumentation code at the start of the method. This includes adding a local variable
    * (this_invocation_nonce) that is initialized to Runtime.nonce++. This provides a unique id on
    * each method entry/exit that allows them to be matched up from the dtrace file. Inserts code to
-   * call Runtime.enter().
+   * call daikon.chicory.Runtime.enter().
    */
   private void add_entry_instrumentation(
       InstructionList il, MethodContext c, boolean shouldCallEnter) throws IOException {
@@ -1158,8 +1159,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   /**
    * Pushes the object, nonce, parameters, and return value on the stack and calls the specified
-   * Method (normally enter or exit) in Runtime. The parameters are passed as an array of objects.
-   * Any primitive values are wrapped in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc).
+   * Method (normally enter or exit) in daikon.chicory.Runtime. The parameters are passed as an
+   * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
+   * wrapper (IntWrap, FloatWrap, etc).
    */
   private InstructionList call_enter_exit(MethodContext c, String method_name, int line) {
 
@@ -1213,7 +1215,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     // If this is an exit, push the return value and line number.
     // The return value is stored in the local "return__$trace2_val".
-    // If the return value is a primitive, wrap it in the appropriate runtime wrapper.
+    // If the return value is a primitive, wrap it in the appropriate wrapper.
     if (method_name.equals("exit")) {
       Type ret_type = mg.getReturnType();
       if (isVoid(ret_type)) {
@@ -1269,7 +1271,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   /**
    * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
    * for prim_type. prim_type should be one of the basic types (eg, Type.INT, Type.FLOAT, etc). The
-   * wrappers are those defined in Runtime.
+   * wrappers are those defined in daikon.chicory.Runtime.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
    */

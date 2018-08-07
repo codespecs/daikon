@@ -291,7 +291,7 @@ public class DeclWriter extends DaikonWriter {
         print_method(mi, exitRoot, exitName, PptType.SUBEXIT, comp_info);
       }
 
-      // UNDONE: a class initializer can have a throw statement.
+      // TODO: a class initializer can have a throw statement.
       // I think we need code similar to:
       //  (member != null
       //      ? methodEntryName(member)

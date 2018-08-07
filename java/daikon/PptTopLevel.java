@@ -4407,9 +4407,10 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  // UNDONE: this doesn't look right
+  // TODO: this doesn't look right
   // if type != null then same as is_exit
-
+  // should we check ppt_name?
+  // This method is currently unused.
   /** Is this is an exception ppt (combined or specific)? */
   /*@Pure*/
   public boolean is_exception() {
@@ -4440,9 +4441,9 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  // UNDONE: this doesn't look right
+  // TODO: this doesn't look right
   // if type != null then same as is_combined_exit
-
+  // should we check ppt_name?
   /** Is this a combined exception point? */
   /*@Pure*/
   public boolean is_combined_exception() {
@@ -4452,8 +4453,6 @@ public class PptTopLevel extends Ppt {
       return ppt_name.isCombinedExceptionPoint();
     }
   }
-
-  // UNDONE: this doesn't look right
 
   /** Is this a numbered (specific) exit point? */
   /*@Pure*/
