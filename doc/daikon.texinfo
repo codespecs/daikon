@@ -2082,7 +2082,7 @@ Daikon by the dataflow hierarchy, see
 
 In a similar manner, @code{foo():::EXCEPTION} is the program point that
 represents all the procedure's exceptional exits,
-and invariants there are postconditions.  When there are multiple
+and invariants there are exceptional postconditions.  When there are multiple
 exception exits from a procedure (for instance, because of multiple
 @code{throw} statements), the different exits are differentiated by
 suffixing them with their line numbers; for instance,

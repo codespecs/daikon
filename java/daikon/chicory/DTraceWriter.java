@@ -148,7 +148,7 @@ public class DTraceWriter extends DaikonWriter {
     Runtime.incrementRecords();
   }
 
-  /** Prints the method exception exit program point(s) in the dtrace file */
+  /** Prints the method exception exit program point(s) in the dtrace file. */
   public void methodExceptionExit(
       MethodInfo mi,
       int nonceVal,

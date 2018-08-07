@@ -322,7 +322,7 @@ public class PptName implements Serializable {
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/
   public boolean isEnterPoint() {
-    return (point != null) && point.startsWith(FileIO.entry_suffix);
+    return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
 
   /**
@@ -405,7 +405,7 @@ public class PptName implements Serializable {
     // entry point; in particular, if there was an exception, then perhaps
     // the precondition or object invariant was not met.
     assert isExitPoint() || isExceptionPoint() : fullname;
-    return new PptName(cls, method, FileIO.entry_suffix);
+    return new PptName(cls, method, FileIO.enter_suffix);
   }
 
   /**

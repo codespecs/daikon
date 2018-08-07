@@ -46,7 +46,7 @@ public abstract class DaikonWriter {
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(Member method) {
-    return methodName(method, daikon.FileIO.entry_suffix);
+    return methodName(method, daikon.FileIO.enter_suffix);
   }
 
   /**
@@ -55,13 +55,14 @@ public abstract class DaikonWriter {
    *
    * @param fullClassName packageName.className
    * @param types string representation of the declared types of the parameters
-   * @param name the method name with modifiers and parameters
+   * @param name the method with modifiers and parameters, such as "public static void
+   *     DataStructures.StackArTester.doNew(int size)"
    * @param short_name just the method's name ("&lt;init&gt;" for constructors)
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(
       String fullClassName, String[] types, String name, String short_name) {
-    return methodName(fullClassName, types, name, short_name, daikon.FileIO.entry_suffix);
+    return methodName(fullClassName, types, name, short_name, daikon.FileIO.enter_suffix);
   }
 
   /**
@@ -95,7 +96,7 @@ public abstract class DaikonWriter {
    * Constructs the program point name suffix for an exception exit
    *
    * @param lineNum the line number of a throw statement causing the exception exit or -1 for an
-   *     uncaught exception
+   *     uncaught propagated exception (one caused by some execution of some other statement)
    * @return the exception name suffix for Daikon
    */
   private static String exceptionSuffix(int lineNum) {
@@ -105,11 +106,11 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Given a method, returns the method exception program point name for Daikon
+   * Given a method, returns the method exception program point name for Daikon.
    *
    * @param method non-null method
-   * @param lineNum the line number of a throw statement in the method or -1 for an uncaught
-   *     exception
+   * @param lineNum the line number of a throw statement causing the exception exit or -1 for an
+   *     uncaught propagated exception (one caused by some execution of some other statement)
    * @return the decorated method exception name for Daikon
    */
   public static String methodExceptionName(Member method, int lineNum) {
@@ -120,13 +121,15 @@ public abstract class DaikonWriter {
    * Given a method, returns the method exception program point name for Daikon. Used when
    * reflection information is not available.
    *
-   * @param fullClassName packageName.className
-   * @param types string representation of the declared types of the parameters
+   * @param fullClassName fully-qualified class name, i.e., packageName.className
+   * @param types string representation of the declared types of the parameters. For example:
+   *     {"int", "java.lang.Object", "float"}.
    * @param name the method name with modifiers and parameters
    * @param short_name just the method's name ("&lt;init&gt;" for constructors)
    * @param lineNum the line number of a throw statement in the method or -1 for an uncaught
    *     exception
    * @return the decorated method exception name for Daikon
+   * @see #methodName(String, String[], String, String, String)
    */
   public static String methodExceptionName(
       String fullClassName, String[] types, String name, String short_name, int lineNum) {
@@ -137,18 +140,13 @@ public abstract class DaikonWriter {
    * Constructs the program point name (which includes the point string at the end)
    *
    * @param fullClassName packageName.className
-   * @param types string representation of the declared types of the parameters. for example:
-   *     {"int", "java.lang.Object", "float"}
-   * @param name the method with modifiers and parameters
-   * @param short_name just the method's name (except it is "<init>" for constructors)
-   *     <p>So a corresponding name/short_name pair could be:
-   *     <pre>
-   *    name: public static void DataStructures.StackArTester.doNew(int size)
-   *    short_name: doNew
-   * </pre>
-   *
+   * @param types string representation of the declared types of the parameters. For example:
+   *     {"int", "java.lang.Object", "float"}.
+   * @param name the method with modifiers and parameters, such as "public static void
+   *     DataStructures.StackArTester.doNew(int size)"
+   * @param short_name just the method's name ("&lt;init&gt;" for constructors)
    * @param point such as "EXIT" or "ENTER"
-   * @return same thing as methodName(Member, point)
+   * @return same thing as {@link #methodName(Member, String)}
    */
   private static String methodName(
       String fullClassName, String[] types, String name, String short_name, String point) {

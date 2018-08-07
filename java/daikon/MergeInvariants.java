@@ -382,14 +382,12 @@ public final class MergeInvariants {
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-
       if (!ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isExceptionPoint()) {
         continue;
       }
       if (ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isCombinedExceptionPoint()) {
         continue;
       }
-
       ppt.children.clear();
       for (PptConditional cond : ppt.cond_iterable()) {
         cond.children.clear();
