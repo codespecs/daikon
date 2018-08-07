@@ -46,6 +46,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
@@ -1275,7 +1276,7 @@ public final class FileIO {
 
       if (count_lines) {
         Daikon.progress = "Checking size of " + filename;
-        total_lines = UtilPlume.count_lines(raw_filename);
+        total_lines = UtilPlume.countLines(raw_filename);
       } else {
         // System.out.printf("no count %b %d %s %d %d\n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
@@ -1813,7 +1814,7 @@ public final class FileIO {
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
         ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-        for (/*@KeyFor("call_hashmap")*/ Integer i : UtilPlume.sortedKeySet(call_hashmap)) {
+        for (/*@KeyFor("call_hashmap")*/ Integer i : CollectionsPlume.sortedKeySet(call_hashmap)) {
           Invocation invok = call_hashmap.get(i);
           assert invok != null;
           invocations.add(invok);

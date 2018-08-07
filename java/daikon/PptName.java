@@ -3,7 +3,7 @@ package daikon;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.ReflectionPlume;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -215,8 +215,8 @@ public class PptName implements Serializable {
 
   /**
    * @return something interesting and descriptive about the point in question, along the lines of
-   *     "ENTER" or "EXIT" or somesuch. The semantics of this method are not yet decided, so don't
-   *     try to do aynthing useful with this result. May be null. e.g. "EXIT84"
+   *     "ENTER" or "EXIT" or some such. The semantics of this method are not yet decided, so don't
+   *     try to do anything useful with this result. May be null. e.g. "EXIT84".
    */
   public /*@Nullable*/ String getPoint() {
     return point;
@@ -359,7 +359,7 @@ public class PptName implements Serializable {
       if (cls == null) return false;
 
       @SuppressWarnings("signature") // cls is allowed to be arbitrary, especially for non-Java code
-      String class_name = UtilPlume.fullyQualifiedNameToSimpleName(cls);
+      String class_name = ReflectionPlume.fullyQualifiedNameToSimpleName(cls);
       assert method != null; // for nullness checker
       int arg_start = method.indexOf('(');
       String method_name = method;
@@ -489,7 +489,7 @@ public class PptName implements Serializable {
       if (cls != null) cls = cls.intern();
       if (method != null) {
         // method = method.intern();
-        UtilPlume.setFinalField(this, "method", method.intern());
+        ReflectionPlume.setFinalField(this, "method", method.intern());
       }
       if (point != null) point = point.intern();
     } catch (NoSuchFieldException e) {

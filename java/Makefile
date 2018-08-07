@@ -1180,14 +1180,15 @@ clover: all_directly
 ### Documentation
 ###
 
-JAVADOC_DEST  = api
+JAVADOC_DEST = api
 # ${DAIKONDIR}/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package"
-JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
+JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
-                -docletpath "${CLASSPATH}" \
                 -classpath "$(subst ${DAIKONDIR}/java:,${CLASSPATH_JARS}:${CLASSPATH_JARS2}:,${CLASSPATH})"
+JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
+                -docletpath "${CLASSPATH}"
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
 
@@ -1197,6 +1198,9 @@ DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
 
 javadoc: api
 
+java-files.txt:
+	find . -name "*.java" -print | grep -v typequals > java-files.txt
+
 # Build javadoc using the daikon package and all of subpackages of
 # daikon.  Unfortunately, there is
 # no switch to javadoc that ignores a subpackage.  Don't include the
@@ -1204,8 +1208,7 @@ javadoc: api
 .PHONY: api
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	@rm -f java-files.txt
-	find . -name "*.java" -print | grep -v typequals > java-files.txt
+	@make java-files.txt
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		@java-files.txt
 	@rm -f java-files.txt
@@ -1216,10 +1219,22 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
-	mkdir -p api
+	mkdir -p $(JAVADOC_DEST)
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
+
+## Test that Javadoc exists.
+## You should regenerate api/ after running this.
+requireJavadocPrivate: $(JAVA_FILES)
+	mkdir -p $(JAVADOC_DEST)
+	@make java-files.txt
+	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS_COMMON) \
+		-doclet org.plumelib.javadoc.RequireJavadoc \
+                -docletpath "${CLASSPATH}" \
+		@java-files.txt
+	@rm -f java-files.txt
+
 
 ## This doesn't seem necessary any more
 # javadoc-lookup: doc-javadoc-lookup

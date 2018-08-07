@@ -60,7 +60,7 @@ public class Chicory {
    * when the routine is exited. These .dtrace entries are purely for the benefit of tools that use
    * Chicory for program tracing, to determine when methods are entered and exited.
    */
-  @Option("Write static initialzer program points")
+  @Option("Write static initializer program points")
   public static boolean instrument_clinit = false;
 
   @Option("Include variables that are visible under normal java access rules")
@@ -101,7 +101,7 @@ public class Chicory {
 
   /**
    * The name of the file to read for a list of pure methods. Should be 1 method per line. Each
-   * method should be in the same format as format ouput by the purity analysis.
+   * method should be in the same format as format output by the purity analysis.
    */
   @Option("File of pure methods to use as additional Daikon variables")
   public static /*@Nullable*/ File purity_file;
@@ -139,7 +139,7 @@ public class Chicory {
   /** Thread that copies output from target to our output */
   public static /*@MonotonicNonNull*/ StreamRedirectThread out_thread;
 
-  /** Thread that copies stderr from target to our stderr */
+  /** Thread that copies stderr from target to our stderr. */
   public static /*@MonotonicNonNull*/ StreamRedirectThread err_thread;
 
   /** starting time (msecs) */
@@ -405,7 +405,9 @@ public class Chicory {
     for (String target_arg : target_args) {
       cmdlist.add(target_arg);
     }
-    if (verbose) System.out.printf("\nExecuting target program: %s\n", args_to_string(cmdlist));
+    if (verbose) {
+      System.out.printf("%nExecuting target program: %s%n", args_to_string(cmdlist));
+    }
     String[] cmdline = cmdlist.toArray(new String[cmdlist.size()]);
 
     // Execute the command, sending all output to our streams

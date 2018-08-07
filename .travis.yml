@@ -84,6 +84,7 @@ script:
      javac -version &&
      export TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG &&
      export TRAVIS_BUILD_DIR=$TRAVIS_BUILD_DIR &&
+     export TRAVIS_COMMIT_RANGE=$TRAVIS_COMMIT_RANGE &&
      ./.travis-build.sh $GROUP"
 
 jobs:
@@ -104,6 +105,8 @@ jobs:
             git ls-remote https://github.com/${SLUGOWNER}/daikon-typecheck.git &>-
             if [ "$?" -eq 0 ]; then
               sh trigger-travis.sh ${SLUGOWNER} daikon-typecheck $TRAVIS_ACCESS_TOKEN
+            elif [[ "${SLUGOWNER}" == "codespecs" ]]; then
+              sh trigger-travis.sh typetests daikon-typecheck $TRAVIS_ACCESS_TOKEN
             fi
 
           fi

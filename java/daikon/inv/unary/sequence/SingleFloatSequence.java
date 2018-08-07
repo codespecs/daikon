@@ -6,7 +6,7 @@ import org.plumelib.util.Intern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /** Abstract base class for invariants over one variable of type {@code double[]}. */

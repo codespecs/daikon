@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /** Provides a class that defines the functions that must exist for each two variable invariant. */

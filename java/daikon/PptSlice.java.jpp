@@ -64,7 +64,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /** Contains all of the invariants over a particular set of ARITY variables. */
@@ -539,7 +539,7 @@ public final class PPTSLICE1 extends PptSlice {
       assert vis_sorted[i].varinfo_index <= vis_sorted[i + 1].varinfo_index;
     }
 
-    assert ArraysPlume.fn_is_permutation(permutation);
+    assert ArraysPlume.fnIsPermutation(permutation);
     // Assert that the permutation represents the rearrangement
     for (int i = 0; i < ARITY; i++) {
       // the variable that used to be at position "i" is now found at

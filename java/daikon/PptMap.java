@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.CollectionsPlume;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -99,7 +99,7 @@ public class PptMap implements Serializable {
    */
   // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
   // https://bugs.openjdk.java.net/browse/JDK-8195646
-  @SuppressWarnings("lock") // JLS bug: can't write recevier annotation on method of anonymous class
+  @SuppressWarnings("lock") // JLS bug: can't write receiver annotation on method of anonymous class
   public Iterator<PptTopLevel> pptIterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
@@ -136,7 +136,7 @@ public class PptMap implements Serializable {
    * @see #pptIterator()
    */
   public Iterable<PptTopLevel> pptIterable() {
-    return UtilPlume.iteratorToIterable(pptIterator());
+    return CollectionsPlume.iteratorToIterable(pptIterator());
   }
 
   /**
@@ -148,7 +148,7 @@ public class PptMap implements Serializable {
    */
   // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
   // https://bugs.openjdk.java.net/browse/JDK-8195646
-  @SuppressWarnings("lock") // JLS bug: can't write recevier annotation on method of anonymous class
+  @SuppressWarnings("lock") // JLS bug: can't write receiver annotation on method of anonymous class
   public Iterator<PptTopLevel> ppt_all_iterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
@@ -195,7 +195,7 @@ public class PptMap implements Serializable {
    * @see #ppt_all_iterator()
    */
   public Iterable<PptTopLevel> ppt_all_iterable() {
-    return UtilPlume.iteratorToIterable(ppt_all_iterator());
+    return CollectionsPlume.iteratorToIterable(ppt_all_iterator());
   }
 
   /** Iterate over the PptTopLevels and trim them. */

@@ -8,7 +8,7 @@ import daikon.inv.OutputFormat;
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 // This invariant is true if the variable is always positive (greater than 0).

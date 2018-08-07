@@ -10,7 +10,7 @@ import org.plumelib.util.MathPlume;
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
-import typequals.*;
+import typequals.prototype.qual.*;
 */
 
 /**
@@ -146,7 +146,7 @@ public class NonModulus extends SingleScalar {
     } else {
       // Do I want to communicate back some information about the smallest
       // possible modulus?
-      long[] result = MathPlume.nonmodulus_strict_long(elements.iterator());
+      long[] result = MathPlume.nonmodulusStrictLong(elements.iterator());
       if (result == null) {
         no_result_yet = true;
       } else {
@@ -169,7 +169,7 @@ public class NonModulus extends SingleScalar {
     if (elements.add(Intern.internedLong(value))
         && results_accurate
         && (!no_result_yet)
-        && (MathPlume.mod_positive(value, modulus) == remainder)) results_accurate = false;
+        && (MathPlume.modPositive(value, modulus) == remainder)) results_accurate = false;
     return InvariantStatus.NO_CHANGE;
   }
 

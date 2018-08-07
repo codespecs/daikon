@@ -1,37 +1,48 @@
-The easiest way to build and run Daikon is to put either java/, or else
-daikon.jar, on your classpath.
+The easiest way to build and run Daikon is to put daikon.jar on your classpath.
+This directory contains dependences that are put in daikon.jar.
+All .jar files in this directory should contain Java 7 bytecodes,
+so that Daikon will run under Java 7.
 
-For external libraries in this directory, we supply both the original
-distribution (for completeness) and also, if the original distribution is
-not a .jar file, the .jar file (for use by Java).
-
-bcel-util-all-0.0.4.jar : https://search.maven.org/#search%7Cga%7C1%7Cbcel-util
+bcel-util-all-0.0.9.jar : https://github.com/plume-lib/bcel-util
+To create, run:
+git clone https://github.com/plume-lib/bcel-util && \
+(cd bcel-util && \
+./gradlew shadowJar && \
+cp build/libs/bcel-util-all-0.0.9.jar ..) && \
+\rm -rf bcel-util
 
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
-java-getopt.jar : http://www.urbanophile.com/arenn/coding/download.html
-- GNU getopt 1.0.8 command-line option parser
-- Distributed with java files alongside class files in the jar file.
-  The java files must be stripped from the jar, otherwise jikes tries
-  to compile the java files inside the jar.
-  1. Download java-getopt-1.0.8.jar
-  2. "jar xf java-getopt-1.0.8.jar"
-  3. "cd gnu"
-  4. "rm `find . -name *.java`"
-  5. "cd .."
-  6. "jar cf java-getopt.jar gnu/"
+daikon-util.jar : Just like plume-util-*.jar, but with package
+changed to daikon.util.  To create, run:
+(mkdir -p ~/java && \
+cd ~/java && \
+git clone https://github.com/pantsbuild/jarjar && \
+cd jarjar && \
+./pants doc test ::) && \
+java \
+-cp $HOME/java/jarjar/dist/jarjar.jar \
+org.pantsbuild.jarjar.Main \
+process daikon-util-rules.txt plume-util-*.jar daikon-util.jar
+
+java-getopt-1.0.14.jar : https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.checkerframework.annotatedlib%22%20a%3A%22java-getopt%22
 
 junit-4.12.jar : https://github.com/junit-team/junit4/wiki/Download-and-Install
 
 options-all-0.3.1.jar : https://github.com/plume-lib/options
-- using JDK 7, uncomment and run shadowJar task
+To create, run:
+git clone https://github.com/plume-lib/options && \
+(cd options && \
+./gradlew shadowJar && \
+cp build/libs/bcel-util-all-0.0.9.jar ..) && \
+\rm -rf options
 
-daikon-util.jar : Just like plume-util-*.jar, but with package
-changed to daikon.util.  To create, run:
-java \
--cp $HOME/java/jarjar/jarjar-command/build/libs/jarjar-command-1.0.0.jar:${HOME}/java/jarjar/jarjar-core/build/libs/jarjar-core-1.0.0.jar:${HOME}/tmp/jopt-simple-5.0.4.jar:${HOME}/tmp/asm-6.0/lib/asm-commons-6.0.jar:${HOME}/tmp/asm-6.0/lib/asm-6.0.jar:${HOME}/tmp/slf4j-1.7.25/slf4j-simple-1.7.25.jar:${HOME}/tmp/slf4j-1.7.25/slf4j-api-1.7.25.jar \
-com.tonicsystems.jarjar.Main \
---rules daikon-util-rules.txt plume-util-*.jar --output daikon-util.jar
+plume-util-0.1.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
+When you update this, remake daikon-util.jar (see above).
+
+require-javadoc-0.0.7.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.0.7/
+
+---------------------------------------------------------------------------
 
 Motivation for daikon-util.jar:
 The daikon.util classes are used only by the run-time support for

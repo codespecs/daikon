@@ -329,9 +329,9 @@ public class SplitterFactoryTestUpdater {
       ps.println("    createSplitterFiles(");
       ps.println(
           "        \""
-              + UtilPlume.java_source(spinfoFileLists.get(i).get(0))
+              + UtilPlume.javaSource(spinfoFileLists.get(i).get(0))
               + "\", \""
-              + UtilPlume.java_source(declsFileLists.get(i).get(0))
+              + UtilPlume.javaSource(declsFileLists.get(i).get(0))
               + "\");");
     }
     ps.println("  }");

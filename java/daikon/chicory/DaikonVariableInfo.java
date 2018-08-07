@@ -1,7 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.util.UtilPlume;
+import daikon.util.ReflectionPlume;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -590,13 +590,13 @@ public abstract class DaikonVariableInfo
 
               // Get class type of the class variable
               try {
-                sibClass = UtilPlume.classForName(JvmUtil.binaryNameToClassGetName(sibType));
+                sibClass = ReflectionPlume.classForName(JvmUtil.binaryNameToClassGetName(sibType));
               } catch (ClassNotFoundException e) {
                 throw new Error(e);
               }
 
               // Add node if the class variable can be used as the pure method's parameter
-              if (UtilPlume.isSubtype(sibClass, meth.arg_types[0])) {
+              if (ReflectionPlume.isSubtype(sibClass, meth.arg_types[0])) {
                 DaikonVariableInfo[] arg = {sib};
                 StringBuilder buf = new StringBuilder();
                 DaikonVariableInfo newChild =
