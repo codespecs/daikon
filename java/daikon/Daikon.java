@@ -545,7 +545,7 @@ public final class Daikon {
   }
 
   /**
-   * This does the work of {@link main}, but it never calls System.exit, so it is appropriate to be
+   * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
    * called progrmmatically.
    */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
