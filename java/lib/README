@@ -42,6 +42,9 @@ When you update this, remake daikon-util.jar (see above).
 
 require-javadoc-0.0.7.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.0.7/
 
+signature-util: https://repo.maven.apache.org/maven2/org/plumelib/signature-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/signature-util/0.0.2/signature-util-0.0.2.jar
+
 ---------------------------------------------------------------------------
 
 Motivation for daikon-util.jar:

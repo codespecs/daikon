@@ -478,7 +478,7 @@ tools/jtb/Ast.java:1386:    NodeSequence seq = (NodeSequence)refType.f0.choice;
 tools/jtb/Ast.java:1387:    if (seq.elementAt(0) instanceof PrimitiveType) {
 tools/jtb/Ast.java:1391:    NodeListOptional opt = (NodeListOptional)seq.elementAt(1);
 tools/jtb/Ast.java:1400:            return c.getName();
-tools/jtb/Ast.java:1402:            return JvmUtil.fieldDescriptorToBinaryName(c.getName());
+tools/jtb/Ast.java:1402:            return Signatures.fieldDescriptorToBinaryName(c.getName());
 tools/jtb/Ast.java:1404:            return c.getName();
 
 

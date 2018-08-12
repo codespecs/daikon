@@ -595,7 +595,8 @@ $(INV_DIR)/java/lib/daikon-util.jar \
 $(INV_DIR)/java/lib/java-getopt-1.0.14.jar \
 $(INV_DIR)/java/lib/options-0.3.3-all.jar \
 $(INV_DIR)/java/lib/plume-util-0.1.1.jar \
-$(INV_DIR)/java/lib/require-javadoc-0.0.7.jar
+$(INV_DIR)/java/lib/require-javadoc-0.0.7.jar \
+$(INV_DIR)/java/lib/signature-util-0.0.2.jar
 
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
 ## "make -C java clean; make daikon.jar".
@@ -621,6 +622,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/options-0.3.3-all.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume-util-0.1.1.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/require-javadoc-0.0.7.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/signature-util-0.0.2.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
