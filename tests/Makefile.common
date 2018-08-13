@@ -181,7 +181,7 @@ SOURCES?=$(COMMON_HERE)/sources
 # (e.g. esc-experiments/StackAr or daikon-tests/QueueAr)
 CWD:=$(shell pwd)
 # Why is this command echoed in the Travis job output?
-PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
+PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[678]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
 PROJECT?=${PROJECT_VIA_COMMAND}
 
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)

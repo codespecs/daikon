@@ -58,7 +58,7 @@ endif
 
 # Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -856,9 +856,6 @@ INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
 INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES}
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
-## Setting this to a subset of directories only works if every file has been
-## previously compiled with the Java 7 compiler in annotations-in-comments
-## mode, so that annotations in the files with @SuppressWarnings are respected.
 NULLNESS_JAVA_FILES = ${DAIKON_JAVA_FILES}
 
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)

@@ -2135,13 +2135,7 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 @node    Distribution setup instructions
 @section Distribution setup instructions
 
-The default version of the Java JDK on the majority of the CSE
-machines is now JDK 8.  However, for the time being, we wish to continue
-to distribute JDK 7 @file{.class} files as part of our distribution process;
-the intention is to maximize compatibility with our existing code base.
-Thus, all of our Makefiles invoke @samp{javac} with @samp{-source 7 -target 7}
-to ensure this is the case.  In addition, we wish to release Checker
-Framework enabled @file{.class} files.  You should install the latest version
+Install the latest version
 of the Checker Framework tools from @uref{https://checkerframework.org} and
 set the @env{CHECKERFRAMEWORK} environment variable as described in the
 @uref{https://checkerframework.org/manual/#installation, ,Installation}
@@ -2319,7 +2313,7 @@ variable is properly set.
 
 @need 1000
 @item
-Verify that Daikon passes its tests, under both JDK 7 and JDK 8.
+Verify that Daikon passes its tests. % , under both JDK 8 and ....
 
 @c For Jenkins, visit each of the following URLs and verify that the job is green:
 @c @* @url{http://tern.cs.washington.edu:8080/job/daikon/}
@@ -2640,7 +2634,7 @@ continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
 Success is indicated by invariant output being written to the screen.
 
 @smallexample
-export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.7.0_45"
+export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.8.0_144"
 export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
 mkdir -p ~/tmp
 cd ~/tmp

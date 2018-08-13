@@ -1,7 +1,7 @@
 The easiest way to build and run Daikon is to put daikon.jar on your classpath.
 This directory contains dependences that are put in daikon.jar.
-All .jar files in this directory should contain Java 7 bytecodes,
-so that Daikon will run under Java 7.
+All .jar files in this directory should contain Java 8 bytecodes,
+so that Daikon will run under Java 8.
 
 bcel-util-all-0.0.9.jar : https://github.com/plume-lib/bcel-util
 To create, run:
