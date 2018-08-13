@@ -16,8 +16,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
-import org.plumelib.bcelutil.JvmUtil;
 import org.plumelib.bcelutil.SimpleLog;
+import org.plumelib.signature.Signatures;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -590,7 +590,8 @@ public abstract class DaikonVariableInfo
 
               // Get class type of the class variable
               try {
-                sibClass = ReflectionPlume.classForName(JvmUtil.binaryNameToClassGetName(sibType));
+                sibClass =
+                    ReflectionPlume.classForName(Signatures.binaryNameToClassGetName(sibType));
               } catch (ClassNotFoundException e) {
                 throw new Error(e);
               }

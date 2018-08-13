@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.plumelib.bcelutil.JvmUtil;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
+import org.plumelib.signature.Signatures;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -414,17 +414,17 @@ public class AnnotateNullable {
     // returnVar is non-null), because we are processing a Java program
     )
     String returnType =
-        returnVar == null ? "V" : JvmUtil.binaryNameToFieldDescriptor(returnVar.type.toString());
+        returnVar == null ? "V" : Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
     // Or an throw point
     if (returnVar == null) {
       returnVar = ppt.find_var_by_name("exception");
       returnType =
           returnVar == null
               ? "V"
-              : "V throws " + JvmUtil.binaryNameToFieldDescriptor(returnVar.type.toString());
+              : "V throws " + Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
     }
 
-    return method + JvmUtil.arglistToJvm(java_args) + returnType;
+    return method + Signatures.arglistToJvm(java_args) + returnType;
   }
 
   /**

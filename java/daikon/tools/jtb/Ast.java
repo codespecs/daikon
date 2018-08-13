@@ -25,7 +25,7 @@ import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import org.plumelib.bcelutil.JvmUtil;
+import org.plumelib.signature.Signatures;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -1381,7 +1381,7 @@ public class Ast {
     if (c.isPrimitive()) {
       return c.getName();
     } else if (c.isArray()) {
-      return JvmUtil.fieldDescriptorToBinaryName(c.getName());
+      return Signatures.fieldDescriptorToBinaryName(c.getName());
     } else {
       return c.getName();
     }
