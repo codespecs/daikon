@@ -355,7 +355,12 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     addComment(n, "@ also" + lineSep, true);
   }
 
-  // n must be a MethodDeclaration or ConstructorDeclaration
+  /**
+   * Insert invariants as annotations.
+   *
+   * @param n the node to be modified. It must be a MethodDeclaration or ConstructorDeclaration.
+   * @param exceptional a flag indicating if we are processing normal or exception invariants.
+   */
   public void insertBehavior(Node n, boolean exceptional) {
     class InsertBehaviorVisitor extends DepthFirstVisitor {
       Node n;

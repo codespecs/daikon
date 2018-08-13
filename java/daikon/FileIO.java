@@ -69,25 +69,39 @@ public final class FileIO {
   static final String declaration_header = "DECLARE";
 
   // Program point name tags
+  /** String used to append a ppt type to a ppt name. */
   public static final String ppt_tag_separator = ":::";
+  /** String used to identify entry ppt names. */
   public static final String enter_suffix = "ENTER";
+  /** String used to mark entry ppt names. */
   public static final String enter_tag = ppt_tag_separator + enter_suffix;
   // EXIT does not necessarily appear at the end of the program point name;
   // a number may follow it.
+  /** String used to identify exit ppt names. */
   public static final String exit_suffix = "EXIT";
+  /** String used to mark exit ppt names. */
   public static final String exit_tag = ppt_tag_separator + exit_suffix;
   // public static final String throw_suffix = "THROW";
   // public static final String throw_tag = ppt_tag_separator + throw_suffix;
+  /** String used to identify uncaught exception ppt names. */
   public static final String exception_uncaught_suffix = "EXCEPTIONUNCAUGHT";
+  /** String used to mark uncaught exception ppt names. */
   public static final String exception_uncaught_tag = ppt_tag_separator + exception_uncaught_suffix;
   // EXCEPTION does not necessarily appear at the end of the program point name;
   // a number may follow it.
+  /** String used to identify exception ppt names. */
   public static final String exception_suffix = "EXCEPTION";
+  /** String used to mark exception ppt names. */
   public static final String exception_tag = ppt_tag_separator + exception_suffix;
+  /** String used to identify object ppt names. */
   public static final String object_suffix = "OBJECT";
+  /** String used to mark object ppt names. */
   public static final String object_tag = ppt_tag_separator + object_suffix;
+  /** String used to identify class ppt names. */
   public static final String class_static_suffix = "CLASS";
+  /** String used to mark class ppt names. */
   public static final String class_static_tag = ppt_tag_separator + class_static_suffix;
+  /** String used to identify global ppt names. */
   public static final String global_suffix = "GLOBAL";
 
   private static final String lineSep = Global.lineSep;
