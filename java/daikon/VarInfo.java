@@ -2692,6 +2692,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
+  /** Return the set of values that have been seen so far for this variable. */
   public ValueSet get_value_set() {
 
     // Static constants don't have value sets, so we must make one
