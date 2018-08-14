@@ -65,6 +65,7 @@ public class Runtime {
   //
   // Control over what classes (ppts) are instrumented
   //
+
   /** Ppts to omit (regular expression) */
   public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
@@ -77,8 +78,6 @@ public class Runtime {
   //
   // Setups that control what information is written
   //
-  /** Render linked lists as vectors */
-  static boolean linked_lists = true;
 
   /** Depth to wich to examine structure components */
   static int nesting_depth = 2;
@@ -86,6 +85,7 @@ public class Runtime {
   //
   // Dtrace file vars
   //
+
   /** Max number of records in dtrace file */
   static long dtraceLimit = Long.MAX_VALUE;
 

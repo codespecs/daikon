@@ -124,9 +124,6 @@ public class Chicory {
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
 
-  @Option("Render linked lists as vectors")
-  public static boolean linked_lists = true;
-
   /**
    * When this option is chosen, Chicory will record each program point until that program point has
    * been executed sample-cnt times. Chicory will then begin sampling. Sampling starts at 10% and
