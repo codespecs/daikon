@@ -709,11 +709,6 @@ public final class Debug {
     return val.toString();
   }
 
-  @Deprecated
-  public static String toString(VarInfo[] vis) {
-    return Arrays.toString(vis);
-  }
-
   /**
    * Returns a string containing each variable and its value.
    *
