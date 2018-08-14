@@ -2692,36 +2692,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns a string containing the names of the vars in the array. */
-  public static String arrayToString(VarInfo[] vis) {
-
-    if (vis == null) return "null";
-    StringJoiner sb = new StringJoiner(", ");
-    for (int i = 0; i < vis.length; i++) {
-      if (vis[i] == null) {
-        sb.add("null");
-      } else {
-        sb.add(vis[i].name());
-      }
-    }
-    return sb.toString();
-  }
-
-  /** Returns a string containing the names of the vars in the list. */
-  public static String listToString(List<VarInfo> vlist) {
-
-    if (vlist == null) return "null";
-    ArrayList<String> vars = new ArrayList<String>(vlist.size());
-    for (VarInfo v : vlist) {
-      if (v == null) {
-        vars.add("null");
-      } else {
-        vars.add(v.name());
-      }
-    }
-    return UtilPlume.join(vars, ", ");
-  }
-
   public ValueSet get_value_set() {
 
     // Static constants don't have value sets, so we must make one

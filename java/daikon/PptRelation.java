@@ -342,8 +342,8 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation(parent, child, PptRelationType.PARENT);
 
-    debug.fine(parent.name() + " parent vars = " + VarInfo.arrayToString(parent.var_infos));
-    debug.fine(child.name() + " child vars = " + VarInfo.arrayToString(child.var_infos));
+    debug.fine(parent.name() + " parent vars = " + Arrays.toString(parent.var_infos));
+    debug.fine(child.name() + " child vars = " + Arrays.toString(child.var_infos));
 
     // Connect each 'this' variable between parent and child.
     // Note that these should be the only variables whose names match and
@@ -594,8 +594,8 @@ public class PptRelation implements Serializable {
     // assert that parent vars match child vars
     if (parent.var_infos.length != child.var_infos.length) {
       System.out.println("newMergeChildRel: in ppt " + parent.name() + " vars don't match");
-      System.out.println("parent vars= " + VarInfo.arrayToString(parent.var_infos));
-      System.out.println("child vars=  " + VarInfo.arrayToString(child.var_infos));
+      System.out.println("parent vars= " + Arrays.toString(parent.var_infos));
+      System.out.println("child vars=  " + Arrays.toString(child.var_infos));
       assert parent.var_infos.length == child.var_infos.length;
     }
 
@@ -607,8 +607,8 @@ public class PptRelation implements Serializable {
       if (!vc.name().equals(vp.name())) {
         System.out.println(
             "newMergeChildRel: in ppt " + parent.name() + " var " + vc.name() + " doesn't match");
-        System.out.println("par vars  = " + VarInfo.arrayToString(parent.var_infos));
-        System.out.println("child vars= " + VarInfo.arrayToString(child.var_infos));
+        System.out.println("par vars  = " + Arrays.toString(parent.var_infos));
+        System.out.println("child vars= " + Arrays.toString(child.var_infos));
         assert vc.name().equals(vp.name());
       }
       rel.child_to_parent_map.put(vc, vp);

@@ -16,6 +16,7 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -480,7 +481,7 @@ public class SampleTester extends TestCase {
     }
     PptSlice slice = ppt.findSlice(vis);
     if (slice == null) {
-      System.out.println("No invariants found for vars: " + VarInfo.arrayToString(vis));
+      System.out.println("No invariants found for vars: " + Arrays.toString(vis));
       return true;
     }
 

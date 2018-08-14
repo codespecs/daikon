@@ -696,7 +696,7 @@ public final class Debug {
   public static String toString(/*@Nullable*/ Object val) {
     if (val == null) return "none";
     if (val instanceof String) return "\"" + val + "\"";
-    if (val instanceof VarInfo[]) return VarInfo.arrayToString((VarInfo[]) val);
+    if (val instanceof VarInfo[]) return Arrays.toString((VarInfo[]) val);
     if (val instanceof String[]) return Arrays.toString((String[]) val);
     if (val instanceof boolean[]) return Arrays.toString((boolean[]) val);
     if (val instanceof byte[]) return Arrays.toString((byte[]) val);
@@ -711,7 +711,7 @@ public final class Debug {
 
   @Deprecated
   public static String toString(VarInfo[] vis) {
-    return VarInfo.arrayToString(vis);
+    return Arrays.toString(vis);
   }
 
   /**

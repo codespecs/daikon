@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.StringJoiner;
 import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
 
@@ -747,14 +746,6 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       sb.append("[]");
     }
     return sb.toString();
-  }
-
-  public static String toString(ProglangType[] types) {
-    StringJoiner out = new StringJoiner(", ");
-    for (int i = 0; i < types.length; i++) {
-      out.add(types[i].toString());
-    }
-    return ("[" + out + "]");
   }
 
   // For Java programs, a @BinaryName.
