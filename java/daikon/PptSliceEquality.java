@@ -467,7 +467,7 @@ public class PptSliceEquality extends PptSlice {
               + ": leader "
               + leader.name()
               + ": new leaders = "
-              + VarInfo.listToString(newVis));
+              + newVis);
       debug.fine("  orig slices count:" + parent.numViews());
     }
 

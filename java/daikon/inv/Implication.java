@@ -2,6 +2,7 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.split.PptSplitter;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -163,7 +164,7 @@ public class Implication extends Joiner {
     }
     DiscardInfo di = orig_right.isObviousDynamically(vis);
     if (di != null) {
-      log("failed isObviousDynamically with vis = %s", VarInfo.arrayToString(vis));
+      log("failed isObviousDynamically with vis = %s", Arrays.toString(vis));
       return di;
     }
 

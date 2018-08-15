@@ -171,7 +171,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
                 "processing slice "
-                    + VarInfo.arrayToString(vis)
+                    + Arrays.toString(vis)
                     + " in ppt "
                     + ppt.name()
                     + " with "
@@ -226,7 +226,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
                 "processing slice "
-                    + VarInfo.arrayToString(vis)
+                    + Arrays.toString(vis)
                     + " in ppt "
                     + ppt.name()
                     + " with "
@@ -282,7 +282,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
             if (NIS.debug.isLoggable(Level.FINE)) {
               NIS.debug.fine(
                   "processing slice "
-                      + VarInfo.arrayToString(vis)
+                      + Arrays.toString(vis)
                       + " in ppt "
                       + ppt.name()
                       + " with "
@@ -379,7 +379,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                   + " in ppt "
                   + ppt
                   + " with var infos "
-                  + VarInfo.arrayToString(var_infos));
+                  + Arrays.toString(var_infos));
         }
         return true;
       }
@@ -396,7 +396,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
               + " is not valid in ppt "
               + ppt
               + " with var infos "
-              + VarInfo.arrayToString(var_infos));
+              + Arrays.toString(var_infos));
     }
     return false;
   }
@@ -437,7 +437,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                   + " in ppt "
                   + ppt
                   + " with var infos "
-                  + VarInfo.arrayToString(var_infos));
+                  + Arrays.toString(var_infos));
         }
         return false;
       }
@@ -454,7 +454,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
               + " is not valid in ppt "
               + ppt
               + " with var infos "
-              + VarInfo.arrayToString(var_infos));
+              + Arrays.toString(var_infos));
     }
     return true;
   }

@@ -652,7 +652,7 @@ public final class PPTSLICE1 extends PptSlice {
       if (slice_missing(ppt, cvis)) {
         if (debugMerge.isLoggable(Level.FINE)) {
           debugMerge.fine(
-              "-- slice ignored (missing) " + ppt.name() + " vars " + VarInfo.arrayToString(cvis_sorted));
+              "-- slice ignored (missing) " + ppt.name() + " vars " + Arrays.toString(cvis_sorted));
         }
         continue;
       }
@@ -673,7 +673,7 @@ public final class PPTSLICE1 extends PptSlice {
               "slice not found "
                   + ppt.name()
                   + " "
-                  + VarInfo.arrayToString(cvis_sorted)
+                  + Arrays.toString(cvis_sorted)
                   + " num_samples= "
                   + ppt.num_samples()
                   + " ppt.constants = "
@@ -681,7 +681,7 @@ public final class PPTSLICE1 extends PptSlice {
         }
         if (debugMerge.isLoggable(Level.FINE)) {
           debugMerge.fine(
-              "-- slice not found " + ppt.name() + " vars " + VarInfo.arrayToString(cvis_sorted));
+              "-- slice not found " + ppt.name() + " vars " + Arrays.toString(cvis_sorted));
         }
         return;
       }
@@ -696,8 +696,8 @@ public final class PPTSLICE1 extends PptSlice {
       // Debug print child vars and permute to parent
       if (debugMerge.isLoggable(Level.FINE)) {
         debugMerge.fine("-- Processing child " + ppt.name() + " (" + rel.getRelationType() + ")");
-        debugMerge.fine("-- -- child vars = " + VarInfo.arrayToString(cvis_sorted));
-        debugMerge.fine("-- -- parent vars = " + VarInfo.arrayToString(var_infos));
+        debugMerge.fine("-- -- child vars = " + Arrays.toString(cvis_sorted));
+        debugMerge.fine("-- -- parent vars = " + Arrays.toString(var_infos));
         debugMerge.fine("-- -- permute = " + Arrays.toString(permute));
       }
 
@@ -722,8 +722,8 @@ public final class PPTSLICE1 extends PptSlice {
               inv,
               orig_inv,
               Arrays.toString(permute),
-              VarInfo.arrayToString(cvis_sorted),
-              VarInfo.arrayToString(child_vars),
+              Arrays.toString(cvis_sorted),
+              Arrays.toString(child_vars),
               parent.name());
         }
       }

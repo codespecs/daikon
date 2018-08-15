@@ -7,6 +7,7 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.unary.*;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -215,7 +216,7 @@ public class NISuppressor {
               + " against inv "
               + ((inv != null) ? inv.format() : "null")
               + " over vars "
-              + VarInfo.arrayToString(vis)
+              + Arrays.toString(vis)
               + " in ppt "
               + ppt.name);
     }
