@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 // Types of Ppt (program point) objects:
 //  Ppt:  abstract base class

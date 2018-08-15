@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.UtilPlume;
 

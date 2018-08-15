@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
 import org.plumelib.util.UtilPlume;
 
 // This class is deprecated.  It should be removed as soon as Daikon no

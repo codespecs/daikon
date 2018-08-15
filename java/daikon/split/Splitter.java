@@ -40,7 +40,7 @@ public abstract class Splitter implements Serializable {
    * implementation should always set the "instantiated" protected field to true, if that field is
    * present in the Splitter class.
    */
-  public abstract Splitter instantiate(@UnknownInitialization(Ppt.class) @Raw(.class) Ppt ppt);
+  public abstract Splitter instantiate(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt);
 
   protected boolean instantiated = false;
   /**
