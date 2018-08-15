@@ -569,7 +569,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   @Override
-  protected @NonPrototype Equality instantiate_dyn(/*@Prototype*/ Equality this, PptSlice slice) {
+  protected /*@NonPrototype*/ Equality instantiate_dyn(/*@Prototype*/ Equality this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

@@ -325,7 +325,7 @@ public class Implication extends Joiner {
   }
 
   @Override
-  protected @NonPrototype Invariant instantiate_dyn(/*@Prototype*/ Implication this, PptSlice slice) {
+  protected /*@NonPrototype*/ Invariant instantiate_dyn(/*@Prototype*/ Implication this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

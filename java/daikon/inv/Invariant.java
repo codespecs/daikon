@@ -249,7 +249,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @return true if the invariant has enough samples to have its computed constants well-formed. Is
    *     overridden in classes like LinearBinary/Ternary and Upper/LowerBound.
    */
-  public boolean enoughSamples(@GuardSatisfied @NonPrototype Invariant this) {
+  public boolean enoughSamples(@GuardSatisfied /*@NonPrototype*/ Invariant this) {
     return true;
   }
 
@@ -280,7 +280,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   //  - The code is a bit more complicated.
 
   /** A wrapper around getConfidence() or getConfidence(). */
-  public final boolean justified(@NonPrototype Invariant this) {
+  public final boolean justified(/*@NonPrototype*/ Invariant this) {
     boolean just = (!falsified && (getConfidence() >= dkconfig_confidence_limit));
     if (logOn()) {
       log(
@@ -321,7 +321,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @see #computeConfidence()
    */
-  public final double getConfidence(@NonPrototype Invariant this) {
+  public final double getConfidence(/*@NonPrototype*/ Invariant this) {
     assert !falsified;
     // if (falsified)
     //   return CONFIDENCE_NEVER;
@@ -352,7 +352,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @see #getConfidence()
    */
-  protected abstract double computeConfidence(@NonPrototype Invariant this);
+  protected abstract double computeConfidence(/*@NonPrototype*/ Invariant this);
 
   /**
    * Subclasses should override. An exact invariant indicates that given all but one variable value,
@@ -389,26 +389,26 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Marks the invariant as falsified. Should always be called rather than just setting the flag so
    * that we can track when this happens.
    */
-  public void falsify(@NonPrototype Invariant this) {
+  public void falsify(/*@NonPrototype*/ Invariant this) {
     falsified = true;
     if (logOn()) log("Destroyed %s", format());
   }
 
   /** Clear the falsified flag. */
-  public void clear_falsified(@NonPrototype Invariant this) {
+  public void clear_falsified(/*@NonPrototype*/ Invariant this) {
     falsified = false;
   }
 
   /** Returns whether or not this invariant has been destroyed. */
   @Pure
-  public boolean is_false(@NonPrototype Invariant this) {
+  public boolean is_false(/*@NonPrototype*/ Invariant this) {
     return falsified;
   }
 
   /** Do nothing special, Overridden to remove exception from declaration. */
   @SideEffectFree
   @Override
-  public Invariant clone(@GuardSatisfied @NonPrototype Invariant this) {
+  public Invariant clone(@GuardSatisfied /*@NonPrototype*/ Invariant this) {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -423,7 +423,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping in the new ppt
    */
-  public Invariant transfer(@NonPrototype Invariant this, PptSlice new_ppt, int[] permutation) {
+  public Invariant transfer(/*@NonPrototype*/ Invariant this, PptSlice new_ppt, int[] permutation) {
     // Check some sanity conditions
     assert new_ppt.arity() == ppt.arity();
     assert permutation.length == ppt.arity();
@@ -469,7 +469,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Clones the invariant and then permutes it as specified. Normally used to make child invariant
    * match the variable order of the parent when merging invariants bottom up.
    */
-  public Invariant clone_and_permute(@NonPrototype Invariant this, int[] permutation) {
+  public Invariant clone_and_permute(/*@NonPrototype*/ Invariant this, int[] permutation) {
 
     Invariant result = this.clone();
     result = result.resurrect_done(permutation);
@@ -491,7 +491,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping
    */
-  public Invariant resurrect(@NonPrototype Invariant this, PptSlice new_ppt, int[] permutation) {
+  public Invariant resurrect(/*@NonPrototype*/ Invariant this, PptSlice new_ppt, int[] permutation) {
     // Check some sanity conditions
     assert falsified;
     assert new_ppt.arity() == ppt.arity();
@@ -537,7 +537,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * returned only if all of the variables involved are always comparable. Otherwise the
    * comparability information from one of the non always-comparable variables is returned.
    */
-  public VarComparability get_comparability(@NonPrototype Invariant this) {
+  public VarComparability get_comparability(/*@NonPrototype*/ Invariant this) {
 
     // assert ppt != null : "class " + getClass();
 
@@ -564,8 +564,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @param parent_ppt slice that will contain the new invariant
    * @return the merged invariant or null if the invariants didn't represent the same invariant
    */
-  public @Nullable @NonPrototype Invariant merge(
-      /*@Prototype*/ Invariant this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+  public @Nullable /*@NonPrototype*/ Invariant merge(
+      /*@Prototype*/ Invariant this, List</*@NonPrototype*/ Invariant> invs, PptSlice parent_ppt) {
 
     Invariant first = invs.get(0);
     Invariant result = first.clone();
@@ -590,7 +590,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Permutes the invariant as specified. Often creates a new invariant (with a different class).
    */
-  public @NonPrototype Invariant permute(@NonPrototype Invariant this, int[] permutation) {
+  public /*@NonPrototype*/ Invariant permute(/*@NonPrototype*/ Invariant this, int[] permutation) {
     return (resurrect_done(permutation));
   }
 
@@ -598,22 +598,22 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Called on the new invariant just before resurrect() returns it to allow subclasses to fix any
    * information they might have cached from the old Ppt and VarInfos.
    */
-  protected abstract Invariant resurrect_done(@NonPrototype Invariant this, int[] permutation);
+  protected abstract Invariant resurrect_done(/*@NonPrototype*/ Invariant this, int[] permutation);
 
   // Regrettably, I can't declare a static abstract method.
   // // The return value is probably ignored.  The new Invariant installs
   // // itself on the PptSlice, and that's what really matters (right?).
   // public static abstract Invariant instantiate(PptSlice ppt);
 
-  public boolean usesVar(@NonPrototype Invariant this, VarInfo vi) {
+  public boolean usesVar(/*@NonPrototype*/ Invariant this, VarInfo vi) {
     return ppt.usesVar(vi);
   }
 
-  public boolean usesVar(@NonPrototype Invariant this, String name) {
+  public boolean usesVar(/*@NonPrototype*/ Invariant this, String name) {
     return ppt.usesVar(name);
   }
 
-  public boolean usesVarDerived(@NonPrototype Invariant this, String name) {
+  public boolean usesVarDerived(/*@NonPrototype*/ Invariant this, String name) {
     return ppt.usesVarDerived(name);
   }
 
@@ -626,7 +626,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // }
 
   /** Return a string representation of the variable names. */
-  public final String varNames(@GuardSatisfied @NonPrototype Invariant this) {
+  public final String varNames(@GuardSatisfied /*@NonPrototype*/ Invariant this) {
     return ppt.varNames();
   }
 
@@ -638,7 +638,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * ({@link #repr_prob} also prints the confidence), and {@link #format} gives a high-level
    * representation for user output.
    */
-  public String repr(@GuardSatisfied @NonPrototype Invariant this) {
+  public String repr(@GuardSatisfied /*@NonPrototype*/ Invariant this) {
     // A better default would be to use reflection and print out all
     // the variable names.
     return getClass() + varNames() + ": " + format();
@@ -649,7 +649,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * representation (repr_prob also prints the confidence), and {@link #format} gives a high-level
    * representation for user output.
    */
-  public String repr_prob(@NonPrototype Invariant this) {
+  public String repr_prob(/*@NonPrototype*/ Invariant this) {
     return repr() + "; confidence = " + getConfidence();
   }
 
@@ -661,7 +661,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // Does not respect PrintInvariants.dkconfig_print_inv_class; PrintInvariants does so.
   // Receiver must be fully-initialized because subclasses read their fields.
   @SideEffectFree
-  public String format(@GuardSatisfied @NonPrototype Invariant this) {
+  public String format(@GuardSatisfied /*@NonPrototype*/ Invariant this) {
     return format_using(OutputFormat.DAIKON);
   }
 
@@ -681,7 +681,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
   @SideEffectFree
   public abstract String format_using(
-      @GuardSatisfied @NonPrototype Invariant this, OutputFormat format);
+      @GuardSatisfied /*@NonPrototype*/ Invariant this, OutputFormat format);
 
   /**
    * @return conjuction of mapping the same function of our expresssions's VarInfos, in general.
@@ -690,7 +690,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @see VarInfo#isValidEscExpression
    */
   @Pure
-  public boolean isValidEscExpression(@NonPrototype Invariant this) {
+  public boolean isValidEscExpression(/*@NonPrototype*/ Invariant this) {
     for (int i = 0; i < ppt.var_infos.length; i++) {
       if (!ppt.var_infos[i].isValidEscExpression()) {
         return false;
@@ -704,7 +704,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
   /** @return true if this Invariant can be properly formatted for Java output */
   @Pure
-  public boolean isValidExpression(@NonPrototype Invariant this, OutputFormat format) {
+  public boolean isValidExpression(/*@NonPrototype*/ Invariant this, OutputFormat format) {
     if ((format == OutputFormat.ESCJAVA) && (!isValidEscExpression())) {
       return false;
     }
@@ -738,7 +738,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     so cores can call it.
    */
   public String format_unimplemented(
-      @GuardSatisfied @NonPrototype Invariant this, OutputFormat request) {
+      @GuardSatisfied /*@NonPrototype*/ Invariant this, OutputFormat request) {
     String classname = this.getClass().getName();
     return "warning: method "
         + classname
@@ -756,7 +756,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     which will be added to the message.
    */
   public String format_too_few_samples(
-      @GuardSatisfied @NonPrototype Invariant this,
+      @GuardSatisfied /*@NonPrototype*/ Invariant this,
       OutputFormat request,
       @Nullable String attempt) {
     if (request == OutputFormat.SIMPLIFY) {
@@ -893,7 +893,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
     @Pure
     @Override
-    public int compare(@NonPrototype Invariant inv1, @NonPrototype Invariant inv2) {
+    public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       if (inv1 == inv2) return 0;
 
       // Guarding implications should compare as if they were without the
@@ -997,7 +997,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     matching type, formula, and variable names.
    */
   @Pure
-  public boolean isSameInvariant(@NonPrototype Invariant this, Invariant inv2) {
+  public boolean isSameInvariant(/*@NonPrototype*/ Invariant this, Invariant inv2) {
     // return isSameInvariant(inv2, defaultIsSameInvariantNameExtractor);
 
     Invariant inv1 = this;
@@ -1037,7 +1037,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     quantities.
    */
   @Pure
-  public boolean isExclusiveFormula(@NonPrototype Invariant this, Invariant other) {
+  public boolean isExclusiveFormula(/*@NonPrototype*/ Invariant this, Invariant other) {
     return false;
   }
 
@@ -1087,7 +1087,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
   // omitted to allow for easier testing.
   @Pure
-  public boolean isWorthPrinting(@NonPrototype Invariant this) {
+  public boolean isWorthPrinting(/*@NonPrototype*/ Invariant this) {
     return InvariantFilters.defaultFilters().shouldKeep(this) == null;
   }
 
@@ -1103,7 +1103,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * isObviousStatically(VarInfo[]) because it is more general.
    */
   @Pure
-  public final @Nullable DiscardInfo isObviousStatically(@NonPrototype Invariant this) {
+  public final @Nullable DiscardInfo isObviousStatically(/*@NonPrototype*/ Invariant this) {
     return isObviousStatically(this.ppt.var_infos);
   }
 
@@ -1138,7 +1138,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // of VarInfos and their equality set, so a possible conservative
   // approximation is to simply return false.
   @Pure
-  public boolean isObviousStatically_AllInEquality(@NonPrototype Invariant this) {
+  public boolean isObviousStatically_AllInEquality(/*@NonPrototype*/ Invariant this) {
     // If the leaders aren't statically obvious, then clearly not all
     // combinations are.
     if (isObviousStatically() == null) return false;
@@ -1163,7 +1163,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     Can be null if no such assignment exists.
    */
   @Pure
-  public @Nullable DiscardInfo isObviousStatically_SomeInEquality(@NonPrototype Invariant this) {
+  public @Nullable DiscardInfo isObviousStatically_SomeInEquality(/*@NonPrototype*/ Invariant this) {
     DiscardInfo result = isObviousStatically();
     if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper(
@@ -1174,7 +1174,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /** Recurse through vis and generate the cartesian product of ... */
   @Pure
   protected @Nullable DiscardInfo isObviousStatically_SomeInEqualityHelper(
-      @NonPrototype Invariant this,
+      /*@NonPrototype*/ Invariant this,
       VarInfo[] vis,
       /*NNC:@MonotonicNonNull*/ VarInfo[] assigned,
       int position) {
@@ -1209,7 +1209,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * possible, suppression, rather than this, should do the dynamic checking.
    */
   @Pure
-  public final @Nullable DiscardInfo isObvious(@NonPrototype Invariant this) {
+  public final @Nullable DiscardInfo isObvious(/*@NonPrototype*/ Invariant this) {
     // Actually actually, we'll eliminate invariants as they become obvious
     // rather than on output; the point of this is to speed up computation.
     // // Actually, we do need to check isObviousDerived after all because we
@@ -1243,7 +1243,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * the overriding method should first call "super.isObviousDynamically(vis)". Since this method is
    * dynamic, it should only be called after all processing.
    */
-  public @Nullable DiscardInfo isObviousDynamically(@NonPrototype Invariant this, VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(/*@NonPrototype*/ Invariant this, VarInfo[] vis) {
     assert !Daikon.isInferencing;
     assert vis.length <= 3 : "Unexpected more-than-ternary invariant";
     if (!ArraysPlume.noDuplicates(vis)) {
@@ -1264,7 +1264,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * corresponding to "a[] is the reverse of a[]", for instance.
    */
   @Pure
-  public boolean isReflexive(@NonPrototype Invariant this) {
+  public boolean isReflexive(/*@NonPrototype*/ Invariant this) {
     return !ArraysPlume.noDuplicates(ppt.var_infos);
   }
 
@@ -1280,7 +1280,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * <p>This method is final because subclasses should extend isObviousDynamically(VarInfo[]) since
    * that method is more general.
    */
-  public final @Nullable DiscardInfo isObviousDynamically(@NonPrototype Invariant this) {
+  public final @Nullable DiscardInfo isObviousDynamically(/*@NonPrototype*/ Invariant this) {
     assert !Daikon.isInferencing;
     return isObviousDynamically(ppt.var_infos);
   }
@@ -1297,7 +1297,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     Can be null if no such assignment exists.
    */
   @Pure
-  public @Nullable DiscardInfo isObviousDynamically_SomeInEquality(@NonPrototype Invariant this) {
+  public @Nullable DiscardInfo isObviousDynamically_SomeInEquality(/*@NonPrototype*/ Invariant this) {
     DiscardInfo result = isObviousDynamically();
     if (result != null) return result;
     return isObviousDynamically_SomeInEqualityHelper(
@@ -1311,7 +1311,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * combinations are generated via recursive calls to this routine.
    */
   protected @Nullable DiscardInfo isObviousDynamically_SomeInEqualityHelper(
-      @NonPrototype Invariant this, VarInfo[] vis, VarInfo[] assigned, int position) {
+      /*@NonPrototype*/ Invariant this, VarInfo[] vis, VarInfo[] assigned, int position) {
     if (position == vis.length) {
       // base case
       if (debugIsObvious.isLoggable(Level.FINE)) {
@@ -1338,7 +1338,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
   /** @return true if this invariant is only over prestate variables */
   @Pure
-  public boolean isAllPrestate(@NonPrototype Invariant this) {
+  public boolean isAllPrestate(/*@NonPrototype*/ Invariant this) {
     return ppt.allPrestate();
   }
 
@@ -1348,7 +1348,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // Uninteresting invariants will override this method to return
   // false
   @Pure
-  public boolean isInteresting(@NonPrototype Invariant this) {
+  public boolean isInteresting(/*@NonPrototype*/ Invariant this) {
     return true;
   }
 
@@ -1362,7 +1362,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * program was tested, rather than a statement that would in fact hold over all possible
    * executions.
    */
-  public boolean hasUninterestingConstant(@NonPrototype Invariant this) {
+  public boolean hasUninterestingConstant(/*@NonPrototype*/ Invariant this) {
     return false;
   }
 
@@ -1446,7 +1446,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
     @Pure
     @Override
-    public int compare(@NonPrototype Invariant inv1, @NonPrototype Invariant inv2) {
+    public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       int compareClassVarname = classVarnameComparator.compare(inv1, inv2);
 
       if (compareClassVarname != 0) {
@@ -1533,12 +1533,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Returns whether or not the invariant matches the specified state. Must be overriden by
    * subclasses that support this. Otherwise, it returns true only if the state is null.
    */
-  public boolean state_match(@NonPrototype Invariant this, Object state) {
+  public boolean state_match(/*@NonPrototype*/ Invariant this, Object state) {
     return (state == null);
   }
 
   /** Create a guarding predicate for a given invariant. Returns null if no guarding is needed. */
-  public @Nullable @NonPrototype Invariant createGuardingPredicate(boolean install) {
+  public @Nullable /*@NonPrototype*/ Invariant createGuardingPredicate(boolean install) {
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine("Guarding predicate being created for: ");
       debugGuarding.fine("  " + this.format());
@@ -1591,7 +1591,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * non-null, and "d" is non-null. So, another way to write the invariant (in "guarded" form) would
    * be "a != null &amp;&amp; a.b != null &amp;&amp; d != null &amp;&amp; a.b.c &gt; d.e".
    */
-  public List<VarInfo> getGuardingList(@NonPrototype Invariant this) {
+  public List<VarInfo> getGuardingList(/*@NonPrototype*/ Invariant this) {
     return getGuardingList(ppt.var_infos);
   }
 
@@ -1615,7 +1615,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * without placing it in any slice and without modifying the original invariant. Returns null if
    * the invariant does not need to be guarded.
    */
-  public @Nullable @NonPrototype Invariant createGuardedInvariant(boolean install) {
+  public @Nullable /*@NonPrototype*/ Invariant createGuardedInvariant(boolean install) {
     if (Daikon.dkconfig_guardNulls == "never") { // interned
       return null;
     }
@@ -1662,7 +1662,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @return the new invariant
    */
-  protected abstract @NonPrototype Invariant instantiate_dyn(
+  protected abstract /*@NonPrototype*/ Invariant instantiate_dyn(
       /*@Prototype*/ Invariant this, PptSlice slice);
 
   /**
@@ -1756,7 +1756,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /** Adds the specified sample to the invariant and returns the result. */
-  public InvariantStatus add_sample(@NonPrototype Invariant this, ValueTuple vt, int count) {
+  public InvariantStatus add_sample(/*@NonPrototype*/ Invariant this, ValueTuple vt, int count) {
 
     if (ppt instanceof PptSlice1) {
 
@@ -1796,7 +1796,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * invariant.
    */
   @Pure
-  public boolean isActive(@NonPrototype Invariant this) {
+  public boolean isActive(/*@NonPrototype*/ Invariant this) {
     return true;
   }
 
@@ -1831,7 +1831,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
    */
   // receiver needs to be initialized because subclass implementations will read their own fields
-  public void log(@NonPrototype Invariant this, Logger log, String msg) {
+  public void log(/*@NonPrototype*/ Invariant this, Logger log, String msg) {
 
     if (Debug.logOn()) {
       Debug.log(log, getClass(), ppt, msg);
@@ -1848,7 +1848,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   @SuppressWarnings(
       "formatter") // call to format method is correct because of @FormatMethod annotation
   public boolean log(
-      @UnknownInitialization(Invariant.class) @Raw(Invariant.class) @NonPrototype Invariant this,
+      @UnknownInitialization(Invariant.class) @Raw(Invariant.class) /*@NonPrototype*/ Invariant this,
       String format,
       @Nullable Object... args) {
     if (ppt != null) {
@@ -1867,7 +1867,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return format();
   }
 
-  public static String toString(@NonPrototype Invariant[] invs) {
+  public static String toString(/*@NonPrototype*/ Invariant[] invs) {
 
     ArrayList<String> strings = new ArrayList<String>(invs.length);
     for (int i = 0; i < invs.length; i++) {
