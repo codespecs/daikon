@@ -56,7 +56,7 @@ else
   JAR ?= jar
 endif
 
-# Add flags like "-source 7" or "-target 7" to JAVAC_TARGET_FLAGS.
+# Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
 JAVAC_ARGS ?= -g -XDignore.symbol.file -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
