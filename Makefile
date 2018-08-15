@@ -358,7 +358,7 @@ DISTTESTDIRJAVA := ${TMPDIR}/daikon.dist/daikon/java
 # 'distribution-check' target on a variety of client machines.
 # - verify we can open/unpack the distribution tar file
 # - run the junit verification tests on daikon.jar
-# - verify the released class files are all version 7
+# - verify the released class files are all version 8
 # - verify that we can rebuild the .class files from the .java files
 # - run the junit verification tests on the class files
 # - run the quick-test
@@ -370,8 +370,8 @@ test-staged-dist: $(STAGING_DIR)
 	(cd $(DISTTESTDIR); mv $(NEW_RELEASE_NAME) daikon)
 	(cd $(DISTTESTDIR)/daikon/java && \
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
-	## Make sure that all of the class files are 1.7 (version 51) or earlier.
-	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 51)
+	## Make sure that all of the class files are 1.8 (version 52) or earlier.
+	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
 	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR):$(DISTTESTDIRJAVA)/lib/junit-4.12.jar all_javac)
 	## Test that these new .class files work properly.
