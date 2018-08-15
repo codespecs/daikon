@@ -47,6 +47,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
@@ -1774,7 +1775,8 @@ public class PptTopLevel extends Ppt {
     return null;
   }
 
-  public boolean check_implied(DiscardInfo di, VarInfo v1, VarInfo v2, /*@Prototype*/ Invariant proto) {
+  public boolean check_implied(
+      DiscardInfo di, VarInfo v1, VarInfo v2, /*@Prototype*/ Invariant proto) {
 
     DiscardInfo di2 = check_implied(di.inv, v1, v2, proto);
     if (di2 == null) return false;

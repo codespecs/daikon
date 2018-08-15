@@ -3,6 +3,7 @@ package daikon.split;
 import daikon.*;
 import daikon.inv.DummyInvariant;
 import java.io.Serializable;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 /**
  * A Splitter represents a test that can be used to separate all samples into two parts. For

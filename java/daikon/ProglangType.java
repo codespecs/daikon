@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import org.checkerframework.checker.interning.qual.Interned;
 import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
 

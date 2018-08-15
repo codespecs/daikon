@@ -47,6 +47,7 @@ import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
 
