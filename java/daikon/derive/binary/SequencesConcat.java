@@ -1,7 +1,10 @@
 package daikon.derive.binary;
 
-import daikon.*;
-import daikon.derive.*;
+import daikon.ProglangType;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.derive.Derivation;
+import daikon.derive.ValueAndModified;
 import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;

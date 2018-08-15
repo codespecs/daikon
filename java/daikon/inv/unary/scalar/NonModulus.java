@@ -1,7 +1,10 @@
 package daikon.inv.unary.scalar;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;

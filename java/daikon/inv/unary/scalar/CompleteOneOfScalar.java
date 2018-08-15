@@ -1,7 +1,12 @@
 package daikon.inv.unary.scalar;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
+import daikon.inv.ValueSet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

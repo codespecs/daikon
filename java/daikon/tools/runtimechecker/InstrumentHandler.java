@@ -7,7 +7,7 @@ import daikon.FileIO;
 import daikon.Global;
 import daikon.LogHelper;
 import daikon.PptMap;
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.ParseResults;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;

@@ -1,6 +1,6 @@
 package daikon.inv.unary;
 
-import daikon.*;
+import daikon.VarInfo;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Raw;

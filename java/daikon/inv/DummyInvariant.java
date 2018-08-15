@@ -1,6 +1,11 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.PptSlice;
+import daikon.PptSlice1;
+import daikon.PptSlice2;
+import daikon.PptSlice3;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;

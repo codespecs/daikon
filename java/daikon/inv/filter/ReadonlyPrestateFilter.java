@@ -3,7 +3,8 @@ package daikon.inv.filter;
 import daikon.PrintInvariants;
 import daikon.VarInfo;
 import daikon.VarInfo.VarFlags;
-import daikon.inv.*;
+import daikon.inv.EqualityComparison;
+import daikon.inv.Invariant;
 import java.util.logging.Level;
 
 /**

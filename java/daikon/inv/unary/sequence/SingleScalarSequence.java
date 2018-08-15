@@ -1,7 +1,8 @@
 package daikon.inv.unary.sequence;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.InvariantStatus;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;

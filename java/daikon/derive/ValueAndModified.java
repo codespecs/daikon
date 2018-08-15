@@ -1,6 +1,6 @@
 package daikon.derive;
 
-import daikon.*;
+import daikon.ValueTuple;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.Intern;

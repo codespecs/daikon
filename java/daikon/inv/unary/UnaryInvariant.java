@@ -1,7 +1,7 @@
 package daikon.inv.unary;
 
 import daikon.PptSlice;
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import org.checkerframework.checker.interning.qual.Interned;
 

@@ -1,7 +1,18 @@
 package daikon.tools;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.Daikon;
+import daikon.Debug;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.LogHelper;
+import daikon.PptConditional;
+import daikon.PptMap;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
 import daikon.inv.filter.InvariantFilters;
 import daikon.split.PptSplitter;
 import gnu.getopt.*;

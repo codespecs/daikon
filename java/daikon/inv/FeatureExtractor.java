@@ -2,8 +2,12 @@ package daikon.inv;
 
 import static daikon.inv.Invariant.asInvClass;
 
-import daikon.*;
-import daikon.diff.*;
+import daikon.Daikon;
+import daikon.Global;
+import daikon.LogHelper;
+import daikon.Ppt;
+import daikon.VarInfo;
+import daikon.diff.InvMap;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;

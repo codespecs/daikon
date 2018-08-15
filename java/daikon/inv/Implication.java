@@ -1,6 +1,8 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
 import daikon.split.PptSplitter;
 import java.util.Arrays;
 import java.util.logging.Level;

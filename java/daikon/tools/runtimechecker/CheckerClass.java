@@ -1,6 +1,6 @@
 package daikon.tools.runtimechecker;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import jtb.syntaxtree.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

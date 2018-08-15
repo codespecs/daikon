@@ -1,7 +1,9 @@
 package daikon.diff;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.PptTopLevel;
+import daikon.inv.Invariant;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

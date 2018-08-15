@@ -1,7 +1,13 @@
 package daikon.inv.unary.string;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.DiscardCode;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
+import daikon.inv.ValueSet;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;

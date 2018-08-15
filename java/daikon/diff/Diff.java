@@ -1,7 +1,14 @@
 package daikon.diff;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.Daikon;
+import daikon.FileIO;
+import daikon.Ppt;
+import daikon.PptConditional;
+import daikon.PptMap;
+import daikon.PptTopLevel;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import gnu.getopt.*;
 import java.io.File;
 import java.io.FileNotFoundException;

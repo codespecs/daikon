@@ -1,8 +1,7 @@
 package daikon.test;
 
-import daikon.*;
 import daikon.inv.OutputFormat;
-import daikon.inv.ternary.threeScalar.*;
+import daikon.inv.ternary.threeScalar.LinearTernaryCore;
 import junit.framework.*;
 
 public class LinearTernaryCoreTest extends TestCase {

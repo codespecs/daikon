@@ -1,8 +1,12 @@
 package daikon.split.misc;
 
-import daikon.*;
+import daikon.Ppt;
+import daikon.ProglangType;
+import daikon.ValueTuple;
+import daikon.VarInfo;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
+import daikon.split.Splitter;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;

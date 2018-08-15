@@ -1,7 +1,13 @@
 package daikon.test.inv.unary.scalar;
 
-import daikon.*;
-import daikon.inv.unary.scalar.*;
+import daikon.PptSlice;
+import daikon.PptSlice1;
+import daikon.PptTopLevel;
+import daikon.ProglangType;
+import daikon.VarComparabilityNone;
+import daikon.VarInfo;
+import daikon.VarInfoAux;
+import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.NonNull;

@@ -1,7 +1,7 @@
 package daikon.diff;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptTopLevel;
+import daikon.inv.Invariant;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

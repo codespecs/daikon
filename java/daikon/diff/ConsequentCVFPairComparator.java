@@ -1,6 +1,6 @@
 package daikon.diff;
 
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import java.util.Comparator;
 import org.checkerframework.dataflow.qual.Pure;
 

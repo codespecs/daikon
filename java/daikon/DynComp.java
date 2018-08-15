@@ -97,7 +97,7 @@ public class DynComp {
    * Path to java agent jar file that performs the transformation. The "main" procedure is
    * Premain.premain().
    *
-   * @see Premain#premain
+   * @see daikon.dcomp.Premain#premain
    */
   // Set by start_target()
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")

@@ -2,8 +2,9 @@ package daikon.inv;
 
 import static daikon.inv.Invariant.asInvClass;
 
-import daikon.*;
-import daikon.inv.binary.*;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
+import daikon.inv.binary.BinaryInvariant;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;

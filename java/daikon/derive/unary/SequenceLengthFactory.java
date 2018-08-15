@@ -1,6 +1,7 @@
 package daikon.derive.unary;
 
-import daikon.*;
+import daikon.Global;
+import daikon.VarInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;

@@ -2,8 +2,9 @@
 
 package daikon.diff;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptMap;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package daikon.derive.binary;
 
-import daikon.*;
-import daikon.derive.*;
+import daikon.Quantify;
+import daikon.VarInfo;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 

@@ -1,6 +1,7 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.Global;
+import daikon.VarInfo;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 

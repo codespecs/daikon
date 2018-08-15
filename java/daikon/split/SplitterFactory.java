@@ -1,6 +1,8 @@
 package daikon.split;
 
-import daikon.*;
+import daikon.Global;
+import daikon.PptMap;
+import daikon.PptTopLevel;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;

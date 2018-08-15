@@ -1,6 +1,7 @@
 package daikon.diff;
 
-import daikon.*;
+import daikon.Global;
+import daikon.Ppt;
 import daikon.inv.Invariant;
 import java.io.PrintStream;
 import java.text.DecimalFormat;

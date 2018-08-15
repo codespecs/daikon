@@ -1,9 +1,10 @@
 package daikon.derive.unary;
 
-import daikon.*;
-import daikon.derive.*;
-import daikon.derive.binary.*;
-import daikon.derive.ternary.*;
+import daikon.ProglangType;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.derive.Derivation;
+import daikon.derive.ValueAndModified;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;

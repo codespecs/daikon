@@ -1,6 +1,10 @@
 package daikon.tools;
 
-import daikon.*;
+import daikon.FileIO;
+import daikon.PptMap;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarInfo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;

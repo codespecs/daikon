@@ -1,8 +1,13 @@
 package daikon.inv.unary.scalar;
 
-import daikon.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
 import daikon.derive.unary.SequenceLength;
-import daikon.inv.*;
+import daikon.inv.DiscardCode;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;

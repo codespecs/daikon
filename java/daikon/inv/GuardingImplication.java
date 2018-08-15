@@ -1,6 +1,7 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 
