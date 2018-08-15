@@ -93,7 +93,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
         throw new Error("Trying to invoke " + tempClass + " constructor", e);
       }
       DummyInvariant dummy =
-          new @Prototype
+          new /*@Prototype*/
           DummyInvariant(
               daikonFormat,
               javaFormat,

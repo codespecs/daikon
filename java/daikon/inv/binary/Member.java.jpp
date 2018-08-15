@@ -98,14 +98,14 @@ public final class CLASSNAME extends SEQUENCESCALAR {
     super(ppt);
   }
 
-  protected @Prototype CLASSNAME() {
+  protected /*@Prototype*/ CLASSNAME() {
     super();
   }
 
-  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static @Prototype CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
@@ -117,7 +117,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  protected CLASSNAME instantiate_dyn(@Prototype PptSlice slice) {
+  protected CLASSNAME instantiate_dyn(/*@Prototype*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 

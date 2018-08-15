@@ -15,7 +15,7 @@ public abstract class SingleScalarSequence extends SingleSequence {
     super(ppt);
   }
 
-  protected @Prototype SingleScalarSequence() {
+  protected /*@Prototype*/ SingleScalarSequence() {
     super();
   }
 

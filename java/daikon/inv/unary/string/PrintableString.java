@@ -20,14 +20,14 @@ public final class PrintableString extends SingleString {
     super(slice);
   }
 
-  public @Prototype PrintableString() {
+  public /*@Prototype*/ PrintableString() {
     super();
   }
 
-  private static @Prototype PrintableString proto = new @Prototype PrintableString();
+  private static /*@Prototype*/ PrintableString proto = new /*@Prototype*/ PrintableString();
 
   /** Returns the prototype invariant for PrintableString */
-  public static @Prototype PrintableString get_proto() {
+  public static /*@Prototype*/ PrintableString get_proto() {
     return proto;
   }
 
@@ -39,7 +39,7 @@ public final class PrintableString extends SingleString {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public PrintableString instantiate_dyn(@Prototype PrintableString this, PptSlice slice) {
+  public PrintableString instantiate_dyn(/*@Prototype*/ PrintableString this, PptSlice slice) {
     return new PrintableString(slice);
   }
 

@@ -324,7 +324,7 @@ public final class Daikon {
   public static @Nullable Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
-  public static ArrayList<@Prototype Invariant> proto_invs = new ArrayList<@Prototype Invariant>();
+  public static ArrayList</*@Prototype*/ Invariant> proto_invs = new ArrayList</*@Prototype*/ Invariant>();
 
   /** Debug tracer. */
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
@@ -1557,8 +1557,8 @@ public final class Daikon {
     }
 
     // Remove any elements that are not enabled
-    for (Iterator<@Prototype Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
-      @Prototype Invariant inv = i.next();
+    for (Iterator</*@Prototype*/ Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
+      /*@Prototype*/ Invariant inv = i.next();
       assert inv != null;
       if (!inv.enabled()) i.remove();
     }

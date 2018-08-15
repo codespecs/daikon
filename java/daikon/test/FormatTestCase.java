@@ -1028,7 +1028,7 @@ class FormatTestCase {
   private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
     try {
       Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
-      @Prototype Invariant proto = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
+      /*@Prototype*/ Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
       Invariant inv = proto.instantiate(sl);
 
       if (inv == null) throw new RuntimeException("null inv for " + theClass.getName());
@@ -1057,7 +1057,7 @@ class FormatTestCase {
       Object[] arg_vals) {
     try {
       Method get_proto = theClass.getMethod("get_proto", arg_types);
-      @Prototype Invariant proto = (@Prototype Invariant) get_proto.invoke(null, arg_vals);
+      /*@Prototype*/ Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, arg_vals);
 
       return (proto.instantiate(slice));
     } catch (Exception e) {

@@ -167,14 +167,14 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     super(ppt);
   }
 
-  protected @Prototype SEQINTEQUAL() {
+  protected /*@Prototype*/ SEQINTEQUAL() {
     super();
   }
 
-  private static @Prototype SEQINTEQUAL proto = new @Prototype SEQINTEQUAL();
+  private static /*@Prototype*/ SEQINTEQUAL proto = new /*@Prototype*/ SEQINTEQUAL();
 
   /** Returns the prototype invariant for SEQINTEQUAL */
-  public static @Prototype SEQINTEQUAL get_proto() {
+  public static /*@Prototype*/ SEQINTEQUAL get_proto() {
     return proto;
   }
 
@@ -216,7 +216,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  protected SEQINTEQUAL instantiate_dyn(@Prototype SEQINTEQUAL this, PptSlice slice) {
+  protected SEQINTEQUAL instantiate_dyn(/*@Prototype*/ SEQINTEQUAL this, PptSlice slice) {
     return new SEQINTEQUAL(slice);
   }
 

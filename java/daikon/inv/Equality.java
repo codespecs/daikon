@@ -559,17 +559,17 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   @Override
-  public boolean enabled(@Prototype Equality this) {
+  public boolean enabled(/*@Prototype*/ Equality this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(@Prototype Equality this, VarInfo[] vis) {
+  public boolean valid_types(/*@Prototype*/ Equality this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
-  protected @NonPrototype Equality instantiate_dyn(@Prototype Equality this, PptSlice slice) {
+  protected @NonPrototype Equality instantiate_dyn(/*@Prototype*/ Equality this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

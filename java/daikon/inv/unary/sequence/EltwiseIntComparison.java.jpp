@@ -42,7 +42,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     super(ppt);
   }
 
-  protected @Prototype CLASSNAME() {
+  protected /*@Prototype*/ CLASSNAME() {
     super();
   }
 }

@@ -240,15 +240,15 @@ public class LOWERBOUND extends SINGLESCALAR {
     core = new LOWERBOUNDCORE(this);
   }
 
-  private @Prototype LOWERBOUND() {
+  private /*@Prototype*/ LOWERBOUND() {
     super();
     // do we need a core?
   }
 
-  private static @Prototype LOWERBOUND proto = new @Prototype LOWERBOUND();
+  private static /*@Prototype*/ LOWERBOUND proto = new /*@Prototype*/ LOWERBOUND();
 
   /** Returns the prototype invariant for LOWERBOUND */
-  public static @Prototype LOWERBOUND get_proto() {
+  public static /*@Prototype*/ LOWERBOUND get_proto() {
     return proto;
   }
 
@@ -271,7 +271,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public LOWERBOUND instantiate_dyn(@Prototype LOWERBOUND this, PptSlice slice) {
+  public LOWERBOUND instantiate_dyn(/*@Prototype*/ LOWERBOUND this, PptSlice slice) {
     return new LOWERBOUND(slice);
   }
 

@@ -35,7 +35,7 @@ import org.plumelib.util.UtilPlume;
  * invariant I(a, b).
  */
 @UsesObjectEquals
-@Prototype
+/*@Prototype*/
 public abstract class Invariant implements Serializable, Cloneable // but don't YOU clone it
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -362,7 +362,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * destroyed, etc.
    */
   @Pure
-  public boolean isExact(@Prototype Invariant this) {
+  public boolean isExact(/*@Prototype*/ Invariant this) {
     return false;
   }
 
@@ -375,7 +375,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   @SuppressWarnings("nullness") // weakness in @Unused checking
-  protected @Prototype Invariant() {
+  protected /*@Prototype*/ Invariant() {
     this.ppt = null;
   }
 
@@ -565,7 +565,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @return the merged invariant or null if the invariants didn't represent the same invariant
    */
   public @Nullable @NonPrototype Invariant merge(
-      @Prototype Invariant this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+      /*@Prototype*/ Invariant this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
 
     Invariant first = invs.get(0);
     Invariant result = first.clone();
@@ -979,7 +979,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     true.
    * @exception RuntimeException if other.getClass() != this.getClass()
    */
-  public abstract boolean isSameFormula(@Prototype Invariant this, Invariant other);
+  public abstract boolean isSameFormula(/*@Prototype*/ Invariant this, Invariant other);
 
   /**
    * Returns whether or not it is possible to merge invariants of the same class but with different
@@ -988,7 +988,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * that invariants that can do this, normally need special merge code as well (to merge the
    * different formulas into a single formula at the upper point.
    */
-  public boolean mergeFormulasOk(@Prototype Invariant this) {
+  public boolean mergeFormulasOk(/*@Prototype*/ Invariant this) {
     return false;
   }
 
@@ -1058,7 +1058,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * of an empty set. Should be overridden by subclasses with non-instantiating suppressions.
    */
   @Pure
-  public @Nullable NISuppressionSet get_ni_suppressions(@Prototype Invariant this) {
+  public @Nullable NISuppressionSet get_ni_suppressions(/*@Prototype*/ Invariant this) {
     return null;
   }
 
@@ -1119,7 +1119,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     variables is the *same* as that of this.ppt.var_infos.
    */
   @Pure
-  public @Nullable DiscardInfo isObviousStatically(@Prototype Invariant this, VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(/*@Prototype*/ Invariant this, VarInfo[] vis) {
     return null;
   }
 
@@ -1520,7 +1520,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * formulas based on their samples (LinearBinary, Bounds, etc) will still match as long as the
    * mergeFormulaOk() method returns true.
    */
-  public boolean match(@Prototype Invariant inv) {
+  public boolean match(/*@Prototype*/ Invariant inv) {
 
     if (inv.getClass() == getClass()) {
       return (inv.mergeFormulasOk() || isSameFormula(inv));
@@ -1663,14 +1663,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @return the new invariant
    */
   protected abstract @NonPrototype Invariant instantiate_dyn(
-      @Prototype Invariant this, PptSlice slice);
+      /*@Prototype*/ Invariant this, PptSlice slice);
 
   /**
    * Returns whether or not this class of invariants is currently enabled.
    *
    * <p>Its implementation is almost always {@code return dkconfig_enabled;}.
    */
-  public abstract boolean enabled(@Prototype Invariant this);
+  public abstract boolean enabled(/*@Prototype*/ Invariant this);
 
   /**
    * Returns whether or not the invariant is valid over the basic types in vis. This only checks
@@ -1680,7 +1680,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @see #instantiate_ok(VarInfo[])
    */
-  public abstract boolean valid_types(@Prototype Invariant this, VarInfo[] vis);
+  public abstract boolean valid_types(/*@Prototype*/ Invariant this, VarInfo[] vis);
 
   /**
    * Returns true if it makes sense to instantiate this invariant over the specified variables.
@@ -1693,7 +1693,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @see #valid_types(VarInfo[])
    */
-  public boolean instantiate_ok(@Prototype Invariant this, VarInfo[] vis) {
+  public boolean instantiate_ok(/*@Prototype*/ Invariant this, VarInfo[] vis) {
     return true;
   }
 
@@ -1728,7 +1728,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * enabled or if the invariant is not reasonable over the specified variables. Otherwise returns
    * the new invariant.
    */
-  public @Nullable Invariant instantiate(@Prototype Invariant this, PptSlice slice) {
+  public @Nullable Invariant instantiate(/*@Prototype*/ Invariant this, PptSlice slice) {
 
     assert isPrototype(); // receiver should be a "prototype" invariant
     assert slice != null;
@@ -1785,7 +1785,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /** Check the rep invariants of this. */
-  public void repCheck(@Prototype Invariant this) {}
+  public void repCheck(/*@Prototype*/ Invariant this) {}
 
   /**
    * Returns whether or not the invariant is currently active. This is used to identify those

@@ -85,14 +85,14 @@ public class NONZERO extends SINGLESCALAR {
     super(ppt);
   }
 
-  private @Prototype NONZERO() {
+  private /*@Prototype*/ NONZERO() {
     super();
   }
 
-  private static @Prototype NONZERO proto = new @Prototype NONZERO();
+  private static /*@Prototype*/ NONZERO proto = new /*@Prototype*/ NONZERO();
 
   /** Returns the prototype invariant for NONZERO */
-  public static @Prototype NONZERO get_proto() {
+  public static /*@Prototype*/ NONZERO get_proto() {
     return proto;
   }
 
@@ -120,11 +120,11 @@ public class NONZERO extends SINGLESCALAR {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public NONZERO instantiate_dyn(@Prototype NONZERO this, PptSlice slice) {
+  public NONZERO instantiate_dyn(/*@Prototype*/ NONZERO this, PptSlice slice) {
     return new NONZERO(slice);
   }
 
-  private String zero(@GuardSatisfied @Prototype NONZERO this, OutputFormat format) {
+  private String zero(@GuardSatisfied /*@Prototype*/ NONZERO this, OutputFormat format) {
 #ifdef SCALAR
     if (is_pointer()) {
       return "null";
@@ -137,7 +137,7 @@ public class NONZERO extends SINGLESCALAR {
 
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied @Prototype NONZERO this, OutputFormat format) {
+  public String format_using(@GuardSatisfied /*@Prototype*/ NONZERO this, OutputFormat format) {
     // // var() fails for prototype invariants
     // if (ppt == null) {
     //   return "Prototype " + NONZEROSTRING + " invariant (ppt == null)";

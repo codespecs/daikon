@@ -15,7 +15,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
     super(ppt);
   }
 
-  protected @Prototype SingleFloatSequence() {
+  protected /*@Prototype*/ SingleFloatSequence() {
     super();
   }
 

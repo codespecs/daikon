@@ -47,14 +47,14 @@ public final class CompleteOneOfString extends SingleString {
     vals = new ArrayList<Info>();
   }
 
-  public @Prototype CompleteOneOfString() {
+  public /*@Prototype*/ CompleteOneOfString() {
     super();
   }
 
-  private static @Prototype CompleteOneOfString proto = new @Prototype CompleteOneOfString();
+  private static /*@Prototype*/ CompleteOneOfString proto = new /*@Prototype*/ CompleteOneOfString();
 
   /** Returns the prototype invariant for CompleteOneOFString */
-  public static @Prototype CompleteOneOfString get_proto() {
+  public static /*@Prototype*/ CompleteOneOfString get_proto() {
     return proto;
   }
 
@@ -66,7 +66,7 @@ public final class CompleteOneOfString extends SingleString {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public CompleteOneOfString instantiate_dyn(@Prototype CompleteOneOfString this, PptSlice slice) {
+  public CompleteOneOfString instantiate_dyn(/*@Prototype*/ CompleteOneOfString this, PptSlice slice) {
     return new CompleteOneOfString(slice);
   }
 

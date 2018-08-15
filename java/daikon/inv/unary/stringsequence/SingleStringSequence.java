@@ -16,7 +16,7 @@ public abstract class SingleStringSequence extends UnaryInvariant {
     super(ppt);
   }
 
-  protected @Prototype SingleStringSequence() {
+  protected /*@Prototype*/ SingleStringSequence() {
     super();
   }
 

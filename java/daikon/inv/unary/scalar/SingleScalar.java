@@ -17,7 +17,7 @@ public abstract class SingleScalar extends UnaryInvariant {
     super(ppt);
   }
 
-  protected @Prototype SingleScalar() {
+  protected /*@Prototype*/ SingleScalar() {
     super();
   }
 

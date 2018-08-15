@@ -37,14 +37,14 @@ public class IsPointer extends SingleScalar {
     super(ppt);
   }
 
-  protected @Prototype IsPointer() {
+  protected /*@Prototype*/ IsPointer() {
     super();
   }
 
-  private static @Prototype IsPointer proto = new @Prototype IsPointer();
+  private static /*@Prototype*/ IsPointer proto = new /*@Prototype*/ IsPointer();
 
   /** Returns the prototype invariant for IsPointer */
-  public static @Prototype IsPointer get_proto() {
+  public static /*@Prototype*/ IsPointer get_proto() {
     return proto;
   }
 

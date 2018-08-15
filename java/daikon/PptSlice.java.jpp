@@ -120,7 +120,7 @@ public final class PPTSLICE1 extends PptSlice {
    * compatible. If the variables are compatible, invariants that match the type of the slices
    * variables are created.
    */
-  public void instantiate_invariants(List<@Prototype Invariant> proto_invs) {
+  public void instantiate_invariants(List</*@Prototype*/ Invariant> proto_invs) {
 
     if (Debug.logOn()) {
       log("instantiate invariants");
@@ -160,7 +160,7 @@ public final class PPTSLICE1 extends PptSlice {
     #endif
 
     // Instantiate each invariant that is valid over those types
-    for (@Prototype Invariant proto : proto_invs) {
+    for (/*@Prototype*/ Invariant proto : proto_invs) {
 
       // Skip invariant if the types are not appropriate
       if (!proto.valid_types(var_infos) || !proto.instantiate_ok(var_infos)) {

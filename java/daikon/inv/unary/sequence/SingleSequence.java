@@ -23,7 +23,7 @@ public abstract class SingleSequence extends UnaryInvariant {
     super(ppt);
   }
 
-  protected @Prototype SingleSequence() {
+  protected /*@Prototype*/ SingleSequence() {
     super();
   }
 

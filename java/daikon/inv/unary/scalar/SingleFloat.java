@@ -15,7 +15,7 @@ public abstract class SingleFloat extends UnaryInvariant {
     super(ppt);
   }
 
-  protected @Prototype SingleFloat() {
+  protected /*@Prototype*/ SingleFloat() {
     super();
   }
 

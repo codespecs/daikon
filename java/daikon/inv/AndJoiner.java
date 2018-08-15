@@ -118,17 +118,17 @@ public class AndJoiner extends Joiner {
   }
 
   @Override
-  public boolean enabled(@Prototype AndJoiner this) {
+  public boolean enabled(/*@Prototype*/ AndJoiner this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(@Prototype AndJoiner this, VarInfo[] vis) {
+  public boolean valid_types(/*@Prototype*/ AndJoiner this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
-  protected @NonPrototype AndJoiner instantiate_dyn(@Prototype AndJoiner this, PptSlice slice) {
+  protected @NonPrototype AndJoiner instantiate_dyn(/*@Prototype*/ AndJoiner this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

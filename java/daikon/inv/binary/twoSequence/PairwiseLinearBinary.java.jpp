@@ -63,16 +63,16 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @SuppressWarnings("nullness") // circular initialization
-  protected @Prototype CLASSNAME() {
+  protected /*@Prototype*/ CLASSNAME() {
     super();
     // Do we need a core in a prototype invariant?
     core = new CORECLASS(this);
   }
 
-  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static @Prototype CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
@@ -84,7 +84,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** Instantiates the invariant on the specified slice */
   @Override
-  protected CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
+  protected CLASSNAME instantiate_dyn(/*@Prototype*/ CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 

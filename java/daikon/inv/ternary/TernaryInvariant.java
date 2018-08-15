@@ -15,7 +15,7 @@ public abstract class TernaryInvariant extends Invariant {
     super(ppt);
   }
 
-  protected @Prototype TernaryInvariant() {
+  protected /*@Prototype*/ TernaryInvariant() {
     super();
   }
 

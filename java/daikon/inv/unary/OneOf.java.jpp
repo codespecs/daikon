@@ -294,7 +294,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   @Unused(when=Prototype.class)
   private int num_elts;
 
-  public @Prototype ONEOFSCALAR() {
+  public /*@Prototype*/ ONEOFSCALAR() {
     super();
   }
 
@@ -325,10 +325,10 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
   }
 
-  private static @Prototype ONEOFSCALAR proto = new @Prototype ONEOFSCALAR();
+  private static /*@Prototype*/ ONEOFSCALAR proto = new /*@Prototype*/ ONEOFSCALAR();
 
   /** Returns the prototype invariant for ONEOFSCALAR */
-  public static @Prototype ONEOFSCALAR get_proto() {
+  public static /*@Prototype*/ ONEOFSCALAR get_proto() {
     return proto;
   }
 
@@ -340,7 +340,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public ONEOFSCALAR instantiate_dyn(@Prototype ONEOFSCALAR this, PptSlice slice) {
+  public ONEOFSCALAR instantiate_dyn(/*@Prototype*/ ONEOFSCALAR this, PptSlice slice) {
     return new ONEOFSCALAR(slice);
   }
 

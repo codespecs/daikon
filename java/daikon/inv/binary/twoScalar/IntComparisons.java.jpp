@@ -401,14 +401,14 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    super(ppt);
   }
 
-  protected @Prototype INTEQUAL() {
+  protected /*@Prototype*/ INTEQUAL() {
    super();
   }
 
-  private static @Prototype INTEQUAL proto = new @Prototype INTEQUAL();
+  private static /*@Prototype*/ INTEQUAL proto = new /*@Prototype*/ INTEQUAL();
 
   /** Returns the prototype invariant for INTEQUAL */
-  public static @Prototype INTEQUAL get_proto() {
+  public static /*@Prototype*/ INTEQUAL get_proto() {
     return proto;
   }
 
@@ -568,7 +568,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   /** Instantiate an invariant on the specified slice */
   @Override
-  protected INTEQUAL instantiate_dyn(@Prototype INTEQUAL this, PptSlice slice) {
+  protected INTEQUAL instantiate_dyn(/*@Prototype*/ INTEQUAL this, PptSlice slice) {
     #if defined (NONEQUAL)
     // System.out.printf("Instantiating non-equal on %s and %s%n",
     //                     slice.var_infos[0], slice.var_infos[1]);

@@ -902,7 +902,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
       try {
         Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
-        Invariant proto = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
+        Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
         Invariant inv = proto.instantiate(sl);
         return inv;
       } catch (Exception e) {

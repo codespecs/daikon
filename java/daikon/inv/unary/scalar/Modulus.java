@@ -34,14 +34,14 @@ public class Modulus extends SingleScalar {
     super(ppt);
   }
 
-  private @Prototype Modulus() {
+  private /*@Prototype*/ Modulus() {
     super();
   }
 
-  private static @Prototype Modulus proto = new @Prototype Modulus();
+  private static /*@Prototype*/ Modulus proto = new /*@Prototype*/ Modulus();
 
   /** Returns the prototype invariant for Modulus */
-  public static @Prototype Modulus get_proto() {
+  public static /*@Prototype*/ Modulus get_proto() {
     return proto;
   }
 
@@ -62,7 +62,7 @@ public class Modulus extends SingleScalar {
 
   /** Instantiate an invariant on the specified slice */
   @Override
-  protected Modulus instantiate_dyn(@Prototype Modulus this, PptSlice slice) {
+  protected Modulus instantiate_dyn(/*@Prototype*/ Modulus this, PptSlice slice) {
     return new Modulus(slice);
   }
 

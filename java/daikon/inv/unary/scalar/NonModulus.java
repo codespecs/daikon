@@ -42,14 +42,14 @@ public class NonModulus extends SingleScalar {
     super(ppt);
   }
 
-  private @Prototype NonModulus() {
+  private /*@Prototype*/ NonModulus() {
     super();
   }
 
-  private static @Prototype NonModulus proto = new @Prototype NonModulus();
+  private static /*@Prototype*/ NonModulus proto = new /*@Prototype*/ NonModulus();
 
   /** Returns the prototype invariant for NonModulus */
-  public static @Prototype NonModulus get_proto() {
+  public static /*@Prototype*/ NonModulus get_proto() {
     return proto;
   }
 
@@ -70,7 +70,7 @@ public class NonModulus extends SingleScalar {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  protected NonModulus instantiate_dyn(@Prototype NonModulus this, PptSlice slice) {
+  protected NonModulus instantiate_dyn(/*@Prototype*/ NonModulus this, PptSlice slice) {
     return new NonModulus(slice);
   }
 

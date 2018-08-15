@@ -55,14 +55,14 @@ public class CLASSNAME extends SUPERCLASS {
     super(ppt);
   }
 
-  protected @Prototype CLASSNAME() {
+  protected /*@Prototype*/ CLASSNAME() {
     super();
   }
 
-  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static @Prototype CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
@@ -89,7 +89,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
+  public CLASSNAME instantiate_dyn(/*@Prototype*/ CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 

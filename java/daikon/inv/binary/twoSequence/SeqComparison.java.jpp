@@ -290,7 +290,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     orderMatters = order;
   }
 
-  protected @Prototype SEQSEQINTEQUAL(boolean order) {
+  protected /*@Prototype*/ SEQSEQINTEQUAL(boolean order) {
     super();
     orderMatters = order;
   }
@@ -303,10 +303,10 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 
   #endif
 
-  private static @Prototype SEQSEQINTEQUAL proto = new @Prototype SEQSEQINTEQUAL(true);
+  private static /*@Prototype*/ SEQSEQINTEQUAL proto = new /*@Prototype*/ SEQSEQINTEQUAL(true);
 
   /** Returns the prototype invariant for SEQSEQINTEQUAL */
-  public static @Prototype SEQSEQINTEQUAL get_proto() {
+  public static /*@Prototype*/ SEQSEQINTEQUAL get_proto() {
     return proto;
   }
 
@@ -352,7 +352,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 
   /** Instantiates the invariant on the specified slice */
   @Override
-  protected SEQSEQINTEQUAL instantiate_dyn(@Prototype SEQSEQINTEQUAL this, PptSlice slice) {
+  protected SEQSEQINTEQUAL instantiate_dyn(/*@Prototype*/ SEQSEQINTEQUAL this, PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.hasOrder() && slice.var_infos[1].aux.hasOrder();
     return new SEQSEQINTEQUAL(slice, has_order);
   }

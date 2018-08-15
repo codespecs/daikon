@@ -15,7 +15,7 @@ public abstract class UnaryInvariant extends Invariant {
     super(ppt);
   }
 
-  protected @Prototype UnaryInvariant() {
+  protected /*@Prototype*/ UnaryInvariant() {
     super();
   }
 

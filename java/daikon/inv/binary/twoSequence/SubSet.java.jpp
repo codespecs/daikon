@@ -79,14 +79,14 @@ public class SUBSET extends TWOSEQUENCE {
     super(ppt);
   }
 
-  protected @Prototype SUBSET() {
+  protected /*@Prototype*/ SUBSET() {
     super();
   }
 
-  private static @Prototype SUBSET proto = new @Prototype SUBSET();
+  private static /*@Prototype*/ SUBSET proto = new /*@Prototype*/ SUBSET();
 
   /** Returns the prototype invariant for SUBSET */
-  public static @Prototype SUBSET get_proto() {
+  public static /*@Prototype*/ SUBSET get_proto() {
     return proto;
   }
 
@@ -131,7 +131,7 @@ public class SUBSET extends TWOSEQUENCE {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  public SUBSET instantiate_dyn(@Prototype SUBSET this, PptSlice slice) {
+  public SUBSET instantiate_dyn(/*@Prototype*/ SUBSET this, PptSlice slice) {
     return new SUBSET(slice);
   }
 

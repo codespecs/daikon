@@ -28,14 +28,14 @@ public class CommonStringSequence extends SingleStringSequence {
     super(ppt);
   }
 
-  protected @Prototype CommonStringSequence() {
+  protected /*@Prototype*/ CommonStringSequence() {
     super();
   }
 
-  private static @Prototype CommonStringSequence proto = new @Prototype CommonStringSequence();
+  private static /*@Prototype*/ CommonStringSequence proto = new /*@Prototype*/ CommonStringSequence();
 
   /** Returns the prototype invariant for CommonStringSequence */
-  public static @Prototype CommonStringSequence get_proto() {
+  public static /*@Prototype*/ CommonStringSequence get_proto() {
     return proto;
   }
 
@@ -48,7 +48,7 @@ public class CommonStringSequence extends SingleStringSequence {
   /** instantiate an invariant on the specified slice */
   @Override
   protected CommonStringSequence instantiate_dyn(
-      @Prototype CommonStringSequence this, PptSlice slice) {
+      /*@Prototype*/ CommonStringSequence this, PptSlice slice) {
     return new CommonStringSequence(slice);
   }
 

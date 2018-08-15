@@ -56,7 +56,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     super(ppt);
   }
 
-  protected @Prototype CLASSNAME() {
+  protected /*@Prototype*/ CLASSNAME() {
     super();
   }
 

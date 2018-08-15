@@ -248,14 +248,14 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     super(ppt);
   }
 
-  protected @Prototype PAIRWISEINTEQUAL() {
+  protected /*@Prototype*/ PAIRWISEINTEQUAL() {
     super();
   }
 
-  private static @Prototype PAIRWISEINTEQUAL proto = new @Prototype PAIRWISEINTEQUAL();
+  private static /*@Prototype*/ PAIRWISEINTEQUAL proto = new /*@Prototype*/ PAIRWISEINTEQUAL();
 
   /** Returns the prototype invariant for PAIRWISEINTEQUAL */
-  public static @Prototype PAIRWISEINTEQUAL get_proto() {
+  public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {
     return proto;
   }
 
@@ -284,7 +284,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  protected PAIRWISEINTEQUAL instantiate_dyn(@Prototype PAIRWISEINTEQUAL this, PptSlice slice) {
+  protected PAIRWISEINTEQUAL instantiate_dyn(/*@Prototype*/ PAIRWISEINTEQUAL this, PptSlice slice) {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn()) {
       inv.log("instantiate");

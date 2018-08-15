@@ -32,14 +32,14 @@ public class Positive extends SingleScalar {
     super(ppt);
   }
 
-  private @Prototype Positive() {
+  private /*@Prototype*/ Positive() {
     super();
   }
 
-  private static @Prototype Positive proto = new @Prototype Positive();
+  private static /*@Prototype*/ Positive proto = new /*@Prototype*/ Positive();
 
   /** Returns the prototype invariant */
-  public static @Prototype Positive get_proto() {
+  public static /*@Prototype*/ Positive get_proto() {
     return proto;
   }
 
@@ -51,7 +51,7 @@ public class Positive extends SingleScalar {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public Positive instantiate_dyn(@Prototype Positive this, PptSlice slice) {
+  public Positive instantiate_dyn(/*@Prototype*/ Positive this, PptSlice slice) {
     return new Positive(slice);
   }
 

@@ -18,7 +18,7 @@ public abstract class BinaryInvariant extends Invariant {
     super(ppt);
   }
 
-  protected @Prototype BinaryInvariant() {
+  protected /*@Prototype*/ BinaryInvariant() {
     super();
   }
 
@@ -56,7 +56,7 @@ public abstract class BinaryInvariant extends Invariant {
    * prototype invariants.
    */
   public InvariantStatus check_unordered(
-      @Prototype BinaryInvariant this,
+      /*@Prototype*/ BinaryInvariant this,
       @Interned Object val1,
       @Interned Object val2,
       int mod_index,
