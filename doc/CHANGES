@@ -29,6 +29,9 @@ Chicory:
 
 5.6.8 (?, ?, 2018)
 
+Daikon now requires Java JDK 8; Java JDK 7 is no longer supported.
+
+Internal implementation change:
 Daikon no longer uses the plume-lib repository, but smaller ones such as
 plume-scripts.
 

@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import org.plumelib.util.Intern;
-import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -747,14 +746,6 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       sb.append("[]");
     }
     return sb.toString();
-  }
-
-  public static String toString(ProglangType[] types) {
-    StringBuilderDelimited out = new StringBuilderDelimited(", ");
-    for (int i = 0; i < types.length; i++) {
-      out.add(types[i].toString());
-    }
-    return ("[" + out + "]");
   }
 
   // For Java programs, a @BinaryName.

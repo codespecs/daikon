@@ -43,11 +43,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import org.plumelib.util.CollectionsPlume;
-import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -254,7 +254,7 @@ public final class FileIO {
   }
 
   // Nullness-checking of read_data_trace_record(ParseState) works even
-  // without these two lines, since StringBuilderDelimited accepts null values.
+  // without these two lines, since StringJoiner accepts null values.
   @SuppressWarnings(
       "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is
   // ensured by call to reset()
@@ -807,7 +807,7 @@ public final class FileIO {
   // implements java.util.List.  All those lines (including interspersed
   // comments) are returned.
   private static String read_list_implementors(LineNumberReader reader) throws IOException {
-    StringBuilderDelimited result = new StringBuilderDelimited(lineSep);
+    StringJoiner result = new StringJoiner(lineSep);
     for (; ; ) {
       String line = reader.readLine();
       if (line == null || line.equals("")) {
@@ -1503,7 +1503,7 @@ public final class FileIO {
       // This cleverness would not be necessary if every comment was followed by
       // a blank line.  We can't depend on that, though.
       if (isComment(line)) {
-        StringBuilderDelimited commentLines = new StringBuilderDelimited(lineSep);
+        StringJoiner commentLines = new StringJoiner(lineSep);
         commentLines.add(line);
         while (nextLineIsComment(reader)) {
           commentLines.add(reader.readLine());
@@ -2912,7 +2912,7 @@ public final class FileIO {
       @SuppressWarnings(
           "nullness") // getEnumConstants returns non-null because enum_class is an enum class
       E /*@NonNull*/ [] all = enum_class.getEnumConstants();
-      StringBuilderDelimited msg = new StringBuilderDelimited(", ");
+      StringJoiner msg = new StringJoiner(", ");
       for (E e : all) {
         msg.add(String.format("'%s'", e.name().toLowerCase()));
       }

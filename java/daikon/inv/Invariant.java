@@ -488,11 +488,8 @@ import typequals.prototype.qual.*;
     if (logOn()) {
       result.log(
           "Created %s via clone_and_permute from %s using permutation %s old_ppt = %s",
-          result.format(),
-          format(),
-          Arrays.toString(permutation),
-          VarInfo.arrayToString(ppt.var_infos)
-          // + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos)
+          result.format(), format(), Arrays.toString(permutation), Arrays.toString(ppt.var_infos)
+          // + " new_ppt = " + Arrays.toString (new_ppt.var_infos)
           );
     }
 
@@ -537,8 +534,8 @@ import typequals.prototype.qual.*;
           result.format(),
           format(),
           Arrays.toString(permutation),
-          VarInfo.arrayToString(ppt.var_infos),
-          VarInfo.arrayToString(new_ppt.var_infos));
+          Arrays.toString(ppt.var_infos),
+          Arrays.toString(new_ppt.var_infos));
     }
 
     return result;

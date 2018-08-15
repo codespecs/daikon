@@ -266,7 +266,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 @node       Requirements
 @section    Requirements for running Daikon
 
-In order to run Daikon, you must have a Java 7 (or later) JDK, including a
+In order to run Daikon, you must have a Java 8 (or later) JDK, including a
 @uref{http://www.oracle.com/technetwork/java/javase/overview/index.html,,
 Java Virtual Machine} and a Java compiler.
 
@@ -424,7 +424,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=@var{daikonparent}/daikon-5.6.7
 # The full Linux pathname of the directory that contains the Java JDK
-export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
+export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.8.0_144
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -443,7 +443,7 @@ ln -s "Program Files" program_files
 @noindent
 and then the JAVA_HOME line becomes:
 @example
-export JAVA_HOME=/cygdrive/c/program_files/Java/jdk1.7.0_45
+export JAVA_HOME=/cygdrive/c/program_files/Java/jdk1.8.0_144
 @end example
 
 @c You can also
@@ -557,8 +557,8 @@ have recompiled the Daikon source).  A typical example for
 @exampleindent 1
 @example
 C:\cygwin64\home\user\invariants\daikon\daikon.jar;.;C:\Program Files
-(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.7.0_45\
-jre\lib\rt.jar;C:\Program Files\Java\jdk1.7.0_45\lib\tools.jar
+(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.8.0_144\
+jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_144\lib\tools.jar
 @end example
 @exampleindent 4
 
@@ -592,8 +592,8 @@ result should be a value for @env{CLASSPATH} that looks something like:
 @exampleindent 1
 @example
 C:\cygwin64\home\user\invariants\daikon\daikon.jar;.;C:\Program Files
-(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.7.0_45\
-jre\lib\rt.jar;C:\Program Files\Java\jdk1.7.0_45\lib\tools.jar
+(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.8.0_144\
+jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_144\lib\tools.jar
 @end example
 @exampleindent 4
 
@@ -4233,14 +4233,11 @@ containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
-On MacOSX, versions of the JDK prior to 7 were not organized in a manner
-similar to the Linux versions.  Current versions of Daikon require JDK 7
-(or newer); hence, this is no longer an issue on MacOSX.
-The following example is typical for an install of Java 1.7 on MacOSX:
+On MacOSX, you might do:
 
 @exampleindent 0
 @example
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_122.jdk/Home
 @end example
 @exampleindent 4
 
@@ -4256,8 +4253,7 @@ unable to instrument, their names will be
 printed at the end of the instrumentation process.  This is not a problem unless
 your application calls one of these methods (directly or indirectly).
 If one of these methods is called, a @samp{NoSuchMethodException} will
-be generated when the call is attempted. As of Java 7 runtime version 1.7.0_65
-all Java runtime methods are able to be instrumented.
+be generated when the call is attempted.
 
 If the instrumented JDK is in a non-standard location, use the
 @option{--rt-file} switch to specify its location, or change your classpath
@@ -8077,11 +8073,11 @@ user.
 @cindex java.lang.UnsupportedClassVersionError
 @cindex major.minor version error
 
-Daikon requires a Java 7 (or newer) JVM (@pxref{Requirements}).
+Daikon requires a Java 8 (or newer) JVM (@pxref{Requirements}).
 An error such as
 @example
 Exception in thread "main" java.lang.UnsupportedClassVersionError:
-daikon/Daikon (Unsupported major.minor version 51.0)
+daikon/Daikon (Unsupported major.minor version 52.0)
 @end example
 
 @noindent
@@ -8663,7 +8659,6 @@ when running Chicory, as described in @ref{Installing Daikon}.)
 
 @menu
 * BCEL must be in the classpath::
-* VerifyError constant pool index error::
 * ClassFormatError LVTT entry does not match::
 * Attempted duplicate class definition error::
 @end menu
@@ -8682,32 +8677,6 @@ then the problem is most likely that your classpath does not contain
 daikon.jar.  If you are running a Daikon version after 5.2.20, then it
 could be caused by your classpath containing a previous version of
 daikon.jar.
-
-@node       VerifyError constant pool index error
-@subsection VerifyError constant pool index error
-
-@cindex VerifyError, when running Chicory
-@cindex java.lang.VerifyError, when running Chicory
-@cindex illegal constant pool index error, when running Chicory
-@cindex constant pool index error, when running Chicory
-
-If Chicory throws an error such as the following:
-@smallexample
-Exception in thread "main" java.lang.VerifyError:
-  (class: ps1/PublicTest, method: <init> signature: (Ljava/lang/String;)V)
-  Illegal constant pool index
-@end smallexample
-
-@noindent
-then the problem is most likely that your classpath contains a version
-of the BCEL library that is not compatible with Java 7.  The
-incompatible version might appear in @file{bcel.jar}, in Java's
-@file{rt.jar}, or elsewhere.  You should either remove that version of
-BCEL from your classpath, or you should ensure that it appears after
-@file{daikon.jar}, which contains the correct version of BCEL@.  (If you
-are running Daikon from sources rather than from @file{daikon.jar}, then
-ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
-BCEL on your classpath.)
 
 @node       ClassFormatError LVTT entry does not match
 @subsection ClassFormatError LVTT entry does not match

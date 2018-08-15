@@ -56,9 +56,9 @@ else
   JAR ?= jar
 endif
 
-# Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
+# Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -816,7 +816,7 @@ endif
 # Note about CHECKER_ARGS: if this contains any -Alint option, it will
 # override (not augment) any other use of -Alint in this Makefile.
 # "-proc:only" prevents generation of .class files (so generated classfiles are
-# version 7 rather than version 8).
+# version 8 rather than version 9).
 CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK}/checker/resources/javadoc.astub
 
 ## All of the following targets need to depend on "compile".
@@ -856,9 +856,6 @@ INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
 INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES}
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
-## Setting this to a subset of directories only works if every file has been
-## previously compiled with the Java 7 compiler in annotations-in-comments
-## mode, so that annotations in the files with @SuppressWarnings are respected.
 NULLNESS_JAVA_FILES = ${DAIKON_JAVA_FILES}
 
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)

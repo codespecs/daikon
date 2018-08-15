@@ -47,11 +47,11 @@ public class SplitterFactory {
    * name or whatever is used on the command line. Uses the current classpath.
    */
   public static String dkconfig_compiler
-      // "-source 6 -target 6" is a hack for when using a Java 8 compiler but
-      // a -Java 6 or Java 7 runtime.  A better solution would be to add
+      // "-source 8 -target 8" is a hack for when using a Java 9+ compiler but
+      // a Java 8 runtime.  A better solution would be to add
       // these command-line arguments only when running
       // SplitterFactoryTestUpdater, but that program does not support that.
-      = "javac -nowarn -source 6 -target 6 -classpath " + System.getProperty("java.class.path");
+      = "javac -nowarn -source 8 -target 8 -classpath " + System.getProperty("java.class.path");
 
   /**
    * Positive integer. Specifies the Splitter compilation timeout, in seconds, after which the

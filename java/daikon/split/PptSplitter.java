@@ -395,7 +395,7 @@ public class PptSplitter implements Serializable {
                     + "\n  @"
                     + eq_inv_ppt
                     + "\n  but can't find slice for "
-                    + VarInfo.arrayToString(cvis_sorted));
+                    + Arrays.toString(cvis_sorted));
           }
           // If no slice, just give up?
           continue;
@@ -423,8 +423,7 @@ public class PptSplitter implements Serializable {
       }
 
       if (pslice.invs.size() == 0) {
-        debug.fine(
-            "PptSplitter: created new slice " + VarInfo.arrayToString(vis) + " @" + parent.name);
+        debug.fine("PptSplitter: created new slice " + Arrays.toString(vis) + " @" + parent.name);
       }
 
       // Add any exclusive conditions for this slice to the list
