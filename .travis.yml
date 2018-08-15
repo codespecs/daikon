@@ -10,9 +10,6 @@ env:
   global:
     - THIS_REPO=daikon
   matrix:
-    - OS=ubuntu JDKVER=jdk7 GROUP=quick-txt-diff
-    - OS=ubuntu JDKVER=jdk7 GROUP=nonquick-txt-diff
-    - OS=ubuntu JDKVER=jdk7 GROUP=non-txt-diff
     - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
     - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
