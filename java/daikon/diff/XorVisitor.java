@@ -1,7 +1,7 @@
 package daikon.diff;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptTopLevel;
+import daikon.inv.Invariant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

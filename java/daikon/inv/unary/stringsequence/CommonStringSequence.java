@@ -1,7 +1,10 @@
 package daikon.inv.unary.stringsequence;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 

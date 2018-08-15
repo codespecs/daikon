@@ -1,6 +1,8 @@
 package daikon.derive.binary;
 
-import daikon.*;
+import daikon.ProglangType;
+import daikon.VarComparability;
+import daikon.VarInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

@@ -1,6 +1,7 @@
 package daikon.inv.filter;
 
-import daikon.inv.*;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Invariant;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

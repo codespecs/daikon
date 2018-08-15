@@ -1,6 +1,6 @@
 package daikon.inv.unary.scalar;
 
-import daikon.*;
+import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;

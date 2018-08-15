@@ -1,6 +1,6 @@
 package daikon;
 
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;

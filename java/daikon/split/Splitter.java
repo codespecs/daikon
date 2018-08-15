@@ -1,6 +1,8 @@
 package daikon.split;
 
-import daikon.*;
+import daikon.Ppt;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
 import daikon.inv.DummyInvariant;
 import java.io.Serializable;
 

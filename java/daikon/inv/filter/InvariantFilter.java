@@ -1,9 +1,9 @@
 package daikon.inv.filter;
 
-import daikon.inv.*;
-
 // The template for an invariant filter.
 // Groups of invariant filters are managed by InvariantFilters.
+import daikon.inv.Invariant;
+
 public abstract class InvariantFilter {
   boolean isOn;
 

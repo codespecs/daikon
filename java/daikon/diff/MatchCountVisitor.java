@@ -1,6 +1,7 @@
 package daikon.diff;
 
-import daikon.*;
+import daikon.PptConditional;
+import daikon.PptTopLevel;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import java.io.PrintStream;

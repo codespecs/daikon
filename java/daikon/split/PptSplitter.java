@@ -2,9 +2,18 @@ package daikon.split;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.suppress.*;
+import daikon.Debug;
+import daikon.DynamicConstants;
+import daikon.PptConditional;
+import daikon.PptRelation;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.inv.DummyInvariant;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
+import daikon.suppress.NIS;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;

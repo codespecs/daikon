@@ -1,7 +1,7 @@
 package daikon.inv.filter;
 
 import daikon.VarInfo;
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import java.util.regex.Pattern;
 
 /*>>>

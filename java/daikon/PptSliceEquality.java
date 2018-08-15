@@ -2,9 +2,8 @@ package daikon;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.inv.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.suppress.*;
+import daikon.inv.Equality;
+import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

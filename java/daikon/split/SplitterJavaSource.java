@@ -1,6 +1,8 @@
 package daikon.split;
 
-import daikon.*;
+import daikon.Global;
+import daikon.ProglangType;
+import daikon.VarInfo;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;

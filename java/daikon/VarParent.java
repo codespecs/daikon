@@ -1,14 +1,5 @@
 package daikon;
 
-import daikon.VarInfoName.*;
-import daikon.derive.*;
-import daikon.derive.binary.*;
-import daikon.derive.ternary.*;
-import daikon.derive.unary.*;
-import daikon.inv.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
 import java.io.Serializable;
 
 /*>>>

@@ -1,6 +1,6 @@
 package daikon.diff;
 
-import daikon.*;
+import daikon.PptConditional;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import java.util.ArrayList;

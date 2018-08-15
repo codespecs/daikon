@@ -1,7 +1,7 @@
 package daikon.derive.binary;
 
-import daikon.*;
-import daikon.derive.*;
+import daikon.VarInfo;
+import daikon.derive.DerivationFactory;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

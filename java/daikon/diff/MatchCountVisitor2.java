@@ -1,6 +1,7 @@
 package daikon.diff;
 
-import daikon.*;
+import daikon.PptConditional;
+import daikon.PptTopLevel;
 import daikon.inv.Invariant;
 import java.io.PrintStream;
 import java.util.HashMap;

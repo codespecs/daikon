@@ -2,9 +2,11 @@ package daikon.suppress;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.*;
+import daikon.Debug;
+import daikon.Global;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;

@@ -1,7 +1,8 @@
 package daikon;
 
-import daikon.inv.*;
-import daikon.suppress.*;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Invariant;
+import daikon.suppress.NIS;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;

@@ -1,7 +1,5 @@
 package daikon.inv;
 
-import daikon.*;
-
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;

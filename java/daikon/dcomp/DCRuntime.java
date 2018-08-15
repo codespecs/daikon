@@ -1,7 +1,19 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
-import daikon.chicory.*;
+import daikon.chicory.ArrayInfo;
+import daikon.chicory.ClassInfo;
+import daikon.chicory.DaikonClassInfo;
+import daikon.chicory.DaikonVariableInfo;
+import daikon.chicory.DaikonWriter;
+import daikon.chicory.FieldInfo;
+import daikon.chicory.MethodInfo;
+import daikon.chicory.ParameterInfo;
+import daikon.chicory.ReturnInfo;
+import daikon.chicory.RootInfo;
+import daikon.chicory.StaticObjInfo;
+import daikon.chicory.StringInfo;
+import daikon.chicory.ThisObjInfo;
 import daikon.util.WeakIdentityHashMap;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;

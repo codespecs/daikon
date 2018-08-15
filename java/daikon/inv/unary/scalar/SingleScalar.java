@@ -1,7 +1,8 @@
 package daikon.inv.unary.scalar;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.InvariantStatus;
 import daikon.inv.unary.UnaryInvariant;
 
 /*>>>

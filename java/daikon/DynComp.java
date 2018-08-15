@@ -1,7 +1,6 @@
 package daikon;
 
 import daikon.chicory.StreamRedirectThread;
-import daikon.dcomp.*;
 import daikon.util.RegexUtil;
 import java.io.File;
 import java.lang.reflect.Method;
@@ -100,7 +99,7 @@ public class DynComp {
    * Path to java agent jar file that performs the transformation. The "main" procedure is
    * Premain.premain().
    *
-   * @see Premain#premain
+   * @see daikon.dcomp.Premain#premain
    */
   // Set by start_target()
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")

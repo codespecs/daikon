@@ -1,6 +1,7 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.ProglangType;
+import daikon.VarInfo;
 import java.io.Serializable;
 import org.plumelib.util.LimitedSizeIntSet;
 import org.plumelib.util.UtilPlume;

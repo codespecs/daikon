@@ -2,7 +2,7 @@ package daikon;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import daikon.chicory.*;
+import daikon.chicory.StreamRedirectThread;
 import daikon.util.RegexUtil;
 import java.io.BufferedReader;
 import java.io.File;
@@ -94,7 +94,7 @@ public class Chicory {
 
   /**
    * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
-   * ChicoryPremain#premain}.
+   * daikon.chicory.ChicoryPremain#premain}.
    */
   @Option("Path to the Chicory agent jar file")
   public static /*@MonotonicNonNull*/ File premain = null;

@@ -1,6 +1,8 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.PptSlice;
+import daikon.PptSlice0;
+import daikon.PptTopLevel;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

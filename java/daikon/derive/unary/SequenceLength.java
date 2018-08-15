@@ -1,9 +1,27 @@
 package daikon.derive.unary;
 
-import daikon.*;
-import daikon.derive.*;
-import daikon.derive.binary.*;
-import daikon.derive.ternary.*;
+import daikon.ProglangType;
+import daikon.Quantify;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.VarInfoAux;
+import daikon.derive.Derivation;
+import daikon.derive.ValueAndModified;
+import daikon.derive.binary.SequenceFloatIntersection;
+import daikon.derive.binary.SequenceFloatSubsequence;
+import daikon.derive.binary.SequenceFloatUnion;
+import daikon.derive.binary.SequenceScalarIntersection;
+import daikon.derive.binary.SequenceScalarSubsequence;
+import daikon.derive.binary.SequenceScalarUnion;
+import daikon.derive.binary.SequenceStringIntersection;
+import daikon.derive.binary.SequenceStringUnion;
+import daikon.derive.binary.SequencesConcat;
+import daikon.derive.binary.SequencesJoin;
+import daikon.derive.binary.SequencesJoinFloat;
+import daikon.derive.binary.SequencesPredicate;
+import daikon.derive.binary.SequencesPredicateFloat;
+import daikon.derive.ternary.SequenceFloatArbitrarySubsequence;
+import daikon.derive.ternary.SequenceScalarArbitrarySubsequence;
 import org.plumelib.util.Intern;
 
 /*>>>

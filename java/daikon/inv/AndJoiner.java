@@ -1,6 +1,9 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.Global;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
 import java.util.ArrayList;
 import java.util.List;
 import org.plumelib.util.UtilPlume;

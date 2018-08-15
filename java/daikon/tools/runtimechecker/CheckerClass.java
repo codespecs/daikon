@@ -1,6 +1,6 @@
 package daikon.tools.runtimechecker;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import jtb.syntaxtree.*;
 
 /*>>>

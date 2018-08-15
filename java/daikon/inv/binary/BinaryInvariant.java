@@ -2,8 +2,9 @@ package daikon.inv.binary;
 
 import static daikon.inv.Invariant.asInvClass;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import java.lang.reflect.Method;
 
