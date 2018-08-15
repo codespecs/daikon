@@ -10,10 +10,6 @@ import java.util.Map;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /** Replaces uses of generic type parameters with versions that do not use generics. */
 public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
@@ -25,7 +21,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   // For debugging purposes.
   private void printShadowingMap() {
     System.out.println("Shadowing map:");
-    for (Map.Entry</*@KeyFor("shadowingMap")*/ String, Deque<ClassOrInterfaceType>> e :
+    for (Map.Entry<@KeyFor("shadowingMap") String, Deque<ClassOrInterfaceType>> e :
         shadowingMap.entrySet()) {
       System.out.print("  " + e.getKey() + " stack: ");
       for (ClassOrInterfaceType t : e.getValue()) {
@@ -230,7 +226,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // 2. Only the first <IDENTIFIER> may possibly be associated
     //    with a type argument. If we find it in typeParametersInScope,
     //    we replace t with [...]
-    for (Map.Entry</*@KeyFor("shadowingMap")*/ String, Deque<ClassOrInterfaceType>> entry :
+    for (Map.Entry<@KeyFor("shadowingMap") String, Deque<ClassOrInterfaceType>> entry :
         shadowingMap.entrySet()) {
       if (entry.getKey().equals(n.f0.tokenImage)) {
         ClassOrInterfaceType c = entry.getValue().getFirst();
@@ -274,7 +270,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     HashMap<String, Deque<ClassOrInterfaceType>> newMap =
         new HashMap<String, Deque<ClassOrInterfaceType>>();
 
-    for (Map.Entry</*@KeyFor("m")*/ String, Deque<ClassOrInterfaceType>> e : m.entrySet()) {
+    for (Map.Entry<@KeyFor("m") String, Deque<ClassOrInterfaceType>> e : m.entrySet()) {
       String key = e.getKey();
       Deque<ClassOrInterfaceType> oldStack = e.getValue();
       Deque<ClassOrInterfaceType> newStack =

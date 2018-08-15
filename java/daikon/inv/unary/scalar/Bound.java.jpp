@@ -162,10 +162,10 @@ The correct way to build the system is to run 'make'.
   #define IS_ELT
   #define SCALAR sequence
   #if defined(ELTLOWER) || defined(ELTUPPER)
-    #define LONG long /*@Interned*/ []
+    #define LONG long @Interned []
     #define SINGLESCALAR SingleScalarSequence
   #elif defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT)
-    #define LONG double /*@Interned*/ []
+    #define LONG double @Interned []
     #define SINGLESCALAR SingleFloatSequence
   #endif
 #endif
@@ -188,15 +188,6 @@ import daikon.inv.unary.*;
 import daikon.derive.unary.*;
 import java.util.*;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import org.checkerframework.framework.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 #if defined (IS_SCALAR)
   /**
@@ -239,7 +230,7 @@ public class LOWERBOUND extends SINGLESCALAR {
    */
   public static long dkconfig_maximal_interesting = 2;
 
-  /*@Unused(when=Prototype.class)*/
+  @Unused(when=Prototype.class)
   private LOWERBOUNDCORE core;
 
   @SuppressWarnings("nullness") // circular initialization
@@ -249,15 +240,15 @@ public class LOWERBOUND extends SINGLESCALAR {
     core = new LOWERBOUNDCORE(this);
   }
 
-  private /*@Prototype*/ LOWERBOUND() {
+  private @Prototype LOWERBOUND() {
     super();
     // do we need a core?
   }
 
-  private static /*@Prototype*/ LOWERBOUND proto = new /*@Prototype*/ LOWERBOUND();
+  private static @Prototype LOWERBOUND proto = new @Prototype LOWERBOUND();
 
   /** Returns the prototype invariant for LOWERBOUND */
-  public static /*@Prototype*/ LOWERBOUND get_proto() {
+  public static @Prototype LOWERBOUND get_proto() {
     return proto;
   }
 
@@ -280,13 +271,13 @@ public class LOWERBOUND extends SINGLESCALAR {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public LOWERBOUND instantiate_dyn(/*>>> @Prototype LOWERBOUND this,*/ PptSlice slice) {
+  public LOWERBOUND instantiate_dyn(@Prototype LOWERBOUND this, PptSlice slice) {
     return new LOWERBOUND(slice);
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public LOWERBOUND clone(/*>>>@GuardSatisfied LOWERBOUND this*/) {
+  public LOWERBOUND clone(@GuardSatisfied LOWERBOUND this) {
     LOWERBOUND result = (LOWERBOUND) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -298,15 +289,15 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied LOWERBOUND this*/) {
+  public String repr(@GuardSatisfied LOWERBOUND this) {
     return LOWERBOUNDSTR + varNames() + ": "
       + core.repr();
   }
 
 #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied LOWERBOUND this, OutputFormat format) {
     String name = var().name_using(format);
     PptTopLevel pptt = ppt.parent;
 
@@ -352,9 +343,9 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 #else
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied LOWERBOUND this, OutputFormat format) {
 
     if (format.isJavaFamily()) {
       return format_java_family(format);
@@ -373,7 +364,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     return format_unimplemented(format);
   }
   // ELTLOWEr || ELTUPPEr
-  public String format_daikon(/*>>>@GuardSatisfied LOWERBOUND this*/) {
+  public String format_daikon(@GuardSatisfied LOWERBOUND this) {
     PptTopLevel pptt = ppt.parent;
     String name = var().name();
 
@@ -401,7 +392,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     return var().name() + " elements " + GTESTR + " " + MIN1;
   }
 
-  public String format_esc(/*>>>@GuardSatisfied LOWERBOUND this*/) {
+  public String format_esc(@GuardSatisfied LOWERBOUND this) {
     PptTopLevel pptt = ppt.parent;
 
     if (PrintInvariants.dkconfig_static_const_infer) {
@@ -445,7 +436,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 #endif
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied LOWERBOUND this*/) {
+  public String format_csharp_contract(@GuardSatisfied LOWERBOUND this) {
     PptTopLevel pptt = ppt.parent;
     String name = var().csharp_name();
 
@@ -491,7 +482,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 #endif
   }
 
-  public String format_java_family(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
+  public String format_java_family(@GuardSatisfied LOWERBOUND this, OutputFormat format) {
     PptTopLevel pptt = ppt.parent;
 
     if (PrintInvariants.dkconfig_static_const_infer) {
@@ -533,7 +524,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 #endif
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied LOWERBOUND this*/) {
+  public String format_simplify(@GuardSatisfied LOWERBOUND this) {
 #ifdef BASE_FLOAT
     String value = simplify_format_double(MIN1);
 #else
@@ -589,7 +580,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   @Override
-  public boolean enoughSamples(/*>>>@GuardSatisfied LOWERBOUND this*/) {
+  public boolean enoughSamples(@GuardSatisfied LOWERBOUND this) {
     return core.enoughSamples();
   }
 
@@ -598,13 +589,13 @@ public class LOWERBOUND extends SINGLESCALAR {
     return core.computeConfidence();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExact() {
     return core.isExact();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((LOWERBOUND) other).core);
@@ -613,7 +604,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 #ifndef IS_ELT
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   // Use hasUninterestingConstant() instead. -SMcC 2/26/2003
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isInteresting() {
     return (-1 < MIN1 && MIN1 < 2);
@@ -637,9 +628,9 @@ public class LOWERBOUND extends SINGLESCALAR {
     return false;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var = vis[0];
     if ((var.derived instanceof SequenceLength)
          && (((SequenceLength) var.derived).shift != 0)) {
@@ -660,9 +651,9 @@ public class LOWERBOUND extends SINGLESCALAR {
     return super.isObviousStatically(vis);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -782,7 +773,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
 #ifdef IS_ELT
@@ -802,7 +793,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   // Look up a previously instantiated invariant.
-  public static /*@Nullable*/ LOWERBOUND find(PptSlice ppt) {
+  public static @Nullable LOWERBOUND find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof LOWERBOUND) {
@@ -832,7 +823,7 @@ public class LOWERBOUND extends SINGLESCALAR {
    * @param parent_ppt slice that will contain the new invariant
    */
   @Override
-  public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
     LOWERBOUND first = (LOWERBOUND) invs.get(0);

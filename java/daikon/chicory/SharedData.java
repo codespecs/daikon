@@ -5,14 +5,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-/*>>>
-import org.checkerframework.checker.formatter.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Data that is shared across Chicory. The primary users are Instrument.java and Runtime.java. As
  * those classes may be executing on different threads, these items must be accessed via
@@ -28,14 +20,12 @@ public class SharedData {
    */
   // The order of this list depends on the order of loading by the JVM.
   // Declared as Deque instead of List to permit use of removeFirst().
-  public static final /*@GuardedBy("<self>")*/ Deque<ClassInfo> new_classes =
+  public static final @GuardedBy("<self>") Deque<ClassInfo> new_classes =
       new ArrayDeque<ClassInfo>();
 
   /** List of all instrumented classes */
-  public static final /*@GuardedBy("<self>")*/ List<ClassInfo> all_classes =
-      new ArrayList<ClassInfo>();
+  public static final @GuardedBy("<self>") List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
 
   /** List of all instrumented methods */
-  public static final /*@GuardedBy("<self>")*/ List<MethodInfo> methods =
-      new ArrayList<MethodInfo>();
+  public static final @GuardedBy("<self>") List<MethodInfo> methods = new ArrayList<MethodInfo>();
 }

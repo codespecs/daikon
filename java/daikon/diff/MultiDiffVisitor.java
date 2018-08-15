@@ -13,10 +13,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import org.plumelib.util.CollectionsPlume;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works across multiple files
  * regardless of the current two-file infrastructure. This allows the selection of very unique
@@ -137,7 +133,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       String data = st.nextToken();
       try {
         @SuppressWarnings("nullness") // map
-        /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
+        @NonNull ArrayList<String> formatAndFrequencyList = lastMap.get(key);
         formatAndFrequencyList.add(data);
       } catch (Exception e) {
         System.out.println(key + " error in MultiDiffVisitor");
@@ -145,7 +141,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     }
 
     // print it all
-    for (Map.Entry</*@KeyFor("lastMap")*/ String, ArrayList<String>> entry : lastMap.entrySet()) {
+    for (Map.Entry<@KeyFor("lastMap") String, ArrayList<String>> entry : lastMap.entrySet()) {
       String key = entry.getKey();
       ArrayList<String> al = entry.getValue();
       // don't print anything if there are no selective invariants
@@ -198,7 +194,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       String data = st.nextToken();
       try {
         @SuppressWarnings("nullness") // map
-        /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
+        @NonNull ArrayList<String> formatAndFrequencyList = lastMap.get(key);
         formatAndFrequencyList.add(data);
       } catch (Exception e) {
         out.println(key + " error in MultiDiffVisitor");
@@ -209,7 +205,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     String lastPpt = "";
     // sort them so that multiple exits will end up being adjacent
     // to each other when they are from the same method
-    for (/*@KeyFor("lastMap")*/ String key : CollectionsPlume.sortedKeySet(lastMap)) {
+    for (@KeyFor("lastMap") String key : CollectionsPlume.sortedKeySet(lastMap)) {
       ArrayList<String> al = lastMap.get(key);
       // don't print anything if there are no selective invariants
 
@@ -247,7 +243,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
   }
 
   @Override
-  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     return true; // super.shouldPrint (inv1, inv2) &&
     //    inv1.format().toString().indexOf(">") == -1 &&
     // inv1.format().toString().indexOf("orig") == -1;

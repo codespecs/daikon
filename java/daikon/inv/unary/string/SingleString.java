@@ -4,14 +4,6 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.UnaryInvariant;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /** Abstract base class for invariants over one variable of type {@code String}. */
 public abstract class SingleString extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -23,7 +15,7 @@ public abstract class SingleString extends UnaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleString() {
+  protected @Prototype SingleString() {
     super();
   }
 
@@ -34,7 +26,7 @@ public abstract class SingleString extends UnaryInvariant {
   }
 
   public VarInfo var(
-      /*>>>@GuardSatisfied @UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this*/) {
+          @GuardSatisfied @UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this) {
     return ppt.var_infos[0];
   }
 
@@ -42,7 +34,7 @@ public abstract class SingleString extends UnaryInvariant {
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(String,int)}.
   @Override
-  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
+  public InvariantStatus add(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     String value = (String) val;
@@ -54,7 +46,7 @@ public abstract class SingleString extends UnaryInvariant {
   }
 
   @Override
-  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
+  public InvariantStatus check(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     String value = (String) val;
@@ -71,10 +63,10 @@ public abstract class SingleString extends UnaryInvariant {
    * {@link #check_modified}. This method need not check for falsification; that is done by the
    * caller.
    */
-  public abstract InvariantStatus add_modified(/*@Interned*/ String value, int count);
+  public abstract InvariantStatus add_modified(@Interned String value, int count);
 
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
-  public InvariantStatus add_unmodified(/*@Interned*/ String value, int count) {
+  public InvariantStatus add_unmodified(@Interned String value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -87,9 +79,9 @@ public abstract class SingleString extends UnaryInvariant {
    *     a count parameter of 3.
    * @return whether or not the sample is consistent with the invariant
    */
-  public abstract InvariantStatus check_modified(/*@Interned*/ String value, int count);
+  public abstract InvariantStatus check_modified(@Interned String value, int count);
 
-  public InvariantStatus check_unmodified(/*@Interned*/ String value, int count) {
+  public InvariantStatus check_unmodified(@Interned String value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 }

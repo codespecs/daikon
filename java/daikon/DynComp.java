@@ -13,10 +13,6 @@ import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * This is the main class for DynComp. It uses the javaagent switch to java (which allows classes to
  * be instrumented as they are loaded). This class parses the command line arguments and starts java
@@ -43,11 +39,11 @@ public class DynComp {
   public static File output_dir = new File(".");
 
   @Option("-f Output filename for Daikon decl file")
-  public static /*@Nullable*/ String decl_file = null;
+  public static @Nullable String decl_file = null;
 
   @Option("Output file for comparability sets")
   // If null, do no output
-  public static /*@Nullable*/ File comparability_file = null;
+  public static @Nullable File comparability_file = null;
 
   @Option("Only process program points matching the regex")
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
@@ -63,7 +59,7 @@ public class DynComp {
   public static boolean no_jdk = false;
 
   @Option("jar file containing an instrumented JDK")
-  public static /*@Nullable*/ File rt_file = null;
+  public static @Nullable File rt_file = null;
 
   @Option("use standard visibility")
   public static boolean std_visibility = false;
@@ -82,14 +78,14 @@ public class DynComp {
 
   @Option("Trace output file")
   // Null if shouldn't do output
-  public static /*@Nullable*/ File trace_file = null;
+  public static @Nullable File trace_file = null;
 
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;
 
   @Option("Output file for DataFlow information")
   // Null if shouldn't do output
-  public static /*@Nullable*/ File dataflow_out = null;
+  public static @Nullable File dataflow_out = null;
 
   //  @Option("Enable tracing");
   //  public static boolean tracing_enabled = true;
@@ -104,7 +100,7 @@ public class DynComp {
    */
   // Set by start_target()
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
-  public static /*@MonotonicNonNull*/ File premain = null;
+  public static @MonotonicNonNull File premain = null;
 
   // /** Thread that copies output from target to our output */
   // public static StreamRedirectThread out_thread;

@@ -8,10 +8,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import org.plumelib.signature.Signatures;
 
-/*>>>
-import org.checkerframework.checker.signature.qual.*;
-*/
-
 /** DaikonWriter is the parent class of DeclWriter and DTraceWriter. */
 public abstract class DaikonWriter {
   /** Controls whether modifiers and the return type are included in the decl output. */
@@ -281,7 +277,7 @@ public abstract class DaikonWriter {
    * been declared in Java source code, except with '$' instead of '.' separating outer and inner
    * classes).
    */
-  public static /*@BinaryName*/ String stdClassName(Class<?> type) {
+  public static @BinaryName String stdClassName(Class<?> type) {
     return Runtime.classGetNameToBinaryName(type.getName());
   }
 

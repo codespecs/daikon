@@ -9,10 +9,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * Union/Find datastructure for Objects without the ranking optimization. All references to the
  * Objects are weak so that they will be removed from the sets when no longer referenced.
@@ -51,7 +47,7 @@ class TagEntry extends WeakReference<Object> {
    * Parent in the tree that represents the set for this element. If this, this entry is the
    * representative one.
    */
-  private /*@Nullable*/ TagEntry parent;
+  private @Nullable TagEntry parent;
 
   /**
    * Element in the tree that this element interacted with. Important!: tracer is null if this has
@@ -59,7 +55,7 @@ class TagEntry extends WeakReference<Object> {
    *
    * <p>if TRACING_ENABLED?
    */
-  private /*@Nullable*/ TagEntry tracer;
+  private @Nullable TagEntry tracer;
 
   protected String trace_loc = "";
 
@@ -206,7 +202,7 @@ class TagEntry extends WeakReference<Object> {
     return root_ref;
   }
 
-  public static /*@Nullable*/ Object tracer_find(Object obj) {
+  public static @Nullable Object tracer_find(Object obj) {
     TagEntry entry = object_map.get(obj);
     if (entry == null) {
       return obj;
@@ -237,7 +233,7 @@ class TagEntry extends WeakReference<Object> {
    * (Imprecise wording, I know.)
    */
   @SuppressWarnings("nullness") // catches NullPointerException
-  public void reroute(/*@Nullable*/ TagEntry newTracer, String tloc) {
+  public void reroute(@Nullable TagEntry newTracer, String tloc) {
     try {
       this.tracer.reroute(this, trace_loc);
     } catch (NullPointerException e) {
@@ -292,7 +288,7 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /** Returns the tracer of this node */
-  public /*@Nullable*/ TagEntry getTracer() {
+  public @Nullable TagEntry getTracer() {
     return tracer;
   }
 

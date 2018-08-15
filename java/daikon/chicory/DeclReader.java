@@ -13,13 +13,6 @@ import java.util.Map;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Reads declaration files and provides methods to access the information within them. A declaration
  * file consists of a number of program points and the variables for each program point.
@@ -104,22 +97,22 @@ public class DeclReader {
       return rep_type.replaceFirst(" .*", "");
     }
 
-    /*@Pure*/
+    @Pure
     public boolean is_double() {
       return (rep_type.equals("double") || (rep_type.equals("float")));
     }
 
-    /*@Pure*/
+    @Pure
     public boolean is_string() {
       return (rep_type.equals("string"));
     }
 
-    /*@Pure*/
+    @Pure
     public boolean is_string_array() {
       return (rep_type.equals("string[]"));
     }
 
-    /*@Pure*/
+    @Pure
     public boolean is_int() {
       return (rep_type.equals("int"));
     }
@@ -137,9 +130,9 @@ public class DeclReader {
       this.comparability = comparability;
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied DeclVarInfo this*/) {
+    public String toString(@GuardSatisfied DeclVarInfo this) {
       return String.format("%s [%s] %s", type, rep_type, name);
     }
 
@@ -147,7 +140,7 @@ public class DeclReader {
      * Reads a single value for this variable and returns it. The result is null exactly if the
      * value is nonsensical. The return value is interned.
      */
-    public /*@Nullable*/ /*@Interned*/ Object read_data(EntryReader reader) throws IOException {
+    public @Nullable @Interned Object read_data(EntryReader reader) throws IOException {
       String var_name = reader.readLine();
       if (var_name == null) {
         throw new Error(
@@ -201,7 +194,7 @@ public class DeclReader {
      * program point is executed. That entry is a list of the values for each variable in the same
      * order as the variables were defined.
      */
-    List<List</*@Interned*/ Object>> data_values = new ArrayList<List</*@Interned*/ Object>>();
+    List<List<@Interned Object>> data_values = new ArrayList<List<@Interned Object>>();
 
     public DeclPpt(String name) {
       this.name = name;
@@ -234,17 +227,17 @@ public class DeclReader {
      * Adds a record of data for this ppt. The data must have one element for each variable in the
      * ppt and be ordered in the same way.
      */
-    public void add_var_data(List</*@Interned*/ Object> var_data_list) {
+    public void add_var_data(List<@Interned Object> var_data_list) {
       assert var_data_list.size() == vars.size();
       data_values.add(var_data_list);
     }
 
-    public List<List</*@Interned*/ Object>> get_var_data() {
+    public List<List<@Interned Object>> get_var_data() {
       return data_values;
     }
 
     /** Returns the DeclVarInfo named var_name or null if it doesn't exist. */
-    public /*@Nullable*/ DeclVarInfo find_var(String var_name) {
+    public @Nullable DeclVarInfo find_var(String var_name) {
       return vars.get(var_name);
     }
 
@@ -258,9 +251,9 @@ public class DeclReader {
       return name.replaceFirst(":::.*", "");
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied DeclPpt this*/) {
+    public String toString(@GuardSatisfied DeclPpt this) {
       return name;
     }
 
@@ -334,7 +327,7 @@ public class DeclReader {
   // outputs a declaration for every program point, and this lookup can
   // fail when using the --comparability-file=... command-line argument
   // with a file produced by DynComp.
-  public /*@Nullable*/ DeclPpt find_ppt(String ppt_name) {
+  public @Nullable DeclPpt find_ppt(String ppt_name) {
     DeclPpt result = ppts.get(ppt_name);
     return result;
   }

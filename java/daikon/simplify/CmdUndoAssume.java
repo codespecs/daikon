@@ -1,10 +1,5 @@
 package daikon.simplify;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * An UndoAssume command removes an assumption from the assumption stack of the given session. The
  * command will not block.
@@ -14,7 +9,7 @@ public class CmdUndoAssume implements Cmd {
 
   /** For documentation, read the class overview. */
   @Override
-  public void apply(final /*@GuardedBy("<self>")*/ Session s) {
+  public void apply(final @GuardedBy("<self>") Session s) {
 
     synchronized (s) {
       // send out the (BG_POP)
@@ -28,9 +23,9 @@ public class CmdUndoAssume implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied CmdUndoAssume this*/) {
+  public String toString(@GuardSatisfied CmdUndoAssume this) {
     return "CmdUndoAssume";
   }
 }

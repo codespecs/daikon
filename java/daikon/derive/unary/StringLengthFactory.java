@@ -4,17 +4,13 @@ import daikon.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 public final class StringLengthFactory extends UnaryDerivationFactory {
 
   /** Debug output */
   public static final Logger debug = Logger.getLogger("daikon.derive.unary.StringLengthFactory");
 
   @Override
-  public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {
+  public UnaryDerivation @Nullable [] instantiate(VarInfo vi) {
     if (!StringLength.dkconfig_enabled) {
       return null;
     }

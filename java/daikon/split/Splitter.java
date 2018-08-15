@@ -4,11 +4,6 @@ import daikon.*;
 import daikon.inv.DummyInvariant;
 import java.io.Serializable;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * A Splitter represents a test that can be used to separate all samples into two parts. For
  * instance, a Splitter might represent the condition "x &gt; 0". The Splitter is used to divide a
@@ -25,7 +20,7 @@ import org.checkerframework.checker.nullness.qual.*;
 // Should not be "implements Serializable":  the classes are created on
 // demand, so the class doesn't exist when a serialized object is being
 // re-read.
-/*@UsesObjectEquals*/
+@UsesObjectEquals
 public abstract class Splitter implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -45,7 +40,7 @@ public abstract class Splitter implements Serializable {
    * implementation should always set the "instantiated" protected field to true, if that field is
    * present in the Splitter class.
    */
-  public abstract Splitter instantiate(/*@UnknownInitialization(Ppt.class) @Raw(.class)*/ Ppt ppt);
+  public abstract Splitter instantiate(@UnknownInitialization(Ppt.class) @Raw(.class) Ppt ppt);
 
   protected boolean instantiated = false;
   /**
@@ -86,5 +81,5 @@ public abstract class Splitter implements Serializable {
   public void instantiateDummy(PptTopLevel ppt) {}
 
   /** On an instantiated Splitter, give back an appropriate instantiated DummyInvariant. */
-  public abstract /*@Nullable*/ DummyInvariant getDummyInvariant();
+  public abstract @Nullable DummyInvariant getDummyInvariant();
 }

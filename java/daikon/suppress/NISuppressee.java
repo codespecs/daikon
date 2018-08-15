@@ -10,13 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /**
  * Defines a suppressee for non-instantiating suppression. A suppressee consists only of the class
  * at this point since ternary invariants only require the class to define them fully (permutations
@@ -27,7 +20,7 @@ public class NISuppressee {
 
   public Class<? extends Invariant> sup_class;
   public int var_count;
-  public /*@Prototype*/ Invariant sample_inv;
+  public @Prototype Invariant sample_inv;
 
   public NISuppressee(Class<? extends Invariant> cls, int var_count) {
     sup_class = cls;
@@ -37,8 +30,8 @@ public class NISuppressee {
     try {
       Method get_proto = cls.getMethod("get_proto", new Class<?>[] {});
       @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-      /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local =
-          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+      @NonNull @Prototype
+      Invariant sample_inv_local = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
       sample_inv = sample_inv_local;
       assert sample_inv != null : cls.getName();
     } catch (Exception e) {
@@ -54,8 +47,9 @@ public class NISuppressee {
     try {
       Method get_proto = cls.getMethod("get_proto", new Class<?>[] {boolean.class});
       @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-      /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local =
-          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {Boolean.valueOf(swap)});
+      @NonNull @Prototype
+      Invariant sample_inv_local =
+          (@Prototype Invariant) get_proto.invoke(null, new Object[] {Boolean.valueOf(swap)});
       sample_inv = sample_inv_local;
       assert sample_inv != null : cls.getName();
     } catch (Exception e) {
@@ -65,7 +59,7 @@ public class NISuppressee {
   }
 
   /** Instantiates the suppressee invariant on the specified slice. */
-  public /*@Nullable*/ Invariant instantiate(PptSlice slice) {
+  public @Nullable Invariant instantiate(PptSlice slice) {
 
     Invariant inv = sample_inv.instantiate(slice);
     if (Debug.logOn()) {
@@ -110,7 +104,7 @@ public class NISuppressee {
    * Instantiates the suppressee invariant on the slice specified by vis in the specified ppt. If
    * the slice is not currently there, it will be created.
    */
-  public /*@Nullable*/ Invariant instantiate(VarInfo[] vis, PptTopLevel ppt) {
+  public @Nullable Invariant instantiate(VarInfo[] vis, PptTopLevel ppt) {
 
     PptSlice slice = ppt.get_or_instantiate_slice(vis);
     return (instantiate(slice));
@@ -173,9 +167,9 @@ public class NISuppressee {
    *     for debug printing only.
    * @return a list describing all of the invariants
    */
-  /*@RequiresNonNull("#2.equality_view")*/
+  @RequiresNonNull("#2.equality_view")
   public List<NIS.SupInv> find_all(
-      VarInfo[] vis, PptTopLevel ppt, /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
+      VarInfo[] vis, PptTopLevel ppt, @Nullable Invariant @Nullable [] cinvs) {
 
     List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
 
@@ -257,9 +251,9 @@ public class NISuppressee {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied NISuppressee this*/) {
+  public String toString(@GuardSatisfied NISuppressee this) {
 
     String extra = "";
     if (var_count == 2) {

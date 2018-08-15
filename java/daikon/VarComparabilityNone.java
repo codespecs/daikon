@@ -2,11 +2,6 @@ package daikon;
 
 import java.io.Serializable;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Used when no VarComparability information is available (in the {@code .dtrace} file). Every
  * variable is considered comparable to every other variable.
@@ -32,12 +27,12 @@ public final class VarComparabilityNone extends VarComparability implements Seri
   }
 
   @Override
-  public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
+  public VarComparability elementType(@GuardSatisfied VarComparabilityNone this) {
     return it;
   }
 
   @Override
-  public VarComparability indexType(/*>>>@GuardSatisfied VarComparabilityNone this,*/ int dim) {
+  public VarComparability indexType(@GuardSatisfied VarComparabilityNone this, int dim) {
     return it;
   }
 
@@ -46,14 +41,14 @@ public final class VarComparabilityNone extends VarComparability implements Seri
     return it;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int hashCode(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
+  public int hashCode(@GuardSatisfied VarComparabilityNone this) {
     return 0;
   }
 
   @Override
-  public boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
+  public boolean alwaysComparable(@GuardSatisfied VarComparabilityNone this) {
     return true;
   }
 
@@ -62,16 +57,15 @@ public final class VarComparabilityNone extends VarComparability implements Seri
    * data trace file are the same. This lets us compare integers to longs, but not integers to
    * arrays.
    */
-  /*@Pure*/
+  @Pure
   static boolean comparable(
-      /*@GuardSatisfied*/ VarComparabilityNone vcomp1,
-      /*@GuardSatisfied*/ VarComparabilityNone vcomp2) {
+      @GuardSatisfied VarComparabilityNone vcomp1, @GuardSatisfied VarComparabilityNone vcomp2) {
     return true;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
+  public String toString(@GuardSatisfied VarComparabilityNone this) {
     return "no-comparability";
   }
 }

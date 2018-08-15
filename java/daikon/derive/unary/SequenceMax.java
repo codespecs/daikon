@@ -5,10 +5,6 @@ import daikon.derive.*;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
-
 // like SequenceMin; if one changes, change the other, too
 public final class SequenceMax extends UnaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
@@ -49,14 +45,14 @@ public final class SequenceMax extends UnaryDerivation {
     return VarInfo.make_scalar_seq_func("max", null, base, 0);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceMax);
   }
 
   /** Returns the ESC name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format("max(%s)", base.esc_name());

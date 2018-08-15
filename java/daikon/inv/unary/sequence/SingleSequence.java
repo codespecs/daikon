@@ -5,13 +5,6 @@ import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.unary.UnaryInvariant;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /** Invariants on a single sequence (array) variable, such as {@code a[] contains no duplicates}. */
 public abstract class SingleSequence extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -30,12 +23,12 @@ public abstract class SingleSequence extends UnaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleSequence() {
+  protected @Prototype SingleSequence() {
     super();
   }
 
   public VarInfo var(
-      /*>>>@GuardSatisfied @UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/) {
+          @GuardSatisfied @UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this) {
     return ppt.var_infos[0];
   }
 }

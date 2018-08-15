@@ -8,15 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import org.checkerframework.framework.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /**
  * Tracks every unique value and how many times it occurs. Prints as either {@code x has no values}
  * or as {@code x has values: "v1" "v2" "v3" ...}.
@@ -45,7 +36,7 @@ public final class CompleteOneOfString extends SingleString {
   }
 
   /** List of values seen */
-  /*@Unused(when=Prototype.class)*/
+  @Unused(when = Prototype.class)
   public List<Info> vals;
 
   /** Boolean. True iff CompleteOneOfString invariants should be considered. */
@@ -56,15 +47,14 @@ public final class CompleteOneOfString extends SingleString {
     vals = new ArrayList<Info>();
   }
 
-  public /*@Prototype*/ CompleteOneOfString() {
+  public @Prototype CompleteOneOfString() {
     super();
   }
 
-  private static /*@Prototype*/ CompleteOneOfString proto =
-      new /*@Prototype*/ CompleteOneOfString();
+  private static @Prototype CompleteOneOfString proto = new @Prototype CompleteOneOfString();
 
   /** Returns the prototype invariant for CompleteOneOFString */
-  public static /*@Prototype*/ CompleteOneOfString get_proto() {
+  public static @Prototype CompleteOneOfString get_proto() {
     return proto;
   }
 
@@ -76,15 +66,14 @@ public final class CompleteOneOfString extends SingleString {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public CompleteOneOfString instantiate_dyn(
-      /*>>> @Prototype CompleteOneOfString this,*/ PptSlice slice) {
+  public CompleteOneOfString instantiate_dyn(@Prototype CompleteOneOfString this, PptSlice slice) {
     return new CompleteOneOfString(slice);
   }
 
   /** Return description of invariant. Only Daikon format is implemented. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CompleteOneOfString this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       if (vals.size() == 0) {
         return var().name() + "has no values";
@@ -102,13 +91,13 @@ public final class CompleteOneOfString extends SingleString {
 
   /** Check to see if a only contains printable ascii characters */
   @Override
-  public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
+  public InvariantStatus add_modified(@Interned String a, int count) {
     return check_modified(a, count);
   }
 
   /** Check to see if a only contains printable ascii characters */
   @Override
-  public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
+  public InvariantStatus check_modified(@Interned String a, int count) {
     for (Info val : vals) {
       if (val.val.equals(a)) {
         val.cnt += count;
@@ -133,9 +122,9 @@ public final class CompleteOneOfString extends SingleString {
    * Returns whether or not this is obvious statically. The only check is for static constants which
    * are obviously printable (or not) from their values.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     return super.isObviousStatically(vis);
   }
 
@@ -143,7 +132,7 @@ public final class CompleteOneOfString extends SingleString {
    * Same formula if each value is the same and has the same count. Not implemented for now, just
    * presumed to be false.
    */
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant o) {
     return false;

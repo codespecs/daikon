@@ -4,11 +4,6 @@ import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /** Exists simply to provide a more intelligent resusurrect_done method. */
 public abstract class TernaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -20,7 +15,7 @@ public abstract class TernaryInvariant extends Invariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ TernaryInvariant() {
+  protected @Prototype TernaryInvariant() {
     super();
   }
 
@@ -33,16 +28,16 @@ public abstract class TernaryInvariant extends Invariant {
   }
 
   public abstract InvariantStatus add(
-      /*@Interned*/ Object val1,
-      /*@Interned*/ Object val2,
-      /*@Interned*/ Object val3,
+      @Interned Object val1,
+      @Interned Object val2,
+      @Interned Object val3,
       int mod_index,
       int count);
 
   public abstract InvariantStatus check(
-      /*@Interned*/ Object val1,
-      /*@Interned*/ Object val2,
-      /*@Interned*/ Object val3,
+      @Interned Object val1,
+      @Interned Object val2,
+      @Interned Object val3,
       int mod_index,
       int count);
 }

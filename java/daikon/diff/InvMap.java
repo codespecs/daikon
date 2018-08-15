@@ -15,12 +15,6 @@ import java.util.List;
 import java.util.Map;
 import org.plumelib.util.CollectionsPlume;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Maps ppts to lists of invariants. Has an iterator to return the ppts in the order they were
  * inserted.
@@ -61,7 +55,7 @@ public class InvMap implements Serializable {
     get(ppt).add(inv);
   }
 
-  public List<Invariant> get(/*>>>@GuardSatisfied InvMap this,*/ PptTopLevel ppt) {
+  public List<Invariant> get(@GuardSatisfied InvMap this, PptTopLevel ppt) {
     if (!pptToInvs.containsKey(ppt)) {
       throw new Error("ppt has not yet been added: " + ppt.name());
     }
@@ -75,7 +69,7 @@ public class InvMap implements Serializable {
    *
    * @see #invariantIterator()
    */
-  public Iterator<PptTopLevel> pptIterator(/*>>>@GuardSatisfied InvMap this*/) {
+  public Iterator<PptTopLevel> pptIterator(@GuardSatisfied InvMap this) {
     return ppts.iterator();
   }
 
@@ -86,7 +80,7 @@ public class InvMap implements Serializable {
    *
    * @see #invariantIterator()
    */
-  public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/) {
+  public Iterable<PptTopLevel> pptIterable(@GuardSatisfied InvMap this) {
     return CollectionsPlume.iteratorToIterable(pptIterator());
   }
 
@@ -110,9 +104,9 @@ public class InvMap implements Serializable {
     return answer.iterator();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied InvMap this*/) {
+  public String toString(@GuardSatisfied InvMap this) {
     String result = "";
     for (PptTopLevel ppt : pptIterable()) {
       result += ppt.name() + Global.lineSep;
@@ -124,7 +118,7 @@ public class InvMap implements Serializable {
     return result;
   }
 
-  /*@Pure*/
+  @Pure
   public int size() {
     int size1 = ppts.size();
     int size2 = pptToInvs.size();
@@ -133,14 +127,14 @@ public class InvMap implements Serializable {
   }
 
   /** Include FileIO.new_decl_format in the stream */
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  @RequiresNonNull("FileIO.new_decl_format")
   private void writeObject(ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
     oos.writeObject(FileIO.new_decl_format);
   }
 
   /** Serialize pptmap and FileIO.new_decl_format */
-  /*@EnsuresNonNull("FileIO.new_decl_format")*/
+  @EnsuresNonNull("FileIO.new_decl_format")
   private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
     FileIO.new_decl_format = (Boolean) ois.readObject();

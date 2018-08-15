@@ -1,16 +1,10 @@
 package daikon.inv;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * This class is an enumerated type representing the possible results of adding an sample to an
  * invariant.
  */
-public final /*@Interned*/ class InvariantStatus {
+public final @Interned class InvariantStatus {
 
   private final String status;
 
@@ -18,9 +12,9 @@ public final /*@Interned*/ class InvariantStatus {
     this.status = status;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied InvariantStatus this*/) {
+  public String toString(@GuardSatisfied InvariantStatus this) {
     return status;
   }
 

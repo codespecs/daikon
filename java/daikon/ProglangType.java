@@ -14,14 +14,6 @@ import org.plumelib.util.Intern;
 import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Represents the type of a variable, for its declared, dtrace file representation, and internal
  * representations. ProgLangTypes are interned, so they can be == compared.
@@ -47,15 +39,15 @@ import org.checkerframework.dataflow.qual.*;
 // integral_types = ("int", "char", "float", "double", "integral", "boolean")
 // known_types = integral_types + ("pointer", "address")
 
-public final /*@Interned*/ class ProglangType implements Serializable {
+public final @Interned class ProglangType implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   // With ArrayList search, this func was a hotspot (38%), so use a Map.
-  private static HashMap</*@Interned*/ String, List<ProglangType>> all_known_types =
-      new HashMap</*@Interned*/ String, List<ProglangType>>();
+  private static HashMap<@Interned String, List<ProglangType>> all_known_types =
+      new HashMap<@Interned String, List<ProglangType>>();
 
   // The set of (interned) names of classes that implement java.util.List.
   // For a Java class, this is a @BinaryNameForNonArray, but when Daikon is
@@ -82,9 +74,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
 
   // For a Java class, this is a binary name.  When Daikon is processing
   // other languages, the format is arbitrary.
-  private /*@Interned*/ String base; // interned name of base type
+  private @Interned String base; // interned name of base type
 
-  public /*@Interned*/ String base() {
+  public @Interned String base() {
     return base;
   }
 
@@ -93,7 +85,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   public int dimensions() {
     return dimensions;
   }
-  /*@Pure*/
+
+  @Pure
   public boolean isArray() {
     return dimensions > 0;
   }
@@ -102,7 +95,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * No public constructor: use parse() instead to get a canonical representation. basetype should
    * be interned.
    */
-  private ProglangType(/*@Interned*/ String basetype, int dimensions) {
+  private ProglangType(@Interned String basetype, int dimensions) {
     assert basetype == basetype.intern();
     this.base = basetype;
     this.dimensions = dimensions;
@@ -164,8 +157,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // Is this necessary?  It will be inherited from Object.
-  // /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  // public boolean equals(/*@Nullable*/ Object o) {
+  // @EnsuresNonNullIf(result=true, expression="#1")
+  // public boolean equals(@Nullable Object o) {
   //   return this == o;
   // }
 
@@ -175,7 +168,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
 
   // THIS CODE IS A HOT SPOT (~33% of runtime) [as of January 2002].
   /** @param t_base must be interned */
-  private static /*@Nullable*/ ProglangType find(/*@Interned*/ String t_base, int t_dims) {
+  private static @Nullable ProglangType find(@Interned String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
 
@@ -207,7 +200,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   //   return t;
   // }
 
-  private static ProglangType intern(/*@Interned*/ String t_base, int t_dims) {
+  private static ProglangType intern(@Interned String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
     ProglangType result = find(t_base, t_dims);
@@ -231,7 +224,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * Returns the type of elements of this. They may themselves be arrays if this is
    * multidimensional.
    */
-  public ProglangType elementType(/*>>>@GuardSatisfied ProglangType this*/) {
+  public ProglangType elementType(@GuardSatisfied ProglangType this) {
     // Presume that if there are no dimensions, this must be a list of
     // objects.  Callers should really find this out from other information
     // in the variable, but this will old code that relied on the pseudo
@@ -245,37 +238,37 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   // array is type.base() == ProglangType.BASE_CHAR.
 
   // Primitive types
-  static final /*@Interned*/ String BASE_BOOLEAN = "boolean";
-  static final /*@Interned*/ String BASE_BYTE = "byte";
-  static final /*@Interned*/ String BASE_CHAR = "char";
-  static final /*@Interned*/ String BASE_DOUBLE = "double";
-  static final /*@Interned*/ String BASE_FLOAT = "float";
-  static final /*@Interned*/ String BASE_INT = "int";
-  static final /*@Interned*/ String BASE_LONG = "long";
-  static final /*@Interned*/ String BASE_LONG_LONG = "long long int";
-  static final /*@Interned*/ String BASE_SHORT = "short";
+  static final @Interned String BASE_BOOLEAN = "boolean";
+  static final @Interned String BASE_BYTE = "byte";
+  static final @Interned String BASE_CHAR = "char";
+  static final @Interned String BASE_DOUBLE = "double";
+  static final @Interned String BASE_FLOAT = "float";
+  static final @Interned String BASE_INT = "int";
+  static final @Interned String BASE_LONG = "long";
+  static final @Interned String BASE_LONG_LONG = "long long int";
+  static final @Interned String BASE_SHORT = "short";
 
   // Nonprimitive types
-  static final /*@Interned*/ String BASE_OBJECT = "java.lang.Object";
-  static final /*@Interned*/ String BASE_STRING = "java.lang.String";
-  static final /*@Interned*/ String BASE_INTEGER = "java.lang.Integer";
+  static final @Interned String BASE_OBJECT = "java.lang.Object";
+  static final @Interned String BASE_STRING = "java.lang.String";
+  static final @Interned String BASE_INTEGER = "java.lang.Integer";
   // "hashcode", "address", and "pointer" are identical;
   // "hashcode" is preferred.
-  static final /*@Interned*/ String BASE_HASHCODE = "hashcode";
-  // static final /*@Interned*/ String BASE_ADDRESS = "address";
-  // static final /*@Interned*/ String BASE_POINTER = "pointer";
+  static final @Interned String BASE_HASHCODE = "hashcode";
+  // static final @Interned String BASE_ADDRESS = "address";
+  // static final @Interned String BASE_POINTER = "pointer";
 
   // avoid duplicate allocations
   // No need for the Integer versions; use Long instead.
-  // static final /*@Interned*/ Integer IntegerZero = Intern.internedInteger(0);
-  // static final /*@Interned*/ Integer IntegerOne = Intern.internedInteger(1);
-  static final /*@Interned*/ Long LongZero = Intern.internedLong(0);
-  static final /*@Interned*/ Long LongOne = Intern.internedLong(1);
-  static final /*@Interned*/ Double DoubleZero = Intern.internedDouble(0);
-  static final /*@Interned*/ Double DoubleNaN = Intern.internedDouble(Double.NaN);
-  static final /*@Interned*/ Double DoublePositiveInfinity =
+  // static final @Interned Integer IntegerZero = Intern.internedInteger(0);
+  // static final @Interned Integer IntegerOne = Intern.internedInteger(1);
+  static final @Interned Long LongZero = Intern.internedLong(0);
+  static final @Interned Long LongOne = Intern.internedLong(1);
+  static final @Interned Double DoubleZero = Intern.internedDouble(0);
+  static final @Interned Double DoubleNaN = Intern.internedDouble(Double.NaN);
+  static final @Interned Double DoublePositiveInfinity =
       Intern.internedDouble(Double.POSITIVE_INFINITY);
-  static final /*@Interned*/ Double DoubleNegativeInfinity =
+  static final @Interned Double DoubleNegativeInfinity =
       Intern.internedDouble(Double.NEGATIVE_INFINITY);
 
   /*
@@ -359,7 +352,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * array is considered to be nonsensical (indicated by returning null). This is not really
    * correct, but it is a reasonable path to take for now. (jhp, Feb 12, 2005)
    */
-  public final /*@Nullable*/ /*@Interned*/ Object parse_value(
+  public final @Nullable @Interned Object parse_value(
       String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
@@ -375,7 +368,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     }
   }
 
-  public final /*@Nullable*/ /*@Interned*/ Object parse_value_scalar(
+  public final @Nullable @Interned Object parse_value_scalar(
       String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
@@ -457,7 +450,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     }
   }
 
-  public final /*@Nullable*/ /*@Interned*/ Object parse_value_array_1d(
+  public final @Nullable @Interned Object parse_value_array_1d(
       String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
@@ -483,7 +476,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       value_strings = new String[0];
     } else if (base == BASE_STRING) {
       // This properly handles strings containing embedded spaces.
-      List</*@Nullable*/ String> v = new ArrayList</*@Nullable*/ String>();
+      List<@Nullable String> v = new ArrayList<@Nullable String>();
       StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
       parser.quoteChar('\"');
       try {
@@ -512,7 +505,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       }
       // Avoid nullness warnings about elements of value_strings
       @SuppressWarnings("nullness")
-      String[] value_strings_result = v.toArray(new /*@Nullable*/ String[0]);
+      String[] value_strings_result = v.toArray(new @Nullable String[0]);
       value_strings = value_strings_result;
     } else {
       value_strings = Global.ws_regexp.split(value);
@@ -551,7 +544,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       return Intern.intern(result);
     } else if (base == BASE_STRING) {
       // First, intern each String in the array ...
-      /*@Interned*/ String[] value_strings_elts_interned = Intern.internStrings(value_strings);
+      @Interned String[] value_strings_elts_interned = Intern.internStrings(value_strings);
       // ... then, intern the entire array, and return it
       return Intern.intern(value_strings_elts_interned);
     } else {
@@ -569,7 +562,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
 
   }
 
-  public final /*@Nullable*/ /*@Interned*/ Object parse_value_array_2d(
+  public final @Nullable @Interned Object parse_value_array_2d(
       String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
@@ -595,7 +588,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         || (base == BASE_SHORT));
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isPrimitive() {
     return ((dimensions == 0) && baseIsPrimitive());
   }
@@ -612,7 +605,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         || (base == BASE_INTEGER));
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isIntegral() {
     return ((dimensions == 0) && baseIsIntegral());
   }
@@ -631,12 +624,12 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // Return true if this variable is sensible as an array index.
-  /*@Pure*/
+  @Pure
   public boolean isIndex() {
     return isIntegral();
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isScalar() {
     // For reptypes, checking against INT is sufficient, rather than
     // calling isIntegral().
@@ -655,12 +648,12 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return ((base == BASE_DOUBLE) || (base == BASE_FLOAT));
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isFloat() {
     return ((dimensions == 0) && baseIsFloat());
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isObject() {
     return ((dimensions == 0) && (baseIsObject()));
   }
@@ -673,7 +666,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return (base == BASE_STRING);
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isString() {
     return ((dimensions == 0) && baseIsString());
   }
@@ -682,13 +675,13 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return (base == BASE_HASHCODE);
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isHashcode() {
     return ((dimensions == 0) && baseIsHashcode());
   }
 
   /** Does this type represent a pointer? Should only be applied to file_rep types. */
-  /*@Pure*/
+  @Pure
   public boolean isPointerFileRep() {
     return (base == BASE_HASHCODE);
   }
@@ -737,8 +730,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/
-  public String format(/*>>>@GuardSatisfied ProglangType this*/) {
+  @SideEffectFree
+  public String format(@GuardSatisfied ProglangType this) {
     if (dimensions == 0) return base;
 
     StringBuilder sb = new StringBuilder();
@@ -758,9 +751,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied ProglangType this*/) {
+  public String toString(@GuardSatisfied ProglangType this) {
     return format();
   }
 
@@ -768,7 +761,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * Returns whether or not this declared type is a function pointer Only valid if the front end
    * marks the function pointer with the name '*func'.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_function_pointer() {
     assert base == base.intern();
     return base == "*func"; // interned

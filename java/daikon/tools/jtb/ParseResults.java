@@ -15,11 +15,6 @@ import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * The wrapped result of parsing a .java source file. The packageName and className arguments can be
  * obtained from root, but they are returned here for convenience.
@@ -39,9 +34,9 @@ public class ParseResults {
     this.compilationUnit = compilationUnit;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied ParseResults this*/) {
+  public String toString(@GuardSatisfied ParseResults this) {
     return "package name: " + packageName + ", file name: " + fileName;
   }
 

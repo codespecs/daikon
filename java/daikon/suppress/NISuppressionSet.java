@@ -16,11 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Class that defines a set of non-instantiating suppressions for a single invariant (suppressee).
  *
@@ -411,7 +406,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * set is valid if any of its suppressions are valid. A suppression is valid if all of its
    * non-missing suppressors are true.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_instantiate_ok(PptSlice slice) {
 
     return (is_instantiate_ok(slice.parent, slice.var_infos));
@@ -422,7 +417,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * Instantiation is ok only if each suppression is invalid. A suppression is valid if all of its
    * non-missing suppressors are true.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_instantiate_ok(PptTopLevel ppt, VarInfo[] var_infos) {
 
     // Check each suppression to see if it is valid
@@ -623,9 +618,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /** Returns a string containing each suppression separated by commas. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
+  public String toString(@GuardSatisfied NISuppressionSet this) {
     return "{ " + UtilPlume.join(suppression_set, ", ") + " }";
   }
 }

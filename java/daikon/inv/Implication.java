@@ -5,15 +5,6 @@ import daikon.split.PptSplitter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*>>>
-import org.checkerframework.checker.formatter.qual.*;
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 // Here Implication is reimplemented as an extension of the new general
 // Joiner class
 
@@ -73,7 +64,7 @@ public class Implication extends Joiner {
    * @return null if predicate and the consequent are the same, or if the PptTopLevel already
    *     contains this Implication
    */
-  public static /*@Nullable*/ Implication makeImplication(
+  public static @Nullable Implication makeImplication(
       PptTopLevel ppt,
       Invariant predicate,
       Invariant consequent,
@@ -115,13 +106,13 @@ public class Implication extends Joiner {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied Implication this*/) {
+  public String repr(@GuardSatisfied Implication this) {
     return "[Implication: " + left.repr() + " => " + right.repr() + "]";
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied Implication this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied Implication this, OutputFormat format) {
     String pred_fmt = left.format_using(format);
     String consq_fmt = right.format_using(format);
     if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {
@@ -153,9 +144,9 @@ public class Implication extends Joiner {
     }
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     assert vis.length > 0;
     for (int ii = 0; ii < vis.length; ii++) {
       assert vis[ii] != null;
@@ -163,9 +154,9 @@ public class Implication extends Joiner {
     return orig_right.isObviousStatically(vis);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     assert vis.length > 0;
     for (int ii = 0; ii < vis.length; ii++) {
       assert vis[ii] != null;
@@ -189,9 +180,9 @@ public class Implication extends Joiner {
    * <p>This must be overridden for Implication because the right side is the invariant of interest.
    * The standard version passes the vis from the slice containing the implication itself (slice 0).
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
+  public @Nullable DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
     //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
     //     if (result != null) return result;
@@ -212,9 +203,9 @@ public class Implication extends Joiner {
    * <p>This must be overridden for Implication because the right side is the invariant of interest.
    * The standard version passes the vis from the slice containing the implication itself (slice 0).
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
+  public @Nullable DiscardInfo isObviousDynamically_SomeInEquality() {
 
     // If the consequent is ni-suppressed in its original program point,
     // then it is obvious from some set of other invariants.  Those invariants
@@ -236,15 +227,15 @@ public class Implication extends Joiner {
     //                                  new VarInfo[right.ppt.var_infos.length], 0);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public boolean isSameFormula(/*@NonNull*/ Invariant other) {
+  public boolean isSameFormula(@NonNull Invariant other) {
     Implication other_implic = (Implication) other;
     return ((iff == other_implic.iff) && super.isSameFormula(other_implic));
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   @Override
   public boolean isSameInvariant(Invariant other) {
     if (other == null) return false;
@@ -255,7 +246,7 @@ public class Implication extends Joiner {
 
   // An implication is only interesting if both the predicate and
   // consequent are interesting
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isInteresting() {
     return (predicate().isInteresting() && consequent().isInteresting());
@@ -268,7 +259,7 @@ public class Implication extends Joiner {
     return consequent().hasUninterestingConstant();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isAllPrestate() {
     return predicate().isAllPrestate() && consequent().isAllPrestate();
@@ -301,16 +292,16 @@ public class Implication extends Joiner {
    * @return whether or not it logged anything
    */
   @Override
-  /*@FormatMethod*/
+  @FormatMethod
   @SuppressWarnings({
     "override.receiver.invalid", // sound overriding, not expressible in Checker Framework
     "method.invocation.invalid", // call to format is OK
     "formatter"
   }) // call to format method is correct because of @FormatMethod annotation
   public boolean log(
-      /*>>>@UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ String
-          format,
-      /*@Nullable*/ Object... args) {
+      @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,
+      String format,
+      @Nullable Object... args) {
     String msg = format;
     if (args.length > 0) msg = String.format(format, args);
     return (right.log(
@@ -323,18 +314,17 @@ public class Implication extends Joiner {
   }
 
   @Override
-  public boolean enabled(/*>>> @Prototype Implication this*/) {
+  public boolean enabled(@Prototype Implication this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(/*>>> @Prototype Implication this,*/ VarInfo[] vis) {
+  public boolean valid_types(@Prototype Implication this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*>>> @Prototype Implication this,*/ PptSlice slice) {
+  protected @NonPrototype Invariant instantiate_dyn(@Prototype Implication this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

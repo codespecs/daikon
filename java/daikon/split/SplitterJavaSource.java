@@ -13,13 +13,6 @@ import java.util.regex.Pattern;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.regex.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * SplitterJavaSource writes the splitter Java file's contents to a string buffer for a given
  * condition, Ppt, and StatementReplacer.
@@ -45,7 +38,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private StatementReplacer statementReplacer;
 
   /** Java reserved words that are replaced by replaceReservedWords. */
-  private static final /*@Regex*/ String[] reservedWords = new /*@Regex*/ String[] {"return"};
+  private static final @Regex String[] reservedWords = new @Regex String[] {"return"};
 
   private static final String lineSep = System.getProperty("line.separator");
 
@@ -151,7 +144,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** Writes the field declarations of the class to fileText. */
   private void writeFields(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+          @UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this) {
     for (int i = 0; i < vars.length; i++) {
       add("  VarInfo " + vars[i].getFieldName() + "; // " + vars[i].getNormalName());
     }
@@ -159,7 +152,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** Writes the body of the of constructor which takes a Ppt in as an argument. */
   private void writeConstructorBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+          @UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this) {
     for (int i = 0; i < vars.length; i++) {
       add(
           "    "
@@ -172,7 +165,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** Writes the body of the valid method to fileText. */
   private void writeValidBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+          @UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this) {
     if (vars.length > 0) {
       fileText.append("    return (" + vars[0].getFieldName() + " != null)");
       for (int i = 1; i < vars.length; i++) {
@@ -187,7 +180,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** Writes the body of the test method to fileText. */
   private void writeTestBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+          @UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this) {
     add("    /* writeTestBody: " + vars.length + " declarations */");
     for (int i = 0; i < vars.length; i++) {
       String type = vars[i].getType();
@@ -250,7 +243,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** Writes the body of the repr method to fileText. */
   private void writeReprBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+          @UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this) {
     add("    return \"" + fileName + ": \"");
     for (int i = 0; i < vars.length; i++) {
       add(
@@ -265,7 +258,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** Writes the body of the instantiateDummy method to fileText. */
   private void writeInstantiateDummyBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+          @UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this) {
     if (vars.length >= 1 && vars.length <= 3) {
       for (int i = 0; i < vars.length; i++) {
         add(
@@ -297,14 +290,14 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param st the string to added to fileText
    */
   private void add(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this,*/ String
-          st) {
+          @UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this,
+      String st) {
     fileText.append(st + lineSep);
   }
 
   /** Skips a line in fileText by adding a black line to fileText. */
   private void skipLine(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+          @UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this) {
     fileText.append(lineSep);
   }
 
@@ -382,7 +375,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo for the variable that may be use in the condition
    * @return true iff the variable represented by varInfo may appear in the splitting condition
    */
-  /*@Pure*/
+  @Pure
   private static boolean isNormalVar(VarInfo varInfo) {
     return ((!isTypeOfVar(varInfo)) && (!isSizeVar(varInfo)) && (!isThisVar(varInfo)));
   }
@@ -393,7 +386,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable being tested
    * @return true iff varInfo is a CLASSNAME variable
    */
-  /*@Pure*/
+  @Pure
   private static boolean isTypeOfVar(VarInfo varInfo) {
     return varInfo.has_typeof();
   }
@@ -404,13 +397,13 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable being tested
    * @return true iff varInfo is a "size" variable
    */
-  /*@Pure*/
+  @Pure
   private static boolean isSizeVar(VarInfo varInfo) {
     return varInfo.is_size();
   }
 
   /** Determines if the variable represented by varInfo is a "this" variable. */
-  /*@Pure*/
+  @Pure
   private static boolean isThisVar(VarInfo varInfo) {
     return varInfo.isThis();
   }
@@ -688,7 +681,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /** Returns true if the variable represented by varInfo is used in this splitting condition. */
-  /*@Pure*/
+  @Pure
   private static boolean isNeeded(String name, List<String> vars) {
     return vars.contains(name);
   }

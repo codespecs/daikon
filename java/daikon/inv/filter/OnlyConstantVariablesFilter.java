@@ -5,10 +5,6 @@ import daikon.inv.*;
 import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.*;
 
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
-
 public class OnlyConstantVariablesFilter extends InvariantFilter {
   @Override
   public String getDescription() {
@@ -52,7 +48,7 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   boolean isConstant(VarInfo vi) {
     PptTopLevel ppt = vi.ppt;
     boolean isStaticConstant = vi.is_static_constant;

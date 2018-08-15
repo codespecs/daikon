@@ -17,10 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * Merges invariants from multiple invariant files into a single invariant file. It does this by
  * forming a hierarchy over the ppts from each invariant file and using the normal hierarchy merging
@@ -39,7 +35,7 @@ public final class MergeInvariants {
 
   public static final Logger debugProgress = Logger.getLogger("daikon.MergeInvariants.progress");
 
-  public static /*@Nullable*/ File output_inv_file;
+  public static @Nullable File output_inv_file;
 
   private static String usage =
       UtilPlume.joinLines(

@@ -13,13 +13,6 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Represents additional information about a VarInfo that front ends tell Daikon. For example,
  * whether order matters in a collection. This is immutable and interned.
@@ -119,7 +112,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * <p>Parse allow for quoted elements. White space to the left and right of keys and values do not
    * matter, but inbetween does.
    */
-  public static /*@Interned*/ VarInfoAux parse(String inString) throws IOException {
+  public static @Interned VarInfoAux parse(String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);
     StreamTokenizer tok = new StreamTokenizer(inStringReader);
     tok.resetSyntax();
@@ -130,7 +123,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     tok.ordinaryChar(']');
     tok.ordinaryChars(',', ',');
     tok.ordinaryChars('=', '=');
-    Map</*@Interned*/ String, /*@Interned*/ String> map = theDefault.map;
+    Map<@Interned String, @Interned String> map = theDefault.map;
 
     String key = "";
     String value = "";
@@ -145,10 +138,10 @@ public final class VarInfoAux implements Cloneable, Serializable {
         // We use default values if none are specified.  We initialize
         // here rather than above to save time when there are no tokens.
 
-        map = new HashMap</*@Interned*/ String, /*@Interned*/ String>(theDefault.map);
+        map = new HashMap<@Interned String, @Interned String>(theDefault.map);
       }
 
-      /*@Interned*/ String token;
+      @Interned String token;
       if (tok.ttype == StreamTokenizer.TT_WORD || tok.ttype == '\"') {
         assert tok.sval != null
             : "@AssumeAssertion(nullness): representation invariant of StreamTokenizer";
@@ -207,24 +200,24 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /** Interned default options. */
-  private static /*@Interned*/ VarInfoAux theDefault = new VarInfoAux().intern();
+  private static @Interned VarInfoAux theDefault = new VarInfoAux().intern();
 
   /** Create a new VarInfoAux with default options. */
-  public static /*@Interned*/ VarInfoAux getDefault() {
+  public static @Interned VarInfoAux getDefault() {
     return theDefault;
   }
 
   /** Map for interning. */
-  private static /*@MonotonicNonNull*/ Map<VarInfoAux, /*@Interned*/ VarInfoAux> interningMap =
+  private static @MonotonicNonNull Map<VarInfoAux, @Interned VarInfoAux> interningMap =
       // Static fields might not be initialized before static methods (which
       // call instance methods) are called, so don't bother to initialize here.
       null;
 
   /** Special handler for deserialization. */
-  private /*@Interned*/ Object readResolve() throws ObjectStreamException {
+  private @Interned Object readResolve() throws ObjectStreamException {
     isInterned = false;
-    Map</*@Interned*/ String, /*@Interned*/ String> newMap =
-        new HashMap</*@Interned*/ String, /*@Interned*/ String>();
+    Map<@Interned String, @Interned String> newMap =
+        new HashMap<@Interned String, @Interned String>();
     for (String key : map.keySet()) {
       newMap.put(key.intern(), map.get(key).intern());
     }
@@ -233,15 +226,15 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /** Contains the actual hashMap for this. */
-  private Map</*@Interned*/ String, /*@Interned*/ String> map;
+  private Map<@Interned String, @Interned String> map;
 
   /** Whether this is interned. */
   private boolean isInterned = false;
 
   /** Make the default map here. */
   private VarInfoAux() {
-    HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap =
-        new HashMap</*@Interned*/ String, /*@Interned*/ String>();
+    HashMap<@Interned String, @Interned String> defaultMap =
+        new HashMap<@Interned String, @Interned String>();
     // The following are default values.
     defaultMap.put(HAS_DUPLICATES, TRUE);
     defaultMap.put(HAS_ORDER, TRUE);
@@ -257,40 +250,37 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /** Create a new VarInfoAux with default options. */
-  private VarInfoAux(Map</*@Interned*/ String, /*@Interned*/ String> map) {
+  private VarInfoAux(Map<@Interned String, @Interned String> map) {
     this.map = map;
     this.isInterned = false;
   }
 
   /** Creates and returns a copy of this. */
   // Default implementation to quiet Findbugs.
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public VarInfoAux clone(
-      /*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
+  public VarInfoAux clone(@GuardSatisfied VarInfoAux this) throws CloneNotSupportedException {
     VarInfoAux result = (VarInfoAux) super.clone();
     result.isInterned = false;
     return result;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied VarInfoAux this*/) {
+  public String toString(@GuardSatisfied VarInfoAux this) {
     return map.toString();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/) {
+  public int hashCode(@GuardSatisfied VarInfoAux this) {
     return map.hashCode();
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   @Override
-  public boolean equals(
-      /*>>>@GuardSatisfied VarInfoAux this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  public boolean equals(@GuardSatisfied VarInfoAux this, @GuardSatisfied @Nullable Object o) {
     if (o instanceof VarInfoAux) {
       return equalsVarInfoAux((VarInfoAux) o);
     } else {
@@ -298,10 +288,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
     }
   }
 
-  /*@Pure*/
-  public boolean equalsVarInfoAux(
-      /*>>>@GuardSatisfied VarInfoAux this,*/
-      /*@GuardSatisfied*/ VarInfoAux o) {
+  @Pure
+  public boolean equalsVarInfoAux(@GuardSatisfied VarInfoAux this, @GuardSatisfied VarInfoAux o) {
     return this.map.equals(o.map);
   }
 
@@ -311,10 +299,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
   // is broken, there will be no NonZero invariant to copy to the other variable.  We only need to
   // check equality for every aux field that might affect methods such as instantiate_ok.
   @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/877
-  /*@Pure*/
+  @Pure
   public boolean equals_for_instantiation(
-      /*>>>@GuardSatisfied VarInfoAux this,*/
-      /*@GuardSatisfied*/ VarInfoAux o) {
+      @GuardSatisfied VarInfoAux this, @GuardSatisfied VarInfoAux o) {
     return this.getValue(HAS_DUPLICATES).equals(o.getValue(HAS_DUPLICATES))
         && this.getValue(HAS_ORDER).equals(o.getValue(HAS_ORDER))
         && this.getValue(HAS_SIZE).equals(o.getValue(HAS_SIZE))
@@ -333,31 +320,30 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * these are always interned.
    */
   @SuppressWarnings({"interning", "cast"}) // intern method
-  private /*@Interned*/ VarInfoAux intern() {
+  private @Interned VarInfoAux intern() {
 
-    for (/*@Interned*/ String key : map.keySet()) {
+    for (@Interned String key : map.keySet()) {
       assert key == key.intern();
       assert map.get(key) == map.get(key).intern();
     }
 
     if (this.isInterned) {
-      return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
+      return (@Interned VarInfoAux) this; // cast is redundant (except in JSR 308)
     }
 
     // Necessary because various static methods call intern(), possibly before static field
     // interningMap's initializer would be executed.
     if (interningMap == null) {
-      interningMap = new HashMap<VarInfoAux, /*@Interned*/ VarInfoAux>();
+      interningMap = new HashMap<VarInfoAux, @Interned VarInfoAux>();
     }
 
-    /*@Interned*/ VarInfoAux result;
+    @Interned VarInfoAux result;
     if (interningMap.containsKey(this)) {
       result = interningMap.get(this);
     } else {
       // Intern values in map
-      interningMap.put(
-          this, (/*@Interned*/ VarInfoAux) this); // cast is redundant (except in JSR 308)
-      result = (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
+      interningMap.put(this, (@Interned VarInfoAux) this); // cast is redundant (except in JSR 308)
+      result = (@Interned VarInfoAux) this; // cast is redundant (except in JSR 308)
       this.isInterned = true;
     }
     return result;
@@ -371,7 +357,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @throws NumberFormatException if the value of the key cannot be parsed as an integer
    * @see #hasValue(String)
    */
-  public int getInt(/*@KeyFor("this.map")*/ String key) {
+  public int getInt(@KeyFor("this.map") String key) {
     if (!hasValue(key)) {
       throw new RuntimeException(String.format("Key '%s' is not defined", key));
     }
@@ -385,7 +371,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @throws RuntimeException if the key is not defined
    * @see #hasValue(String)
    */
-  public String[] getList(/*@KeyFor("this.map")*/ String key) {
+  public String[] getList(@KeyFor("this.map") String key) {
     try {
       if (!hasValue(key)) {
         throw new RuntimeException(String.format("Key '%s' is not defined", key));
@@ -413,16 +399,12 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /** Returns the value for the given key, which must be present in the map. */
-  public String getValue(
-      /*>>>@GuardSatisfied VarInfoAux this,*/
-      /*@KeyFor("this.map")*/ String key) {
+  public String getValue(@GuardSatisfied VarInfoAux this, @KeyFor("this.map") String key) {
     return map.get(key);
   }
 
   /** Returns the value for the given key, or null if it is not present. */
-  public /*@Nullable*/ String getValueOrNull(
-      /*>>>@GuardSatisfied VarInfoAux this,*/
-      String key) {
+  public @Nullable String getValueOrNull(@GuardSatisfied VarInfoAux this, String key) {
     return map.get(key);
   }
 
@@ -431,7 +413,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return map.containsKey(key);
   }
 
-  public boolean getFlag(/*@KeyFor("this.map")*/ String key) {
+  public boolean getFlag(@KeyFor("this.map") String key) {
     assert map.containsKey(key);
     Object value = map.get(key);
     assert value == TRUE || value == FALSE;
@@ -439,9 +421,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /** Return a new VarInfoAux with the desired value set. Does not modify this. */
-  public /*@Interned*/ VarInfoAux setValue(String key, String value) {
-    HashMap</*@Interned*/ String, /*@Interned*/ String> newMap =
-        new HashMap</*@Interned*/ String, /*@Interned*/ String>(this.map);
+  public @Interned VarInfoAux setValue(String key, String value) {
+    HashMap<@Interned String, @Interned String> newMap =
+        new HashMap<@Interned String, @Interned String>(this.map);
     newMap.put(key.intern(), value.intern());
     return new VarInfoAux(newMap).intern();
   }
@@ -456,63 +438,63 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /** @see #NULL_TERMINATING */
   @SuppressWarnings("keyfor") // NULL_TERMINATING is always a key
-  /*@Pure*/
+  @Pure
   public boolean nullTerminating() {
     return getFlag(NULL_TERMINATING);
   }
 
   /** @see #IS_PARAM */
   @SuppressWarnings("keyfor") // IS_PARAM is always a key
-  /*@Pure*/
+  @Pure
   public boolean isParam() {
     return getFlag(IS_PARAM);
   }
 
   /** @see #PACKAGE_NAME */
   @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
-  /*@Pure*/
+  @Pure
   public boolean packageName() {
     return getFlag(PACKAGE_NAME);
   }
 
   /** @see #HAS_DUPLICATES */
   @SuppressWarnings("keyfor") // HAS_DUPLICATES is always a key
-  /*@Pure*/
+  @Pure
   public boolean hasDuplicates() {
     return getFlag(HAS_DUPLICATES);
   }
 
   /** @see #HAS_ORDER */
   @SuppressWarnings("keyfor") // HAS_ORDER is always a key
-  /*@Pure*/
+  @Pure
   public boolean hasOrder() {
     return getFlag(HAS_ORDER);
   }
 
   /** @see #HAS_SIZE */
   @SuppressWarnings("keyfor") // HAS_SIZE is always a key
-  /*@Pure*/
+  @Pure
   public boolean hasSize() {
     return getFlag(HAS_SIZE);
   }
 
   /** @see #HAS_NULL */
   @SuppressWarnings("keyfor") // HAS_NULL is always a key
-  /*@Pure*/
+  @Pure
   public boolean hasNull() {
     return getFlag(HAS_NULL);
   }
 
   /** @see #IS_STRUCT */
   @SuppressWarnings("keyfor") // IS_STRUCT is always a key
-  /*@Pure*/
+  @Pure
   public boolean isStruct() {
     return getFlag(IS_STRUCT);
   }
 
   /** @see #IS_NON_NULL */
   @SuppressWarnings("keyfor") // IS_NON_NULL is always a key
-  /*@Pure*/
+  @Pure
   public boolean isNonNull() {
     return getFlag(IS_NON_NULL);
   }

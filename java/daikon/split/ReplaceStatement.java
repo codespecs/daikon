@@ -9,11 +9,6 @@ import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * ReplaceStatement is an immutable data structure for holding the information of a replace
  * statement from a {@code .spinfo} file. See "The Daikon Invariant Detector User Manual" for more
@@ -88,9 +83,9 @@ class ReplaceStatement {
   }
 
   /** Returns a string representation of this. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied ReplaceStatement this*/) {
+  public String toString(@GuardSatisfied ReplaceStatement this) {
     StringBuilder params = new StringBuilder();
     for (int i = 0; i < parameters.length; i++) {
       params.append(parameters[i].toString());

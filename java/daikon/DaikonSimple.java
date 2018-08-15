@@ -19,12 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * DaikonSimple reads a declaration file and trace file and outputs a list of likely invariants
  * using the simple incremental algorithm. Its methods parallel those of Daikon but oftentimes
@@ -310,7 +304,7 @@ public class DaikonSimple {
   // This method is exclusively for checking variables participating
   // in ternary invariants. The variable must be integer or float, and
   // can not be an array.
-  /*@Pure*/
+  @Pure
   public static boolean is_var_ok(VarInfo var) {
 
     return (var.file_rep_type.isIntegral() || var.file_rep_type.isFloat())
@@ -327,7 +321,7 @@ public class DaikonSimple {
    *
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo)
    */
-  /*@Pure*/
+  @Pure
   public static boolean is_slice_ok(VarInfo v1, VarInfo v2) {
 
     return v1.compatible(v2);
@@ -350,7 +344,7 @@ public class DaikonSimple {
    *
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo, VarInfo)
    */
-  /*@Pure*/
+  @Pure
   public static boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
 
     // Vars must be compatible
@@ -416,8 +410,8 @@ public class DaikonSimple {
       // Make the vt for the receiver ppt
       //      Object[] values = new Object[receiver.num_tracevars];
       //      int[] mods = new int[receiver.num_tracevars];
-      /*@Nullable*/ /*@Interned*/ Object[] values =
-          new /*@Interned*/ Object[receiver.var_infos.length - receiver.num_static_constant_vars];
+      @Nullable @Interned Object[] values =
+          new @Interned Object[receiver.var_infos.length - receiver.num_static_constant_vars];
       int[] mods = new int[receiver.var_infos.length - receiver.num_static_constant_vars];
 
       // Build the vt for the receiver ppt by looking through the current
@@ -458,7 +452,7 @@ public class DaikonSimple {
      */
     @Override
     public void process_sample(
-        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
+        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
       this.all_ppts = all_ppts;
 
       // Add samples to orig and derived variables

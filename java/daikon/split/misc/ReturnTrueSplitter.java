@@ -4,10 +4,6 @@ import daikon.*;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 // This splitter tests the condition "return == true".
 public final class ReturnTrueSplitter extends Splitter {
   // We are Serializable, so we specify a version to allow changes to
@@ -15,7 +11,7 @@ public final class ReturnTrueSplitter extends Splitter {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  private /*@Nullable*/ VarInfo return_varinfo;
+  private @Nullable VarInfo return_varinfo;
 
   public ReturnTrueSplitter() {}
 
@@ -29,7 +25,7 @@ public final class ReturnTrueSplitter extends Splitter {
     return new ReturnTrueSplitter(ppt);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="return_varinfo")*/
+  @EnsuresNonNullIf(result = true, expression = "return_varinfo")
   @Override
   public boolean valid() {
     return ((return_varinfo != null) && (return_varinfo.type == ProglangType.BOOLEAN));
@@ -38,7 +34,7 @@ public final class ReturnTrueSplitter extends Splitter {
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // application invariant about private
   // variable
-  /*@RequiresNonNull("return_varinfo")*/
+  @RequiresNonNull("return_varinfo")
   @Override
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);
@@ -50,7 +46,7 @@ public final class ReturnTrueSplitter extends Splitter {
   }
 
   @Override
-  public /*@Nullable*/ DummyInvariant getDummyInvariant() {
+  public @Nullable DummyInvariant getDummyInvariant() {
     return null;
   }
 }

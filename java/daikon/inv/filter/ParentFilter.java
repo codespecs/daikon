@@ -5,10 +5,6 @@ import daikon.inv.*;
 import java.util.Arrays;
 import java.util.List;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /** Filter for not printing invariants that have a matching invariant at their parent PPT. */
 public class ParentFilter extends InvariantFilter {
   @Override
@@ -57,7 +53,7 @@ public class ParentFilter extends InvariantFilter {
 
       // Look up each variable in the parent, skip this parent if any
       // variables don't exist in the parent.
-      /*@Nullable*/ VarInfo[] pvis_raw = new VarInfo[inv.ppt.var_infos.length];
+      @Nullable VarInfo[] pvis_raw = new VarInfo[inv.ppt.var_infos.length];
       for (int j = 0; j < pvis_raw.length; j++) {
         pvis_raw[j] = rel.parentVar(inv.ppt.var_infos[j]);
         // pvis_raw[j] *can* be null.  Why, and is that a problem? -MDE

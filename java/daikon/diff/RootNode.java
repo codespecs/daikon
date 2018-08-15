@@ -2,10 +2,6 @@ package daikon.diff;
 
 import org.plumelib.util.Pair;
 
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /** The root of the tree. All its children are PptNodes. */
 public class RootNode extends Node<Void, PptNode> {
 
@@ -19,13 +15,13 @@ public class RootNode extends Node<Void, PptNode> {
     throw new Error("Shouldn't ask for userObject for RootNode");
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public Void getUserLeft() {
     throw new Error("Shouldn't ask for userObject for RootNode");
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public Void getUserRight() {
     throw new Error("Shouldn't ask for userObject for RootNode");

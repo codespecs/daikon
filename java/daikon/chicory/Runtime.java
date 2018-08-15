@@ -25,14 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
-/*>>>
-import org.checkerframework.checker.formatter.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Runtime support for Chicory, the Daikon front end for Java. This class is a collection of
  * methods; it should never be instantiated.
@@ -72,7 +64,7 @@ public class Runtime {
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
   /** Comparability information (if any) */
-  static /*@Nullable*/ DeclReader comp_info = null;
+  static @Nullable DeclReader comp_info = null;
 
   //
   // Setups that control what information is written
@@ -99,7 +91,7 @@ public class Runtime {
   // Not annotated *@MonotonicNonNull* because initialization and use
   // happen in generated instrumentation code that cannot be type-checked
   // by a source code checker.
-  static /*@GuardedBy("<self>")*/ PrintStream dtrace;
+  static @GuardedBy("<self>") PrintStream dtrace;
 
   /** Set to true when the dtrace stream is closed */
   static boolean dtrace_closed = false;
@@ -115,7 +107,7 @@ public class Runtime {
 
   /** Dtrace writer setup for writing to the trace file */
   // Set in ChicoryPremain.premain().
-  static /*@GuardedBy("Runtime.class")*/ DTraceWriter dtrace_writer;
+  static @GuardedBy("Runtime.class") DTraceWriter dtrace_writer;
 
   /**
    * Which static initializers have been run. Each element of the Set is a fully qualified class
@@ -130,7 +122,7 @@ public class Runtime {
     /** whether or not the call was captured on enter */
     boolean captured;
 
-    /*@Holding("Runtime.class")*/
+    @Holding("Runtime.class")
     public CallInfo(int nonce, boolean captured) {
       this.nonce = nonce;
       this.captured = captured;
@@ -138,7 +130,7 @@ public class Runtime {
   }
 
   /** Stack of active methods. */
-  private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Deque<CallInfo>> thread_to_callstack =
+  private static @GuardedBy("Runtime.class") Map<Thread, Deque<CallInfo>> thread_to_callstack =
       new LinkedHashMap<Thread, Deque<CallInfo>>();
 
   /**
@@ -180,17 +172,17 @@ public class Runtime {
   // the lock.
   private static boolean invokingPure = false;
 
-  /*@Holding("Runtime.class")*/
+  @Holding("Runtime.class")
   public static boolean dontProcessPpts() {
     return invokingPure;
   }
 
-  /*@Holding("Runtime.class")*/
+  @Holding("Runtime.class")
   public static void startPure() {
     invokingPure = true;
   }
 
-  /*@Holding("Runtime.class")*/
+  @Holding("Runtime.class")
   public static void endPure() {
     invokingPure = false;
   }
@@ -204,7 +196,7 @@ public class Runtime {
    * @param args array of arguments to method
    */
   public static synchronized void enter(
-      /*@Nullable*/ Object obj, int nonce, int mi_index, Object[] args) {
+      @Nullable Object obj, int nonce, int mi_index, Object[] args) {
 
     MethodInfo mi = null;
     if (debug) {
@@ -294,7 +286,7 @@ public class Runtime {
    * @param exitLineNum the line number at which this method exited
    */
   public static synchronized void exit(
-      /*@Nullable*/ Object obj,
+      @Nullable Object obj,
       int nonce,
       int mi_index,
       Object[] args,
@@ -335,7 +327,7 @@ public class Runtime {
       if (sample_start > 0) {
         CallInfo ci = null;
         @SuppressWarnings("nullness") // map: key was put in map by enter()
-        /*@NonNull*/ Deque<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
+        @NonNull Deque<CallInfo> callstack = thread_to_callstack.get(Thread.currentThread());
         while (!callstack.isEmpty()) {
           ci = callstack.pop();
           if (ci.nonce == nonce) {
@@ -423,7 +415,7 @@ public class Runtime {
    * Writes out decl information for any new classes (those in the new_classes field) and removes
    * them from that list.
    */
-  /*@Holding("Runtime.class")*/
+  @Holding("Runtime.class")
   public static void process_new_classes() {
 
     // Processing of the new_classes list must be
@@ -493,7 +485,7 @@ public class Runtime {
     // requirement that all variables used as locks be final or
     // effectively final.  If a bug exists whereby Runtime.dtrace
     // is not effectively final, this would unfortunately mask that error.
-    final /*@GuardedBy("<self>")*/ PrintStream dtrace = Runtime.dtrace;
+    final @GuardedBy("<self>") PrintStream dtrace = Runtime.dtrace;
 
     synchronized (dtrace) {
       // The shutdown hook is synchronized on this, so close it up
@@ -520,7 +512,7 @@ public class Runtime {
     }
   }
 
-  /*@EnsuresNonNull("dtrace")*/
+  @EnsuresNonNull("dtrace")
   public static void setDtraceOnlineMode(int port) {
     dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
     dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
@@ -529,7 +521,7 @@ public class Runtime {
     try {
       daikonSocket = new Socket();
       @SuppressWarnings("nullness") // unannotated: java.net.Socket is not yet annotated
-      /*@NonNull*/ SocketAddress dummy = null;
+      @NonNull SocketAddress dummy = null;
       daikonSocket.bind(dummy);
       // System.out.println("Attempting to connect to Daikon on port --- " + port);
       daikonSocket.connect(new InetSocketAddress(InetAddress.getLocalHost(), port), 5000);
@@ -561,7 +553,7 @@ public class Runtime {
 
   // Copied from daikon.Runtime
   /** Specify the dtrace file to which to write */
-  /*@EnsuresNonNull("dtrace")*/
+  @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {
     System.out.printf("entered daikon.chicory.Runtime.setDtrace(%s, %b)...%n", filename, append);
 
@@ -693,7 +685,7 @@ public class Runtime {
    * @param type declaring class
    * @return ClassInfo structure corresponding to type
    */
-  public static /*@Nullable*/ ClassInfo getClassInfoFromClass(Class<?> type) {
+  public static @Nullable ClassInfo getClassInfoFromClass(Class<?> type) {
     try {
       synchronized (SharedData.all_classes) {
         for (ClassInfo cinfo : SharedData.all_classes) {
@@ -734,9 +726,10 @@ public class Runtime {
     public BooleanWrap(boolean val) {
       this.val = val;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied BooleanWrap this*/) {
+    public String toString(@GuardSatisfied BooleanWrap this) {
       return Boolean.toString(val);
     }
 
@@ -758,9 +751,10 @@ public class Runtime {
     public ByteWrap(byte val) {
       this.val = val;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied ByteWrap this*/) {
+    public String toString(@GuardSatisfied ByteWrap this) {
       return Byte.toString(val);
     }
 
@@ -783,9 +777,9 @@ public class Runtime {
       this.val = val;
     }
     // Print characters as integers.
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied CharWrap this*/) {
+    public String toString(@GuardSatisfied CharWrap this) {
       return Integer.toString(val);
     }
 
@@ -807,9 +801,10 @@ public class Runtime {
     public FloatWrap(float val) {
       this.val = val;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied FloatWrap this*/) {
+    public String toString(@GuardSatisfied FloatWrap this) {
       return Float.toString(val);
     }
 
@@ -831,9 +826,10 @@ public class Runtime {
     public IntWrap(int val) {
       this.val = val;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied IntWrap this*/) {
+    public String toString(@GuardSatisfied IntWrap this) {
       return Integer.toString(val);
     }
 
@@ -855,9 +851,10 @@ public class Runtime {
     public LongWrap(long val) {
       this.val = val;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied LongWrap this*/) {
+    public String toString(@GuardSatisfied LongWrap this) {
       return Long.toString(val);
     }
 
@@ -879,9 +876,10 @@ public class Runtime {
     public ShortWrap(short val) {
       this.val = val;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied ShortWrap this*/) {
+    public String toString(@GuardSatisfied ShortWrap this) {
       return Short.toString(val);
     }
 
@@ -903,9 +901,10 @@ public class Runtime {
     public DoubleWrap(double val) {
       this.val = val;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied DoubleWrap this*/) {
+    public String toString(@GuardSatisfied DoubleWrap this) {
       return Double.toString(val);
     }
 
@@ -989,7 +988,7 @@ public class Runtime {
    * used on the output of {@link Class#getName()}.
    */
   @Deprecated
-  public static String classnameFromJvm(/*@FieldDescriptor*/ String classname) {
+  public static String classnameFromJvm(@FieldDescriptor String classname) {
     return fieldDescriptorToBinaryName(classname);
   }
 
@@ -1001,7 +1000,7 @@ public class Runtime {
    * used on the output of {@link Class#getName()}.
    */
   @SuppressWarnings("signature") // conversion routine
-  public static String fieldDescriptorToBinaryName(/*@FieldDescriptor*/ String classname) {
+  public static String fieldDescriptorToBinaryName(@FieldDescriptor String classname) {
 
     // System.out.println(classname);
 
@@ -1036,8 +1035,7 @@ public class Runtime {
   }
 
   @SuppressWarnings("signature") // conversion method
-  public static final /*@BinaryName*/ String classGetNameToBinaryName(
-      /*@ClassGetName*/ String cgn) {
+  public static final @BinaryName String classGetNameToBinaryName(@ClassGetName String cgn) {
     if (cgn.startsWith("[")) {
       return fieldDescriptorToBinaryName(cgn);
     } else {

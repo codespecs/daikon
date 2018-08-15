@@ -24,13 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 // This class is deprecated.  It should be removed as soon as Daikon no
 // longer supports the old decl format.
 
@@ -45,7 +38,7 @@ import org.checkerframework.dataflow.qual.*;
  * name, and "sin(a)" is a name that is the name "a" with the function "sin" applied to it.
  */
 @SuppressWarnings({"nullness", "interning", "regex"}) // deprecated file
-public abstract /*@Interned*/ class VarInfoName implements Serializable, Comparable<VarInfoName> {
+public abstract @Interned class VarInfoName implements Serializable, Comparable<VarInfoName> {
 
   /** Debugging Logger. */
   public static Logger debug = Logger.getLogger("daikon.VarInfoName");
@@ -177,8 +170,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    *
    * @return the string representation (interned) of this name, in the default output format
    */
-  /*@Pure*/
-  public /*@Interned*/ String name(/*>>>@GuardSatisfied VarInfoName this*/) {
+  @Pure
+  public @Interned String name(@GuardSatisfied VarInfoName this) {
     if (name_cached == null) {
       try {
         name_cached = name_impl().intern();
@@ -190,20 +183,20 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return name_cached;
   }
 
-  private /*@Interned*/ String name_cached = null; // interned
+  private @Interned String name_cached = null; // interned
 
   /**
    * Returns the String representation of this name in the default output format. Result is not
    * interned; the client (name()) does so, then caches the interned value.
    */
-  protected abstract String name_impl(/*>>>@GuardSatisfied VarInfoName this*/);
+  protected abstract String name_impl(@GuardSatisfied VarInfoName this);
 
   /**
    * Return the String representation of this name in the esc style output format.
    *
    * @return the string representation (interned) of this name, in the esc style output format
    */
-  public /*@Interned*/ String esc_name() {
+  public @Interned String esc_name() {
     if (esc_name_cached == null) {
       try {
         esc_name_cached = esc_name_impl().intern();
@@ -217,7 +210,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return esc_name_cached;
   }
 
-  private /*@Interned*/ String esc_name_cached = null; // interned
+  private @Interned String esc_name_cached = null; // interned
 
   /**
    * Returns the String representation of this name in the ESC style output format. Cached by {@link
@@ -229,7 +222,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * @return the string representation (interned) of this name, in the Simplify tool output format
    *     in the pre-state context
    */
-  public /*@Interned*/ String simplify_name() {
+  public @Interned String simplify_name() {
     return simplify_name(false);
   }
 
@@ -237,7 +230,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * @return the string representation (interned) of this name, in the Simplify tool output format,
    *     in the given pre/post-state context.
    */
-  protected /*@Interned*/ String simplify_name(boolean prestate) {
+  protected @Interned String simplify_name(boolean prestate) {
     int which = prestate ? 0 : 1;
     if (simplify_name_cached[which] == null) {
       try {
@@ -251,7 +244,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   // each element is interned
-  private /*@Interned*/ String[] simplify_name_cached = new /*@Interned*/ String[2];
+  private @Interned String[] simplify_name_cached = new @Interned String[2];
 
   /**
    * Returns the String representation of this name in the simplify output format in either prestate
@@ -264,7 +257,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    *
    * @return the string representation (interned) of this name, in the java style output format
    */
-  public /*@Interned*/ String java_name(VarInfo v) {
+  public @Interned String java_name(VarInfo v) {
     if (java_name_cached == null) {
       try {
         java_name_cached = java_name_impl(v).intern();
@@ -276,7 +269,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return java_name_cached;
   }
 
-  private /*@Interned*/ String java_name_cached = null; // interned
+  private @Interned String java_name_cached = null; // interned
 
   /**
    * Return the String representation of this name in java format. Cached and interned by {@link
@@ -285,7 +278,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   protected abstract String java_name_impl(VarInfo v);
 
   /** Return the String representation of this name in the JML style output format. */
-  public /*@Interned*/ String jml_name(VarInfo v) {
+  public @Interned String jml_name(VarInfo v) {
     if (jml_name_cached == null) {
       try {
         jml_name_cached = jml_name_impl(v).intern();
@@ -299,7 +292,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return jml_name_cached;
   }
 
-  private /*@Interned*/ String jml_name_cached = null; // interned
+  private @Interned String jml_name_cached = null; // interned
   /** Returns the name in JML style output format. Cached and interned by {@link #jml_name}. */
   protected abstract String jml_name_impl(VarInfo v);
 
@@ -327,7 +320,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    *     Jtest's DBC style, as "$pre(<em>type</em>, x)".
    * @return the string representation (interned) of this name, in the dbc style output format
    */
-  public /*@Interned*/ String dbc_name(VarInfo var) {
+  public @Interned String dbc_name(VarInfo var) {
     if (dbc_name_cached == null) {
       try {
         dbc_name_cached = dbc_name_impl(var).intern();
@@ -339,7 +332,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return dbc_name_cached;
   }
 
-  private /*@Interned*/ String dbc_name_cached = null; // interned
+  private @Interned String dbc_name_cached = null; // interned
   /**
    * Return the name in the DBC style output format. If v is null, uses JML style instead. Cached
    * and interned by {@link #dbc_name}.
@@ -347,7 +340,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   protected abstract String dbc_name_impl(VarInfo v);
 
   /** Return the String representation of this name using only letters, numbers, and underscores. */
-  public /*@Interned*/ String identifier_name() {
+  public @Interned String identifier_name() {
     if (identifier_name_cached == null) {
       try {
         identifier_name_cached = identifier_name_impl().intern();
@@ -361,7 +354,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return identifier_name_cached;
   }
 
-  private /*@Interned*/ String identifier_name_cached = null; // interned
+  private @Interned String identifier_name_cached = null; // interned
 
   /**
    * Returns the name using only letters, numbers, and underscores. Cached and interned by {@link
@@ -382,7 +375,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** @return the name, in a debugging format */
-  public String repr(/*>>>@GuardSatisfied VarInfoName this*/) {
+  public String repr(@GuardSatisfied VarInfoName this) {
     // AAD: Used to be interned for space reasons, but removed during
     // profiling when it was determined that the interns are unique
     // anyway.
@@ -395,7 +388,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   private String repr_cached = null;
 
   /** Return the name in a verbose debugging format. Cached by repr. */
-  protected abstract String repr_impl(/*>>>@GuardSatisfied VarInfoName this*/);
+  protected abstract String repr_impl(@GuardSatisfied VarInfoName this);
 
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
@@ -427,13 +420,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // Observers
 
   /** @return true when this is "0", "-1", "1", etc. */
-  /*@Pure*/
+  @Pure
   public boolean isLiteralConstant() {
     return false;
   }
 
   /** @return the nodes of this, as given by an inorder traversal */
-  public Collection<VarInfoName> inOrderTraversal(/*>>> @Interned VarInfoName this*/) {
+  public Collection<VarInfoName> inOrderTraversal(@Interned VarInfoName this) {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
 
@@ -464,7 +457,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns whether or not this name refers to the 'this' variable of a class. True for both normal
    * and prestate versions of the variable.
    */
-  /*@Pure*/
+  @Pure
   public boolean isThis() {
     if (name() == "this") { // interned
       return true;
@@ -481,18 +474,18 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * @return true if the given node is in a prestate context within this tree; the node must be a
    *     member of this tree
    */
-  public boolean inPrestateContext(/*>>> @Interned VarInfoName this,*/ VarInfoName node) {
+  public boolean inPrestateContext(@Interned VarInfoName this, VarInfoName node) {
     return (new NodeFinder(this, node)).inPre();
   }
 
   /** @return true if every variable in the name is an orig(...) variable. */
-  /*@Pure*/
-  public boolean isAllPrestate(/*>>> @Interned VarInfoName this*/) {
+  @Pure
+  public boolean isAllPrestate(@Interned VarInfoName this) {
     return new IsAllPrestateVisitor(this).result();
   }
 
   /** @return true if this VarInfoName contains a simple variable whose name is NAME */
-  public boolean includesSimpleName(/*>>> @Interned VarInfoName this,*/ String name) {
+  public boolean includesSimpleName(@Interned VarInfoName this, String name) {
     return new SimpleNamesVisitor(this).simples().contains(name);
   }
 
@@ -501,7 +494,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /** Replace the first instance of node by replacement, in the data structure rooted at this. */
   public VarInfoName replace(
-      /*>>> @Interned VarInfoName this,*/ VarInfoName node, VarInfoName replacement) {
+      @Interned VarInfoName this, VarInfoName node, VarInfoName replacement) {
     if (node == replacement) // "interned": equality optimization pattern
     return this;
     Replacer r = new Replacer(node, replacement);
@@ -510,7 +503,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /** Replace all instances of node by replacement, in the data structure rooted at this. */
   public VarInfoName replaceAll(
-      /*>>> @Interned VarInfoName this,*/ VarInfoName node, VarInfoName replacement) {
+      @Interned VarInfoName this, VarInfoName node, VarInfoName replacement) {
     if (node == replacement) // "interned": equality optimization pattern
     return this;
 
@@ -531,20 +524,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // ============================================================
   // The usual Object methods
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   @Override
-  public boolean equals(
-      /*>>>@GuardSatisfied VarInfoName this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  public boolean equals(@GuardSatisfied VarInfoName this, @GuardSatisfied @Nullable Object o) {
     return (o instanceof VarInfoName) && equalsVarInfoName((VarInfoName) o);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   public boolean equalsVarInfoName(
-      /*>>>@GuardSatisfied @Interned VarInfoName this,*/
-      /*@GuardSatisfied*/ VarInfoName other) {
+      @GuardSatisfied @Interned VarInfoName this, @GuardSatisfied VarInfoName other) {
     return ((other == this) // "interned": equality optimization pattern
         || ((other != null) && (this.repr().equals(other.repr()))));
   }
@@ -552,15 +542,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // This should be safe even in the absence of caching, because "repr()"
   // returns a new string each time, but it is equal() to any other
   // returned string, so their hashCode()s should be the same.
-  /*@Pure*/
+  @Pure
   @Override
-  public int hashCode(/*>>>@GuardSatisfied VarInfoName this*/) {
+  public int hashCode(@GuardSatisfied VarInfoName this) {
     return repr().hashCode();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int compareTo(/*>>>@GuardSatisfied VarInfoName this,*/ VarInfoName other) {
+  public int compareTo(@GuardSatisfied VarInfoName this, VarInfoName other) {
     int nameCmp = name().compareTo(other.name());
     if (nameCmp != 0) return nameCmp;
     int reprCmp = repr().compareTo(other.repr());
@@ -570,9 +560,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // This is a debugging method, not intended for ordinary output.
   // Code producing output should usually call name() rather than
   // calling toString (perhaps implicitly).
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied VarInfoName this*/) {
+  public String toString(@GuardSatisfied VarInfoName this) {
     return repr();
   }
 
@@ -593,7 +583,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // Static inner classes that form the expression langugage
 
   /** A simple identifier like "a", etc. */
-  public static /*@Interned*/ class Simple extends VarInfoName {
+  public static @Interned class Simple extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -605,7 +595,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       assert name != null;
       this.name = name;
     }
-    /*@Pure*/
+
+    @Pure
     @Override
     public boolean isLiteralConstant() {
       try {
@@ -617,12 +608,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied Simple this*/) {
+    protected String repr_impl(@GuardSatisfied Simple this) {
       return name;
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied Simple this*/) {
+    protected String name_impl(@GuardSatisfied Simple this) {
       return name;
     }
 
@@ -703,7 +694,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * @return true iff applySize will not throw an exception
    * @see #applySize
    */
-  /*@Pure*/
+  @Pure
   public boolean isApplySizeSafe() {
     return (new ElementsFinder(this)).elems() != null;
   }
@@ -712,7 +703,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for the size of this (this object should be a sequence). Form is like
    * "size(a[])" or "a.length".
    */
-  public VarInfoName applySize(/*>>> @Interned VarInfoName this*/) {
+  public VarInfoName applySize(@Interned VarInfoName this) {
     // The simple approach:
     //   return (new SizeOf((Elements) this)).intern();
     // is wrong because this might be "orig(a[])".
@@ -757,7 +748,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * If this is a slice, (potentially in pre-state), return its lower and upper bounds, which can be
    * subtracted to get one less than its size.
    */
-  public /*@Interned*/ VarInfoName[] getSliceBounds(/*>>> @Interned VarInfoName this*/) {
+  public @Interned VarInfoName[] getSliceBounds(@Interned VarInfoName this) {
     VarInfoName vin = this;
     boolean inPrestate = false;
     if (vin instanceof Prestate) {
@@ -769,7 +760,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
     if (!(vin instanceof Slice)) return null;
     Slice slice = (Slice) vin;
-    /*@Interned*/ VarInfoName[] ret = new /*@Interned*/ VarInfoName[2];
+    @Interned VarInfoName[] ret = new @Interned VarInfoName[2];
     if (slice.i != null) {
       ret[0] = slice.i;
     } else {
@@ -788,7 +779,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** The size of a contained sequence; form is like "size(sequence)" or "sequence.length". */
-  public static /*@Interned*/ class SizeOf extends VarInfoName {
+  public static @Interned class SizeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -802,12 +793,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied SizeOf this*/) {
+    protected String repr_impl(@GuardSatisfied SizeOf this) {
       return "SizeOf[" + sequence.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied SizeOf this*/) {
+    protected String name_impl(@GuardSatisfied SizeOf this) {
       return "size(" + sequence.name() + ")";
 
       // I'm not sure how to get this right; seems to require info about
@@ -827,7 +818,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /** Returns the hashcode that is the base of the array */
-    /*@Pure*/
+    @Pure
     public VarInfoName get_term() {
       if (sequence instanceof Elements) {
         return ((Elements) sequence).term;
@@ -903,7 +894,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** Returns a name for a unary function applied to this object. The result is like "sum(this)". */
-  public VarInfoName applyFunction(/*>>> @Interned VarInfoName this,*/ String function) {
+  public VarInfoName applyFunction(@Interned VarInfoName this, String function) {
     return (new FunctionOf(function, this)).intern();
   }
 
@@ -924,14 +915,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * @param function the name of the function
    * @param vars the arguments to the function
    */
-  public static VarInfoName applyFunctionOfN(String function, /*@Interned*/ VarInfoName[] vars) {
+  public static VarInfoName applyFunctionOfN(String function, @Interned VarInfoName[] vars) {
     // This causes an odd error with the Interned checker:
-    // return applyFunctionOfN(function, Arrays.</*@Interned*/ VarInfoName>asList(vars));
+    // return applyFunctionOfN(function, Arrays.<@Interned VarInfoName>asList(vars));
     return applyFunctionOfN(function, Arrays.asList(vars));
   }
 
   /** A function over a term, like "sum(argument)". */
-  public static /*@Interned*/ class FunctionOf extends VarInfoName {
+  public static @Interned class FunctionOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -948,12 +939,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied FunctionOf this*/) {
+    protected String repr_impl(@GuardSatisfied FunctionOf this) {
       return "FunctionOf{" + function + "}[" + argument.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied FunctionOf this*/) {
+    protected String name_impl(@GuardSatisfied FunctionOf this) {
       return function + "(" + argument.name() + ")";
     }
 
@@ -1017,7 +1008,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** A function of multiple parameters. */
-  public static /*@Interned*/ class FunctionOfN extends VarInfoName {
+  public static @Interned class FunctionOfN extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1039,7 +1030,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.function = function;
     }
 
-    private List<String> elts_repr(/*>>>@GuardSatisfied FunctionOfN this*/) {
+    private List<String> elts_repr(@GuardSatisfied FunctionOfN this) {
       List<String> elts = new ArrayList<String>(args.size());
       for (VarInfoName vin : args) {
         elts.add(vin.repr());
@@ -1047,17 +1038,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return elts;
     }
 
-    private String elts_repr_commas(/*>>>@GuardSatisfied FunctionOfN this*/) {
+    private String elts_repr_commas(@GuardSatisfied FunctionOfN this) {
       return UtilPlume.join(elts_repr(), ", ");
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied FunctionOfN this*/) {
+    protected String repr_impl(@GuardSatisfied FunctionOfN this) {
       return "FunctionOfN{" + function + "}[" + elts_repr_commas() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied FunctionOfN this*/) {
+    protected String name_impl(@GuardSatisfied FunctionOfN this) {
       return function + "(" + elts_repr_commas() + ")";
     }
 
@@ -1141,7 +1132,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** Returns a name for the intersection of with another sequence, like "intersect(a[], b[])". */
-  public VarInfoName applyIntersection(/*>>> @Interned VarInfoName this,*/ VarInfoName seq2) {
+  public VarInfoName applyIntersection(@Interned VarInfoName this, VarInfoName seq2) {
     assert seq2 != null;
     return (new Intersection(this, seq2)).intern();
   }
@@ -1150,7 +1141,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Intersection of two sequences. Extends FunctionOfN, and the only change is that it does special
    * formatting for IOA.
    */
-  public static /*@Interned*/ class Intersection extends FunctionOfN {
+  public static @Interned class Intersection extends FunctionOfN {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1162,7 +1153,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** Returns a name for the union of this with another sequence, like "union(a[], b[])". */
-  public VarInfoName applyUnion(/*>>> @Interned VarInfoName this,*/ VarInfoName seq2) {
+  public VarInfoName applyUnion(@Interned VarInfoName this, VarInfoName seq2) {
     assert seq2 != null;
     return (new Union(this, seq2)).intern();
   }
@@ -1171,7 +1162,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Union of two sequences. Extends FunctionOfN, and the only change is that it does special
    * formatting for IOA.
    */
-  public static /*@Interned*/ class Union extends FunctionOfN {
+  public static @Interned class Union extends FunctionOfN {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1183,12 +1174,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** Returns a 'getter' operation for some field of this name, like a.foo if this is a. */
-  public VarInfoName applyField(/*>>> @Interned VarInfoName this,*/ String field) {
+  public VarInfoName applyField(@Interned VarInfoName this, String field) {
     return (new Field(this, field)).intern();
   }
 
   /** A 'getter' operation for some field, like a.foo. */
-  public static /*@Interned*/ class Field extends VarInfoName {
+  public static @Interned class Field extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1205,12 +1196,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied Field this*/) {
+    protected String repr_impl(@GuardSatisfied Field this) {
       return "Field{" + field + "}[" + term.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied Field this*/) {
+    protected String name_impl(@GuardSatisfied Field this) {
       return term.name() + "." + field;
     }
 
@@ -1414,12 +1405,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for the type of this object; form is like "this.getClass().getName()" or
    * "\typeof(this)".
    */
-  public VarInfoName applyTypeOf(/*>>> @Interned VarInfoName this*/) {
+  public VarInfoName applyTypeOf(@Interned VarInfoName this) {
     return (new TypeOf(this)).intern();
   }
 
   /** The type of the term, like "term.getClass().getName()" or "\typeof(term)". */
-  public static /*@Interned*/ class TypeOf extends VarInfoName {
+  public static @Interned class TypeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1433,12 +1424,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied TypeOf this*/) {
+    protected String repr_impl(@GuardSatisfied TypeOf this) {
       return "TypeOf[" + term.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied TypeOf this*/) {
+    protected String name_impl(@GuardSatisfied TypeOf this) {
       return term.name() + DaikonVariableInfo.class_suffix;
     }
 
@@ -1452,7 +1443,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return "(typeof " + term.simplify_name(prestate) + ")";
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     protected String javaFamilyFormat(String varname, boolean isArray) {
       if (isArray) {
         return "daikon.Quant.typeArray(" + varname + ")";
@@ -1500,7 +1491,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for a the prestate value of this object; form is like "orig(this)" or
    * "\old(this)".
    */
-  public VarInfoName applyPrestate(/*>>> @Interned VarInfoName this*/) {
+  public VarInfoName applyPrestate(@Interned VarInfoName this) {
     if (this instanceof Poststate) {
       return ((Poststate) this).term;
     } else if ((this instanceof Add) && ((Add) this).term instanceof Poststate) {
@@ -1513,7 +1504,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** The prestate value of a term, like "orig(term)" or "\old(term)". */
-  public static /*@Interned*/ class Prestate extends VarInfoName {
+  public static @Interned class Prestate extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1527,12 +1518,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied Prestate this*/) {
+    protected String repr_impl(@GuardSatisfied Prestate this) {
       return "Prestate[" + term.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied Prestate this*/) {
+    protected String name_impl(@GuardSatisfied Prestate this) {
       return "orig(" + term.name() + ")";
     }
 
@@ -1613,7 +1604,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for a the poststate value of this object; form is like "new(this)" or
    * "\new(this)".
    */
-  public VarInfoName applyPoststate(/*>>> @Interned VarInfoName this*/) {
+  public VarInfoName applyPoststate(@Interned VarInfoName this) {
     return (new Poststate(this)).intern();
   }
 
@@ -1621,7 +1612,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * The poststate value of a term, like "new(term)". Only used within prestate, so like
    * "orig(this.myArray[new(index)]".
    */
-  public static /*@Interned*/ class Poststate extends VarInfoName {
+  public static @Interned class Poststate extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1635,12 +1626,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied Poststate this*/) {
+    protected String repr_impl(@GuardSatisfied Poststate this) {
       return "Poststate[" + term.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied Poststate this*/) {
+    protected String name_impl(@GuardSatisfied Poststate this) {
       return "post(" + term.name() + ")";
     }
 
@@ -1683,7 +1674,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** Returns a name for the this term plus a constant, like "this-1" or "this+1". */
-  public VarInfoName applyAdd(/*>>> @Interned VarInfoName this,*/ int amount) {
+  public VarInfoName applyAdd(@Interned VarInfoName this, int amount) {
     if (amount == 0) {
       return this;
     } else {
@@ -1692,7 +1683,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** An integer amount more or less than some other value, like "x+2". */
-  public static /*@Interned*/ class Add extends VarInfoName {
+  public static @Interned class Add extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1707,17 +1698,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.amount = amount;
     }
 
-    private String amount(/*>>>@GuardSatisfied Add this*/) {
+    private String amount(@GuardSatisfied Add this) {
       return (amount < 0) ? String.valueOf(amount) : "+" + amount;
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied Add this*/) {
+    protected String repr_impl(@GuardSatisfied Add this) {
       return "Add{" + amount() + "}[" + term.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied Add this*/) {
+    protected String name_impl(@GuardSatisfied Add this) {
       return term.name() + amount();
     }
 
@@ -1770,12 +1761,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** Returns a name for the decrement of this term, like "this-1". */
-  public VarInfoName applyDecrement(/*>>> @Interned VarInfoName this*/) {
+  public VarInfoName applyDecrement(@Interned VarInfoName this) {
     return applyAdd(-1);
   }
 
   /** Returns a name for the increment of this term, like "this+1". */
-  public VarInfoName applyIncrement(/*>>> @Interned VarInfoName this*/) {
+  public VarInfoName applyIncrement(@Interned VarInfoName this) {
     return applyAdd(+1);
   }
 
@@ -1783,12 +1774,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for the elements of a container (as opposed to the identity of the container)
    * like "this[]" or "(elements this)".
    */
-  public VarInfoName applyElements(/*>>> @Interned VarInfoName this*/) {
+  public VarInfoName applyElements(@Interned VarInfoName this) {
     return (new Elements(this)).intern();
   }
 
   /** The elements of a container, like "term[]". */
-  public static /*@Interned*/ class Elements extends VarInfoName {
+  public static @Interned class Elements extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1802,16 +1793,16 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied Elements this*/) {
+    protected String repr_impl(@GuardSatisfied Elements this) {
       return "Elements[" + term.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied Elements this*/) {
+    protected String name_impl(@GuardSatisfied Elements this) {
       return name_impl("");
     }
 
-    protected String name_impl(/*>>>@GuardSatisfied Elements this,*/ String index) {
+    protected String name_impl(@GuardSatisfied Elements this, String index) {
       return term.name() + "[" + index + "]";
     }
 
@@ -1937,7 +1928,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** Returns a name for an element selected from a sequence, like "this[i]". */
-  public VarInfoName applySubscript(/*>>> @Interned VarInfoName this,*/ VarInfoName index) {
+  public VarInfoName applySubscript(@Interned VarInfoName this, VarInfoName index) {
     assert index != null;
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
@@ -1966,7 +1957,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** An element from a sequence, like "sequence[index]". */
-  public static /*@Interned*/ class Subscript extends VarInfoName {
+  public static @Interned class Subscript extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -1983,12 +1974,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied Subscript this*/) {
+    protected String repr_impl(@GuardSatisfied Subscript this) {
       return "Subscript{" + index.repr() + "}[" + sequence.repr() + "]";
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied Subscript this*/) {
+    protected String name_impl(@GuardSatisfied Subscript this) {
       return sequence.name_impl(index.name());
     }
 
@@ -2061,8 +2052,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * endpoint is null, it means "from the start" or "to the end".
    */
   public VarInfoName applySlice(
-      /*>>> @Interned VarInfoName this,*/
-      /*@Nullable*/ VarInfoName i, /*@Nullable*/ VarInfoName j) {
+      @Interned VarInfoName this, @Nullable VarInfoName i, @Nullable VarInfoName j) {
     // a[] -> a[index..]
     // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);
@@ -2081,7 +2071,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** A slice of elements from a sequence, like "sequence[i..j]". */
-  public static /*@Interned*/ class Slice extends VarInfoName {
+  public static @Interned class Slice extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -2099,7 +2089,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String repr_impl(/*>>>@GuardSatisfied Slice this*/) {
+    protected String repr_impl(@GuardSatisfied Slice this) {
       return "Slice{"
           + ((i == null) ? "" : i.repr())
           + ","
@@ -2110,7 +2100,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     @Override
-    protected String name_impl(/*>>>@GuardSatisfied Slice this*/) {
+    protected String name_impl(@GuardSatisfied Slice this) {
       return sequence.name_impl(
           "" + ((i == null) ? "0" : i.name()) + ".." + ((j == null) ? "" : j.name()));
     }
@@ -2478,14 +2468,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /** Returns true iff some part of root is contained in this.goals. */
-    /*@EnsuresNonNullIf(result=true, expression="getPart(#1")*/
+    @EnsuresNonNullIf(result = true, expression = "getPart(#1")
     public boolean contains(VarInfoName root) {
       VarInfoName o = getPart(root);
       return (o != null);
     }
 
     /** Returns the part of root that is contained in this.goals, or null if not found. */
-    public /*@Nullable*/ VarInfoName getPart(VarInfoName root) {
+    public @Nullable VarInfoName getPart(VarInfoName root) {
       VarInfoName o = root.intern().accept(this);
       return o;
     }
@@ -3149,7 +3139,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
 
       @Override
-      protected String repr_impl(/*>>>@GuardSatisfied FreeVar this*/) {
+      protected String repr_impl(@GuardSatisfied FreeVar this) {
         return "Free[" + super.repr_impl() + "]";
       }
 
@@ -3237,7 +3227,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      * (index_base+index_off)-th element of that sequence. index_base may be null, to represent 0.
      */
     public static VarInfoName selectNth(
-        VarInfoName root, /*@Nullable*/ VarInfoName index_base, int index_off) {
+        VarInfoName root, @Nullable VarInfoName index_base, int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
       List<VarInfoName> unquants = new ArrayList<VarInfoName>(qv.unquants());
       if (unquants.size() == 0) {
@@ -3252,7 +3242,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           index_vin = new Simple(index_off + "");
         }
         VarInfoName to_replace = unquants.get(0);
-        /*@Interned*/ VarInfoName[] replace_result = replace(root, to_replace, index_vin);
+        @Interned VarInfoName[] replace_result = replace(root, to_replace, index_vin);
         return replace_result[0];
       } else {
         throw new Error("Can't handle multi-dim array in VarInfoName.QuantHelper.select_nth()");
@@ -3317,8 +3307,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     /** Record type for return value of the quantify method below. */
     public static class QuantifyReturn {
-      public /*@Interned*/ VarInfoName[] root_primes;
-      public List</*@Interned*/ VarInfoName[]>
+      public @Interned VarInfoName[] root_primes;
+      public List<@Interned VarInfoName[]>
           bound_vars; // each element is VarInfoName[3] = <variable, lower, upper>
     }
 
@@ -4029,7 +4019,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /** Compare VarInfoNames alphabetically. */
   public static class LexicalComparator implements Comparator<VarInfoName> {
-    /*@Pure*/
+    @Pure
     @Override
     public int compare(VarInfoName name1, VarInfoName name2) {
       return name1.compareTo(name2);

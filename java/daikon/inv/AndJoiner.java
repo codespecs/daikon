@@ -5,13 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /**
  * This is a special invariant used internally by Daikon to represent an antecedent invariant in an
  * implication where that antecedent consists of two invariants anded together.
@@ -36,13 +29,13 @@ public class AndJoiner extends Joiner {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied AndJoiner this*/) {
+  public String repr(@GuardSatisfied AndJoiner this) {
     return "[" + left.repr() + " and " + right.repr() + "]";
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied AndJoiner this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied AndJoiner this, OutputFormat format) {
     List<Invariant> invs = conjuncts();
     List<String> invStrings = new ArrayList<String>(invs.size());
     for (Invariant inv : invs) {
@@ -62,7 +55,7 @@ public class AndJoiner extends Joiner {
     }
   }
 
-  public List<Invariant> conjuncts(/*>>>@GuardSatisfied AndJoiner this*/) {
+  public List<Invariant> conjuncts(@GuardSatisfied AndJoiner this) {
     List<Invariant> result = new ArrayList<Invariant>(2);
     if (left instanceof AndJoiner) {
       result.addAll(((AndJoiner) left).conjuncts());
@@ -77,9 +70,9 @@ public class AndJoiner extends Joiner {
     return result;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     // Don't call super.isObviousDynamically(vis);
 
     DiscardInfo leftObvious = left.isObviousDynamically(vis);
@@ -97,9 +90,9 @@ public class AndJoiner extends Joiner {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     DiscardInfo leftObvious = left.isObviousStatically(vis);
     DiscardInfo rightObvious = right.isObviousStatically(vis);
     if (leftObvious != null && rightObvious != null) {
@@ -118,25 +111,24 @@ public class AndJoiner extends Joiner {
     }
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameInvariant(Invariant other) {
     return super.isSameInvariant(other);
   }
 
   @Override
-  public boolean enabled(/*>>> @Prototype AndJoiner this*/) {
+  public boolean enabled(@Prototype AndJoiner this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(/*>>> @Prototype AndJoiner this,*/ VarInfo[] vis) {
+  public boolean valid_types(@Prototype AndJoiner this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
-  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(
-      /*>>> @Prototype AndJoiner this,*/ PptSlice slice) {
+  protected @NonPrototype AndJoiner instantiate_dyn(@Prototype AndJoiner this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

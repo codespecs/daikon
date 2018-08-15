@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /** Utility methods that operate on collections of instructions. */
 public class InstructionUtils {
 
@@ -85,8 +81,8 @@ public class InstructionUtils {
   public static Map<String, Set<String>> computeRedundantVarsFake(List<IInstruction> path) {
     Map<String, Set<String>> redundants = new LinkedHashMap<String, Set<String>>();
     Map<String, String> leaders = new LinkedHashMap<String, String>();
-    Set</*@KeyFor("leaders")*/ String> varsUsedPreviously =
-        new LinkedHashSet</*@KeyFor("leaders")*/ String>();
+    Set<@KeyFor("leaders") String> varsUsedPreviously =
+        new LinkedHashSet<@KeyFor("leaders") String>();
     for (IInstruction instr : path) {
       for (String varName : instr.getBinaryVarNames()) {
         String varFullName = "bv:" + instr.getAddress() + ":" + varName;
@@ -106,7 +102,7 @@ public class InstructionUtils {
       }
     }
     Map<String, Set<String>> redundantsFinal = new LinkedHashMap<String, Set<String>>();
-    for (Map.Entry</*@KeyFor("redundants")*/ String, Set<String>> e : redundants.entrySet()) {
+    for (Map.Entry<@KeyFor("redundants") String, Set<String>> e : redundants.entrySet()) {
       if (!e.getValue().isEmpty()) {
         redundantsFinal.put(e.getKey(), e.getValue());
       }
@@ -252,7 +248,7 @@ public class InstructionUtils {
               String leaderName = "bv:" + path.get(leaders.get(var)).getAddress() + ":" + var;
               String varName = "bv:" + instr.getAddress() + ":" + var;
               @SuppressWarnings("nullness") // map: was set on previous iteration
-              /*@NonNull*/ Set<String> rset = redundantVars.get(leaderName);
+              @NonNull Set<String> rset = redundantVars.get(leaderName);
               rset.add(varName);
             }
           }
@@ -270,7 +266,7 @@ public class InstructionUtils {
     int totalVars = 0;
     Map<String, String> result = new LinkedHashMap<String, String>();
     // Map<String, Set<String>> redundantVarsFinal = new LinkedHashMap<String, Set<String>>();
-    for (Map.Entry</*@KeyFor("redundantVars")*/ String, Set<String>> e : redundantVars.entrySet()) {
+    for (Map.Entry<@KeyFor("redundantVars") String, Set<String>> e : redundantVars.entrySet()) {
       totalVars++;
       if (!e.getValue().isEmpty()) {
         for (String rvar : e.getValue()) {

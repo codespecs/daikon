@@ -6,13 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Utility class to parse annotations generated with the Annotate program using the {@code
  * --wrap_xml} flag.
@@ -65,19 +58,19 @@ public class Annotation {
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
   /** The way this annotation would be printed by Daikon. */
-  public String daikonRep(/*>>>@GuardSatisfied Annotation this*/) {
+  public String daikonRep(@GuardSatisfied Annotation this) {
     return daikonRep;
   }
 
   private final String method;
   /** The method that this annotation refers to. */
-  public String method(/*>>>@GuardSatisfied Annotation this*/) {
+  public String method(@GuardSatisfied Annotation this) {
     return method;
   }
 
   private final Kind kind;
   /** The kind of this annotation. */
-  public Kind kind(/*>>>@GuardSatisfied Annotation this*/) {
+  public Kind kind(@GuardSatisfied Annotation this) {
     return kind;
   }
 
@@ -231,7 +224,7 @@ public class Annotation {
    * || a.kind == Kind.objectInvariant
    * </pre>
    */
-  /*@UsesObjectEquals*/
+  @UsesObjectEquals
   public static class Kind {
     public final String name;
     public final String xmlname;
@@ -240,14 +233,16 @@ public class Annotation {
       this.name = name;
       this.xmlname = xmlname;
     }
-    /*@Pure*/
+
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
+    public int hashCode(@GuardSatisfied Kind this) {
       return name.hashCode();
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied Kind this*/) {
+    public String toString(@GuardSatisfied Kind this) {
       return name;
     }
 
@@ -261,19 +256,17 @@ public class Annotation {
   }
 
   /** Easy-on-the-eye format. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied Annotation this*/) {
+  public String toString(@GuardSatisfied Annotation this) {
     return kind.toString() + " : " + daikonRep();
   }
 
   /** Two annotations are equal iff their fields "daikonRep", "method" and "kind" are equal. */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   @Override
-  public boolean equals(
-      /*>>>@GuardSatisfied Annotation this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  public boolean equals(@GuardSatisfied Annotation this, @GuardSatisfied @Nullable Object o) {
     if (o == null) {
       return false;
     }
@@ -286,9 +279,9 @@ public class Annotation {
         && (this.kind().equals(anno.kind())));
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int hashCode(/*>>>@GuardSatisfied Annotation this*/) {
+  public int hashCode(@GuardSatisfied Annotation this) {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 

@@ -8,14 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import junit.framework.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 @SuppressWarnings("interning") // use of == in test code
 public class InvMapTester extends TestCase {
 
-  private /*@MonotonicNonNull*/ InvMap map; // initialized by setUp()
+  private @MonotonicNonNull InvMap map; // initialized by setUp()
   private PptTopLevel pptA = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptB = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptC = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
@@ -38,7 +34,7 @@ public class InvMapTester extends TestCase {
     map = new InvMap();
   }
 
-  /*@RequiresNonNull("map")*/
+  @RequiresNonNull("map")
   // implicit flow: setUp was called by JUnit";
   public void testABC() {
     map.put(pptA, invsA);
@@ -58,7 +54,7 @@ public class InvMapTester extends TestCase {
     assert invsC == map.get(pptC);
   }
 
-  /*@RequiresNonNull("map")*/
+  @RequiresNonNull("map")
   // implicit flow: setUp was called by JUnit";
   public void testCAB() {
     map.put(pptC, invsC);

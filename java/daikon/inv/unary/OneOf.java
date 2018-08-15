@@ -2,12 +2,6 @@ package daikon.inv.unary;
 
 import daikon.*;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 // An interface satisfied by OneOfScalar, OneOfString, OneOfSequence, and
 // OneOfStringSequence.
 // The variable takes on exactly one value.
@@ -22,5 +16,5 @@ public interface OneOf {
   public Object elt();
 
   public VarInfo var(
-      /*>>>@GuardSatisfied @UnknownInitialization(OneOf.class) @Raw(OneOf.class) OneOf this*/);
+      @GuardSatisfied @UnknownInitialization(OneOf.class) @Raw(OneOf.class) OneOf this);
 }

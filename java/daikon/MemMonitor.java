@@ -8,11 +8,6 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 public class MemMonitor implements Runnable {
 
   PrintWriter fout;
@@ -40,7 +35,7 @@ public class MemMonitor implements Runnable {
   }
 
   private long mem_usage(
-      /*>>>@UnknownInitialization(MemMonitor.class) @Raw(MemMonitor.class) MemMonitor this*/) {
+      @UnknownInitialization(MemMonitor.class) @Raw(MemMonitor.class) MemMonitor this) {
     return (java.lang.Runtime.getRuntime().totalMemory()
         - java.lang.Runtime.getRuntime().freeMemory());
   }

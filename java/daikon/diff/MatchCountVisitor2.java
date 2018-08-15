@@ -6,10 +6,6 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 // MatchCountVisitor2 differs from MatchCountVisitor in that it reverses
 // some key predicates, and adds some functionality.  The differences are
 // not documented.
@@ -144,8 +140,10 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
   // Cannot be static because it uses instance variable "targSet"
   /** Returns true if the pair of invariants should be printed */
-  /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
-  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  @EnsuresNonNullIf(
+      result = true,
+      expression = {"#1", "#2"})
+  protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
 
     if (inv1 == null || inv2 == null) {
       return false;
@@ -180,7 +178,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
    * Returns true iff any token of inv.format_java() contains a number other than -1, 0, 1 or is
    * null.
    */
-  private static boolean filterOut(/*@Nullable*/ Invariant inv) {
+  private static boolean filterOut(@Nullable Invariant inv) {
 
     return false;
 

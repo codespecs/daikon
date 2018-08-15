@@ -24,13 +24,6 @@ import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.Pair;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Diff is the main class for the invariant diff program. The invariant diff program outputs the
  * differences between two sets of invariants.
@@ -65,8 +58,8 @@ public final class Diff {
   private static boolean treeManip = false;
 
   // this is set only when the manip flag is set "-z", that is when treeManip != null
-  private static /*@MonotonicNonNull*/ PptMap manip1 = null;
-  private static /*@MonotonicNonNull*/ PptMap manip2 = null;
+  private static @MonotonicNonNull PptMap manip1 = null;
+  private static @MonotonicNonNull PptMap manip2 = null;
 
   /** The long command line options. */
   private static final String HELP_SWITCH = "help";
@@ -114,9 +107,9 @@ public final class Diff {
   public Diff(
       boolean examineAllPpts,
       boolean ignoreNumberedExits,
-      /*@Nullable*/ /*@ClassGetName*/ String invSortComparator1Classname,
-      /*@Nullable*/ /*@ClassGetName*/ String invSortComparator2Classname,
-      /*@Nullable*/ /*@ClassGetName*/ String invPairComparatorClassname,
+      @Nullable @ClassGetName String invSortComparator1Classname,
+      @Nullable @ClassGetName String invSortComparator2Classname,
+      @Nullable @ClassGetName String invPairComparatorClassname,
       Comparator<Invariant> defaultComparator)
       throws ClassNotFoundException, IllegalAccessException, InstantiationException,
           InvocationTargetException, NoSuchMethodException {
@@ -168,9 +161,9 @@ public final class Diff {
     boolean continuousJustification = false;
     boolean logging = false;
     File outputFile = null;
-    /*@ClassGetName*/ String invSortComparator1Classname = null;
-    /*@ClassGetName*/ String invSortComparator2Classname = null;
-    /*@ClassGetName*/ String invPairComparatorClassname = null;
+    @ClassGetName String invSortComparator1Classname = null;
+    @ClassGetName String invSortComparator2Classname = null;
+    @ClassGetName String invPairComparatorClassname = null;
 
     boolean optionSelected = false;
 
@@ -208,7 +201,7 @@ public final class Diff {
                       + " classnames supplied on command line");
             }
             @SuppressWarnings("signature") // user input, should be checked
-            /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
+            @ClassGetName String cgn = Daikon.getOptarg(g);
             invSortComparator1Classname = cgn;
           } else if (INV_SORT_COMPARATOR2_SWITCH.equals(optionName)) {
             if (invSortComparator2Classname != null) {
@@ -218,7 +211,7 @@ public final class Diff {
                       + " classnames supplied on command line");
             }
             @SuppressWarnings("signature") // user input, should be checked
-            /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
+            @ClassGetName String cgn = Daikon.getOptarg(g);
             invSortComparator2Classname = cgn;
           } else if (INV_PAIR_COMPARATOR_SWITCH.equals(optionName)) {
             if (invPairComparatorClassname != null) {
@@ -228,7 +221,7 @@ public final class Diff {
                       + " classnames supplied on command line");
             }
             @SuppressWarnings("signature") // user input, should be checked
-            /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
+            @ClassGetName String cgn = Daikon.getOptarg(g);
             invPairComparatorClassname = cgn;
           } else if (IGNORE_UNJUSTIFIED_SWITCH.equals(optionName)) {
             optionSelected = true;
@@ -631,13 +624,13 @@ public final class Diff {
   public RootNode diffInvMap(InvMap map1, InvMap map2, boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator<Pair</*@Nullable*/ PptTopLevel, /*@Nullable*/ PptTopLevel>> opi =
+    Iterator<Pair<@Nullable PptTopLevel, @Nullable PptTopLevel>> opi =
         new OrderedPairIterator<PptTopLevel>(
             map1.pptSortedIterator(PPT_COMPARATOR),
             map2.pptSortedIterator(PPT_COMPARATOR),
             PPT_COMPARATOR);
     while (opi.hasNext()) {
-      Pair</*@Nullable*/ PptTopLevel, /*@Nullable*/ PptTopLevel> ppts = opi.next();
+      Pair<@Nullable PptTopLevel, @Nullable PptTopLevel> ppts = opi.next();
       PptTopLevel ppt1 = ppts.a;
       PptTopLevel ppt2 = ppts.b;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
@@ -668,7 +661,7 @@ public final class Diff {
   }
 
   /** Returns true if the program point should be added to the tree, false otherwise. */
-  private boolean shouldAdd(/*@Nullable*/ PptTopLevel ppt) {
+  private boolean shouldAdd(@Nullable PptTopLevel ppt) {
     if (examineAllPpts) {
       return true;
     } else {
@@ -690,8 +683,8 @@ public final class Diff {
    * true, the unjustified invariants are included.
    */
   private PptNode diffPptTopLevel(
-      /*@Nullable*/ PptTopLevel ppt1,
-      /*@Nullable*/ PptTopLevel ppt2,
+      @Nullable PptTopLevel ppt1,
+      @Nullable PptTopLevel ppt2,
       InvMap map1,
       InvMap map2,
       boolean includeUnjustified) {
@@ -769,10 +762,10 @@ public final class Diff {
       }
     }
 
-    Iterator<Pair</*@Nullable*/ Invariant, /*@Nullable*/ Invariant>> opi =
+    Iterator<Pair<@Nullable Invariant, @Nullable Invariant>> opi =
         new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(), invPairComparator);
     while (opi.hasNext()) {
-      Pair</*@Nullable*/ Invariant, /*@Nullable*/ Invariant> invariants = opi.next();
+      Pair<@Nullable Invariant, @Nullable Invariant> invariants = opi.next();
       Invariant inv1 = invariants.a;
       Invariant inv2 = invariants.b;
       if (!includeUnjustified) {
@@ -792,8 +785,8 @@ public final class Diff {
     return pptNode;
   }
 
-  /*@Pure*/
-  private boolean isCond(/*@Nullable*/ PptTopLevel ppt) {
+  @Pure
+  private boolean isCond(@Nullable PptTopLevel ppt) {
     return (ppt instanceof PptConditional);
   }
 
@@ -808,7 +801,7 @@ public final class Diff {
       // A conditional Ppt always contains the normal Ppt
       if (targ.equals(somePptName)) {
         @SuppressWarnings("nullness") // map: iterating over keySet
-        /*@NonNull*/ PptTopLevel repl = manip.get(somePptName);
+        @NonNull PptTopLevel repl = manip.get(somePptName);
         return repl.getInvariants();
       }
     }
@@ -828,7 +821,7 @@ public final class Diff {
       // A conditional Ppt always contains the normal Ppt
       if (targetName.equals(somePptName)) {
         @SuppressWarnings("nullness") // map: iterating over keySet
-        /*@NonNull*/ PptTopLevel repl = manip.get(somePptName);
+        @NonNull PptTopLevel repl = manip.get(somePptName);
         return CollectionsPlume.sortList(repl.getInvariants(), PptTopLevel.icfp);
       }
     }
@@ -838,9 +831,8 @@ public final class Diff {
   }
 
   /** Use the comparator for sorting both sets and creating the pair tree. */
-  /*@EnsuresNonNull({"invSortComparator1", "invSortComparator2", "invPairComparator"})*/
-  public void setAllInvComparators(
-      /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
+  @EnsuresNonNull({"invSortComparator1", "invSortComparator2", "invPairComparator"})
+  public void setAllInvComparators(@UnknownInitialization @Raw Diff this, Comparator<Invariant> c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);
     setInvPairComparator(c);
@@ -851,7 +843,7 @@ public final class Diff {
    * default.
    */
   private static Comparator<Invariant> selectComparator(
-      /*@Nullable*/ /*@ClassGetName*/ String classname, Comparator<Invariant> defaultComparator)
+      @Nullable @ClassGetName String classname, Comparator<Invariant> defaultComparator)
       throws ClassNotFoundException, IllegalAccessException, InstantiationException,
           InvocationTargetException, NoSuchMethodException {
 
@@ -867,23 +859,22 @@ public final class Diff {
   }
 
   /** Use the comparator for sorting the first set. */
-  /*@EnsuresNonNull("invSortComparator1")*/
+  @EnsuresNonNull("invSortComparator1")
   public void setInvSortComparator1(
-      /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
+      @UnknownInitialization @Raw Diff this, Comparator<Invariant> c) {
     invSortComparator1 = c;
   }
 
   /** Use the comparator for sorting the second set. */
-  /*@EnsuresNonNull("invSortComparator2")*/
+  @EnsuresNonNull("invSortComparator2")
   public void setInvSortComparator2(
-      /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
+      @UnknownInitialization @Raw Diff this, Comparator<Invariant> c) {
     invSortComparator2 = c;
   }
 
   /** Use the comparator for creating the pair tree. */
-  /*@EnsuresNonNull("invPairComparator")*/
-  public void setInvPairComparator(
-      /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
+  @EnsuresNonNull("invPairComparator")
+  public void setInvPairComparator(@UnknownInitialization @Raw Diff this, Comparator<Invariant> c) {
     invPairComparator = c;
   }
 }

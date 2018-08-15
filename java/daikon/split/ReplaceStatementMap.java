@@ -4,12 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * ReplaceStatementMap is a immutable ADT for holding ReplaceStatements that need to be looked-up by
  * their method names.
@@ -42,7 +36,7 @@ class ReplaceStatementMap {
    *
    * @param name the name of the ReplaceStatement desired
    */
-  public /*@Nullable*/ ReplaceStatement get(String name) {
+  public @Nullable ReplaceStatement get(String name) {
     ReplaceStatement rs = map.get(name);
     if (rs != null) {
       return rs;
@@ -59,9 +53,9 @@ class ReplaceStatementMap {
   }
 
   /** For debugging only. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied ReplaceStatementMap this*/) {
+  public String toString(@GuardSatisfied ReplaceStatementMap this) {
     return map.toString();
   }
 }

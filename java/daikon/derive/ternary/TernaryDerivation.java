@@ -4,11 +4,6 @@ import daikon.*;
 import daikon.derive.*;
 import org.plumelib.util.ArraysPlume;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /** Abstract class to represent a derived variable that came from three base variables. */
 public abstract class TernaryDerivation extends Derivation {
   // We are Serializable, so we specify a version to allow changes to
@@ -32,9 +27,9 @@ public abstract class TernaryDerivation extends Derivation {
     base3 = vi3;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public TernaryDerivation clone(/*>>>@GuardSatisfied TernaryDerivation this*/) {
+  public TernaryDerivation clone(@GuardSatisfied TernaryDerivation this) {
     try {
       return (TernaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {
@@ -42,13 +37,13 @@ public abstract class TernaryDerivation extends Derivation {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public VarInfo[] getBases() {
     return new VarInfo[] {base1, base2, base3};
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public VarInfo getBase(int i) {
     switch (i) {
@@ -75,7 +70,7 @@ public abstract class TernaryDerivation extends Derivation {
   @Override
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 
-  /*@Pure*/
+  @Pure
   @Override
   protected boolean isParam() {
     return (base1.isParam() || base2.isParam() || base3.isParam());
@@ -91,7 +86,7 @@ public abstract class TernaryDerivation extends Derivation {
     return base1.canBeMissing || base2.canBeMissing || base3.canBeMissing;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isDerivedFromNonCanonical() {
     // We insist that both are canonical, not just one.

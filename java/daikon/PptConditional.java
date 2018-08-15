@@ -3,11 +3,6 @@ package daikon;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 // Information about a disjunctive program point that represents just part
 // of the data.
 // This doesn't do any direct computation, instead deferring that to its
@@ -38,7 +33,7 @@ public final class PptConditional extends PptTopLevel {
     // assert splitter.instantiated() == false;
     this.parent = parent;
     @SuppressWarnings({"rawness", "initialization"}) // won't be used until it's fully initialized
-    /*@Initialized*/ /*@NonRaw*/ PptConditional thisNonRaw = this;
+    @Initialized @NonRaw PptConditional thisNonRaw = this;
     this.splitter = splitter.instantiate(thisNonRaw);
     this.splitter_inverse = splitter_inverse;
     // assert splitter.instantiated() == false;
@@ -68,7 +63,7 @@ public final class PptConditional extends PptTopLevel {
     return splitter.valid();
   }
 
-  public /*@Nullable*/ DummyInvariant dummyInvariant() {
+  public @Nullable DummyInvariant dummyInvariant() {
     return splitter.getDummyInvariant();
   }
 }

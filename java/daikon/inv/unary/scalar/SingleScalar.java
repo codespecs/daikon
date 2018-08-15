@@ -4,14 +4,6 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.UnaryInvariant;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /**
  * Abstract base class for invariants over one numeric (scalar) variable, such as {@code x != 0}.
  */
@@ -25,12 +17,12 @@ public abstract class SingleScalar extends UnaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleScalar() {
+  protected @Prototype SingleScalar() {
     super();
   }
 
   public VarInfo var(
-      /*>>>@GuardSatisfied @UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this*/) {
+          @GuardSatisfied @UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this) {
     return ppt.var_infos[0];
   }
 
@@ -52,7 +44,7 @@ public abstract class SingleScalar extends UnaryInvariant {
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   @Override
-  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
+  public InvariantStatus add(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();
@@ -64,7 +56,7 @@ public abstract class SingleScalar extends UnaryInvariant {
   }
 
   @Override
-  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
+  public InvariantStatus check(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();

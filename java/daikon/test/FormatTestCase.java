@@ -23,12 +23,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import org.plumelib.util.Intern;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /**
  * This class is used by InvariantFormatTester to store data representing test cases and for
  * formatting results related to that data. This class is related to tests performed on one
@@ -62,7 +56,7 @@ class FormatTestCase {
     private int goalLineNumber;
 
     /** A cached copy of the result achieved by invoking the output method. */
-    private /*@MonotonicNonNull*/ String resultCache = null;
+    private @MonotonicNonNull String resultCache = null;
 
     /** A string containing the format that this particular test case represented. */
     private String formatString;
@@ -282,7 +276,7 @@ class FormatTestCase {
    * @param classInfo the fully-qualified class name
    * @return a Class object representing the class name if such a class is defined, otherwise null
    */
-  private static Class<?> getClass(/*@BinaryName*/ String classInfo) {
+  private static Class<?> getClass(@BinaryName String classInfo) {
     try {
       return ClassLoader.getSystemClassLoader().loadClass(classInfo);
     } catch (ClassNotFoundException e) {
@@ -297,14 +291,14 @@ class FormatTestCase {
    * @return the actual result String represented by the goal statement or null if the String isn't
    *     actually a goal statement
    */
-  static /*@Nullable*/ String parseGoal(String goalString) {
+  static @Nullable String parseGoal(String goalString) {
     if (goalString.startsWith(GOAL_PREFIX)) {
       return goalString.substring(GOAL_PREFIX.length(), goalString.length());
     }
     return null;
   }
 
-  static /*@Nullable*/ String getFormat(String partialGoalString) {
+  static @Nullable String getFormat(String partialGoalString) {
     try {
       return partialGoalString.substring(
           partialGoalString.indexOf('(') + 1, partialGoalString.indexOf(')'));
@@ -314,7 +308,7 @@ class FormatTestCase {
     return null;
   }
 
-  static /*@Nullable*/ String getGoalOutput(String partialGoalString) {
+  static @Nullable String getGoalOutput(String partialGoalString) {
     try {
       return partialGoalString.substring(
           partialGoalString.indexOf(':') + 2, partialGoalString.length());
@@ -342,7 +336,7 @@ class FormatTestCase {
    * @param generateGoals true if goal generation is desired, false if goal testing is desired
    * @return a new FormatTestCase instance
    */
-  public static /*@Nullable*/ FormatTestCase instantiate(
+  public static @Nullable FormatTestCase instantiate(
       LineNumberReader commands, boolean generateGoals) {
     List<SingleOutputTestCase> testCases = new ArrayList<SingleOutputTestCase>();
 
@@ -354,7 +348,7 @@ class FormatTestCase {
     if (line == null) return null;
     String[] tokens = line.split("  *");
     @SuppressWarnings("signature") // user input, should be checked
-    /*@BinaryName*/ String className = tokens[0];
+    @BinaryName String className = tokens[0];
     int arg_count = (tokens.length - 1) / 2;
     Class<?>[] arg_types = new Class<?>[arg_count];
     Object[] arg_vals = new Object[arg_count];
@@ -1034,8 +1028,7 @@ class FormatTestCase {
   private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
     try {
       Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
-      /*@Prototype*/ Invariant proto =
-          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+      @Prototype Invariant proto = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
       Invariant inv = proto.instantiate(sl);
 
       if (inv == null) throw new RuntimeException("null inv for " + theClass.getName());
@@ -1064,7 +1057,7 @@ class FormatTestCase {
       Object[] arg_vals) {
     try {
       Method get_proto = theClass.getMethod("get_proto", arg_types);
-      /*@Prototype*/ Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, arg_vals);
+      @Prototype Invariant proto = (@Prototype Invariant) get_proto.invoke(null, arg_vals);
 
       return (proto.instantiate(slice));
     } catch (Exception e) {

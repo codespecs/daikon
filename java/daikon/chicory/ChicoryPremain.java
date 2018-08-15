@@ -29,11 +29,6 @@ import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-*/
-
 public class ChicoryPremain {
 
   /**
@@ -51,7 +46,7 @@ public class ChicoryPremain {
 
   /** Set of pure methods returned by Alexandru Salcianu's purity analysis */
   // Non-null if doPurity == true
-  private static /*@MonotonicNonNull*/ Set<String> pureMethods = null;
+  private static @MonotonicNonNull Set<String> pureMethods = null;
 
   /** True iff Chicory should add variables based on pure methods during instrumentation. */
   private static boolean doPurity = false;
@@ -187,7 +182,7 @@ public class ChicoryPremain {
    * Specification". This is public, protected or private first, and then other modifiers in the
    * following order: abstract, static, final, synchronized native.
    */
-  private static void readPurityFile(File purityFileName, /*@Nullable*/ File pathLoc) {
+  private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
     pureMethods = new HashSet<String>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
 
@@ -238,8 +233,8 @@ public class ChicoryPremain {
    *
    * @param fileName where to write the file to (full path)
    */
-  // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
-  /*@RequiresNonNull("pureMethods")*/
+  // not handled: @RequiresNonNull("ChicoryPremain.pureMethods")
+  @RequiresNonNull("pureMethods")
   private static void writePurityFile(String fileName, String parentDir) {
     File absFile = new File(parentDir, fileName);
     System.out.printf("Writing pure methods to %s%n", absFile);
@@ -277,8 +272,8 @@ public class ChicoryPremain {
 
   /** Return true iff Chicory has run a purity analysis or read a {@code *.pure} file. */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
-  // /*@EnsuresNonNullIf(result=true, expression="ChicoryPremain.pureMethods")*/
-  /*@EnsuresNonNullIf(result=true, expression="pureMethods")*/
+  // @EnsuresNonNullIf(result=true, expression="ChicoryPremain.pureMethods")
+  @EnsuresNonNullIf(result = true, expression = "pureMethods")
   public static boolean shouldDoPurity() {
     return doPurity;
   }
@@ -289,8 +284,8 @@ public class ChicoryPremain {
    *
    * @return true iff member is a pure method
    */
-  // /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
-  /*@RequiresNonNull("pureMethods")*/
+  // @RequiresNonNull("ChicoryPremain.pureMethods")
+  @RequiresNonNull("pureMethods")
   public static boolean isMethodPure(Member member) {
     assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
 
@@ -305,8 +300,8 @@ public class ChicoryPremain {
   }
 
   /** Return an unmodifiable Set of the pure methods. */
-  // /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
-  /*@RequiresNonNull("pureMethods")*/
+  // @RequiresNonNull("ChicoryPremain.pureMethods")
+  @RequiresNonNull("pureMethods")
   public static Set<String> getPureMethods() {
     return Collections.unmodifiableSet(pureMethods);
   }
@@ -454,8 +449,8 @@ public class ChicoryPremain {
     }
 
     @Override
-    protected Class<?> loadClass(
-        /*@BinaryName*/ String name, boolean resolve) throws java.lang.ClassNotFoundException {
+    protected Class<?> loadClass(@BinaryName String name, boolean resolve)
+        throws java.lang.ClassNotFoundException {
 
       return super.loadClass(name, resolve);
     }

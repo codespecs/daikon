@@ -4,11 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Represents a set of instructions that may or may not be executed, and whose only effect is that
  * they may kill one or more variables.
@@ -49,9 +44,9 @@ public class KillerInstruction implements IInstruction {
     return false;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied KillerInstruction this*/) {
+  public String toString(@GuardSatisfied KillerInstruction this) {
     StringBuilder b = new StringBuilder();
     for (X86Instruction i : instructions) {
       b.append("(potential)" + i + "\n");

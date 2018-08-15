@@ -4,11 +4,6 @@ import daikon.inv.filter.*;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * DiscardCode is an enumeration type. It represents reasons why an invariant is falsified or
  * disregarded. Methods that decide whether an Invariant should be printed later (such as
@@ -119,9 +114,9 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public int compareTo(/*>>>@GuardSatisfied DiscardCode this,*/ DiscardCode o) {
+  public int compareTo(@GuardSatisfied DiscardCode this, DiscardCode o) {
     if (this.enumValue < o.enumValue) {
       return -1;
     } else if (this.enumValue == o.enumValue) {
@@ -150,9 +145,9 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    *     "Only constant variables in this expression", "Derived Param", "Control Check", "Exact",
    *     "Variable Filter", "Filtered"}
    */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied DiscardCode this*/) {
+  public String toString(@GuardSatisfied DiscardCode this) {
     if (this.enumValue == -1) return "Not discarded";
     else if (this.enumValue == 0) return "Obvious";
     else if (this.enumValue == 1) return "Bad sample seen";

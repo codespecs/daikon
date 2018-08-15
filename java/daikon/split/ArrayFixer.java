@@ -6,10 +6,6 @@ import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * ArrayFixer is a visitor for a JTB syntax tree that adds the "_identity" and "_array" suffixes to
  * an expression as needed. For example, the condition:
@@ -45,7 +41,7 @@ class ArrayFixer extends DepthFirstVisitor {
    * The token previously visited. Null only when visiting the first token. Non-null if
    * lastTokenMayBeElements or lastTokenMayBeIdentity is true.
    */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   /**
    * True if the last token visited could be the name of a variable that needs the "_array" suffix.

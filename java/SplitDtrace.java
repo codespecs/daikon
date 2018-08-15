@@ -10,10 +10,6 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Takes one argument: a .dtrace or dtrace.gz file. Splits it into 100 files: the first file
  * contains the first 1% of the original file, the second contains 1-2%, ... until the last one
@@ -123,15 +119,18 @@ public final class SplitDtrace {
     }
     throw new RuntimeException("no nonce: " + res);
   }
-  /*@Pure*/
+
+  @Pure
   static boolean isEnter(ArrayList<String> res) {
     return res.get(0).contains(":::ENTER");
   }
-  /*@Pure*/
+
+  @Pure
   static boolean isExit(ArrayList<String> res) {
     return res.get(0).contains(":::EXIT");
   }
-  /*@Pure*/
+
+  @Pure
   static boolean isDeclare(ArrayList<String> res) {
     return res.get(0).equals("DECLARE");
   }
@@ -146,7 +145,7 @@ public final class SplitDtrace {
 
   @SuppressWarnings(
       "purity") // non-deterministic call to trim is used only for equals(), does not affect result
-  /*@Pure*/
+  @Pure
   static boolean isEmpty(String l) {
     return l.trim().equals("") || l.startsWith("#");
   }

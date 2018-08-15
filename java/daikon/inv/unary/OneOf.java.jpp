@@ -90,8 +90,8 @@ The correct way to build the system is to run 'make'.
   #undef JAVA_EQUALS_STRING
   #define JAVA_EQUALS_STRING(x) ".equals(" + x + ")"
   #define SCALARPKG string
-  #define INT /*@Interned*/ String
-  #define INTARRAY /*@Interned*/ String[]
+  #define INT @Interned String
+  #define INTARRAY @Interned String[]
   #define INTARRAY_UNINTERNED String[]
   #define INT_PRINTED String
   #define ONEOFSCALAR OneOfString
@@ -102,8 +102,8 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(SEQUENCE)
   #define SCALARPKG sequence
-  #define INT long /*@Interned*/ []
-  #define INTARRAY long[] /*@Interned*/ []
+  #define INT long @Interned []
+  #define INTARRAY long[] @Interned []
   #define INTARRAY_UNINTERNED long[][]
   #define INT_PRINTED long[]
   #define ONEOFSCALAR OneOfSequence
@@ -116,8 +116,8 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(FLOATSEQUENCE)
   #define SCALARPKG sequence
-  #define INT double /*@Interned*/ []
-  #define INTARRAY double[] /*@Interned*/ []
+  #define INT double @Interned []
+  #define INTARRAY double[] @Interned []
   #define INTARRAY_UNINTERNED double[][]
   #define INT_PRINTED double[]
   #define ONEOFSCALAR OneOfFloatSequence
@@ -130,9 +130,9 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(STRINGSEQUENCE)
   #define SCALARPKG stringsequence
-  #define INT /*@Interned*/ String /*@Interned*/ []
-  #define INTARRAY /*@Interned*/ String[] /*@Interned*/ []
-  #define INTARRAY_UNINTERNED /*@Interned*/ String[][]
+  #define INT @Interned String @Interned []
+  #define INTARRAY @Interned String[] @Interned []
+  #define INTARRAY_UNINTERNED @Interned String[][]
   #define INT_PRINTED String[]
   #define ONEOFSCALAR OneOfStringSequence
   #define ONEOFSCALAR_STRING "OneOfStringSequence"
@@ -178,8 +178,8 @@ The correct way to build the system is to run 'make'.
   #define UPPERBOUND UpperBoundFloat
 #elif defined(ELTSTRING)
   #define SCALARPKG stringsequence
-  #define INT /*@Interned*/ String
-  #define INTARRAY /*@Interned*/ String[]
+  #define INT @Interned String
+  #define INTARRAY @Interned String[]
   #define INTARRAY_UNINTERNED String[]
   #define INT_PRINTED String
   #define ONEOFSCALAR EltOneOfString
@@ -219,16 +219,6 @@ import org.plumelib.signature.Signatures;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import org.checkerframework.framework.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 // This subsumes an "exact" invariant that says the value is always exactly
 // a specific value.  Do I want to make that a separate invariant
@@ -299,12 +289,12 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  /*@Unused(when=Prototype.class)*/
+  @Unused(when=Prototype.class)
   private INTARRAY elts;
-  /*@Unused(when=Prototype.class)*/
+  @Unused(when=Prototype.class)
   private int num_elts;
 
-  public /*@Prototype*/ ONEOFSCALAR() {
+  public @Prototype ONEOFSCALAR() {
     super();
   }
 
@@ -313,15 +303,15 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
-    elts = new long[dkconfig_size] /*@Interned*/ [];
+    elts = new long[dkconfig_size] @Interned [];
 #elif defined(FLOATSEQUENCE)
     // Elements are interned, so can test with == (except that NaN != NaN)
     // (in the general online case, it's not worth interning).
-    elts = new double[dkconfig_size] /*@Interned*/ [];
+    elts = new double[dkconfig_size] @Interned [];
 #elif defined(STRINGSEQUENCE)
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
-    elts = new /*@Interned*/ String [dkconfig_size] /*@Interned*/ [];
+    elts = new @Interned String [dkconfig_size] @Interned [];
 #else
     elts = new INT[dkconfig_size];
 #endif
@@ -335,10 +325,10 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
   }
 
-  private static /*@Prototype*/ ONEOFSCALAR proto = new /*@Prototype*/ ONEOFSCALAR();
+  private static @Prototype ONEOFSCALAR proto = new @Prototype ONEOFSCALAR();
 
   /** Returns the prototype invariant for ONEOFSCALAR */
-  public static /*@Prototype*/ ONEOFSCALAR get_proto() {
+  public static @Prototype ONEOFSCALAR get_proto() {
     return proto;
   }
 
@@ -350,34 +340,34 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public ONEOFSCALAR instantiate_dyn(/*>>> @Prototype ONEOFSCALAR this,*/ PptSlice slice) {
+  public ONEOFSCALAR instantiate_dyn(@Prototype ONEOFSCALAR this, PptSlice slice) {
     return new ONEOFSCALAR(slice);
   }
 
 #if defined(SCALAR)
-  /*@Pure*/
-  public boolean is_boolean(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  @Pure
+  public boolean is_boolean(@GuardSatisfied ONEOFSCALAR this) {
      return (var().file_rep_type == ProglangType.BOOLEAN);
   }
-  /*@Pure*/
-  public boolean is_hashcode(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  @Pure
+  public boolean is_hashcode(@GuardSatisfied ONEOFSCALAR this) {
     return (var().file_rep_type == ProglangType.HASHCODE);
   }
 #else
-  /*@Pure*/
-  public boolean is_boolean(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  @Pure
+  public boolean is_boolean(@GuardSatisfied ONEOFSCALAR this) {
     return (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
   }
-  /*@Pure*/
-  public boolean is_hashcode(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  @Pure
+  public boolean is_hashcode(@GuardSatisfied ONEOFSCALAR this) {
     return (var().file_rep_type.elementType() == ProglangType.HASHCODE);
   }
 #endif
 
   @SuppressWarnings("interning") // clone method re-does interning
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public ONEOFSCALAR clone(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  public ONEOFSCALAR clone(@GuardSatisfied ONEOFSCALAR this) {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = elts.clone();
 #ifdef IS_SEQUENCE
@@ -431,7 +421,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   #define COMPARATOR_ARG
 #endif
 
-  private void sort_rep(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  private void sort_rep(@GuardSatisfied ONEOFSCALAR this) {
     Arrays.sort(elts, 0, num_elts COMPARATOR_ARG);
   }
 
@@ -463,7 +453,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return true;
   }
 
-  private String subarray_rep(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  private String subarray_rep(@GuardSatisfied ONEOFSCALAR this) {
     // Not so efficient an implementation, but simple;
     // and how often will we need to print this anyway?
     sort_rep();
@@ -534,14 +524,14 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  public String repr(@GuardSatisfied ONEOFSCALAR this) {
     return ONEOFSCALAR_STRING + varNames() + ": falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
   }
 
 #if defined(IS_SEQUENCE_NUMERIC)
-  private boolean all_nulls(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ int value_no) {
+  private boolean all_nulls(@GuardSatisfied ONEOFSCALAR this, int value_no) {
     INT seq = elts[value_no];
     for (int i = 0; i < seq.length; i++) {
       if (seq[i] != 0) {
@@ -550,7 +540,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
     return true;
   }
-  private boolean no_nulls(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ int value_no) {
+  private boolean no_nulls(@GuardSatisfied ONEOFSCALAR this, int value_no) {
     INT seq = elts[value_no];
     for (int i = 0; i < seq.length; i++) {
       if (seq[i] == 0) {
@@ -571,9 +561,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 #endif
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied ONEOFSCALAR this, OutputFormat format) {
     sort_rep();
 
     if (format.isJavaFamily()) {
@@ -594,7 +584,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  public String format_daikon(@GuardSatisfied ONEOFSCALAR this) {
     String varname = NAME;
     if (num_elts == 1) {
       #if defined(SCALAR) || defined(ELT)
@@ -715,8 +705,8 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
 #if defined(STRING) || defined(ELTSTRING)
-  /*@Pure*/
-  private boolean is_type(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  @Pure
+  private boolean is_type(@GuardSatisfied ONEOFSCALAR this) {
     return var().has_typeof();
   }
 #endif
@@ -750,7 +740,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
 
 #if defined(ELTSTRING) || defined(STRINGSEQUENCE)
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isValidEscExpression() {
     // format_esc will look at the particulars and decide
@@ -758,7 +748,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 #endif
 
-  public String format_esc(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  public String format_esc(@GuardSatisfied ONEOFSCALAR this) {
     sort_rep();
 #if defined(IS_ELT)
     String[] form = VarInfo.esc_quantify(var());
@@ -883,9 +873,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     if (var().is_typeof()) {
 
       @SuppressWarnings("nullness")
-      /*@NonNull*/ VarInfo sequence = var().get_enclosing_var();
+      @NonNull VarInfo sequence = var().get_enclosing_var();
       @SuppressWarnings("nullness")
-      /*@NonNull*/ String varname = sequence.get_enclosing_var().esc_name();
+      @NonNull String varname = sequence.get_enclosing_var().esc_name();
       String type = null;
       boolean consistent = true;
       for (int i = 0; consistent && i < num_elts; i++) {
@@ -916,9 +906,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return result;
   }
 
-public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
-    /*@NonNull @NonRaw @Initialized*/ // UNDONE: don't understand why needed (markro)
+    @NonNull @NonRaw @Initialized // UNDONE: don't understand why needed (markro)
     String result;
 
 #if defined(IS_ELT)
@@ -939,7 +929,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // Construct the array that unary value will be compared against.
     for (int i = 0; i < num_elts; i++) {
     #if defined(ELTSTRING)
-      /*@NonNull @NonRaw @Initialized*/ // UNDONE: don't understand why needed (markro)
+      @NonNull @NonRaw @Initialized // UNDONE: don't understand why needed (markro)
       String arg = is_type() ? "typeof(" + elts[i] + ")" : TOSTRING(elts[i]);
       args_list.add(arg);
     #else
@@ -1054,7 +1044,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return result;
   }
 
-  public String format_java_family(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ OutputFormat format) {
+  public String format_java_family(@GuardSatisfied ONEOFSCALAR this, OutputFormat format) {
 
     String result;
 
@@ -1206,7 +1196,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return result;
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  public String format_simplify(@GuardSatisfied ONEOFSCALAR this) {
 #ifdef BASE_INT
     // if (is_hashcode() && dkconfig_omit_hashcode_values_Simplify)
     //   return "(AND)";
@@ -1545,7 +1535,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   // It is possible to have seen many (array) samples, but no (INT)
   // array element values.
   @Override
-  public boolean enoughSamples(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  public boolean enoughSamples(@GuardSatisfied ONEOFSCALAR this) {
     return num_elts > 0;
   }
 #endif
@@ -1565,9 +1555,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
     // desirable if the user doesn't know their actual value.
@@ -1579,9 +1569,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   }
 
 #if defined(IS_NUMERIC)
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -1638,7 +1628,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     // just apply to all arrays.
     if (v.isDerived() && (v.derived instanceof SequenceLength)
       && (num_elts == 1) && (elts[0] == 0)) {
-      /*@NonNull*/ VarInfo b = v.derived.getBase(0);
+      @NonNull VarInfo b = v.derived.getBase(0);
       if (!b.isDerived()) {
         if (logOn()) {
           dlog.log("isObviousDynamically '" + v.name()
@@ -1649,7 +1639,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
 
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
-      /*@NonNull*/ SequenceLength sl = (SequenceLength) v.derived;
+      @NonNull SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
         String discardString = v.name() + " is derived with shift!=0 (shift==" + sl.shift + ")";
         return new DiscardInfo(this, DiscardCode.obvious, discardString);
@@ -1687,7 +1677,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   /** {@inheritDoc} */
   @SuppressWarnings("keyfor")   // needs EnsureQualifier
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -1738,9 +1728,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return null;
   }
 #elif defined(IS_ELT_NUMERIC)
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -1789,7 +1779,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 #elif defined(STRING) || defined(ELTSTRING)
   /** {@inheritDoc} */
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -1833,7 +1823,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant o) {
     ONEOFSCALAR other = (ONEOFSCALAR) o;
@@ -1917,7 +1907,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant o) {
     if (o instanceof ONEOFSCALAR) {
@@ -1980,7 +1970,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   // OneOf invariants that indicate a small set of possible values are
   // uninteresting.  OneOf invariants that indicate exactly one value
   // are interesting.
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isInteresting() {
     if (num_elts() > 1) {
@@ -2022,14 +2012,14 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return false;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExact() {
     return (num_elts == 1);
   }
 
   // Look up a previously instantiated invariant.
-  public static /*@Nullable*/ ONEOFSCALAR find(PptSlice ppt) {
+  public static @Nullable ONEOFSCALAR find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof ONEOFSCALAR) {
@@ -2069,7 +2059,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
    */
   @SuppressWarnings("interning") // cloning requires re-interning
   @Override
-  public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
     ONEOFSCALAR  first = (ONEOFSCALAR) invs.get(0);
@@ -2163,7 +2153,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   private static Map<Long,Long> dummy_hashcode_vals = new LinkedHashMap<Long,Long>();
   private static long next_dummy_hashcode = 1001;
 
-  private long get_hashcode_val(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ long hashcode) {
+  private long get_hashcode_val(@GuardSatisfied ONEOFSCALAR this, long hashcode) {
     if (!dkconfig_omit_hashcode_values_Simplify) {
       return hashcode;
     }

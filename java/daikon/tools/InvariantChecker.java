@@ -23,10 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * InvariantChecker reads an invariant file and trace file. It prints errors for any invariants that
  * are violated by the trace file.
@@ -73,7 +69,7 @@ public class InvariantChecker {
   static int error_cnt = 0;
   static int sample_cnt = 0;
 
-  static /*@Nullable*/ File dir_file; // Yoav added
+  static @Nullable File dir_file; // Yoav added
   static boolean doFilter;
   static boolean doConf;
   static boolean quiet = true;
@@ -370,10 +366,10 @@ public class InvariantChecker {
      * process the sample by checking it against each existing invariant and issuing an error if any
      * invariant is falsified or weakened.
      */
-    /*@RequiresNonNull("FileIO.data_trace_state")*/
+    @RequiresNonNull("FileIO.data_trace_state")
     @Override
     public void process_sample(
-        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
+        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
 
       debug.fine("processing sample from: " + ppt.name);
 
@@ -420,7 +416,7 @@ public class InvariantChecker {
       add(ppt, vt, all_ppts);
     }
 
-    /*@RequiresNonNull("FileIO.data_trace_state")*/
+    @RequiresNonNull("FileIO.data_trace_state")
     private void add(PptTopLevel ppt, ValueTuple vt, PptMap all_ppts) {
       // Add the sample to any splitters
       if (ppt.has_splitters()) {

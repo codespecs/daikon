@@ -6,12 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /** Helper classes for quantification for various output formats. */
 public class Quantify {
 
@@ -62,29 +56,35 @@ public class Quantify {
    * variables.
    */
   public abstract static class Term {
-    /*@SideEffectFree*/
-    public abstract String name(/*>>>@GuardSatisfied Term this*/);
-    /*@SideEffectFree*/
+    @SideEffectFree
+    public abstract String name(@GuardSatisfied Term this);
+
+    @SideEffectFree
     public String esc_name() {
       return name();
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     public String jml_name() {
       return esc_name();
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     public String jml_name(boolean in_prestate) {
       return jml_name();
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     public String simplify_name() {
       return name();
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     public String csharp_name() {
       return name();
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     protected static String name_with_offset(String name, int offset) {
       if (offset == 0) {
         return name;
@@ -101,12 +101,14 @@ public class Quantify {
     public FreeVar(String name) {
       this.name = name;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String name(/*>>>@GuardSatisfied FreeVar this*/) {
+    public String name(@GuardSatisfied FreeVar this) {
       return name;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
     public String simplify_name() {
       return "|" + name + "|";
@@ -120,9 +122,10 @@ public class Quantify {
     public Constant(int val) {
       this.val = val;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String name(/*>>>@GuardSatisfied Constant this*/) {
+    public String name(@GuardSatisfied Constant this) {
       return "" + val;
     }
 
@@ -140,17 +143,20 @@ public class Quantify {
       this.sequence = sequence;
       this.offset = offset;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied Length this*/) {
+    public String toString(@GuardSatisfied Length this) {
       return name();
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String name(/*>>>@GuardSatisfied Length this*/) {
+    public String name(@GuardSatisfied Length this) {
       return name_with_offset("size(" + sequence.name() + ")", offset);
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
     public String esc_name() {
       VarInfo arr_var = get_check_array_var("ESC");
@@ -162,7 +168,8 @@ public class Quantify {
         return name_with_offset(arr_var.esc_name() + ".length", offset);
       }
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
     public String jml_name() {
       VarInfo arr_var = get_check_array_var("JML");
@@ -176,7 +183,8 @@ public class Quantify {
         return name_with_offset(name, offset);
       }
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
     public String jml_name(boolean in_prestate) {
       if (!in_prestate) return jml_name();
@@ -191,7 +199,8 @@ public class Quantify {
         return name_with_offset(name, offset);
       }
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
     public String simplify_name() {
       VarInfo arr_var = get_check_array_var("Simplify");
@@ -204,7 +213,8 @@ public class Quantify {
         return length;
       }
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
     public String csharp_name() {
       VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
@@ -220,7 +230,7 @@ public class Quantify {
      * not exist.
      */
     @SuppressWarnings("sideeffectfree") // throws exception in case of error
-    /*@SideEffectFree*/
+    @SideEffectFree
     private VarInfo get_check_array_var(String output_format) {
       VarInfo arr_var = sequence.get_base_array_hashcode();
       if (arr_var != null) return arr_var;
@@ -251,25 +261,25 @@ public class Quantify {
       this.offset = offset;
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String name(/*>>>@GuardSatisfied VarPlusOffset this*/) {
+    public String name(@GuardSatisfied VarPlusOffset this) {
       return name_with_offset(var.name(), offset);
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
     public String esc_name() {
       return name_with_offset(var.esc_name(), offset);
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
     public String jml_name() {
       return name_with_offset(var.jml_name(), offset);
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
     public String jml_name(boolean in_prestate) {
       if (!in_prestate) return jml_name();
@@ -282,7 +292,7 @@ public class Quantify {
       }
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
     public String simplify_name() {
       if (offset < 0) {
@@ -299,7 +309,7 @@ public class Quantify {
     /** Variable being quantified. */
     public VarInfo var;
     /** Index into the variable. If null, variable is not a sequence. */
-    public /*@Nullable*/ Term index;
+    public @Nullable Term index;
 
     public QuantifyReturn(VarInfo var) {
       this.var = var;
@@ -451,7 +461,7 @@ public class Quantify {
     EnumSet<QuantFlags> flags;
     String quantification;
     String[] arr_vars_indexed;
-    /*@Nullable*/ String[] indices;
+    @Nullable String[] indices;
 
     public SimplifyQuantification(EnumSet<QuantFlags> flags, VarInfo... vars) {
       this.flags = flags.clone();
@@ -494,7 +504,7 @@ public class Quantify {
             // Term _idx = _boundv[0], _low = _boundv[1];
             @SuppressWarnings(
                 "nullness") // if variable is a sequence (is it?), then index is non-null
-            /*@NonNull*/ Term _idx = qrets[i - 1].index;
+            @NonNull Term _idx = qrets[i - 1].index;
             Term _low = qrets[i - 1].var.get_lower_bound();
             if (_low.simplify_name().equals(low.simplify_name())) {
               conditions.append(" (EQ " + _idx.simplify_name() + " " + idx.simplify_name() + ")");
@@ -510,7 +520,7 @@ public class Quantify {
             // Term prev_idx = _boundv[0];
             @SuppressWarnings(
                 "nullness") // if variable is a sequence (is it?), then index is non-null
-            /*@NonNull*/ Term prev_idx = qrets[i - 1].index;
+            @NonNull Term prev_idx = qrets[i - 1].index;
             if (flags.contains(QuantFlags.ADJACENT)) {
               conditions.append(
                   " (EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
@@ -544,7 +554,7 @@ public class Quantify {
       // stringify the indices,
       // note that the index should be relative to the slice, not relative
       // to the original array (we used to get this wrong)
-      indices = new /*@Nullable*/ String[vars.length];
+      indices = new @Nullable String[vars.length];
       for (int i = 0; i < qrets.length; i++) {
         // Term[] boundv = qret.bound_vars.get(i);
         // Term idx_var = boundv[0];

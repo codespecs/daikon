@@ -18,11 +18,6 @@ import junit.framework.*;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * This is a tester for the formatting of invariants in different modes that is configurable by file
  * input. It can test practically any invariant in the Daikon system given the appropriate commands.
@@ -52,7 +47,7 @@ public class InvariantFormatTester extends TestCase {
 
   /** Determines whether the object will generate goal statements. */
   @Option("-g Filename to write goals to")
-  public static /*@Nullable*/ File generate_goals = null;
+  public static @Nullable File generate_goals = null;
 
   /**
    * This function allows this test to be run from the command line instead of its usual method,
@@ -126,7 +121,7 @@ public class InvariantFormatTester extends TestCase {
    * @return the next non-comment, non-whitespace line of the input buffer or null if the end of the
    *     buffer is reached before such a line can be found
    */
-  static /*@Nullable*/ String getNextRealLine(BufferedReader input) {
+  static @Nullable String getNextRealLine(BufferedReader input) {
     String currentLine = "";
 
     try {
@@ -303,7 +298,7 @@ public class InvariantFormatTester extends TestCase {
    * @return true if the line is a comment (that is, not to be interpretted as a command); false
    *     otherwise
    */
-  /*@Pure*/
+  @Pure
   static boolean isComment(String line) {
     return line.startsWith(COMMENT_STARTER_STRING);
   }
@@ -314,7 +309,7 @@ public class InvariantFormatTester extends TestCase {
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
    */
-  /*@Pure*/
+  @Pure
   static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {
       if (!Character.isWhitespace(line.charAt(x))) {

@@ -5,10 +5,6 @@ import static daikon.inv.Invariant.asInvClass;
 import daikon.*;
 import daikon.inv.*;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-*/
-
 /**
  * InvariantLemmas are Lemmas created by printing a Daikon invariant in Simplify format, sometimes
  * with some hacks.
@@ -25,7 +21,7 @@ public class InvariantLemma extends Lemma {
   }
 
   @Override
-  public String summarize(/*>>>@GuardSatisfied InvariantLemma this*/) {
+  public String summarize(@GuardSatisfied InvariantLemma this) {
     return summary + " from " + from;
   }
 

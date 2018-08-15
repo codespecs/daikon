@@ -8,14 +8,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 // Types of Ppt (program point) objects:
 //  Ppt:  abstract base class
 //  PptTopLevel:  pointed to by top-level PptMap object.  Contains all variables
@@ -35,7 +27,7 @@ import org.checkerframework.dataflow.qual.*;
 // functions such as num_vars() and var_info_iterator().
 
 // The common interface for all Ppt objects.
-/*@UsesObjectEquals*/
+@UsesObjectEquals
 public abstract class Ppt implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -55,8 +47,7 @@ public abstract class Ppt implements Serializable {
   // up too much space in PptSlice objects.
   // This is safe if the receiver is @UnknownInitialization(PptTopLevel.class) OR
   // @UnknownInitialization(PptSlice.class), but annotations cannot express that.
-  public abstract String name(
-      /*>>>@GuardSatisfied @UnknownInitialization(PptTopLevel.class) Ppt this*/);
+  public abstract String name(@GuardSatisfied @UnknownInitialization(PptTopLevel.class) Ppt this);
 
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {
@@ -69,7 +60,7 @@ public abstract class Ppt implements Serializable {
 
   /** Returns a string rep of the specified variable names */
   @SuppressWarnings("purity") // Impure side effects do not escape (string creation)
-  /*@SideEffectFree*/
+  @SideEffectFree
   public static String varNames(VarInfo[] infos) {
     StringBuilder sb = new StringBuilder();
     sb.append("(");
@@ -87,9 +78,9 @@ public abstract class Ppt implements Serializable {
   }
 
   /** Return a string representation of the variable names. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String varNames(
-      /*>>>@GuardSatisfied @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/) {
+      @GuardSatisfied @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this) {
     return (varNames(var_infos));
   }
 
@@ -97,7 +88,7 @@ public abstract class Ppt implements Serializable {
    * Returns the varinfo_index of the variable whose name is varname. Returns -1 if there is no such
    * variable.
    */
-  /*@Pure*/
+  @Pure
   public int indexOf(String varname) {
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].name().equals(varname)) {
@@ -108,8 +99,8 @@ public abstract class Ppt implements Serializable {
   }
 
   /** Returns the VarInfo with the specified name. Null if the name is not found. */
-  /*@Pure*/
-  public /*@Nullable*/ VarInfo find_var_by_name(String varname) {
+  @Pure
+  public @Nullable VarInfo find_var_by_name(String varname) {
     // System.out.printf("Ppt.find_var_by_name(%s): %s%n", varname, this);
     int i = indexOf(varname);
     if (i == -1) {
@@ -145,7 +136,7 @@ public abstract class Ppt implements Serializable {
   // Orders ppts by the name, except . and : are swapped
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
   public static final class NameComparator implements Comparator<PptTopLevel> {
-    /*@Pure*/
+    @Pure
     @Override
     public int compare(PptTopLevel p1, PptTopLevel p2) {
       if (p1 == p2) {

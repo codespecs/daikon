@@ -13,10 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * This class's main method can be used to update both the target files of SplitterFactoryTest and
  * the code of the SplitterFactoryTest itself.
@@ -196,9 +192,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("import junit.framework.*;");
     ps.println("import org.plumelib.util.UtilPlume;");
     ps.println();
-    ps.println("/*>>>");
     ps.println("import org.checkerframework.checker.nullness.qual.*;");
-    ps.println("*/");
     ps.println();
     ps.println("/**");
     ps.println(
@@ -225,7 +219,7 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  private static String targetDir = \"" + targetDir + "\";");
     ps.println();
-    ps.println("  private static /*@Nullable*/ String tempDir = null;");
+    ps.println("  private static @Nullable String tempDir = null;");
     ps.println();
     ps.println("  private static boolean saveFiles = false;");
     ps.println();

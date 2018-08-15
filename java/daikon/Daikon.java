@@ -53,13 +53,6 @@ import org.plumelib.util.EntryReader;
 import org.plumelib.util.RegexUtil;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /**
  * The {@link #main} method is the main entry point for the Daikon invariant detector. The {@link
  * #mainHelper} method is the entry point, when called programmatically.
@@ -188,7 +181,7 @@ public final class Daikon {
    * &#64;cindex nonsensical values for variables, guarding
    */
   // Perhaps a better default would be "missing".
-  public static /*@Interned*/ String dkconfig_guardNulls = "default";
+  public static @Interned String dkconfig_guardNulls = "default";
 
   /**
    * Whether to associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
@@ -216,20 +209,20 @@ public final class Daikon {
   public static boolean ignore_comparability = false;
 
   // Controls which program points/variables are used/ignored.
-  public static /*@Nullable*/ Pattern ppt_regexp;
-  public static /*@Nullable*/ Pattern ppt_omit_regexp;
-  public static /*@Nullable*/ Pattern var_regexp;
-  public static /*@Nullable*/ Pattern var_omit_regexp;
+  public static @Nullable Pattern ppt_regexp;
+  public static @Nullable Pattern ppt_omit_regexp;
+  public static @Nullable Pattern var_regexp;
+  public static @Nullable Pattern var_omit_regexp;
 
   /**
    * If set, only ppts less than ppt_max_name are included. Used by the configuration option
    * dkconfig_ppt_percent to only work on a specified percent of the ppts.
    */
-  public static /*@Nullable*/ String ppt_max_name = null;
+  public static @Nullable String ppt_max_name = null;
 
   // The invariants detected will be serialized and written to this
   // file.
-  public static /*@Nullable*/ File inv_file;
+  public static @Nullable File inv_file;
 
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;
@@ -320,7 +313,7 @@ public final class Daikon {
     }
   }
 
-  public static /*@MonotonicNonNull*/ File server_dir =
+  public static @MonotonicNonNull File server_dir =
       null; // YOAV: the directory from which we read the dtrace files
 
   // A PptMap (mapping String -> PptTopLevel) that contains all the program points.
@@ -328,11 +321,10 @@ public final class Daikon {
   public static PptMap all_ppts;
 
   /** current invariant (used for debugging) */
-  public static /*@Nullable*/ Invariant current_inv = null;
+  public static @Nullable Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
-  public static ArrayList</*@Prototype*/ Invariant> proto_invs =
-      new ArrayList</*@Prototype*/ Invariant>();
+  public static ArrayList<@Prototype Invariant> proto_invs = new ArrayList<@Prototype Invariant>();
 
   /** Debug tracer. */
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
@@ -493,7 +485,7 @@ public final class Daikon {
     }
     // This constructor is too error-prone:  it leads to throwing away
     // subsequent args if there are not enough % directives in the string.
-    // public UserError(String format, /*@Nullable*/ Object... args) {
+    // public UserError(String format, @Nullable Object... args) {
     //   super (String.format (format, args));
     // }
   }
@@ -960,7 +952,7 @@ public final class Daikon {
                         + ": not in the format required by Class.getName(String)");
               }
               @SuppressWarnings("signature") // Regex match guarantees the format of Class.getName()
-              /*@ClassGetName*/ String cname = user_defined_invariant_string;
+              @ClassGetName String cname = user_defined_invariant_string;
               userDefinedInvariants.add(cname);
             } catch (Exception e) {
               throw new Daikon.UserError(
@@ -997,7 +989,7 @@ public final class Daikon {
               "unchecked", // type of ClassLoader.classes field is known
               "nullness" // ClassLoader.classes is non-null
             })
-            /*@NonNull*/ List<Class<?>> classes = (List<Class<?>>) classesAsObject;
+            @NonNull List<Class<?>> classes = (List<Class<?>>) classesAsObject;
             for (int i = 0; i < classes.size(); i++) {
               Class<?> loadedClass = classes.get(i);
               if (Invariant.class.isAssignableFrom(loadedClass)) {
@@ -1274,8 +1266,8 @@ public final class Daikon {
    * Invariants passed on the command line with the {@code --user_defined_invariant} option. A list
    * of class names in the format required by {@link Class#forName(String)}.
    */
-  private static List</*@ClassGetName*/ String> userDefinedInvariants =
-      new ArrayList</*@ClassGetName*/ String>();
+  private static List<@ClassGetName String> userDefinedInvariants =
+      new ArrayList<@ClassGetName String>();
 
   /**
    * Creates the list of prototype invariants for all Daikon invariants. New invariants must be
@@ -1565,8 +1557,8 @@ public final class Daikon {
     }
 
     // Remove any elements that are not enabled
-    for (Iterator</*@Prototype*/ Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
-      /*@Prototype*/ Invariant inv = i.next();
+    for (Iterator<@Prototype Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
+      @Prototype Invariant inv = i.next();
       assert inv != null;
       if (!inv.enabled()) i.remove();
     }
@@ -1668,7 +1660,7 @@ public final class Daikon {
           exit_vars[j].value_index = ppt.var_infos[j].value_index;
           // Don't inherit the entry variable's equalitySet.
           @SuppressWarnings("nullness") // reinitialization
-          /*@NonNull*/ Equality es = null;
+          @NonNull Equality es = null;
           exit_vars[j].equalitySet = es;
         }
 
@@ -1830,7 +1822,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
-  /*@RequiresNonNull("fileio_progress")*/
+  @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
     long startTime = System.nanoTime();
@@ -1947,7 +1939,7 @@ public final class Daikon {
 
   // Is set unconditionally in mainHelper
   /** Takes precedence over the progress variable. */
-  private static /*@MonotonicNonNull*/ FileIOProgress fileio_progress = null;
+  private static @MonotonicNonNull FileIOProgress fileio_progress = null;
 
   /** Outputs FileIO progress information. Uses global variable FileIO.data_trace_state. */
   public static class FileIOProgress extends Thread {
@@ -2043,7 +2035,7 @@ public final class Daikon {
    * instantiated. This routine processes data to falsify the candidate invariants.
    */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
-  /*@RequiresNonNull("fileio_progress")*/
+  @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
     MemMonitor monitor = null;
@@ -2270,7 +2262,7 @@ public final class Daikon {
       }
       System.out.println("  vars       = " + ppt.var_infos.length);
       System.out.println("  leaders    = " + leader_cnt);
-      for (Map.Entry</*@KeyFor("type_map")*/ ProglangType, Count> e : type_map.entrySet()) {
+      for (Map.Entry<@KeyFor("type_map") ProglangType, Count> e : type_map.entrySet()) {
         ProglangType file_rep_type = e.getKey();
         Count cnt = e.getValue();
         System.out.printf("  %s  = %d%n", file_rep_type, cnt.val);
@@ -2384,7 +2376,7 @@ public final class Daikon {
    * Returns the ppt name, max_ppt, that corresponds to the specified percentage of ppts (presuming
    * that only those ppts &le; max_ppt will be processed).
    */
-  private static /*@Nullable*/ String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
+  private static @Nullable String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100)) {
@@ -2459,7 +2451,7 @@ public final class Daikon {
    * optimizations (should yield the same invariants as the simple incremental algorithm.
    */
   @SuppressWarnings("flowexpr.parse.error") // private field
-  /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
+  @RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})
   public static void undoOpts(PptMap all_ppts) {
 
     // undo suppressions

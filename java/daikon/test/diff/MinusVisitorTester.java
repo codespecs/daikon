@@ -7,10 +7,6 @@ import daikon.test.*;
 import java.util.Arrays;
 import junit.framework.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 public class MinusVisitorTester extends TestCase {
 
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
@@ -61,14 +57,14 @@ public class MinusVisitorTester extends TestCase {
     Invariant unjO = new DiffDummyInvariant(sliceo, "O", false);
 
     InvMap map1 = new InvMap();
-    map1.put(A, Arrays.</*@NonNull*/ Invariant>asList(W, X1, Y));
-    map1.put(B, Arrays.</*@NonNull*/ Invariant>asList(Y));
-    map1.put(D, Arrays.</*@NonNull*/ Invariant>asList(M, unjN, unjO));
+    map1.put(A, Arrays.<@NonNull Invariant>asList(W, X1, Y));
+    map1.put(B, Arrays.<@NonNull Invariant>asList(Y));
+    map1.put(D, Arrays.<@NonNull Invariant>asList(M, unjN, unjO));
 
     InvMap map2 = new InvMap();
-    map2.put(A, Arrays.</*@NonNull*/ Invariant>asList(W, X2, Z));
-    map2.put(C, Arrays.</*@NonNull*/ Invariant>asList(Z));
-    map2.put(D, Arrays.</*@NonNull*/ Invariant>asList(unjM, N));
+    map2.put(A, Arrays.<@NonNull Invariant>asList(W, X2, Z));
+    map2.put(C, Arrays.<@NonNull Invariant>asList(Z));
+    map2.put(D, Arrays.<@NonNull Invariant>asList(unjM, N));
 
     RootNode root = diff.diffInvMap(map1, map2, false);
     MinusVisitor v = new MinusVisitor();
@@ -76,9 +72,9 @@ public class MinusVisitorTester extends TestCase {
     InvMap result = v.getResult();
 
     InvMap expected = new InvMap();
-    expected.put(A, Arrays.</*@NonNull*/ Invariant>asList(X1, Y));
-    expected.put(B, Arrays.</*@NonNull*/ Invariant>asList(Y));
-    expected.put(D, Arrays.</*@NonNull*/ Invariant>asList(M));
+    expected.put(A, Arrays.<@NonNull Invariant>asList(X1, Y));
+    expected.put(B, Arrays.<@NonNull Invariant>asList(Y));
+    expected.put(D, Arrays.<@NonNull Invariant>asList(M));
 
     assert expected.toString().equals(result.toString());
   }

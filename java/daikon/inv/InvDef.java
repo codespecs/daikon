@@ -7,12 +7,6 @@ import daikon.inv.binary.*;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /** Class that defines an invariant so that it can be searched for as part of suppression. */
 public class InvDef {
 
@@ -24,7 +18,8 @@ public class InvDef {
    * then this is a binary invariant.
    */
   VarInfo v1;
-  /*@Nullable*/ VarInfo v2;
+
+  @Nullable VarInfo v2;
 
   /** Argument indices used by the invariant. */
   int v1_index = -1;
@@ -36,7 +31,7 @@ public class InvDef {
   Class<? extends Invariant> inv_class;
 
   /** State to check. Only for invariants with state. */
-  /*@Nullable*/ Object state;
+  @Nullable Object state;
 
   /** True if the order of the variables was swapped. */
   boolean swap = false;
@@ -86,7 +81,7 @@ public class InvDef {
       if (swap) {
         @SuppressWarnings("nullness") // static method, so null first arg is OK: swap_class()
         Class<? extends Invariant> tmp_cls =
-            asInvClass(swap_method.invoke(null, (Object /*@Nullable*/ []) null));
+            asInvClass(swap_method.invoke(null, (Object @Nullable []) null));
         cls = tmp_cls;
       }
     } catch (Exception e) {
@@ -117,9 +112,9 @@ public class InvDef {
   //     this.inv_class = inv_class;
   //   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied InvDef this*/) {
+  public String toString(@GuardSatisfied InvDef this) {
     String out = "v1=" + v1.name();
     if (v2 != null) out += ", v2=" + v2.name();
     return (out
@@ -165,7 +160,7 @@ public class InvDef {
   /**
    * Looks for this invariant (in this ppt). Returns the invariant if it finds it, null otherwise.
    */
-  public /*@Nullable*/ Invariant find() {
+  public @Nullable Invariant find() {
 
     PptTopLevel ppt = v1.ppt;
 

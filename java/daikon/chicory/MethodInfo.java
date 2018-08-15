@@ -7,13 +7,6 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Keeps information about a method that is useful for writing out decl and/or dtrace information.
  * Original information is filled out during the transformation and other information is added the
@@ -30,7 +23,7 @@ public class MethodInfo {
    * {@link #is_class_init()}.
    */
   // The code often assumes that member != null.
-  public /*@MonotonicNonNull*/ Member member = null;
+  public @MonotonicNonNull Member member = null;
 
   /**
    * Method name. For example: "public static void sort(int[] arr)" would have method_name "sort".
@@ -44,7 +37,7 @@ public class MethodInfo {
    * Array of argument types for this method (fully qualified). For example: "public static void
    * examineObject(Object x)" would have arg_types {"java.lang.Object"}.
    */
-  public /*@ClassGetName*/ String[] arg_type_strings;
+  public @ClassGetName String[] arg_type_strings;
 
   /** Array of argument types as classes for this method */
   public Class<?>[] arg_types;
@@ -60,14 +53,14 @@ public class MethodInfo {
    *
    * <p>Set by DeclWriter and read by DTraceWriter.
    */
-  public /*@MonotonicNonNull*/ RootInfo traversalEnter = null;
+  public @MonotonicNonNull RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
    *
    * <p>Set by DeclWriter and read by DTraceWriter.
    */
-  public /*@MonotonicNonNull*/ RootInfo traversalExit = null;
+  public @MonotonicNonNull RootInfo traversalExit = null;
 
   /** The number of times this method has been called */
   public int call_cnt = 0;
@@ -87,7 +80,7 @@ public class MethodInfo {
       ClassInfo class_info,
       String method_name,
       String[] arg_names,
-      /*@ClassGetName*/ String[] arg_type_strings,
+      @ClassGetName String[] arg_type_strings,
       List<Integer> exit_locations,
       List<Boolean> is_included) {
 
@@ -180,20 +173,20 @@ public class MethodInfo {
    *
    * @return true iff this method is a constructor
    */
-  /*@Pure*/
+  @Pure
   public boolean is_constructor() {
     return (method_name.equals("<init>") || method_name.equals(""));
   }
 
   /** Returns whether or not this method is a class initializer */
-  /*@Pure*/
+  @Pure
   public boolean is_class_init() {
     return (method_name.equals("<clinit>"));
   }
 
   /** Returns whether or not this method is static */
-  /*@RequiresNonNull("member")*/
-  /*@Pure*/
+  @RequiresNonNull("member")
+  @Pure
   public boolean is_static() {
     return Modifier.isStatic(member.getModifiers());
   }
@@ -216,9 +209,9 @@ public class MethodInfo {
     //                    traversalExit.treeString());
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied MethodInfo this*/) {
+  public String toString(@GuardSatisfied MethodInfo this) {
     String out = "";
     if (class_info != null) out = class_info.class_name + ".";
     out += method_name + "(";

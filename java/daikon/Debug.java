@@ -9,11 +9,6 @@ import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * Debug class used with the logger to create standardized output. It can be setup to track
  * combinations of classes, program points, and variables. The most common class to track is an
@@ -97,7 +92,7 @@ public final class Debug {
    * FunctionBinary specific log functions. If null, there is no restriction (all function binary
    * methods are printed). See Functions.java for a list of function names.
    */
-  public static /*@Nullable*/ String function_binary_method = null
+  public static @Nullable String function_binary_method = null
       // "java.lang.Math.max("
       // "java.lang.Math.min("
       // "org.plumelib.util.MathPlume.logicalXor("
@@ -151,16 +146,16 @@ public final class Debug {
   // subclass of Invariant -- for instance, it might be a subclass of
   // BinaryDerivationFactory.
   /** cached class: class to use by default when calling variants of log() with few arguments */
-  public /*@Nullable*/ Class<?> cache_class;
+  public @Nullable Class<?> cache_class;
 
   /** cached ppt: ppt to use by default when calling variants of log() with few arguments */
-  public /*@Nullable*/ Ppt cache_ppt;
+  public @Nullable Ppt cache_ppt;
 
   /**
    * Cached variables: variables to use by default when calling variants of log() with few
    * arguments.
    */
-  public VarInfo /*@Nullable*/ [] cache_vis;
+  public VarInfo @Nullable [] cache_vis;
 
   /**
    * Ordinarily, a client would have to supply a Class, Ppt, and List&lt;Varinfo&gt; with each call
@@ -177,7 +172,7 @@ public final class Debug {
    * Otherwise, return NULL. Preferred over calling the constructor directly, since it doesn't
    * create the object if it doesn't have to.
    */
-  public static /*@Nullable*/ Debug newDebug(Class<?> c, Ppt ppt, VarInfo[] vis) {
+  public static @Nullable Debug newDebug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     if (logOn() && class_match(c) && ppt_match(ppt) && var_match(vis)) {
       return new Debug(c, ppt, vis);
     } else {
@@ -207,8 +202,7 @@ public final class Debug {
    * Looks for each of the variables in vis in the DebugTrackVar list. If any match, returns that
    * variable. Returns null if there are no matches.
    */
-  public /*@Nullable*/ VarInfo visTracked(
-      /*>>>@UnknownInitialization Debug this,*/ List<VarInfo> vis) {
+  public @Nullable VarInfo visTracked(@UnknownInitialization Debug this, List<VarInfo> vis) {
 
     for (VarInfo v : vis) {
       Set<VarInfo> evars = null;
@@ -229,7 +223,7 @@ public final class Debug {
     return null;
   }
 
-  private static /*@Nullable*/ String[] ourvars = new String[3];
+  private static @Nullable String[] ourvars = new String[3];
 
   private static final VarInfo[] vis1 = new VarInfo[1];
   private static final VarInfo[] vis2 = new VarInfo[2];
@@ -258,8 +252,10 @@ public final class Debug {
    * other words, future calls can use the versions of log with fewer arguments.
    */
   void set(
-      /*>>>@UnknownInitialization Debug this,*/
-      /*@Nullable*/ Class<?> c, /*@Nullable*/ Ppt ppt, VarInfo /*@Nullable*/ [] vis) {
+      @UnknownInitialization Debug this,
+      @Nullable Class<?> c,
+      @Nullable Ppt ppt,
+      VarInfo @Nullable [] vis) {
     cache_class = c;
     cache_ppt = ppt;
     cache_vis = vis;
@@ -331,7 +327,7 @@ public final class Debug {
    * Logs a description of the class, ppt, ppt variables and the specified msg via the logger as
    * described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
-  public static void log(Logger debug, Class<?> inv_class, /*@Nullable*/ Ppt ppt, String msg) {
+  public static void log(Logger debug, Class<?> inv_class, @Nullable Ppt ppt, String msg) {
     if (ppt == null) {
       log(debug, inv_class, ppt, null, msg);
     } else {
@@ -384,7 +380,7 @@ public final class Debug {
       class_str = "null";
     } else {
       @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
-      /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
+      @NonNull String packageName = inv_class.getPackage().getName() + ".";
       class_str = UtilPlume.replaceString(inv_class.getName(), packageName, "");
     }
 
@@ -442,7 +438,7 @@ public final class Debug {
    */
   // 3-argument form
   public static boolean log(
-      Class<?> inv_class, /*@UnknownInitialization(PptTopLevel.class)*/ Ppt ppt, String msg) {
+      Class<?> inv_class, @UnknownInitialization(PptTopLevel.class) Ppt ppt, String msg) {
 
     return (log(inv_class, ppt, ppt.var_infos, msg));
   }
@@ -456,9 +452,9 @@ public final class Debug {
    */
   // 4-argument form
   public static boolean log(
-      /*@Nullable*/ Class<?> inv_class,
-      /*@Nullable*/ /*@UnknownInitialization(PptTopLevel.class)*/ Ppt ppt,
-      VarInfo /*@Nullable*/ [] vis,
+      @Nullable Class<?> inv_class,
+      @Nullable @UnknownInitialization(PptTopLevel.class) Ppt ppt,
+      VarInfo @Nullable [] vis,
       String msg) {
 
     if (!debugTrack.isLoggable(Level.FINE)) return false;
@@ -476,7 +472,7 @@ public final class Debug {
     String class_str = "null";
     if (inv_class != null) {
       @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
-      /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
+      @NonNull String packageName = inv_class.getPackage().getName() + ".";
       class_str = UtilPlume.replaceString(inv_class.getName(), packageName, "");
     }
 
@@ -526,7 +522,7 @@ public final class Debug {
   }
 
   /** Returns whether or not the specified class matches the classes being tracked. */
-  public static boolean class_match(/*@Nullable*/ Class<?> inv_class) {
+  public static boolean class_match(@Nullable Class<?> inv_class) {
 
     if ((debugTrackClass.length > 0) && (inv_class != null)) {
       return (strContainsElem(inv_class.getName(), debugTrackClass));
@@ -535,7 +531,7 @@ public final class Debug {
   }
 
   /** Returns whether or not the specified ppt matches the ppts being tracked. */
-  public static boolean ppt_match(/*@Nullable*/ Ppt ppt) {
+  public static boolean ppt_match(@Nullable Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
       return ((ppt != null) && strContainsElem(ppt.name(), debugTrackPpt));
@@ -548,7 +544,7 @@ public final class Debug {
    * Debug.ourvars with the names of the variables matched if they are not the leader of their
    * equality sets.
    */
-  public static boolean var_match(VarInfo /*@Nullable*/ [] vis) {
+  public static boolean var_match(VarInfo @Nullable [] vis) {
 
     if (debugTrackVars.length == 0) return true;
     if (vis == null) return false;
@@ -693,7 +689,7 @@ public final class Debug {
   }
 
   /** Like Object.toString(), but handles null, and has special handling for arrays. */
-  public static String toString(/*@Nullable*/ Object val) {
+  public static String toString(@Nullable Object val) {
     if (val == null) return "none";
     if (val instanceof String) return "\"" + val + "\"";
     if (val instanceof VarInfo[]) return VarInfo.arrayToString((VarInfo[]) val);
@@ -751,7 +747,7 @@ public final class Debug {
    * at sign (@). Each is optional and can be left out. The add_track routine can be called multiple
    * times. An invariant that matches any of the specifications will be tracked.
    */
-  public static /*@Nullable*/ String add_track(String def) {
+  public static @Nullable String add_track(String def) {
 
     String classes = null;
     String vars = null;

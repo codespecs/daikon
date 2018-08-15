@@ -1,9 +1,5 @@
 package daikon.chicory;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * The StaticObjInfo class is a subtype of DaikonVariableInfo used as a root for static variables
  * within a class (which are the only variables visible to static methods). Nothing is printed for
@@ -27,7 +23,7 @@ public class StaticObjInfo extends DaikonVariableInfo {
    * @see daikon.chicory.DaikonVariableInfo#getChildValue(java.lang.Object)
    */
   @Override
-  public /*@Nullable*/ Object getMyValFromParentVal(Object val) {
+  public @Nullable Object getMyValFromParentVal(Object val) {
     return null;
   }
 

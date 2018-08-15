@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import jtb.syntaxtree.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /** Represents a set of classes created by the instrumenter to check invariants. */
 public class CheckerClasses {
 
@@ -36,7 +32,7 @@ public class CheckerClasses {
 
     @SuppressWarnings(
         "nullness") // application invariant: a constructor is always in a class or interface
-    /*@NonNull*/ ClassOrInterfaceBody body =
+    @NonNull ClassOrInterfaceBody body =
         (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, clazz);
     addDeclaration(body, decl);
   }
@@ -45,7 +41,7 @@ public class CheckerClasses {
 
     @SuppressWarnings(
         "nullness") // application invariant: a method is always in a class or interface
-    /*@NonNull*/ ClassOrInterfaceBody body =
+    @NonNull ClassOrInterfaceBody body =
         (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, clazz);
     addDeclaration(body, decl);
   }

@@ -7,10 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * A class that gives an example of how to use a FileIO.Processor object to read a trace file.
  * Invoke it like:
@@ -63,10 +59,10 @@ public class ReadTrace {
         new LinkedHashMap<PptTopLevel, List<ValueTuple>>();
 
     /** Process the sample, by adding it to the {@code samples} map. */
-    /*@RequiresNonNull("FileIO.data_trace_state")*/
+    @RequiresNonNull("FileIO.data_trace_state")
     @Override
     public void process_sample(
-        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
+        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
 
       // Add orig and derived variables to the ValueTuple
       FileIO.compute_orig_variables(ppt, vt.vals, vt.mods, nonce);

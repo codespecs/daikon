@@ -5,10 +5,6 @@ import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * PrefixRemover is a visitor for a JTB syntax tree that removes all instances of some prefix. For
  * example if "prefix" is the prefix then "prefix.x" would go to "x" and "y.prefix.x" would go to
@@ -25,7 +21,7 @@ class PrefixRemover extends DepthFirstVisitor {
   private String prefix;
 
   /** The last token visited by this. */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   private int columnshift = 0;
   private int columnshiftline = -1;

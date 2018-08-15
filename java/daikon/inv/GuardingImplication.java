@@ -2,11 +2,6 @@ package daikon.inv;
 
 import daikon.*;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * This is a special implication invariant that guards any invariants that are over variables that
  * are sometimes missing. For example, if the invariant {@code a.x = 0} is true, the guarded
@@ -42,7 +37,7 @@ public class GuardingImplication extends Implication {
     return result;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isWorthPrinting() {
     return right.isWorthPrinting();
@@ -50,7 +45,7 @@ public class GuardingImplication extends Implication {
   }
 
   @Override
-  public boolean enoughSamples(/*>>>@GuardSatisfied GuardingImplication this*/) {
+  public boolean enoughSamples(@GuardSatisfied GuardingImplication this) {
     return right.enoughSamples();
   }
 

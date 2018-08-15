@@ -26,12 +26,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.plumelib.bcelutil.SimpleLog;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
 public final class DCRuntime {
 
@@ -57,14 +51,14 @@ public final class DCRuntime {
   static int max_jdk_static = 100000;
 
   /** If the application exits with an exception, it should be placed here */
-  public static /*@Nullable*/ Throwable exit_exception = null;
+  public static @Nullable Throwable exit_exception = null;
 
   /** Map from each primitive static name to the offset in static_tags. */
   // public static Map<String,Integer> static_map
   //   = new LinkedHashMap<String,Integer>();
 
   /** Storage for each static tag */
-  public static List</*@Nullable*/ Object> static_tags = new ArrayList</*@Nullable*/ Object>();
+  public static List<@Nullable Object> static_tags = new ArrayList<@Nullable Object>();
 
   /**
    * Object used to mark procedure entries in the tag stack. It is pushed on the stack at entry and
@@ -131,7 +125,7 @@ public final class DCRuntime {
    */
   private static class UninitFieldTag {
     String descr;
-    /*@Nullable*/ Throwable stack_trace = null;
+    @Nullable Throwable stack_trace = null;
 
     public UninitFieldTag() {}
 
@@ -187,7 +181,7 @@ public final class DCRuntime {
     }
 
     // Initialize the array of static tags
-    ((ArrayList</*@Nullable*/ Object>) static_tags).ensureCapacity(max_jdk_static);
+    ((ArrayList<@Nullable Object>) static_tags).ensureCapacity(max_jdk_static);
     while (static_tags.size() <= max_jdk_static) static_tags.add(null);
   }
 
@@ -1018,8 +1012,7 @@ public final class DCRuntime {
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
    */
-  public static void enter(
-      Object[] tag_frame, /*@Nullable*/ Object obj, int mi_index, Object[] args) {
+  public static void enter(Object[] tag_frame, @Nullable Object obj, int mi_index, Object[] args) {
 
     // Don't be recursive
     if (in_enter_exit) return;
@@ -1076,7 +1069,7 @@ public final class DCRuntime {
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
    */
-  public static void enter_refs_only(/*@Nullable*/ Object obj, int mi_index, Object[] args) {
+  public static void enter_refs_only(@Nullable Object obj, int mi_index, Object[] args) {
 
     // Don't be recursive
     if (in_enter_exit) return;
@@ -1139,7 +1132,7 @@ public final class DCRuntime {
    */
   public static void exit(
       Object[] tag_frame,
-      /*@Nullable*/ Object obj,
+      @Nullable Object obj,
       int mi_index,
       Object[] args,
       Object ret_val,
@@ -1190,7 +1183,7 @@ public final class DCRuntime {
    * @param exit_line_number the source line number of this exit point
    */
   public static void exit_refs_only(
-      /*@Nullable*/ Object obj, int mi_index, Object[] args, Object ret_val, int exit_line_number) {
+      @Nullable Object obj, int mi_index, Object[] args, Object ret_val, int exit_line_number) {
 
     // Don't be recursive
     if (in_enter_exit) return;
@@ -2351,9 +2344,9 @@ public final class DCRuntime {
   private static class DVSet extends ArrayList<DaikonVariableInfo> implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int compareTo(/*>>>@GuardSatisfied DVSet this,*/ DVSet s1) {
+    public int compareTo(@GuardSatisfied DVSet this, DVSet s1) {
       if (s1.size() == 0) {
         return 1;
       } else if (size() == 0) {
@@ -2376,7 +2369,7 @@ public final class DCRuntime {
    * <p>The sets are calculated by processing each daikon variable and adding it to a list
    * associated with the leader of that set.
    */
-  static /*@Nullable*/ List<DVSet> get_comparable(RootInfo root) {
+  static @Nullable List<DVSet> get_comparable(RootInfo root) {
 
     if (root == null) return null;
 
@@ -2406,8 +2399,7 @@ public final class DCRuntime {
    * each parent node as the key to a set contains all its children. The parameter RootInfo node is
    * included as a key to all its children.
    */
-  static /*@PolyNull*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced(
-      /*@PolyNull*/ RootInfo root) {
+  static @PolyNull Map<DaikonVariableInfo, DVSet> get_comparable_traced(@PolyNull RootInfo root) {
     if (root == null) return null;
 
     // List of all of the parent-child relationships, where parent-child
@@ -2888,7 +2880,7 @@ public final class DCRuntime {
   }
 
   /** Returns whether or not the specified class is initialized. */
-  /*@Pure*/
+  @Pure
   public static boolean is_class_init(Class<?> clazz) {
     return (init_classes.contains(clazz.getName()));
   }

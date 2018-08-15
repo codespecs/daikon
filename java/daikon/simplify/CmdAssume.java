@@ -1,10 +1,5 @@
 package daikon.simplify;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * An Assume command pushes some proposition onto the assumption stack of the session. The
  * proposition is assumed to be true, and is not proved. This command will not block.
@@ -19,7 +14,7 @@ public class CmdAssume implements Cmd {
 
   /** For documentation, read the class overview. */
   @Override
-  public void apply(final /*@GuardedBy("<self>")*/ Session s) {
+  public void apply(final @GuardedBy("<self>") Session s) {
 
     synchronized (s) {
       // send out the (BG_PUSH proposition)
@@ -33,9 +28,9 @@ public class CmdAssume implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied CmdAssume this*/) {
+  public String toString(@GuardSatisfied CmdAssume this) {
     return "CmdAssume: " + proposition;
   }
 }

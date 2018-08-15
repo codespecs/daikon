@@ -11,10 +11,6 @@ import java.util.Map;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 // CreateSpinfo extracts the following expressions from the Java source:
 // For each method:
 //  * extracts all expressions in conditional statements,
@@ -32,10 +28,10 @@ import org.checkerframework.checker.nullness.qual.*;
 
 class ConditionExtractor extends DepthFirstVisitor {
 
-  private /*@Nullable*/ String packageName;
+  private @Nullable String packageName;
   private String className = "classname field is uninitialized"; // The class name.
-  private /*@Nullable*/ String curMethodName; // Name of current method being parsed
-  private /*@Nullable*/ String curMethodDeclaration;
+  private @Nullable String curMethodName; // Name of current method being parsed
+  private @Nullable String curMethodDeclaration;
   boolean enterMethod = false; // true if the current Node is a Method
   // declaration ie. we just entered a method.
 
@@ -342,7 +338,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     return replaceStatements;
   }
 
-  public /*@Nullable*/ String getPackageName() {
+  public @Nullable String getPackageName() {
     return packageName;
   }
 }

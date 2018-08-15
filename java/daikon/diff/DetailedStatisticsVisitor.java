@@ -8,11 +8,6 @@ import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Computes statistics about the differences between the sets of invariants. The statistics can be
  * printed as a human-readable table or a tab-separated list suitable for further processing.
@@ -96,7 +91,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Adds the difference between the two invariants to the appropriate entry in the frequencies
    * table.
    */
-  private void addFrequency(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  private void addFrequency(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     if (continuousJustification) {
       addFrequencyContinuous(inv1, inv2);
     } else {
@@ -108,7 +103,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Treats justification as a binary value. The table entry is incremented by 1 regardless of the
    * difference in justifications.
    */
-  private void addFrequencyBinary(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  private void addFrequencyBinary(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
     freq[type][relationship]++;
@@ -118,7 +113,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Treats justification as a continuous value. If one invariant is justified but the other is
    * unjustified, the table entry is incremented by the difference in justifications.
    */
-  private void addFrequencyContinuous(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  private void addFrequencyContinuous(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
 
@@ -153,12 +148,12 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * and whether the pair is interesting or not. A pair is interesting if at least one invariant is
    * interesting.
    */
-  public static int determineType(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  public static int determineType(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int type;
 
     // Set inv to a non-null invariant
     @SuppressWarnings("nullness") // at least one argument is non-null
-    /*@NonNull*/ Invariant inv = (inv1 != null) ? inv1 : inv2;
+    @NonNull Invariant inv = (inv1 != null) ? inv1 : inv2;
 
     boolean interesting =
         ((inv1 != null && inv1.isInteresting()) || (inv2 != null && inv2.isInteresting()));
@@ -201,8 +196,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Returns the relationship between the two invariants. There are twelve possible relationships,
    * described at the beginning of this file.
    */
-  public static int determineRelationship(
-      /*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  public static int determineRelationship(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int relationship;
 
     if (inv1 == null) {
@@ -260,7 +254,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
 
   /** Returns a human-readable table of its data. */
   @SuppressWarnings("NarrowingCompoundAssignment") // due to heterogeneous freq array
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String format() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -312,8 +306,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Returns true if the pair of invariants should be added to the frequency table, based on their
    * printability.
    */
-  private static boolean shouldAddFrequency(
-      /*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  private static boolean shouldAddFrequency(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     return (inv1 != null && inv1.isWorthPrinting()) || (inv2 != null && inv2.isWorthPrinting());
   }
 }

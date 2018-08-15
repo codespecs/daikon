@@ -6,10 +6,6 @@ import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * TokenReplacer is a JTB syntax tree visitor that replaces a given set of tokens that are names of
  * a variable with another set of tokens. Note that it only replaces tokens that represent name of
@@ -29,10 +25,10 @@ class TokenReplacer extends DepthFirstVisitor {
   // the replacement for the ith element of oldVars.
 
   /** the last token visited. */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   /** the token visited before lastToken. */
-  private /*@MonotonicNonNull*/ NodeToken twoTokensAgo;
+  private @MonotonicNonNull NodeToken twoTokensAgo;
 
   /**
    * Creates a new TokenReplacer with ith element of oldVars being replaced with ith element of new
@@ -70,7 +66,7 @@ class TokenReplacer extends DepthFirstVisitor {
   }
 
   /** Replaces lastToken if needed. */
-  /*@RequiresNonNull("lastToken")*/
+  @RequiresNonNull("lastToken")
   private void replaceLastToken() {
     if (Visitors.isIdentifier(lastToken)
         && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))) {

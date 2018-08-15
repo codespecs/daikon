@@ -4,16 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.regex.qual.*;
-*/
-
 /** Supplies a static method htmlToTexinfo that converts HTML to Texinfo format. */
 public class HtmlToTexinfo {
 
   private static final String lineSep = System.getProperty("line.separator");
 
-  public static /*@Regex(1)*/ Pattern javadocAtCode;
+  public static @Regex(1) Pattern javadocAtCode;
 
   static {
     // Javadoc actually permits matched braces.  Expand this in the future when needed.

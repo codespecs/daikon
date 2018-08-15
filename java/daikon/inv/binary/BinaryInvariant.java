@@ -7,13 +7,6 @@ import daikon.inv.*;
 import daikon.inv.InvariantStatus;
 import java.lang.reflect.Method;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /** Provides a class that defines the functions that must exist for each two variable invariant. */
 public abstract class BinaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -25,15 +18,15 @@ public abstract class BinaryInvariant extends Invariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ BinaryInvariant() {
+  protected @Prototype BinaryInvariant() {
     super();
   }
 
   public abstract InvariantStatus check(
-      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count);
+      @Interned Object val1, @Interned Object val2, int mod_index, int count);
 
   public abstract InvariantStatus add(
-      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count);
+      @Interned Object val1, @Interned Object val2, int mod_index, int count);
 
   /**
    * Applies the variables in the correct order. If the second variable is an array and the first
@@ -41,7 +34,7 @@ public abstract class BinaryInvariant extends Invariant {
    * argument).
    */
   public InvariantStatus add_unordered(
-      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
+      @Interned Object val1, @Interned Object val2, int mod_index, int count) {
 
     VarInfo v1 = ppt.var_infos[0];
     VarInfo v2 = ppt.var_infos[1];
@@ -63,8 +56,11 @@ public abstract class BinaryInvariant extends Invariant {
    * prototype invariants.
    */
   public InvariantStatus check_unordered(
-      /*>>> @Prototype BinaryInvariant this,*/
-      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
+      @Prototype BinaryInvariant this,
+      @Interned Object val1,
+      @Interned Object val2,
+      int mod_index,
+      int count) {
 
     // If one argument is scalar and the other an array, put the scalar first.
     if (((val2 instanceof long[]) || (val2 instanceof double[]) || (val2 instanceof String[]))
@@ -81,7 +77,7 @@ public abstract class BinaryInvariant extends Invariant {
    * Returns true if the binary function is symmetric (x,y &rArr; y,x). Subclasses that are
    * symmetric should override.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_symmetric() {
     return false;
   }
@@ -98,7 +94,7 @@ public abstract class BinaryInvariant extends Invariant {
    * Searches for the specified binary invariant (by class) in the specified slice. Returns null if
    * the invariant is not found.
    */
-  protected /*@Nullable*/ Invariant find(Class<? extends Invariant> cls, VarInfo v1, VarInfo v2) {
+  protected @Nullable Invariant find(Class<? extends Invariant> cls, VarInfo v1, VarInfo v2) {
 
     // find the slice containing v1 and v2
     boolean fswap = false;
@@ -135,7 +131,7 @@ public abstract class BinaryInvariant extends Invariant {
       if (fswap) {
         @SuppressWarnings("nullness") // static method, so null first arg is OK: swap_class()
         Class<? extends Invariant> tmp_cls =
-            asInvClass(swap_method.invoke(null, (Object /*@Nullable*/ []) null));
+            asInvClass(swap_method.invoke(null, (Object @Nullable []) null));
         cls = tmp_cls;
       }
     } catch (Exception e) {

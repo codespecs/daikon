@@ -4,12 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * A VarComparabilityImplicit is an arbitrary integer, and comparisons succeed exactly if the two
  * integers are equal, except that negative integers compare equal to everything. Alternately, for
@@ -38,24 +32,24 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   int base;
   /** indexTypes[0] is comparability of the first index of this array. */
   // null only for the "unknown" type??
-  VarComparabilityImplicit /*@Nullable*/ [] indexTypes;
+  VarComparabilityImplicit @Nullable [] indexTypes;
   /** Indicates how many of the indices are in use; there may be more indices than this. */
   int dimensions;
 
-  private /*@MonotonicNonNull*/ VarComparabilityImplicit cached_element_type;
+  private @MonotonicNonNull VarComparabilityImplicit cached_element_type;
 
   public static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 
   private VarComparabilityImplicit(
-      int base, VarComparabilityImplicit /*@Nullable*/ [] indexTypes, int dimensions) {
+      int base, VarComparabilityImplicit @Nullable [] indexTypes, int dimensions) {
     this.base = base;
     this.indexTypes = indexTypes;
     this.dimensions = dimensions;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int hashCode(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
+  public int hashCode(@GuardSatisfied VarComparabilityImplicit this) {
     if (base < 0) {
       // This is equals() to everything
       return -1;
@@ -66,23 +60,21 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return base;
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   @Override
   public boolean equals(
-      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+      @GuardSatisfied VarComparabilityImplicit this, @GuardSatisfied @Nullable Object o) {
     if (!(o instanceof VarComparabilityImplicit)) {
       return false;
     }
     return equalsVarComparabilityImplicit((VarComparabilityImplicit) o);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   public boolean equalsVarComparabilityImplicit(
-      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/
-      /*@GuardSatisfied*/ VarComparabilityImplicit o) {
+      @GuardSatisfied VarComparabilityImplicit this, @GuardSatisfied VarComparabilityImplicit o) {
     return equality_set_ok(o);
   }
 
@@ -90,13 +82,13 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return (base < 0);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
+  public boolean alwaysComparable(@GuardSatisfied VarComparabilityImplicit this) {
     return (dimensions == 0) && (base < 0);
   }
 
-  static VarComparabilityImplicit parse(String rep, /*@Nullable*/ ProglangType vartype) {
+  static VarComparabilityImplicit parse(String rep, @Nullable ProglangType vartype) {
     // String rep_ = rep;          // for debugging
 
     List<String> dim_reps = new ArrayList<String>();
@@ -125,7 +117,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   @Override
-  public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
+  public VarComparability elementType(@GuardSatisfied VarComparabilityImplicit this) {
     if (cached_element_type == null) {
       // When Ajax is modified to output non-atomic info for arrays, this
       // check will no longer be necessary.
@@ -150,9 +142,9 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return unknown;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public VarComparability indexType(/*>>>@GuardSatisfied VarComparabilityImplicit this,*/ int dim) {
+  public VarComparability indexType(@GuardSatisfied VarComparabilityImplicit this, int dim) {
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
     if (dim < dimensions) {
@@ -164,10 +156,10 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   @SuppressWarnings("purity") // Override the purity checker
-  /*@Pure*/
+  @Pure
   static boolean comparable(
-      /*@GuardSatisfied*/ VarComparabilityImplicit type1,
-      /*@GuardSatisfied*/ VarComparabilityImplicit type2) {
+      @GuardSatisfied VarComparabilityImplicit type1,
+      @GuardSatisfied VarComparabilityImplicit type2) {
     if (type1.alwaysComparable()) return true;
     if (type2.alwaysComparable()) return true;
     if ((type1.dimensions > 0) && (type2.dimensions > 0)) {
@@ -191,8 +183,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    */
   @Override
   public boolean equality_set_ok(
-      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/
-      /*@GuardSatisfied*/ VarComparability other) {
+      @GuardSatisfied VarComparabilityImplicit this, @GuardSatisfied VarComparability other) {
 
     VarComparabilityImplicit type1 = this;
     VarComparabilityImplicit type2 = (VarComparabilityImplicit) other;
@@ -214,9 +205,9 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   // for debugging
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
+  public String toString(@GuardSatisfied VarComparabilityImplicit this) {
     String result = "" + base;
     for (int i = 0; i < dimensions; i++) {
       result += "[" + indexType(i) + "]";

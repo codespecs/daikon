@@ -12,10 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import junit.framework.TestCase;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 public class InstructionUtilsTest extends TestCase {
 
   public static void testComputeRedundantVars1() {
@@ -42,7 +38,7 @@ public class InstructionUtilsTest extends TestCase {
     }
     Set<String> redExpected = new LinkedHashSet<String>(Arrays.<String>asList(redundantVars));
     Set<String> redActual = new LinkedHashSet<String>(); // redMap.get(leader);
-    for (Map.Entry</*@KeyFor("redMap")*/ String, String> e : redMap.entrySet()) {
+    for (Map.Entry<@KeyFor("redMap") String, String> e : redMap.entrySet()) {
       if (e.getValue().equals(leader)) redActual.add(e.getKey());
     }
     assert redExpected.equals(redActual) : leader;

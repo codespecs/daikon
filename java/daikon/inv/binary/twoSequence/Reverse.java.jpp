@@ -33,13 +33,6 @@ import daikon.inv.*;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /**
  * Represents two sequences of PRIMITIVE where one is in the reverse order of the other. Prints as
  * {@code x[] is the reverse of y[]}.
@@ -62,14 +55,14 @@ public class CLASSNAME extends SUPERCLASS {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected @Prototype CLASSNAME() {
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
+  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static /*@Prototype*/ CLASSNAME get_proto() {
+  public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
@@ -96,7 +89,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+  public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
@@ -107,13 +100,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String repr(@GuardSatisfied CLASSNAME this) {
     return CLASSSTRING + varNames() + ": falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
@@ -123,22 +116,22 @@ public class CLASSNAME extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_daikon(@GuardSatisfied CLASSNAME this) {
     return var1().name() + " is the reverse of " + var2().name();
   }
 
-  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_java_family(@GuardSatisfied CLASSNAME this, OutputFormat format) {
           return "daikon.Quant.isReverse(" + var1().name_using(format)
             + ", " + var2().name_using(format) + ")";
   }
 
-  public String format_csharp(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_csharp(@GuardSatisfied CLASSNAME this) {
     String[] split1 = var1().csharp_array_split();
     String[] split2 = var2().csharp_array_split();
     return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " + split1[0] + "[i]"  + split1[1] + ".Equals(" + split2[0] + "[" +split1[0] + ".Count()-1-i]" + split2[1] +"))";
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_simplify(@GuardSatisfied CLASSNAME this) {
     if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
     } else {
@@ -146,7 +139,7 @@ public class CLASSNAME extends SUPERCLASS {
     }
   }
 
-  private String format_simplify_defined(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  private String format_simplify_defined(@GuardSatisfied CLASSNAME this) {
     VarInfo onevar = var1();
     VarInfo othervar = var2();
     String[] one_name = onevar.simplifyNameAndBounds();
@@ -161,7 +154,7 @@ public class CLASSNAME extends SUPERCLASS {
       + other_name[0] + " " + other_name[1] + " " + other_name[2] + ")";
   }
 
-  private String format_simplify_explicit(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  private String format_simplify_explicit(@GuardSatisfied CLASSNAME this) {
     VarInfo onevar = var1();
     VarInfo othervar = var2();
     String[] one_name = onevar.simplifyNameAndBounds();
@@ -199,7 +192,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
+  public InvariantStatus check_modified(PRIMITIVE @Interned [] a1, PRIMITIVE @Interned [] a2, int count) {
     if (a1.length != a2.length) {
       return InvariantStatus.FALSIFIED;
     }
@@ -213,7 +206,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
+  public InvariantStatus add_modified(PRIMITIVE @Interned [] a1, PRIMITIVE @Interned [] a2, int count) {
     return check_modified(a1, a2, count);
   }
 
@@ -222,7 +215,7 @@ public class CLASSNAME extends SUPERCLASS {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CLASSNAME;

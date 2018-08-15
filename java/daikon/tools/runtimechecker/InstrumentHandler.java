@@ -21,10 +21,6 @@ import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-*/
-
 /**
  * Instruments a file to check invariant violations at runtime. Violated invariants are stored in a
  * list in daikon.tools.runtimechecker.Runtime. The control flow of the class remains unchanged from
@@ -190,7 +186,7 @@ public class InstrumentHandler extends CommandHandler {
     return true;
   }
 
-  /*@UsesObjectEquals*/
+  @UsesObjectEquals
   private static class Arguments {
     public String invFile;
     public List<String> javaFileNames;

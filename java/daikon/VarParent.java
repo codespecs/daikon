@@ -11,10 +11,6 @@ import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import java.io.Serializable;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * Represents a parent of a variable. Includes the name of the parent program point, as well as the
  * relationship id. If the name of the variable at the parent program point is different, the parent
@@ -30,13 +26,12 @@ public class VarParent implements Serializable {
   public String parent_ppt;
 
   /** Parent variable (within parent_ppt) (if any) */
-  public /*@Nullable*/ String parent_variable;
+  public @Nullable String parent_variable;
 
   /** Parent ppt relation id */
   public int parent_relation_id;
 
-  public VarParent(
-      String parent_ppt, int parent_relation_id, /*@Nullable*/ String parent_variable) {
+  public VarParent(String parent_ppt, int parent_relation_id, @Nullable String parent_variable) {
     this.parent_ppt = parent_ppt;
     this.parent_relation_id = parent_relation_id;
     this.parent_variable = parent_variable;

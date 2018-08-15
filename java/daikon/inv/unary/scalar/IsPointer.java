@@ -8,12 +8,6 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.ValueSet;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
-
 /**
  * IsPointer is an invariant that heuristically determines whether an integer represents a pointer
  * (a 32-bit memory address). Since both a 32-bit integer and an address have the same
@@ -43,14 +37,14 @@ public class IsPointer extends SingleScalar {
     super(ppt);
   }
 
-  protected /*@Prototype*/ IsPointer() {
+  protected @Prototype IsPointer() {
     super();
   }
 
-  private static /*@Prototype*/ IsPointer proto = new /*@Prototype*/ IsPointer();
+  private static @Prototype IsPointer proto = new @Prototype IsPointer();
 
   /** Returns the prototype invariant for IsPointer */
-  public static /*@Prototype*/ IsPointer get_proto() {
+  public static @Prototype IsPointer get_proto() {
     return proto;
   }
 
@@ -86,15 +80,15 @@ public class IsPointer extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
-  /*@Pure*/
+  @Pure
   private boolean isWithinPointerRange(long value) {
     if (value == 0) return true;
     return (value >= largestNonPointerValue) || (value <= smallestNonPointerValue);
   }
 
   @Override
-  /*@SideEffectFree*/
-  public String format_using(/*>>>@GuardSatisfied IsPointer this,*/ OutputFormat format) {
+  @SideEffectFree
+  public String format_using(@GuardSatisfied IsPointer this, OutputFormat format) {
     String varname = var().name_using(format);
     if (format == OutputFormat.SIMPLIFY) return "(AND)"; // trivially true
     if (format == OutputFormat.JAVA) {
@@ -123,7 +117,7 @@ public class IsPointer extends SingleScalar {
     return Invariant.PROBABILITY_JUSTIFIED;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof IsPointer;

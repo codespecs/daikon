@@ -7,10 +7,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*>>>
-import org.checkerframework.checker.regex.qual.*;
-*/
-
 /** Utility methods for operands of instructions. */
 public class Operand {
 
@@ -74,7 +70,7 @@ public class Operand {
     b.append("|ebp");
 
     @SuppressWarnings("regex") // StringBuilder
-    /*@Regex*/ String regex = b.toString();
+    @Regex String regex = b.toString();
     registers32BitRegExp = Pattern.compile(regex);
   }
 

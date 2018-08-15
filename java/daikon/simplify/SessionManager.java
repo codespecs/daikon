@@ -9,21 +9,16 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /** A SessionManager is a component which handles the threading interaction with the Session. */
 public class SessionManager {
   /** The command to be performed (point of communication with worker thread). */
-  private /*@Nullable*/ Cmd pending;
+  private @Nullable Cmd pending;
 
   /** Our worker thread; hold onto it so that we can stop it. */
   private Worker worker;
 
   // The error message returned by the worked thread, or null
-  private /*@Nullable*/ String error = null;
+  private @Nullable String error = null;
 
   /** Debug tracer common to all Simplify classes. */
   public static final Logger debug = Logger.getLogger("daikon.simplify");
@@ -98,7 +93,7 @@ public class SessionManager {
     worker = null;
   }
 
-  private static /*@MonotonicNonNull*/ String prover_background = null;
+  private static @MonotonicNonNull String prover_background = null;
 
   private static String proverBackground() {
     if (prover_background == null) {
@@ -139,7 +134,7 @@ public class SessionManager {
 
   // Start up simplify, and send the universal backgound.
   // Is successful exactly when return != null.
-  public static /*@Nullable*/ SessionManager attemptProverStartup() {
+  public static @Nullable SessionManager attemptProverStartup() {
     SessionManager prover;
 
     // Limit ourselves to a few tries
@@ -172,7 +167,7 @@ public class SessionManager {
     private final SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */
-    private /*@Nullable*/ /*@GuardedBy("<self>")*/ Session session = new Session();
+    private @Nullable @GuardedBy("<self>") Session session = new Session();
 
     private boolean finished = false;
 
@@ -205,10 +200,10 @@ public class SessionManager {
       }
     }
 
-    /*@RequiresNonNull("session")*/
+    @RequiresNonNull("session")
     private void session_done() {
       finished = true;
-      final /*@GuardedBy("<self>")*/ Session tmp = session;
+      final @GuardedBy("<self>") Session tmp = session;
       session = null;
       synchronized (tmp) {
         tmp.kill();

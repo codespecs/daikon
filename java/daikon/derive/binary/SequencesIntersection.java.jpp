@@ -20,7 +20,7 @@ The correct way to build the system is to run 'make'.
   #define SCALARSEQUENCESINTERSECTION_STRING "SequenceFloatIntersection"
   #define INTERN(v) Intern.internedDouble(v)
 #elif defined(STRING)
-  #define SCALAR /*@Interned*/ String
+  #define SCALAR @Interned String
   #define SCALARSEQUENCESINTERSECTION SequenceStringIntersection
   #define SCALARSEQUENCESINTERSECTION_STRING "SequenceStringIntersection"
   #if 0
@@ -40,11 +40,6 @@ import daikon.derive.*;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /** Intersection between two comparable sequences. */
 public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
@@ -114,14 +109,14 @@ public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
     return VarInfo.make_function("intersection", base1, base2);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SCALARSEQUENCESINTERSECTION);
   }
 
   /** Returns the ESC name for sequence subsequence */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format("intersection[%s,%s]", base1.esc_name(), base2.esc_name());

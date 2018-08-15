@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Container class for holding all info needed to describe an Invariant. If any field is null, that
  * field is a wildcard, so one instance of InvariantInfo may describe multiple Invariants in that
@@ -19,16 +14,16 @@ public class InvariantInfo {
   private String ppt;
   // vars is maintained as "var1,var2,.." sorted in ascending lexicographical order
   /** If null, treated as a wildcard. */
-  private final /*@Nullable*/ String vars;
+  private final @Nullable String vars;
   /** If null, treated as a wildcard. */
-  private /*@Nullable*/ String className;
+  private @Nullable String className;
 
   //   private InvariantInfo() {
   //     // Make the default constructor private, this should never be called
   //   }
 
   /* // It's ok if vars isn't given in sorted order, we'll sort it here */
-  public InvariantInfo(String ppt, /*@Nullable*/ String vars, /*@Nullable*/ String className) {
+  public InvariantInfo(String ppt, @Nullable String vars, @Nullable String className) {
     this.ppt = ppt;
     this.className = className;
     /* if (vars != null) {
@@ -52,12 +47,12 @@ public class InvariantInfo {
     return this.ppt;
   }
 
-  /*@Pure*/
-  public /*@Nullable*/ String className() {
+  @Pure
+  public @Nullable String className() {
     return this.className;
   }
 
-  public /*@Nullable*/ String vars() {
+  public @Nullable String vars() {
     return this.vars;
   }
 
@@ -66,7 +61,7 @@ public class InvariantInfo {
    *     e.g., if vars is "var1,var2,var3", this method will return ["var1,var2,var3",
    *     "var1,var3,var2", "var2,var1,var3"... etc.]
    */
-  public /*@Nullable*/ List<String> var_permutations() {
+  public @Nullable List<String> var_permutations() {
     if (vars == null) return null;
 
     // We know there can be at most 3 vars so it's not worth writing

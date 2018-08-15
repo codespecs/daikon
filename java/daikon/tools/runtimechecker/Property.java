@@ -8,13 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /** A program property (currently, derived by Daikon). */
 public class Property implements Serializable {
 
@@ -26,21 +19,21 @@ public class Property implements Serializable {
   // The name of the method that this property describes.
   private final String method;
   /** The name of the method that this property describes. ("null" for object invariants.) */
-  public String method(/*>>>@GuardSatisfied Property this*/) {
+  public String method(@GuardSatisfied Property this) {
     return method;
   }
 
   // The kind of proerty (enter, exit or objectInvariant).
   private final Kind kind;
   /** The kind of property (enter, exit or objectInvariant). */
-  public Kind kind(/*>>>@GuardSatisfied Property this*/) {
+  public Kind kind(@GuardSatisfied Property this) {
     return kind;
   }
 
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
   /** Daikon representation (as output by Daikon's default output format). */
-  public String daikonRep(/*>>>@GuardSatisfied Property this*/) {
+  public String daikonRep(@GuardSatisfied Property this) {
     return daikonRep;
   }
 
@@ -73,9 +66,9 @@ public class Property implements Serializable {
   }
 
   /** Easy-on-the-eye string representation. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied Property this*/) {
+  public String toString(@GuardSatisfied Property this) {
     return kind.toString() + " : " + daikonRep();
   }
 
@@ -84,7 +77,7 @@ public class Property implements Serializable {
    * Kind.exit}, or {@code Kind.objectInvariant}.
    */
   // This should be an enum.
-  /*@UsesObjectEquals*/
+  @UsesObjectEquals
   public static class Kind implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -97,15 +90,15 @@ public class Property implements Serializable {
       this.xmlname = xmlname;
     }
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
+    public int hashCode(@GuardSatisfied Kind this) {
       return name.hashCode();
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied Kind this*/) {
+    public String toString(@GuardSatisfied Kind this) {
       return name;
     }
 
@@ -140,12 +133,10 @@ public class Property implements Serializable {
    * Two properties are equal if their fields {@code daikonRep}, {@code method} and {@code kind} are
    * equal. The other fields may differ.
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   @Override
-  public boolean equals(
-      /*>>>@GuardSatisfied Property this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  public boolean equals(@GuardSatisfied Property this, @GuardSatisfied @Nullable Object o) {
     if (o == null) {
       return false;
     }
@@ -158,9 +149,9 @@ public class Property implements Serializable {
         && (this.kind().equals(anno.kind())));
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int hashCode(/*>>>@GuardSatisfied Property this*/) {
+  public int hashCode(@GuardSatisfied Property this) {
     return daikonRep.hashCode() + kind.hashCode() + (method == null ? 0 : method.hashCode());
   }
 

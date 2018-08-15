@@ -2,10 +2,6 @@ package daikon.chicory;
 
 import static java.lang.System.out;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 class Test {
 
   int t1 = 55;
@@ -29,7 +25,7 @@ class Test {
     t.test_d(1.0, 5.0);
   }
 
-  public Test /*@Nullable*/ [] test_array() {
+  public Test @Nullable [] test_array() {
     return null;
   }
 

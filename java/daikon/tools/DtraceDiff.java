@@ -19,10 +19,6 @@ import java.util.regex.Pattern;
 import org.plumelib.util.RegexUtil;
 import org.plumelib.util.UtilPlume;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 /**
  * This tool is used to find the differences between two dtrace files based on analysis of the
  * files' content, rather than a straight textual comparison.
@@ -280,13 +276,13 @@ public class DtraceDiff {
         if (state1.rtype == state2.rtype) {
           if (state1.rtype == FileIO.RecordType.SAMPLE) {
             @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
-            /*@NonNull*/ PptTopLevel ppt1 = state1.ppt;
+            @NonNull PptTopLevel ppt1 = state1.ppt;
             @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
-            /*@NonNull*/ PptTopLevel ppt2 = state2.ppt;
+            @NonNull PptTopLevel ppt2 = state2.ppt;
             @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
-            /*@NonNull*/ ValueTuple vt1 = state1.vt;
+            @NonNull ValueTuple vt1 = state1.vt;
             @SuppressWarnings("nullness") // dependent:  state2 is SAMPLE
-            /*@NonNull*/ ValueTuple vt2 = state2.vt;
+            @NonNull ValueTuple vt2 = state2.vt;
             VarInfo[] vis1 = ppt1.var_infos;
             VarInfo[] vis2 = ppt2.var_infos;
 
@@ -489,11 +485,11 @@ public class DtraceDiff {
   @SuppressWarnings("nullness") // nullable parameters suppress warnings at call sites
   private static void ppt_var_value_error(
       VarInfo vi1,
-      /*@Nullable*/ Object val1,
+      @Nullable Object val1,
       FileIO.ParseState state1,
       String dtracefile1,
       VarInfo vi2,
-      /*@Nullable*/ Object val2,
+      @Nullable Object val2,
       FileIO.ParseState state2,
       String dtracefile2) {
     assert vi1.name().equals(vi2.name());

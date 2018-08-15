@@ -54,10 +54,6 @@ import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
 import java.util.*;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
-
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
@@ -71,7 +67,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
   //   base2 is the scalar
 
   @Override
-  public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2) {
+  public BinaryDerivation @Nullable [] instantiate(VarInfo vi1, VarInfo vi2) {
 
     Debug debug = null;
     if (!debug_set) {

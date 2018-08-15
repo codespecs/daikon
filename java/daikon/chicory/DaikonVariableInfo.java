@@ -19,14 +19,6 @@ import java.util.regex.Matcher;
 import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.signature.Signatures;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * Each DaikonVariableInfo object is a node in the tree structure of the variables in the target
  * application. The tree structure is built in the DeclWriter and traversed in the DTraceWriter.
@@ -47,7 +39,7 @@ public abstract class DaikonVariableInfo
   public static boolean dkconfig_constant_infer = false;
 
   /** The variable name. Sensible for all subtypes except RootInfo. */
-  private final /*@Interned*/ String name;
+  private final @Interned String name;
 
   /** The child nodes */
   public List<DaikonVariableInfo> children;
@@ -102,10 +94,10 @@ public abstract class DaikonVariableInfo
   protected String compareInfoString = compareInfoDefaultString;
 
   /** Value of static constants. Access via {@link #get_const_val} method. */
-  /*@Nullable*/ String const_val = null;
+  @Nullable String const_val = null;
 
   /** Arguments used to create a function. Access via {@link #get_func_args()} method. */
-  /*@Nullable*/ String function_args = null;
+  @Nullable String function_args = null;
 
   /** True iff the DeclWriter should print this variable */
   protected boolean declShouldPrint = true;
@@ -165,7 +157,7 @@ public abstract class DaikonVariableInfo
   }
 
   /** Returns the name of this variable. */
-  public /*@Nullable*/ String getName(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
+  public @Nullable String getName(@GuardSatisfied DaikonVariableInfo this) {
     if (name == null) return null;
 
     if (Chicory.new_decl_format) {
@@ -193,9 +185,9 @@ public abstract class DaikonVariableInfo
   }
 
   /** Returns a string representation of this node. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
+  public String toString(@GuardSatisfied DaikonVariableInfo this) {
     return getClass().getName() + ":" + getName();
   }
 
@@ -255,7 +247,7 @@ public abstract class DaikonVariableInfo
    * @param parentVal the parent object. Can be null for static fields. (Are there any other
    *     circumstances where it can be null?)
    */
-  public abstract /*@Nullable*/ Object getMyValFromParentVal(Object parentVal);
+  public abstract @Nullable Object getMyValFromParentVal(Object parentVal);
 
   /**
    * Returns a String representation of this object suitable for a {@code .dtrace} file
@@ -424,7 +416,7 @@ public abstract class DaikonVariableInfo
    *
    * @param type the class whose fields should all be added to this node
    */
-  /*@RequiresNonNull("#1.clazz")*/
+  @RequiresNonNull("#1.clazz")
   protected void addClassVars(
       ClassInfo cinfo, boolean dontPrintInstanceVars, Class<?> type, String offset, int depth) {
 
@@ -665,7 +657,7 @@ public abstract class DaikonVariableInfo
     }
 
     @SuppressWarnings("nullness") // method precondition
-    /*@NonNull*/ Method meth = (Method) minfo.member;
+    @NonNull Method meth = (Method) minfo.member;
 
     boolean changedAccess = false;
 
@@ -832,7 +824,7 @@ public abstract class DaikonVariableInfo
    * been declared in Java source code, except with '$' instead of '.' separating outer and inner
    * classes).
    */
-  public static /*@BinaryName*/ String stdClassName(Class<?> type) {
+  public static @BinaryName String stdClassName(Class<?> type) {
     return Runtime.classGetNameToBinaryName(type.getName());
   }
 
@@ -1092,7 +1084,7 @@ public abstract class DaikonVariableInfo
    * @param offset the representation of the variables we have previously examined. For examples,
    *     offset could be "this." in which case offset + name would be "this.ballCount.".
    */
-  /*@RequiresNonNull("#1.clazz")*/
+  @RequiresNonNull("#1.clazz")
   protected void addChildNodes(
       ClassInfo cinfo, Class<?> type, String theName, String offset, int depthRemaining) {
 
@@ -1202,7 +1194,7 @@ public abstract class DaikonVariableInfo
    * @see #getTypeName()
    */
   @SuppressWarnings("signature") // substring
-  public /*@BinaryName*/ String getTypeNameOnly() {
+  public @BinaryName String getTypeNameOnly() {
     return typeName.replaceFirst(" # .*", "");
   }
 
@@ -1222,7 +1214,7 @@ public abstract class DaikonVariableInfo
    * Returns the constant value of the variable. If the variable is not static and final, or if the
    * constant value is not available in the class file, returns null.
    */
-  public /*@Nullable*/ String get_const_val() {
+  public @Nullable String get_const_val() {
     return const_val;
   }
 
@@ -1230,7 +1222,7 @@ public abstract class DaikonVariableInfo
    * Returns the function args of the variable. If the variable is not a function, or does not have
    * any arguments, returns null.
    */
-  public /*@Nullable*/ String get_function_args() {
+  public @Nullable String get_function_args() {
     return function_args;
   }
 
@@ -1256,9 +1248,9 @@ public abstract class DaikonVariableInfo
   }
 
   /** Compares based on the name of the variable. */
-  /*@Pure*/
+  @Pure
   @Override
-  public int compareTo(/*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv) {
+  public int compareTo(@GuardSatisfied DaikonVariableInfo this, DaikonVariableInfo dv) {
     return name.compareTo(dv.name);
   }
 
@@ -1268,7 +1260,7 @@ public abstract class DaikonVariableInfo
   }
 
   /** Returns the direct child that is an array, null if one does not exist */
-  public /*@Nullable*/ DaikonVariableInfo array_child() {
+  public @Nullable DaikonVariableInfo array_child() {
     for (DaikonVariableInfo dv : children) {
       if (dv.isArray()) return dv;
     }
@@ -1297,7 +1289,7 @@ public abstract class DaikonVariableInfo
    * Returns the name of this variable relative to its enclosing variable. For example the relative
    * name for 'this.a' is 'a'.
    */
-  public /*@Nullable*/ String get_relative_name() {
+  public @Nullable String get_relative_name() {
     return null;
   }
 
@@ -1313,7 +1305,7 @@ public abstract class DaikonVariableInfo
   }
 
   /** Returns true iff the variable is static. Overridden by subclasses that can be static. */
-  /*@Pure*/
+  @Pure
   public boolean isStatic() {
     return false;
   }

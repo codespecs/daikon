@@ -11,12 +11,6 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.plumelib.bcelutil.BcelUtil;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 public class Instrument implements ClassFileTransformer {
 
   File debug_dir;
@@ -36,9 +30,9 @@ public class Instrument implements ClassFileTransformer {
 
   @Override
   @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
-  public byte /*@Nullable*/ [] transform(
+  public byte @Nullable [] transform(
       ClassLoader loader,
-      /*@InternalFormForNonArray*/ String className,
+      @InternalFormForNonArray String className,
       Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)
@@ -119,7 +113,7 @@ public class Instrument implements ClassFileTransformer {
    * Returns whether or not the specified class is part of dcomp itself (and thus should not be
    * instrumented). Some Daikon classes that are used by DynComp are included here as well.
    */
-  /*@Pure*/
+  @Pure
   private static boolean is_dcomp(String classname) {
 
     if ((classname.startsWith("daikon/dcomp/") && !classname.startsWith("daikon/dcomp/Test"))

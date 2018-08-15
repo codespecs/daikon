@@ -3,11 +3,6 @@ package daikon.simplify;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
-
 /**
  * A Check command takes a given proposition and asks the Session to prove it. The apply method
  * returns when a result is available; the valid field contains the result.
@@ -29,7 +24,7 @@ public class CmdCheck implements Cmd {
 
   /** For documentation, read the class overview. */
   @Override
-  public void apply(final /*@GuardedBy("<self>")*/ Session s) {
+  public void apply(final @GuardedBy("<self>") Session s) {
     try {
 
       String result;
@@ -117,9 +112,9 @@ public class CmdCheck implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied CmdCheck this*/) {
+  public String toString(@GuardSatisfied CmdCheck this) {
     return "CmdCheck: " + proposition;
   }
 }
