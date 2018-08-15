@@ -94,7 +94,7 @@ public class Chicory {
 
   /**
    * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
-   * ChicoryPremain#premain}.
+   * daikon.chicory.ChicoryPremain#premain}.
    */
   @Option("Path to the Chicory agent jar file")
   public static /*@MonotonicNonNull*/ File premain = null;
