@@ -1,7 +1,10 @@
 package daikon;
 
 import daikon.inv.DummyInvariant;
-import daikon.split.*;
+import daikon.split.Splitter;
+import org.checkerframework.checker.initialization.qual.Initialized;
+import org.checkerframework.checker.nullness.qual.NonRaw;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // Information about a disjunctive program point that represents just part
 // of the data.

@@ -2,6 +2,7 @@ package daikon.tools.runtimechecker;
 
 import daikon.tools.jtb.*;
 import jtb.syntaxtree.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Represents a class created by the instrumenter to check invariants. */
 public class CheckerClass {

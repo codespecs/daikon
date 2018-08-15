@@ -3,6 +3,10 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.derive.unary.SequenceLength;
 import daikon.inv.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.MathPlume;
 
 /**

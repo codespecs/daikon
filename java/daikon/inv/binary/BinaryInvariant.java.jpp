@@ -67,6 +67,9 @@
 
 package daikon.inv.binary.PACKAGE;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;

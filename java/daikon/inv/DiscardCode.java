@@ -3,6 +3,9 @@ package daikon.inv;
 import daikon.inv.filter.*;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * DiscardCode is an enumeration type. It represents reasons why an invariant is falsified or

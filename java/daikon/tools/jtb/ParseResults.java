@@ -14,6 +14,8 @@ import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * The wrapped result of parsing a .java source file. The packageName and className arguments can be

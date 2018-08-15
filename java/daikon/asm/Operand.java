@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.regex.qual.Regex;
 
 /** Utility methods for operands of instructions. */
 public class Operand {

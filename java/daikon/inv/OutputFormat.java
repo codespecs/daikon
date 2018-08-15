@@ -1,6 +1,9 @@
 package daikon.inv;
 
 import daikon.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Enumeration type for output style. (Should this be somewhere else?) */
 public enum OutputFormat {

@@ -1,11 +1,14 @@
 package daikon;
 
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.UtilPlume;
 

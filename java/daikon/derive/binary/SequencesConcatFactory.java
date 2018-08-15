@@ -3,6 +3,7 @@ package daikon.derive.binary;
 import daikon.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Factory for SequencesConcat derived variables. */
 public final class SequencesConcatFactory extends BinaryDerivationFactory {

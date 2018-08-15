@@ -215,6 +215,14 @@ import java.util.*;
 #if defined(BASE_STRING)
   import java.util.regex.*;
 #endif
+import org.checkerframework.checker.initialization.qual.Initialized;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.NonRaw;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.signature.Signatures;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
@@ -289,9 +297,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  @Unused(when=Prototype.class)
+  /*@Unused(when=Prototype.class)*/
   private INTARRAY elts;
-  @Unused(when=Prototype.class)
+  /*@Unused(when=Prototype.class)*/
   private int num_elts;
 
   public /*@Prototype*/ ONEOFSCALAR() {

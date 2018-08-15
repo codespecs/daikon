@@ -2,6 +2,8 @@ package daikon.chicory;
 
 import static java.lang.System.out;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 class Test {
 
   int t1 = 55;

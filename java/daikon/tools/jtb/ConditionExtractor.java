@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // CreateSpinfo extracts the following expressions from the Java source:
 // For each method:

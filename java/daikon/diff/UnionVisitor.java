@@ -2,6 +2,9 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.*;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** Computes A union B, where A and B are the two sets of invariants. */
 public class UnionVisitor extends DepthFirstVisitor {

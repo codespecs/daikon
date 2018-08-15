@@ -6,6 +6,9 @@ import daikon.*;
 import daikon.inv.binary.*;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Class that defines an invariant so that it can be searched for as part of suppression. */
 public class InvDef {

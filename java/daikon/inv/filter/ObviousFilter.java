@@ -1,6 +1,7 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 
 public class ObviousFilter extends InvariantFilter {
   @Override

@@ -5,6 +5,7 @@ import daikon.tools.jtb.*;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * ThisFixer is a visitor for a jtb syntax tree that changes all instances of "this." to "this_".

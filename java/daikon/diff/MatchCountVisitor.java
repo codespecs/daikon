@@ -7,6 +7,8 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * MatchCountVisitor is a visitor that almost does the opposite of PrintDifferingInvariantsVisitor.

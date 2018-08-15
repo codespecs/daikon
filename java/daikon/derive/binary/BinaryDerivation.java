@@ -2,6 +2,9 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 
 /** Abstract class to represent a derived variable that came from two base variables. */

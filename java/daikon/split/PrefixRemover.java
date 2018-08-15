@@ -4,6 +4,7 @@ import daikon.tools.jtb.*;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * PrefixRemover is a visitor for a JTB syntax tree that removes all instances of some prefix. For

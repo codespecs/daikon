@@ -1,10 +1,21 @@
 package daikon;
 
+// import daikon.derive.*; // see dbc_name_impl(VarInfo v)
+// import daikon.derive.binary.*; // see dbc_name_impl(VarInfo v)
+// import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
+// import daikon.derive.unary.*; // see dbc_name_impl(VarInfo v)
 import daikon.chicory.DaikonVariableInfo;
-import daikon.derive.*; // see dbc_name_impl(VarInfo v)
-import daikon.derive.binary.*; // see dbc_name_impl(VarInfo v)
-import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
-import daikon.derive.unary.*; // see dbc_name_impl(VarInfo v)
+import daikon.derive.Derivation;
+import daikon.derive.binary.BinaryDerivation;
+import daikon.derive.binary.SequenceFloatSubscript;
+import daikon.derive.binary.SequenceScalarSubscript;
+import daikon.derive.binary.SequenceStringSubscript;
+import daikon.derive.binary.SequenceSubsequence;
+import daikon.derive.ternary.SequenceFloatArbitrarySubsequence;
+import daikon.derive.ternary.SequenceScalarArbitrarySubsequence;
+import daikon.derive.ternary.SequenceStringArbitrarySubsequence;
+import daikon.derive.unary.SequenceLength;
+import daikon.derive.unary.UnaryDerivation;
 import daikon.inv.OutputFormat;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,6 +34,11 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
 
 // This class is deprecated.  It should be removed as soon as Daikon no

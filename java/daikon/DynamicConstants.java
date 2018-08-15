@@ -1,16 +1,18 @@
 package daikon;
 
-import daikon.inv.*;
-import daikon.inv.binary.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.ternary.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.unary.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.stringsequence.*;
-import daikon.suppress.*;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.binary.twoScalar.LinearBinary;
+import daikon.inv.binary.twoScalar.LinearBinaryFloat;
+import daikon.inv.ternary.threeScalar.LinearTernary;
+import daikon.inv.ternary.threeScalar.LinearTernaryFloat;
+import daikon.inv.unary.scalar.OneOfFloat;
+import daikon.inv.unary.scalar.OneOfScalar;
+import daikon.inv.unary.sequence.OneOfFloatSequence;
+import daikon.inv.unary.sequence.OneOfSequence;
+import daikon.inv.unary.string.OneOfString;
+import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.suppress.NIS;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +25,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Class that implements dynamic constants optimization. This optimization doesn't instantiate

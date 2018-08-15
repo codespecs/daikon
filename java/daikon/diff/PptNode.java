@@ -1,6 +1,8 @@
 package daikon.diff;
 
 import daikon.PptTopLevel;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.Pair;
 
 /**

@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import org.checkerframework.checker.lock.qual.GuardedBy;
 
 /**
  * Data that is shared across Chicory. The primary users are Instrument.java and Runtime.java. As

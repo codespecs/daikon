@@ -22,6 +22,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.EntryReader;
 import org.plumelib.util.UtilPlume;
 

@@ -1,5 +1,7 @@
 package daikon.chicory;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * The StaticObjInfo class is a subtype of DaikonVariableInfo used as a root for static variables
  * within a class (which are the only variables visible to static methods). Nothing is printed for

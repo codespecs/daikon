@@ -10,6 +10,7 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
 
 /**
  * This program runs a given program (which is assumed to contain some classes that have been

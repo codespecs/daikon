@@ -2,9 +2,16 @@ package daikon;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.inv.*;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
 import java.util.HashSet;
 import java.util.List;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
 
 // This is a fake PptSlice for use with Implication invariants.
 

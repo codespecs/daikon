@@ -3,6 +3,10 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.UnaryInvariant;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Raw;
 
 /**
  * Abstract base class for invariants over one numeric (scalar) variable, such as {@code x != 0}.

@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.plumelib.util.Partitioner;
 import org.plumelib.util.UtilPlume;
 

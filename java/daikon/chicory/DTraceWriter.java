@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * DTraceWriter writes {@code .dtrace} program points to an output stream. It uses the trees created

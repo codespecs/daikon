@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.Invariant;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Prints all the invariant pairs, including pairs containing identical invariants. */
 public class PrintAllVisitor extends DepthFirstVisitor {

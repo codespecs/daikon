@@ -7,6 +7,11 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Tracks every unique value and how many times it occurs. Prints as either {@code x has no values}
@@ -36,7 +41,7 @@ public final class CompleteOneOfString extends SingleString {
   }
 
   /** List of values seen */
-  @Unused(when = Prototype.class)
+  /*@Unused(when = Prototype.class)*/
   public List<Info> vals;
 
   /** Boolean. True iff CompleteOneOfString invariants should be considered. */
@@ -51,7 +56,8 @@ public final class CompleteOneOfString extends SingleString {
     super();
   }
 
-  private static /*@Prototype*/ CompleteOneOfString proto = new /*@Prototype*/ CompleteOneOfString();
+  private static /*@Prototype*/ CompleteOneOfString proto =
+      new /*@Prototype*/ CompleteOneOfString();
 
   /** Returns the prototype invariant for CompleteOneOFString */
   public static /*@Prototype*/ CompleteOneOfString get_proto() {
@@ -66,7 +72,8 @@ public final class CompleteOneOfString extends SingleString {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public CompleteOneOfString instantiate_dyn(/*@Prototype*/ CompleteOneOfString this, PptSlice slice) {
+  public CompleteOneOfString instantiate_dyn(
+      /*@Prototype*/ CompleteOneOfString this, PptSlice slice) {
     return new CompleteOneOfString(slice);
   }
 

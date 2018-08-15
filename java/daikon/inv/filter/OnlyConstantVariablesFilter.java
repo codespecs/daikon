@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.*;
+import org.checkerframework.dataflow.qual.Pure;
 
 public class OnlyConstantVariablesFilter extends InvariantFilter {
   @Override

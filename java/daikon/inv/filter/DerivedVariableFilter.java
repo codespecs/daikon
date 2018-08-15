@@ -3,6 +3,8 @@ package daikon.inv.filter;
 import daikon.VarInfo;
 import daikon.inv.*;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.regex.qual.Regex;
 
 /**
  * A filter that filters out invariants that contain derived variables of a specified derivation. If

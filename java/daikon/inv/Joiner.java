@@ -1,6 +1,10 @@
 package daikon.inv;
 
 import daikon.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 public abstract class Joiner extends Invariant {
 

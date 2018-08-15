@@ -1,6 +1,9 @@
 package daikon.inv.unary;
 
 import daikon.*;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Raw;
 
 // An interface satisfied by OneOfScalar, OneOfString, OneOfSequence, and
 // OneOfStringSequence.

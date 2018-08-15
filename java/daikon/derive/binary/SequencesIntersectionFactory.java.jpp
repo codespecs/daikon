@@ -37,10 +37,12 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.derive.Derivation;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up

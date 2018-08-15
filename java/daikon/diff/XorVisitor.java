@@ -4,6 +4,11 @@ import daikon.*;
 import daikon.inv.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** Computes A xor B, where A and B are the two sets of invariants. */
 public class XorVisitor extends DepthFirstVisitor {

@@ -9,6 +9,12 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
+import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.FieldDescriptor;
 
 /**
  * The Runtime class provides methods for printing values to a Daikon data trace file. Daikon can

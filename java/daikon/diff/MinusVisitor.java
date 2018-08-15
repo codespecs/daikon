@@ -2,6 +2,10 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.*;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** Computes A - B, where A and B are the two sets of invariants. */
 public class MinusVisitor extends DepthFirstVisitor {

@@ -53,6 +53,8 @@ import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
 import java.util.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up

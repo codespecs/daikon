@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import java.util.EnumSet;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * The ParameterInfo class is a subtype of DaikonVariableInfo used for variable types which are

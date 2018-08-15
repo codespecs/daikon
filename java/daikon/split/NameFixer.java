@@ -5,6 +5,7 @@ import daikon.tools.jtb.*;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * NameFixer is a visitor for a JTB syntax tree that checks for unqualifed class member variables

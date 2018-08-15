@@ -3,6 +3,7 @@ package daikon.inv.ternary;
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
+import org.checkerframework.checker.interning.qual.Interned;
 
 /** Exists simply to provide a more intelligent resusurrect_done method. */
 public abstract class TernaryInvariant extends Invariant {

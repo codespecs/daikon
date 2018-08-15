@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.plumelib.signature.Signatures;
 
 /** DaikonWriter is the parent class of DeclWriter and DTraceWriter. */

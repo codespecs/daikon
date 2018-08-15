@@ -25,6 +25,9 @@ import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
+import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.signature.Signatures;
 import org.plumelib.util.UtilPlume;
 

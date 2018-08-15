@@ -1,6 +1,8 @@
 package daikon.inv;
 
 import daikon.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This is a special implication invariant that guards any invariants that are over variables that

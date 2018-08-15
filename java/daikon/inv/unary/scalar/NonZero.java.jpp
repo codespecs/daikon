@@ -44,6 +44,10 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.unary.scalar;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.derive.unary.*;
 import daikon.inv.*;

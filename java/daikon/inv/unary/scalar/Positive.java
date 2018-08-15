@@ -4,6 +4,9 @@ import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 // This invariant is true if the variable is always positive (greater than 0).
 // This invariant is provided for pedagogical reasons only.

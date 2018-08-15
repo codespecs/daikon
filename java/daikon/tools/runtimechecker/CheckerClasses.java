@@ -4,6 +4,7 @@ import daikon.tools.jtb.*;
 import java.util.ArrayList;
 import java.util.List;
 import jtb.syntaxtree.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Represents a set of classes created by the instrumenter to check invariants. */
 public class CheckerClasses {

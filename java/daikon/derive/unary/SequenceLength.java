@@ -4,6 +4,8 @@ import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
 
 // originally from pass1.

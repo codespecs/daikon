@@ -2,6 +2,7 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Factory to produce BinaryDerivation. */
 public abstract class BinaryDerivationFactory implements DerivationFactory {

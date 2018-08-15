@@ -2,6 +2,7 @@ package daikon.tools.runtimechecker;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.lock.qual.GuardedBy;
 
 /**
  * If a class has been instrumented with the instrumenter, invariant violations are added to the

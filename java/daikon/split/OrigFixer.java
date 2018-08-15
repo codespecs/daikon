@@ -4,6 +4,9 @@ import daikon.tools.jtb.*;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * OrigFixer is a visitor for a jtb syntax tree that replaces instances of of "orig()" with "orig_".

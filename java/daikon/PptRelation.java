@@ -2,7 +2,8 @@ package daikon;
 
 import static daikon.FileIO.ParentRelation;
 
-import daikon.inv.*;
+import daikon.inv.Equality;
+import daikon.inv.Invariant;
 import daikon.split.PptSplitter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +15,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Class that builds and describes relations in the ppt hierarchy. Building the relationship is

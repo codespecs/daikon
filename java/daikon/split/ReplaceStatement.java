@@ -8,6 +8,8 @@ import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * ReplaceStatement is an immutable data structure for holding the information of a replace

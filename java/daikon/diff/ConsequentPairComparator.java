@@ -2,6 +2,7 @@ package daikon.diff;
 
 import daikon.inv.*;
 import java.util.Comparator;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Comparator for pairing invariants. In an invariant in set2 is an implication, its consequent is

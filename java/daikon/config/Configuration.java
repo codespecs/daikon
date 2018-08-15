@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.EntryReader;
 import org.plumelib.util.ReflectionPlume;
 

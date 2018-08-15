@@ -26,6 +26,12 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoScalar;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.derive.unary.SequenceLength;
 import daikon.inv.*;

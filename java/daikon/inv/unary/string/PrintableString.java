@@ -2,6 +2,11 @@ package daikon.inv.unary.string;
 
 import daikon.*;
 import daikon.inv.*;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Represents a string that contains only printable ascii characters (values 32 through 126 plus 9

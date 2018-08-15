@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.initialization.qual.Initialized;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.NonRaw;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /**
  * Method "fieldDeclarations" returns a list of all FieldDeclarations declared in this class (or,

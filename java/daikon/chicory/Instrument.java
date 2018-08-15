@@ -40,6 +40,12 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.InternalFormForNonArray;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.bcelutil.InstructionListUtils;
 import org.plumelib.bcelutil.SimpleLog;
 

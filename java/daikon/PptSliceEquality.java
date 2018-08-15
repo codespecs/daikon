@@ -2,9 +2,8 @@ package daikon;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.inv.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.suppress.*;
+import daikon.inv.Equality;
+import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,6 +16,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Holds Equality invariants. */
 public class PptSliceEquality extends PptSlice {

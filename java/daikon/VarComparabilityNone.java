@@ -1,6 +1,9 @@
 package daikon;
 
 import java.io.Serializable;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Used when no VarComparability information is available (in the {@code .dtrace} file). Every

@@ -10,6 +10,11 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Class that defines a suppressor invariant for use in non-instantiating suppressions. In
@@ -67,7 +72,8 @@ public class NISuppressor {
       Method get_proto = inv_class.getMethod("get_proto", new Class<?>[] {});
       @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
       @NonNull /*@Prototype*/
-      Invariant sample_inv_local = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+      Invariant sample_inv_local =
+          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
       sample_inv = sample_inv_local;
       assert sample_inv != null;
     } catch (Exception e) {
@@ -125,7 +131,8 @@ public class NISuppressor {
         Method get_proto = inv_class.getMethod("get_proto", new Class<?>[] {});
         @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
         @NonNull /*@Prototype*/
-        Invariant sample_inv_local = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+        Invariant sample_inv_local =
+            (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
         sample_inv = sample_inv_local;
       }
     } catch (Exception e) {

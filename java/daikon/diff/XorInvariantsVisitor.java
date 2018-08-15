@@ -3,6 +3,7 @@ package daikon.diff;
 import daikon.*;
 import daikon.inv.Invariant;
 import java.io.PrintStream;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * <B>XorInvariantsVisitor</B> is a visitor that performs a standard Diff on two PptMaps, that is,

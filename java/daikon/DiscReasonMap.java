@@ -7,6 +7,8 @@ import daikon.inv.InvariantInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class DiscReasonMap {
 

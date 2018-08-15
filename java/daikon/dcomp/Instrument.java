@@ -9,6 +9,9 @@ import java.security.ProtectionDomain;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.InternalFormForNonArray;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.bcelutil.BcelUtil;
 
 public class Instrument implements ClassFileTransformer {

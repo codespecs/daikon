@@ -6,6 +6,8 @@ import java.util.List;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * StatementReplacer is a JTB syntax tree visitor that replaces method calls to one line methods

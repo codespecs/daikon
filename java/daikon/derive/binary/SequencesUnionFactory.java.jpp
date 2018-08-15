@@ -34,6 +34,8 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 
 // This controls derivations which use the scalar as an index into the

@@ -9,6 +9,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Takes one argument: a .dtrace or dtrace.gz file. Splits it into 100 files: the first file

@@ -46,6 +46,7 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.ternary;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
 import java.util.*;

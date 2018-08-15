@@ -2,6 +2,7 @@ package daikon.config;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.regex.qual.Regex;
 import org.plumelib.util.UtilPlume;
 
 /** Supplies a static method htmlToTexinfo that converts HTML to Texinfo format. */

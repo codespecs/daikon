@@ -1,6 +1,9 @@
 package daikon.diff;
 
 import daikon.inv.Invariant;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.Pair;
 
 /** Contains a pair of Invariants. Resides in the third level of the tree. Has no children. */

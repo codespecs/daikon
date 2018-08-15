@@ -2,6 +2,7 @@ package daikon.derive.ternary;
 
 import daikon.*;
 import daikon.derive.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Factory to produce TernaryDerivations. */
 public abstract class TernaryDerivationFactory implements DerivationFactory {

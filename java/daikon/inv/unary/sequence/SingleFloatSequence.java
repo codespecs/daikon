@@ -2,6 +2,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import org.checkerframework.checker.interning.qual.Interned;
 import org.plumelib.util.Intern;
 
 /** Abstract base class for invariants over one variable of type {@code double[]}. */

@@ -2,6 +2,9 @@ package daikon.chicory;
 
 import java.util.AbstractList;
 import java.util.List;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * NonsensicalList is similar to NonsensicalObject but it is used for arrays whose value is

@@ -1,6 +1,8 @@
 package daikon.asm;
 
 import java.util.Set;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /*
  * Represents an assembly instruction.

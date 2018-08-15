@@ -9,6 +9,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Defines a suppressee for non-instantiating suppression. A suppressee consists only of the class
@@ -31,7 +36,8 @@ public class NISuppressee {
       Method get_proto = cls.getMethod("get_proto", new Class<?>[] {});
       @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
       @NonNull /*@Prototype*/
-      Invariant sample_inv_local = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+      Invariant sample_inv_local =
+          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
       sample_inv = sample_inv_local;
       assert sample_inv != null : cls.getName();
     } catch (Exception e) {

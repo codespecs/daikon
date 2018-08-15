@@ -3,6 +3,9 @@ package daikon.simplify;
 import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * A lemma is an object that wraps a Simplify formula representing some logical statement. The only

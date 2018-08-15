@@ -132,6 +132,11 @@
 
 package daikon.inv.binary.sequenceScalar;
 
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.derive.unary.*;
 import daikon.inv.*;

@@ -5,6 +5,8 @@ import java.util.List;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /**
  * TokenReplacer is a JTB syntax tree visitor that replaces a given set of tokens that are names of

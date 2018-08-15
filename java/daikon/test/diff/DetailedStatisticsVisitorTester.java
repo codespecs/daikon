@@ -6,6 +6,8 @@ import daikon.inv.*;
 import daikon.test.*;
 import java.lang.reflect.Method;
 import junit.framework.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class DetailedStatisticsVisitorTester extends TestCase {
 

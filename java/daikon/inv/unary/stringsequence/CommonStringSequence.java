@@ -2,6 +2,12 @@ package daikon.inv.unary.stringsequence;
 
 import daikon.*;
 import daikon.inv.*;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
@@ -32,7 +38,8 @@ public class CommonStringSequence extends SingleStringSequence {
     super();
   }
 
-  private static /*@Prototype*/ CommonStringSequence proto = new /*@Prototype*/ CommonStringSequence();
+  private static /*@Prototype*/ CommonStringSequence proto =
+      new /*@Prototype*/ CommonStringSequence();
 
   /** Returns the prototype invariant for CommonStringSequence */
   public static /*@Prototype*/ CommonStringSequence get_proto() {

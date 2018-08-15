@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 /**
  * Instruments a file to check invariant violations at runtime. Violated invariants are stored in a

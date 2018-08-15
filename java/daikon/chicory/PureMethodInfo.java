@@ -4,6 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.initialization.qual.Initialized;
+import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.NonRaw;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * The PureMethodInfo class is a subtype of DaikonVariableInfo used for "variable types" which

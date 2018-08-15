@@ -1,5 +1,9 @@
 package daikon.simplify;
 
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * A Raw command provides no additional structure, allowing arbitrary commands (as long as they have
  * no output) to be sent to the prover. It will not block.

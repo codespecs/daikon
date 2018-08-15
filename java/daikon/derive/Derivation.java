@@ -3,6 +3,10 @@ package daikon.derive;
 import daikon.*;
 import java.io.Serializable;
 import java.util.logging.Logger;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Structure that represents a derivation; can generate values and derived variables from base

@@ -3,6 +3,8 @@ package daikon.diff;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.Pair;
 
 /**

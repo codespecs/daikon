@@ -3,6 +3,11 @@ package daikon.split.misc;
 import daikon.*;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 
 /** This splitter tests the condition "$caller one of { some set of integers }". */

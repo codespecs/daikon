@@ -2,6 +2,7 @@ package daikon.derive.unary;
 
 import daikon.*;
 import daikon.derive.*;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.Intern;
 
 public final class SequenceSum extends UnaryDerivation {

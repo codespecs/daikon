@@ -15,6 +15,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 

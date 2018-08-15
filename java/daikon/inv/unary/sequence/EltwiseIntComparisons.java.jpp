@@ -134,6 +134,11 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.unary.sequence;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.Quantify.QuantFlags;
 import daikon.derive.*;

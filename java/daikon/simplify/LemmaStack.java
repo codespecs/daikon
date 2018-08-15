@@ -9,6 +9,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Raw;
 
 /**
  * A stack of Lemmas that shadows the stack of assumptions that Simplify keeps. Keeping this stack

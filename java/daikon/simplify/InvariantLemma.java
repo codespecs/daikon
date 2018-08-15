@@ -4,6 +4,7 @@ import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;
 import daikon.inv.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 
 /**
  * InvariantLemmas are Lemmas created by printing a Daikon invariant in Simplify format, sometimes

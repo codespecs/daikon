@@ -5,6 +5,15 @@ import daikon.split.PptSplitter;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.formatter.qual.FormatMethod;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 // Here Implication is reimplemented as an extension of the new general
 // Joiner class
@@ -325,7 +334,8 @@ public class Implication extends Joiner {
   }
 
   @Override
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(/*@Prototype*/ Implication this, PptSlice slice) {
+  protected /*@NonPrototype*/ Invariant instantiate_dyn(
+      /*@Prototype*/ Implication this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

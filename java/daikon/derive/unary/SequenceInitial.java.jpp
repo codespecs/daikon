@@ -30,6 +30,9 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.unary;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;

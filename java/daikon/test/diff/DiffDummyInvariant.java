@@ -4,6 +4,9 @@ package daikon.test.diff;
 
 import daikon.*;
 import daikon.inv.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** A dummy invariant used for testing purposes. */
 public class DiffDummyInvariant extends Invariant {

@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
 

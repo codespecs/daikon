@@ -24,6 +24,9 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import daikon.*;
 import daikon.derive.*;
 import java.util.logging.Level;

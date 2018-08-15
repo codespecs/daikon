@@ -6,6 +6,7 @@ import daikon.inv.*;
 import daikon.test.*;
 import java.util.Arrays;
 import junit.framework.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class MinusVisitorTester extends TestCase {
 

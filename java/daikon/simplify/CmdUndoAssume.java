@@ -1,5 +1,9 @@
 package daikon.simplify;
 
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * An UndoAssume command removes an assumption from the assumption stack of the given session. The
  * command will not block.

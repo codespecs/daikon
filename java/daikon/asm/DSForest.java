@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 /**
  * Implements a partition of distinct elements into disjoint sets. Each set in the partition is

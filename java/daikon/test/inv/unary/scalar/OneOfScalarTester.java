@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.unary.scalar.*;
 import daikon.test.Common;
 import junit.framework.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 @SuppressWarnings("nullness") // testing code
 public class OneOfScalarTester extends TestCase {

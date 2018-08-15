@@ -2,6 +2,8 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and i. */
 public abstract class SequenceSubsequence extends BinaryDerivation {

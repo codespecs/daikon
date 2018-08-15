@@ -5,6 +5,8 @@ import daikon.inv.Invariant;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // MatchCountVisitor2 differs from MatchCountVisitor in that it reverses
 // some key predicates, and adds some functionality.  The differences are

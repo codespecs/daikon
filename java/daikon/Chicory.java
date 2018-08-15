@@ -2,7 +2,7 @@ package daikon;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import daikon.chicory.*;
+import daikon.chicory.StreamRedirectThread;
 import daikon.util.RegexUtil;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;

@@ -3,6 +3,9 @@ package daikon.inv;
 import daikon.*;
 import java.util.HashSet;
 import java.util.Iterator;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * This is a special invariant used internally by Daikon to represent invariants whose meaning

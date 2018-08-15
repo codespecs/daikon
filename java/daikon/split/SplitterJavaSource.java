@@ -12,6 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.checker.regex.qual.Regex;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * SplitterJavaSource writes the splitter Java file's contents to a string buffer for a given

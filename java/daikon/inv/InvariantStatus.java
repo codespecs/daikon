@@ -1,5 +1,9 @@
 package daikon.inv;
 
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * This class is an enumerated type representing the possible results of adding an sample to an
  * invariant.

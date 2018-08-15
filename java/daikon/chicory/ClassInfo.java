@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Keeps information about a class that is useful for writing out decl and/or dtrace information.

@@ -1,6 +1,8 @@
 package daikon;
 
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 
 // Internally, we use the names "array[]", "array[]-element", and
 // "array[]-indexn".  These may be different depending on the programming

@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.plumelib.util.FuzzyFloat;
 
 public final class Global {

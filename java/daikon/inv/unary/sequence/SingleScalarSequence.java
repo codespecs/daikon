@@ -2,6 +2,10 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Raw;
 import org.plumelib.util.Intern;
 
 /** Abstract base class for invariants over one variable of type {@code long[]}. */

@@ -4,6 +4,9 @@ import daikon.*;
 import daikon.inv.*;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
 import org.plumelib.util.MathPlume;
 

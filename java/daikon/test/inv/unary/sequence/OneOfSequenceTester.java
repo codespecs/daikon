@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.unary.sequence.*;
 import daikon.test.Common;
 import junit.framework.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.plumelib.util.Intern;
 
 @SuppressWarnings("nullness") // testing code

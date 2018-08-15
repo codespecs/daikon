@@ -3,6 +3,9 @@ package daikon.split.misc;
 import daikon.*;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 // This splitter tests the condition "return == true".
 public final class ReturnTrueSplitter extends Splitter {

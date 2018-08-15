@@ -6,6 +6,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ReflectionPlume;
 
 /**
@@ -93,8 +99,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
         throw new Error("Trying to invoke " + tempClass + " constructor", e);
       }
       DummyInvariant dummy =
-          new /*@Prototype*/
-          DummyInvariant(
+          new /*@Prototype*/ DummyInvariant(
               daikonFormat,
               javaFormat,
               escFormat,

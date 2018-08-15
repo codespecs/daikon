@@ -20,7 +20,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.formatter.qual.FormatMethod;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.MathPlume;
@@ -99,7 +107,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * The program point for this invariant; includes values, number of samples, VarInfos, etc. Can be
    * null for a "prototype" invariant.
    */
-  @Unused(when = Prototype.class)
+  /*@Unused(when = Prototype.class)*/
   public PptSlice ppt;
 
   // Has to be public so wrappers can read it.
@@ -491,7 +499,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping
    */
-  public Invariant resurrect(/*@NonPrototype*/ Invariant this, PptSlice new_ppt, int[] permutation) {
+  public Invariant resurrect(
+      /*@NonPrototype*/ Invariant this, PptSlice new_ppt, int[] permutation) {
     // Check some sanity conditions
     assert falsified;
     assert new_ppt.arity() == ppt.arity();
@@ -1163,7 +1172,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     Can be null if no such assignment exists.
    */
   @Pure
-  public @Nullable DiscardInfo isObviousStatically_SomeInEquality(/*@NonPrototype*/ Invariant this) {
+  public @Nullable DiscardInfo isObviousStatically_SomeInEquality(
+      /*@NonPrototype*/ Invariant this) {
     DiscardInfo result = isObviousStatically();
     if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper(
@@ -1243,7 +1253,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * the overriding method should first call "super.isObviousDynamically(vis)". Since this method is
    * dynamic, it should only be called after all processing.
    */
-  public @Nullable DiscardInfo isObviousDynamically(/*@NonPrototype*/ Invariant this, VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(
+      /*@NonPrototype*/ Invariant this, VarInfo[] vis) {
     assert !Daikon.isInferencing;
     assert vis.length <= 3 : "Unexpected more-than-ternary invariant";
     if (!ArraysPlume.noDuplicates(vis)) {
@@ -1297,7 +1308,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     Can be null if no such assignment exists.
    */
   @Pure
-  public @Nullable DiscardInfo isObviousDynamically_SomeInEquality(/*@NonPrototype*/ Invariant this) {
+  public @Nullable DiscardInfo isObviousDynamically_SomeInEquality(
+      /*@NonPrototype*/ Invariant this) {
     DiscardInfo result = isObviousDynamically();
     if (result != null) return result;
     return isObviousDynamically_SomeInEqualityHelper(
@@ -1848,7 +1860,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   @SuppressWarnings(
       "formatter") // call to format method is correct because of @FormatMethod annotation
   public boolean log(
-      @UnknownInitialization(Invariant.class) @Raw(Invariant.class) /*@NonPrototype*/ Invariant this,
+      @UnknownInitialization(Invariant.class) @Raw(Invariant.class) /*@NonPrototype*/
+          Invariant this,
       String format,
       @Nullable Object... args) {
     if (ppt != null) {

@@ -2,6 +2,9 @@ package daikon.simplify;
 
 import java.io.IOException;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * A Check command takes a given proposition and asks the Session to prove it. The apply method

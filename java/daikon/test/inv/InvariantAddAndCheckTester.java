@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import junit.framework.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This is a tester for the results of adding or checking an sample to an invariant. It can test

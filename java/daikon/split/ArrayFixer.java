@@ -5,6 +5,7 @@ import daikon.tools.jtb.*;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * ArrayFixer is a visitor for a JTB syntax tree that adds the "_identity" and "_array" suffixes to

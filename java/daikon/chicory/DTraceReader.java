@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.interning.qual.Interned;
 
 /**
  * Reads dtrace files and provides methods to access the information within them. A dtrace file

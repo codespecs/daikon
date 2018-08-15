@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import java.util.EnumSet;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * The ThisObjInfo class is a subtype of DaikonVariableInfo used for variable types which represent

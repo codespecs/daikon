@@ -14,6 +14,9 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.EntryReader;
 
 /**

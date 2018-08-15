@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.KeyFor;
 
 /** Replaces uses of generic type parameters with versions that do not use generics. */
 public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {

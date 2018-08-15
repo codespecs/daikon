@@ -2,6 +2,7 @@ package daikon.diff;
 
 import daikon.inv.*;
 import java.util.Comparator;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Comparator for sorting invariants. If an invariant is an implication, its consequent is used

@@ -1,7 +1,6 @@
 package daikon;
 
 import daikon.chicory.StreamRedirectThread;
-import daikon.dcomp.*;
 import daikon.util.RegexUtil;
 import java.io.File;
 import java.lang.reflect.Method;
@@ -9,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;

@@ -6,6 +6,9 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;
 import java.lang.reflect.Method;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 /** Provides a class that defines the functions that must exist for each two variable invariant. */
 public abstract class BinaryInvariant extends Invariant {

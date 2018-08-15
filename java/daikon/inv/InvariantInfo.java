@@ -3,6 +3,8 @@ package daikon.inv;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Container class for holding all info needed to describe an Invariant. If any field is null, that

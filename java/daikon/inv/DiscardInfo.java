@@ -1,6 +1,8 @@
 package daikon.inv;
 
 import daikon.*;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * A class used for holding a DiscardCode and a string that contains more detailed information about

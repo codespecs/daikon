@@ -11,6 +11,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.regex.qual.Regex;
+import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 
