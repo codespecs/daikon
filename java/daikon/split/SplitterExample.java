@@ -1,7 +1,10 @@
 package daikon.split;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.Ppt;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.inv.DummyInvariant;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -1,9 +1,17 @@
 package daikon.tools;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.unary.scalar.*;
+import daikon.Daikon;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.PptMap;
+import daikon.PptSlice;
+import daikon.PptSliceEquality;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
+import daikon.inv.binary.twoScalar.IntGreaterThan;
+import daikon.inv.binary.twoScalar.IntLessThan;
+import daikon.inv.unary.scalar.OneOfScalar;
 import gnu.getopt.*;
 import java.io.File;
 import java.io.IOException;

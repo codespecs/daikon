@@ -1,6 +1,5 @@
 package daikon;
 
-import daikon.derive.*;
 import java.util.Arrays;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;

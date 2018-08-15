@@ -1,12 +1,17 @@
 package daikon.suppress;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.binary.twoString.*;
-import daikon.inv.ternary.*;
-import daikon.inv.ternary.threeScalar.*;
+import daikon.Daikon;
+import daikon.Debug;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarComparability;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.ValueSet;
+import daikon.inv.binary.BinaryInvariant;
+import daikon.inv.binary.twoScalar.IntEqual;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;

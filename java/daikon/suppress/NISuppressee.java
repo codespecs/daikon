@@ -1,10 +1,15 @@
 package daikon.suppress;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.*;
-import daikon.inv.ternary.*;
-import daikon.inv.unary.*;
+import daikon.Debug;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.binary.BinaryInvariant;
+import daikon.inv.ternary.TernaryInvariant;
+import daikon.inv.unary.UnaryInvariant;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;

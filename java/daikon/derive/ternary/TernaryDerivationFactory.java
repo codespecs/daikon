@@ -1,7 +1,8 @@
 package daikon.derive.ternary;
 
-import daikon.*;
-import daikon.derive.*;
+import daikon.ProglangType;
+import daikon.VarInfo;
+import daikon.derive.DerivationFactory;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

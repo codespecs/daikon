@@ -2,7 +2,8 @@ package daikon;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.inv.*;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
 import java.util.HashSet;
 import java.util.List;
 

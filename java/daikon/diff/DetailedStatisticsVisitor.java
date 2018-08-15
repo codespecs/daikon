@@ -1,6 +1,6 @@
 package daikon.diff;
 
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.logging.Level;

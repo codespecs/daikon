@@ -1,7 +1,6 @@
 package daikon;
 
 import daikon.chicory.StreamRedirectThread;
-import daikon.dcomp.*;
 import daikon.util.RegexUtil;
 import java.io.File;
 import java.lang.reflect.Method;

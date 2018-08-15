@@ -2,7 +2,8 @@ package daikon;
 
 import static daikon.FileIO.ParentRelation;
 
-import daikon.inv.*;
+import daikon.inv.Equality;
+import daikon.inv.Invariant;
 import daikon.split.PptSplitter;
 import java.io.Serializable;
 import java.util.ArrayList;

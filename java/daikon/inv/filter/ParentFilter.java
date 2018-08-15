@@ -1,7 +1,10 @@
 package daikon.inv.filter;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.Debug;
+import daikon.PptRelation;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
 import java.util.Arrays;
 import java.util.List;
 

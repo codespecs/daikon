@@ -2,8 +2,12 @@ package daikon.simplify;
 
 import static daikon.inv.Invariant.asInvClass;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.PptSlice0;
+import daikon.inv.GuardingImplication;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;

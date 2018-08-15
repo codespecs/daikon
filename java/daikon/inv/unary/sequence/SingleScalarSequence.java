@@ -1,7 +1,8 @@
 package daikon.inv.unary.sequence;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.InvariantStatus;
 import org.plumelib.util.Intern;
 
 /*>>>

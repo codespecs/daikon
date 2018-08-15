@@ -1,7 +1,7 @@
 package daikon.tools;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
 import gnu.getopt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

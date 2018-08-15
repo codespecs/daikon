@@ -1,6 +1,8 @@
 package daikon.derive;
 
-import daikon.*;
+import daikon.Quantify;
+import daikon.ValueTuple;
+import daikon.VarInfo;
 import java.io.Serializable;
 import java.util.logging.Logger;
 

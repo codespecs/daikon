@@ -1,6 +1,6 @@
 package daikon.inv.unary;
 
-import daikon.*;
+import daikon.VarInfo;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

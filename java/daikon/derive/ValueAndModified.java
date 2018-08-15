@@ -1,6 +1,6 @@
 package daikon.derive;
 
-import daikon.*;
+import daikon.ValueTuple;
 import org.plumelib.util.Intern;
 
 /*>>>

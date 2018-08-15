@@ -1,7 +1,13 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.Debug;
+import daikon.Global;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
 import daikon.Quantify.QuantFlags;
+import daikon.ValueTuple;
+import daikon.VarComparability;
+import daikon.VarInfo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

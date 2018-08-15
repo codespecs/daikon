@@ -2,7 +2,7 @@ package daikon;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import daikon.chicory.*;
+import daikon.chicory.StreamRedirectThread;
 import daikon.util.RegexUtil;
 import java.io.BufferedReader;
 import java.io.File;

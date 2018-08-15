@@ -1,6 +1,6 @@
 package daikon.split;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;

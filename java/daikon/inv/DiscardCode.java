@@ -1,6 +1,13 @@
 package daikon.inv;
 
-import daikon.inv.filter.*;
+import daikon.inv.filter.DerivedParameterFilter;
+import daikon.inv.filter.InvariantFilter;
+import daikon.inv.filter.ObviousFilter;
+import daikon.inv.filter.OnlyConstantVariablesFilter;
+import daikon.inv.filter.SimplifyFilter;
+import daikon.inv.filter.UnjustifiedFilter;
+import daikon.inv.filter.UnmodifiedVariableEqualityFilter;
+import daikon.inv.filter.VariableFilter;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 

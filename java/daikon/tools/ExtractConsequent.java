@@ -2,8 +2,17 @@ package daikon.tools;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.Daikon;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.LogHelper;
+import daikon.Ppt;
+import daikon.PptMap;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
 import java.io.File;

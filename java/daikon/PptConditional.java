@@ -1,7 +1,7 @@
 package daikon;
 
 import daikon.inv.DummyInvariant;
-import daikon.split.*;
+import daikon.split.Splitter;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

@@ -4,7 +4,14 @@ package daikon.tools;
 
 import static daikon.tools.nullness.NullnessUtil.*;
 
-import daikon.*;
+import daikon.Daikon;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.PptMap;
+import daikon.PptTopLevel;
+import daikon.ProglangType;
+import daikon.ValueTuple;
+import daikon.VarInfo;
 import daikon.config.Configuration;
 import gnu.getopt.*;
 import java.io.File;

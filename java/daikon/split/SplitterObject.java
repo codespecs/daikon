@@ -1,7 +1,7 @@
 package daikon.split;
 
 import daikon.Daikon;
-import daikon.inv.*;
+import daikon.inv.DummyInvariant;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

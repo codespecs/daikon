@@ -1,8 +1,7 @@
 package daikon.inv.unary.sequence;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.twoSequence.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
 import daikon.inv.unary.UnaryInvariant;
 
 /*>>>
