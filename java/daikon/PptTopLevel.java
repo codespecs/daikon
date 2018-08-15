@@ -42,13 +42,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.ReflectionPlume;
-import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -3338,11 +3338,11 @@ public class PptTopLevel extends Ppt {
 
     if (equality_view == null) return "null";
 
-    StringBuilderDelimited out = new StringBuilderDelimited(", ");
+    StringJoiner out = new StringJoiner(", ");
     for (Invariant inv : equality_view.invs) {
       Equality e = (Equality) inv;
       Set<VarInfo> vars = e.getVars();
-      StringBuilderDelimited set_str = new StringBuilderDelimited(",");
+      StringJoiner set_str = new StringJoiner(",");
       for (VarInfo v : vars) {
         String name = v.name();
         if (v.missingOutOfBounds()) name += "{MOB}";

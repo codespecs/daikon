@@ -181,7 +181,7 @@ SOURCES?=$(COMMON_HERE)/sources
 # (e.g. esc-experiments/StackAr or daikon-tests/QueueAr)
 CWD:=$(shell pwd)
 # Why is this command echoed in the Travis job output?
-PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
+PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[678]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
 PROJECT?=${PROJECT_VIA_COMMAND}
 
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
@@ -205,7 +205,7 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-# Must use Java 1.5 or later.
+# Must use Java 1.8 or later.
 # On Cygwin, we use a script that converts the Unix-style pathnames in this
 # makefile to Windows pathnames.
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
@@ -281,20 +281,18 @@ JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.* 1\.\(.\)
 JAVA_UPDATE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.*_//')
 NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
 
+# TODO:
+# Will need to support Java 8 and 9 at some point.
+ifneq ($(JAVA_RELEASE_NUMBER), 8)
+    $(error Must use Java version 8)
+endif
+
 # Function to compute goal filename extension.  Java 8 is now the default.
-# If we are running Java 7 and if filename.test.goal.j7 exists, use it;
+# If we are running Java 9 and if filename.test.goal.j9 exists, use it;
 # otherwise, use filename.test.goal
-# Reasons for different behavior between Java 7 and Java 8 include:
-#  * nondeterministic behavior, such as using a HashMap's iterator.
-#    In this case, don't create a .goal.j8 goal file; instead, change the
-#    subject program to use LinkedHashMap.
-#  * different line numbers for :::EXITnnn program points, when a return
-#    statement spans multiple lines.  In this case, don't create a .goal.j8
-#    goal file; instead, change the subject program to put the entire return
-#    statement on one line.
-#  * different numbers of calls to hashCode, due to differences in Java 7 and
-#    Java 8 HashMap implementations and possibly String.hashCode().
-#    This is currently the only reason to create a .goal.j8 file.
+# Reasons for different behavior between Java 8 and Java 9 include:
+# (Unkown at this point.)
+#
 # The argument ($(1)) is '<filename>.<test>'
 
 # Now we have an additional complication.  If we are using an older Java8
@@ -302,31 +300,11 @@ NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
 # otherwise, use filename.test.goal
 
 goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
-				$(if $(findstring 1, $(NEWER_JAVA8_RELEASE)), \
-					$(1).goal, \
-					$(if $(shell if [ -f $(1).goal.j8o ] ; then echo true; fi), \
-						$(1).goal.j8o, \
-						$(1).goal) \
-					), \
-				$(if $(shell if [ -f $(1).goal.j7 ] ; then echo true; fi), \
-					$(1).goal.j7, \
+				$(1).goal, \
+				$(if $(shell if [ -f $(1).goal.j9 ] ; then echo true; fi), \
+					$(1).goal.j9, \
 					$(1).goal) \
 			)
-
-#goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
-#				$(if $(findstring 1, $(NEWER_JAVA8_RELEASE)), \
-#					$(if $(shell if [ -f $(1).goal.j8n ] ; then echo true; fi), \
-#						$(1).goal.j8n, \
-#						$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
-#							$(1).goal.j8, \
-#							$(1).goal) \
-#					), \
-#					$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
-#						$(1).goal.j8, \
-#						$(1).goal) \
-#				), \
-#				$(1).goal \
-#			)
 
 
 $(PRINT_INVARIANTS_CLASS):
@@ -448,6 +426,8 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make create-scratch : sets up the /scratch folder"
 create-scratch: ${SCRATCH_FOR_DAIKON}/.exists
 ${SCRATCH_FOR_DAIKON}/.exists:
+#	@echo
+#	@echo JAVA_RELEASE_NUMBER = $(JAVA_RELEASE_NUMBER)
 	@echo
 	@echo "### create-scratch (${PROJECT_FILE})"
 	@echo

@@ -27,10 +27,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
-import org.plumelib.util.StringBuilderDelimited;
 import org.plumelib.util.UtilPlume;
 
 /*>>>
@@ -525,7 +525,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       if (!parent_vars_specified) {
         p.parent_variable = null;
       } else {
-        StringBuilderDelimited args = new StringBuilderDelimited(",");
+        StringJoiner args = new StringJoiner(",");
         for (VarInfo vi : bases) {
           boolean found = false;
           for (VarParent vp : vi.parents) {
@@ -2692,36 +2692,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns a string containing the names of the vars in the array. */
-  public static String arrayToString(VarInfo[] vis) {
-
-    if (vis == null) return "null";
-    StringBuilderDelimited sb = new StringBuilderDelimited(", ");
-    for (int i = 0; i < vis.length; i++) {
-      if (vis[i] == null) {
-        sb.add("null");
-      } else {
-        sb.add(vis[i].name());
-      }
-    }
-    return sb.toString();
-  }
-
-  /** Returns a string containing the names of the vars in the list. */
-  public static String listToString(List<VarInfo> vlist) {
-
-    if (vlist == null) return "null";
-    ArrayList<String> vars = new ArrayList<String>(vlist.size());
-    for (VarInfo v : vlist) {
-      if (v == null) {
-        vars.add("null");
-      } else {
-        vars.add(v.name());
-      }
-    }
-    return UtilPlume.join(vars, ", ");
-  }
-
+  /** Return the set of values that have been seen so far for this variable. */
   public ValueSet get_value_set() {
 
     // Static constants don't have value sets, so we must make one

@@ -38,7 +38,7 @@ public class ParentFilter extends InvariantFilter {
             inv.format(), inv.ppt.parent.name, inv.ppt.parent.parents.size());
         for (PptRelation rel : inv.ppt.parent.parents) {
           inv.log("--%s%n", rel);
-          inv.log("--variables: %s", VarInfo.arrayToString(rel.parent.var_infos));
+          inv.log("--variables: %s", Arrays.toString(rel.parent.var_infos));
           inv.log("--map: %s", rel.child_to_parent_map);
         }
       } else {
@@ -89,7 +89,7 @@ public class ParentFilter extends InvariantFilter {
 
       // Sort the parent variables in index order
       Arrays.sort(pvis, VarInfo.IndexComparator.getInstance());
-      if (Debug.logDetail()) inv.log("Found parent vars: %s", VarInfo.arrayToString(pvis));
+      if (Debug.logDetail()) inv.log("Found parent vars: %s", Arrays.toString(pvis));
 
       // Lookup the slice, skip if not found
       PptSlice pslice = rel.parent.findSlice(pvis);

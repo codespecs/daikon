@@ -20,6 +20,8 @@ Further documentation can be found in:
 
 ===========================================================================
 
+Daikon now requires Java JDK 8; Java JDK 7 is no longer supported.
+
 Daikon no longer uses the plume-lib repository, but smaller ones such as
 plume-scripts.
 

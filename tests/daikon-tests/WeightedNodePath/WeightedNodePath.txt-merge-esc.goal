@@ -157,8 +157,6 @@ public class WeightedNodePath implements Path {
    */
   public boolean equals(WeightedNodePath wnp) {
     return (wnp != null) && this.node.equals(wnp.node) && (this.path == null ? wnp.path==null : this.path.equals(wnp.path));
-    // Java 7 and Java 8 assign different line numbers
-    // to multi-line return statements.
   }
 
   /*@ also_modifies this.path.node, this.path.path, this.path.path.node, this.path.path.path, this.path.path.cost, this.path.cost; */

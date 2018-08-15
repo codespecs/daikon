@@ -15,15 +15,15 @@ public class WeightedNodePath implements Path {
   //   (path == null) ==> (cost == node.cost) &&
   //   (path != null) ==> (cost == node.cost + path.cost)
   //
-  
+
   private final WeightedNode node;
   private final WeightedNodePath path;
   private final int cost;
-  
+
 
   /**
    * Constructs a WeightedNodePath containing one node.
-   * 
+   *
    * @requires node != null
    * @effects Creates a new WeightedNodePath which originates at
    * <code>node</code>.
@@ -111,13 +111,11 @@ public class WeightedNodePath implements Path {
    */
   public boolean equals(WeightedNodePath wnp) {
     return (wnp != null) && this.node.equals(wnp.node) && (this.path == null ? wnp.path==null : this.path.equals(wnp.path));
-    // Java 7 and Java 8 assign different line numbers
-    // to multi-line return statements.
   }
 
   // Specified by the Object superclass
   public int hashCode() {
     return node.hashCode() + (this.path==null ? 0 : 13 * path.hashCode());
-  }					       
-}    
+  }
+}
 
