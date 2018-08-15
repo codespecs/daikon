@@ -304,6 +304,8 @@ In order to compile Kvasir, the Daikon front end for the C language
 (@pxref{Kvasir,,,daikon,Daikon User Manual}), you will need some
 additional tools beyond those required to compile Daikon.
 
+Note that Kvasir does not work on MacOS.
+
 To install these dependencies under Ubuntu, run the command:
 @exampleindent 2
 @example

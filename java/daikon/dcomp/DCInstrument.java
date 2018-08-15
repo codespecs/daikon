@@ -2059,11 +2059,11 @@ class DCInstrument extends InstructionListUtils {
             callee_instrumented = false;
           }
 
-          // UNDONE:
+          // TODO:
           // This is actually a general problem.  Correct solution would seem
           // to be a variation of "has_instrumented" to find target of virtual
           // call at runtime.
-          // These is just a hack to get through PASCALI corpus.
+          // This is just a hack to get through PASCALI corpus.
           String super_class = gen.getSuperclassName();
           if ((!super_class.equals("java.lang.Object")) && (BcelUtil.inJdk(super_class))) {
             callee_instrumented = false;
@@ -2174,11 +2174,11 @@ class DCInstrument extends InstructionListUtils {
             callee_instrumented = false;
           }
 
-          // UNDONE:
+          // TODO:
           // This is actually a general problem.  Correct solution would seem
           // to be a variation of "has_instrumented" to find target of virtual
           // call at runtime.
-          // These is just a hack to get through PASCALI corpus.
+          // This is just a hack to get through PASCALI corpus.
           String super_class = gen.getSuperclassName();
           if ((!super_class.equals("java.lang.Object")) && (BcelUtil.inJdk(super_class))) {
             callee_instrumented = false;
