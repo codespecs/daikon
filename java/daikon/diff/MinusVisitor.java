@@ -2,16 +2,16 @@ package daikon.diff;
 
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** Computes A - B, where A and B are the two sets of invariants. */
 public class MinusVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private /*@MonotonicNonNull*/ PptTopLevel currentPpt;
+  private @MonotonicNonNull PptTopLevel currentPpt;
 
   /** If the first ppt is non-null, it should be part of the result. */
   @Override
@@ -29,7 +29,7 @@ public class MinusVisitor extends DepthFirstVisitor {
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode
   // has already been visited
-  /*@RequiresNonNull("currentPpt")*/
+  @RequiresNonNull("currentPpt")
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
@@ -42,8 +42,8 @@ public class MinusVisitor extends DepthFirstVisitor {
    * If the first invariant is non-null and justified, and the second one is null or unjustified,
    * the first invariant should be added.
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  private static boolean shouldAdd(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  private static boolean shouldAdd(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     return ((inv1 != null) && (inv2 == null));
   }
 

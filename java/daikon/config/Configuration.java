@@ -5,13 +5,10 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.EntryReader;
 import org.plumelib.util.ReflectionPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-*/
 
 /**
  * This class applies settings from a configuration file that lists variable names and values (see
@@ -53,7 +50,7 @@ public final class Configuration implements Serializable {
     return instance;
   }
 
-  private static volatile /*@NonNull*/ Configuration instance = new Configuration();
+  private static volatile @NonNull Configuration instance = new Configuration();
 
   /**
    * This used to read a file containing all of the configurable options so that when the options
@@ -149,13 +146,13 @@ public final class Configuration implements Serializable {
     }
 
     @SuppressWarnings("signature") // substring operation
-    /*@ClassGetName*/ String classname = name.substring(0, dot);
+    @ClassGetName String classname = name.substring(0, dot);
     String fieldname = name.substring(dot + 1);
 
     apply(classname, fieldname, value);
   }
 
-  public void apply(/*@ClassGetName*/ String classname, String fieldname, String value) {
+  public void apply(@ClassGetName String classname, String fieldname, String value) {
     assert classname != null;
     assert fieldname != null;
     assert value != null;

@@ -68,21 +68,21 @@ The correct way to build the system is to run 'make'.
   #define _TYPE_WRAPPER_NAME Short
   #define BAD_VALUE Short.MAX_VALUE
 #elif defined(OBJECT)
-  #define _TYPE /*@Interned*/ Object
+  #define _TYPE @Interned Object
   #define _TYPE_NAME Object
   #undef _TYPE_ARG
-  #define _TYPE_ARG </*@Interned*/ Object>
+  #define _TYPE_ARG <@Interned Object>
   #define BAD_VALUE null
   #undef BAD_VALUE_QUALIFIER
-  #define BAD_VALUE_QUALIFIER /*@Nullable*/
+  #define BAD_VALUE_QUALIFIER @Nullable
 #elif defined(STRING)
-  #define _TYPE /*@Interned*/ String
+  #define _TYPE @Interned String
   #define _TYPE_NAME String
   #undef _TYPE_ARG
-  #define _TYPE_ARG </*@Interned*/ String>
+  #define _TYPE_ARG <@Interned String>
   #define BAD_VALUE null
   #undef BAD_VALUE_QUALIFIER
-  #define BAD_VALUE_QUALIFIER /*@Nullable*/
+  #define BAD_VALUE_QUALIFIER @Nullable
 #endif
 
 #if defined(OBJECT)
@@ -165,9 +165,9 @@ The correct way to build the system is to run 'make'.
    */
   @SuppressWarnings("interning") // reflection
 #if defined(BOOLEAN)
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
+  @EnsuresNonNullIf(result=true, expression="#1")
 #endif
-  /*@Pure*/
+  @Pure
   public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT(Object o, long i) {
     if (o == null) {
       return BAD_VALUE; // return default value
@@ -184,9 +184,9 @@ The correct way to build the system is to run 'make'.
 
   @SuppressWarnings("interning") // called reflectively
 #if defined(BOOLEAN)
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
+  @EnsuresNonNullIf(result=true, expression="#1")
 #endif
-  /*@Pure*/
+  @Pure
   public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT(_TYPE_NAME[] arr, long i) {
     if (arr == null) {
       return BAD_VALUE; // return default value
@@ -259,10 +259,10 @@ The correct way to build the system is to run 'make'.
    * its slot in the returned array is null.
    */
   @SuppressWarnings("nullness") // https://tinyurl.com/cfissue/58
-  /*@SideEffectFree*/
-  public static /*@PolyNull*//*("elt")*/ String /*@PolyNull*//*("container")*/ [] typeArray(/*@PolyNull*//*("elt")*/ _TYPE /*@PolyNull*//*("container")*/ [] seq) {
+  @SideEffectFree
+  public static @PolyNull/*("elt")*/ String @PolyNull/*("container")*/ [] typeArray(@PolyNull/*("elt")*/ _TYPE @PolyNull/*("container")*/ [] seq) {
     if (seq == null) return null;
-    /*@PolyNull*//*("elt")*/ String[] retval = new /*@PolyNull*//*("elt")*/ String[seq.length];
+    @PolyNull/*("elt")*/ String[] retval = new @PolyNull/*("elt")*/ String[seq.length];
     for (int i = 0 ; i < seq.length ; i++) {
       if (seq[i] == null) {
         retval[i] = null;
@@ -275,9 +275,9 @@ The correct way to build the system is to run 'make'.
 #endif
 
   /** True iff both sequences are non-null and have the same length. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
-  /*@Pure*/
-  public static boolean sameLength(_TYPE_NAME /*@Nullable*/ [] seq1, _TYPE_NAME /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1", "#2"})
+  @Pure
+  public static boolean sameLength(_TYPE_NAME @Nullable [] seq1, _TYPE_NAME @Nullable [] seq2) {
     return ((seq1 != null)
             && (seq2 != null)
             && seq1.length == seq2.length);
@@ -285,9 +285,9 @@ The correct way to build the system is to run 'make'.
 
 #ifdef COMPATIBLE
   /** True iff both sequences are non-null and have the same length. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
-  /*@Pure*/
-  public static boolean sameLength(_TYPE_NAME /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1", "#2"})
+  @Pure
+  public static boolean sameLength(_TYPE_NAME @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     return ((seq1 != null)
             && (seq2 != null)
             && seq1.length == seq2.length);
@@ -306,8 +306,8 @@ The correct way to build the system is to run 'make'.
    * </pre>
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseDivides(_TYPE[] seq1, _TYPE[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -320,8 +320,8 @@ The correct way to build the system is to run 'make'.
     }
     return true;
   }
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseDivides(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -346,8 +346,8 @@ The correct way to build the system is to run 'make'.
    * </pre>
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseSquare(_TYPE[] seq1, _TYPE[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -360,8 +360,8 @@ The correct way to build the system is to run 'make'.
     }
     return true;
   }
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseSquare(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -393,8 +393,8 @@ The correct way to build the system is to run 'make'.
    * </pre>
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, _TYPE[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -407,8 +407,8 @@ The correct way to build the system is to run 'make'.
     }
     return true;
   }
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -427,8 +427,8 @@ This has nothing to do with INT.
 The test ensures that the method only appears once in the output.
 #endif
 #if (defined(INT))
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseBitwiseComplement(Object[] seq1, Object[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -462,8 +462,8 @@ The test ensures that the method only appears once in the output.
    * </pre>
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
@@ -477,8 +477,8 @@ The test ensures that the method only appears once in the output.
     }
     return true;
   }
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, COMPATIBLE[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -497,8 +497,8 @@ This has nothing to do with INT.
 The test ensures that the method only appears once in the output.
 #endif
 #if (defined(INT))
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean pairwiseBitwiseSubset(Object[] seq1, Object[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -568,16 +568,16 @@ The test ensures that the method only appears once in the output.
    * elements in the other array. If both arrays are empty, returns a new empty array.
    */
   @SuppressWarnings({"interning", "UnnecessaryTypeArgument"}) // generics bug in Checker Framework?
-  /*@SideEffectFree*/
-  public static _TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, _TYPE /*@PolyNull*/ [] seq2) {
+  @SideEffectFree
+  public static _TYPE @PolyNull [] concat(_TYPE @PolyNull [] seq1, _TYPE @PolyNull [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     return ArraysPlume._TYPE_ARG concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
-  /*@SideEffectFree*/
-  public static CAST_TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, COMPATIBLE /*@PolyNull*/ [] seq2) {
+  @SideEffectFree
+  public static CAST_TYPE @PolyNull [] concat(_TYPE @PolyNull [] seq1, COMPATIBLE @PolyNull [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     // Cannot just use ArraysPlume.concat because the two arrays
@@ -604,16 +604,16 @@ The test ensures that the method only appears once in the output.
    * assurances about the order or repetition of elements: elements may be repeated, and their
    * order may be different from the order of elements in seq1 and seq2.
    */
-  /*@SideEffectFree*/
-  public static _TYPE /*@PolyNull*/ [] union(_TYPE /*@PolyNull*/ [] seq1, _TYPE /*@PolyNull*/ [] seq2) {
+  @SideEffectFree
+  public static _TYPE @PolyNull [] union(_TYPE @PolyNull [] seq1, _TYPE @PolyNull [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     return concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
-  /*@Pure*/
-  public static CAST_TYPE /*@PolyNull*/ [] union(_TYPE /*@PolyNull*/ [] seq1, COMPATIBLE /*@PolyNull*/ [] seq2) {
+  @Pure
+  public static CAST_TYPE @PolyNull [] union(_TYPE @PolyNull [] seq1, COMPATIBLE @PolyNull [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     return concat(seq1, seq2);
@@ -625,8 +625,8 @@ The test ensures that the method only appears once in the output.
    * gives no assurances about the order or repetition of elements: elements may be repeated, and
    * their order may be different from the order of elements in seq1 and seq2.
    */
-  /*@Pure*/
-  public static _TYPE /*@PolyNull*/ [] intersection(_TYPE /*@PolyNull*/ [] seq1, _TYPE /*@PolyNull*/ [] seq2) {
+  @Pure
+  public static _TYPE @PolyNull [] intersection(_TYPE @PolyNull [] seq1, _TYPE @PolyNull [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     _TYPE[] intermediate = new _TYPE[Math.min(seq1.length, seq2.length)];
@@ -640,8 +640,8 @@ The test ensures that the method only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@Pure*/
-  public static CAST_TYPE /*@PolyNull*/ [] intersection(_TYPE /*@PolyNull*/ [] seq1, COMPATIBLE /*@PolyNull*/ [] seq2) {
+  @Pure
+  public static CAST_TYPE @PolyNull [] intersection(_TYPE @PolyNull [] seq1, COMPATIBLE @PolyNull [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     CAST_TYPE[] intermediate = new CAST_TYPE[Math.min(seq1.length, seq2.length)];
@@ -660,8 +660,8 @@ The test ensures that the method only appears once in the output.
    * no assurances about the order or repetition of elements: elements may be repeated, and their
    * order may be different from the order of elements in seq1 and seq2.
    */
-  /*@Pure*/
-  public static _TYPE /*@PolyNull*/ [] setDiff(_TYPE /*@PolyNull*/ [] seq1, _TYPE /*@PolyNull*/ [] seq2) {
+  @Pure
+  public static _TYPE @PolyNull [] setDiff(_TYPE @PolyNull [] seq1, _TYPE @PolyNull [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     _TYPE[] intermediate = new _TYPE[seq1.length];
@@ -675,8 +675,8 @@ The test ensures that the method only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@Pure*/
-  public static CAST_TYPE /*@PolyNull*/ [] setDiff(_TYPE /*@PolyNull*/ [] seq1, COMPATIBLE /*@PolyNull*/ [] seq2) {
+  @Pure
+  public static CAST_TYPE @PolyNull [] setDiff(_TYPE @PolyNull [] seq1, COMPATIBLE @PolyNull [] seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     CAST_TYPE[] intermediate = new CAST_TYPE[seq1.length];
@@ -691,9 +691,9 @@ The test ensures that the method only appears once in the output.
 #endif
 
   /** Returns true iff seq1 and seq2 are equal when considered as sets. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean setEqual(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean setEqual(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     for (int i = 0; i < seq1.length ; i++) {
@@ -710,9 +710,9 @@ The test ensures that the method only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean setEqual(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean setEqual(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     for (int i = 0; i < seq1.length ; i++) {
@@ -739,8 +739,8 @@ The test ensures that the method only appears once in the output.
    * </pre>
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
   public static boolean isReverse(_TYPE[] seq1, _TYPE[] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
@@ -756,9 +756,9 @@ The test ensures that the method only appears once in the output.
   }
 
 #if (defined(OBJECT))
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean isReverse(/*@PolyNull*/ Collection<? extends _TYPE> seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean isReverse(@PolyNull Collection<? extends _TYPE> seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     _TYPE[] seq1_array = seq1.toArray(new _TYPE[]{});
@@ -767,9 +767,9 @@ The test ensures that the method only appears once in the output.
 #endif
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean isReverse(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean isReverse(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -797,9 +797,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..elt.length-1 } : elt[i] element_of arr
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean subsetOf(/*@Nullable*/ Object elts, /*@Nullable*/ Object arr) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean subsetOf(@Nullable Object elts, @Nullable Object arr) {
     if (elts == null) return false;
     if (arr == null) return false;
     if (!(elts.getClass().isArray() && arr.getClass().isArray())) {
@@ -859,9 +859,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /** True iff seq1 is a subset of seq2, when the sequences are considered as sets. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean subsetOf(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean subsetOf(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     for (int i = 0 ; i < seq1.length ; i++) {
@@ -873,9 +873,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean subsetOf(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean subsetOf(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     for (int i = 0 ; i < seq1.length ; i++) {
@@ -888,18 +888,18 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
 #if (defined(OBJECT))
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean subsetOf(/*@Nullable*/ Collection<? extends _TYPE> seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean subsetOf(@Nullable Collection<? extends _TYPE> seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     _TYPE[] seq1_array = seq1.toArray(new _TYPE[]{});
     return subsetOf(seq1_array, seq2);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean subsetOf(_TYPE /*@Nullable*/ [] seq1, /*@Nullable*/ Collection<? extends _TYPE> seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean subsetOf(_TYPE @Nullable [] seq1, @Nullable Collection<? extends _TYPE> seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     _TYPE[] seq2_array = seq2.toArray(new _TYPE[]{});
@@ -908,17 +908,17 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /** Returns true iff seq contains no duplicate elements. */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean noDups(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean noDups(_TYPE @Nullable [] seq) {
     if (seq == null) return false;
     return ArraysPlume.noDuplicates(seq);
   }
 
  /** Returns true iff elt is in array arr. */
-  /*@EnsuresNonNullIf(result=true, expression="#2")*/
-  /*@Pure*/
-  public static boolean memberOf(_TYPE elt, _TYPE /*@Nullable*/ [] arr) {
+  @EnsuresNonNullIf(result=true, expression="#2")
+  @Pure
+  public static boolean memberOf(_TYPE elt, _TYPE @Nullable [] arr) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) {
@@ -929,9 +929,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression="#2")*/
-  /*@Pure*/
-  public static boolean memberOf(_TYPE elt, COMPATIBLE /*@Nullable*/ [] arr) {
+  @EnsuresNonNullIf(result=true, expression="#2")
+  @Pure
+  public static boolean memberOf(_TYPE elt, COMPATIBLE @Nullable [] arr) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) {
@@ -943,9 +943,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
 #if (defined(BYTE) || defined(SHORT))
-  /*@EnsuresNonNullIf(result=true, expression="#2")*/
-  /*@Pure*/
-  public static boolean memberOf(long elt, _TYPE /*@Nullable*/ [] arr) {
+  @EnsuresNonNullIf(result=true, expression="#2")
+  @Pure
+  public static boolean memberOf(long elt, _TYPE @Nullable [] arr) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) {
@@ -957,8 +957,8 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /** Returns a subsequence of seq with first elements seq[start] and last element seq[end]. */
-  /*@Pure*/
-  public static _TYPE /*@PolyNull*/ [] slice(_TYPE /*@PolyNull*/ [] seq, int start, int end) {
+  @Pure
+  public static _TYPE @PolyNull [] slice(_TYPE @PolyNull [] seq, int start, int end) {
     if (seq == null) return null;
     int sliceStart = start;
     int sliceEnd = end;
@@ -975,16 +975,16 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return ArraysPlume.subarray(seq, sliceStart, length);
   }
 
-  /*@Pure*/
-  public static _TYPE /*@PolyNull*/ [] slice(_TYPE /*@PolyNull*/ [] seq, long start, int end) {
+  @Pure
+  public static _TYPE @PolyNull [] slice(_TYPE @PolyNull [] seq, long start, int end) {
     return slice(seq, (int)start, end);
   }
-  /*@Pure*/
-  public static _TYPE /*@PolyNull*/ [] slice(_TYPE /*@PolyNull*/ [] seq, int start, long end) {
+  @Pure
+  public static _TYPE @PolyNull [] slice(_TYPE @PolyNull [] seq, int start, long end) {
     return slice(seq, start, (int)end);
   }
-  /*@Pure*/
-  public static _TYPE /*@PolyNull*/ [] slice(_TYPE /*@PolyNull*/ [] seq, long start, long end) {
+  @Pure
+  public static _TYPE @PolyNull [] slice(_TYPE @PolyNull [] seq, long start, long end) {
     return slice(seq, (int)start, (int)end);
   }
 
@@ -995,9 +995,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] == elt
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsEqual(_TYPE /*@Nullable*/ [] arr, _TYPE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsEqual(_TYPE @Nullable [] arr, _TYPE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (ne(arr[i], elt)) {
@@ -1008,9 +1008,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsEqual(_TYPE /*@Nullable*/ [] arr, COMPATIBLE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsEqual(_TYPE @Nullable [] arr, COMPATIBLE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (ne(arr[i], elt)) {
@@ -1028,9 +1028,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] != elt
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsNotEqual(_TYPE /*@Nullable*/ [] arr, _TYPE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsNotEqual(_TYPE @Nullable [] arr, _TYPE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) {
@@ -1041,9 +1041,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsNotEqual(_TYPE /*@Nullable*/ [] arr, COMPATIBLE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsNotEqual(_TYPE @Nullable [] arr, COMPATIBLE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (eq(arr[i], elt)) {
@@ -1063,9 +1063,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] &gt; elt
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsGT(_TYPE /*@Nullable*/ [] arr, _TYPE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsGT(_TYPE @Nullable [] arr, _TYPE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (lte(arr[i], elt)) {
@@ -1076,9 +1076,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsGT(_TYPE /*@Nullable*/ [] arr, COMPATIBLE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsGT(_TYPE @Nullable [] arr, COMPATIBLE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (lte(arr[i], elt)) {
@@ -1096,9 +1096,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] &ge; elt
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsGTE(_TYPE /*@Nullable*/ [] arr, _TYPE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsGTE(_TYPE @Nullable [] arr, _TYPE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (lt(arr[i], elt)) {
@@ -1109,9 +1109,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsGTE(_TYPE /*@Nullable*/ [] arr, COMPATIBLE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsGTE(_TYPE @Nullable [] arr, COMPATIBLE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (lt(arr[i], elt)) {
@@ -1129,9 +1129,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] &lt; elt
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsLT(_TYPE /*@Nullable*/ [] arr, _TYPE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsLT(_TYPE @Nullable [] arr, _TYPE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (gte(arr[i], elt)) {
@@ -1142,9 +1142,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsLT(_TYPE /*@Nullable*/ [] arr, COMPATIBLE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsLT(_TYPE @Nullable [] arr, COMPATIBLE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (gte(arr[i], elt)) {
@@ -1162,9 +1162,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..arr.length-1 } : arr[i] &le; elt
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsLTE(_TYPE /*@Nullable*/ [] arr, _TYPE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsLTE(_TYPE @Nullable [] arr, _TYPE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (gt(arr[i], elt)) {
@@ -1175,9 +1175,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsLTE(_TYPE /*@Nullable*/ [] arr, COMPATIBLE elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsLTE(_TYPE @Nullable [] arr, COMPATIBLE elt) {
     if (arr == null) return false;
     for (int i = 0 ; i < arr.length ; i++) {
       if (gt(arr[i], elt)) {
@@ -1199,9 +1199,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    *
    */
 #if (defined(FLOAT) || defined(DOUBLE))
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseEqual(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseEqual(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1217,9 +1217,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 #else
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseEqual(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseEqual(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1234,9 +1234,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
 #if (defined(OBJECT) || defined(STRING))
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseEqual(/*@Nullable*/ AbstractCollection<_TYPE> seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseEqual(@Nullable AbstractCollection<_TYPE> seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
@@ -1244,9 +1244,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return pairwiseEqual(seq1a, seq2);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseEqual(_TYPE /*@Nullable*/ [] seq1, /*@Nullable*/ AbstractCollection<_TYPE> seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseEqual(_TYPE @Nullable [] seq1, @Nullable AbstractCollection<_TYPE> seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
@@ -1256,9 +1256,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseEqual(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseEqual(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1280,9 +1280,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] != seq2[i]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseNotEqual(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseNotEqual(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1296,9 +1296,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseNotEqual(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseNotEqual(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1322,9 +1322,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] &lt; seq2[i]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseLT(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseLT(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1338,9 +1338,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseLT(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseLT(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1361,9 +1361,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] &le; seq2[i]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseLTE(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseLTE(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1377,9 +1377,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseLTE(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseLTE(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1400,9 +1400,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] &gt; seq2[i]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseGT(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseGT(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1416,9 +1416,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseGT(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseGT(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1439,9 +1439,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * /\ forall i in { 0..seq1.length-1 } : seq1[i] &ge; seq2[i]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseGTE(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseGTE(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1455,9 +1455,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseGTE(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseGTE(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (!sameLength(seq1, seq2)) {
       return false;
     }
@@ -1477,18 +1477,18 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * Returns true iff seq1 is lexically equal to seq2.
    * For equality, "lexically" and "pairwise" are the same.
    */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexEqual(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexEqual(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return pairwiseEqual(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexEqual(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexEqual(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return pairwiseEqual(seq1, seq2);
@@ -1496,18 +1496,18 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /** Returns true iff seq1 is lexically not equal to seq2. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexNotEqual(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexNotEqual(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return !lexEqual(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexNotEqual(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexNotEqual(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return !lexEqual(seq1, seq2);
@@ -1517,9 +1517,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #ifdef NUMERIC
 
   /** Returns true iff seq1 is lexically &lt;  seq2. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexLT(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexLT(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1537,9 +1537,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexLT(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexLT(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1558,9 +1558,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /** Returns true iff seq1 is lexically &le; to seq2. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexLTE(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexLTE(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1578,9 +1578,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexLTE(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexLTE(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
   if (seq1 == null) return false;
   if (seq2 == null) return false;
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1599,9 +1599,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /** Returns true iff seq1 is lexically &gt; to seq2. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexGT(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexGT(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
   if (seq1 == null) return false;
   if (seq2 == null) return false;
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1619,9 +1619,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexGT(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexGT(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
   if (seq1 == null) return false;
   if (seq2 == null) return false;
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1640,9 +1640,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /** Returns true iff seq1 is lexically &ge; to seq2. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexGTE(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexGTE(_TYPE @Nullable [] seq1, _TYPE @Nullable [] seq2) {
   if (seq1 == null) return false;
   if (seq2 == null) return false;
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1660,9 +1660,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 
 #ifdef COMPATIBLE
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexGTE(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexGTE(_TYPE @Nullable [] seq1, COMPATIBLE @Nullable [] seq2) {
   if (seq1 == null) return false;
   if (seq2 == null) return false;
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1689,9 +1689,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] == seq[i+1]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltwiseEqual(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltwiseEqual(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length - 1) {
@@ -1710,9 +1710,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] != seq[i+1]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltwiseNotEqual(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltwiseNotEqual(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length - 1) {
@@ -1733,9 +1733,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] &lt; seq[i+1]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltwiseLT(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltwiseLT(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length - 1) {
@@ -1754,9 +1754,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] &le; seq[i+1]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltwiseLTE(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltwiseLTE(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length - 1) {
@@ -1775,9 +1775,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] &gt; seq[i+1]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltwiseGT(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltwiseGT(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length - 1) {
@@ -1796,9 +1796,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-2 } : seq[i] &ge; seq[i+1]
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltwiseGTE(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltwiseGTE(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length - 1) {
@@ -1820,9 +1820,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] == i
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsEqualIndex(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsEqualIndex(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (ne(seq[i], i)) {
@@ -1839,9 +1839,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] != i
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsNotEqualIndex(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsNotEqualIndex(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (eq(seq[i], i)) {
@@ -1858,9 +1858,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] &lt; i
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsLtIndex(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsLtIndex(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (gte(seq[i], i)) {
@@ -1877,9 +1877,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] &le; i
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsLteIndex(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsLteIndex(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (gt(seq[i], i)) {
@@ -1896,9 +1896,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] &gt; i
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsGtIndex(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsGtIndex(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (lte(seq[i], i)) {
@@ -1915,9 +1915,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * forall i in { 0..seq.length-1 } : seq[i] &ge; i
    *
    */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsGteIndex(_TYPE /*@Nullable*/ [] seq) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsGteIndex(_TYPE @Nullable [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (lt(seq[i], i)) {
@@ -1963,8 +1963,8 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * Object[]. Returns null if any array or field access causes an exception.
    */
   @SuppressWarnings("interning") // reflection
-  /*@SideEffectFree*/
-  public static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE(/*@Nullable*/ Object object, /*@Nullable*/ String fieldStr) {
+  @SideEffectFree
+  public static _TYPE_NAME @Nullable [] COLLECT_TYPE(@Nullable Object object, @Nullable String fieldStr) {
 
     if (object == null) return null;
     if (fieldStr == null) return null;
@@ -1982,8 +1982,8 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * @see COLLECT_TYPE(Object, String)
    */
   // @PolyNull does not work for return type, because null is returned on error.
-  /*@SideEffectFree*/
-  private static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE(/*@Nullable*/ Object object,
+  @SideEffectFree
+  private static _TYPE_NAME @Nullable [] COLLECT_TYPE(@Nullable Object object,
                                                    String[] fields, int fieldsStartIdx) {
 
     if (object == null) return null;
@@ -2101,7 +2101,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * Returns a default value if any field access causes an exception.
    */
   @SuppressWarnings("interning") // reflection
-  /*@SideEffectFree*/
+  @SideEffectFree
   public static BAD_VALUE_QUALIFIER _TYPE_NAME COLLECT_TYPE_FIELD(Object object, String fieldStr) {
 
     if (object == null) {

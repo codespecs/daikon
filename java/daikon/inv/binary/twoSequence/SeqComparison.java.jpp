@@ -239,6 +239,11 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoSequence;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.Quantify.QuantFlags;
 import daikon.derive.binary.*;
@@ -248,14 +253,6 @@ import java.util.*;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * Represents invariants between two sequences of PRIMITIVE values. If order matters for each
@@ -360,7 +357,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 
   /** Instantiates the invariant on the specified slice */
   @Override
-  protected SEQSEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
+  protected SEQSEQINTEQUAL instantiate_dyn(/*@Prototype*/ SEQSEQINTEQUAL this, PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.hasOrder() && slice.var_infos[1].aux.hasOrder();
     return new SEQSEQINTEQUAL(slice, has_order);
   }
@@ -375,15 +372,15 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
+  public String repr(@GuardSatisfied SEQSEQINTEQUAL this) {
     return SEQSEQINTEQUALstring + varNames() + ": ,orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
       ;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied SEQSEQINTEQUAL this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied SEQSEQINTEQUAL this, OutputFormat format) {
     // System.out.println("Calling " + SEQSEQINTEQUALstring + ".format for: " + repr());
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -441,7 +438,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     return format_unimplemented(format);
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
+  public String format_simplify(@GuardSatisfied SEQSEQINTEQUAL this) {
     if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
     } else {
@@ -449,7 +446,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     }
   }
 
-  private String format_simplify_defined(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
+  private String format_simplify_defined(@GuardSatisfied SEQSEQINTEQUAL this) {
     String[] var1_name = var1().simplifyNameAndBounds();
     String[] var2_name = var2().simplifyNameAndBounds();
     if (var1_name == null || var2_name == null) {
@@ -462,7 +459,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
       + var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
   }
 
-  private String format_simplify_explicit(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
+  private String format_simplify_explicit(@GuardSatisfied SEQSEQINTEQUAL this) {
     #if (defined(EQUAL) || defined(EQUALSTRING) || defined(EQUALFLOAT))
       // A simple case: if two sequences are lexically equal iff they
       // are elementwise equal.
@@ -479,7 +476,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 
   @Override
   public InvariantStatus check_modified(
-      PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
+      PRIMITIVE @Interned [] v1, PRIMITIVE @Interned [] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
     /// if one is missing, but not if one is zero-length.
     // // Don't make comparisons with empty arrays.
@@ -503,7 +500,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   }
 
   @Override
-  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
+  public InvariantStatus add_modified(PRIMITIVE @Interned [] v1, PRIMITIVE @Interned [] v2, int count) {
     if (logDetail()) {
       log("add_modified (%s, %s)", Arrays.toString(v1), Arrays.toString(v2));
     }
@@ -532,13 +529,13 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   }
 #endif
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant o) {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant o) {
     return false;
@@ -548,9 +545,9 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
    * Since this invariant can be a postProcessed equality, we have to handle isObvious especially to
    * avoid circular isObvious relations.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
+  public @Nullable DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically(this.ppt.var_infos);
     } else {
@@ -562,9 +559,9 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
    * Since this invariant can be a postProcessed equality, we have to handle isObvious especially to
    * avoid circular isObvious relations.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
+  public @Nullable DiscardInfo isObviousDynamically_SomeInEquality() {
     if (logOn()) {
       log("Considering dynamically_someInEquality");
     }
@@ -575,9 +572,9 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     }
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     #ifdef NUMERIC
       VarInfo var1 = vis[0];
       VarInfo var2 = vis[1];
@@ -593,9 +590,9 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     return super.isObviousStatically(vis);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -743,7 +740,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     */
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isEqual() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     return true;
@@ -753,7 +750,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   }
 
   // Look up a previously instantiated invariant.
-  public static /*@Nullable*/ SEQSEQINTEQUAL find(PptSlice ppt) {
+  public static @Nullable SEQSEQINTEQUAL find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof SEQSEQINTEQUAL) {
@@ -764,9 +761,9 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   }
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
+  public @Nullable NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }
 
@@ -784,6 +781,6 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
             new NISuppression(v1_pw_v2, suppressee),
           });
   #else
-    private static /*@Nullable*/ NISuppressionSet suppressions = null;
+    private static @Nullable NISuppressionSet suppressions = null;
   #endif
 }

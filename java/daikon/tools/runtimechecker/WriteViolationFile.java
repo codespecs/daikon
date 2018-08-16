@@ -10,10 +10,7 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.signature.qual.*;
-*/
+import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
 
 /**
  * This program runs a given program (which is assumed to contain some classes that have been
@@ -38,7 +35,7 @@ class WriteViolationFile {
       System.exit(1);
     }
     @SuppressWarnings("signature") // will be checked immediately below, and exception is caught
-    /*@BinaryNameForNonArray*/ String class_name = args[0];
+    @BinaryNameForNonArray String class_name = args[0];
     String[] main_args = new String[args.length - 1];
     for (int i = 0; i < main_args.length; i++) {
       main_args[i] = args[i + 1];

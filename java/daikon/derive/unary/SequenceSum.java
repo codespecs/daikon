@@ -4,11 +4,8 @@ import daikon.ValueTuple;
 import daikon.VarInfo;
 import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
 
 public final class SequenceSum extends UnaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
@@ -58,7 +55,7 @@ public final class SequenceSum extends UnaryDerivation {
     return VarInfo.make_scalar_seq_func("sum", null, base, 0);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceSum);

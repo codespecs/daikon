@@ -4,12 +4,10 @@ import daikon.ValueTuple;
 import daikon.VarInfo;
 import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 public abstract class UnaryDerivation extends Derivation {
   // We are Serializable, so we specify a version to allow changes to
@@ -23,9 +21,9 @@ public abstract class UnaryDerivation extends Derivation {
     base = vi;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public UnaryDerivation clone(/*>>>@GuardSatisfied UnaryDerivation this*/) {
+  public UnaryDerivation clone(@GuardSatisfied UnaryDerivation this) {
     try {
       return (UnaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {
@@ -60,13 +58,13 @@ public abstract class UnaryDerivation extends Derivation {
     return base;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public VarInfo[] getBases() {
     return new VarInfo[] {base()};
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public VarInfo getBase(int i) {
     switch (i) {
@@ -77,13 +75,13 @@ public abstract class UnaryDerivation extends Derivation {
     }
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   protected boolean isParam() {
     return base.isParam();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isDerivedFromNonCanonical() {
     return !base.isCanonical();

@@ -22,11 +22,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Functions that look for relationships between the invariants at different program points.
@@ -141,7 +139,7 @@ public class InvMatch {
       // has an effect.
       @SuppressWarnings(
           "nullness") // can't figure out what this is for; maybe change the declaration
-      /*@NonNull*/ InvTranslate dummy = null;
+      @NonNull InvTranslate dummy = null;
       inv_xlate_list.add(dummy);
     }
 
@@ -195,7 +193,8 @@ public class InvMatch {
       }
     }
   }
-  /*@Pure*/
+
+  @Pure
   public static boolean is_good_translation(List<InvTranslate> translation_list) {
 
     Map<String, String> var_map = new LinkedHashMap<String, String>();
@@ -217,7 +216,7 @@ public class InvMatch {
     return true;
   }
 
-  public static /*@Nullable*/ List<InvTranslate> best_translation(
+  public static @Nullable List<InvTranslate> best_translation(
       List<List<InvTranslate>> valid_translations) {
 
     // Determine the best translation and print it out.

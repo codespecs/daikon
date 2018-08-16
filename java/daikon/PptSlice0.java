@@ -6,13 +6,12 @@ import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import java.util.HashSet;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
 
 // This is a fake PptSlice for use with Implication invariants.
 
@@ -36,7 +35,7 @@ public class PptSlice0 extends PptSlice {
 
   @Override
   public final int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this*/) {
+      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this) {
     return 0;
   }
 
@@ -176,15 +175,15 @@ public class PptSlice0 extends PptSlice {
     }
 
     // Abstracted out to permit use of a cached value
-    private String format(/*>>>@GuardSatisfied ImplicationWrapper this*/) {
+    private String format(@GuardSatisfied ImplicationWrapper this) {
       // return format;
       return theImp.format();
       // return theImp.repr();
     }
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied ImplicationWrapper this*/) {
+    public int hashCode(@GuardSatisfied ImplicationWrapper this) {
       if (hashCode == 0) {
         hashCode = format().hashCode();
         // hashCode = (theImp.iff ? 1 : 0);
@@ -195,12 +194,11 @@ public class PptSlice0 extends PptSlice {
     }
 
     // Returns the value of "isSameInvariant()".
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     @Override
     public boolean equals(
-        /*>>>@GuardSatisfied ImplicationWrapper this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+        @GuardSatisfied ImplicationWrapper this, @GuardSatisfied @Nullable Object o) {
       if (o == null) return false;
       assert o instanceof ImplicationWrapper;
       ImplicationWrapper other = (ImplicationWrapper) o;
@@ -237,7 +235,7 @@ public class PptSlice0 extends PptSlice {
 
   // I need to figure out how to set these.
   @Override
-  public int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PptSlice0 this*/) {
+  public int num_samples(@UnknownInitialization @GuardSatisfied PptSlice0 this) {
     return 2222;
   }
 

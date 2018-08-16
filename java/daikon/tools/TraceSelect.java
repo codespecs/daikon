@@ -9,13 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.MultiRandSelector;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 public class TraceSelect {
 
@@ -27,26 +25,26 @@ public class TraceSelect {
 
   private static int num_reps;
 
-  private static /*@MonotonicNonNull*/ String fileName = null;
+  private static @MonotonicNonNull String fileName = null;
 
   // Just a quick command line cache
   // ... but I think it would it be better to pass args to invokeDaikon
   // rather than introducing this variable.
-  private static String /*@MonotonicNonNull*/ [] argles;
+  private static String @MonotonicNonNull [] argles;
   // // stores the invocations in Strings
   // private static ArrayList invokeBuffer;
 
   private static int numPerSample;
 
   // always set to non-null by mainHelper
-  private static /*@MonotonicNonNull*/ Random randObj;
+  private static @MonotonicNonNull Random randObj;
 
   private static int daikonArgStart = 0;
 
   // This allows us to simply call MultiDiff
   // with the same files we just created.
   // Always set to non-null by mainHelper
-  private static String /*@MonotonicNonNull*/ [] sampleNames;
+  private static String @MonotonicNonNull [] sampleNames;
 
   private static final String usage =
       UtilPlume.joinLines(
@@ -233,7 +231,7 @@ public class TraceSelect {
     }
   }
 
-  /*@RequiresNonNull("argles")*/
+  @RequiresNonNull("argles")
   private static void invokeDaikon(String dtraceName) throws IOException {
 
     System.out.println("Created file: " + dtraceName);
@@ -309,7 +307,7 @@ public class TraceSelect {
 
 class InvocationComparator implements Comparator<String> {
   /** Requires: s1 and s2 are String representations of invocations from a tracefile. */
-  /*@Pure*/
+  @Pure
   @Override
   public int compare(String s1, String s2) {
     if (s1 == s2) {

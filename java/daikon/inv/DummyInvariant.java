@@ -8,13 +8,9 @@ import daikon.PptTopLevel;
 import daikon.VarInfo;
 import java.util.HashSet;
 import java.util.Iterator;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * This is a special invariant used internally by Daikon to represent invariants whose meaning
@@ -39,13 +35,13 @@ public class DummyInvariant extends Invariant {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030220L;
 
-  private /*@Nullable*/ String daikonFormat;
-  private /*@Nullable*/ String javaFormat;
-  private /*@Nullable*/ String escFormat;
-  private /*@Nullable*/ String simplifyFormat;
-  private /*@Nullable*/ String jmlFormat;
-  private /*@Nullable*/ String dbcFormat;
-  private /*@Nullable*/ String csharpFormat;
+  private @Nullable String daikonFormat;
+  private @Nullable String javaFormat;
+  private @Nullable String escFormat;
+  private @Nullable String simplifyFormat;
+  private @Nullable String jmlFormat;
+  private @Nullable String dbcFormat;
+  private @Nullable String csharpFormat;
 
   private boolean negated = false;
 
@@ -60,13 +56,13 @@ public class DummyInvariant extends Invariant {
 
   public DummyInvariant(
       PptSlice ppt,
-      /*@Nullable*/ String daikonStr,
-      /*@Nullable*/ String java,
-      /*@Nullable*/ String esc,
-      /*@Nullable*/ String simplify,
-      /*@Nullable*/ String jml,
-      /*@Nullable*/ String dbc,
-      /*@Nullable*/ String csharp,
+      @Nullable String daikonStr,
+      @Nullable String java,
+      @Nullable String esc,
+      @Nullable String simplify,
+      @Nullable String jml,
+      @Nullable String dbc,
+      @Nullable String csharp,
       boolean valid) {
     super(ppt);
     daikonFormat = daikonStr;
@@ -80,13 +76,13 @@ public class DummyInvariant extends Invariant {
   }
 
   public /*@Prototype*/ DummyInvariant(
-      /*@Nullable*/ String daikonStr,
-      /*@Nullable*/ String java,
-      /*@Nullable*/ String esc,
-      /*@Nullable*/ String simplify,
-      /*@Nullable*/ String jml,
-      /*@Nullable*/ String dbc,
-      /*@Nullable*/ String csharp,
+      @Nullable String daikonStr,
+      @Nullable String java,
+      @Nullable String esc,
+      @Nullable String simplify,
+      @Nullable String jml,
+      @Nullable String dbc,
+      @Nullable String csharp,
       boolean valid) {
     super();
     daikonFormat = daikonStr;
@@ -198,9 +194,9 @@ public class DummyInvariant extends Invariant {
     negated = !negated;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied DummyInvariant this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
@@ -212,7 +208,7 @@ public class DummyInvariant extends Invariant {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_daikon(@GuardSatisfied DummyInvariant this) {
     String df;
     if (daikonFormat == null) {
       df = "<dummy>";
@@ -226,7 +222,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_java(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_java(@GuardSatisfied DummyInvariant this) {
     if (javaFormat == null) {
       return "format_java not implemented for dummy invariant";
     }
@@ -237,7 +233,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_esc(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_esc(@GuardSatisfied DummyInvariant this) {
     if (escFormat == null) {
       return "format_esc not implemented for dummy invariant";
     }
@@ -248,7 +244,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_simplify(@GuardSatisfied DummyInvariant this) {
     if (simplifyFormat == null) {
       return "format_simplify not implemented for dummy invariant";
     }
@@ -259,7 +255,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_jml(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_jml(@GuardSatisfied DummyInvariant this) {
     if (jmlFormat == null) {
       return "format_jml not implemented for dummy invariant";
     }
@@ -270,7 +266,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_dbc(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_dbc(@GuardSatisfied DummyInvariant this) {
     if (dbcFormat == null) {
       return "format_dbc not implemented for dummy invariant";
     }
@@ -281,7 +277,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_csharp(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_csharp(@GuardSatisfied DummyInvariant this) {
     if (csharpFormat == null) {
       return "format_csharp not implemented for dummy invariant";
     }
@@ -303,18 +299,18 @@ public class DummyInvariant extends Invariant {
   }
 
   @Override
-  public boolean enabled(/*>>> @Prototype DummyInvariant this*/) {
+  public boolean enabled(/*@Prototype*/ DummyInvariant this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(/*>>> @Prototype DummyInvariant this,*/ VarInfo[] vis) {
+  public boolean valid_types(/*@Prototype*/ DummyInvariant this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
   protected /*@NonPrototype*/ DummyInvariant instantiate_dyn(
-      /*>>> @Prototype DummyInvariant this,*/ PptSlice slice) {
+      /*@Prototype*/ DummyInvariant this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

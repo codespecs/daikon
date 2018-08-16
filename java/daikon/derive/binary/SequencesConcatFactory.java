@@ -5,10 +5,7 @@ import daikon.VarComparability;
 import daikon.VarInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Factory for SequencesConcat derived variables. */
 public final class SequencesConcatFactory extends BinaryDerivationFactory {
@@ -18,7 +15,7 @@ public final class SequencesConcatFactory extends BinaryDerivationFactory {
       Logger.getLogger("daikon.derive.binary.SequencesConcatFactory");
 
   @Override
-  public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo var1, VarInfo var2) {
+  public BinaryDerivation @Nullable [] instantiate(VarInfo var1, VarInfo var2) {
 
     boolean enabled = SequencesConcat.dkconfig_enabled;
     if (!enabled) return null;

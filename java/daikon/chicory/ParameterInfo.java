@@ -1,10 +1,7 @@
 package daikon.chicory;
 
 import java.util.EnumSet;
-
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * The ParameterInfo class is a subtype of DaikonVariableInfo used for variable types which are
@@ -81,7 +78,7 @@ public class ParameterInfo extends DaikonVariableInfo {
   }
 
   /** Returns whether or not this parameter is a primitive type */
-  /*@Pure*/
+  @Pure
   public boolean isPrimitive() {
     return isPrimitive;
   }

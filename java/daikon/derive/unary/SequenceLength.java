@@ -22,11 +22,9 @@ import daikon.derive.binary.SequencesPredicate;
 import daikon.derive.binary.SequencesPredicateFloat;
 import daikon.derive.ternary.SequenceFloatArbitrarySubsequence;
 import daikon.derive.ternary.SequenceScalarArbitrarySubsequence;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
 
 // originally from pass1.
 public final class SequenceLength extends UnaryDerivation {
@@ -130,7 +128,7 @@ public final class SequenceLength extends UnaryDerivation {
     return v;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceLength) && (((SequenceLength) other).shift == this.shift);
@@ -139,7 +137,7 @@ public final class SequenceLength extends UnaryDerivation {
   /** Returns the ESC name */
   @Override
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String esc_name(String index) {
     // This should be able to use Quantify.Length to calculate the name,
     // but it can't because the old version formatted these slightly
@@ -164,7 +162,7 @@ public final class SequenceLength extends UnaryDerivation {
   }
 
   /** Returns the Simplify name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String simplify_name() {
     Quantify.Length ql = new Quantify.Length(base, shift);
@@ -172,7 +170,7 @@ public final class SequenceLength extends UnaryDerivation {
   }
 
   /** Returns the CSharpContract name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String csharp_name(String index) {
     Quantify.Length ql = new Quantify.Length(base, shift);

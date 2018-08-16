@@ -100,15 +100,12 @@ import daikon.suppress.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.MathPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * Base class for each of the CLASSNAME functions and permutatons. Most of the work is done
@@ -171,10 +168,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   // check_modified relies on func having no side effects.
   abstract PRIMITIVE func(PRIMITIVE arg1, PRIMITIVE arg2);
-  /*@Pure*/
+  @Pure
   abstract boolean is_symmetric();
-  abstract String[] get_method_name(/*>>>@GuardSatisfied CLASSNAME this*/);
-  abstract int get_var_order(/*>>>@GuardSatisfied CLASSNAME this*/);
+  abstract String[] get_method_name(@GuardSatisfied CLASSNAME this);
+  abstract int get_var_order(@GuardSatisfied CLASSNAME this);
   abstract void set_function_id(int function_id);
   abstract int get_function_id();
 
@@ -415,13 +412,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String repr(@GuardSatisfied CLASSNAME this) {
     return format();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
     if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     }
@@ -458,7 +455,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_simplify(@GuardSatisfied CLASSNAME this) {
     int var_order = get_var_order();
     String[] methodname = get_method_name();
     VarInfo[] vis = ppt.var_infos;
@@ -496,7 +493,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_csharp_contract(@GuardSatisfied CLASSNAME this) {
     int var_order = get_var_order();
     String[] methodname = get_method_name();
 
@@ -562,7 +559,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   // If our classes match, we must match
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     return true;
@@ -583,16 +580,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /** If the arg is a sequence size, return the sequence; otherwise return null. */
-  private /*@Nullable*/ VarInfo sized_sequence(VarInfo size) {
+  private @Nullable VarInfo sized_sequence(VarInfo size) {
     if (size.derived instanceof SequenceLength) {
       return ((SequenceLength)size.derived).base;
     }
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

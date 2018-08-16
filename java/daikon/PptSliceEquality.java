@@ -16,13 +16,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Holds Equality invariants. */
 public class PptSliceEquality extends PptSlice {
@@ -51,7 +52,7 @@ public class PptSliceEquality extends PptSlice {
 
   @Override
   public final int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/) {
+      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this) {
     throw new Error("Don't call arity on PptSliceEquality");
   }
 
@@ -67,7 +68,7 @@ public class PptSliceEquality extends PptSlice {
 
   // Not valid for this type of slice.  Always pretend there are enough.
   @Override
-  public int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PptSliceEquality this*/) {
+  public int num_samples(@UnknownInitialization @GuardSatisfied PptSliceEquality this) {
     if (true) throw new Error();
     return Integer.MAX_VALUE;
   }
@@ -91,9 +92,9 @@ public class PptSliceEquality extends PptSlice {
   private static class VarInfoAndComparability {
     public VarInfo vi;
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/) {
+    public int hashCode(@GuardSatisfied VarInfoAndComparability this) {
       // This is very coarse but is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
       // comparable and yet be not the same.
@@ -101,12 +102,11 @@ public class PptSliceEquality extends PptSlice {
       return vi.file_rep_type.hashCode();
     }
 
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     @Override
     public boolean equals(
-        /*>>>@GuardSatisfied VarInfoAndComparability this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+        @GuardSatisfied VarInfoAndComparability this, @GuardSatisfied @Nullable Object o) {
       if (!(o instanceof VarInfoAndComparability)) {
         return false;
       }
@@ -117,11 +117,10 @@ public class PptSliceEquality extends PptSlice {
      * Whether two VarInfos can be set to be equal to each other is whether they are comparableNWay.
      * Since we do not yet handle inheritance, we require that the comparability go both ways.
      */
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     public boolean equalsVarInfoAndComparability(
-        /*>>>@GuardSatisfied VarInfoAndComparability this,*/
-        /*@GuardSatisfied*/ VarInfoAndComparability o) {
+        @GuardSatisfied VarInfoAndComparability this, @GuardSatisfied VarInfoAndComparability o) {
 
       return (vi.comparableNWay(o.vi)
           && vi.comparability.equality_set_ok(o.vi.comparability)
@@ -364,7 +363,7 @@ public class PptSliceEquality extends PptSlice {
     /*NNC:@MonotonicNonNull*/ Equality[] resultArray =
         new Equality[multiMap.values().size() + out_of_bounds.size()];
     int resultCount = 0;
-    for (Map.Entry</*@KeyFor("multiMap")*/ Object, List<VarInfo>> entry : multiMap.entrySet()) {
+    for (Map.Entry<@KeyFor("multiMap") Object, List<VarInfo>> entry : multiMap.entrySet()) {
       Object key = entry.getKey();
       List<VarInfo> list = entry.getValue();
       assert list.size() > 0;
@@ -637,9 +636,9 @@ public class PptSliceEquality extends PptSlice {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
+  public String toString(@GuardSatisfied PptSliceEquality this) {
     StringBuilder result = new StringBuilder("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append(inv.repr());
@@ -655,7 +654,7 @@ public class PptSliceEquality extends PptSlice {
 
     private EqualityComparator() {}
 
-    /*@Pure*/
+    @Pure
     @Override
     public int compare(Equality eq1, Equality eq2) {
       return VarInfo.IndexComparator.theInstance.compare(eq1.leader(), eq2.leader());

@@ -5,11 +5,10 @@ import daikon.ValueTuple;
 import daikon.VarInfo;
 import java.io.Serializable;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Structure that represents a derivation; can generate values and derived variables from base
@@ -48,14 +47,14 @@ public abstract class Derivation implements Serializable, Cloneable {
   public abstract Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars);
 
   /** @return array of the VarInfos this was derived from */
-  /*@SideEffectFree*/
+  @SideEffectFree
   public abstract VarInfo[] getBases();
 
   /**
    * @param i index into the array of Varinfos this was derived from
    * @return the {@code i}th VarInfo this was derived from
    */
-  /*@Pure*/
+  @Pure
   public abstract VarInfo getBase(int i);
 
   /**
@@ -84,7 +83,7 @@ public abstract class Derivation implements Serializable, Cloneable {
     return this_var_info;
   }
 
-  private /*@MonotonicNonNull*/ VarInfo this_var_info;
+  private @MonotonicNonNull VarInfo this_var_info;
 
   /**
    * Used by all child classes to actually create the VarInfo this represents, after which it is
@@ -93,7 +92,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   // This is in each class, but I can't have a private abstract method.
   protected abstract VarInfo makeVarInfo();
 
-  /*@RequiresNonNull("this_var_info")*/
+  @RequiresNonNull("this_var_info")
   protected void makeVarInfo_common_setup(VarInfo vi) {
     // Common tasks that are abstracted into here.
     vi.derived = this;
@@ -107,7 +106,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   // Set whether the derivation is a param according to aux info
-  /*@Pure*/
+  @Pure
   protected abstract boolean isParam();
 
   public boolean missing_array_bounds = false;
@@ -128,7 +127,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * before performing the derivation that this would be the case --
    * for instance, when deriving before any values are seen.
    */
-  /*@Pure*/
+  @Pure
   public abstract boolean isDerivedFromNonCanonical();
 
   /**
@@ -142,7 +141,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    *     applied to). Default implentation will just checks runtime type, but subclasses with state
    *     (e.g. SequenceInitial index) should match that, too.
    */
-  /*@Pure*/
+  @Pure
   public abstract boolean isSameFormula(Derivation other);
 
   /** @see VarInfo#canBeMissing */
@@ -176,7 +175,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * Returns the name of this variable in ESC format. If an index is specified, it is used as an
    * array index. It is an error to specify an index on a non-array variable.
    */
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String esc_name(String index) {
     throw new RuntimeException("esc_name not implemented for " + this);
   }
@@ -193,13 +192,13 @@ public abstract class Derivation implements Serializable, Cloneable {
    * Returns the name of this variable in CSHARPCONTRACT format. If an index is specified, it is
    * used as an array index. It is an error to specify an index on a non-array variable.
    */
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String csharp_name(String index) {
     throw new RuntimeException("csharp_name not implemented for " + this);
   }
 
   /** Returns the name of this variable in simplify format */
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String simplify_name() {
     throw new RuntimeException(
         "simplify_name not implemented for " + this.getClass() + " (" + this + ")");
@@ -209,7 +208,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * Returns true if d is the prestate version of this. Returns true if this and d are of the same
    * derivation with the same formula and have the same bases.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_prestate_version(Derivation d) {
 
     // The derivations must be of the same type

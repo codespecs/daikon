@@ -5,11 +5,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * The OjbectInfo class is a subtype of DaikonVariableInfo used for variable types which are class
@@ -38,7 +37,7 @@ public class FieldInfo extends DaikonVariableInfo {
    * Class that gets the tags for fields. Used by DynComp. Accessed only by methods
    * DCRuntime.get_field_tag and DCRuntime.get_field_tag_refs_only.
    */
-  public DCRuntime./*@MonotonicNonNull*/ FieldTag field_tag = null;
+  public DCRuntime.@MonotonicNonNull FieldTag field_tag = null;
 
   public FieldInfo(
       String theName, Field field, String typeName, String repTypeName, boolean isArr) {
@@ -58,7 +57,7 @@ public class FieldInfo extends DaikonVariableInfo {
     }
     @SuppressWarnings(
         "nullness") // Object declares no fields, so clazz != object and so superclass != null
-    /*@NonNull*/ Class<?> superclass = clazz.getSuperclass();
+    @NonNull Class<?> superclass = clazz.getSuperclass();
     field_num = num_prim_fields(superclass);
     for (Field f : clazz.getDeclaredFields()) {
       if (f.equals(field)) {
@@ -92,14 +91,14 @@ public class FieldInfo extends DaikonVariableInfo {
   }
 
   /** Returns true iff the corresponding field is static. */
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isStatic() {
     return is_static;
   }
 
   /** Returns true iff the corresponding field is final. */
-  /*@Pure*/
+  @Pure
   public boolean isFinal() {
     return is_final;
   }
@@ -132,12 +131,12 @@ public class FieldInfo extends DaikonVariableInfo {
     return field_num;
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isPrimitive() {
     return is_primitive;
   }
 
-  /*@MonotonicNonNull*/ Field tag_field = null;
+  @MonotonicNonNull Field tag_field = null;
 
   public Field get_tag_field(String tag_field_name, Class<?> parent_class) {
     if (tag_field == null) {
@@ -168,7 +167,7 @@ public class FieldInfo extends DaikonVariableInfo {
    * return their field name.
    */
   @Override
-  public /*@Nullable*/ String get_relative_name() {
+  public @Nullable String get_relative_name() {
     if (isStatic() || is_outer_this) {
       return null;
     } else {

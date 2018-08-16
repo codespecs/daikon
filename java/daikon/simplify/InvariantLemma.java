@@ -8,10 +8,7 @@ import daikon.inv.GuardingImplication;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 
 /**
  * InvariantLemmas are Lemmas created by printing a Daikon invariant in Simplify format, sometimes
@@ -29,7 +26,7 @@ public class InvariantLemma extends Lemma {
   }
 
   @Override
-  public String summarize(/*>>>@GuardSatisfied InvariantLemma this*/) {
+  public String summarize(@GuardSatisfied InvariantLemma this) {
     return summary + " from " + from;
   }
 

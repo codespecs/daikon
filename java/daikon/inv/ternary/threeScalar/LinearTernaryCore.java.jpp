@@ -37,6 +37,10 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.ternary.threeScalar;
 
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
@@ -47,13 +51,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.MathPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * The LinearTernaryCore class is acts as the backend for the invariant (ax + by + cz + d = 0) by
@@ -129,18 +126,18 @@ public final class CLASSNAME implements Serializable, Cloneable {
     public Point(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
       this.x = x; this.y = y; this.z = z;
     }
-    /*@Pure*/
+    @Pure
     public boolean equals(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
       return ((this.x == x) && (this.y == y) && (this.z == z));
     }
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    protected Point clone(/*>>>@GuardSatisfied Point this*/) throws CloneNotSupportedException {
+    protected Point clone(@GuardSatisfied Point this) throws CloneNotSupportedException {
       return (Point) super.clone();
     }
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied Point this*/) {
+    public String toString(@GuardSatisfied Point this) {
       return ("(" + x + ", " + y + " ," + z + ")");
     }
   }
@@ -152,7 +149,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // (The invariant appears to be a bit stronger than that, since there are
   // places that dereference the array unconditionally, assuming that its
   // elements are non-null.  This should be clarified/refactored.)
-  public /*@Nullable*/ Point[] def_points = new Point[MINTRIPLES];
+  public @Nullable Point[] def_points = new Point[MINTRIPLES];
 
   public Invariant wrapper;
 
@@ -165,9 +162,9 @@ public final class CLASSNAME implements Serializable, Cloneable {
     this.wrapper = wrapper;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public CLASSNAME clone(@GuardSatisfied CLASSNAME this) {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       result.def_points = new Point[MINTRIPLES];
@@ -261,8 +258,8 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // the invariant must have seen enough samples and not be a line for all the
   // other calculations and comparisons done to be sensible, meaning that
   // a full linear ternary invariant exists, not a degenerate one
-  /*@Pure*/
-  public boolean isActive(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  @Pure
+  public boolean isActive(@GuardSatisfied CLASSNAME this) {
     return (line_flag == Flag.NO_LINE && values_seen >= MINTRIPLES && a != 0 && b != 0 && c != 0);
   }
 
@@ -500,13 +497,13 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * @return the status of the invariant
    *     (whether the plane fitting was successful)
    */
-  private InvariantStatus planarIntervention(/*@Nullable*/ Point[] def_point) {
+  private InvariantStatus planarIntervention(@Nullable Point[] def_point) {
 
     // make a copy of the array so that the points don't get clobbered
     // because we need to check all the points in def_points against the
     // coefficients calculated
 
-    /*@Nullable*/ Point[] dummy = new /*@Nullable*/ Point[def_point.length];
+    @Nullable Point[] dummy = new @Nullable Point[def_point.length];
     for (int i = 0; i < def_point.length; i++) {
       dummy[i] = def_point[i];
     }
@@ -599,7 +596,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * @param def_point array of points. Must have at least 2 elements.
    *
    */
-  private void linearIntervention(/*@Nullable*/ Point[] def_point) {
+  private void linearIntervention(@Nullable Point[] def_point) {
 
     // find the max separation points
     Point[] maxsep_doubles = maxsep_doubles(def_point);
@@ -677,7 +674,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * @return a 2-element array containing the most-separated elements. Returns null if no pair of
    *      elements is NaN-free.
    */
-  private Point /*@Nullable*/ [] maxsep_doubles(/*@Nullable*/ Point[] pa) {
+  private Point @Nullable [] maxsep_doubles(@Nullable Point[] pa) {
 
     Point p1 = null;
     Point p2 = null;
@@ -932,7 +929,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    *     The first three elements are null if no triple of elements is NaN-free.
    * @return the maximum separation found
    */
-  double maxsep_triples(/*@Nullable*/ Point[] pa) {
+  double maxsep_triples(@Nullable Point[] pa) {
 
     // cache values for the (square of the) distance between each pair of
     // points, to avoid duplicating work
@@ -1019,7 +1016,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    */
   // TODO: should just pass in the first three elements rather than passing
   // in the point array.
-  public double[] calc_tri_linear(/*@Nullable*/ Point[] points) { // TODO: remove annotation after refactoring method
+  public double[] calc_tri_linear(@Nullable Point[] points) { // TODO: remove annotation after refactoring method
 
     Point p0 = points[0];
     Point p1 = points[1];
@@ -1089,7 +1086,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
 
   }
 
-  public boolean enoughSamples(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public boolean enoughSamples(@GuardSatisfied CLASSNAME this) {
     return isActive();
   }
 
@@ -1106,7 +1103,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
 
   }
 
-  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String repr(@GuardSatisfied CLASSNAME this) {
     return CLASSSTRING + wrapper.varNames() + ": a=" + a
       + ",b=" + b
       + ",c=" + c
@@ -1132,11 +1129,11 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   // In this class for convenience (avoid prefixing "LinearBinaryCore").
-  static String formatTerm(double coeff, /*@Nullable*/ String varname, boolean first) {
+  static String formatTerm(double coeff, @Nullable String varname, boolean first) {
     return LinearBinaryCore.formatTerm(coeff, varname, first);
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String format_using(OutputFormat format,
                              String vix, String viy, String viz,
                              double a, double b, double c, double d) {
@@ -1227,7 +1224,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     return "(EQ 0 " + str_axPbyPczPd + ")";
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String format_using(OutputFormat format,
                              String vix, String viy, String viz
                              ) {
@@ -1245,7 +1242,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   //   return format(y, x, a, -b/a);
   // }
 
-  /*@Pure*/
+  @Pure
   public boolean isSameFormula(CLASSNAME other) {
 
     // If both have yet to see enough values
@@ -1275,7 +1272,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     }
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isExclusiveFormula(CLASSNAME other) {
     if (!isActive()
         || !other.isActive()) {
@@ -1306,7 +1303,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * @param cores list of LinearTernary cores to merge. They should all be permuted to match the
    *     variable order in ppt.
    */
-  public /*@Nullable*/ CLASSNAME merge(List<CLASSNAME> cores, Invariant wrapper) {
+  public @Nullable CLASSNAME merge(List<CLASSNAME> cores, Invariant wrapper) {
 
     // Look for any active planes.  All must define the same plane
     CLASSNAME first = null;

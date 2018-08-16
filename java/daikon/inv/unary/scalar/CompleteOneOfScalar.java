@@ -10,14 +10,10 @@ import daikon.inv.ValueSet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import org.checkerframework.framework.qual.*;
-import typequals.prototype.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Tracks every unique value and how many times it occurs. Prints as {@code x has values: v1 v2 v3
@@ -42,7 +38,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
   }
 
   /** List of values seen */
-  /*@Unused(when=Prototype.class)*/
+  /*@Unused(when = Prototype.class)*/
   public List<Info> vals;
 
   /** Boolean. True iff CompleteOneOfScalar invariants should be considered. */
@@ -74,14 +70,14 @@ public final class CompleteOneOfScalar extends SingleScalar {
   /** instantiate an invariant on the specified slice */
   @Override
   public CompleteOneOfScalar instantiate_dyn(
-      /*>>> @Prototype CompleteOneOfScalar this,*/ PptSlice slice) {
+      /*@Prototype*/ CompleteOneOfScalar this, PptSlice slice) {
     return new CompleteOneOfScalar(slice);
   }
 
   /** Return description of invariant. Only Daikon format is implemented. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CompleteOneOfScalar this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CompleteOneOfScalar this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       String out = var().name() + " has values: ";
       for (Info val : vals) {
@@ -128,9 +124,9 @@ public final class CompleteOneOfScalar extends SingleScalar {
    * Returns whether or not this is obvious statically. The only check is for static constants which
    * are obviously printable (or not) from their values.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     return super.isObviousStatically(vis);
   }
 
@@ -138,7 +134,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
    * Same formula if each value is the same and has the same count. Not implemented for now, just
    * presumed to be false.
    */
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant o) {
     return false;

@@ -6,15 +6,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ReflectionPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * A SplitterObject is the starting point for all the information we have about a splitting
@@ -23,9 +21,9 @@ import typequals.prototype.qual.*;
  */
 public class SplitterObject implements Comparable<SplitterObject> {
 
-  private /*@MonotonicNonNull*/ Splitter splitter;
+  private @MonotonicNonNull Splitter splitter;
   private String condition; // the condition
-  private /*@BinaryName*/ String className = "Unassigned"; // the Java classname of this Splitter
+  private @BinaryName String className = "Unassigned"; // the Java classname of this Splitter
   private String directory; // the directory where it resides
   private String pptName; // the program point with which it is associated
   private boolean exists = false;
@@ -34,16 +32,16 @@ public class SplitterObject implements Comparable<SplitterObject> {
   private String errorMessage = "Splitter not yet loaded";
   private int guid = -999; // -999 indicates not yet set
   /** class file containing compiled code for this splitter */
-  private /*@MonotonicNonNull*/ File classFile;
+  private @MonotonicNonNull File classFile;
 
   public boolean dummyDesired = false;
-  public /*@Nullable*/ String daikonFormat = null;
-  public /*@Nullable*/ String javaFormat = null;
-  public /*@Nullable*/ String escFormat = null;
-  public /*@Nullable*/ String simplifyFormat = null;
-  public /*@Nullable*/ String jmlFormat = null;
-  public /*@Nullable*/ String dbcFormat = null;
-  public /*@Nullable*/ String csharpFormat = null;
+  public @Nullable String daikonFormat = null;
+  public @Nullable String javaFormat = null;
+  public @Nullable String escFormat = null;
+  public @Nullable String simplifyFormat = null;
+  public @Nullable String jmlFormat = null;
+  public @Nullable String dbcFormat = null;
+  public @Nullable String csharpFormat = null;
 
   /**
    * @param condition the splitting condition of this splitter
@@ -62,8 +60,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
    * @param fileName the pathname of a {@code .class} file
    * @return a Java Class corresponding to the {@code .class} file, or null
    */
-  static /*@Nullable*/ Class<?> defineSplitterClass(
-      /*@BinaryName*/ String className, String fileName) {
+  static @Nullable Class<?> defineSplitterClass(@BinaryName String className, String fileName) {
     try {
       return ReflectionPlume.defineClassFromFile(className, fileName);
     } catch (FileNotFoundException e) {
@@ -149,7 +146,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   /**
    * @return the Splitter that this SplitterObject represents. Null if splitterExists() == false.
    */
-  public /*@Nullable*/ Splitter getSplitter() {
+  public @Nullable Splitter getSplitter() {
     return this.splitter;
   }
 
@@ -186,13 +183,13 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /** Set the className of this Splitter. */
-  public void setClassName(/*@BinaryName*/ String className) {
+  public void setClassName(@BinaryName String className) {
     this.className = className;
     classFile = new File(directory + className + ".class");
   }
 
   /** @return the className of the Splitter */
-  public /*@BinaryName*/ String getClassName() {
+  public @BinaryName String getClassName() {
     return this.className;
   }
 
@@ -217,9 +214,9 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.testString;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied SplitterObject this*/) {
+  public String toString(@GuardSatisfied SplitterObject this) {
     return (className
         + ": "
         + "condition: "
@@ -230,9 +227,9 @@ public class SplitterObject implements Comparable<SplitterObject> {
         + pptName);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int compareTo(/*>>>@GuardSatisfied SplitterObject this,*/ SplitterObject o) {
+  public int compareTo(@GuardSatisfied SplitterObject this, SplitterObject o) {
     return this.guid - o.getGUID();
   }
 }

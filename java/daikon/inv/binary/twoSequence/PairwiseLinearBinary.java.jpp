@@ -28,6 +28,11 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoSequence;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.Quantify.QuantFlags;
 import daikon.inv.*;
@@ -36,14 +41,6 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.binary.twoScalar.*;
 import java.util.*;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * Represents a linear invariant (i.e., {@code y = ax + b}) between the corresponding elements
@@ -92,13 +89,13 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** Instantiates the invariant on the specified slice */
   @Override
-  protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+  protected CLASSNAME instantiate_dyn(/*@Prototype*/ CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public CLASSNAME clone(@GuardSatisfied CLASSNAME this) {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -112,14 +109,14 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String repr(@GuardSatisfied CLASSNAME this) {
     return CLASSSTRING + varNames() + ": falsified=" + falsified
       + "; " + core.repr();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
     if (core.a == 0 && core.b == 0 && core.c == 0) {
       return format_too_few_samples(format, null);
     }
@@ -132,12 +129,12 @@ public class CLASSNAME extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_daikon(@GuardSatisfied CLASSNAME this) {
     return core.format_using(OutputFormat.DAIKON, var1().name(),
                              var2().name());
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_simplify(@GuardSatisfied CLASSNAME this) {
     String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(),
                                                var1(), var2());
     return form[0] + CORECLASS.format_simplify(form[1], form[2],
@@ -145,7 +142,7 @@ public class CLASSNAME extends SUPERCLASS {
       + form[3];
   }
 
-  public String format_csharp(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_csharp(@GuardSatisfied CLASSNAME this) {
 
     String[] split1 = var1().csharp_array_split();
     String[] split2 = var2().csharp_array_split();
@@ -157,12 +154,12 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] x_arr, PRIMITIVE /*@Interned*/ [] y_arr, int count) {
+  public InvariantStatus check_modified(PRIMITIVE @Interned [] x_arr, PRIMITIVE @Interned [] y_arr, int count) {
     return clone().add_modified(x_arr, y_arr, count);
   }
 
   @Override
-  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] x_arr, PRIMITIVE /*@Interned*/ [] y_arr, int count) {
+  public InvariantStatus add_modified(PRIMITIVE @Interned [] x_arr, PRIMITIVE @Interned [] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       return InvariantStatus.FALSIFIED;
     }
@@ -185,13 +182,13 @@ public class CLASSNAME extends SUPERCLASS {
     return core.computeConfidence();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
@@ -200,9 +197,9 @@ public class CLASSNAME extends SUPERCLASS {
     return false;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -223,7 +220,7 @@ public class CLASSNAME extends SUPERCLASS {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isActive() {
     return core.isActive();
@@ -243,7 +240,7 @@ public class CLASSNAME extends SUPERCLASS {
    * @param parent_ppt slice that will contain the new invariant
    */
   @Override
-  public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
     List<CORECLASS> cores = new ArrayList<CORECLASS>();

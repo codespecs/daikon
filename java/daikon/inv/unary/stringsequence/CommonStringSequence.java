@@ -5,16 +5,14 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * Represents string sequences that contain a common subset. Prints as {@code {s1, s2, s3, ...}
@@ -33,7 +31,7 @@ public class CommonStringSequence extends SingleStringSequence {
 
   private int elts = 0;
   /** Null means no samples have been seen yet. Empty array means intersection is empty. */
-  private String /*@MonotonicNonNull*/ [] intersect = null;
+  private String @MonotonicNonNull [] intersect = null;
 
   protected CommonStringSequence(PptSlice ppt) {
     super(ppt);
@@ -60,7 +58,7 @@ public class CommonStringSequence extends SingleStringSequence {
   /** instantiate an invariant on the specified slice */
   @Override
   protected CommonStringSequence instantiate_dyn(
-      /*>>> @Prototype CommonStringSequence this,*/ PptSlice slice) {
+      /*@Prototype*/ CommonStringSequence this, PptSlice slice) {
     return new CommonStringSequence(slice);
   }
 
@@ -68,11 +66,11 @@ public class CommonStringSequence extends SingleStringSequence {
   // protected Object clone();
 
   @Override
-  public String repr(/*>>>@GuardSatisfied CommonStringSequence this*/) {
+  public String repr(@GuardSatisfied CommonStringSequence this) {
     return "CommonStringSequence " + varNames() + ": elts=\"" + elts;
   }
 
-  private String printIntersect(/*>>>@GuardSatisfied CommonStringSequence this*/) {
+  private String printIntersect(@GuardSatisfied CommonStringSequence this) {
     if (intersect == null) return "{}";
 
     String result = "{";
@@ -84,21 +82,20 @@ public class CommonStringSequence extends SingleStringSequence {
     return result;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(
-      /*>>>@GuardSatisfied CommonStringSequence this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CommonStringSequence this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
 
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied CommonStringSequence this*/) {
+  public String format_daikon(@GuardSatisfied CommonStringSequence this) {
     return (printIntersect() + " subset of " + var().name());
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied CommonStringSequence this*/) {
+  public String format_csharp_contract(@GuardSatisfied CommonStringSequence this) {
     if (intersect == null) return "()";
 
     if (intersect.length == 1) {
@@ -118,7 +115,7 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   @Override
-  public InvariantStatus check_modified(/*@Interned*/ String /*@Interned*/ [] a, int count) {
+  public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect == null) {
@@ -141,14 +138,14 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   @Override
-  public InvariantStatus add_modified(/*@Interned*/ String /*@Interned*/ [] a, int count) {
+  public InvariantStatus add_modified(@Interned String @Interned [] a, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect == null) {
       intersect = Intern.intern(a);
       return InvariantStatus.NO_CHANGE;
     } else {
-      /*@Interned*/ String[] tmp = new /*@Interned*/ String[intersect.length];
+      @Interned String[] tmp = new @Interned String[intersect.length];
       int size = 0;
       for (int i = 1; i < a.length; i++) {
         if ((ArraysPlume.indexOf(intersect, a[i]) != -1)
@@ -171,12 +168,12 @@ public class CommonStringSequence extends SingleStringSequence {
     throw new Error("Not yet implemented");
   }
 
-  /*@Pure*/
-  public /*@Nullable*/ DiscardInfo isObviousImplied() {
+  @Pure
+  public @Nullable DiscardInfo isObviousImplied() {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CommonStringSequence;

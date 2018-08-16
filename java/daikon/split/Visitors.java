@@ -7,11 +7,8 @@ import jtb.JavaParserConstants;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This class consists solely of static methods that are useful when working with jtb syntax tree
@@ -30,7 +27,7 @@ class Visitors implements JavaParserConstants {
    */
   public static Node getJtbTree(String expression) throws ParseException {
     class ExpressionExtractor extends DepthFirstVisitor {
-      private /*@Nullable*/ Node expressionNode;
+      private @Nullable Node expressionNode;
 
       @Override
       public void visit(VariableInitializer n) {
@@ -49,37 +46,37 @@ class Visitors implements JavaParserConstants {
   }
 
   /** Returns whether n represents the java reserved word "this". */
-  /*@Pure*/
+  @Pure
   public static boolean isThis(NodeToken n) {
     return n.kind == THIS;
   }
 
   /** Returns whether n represents a left bracket, "[". */
-  /*@Pure*/
+  @Pure
   public static boolean isLBracket(NodeToken n) {
     return n.kind == LBRACKET;
   }
 
   /** Returns whether n represents a dot, ".". */
-  /*@Pure*/
+  @Pure
   public static boolean isDot(NodeToken n) {
     return n.kind == DOT;
   }
 
   /** Returns whether n represents a java identifier. */
-  /*@Pure*/
+  @Pure
   public static boolean isIdentifier(NodeToken n) {
     return n.kind == IDENTIFIER;
   }
 
   /** Returns whether n represents a left parenthesis, "(". */
-  /*@Pure*/
+  @Pure
   public static boolean isLParen(NodeToken n) {
     return n.kind == LPAREN;
   }
 
   /** Returns whether n represents the java reserved word "null". */
-  /*@Pure*/
+  @Pure
   public static boolean isNull(NodeToken n) {
     return n.kind == NULL;
   }

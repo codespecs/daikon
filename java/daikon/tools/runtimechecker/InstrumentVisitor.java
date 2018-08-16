@@ -21,11 +21,9 @@ import jtb.syntaxtree.*;
 import jtb.visitor.DepthFirstVisitor;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 /**
  * Visitor that instruments a Java source file (i.e. adds code at certain places) to check invariant
@@ -330,7 +328,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     @SuppressWarnings(
         "nullness") // application invariant: method node is always in a class or interface
-    /*@NonNull*/ ClassOrInterfaceDeclaration clsdecl =
+    @NonNull ClassOrInterfaceDeclaration clsdecl =
         (ClassOrInterfaceDeclaration) Ast.getParent(ClassOrInterfaceDeclaration.class, method);
 
     // skip anonymous nested classes for now, hard to refer to the right this object there...
@@ -486,7 +484,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     @SuppressWarnings(
         "nullness") // application invariant: method node is always in a class or interface
-    /*@NonNull*/ ClassOrInterfaceBody c =
+    @NonNull ClassOrInterfaceBody c =
         (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
 
     StringBuilder modifiers_declaration_stringbuffer = new StringBuilder();
@@ -662,8 +660,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     code.append(
         "daikonProperties = new daikon.tools.runtimechecker.Property[" + varNumCounter + "];\n");
 
-    for (Map.Entry</*@KeyFor("xmlStringToIndex")*/ String, String> e :
-        xmlStringToIndex.entrySet()) {
+    for (Map.Entry<@KeyFor("xmlStringToIndex") String, String> e : xmlStringToIndex.entrySet()) {
       code.append("daikonProperties[" + e.getValue() + "] = ");
       code.append("daikon.tools.runtimechecker.Property.get(");
       code.append("\"");

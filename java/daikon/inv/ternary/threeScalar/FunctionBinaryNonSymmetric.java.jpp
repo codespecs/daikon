@@ -11,7 +11,7 @@
 #define NON_SYMMETRIC 1
 
   // default is that it is not this function, overriden in the subclass
-  /*@Pure*/
+  @Pure
   public boolean is ## FUNCTION() {
     return false;
   }

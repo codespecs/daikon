@@ -48,6 +48,11 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoSequence;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.inv.*;
 import daikon.suppress.*;
@@ -55,13 +60,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * Represents two sequences of LONG values where one of the sequences is a subset of the other; that
@@ -138,7 +136,7 @@ public class SUBSET extends TWOSEQUENCE {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  public SUBSET instantiate_dyn(/*>>> @Prototype SUBSET this,*/ PptSlice slice) {
+  public SUBSET instantiate_dyn(/*@Prototype*/ SUBSET this, PptSlice slice) {
     return new SUBSET(slice);
   }
 
@@ -148,13 +146,13 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied SUBSET this*/) {
+  public String repr(@GuardSatisfied SUBSET this) {
     return SUBSETSTRING + varNames() + ": ,falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied SUBSET this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied SUBSET this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
@@ -166,9 +164,9 @@ public class SUBSET extends TWOSEQUENCE {
     return format_unimplemented(format);
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format(/*>>>@GuardSatisfied SUBSET this*/) {
+  public String format(@GuardSatisfied SUBSET this) {
     String v1 = var1().name();
     String v2 = var2().name();
     #if (defined(SUB) || defined(SUBFLOAT))
@@ -178,7 +176,7 @@ public class SUBSET extends TWOSEQUENCE {
     #endif
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied SUBSET this*/) {
+  public String format_csharp_contract(@GuardSatisfied SUBSET this) {
     String v1 = var1().csharp_collection_string();
     String v2 = var2().csharp_collection_string();
 
@@ -189,12 +187,12 @@ public class SUBSET extends TWOSEQUENCE {
     #endif
   }
 
-  public String format_esc(/*>>>@GuardSatisfied SUBSET this*/) {
+  public String format_esc(@GuardSatisfied SUBSET this) {
     String classname = this.getClass().toString().substring(6); // remove leading "class"
     return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied SUBSET this*/) {
+  public String format_simplify(@GuardSatisfied SUBSET this) {
     if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
     } else {
@@ -202,7 +200,7 @@ public class SUBSET extends TWOSEQUENCE {
     }
   }
 
-  private String format_simplify_defined(/*>>>@GuardSatisfied SUBSET this*/) {
+  private String format_simplify_defined(@GuardSatisfied SUBSET this) {
 #if defined(SUB) || defined(SUBFLOAT)
     VarInfo subvar = var1();
     VarInfo supervar = var2();
@@ -224,7 +222,7 @@ public class SUBSET extends TWOSEQUENCE {
       + super_name[0] + " " + super_name[1] + " " + super_name[2] + ")";
   }
 
-  private String format_simplify_explicit(/*>>>@GuardSatisfied SUBSET this*/) {
+  private String format_simplify_explicit(@GuardSatisfied SUBSET this) {
 #if defined(SUB) || defined(SUBFLOAT)
     VarInfo subvar = var1();
     VarInfo supervar = var2();
@@ -262,7 +260,7 @@ public class SUBSET extends TWOSEQUENCE {
 
   }
 
-  public String format_java_family(/*>>>@GuardSatisfied SUBSET this,*/ OutputFormat format) {
+  public String format_java_family(@GuardSatisfied SUBSET this, OutputFormat format) {
 
     String v1 = var1().name_using(format);
     String v2 = var2().name_using(format);
@@ -305,14 +303,14 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   // Convenience name to make this easier to find.
-  /*@Pure*/
-  public static /*@Nullable*/ DiscardInfo isObviousSubSet(Invariant inv, VarInfo subvar, VarInfo supervar) {
+  @Pure
+  public static @Nullable DiscardInfo isObviousSubSet(Invariant inv, VarInfo subvar, VarInfo supervar) {
     return SUBSEQUENCE.isObviousSubSequence(inv, subvar, supervar);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
@@ -359,7 +357,7 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   // Look up a previously instantiated SubSet relationship.
-  public static /*@Nullable*/ SUBSET find(PptSlice ppt) {
+  public static @Nullable SUBSET find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof SUBSET) {
@@ -369,7 +367,7 @@ public class SUBSET extends TWOSEQUENCE {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof SUBSET;
@@ -377,12 +375,12 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   /** NI suppressions, initialized in get_ni_suppressions() */
-  private static /*@Nullable*/ NISuppressionSet suppressions = null;
+  private static @Nullable NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for SUBSET */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+  public @NonNull NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       NISuppressee suppressee = new NISuppressee(SUBSET.class, 2);
 

@@ -3,10 +3,7 @@ package daikon.derive.ternary;
 import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.derive.DerivationFactory;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Factory to produce TernaryDerivations. */
 public abstract class TernaryDerivationFactory implements DerivationFactory {
@@ -22,8 +19,7 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
    *     base variables may have multiple derived variables, per type of derivation. Can also be
    *     null if the variables have nothing to derive from.
    */
-  public abstract TernaryDerivation /*@Nullable*/ [] instantiate(
-      VarInfo vi1, VarInfo vi2, VarInfo vi3);
+  public abstract TernaryDerivation @Nullable [] instantiate(VarInfo vi1, VarInfo vi2, VarInfo vi3);
 
   /**
    * Check if vi1 and vi2 can be a part of a VarInfo triple based on their types.
@@ -48,7 +44,7 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
    * @return a ProglangType which is the type of VarInfo needed to make a valid VarInfo triple out
    *     of vi1 and vi2 (null otherwise)
    */
-  public static /*@Nullable*/ ProglangType returnType(VarInfo vi1, VarInfo vi2) {
+  public static @Nullable ProglangType returnType(VarInfo vi1, VarInfo vi2) {
     if ((vi1.rep_type == ProglangType.INT_ARRAY) && (vi2.rep_type == ProglangType.INT)) {
       return ProglangType.INT;
     } else if ((vi1.rep_type == ProglangType.INT) && (vi2.rep_type == ProglangType.INT_ARRAY)) {

@@ -58,7 +58,7 @@ endif
 
 # Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 

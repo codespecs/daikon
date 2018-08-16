@@ -23,16 +23,18 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 // Outstanding NIS todo list
 //
@@ -126,26 +128,26 @@ public class NIS {
 
   // This should be an enum!!
   /** initial state -- suppressor has not been checked yet */
-  static final /*@Interned*/ String NONE = "none";
+  static final @Interned String NONE = "none";
 
   /**
    * Map from invariant class to a list of all of the suppression sets that contain a suppressor of
    * that class.
    */
-  public static /*@MonotonicNonNull*/ Map<Class<? extends Invariant>, List<NISuppressionSet>>
+  public static @MonotonicNonNull Map<Class<? extends Invariant>, List<NISuppressionSet>>
       suppressor_map;
 
   /**
    * Map from invariant class to the number of suppressions that contain a suppressor of that class.
    */
-  public static /*@MonotonicNonNull*/ Map<Class<? extends Invariant>, Integer>
+  public static @MonotonicNonNull Map<Class<? extends Invariant>, Integer>
       suppressor_map_suppression_count;
 
   /** List of all suppressions */
-  static /*@MonotonicNonNull*/ List<NISuppressionSet> all_suppressions;
+  static @MonotonicNonNull List<NISuppressionSet> all_suppressions;
 
   /** List of suppressor invariant prototypes */
-  public /*@MonotonicNonNull*/ static List</*@Prototype*/ Invariant> suppressor_proto_invs;
+  public @MonotonicNonNull static List</*@Prototype*/ Invariant> suppressor_proto_invs;
 
   /**
    * List of invariants that are unsuppressed by the current sample. The {@link #falsified} and
@@ -194,7 +196,12 @@ public class NIS {
    * Sets up non-instantiation suppression. Primarily this includes setting up the map from
    * suppressor classes to all of the suppression sets associated with that suppressor invariant.
    */
-  /*@EnsuresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions", "suppressor_proto_invs"})*/
+  @EnsuresNonNull({
+    "suppressor_map",
+    "suppressor_map_suppression_count",
+    "all_suppressions",
+    "suppressor_proto_invs"
+  })
   public static void init_ni_suppression() {
 
     // Creating these here, rather than where they are declared, allows
@@ -291,7 +298,7 @@ public class NIS {
    *
    * @see #process_falsified_invs
    */
-  /*@RequiresNonNull("suppressor_map")*/
+  @RequiresNonNull("suppressor_map")
   public static void falsified(Invariant inv) {
 
     if (!dkconfig_enabled || antecedent_method) {
@@ -499,7 +506,12 @@ public class NIS {
    * called after the sample has been processed and any invariants falsified by the sample are
    * marked as such, but before they have been removed.
    */
-  /*@RequiresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions", "NIS.suppressor_proto_invs"})*/
+  @RequiresNonNull({
+    "suppressor_map",
+    "suppressor_map_suppression_count",
+    "all_suppressions",
+    "NIS.suppressor_proto_invs"
+  })
   public static void process_falsified_invs(PptTopLevel ppt, ValueTuple vt) {
 
     // if using the hybrid method, need to know the number of falsified suppressor
@@ -713,7 +725,7 @@ public class NIS {
    * suppressions with all other invariants, they must be added to each of set of comparable
    * antecedents.
    */
-  /*@RequiresNonNull("NIS.suppressor_map")*/
+  @RequiresNonNull("NIS.suppressor_map")
   static void merge_always_comparable(Map<VarComparability, Antecedents> comp_ants) {
 
     // Find the antecedents that are always comparable (if any)
@@ -743,7 +755,7 @@ public class NIS {
    *
    * @return a list of created invariants
    */
-  /*@RequiresNonNull({"all_suppressions", "suppressor_map"})*/
+  @RequiresNonNull({"all_suppressions", "suppressor_map"})
   public static List<Invariant> create_suppressed_invs(PptTopLevel ppt) {
 
     // Find all antecedents and organize them by their variables comparability
@@ -784,7 +796,7 @@ public class NIS {
    * Adds each antecedent invariant in the specified slices to the Antecedents object in comp_ants
    * with the corresponding VarComparability.
    */
-  /*@RequiresNonNull("suppressor_map")*/
+  @RequiresNonNull("suppressor_map")
   static void store_antecedents_by_comparability(
       Iterator<PptSlice> slice_iterator, Map<VarComparability, Antecedents> comp_ants) {
 
@@ -831,7 +843,7 @@ public class NIS {
    * Processes each slice in slice_iterator and fills the specified map with a list of all of the
    * antecedent invariants for each class. @return the number of false antecedents found
    */
-  /*@RequiresNonNull("suppressor_map")*/
+  @RequiresNonNull("suppressor_map")
   static int find_antecedents(
       Iterator<PptSlice> slice_iterator,
       Map<Class<? extends Invariant>, List<Invariant>> antecedent_map) {
@@ -873,14 +885,14 @@ public class NIS {
   }
 
   /** Returns true if the specified class is an antecedent in any NI suppression. */
-  /*@RequiresNonNull("NIS.suppressor_map")*/
-  /*@Pure*/
+  @RequiresNonNull("NIS.suppressor_map")
+  @Pure
   public static boolean is_suppressor(Class<? extends Invariant> cls) {
     return (suppressor_map.containsKey(cls));
   }
 
   /** Dump out the suppressor map. */
-  /*@RequiresNonNull("suppressor_map")*/
+  @RequiresNonNull("suppressor_map")
   public static void dump(Logger log) {
 
     if (!log.isLoggable(Level.FINE)) return;
@@ -918,18 +930,15 @@ public class NIS {
 
     /** Track Log the specified message */
     public void log(
-        /*>>>@UnknownInitialization(SupInv.class) @Raw(SupInv.class) SupInv this,*/ String
-            message) {
+        @UnknownInitialization(SupInv.class) @Raw(SupInv.class) SupInv this, String message) {
       if (Debug.logOn()) Debug.log(suppressee.sup_class, ppt, vis, message);
     }
 
     /** Equal iff classes / swap variable / and variables match exactly */
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     @Override
-    public boolean equals(
-        /*>>>@GuardSatisfied SupInv this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    public boolean equals(@GuardSatisfied SupInv this, @GuardSatisfied @Nullable Object obj) {
       if (!(obj instanceof SupInv)) return false;
 
       // Class and variables must match
@@ -953,9 +962,9 @@ public class NIS {
     }
 
     /** Hash on class and variables */
-    /*@Pure*/
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied SupInv this*/) {
+    public int hashCode(@GuardSatisfied SupInv this) {
       int code = suppressee.sup_class.hashCode();
       for (int i = 0; i < vis.length; i++) {
         code += vis[i].hashCode();
@@ -970,7 +979,7 @@ public class NIS {
 
     /** Returns true if the invariant is still suppressed */
     @SuppressWarnings("purity") // new object is not returned
-    /*@Pure*/
+    @Pure
     public boolean is_ni_suppressed() {
 
       NISuppressionSet ss = suppressee.sample_inv.get_ni_suppressions();
@@ -980,7 +989,7 @@ public class NIS {
     }
 
     /** Instantiate this invariant on the specified ppt */
-    public /*@Nullable*/ Invariant instantiate(PptTopLevel ppt) {
+    public @Nullable Invariant instantiate(PptTopLevel ppt) {
       return suppressee.instantiate(vis, ppt);
     }
 
@@ -990,7 +999,7 @@ public class NIS {
      * invariants handle permutations as different classes). Binary invariants must match the class
      * and if there is an internal swap variable for variable order, that must match as well.
      */
-    public /*@Nullable*/ Invariant already_exists() {
+    public @Nullable Invariant already_exists() {
       Invariant cinv = ppt.find_inv_by_class(vis, suppressee.sup_class);
       if (cinv == null) return null;
       if (suppressee.var_count != 2) return cinv;
@@ -1001,9 +1010,9 @@ public class NIS {
     }
 
     /** Return string representation of the suppressed invariant */
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied SupInv this*/) {
+    public String toString(@GuardSatisfied SupInv this) {
       String[] names = new String[vis.length];
       for (int i = 0; i < vis.length; i++) {
         names[i] = vis[i].name();
@@ -1046,7 +1055,7 @@ public class NIS {
      * Adds the specified invariant to the list for its class. Falsified invariants are added to the
      * beginning of the list, non-falsified ones to the end.
      */
-    /*@RequiresNonNull("NIS.suppressor_map")*/
+    @RequiresNonNull("NIS.suppressor_map")
     public void add(Invariant inv) {
 
       // Only possible antecedents need to be added
@@ -1079,7 +1088,7 @@ public class NIS {
     }
 
     /** Adds all of the antecedents specified to the lists for their class. */
-    /*@RequiresNonNull("NIS.suppressor_map")*/
+    @RequiresNonNull("NIS.suppressor_map")
     public void add(Antecedents ants) {
 
       for (List<Invariant> invs : ants.antecedent_map.values()) {
@@ -1093,15 +1102,15 @@ public class NIS {
      * Returns a list of all of the antecedent invariants of the specified class. Returns null if
      * there are none of that class.
      */
-    public /*@Nullable*/ List<Invariant> get(Class<? extends Invariant> cls) {
+    public @Nullable List<Invariant> get(Class<? extends Invariant> cls) {
 
       return antecedent_map.get(cls);
     }
 
     /** Returns a string representation of all of the antecedents by class. */
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied Antecedents this*/) {
+    public String toString(@GuardSatisfied Antecedents this) {
 
       String out = "Comparability " + comparability + " : ";
 

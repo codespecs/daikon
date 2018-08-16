@@ -35,18 +35,14 @@ The correct way to build the system is to run 'make'.
 
 package PACKAGE;
 
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.BinaryInvariant;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * Abstract base class for comparing PRIMITIVE sequences to PRIMITIVE variables. Note that the sequence
@@ -97,7 +93,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Since the order is determined from the vars and the sequence is always first, this is
    * essentially symmetric. Subclasses can override if necessary.
    */
-  /*@Pure*/
+  @Pure
   @Override
   public boolean is_symmetric() {
     return true;
@@ -121,23 +117,23 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return this;
   }
 
- protected final boolean seq_first(/*>>>@GuardSatisfied CLASSNAME this*/) {
+ protected final boolean seq_first(@GuardSatisfied CLASSNAME this) {
     return (ppt.var_infos[0].rep_type == ProglangType.PROG_LANG_TYPE_ARRAY);
   }
 
-  protected final int seq_index(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  protected final int seq_index(@GuardSatisfied CLASSNAME this) {
     return (seq_first() ? 0 : 1);
   }
 
-  protected final int scl_index(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  protected final int scl_index(@GuardSatisfied CLASSNAME this) {
     return (seq_first() ? 1 : 0);
   }
 
-  public VarInfo seqvar(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo seqvar(@GuardSatisfied CLASSNAME this) {
     return (ppt.var_infos[seq_index()]);
   }
 
-  public VarInfo sclvar(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo sclvar(@GuardSatisfied CLASSNAME this) {
     return (ppt.var_infos[scl_index()]);
   }
 
@@ -157,7 +153,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   @Override
   public InvariantStatus check(
-      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
+      @Interned Object val1, @Interned Object val2, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 4);
     PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
@@ -173,7 +169,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   @Override
   public InvariantStatus add(
-      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
+      @Interned Object val1, @Interned Object val2, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 4);
     PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
@@ -196,9 +192,9 @@ public abstract class CLASSNAME extends BinaryInvariant {
    *     a count parameter of 3.
    * @return whether or not the sample is consistent with the invariant
    */
-  public abstract InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count);
+  public abstract InvariantStatus check_modified(PRIMITIVE @Interned [] v1, PRIMITIVE v2, int count);
 
-  public InvariantStatus check_unmodified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count) {
+  public InvariantStatus check_unmodified(PRIMITIVE @Interned [] v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -208,10 +204,10 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * {@link #check_modified}. This method need not check for falsification; that is done by the
    * caller.
    */
-  public abstract InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count);
+  public abstract InvariantStatus add_modified(PRIMITIVE @Interned [] v1, PRIMITIVE v2, int count);
 
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
-  public InvariantStatus add_unmodified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count) {
+  public InvariantStatus add_unmodified(PRIMITIVE @Interned [] v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 }

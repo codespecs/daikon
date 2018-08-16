@@ -40,15 +40,14 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.InternalFormForNonArray;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.bcelutil.InstructionListUtils;
 import org.plumelib.bcelutil.SimpleLog;
-
-/*>>>
-import org.checkerframework.checker.formatter.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
@@ -132,16 +131,16 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * the Java runtime each time a new class is loaded.
    */
   @Override
-  public byte /*@Nullable*/ [] transform(
+  public byte @Nullable [] transform(
       ClassLoader loader,
-      /*@InternalFormForNonArray*/ String className,
+      @InternalFormForNonArray String className,
       Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
     @SuppressWarnings("signature") // string manipulation (checker should handle)
-    /*@BinaryNameForNonArray*/ String fullClassName = className.replace("/", ".");
+    @BinaryNameForNonArray String fullClassName = className.replace("/", ".");
     // String fullClassName = className;
 
     // new Throwable().printStackTrace();
@@ -313,7 +312,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   // called by addInvokeToClinit to add in a hook at return opcodes
-  private /*@Nullable*/ InstructionList xform_clinit(
+  private @Nullable InstructionList xform_clinit(
       ClassGen cg,
       ConstantPoolGen cp,
       String fullClassName,
@@ -335,7 +334,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   // create a <clinit> method, if none exists; guarantees we have this hook
-  private Method createClinit(ClassGen cg, /*@BinaryNameForNonArray*/ String fullClassName) {
+  private Method createClinit(ClassGen cg, @BinaryNameForNonArray String fullClassName) {
     InstructionFactory factory = new InstructionFactory(cg);
 
     InstructionList il = new InstructionList();
@@ -605,7 +604,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   // This method exists only to suppress interning warnings
   @SuppressWarnings("interning") // special, unique value
-  /*@Pure*/
+  @Pure
   private static boolean isVoid(Type t) {
     return t == Type.VOID;
   }
@@ -615,7 +614,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * (return__$trace2_val) and then do the return. Also, calls Runtime.exit() immediately before the
    * return.
    */
-  private /*@Nullable*/ InstructionList add_return_instrumentation(
+  private @Nullable InstructionList add_return_instrumentation(
       String fullClassName,
       Instruction inst,
       MethodContext c,
@@ -661,7 +660,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * Returns the local variable used to store the return result. If it is not present, creates it
    * with the specified type. If the variable is known to already exist, the type can be null.
    */
-  private LocalVariableGen get_return_local(MethodGen mg, /*@Nullable*/ Type return_type) {
+  private LocalVariableGen get_return_local(MethodGen mg, @Nullable Type return_type) {
 
     // Find the local used for the return value
     LocalVariableGen return_local = null;
@@ -689,7 +688,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /** Finds the nonce local variable. Returns null if not present. */
-  private /*@Nullable*/ LocalVariableGen get_nonce_local(MethodGen mg) {
+  private @Nullable LocalVariableGen get_nonce_local(MethodGen mg) {
 
     // Find the local used for the nonce value
     for (LocalVariableGen lv : mg.getLocalVariables()) {
@@ -979,7 +978,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    *
    * @return true iff mgen is a constructor
    */
-  /*@Pure*/
+  @Pure
   private boolean is_constructor(MethodGen mgen) {
 
     if (mgen.getName().equals("<init>") || mgen.getName().equals("")) {
@@ -995,10 +994,10 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    *
    * @return an array of strings, each corresponding to mgen's argument types
    */
-  private /*@BinaryName*/ String[] getArgTypes(MethodGen mgen) {
+  private @BinaryName String[] getArgTypes(MethodGen mgen) {
 
     Type[] arg_types = mgen.getArgumentTypes();
-    /*@BinaryName*/ String[] arg_type_strings = new /*@BinaryName*/ String[arg_types.length];
+    @BinaryName String[] arg_type_strings = new @BinaryName String[arg_types.length];
 
     for (int ii = 0; ii < arg_types.length; ii++) {
       Type t = arg_types[ii];
@@ -1016,7 +1015,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   // creates a MethodInfo struct corresponding to mgen
   @SuppressWarnings("unchecked")
-  private /*@Nullable*/ MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen) {
+  private @Nullable MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen) {
 
     // Get the argument names for this method
     String[] arg_names = mgen.getArgumentNames();
@@ -1077,7 +1076,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     }
     // Get the argument types for this method
     Type[] arg_types = mgen.getArgumentTypes();
-    /*@ClassGetName*/ String[] arg_type_strings = new /*@ClassGetName*/ String[arg_types.length];
+    @ClassGetName String[] arg_type_strings = new @ClassGetName String[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++) {
       arg_type_strings[ii] = typeToClassGetName(arg_types[ii]);
     }
@@ -1189,7 +1188,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * Returns whether or not the specified class is part of chicory itself (and thus should not be
    * instrumented). Some Daikon classes that are used by Chicory are included here as well.
    */
-  /*@Pure*/
+  @Pure
   private static boolean is_chicory(String classname) {
 
     if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test")) {

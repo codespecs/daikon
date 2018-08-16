@@ -88,7 +88,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn(/*>>> @Prototype CNAME(FUNCTION,PERM_NAME) this,*/ PptSlice slice) {
+  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn(/*@Prototype*/ CNAME(FUNCTION,PERM_NAME) this, PptSlice slice) {
     return new CNAME(FUNCTION,PERM_NAME) (slice);
   }
 
@@ -103,7 +103,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   private static String[] method_name = new String[] METHOD_NAME;
 
   @Override
-  public String[] get_method_name(/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
+  public String[] get_method_name(@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this) {
     return method_name;
   }
 
@@ -123,11 +123,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   private static int var_order = PERMUTATION;
 
   @Override
-  public int get_var_order(/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
+  public int get_var_order(@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this) {
     return var_order;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean is_symmetric() {
     #ifdef SYMMETRIC
@@ -180,14 +180,14 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return (add_ordered(resultvar, arg1, arg2, count));
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean is ## FUNCTION() {
     return true;
   }
 
   #ifdef EXACT
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExact() {
     return true;
@@ -195,9 +195,9 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   #endif
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
+  public @Nullable NISuppressionSet get_ni_suppressions() {
     if (NIS.dkconfig_enabled && dkconfig_enabled) {
       return suppressions;
     } else {

@@ -47,11 +47,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 /**
  * This is a standalone program that compares the invariants from two versions of (and/or runs of) a
@@ -83,9 +84,9 @@ public class LogicalCompare {
   // method should create an instance.
 
   // key = ppt name
-  private static /*@MonotonicNonNull*/ Map<String, List<Lemma>> extra_assumptions;
+  private static @MonotonicNonNull Map<String, List<Lemma>> extra_assumptions;
 
-  private static /*@MonotonicNonNull*/ LemmaStack lemmas;
+  private static @MonotonicNonNull LemmaStack lemmas;
 
   private static String usage =
       UtilPlume.joinLines(
@@ -275,7 +276,7 @@ public class LogicalCompare {
     return name.substring(name.lastIndexOf('.') + 1);
   }
 
-  /*@RequiresNonNull("lemmas")*/
+  @RequiresNonNull("lemmas")
   private static int checkConsequences(List<Lemma> assumptions, List<Lemma> consequences) {
     Set<String> assumption_formulas = new HashSet<String>();
     for (Lemma lem : assumptions) {
@@ -300,7 +301,7 @@ public class LogicalCompare {
             @SuppressWarnings(
                 "nullness") // application invariant: context; might be able to rewrite types to
             // make consequences a List<InvariantLemma>"
-            /*@NonNull*/ Class<? extends Invariant> inv_class = inv.invClass();
+            @NonNull Class<? extends Invariant> inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
               System.out.print(" " + shortName(inv_class));
@@ -365,7 +366,7 @@ public class LogicalCompare {
   // Check that each of the invariants in CONSEQUENCES follows from
   // zero or more of the invariants in ASSUMPTIONS. Returns the number
   // of invariants that can't be proven to follow.
-  /*@RequiresNonNull("lemmas")*/
+  @RequiresNonNull("lemmas")
   private static int evaluateImplications(List<Lemma> assumptions, List<Lemma> consequences)
       throws SimplifyError {
     int mark = lemmas.markLevel();
@@ -390,7 +391,7 @@ public class LogicalCompare {
     return invalidCount;
   }
 
-  /*@RequiresNonNull("lemmas")*/
+  @RequiresNonNull("lemmas")
   private static int evaluateImplicationsCarefully(
       List<Lemma> safeAssumptions, List<Lemma> unsafeAssumptions, List<Lemma> consequences)
       throws SimplifyError {
@@ -437,7 +438,7 @@ public class LogicalCompare {
 
   // Initialize the theorem prover. Whichever mode we're in, we should
   // only do this once per program run.
-  /*@EnsuresNonNull("lemmas")*/
+  @EnsuresNonNull("lemmas")
   private static void startProver() {
     lemmas = new LemmaStack();
   }
@@ -449,7 +450,7 @@ public class LogicalCompare {
   // invariants (from running the app in practice) and the other set of
   // invariants is called the test invariants (from running the app on its
   // test suite).
-  /*@RequiresNonNull({"extra_assumptions","lemmas"})*/
+  @RequiresNonNull({"extra_assumptions", "lemmas"})
   private static void comparePpts(
       PptTopLevel app_enter_ppt,
       PptTopLevel test_enter_ppt,
@@ -551,7 +552,7 @@ public class LogicalCompare {
     if (opt_timing) System.out.println("Total time " + time_elapsed + "ms");
   }
 
-  /*@RequiresNonNull("extra_assumptions")*/
+  @RequiresNonNull("extra_assumptions")
   private static void readExtraAssumptions(String filename) {
     File file = new File(filename);
     try {
@@ -588,7 +589,7 @@ public class LogicalCompare {
           comment = comment.trim();
           @SuppressWarnings(
               "nullness") // map: on previous loop iteration, this key was added to map
-          /*@NonNull*/ List<Lemma> assumption_vec = extra_assumptions.get(ppt_name);
+          @NonNull List<Lemma> assumption_vec = extra_assumptions.get(ppt_name);
           assumption_vec.add(new Lemma(comment, formula));
         } else {
           System.err.println("Can't parse " + line + " in assumptions file");
@@ -795,15 +796,14 @@ public class LogicalCompare {
     } else if (num_args == 2) {
       startProver();
 
-      Collection</*@KeyFor("app_ppts.nameToPpt")*/ String> app_ppt_names = app_ppts.nameStringSet();
-      Collection</*@KeyFor("test_ppts.nameToPpt")*/ String> test_ppt_names =
-          test_ppts.nameStringSet();
+      Collection<@KeyFor("app_ppts.nameToPpt") String> app_ppt_names = app_ppts.nameStringSet();
+      Collection<@KeyFor("test_ppts.nameToPpt") String> test_ppt_names = test_ppts.nameStringSet();
       // These are keys in both app_ppts and test_ppts.
       Set<String> common_names = new TreeSet<String>();
 
       for (String name : app_ppt_names) {
         @SuppressWarnings("nullness") // map: iterating over keyset
-        /*@NonNull*/ PptTopLevel app_ppt = app_ppts.get(name);
+        @NonNull PptTopLevel app_ppt = app_ppts.get(name);
 
         if (!app_ppt.ppt_name.isEnterPoint()) {
           // an exit point, and we only want entries
@@ -825,13 +825,13 @@ public class LogicalCompare {
         System.out.println();
         System.out.println("Looking at " + name);
         @SuppressWarnings("nullness") // map: iterating over subset of keySet
-        /*@NonNull*/ PptTopLevel app_enter_ppt = app_ppts.get(name);
+        @NonNull PptTopLevel app_enter_ppt = app_ppts.get(name);
         @SuppressWarnings("nullness") // map: iterating over subset of keySet
-        /*@NonNull*/ PptTopLevel test_enter_ppt = test_ppts.get(name);
+        @NonNull PptTopLevel test_enter_ppt = test_ppts.get(name);
         @SuppressWarnings("nullness") // map: exit should be in map if enter is
-        /*@NonNull*/ PptTopLevel app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
+        @NonNull PptTopLevel app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
         @SuppressWarnings("nullness") // map: exit should be in map if enter is
-        /*@NonNull*/ PptTopLevel test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
+        @NonNull PptTopLevel test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
 
         assert app_exit_ppt != null;
         assert test_exit_ppt != null;

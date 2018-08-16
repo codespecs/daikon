@@ -104,15 +104,13 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.unary;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import daikon.*;
 import daikon.inv.*;
 import java.io.Serializable;
 import java.text.DecimalFormat;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 // One reason not to combine LowerBound and Upperbound is that they have
 // separate justifications:  one may be justified when the other is not.
@@ -155,9 +153,9 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
     return MIN1;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public LOWERBOUNDCORE clone(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
+  public LOWERBOUNDCORE clone(@GuardSatisfied LOWERBOUNDCORE this) {
     try {
       return (LOWERBOUNDCORE) super.clone();
     } catch (CloneNotSupportedException e) {
@@ -167,7 +165,7 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
 
   private static DecimalFormat two_decimals = new java.text.DecimalFormat("#.##");
 
-  public String repr(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
+  public String repr(@GuardSatisfied LOWERBOUNDCORE this) {
     PRIMITIVE modulus = calc_modulus();
     PRIMITIVE range = calc_range();
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
@@ -181,7 +179,7 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
       + "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
 
-  private double calc_avg_samples_per_val(/*>>>@GuardSatisfied LOWERBOUNDCORE this,*/ PRIMITIVE modulus, double range) {
+  private double calc_avg_samples_per_val(@GuardSatisfied LOWERBOUNDCORE this, PRIMITIVE modulus, double range) {
     // int num_samples = wrapper.ppt.num_mod_samples();
     int num_samples = wrapper.ppt.num_samples();
     double avg_samples_per_val =
@@ -195,12 +193,12 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
     return avg_samples_per_val;
   }
 
-  private PRIMITIVE calc_range(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
+  private PRIMITIVE calc_range(@GuardSatisfied LOWERBOUNDCORE this) {
     // If I used Math.abs, the order of arguments to minus would not matter.
     return SIGNADJUST(MAX - MIN1) + 1;
   }
 
-  private PRIMITIVE calc_modulus(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
+  private PRIMITIVE calc_modulus(@GuardSatisfied LOWERBOUNDCORE this) {
     // Need to reinstate this at some point.
     // {
     //   for (Invariant inv : wrapper.ppt.invs) {
@@ -268,7 +266,7 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
     }
   }
 
-  public boolean enoughSamples(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
+  public boolean enoughSamples(@GuardSatisfied LOWERBOUNDCORE this) {
     return samples > required_samples;
   }
 
@@ -377,12 +375,12 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
 
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isSameFormula(LOWERBOUNDCORE other) {
     return MIN1 == other.MIN1;
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isExact() {
     return false;
   }

@@ -17,15 +17,13 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 // Note that this Invariant is used in a *very* different way from
 // the same-named one in V2.  In V2, this is just for printing.  In V3,
@@ -74,7 +72,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     numSamples = sample_cnt;
   }
 
-  public int numSamples(/*>>>@GuardSatisfied Equality this*/) {
+  public int numSamples(@GuardSatisfied Equality this) {
     return numSamples;
   }
 
@@ -85,8 +83,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   private TreeSet<VarInfo> vars;
 
   /** Returns the number of variables in the set. */
-  /*@Pure*/
-  public int size(/*>>>@GuardSatisfied Equality this*/) {
+  @Pure
+  public int size(@GuardSatisfied Equality this) {
     return vars.size();
   }
 
@@ -131,16 +129,16 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   ////////////////////////
   // Accessors
 
-  private /*@Nullable*/ VarInfo leaderCache = null;
+  private @Nullable VarInfo leaderCache = null;
   /**
    * Return the canonical VarInfo of this. Note that the leader never changes.
    *
    * @return the canonical VarInfo of this
    */
   @SuppressWarnings("purity") // set cache field
-  /*@Pure*/
+  @Pure
   public VarInfo leader(
-      /*>>>@GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/) {
+      @GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }
@@ -175,7 +173,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // they can be called if desired.
 
   @Override
-  public String repr(/*>>>@GuardSatisfied Equality this*/) {
+  public String repr(@GuardSatisfied Equality this) {
     return "Equality: size="
         + size()
         + " leader: "
@@ -186,9 +184,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         + numSamples();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied Equality this, OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -202,7 +200,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied Equality this*/) {
+  public String format_daikon(@GuardSatisfied Equality this) {
     StringBuilder result = new StringBuilder();
     boolean start = true;
     for (VarInfo var : vars) {
@@ -232,7 +230,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return UtilPlume.join(clauses, " && ");
   }
 
-  public String format_esc(/*>>>@GuardSatisfied Equality this*/) {
+  public String format_esc(@GuardSatisfied Equality this) {
     String result = "";
 
     List<VarInfo> valid_equiv = new ArrayList<VarInfo>();
@@ -296,7 +294,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // (hash A) (hash B)).  If we said the former, Simplify would
   // presume that A and B were always interchangeable, which is not
   // the case when your programming language involves mutation.
-  private String format_elt(/*>>>@GuardSatisfied Equality this,*/ String simname) {
+  private String format_elt(@GuardSatisfied Equality this, String simname) {
     String result = simname;
     if (leader().is_reference()) {
       result = "(hash " + result + ")";
@@ -304,7 +302,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return result;
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied Equality this*/) {
+  public String format_simplify(@GuardSatisfied Equality this) {
     StringBuilder result = new StringBuilder("(AND");
     VarInfo leader = leader();
     String leaderName = leader.simplify_name();
@@ -340,7 +338,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return format_daikon();
   }
 
-  public String format_java_family(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
+  public String format_java_family(@GuardSatisfied Equality this, OutputFormat format) {
     VarInfo leader = leader();
     String leaderName = leader.name_using(format);
     List<String> clauses = new ArrayList<String>();
@@ -370,9 +368,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return UtilPlume.join(clauses, " && ");
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied Equality this*/) {
+  public String toString(@GuardSatisfied Equality this) {
     return repr();
   }
 
@@ -462,7 +460,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     throw new UnsupportedOperationException(
@@ -573,18 +571,18 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   @Override
-  public boolean enabled(/*>>> @Prototype Equality this*/) {
+  public boolean enabled(/*@Prototype*/ Equality this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(/*>>> @Prototype Equality this,*/ VarInfo[] vis) {
+  public boolean valid_types(/*@Prototype*/ Equality this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
   protected /*@NonPrototype*/ Equality instantiate_dyn(
-      /*>>> @Prototype Equality this,*/ PptSlice slice) {
+      /*@Prototype*/ Equality this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

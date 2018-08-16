@@ -8,13 +8,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Maps from a program point name (a String) to a PptTopLevel.
@@ -46,8 +46,8 @@ public class PptMap implements Serializable {
    * Get the pptname named 'name' from the map. Note that conditional program points are not stored
    * in the map by name. They are only available through their parent.
    */
-  /*@Pure*/
-  public /*@Nullable*/ PptTopLevel get(String name) {
+  @Pure
+  public @Nullable PptTopLevel get(String name) {
     return nameToPpt.get(name);
   }
 
@@ -55,8 +55,8 @@ public class PptMap implements Serializable {
    * Get the pptname 'name' from the map. Note that conditional program points are not stored in the
    * map by name. They are only available through their parent.
    */
-  /*@Pure*/
-  public /*@Nullable*/ PptTopLevel get(PptName name) {
+  @Pure
+  public @Nullable PptTopLevel get(PptName name) {
     return get(name.toString());
   }
 
@@ -64,9 +64,9 @@ public class PptMap implements Serializable {
    * Returns whether or not 'name' is the name of a Ppt in the map. Note that conditional program
    * points are not stored in the map by name. They are only available through their parent.
    */
-  /*@Pure*/
+  @Pure
   @SuppressWarnings("nullness") // postcondition: linked maps
-  /*@EnsuresNonNullIf(result=true, expression="get(#1)")*/
+  @EnsuresNonNullIf(result = true, expression = "get(#1)")
   // get(#1) == nameToPpt.get(#1)
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
@@ -86,7 +86,7 @@ public class PptMap implements Serializable {
   }
 
   /** @return an unmodifiable version of the keySet */
-  public Collection</*@KeyFor("nameToPpt")*/ String> nameStringSet() {
+  public Collection<@KeyFor("nameToPpt") String> nameStringSet() {
     return Collections.unmodifiableSet(nameToPpt.keySet());
   }
 
@@ -157,7 +157,7 @@ public class PptMap implements Serializable {
     final Iterator<PptTopLevel> iter_view = nameToPpt.values().iterator();
     final Iterator<PptTopLevel> iter_sort = sorted.iterator();
     return new Iterator<PptTopLevel>() {
-      /*@Nullable*/ Iterator<PptConditional> cond_iterator = null;
+      @Nullable Iterator<PptConditional> cond_iterator = null;
 
       @Override
       public boolean hasNext(/*! >>>@GuardSatisfied Iterator<PptConditional> this*/ ) {
@@ -213,7 +213,7 @@ public class PptMap implements Serializable {
   }
 
   /** Return the number of active PptSlices. */
-  /*@Pure*/
+  @Pure
   public int countSlices() {
     int result = 0;
     for (PptTopLevel ppt : this.pptIterable()) {
@@ -222,14 +222,14 @@ public class PptMap implements Serializable {
     return result;
   }
 
-  /*@Pure*/
+  @Pure
   public int size() {
     return nameToPpt.size();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied PptMap this*/) {
+  public String toString(@GuardSatisfied PptMap this) {
     return "PptMap: " + nameToPpt.toString();
   }
 

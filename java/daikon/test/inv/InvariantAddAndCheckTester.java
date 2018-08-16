@@ -24,13 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import junit.framework.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This is a tester for the results of adding or checking an sample to an invariant. It can test
@@ -176,7 +172,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @return the next non-comment, non-whitespace line of the input buffer or null if the end of the
    *     buffer is reached before such a line can be found
    */
-  static /*@Nullable*/ String getNextRealLine(BufferedReader input) {
+  static @Nullable String getNextRealLine(BufferedReader input) {
     String currentLine = "";
 
     try {
@@ -240,7 +236,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @return a String holding the error messages for any failed tests, or null if no tests are
    *     failed
    */
-  private static /*@Nullable*/ String performTest(LineNumberReader commands) {
+  private static @Nullable String performTest(LineNumberReader commands) {
     StringBuilder output = new StringBuilder();
     //  List invariantTestCases = new ArrayList();
     boolean noTestFailed = true;
@@ -353,7 +349,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @return true if the line is a comment (that is, not to be interpretted as a command); false
    *     otherwise
    */
-  /*@Pure*/
+  @Pure
   static boolean isComment(String line) {
     return line.startsWith(COMMENT_STARTER_STRING);
   }
@@ -364,7 +360,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
    */
-  /*@Pure*/
+  @Pure
   static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {
       if (!Character.isWhitespace(line.charAt(x))) {
@@ -405,7 +401,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *     failed cases, the empty string is returned. In the case where commands is empty (there
      *     are no more test cases and the end of the file has been reached), null is returned.
      */
-    public static /*@Nullable*/ String runTest(LineNumberReader commands) {
+    public static @Nullable String runTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, false);
       if (endOfFile) {
         return null;
@@ -431,7 +427,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a String containing the proper add and check commands for this input lines of this
      *     test case
      */
-    public static /*@Nullable*/ String generateTest(LineNumberReader commands) {
+    public static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) return null;
       while (true) {
@@ -464,7 +460,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       results = new StringBuilder();
 
       @SuppressWarnings("signature") // user input, should be checked
-      /*@BinaryName*/ String className = getNextRealLine(commands);
+      @BinaryName String className = getNextRealLine(commands);
 
       // End of file reached
       if (className == null) return true;
@@ -718,7 +714,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @param classInfo the fully-qualified class name
      * @return a Class object representing the class name if such a class is defined, otherwise null
      */
-    private static Class<?> getClass(/*@BinaryName*/ String classInfo) {
+    private static Class<?> getClass(@BinaryName String classInfo) {
       try {
         return ClassLoader.getSystemClassLoader().loadClass(classInfo);
       } catch (ClassNotFoundException e) {
@@ -734,25 +730,25 @@ public class InvariantAddAndCheckTester extends TestCase {
       return InvariantAddAndCheckTester.getNextRealLine(buffer);
     }
 
-    /*@Pure*/
+    @Pure
     private static boolean isTestTerminator(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("end");
     }
 
-    /*@Pure*/
+    @Pure
     private static boolean isAddCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("add");
     }
 
-    /*@Pure*/
+    @Pure
     private static boolean isCheckCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("check");
     }
 
-    /*@Pure*/
+    @Pure
     private static boolean isCompareCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("compare");

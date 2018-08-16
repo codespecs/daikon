@@ -30,15 +30,13 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.unary;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 // originally from pass1.
 /**
@@ -114,7 +112,7 @@ public final class CLASSNAME extends UnaryDerivation {
       return new ValueAndModified(Intern.INTERNEDLONG(val_array[real_index]), source_mod);
     } else {
       @SuppressWarnings("interning") // object invariant: array elements are interned
-      /*@Interned*/ Object[] val_array = (/*@Interned*/ Object[]) val;
+      @Interned Object[] val_array = (@Interned Object[]) val;
       if (val_array.length < minLength) {
         return ValueAndModified.MISSING_NONSENSICAL;
       }
@@ -128,7 +126,7 @@ public final class CLASSNAME extends UnaryDerivation {
     return VarInfo.make_subscript(base, null, index);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof CLASSNAME)
@@ -136,7 +134,7 @@ public final class CLASSNAME extends UnaryDerivation {
   }
 
   /** Returns the ESC name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format("%s[0]", base.esc_name());

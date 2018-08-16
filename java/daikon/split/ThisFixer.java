@@ -5,10 +5,7 @@ import daikon.tools.jtb.Ast;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * ThisFixer is a visitor for a jtb syntax tree that changes all instances of "this." to "this_".
@@ -35,7 +32,7 @@ class ThisFixer extends DepthFirstVisitor {
   private VarInfo[] varInfos;
 
   /** The token previously visited. Null only when visiting the first token. */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   /**
    * Creates a new instance of ThisFixer.

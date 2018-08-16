@@ -14,13 +14,10 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.EntryReader;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * This factory creates Splitters from map files. The splitters partition the data based upon the
@@ -251,7 +248,7 @@ public class ContextSplitterFactory {
     ArrayList<PptNameAndSplitters> result = new ArrayList<PptNameAndSplitters>();
 
     // For each callee
-    for (Map.Entry</*@KeyFor("callee2caller2ids")*/ String, Map<String, Set<Long>>> ipair :
+    for (Map.Entry<@KeyFor("callee2caller2ids") String, Map<String, Set<Long>>> ipair :
         callee2caller2ids.entrySet()) {
       String callee_ppt_name = ipair.getKey();
       Map<String, Set<Long>> caller2ids = ipair.getValue();
@@ -260,7 +257,7 @@ public class ContextSplitterFactory {
       Collection<Splitter> splitters = new ArrayList<Splitter>();
 
       // For each caller of that callee
-      for (Map.Entry</*@KeyFor("caller2ids")*/ String, Set<Long>> jpair : caller2ids.entrySet()) {
+      for (Map.Entry<@KeyFor("caller2ids") String, Set<Long>> jpair : caller2ids.entrySet()) {
         String caller_condition = jpair.getKey();
         List<Long> ids = new ArrayList<Long>(jpair.getValue());
 
@@ -300,9 +297,9 @@ public class ContextSplitterFactory {
       this.splitters = splitters;
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied PptNameAndSplitters this*/) {
+    public String toString(@GuardSatisfied PptNameAndSplitters this) {
       return "PptNameAndSplitters<" + ppt_name + "," + Arrays.asList(splitters).toString() + ">";
     }
   }

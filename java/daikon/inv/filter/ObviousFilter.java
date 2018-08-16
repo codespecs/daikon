@@ -2,10 +2,7 @@ package daikon.inv.filter;
 
 import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 
 public class ObviousFilter extends InvariantFilter {
   @Override
@@ -22,7 +19,7 @@ public class ObviousFilter extends InvariantFilter {
 
   @Override
   @SuppressWarnings("nullness") // condition hidden in local variable
-  /*@EnsuresNonNullIf(result=true, expression="#1.isObvious()")*/
+  @EnsuresNonNullIf(result = true, expression = "#1.isObvious()")
   boolean shouldDiscardInvariant(Invariant invariant) {
     // if ((invariant.ppt.arity() == 1) || invariant.isEqualityComparison()) {
     DiscardInfo discard = invariant.isObvious();

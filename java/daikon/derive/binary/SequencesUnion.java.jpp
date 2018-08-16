@@ -18,7 +18,7 @@ The correct way to build the system is to run 'make'.
   #define SCALARSEQUENCESUNION SequenceFloatUnion
   #define INTERN(v) Intern.internedDouble(v)
 #elif defined(STRING)
-  #define SCALAR /*@Interned*/ String
+  #define SCALAR @Interned String
   #define SCALARSEQUENCESUNION SequenceStringUnion
   #if 0
     // In this particular case, the string is already interned
@@ -32,15 +32,13 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.derive.*;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Represents the setwise union of two base variables, each of which is a collection. This variable
@@ -112,14 +110,14 @@ public final class SCALARSEQUENCESUNION extends BinaryDerivation {
     return VarInfo.make_function("union", base1, base2);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SCALARSEQUENCESUNION);
   }
 
   /** Returns the ESC name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format("union(%s,%s)", var1().esc_name(), var2().esc_name());

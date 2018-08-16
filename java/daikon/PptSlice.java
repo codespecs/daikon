@@ -10,14 +10,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * A Slice is a view of some of the variables for a program point. A program point (that is,
@@ -54,7 +55,7 @@ public abstract class PptSlice extends Ppt {
   public PptTopLevel parent;
 
   public abstract int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/);
+      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this);
 
   /**
    * The invariants contained in this slice. This should not be used directly, in general. In
@@ -78,12 +79,12 @@ public abstract class PptSlice extends Ppt {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   @SuppressWarnings(
       "initialization:override.receiver.invalid") // see comment on overridden definition in Ppt
   public final String name(
-      /*>>>@GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
+      @GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this) {
     return parent.name + varNames(var_infos);
   }
 
@@ -172,7 +173,7 @@ public abstract class PptSlice extends Ppt {
   abstract List<Invariant> add(ValueTuple full_vt, int count);
 
   /** Removes any falsified invariants from our list. */
-  /*@RequiresNonNull("NIS.suppressor_map")*/
+  @RequiresNonNull("NIS.suppressor_map")
   protected void remove_falsified() {
 
     // Remove the dead invariants
@@ -204,7 +205,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /** Return an approximation of the number of samples seen on this slice */
-  public abstract int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PptSlice this*/);
+  public abstract int num_samples(@UnknownInitialization @GuardSatisfied PptSlice this);
 
   /** Return an approximation of the number of distinct values seen on this slice. */
   public abstract int num_values();
@@ -217,7 +218,7 @@ public abstract class PptSlice extends Ppt {
    * It's somewhat less efficient than ArityPptnameComparator.
    */
   public static final class ArityVarnameComparator implements Comparator<PptSlice> {
-    /*@Pure*/
+    @Pure
     @Override
     public int compare(PptSlice slice1, PptSlice slice2) {
       if (slice1 == slice2) return 0;
@@ -236,7 +237,7 @@ public abstract class PptSlice extends Ppt {
    * the dependence on name, it should be used only for slices on the same Ppt.
    */
   public static final class ArityPptnameComparator implements Comparator<PptSlice> {
-    /*@Pure*/
+    @Pure
     @Override
     public int compare(PptSlice slice1, PptSlice slice2) {
       if (slice1 == slice2) return 0;
@@ -322,8 +323,8 @@ public abstract class PptSlice extends Ppt {
   /** For debugging only. */
   @Override
   @SuppressWarnings("purity") // string creation
-  /*@SideEffectFree*/
-  public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
+  @SideEffectFree
+  public String toString(@GuardSatisfied PptSlice this) {
     StringBuilder sb = new StringBuilder();
     for (VarInfo vi : var_infos) {
       sb.append(" " + vi.name());
@@ -355,7 +356,7 @@ public abstract class PptSlice extends Ppt {
    * Returns whether or not this slice contains an exact match for the specified invariant. An exact
    * match requires that the invariants be of the same class and have the same formula.
    */
-  /*@EnsuresNonNullIf(result=true, expression="find_inv_exact(#1)")*/
+  @EnsuresNonNullIf(result = true, expression = "find_inv_exact(#1)")
   public boolean contains_inv_exact(Invariant inv) {
 
     return (find_inv_exact(inv) != null);
@@ -366,8 +367,8 @@ public abstract class PptSlice extends Ppt {
    * null. An exact match requires that the invariants be of the same class and have the same
    * formula.
    */
-  /*@Pure*/
-  public /*@Nullable*/ Invariant find_inv_exact(Invariant inv) {
+  @Pure
+  public @Nullable Invariant find_inv_exact(Invariant inv) {
 
     for (Invariant mine : invs) {
       if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv)) {
@@ -380,7 +381,7 @@ public abstract class PptSlice extends Ppt {
   /**
    * Returns the invariant that matches the specified class if it exists. Otherwise returns null.
    */
-  public /*@Nullable*/ Invariant find_inv_by_class(Class<? extends Invariant> cls) {
+  public @Nullable Invariant find_inv_by_class(Class<? extends Invariant> cls) {
 
     for (Invariant inv : invs) {
       if ((inv.getClass() == cls)) {
@@ -394,7 +395,7 @@ public abstract class PptSlice extends Ppt {
    * Returns true if the invariant is true in this slice. This can occur if the invariant exists in
    * this slice, is suppressed, or is obvious statically.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_inv_true(Invariant inv) {
 
     if (contains_inv_exact(inv)) {

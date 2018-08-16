@@ -26,6 +26,10 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoScalar;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.inv.*;
 import java.io.Serializable;
@@ -33,12 +37,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.MathPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 public final class CLASSNAME implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
@@ -75,9 +73,9 @@ public final class CLASSNAME implements Serializable, Cloneable {
     this.wrapper = wrapper;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public CLASSNAME clone(@GuardSatisfied CLASSNAME this) {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       if (x_cache != null) {
@@ -134,7 +132,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * Returns whether or not the invariant is currently active. We become active after MINPAIRS
    * values have been seen and a line calculated. Before that, a and b are uninitialized.
    */
-  /*@Pure*/
+  @Pure
   public boolean isActive() {
     return (values_seen >= MINPAIRS);
   }
@@ -143,7 +141,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * LinearBinary can't be flowed because it keeps samples to build the line. These sample can't be
    * flowed from ppt to ppt (since they probably didn't occur at the lower ppt).
    */
-  /*@Pure*/
+  @Pure
   public boolean isFlowable() {
     return false;
   }
@@ -445,7 +443,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     return InvariantStatus.NO_CHANGE;
   }
 
-  public boolean enoughSamples(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public boolean enoughSamples(@GuardSatisfied CLASSNAME this) {
     return (values_seen >= MINPAIRS);
   }
 
@@ -453,7 +451,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     return Invariant.conf_is_ge(values_seen, MINPAIRS);
   }
 
-  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String repr(@GuardSatisfied CLASSNAME this) {
     return CLASSSTRING + wrapper.varNames() + ": a=" + a
       + ",b=" + b
       + ",c=" + c
@@ -464,7 +462,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // Variable "first" indicates whether this is the leading term
   // Variable "varname" is the name of the variable; may be null
   // for the constant term.
-  public static String formatTerm(double coeff, /*@Nullable*/ String varname, boolean first) {
+  public static String formatTerm(double coeff, @Nullable String varname, boolean first) {
     double ncoeff = coeff;
 
     if (ncoeff == 0) {
@@ -496,7 +494,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String format_using(
       OutputFormat format, String vix, String viy, double u, double v, double w) {
 
@@ -570,7 +568,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       return "(EQ 0 " + str_axpc + ")";
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String format_using(OutputFormat format, String xname, String yname) {
     String result = format_using(format, xname, yname, a, b, c);
     if (result != null) {
@@ -605,7 +603,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * @param cores list of LinearBinary cores to merge. They should all be permuted to match the
    *     variable order in ppt.
    */
-  public /*@Nullable*/ CLASSNAME merge(List<CLASSNAME> cores, Invariant wrapper) {
+  public @Nullable CLASSNAME merge(List<CLASSNAME> cores, Invariant wrapper) {
 
     // Look for any active lines.  All must define the same line
     CLASSNAME result = null;
@@ -647,7 +645,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     return result;
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isSameFormula(CLASSNAME other) {
     boolean thisMeaningless = values_seen < MINPAIRS;
     boolean otherMeaningless = other.values_seen < MINPAIRS;
@@ -663,7 +661,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     }
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isExclusiveFormula(CLASSNAME other) {
     if ((values_seen < MINPAIRS) || (other.values_seen < MINPAIRS)) {
       return false;

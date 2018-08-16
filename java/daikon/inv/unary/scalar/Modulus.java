@@ -8,14 +8,11 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.MathPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
 
 /**
  * Represents the invariant {@code x == r (mod m)} where {@code x} is a long scalar variable, {@code
@@ -74,18 +71,18 @@ public class Modulus extends SingleScalar {
 
   /** Instantiate an invariant on the specified slice */
   @Override
-  protected Modulus instantiate_dyn(/*>>> @Prototype Modulus this,*/ PptSlice slice) {
+  protected Modulus instantiate_dyn(/*@Prototype*/ Modulus this, PptSlice slice) {
     return new Modulus(slice);
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied Modulus this*/) {
+  public String repr(@GuardSatisfied Modulus this) {
     return "Modulus" + varNames() + ": modulus=" + modulus + ",remainder=" + remainder;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied Modulus this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied Modulus this, OutputFormat format) {
     String name = var().name_using(format);
 
     if (format == OutputFormat.DAIKON) {
@@ -223,7 +220,7 @@ public class Modulus extends SingleScalar {
     return 1 - Math.pow(probability_one_elt_modulus, ppt.num_samples());
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     Modulus otherModulus = (Modulus) other;
@@ -241,7 +238,7 @@ public class Modulus extends SingleScalar {
     }
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
     if ((modulus == 0) || (modulus == 1)) {
@@ -262,7 +259,7 @@ public class Modulus extends SingleScalar {
   }
 
   // Look up a previously instantiated invariant.
-  public static /*@Nullable*/ Modulus find(PptSlice ppt) {
+  public static @Nullable Modulus find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof Modulus) {
@@ -279,9 +276,9 @@ public class Modulus extends SingleScalar {
    *    size(x[]) = r (mod m) &rArr; size(x[])-1 = (r-1) (mod m)
    * </pre>
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // Do not show x-1 = a (mod b).  There must be a different mod
     // invariant over x.  JHP: This should really find the invariant rather

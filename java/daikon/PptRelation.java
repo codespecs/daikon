@@ -15,13 +15,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Class that builds and describes relations in the ppt hierarchy. Building the relationship is
@@ -120,7 +119,7 @@ public class PptRelation implements Serializable {
   /** Adds this relation to its child's parent list and its parent's children list. */
   @SuppressWarnings({"rawness", "initialization"}) // won't be used until initialization is finished
   private void connect(
-      /*>>>@UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
+      @UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
     child.parents.add(this);
@@ -128,14 +127,14 @@ public class PptRelation implements Serializable {
   }
 
   /** Returns the number of parent to child variable relations. */
-  /*@Pure*/
+  @Pure
   public int size() {
     return (parent_to_child_map.size());
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
+  public String toString(@GuardSatisfied PptRelation this) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
@@ -187,8 +186,7 @@ public class PptRelation implements Serializable {
    * all others are. The remaining relations (class&rarr;object, object&rarr;method,and
    * exit&rarr;exitNN) form a simple tree without duplication.
    */
-
-  /*@Pure*/
+  @Pure
   public boolean is_primary() {
     return ((relationship != PptRelationType.USER) && (relationship != PptRelationType.ENTER_EXIT));
   }
@@ -202,7 +200,7 @@ public class PptRelation implements Serializable {
    * Returns the parent variable that corresponds to childVar. Returns null if there is no
    * corresponding variable.
    */
-  public /*@Nullable*/ VarInfo parentVar(VarInfo childVar) {
+  public @Nullable VarInfo parentVar(VarInfo childVar) {
     return child_to_parent_map.get(childVar);
   }
 
@@ -210,7 +208,7 @@ public class PptRelation implements Serializable {
    * Like parentVar(VarInfo), but if no parent is found, tries every variable in the equality set
    * and returns null only if none of them has a parent.
    */
-  public /*@Nullable*/ VarInfo parentVarAnyInEquality(VarInfo childVar) {
+  public @Nullable VarInfo parentVarAnyInEquality(VarInfo childVar) {
     VarInfo result = parentVar(childVar);
     if (result != null) {
       return result;
@@ -231,7 +229,7 @@ public class PptRelation implements Serializable {
    * Returns the child variable that corresponds to parentVar. Returns null if there is no
    * corresponding variable.
    */
-  public /*@Nullable*/ VarInfo childVar(VarInfo parentVar) {
+  public @Nullable VarInfo childVar(VarInfo parentVar) {
     return parent_to_child_map.get(parentVar);
   }
 
@@ -489,7 +487,7 @@ public class PptRelation implements Serializable {
       VarInfo[] vp_bases = vp.derived.getBases();
       // TODO: Is this "@Nullable" annotation correct?  (That is, can the
       // element value actually be null?)
-      /*@Nullable*/ VarInfo[] child_vp_bases = new VarInfo[vp_bases.length];
+      @Nullable VarInfo[] child_vp_bases = new VarInfo[vp_bases.length];
       for (int j = 0; j < vp_bases.length; j++) {
         child_vp_bases[j] = rel.childVar(vp_bases[j]);
       }

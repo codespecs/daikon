@@ -3,11 +3,8 @@ package daikon.inv.filter;
 import daikon.VarInfo;
 import daikon.inv.Invariant;
 import java.util.regex.Pattern;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.regex.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.regex.qual.Regex;
 
 /**
  * A filter that filters out invariants that contain derived variables of a specified derivation. If
@@ -27,9 +24,9 @@ public class DerivedVariableFilter extends InvariantFilter {
    * out.
    */
   // dkconfig_* means a configuration option, set from command line or file
-  public static /*@Nullable*/ /*@Regex*/ String dkconfig_class_re = null;
+  public static @Nullable @Regex String dkconfig_class_re = null;
 
-  public static /*@Nullable*/ Pattern class_re = null;
+  public static @Nullable Pattern class_re = null;
 
   public DerivedVariableFilter() {
     isOn = dkconfig_class_re != null;
@@ -40,7 +37,7 @@ public class DerivedVariableFilter extends InvariantFilter {
     }
   }
 
-  public /*@Nullable*/ /*@Regex*/ String get_derivation_class_re() {
+  public @Nullable @Regex String get_derivation_class_re() {
     return dkconfig_class_re;
   }
 

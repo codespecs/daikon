@@ -7,15 +7,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 import org.plumelib.signature.Signatures;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which reference variables have seen
@@ -43,7 +42,7 @@ public class AnnotateNullable {
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
-  static /*@Interned*/ String last_package = "";
+  static @Interned String last_package = "";
 
   /**
    * Write an output file in the stub class format (see the Checker Framework Manual), instead of in
@@ -115,9 +114,9 @@ public class AnnotateNullable {
       int lastdot = name.lastIndexOf('.');
       @SuppressWarnings("keyfor") // application invariant:  KeyFor and substring
       // @KeyFor because class_map has entry per class, and this method is in some class
-      /*@KeyFor("class_map")*/ String classname = name.substring(0, lastdot);
+      @KeyFor("class_map") String classname = name.substring(0, lastdot);
       // System.out.printf("classname for ppt %s is '%s'%n", name, classname);
-      /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
+      @NonNull List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
       static_methods.add(ppt);
     }
@@ -135,8 +134,7 @@ public class AnnotateNullable {
       if (ppt.is_class()) {
         @SuppressWarnings(
             "nullness") // map: retrieve class name from class Ppt name, with string manipulation
-        /*@NonNull*/ List<PptTopLevel> static_methods =
-            class_map.get(ppt.name().replace(":::CLASS", ""));
+        @NonNull List<PptTopLevel> static_methods = class_map.get(ppt.name().replace(":::CLASS", ""));
         int child_cnt = 0;
         // TODO: Once Checker Framework issue 565 has been fixed (https://tinyurl.com/cfissue/565),
         // change the following two lines back to
@@ -171,7 +169,7 @@ public class AnnotateNullable {
   }
 
   // Returns null if no corresponding class ppt exists
-  private static /*@Nullable*/ PptTopLevel class_for_object(PptTopLevel object_ppt) {
+  private static @Nullable PptTopLevel class_for_object(PptTopLevel object_ppt) {
     if (object_ppt.parents.size() == 0) {
       return null;
     }
@@ -180,7 +178,7 @@ public class AnnotateNullable {
   }
 
   // Returns null if no corresponding object ppt exists
-  private static /*@Nullable*/ PptTopLevel object_for_class(PptTopLevel class_ppt) {
+  private static @Nullable PptTopLevel object_for_class(PptTopLevel class_ppt) {
     PptTopLevel object_ppt = null;
     for (PptRelation child_relation : class_ppt.children) {
       PptTopLevel child = child_relation.child;
@@ -249,7 +247,7 @@ public class AnnotateNullable {
       String classname = object_ppt.ppt_name.getFullClassName();
       assert classname != null;
       @SuppressWarnings("nullness") // map: class_map has entry per classname
-      /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
+      @NonNull List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
       for (PptTopLevel child : static_methods) {
         process_method(child);
@@ -396,9 +394,9 @@ public class AnnotateNullable {
   public static String jvm_signature(PptTopLevel ppt) {
 
     @SuppressWarnings("nullness") // Java method, so getMethodName() != null
-    /*@NonNull*/ String method = ppt.ppt_name.getMethodName();
+    @NonNull String method = ppt.ppt_name.getMethodName();
     @SuppressWarnings("nullness") // Java method, so getSignature() != null
-    /*@NonNull*/ String java_sig = ppt.ppt_name.getSignature();
+    @NonNull String java_sig = ppt.ppt_name.getSignature();
     String java_args = java_sig.replace(method, "");
     // System.out.printf("m/s/a = %s %s %s%n", method, java_sig, java_args);
     if (method.equals(ppt.ppt_name.getShortClassName())) method = "<init>";
@@ -443,7 +441,7 @@ public class AnnotateNullable {
    * exit ppt. Exit ppts that do not have an object as a parent are inferred to be static. This does
    * not work for enter ppts, because constructors do not have the object as a parent on entry.
    */
-  /*@Pure*/
+  @Pure
   public static boolean is_static_method(PptTopLevel ppt) {
 
     assert ppt.is_exit() : ppt;

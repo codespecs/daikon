@@ -22,13 +22,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.EntryReader;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 // For each class:  (UnmodifiedClassDeclaration)
 //  * insert object invariants
@@ -155,7 +154,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     addComment(Ast.nodeTokenAfter(n), comment, true);
   }
 
-  /*@Pure*/
+  @Pure
   private boolean isOwned(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.ownedFieldNames.contains(fieldname)) {
@@ -165,7 +164,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/
+  @Pure
   private boolean isFinal(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.finalFieldNames.contains(fieldname)) {
@@ -175,7 +174,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/
+  @Pure
   private boolean isNotContainsNull(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.notContainsNullFieldNames.contains(fieldname)) {
@@ -185,7 +184,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/
+  @Pure
   private boolean isElementType(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.elementTypeFieldNames.containsKey(fieldname)) {
@@ -311,7 +310,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // Node n is a MethodDeclaration or a ConstructorDeclaration
-  /*@Nullable*/ InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
+  @Nullable InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
     InvariantsAndModifiedVars requires_invs = null;
     InvariantsAndModifiedVars ensures_invs = null;
 
@@ -342,7 +341,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     //                     requires_invs, ensures_invs);
     // }
 
-    return new /*@Nullable*/ InvariantsAndModifiedVars[] {requires_invs, ensures_invs};
+    return new @Nullable InvariantsAndModifiedVars[] {requires_invs, ensures_invs};
   }
 
   public void insertAlso(Node n) {
@@ -440,8 +439,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n); // call "accept(this)" on each field
 
-    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures =
-        get_requires_and_ensures(ppts, n);
+    @Nullable InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
 
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
@@ -530,8 +528,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n); // call "accept(this)" on each field
 
-    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures =
-        get_requires_and_ensures(ppts, n);
+    @Nullable InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 
@@ -661,9 +658,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // The "invs" argument may be null, in which case no work is done.
-  /*@EnsuresNonNullIf(result=true, expression="#3")*/
+  @EnsuresNonNullIf(result = true, expression = "#3")
   public boolean insertInvariants(
-      Node n, String prefix, /*@Nullable*/ InvariantsAndModifiedVars invs, boolean useJavaComment) {
+      Node n, String prefix, @Nullable InvariantsAndModifiedVars invs, boolean useJavaComment) {
     if (invs == null) {
       return false;
     }
@@ -759,7 +756,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
             MethodDeclaration md = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
             if ((cd != null) || ((md != null) && (!Ast.contains(md.f0, "static")))) {
               @SuppressWarnings("nullness")
-              /*@NonNull*/ Node parent = Ast.getParent(Statement.class, n);
+              @NonNull Node parent = Ast.getParent(Statement.class, n);
               // If parent isn't in a block (eg, if parent
               // is sole element in then or else clause), then this is wrong.
               // It's safe, however.  But does it cause syntax errors if an
@@ -799,7 +796,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       String fieldname = Ast.fieldName(pe);
       Annotate.debug.fine("In expression, fieldname = " + fieldname);
       @SuppressWarnings("nullness") // every expression is within a statement
-      /*@NonNull*/ Node stmt = Ast.getParent(Statement.class, n);
+      @NonNull Node stmt = Ast.getParent(Statement.class, n);
       if ((fieldname != null) && isOwned(fieldname)) {
         if (lightweight) {
           addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this;"));

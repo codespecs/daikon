@@ -4,11 +4,9 @@ import daikon.tools.jtb.Ast;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * OrigFixer is a visitor for a jtb syntax tree that replaces instances of of "orig()" with "orig_".
@@ -22,10 +20,10 @@ class OrigFixer extends DepthFirstVisitor {
   private boolean foundOrig = false;
 
   /** The last NodeToken visited. */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   /** The token visited before lastToken. */
-  private /*@MonotonicNonNull*/ NodeToken twoTokensAgo;
+  private @MonotonicNonNull NodeToken twoTokensAgo;
 
   /** Blocks public constructor. */
   private OrigFixer() {
@@ -97,7 +95,7 @@ class OrigFixer extends DepthFirstVisitor {
    *
    * @return true iff n is a instance of the method "orig"
    */
-  /*@Pure*/
+  @Pure
   private boolean isOrig(PrimaryExpression n) {
     return ((n.f0.f0.choice instanceof Name)
         && (((Name) n.f0.f0.choice).f0.tokenImage.equals("orig"))
@@ -123,8 +121,8 @@ class OrigFixer extends DepthFirstVisitor {
   }
 
   /** Returns if the the last token represents a variable name. */
-  /*@EnsuresNonNullIf(result=true, expression="lastToken")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "lastToken")
+  @Pure
   private boolean isLastTokenVar(NodeToken n) {
     return (lastToken != null
         && Visitors.isIdentifier(lastToken)

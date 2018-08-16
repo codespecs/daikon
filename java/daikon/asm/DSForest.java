@@ -5,10 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-*/
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 /**
  * Implements a partition of distinct elements into disjoint sets. Each set in the partition is
@@ -34,7 +31,7 @@ public class DSForest {
   private static int idCounter = 0;
 
   // A node in the tree.
-  /*@UsesObjectEquals*/
+  @UsesObjectEquals
   private static class DSForestNode {
     public String element;
     public DSForestNode parent;

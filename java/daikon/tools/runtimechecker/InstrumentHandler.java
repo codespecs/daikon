@@ -20,10 +20,7 @@ import java.util.logging.Logger;
 import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-*/
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 /**
  * Instruments a file to check invariant violations at runtime. Violated invariants are stored in a
@@ -190,7 +187,7 @@ public class InstrumentHandler extends CommandHandler {
     return true;
   }
 
-  /*@UsesObjectEquals*/
+  @UsesObjectEquals
   private static class Arguments {
     public String invFile;
     public List<String> javaFileNames;
