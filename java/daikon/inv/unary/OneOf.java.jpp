@@ -228,6 +228,11 @@ import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+import org.checkerframework.framework.qual.Unused;
+*/
+
 // This subsumes an "exact" invariant that says the value is always exactly
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.

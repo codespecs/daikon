@@ -51,6 +51,10 @@ import java.util.*;
 import java.util.logging.*;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents sequences of PRIMITIVE that contain no duplicate elements. Prints as
  * {@code x[] contains no duplicates}.

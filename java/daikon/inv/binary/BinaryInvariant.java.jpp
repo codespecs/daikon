@@ -77,6 +77,10 @@ import daikon.inv.binary.*;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Base class for invariants over two variables of type PRIMITIVENONCOMMENT.
  * EXAMPLE_INVARIANT

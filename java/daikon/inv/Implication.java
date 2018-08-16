@@ -17,6 +17,10 @@ import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 // Here Implication is reimplemented as an extension of the new general
 // Joiner class
 

@@ -36,6 +36,10 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 // Outstanding NIS todo list
 //
 //  - Merging is slow when there are multiple children.

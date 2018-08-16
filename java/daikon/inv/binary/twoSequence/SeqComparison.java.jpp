@@ -254,6 +254,10 @@ import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents invariants between two sequences of PRIMITIVE values. If order matters for each
  * variable (which it does by default), then the sequences are compared lexically. Prints as

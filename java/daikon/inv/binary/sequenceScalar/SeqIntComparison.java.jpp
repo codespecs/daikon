@@ -147,6 +147,10 @@ import java.util.*;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents an invariant between a PRIMITIVE scalar and a a sequence of PRIMITIVE values. Prints
  * as {@code x[] elements EQUALScode y} where {@code x} is a PRIMITIVE sequence and

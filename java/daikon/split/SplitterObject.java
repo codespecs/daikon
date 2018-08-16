@@ -14,6 +14,10 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ReflectionPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * A SplitterObject is the starting point for all the information we have about a splitting
  * condition. It is created immediately when the condition is read from the {@code .spinfo} file,

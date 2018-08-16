@@ -20,6 +20,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Defines a suppressee for non-instantiating suppression. A suppressee consists only of the class
  * at this point since ternary invariants only require the class to define them fully (permutations

@@ -43,6 +43,11 @@ import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.MathPlume;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+import org.checkerframework.framework.qual.Unused;
+*/
+
 /**
  * Base implementation for Invariant objects. Intended to be subclassed but not to be directly
  * instantiated. Rules/assumptions for invariants:

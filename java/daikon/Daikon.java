@@ -198,6 +198,10 @@ import org.plumelib.util.EntryReader;
 import org.plumelib.util.RegexUtil;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * The {@link #main} method is the main entry point for the Daikon invariant detector. The {@link
  * #mainHelper} method is the entry point, when called programmatically.

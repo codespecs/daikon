@@ -44,6 +44,10 @@ import daikon.inv.binary.BinaryInvariant;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Abstract base class for comparing PRIMITIVE sequences to PRIMITIVE variables. Note that the sequence
  * must always be passed in first. An example is {@code x is a member of a[]}.

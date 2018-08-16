@@ -21,6 +21,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Class that defines a suppressor invariant for use in non-instantiating suppressions. In
  * non-instantiating suppressions, suppressor invariants are defined independent of specific

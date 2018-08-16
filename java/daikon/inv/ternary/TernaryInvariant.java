@@ -5,7 +5,11 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import org.checkerframework.checker.interning.qual.Interned;
 
-/** Exists simply to provide a more intelligent resusurrect_done method. */
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
+/** Exists simply to provide a more intelligent {@link #resurrect_done} method. */
 public abstract class TernaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

@@ -37,6 +37,10 @@ import daikon.derive.unary.SequenceLength;
 import daikon.inv.*;
 import java.util.*;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents a Linear invariant between two PRIMITIVE scalars {@code x} and {@code y}, of
  * the form {@code ax + by + c = 0}. The constants {@code a}, {@code b} and

@@ -107,6 +107,10 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.MathPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Base class for each of the CLASSNAME functions and permutatons. Most of the work is done
  * here. The subclasses basically define the function and return information describing the function

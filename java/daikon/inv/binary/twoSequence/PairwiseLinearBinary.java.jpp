@@ -42,6 +42,10 @@ import daikon.inv.binary.twoScalar.*;
 import java.util.*;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents a linear invariant (i.e., {@code y = ax + b}) between the corresponding elements
  * of two sequences of PRIMITIVE values. Each {@code (x[i], y[i])} pair is examined. Thus,

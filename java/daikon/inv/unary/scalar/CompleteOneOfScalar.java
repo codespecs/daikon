@@ -15,6 +15,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+/*>>>
+import typequals.prototype.qual.*;
+import org.checkerframework.framework.qual.Unused;
+*/
+
 /**
  * Tracks every unique value and how many times it occurs. Prints as {@code x has values: v1 v2 v3
  * ...}.

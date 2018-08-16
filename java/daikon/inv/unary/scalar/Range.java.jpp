@@ -75,6 +75,10 @@ import java.util.logging.Logger;
 import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Baseclass for unary range based invariants. Each invariant is a special stateless version of
  * bound or oneof. For example EqualZero, BooleanVal, etc). These are never printed, but are used

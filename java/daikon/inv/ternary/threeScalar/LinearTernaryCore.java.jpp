@@ -52,6 +52,10 @@ import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.MathPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * The LinearTernaryCore class is acts as the backend for the invariant (ax + by + cz + d = 0) by
  * processing samples and computing coefficients. The resulting coefficients a, b, c, and d are

@@ -14,6 +14,10 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents string sequences that contain a common subset. Prints as {@code {s1, s2, s3, ...}
  * subset of x[]}.

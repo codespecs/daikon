@@ -11,6 +11,10 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * IsPointer is an invariant that heuristically determines whether an integer represents a pointer
  * (a 32-bit memory address). Since both a 32-bit integer and an address have the same

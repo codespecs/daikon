@@ -65,6 +65,10 @@ import org.checkerframework.checker.nullness.qual.Raw;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /** Contains all of the invariants over a particular set of ARITY variables. */
 public final class PPTSLICE1 extends PptSlice {
   // We are Serializable, so we specify a version to allow changes to

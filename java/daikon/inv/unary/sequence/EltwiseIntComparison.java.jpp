@@ -22,6 +22,10 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Abstract base class defined so that the different types of EltwiseIntComparison (and separately
  * EltwiseFloatComparison), at the current moment those are ==, !=, &lt;, &le;, &gt;, &ge; can have

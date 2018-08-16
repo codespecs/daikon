@@ -67,6 +67,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents the invariant "x != 0" where x represents all of the elements of a sequence of
  * PRIMITIVE. Prints as {@code x[] elements != 0}.

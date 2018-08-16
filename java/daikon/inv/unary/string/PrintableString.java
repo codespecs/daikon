@@ -14,6 +14,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents a string that contains only printable ascii characters (values 32 through 126 plus 9
  * (tab).

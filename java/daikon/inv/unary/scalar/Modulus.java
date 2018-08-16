@@ -14,6 +14,10 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.MathPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents the invariant {@code x == r (mod m)} where {@code x} is a long scalar variable, {@code
  * r} is the (constant) remainder, and {@code m} is the (constant) modulus.

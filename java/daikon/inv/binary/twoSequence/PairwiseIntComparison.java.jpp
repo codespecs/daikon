@@ -227,6 +227,10 @@ import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents an invariant between corresponding elements of two sequences of PRIMITIVE values. The
  * length of the sequences must match for the invariant to hold. A comparison is made over each

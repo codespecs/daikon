@@ -9,6 +9,10 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Raw;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /** Abstract base class for invariants over one variable of type {@code String}. */
 public abstract class SingleString extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to

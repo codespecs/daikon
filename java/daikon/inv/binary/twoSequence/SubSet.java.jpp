@@ -61,6 +61,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.ArraysPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents two sequences of LONG values where one of the sequences is a subset of the other; that
  * is each element of one sequence appears in the other. Prints as either

@@ -11,6 +11,10 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /** Provides a class that defines the functions that must exist for each two variable invariant. */
 public abstract class BinaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to

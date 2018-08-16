@@ -179,6 +179,10 @@ import daikon.suppress.*;
 import java.util.*;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Baseclass for binary numeric invariants.
  *

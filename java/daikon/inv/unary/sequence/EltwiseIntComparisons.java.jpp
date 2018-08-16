@@ -147,6 +147,10 @@ import daikon.inv.*;
 import java.util.*;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 #if defined(EQUAL) || defined(EQUALFLOAT)
   /**
    * Represents equality between adjacent elements (x[i], x[i+1]) of a PRIMITIVE sequence. Prints as

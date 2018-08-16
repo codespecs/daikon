@@ -28,6 +28,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * This is a tester for the results of adding or checking an sample to an invariant. It can test
  * practically any invariant in the Daikon system given the appropriate commands. The test are

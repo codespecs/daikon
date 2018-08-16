@@ -58,6 +58,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 #if defined (SCALAR)
 // This also serves as NonNull.
 

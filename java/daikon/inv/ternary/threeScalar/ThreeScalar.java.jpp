@@ -32,6 +32,10 @@ import daikon.inv.*;
 import daikon.inv.ternary.TernaryInvariant;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Abstract base class for invariants over three numeric variables. An example is {@code z = ax + by
  * + c}.

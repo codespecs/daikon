@@ -9,6 +9,10 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Raw;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Abstract base class for invariants over one numeric (scalar) variable, such as {@code x != 0}.
  */

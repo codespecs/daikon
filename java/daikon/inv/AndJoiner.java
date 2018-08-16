@@ -12,6 +12,10 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * This is a special invariant used internally by Daikon to represent an antecedent invariant in an
  * implication where that antecedent consists of two invariants anded together.

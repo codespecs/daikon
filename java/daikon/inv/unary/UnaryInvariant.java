@@ -5,6 +5,10 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import org.checkerframework.checker.interning.qual.Interned;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /** Exists simply to provide the do-nothing resusurrect_done method and abstract add method. */
 public abstract class UnaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to

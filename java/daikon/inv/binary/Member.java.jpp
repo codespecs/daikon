@@ -81,6 +81,10 @@ import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 import org.plumelib.util.Pair;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents SCALAR scalars that are always members of a sequence of SCALAR values. Prints as
  * {@code x in y[]} where {@code x} is a SCALAR scalar and {@code y[]} is a sequence

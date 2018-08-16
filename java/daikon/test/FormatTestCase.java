@@ -26,6 +26,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * This class is used by InvariantFormatTester to store data representing test cases and for
  * formatting results related to that data. This class is related to tests performed on one

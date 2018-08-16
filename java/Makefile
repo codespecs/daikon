@@ -71,13 +71,13 @@ ifdef CHECKERFRAMEWORK
   CHECKERJAR ?= ${CHECKERFRAMEWORK}/checker/dist/checker.jar
 endif
 # Version of javac that supports pluggable type-checking.
+# JAVACHECK_EXTRA_ARGS is set only by the user.
 JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac ${JAVACHECK_EXTRA_ARGS}
 
 ### end of user customizations
 
 JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
-# When running the checkers, it is important not to pass in "-source 5".
-# Also avoid unqualified "-Xlint" that activates warnings about failure to use == for interned values.
+# Avoid unqualified "-Xlint" that activates warnings about failure to use == for interned values.
 JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
 
 

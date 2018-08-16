@@ -57,6 +57,11 @@ import daikon.inv.unary.scalar.*;
 import daikon.suppress.NIS;
 import java.util.*;
 
+/*>>>
+import typequals.prototype.qual.*;
+import org.checkerframework.framework.qual.Unused;
+*/
+
 /**
  * Represents a Linear invariant over three PRIMITIVE scalars {@code x},
  * {@code y}, and {@code z}, of the form

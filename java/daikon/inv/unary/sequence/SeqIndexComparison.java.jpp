@@ -166,6 +166,10 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents an invariant over sequences of PRIMITIVE values between the index of an element of the
  * sequence and the element itself. Prints as {@code x[i] EQUALScode i}.

@@ -13,6 +13,10 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
 import org.plumelib.util.MathPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents long scalars that are never equal to {@code r (mod m)} where all other numbers in the
  * same range (i.e., all the values that {@code x} doesn't take from {@code min(x)} to {@code

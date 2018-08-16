@@ -6,6 +6,10 @@ import daikon.inv.InvariantStatus;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /** Abstract base class for invariants over one variable of type {@code double[]}. */
 public abstract class SingleFloatSequence extends SingleSequence {
   // We are Serializable, so we specify a version to allow changes to

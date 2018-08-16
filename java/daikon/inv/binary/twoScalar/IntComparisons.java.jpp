@@ -381,6 +381,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as {@code x EQUALScode y}.
  */

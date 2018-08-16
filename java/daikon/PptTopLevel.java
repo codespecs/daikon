@@ -117,6 +117,10 @@ import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * All information about a single program point. A Ppt may also represent just part of the data: see
  * PptConditional.

@@ -7,6 +7,10 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Raw;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /** Invariants on a single sequence (array) variable, such as {@code a[] contains no duplicates}. */
 public abstract class SingleSequence extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to

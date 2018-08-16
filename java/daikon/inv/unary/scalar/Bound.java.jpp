@@ -194,6 +194,11 @@ import daikon.derive.unary.*;
 import java.util.*;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+import org.checkerframework.framework.qual.Unused;
+*/
+
 #if defined (IS_SCALAR)
   /**
    * Represents the invariant {@code x GTE c}, where {@code c} is a constant and

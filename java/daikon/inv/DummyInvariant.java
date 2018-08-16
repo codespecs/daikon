@@ -12,6 +12,10 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * This is a special invariant used internally by Daikon to represent invariants whose meaning
  * Daikon doesn't understand. The only operation that can be performed on a DummyInvariant is to

@@ -41,6 +41,10 @@ import java.util.Arrays;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents sequences of PRIMITIVE values that contain a common subset. Prints as
  * {@code {e1, e2, e3, ...} subset of x[]}.

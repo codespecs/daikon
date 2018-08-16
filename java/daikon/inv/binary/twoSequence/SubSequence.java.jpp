@@ -96,6 +96,10 @@ import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Pair;
 import org.plumelib.util.UtilPlume;
 
+/*>>>
+import typequals.prototype.qual.*;
+*/
+
 /**
  * Represents two sequences of PRIMITIVE values where one sequence is a subsequence of the
  * other. Prints as {@code x[] is a subsequence of y[]}.
