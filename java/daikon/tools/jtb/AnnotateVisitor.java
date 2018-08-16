@@ -305,7 +305,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       //       System.out.println("@@@");
       //       Node n2 = n.getParent().getParent(); n2.accept(new TreeFormatter());
       //       System.out.println("@@@" + Ast.format(n2));
-      addComment(n.getParent().getParent(), "@ spec_public  ");
+      addComment(n.getParent().getParent(), "/*@ spec_public */ ");
     }
   }
 

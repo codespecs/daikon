@@ -43,7 +43,7 @@ public class Annotate {
   //    overrides another method/interface.
 
   // spec_public:
-  // for each non-public field, add "@ spec_public " to its declaration
+  // for each non-public field, add "/*@ spec_public */" to its declaration
 
   // owner annotations:
   // for each private field that is set via a call to new in the constructor
