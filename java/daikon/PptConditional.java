@@ -37,7 +37,7 @@ public final class PptConditional extends PptTopLevel {
     this.parent = parent;
     @SuppressWarnings({"rawness", "initialization"}) // won't be used until it's fully initialized
     @Initialized @NonRaw PptConditional thisNonRaw = this;
-    this.splitter = splitter.instantiate(thisNonRaw);
+    this.splitter = splitter.instantiateSplitter(thisNonRaw);
     this.splitter_inverse = splitter_inverse;
     // assert splitter.instantiated() == false;
     // assert this.splitter.instantiated() == true;

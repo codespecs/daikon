@@ -7,8 +7,10 @@ import daikon.VarInfo;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
 import daikon.split.Splitter;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 // This splitter tests the condition "return == true".
@@ -22,13 +24,15 @@ public final class ReturnTrueSplitter extends Splitter {
 
   public ReturnTrueSplitter() {}
 
-  public ReturnTrueSplitter(Ppt ppt) {
+  public ReturnTrueSplitter(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt) {
     return_varinfo = ppt.find_var_by_name("return");
     instantiated = true;
   }
 
+  @SuppressWarnings(
+      "initialization:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
   @Override
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt) {
     return new ReturnTrueSplitter(ppt);
   }
 

@@ -100,7 +100,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     writeConstructorBody();
     add("  }");
     skipLine();
-    add("  public Splitter instantiate(Ppt ppt) {");
+    add("  public Splitter instantiateSplitter(Ppt ppt) {");
     add("    return new " + fileName + "(ppt);");
     add("  }");
     skipLine();

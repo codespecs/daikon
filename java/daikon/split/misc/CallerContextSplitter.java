@@ -5,9 +5,11 @@ import daikon.ValueTuple;
 import daikon.VarInfo;
 import daikon.inv.DummyInvariant;
 import daikon.split.Splitter;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
@@ -20,8 +22,10 @@ public final class CallerContextSplitter extends Splitter {
   static final long serialVersionUID = 20030112L;
 
   /** Create a new splitter for the given ppt using this as a prototype. */
+  @SuppressWarnings(
+      "initialization:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
   @Override
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt) {
     return new CallerContextSplitter(ppt, ids, condition);
   }
 
@@ -32,7 +36,8 @@ public final class CallerContextSplitter extends Splitter {
   private final long[] ids;
   private final String condition;
 
-  protected CallerContextSplitter(Ppt ppt, long[] ids, String condition) {
+  protected CallerContextSplitter(
+      @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt, long[] ids, String condition) {
     caller_varinfo = ppt.find_var_by_name(CALLER_INDICATOR_NAME_STRING);
     this.ids = ids;
     this.condition = condition;
