@@ -127,7 +127,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // Has to be public so wrappers can read it.
   /**
    * True exactly if the invariant has been falsified: it is guaranteed never to hold (and should be
-   * either in the process of being destroyed or about to be destroyed. This should never be set
+   * either in the process of being destroyed or about to be destroyed). This should never be set
    * directly; instead, call destroy().
    */
   protected boolean falsified = false;
@@ -174,6 +174,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Return Invariant.CONFIDENCE_JUSTIFIED if x&ge;goal. Return Invariant.CONFIDENCE_UNJUSTIFIED if
    * x&le;1. For intermediate inputs, the result gives confidence that grades between the two
    * extremes. See the discussion of gradual vs. sudden confidence transitions.
+   *
+   * @param x the greater value
+   * @param goal the lesser value
+   * @return CONFIDENCE_JUSTIFIED if x&ge;goal, Invariant.CONFIDENCE_UNJUSTIFIED if x&le;1, other
+   *     values otherwise
    */
   public static final double conf_is_ge(double x, double goal) {
     if (x >= goal) return 1;
@@ -188,6 +193,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Return Invariant.PROBABILITY_JUSTIFIED if x&ge;goal. Return Invariant.PROBABILITY_UNJUSTIFIED
    * if x&le;1. For intermediate inputs, the result gives probability that grades between the two
    * extremes. See the discussion of gradual vs. sudden probability transitions.
+   *
+   * @param x the greater value
+   * @param goal the lesser value
+   * @return Invariant.PROBABILITY_JUSTIFIED if x&ge;goal, Invariant.PROBABILITY_UNJUSTIFIED if
+   *     x&le;1, other values otherwise
    */
   public static final double prob_is_ge(double x, double goal) {
     if (x >= goal) return 0;
@@ -198,7 +208,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return result;
   }
 
-  /** Return the confidence that both conditions are satisfied. */
+  /**
+   * Return the "and" of the given confidences. This is the confidence that multiple conditions
+   * (whose confidences are given) are all satisfied.
+   *
+   * @param c1 the confidence of the first condition
+   * @param c2 the confidence of the second condition
+   * @return the "and" of the two condidences
+   */
   public static final double confidence_and(double c1, double c2) {
     assert 0 <= c1 && c1 <= 1 : "confidence_and: bad c1 = " + c1;
     assert 0 <= c2 && c2 <= 1 : "confidence_and: bad c2 = " + c2;
@@ -209,7 +226,15 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return result;
   }
 
-  /** Return the confidence that all three conditions are satisfied. */
+  /**
+   * Return the "and" of the given confidences. This is the confidence that multiple conditions
+   * (whose confidences are given) are all satisfied.
+   *
+   * @param c1 the confidence of the first condition
+   * @param c2 the confidence of the second condition
+   * @param c3 the confidence of the third condition
+   * @return the "and" of the two condidences
+   */
   public static final double confidence_and(double c1, double c2, double c3) {
     assert 0 <= c1 && c1 <= 1 : "confidence_and: bad c1 = " + c1;
     assert 0 <= c2 && c2 <= 1 : "confidence_and: bad c2 = " + c1;
@@ -221,14 +246,28 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return result;
   }
 
-  /** Return the confidence that either condition is satisfied. */
+  /**
+   * Return the "or" of the given confidences. This is the confidence that at least one of multiple
+   * conditions (whose confidences are given) is satisfied.
+   *
+   * @param c1 the confidence of the first condition
+   * @param c2 the confidence of the second condition
+   * @return the "or" of the two condidences
+   */
   public static final double confidence_or(double c1, double c2) {
     // Not "1-(1-c1)*(1-c2)" because that can produce a value too large; we
     // don't want the result to be larger than the larger argument.
     return Math.max(c1, c2);
   }
 
-  /** Return the probability that both conditions are satisfied. */
+  /**
+   * Return the "and" of the given probabilities. This is the probability that multiple conditions
+   * (whose probabilities are given) are all satisfied.
+   *
+   * @param p1 the probability of the first condition
+   * @param p2 the probability of the second condition
+   * @return the "and" of the two condidences
+   */
   public static final double prob_and(double p1, double p2) {
     assert 0 <= p1 && p1 <= 1 : "prob_and: bad p1 = " + p1;
     assert 0 <= p2 && p2 <= 1 : "prob_and: bad p2 = " + p2;
@@ -240,7 +279,15 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return result;
   }
 
-  /** Return the probability that all three conditions are satisfied. */
+  /**
+   * Return the "and" of the given probabilities. This is the probability that multiple conditions
+   * (whose probabilities are given) are all satisfied.
+   *
+   * @param p1 the probability of the first condition
+   * @param p2 the probability of the second condition
+   * @param p3 the probability of the third condition
+   * @return the "and" of the two condidences
+   */
   public static final double prob_and(double p1, double p2, double p3) {
     assert 0 <= p1 && p1 <= 1 : "prob_and: bad p1 = " + p1;
     assert 0 <= p2 && p2 <= 1 : "prob_and: bad p2 = " + p1;
@@ -252,7 +299,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return result;
   }
 
-  /** Return the probability that either condition is satisfied. */
+  /**
+   * Return the "or" of the given probabilities. This is the probability that at least one of
+   * multiple conditions (whose probabilities are given) is satisfied.
+   *
+   * @param p1 the probability of the first condition
+   * @param p2 the probability of the second condition
+   * @return the "or" of the two condidences
+   */
   public static final double prob_or(double p1, double p2) {
     // Not "p1*p2" because that can produce a value too small; we don't
     // want the result to be smaller than the smaller argument.
@@ -301,7 +355,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   //    justification.
   //  - The code is a bit more complicated.
 
-  /** A wrapper around getConfidence() or getConfidence(). */
+  /**
+   * A wrapper around getConfidence() or getConfidence().
+   *
+   * @return true if this invariant's confidence is greater than the global confidence limit
+   */
   public final boolean justified(/*@NonPrototype*/ Invariant this) {
     boolean just = (!falsified && (getConfidence() >= dkconfig_confidence_limit));
     if (logOn()) {
@@ -341,6 +399,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * If 5 values had been seen, then this implementation would return 31/32, which is the likelihood
    * that all 5 values seen so far were even not purely by chance.
    *
+   * @return confidence of this invariant
    * @see #computeConfidence()
    */
   public final double getConfidence(/*@NonPrototype*/ Invariant this) {
@@ -372,6 +431,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * <p>This method need not check the value of field "falsified", as the caller does that.
    *
+   * @return confidence of this invariant
    * @see #getConfidence()
    */
   protected abstract double computeConfidence(/*@NonPrototype*/ Invariant this);
@@ -382,6 +442,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * (when only equality is possible), LinearBinary, FunctionUnary. OneOf is treated differently, as
    * an interface. The result of this method does not depend on whether the invariant is justified,
    * destroyed, etc.
+   *
+   * @return true if any variable value can be computed from all the others
    */
   @Pure
   public boolean isExact(/*@Prototype*/ Invariant this) {
@@ -421,7 +483,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     falsified = false;
   }
 
-  /** Returns whether or not this invariant has been destroyed. */
+  /**
+   * Returns whether or not this invariant has been falsified.
+   *
+   * @return true if this invariant has been falsified
+   */
   @Pure
   public boolean is_false(/*@NonPrototype*/ Invariant this) {
     return falsified;
@@ -440,10 +506,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Take an invariant and transfer it into a new PptSlice.
+   * Make a copy of this invariant and transfer it into a new PptSlice.
    *
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping in the new ppt
+   * @return a copy of the invariant, on a different slice
    */
   public Invariant transfer(/*@NonPrototype*/ Invariant this, PptSlice new_ppt, int[] permutation) {
     // Check some sanity conditions
@@ -512,6 +579,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping
+   * @return the resurrected invariant, in a new PptSlice
    */
   public Invariant resurrect(
       /*@NonPrototype*/ Invariant this, PptSlice new_ppt, int[] permutation) {
@@ -559,6 +627,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * always comparable (comparable to everything else). An always comparable VarComparability is
    * returned only if all of the variables involved are always comparable. Otherwise the
    * comparability information from one of the non always-comparable variables is returned.
+   *
+   * @return a VarComparability that describes any (and all) of this invariant's variables
    */
   public VarComparability get_comparability(/*@NonPrototype*/ Invariant this) {
 
@@ -612,6 +682,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
   /**
    * Permutes the invariant as specified. Often creates a new invariant (with a different class).
+   *
+   * @param permutation the permutation
+   * @return the permuted invariant
    */
   public /*@NonPrototype*/ Invariant permute(/*@NonPrototype*/ Invariant this, int[] permutation) {
     return (resurrect_done(permutation));
@@ -620,6 +693,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Called on the new invariant just before resurrect() returns it to allow subclasses to fix any
    * information they might have cached from the old Ppt and VarInfos.
+   *
+   * @param permutation the permutation
+   * @return the permuted invariant
    */
   protected abstract Invariant resurrect_done(/*@NonPrototype*/ Invariant this, int[] permutation);
 
@@ -648,7 +724,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   //   ppt.varNames(sb);
   // }
 
-  /** Return a string representation of the variable names. */
+  /**
+   * Return a string representation of the variable names.
+   *
+   * @return a string representation of the variable names.
+   */
   public final String varNames(@GuardSatisfied /*@NonPrototype*/ Invariant this) {
     return ppt.varNames();
   }
@@ -660,6 +740,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * For printing invariants, there are two interfaces: repr gives a low-level representation
    * ({@link #repr_prob} also prints the confidence), and {@link #format} gives a high-level
    * representation for user output.
+   *
+   * @return a string representation of this
    */
   public String repr(@GuardSatisfied /*@NonPrototype*/ Invariant this) {
     // A better default would be to use reflection and print out all
@@ -671,6 +753,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * For printing invariants, there are two interfaces: {@link #repr} gives a low-level
    * representation (repr_prob also prints the confidence), and {@link #format} gives a high-level
    * representation for user output.
+   *
+   * @return {@link #repr()}, but with the confidence as well
    */
   public String repr_prob(/*@NonPrototype*/ Invariant this) {
     return repr() + "; confidence = " + getConfidence();
@@ -680,6 +764,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Returns a high-level printed representation of the invariant, for user output. {@code format}
    * produces normal output, while the {@link #repr} formatting routine produces low-level, detailed
    * output for debugging, and {@link #repr_prob} also prints the confidence.
+   *
+   * @return a string representation of this
    */
   // Does not respect PrintInvariants.dkconfig_print_inv_class; PrintInvariants does so.
   // Receiver must be fully-initialized because subclasses read their fields.
@@ -691,6 +777,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Returns the class name of the invariant, for use in debugging output. Returns "" if {@link
    * PrintInvariants#dkconfig_print_inv_class} is false.
+   *
+   * @return a string representation of the class name of the invariant, or ""
    */
   public String format_classname() {
     if (!PrintInvariants.dkconfig_print_inv_class) {
@@ -725,7 +813,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /** A "\type(...)" construct where the "..." contains a "$". */
   private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
 
-  /** @return true if this Invariant can be properly formatted for Java output */
+  /** @return true if this Invariant can be properly formatted for the given output */
   @Pure
   public boolean isValidExpression(/*@NonPrototype*/ Invariant this, OutputFormat format) {
     if ((format == OutputFormat.ESCJAVA) && (!isValidEscExpression())) {
@@ -757,22 +845,24 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
+   * @param format the requested output format
    * @return standard "format needs to be implemented" for the given requested format. Made public
    *     so cores can call it.
    */
   public String format_unimplemented(
-      @GuardSatisfied /*@NonPrototype*/ Invariant this, OutputFormat request) {
+      @GuardSatisfied /*@NonPrototype*/ Invariant this, OutputFormat format) {
     String classname = this.getClass().getName();
     return "warning: method "
         + classname
         + ".format("
-        + request
+        + format
         + ")"
         + " needs to be implemented: "
         + format();
   }
 
   /**
+   * @param format the requested output format
    * @return standard "too few samples for to have interesting invariant" for the requested format.
    *     For machine-readable formats, this is just "true". An optional string argument, if
    *     supplied, is a human-readable description of the invariant in its uninformative state,
@@ -780,14 +870,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    */
   public String format_too_few_samples(
       @GuardSatisfied /*@NonPrototype*/ Invariant this,
-      OutputFormat request,
+      OutputFormat format,
       @Nullable String attempt) {
-    if (request == OutputFormat.SIMPLIFY) {
+    if (format == OutputFormat.SIMPLIFY) {
       return "(AND)";
-    } else if (request == OutputFormat.JAVA
-        || request == OutputFormat.ESCJAVA
-        || request == OutputFormat.JML
-        || request == OutputFormat.DBCJAVA) {
+    } else if (format == OutputFormat.JAVA
+        || format == OutputFormat.ESCJAVA
+        || format == OutputFormat.JML
+        || format == OutputFormat.DBCJAVA) {
       return "true";
     }
     String classname = this.getClass().getName();
@@ -800,6 +890,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Convert a floating point value into the weird Modula-3-like floating point format that the
    * Simplify tool requires.
+   *
+   * @param d the number to print
+   * @return a printed representation of the number, for Simplify
    */
   public static String simplify_format_double(double d) {
     String s = d + "";
@@ -823,6 +916,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Conver a long integer value into a format that Simplify can use. If the value is too big, we
    * have to print it in a weird way, then tell Simplify about its properties specially.
+   *
+   * @param l the number to print
+   * @return a printed representation of the number, for Simplify
    */
   public static String simplify_format_long(long l) {
     LemmaStack.noticeInt(l);
@@ -862,6 +958,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Convert a string value into the weird |-quoted format that the Simplify tool requires. (Note
    * that Simplify doesn't distinguish between variables, symbolic constants, and strings, so we
    * prepend "_string_" to avoid collisions with variables and other symbols).
+   *
+   * @param s the number to print
+   * @return a printed representation of the string, for Simplify
    */
   public static String simplify_format_string(String s) {
     if (s == null) return "null";
@@ -994,6 +1093,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
+   * @param other the invariant to compare to this one
    * @return true iff the two invariants represent the same mathematical formula. Does not consider
    *     the context such as variable names, confidences, sample counts, value counts, or related
    *     quantities. As a rule of thumb, if two invariants format the same, this method returns
@@ -1010,12 +1110,15 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Invariants that have this characteristic (eg, bound, oneof) should override this function. Note
    * that invariants that can do this, normally need special merge code as well (to merge the
    * different formulas into a single formula at the upper point.
+   *
+   * @return true if invariants with different formulas can be merged
    */
   public boolean mergeFormulasOk(/*@Prototype*/ Invariant this) {
     return false;
   }
 
   /**
+   * @param inv2 the other invariant to compare to this one
    * @return true iff the argument is the "same" invariant as this. Same, in this case, means a
    *     matching type, formula, and variable names.
    */
@@ -1054,6 +1157,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
+   * @param other the other invariant to compare to this one
    * @return true iff the two invariants represent mutually exclusive mathematical formulas -- that
    *     is, if one of them is true, then the other must be false. This method does not consider the
    *     context such as variable names, confidences, sample counts, value counts, or related
@@ -1064,7 +1168,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return false;
   }
 
-  /** Look up a previously instantiated Invariant. */
+  /**
+   * Look up a previously instantiated Invariant.
+   *
+   * @param invclass the class of the invariant to search for
+   * @param ppt the program point in which to look for the invariant
+   * @return the invariant of class invclass, or null if none was found
+   */
   // This implementation should be made more efficient, because it's used in
   // suppression.  We should somehow index invariants by their type.
   public static @Nullable Invariant find(Class<? extends Invariant> invclass, PptSlice ppt) {
@@ -1079,13 +1189,19 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Returns the set of non-instantiating suppressions for this invariant. May return null instead
    * of an empty set. Should be overridden by subclasses with non-instantiating suppressions.
+   *
+   * @return the set of non-instantiating suppressions for this invariant
    */
   @Pure
   public @Nullable NISuppressionSet get_ni_suppressions(/*@Prototype*/ Invariant this) {
     return null;
   }
 
-  /** Returns whether or not this invariant is ni-suppressed. */
+  /**
+   * Returns whether or not this invariant is ni-suppressed.
+   *
+   * @return true if this invariant is ni-suppressed
+   */
   @SuppressWarnings(
       "nullness") // tricky control flow, need to mark get_ni_suppressions as @Pure if that's true
   @EnsuresNonNullIf(result = true, expression = "get_ni_suppressions()")
@@ -1781,7 +1897,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return inv;
   }
 
-  /** Adds the specified sample to the invariant and returns the result. */
+  /**
+   * Adds the specified sample to the invariant and returns the result.
+   *
+   * @param vt the sample to add to this invariant
+   * @param count the number of occurrences of the sample to add to this invariant
+   * @return the result of adding the samples to this invariant
+   */
   public InvariantStatus add_sample(/*@NonPrototype*/ Invariant this, ValueTuple vt, int count) {
 
     if (ppt instanceof PptSlice1) {
@@ -1820,6 +1942,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * <p>This is used during suppresion. Any invariant that is not active cannot suppress another
    * invariant.
+   *
+   * @return true if this invariant is currently active
    */
   @Pure
   public boolean isActive(/*@NonPrototype*/ Invariant this) {
@@ -1831,13 +1955,15 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // the receiver, suggesting that they have something to do with the
   // receiver.  This should be corrected.  -MDE
 
+  // TODO: This text crashes Javadoc 1.8.0_181 on Fedora and CentOS:
+  //  * @see daikon.Debug#log(Logger, Class, Ppt, String)
+  // Reinstate the text when Javadoc is fixed.
   /**
    * Returns whether or not detailed logging is on. Note that this check is not performed inside the
    * logging calls themselves, it must be performed by the caller.
    *
    * @see daikon.Debug#logDetail()
    * @see daikon.Debug#logOn()
-   * @see daikon.Debug#log(Logger, Class, Ppt, String)
    */
   public static boolean logDetail() {
     return (Debug.logDetail());
@@ -1855,6 +1981,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Logs a description of the invariant and the specified msg via the logger as described in {@link
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
+   *
+   * @param log where to log the message
+   * @param msg the message to log
    */
   // receiver needs to be initialized because subclass implementations will read their own fields
   public void log(/*@NonPrototype*/ Invariant this, Logger log, String msg) {
@@ -1868,6 +1997,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Logs a description of the invariant and the specified msg via the logger as described in {@link
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
    *
+   * @param format a format string
+   * @param args the argumnts to the format string
    * @return whether or not it logged anything
    */
   @FormatMethod
@@ -1894,6 +2025,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return format();
   }
 
+  /**
+   * Return a string representation of the given invariants
+   *
+   * @param invs the invariants to get a string representation of
+   * @return a string representation of the given invariants
+   */
   public static String toString(/*@NonPrototype*/ Invariant[] invs) {
 
     ArrayList<String> strings = new ArrayList<String>(invs.length);
