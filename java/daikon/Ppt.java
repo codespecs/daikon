@@ -96,7 +96,7 @@ public abstract class Ppt implements Serializable {
    * variable.
    */
   @Pure
-  public int indexOf(String varname) {
+  public int indexOf(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this, String varname) {
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].name().equals(varname)) {
         return i;
@@ -107,7 +107,8 @@ public abstract class Ppt implements Serializable {
 
   /** Returns the VarInfo with the specified name. Null if the name is not found. */
   @Pure
-  public @Nullable VarInfo find_var_by_name(String varname) {
+  public @Nullable VarInfo find_var_by_name(
+      @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this, String varname) {
     // System.out.printf("Ppt.find_var_by_name(%s): %s%n", varname, this);
     int i = indexOf(varname);
     if (i == -1) {

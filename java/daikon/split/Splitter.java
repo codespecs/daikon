@@ -34,10 +34,10 @@ public abstract class Splitter implements Serializable {
   static final long serialVersionUID = 20020122L;
 
   /**
-   * Creates a splitter "factory" that should only be used for creating new copies via
-   * instantiate(Ppt). (That is, the result of "new Splitter()" should not do any splitting itself.)
-   * There is no need for subclasses to override this (but most will have to, since they will add
-   * their own constructors as well).
+   * Creates a splitter "factory" that should only be used for creating new copies via {@link
+   * #instantiateSplitter(Ppt)}. (That is, the result of "new Splitter()" should not do any
+   * splitting itself.) There is no need for subclasses to override this (but most will have to,
+   * since they will add their own constructors as well).
    */
   public Splitter() {}
 
@@ -46,9 +46,12 @@ public abstract class Splitter implements Serializable {
    * implementation should always set the "instantiated" protected field to true, if that field is
    * present in the Splitter class.
    */
-  public abstract Splitter instantiate(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt);
+  public abstract Splitter instantiateSplitter(
+      @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt);
 
+  /** True for an instantiated (non-"factory") splitter. */
   protected boolean instantiated = false;
+
   /**
    * Returns true for an instantiated (non-"factory") splitter. Clients also need to check valid().
    */
@@ -58,9 +61,9 @@ public abstract class Splitter implements Serializable {
 
   /**
    * Returns true or false according to whether this was instantiated correctly and test(ValueTuple)
-   * can be called without error. An alternate design would have instantiate(Ppt) check this, but
-   * it's a bit easier on implementers of subclasses of Splitter for the work to be done (in just
-   * one place) by the caller.
+   * can be called without error. An alternate design would have {@link #instantiateSplitter(Ppt)}
+   * check this, but it's a bit easier on implementers of subclasses of Splitter for the work to be
+   * done (in just one place) by the caller.
    */
   public abstract boolean valid();
 

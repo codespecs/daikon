@@ -189,7 +189,7 @@ class FormatTestCase {
 
   /**
    * This function constructs a FormatTestCase object directly from passed in objects. It is to be
-   * called internally by instantiate to create an instance of FormatTestCase
+   * called internally by {@link #readFromFile} to create an instance of FormatTestCase.
    *
    * @param testCases a List of SingleOutputTestCase objects to be performed on an Invariant
    * @param invariantToTest the Invariant on which the tests are to be performed
@@ -343,7 +343,7 @@ class FormatTestCase {
    * @param generateGoals true if goal generation is desired, false if goal testing is desired
    * @return a new FormatTestCase instance
    */
-  public static @Nullable FormatTestCase instantiate(
+  public static @Nullable FormatTestCase readFromFile(
       LineNumberReader commands, boolean generateGoals) {
     List<SingleOutputTestCase> testCases = new ArrayList<SingleOutputTestCase>();
 

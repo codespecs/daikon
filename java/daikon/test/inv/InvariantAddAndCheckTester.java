@@ -247,7 +247,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     while (true) {
       // Create a new test case
-      //  FormatTestCase currentCase = FormatTestCase.instantiate(commands, generateGoals);
+      //  FormatTestCase currentCase = FormatTestCase.readFromFile(commands, generateGoals);
 
       // if (currentCase == null)
       //  break;

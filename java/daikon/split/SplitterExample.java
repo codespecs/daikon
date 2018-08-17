@@ -31,7 +31,7 @@ public final class SplitterExample extends Splitter {
   }
 
   @Override
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new SplitterExample(ppt);
   }
 

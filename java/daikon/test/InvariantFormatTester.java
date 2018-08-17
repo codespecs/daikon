@@ -246,7 +246,7 @@ public class InvariantFormatTester extends TestCase {
 
     while (true) {
       // Create a new test case
-      FormatTestCase currentCase = FormatTestCase.instantiate(commands, (generate_goals != null));
+      FormatTestCase currentCase = FormatTestCase.readFromFile(commands, (generate_goals != null));
       if (currentCase == null) {
         break;
       } else {
