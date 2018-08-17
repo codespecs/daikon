@@ -28,10 +28,10 @@ env:
     - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
-## Disabled because of crash in Javadoc: https://travis-ci.org/codespecs/daikon/jobs/416612839#L1302
-#    - OS=fedora JDKVER=jdkany GROUP=misc
+    - OS=fedora JDKVER=jdkany GROUP=misc
     - OS=fedora JDKVER=jdkany GROUP=kvasir
     - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
+    - OS=centos JDKVER=jdkany GROUP=misc
     - OS=centos JDKVER=jdkany GROUP=kvasir
 
 # Currently-failing jobs

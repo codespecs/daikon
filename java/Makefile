@@ -1213,6 +1213,13 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	cp -pf ../doc/daikon-favicon.png $(JAVADOC_DEST)
 	cd $(JAVADOC_DEST) && $(HTMLTOOLS)/html-add-favicon . daikon-favicon.png
 
+# Run Javadoc on each file individually, to determine which one is crashing Javadoc.
+# Then, you need to do binary search on that file.
+api-test-each: ../utils/plume-scripts ../utils/html-tools
+	mkdir -p $(JAVADOC_DEST)
+	@make java-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < java-files.txt
+
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
