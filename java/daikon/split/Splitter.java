@@ -49,7 +49,9 @@ public abstract class Splitter implements Serializable {
   public abstract Splitter instantiateSplitter(
       @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt);
 
+  /** True for an instantiated (non-"factory") splitter. */
   protected boolean instantiated = false;
+
   /**
    * Returns true for an instantiated (non-"factory") splitter. Clients also need to check valid().
    */

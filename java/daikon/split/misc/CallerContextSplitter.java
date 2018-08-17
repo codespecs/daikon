@@ -36,6 +36,7 @@ public final class CallerContextSplitter extends Splitter {
   private final long[] ids;
   private final String condition;
 
+  /** Create a new instantiated CallerContextSplitter. */
   protected CallerContextSplitter(
       @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt, long[] ids, String condition) {
     caller_varinfo = ppt.find_var_by_name(CALLER_INDICATOR_NAME_STRING);
@@ -44,7 +45,7 @@ public final class CallerContextSplitter extends Splitter {
     instantiated = true;
   }
 
-  /** Create a prototype splitter for the given set of ids and condition. */
+  /** Create a prototype (factory) splitter for the given set of ids and condition. */
   public CallerContextSplitter(long[] ids, String condition) {
     this.caller_varinfo = null;
     this.ids = ids.clone();

@@ -22,8 +22,10 @@ public final class ReturnTrueSplitter extends Splitter {
 
   private @Nullable VarInfo return_varinfo;
 
+  /** Create a prototype (factory) splitter. */
   public ReturnTrueSplitter() {}
 
+  /** Create a new instantiated ReturnTrueSplitter. */
   public ReturnTrueSplitter(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt) {
     return_varinfo = ppt.find_var_by_name("return");
     instantiated = true;
