@@ -18,7 +18,7 @@ public final class Math__BigFloat_bdiv__36 extends Splitter {
     $x__p_is_defined_varinfo = ppt.find_var_by_name("$x._p.is_defined");
   }
 
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new Math__BigFloat_bdiv__36(ppt);
   }
 

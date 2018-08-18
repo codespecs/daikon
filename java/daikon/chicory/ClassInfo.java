@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
@@ -20,7 +20,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 public class ClassInfo {
 
   /** binary name of the class */
-  public @BinaryNameForNonArray String class_name;
+  public @BinaryName String class_name;
 
   // set by initViaReflection()
   /** reflection object for this class */
@@ -50,7 +50,7 @@ public class ClassInfo {
   public Map<String, String> staticMap = new HashMap<String, String>();
 
   /** Create ClassInfo with specified name */
-  public ClassInfo(@BinaryNameForNonArray String class_name, ClassLoader theLoader) {
+  public ClassInfo(@BinaryName String class_name, ClassLoader theLoader) {
     this.class_name = class_name;
     loader = theLoader;
   }

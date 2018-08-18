@@ -21,7 +21,7 @@ this has only one value
 this.t1 == 5
 myint == 0
 ===========================================================================
-daikon.chicory.Test.sample(int):::EXIT47
+daikon.chicory.Test.sample(int):::EXIT45
 ===========================================================================
 daikon.chicory.Test.sample(int):::EXIT
 this.t1 == orig(this.t1)
@@ -42,7 +42,7 @@ daikon.chicory.Test.sample2():::ENTER
 this has only one value
 this.t1 == 32
 ===========================================================================
-daikon.chicory.Test.sample2():::EXIT63
+daikon.chicory.Test.sample2():::EXIT61
 ===========================================================================
 daikon.chicory.Test.sample2():::EXIT
 this.t1 == orig(this.t1)

@@ -228,7 +228,7 @@ tools/jtb/Ast.java:218:      PackageDeclaration p = (PackageDeclaration) o.node;
 tools/jtb/Ast.java:219:      return print(p.f2);
 tools/jtb/Ast.java:229:  public static String getFullName(MethodDeclaration method) {
 tools/jtb/Ast.java:248:  // ClassOrInterfaceDeclaration. Otherwise returns null.
-tools/jtb/Ast.java:249:  public static /*@Nullable*/ /*@BinaryNameForNonArray*/ String getClassNameForType(TypeDeclaration d) {
+tools/jtb/Ast.java:249:  public static /*@Nullable*/ /*@BinaryName*/ String getClassNameForType(TypeDeclaration d) {
 tools/jtb/Ast.java:251:    // Grammar production for TypeDeclaration:
 tools/jtb/Ast.java:252:    // f0 -> ";"
 tools/jtb/Ast.java:253:    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
@@ -236,7 +236,7 @@ tools/jtb/Ast.java:255:    NodeChoice c = d.f0;
 tools/jtb/Ast.java:259:      NodeSequence seq = (NodeSequence)c.choice;
 tools/jtb/Ast.java:261:      if (c2.choice instanceof ClassOrInterfaceDeclaration) {
 tools/jtb/Ast.java:262:        return getClassName(c2.choice);
-tools/jtb/Ast.java:271:  public static /*@BinaryNameForNonArray*/ String getClassName(Node d) {
+tools/jtb/Ast.java:271:  public static /*@BinaryName*/ String getClassName(Node d) {
 tools/jtb/Ast.java:273:    ClassOrInterfaceDeclaration n =
 tools/jtb/Ast.java:274:      (d instanceof ClassOrInterfaceDeclaration)
 tools/jtb/Ast.java:275:      ? (ClassOrInterfaceDeclaration)d
@@ -264,7 +264,7 @@ tools/jtb/Ast.java:321:        className = "$inner" + "." + className;
 tools/jtb/Ast.java:324:        String s = ((ClassOrInterfaceDeclaration) n1).f1.tokenImage;
 tools/jtb/Ast.java:325:        className = s + "." + className;
 tools/jtb/Ast.java:330:    String result = packageName + className;
-tools/jtb/Ast.java:336:    /*@BinaryNameForNonArray*/ String result_bnfna = result;
+tools/jtb/Ast.java:336:    /*@BinaryName*/ String result_bnfna = result;
 tools/jtb/Ast.java:341:  public static void setName(MethodDeclaration m, String name) {
 tools/jtb/Ast.java:342:    m.f2.f0.tokenImage = name;
 tools/jtb/Ast.java:347:  public static PrimaryExpression assignment2primaryexpression(Expression n) {

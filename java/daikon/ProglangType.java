@@ -54,7 +54,7 @@ public final @Interned class ProglangType implements Serializable {
       new HashMap<@Interned String, List<ProglangType>>();
 
   // The set of (interned) names of classes that implement java.util.List.
-  // For a Java class, this is a @BinaryNameForNonArray, but when Daikon is
+  // For a Java class, this is a @BinaryName, but when Daikon is
   // processing programs written in other languages, it can be arbitrary.
   public static HashSet<String> list_implementors = new LinkedHashSet<String>();
 
