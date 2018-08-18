@@ -602,8 +602,6 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	$(MAKE) -C java all_directly
 	cd java && find . \( -name "dcomp-rt*" \) -prune -o -name '*.class' -print \
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
-	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
-	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 
 	for filename in $(JAR_DIR)/java/lib/*.jar ; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
