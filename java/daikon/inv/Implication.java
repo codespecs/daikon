@@ -16,6 +16,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 // Here Implication is reimplemented as an extension of the new general
@@ -337,8 +338,7 @@ public class Implication extends Joiner {
   }
 
   @Override
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      @Prototype Implication this, PptSlice slice) {
+  protected @NonPrototype Invariant instantiate_dyn(@Prototype Implication this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

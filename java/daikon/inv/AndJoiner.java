@@ -11,6 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
+import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -136,7 +137,7 @@ public class AndJoiner extends Joiner {
   }
 
   @Override
-  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(@Prototype AndJoiner this, PptSlice slice) {
+  protected @NonPrototype AndJoiner instantiate_dyn(@Prototype AndJoiner this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

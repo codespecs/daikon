@@ -11,6 +11,7 @@ import java.util.Iterator;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -310,7 +311,7 @@ public class DummyInvariant extends Invariant {
   }
 
   @Override
-  protected /*@NonPrototype*/ DummyInvariant instantiate_dyn(
+  protected @NonPrototype DummyInvariant instantiate_dyn(
       @Prototype DummyInvariant this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
