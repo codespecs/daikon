@@ -251,8 +251,10 @@ public class Ast {
     return className + "." + methodDeclarator;
   }
 
-  // Returns the classname if the given type declaration declares a
-  // ClassOrInterfaceDeclaration. Otherwise returns null.
+  /**
+   * Returns the classname if the given type declaration declares a ClassOrInterfaceDeclaration.
+   * Otherwise returns null.
+   */
   public static @Nullable @BinaryName String getClassNameForType(TypeDeclaration d) {
 
     // Grammar production for TypeDeclaration:
@@ -274,8 +276,7 @@ public class Ast {
     }
   }
 
-  // Return the fully qualified name of the class containing the node.
-  // (The result does not include the trailing period, though it did once.)
+  /** Return the fully qualified name of the class containing the node. */
   public static @BinaryName String getClassName(Node d) {
 
     ClassOrInterfaceDeclaration n =
