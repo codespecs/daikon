@@ -26,7 +26,7 @@ import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.signature.Signatures;
 import org.plumelib.util.UtilPlume;
@@ -251,9 +251,11 @@ public class Ast {
     return className + "." + methodDeclarator;
   }
 
-  // Returns the classname if the given type declaration declares a
-  // ClassOrInterfaceDeclaration. Otherwise returns null.
-  public static @Nullable @BinaryNameForNonArray String getClassNameForType(TypeDeclaration d) {
+  /**
+   * Returns the classname if the given type declaration declares a ClassOrInterfaceDeclaration.
+   * Otherwise returns null.
+   */
+  public static @Nullable @BinaryName String getClassNameForType(TypeDeclaration d) {
 
     // Grammar production for TypeDeclaration:
     // f0 -> ";"
@@ -274,9 +276,8 @@ public class Ast {
     }
   }
 
-  // Return the fully qualified name of the class containing the node.
-  // (The result does not include the trailing period, though it did once.)
-  public static @BinaryNameForNonArray String getClassName(Node d) {
+  /** Return the fully qualified name of the class containing the node. */
+  public static @BinaryName String getClassName(Node d) {
 
     ClassOrInterfaceDeclaration n =
         (d instanceof ClassOrInterfaceDeclaration)
@@ -322,7 +323,7 @@ public class Ast {
     }
 
     @SuppressWarnings("signature") // string concatenation, etc.
-    @BinaryNameForNonArray String result_bnfna = result;
+    @BinaryName String result_bnfna = result;
     return result_bnfna;
   }
 

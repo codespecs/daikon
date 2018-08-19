@@ -10,7 +10,7 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signature.qual.InternalFormForNonArray;
+import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.bcelutil.BcelUtil;
 
@@ -35,7 +35,7 @@ public class Instrument implements ClassFileTransformer {
   @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
   public byte @Nullable [] transform(
       ClassLoader loader,
-      @InternalFormForNonArray String className,
+      @InternalForm String className,
       Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)

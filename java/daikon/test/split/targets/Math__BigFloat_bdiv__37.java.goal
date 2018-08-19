@@ -20,7 +20,7 @@ public final class Math__BigFloat_bdiv__37 extends Splitter {
     orig_$p_varinfo = ppt.find_var_by_name("orig($p)");
   }
 
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new Math__BigFloat_bdiv__37(ppt);
   }
 

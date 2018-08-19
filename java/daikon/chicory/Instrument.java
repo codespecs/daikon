@@ -42,9 +42,8 @@ import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
-import org.checkerframework.checker.signature.qual.BinaryNameForNonArray;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.checkerframework.checker.signature.qual.InternalFormForNonArray;
+import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.bcelutil.InstructionListUtils;
 import org.plumelib.bcelutil.SimpleLog;
@@ -133,14 +132,14 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   @Override
   public byte @Nullable [] transform(
       ClassLoader loader,
-      @InternalFormForNonArray String className,
+      @InternalForm String className,
       Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
     @SuppressWarnings("signature") // string manipulation (checker should handle)
-    @BinaryNameForNonArray String fullClassName = className.replace("/", ".");
+    @BinaryName String fullClassName = className.replace("/", ".");
     // String fullClassName = className;
 
     // new Throwable().printStackTrace();
@@ -334,7 +333,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   // create a <clinit> method, if none exists; guarantees we have this hook
-  private Method createClinit(ClassGen cg, @BinaryNameForNonArray String fullClassName) {
+  private Method createClinit(ClassGen cg, @BinaryName String fullClassName) {
     InstructionFactory factory = new InstructionFactory(cg);
 
     InstructionList il = new InstructionList();

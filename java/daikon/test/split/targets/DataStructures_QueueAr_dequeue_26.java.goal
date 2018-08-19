@@ -18,7 +18,7 @@ public final class DataStructures_QueueAr_dequeue_26 extends Splitter {
     this_currentSize_varinfo = ppt.find_var_by_name("this.currentSize");
   }
 
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new DataStructures_QueueAr_dequeue_26(ppt);
   }
 

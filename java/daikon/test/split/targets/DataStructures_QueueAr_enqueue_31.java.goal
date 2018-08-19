@@ -18,7 +18,7 @@ public final class DataStructures_QueueAr_enqueue_31 extends Splitter {
     orig_this_back_varinfo = ppt.find_var_by_name("orig(this.back)");
   }
 
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new DataStructures_QueueAr_enqueue_31(ppt);
   }
 
