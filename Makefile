@@ -740,7 +740,7 @@ ifndef NONETWORK
 	if test -d utils/checklink/.git ; then \
 	  (cd utils/checklink && git pull -q) \
 	elif ! test -d utils/checklink ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink || git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink)) \
 	fi
 endif
 
@@ -749,7 +749,7 @@ ifndef NONETWORK
 	if test -d utils/html-tools/.git ; then \
 	  (cd utils/html-tools && git pull -q) \
 	elif ! test -d utils/html-tools ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools || git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools)) \
 	fi
 endif
 
@@ -767,7 +767,7 @@ ifndef NONETWORK
 	if test -d utils/run-google-java-format/.git ; then \
 	  (cd utils/run-google-java-format && git pull -q) \
 	elif ! test -d utils/run-google-java-format ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format || git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format)) \
 	fi
 endif
 
