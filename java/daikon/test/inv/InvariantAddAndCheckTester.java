@@ -27,10 +27,7 @@ import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * This is a tester for the results of adding or checking an sample to an invariant. It can test
@@ -909,7 +906,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
       try {
         Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
-        Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+        Invariant proto = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
         Invariant inv = proto.instantiate(sl);
         return inv;
       } catch (Exception e) {

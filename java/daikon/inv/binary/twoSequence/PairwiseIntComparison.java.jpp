@@ -208,12 +208,6 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoSequence;
 
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.interning.qual.Interned;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.Quantify.QuantFlags;
 import daikon.derive.binary.*;
@@ -224,12 +218,16 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents an invariant between corresponding elements of two sequences of PRIMITIVE values. The
@@ -258,14 +256,14 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     super(ppt);
   }
 
-  protected /*@Prototype*/ PAIRWISEINTEQUAL() {
+  protected @Prototype PAIRWISEINTEQUAL() {
     super();
   }
 
-  private static /*@Prototype*/ PAIRWISEINTEQUAL proto = new /*@Prototype*/ PAIRWISEINTEQUAL();
+  private static @Prototype PAIRWISEINTEQUAL proto = new @Prototype PAIRWISEINTEQUAL();
 
   /** Returns the prototype invariant for PAIRWISEINTEQUAL */
-  public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {
+  public static @Prototype PAIRWISEINTEQUAL get_proto() {
     return proto;
   }
 
@@ -294,7 +292,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  protected PAIRWISEINTEQUAL instantiate_dyn(/*@Prototype*/ PAIRWISEINTEQUAL this, PptSlice slice) {
+  protected PAIRWISEINTEQUAL instantiate_dyn(@Prototype PAIRWISEINTEQUAL this, PptSlice slice) {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn()) {
       inv.log("instantiate");

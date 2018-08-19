@@ -37,10 +37,6 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.ternary.threeScalar;
 
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
@@ -49,12 +45,14 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.MathPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * The LinearTernaryCore class is acts as the backend for the invariant (ax + by + cz + d = 0) by

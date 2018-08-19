@@ -67,19 +67,17 @@
 
 package daikon.inv.binary.PACKAGE;
 
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;
 import daikon.inv.binary.*;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Base class for invariants over two variables of type PRIMITIVENONCOMMENT.
@@ -111,7 +109,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected @Prototype CLASSNAME() {
     super();
   }
 

@@ -11,10 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * This is a special invariant used internally by Daikon to represent an antecedent invariant in an
@@ -129,18 +126,17 @@ public class AndJoiner extends Joiner {
   }
 
   @Override
-  public boolean enabled(/*@Prototype*/ AndJoiner this) {
+  public boolean enabled(@Prototype AndJoiner this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(/*@Prototype*/ AndJoiner this, VarInfo[] vis) {
+  public boolean valid_types(@Prototype AndJoiner this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
-  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(
-      /*@Prototype*/ AndJoiner this, PptSlice slice) {
+  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(@Prototype AndJoiner this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

@@ -8,10 +8,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Raw;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * Abstract base class for invariants over one numeric (scalar) variable, such as {@code x != 0}.
@@ -26,7 +23,7 @@ public abstract class SingleScalar extends UnaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleScalar() {
+  protected @Prototype SingleScalar() {
     super();
   }
 

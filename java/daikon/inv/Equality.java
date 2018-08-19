@@ -24,10 +24,7 @@ import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 // Note that this Invariant is used in a *very* different way from
 // the same-named one in V2.  In V2, this is just for printing.  In V3,
@@ -575,18 +572,17 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   @Override
-  public boolean enabled(/*@Prototype*/ Equality this) {
+  public boolean enabled(@Prototype Equality this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(/*@Prototype*/ Equality this, VarInfo[] vis) {
+  public boolean valid_types(@Prototype Equality this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
-  protected /*@NonPrototype*/ Equality instantiate_dyn(
-      /*@Prototype*/ Equality this, PptSlice slice) {
+  protected /*@NonPrototype*/ Equality instantiate_dyn(@Prototype Equality this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

@@ -5,10 +5,7 @@ import daikon.VarInfo;
 import daikon.inv.InvariantStatus;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /** Abstract base class for invariants over one variable of type {@code double[]}. */
 public abstract class SingleFloatSequence extends SingleSequence {
@@ -21,7 +18,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleFloatSequence() {
+  protected @Prototype SingleFloatSequence() {
     super();
   }
 

@@ -178,10 +178,8 @@ import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
 import java.util.*;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Baseclass for binary numeric invariants.
@@ -638,9 +636,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (new InvDef[][] {});
   }
 
-  public static List</*@Prototype*/ Invariant> get_proto_all() {
+  public static List<@Prototype Invariant> get_proto_all() {
 
-    List</*@Prototype*/ Invariant> result = new ArrayList</*@Prototype*/ Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
     #if (defined(STRING))
         result.add(SubString.get_proto(false));
         result.add(SubString.get_proto(true));
@@ -714,11 +712,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ Divides proto = new /*@Prototype*/ Divides(false);
-    private static /*@Prototype*/ Divides proto_swap = new /*@Prototype*/ Divides(true);
+    private static @Prototype Divides proto = new @Prototype Divides(false);
+    private static @Prototype Divides proto_swap = new @Prototype Divides(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ CLASSNAME get_proto(boolean swap) {
+    public static @Prototype CLASSNAME get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -738,7 +736,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected Divides instantiate_dyn(/*@Prototype*/ Divides this, PptSlice slice) {
+    protected Divides instantiate_dyn(@Prototype Divides this, PptSlice slice) {
       return new Divides(slice, swap);
     }
 
@@ -915,11 +913,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ Square proto = new /*@Prototype*/ Square(false);
-    private static /*@Prototype*/ Square proto_swap = new /*@Prototype*/ Square(true);
+    private static @Prototype Square proto = new @Prototype Square(false);
+    private static @Prototype Square proto_swap = new @Prototype Square(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ Square get_proto(boolean swap) {
+    public static @Prototype Square get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -938,7 +936,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return dkconfig_enabled;
     }
     @Override
-    protected Square instantiate_dyn(/*@Prototype*/ Square this, PptSlice slice) {
+    protected Square instantiate_dyn(@Prototype Square this, PptSlice slice) {
       return new Square(slice, swap);
     }
 
@@ -993,15 +991,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
-    protected /*@Prototype*/ ZeroTrack(boolean swap) {
+    protected @Prototype ZeroTrack(boolean swap) {
       super(swap);
     }
 
-    private static /*@Prototype*/ ZeroTrack proto = new /*@Prototype*/ ZeroTrack(false);
-    private static /*@Prototype*/ ZeroTrack proto_swap = new /*@Prototype*/ ZeroTrack(true);
+    private static @Prototype ZeroTrack proto = new @Prototype ZeroTrack(false);
+    private static @Prototype ZeroTrack proto_swap = new @Prototype ZeroTrack(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ ZeroTrack get_proto(boolean swap) {
+    public static @Prototype ZeroTrack get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -1021,7 +1019,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected ZeroTrack instantiate_dyn(/*@Prototype*/ ZeroTrack this, PptSlice slice) {
+    protected ZeroTrack instantiate_dyn(@Prototype ZeroTrack this, PptSlice slice) {
       return new ZeroTrack(slice, swap);
     }
 
@@ -1091,14 +1089,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
-    protected /*@Prototype*/ BitwiseComplement() {
+    protected @Prototype BitwiseComplement() {
       super(false);
     }
 
-    private static /*@Prototype*/ BitwiseComplement proto = new /*@Prototype*/ BitwiseComplement();
+    private static @Prototype BitwiseComplement proto = new @Prototype BitwiseComplement();
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ BitwiseComplement get_proto() {
+    public static @Prototype BitwiseComplement get_proto() {
       return proto;
     }
 
@@ -1114,7 +1112,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected BitwiseComplement instantiate_dyn(/*@Prototype*/ BitwiseComplement this, PptSlice slice) {
+    protected BitwiseComplement instantiate_dyn(@Prototype BitwiseComplement this, PptSlice slice) {
       return new BitwiseComplement(slice);
     }
 
@@ -1165,11 +1163,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ BitwiseSubset proto = new /*@Prototype*/ BitwiseSubset(false);
-    private static /*@Prototype*/ BitwiseSubset proto_swap = new /*@Prototype*/ BitwiseSubset(true);
+    private static @Prototype BitwiseSubset proto = new @Prototype BitwiseSubset(false);
+    private static @Prototype BitwiseSubset proto_swap = new @Prototype BitwiseSubset(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ BitwiseSubset get_proto(boolean swap) {
+    public static @Prototype BitwiseSubset get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -1189,7 +1187,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    public BitwiseSubset instantiate_dyn(/*@Prototype*/ BitwiseSubset this, PptSlice slice) {
+    public BitwiseSubset instantiate_dyn(@Prototype BitwiseSubset this, PptSlice slice) {
       return new BitwiseSubset(slice, swap);
     }
 
@@ -1278,14 +1276,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
-    protected /*@Prototype*/ BitwiseAndZero() {
+    protected @Prototype BitwiseAndZero() {
       super(false);
     }
 
-    private static /*@Prototype*/ BitwiseAndZero proto = new /*@Prototype*/ BitwiseAndZero();
+    private static @Prototype BitwiseAndZero proto = new @Prototype BitwiseAndZero();
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ BitwiseAndZero get_proto() {
+    public static @Prototype BitwiseAndZero get_proto() {
       return proto;
     }
 
@@ -1301,7 +1299,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    public BitwiseAndZero instantiate_dyn(/*@Prototype*/ BitwiseAndZero this, PptSlice slice) {
+    public BitwiseAndZero instantiate_dyn(@Prototype BitwiseAndZero this, PptSlice slice) {
       return new BitwiseAndZero(slice);
     }
 
@@ -1375,11 +1373,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ ShiftZero proto = new /*@Prototype*/ ShiftZero(false);
-    private static /*@Prototype*/ ShiftZero proto_swap = new /*@Prototype*/ ShiftZero(true);
+    private static @Prototype ShiftZero proto = new @Prototype ShiftZero(false);
+    private static @Prototype ShiftZero proto_swap = new @Prototype ShiftZero(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ ShiftZero get_proto(boolean swap) {
+    public static @Prototype ShiftZero get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -1399,7 +1397,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected ShiftZero instantiate_dyn(/*@Prototype*/ ShiftZero this, PptSlice slice) {
+    protected ShiftZero instantiate_dyn(@Prototype ShiftZero this, PptSlice slice) {
       return new ShiftZero(slice, swap);
     }
 
@@ -1475,11 +1473,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ SubString proto = new /*@Prototype*/ SubString(false);
-    private static /*@Prototype*/ SubString proto_swap = new /*@Prototype*/ SubString(true);
+    private static @Prototype SubString proto = new @Prototype SubString(false);
+    private static @Prototype SubString proto_swap = new @Prototype SubString(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ SubString get_proto(boolean swap) {
+    public static @Prototype SubString get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -1499,7 +1497,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected SubString instantiate_dyn(/*@Prototype*/ SubString this, PptSlice slice) {
+    protected SubString instantiate_dyn(@Prototype SubString this, PptSlice slice) {
       return new SubString(slice, swap);
     }
 

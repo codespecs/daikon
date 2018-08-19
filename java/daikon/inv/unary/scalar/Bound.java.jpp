@@ -174,11 +174,6 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.unary.SCALAR;
 
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.interning.qual.Interned;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.inv.*;
 #ifdef IS_SCALAR
@@ -189,15 +184,18 @@ import daikon.inv.*;
   import daikon.inv.binary.twoSequence.*;
   import daikon.inv.unary.scalar.*;
 #endif
-import daikon.inv.unary.*;
 import daikon.derive.unary.*;
+import daikon.inv.unary.*;
 import java.util.*;
-import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
-*/
+import org.plumelib.util.Intern;
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 #if defined (IS_SCALAR)
   /**
@@ -240,7 +238,7 @@ public class LOWERBOUND extends SINGLESCALAR {
    */
   public static long dkconfig_maximal_interesting = 2;
 
-  /*@Unused(when=Prototype.class)*/
+  @Unused(when=Prototype.class)
   private LOWERBOUNDCORE core;
 
   @SuppressWarnings("nullness") // circular initialization
@@ -250,15 +248,15 @@ public class LOWERBOUND extends SINGLESCALAR {
     core = new LOWERBOUNDCORE(this);
   }
 
-  private /*@Prototype*/ LOWERBOUND() {
+  private @Prototype LOWERBOUND() {
     super();
     // do we need a core?
   }
 
-  private static /*@Prototype*/ LOWERBOUND proto = new /*@Prototype*/ LOWERBOUND();
+  private static @Prototype LOWERBOUND proto = new @Prototype LOWERBOUND();
 
   /** Returns the prototype invariant for LOWERBOUND */
-  public static /*@Prototype*/ LOWERBOUND get_proto() {
+  public static @Prototype LOWERBOUND get_proto() {
     return proto;
   }
 
@@ -281,7 +279,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public LOWERBOUND instantiate_dyn(/*@Prototype*/ LOWERBOUND this, PptSlice slice) {
+  public LOWERBOUND instantiate_dyn(@Prototype LOWERBOUND this, PptSlice slice) {
     return new LOWERBOUND(slice);
   }
 

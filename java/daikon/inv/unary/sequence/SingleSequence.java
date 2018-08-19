@@ -6,10 +6,7 @@ import daikon.inv.unary.UnaryInvariant;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Raw;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /** Invariants on a single sequence (array) variable, such as {@code a[] contains no duplicates}. */
 public abstract class SingleSequence extends UnaryInvariant {
@@ -29,7 +26,7 @@ public abstract class SingleSequence extends UnaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleSequence() {
+  protected @Prototype SingleSequence() {
     super();
   }
 

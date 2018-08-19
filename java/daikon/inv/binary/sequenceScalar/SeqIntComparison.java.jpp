@@ -132,11 +132,6 @@
 
 package daikon.inv.binary.sequenceScalar;
 
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.interning.qual.Interned;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.derive.unary.*;
 import daikon.inv.*;
@@ -145,11 +140,14 @@ import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents an invariant between a PRIMITIVE scalar and a a sequence of PRIMITIVE values. Prints
@@ -176,14 +174,14 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SEQINTEQUAL() {
+  protected @Prototype SEQINTEQUAL() {
     super();
   }
 
-  private static /*@Prototype*/ SEQINTEQUAL proto = new /*@Prototype*/ SEQINTEQUAL();
+  private static @Prototype SEQINTEQUAL proto = new @Prototype SEQINTEQUAL();
 
   /** Returns the prototype invariant for SEQINTEQUAL */
-  public static /*@Prototype*/ SEQINTEQUAL get_proto() {
+  public static @Prototype SEQINTEQUAL get_proto() {
     return proto;
   }
 
@@ -225,7 +223,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  protected SEQINTEQUAL instantiate_dyn(/*@Prototype*/ SEQINTEQUAL this, PptSlice slice) {
+  protected SEQINTEQUAL instantiate_dyn(@Prototype SEQINTEQUAL this, PptSlice slice) {
     return new SEQINTEQUAL(slice);
   }
 

@@ -13,10 +13,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ReflectionPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * A SplitterObject is the starting point for all the information we have about a splitting
@@ -103,7 +100,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
         throw new Error("Trying to invoke " + tempClass + " constructor", e);
       }
       DummyInvariant dummy =
-          new /*@Prototype*/ DummyInvariant(
+          new @Prototype
+          DummyInvariant(
               daikonFormat,
               javaFormat,
               escFormat,

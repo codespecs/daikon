@@ -10,10 +10,7 @@ import daikon.inv.ValueSet;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * IsPointer is an invariant that heuristically determines whether an integer represents a pointer
@@ -44,14 +41,14 @@ public class IsPointer extends SingleScalar {
     super(ppt);
   }
 
-  protected /*@Prototype*/ IsPointer() {
+  protected @Prototype IsPointer() {
     super();
   }
 
-  private static /*@Prototype*/ IsPointer proto = new /*@Prototype*/ IsPointer();
+  private static @Prototype IsPointer proto = new @Prototype IsPointer();
 
   /** Returns the prototype invariant for IsPointer */
-  public static /*@Prototype*/ IsPointer get_proto() {
+  public static @Prototype IsPointer get_proto() {
     return proto;
   }
 

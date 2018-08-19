@@ -223,15 +223,13 @@ import org.checkerframework.checker.nullness.qual.NonRaw;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.framework.qual.Unused;
 import org.plumelib.signature.Signatures;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-import org.checkerframework.framework.qual.Unused;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 // This subsumes an "exact" invariant that says the value is always exactly
 // a specific value.  Do I want to make that a separate invariant
@@ -302,12 +300,12 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  /*@Unused(when=Prototype.class)*/
+  @Unused(when=Prototype.class)
   private INTARRAY elts;
-  /*@Unused(when=Prototype.class)*/
+  @Unused(when=Prototype.class)
   private int num_elts;
 
-  public /*@Prototype*/ ONEOFSCALAR() {
+  public @Prototype ONEOFSCALAR() {
     super();
   }
 
@@ -338,10 +336,10 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
   }
 
-  private static /*@Prototype*/ ONEOFSCALAR proto = new /*@Prototype*/ ONEOFSCALAR();
+  private static @Prototype ONEOFSCALAR proto = new @Prototype ONEOFSCALAR();
 
   /** Returns the prototype invariant for ONEOFSCALAR */
-  public static /*@Prototype*/ ONEOFSCALAR get_proto() {
+  public static @Prototype ONEOFSCALAR get_proto() {
     return proto;
   }
 
@@ -353,7 +351,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public ONEOFSCALAR instantiate_dyn(/*@Prototype*/ ONEOFSCALAR this, PptSlice slice) {
+  public ONEOFSCALAR instantiate_dyn(@Prototype ONEOFSCALAR this, PptSlice slice) {
     return new ONEOFSCALAR(slice);
   }
 

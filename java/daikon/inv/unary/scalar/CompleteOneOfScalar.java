@@ -14,11 +14,8 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-
-/*>>>
-import typequals.prototype.qual.*;
 import org.checkerframework.framework.qual.Unused;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * Tracks every unique value and how many times it occurs. Prints as {@code x has values: v1 v2 v3
@@ -43,7 +40,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
   }
 
   /** List of values seen */
-  /*@Unused(when = Prototype.class)*/
+  @Unused(when = Prototype.class)
   public List<Info> vals;
 
   /** Boolean. True iff CompleteOneOfScalar invariants should be considered. */
@@ -54,15 +51,14 @@ public final class CompleteOneOfScalar extends SingleScalar {
     vals = new ArrayList<Info>();
   }
 
-  public /*@Prototype*/ CompleteOneOfScalar() {
+  public @Prototype CompleteOneOfScalar() {
     super();
   }
 
-  private static /*@Prototype*/ CompleteOneOfScalar proto =
-      new /*@Prototype*/ CompleteOneOfScalar();
+  private static @Prototype CompleteOneOfScalar proto = new @Prototype CompleteOneOfScalar();
 
   /** Returns the prototype invariant for CompleteOneOFScalar */
-  public static /*@Prototype*/ CompleteOneOfScalar get_proto() {
+  public static @Prototype CompleteOneOfScalar get_proto() {
     return proto;
   }
 
@@ -74,8 +70,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public CompleteOneOfScalar instantiate_dyn(
-      /*@Prototype*/ CompleteOneOfScalar this, PptSlice slice) {
+  public CompleteOneOfScalar instantiate_dyn(@Prototype CompleteOneOfScalar this, PptSlice slice) {
     return new CompleteOneOfScalar(slice);
   }
 

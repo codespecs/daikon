@@ -116,10 +116,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * All information about a single program point. A Ppt may also represent just part of the data: see
@@ -1780,7 +1777,7 @@ public class PptTopLevel extends Ppt {
    * that the prototype invariant implies imp_inv. Otherwise returns null.
    */
   public @Nullable DiscardInfo check_implied(
-      Invariant imp_inv, VarInfo v, /*@Prototype*/ Invariant proto) {
+      Invariant imp_inv, VarInfo v, @Prototype Invariant proto) {
 
     // If there is no proto invariant, we can't look for it.  This happens
     // if the invariant is not enabled.
@@ -1804,7 +1801,7 @@ public class PptTopLevel extends Ppt {
    * indicating that the proto invariant implies imp_inv. Otherwise returns null.
    */
   public @Nullable DiscardInfo check_implied_canonical(
-      Invariant imp_inv, VarInfo v, /*@Prototype*/ Invariant proto) {
+      Invariant imp_inv, VarInfo v, @Prototype Invariant proto) {
 
     VarInfo leader = v.canonicalRep();
 
@@ -1822,7 +1819,7 @@ public class PptTopLevel extends Ppt {
    * that the prototype invariant implies imp_inv. Otherwise returns null.
    */
   public @Nullable DiscardInfo check_implied(
-      Invariant imp_inv, VarInfo v1, VarInfo v2, /*@Prototype*/ Invariant proto) {
+      Invariant imp_inv, VarInfo v1, VarInfo v2, @Prototype Invariant proto) {
 
     // If there is no prototype invariant, we can't look for it.  This happens
     // if the invariant is not enabled.
@@ -1844,8 +1841,7 @@ public class PptTopLevel extends Ppt {
     return null;
   }
 
-  public boolean check_implied(
-      DiscardInfo di, VarInfo v1, VarInfo v2, /*@Prototype*/ Invariant proto) {
+  public boolean check_implied(DiscardInfo di, VarInfo v1, VarInfo v2, @Prototype Invariant proto) {
 
     DiscardInfo di2 = check_implied(di.inv, v1, v2, proto);
     if (di2 == null) return false;
@@ -1859,7 +1855,7 @@ public class PptTopLevel extends Ppt {
    * DiscardInfo indicating that the prototype invariant implies imp_inv. Otherwise returns null.
    */
   public @Nullable DiscardInfo check_implied_canonical(
-      Invariant imp_inv, VarInfo v1, VarInfo v2, /*@Prototype*/ Invariant proto) {
+      Invariant imp_inv, VarInfo v1, VarInfo v2, @Prototype Invariant proto) {
 
     VarInfo leader1 = v1.canonicalRep();
     VarInfo leader2 = v2.canonicalRep();
@@ -1881,7 +1877,7 @@ public class PptTopLevel extends Ppt {
   }
 
   public boolean check_implied_canonical(
-      DiscardInfo di, VarInfo v1, VarInfo v2, /*@Prototype*/ Invariant proto) {
+      DiscardInfo di, VarInfo v1, VarInfo v2, @Prototype Invariant proto) {
 
     DiscardInfo di2 = check_implied_canonical(di.inv, v1, v2, proto);
     if (di2 == null) {
@@ -1936,7 +1932,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Get a prototype of the invariant we are looking for
-    /*@Prototype*/ Invariant proto = NonZero.get_proto();
+    @Prototype Invariant proto = NonZero.get_proto();
     if (proto == null) return false;
 
     Invariant inv = proto.instantiate(slice);
@@ -1975,7 +1971,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Get a prototype of the invariant we are looking for
-    /*@Prototype*/ Invariant proto;
+    @Prototype Invariant proto;
     if (v1.rep_type.isScalar()) {
       assert v2.rep_type.isScalar()
           : String.format("v1 %s rep %s, v2 %s rep %s", v1, v1.rep_type, v2, v2.rep_type);

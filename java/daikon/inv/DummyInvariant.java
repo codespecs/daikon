@@ -11,10 +11,7 @@ import java.util.Iterator;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * This is a special invariant used internally by Daikon to represent invariants whose meaning
@@ -79,7 +76,7 @@ public class DummyInvariant extends Invariant {
     this.valid = valid;
   }
 
-  public /*@Prototype*/ DummyInvariant(
+  public @Prototype DummyInvariant(
       @Nullable String daikonStr,
       @Nullable String java,
       @Nullable String esc,
@@ -303,18 +300,18 @@ public class DummyInvariant extends Invariant {
   }
 
   @Override
-  public boolean enabled(/*@Prototype*/ DummyInvariant this) {
+  public boolean enabled(@Prototype DummyInvariant this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(/*@Prototype*/ DummyInvariant this, VarInfo[] vis) {
+  public boolean valid_types(@Prototype DummyInvariant this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
   protected /*@NonPrototype*/ DummyInvariant instantiate_dyn(
-      /*@Prototype*/ DummyInvariant this, PptSlice slice) {
+      @Prototype DummyInvariant this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

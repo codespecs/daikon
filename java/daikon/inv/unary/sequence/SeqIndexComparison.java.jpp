@@ -150,12 +150,6 @@
 
 package daikon.inv.unary.sequence;
 
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.interning.qual.Interned;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.Quantify.QuantFlags;
 import daikon.inv.*;
@@ -164,11 +158,15 @@ import daikon.suppress.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents an invariant over sequences of PRIMITIVE values between the index of an element of the
@@ -189,7 +187,7 @@ public class CLASSNAME extends SUPERCLASS {
   /** Boolean. True iff CLASSNAME invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  private /*@Prototype*/ CLASSNAME() {
+  private @Prototype CLASSNAME() {
     super();
   }
 
@@ -199,10 +197,10 @@ public class CLASSNAME extends SUPERCLASS {
     assert var().rep_type == ProglangType.ASSERTYPE;
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
+  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static /*@Prototype*/ CLASSNAME get_proto() {
+  public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
@@ -240,7 +238,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** Instantiate the invariant on the specified slice */
   @Override
-  public CLASSNAME instantiate_dyn(/*@Prototype*/ CLASSNAME this, PptSlice slice) {
+  public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 

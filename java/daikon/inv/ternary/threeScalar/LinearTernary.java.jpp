@@ -44,10 +44,6 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.ternary.threeScalar;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import daikon.*;
 import daikon.inv.*        ;
 import daikon.inv.DiscardCode;
@@ -56,11 +52,13 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.NIS;
 import java.util.*;
-
-/*>>>
-import typequals.prototype.qual.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents a Linear invariant over three PRIMITIVE scalars {@code x},
@@ -85,7 +83,7 @@ public class CLASSNAME extends SUPERCLASS {
   public static final boolean debugLinearTernary = false;
   // public static final boolean debugLinearTernary = true;
 
-  /*@Unused(when=Prototype.class)*/
+  @Unused(when=Prototype.class)
   public CORECLASS core;
 
   @SuppressWarnings("nullness") // circular initialization
@@ -94,14 +92,14 @@ public class CLASSNAME extends SUPERCLASS {
     core = new CORECLASS(this);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected @Prototype CLASSNAME() {
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
+  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static /*@Prototype*/ CLASSNAME get_proto() {
+  public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
@@ -296,7 +294,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** Instantiate the invariant on the specified slice */
   @Override
-  public CLASSNAME instantiate_dyn(/*@Prototype*/ CLASSNAME this, PptSlice slice) {
+  public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 

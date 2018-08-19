@@ -35,18 +35,16 @@ The correct way to build the system is to run 'make'.
 
 package PACKAGE;
 
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.BinaryInvariant;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Abstract base class for comparing PRIMITIVE sequences to PRIMITIVE variables. Note that the sequence
@@ -63,7 +61,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected @Prototype CLASSNAME() {
     super();
   }
 

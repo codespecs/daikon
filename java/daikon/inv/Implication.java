@@ -16,10 +16,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 // Here Implication is reimplemented as an extension of the new general
 // Joiner class
@@ -330,18 +327,18 @@ public class Implication extends Joiner {
   }
 
   @Override
-  public boolean enabled(/*@Prototype*/ Implication this) {
+  public boolean enabled(@Prototype Implication this) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
-  public boolean valid_types(/*@Prototype*/ Implication this, VarInfo[] vis) {
+  public boolean valid_types(@Prototype Implication this, VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
   protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*@Prototype*/ Implication this, PptSlice slice) {
+      @Prototype Implication this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

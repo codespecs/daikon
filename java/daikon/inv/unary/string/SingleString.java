@@ -8,10 +8,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Raw;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /** Abstract base class for invariants over one variable of type {@code String}. */
 public abstract class SingleString extends UnaryInvariant {
@@ -24,7 +21,7 @@ public abstract class SingleString extends UnaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleString() {
+  protected @Prototype SingleString() {
     super();
   }
 

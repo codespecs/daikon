@@ -9,10 +9,7 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Raw;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /** Abstract base class for invariants over one variable of type {@code String[]}. */
 public abstract class SingleStringSequence extends UnaryInvariant {
@@ -25,7 +22,7 @@ public abstract class SingleStringSequence extends UnaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleStringSequence() {
+  protected @Prototype SingleStringSequence() {
     super();
   }
 

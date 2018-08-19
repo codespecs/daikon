@@ -13,10 +13,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents string sequences that contain a common subset. Prints as {@code {s1, s2, s3, ...}
@@ -41,15 +38,14 @@ public class CommonStringSequence extends SingleStringSequence {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CommonStringSequence() {
+  protected @Prototype CommonStringSequence() {
     super();
   }
 
-  private static /*@Prototype*/ CommonStringSequence proto =
-      new /*@Prototype*/ CommonStringSequence();
+  private static @Prototype CommonStringSequence proto = new @Prototype CommonStringSequence();
 
   /** Returns the prototype invariant for CommonStringSequence */
-  public static /*@Prototype*/ CommonStringSequence get_proto() {
+  public static @Prototype CommonStringSequence get_proto() {
     return proto;
   }
 
@@ -62,7 +58,7 @@ public class CommonStringSequence extends SingleStringSequence {
   /** instantiate an invariant on the specified slice */
   @Override
   protected CommonStringSequence instantiate_dyn(
-      /*@Prototype*/ CommonStringSequence this, PptSlice slice) {
+      @Prototype CommonStringSequence this, PptSlice slice) {
     return new CommonStringSequence(slice);
   }
 

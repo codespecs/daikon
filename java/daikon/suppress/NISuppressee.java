@@ -19,10 +19,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * Defines a suppressee for non-instantiating suppression. A suppressee consists only of the class
@@ -34,7 +31,7 @@ public class NISuppressee {
 
   public Class<? extends Invariant> sup_class;
   public int var_count;
-  public /*@Prototype*/ Invariant sample_inv;
+  public @Prototype Invariant sample_inv;
 
   public NISuppressee(Class<? extends Invariant> cls, int var_count) {
     sup_class = cls;
@@ -44,9 +41,8 @@ public class NISuppressee {
     try {
       Method get_proto = cls.getMethod("get_proto", new Class<?>[] {});
       @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-      @NonNull /*@Prototype*/
-      Invariant sample_inv_local =
-          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+      @NonNull @Prototype
+      Invariant sample_inv_local = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
       sample_inv = sample_inv_local;
       assert sample_inv != null : cls.getName();
     } catch (Exception e) {
@@ -62,9 +58,9 @@ public class NISuppressee {
     try {
       Method get_proto = cls.getMethod("get_proto", new Class<?>[] {boolean.class});
       @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-      @NonNull /*@Prototype*/
+      @NonNull @Prototype
       Invariant sample_inv_local =
-          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {Boolean.valueOf(swap)});
+          (@Prototype Invariant) get_proto.invoke(null, new Object[] {Boolean.valueOf(swap)});
       sample_inv = sample_inv_local;
       assert sample_inv != null : cls.getName();
     } catch (Exception e) {

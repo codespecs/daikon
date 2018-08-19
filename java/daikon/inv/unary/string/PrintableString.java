@@ -13,10 +13,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents a string that contains only printable ascii characters (values 32 through 126 plus 9
@@ -35,14 +32,14 @@ public final class PrintableString extends SingleString {
     super(slice);
   }
 
-  public /*@Prototype*/ PrintableString() {
+  public @Prototype PrintableString() {
     super();
   }
 
-  private static /*@Prototype*/ PrintableString proto = new /*@Prototype*/ PrintableString();
+  private static @Prototype PrintableString proto = new @Prototype PrintableString();
 
   /** Returns the prototype invariant for PrintableString */
-  public static /*@Prototype*/ PrintableString get_proto() {
+  public static @Prototype PrintableString get_proto() {
     return proto;
   }
 
@@ -54,7 +51,7 @@ public final class PrintableString extends SingleString {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public PrintableString instantiate_dyn(/*@Prototype*/ PrintableString this, PptSlice slice) {
+  public PrintableString instantiate_dyn(@Prototype PrintableString this, PptSlice slice) {
     return new PrintableString(slice);
   }
 

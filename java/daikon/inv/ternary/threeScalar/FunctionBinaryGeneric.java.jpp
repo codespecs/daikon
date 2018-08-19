@@ -79,16 +79,16 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     static int[] arg2_bound = ARG2_BOUND;
   #endif
 
-  private static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) proto = new /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) ();
+  private static @Prototype CNAME(FUNCTION,PERM_NAME) proto = new @Prototype CNAME(FUNCTION,PERM_NAME) ();
 
   /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) */
-  public static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) get_proto() {
+  public static @Prototype CNAME(FUNCTION,PERM_NAME) get_proto() {
     return proto;
   }
 
   /** instantiate an invariant on the specified slice */
   @Override
-  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn(/*@Prototype*/ CNAME(FUNCTION,PERM_NAME) this, PptSlice slice) {
+  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn(@Prototype CNAME(FUNCTION,PERM_NAME) this, PptSlice slice) {
     return new CNAME(FUNCTION,PERM_NAME) (slice);
   }
 
@@ -96,7 +96,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     super(slice);
   }
 
-  public /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) () {
+  public @Prototype CNAME(FUNCTION,PERM_NAME) () {
     super();
   }
 

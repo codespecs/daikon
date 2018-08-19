@@ -12,10 +12,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
 import org.plumelib.util.MathPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents long scalars that are never equal to {@code r (mod m)} where all other numbers in the
@@ -52,14 +49,14 @@ public class NonModulus extends SingleScalar {
     super(ppt);
   }
 
-  private /*@Prototype*/ NonModulus() {
+  private @Prototype NonModulus() {
     super();
   }
 
-  private static /*@Prototype*/ NonModulus proto = new /*@Prototype*/ NonModulus();
+  private static @Prototype NonModulus proto = new @Prototype NonModulus();
 
   /** Returns the prototype invariant for NonModulus */
-  public static /*@Prototype*/ NonModulus get_proto() {
+  public static @Prototype NonModulus get_proto() {
     return proto;
   }
 
@@ -80,7 +77,7 @@ public class NonModulus extends SingleScalar {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  protected NonModulus instantiate_dyn(/*@Prototype*/ NonModulus this, PptSlice slice) {
+  protected NonModulus instantiate_dyn(@Prototype NonModulus this, PptSlice slice) {
     return new NonModulus(slice);
   }
 

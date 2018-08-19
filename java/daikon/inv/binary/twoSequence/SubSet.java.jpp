@@ -48,22 +48,20 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoSequence;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.inv.*;
 import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents two sequences of LONG values where one of the sequences is a subset of the other; that
@@ -88,14 +86,14 @@ public class SUBSET extends TWOSEQUENCE {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SUBSET() {
+  protected @Prototype SUBSET() {
     super();
   }
 
-  private static /*@Prototype*/ SUBSET proto = new /*@Prototype*/ SUBSET();
+  private static @Prototype SUBSET proto = new @Prototype SUBSET();
 
   /** Returns the prototype invariant for SUBSET */
-  public static /*@Prototype*/ SUBSET get_proto() {
+  public static @Prototype SUBSET get_proto() {
     return proto;
   }
 
@@ -140,7 +138,7 @@ public class SUBSET extends TWOSEQUENCE {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  public SUBSET instantiate_dyn(/*@Prototype*/ SUBSET this, PptSlice slice) {
+  public SUBSET instantiate_dyn(@Prototype SUBSET this, PptSlice slice) {
     return new SUBSET(slice);
   }
 

@@ -360,12 +360,6 @@ package daikon.inv.binary.twoString;
 package daikon.inv.binary.twoScalar;
 #endif
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.interning.qual.Interned;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.derive.binary.*;
 import daikon.derive.unary.*;
@@ -379,11 +373,15 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as {@code x EQUALScode y}.
@@ -411,14 +409,14 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    super(ppt);
   }
 
-  protected /*@Prototype*/ INTEQUAL() {
+  protected @Prototype INTEQUAL() {
    super();
   }
 
-  private static /*@Prototype*/ INTEQUAL proto = new /*@Prototype*/ INTEQUAL();
+  private static @Prototype INTEQUAL proto = new @Prototype INTEQUAL();
 
   /** Returns the prototype invariant for INTEQUAL */
-  public static /*@Prototype*/ INTEQUAL get_proto() {
+  public static @Prototype INTEQUAL get_proto() {
     return proto;
   }
 
@@ -578,7 +576,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   /** Instantiate an invariant on the specified slice */
   @Override
-  protected INTEQUAL instantiate_dyn(/*@Prototype*/ INTEQUAL this, PptSlice slice) {
+  protected INTEQUAL instantiate_dyn(@Prototype INTEQUAL this, PptSlice slice) {
     #if defined (NONEQUAL)
     // System.out.printf("Instantiating non-equal on %s and %s%n",
     //                     slice.var_infos[0], slice.var_infos[1]);

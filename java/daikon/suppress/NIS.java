@@ -35,10 +35,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 // Outstanding NIS todo list
 //
@@ -151,7 +148,7 @@ public class NIS {
   static @MonotonicNonNull List<NISuppressionSet> all_suppressions;
 
   /** List of suppressor invariant prototypes */
-  public @MonotonicNonNull static List</*@Prototype*/ Invariant> suppressor_proto_invs;
+  public @MonotonicNonNull static List<@Prototype Invariant> suppressor_proto_invs;
 
   /**
    * List of invariants that are unsuppressed by the current sample. The {@link #falsified} and
@@ -213,7 +210,7 @@ public class NIS {
     suppressor_map = new LinkedHashMap<Class<? extends Invariant>, List<NISuppressionSet>>(256);
     suppressor_map_suppression_count = new LinkedHashMap<Class<? extends Invariant>, Integer>(256);
     all_suppressions = new ArrayList<NISuppressionSet>();
-    suppressor_proto_invs = new ArrayList</*@Prototype*/ Invariant>();
+    suppressor_proto_invs = new ArrayList<@Prototype Invariant>();
 
     // This should be the first statement in the method, but put it after the
     // field initalizations so that the Initialization Checker doesn't complain.
@@ -270,7 +267,7 @@ public class NIS {
 
     if (NIS.dkconfig_suppressor_list) {
       // Set up the list of suppressor invariant prototypes
-      for (/*@Prototype*/ Invariant i : Daikon.proto_invs) {
+      for (@Prototype Invariant i : Daikon.proto_invs) {
         if (suppressor_map.containsKey(i.getClass())) {
           suppressor_proto_invs.add(i);
         }

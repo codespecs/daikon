@@ -50,12 +50,6 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.unary.sequence;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.interning.qual.Interned;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.ValueSet;
@@ -65,11 +59,15 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents the invariant "x != 0" where x represents all of the elements of a sequence of
@@ -95,14 +93,14 @@ public final class CLASSNAME extends SUPERCLASS {
     super(ppt);
   }
 
-  public /*@Prototype*/ CLASSNAME() {
+  public @Prototype CLASSNAME() {
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
+  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static /*@Prototype*/ CLASSNAME get_proto() {
+  public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
@@ -114,7 +112,7 @@ public final class CLASSNAME extends SUPERCLASS {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  protected CLASSNAME instantiate_dyn(/*@Prototype*/ CLASSNAME this, PptSlice slice) {
+  protected CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 

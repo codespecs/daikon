@@ -10,10 +10,7 @@ import java.lang.reflect.Method;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
-
-/*>>>
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /** Provides a class that defines the functions that must exist for each two variable invariant. */
 public abstract class BinaryInvariant extends Invariant {
@@ -26,7 +23,7 @@ public abstract class BinaryInvariant extends Invariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ BinaryInvariant() {
+  protected @Prototype BinaryInvariant() {
     super();
   }
 
@@ -64,7 +61,7 @@ public abstract class BinaryInvariant extends Invariant {
    * prototype invariants.
    */
   public InvariantStatus check_unordered(
-      /*@Prototype*/ BinaryInvariant this,
+      @Prototype BinaryInvariant this,
       @Interned Object val1,
       @Interned Object val2,
       int mod_index,
