@@ -816,14 +816,12 @@ show_nullness_java_files:
 check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock check-index
 typecheck: check-all
 
-index: check-index
 check-index: ${INDEX_JAVA_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
 
 # Run the index checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
-index-all: check-index-all
 check-index-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
@@ -835,15 +833,12 @@ INDEX_ONEFILE ?= daikon/PptTopLevel.java
 check-index-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_ONEFILE}
 
-intern: check-interning
-interning: check-interning
 check-interning: ${INTERNING_JAVA_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
-interning-all: check-interning-all
 check-interning-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
@@ -855,7 +850,6 @@ INTERNING_ONEFILE ?= daikon/PptTopLevel.java
 check-interning-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_ONEFILE}
 
-signature: check-signature
 check-signature: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
@@ -868,7 +862,17 @@ SIGNATURE_ONEFILE ?= daikon/dcomp/TypeStack.java
 check-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
-check-nullness: check-nullness-all
+
+check-nullness: check-nullness-raw check-nullness-fbc
+
+check-nullness-raw: compile compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-fbc: compile compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+
 
 # These targets run the Nullness checker on just one file.
 # Typical command:
@@ -880,17 +884,6 @@ check-nullness-raw-onefile: compile compile-typequals
 	${MAKE} check-nullness-raw-onefile-norecompile
 check-nullness-raw-onefile-norecompile:
 	${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_RAW_ONEFILE}
-
-
-check-nullness-all: check-nullness-raw-all check-nullness-fbc-all
-
-check-nullness-raw-all: compile compile-typequals
-	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
-check-nullness-fbc-all: compile compile-typequals
-	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 
 # These targets run the Nullness checker on just one file.
@@ -906,15 +899,11 @@ check-nullness-onefile-norecompile: check-nullness-fbc-onefile-norecompile
 check-nullness-fbc-onefile-norecompile:
 	${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
 
-check-prototype: check-prototype-all
-
-check-prototype-all: compile compile-typequals
+check-prototype: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-vindex: check-vindex-all
-
-check-vindex-all: compile compile-typequals
+check-vindex: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
