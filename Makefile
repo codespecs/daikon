@@ -41,7 +41,7 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # accidentally including things in the user's checkout that are not needed
 # by most users, but why not include everything that's in repository?)
 SCRIPT_FILES := Makefile \
-	daikon.cshrc daikon.bashrc daikonenv.bat \
+	daikon.bashrc daikonenv.bat \
 	dfepl dtrace-perl dtype-perl \
 	java-cpp \
 	kvasir-dtrace \
