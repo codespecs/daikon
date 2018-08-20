@@ -1,13 +1,11 @@
 package daikon.inv.unary.sequence;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.InvariantStatus;
+import org.checkerframework.checker.interning.qual.Interned;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /** Abstract base class for invariants over one variable of type {@code double[]}. */
 public abstract class SingleFloatSequence extends SingleSequence {
@@ -20,7 +18,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleFloatSequence() {
+  protected @Prototype SingleFloatSequence() {
     super();
   }
 
@@ -36,7 +34,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   @Override
-  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
+  public InvariantStatus add(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
@@ -53,7 +51,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
   }
 
   @Override
-  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
+  public InvariantStatus check(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
@@ -73,10 +71,10 @@ public abstract class SingleFloatSequence extends SingleSequence {
    * {@link #check_modified}. This method need not check for falsification; that is done by the
    * caller.
    */
-  public abstract InvariantStatus add_modified(double /*@Interned*/ [] value, int count);
+  public abstract InvariantStatus add_modified(double @Interned [] value, int count);
 
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
-  public InvariantStatus add_unmodified(double /*@Interned*/ [] value, int count) {
+  public InvariantStatus add_unmodified(double @Interned [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -89,9 +87,9 @@ public abstract class SingleFloatSequence extends SingleSequence {
    *     a count parameter of 3.
    * @return whether or not the sample is consistent with the invariant
    */
-  public abstract InvariantStatus check_modified(double /*@Interned*/ [] value, int count);
+  public abstract InvariantStatus check_modified(double @Interned [] value, int count);
 
-  public InvariantStatus check_unmodified(double /*@Interned*/ [] value, int count) {
+  public InvariantStatus check_unmodified(double @Interned [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 }

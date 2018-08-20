@@ -22,11 +22,6 @@ import org.apache.bcel.generic.*;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-*/
-
 public class Premain {
 
   /**

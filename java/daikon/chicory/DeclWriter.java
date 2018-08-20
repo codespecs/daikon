@@ -12,13 +12,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.bcelutil.SimpleLog;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * DeclWriter writes the {@code .decls} file to a stream. It uses traversal pattern trees (see
@@ -116,7 +115,7 @@ public class DeclWriter extends DaikonWriter {
    *
    * @param cinfo class whose declarations should be printed
    */
-  public void printDeclClass(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
+  public void printDeclClass(ClassInfo cinfo, @Nullable DeclReader comp_info) {
     if (Chicory.new_decl_format) {
       print_decl_class(cinfo, comp_info);
       return;
@@ -183,7 +182,7 @@ public class DeclWriter extends DaikonWriter {
    * used. Otherwise -1 is used if there is comparability information available and the information
    * in the variable is used if it is not.
    */
-  private void traverseDecl(DaikonVariableInfo curInfo, DeclReader./*@Nullable*/ DeclPpt decl_ppt) {
+  private void traverseDecl(DaikonVariableInfo curInfo, DeclReader.@Nullable DeclPpt decl_ppt) {
     if (curInfo.declShouldPrint()) {
 
       if (!(curInfo instanceof StaticObjInfo)) {
@@ -251,7 +250,7 @@ public class DeclWriter extends DaikonWriter {
    *
    * @param cinfo class whose declarations should be printed
    */
-  public void print_decl_class(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
+  public void print_decl_class(ClassInfo cinfo, @Nullable DeclReader comp_info) {
 
     if (debug) System.out.println("Enter print_decl_class: " + cinfo);
 
@@ -338,11 +337,7 @@ public class DeclWriter extends DaikonWriter {
    * @param comp_info comparability information
    */
   private void print_method(
-      MethodInfo mi,
-      RootInfo root,
-      String name,
-      PptType ppt_type,
-      /*@Nullable*/ DeclReader comp_info) {
+      MethodInfo mi, RootInfo root, String name, PptType ppt_type, @Nullable DeclReader comp_info) {
 
     if (debug) System.out.println("Enter print_method: " + name);
 
@@ -508,9 +503,9 @@ public class DeclWriter extends DaikonWriter {
       this(parent_ppt_name, type, null, null, null);
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied VarRelation this*/) {
+    public String toString(@GuardSatisfied VarRelation this) {
       return String.format(
           "VarRelation %s (%s->%s) %s [%s]",
           parent_ppt_name, local_prefix, parent_prefix, local_variable, type);
@@ -520,7 +515,7 @@ public class DeclWriter extends DaikonWriter {
      * Returns whether or not this relation is from a static variable in an object ppt to its
      * matching variable at the class level.
      */
-    /*@Pure*/
+    @Pure
     public boolean is_class_relation() {
       return (parent_ppt_name.endsWith(":::CLASS"));
     }
@@ -540,11 +535,9 @@ public class DeclWriter extends DaikonWriter {
 
     /** Two VarRelations are equal if the refer to the same program point and local variable. */
     @Override
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
-    public boolean equals(
-        /*>>>@GuardSatisfied VarRelation this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
+    public boolean equals(@GuardSatisfied VarRelation this, @GuardSatisfied @Nullable Object o) {
       if (!(o instanceof VarRelation) || (o == null)) {
         return false;
       }
@@ -555,8 +548,8 @@ public class DeclWriter extends DaikonWriter {
     }
 
     @Override
-    /*@Pure*/
-    public int hashCode(/*>>>@GuardSatisfied VarRelation this*/) {
+    @Pure
+    public int hashCode(@GuardSatisfied VarRelation this) {
       return (parent_ppt_name.hashCode()
           + ((local_variable == null) ? 0 : local_variable.hashCode()));
     }
@@ -723,8 +716,8 @@ public class DeclWriter extends DaikonWriter {
    * @param parent parent of var in the variable tree
    * @param var variable whose relation is desired
    */
-  private /*@Nullable*/ VarRelation find_relation(
-      /*@Nullable*/ ClassInfo cinfo,
+  private @Nullable VarRelation find_relation(
+      @Nullable ClassInfo cinfo,
       boolean is_static_method,
       DaikonVariableInfo parent,
       DaikonVariableInfo var) {

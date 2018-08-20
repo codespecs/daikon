@@ -2,21 +2,21 @@ package daikon.suppress;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.*;
+import daikon.Debug;
+import daikon.Global;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Class that defines a single non-instantiating suppression. A suppression consists of one or more
@@ -98,7 +98,7 @@ public class NISuppression {
    *     one or more suppressors were nonsensical and the rest were valid, NIS.SuppressState.INVALID
    *     otherwise
    */
-  public NIS.SuppressState check(PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
+  public NIS.SuppressState check(PptTopLevel ppt, VarInfo[] vis, @Nullable Invariant inv) {
 
     NIS.SuppressState status = NIS.SuppressState.VALID;
     boolean set = false;
@@ -258,7 +258,7 @@ public class NISuppression {
             Invariant cinv = supinv.already_exists();
             if (cinv != null) {
               @SuppressWarnings("nullness")
-              /*@NonNull*/ NISuppressionSet ss = cinv.get_ni_suppressions();
+              @NonNull NISuppressionSet ss = cinv.get_ni_suppressions();
               // this is apparently called for side effect (debugging output)
               ss.suppressed(cinv.ppt);
               throw new Error(
@@ -307,7 +307,7 @@ public class NISuppression {
       VarInfo vis[],
       int idx,
       boolean false_antecedents,
-      /*@Nullable*/ Invariant[] cinvs) {
+      @Nullable Invariant[] cinvs) {
 
     boolean all_true_at_end = ((idx + 1) == suppressors.length) && !false_antecedents;
 
@@ -399,7 +399,7 @@ public class NISuppression {
    * @return a new VarInfo[] containing the variables of inv, or null if inv does not match in some
    *     way
    */
-  private VarInfo /*@Nullable*/ [] consider_inv(Invariant inv, NISuppressor supor, VarInfo[] vis) {
+  private VarInfo @Nullable [] consider_inv(Invariant inv, NISuppressor supor, VarInfo[] vis) {
 
     // Make sure this invariant really matches this suppressor.  We know
     // the class already matches, but if the invariant has a swap variable
@@ -443,7 +443,7 @@ public class NISuppression {
    * suppression. Returns null if the list is empty for any suppressor (because that means there
    * can't be any suppressions based on these antecedents).
    */
-  List<Invariant> /*@Nullable*/ [] antecedents_for_suppressors(NIS.Antecedents ants) {
+  List<Invariant> @Nullable [] antecedents_for_suppressors(NIS.Antecedents ants) {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     /*NNC:@MonotonicNonNull*/ List<Invariant> antecedents[] =
@@ -580,9 +580,9 @@ public class NISuppression {
   }
 
   /** Returns {@code "suppressor && suppressor ... ==> suppressee"}. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied NISuppression this*/) {
+  public String toString(@GuardSatisfied NISuppression this) {
     String suppressorsString =
         (suppressors.length == 1)
             ? suppressors[0].toString()

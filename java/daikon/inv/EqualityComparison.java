@@ -1,6 +1,6 @@
 package daikon.inv;
 
-import daikon.*;
+import daikon.VarInfo;
 
 /** An interface satisfied by equality invariants such as {@code =}. */
 public interface EqualityComparison {

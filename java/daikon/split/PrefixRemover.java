@@ -1,13 +1,10 @@
 package daikon.split;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * PrefixRemover is a visitor for a JTB syntax tree that removes all instances of some prefix. For
@@ -25,7 +22,7 @@ class PrefixRemover extends DepthFirstVisitor {
   private String prefix;
 
   /** The last token visited by this. */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   private int columnshift = 0;
   private int columnshiftline = -1;

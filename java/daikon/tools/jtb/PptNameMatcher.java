@@ -7,11 +7,9 @@ import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 /**
  * Matches program point names with their corresponding MethodDeclaration's (or
@@ -302,7 +300,7 @@ public class PptNameMatcher {
   public List<String> extractPptArgs(PptName ppt_name) {
 
     @SuppressWarnings("nullness") // application invariant
-    /*@NonNull*/ String pptFullMethodName = ppt_name.getSignature();
+    @NonNull String pptFullMethodName = ppt_name.getSignature();
 
     if (debug_getMatches) {
       System.out.println("in extractPptArgs: pptFullMethodName = " + pptFullMethodName);
@@ -321,7 +319,7 @@ public class PptNameMatcher {
   }
 
   /** Returns simple name of inner class, or null if ppt_name is not an inner constructor. */
-  private static /*@Nullable*/ String innerConstructorName(PptName pptName) {
+  private static @Nullable String innerConstructorName(PptName pptName) {
     String mname = pptName.getMethodName();
     if (mname == null) {
       return null;

@@ -3,17 +3,19 @@ package daikon.inv.filter;
 import daikon.Daikon;
 import daikon.PrintInvariants;
 import daikon.VarInfo;
-import daikon.inv.*;
+import daikon.inv.GuardingImplication;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
 
 //  This class contains a collection of invariant filters, and allows other
 //  code to perform invariant filtering.  To filter invariants, do the
@@ -80,7 +82,7 @@ public class InvariantFilters {
     addPropertyFilter(new DotNetStringFilter());
   }
 
-  private static /*@MonotonicNonNull*/ InvariantFilters default_filters = null;
+  private static @MonotonicNonNull InvariantFilters default_filters = null;
 
   public static InvariantFilters defaultFilters() {
     if (default_filters == null) default_filters = new InvariantFilters();
@@ -88,12 +90,12 @@ public class InvariantFilters {
   }
 
   void addPropertyFilter(
-      /*>>>@UnknownInitialization(InvariantFilters.class) @Raw(InvariantFilters.class) InvariantFilters this,*/ InvariantFilter
-          filter) {
+          @UnknownInitialization(InvariantFilters.class) @Raw(InvariantFilters.class) InvariantFilters this,
+      InvariantFilter filter) {
     propertyFilters.add(filter);
   }
 
-  public /*@Nullable*/ InvariantFilter shouldKeepVarFilters(Invariant invariant) {
+  public @Nullable InvariantFilter shouldKeepVarFilters(Invariant invariant) {
     // Logger df = PrintInvariants.debugFiltering;
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
@@ -121,7 +123,7 @@ public class InvariantFilters {
     return null;
   }
 
-  public /*@Nullable*/ InvariantFilter shouldKeepPropFilters(Invariant invariant) {
+  public @Nullable InvariantFilter shouldKeepPropFilters(Invariant invariant) {
     Logger df = PrintInvariants.debugFiltering;
     for (InvariantFilter filter : propertyFilters) {
       if (Invariant.logDetail() || df.isLoggable(Level.FINE)) {
@@ -144,7 +146,7 @@ public class InvariantFilters {
     return null;
   }
 
-  public /*@Nullable*/ InvariantFilter shouldKeep(Invariant invariant) {
+  public @Nullable InvariantFilter shouldKeep(Invariant invariant) {
     Logger df = PrintInvariants.debugFiltering;
 
     if (Invariant.logOn() || df.isLoggable(Level.FINE)) {

@@ -3,12 +3,9 @@ package daikon.simplify;
 import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * A lemma is an object that wraps a Simplify formula representing some logical statement. The only
@@ -27,18 +24,18 @@ public class Lemma implements Comparable<Lemma> {
   }
 
   /** Return a human-readable description. */
-  public String summarize(/*>>>@GuardSatisfied Lemma this*/) {
+  public String summarize(@GuardSatisfied Lemma this) {
     return summary;
   }
 
   /** If this lemma came from an invariant, get its class. */
-  public /*@Nullable*/ Class<? extends Invariant> invClass() {
+  public @Nullable Class<? extends Invariant> invClass() {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int compareTo(/*>>>@GuardSatisfied Lemma this,*/ Lemma other) {
+  public int compareTo(@GuardSatisfied Lemma this, Lemma other) {
     return summarize().compareTo(other.summarize());
   }
 

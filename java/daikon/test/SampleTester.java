@@ -23,12 +23,9 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-*/
 
 /**
  * This tests Daikon's state as samples are processed. A standard decl file specifies the ppts. A
@@ -134,7 +131,7 @@ public class SampleTester extends TestCase {
     System.out.println("Test Passes");
   }
 
-  private static /*@Nullable*/ String find_file(String fname) {
+  private static @Nullable String find_file(String fname) {
 
     URL input_file_location = ClassLoader.getSystemResource(fname);
 
@@ -424,7 +421,7 @@ public class SampleTester extends TestCase {
     try {
       debug.fine("Looking for " + arg0);
       @SuppressWarnings("signature") // user input (?); throws exception if fails
-      /*@ClassGetName*/ String arg0_cgn = arg0;
+      @ClassGetName String arg0_cgn = arg0;
       cls = Class.forName(arg0_cgn);
     } catch (Exception e) {
       format = arg0;

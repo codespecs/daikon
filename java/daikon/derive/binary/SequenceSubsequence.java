@@ -1,12 +1,9 @@
 package daikon.derive.binary;
 
-import daikon.*;
-import daikon.derive.*;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import daikon.Quantify;
+import daikon.VarInfo;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and i. */
 public abstract class SequenceSubsequence extends BinaryDerivation {
@@ -20,11 +17,11 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
 
   // base1 is the sequence
   // base2 is the scalar
-  public VarInfo seqvar(/*>>>@GuardSatisfied SequenceSubsequence this*/) {
+  public VarInfo seqvar(@GuardSatisfied SequenceSubsequence this) {
     return base1;
   }
 
-  public VarInfo sclvar(/*>>>@GuardSatisfied SequenceSubsequence this*/) {
+  public VarInfo sclvar(@GuardSatisfied SequenceSubsequence this) {
     return base2;
   }
 
@@ -94,7 +91,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return seqvar();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String csharp_name(String index) {
     // String lower = get_lower_bound().csharp_name();
@@ -105,7 +102,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   /** Returns the ESC name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format(

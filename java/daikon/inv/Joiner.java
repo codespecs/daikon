@@ -1,12 +1,12 @@
 package daikon.inv;
 
-import daikon.*;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import daikon.PptSlice;
+import daikon.PptSlice0;
+import daikon.PptTopLevel;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 public abstract class Joiner extends Invariant {
 
@@ -36,7 +36,7 @@ public abstract class Joiner extends Invariant {
   }
 
   @Override
-  public abstract String repr(/*>>>@GuardSatisfied Joiner this*/);
+  public abstract String repr(@GuardSatisfied Joiner this);
 
   // I think we don't resurrect joiners
   @Override
@@ -44,26 +44,26 @@ public abstract class Joiner extends Invariant {
     throw new UnsupportedOperationException();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public abstract String format_using(/*>>>@GuardSatisfied Joiner this,*/ OutputFormat format);
+  public abstract String format_using(@GuardSatisfied Joiner this, OutputFormat format);
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isValidEscExpression() {
     return left.isValidEscExpression() && right.isValidEscExpression();
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isObviousDerived() {
     return false;
   }
 
-  public /*@Nullable*/ DiscardInfo isObviousImplied() {
+  public @Nullable DiscardInfo isObviousImplied() {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameInvariant(Invariant other) {
     if (!getClass().equals(other.getClass())) {
@@ -79,7 +79,7 @@ public abstract class Joiner extends Invariant {
     return left.isSameInvariant(otherAsJoiner.left) && right.isSameInvariant(otherAsJoiner.right);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     if (!getClass().equals(other.getClass())) return false;
@@ -97,7 +97,7 @@ public abstract class Joiner extends Invariant {
         && right.isSameInvariant(other_joiner.right));
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isInteresting() {
     return (left.isInteresting() && right.isInteresting());

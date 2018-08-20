@@ -1,8 +1,6 @@
 ### User customizations
 
-# Put user-specific changes (such as changes to the JAVAC variable:
-#   JAVAC ?= jikes -g +E +F
-# ) in your own Makefile.user file in this directory.
+# Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
@@ -50,7 +48,6 @@ ifeq (cygwin, $(OSTYPE))
 else
   JAVA ?= java -ea
   # JAVAC ?= javac -g -Xlint:unchecked
-  # JAVAC ?= jikes -g +E +F
   JAVAC ?= javac
   JAVADOC ?= javadoc
   JAR ?= jar
@@ -58,27 +55,18 @@ endif
 
 # Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
-# When type-checking, must use checker.jar.
-# No harm using it, if available, during ordinary compilation.
-ifdef JSR308
-  CHECKERFRAMEWORK ?= ${JSR308}/checker-framework
-endif
 ifdef CHECKERFRAMEWORK
-  CHECKERJAR ?= ${CHECKERFRAMEWORK}/checker/dist/checker.jar
+  CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
 endif
-# Version of javac that supports pluggable type-checking.
-JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac ${JAVACHECK_EXTRA_ARGS}
+CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
 
 ### end of user customizations
 
-JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
-# When running the checkers, it is important not to pass in "-source 5".
-# Also avoid unqualified "-Xlint" that activates warnings about failure to use == for interned values.
-JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
+JAVAC_COMMAND := ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 
 
 
@@ -86,38 +74,10 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
 ### Variables
 ###
 
-# These jar files only exist for the development version, not the
-# distributed version, of Daikon.  The if clause avoids a (harmless but
-# annoying) javac error message that they don't exist.
-ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-util.jar)" "${DAIKONDIR}/java/lib/daikon-util.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/*
-endif
-ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
-    CLASSPATH_JARS2 = ${CHECKERJAR}
-endif
+# $CHECKERFRAMEWORK_JAR_DIR goes before java/lib/, to enable overriding local checker-qual.jar .
+CLASSPATH := :${DAIKONDIR}/java:$(CLASSPATH):.:${CF_JAR_DIR}/*:${DAIKONDIR}/java/lib/*
 
-# This probably shouldn't be unconditional??
-CLASSPATH := :${DAIKONDIR}/java:$(CLASSPATH)
-
-# Add necessary items to the classpath if they are not already there
-ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
-  CLASSPATH := .:$(CLASSPATH)
-endif
-# This DAIKON_CLASSPATH_PREFIX is intended to be set in Makefile.user
-ifdef DAIKON_CLASSPATH_PREFIX
-  CLASSPATH := ${DAIKON_CLASSPATH_PREFIX}:${CLASSPATH}
-endif
-ifdef CLASSPATH_JARS
-  CLASSPATH := $(CLASSPATH_JARS):$(CLASSPATH)
-endif
-ifeq "$(wildcard ${CHECKERFRAMEWORK}/checker/build)" "${CHECKERFRAMEWORK}/checker/build"
-  CLASSPATH := $(CLASSPATH):${CHECKERFRAMEWORK}/checker/build
-endif
-ifdef CLASSPATH_JARS2
-  ifneq (${CHECKERJAR}, $(findstring ${CHECKERJAR},$(CLASSPATH)))
-    CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS2)
-  endif
-endif
+# These are necessary for javadoc (or were at one time).
 ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
   ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
     CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/tools.jar
@@ -126,16 +86,6 @@ ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
     CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/rt.jar
   endif
 endif
-
-## Not necessary due to use of *-cygwin versions of Java programs.
-# # On cygwin, translate the classpath to windows format.  Only do so if
-# # this has not already been done (which is determined by looking for
-# # semicolons (;) in the classpath
-# ifeq (cygwin,$(OSTYPE))
-#   ifneq (;,$(findstring ;,$(CLASSPATH)))
-#     CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
-#   endif
-# endif
 
 export CLASSPATH
 
@@ -426,7 +376,6 @@ update-libs:
 ###
 
 export CLASSPATH
-export CHECKERJAR
 export DAIKONDIR
 
 
@@ -642,13 +591,6 @@ all_javac:	all_via_javac
 
 javac:	all_via_javac
 
-all_via_jikes:
-	$(MAKE) JAVAC='jikes +E +F' all
-
-all_jikes:	all_via_jikes
-
-jikes:	all_via_jikes
-
 # These rules are undesirable, because Daikon.class (or Diff.class) might
 # be up to date even if other files aren't.
 daikon/Daikon.class: daikon/Daikon.java	../utils/plume-scripts ${AUTO_GENERATED_FILES}
@@ -808,7 +750,7 @@ endif
 
 
 ###########################################################################
-### Pluggable type qualifier checkers
+### Pluggable type checkers
 ###
 
 # (Don't run these until after you have compiled Daikon at least once.)
@@ -817,7 +759,7 @@ endif
 # override (not augment) any other use of -Alint in this Makefile.
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 8 rather than version 9).
-CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK}/checker/resources/javadoc.astub
+CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK}/checker/resources/javadoc.astub -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar
 
 ## All of the following targets need to depend on "compile".
 
@@ -874,49 +816,43 @@ show_nullness_java_files:
 check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock check-index
 typecheck: check-all
 
-index: check-index
 check-index: ${INDEX_JAVA_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
 
 # Run the index checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
-index-all: check-index-all
 check-index-all: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 # This target runs the Index checker on just one file.
 # Typical command:
 # INDEX_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-index-onefile
 INDEX_ONEFILE ?= daikon/PptTopLevel.java
 check-index-onefile: ${ALL_GENERATED_FILES} compile
-	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_ONEFILE}
+	${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_ONEFILE}
 
-intern: check-interning
-interning: check-interning
 check-interning: ${INTERNING_JAVA_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
-interning-all: check-interning-all
 check-interning-all: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 # This target runs the Interning checker on just one file.
 # Typical command:
 # INTERNING_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-interning-onefile
 INTERNING_ONEFILE ?= daikon/PptTopLevel.java
 check-interning-onefile: ${ALL_GENERATED_FILES} compile
-	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_ONEFILE}
+	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_ONEFILE}
 
-signature: check-signature
 check-signature: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 # This target runs the Signature checker on just one file.
 # Typical command:
@@ -924,20 +860,19 @@ check-signature: ${ALL_GENERATED_FILES} compile
 # SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
 SIGNATURE_ONEFILE ?= daikon/dcomp/TypeStack.java
 check-signature-onefile: ${ALL_GENERATED_FILES} compile
-	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
+	${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
-check-nullness: check-nullness-all
 
-check-nullness-all: check-nullness-all-withstubs
+check-nullness: check-nullness-raw check-nullness-fbc
 
-check-nullness-all-nostubs: check-nullness-raw-all-nostubs check-nullness-fbc-all-nostubs
+check-nullness-raw: compile compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-nullness-raw: check-nullness-raw-all-withstubs
+check-nullness-fbc: compile compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-nullness-raw-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
-	$(MAKE) JAVAC=${JAVAC_FOR_CHECKER} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 # These targets run the Nullness checker on just one file.
 # Typical command:
@@ -945,44 +880,11 @@ check-nullness-raw-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 # NULLNESS_RAW_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_RAW_ONEFILE ?= daikon/FileIO.java
 NULLNESS_RAW_ONEFILE ?= daikon/inv/Invariant.java
-check-nullness-raw-onefile: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
+check-nullness-raw-onefile: compile compile-typequals
 	${MAKE} check-nullness-raw-onefile-norecompile
 check-nullness-raw-onefile-norecompile:
-	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_RAW_ONEFILE}
+	${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_RAW_ONEFILE}
 
-
-check-nullness-fbc-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
-check-nullness-all-withstubs: check-nullness-raw-all-withstubs check-nullness-fbc-all-withstubs
-
-check-nullness-raw-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
-check-nullness-fbc: check-nullness-fbc-all-withstubs
-
-check-nullness-fbc-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
-
-# Version that issues warnings, not errors.
-## (Actually, it's identical to the above!  TODO: Fix that.)
-check-nullness-raw-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
-check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 # These targets run the Nullness checker on just one file.
 # Typical command:
@@ -991,69 +893,42 @@ check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
 # NULLNESS_ONEFILE ?= daikon/FileIO.java
 NULLNESS_ONEFILE ?= daikon/Daikon.java
 check-nullness-onefile: check-nullness-fbc-onefile
-check-nullness-fbc-onefile: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
+check-nullness-fbc-onefile: compile compile-typequals
 	${MAKE} check-nullness-fbc-onefile-norecompile
 check-nullness-onefile-norecompile: check-nullness-fbc-onefile-norecompile
 check-nullness-fbc-onefile-norecompile:
-	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
+	${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
 
-check-prototype: check-prototype-all
+check-prototype: compile compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-prototype-all: check-prototype-all-withstubs
-
-check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
-check-vindex: check-vindex-all
-
-check-vindex-all: check-vindex-all-withstubs
-
-check-vindex-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
-	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+check-vindex: compile compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-regex: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 check-regex-qual: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 check-formatter: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 check-lock: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-
-check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-
-check-igj-all-withstubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-
-check-javari-all-nostubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-
-check-javari-all-withstubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
 TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
 
 compile-typequals: ${TYPEQUALS_CLASSES}
 ${TYPEQUALS_CLASSES}: ${TYPEQUALS_JAVA_FILES}
-	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_ARGS} ${TYPEQUALS_JAVA_FILES}
+	${JAVAC_COMMAND} ${JAVAC_ARGS} ${TYPEQUALS_JAVA_FILES}
 
 # These targets run the Interning checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
@@ -1104,10 +979,11 @@ nullness-counts:
 	@grep -n '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES}
 
 
+# Count the total possible locations at which a type annotation could be written.
 JAVAC_COUNT_ARGS = -processor org.checkerframework.common.util.count.Locations -implicit:class -Xlint:-processing
 possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 
 
@@ -1212,6 +1088,13 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
 	cp -pf ../doc/daikon-favicon.png $(JAVADOC_DEST)
 	cd $(JAVADOC_DEST) && $(HTMLTOOLS)/html-add-favicon . daikon-favicon.png
+
+# Run Javadoc on each file individually, to determine which one is crashing Javadoc.
+# Then, you need to do binary search on that file.
+api-test-each: ../utils/plume-scripts ../utils/html-tools
+	mkdir -p $(JAVADOC_DEST)
+	@make java-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < java-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/

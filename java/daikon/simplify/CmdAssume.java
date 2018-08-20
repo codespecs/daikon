@@ -1,9 +1,8 @@
 package daikon.simplify;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * An Assume command pushes some proposition onto the assumption stack of the session. The
@@ -19,7 +18,7 @@ public class CmdAssume implements Cmd {
 
   /** For documentation, read the class overview. */
   @Override
-  public void apply(final /*@GuardedBy("<self>")*/ Session s) {
+  public void apply(final @GuardedBy("<self>") Session s) {
 
     synchronized (s) {
       // send out the (BG_PUSH proposition)
@@ -33,9 +32,9 @@ public class CmdAssume implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied CmdAssume this*/) {
+  public String toString(@GuardSatisfied CmdAssume this) {
     return "CmdAssume: " + proposition;
   }
 }

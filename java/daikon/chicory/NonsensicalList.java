@@ -2,11 +2,9 @@ package daikon.chicory;
 
 import java.util.AbstractList;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * NonsensicalList is similar to NonsensicalObject but it is used for arrays whose value is
@@ -23,21 +21,21 @@ public class NonsensicalList extends AbstractList<Object> implements List<Object
     return theList;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public Object get(/*>>>@GuardSatisfied NonsensicalList this,*/ int index) {
+  public Object get(@GuardSatisfied NonsensicalList this, int index) {
     return NonsensicalObject.getInstance();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int size(/*>>>@GuardSatisfied NonsensicalList this*/) {
+  public int size(@GuardSatisfied NonsensicalList this) {
     return 0;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied NonsensicalList this*/) {
+  public String toString(@GuardSatisfied NonsensicalList this) {
     return "NonsensicalList";
   }
 

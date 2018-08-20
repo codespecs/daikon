@@ -7,10 +7,8 @@ import daikon.inv.InvariantInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class DiscReasonMap {
 
@@ -31,7 +29,7 @@ public final class DiscReasonMap {
     // Use initialize();
   }
 
-  /*@EnsuresNonNull("the_map")*/
+  @EnsuresNonNull("the_map")
   public static void initialize() {
     the_map = new HashMap<String, HashMap<String, List<DiscardInfo>>>();
   }
@@ -143,7 +141,7 @@ public final class DiscReasonMap {
       // The user entered the vars in a specific order, but let's give
       // them matching invariants that have those vars in any order.
       @SuppressWarnings("nullness") // because invInfo.vars() != null
-      /*@NonNull*/ List<String> var_perms = invInfo.var_permutations();
+      @NonNull List<String> var_perms = invInfo.var_permutations();
       for (String var_perm : var_perms) {
         List<DiscardInfo> temp = vars_map_from_ppt.get(var_perm);
         if (temp != null) {
@@ -172,7 +170,7 @@ public final class DiscReasonMap {
   // least 1 DiscardInfo associated with it.
   private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
     @SuppressWarnings("nullness") // map:  method precondition
-    /*@NonNull*/ HashMap<String, List<DiscardInfo>> vars_map = the_map.get(ppt);
+    @NonNull HashMap<String, List<DiscardInfo>> vars_map = the_map.get(ppt);
     assert vars_map != null;
 
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();

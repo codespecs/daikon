@@ -18,7 +18,7 @@ public final class misc_Fib_main_18 extends Splitter {
     misc_Fib_STEPS_varinfo = ppt.find_var_by_name("misc.Fib.STEPS");
   }
 
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new misc_Fib_main_18(ppt);
   }
 

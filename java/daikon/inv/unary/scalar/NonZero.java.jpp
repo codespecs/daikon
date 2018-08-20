@@ -52,15 +52,13 @@ import daikon.inv.unary.sequence.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 #if defined (SCALAR)
 // This also serves as NonNull.
@@ -93,14 +91,14 @@ public class NONZERO extends SINGLESCALAR {
     super(ppt);
   }
 
-  private /*@Prototype*/ NONZERO() {
+  private @Prototype NONZERO() {
     super();
   }
 
-  private static /*@Prototype*/ NONZERO proto = new /*@Prototype*/ NONZERO();
+  private static @Prototype NONZERO proto = new @Prototype NONZERO();
 
   /** Returns the prototype invariant for NONZERO */
-  public static /*@Prototype*/ NONZERO get_proto() {
+  public static @Prototype NONZERO get_proto() {
     return proto;
   }
 
@@ -128,11 +126,11 @@ public class NONZERO extends SINGLESCALAR {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public NONZERO instantiate_dyn(/*>>> @Prototype NONZERO this,*/ PptSlice slice) {
+  public NONZERO instantiate_dyn(@Prototype NONZERO this, PptSlice slice) {
     return new NONZERO(slice);
   }
 
-  private String zero(/*>>>@GuardSatisfied @Prototype NONZERO this,*/ OutputFormat format) {
+  private String zero(@GuardSatisfied @Prototype NONZERO this, OutputFormat format) {
 #ifdef SCALAR
     if (is_pointer()) {
       return "null";
@@ -143,9 +141,9 @@ public class NONZERO extends SINGLESCALAR {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied @Prototype NONZERO this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied @Prototype NONZERO this, OutputFormat format) {
     // // var() fails for prototype invariants
     // if (ppt == null) {
     //   return "Prototype " + NONZEROSTRING + " invariant (ppt == null)";
@@ -196,8 +194,8 @@ public class NONZERO extends SINGLESCALAR {
   }
 
   /** Returns whether or not the variable is a pointer. */
-  /*@Pure*/
-  private boolean is_pointer(/*>>>@GuardSatisfied NONZERO this*/) {
+  @Pure
+  private boolean is_pointer(@GuardSatisfied NONZERO this) {
     return (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE);
   }
 
@@ -260,9 +258,9 @@ public class NONZERO extends SINGLESCALAR {
     }
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var = vis[0];
 
     if (var.aux.isStruct()) {
@@ -283,9 +281,9 @@ public class NONZERO extends SINGLESCALAR {
     return super.isObviousStatically(vis);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -356,14 +354,14 @@ public class NONZERO extends SINGLESCALAR {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof NONZERO;
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof OneOfScalar) {

@@ -24,16 +24,14 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.derive.*;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Derived variable representing the selecting of elements of one sequence based on the values of
@@ -64,12 +62,12 @@ public final class CLASSNAME extends BinaryDerivation {
   public static boolean dkconfig_boolOnly = true;
 
   @Override
-  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var1(@GuardSatisfied CLASSNAME this) {
     return base1;
   }
 
   @Override
-  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var2(@GuardSatisfied CLASSNAME this) {
     return base2;
   }
 
@@ -183,9 +181,9 @@ public final class CLASSNAME extends BinaryDerivation {
       }
       return new ValueAndModified(Intern.intern(result), mod);
     } else if (val1 instanceof Object[]) {
-      /*@Interned*/ Object[] result = new /*@Interned*/ Object[count];
+      @Interned Object[] result = new @Interned Object[count];
       @SuppressWarnings("interning") // object invariant: array elements are interned
-      /*@Interned*/ Object[] values = (/*@Interned*/ Object[]) val1;
+      @Interned Object[] values = (@Interned Object[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {
         if ((predicate[i] == choose) ^ !keep) {
@@ -206,9 +204,9 @@ public final class CLASSNAME extends BinaryDerivation {
     return VarInfo.make_function("predicateSlice", var1(), var2());
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String toString(@GuardSatisfied CLASSNAME this) {
     return "[" + CLASSSTRING + " of "
         + var1().name()
         + " "
@@ -218,7 +216,7 @@ public final class CLASSNAME extends BinaryDerivation {
         + "]";
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
@@ -230,7 +228,7 @@ public final class CLASSNAME extends BinaryDerivation {
   }
 
   /** Returns the ESC name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format("predicate(%s,%s)", var1().esc_name(), var2().esc_name());

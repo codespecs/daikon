@@ -1,11 +1,9 @@
 package daikon.diff;
 
-import daikon.inv.*;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
 import java.util.Comparator;
-
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Comparator for pairing invariants. In an invariant in set2 is an implication, its consequent is
@@ -24,7 +22,7 @@ public class ConsequentPairComparator implements Comparator<Invariant> {
     this.c = c;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public int compare(Invariant inv1, Invariant inv2) {
     if (inv2 instanceof Implication) {

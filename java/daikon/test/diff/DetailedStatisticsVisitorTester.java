@@ -6,10 +6,8 @@ import daikon.inv.*;
 import daikon.test.*;
 import java.lang.reflect.Method;
 import junit.framework.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class DetailedStatisticsVisitorTester extends TestCase {
 
@@ -168,22 +166,19 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     m.setAccessible(true);
 
     @SuppressWarnings("nullness") // static method, so null first arg is OK: shouldAddFrequency()
-    /*@NonNull*/ Boolean b1 = (Boolean) m.invoke(null, new Object[] {null_noprint, null_noprint});
+    @NonNull Boolean b1 = (Boolean) m.invoke(null, new Object[] {null_noprint, null_noprint});
     assert !b1.booleanValue();
 
     @SuppressWarnings("nullness") // static method, so null first arg is OK: shouldAddFrequency()
-    /*@NonNull*/ Boolean b2 =
-        (Boolean) m.invoke(null, new Object[] {null_int_1_just, null_int_1_just});
+    @NonNull Boolean b2 = (Boolean) m.invoke(null, new Object[] {null_int_1_just, null_int_1_just});
     assert b2.booleanValue();
 
     @SuppressWarnings("nullness") // static method, so null first arg is OK: shouldAddFrequency()
-    /*@NonNull*/ Boolean b3 =
-        (Boolean) m.invoke(null, new /*@Nullable*/ Object[] {null, null_noprint});
+    @NonNull Boolean b3 = (Boolean) m.invoke(null, new @Nullable Object[] {null, null_noprint});
     assert !b3.booleanValue();
 
     @SuppressWarnings("nullness") // static method, so null first arg is OK: shouldAddFrequency()
-    /*@NonNull*/ Boolean b4 =
-        (Boolean) m.invoke(null, new /*@Nullable*/ Object[] {null, null_int_1_just});
+    @NonNull Boolean b4 = (Boolean) m.invoke(null, new @Nullable Object[] {null, null_int_1_just});
     assert b4.booleanValue();
   }
 }

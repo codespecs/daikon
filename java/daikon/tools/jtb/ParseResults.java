@@ -14,11 +14,8 @@ import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * The wrapped result of parsing a .java source file. The packageName and className arguments can be
@@ -39,9 +36,9 @@ public class ParseResults {
     this.compilationUnit = compilationUnit;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied ParseResults this*/) {
+  public String toString(@GuardSatisfied ParseResults this) {
     return "package name: " + packageName + ", file name: " + fileName;
   }
 

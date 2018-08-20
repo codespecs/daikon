@@ -6,14 +6,24 @@ import daikon.FileIO.ParentRelation;
 import daikon.PptRelation.PptRelationType;
 import daikon.VarInfo.VarFlags;
 import daikon.config.Configuration;
-import daikon.derive.*;
-import daikon.derive.binary.*;
-import daikon.inv.*;
+import daikon.inv.DiscardCode;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Equality;
+import daikon.inv.GuardingImplication;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantInfo;
+import daikon.inv.Joiner;
 import daikon.inv.OutputFormat;
-import daikon.inv.filter.*;
+import daikon.inv.filter.InvariantFilter;
+import daikon.inv.filter.InvariantFilters;
+import daikon.inv.filter.ObviousFilter;
+import daikon.inv.filter.UnjustifiedFilter;
 import daikon.split.PptSplitter;
-import daikon.suppress.*;
-import gnu.getopt.*;
+import daikon.suppress.NIS;
+import daikon.suppress.NISuppressionSet;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,12 +51,12 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.plumelib.util.RegexUtil;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 /**
  * PrintInvariants prints a set of invariants from a {@code .inv} file. For documentation, see
@@ -193,7 +203,7 @@ public final class PrintInvariants {
   private static final String lineSep = Global.lineSep;
 
   /** Regular expression that ppts must match to be printed */
-  private static /*@Nullable*/ Pattern ppt_regexp;
+  private static @Nullable Pattern ppt_regexp;
 
   /**
    * Switch for whether to print discarded Invariants or not, default is false. True iff {@code
@@ -237,16 +247,16 @@ public final class PrintInvariants {
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
   // Stores the output file stream if --output is specified.  Null means System.out.
-  private static /*@Nullable*/ OutputStream out_stream = null;
+  private static @Nullable OutputStream out_stream = null;
   private static boolean print_csharp_metadata = false;
 
   // Fields that will be used if the --disc_reason switch is used (in other
   // words, if print_discarded_invariants == true).  But they can be null
   // even in that case, which means to output a discard-reason for every
   // invariant.
-  private static /*@MonotonicNonNull*/ String discClass = null;
-  private static /*@MonotonicNonNull*/ String discVars = null;
-  private static /*@MonotonicNonNull*/ String discPpt = null;
+  private static @MonotonicNonNull String discClass = null;
+  private static @MonotonicNonNull String discVars = null;
+  private static @MonotonicNonNull String discPpt = null;
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
@@ -707,7 +717,7 @@ public final class PrintInvariants {
   //
   // All of this can (and should be) improved when V2 is dropped.
 
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariants(PptMap all_ppts) {
 
     if (out_stream == null) {
@@ -803,7 +813,7 @@ public final class PrintInvariants {
    * Print invariants for a single program point and its conditionals. Does no output if no samples
    * or no views.
    */
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariants_maybe(PptTopLevel ppt, PrintWriter out, PptMap all_ppts) {
 
     debugPrint.fine("Considering printing ppt " + ppt.name() + ", samples = " + ppt.num_samples());
@@ -890,7 +900,7 @@ public final class PrintInvariants {
    * samples for the specified ppt. Also prints all of the variables for the ppt if
    * Daikon.output_num_samples is enabled or the format is ESCJAVA, JML, or DBCJAVA.
    */
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
 
     if (!wrap_xml) {
@@ -1052,7 +1062,7 @@ public final class PrintInvariants {
   private static String reason = "";
 
   /** Prints the specified invariant to out. */
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariant(
       Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt) {
 
@@ -1165,7 +1175,7 @@ public final class PrintInvariants {
    *
    * <p>If the content is null, prints nothing.
    */
-  private static void printXmlTagged(PrintWriter out, String tag, /*@Nullable*/ Object content) {
+  private static void printXmlTagged(PrintWriter out, String tag, @Nullable Object content) {
     if (content == null) {
       return;
     }
@@ -1327,7 +1337,7 @@ public final class PrintInvariants {
   }
 
   /** Print invariants for a single program point, once we know that this ppt is worth printing. */
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariants(PptTopLevel ppt, PrintWriter out, PptMap ppt_map) {
 
     // make names easier to read before printing
@@ -1446,7 +1456,7 @@ public final class PrintInvariants {
   }
 
   /** Does the actual printing of the invariants. */
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  @RequiresNonNull("FileIO.new_decl_format")
   private static void finally_print_the_invariants(
       List<Invariant> invariants, PrintWriter out, PptTopLevel ppt) {
     // System.out.printf("Ppt %s%n", ppt.name());
@@ -1467,7 +1477,7 @@ public final class PrintInvariants {
     }
 
     if (dkconfig_replace_prestate) {
-      for (Map.Entry</*@KeyFor("exprToVar")*/ String, String> e : exprToVar.entrySet()) {
+      for (Map.Entry<@KeyFor("exprToVar") String, String> e : exprToVar.entrySet()) {
         out.println("prestate assignment: " + e.getValue() + "=" + e.getKey());
       }
       resetPrestateExpressions();
@@ -1587,7 +1597,7 @@ public final class PrintInvariants {
   }
 
   /** Prints all of the invariants in the specified slice */
-  public static void print_all_invs(/*@Nullable*/ PptSlice slice, String indent) {
+  public static void print_all_invs(@Nullable PptSlice slice, String indent) {
 
     if (slice == null) return;
 
@@ -1605,12 +1615,10 @@ public final class PrintInvariants {
     Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
 
     // Not Map, because keys are nullable
-    HashMap<
-            /*@Nullable*/ Class<? extends InvariantFilter>,
-            Map<Class<? extends Invariant>, Integer>>
+    HashMap<@Nullable Class<? extends InvariantFilter>, Map<Class<? extends Invariant>, Integer>>
         filter_map =
             new LinkedHashMap<
-                /*@Nullable*/ Class<? extends InvariantFilter>,
+                @Nullable Class<? extends InvariantFilter>,
                 Map<Class<? extends Invariant>, Integer>>();
 
     if (print_invs) debug.fine(ppt.name());
@@ -1643,7 +1651,7 @@ public final class PrintInvariants {
     log.fine(ppt.name() + ": " + invs_array.length);
 
     for (Map.Entry<
-            /*@Nullable*/ /*@KeyFor("filter_map")*/ Class<? extends InvariantFilter>,
+            @Nullable @KeyFor("filter_map") Class<? extends InvariantFilter>,
             Map<Class<? extends Invariant>, Integer>>
         entry : filter_map.entrySet()) {
       Class<? extends InvariantFilter> filter_class = entry.getKey();
@@ -1657,7 +1665,7 @@ public final class PrintInvariants {
       } else {
         log.fine(" : " + filter_class.getName() + ": " + total);
       }
-      for (Map.Entry</*@KeyFor("inv_map")*/ Class<? extends Invariant>, Integer> entry2 :
+      for (Map.Entry<@KeyFor("inv_map") Class<? extends Invariant>, Integer> entry2 :
           inv_map.entrySet()) {
         Class<? extends Invariant> inv_class = entry2.getKey();
         Integer cnt = entry2.getValue();
@@ -1667,7 +1675,7 @@ public final class PrintInvariants {
   }
 
   @SuppressWarnings("flowexpr.parse.error") // private field
-  /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
+  @RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})
   public static void print_true_inv_cnt(PptMap ppts) {
 
     // Count printable invariants

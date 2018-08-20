@@ -1,11 +1,8 @@
 package daikon.tools.runtimechecker;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import jtb.syntaxtree.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Represents a class created by the instrumenter to check invariants. */
 public class CheckerClass {
@@ -35,8 +32,7 @@ public class CheckerClass {
     // f3 -> ";"
     // Get the package and imports from clazz. We'll include them.
     @SuppressWarnings("nullness") // application invariant: every body is in a compilation unit
-    /*@NonNull*/ CompilationUnit clazzCU =
-        (CompilationUnit) Ast.getParent(CompilationUnit.class, clazz);
+    @NonNull CompilationUnit clazzCU = (CompilationUnit) Ast.getParent(CompilationUnit.class, clazz);
     NodeOptional no = clazzCU.f0;
     String packageName;
     if (no.present()) {

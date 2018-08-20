@@ -8,17 +8,155 @@ import daikon.derive.Derivation;
 import daikon.inv.Equality;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
-import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.sequenceScalar.Member;
+import daikon.inv.binary.sequenceScalar.MemberFloat;
+import daikon.inv.binary.sequenceScalar.SeqFloatEqual;
+import daikon.inv.binary.sequenceScalar.SeqFloatGreaterEqual;
+import daikon.inv.binary.sequenceScalar.SeqFloatGreaterThan;
+import daikon.inv.binary.sequenceScalar.SeqFloatLessEqual;
+import daikon.inv.binary.sequenceScalar.SeqFloatLessThan;
+import daikon.inv.binary.sequenceScalar.SeqIntEqual;
+import daikon.inv.binary.sequenceScalar.SeqIntGreaterEqual;
+import daikon.inv.binary.sequenceScalar.SeqIntGreaterThan;
+import daikon.inv.binary.sequenceScalar.SeqIntLessEqual;
+import daikon.inv.binary.sequenceScalar.SeqIntLessThan;
 import daikon.inv.binary.sequenceString.MemberString;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.binary.twoSequence.*;
-import daikon.inv.binary.twoString.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.stringsequence.*;
-import daikon.split.*;
+import daikon.inv.binary.twoScalar.FloatEqual;
+import daikon.inv.binary.twoScalar.FloatGreaterEqual;
+import daikon.inv.binary.twoScalar.FloatGreaterThan;
+import daikon.inv.binary.twoScalar.FloatLessEqual;
+import daikon.inv.binary.twoScalar.FloatLessThan;
+import daikon.inv.binary.twoScalar.FloatNonEqual;
+import daikon.inv.binary.twoScalar.IntEqual;
+import daikon.inv.binary.twoScalar.IntGreaterEqual;
+import daikon.inv.binary.twoScalar.IntGreaterThan;
+import daikon.inv.binary.twoScalar.IntLessEqual;
+import daikon.inv.binary.twoScalar.IntLessThan;
+import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.binary.twoScalar.LinearBinary;
+import daikon.inv.binary.twoScalar.LinearBinaryFloat;
+import daikon.inv.binary.twoScalar.NumericFloat;
+import daikon.inv.binary.twoScalar.NumericInt;
+import daikon.inv.binary.twoSequence.PairwiseFloatEqual;
+import daikon.inv.binary.twoSequence.PairwiseFloatGreaterEqual;
+import daikon.inv.binary.twoSequence.PairwiseFloatGreaterThan;
+import daikon.inv.binary.twoSequence.PairwiseFloatLessEqual;
+import daikon.inv.binary.twoSequence.PairwiseFloatLessThan;
+import daikon.inv.binary.twoSequence.PairwiseIntEqual;
+import daikon.inv.binary.twoSequence.PairwiseIntGreaterEqual;
+import daikon.inv.binary.twoSequence.PairwiseIntGreaterThan;
+import daikon.inv.binary.twoSequence.PairwiseIntLessEqual;
+import daikon.inv.binary.twoSequence.PairwiseIntLessThan;
+import daikon.inv.binary.twoSequence.PairwiseLinearBinary;
+import daikon.inv.binary.twoSequence.PairwiseLinearBinaryFloat;
+import daikon.inv.binary.twoSequence.PairwiseNumericFloat;
+import daikon.inv.binary.twoSequence.PairwiseNumericInt;
+import daikon.inv.binary.twoSequence.PairwiseString;
+import daikon.inv.binary.twoSequence.PairwiseStringEqual;
+import daikon.inv.binary.twoSequence.PairwiseStringGreaterEqual;
+import daikon.inv.binary.twoSequence.PairwiseStringGreaterThan;
+import daikon.inv.binary.twoSequence.PairwiseStringLessEqual;
+import daikon.inv.binary.twoSequence.PairwiseStringLessThan;
+import daikon.inv.binary.twoSequence.Reverse;
+import daikon.inv.binary.twoSequence.ReverseFloat;
+import daikon.inv.binary.twoSequence.SeqSeqFloatEqual;
+import daikon.inv.binary.twoSequence.SeqSeqFloatGreaterEqual;
+import daikon.inv.binary.twoSequence.SeqSeqFloatGreaterThan;
+import daikon.inv.binary.twoSequence.SeqSeqFloatLessEqual;
+import daikon.inv.binary.twoSequence.SeqSeqFloatLessThan;
+import daikon.inv.binary.twoSequence.SeqSeqIntEqual;
+import daikon.inv.binary.twoSequence.SeqSeqIntGreaterEqual;
+import daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan;
+import daikon.inv.binary.twoSequence.SeqSeqIntLessEqual;
+import daikon.inv.binary.twoSequence.SeqSeqIntLessThan;
+import daikon.inv.binary.twoSequence.SeqSeqStringEqual;
+import daikon.inv.binary.twoSequence.SeqSeqStringGreaterEqual;
+import daikon.inv.binary.twoSequence.SeqSeqStringGreaterThan;
+import daikon.inv.binary.twoSequence.SeqSeqStringLessEqual;
+import daikon.inv.binary.twoSequence.SeqSeqStringLessThan;
+import daikon.inv.binary.twoSequence.SubSequence;
+import daikon.inv.binary.twoSequence.SubSequenceFloat;
+import daikon.inv.binary.twoSequence.SubSet;
+import daikon.inv.binary.twoSequence.SubSetFloat;
+import daikon.inv.binary.twoSequence.SuperSequence;
+import daikon.inv.binary.twoSequence.SuperSequenceFloat;
+import daikon.inv.binary.twoSequence.SuperSet;
+import daikon.inv.binary.twoSequence.SuperSetFloat;
+import daikon.inv.binary.twoString.StdString;
+import daikon.inv.binary.twoString.StringEqual;
+import daikon.inv.binary.twoString.StringGreaterEqual;
+import daikon.inv.binary.twoString.StringGreaterThan;
+import daikon.inv.binary.twoString.StringLessEqual;
+import daikon.inv.binary.twoString.StringLessThan;
+import daikon.inv.binary.twoString.StringNonEqual;
+import daikon.inv.ternary.threeScalar.FunctionBinary;
+import daikon.inv.ternary.threeScalar.FunctionBinaryFloat;
+import daikon.inv.ternary.threeScalar.LinearTernary;
+import daikon.inv.ternary.threeScalar.LinearTernaryFloat;
+import daikon.inv.unary.scalar.CompleteOneOfScalar;
+import daikon.inv.unary.scalar.IsPointer;
+import daikon.inv.unary.scalar.LowerBound;
+import daikon.inv.unary.scalar.LowerBoundFloat;
+import daikon.inv.unary.scalar.Modulus;
+import daikon.inv.unary.scalar.NonModulus;
+import daikon.inv.unary.scalar.NonZero;
+import daikon.inv.unary.scalar.NonZeroFloat;
+import daikon.inv.unary.scalar.OneOfFloat;
+import daikon.inv.unary.scalar.OneOfScalar;
+import daikon.inv.unary.scalar.RangeFloat;
+import daikon.inv.unary.scalar.RangeInt;
+import daikon.inv.unary.scalar.UpperBound;
+import daikon.inv.unary.scalar.UpperBoundFloat;
+import daikon.inv.unary.sequence.CommonFloatSequence;
+import daikon.inv.unary.sequence.CommonSequence;
+import daikon.inv.unary.sequence.EltLowerBound;
+import daikon.inv.unary.sequence.EltLowerBoundFloat;
+import daikon.inv.unary.sequence.EltNonZero;
+import daikon.inv.unary.sequence.EltNonZeroFloat;
+import daikon.inv.unary.sequence.EltOneOf;
+import daikon.inv.unary.sequence.EltOneOfFloat;
+import daikon.inv.unary.sequence.EltRangeFloat;
+import daikon.inv.unary.sequence.EltRangeInt;
+import daikon.inv.unary.sequence.EltUpperBound;
+import daikon.inv.unary.sequence.EltUpperBoundFloat;
+import daikon.inv.unary.sequence.EltwiseFloatEqual;
+import daikon.inv.unary.sequence.EltwiseFloatGreaterEqual;
+import daikon.inv.unary.sequence.EltwiseFloatGreaterThan;
+import daikon.inv.unary.sequence.EltwiseFloatLessEqual;
+import daikon.inv.unary.sequence.EltwiseFloatLessThan;
+import daikon.inv.unary.sequence.EltwiseIntEqual;
+import daikon.inv.unary.sequence.EltwiseIntGreaterEqual;
+import daikon.inv.unary.sequence.EltwiseIntGreaterThan;
+import daikon.inv.unary.sequence.EltwiseIntLessEqual;
+import daikon.inv.unary.sequence.EltwiseIntLessThan;
+import daikon.inv.unary.sequence.NoDuplicates;
+import daikon.inv.unary.sequence.NoDuplicatesFloat;
+import daikon.inv.unary.sequence.OneOfFloatSequence;
+import daikon.inv.unary.sequence.OneOfSequence;
+import daikon.inv.unary.sequence.SeqIndexFloatEqual;
+import daikon.inv.unary.sequence.SeqIndexFloatGreaterEqual;
+import daikon.inv.unary.sequence.SeqIndexFloatGreaterThan;
+import daikon.inv.unary.sequence.SeqIndexFloatLessEqual;
+import daikon.inv.unary.sequence.SeqIndexFloatLessThan;
+import daikon.inv.unary.sequence.SeqIndexFloatNonEqual;
+import daikon.inv.unary.sequence.SeqIndexIntEqual;
+import daikon.inv.unary.sequence.SeqIndexIntGreaterEqual;
+import daikon.inv.unary.sequence.SeqIndexIntGreaterThan;
+import daikon.inv.unary.sequence.SeqIndexIntLessEqual;
+import daikon.inv.unary.sequence.SeqIndexIntLessThan;
+import daikon.inv.unary.sequence.SeqIndexIntNonEqual;
+import daikon.inv.unary.string.CompleteOneOfString;
+import daikon.inv.unary.string.OneOfString;
+import daikon.inv.unary.string.PrintableString;
+import daikon.inv.unary.stringsequence.CommonStringSequence;
+import daikon.inv.unary.stringsequence.EltOneOfString;
+import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.split.ContextSplitterFactory;
+import daikon.split.PptSplitter;
+import daikon.split.SpinfoFile;
+import daikon.split.Splitter;
+import daikon.split.SplitterFactory;
+import daikon.split.SplitterList;
 import daikon.suppress.NIS;
 import daikon.suppress.NIS.SuppressionProcessor;
 import gnu.getopt.Getopt;
@@ -49,16 +187,17 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.EntryReader;
 import org.plumelib.util.RegexUtil;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * The {@link #main} method is the main entry point for the Daikon invariant detector. The {@link
@@ -188,7 +327,7 @@ public final class Daikon {
    * &#64;cindex nonsensical values for variables, guarding
    */
   // Perhaps a better default would be "missing".
-  public static /*@Interned*/ String dkconfig_guardNulls = "default";
+  public static @Interned String dkconfig_guardNulls = "default";
 
   /**
    * Whether to associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
@@ -216,20 +355,20 @@ public final class Daikon {
   public static boolean ignore_comparability = false;
 
   // Controls which program points/variables are used/ignored.
-  public static /*@Nullable*/ Pattern ppt_regexp;
-  public static /*@Nullable*/ Pattern ppt_omit_regexp;
-  public static /*@Nullable*/ Pattern var_regexp;
-  public static /*@Nullable*/ Pattern var_omit_regexp;
+  public static @Nullable Pattern ppt_regexp;
+  public static @Nullable Pattern ppt_omit_regexp;
+  public static @Nullable Pattern var_regexp;
+  public static @Nullable Pattern var_omit_regexp;
 
   /**
    * If set, only ppts less than ppt_max_name are included. Used by the configuration option
    * dkconfig_ppt_percent to only work on a specified percent of the ppts.
    */
-  public static /*@Nullable*/ String ppt_max_name = null;
+  public static @Nullable String ppt_max_name = null;
 
   // The invariants detected will be serialized and written to this
   // file.
-  public static /*@Nullable*/ File inv_file;
+  public static @Nullable File inv_file;
 
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;
@@ -320,7 +459,7 @@ public final class Daikon {
     }
   }
 
-  public static /*@MonotonicNonNull*/ File server_dir =
+  public static @MonotonicNonNull File server_dir =
       null; // YOAV: the directory from which we read the dtrace files
 
   // A PptMap (mapping String -> PptTopLevel) that contains all the program points.
@@ -328,11 +467,10 @@ public final class Daikon {
   public static PptMap all_ppts;
 
   /** current invariant (used for debugging) */
-  public static /*@Nullable*/ Invariant current_inv = null;
+  public static @Nullable Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
-  public static ArrayList</*@Prototype*/ Invariant> proto_invs =
-      new ArrayList</*@Prototype*/ Invariant>();
+  public static ArrayList<@Prototype Invariant> proto_invs = new ArrayList<@Prototype Invariant>();
 
   /** Debug tracer. */
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
@@ -493,7 +631,7 @@ public final class Daikon {
     }
     // This constructor is too error-prone:  it leads to throwing away
     // subsequent args if there are not enough % directives in the string.
-    // public UserError(String format, /*@Nullable*/ Object... args) {
+    // public UserError(String format, @Nullable Object... args) {
     //   super (String.format (format, args));
     // }
   }
@@ -960,7 +1098,7 @@ public final class Daikon {
                         + ": not in the format required by Class.getName(String)");
               }
               @SuppressWarnings("signature") // Regex match guarantees the format of Class.getName()
-              /*@ClassGetName*/ String cname = user_defined_invariant_string;
+              @ClassGetName String cname = user_defined_invariant_string;
               userDefinedInvariants.add(cname);
             } catch (Exception e) {
               throw new Daikon.UserError(
@@ -997,7 +1135,7 @@ public final class Daikon {
               "unchecked", // type of ClassLoader.classes field is known
               "nullness" // ClassLoader.classes is non-null
             })
-            /*@NonNull*/ List<Class<?>> classes = (List<Class<?>>) classesAsObject;
+            @NonNull List<Class<?>> classes = (List<Class<?>>) classesAsObject;
             for (int i = 0; i < classes.size(); i++) {
               Class<?> loadedClass = classes.get(i);
               if (Invariant.class.isAssignableFrom(loadedClass)) {
@@ -1274,8 +1412,8 @@ public final class Daikon {
    * Invariants passed on the command line with the {@code --user_defined_invariant} option. A list
    * of class names in the format required by {@link Class#forName(String)}.
    */
-  private static List</*@ClassGetName*/ String> userDefinedInvariants =
-      new ArrayList</*@ClassGetName*/ String>();
+  private static List<@ClassGetName String> userDefinedInvariants =
+      new ArrayList<@ClassGetName String>();
 
   /**
    * Creates the list of prototype invariants for all Daikon invariants. New invariants must be
@@ -1565,8 +1703,8 @@ public final class Daikon {
     }
 
     // Remove any elements that are not enabled
-    for (Iterator</*@Prototype*/ Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
-      /*@Prototype*/ Invariant inv = i.next();
+    for (Iterator<@Prototype Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
+      @Prototype Invariant inv = i.next();
       assert inv != null;
       if (!inv.enabled()) i.remove();
     }
@@ -1673,7 +1811,7 @@ public final class Daikon {
           exit_vars[j].value_index = ppt.var_infos[j].value_index;
           // Don't inherit the entry variable's equalitySet.
           @SuppressWarnings("nullness") // reinitialization
-          /*@NonNull*/ Equality es = null;
+          @NonNull Equality es = null;
           exit_vars[j].equalitySet = es;
         }
 
@@ -1835,7 +1973,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
-  /*@RequiresNonNull("fileio_progress")*/
+  @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
     long startTime = System.nanoTime();
@@ -1952,7 +2090,7 @@ public final class Daikon {
 
   // Is set unconditionally in mainHelper
   /** Takes precedence over the progress variable. */
-  private static /*@MonotonicNonNull*/ FileIOProgress fileio_progress = null;
+  private static @MonotonicNonNull FileIOProgress fileio_progress = null;
 
   /** Outputs FileIO progress information. Uses global variable FileIO.data_trace_state. */
   public static class FileIOProgress extends Thread {
@@ -2048,7 +2186,7 @@ public final class Daikon {
    * instantiated. This routine processes data to falsify the candidate invariants.
    */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
-  /*@RequiresNonNull("fileio_progress")*/
+  @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
     MemMonitor monitor = null;
@@ -2275,7 +2413,7 @@ public final class Daikon {
       }
       System.out.println("  vars       = " + ppt.var_infos.length);
       System.out.println("  leaders    = " + leader_cnt);
-      for (Map.Entry</*@KeyFor("type_map")*/ ProglangType, Count> e : type_map.entrySet()) {
+      for (Map.Entry<@KeyFor("type_map") ProglangType, Count> e : type_map.entrySet()) {
         ProglangType file_rep_type = e.getKey();
         Count cnt = e.getValue();
         System.out.printf("  %s  = %d%n", file_rep_type, cnt.val);
@@ -2389,7 +2527,7 @@ public final class Daikon {
    * Returns the ppt name, max_ppt, that corresponds to the specified percentage of ppts (presuming
    * that only those ppts &le; max_ppt will be processed).
    */
-  private static /*@Nullable*/ String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
+  private static @Nullable String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100)) {
@@ -2464,7 +2602,7 @@ public final class Daikon {
    * optimizations (should yield the same invariants as the simple incremental algorithm.
    */
   @SuppressWarnings("flowexpr.parse.error") // private field
-  /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
+  @RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})
   public static void undoOpts(PptMap all_ppts) {
 
     // undo suppressions

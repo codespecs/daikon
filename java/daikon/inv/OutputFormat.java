@@ -1,11 +1,8 @@
 package daikon.inv;
 
-import daikon.*;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Enumeration type for output style. (Should this be somewhere else?) */
 public enum OutputFormat {
@@ -41,13 +38,13 @@ public enum OutputFormat {
     this.name = name;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied OutputFormat this*/) {
+  public String toString(@GuardSatisfied OutputFormat this) {
     return "OutputFormat:" + name;
   }
 
-  /*@Pure*/
+  @Pure
   public boolean isJavaFamily() {
     return (this == DBCJAVA || this == JML || this == JAVA);
   }

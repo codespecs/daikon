@@ -3,48 +3,44 @@ This directory contains dependences that are put in daikon.jar.
 All .jar files in this directory should contain Java 8 bytecodes,
 so that Daikon will run under Java 8.
 
-bcel-util-all-0.0.9.jar : https://github.com/plume-lib/bcel-util
-To create, run:
-git clone https://github.com/plume-lib/bcel-util && \
-(cd bcel-util && \
-./gradlew shadowJar && \
-cp build/libs/bcel-util-all-0.0.9.jar ..) && \
-\rm -rf bcel-util
+bcel-6.2.0.2.jar
+  wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel/6.2.0.2/bcel-6.2.0.2.jar
+
+bcel-util-1.1.3.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/1.1.3/bcel-util-1.1.3.jar
 
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
-daikon-util.jar : Just like plume-util-*.jar, but with package
-changed to daikon.util.  To create, run:
+daikon-util.jar : Just like plume-util-*.jar, but in package daikon.util.
+To create, run:
 (mkdir -p ~/java && \
 cd ~/java && \
-git clone https://github.com/pantsbuild/jarjar && \
-cd jarjar && \
+(git clone https://github.com/pantsbuild/jarjar jarjar-pantsbuild > /dev/null 2>&1 \
+  || (cd jarjar-pantsbuild && git pull)) && \
+cd jarjar-pantsbuild && \
 ./pants doc test ::) && \
 java \
--cp $HOME/java/jarjar/dist/jarjar.jar \
+-cp $HOME/java/jarjar-pantsbuild/dist/jarjar.jar \
 org.pantsbuild.jarjar.Main \
 process daikon-util-rules.txt plume-util-*.jar daikon-util.jar
 
-java-getopt-1.0.14.jar : https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.checkerframework.annotatedlib%22%20a%3A%22java-getopt%22
+java-getopt-1.0.14.0.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.checkerframework.annotatedlib%22%20a%3A%22java-getopt%22
+  wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/java-getopt/1.0.14.0.1/java-getopt-1.0.14.0.1.jar
 
 junit-4.12.jar : https://github.com/junit-team/junit4/wiki/Download-and-Install
 
-options-all-0.3.1.jar : https://github.com/plume-lib/options
-To create, run:
-git clone https://github.com/plume-lib/options && \
-(cd options && \
-./gradlew shadowJar && \
-cp build/libs/bcel-util-all-0.0.9.jar ..) && \
-\rm -rf options
+options-1.0.1.jar : https://search.maven.org/#search%7Cga%7C1%7Coptions
+  wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.1/options-1.0.1.jar
 
-plume-util-0.1.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
-When you update this, remake daikon-util.jar (see above).
+plume-util-1.0.3.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
+  wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.0.3/plume-util-1.0.3.jar
+When you update this, remove the old one then remake daikon-util.jar (see above).
 
 require-javadoc-0.1.0.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/
   wget https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.1.0/require-javadoc-0.1.0.jar
 
-signature-util: https://repo.maven.apache.org/maven2/org/plumelib/signature-util/
-  wget https://repo.maven.apache.org/maven2/org/plumelib/signature-util/0.0.2/signature-util-0.0.2.jar
+signature-util-0.0.4.jar : https://repo.maven.apache.org/maven2/org/plumelib/signature-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/signature-util/0.0.4/signature-util-0.0.4.jar
 
 ---------------------------------------------------------------------------
 

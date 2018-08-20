@@ -1,11 +1,8 @@
 package daikon;
 
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 
 // Internally, we use the names "array[]", "array[]-element", and
 // "array[]-indexn".  These may be different depending on the programming
@@ -72,27 +69,27 @@ public abstract class VarComparability {
 
   public abstract VarComparability makeAlias();
 
-  public abstract VarComparability elementType(/*>>>@GuardSatisfied VarComparability this*/);
+  public abstract VarComparability elementType(@GuardSatisfied VarComparability this);
 
-  public abstract VarComparability indexType(/*>>>@GuardSatisfied VarComparability this,*/ int dim);
+  public abstract VarComparability indexType(@GuardSatisfied VarComparability this, int dim);
 
   /** Return the comparability for the length of this string* */
   public abstract VarComparability string_length_type();
 
   /** Returns true if this is comparable to everything else. */
-  public abstract boolean alwaysComparable(/*>>>@GuardSatisfied VarComparability this*/);
+  public abstract boolean alwaysComparable(@GuardSatisfied VarComparability this);
 
   /** Returns whether two variables are comparable. */
-  /*@Pure*/
+  @Pure
   public static boolean comparable(VarInfo v1, VarInfo v2) {
     return comparable(v1.comparability, v2.comparability);
   }
 
   /** Returns whether two comparabilities are comparable. */
   @SuppressWarnings("purity") // Override the purity checker
-  /*@Pure*/
+  @Pure
   public static boolean comparable(
-      /*@GuardSatisfied*/ VarComparability type1, /*@GuardSatisfied*/ VarComparability type2) {
+      @GuardSatisfied VarComparability type1, @GuardSatisfied VarComparability type2) {
 
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass()) {
       throw new Error(
@@ -118,8 +115,7 @@ public abstract class VarComparability {
    * override this method to provide the correct results.
    */
   public boolean equality_set_ok(
-      /*>>>@GuardSatisfied VarComparability this,*/
-      /*@GuardSatisfied*/ VarComparability other) {
+      @GuardSatisfied VarComparability this, @GuardSatisfied VarComparability other) {
     return comparable(this, other);
   }
 }

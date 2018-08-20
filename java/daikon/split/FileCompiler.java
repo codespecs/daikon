@@ -16,13 +16,10 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
-
-/*>>>
-import org.checkerframework.common.value.qual.*;
-import org.checkerframework.checker.index.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.regex.qual.*;
-*/
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.regex.qual.Regex;
+import org.checkerframework.common.value.qual.MinLen;
 
 /**
  * This class has method {@link #compileFiles(List)} that compiles Java source files. It invokes a
@@ -33,12 +30,12 @@ public final class FileCompiler {
   /** The Runtime of the JVM. */
   public static Runtime runtime = java.lang.Runtime.getRuntime();
   /** Matches the names of Java source files. Match group 1 is the complete filename. */
-  static /*@Regex(1)*/ Pattern java_filename_pattern;
+  static @Regex(1) Pattern java_filename_pattern;
   /**
    * External command used to compile Java files, and command-line arguments. Guaranteed to be
    * non-empty.
    */
-  private String /*@MinLen(1)*/[] compiler;
+  private String @MinLen(1) [] compiler;
   /** Time limit for compilation jobs. */
   private long timeLimit;
 
@@ -46,7 +43,7 @@ public final class FileCompiler {
     try {
       @SuppressWarnings(
           "regex") // output of escapeNonJava() can appear in a character class in a regex
-      /*@Regex(1)*/ String java_filename_re
+      @Regex(1) String java_filename_re
           // A javac error message may consist of several lines of output.
           // The filename will be found at the beginning of the first line,
           // the additional lines of information will all be indented.
@@ -72,7 +69,7 @@ public final class FileCompiler {
    *     options
    * @param timeLimit the maximum permitted compilation time, in msec
    */
-  public FileCompiler(String /*@MinLen(1)*/[] compiler, /*@Positive*/ long timeLimit) {
+  public FileCompiler(String @MinLen(1) [] compiler, @Positive long timeLimit) {
     if (compiler.length == 0) {
       throw new Error("no compile command was provided");
     }
@@ -90,7 +87,7 @@ public final class FileCompiler {
    * @param timeLimit the maximum permitted compilation time, in msec
    */
   @SuppressWarnings("value") // no index checker list support
-  public FileCompiler(/*(at)MinLen(1)*/ ArrayList<String> compiler, /*@Positive*/ long timeLimit) {
+  public FileCompiler(/*(at)MinLen(1)*/ ArrayList<String> compiler, @Positive long timeLimit) {
     this(compiler.toArray(new String[0]), timeLimit);
   }
 
@@ -102,7 +99,7 @@ public final class FileCompiler {
    *     split on spaces.
    * @param timeLimit the maximum permitted compilation time, in msec
    */
-  public FileCompiler(String compiler, /*@Positive*/ long timeLimit) {
+  public FileCompiler(String compiler, @Positive long timeLimit) {
     this(compiler.trim().split(" +"), timeLimit);
   }
 
@@ -154,7 +151,7 @@ public final class FileCompiler {
     cmdLine = new CommandLine(compiler[0]); // constructor requires executable name
     // add rest of compiler command arguments
     @SuppressWarnings("nullness") // arguments are in range, so result array contains no nulls
-    /*@NonNull*/ String[] args = Arrays.copyOfRange(compiler, 1, compiler.length);
+    @NonNull String[] args = Arrays.copyOfRange(compiler, 1, compiler.length);
     cmdLine.addArguments(args);
     // add file name arguments
     cmdLine.addArguments(filenames.toArray(new String[0]));
@@ -226,7 +223,7 @@ public final class FileCompiler {
       while (m.find()) {
         @SuppressWarnings(
             "nullness") // Regex Checker imprecision: find() guarantees that group 1 exists
-        /*@NonNull*/ String sansExtension = m.group(1);
+        @NonNull String sansExtension = m.group(1);
         errorClasses.add(sansExtension);
       }
       // Collect all the files that were not compiled into retry

@@ -2,9 +2,18 @@ package daikon.split;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.suppress.*;
+import daikon.Debug;
+import daikon.DynamicConstants;
+import daikon.PptConditional;
+import daikon.PptRelation;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.inv.DummyInvariant;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
+import daikon.suppress.NIS;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,23 +26,23 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.Pair;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * PptSplitter contains the splitter and its associated PptConditional ppts. Currently all splitters
  * are binary (have exactly two PptConditional ppts) and this is presumed in the implementation.
  * However, this could be extended by extending this class with specific other implementations.
  */
-/*@UsesObjectEquals*/
+@UsesObjectEquals
 public class PptSplitter implements Serializable {
 
   // We are Serializable, so we specify a version to allow changes to
@@ -77,7 +86,7 @@ public class PptSplitter implements Serializable {
    * Splitter that chooses which PptConditional a sample is applied to. May be null if no
    * computation is required (e.g., splitting over exit points).
    */
-  public transient /*@Nullable*/ Splitter splitter;
+  public transient @Nullable Splitter splitter;
 
   /**
    * One PptConditional for each splitter result. ppts[0] is used when the splitter is true, ppts[1]
@@ -142,7 +151,11 @@ public class PptSplitter implements Serializable {
 
   /** Adds the sample to one of the conditional ppts in the split. */
   @SuppressWarnings("flowexpr.parse.error") // private field
-  /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
+  @RequiresNonNull({
+    "NIS.suppressor_map",
+    "NIS.suppressor_map_suppression_count",
+    "NIS.all_suppressions"
+  })
   public void add_bottom_up(ValueTuple vt, int count) {
 
     // Choose the appropriate conditional point based on the condition result
@@ -174,7 +187,7 @@ public class PptSplitter implements Serializable {
    * Chooses the correct conditional point based on the values in this sample. Returns null if none
    * is applicable.
    */
-  public /*@Nullable*/ PptConditional choose_conditional(ValueTuple vt) {
+  public @Nullable PptConditional choose_conditional(ValueTuple vt) {
 
     // Currently only binary implications are supported
     assert ppts.length == 2;
@@ -199,7 +212,7 @@ public class PptSplitter implements Serializable {
 
   /** Adds implication invariants based on the invariants found on each side of the split. */
   @SuppressWarnings("flowexpr.parse.error") // private field
-  /*@RequiresNonNull({"parent.equality_view", "NIS.all_suppressions", "NIS.suppressor_map"})*/
+  @RequiresNonNull({"parent.equality_view", "NIS.all_suppressions", "NIS.suppressor_map"})
   public void add_implications() {
 
     // Currently only binary implications are supported
@@ -208,7 +221,7 @@ public class PptSplitter implements Serializable {
     // Create any NIS suppressed invariants in each conditional
     @SuppressWarnings({"unchecked", "rawtypes"})
     List<Invariant> suppressed_invs[] =
-        (ArrayList<Invariant>[]) new /*@Nullable*/ ArrayList[ppts.length];
+        (ArrayList<Invariant>[]) new @Nullable ArrayList[ppts.length];
     for (int i = 0; i < ppts.length; i++) {
       suppressed_invs[i] = NIS.create_suppressed_invs(ppts[i]);
     }
@@ -251,7 +264,7 @@ public class PptSplitter implements Serializable {
    * false inference. Note that this situation can occur if the splitting condition uses variables
    * that can ever be missing. (Or, presumably, if the condition ever cannot be computed.)
    */
-  /*@RequiresNonNull("parent.equality_view")*/
+  @RequiresNonNull("parent.equality_view")
   private void add_implications_pair() {
 
     for (PptTopLevel pchild : ppts) {
@@ -273,16 +286,16 @@ public class PptSplitter implements Serializable {
     // Maps permuted invariants to their original invariants
     Map<Invariant, Invariant> orig_invs = new LinkedHashMap<Invariant, Invariant>();
 
-    List</*@KeyFor("orig_invs")*/ Invariant> same_invs_vec =
-        new ArrayList</*@KeyFor("orig_invs")*/ Invariant>();
+    List<@KeyFor("orig_invs") Invariant> same_invs_vec =
+        new ArrayList<@KeyFor("orig_invs") Invariant>();
 
-    List</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec =
-        new ArrayList</*@KeyFor("orig_invs")*/ Invariant[]>();
+    List<@KeyFor("orig_invs") Invariant[]> exclusive_invs_vec =
+        new ArrayList<@KeyFor("orig_invs") Invariant[]>();
 
     // Does not contain anything that is in exclusive_invs_vec.
     // (Those may be added temporarily, but are removed later.)
-    List</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec =
-        new ArrayList</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]>();
+    List<@Nullable @KeyFor("orig_invs") Invariant[]> different_invs_vec =
+        new ArrayList<@Nullable @KeyFor("orig_invs") Invariant[]>();
 
     /// ??? MDE
     // Loop through each possible parent slice
@@ -296,7 +309,7 @@ public class PptSplitter implements Serializable {
       // the parent (and with a parent slice as its ppt slot).
       @SuppressWarnings({"unchecked", "rawtypes"})
       /*NNC:@MonotonicNonNull*/ List<Invariant> invs[] =
-          (ArrayList<Invariant>[]) new /*@Nullable*/ ArrayList[num_children];
+          (ArrayList<Invariant>[]) new @Nullable ArrayList[num_children];
 
       // find the parent slice
       PptSlice pslice = parent.get_or_instantiate_slice(vis);
@@ -428,18 +441,17 @@ public class PptSplitter implements Serializable {
 
       // Add any exclusive conditions for this slice to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      List</*@KeyFor("orig_invs")*/ Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
+      List<@KeyFor("orig_invs") Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
       exclusive_invs_vec.addAll(ec);
 
       // Add any invariants that are the same to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      List</*@KeyFor("orig_invs")*/ Invariant> si = same_invariants(invs[0], invs[1]);
+      List<@KeyFor("orig_invs") Invariant> si = same_invariants(invs[0], invs[1]);
       same_invs_vec.addAll(si);
 
       // Add any invariants that are different to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      List</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> di =
-          different_invariants(invs[0], invs[1]);
+      List<@Nullable @KeyFor("orig_invs") Invariant[]> di = different_invariants(invs[0], invs[1]);
       different_invs_vec.addAll(di);
     } // slices.iterator() loop
 
@@ -451,7 +463,7 @@ public class PptSplitter implements Serializable {
         debug.fine("-- " + invs[0] + " -- " + invs[1]);
       }
       debug.fine("Found " + different_invs_vec.size() + " different invariants ");
-      for (/*@Nullable*/ Invariant[] invs : different_invs_vec) {
+      for (@Nullable Invariant[] invs : different_invs_vec) {
         if (invs[0] != null) invs[0].log("%s differs from %s", invs[0], invs[1]);
         if (invs[1] != null) invs[1].log("%s differs from %s", invs[0], invs[1]);
         debug.fine("-- " + invs[0] + " -- " + invs[1]);
@@ -482,8 +494,7 @@ public class PptSplitter implements Serializable {
           orig_invs.put(dummy2, dummy2);
           @SuppressWarnings(
               "keyfor") // BUG in Daikon, possibly, because these are not keys; need to investigate
-          /*@KeyFor("orig_invs")*/ Invariant[] dummy_pair =
-              new /*@KeyFor("orig_invs")*/ Invariant[] {dummy1, dummy2};
+          @KeyFor("orig_invs") Invariant[] dummy_pair = new @KeyFor("orig_invs") Invariant[] {dummy1, dummy2};
           exclusive_invs_vec.add(dummy_pair);
           // Don't add the dummy_pair, as it would just be removed afterward.
           // different_invs_vec.add(dummy_pair);
@@ -502,10 +513,9 @@ public class PptSplitter implements Serializable {
     // Remove exclusive invariants from the different invariants list.
     // It would be better not to have added them in the first place,
     // but this is easier for now.
-    for (Iterator</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> ii =
-            different_invs_vec.iterator();
+    for (Iterator<@Nullable @KeyFor("orig_invs") Invariant[]> ii = different_invs_vec.iterator();
         ii.hasNext(); ) {
-      /*@Nullable*/ Invariant[] diff_invs = ii.next();
+      @Nullable Invariant[] diff_invs = ii.next();
       if (diff_invs[0] != null) {
         assert diff_invs[1] == null;
         // debug.fine ("Considering inv0 " + diff_invs[0]);
@@ -543,7 +553,7 @@ public class PptSplitter implements Serializable {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {
           @SuppressWarnings("nullness") // map
-          /*@NonNull*/ Invariant orig = orig_invs.get(invs[jj]);
+          @NonNull Invariant orig = orig_invs.get(invs[jj]);
           assert orig != null : "Not in orig_invs: " + invs[jj] + " " + invs[jj].getClass();
           if ((orig.isObvious() == null) && !orig.is_ni_suppressed()) con_invs[jj] = invs[jj];
         }
@@ -572,7 +582,7 @@ public class PptSplitter implements Serializable {
     }
 
     // Create single implication for each different invariant
-    for (/*@Nullable*/ Invariant[] invs : different_invs_vec) {
+    for (@Nullable Invariant[] invs : different_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (invs[jj] != null) add_implication(parent, con_invs[jj], invs[jj], false, orig_invs);
       }
@@ -587,7 +597,7 @@ public class PptSplitter implements Serializable {
    * implications created from invariants in child slices that only exist in one child (and thus
    * don't exist in the parent).
    */
-  /*@RequiresNonNull("parent.equality_view")*/
+  @RequiresNonNull("parent.equality_view")
   private List<VarInfo[]> possible_slices() {
 
     List<VarInfo[]> result = new ArrayList<VarInfo[]>();
@@ -679,21 +689,20 @@ public class PptSplitter implements Serializable {
    * List<Invariant> (with one or the other always null). All the arguments should be over the same
    * program point.
    */
-  List</*@Nullable*/ Invariant[]> different_invariants(
-      List<Invariant> invs1, List<Invariant> invs2) {
+  List<@Nullable Invariant[]> different_invariants(List<Invariant> invs1, List<Invariant> invs2) {
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
     SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
     ss2.addAll(invs2);
-    List</*@Nullable*/ Invariant[]> result = new ArrayList</*@Nullable*/ Invariant[]>();
+    List<@Nullable Invariant[]> result = new ArrayList<@Nullable Invariant[]>();
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
         opi.hasNext(); ) {
-      Pair</*@Nullable*/ Invariant, /*@Nullable*/ Invariant> pair = opi.next();
+      Pair<@Nullable Invariant, @Nullable Invariant> pair = opi.next();
       if ((pair.a == null) || (pair.b == null)
       // || (icfp.compare(pair.a, pair.b) != 0)
       ) {
-        result.add(new /*@Nullable*/ Invariant[] {pair.a, pair.b});
+        result.add(new @Nullable Invariant[] {pair.a, pair.b});
       }
     }
     return result;
@@ -715,11 +724,11 @@ public class PptSplitter implements Serializable {
 
     // // This seems like a rather complicated implementation.  Why can't it
     // // just use set intersection?
-    // List</*@Nullable*/ Invariant> result = new ArrayList</*@Nullable*/ Invariant>();
+    // List<@Nullable Invariant> result = new ArrayList<@Nullable Invariant>();
     // for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
     //                                 ss2.iterator(), icfp);
     //      opi.hasNext(); ) {
-    //   Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant> pair = opi.next();
+    //   Pair<@Nullable Invariant,@Nullable Invariant> pair = opi.next();
     //   if (pair.a != null && pair.b != null) {
     //     Invariant inv1 = pair.a;
     //     Invariant inv2 = pair.b;
@@ -747,7 +756,7 @@ public class PptSplitter implements Serializable {
     assert consequent != null;
 
     @SuppressWarnings("nullness") // map: method precondition
-    /*@NonNull*/ Invariant orig_pred = orig_invs.get(predicate);
+    @NonNull Invariant orig_pred = orig_invs.get(predicate);
     Invariant orig_cons = orig_invs.get(consequent);
     if (orig_cons == null) {
       assert (consequent instanceof DummyInvariant);
@@ -827,9 +836,9 @@ public class PptSplitter implements Serializable {
     return v;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied PptSplitter this*/) {
+  public String toString(@GuardSatisfied PptSplitter this) {
     return "Splitter " + splitter + ": ppt1 " + ppts[0].name() + ": ppt2 " + ppts[1].name;
   }
 }

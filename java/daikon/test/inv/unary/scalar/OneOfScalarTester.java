@@ -1,13 +1,16 @@
 package daikon.test.inv.unary.scalar;
 
-import daikon.*;
-import daikon.inv.unary.scalar.*;
+import daikon.PptSlice;
+import daikon.PptSlice1;
+import daikon.PptTopLevel;
+import daikon.ProglangType;
+import daikon.VarComparabilityNone;
+import daikon.VarInfo;
+import daikon.VarInfoAux;
+import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
 import junit.framework.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 @SuppressWarnings("nullness") // testing code
 public class OneOfScalarTester extends TestCase {
@@ -51,8 +54,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNullNon() {
-    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
-    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    @NonNull OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    @NonNull OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
@@ -61,8 +64,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNullNull() {
-    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
-    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    @NonNull OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    @NonNull OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
@@ -71,8 +74,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNonNon() {
-    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
-    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    @NonNull OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    @NonNull OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);

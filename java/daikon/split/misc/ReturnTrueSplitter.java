@@ -1,12 +1,17 @@
 package daikon.split.misc;
 
-import daikon.*;
+import daikon.Ppt;
+import daikon.ProglangType;
+import daikon.ValueTuple;
+import daikon.VarInfo;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import daikon.split.Splitter;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 // This splitter tests the condition "return == true".
 public final class ReturnTrueSplitter extends Splitter {
@@ -15,21 +20,25 @@ public final class ReturnTrueSplitter extends Splitter {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  private /*@Nullable*/ VarInfo return_varinfo;
+  private @Nullable VarInfo return_varinfo;
 
+  /** Create a prototype (factory) splitter. */
   public ReturnTrueSplitter() {}
 
-  public ReturnTrueSplitter(Ppt ppt) {
+  /** Create a new instantiated ReturnTrueSplitter. */
+  public ReturnTrueSplitter(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt) {
     return_varinfo = ppt.find_var_by_name("return");
     instantiated = true;
   }
 
+  @SuppressWarnings(
+      "initialization:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
   @Override
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt) {
     return new ReturnTrueSplitter(ppt);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="return_varinfo")*/
+  @EnsuresNonNullIf(result = true, expression = "return_varinfo")
   @Override
   public boolean valid() {
     return ((return_varinfo != null) && (return_varinfo.type == ProglangType.BOOLEAN));
@@ -38,7 +47,7 @@ public final class ReturnTrueSplitter extends Splitter {
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // application invariant about private
   // variable
-  /*@RequiresNonNull("return_varinfo")*/
+  @RequiresNonNull("return_varinfo")
   @Override
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);
@@ -50,7 +59,7 @@ public final class ReturnTrueSplitter extends Splitter {
   }
 
   @Override
-  public /*@Nullable*/ DummyInvariant getDummyInvariant() {
+  public @Nullable DummyInvariant getDummyInvariant() {
     return null;
   }
 }

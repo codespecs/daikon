@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Represents an x86 instruction. */
 public class X86Instruction implements IInstruction {
@@ -29,7 +26,7 @@ public class X86Instruction implements IInstruction {
   // For debugging printing purposes.
   /** The name of the basic block that contains this instruction. */
   // (Maybe this should be @MonotonicNonNull?)
-  public /*@Nullable*/ String owner = null;
+  public @Nullable String owner = null;
 
   // See method parseInstruction. It sets all fields appropriately.
   private X86Instruction(
@@ -109,9 +106,9 @@ public class X86Instruction implements IInstruction {
    *
    * @see daikon.IInstruction#toString()
    */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied X86Instruction this*/) {
+  public String toString(@GuardSatisfied X86Instruction this) {
     StringBuilder b = new StringBuilder();
     // b.append(owner != null ? owner + ":" : "");
     // b.append(dllName);

@@ -2,9 +2,14 @@ package daikon.suppress;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.*;
+import daikon.Daikon;
+import daikon.Debug;
+import daikon.PptSlice;
+import daikon.PptSlice3;
+import daikon.PptTopLevel;
+import daikon.PrintInvariants;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -14,12 +19,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Class that defines a set of non-instantiating suppressions for a single invariant (suppressee).
@@ -411,7 +414,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * set is valid if any of its suppressions are valid. A suppression is valid if all of its
    * non-missing suppressors are true.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_instantiate_ok(PptSlice slice) {
 
     return (is_instantiate_ok(slice.parent, slice.var_infos));
@@ -422,7 +425,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * Instantiation is ok only if each suppression is invalid. A suppression is valid if all of its
    * non-missing suppressors are true.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_instantiate_ok(PptTopLevel ppt, VarInfo[] var_infos) {
 
     // Check each suppression to see if it is valid
@@ -623,9 +626,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /** Returns a string containing each suppression separated by commas. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
+  public String toString(@GuardSatisfied NISuppressionSet this) {
     return "{ " + UtilPlume.join(suppression_set, ", ") + " }";
   }
 }

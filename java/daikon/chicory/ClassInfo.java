@@ -6,13 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Keeps information about a class that is useful for writing out decl and/or dtrace information.
@@ -22,11 +20,11 @@ import org.checkerframework.dataflow.qual.*;
 public class ClassInfo {
 
   /** binary name of the class */
-  public /*@BinaryNameForNonArray*/ String class_name;
+  public @BinaryName String class_name;
 
   // set by initViaReflection()
   /** reflection object for this class */
-  public /*@MonotonicNonNull*/ Class<?> clazz;
+  public @MonotonicNonNull Class<?> clazz;
 
   // Does not include class initializers, so each element's .member field
   // is non-null.
@@ -38,10 +36,10 @@ public class ClassInfo {
 
   // traversalClass and traversalObject are set by init_traversal().
   /** DaikonVariables for the object (instance and static) */
-  public /*@MonotonicNonNull*/ RootInfo traversalObject;
+  public @MonotonicNonNull RootInfo traversalObject;
 
   /** DaikonVariables for the class (static vars only) */
-  public /*@MonotonicNonNull*/ RootInfo traversalClass;
+  public @MonotonicNonNull RootInfo traversalClass;
 
   /** Whether or not any methods in this class were instrumented */
   public boolean shouldInclude = false;
@@ -52,7 +50,7 @@ public class ClassInfo {
   public Map<String, String> staticMap = new HashMap<String, String>();
 
   /** Create ClassInfo with specified name */
-  public ClassInfo(/*@BinaryNameForNonArray*/ String class_name, ClassLoader theLoader) {
+  public ClassInfo(@BinaryName String class_name, ClassLoader theLoader) {
     this.class_name = class_name;
     loader = theLoader;
   }
@@ -70,7 +68,7 @@ public class ClassInfo {
    * Gets the reflection object Class for this class, and the Method objects for each method that is
    * already in method_infos.
    */
-  /*@EnsuresNonNull("clazz")*/
+  @EnsuresNonNull("clazz")
   public void initViaReflection() {
 
     // get the reflection class
@@ -152,9 +150,9 @@ public class ClassInfo {
     assert traversalClass != null : class_name;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied ClassInfo this*/) {
+  public String toString(@GuardSatisfied ClassInfo this) {
     return (String.format(
         "ClassInfo %08X [%s] %s", System.identityHashCode(this), class_name, clazz));
   }

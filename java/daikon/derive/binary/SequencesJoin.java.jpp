@@ -24,16 +24,14 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import daikon.*;
 import daikon.derive.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Derived variable representing the "join" of two sequences. That is, if the two sequences came
@@ -57,12 +55,12 @@ public final class CLASSNAME extends BinaryDerivation {
   public static boolean dkconfig_enabled = false;
 
   @Override
-  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var1(@GuardSatisfied CLASSNAME this) {
     return base1;
   }
 
   @Override
-  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var2(@GuardSatisfied CLASSNAME this) {
     return base2;
   }
 
@@ -199,20 +197,20 @@ public final class CLASSNAME extends BinaryDerivation {
     return vi;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String toString(@GuardSatisfied CLASSNAME this) {
     return "[" + CLASSSTRING + " of " + var1().name() + " " + var2().name() + "]";
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof CLASSNAME);
   }
 
   /** Returns the ESC name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format("join[%s,%s]", var1().esc_name(), var2().esc_name());

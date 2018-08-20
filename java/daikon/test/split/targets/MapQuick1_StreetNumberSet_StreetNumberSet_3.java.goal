@@ -16,7 +16,7 @@ public final class MapQuick1_StreetNumberSet_StreetNumberSet_3 extends Splitter 
   public MapQuick1_StreetNumberSet_StreetNumberSet_3(Ppt ppt) {
   }
 
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new MapQuick1_StreetNumberSet_StreetNumberSet_3(ppt);
   }
 

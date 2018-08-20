@@ -1,15 +1,13 @@
 package daikon.inv.unary.scalar;
 
-import daikon.*;
+import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import typequals.prototype.qual.Prototype;
 
 // This invariant is true if the variable is always positive (greater than 0).
 // This invariant is provided for pedagogical reasons only.
@@ -38,14 +36,14 @@ public class Positive extends SingleScalar {
     super(ppt);
   }
 
-  private /*@Prototype*/ Positive() {
+  private @Prototype Positive() {
     super();
   }
 
-  private static /*@Prototype*/ Positive proto = new /*@Prototype*/ Positive();
+  private static @Prototype Positive proto = new @Prototype Positive();
 
   /** Returns the prototype invariant */
-  public static /*@Prototype*/ Positive get_proto() {
+  public static @Prototype Positive get_proto() {
     return proto;
   }
 
@@ -57,14 +55,14 @@ public class Positive extends SingleScalar {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public Positive instantiate_dyn(/*>>> @Prototype Positive this,*/ PptSlice slice) {
+  public Positive instantiate_dyn(@Prototype Positive this, PptSlice slice) {
     return new Positive(slice);
   }
 
   // A printed representation for user output
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied Positive this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied Positive this, OutputFormat format) {
     return var().name() + " > 0";
   }
 
@@ -89,7 +87,7 @@ public class Positive extends SingleScalar {
     return 1 - Math.pow(.5, ppt.num_samples());
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof Positive;

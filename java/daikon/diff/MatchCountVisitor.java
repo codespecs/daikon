@@ -1,16 +1,15 @@
 package daikon.diff;
 
-import daikon.*;
+import daikon.PptConditional;
+import daikon.PptTopLevel;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * MatchCountVisitor is a visitor that almost does the opposite of PrintDifferingInvariantsVisitor.
@@ -122,8 +121,10 @@ public class MatchCountVisitor extends PrintAllVisitor {
   }
 
   /** Returns true if the pair of invariants should be printed */
-  /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
-  protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  @EnsuresNonNullIf(
+      result = true,
+      expression = {"#1", "#2"})
+  protected static boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
 
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2) {

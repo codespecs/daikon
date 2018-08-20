@@ -1,14 +1,12 @@
 package daikon.split;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import java.util.List;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /**
  * TokenReplacer is a JTB syntax tree visitor that replaces a given set of tokens that are names of
@@ -29,10 +27,10 @@ class TokenReplacer extends DepthFirstVisitor {
   // the replacement for the ith element of oldVars.
 
   /** the last token visited. */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   /** the token visited before lastToken. */
-  private /*@MonotonicNonNull*/ NodeToken twoTokensAgo;
+  private @MonotonicNonNull NodeToken twoTokensAgo;
 
   /**
    * Creates a new TokenReplacer with ith element of oldVars being replaced with ith element of new
@@ -70,7 +68,7 @@ class TokenReplacer extends DepthFirstVisitor {
   }
 
   /** Replaces lastToken if needed. */
-  /*@RequiresNonNull("lastToken")*/
+  @RequiresNonNull("lastToken")
   private void replaceLastToken() {
     if (Visitors.isIdentifier(lastToken)
         && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))) {

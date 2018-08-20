@@ -1,6 +1,7 @@
 package daikon.diff;
 
-import daikon.*;
+import daikon.PptConditional;
+import daikon.PptTopLevel;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import java.io.PrintStream;
@@ -8,11 +9,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 // This seems to only count the left side of the pair -- it calls getPpt1
 // but not getPpt2.
@@ -48,7 +48,7 @@ public class PptCountVisitor extends PrintAllVisitor {
   @Override
   public void visit(PptNode node) {
     @SuppressWarnings("nullness") // application invariant: calling context
-    /*@NonNull*/ PptTopLevel ppt = node.getPpt1();
+    @NonNull PptTopLevel ppt = node.getPpt1();
 
     if ((ppt instanceof PptConditional)) return;
     //        else super.visit (node);
@@ -70,7 +70,7 @@ public class PptCountVisitor extends PrintAllVisitor {
   }
 
   @SuppressWarnings("purity") // Impure side effects do not escape
-  /*@Pure*/
+  @Pure
   private boolean countReport(PptNode input) {
 
     int reportCnt = 0;
@@ -92,7 +92,7 @@ public class PptCountVisitor extends PrintAllVisitor {
   }
 
   @SuppressWarnings("purity") // Impure side effects do not escape
-  /*@Pure*/
+  @Pure
   private boolean countTarget(PptNode input) {
 
     int targetCnt = 0;
@@ -190,8 +190,10 @@ public class PptCountVisitor extends PrintAllVisitor {
   }
 
   /** Returns true if the pair of invariants should be printed */
-  /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
-  protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  @EnsuresNonNullIf(
+      result = true,
+      expression = {"#1", "#2"})
+  protected static boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
 
     if (inv1 == null || inv2 == null) {
       return false;
@@ -226,7 +228,7 @@ public class PptCountVisitor extends PrintAllVisitor {
    * Returns true iff any token of inv.format_java() contains a number other than -1, 0, 1 or is
    * null.
    */
-  private static boolean filterOut(/*@Nullable*/ Invariant inv) {
+  private static boolean filterOut(@Nullable Invariant inv) {
 
     if (inv == null) return true;
     String str = inv.format_using(OutputFormat.JAVA);

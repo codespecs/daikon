@@ -1,16 +1,13 @@
 package daikon.split;
 
-import daikon.*;
+import daikon.Global;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Level;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // SplitterList maps from a program point name to an array of Splitter
 // objects that should be used when splitting that program point.
@@ -78,7 +75,7 @@ public abstract class SplitterList {
     return sb.toString();
   }
 
-  public static Splitter /*@Nullable*/ [] get_raw(String pptname) {
+  public static Splitter @Nullable [] get_raw(String pptname) {
     return ppt_splitters.get(pptname);
   }
 
@@ -166,7 +163,7 @@ public abstract class SplitterList {
    *
    * @return an array of splitters
    */
-  public static Splitter /*@Nullable*/ [] get(String pptName) {
+  public static Splitter @Nullable [] get(String pptName) {
     List<Splitter[]> splitterArrays = new ArrayList<Splitter[]>();
 
     for (String name : ppt_splitters.keySet()) {

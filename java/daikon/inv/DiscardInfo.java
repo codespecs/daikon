@@ -1,11 +1,9 @@
 package daikon.inv;
 
-import daikon.*;
-
-/*>>>
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import daikon.Global;
+import daikon.VarInfo;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * A class used for holding a DiscardCode and a string that contains more detailed information about
@@ -69,11 +67,11 @@ public final class DiscardInfo {
     return this.discardString;
   }
 
-  public /*@ClassGetName*/ String className() {
+  public @ClassGetName String className() {
     return this.inv.getClass().getName();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String format() {
     return (discardFormat + Global.lineSep + discardCode + Global.lineSep + discardString);
   }

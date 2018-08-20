@@ -4,11 +4,9 @@ package daikon.test.diff;
 
 import daikon.*;
 import daikon.inv.*;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** A dummy invariant used for testing purposes. */
 public class DiffDummyInvariant extends Invariant {
@@ -70,19 +68,19 @@ public class DiffDummyInvariant extends Invariant {
     throw new UnsupportedOperationException();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isInteresting() {
     return interesting;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameInvariant(Invariant other) {
     return this.isSameFormula(other);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     if (other instanceof DiffDummyInvariant) {
@@ -99,20 +97,20 @@ public class DiffDummyInvariant extends Invariant {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied DiffDummyInvariant this*/) {
+  public String repr(@GuardSatisfied DiffDummyInvariant this) {
     return "DiffDummyInvariant(" + ppt.arity() + "," + formula + "," + confidence + ")";
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied DiffDummyInvariant this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied DiffDummyInvariant this, OutputFormat format) {
     return repr();
   }
 
   // IsWorthPrinting should not be overridden by subclasses.
   // But this subclass is special:  it's not really an invariant,
   // but is only used for testing.
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isWorthPrinting() {
     return isWorthPrinting;

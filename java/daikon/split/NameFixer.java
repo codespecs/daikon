@@ -1,14 +1,12 @@
 package daikon.split;
 
-import daikon.*;
-import daikon.tools.jtb.*;
+import daikon.Global;
+import daikon.VarInfo;
+import daikon.tools.jtb.Ast;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * NameFixer is a visitor for a JTB syntax tree that checks for unqualifed class member variables
@@ -41,7 +39,7 @@ class NameFixer extends DepthFirstVisitor {
    * The token previously visited. Null only when visiting the first token. Non-null if
    * lastTokenMayBeMemberVar is true.
    */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   /**
    * True if the last token visited could be the name of a variable that needs the className prefix.

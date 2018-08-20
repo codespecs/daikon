@@ -1,16 +1,17 @@
 package daikon.derive.binary;
 
-import daikon.*;
-import daikon.derive.*;
+import daikon.ProglangType;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.derive.Derivation;
+import daikon.derive.ValueAndModified;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Represents the concatenation of two base variables. This derived variable works for both
@@ -31,12 +32,12 @@ public final class SequencesConcat extends BinaryDerivation {
   public static boolean dkconfig_enabled = false;
 
   @Override
-  public VarInfo var1(/*>>>@GuardSatisfied SequencesConcat this*/) {
+  public VarInfo var1(@GuardSatisfied SequencesConcat this) {
     return base1;
   }
 
   @Override
-  public VarInfo var2(/*>>>@GuardSatisfied SequencesConcat this*/) {
+  public VarInfo var2(@GuardSatisfied SequencesConcat this) {
     return base2;
   }
 
@@ -82,10 +83,10 @@ public final class SequencesConcat extends BinaryDerivation {
     } else if (var1().rep_type == ProglangType.STRING_ARRAY) {
       // val1 instanceof String[] || val2 instanceof String[]
       @SuppressWarnings("interning") // object invariant: array elements are interned
-      /*@Interned*/ String[] result =
+      @Interned String[] result =
           ArraysPlume.concat(
-              val1 == null ? null : (/*@Interned*/ String[]) val1,
-              val2 == null ? null : (/*@Interned*/ String[]) val2);
+              val1 == null ? null : (@Interned String[]) val1,
+              val2 == null ? null : (@Interned String[]) val2);
       return new ValueAndModified(Intern.intern(result), mod);
     } else {
       throw new Error("Attempted to concatenate unknown arrays");
@@ -97,20 +98,20 @@ public final class SequencesConcat extends BinaryDerivation {
     return VarInfo.make_function("concat", var1(), var2());
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied SequencesConcat this*/) {
+  public String toString(@GuardSatisfied SequencesConcat this) {
     return "[SequencesConcat of " + var1().name() + " " + var2().name() + "]";
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SequencesConcat);
   }
 
   /** Returns the ESC name for sequence subsequence */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format("SequencesConcat[%s,%s]", var1().esc_name(), var2().esc_name());

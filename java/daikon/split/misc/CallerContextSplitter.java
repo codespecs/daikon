@@ -1,15 +1,18 @@
 package daikon.split.misc;
 
-import daikon.*;
+import daikon.Ppt;
+import daikon.ValueTuple;
+import daikon.VarInfo;
 import daikon.inv.DummyInvariant;
-import daikon.split.*;
+import daikon.split.Splitter;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /** This splitter tests the condition "$caller one of { some set of integers }". */
 public final class CallerContextSplitter extends Splitter {
@@ -19,33 +22,37 @@ public final class CallerContextSplitter extends Splitter {
   static final long serialVersionUID = 20030112L;
 
   /** Create a new splitter for the given ppt using this as a prototype. */
+  @SuppressWarnings(
+      "initialization:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
   @Override
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt) {
     return new CallerContextSplitter(ppt, ids, condition);
   }
 
   /** Name of the variable used by the front end to store caller (callsite) information. */
   public final String CALLER_INDICATOR_NAME_STRING = "daikon_callsite_id";
 
-  private final /*@Nullable*/ VarInfo caller_varinfo;
+  private final @Nullable VarInfo caller_varinfo;
   private final long[] ids;
   private final String condition;
 
-  protected CallerContextSplitter(Ppt ppt, long[] ids, String condition) {
+  /** Create a new instantiated CallerContextSplitter. */
+  protected CallerContextSplitter(
+      @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt, long[] ids, String condition) {
     caller_varinfo = ppt.find_var_by_name(CALLER_INDICATOR_NAME_STRING);
     this.ids = ids;
     this.condition = condition;
     instantiated = true;
   }
 
-  /** Create a prototype splitter for the given set of ids and condition. */
+  /** Create a prototype (factory) splitter for the given set of ids and condition. */
   public CallerContextSplitter(long[] ids, String condition) {
     this.caller_varinfo = null;
     this.ids = ids.clone();
     this.condition = condition;
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="caller_varinfo")*/
+  @EnsuresNonNullIf(result = true, expression = "caller_varinfo")
   @Override
   public boolean valid() {
     return (caller_varinfo != null);
@@ -54,7 +61,7 @@ public final class CallerContextSplitter extends Splitter {
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // application invariant about private
   // variable
-  /*@RequiresNonNull("caller_varinfo")*/
+  @RequiresNonNull("caller_varinfo")
   @Override
   public boolean test(ValueTuple vt) {
     long caller = caller_varinfo.getIntValue(vt);
@@ -66,9 +73,9 @@ public final class CallerContextSplitter extends Splitter {
     return condition;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied CallerContextSplitter this*/) {
+  public String toString(@GuardSatisfied CallerContextSplitter this) {
     String attach = "(unattached prototype)";
     if (caller_varinfo != null) {
       attach = "attached to " + caller_varinfo.ppt.name();
@@ -77,7 +84,7 @@ public final class CallerContextSplitter extends Splitter {
   }
 
   @Override
-  public /*@Nullable*/ DummyInvariant getDummyInvariant() {
+  public @Nullable DummyInvariant getDummyInvariant() {
     return null;
   }
 }

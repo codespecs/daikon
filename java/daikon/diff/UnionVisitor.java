@@ -1,17 +1,16 @@
 package daikon.diff;
 
-import daikon.*;
-import daikon.inv.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import daikon.PptTopLevel;
+import daikon.inv.Invariant;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** Computes A union B, where A and B are the two sets of invariants. */
 public class UnionVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private /*@MonotonicNonNull*/ PptTopLevel currentPpt;
+  private @MonotonicNonNull PptTopLevel currentPpt;
 
   public InvMap getResult() {
     return result;
@@ -24,7 +23,7 @@ public class UnionVisitor extends DepthFirstVisitor {
     PptTopLevel ppt2 = node.getPpt2();
     @SuppressWarnings(
         "nullness") // application invariant: at least one of ppt1 and ppt2 is non-null
-    /*@NonNull*/ PptTopLevel pptNonNull = (ppt1 != null ? ppt1 : ppt2);
+    @NonNull PptTopLevel pptNonNull = (ppt1 != null ? ppt1 : ppt2);
     result.addPpt(pptNonNull);
     currentPpt = pptNonNull;
     super.visit(node);
@@ -38,7 +37,7 @@ public class UnionVisitor extends DepthFirstVisitor {
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode
   // has already been visited
-  /*@RequiresNonNull("currentPpt")*/
+  @RequiresNonNull("currentPpt")
   // visitor invariant
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();

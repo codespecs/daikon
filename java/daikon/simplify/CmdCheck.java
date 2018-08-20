@@ -2,11 +2,9 @@ package daikon.simplify;
 
 import java.io.IOException;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * A Check command takes a given proposition and asks the Session to prove it. The apply method
@@ -29,7 +27,7 @@ public class CmdCheck implements Cmd {
 
   /** For documentation, read the class overview. */
   @Override
-  public void apply(final /*@GuardedBy("<self>")*/ Session s) {
+  public void apply(final @GuardedBy("<self>") Session s) {
     try {
 
       String result;
@@ -117,9 +115,9 @@ public class CmdCheck implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied CmdCheck this*/) {
+  public String toString(@GuardSatisfied CmdCheck this) {
     return "CmdCheck: " + proposition;
   }
 }

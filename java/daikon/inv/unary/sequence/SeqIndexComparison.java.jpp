@@ -158,15 +158,15 @@ import daikon.suppress.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents an invariant over sequences of PRIMITIVE values between the index of an element of the
@@ -187,7 +187,7 @@ public class CLASSNAME extends SUPERCLASS {
   /** Boolean. True iff CLASSNAME invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  private /*@Prototype*/ CLASSNAME() {
+  private @Prototype CLASSNAME() {
     super();
   }
 
@@ -197,10 +197,10 @@ public class CLASSNAME extends SUPERCLASS {
     assert var().rep_type == ProglangType.ASSERTYPE;
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
+  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static /*@Prototype*/ CLASSNAME get_proto() {
+  public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
@@ -238,18 +238,18 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** Instantiate the invariant on the specified slice */
   @Override
-  public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+  public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
 #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
   /** NI suppressions, initialized in get_ni_suppressions() */
-  private static /*@Nullable*/ NISuppressionSet suppressions = null;
+  private static @Nullable NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for CLASSNAME */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+  public @NonNull NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
       NISuppressee suppressee = new NISuppressee(CLASSNAME.class, 1);
@@ -285,9 +285,9 @@ public class CLASSNAME extends SUPERCLASS {
   }
 #else
   /** returns the ni-suppressions for CLASSNAME */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
+  public @Nullable NISuppressionSet get_ni_suppressions() {
     return null;
   }
 #endif
@@ -304,9 +304,9 @@ public class CLASSNAME extends SUPERCLASS {
     return EQUALSstring;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     // TODO: Eliminate the unnecessary format_xxx() below if the
@@ -320,7 +320,7 @@ public class CLASSNAME extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_daikon(@GuardSatisfied CLASSNAME this) {
 
     // If this is an array/container and not a subsequence
     if (var().isDerivedSubSequenceOf() == null) {
@@ -331,22 +331,22 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   // Bad code here: if the first index is changed from i this breaks
-  public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_esc(@GuardSatisfied CLASSNAME this) {
     String[] form = VarInfo.esc_quantify(var());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " i)" + form[2];
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_csharp_contract(@GuardSatisfied CLASSNAME this) {
     String[] split = var().csharp_array_split();
     return "Contract.ForAll(0, " + split[0] + ".Count(), i => " + split[0] + "[i]" + split[1] + " " + EQUALSstring + " i)";
   }
 
-  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_java_family(@GuardSatisfied CLASSNAME this, OutputFormat format) {
     return "daikon.Quant.elts" + EQUALSQUANTstring + "Index("
       + var().name_using(format) + ")";
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_simplify(@GuardSatisfied CLASSNAME this) {
     String[] form = VarInfo.simplify_quantify(QuantFlags.include_index(),
                                                var());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")"
@@ -354,7 +354,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
+  public InvariantStatus check_modified(PRIMITIVE @Interned [] a, int count) {
     for (int i = 0; i < a.length; i++) {
       if (!EQUALS(a[i], i)) {
         return InvariantStatus.FALSIFIED;
@@ -364,7 +364,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE @Interned [] a, int count) {
 
     if (logDetail()) {
       log("Entered add_modified: ppt.num_values()==%s, sample==%s",
@@ -431,20 +431,20 @@ public class CLASSNAME extends SUPERCLASS {
     #endif
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 
   // Look up a previously instantiated invariant.
-  public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
+  public static @Nullable CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME) {
@@ -465,9 +465,9 @@ public class CLASSNAME extends SUPERCLASS {
    * 0. If B[] = {0, 1, 2, 3, 4} and A[] = {2, 3, 4}, A[] is a subsequence of B[] and B[i] == i, but
    * A[i] = i is not true.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

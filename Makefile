@@ -588,23 +588,13 @@ update-dist-version-file:
 	@echo -n "doc/VERSION now contains: "
 	@cat doc/VERSION
 
-JAR_FILES = \
-$(INV_DIR)/java/lib/bcel-util-0.0.9-all.jar \
-$(INV_DIR)/java/lib/commons-exec-1.3.jar \
-$(INV_DIR)/java/lib/daikon-util.jar \
-$(INV_DIR)/java/lib/java-getopt-1.0.14.jar \
-$(INV_DIR)/java/lib/options-0.3.3-all.jar \
-$(INV_DIR)/java/lib/plume-util-0.1.1.jar \
-$(INV_DIR)/java/lib/require-javadoc-0.1.0.jar \
-$(INV_DIR)/java/lib/signature-util-0.0.2.jar
-
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
 ## "make -C java clean; make daikon.jar".
 ## It seems that one must do "make compile" before "make daikon.jar".
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
 .PHONY: jar
 jar: daikon.jar
-daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $(JAR_FILES)
+daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ ${TMPDIR}/daikon-jar
 	install -d ${TMPDIR}/daikon-jar
 	# Compile Daikon and copy the resulting class files
@@ -612,17 +602,8 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	$(MAKE) -C java all_directly
 	cd java && find . \( -name "dcomp-rt*" \) -prune -o -name '*.class' -print \
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
-	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
-	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/bcel-util-0.0.9-all.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/commons-exec-1.3.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/daikon-util.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt-1.0.14.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/options-0.3.3-all.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume-util-0.1.1.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/require-javadoc-0.1.0.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/signature-util-0.0.2.jar
+	for filename in $(JAR_DIR)/java/lib/*.jar ; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
@@ -759,7 +740,7 @@ ifndef NONETWORK
 	if test -d utils/checklink/.git ; then \
 	  (cd utils/checklink && git pull -q) \
 	elif ! test -d utils/checklink ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink || git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink)) \
 	fi
 endif
 
@@ -768,7 +749,7 @@ ifndef NONETWORK
 	if test -d utils/html-tools/.git ; then \
 	  (cd utils/html-tools && git pull -q) \
 	elif ! test -d utils/html-tools ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools || git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools)) \
 	fi
 endif
 
@@ -777,7 +758,7 @@ ifndef NONETWORK
 	if test -d utils/plume-scripts/.git ; then \
 	  (cd utils/plume-scripts && (git pull -q || echo "git pull failed")) \
 	elif ! test -d utils/plume-scripts ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
 	fi
 endif
 
@@ -786,7 +767,7 @@ ifndef NONETWORK
 	if test -d utils/run-google-java-format/.git ; then \
 	  (cd utils/run-google-java-format && git pull -q) \
 	elif ! test -d utils/run-google-java-format ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format || git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format)) \
 	fi
 endif
 

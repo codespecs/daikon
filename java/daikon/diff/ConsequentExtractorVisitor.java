@@ -1,16 +1,14 @@
 package daikon.diff;
 
-import daikon.*;
+import daikon.PptConditional;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * <B>ConsequentExtractorVisitor</B> is a visitor that takes in RootNode tree used by the other
@@ -36,7 +34,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
   }
 
   @Override
-  public void visit(/*@NonNull*/ PptNode node) {
+  public void visit(@NonNull PptNode node) {
     assert node.getPpt1() != null
         : "@AssumeAssertion(nullness): method precondition: has a (non-null) consequent";
     if (node.getPpt1() instanceof PptConditional) {
@@ -104,7 +102,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
    * Returns true if the pair of invariants should be printed, depending on their type,
    * relationship, and printability.
    */
-  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
     if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING
         || type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {

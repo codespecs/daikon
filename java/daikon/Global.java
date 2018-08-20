@@ -10,11 +10,8 @@ import java.util.Random;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.plumelib.util.FuzzyFloat;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 public final class Global {
 
@@ -202,7 +199,7 @@ public final class Global {
   public static final boolean debugPrintDtrace = false;
 
   // used only if debugPrintDtrace is true.  Users need not set this.
-  public static /*@MonotonicNonNull*/ PrintWriter dtraceWriter = null;
+  public static @MonotonicNonNull PrintWriter dtraceWriter = null;
 
   // Global Fuzzy Float comparator to use
   public static FuzzyFloat fuzzy = new FuzzyFloat();

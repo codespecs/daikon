@@ -25,13 +25,11 @@ import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.signature.Signatures;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-*/
 
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
@@ -222,7 +220,7 @@ public class Ast {
 
   // Returns the name of the package for this compilation unit, or null if
   // no package was specified.
-  public static /*@Nullable*/ String getPackage(CompilationUnit u) {
+  public static @Nullable String getPackage(CompilationUnit u) {
     NodeOptional o = u.f0;
     if (o.present()) {
       PackageDeclaration p = (PackageDeclaration) o.node;
@@ -253,10 +251,11 @@ public class Ast {
     return className + "." + methodDeclarator;
   }
 
-  // Returns the classname if the given type declaration declares a
-  // ClassOrInterfaceDeclaration. Otherwise returns null.
-  public static /*@Nullable*/ /*@BinaryNameForNonArray*/ String getClassNameForType(
-      TypeDeclaration d) {
+  /**
+   * Returns the classname if the given type declaration declares a ClassOrInterfaceDeclaration.
+   * Otherwise returns null.
+   */
+  public static @Nullable @BinaryName String getClassNameForType(TypeDeclaration d) {
 
     // Grammar production for TypeDeclaration:
     // f0 -> ";"
@@ -277,9 +276,8 @@ public class Ast {
     }
   }
 
-  // Return the fully qualified name of the class containing the node.
-  // (The result does not include the trailing period, though it did once.)
-  public static /*@BinaryNameForNonArray*/ String getClassName(Node d) {
+  /** Return the fully qualified name of the class containing the node. */
+  public static @BinaryName String getClassName(Node d) {
 
     ClassOrInterfaceDeclaration n =
         (d instanceof ClassOrInterfaceDeclaration)
@@ -325,7 +323,7 @@ public class Ast {
     }
 
     @SuppressWarnings("signature") // string concatenation, etc.
-    /*@BinaryNameForNonArray*/ String result_bnfna = result;
+    @BinaryName String result_bnfna = result;
     return result_bnfna;
   }
 
@@ -710,7 +708,7 @@ public class Ast {
     return getClass(ast_classname);
   }
 
-  public static Class<?> getClass(/*@ClassGetName*/ String s) {
+  public static Class<?> getClass(@ClassGetName String s) {
     try {
       Class<?> c = Class.forName(s);
       assert c != null;
@@ -726,7 +724,7 @@ public class Ast {
           throw new Error("Didn't find class " + orig_s);
         }
         @SuppressWarnings("signature") // string concatenation
-        /*@ClassGetName*/ String new_s = s.substring(0, dot_pos) + "$" + s.substring(dot_pos + 1);
+        @ClassGetName String new_s = s.substring(0, dot_pos) + "$" + s.substring(dot_pos + 1);
         s = new_s;
         // System.out.println("Lookup trying: " + s);
         try {
@@ -905,7 +903,7 @@ public class Ast {
   // Following the chain of parent pointers from the child, returns
   // the first node of the specified type or a subtype.  Returns null
   // if no parent of that type.
-  public static /*@Nullable*/ Node getParent(Class<?> type, Node child) {
+  public static @Nullable Node getParent(Class<?> type, Node child) {
     Node currentNode = child.getParent();
     while (true) {
       if (type.isInstance(currentNode)) {

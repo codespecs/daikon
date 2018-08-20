@@ -15,11 +15,8 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 /**
  * Merges invariants from multiple invariant files into a single invariant file. It does this by
@@ -39,7 +36,7 @@ public final class MergeInvariants {
 
   public static final Logger debugProgress = Logger.getLogger("daikon.MergeInvariants.progress");
 
-  public static /*@Nullable*/ File output_inv_file;
+  public static @Nullable File output_inv_file;
 
   private static String usage =
       UtilPlume.joinLines(

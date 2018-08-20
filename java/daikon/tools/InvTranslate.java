@@ -1,20 +1,17 @@
 package daikon.tools;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
 import gnu.getopt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Provides a variable translation over an invariant at one program point (perhaps in a different
@@ -105,8 +102,8 @@ public class InvTranslate {
 
   /** Add the specified variable names to the variable translation. */
   private void add_variable_map(
-      /*>>>@UnknownInitialization(daikon.tools.InvTranslate.class) @Raw(daikon.tools.InvTranslate.class) InvTranslate this,*/ String
-          v1_name,
+          @UnknownInitialization(daikon.tools.InvTranslate.class) @Raw(daikon.tools.InvTranslate.class) InvTranslate this,
+      String v1_name,
       String v2_name) {
 
     assert !var_map.containsKey(v1_name);
@@ -115,9 +112,9 @@ public class InvTranslate {
   }
 
   /** Returns a somewhat verbose description of the translation. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied InvTranslate this*/) {
+  public String toString(@GuardSatisfied InvTranslate this) {
     StringBuilder out = new StringBuilder();
 
     List<String> mappings = new ArrayList<String>();

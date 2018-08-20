@@ -1,12 +1,8 @@
 package daikon.diff;
 
-import daikon.*;
 import daikon.inv.Invariant;
 import java.io.PrintStream;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * <B>XorInvariantsVisitor</B> is a visitor that performs a standard Diff on two PptMaps, that is,
@@ -54,7 +50,7 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
    * relationship, and printability.
    */
   @Override
-  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
     if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING
         || type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {

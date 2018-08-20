@@ -18,7 +18,7 @@ public final class DataStructures_QueueAr_getFront_24 extends Splitter {
     orig_this_currentSize_varinfo = ppt.find_var_by_name("orig(this.currentSize)");
   }
 
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new DataStructures_QueueAr_getFront_24(ppt);
   }
 

@@ -56,16 +56,16 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Raw;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.Prototype;
+import typequals.prototype.qual.NonPrototype;
 
 /** Contains all of the invariants over a particular set of ARITY variables. */
 public final class PPTSLICE1 extends PptSlice {
@@ -109,7 +109,7 @@ public final class PPTSLICE1 extends PptSlice {
 
   @Override
   public final int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PPTSLICE1 this*/) {
+      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PPTSLICE1 this) {
     return ARITY;
   }
   /**
@@ -128,7 +128,7 @@ public final class PPTSLICE1 extends PptSlice {
    * compatible. If the variables are compatible, invariants that match the type of the slices
    * variables are created.
    */
-  public void instantiate_invariants(List</*@Prototype*/ Invariant> proto_invs) {
+  public void instantiate_invariants(List<@Prototype Invariant> proto_invs) {
 
     if (Debug.logOn()) {
       log("instantiate invariants");
@@ -168,7 +168,7 @@ public final class PPTSLICE1 extends PptSlice {
     #endif
 
     // Instantiate each invariant that is valid over those types
-    for (/*@Prototype*/ Invariant proto : proto_invs) {
+    for (@Prototype Invariant proto : proto_invs) {
 
       // Skip invariant if the types are not appropriate
       if (!proto.valid_types(var_infos) || !proto.instantiate_ok(var_infos)) {
@@ -190,7 +190,7 @@ public final class PPTSLICE1 extends PptSlice {
       // never be returned because we check instantiate_ok() above and
       // only enabled invariants are in this list.
       @SuppressWarnings("nullness") // application invariant, see comment above
-      /*@NonNull*/ Invariant inv = proto.instantiate(this);
+      @NonNull Invariant inv = proto.instantiate(this);
       addInvariant(inv);
       if (Debug.logOn()) {
         inv.log("Created invariant %s ss = %s", inv.format(), ss);
@@ -201,7 +201,7 @@ public final class PPTSLICE1 extends PptSlice {
   // These accessors are for abstract methods declared in Ppt
   /** Returns the number of (non-missing) samples observed at this slice. */
   @Override
-  public int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PPTSLICE1 this*/) {
+  public int num_samples(@UnknownInitialization @GuardSatisfied PPTSLICE1 this) {
     if (parent == null || var_infos == null) { // handle not-yet-initialized slices
       return 0;
     }
@@ -356,7 +356,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 
 #if defined (ARITY1)
-  public List<Invariant> add_val_bu(/*@Interned*/ Object val1, int mod1, int count) {
+  public List<Invariant> add_val_bu(@Interned Object val1, int mod1, int count) {
 
     assert mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL;
     List<Invariant> result = new ArrayList<Invariant>();
@@ -386,7 +386,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 #elif defined (ARITY2)
 
-  public List<Invariant> add_val_bu(/*@Interned*/ Object val1, /*@Interned*/ Object val2,
+  public List<Invariant> add_val_bu(@Interned Object val1, @Interned Object val2,
                                         int mod1, int mod2, int count) {
 
     assert (mod1 != ValueTuple.MISSING_FLOW
@@ -454,7 +454,7 @@ public final class PPTSLICE1 extends PptSlice {
     return result;
   }
 #elif defined (ARITY3)
-  public List<Invariant> add_val_bu(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3,
+  public List<Invariant> add_val_bu(@Interned Object val1, @Interned Object val2, @Interned Object val3,
                                      int mod1, int mod2, int mod3, int count) {
 
     assert (mod1 != ValueTuple.MISSING_FLOW
@@ -719,7 +719,7 @@ public final class PPTSLICE1 extends PptSlice {
           for (int k = 0; k < var_infos.length; k++) {
             VarInfo pv = var_infos[k];
             @SuppressWarnings("nullness")
-            /*@NonNull*/ VarInfo cv = rel.childVar(pv);
+            @NonNull VarInfo cv = rel.childVar(pv);
             assert cv != null;
             child_vars[k] = cv.canonicalRep();
           }

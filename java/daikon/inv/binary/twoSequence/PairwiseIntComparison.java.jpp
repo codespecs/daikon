@@ -218,16 +218,16 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.prototype.qual.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents an invariant between corresponding elements of two sequences of PRIMITIVE values. The
@@ -256,14 +256,14 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     super(ppt);
   }
 
-  protected /*@Prototype*/ PAIRWISEINTEQUAL() {
+  protected @Prototype PAIRWISEINTEQUAL() {
     super();
   }
 
-  private static /*@Prototype*/ PAIRWISEINTEQUAL proto = new /*@Prototype*/ PAIRWISEINTEQUAL();
+  private static @Prototype PAIRWISEINTEQUAL proto = new @Prototype PAIRWISEINTEQUAL();
 
   /** Returns the prototype invariant for PAIRWISEINTEQUAL */
-  public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {
+  public static @Prototype PAIRWISEINTEQUAL get_proto() {
     return proto;
   }
 
@@ -292,7 +292,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  protected PAIRWISEINTEQUAL instantiate_dyn(/*>>> @Prototype PAIRWISEINTEQUAL this,*/ PptSlice slice) {
+  protected PAIRWISEINTEQUAL instantiate_dyn(@Prototype PAIRWISEINTEQUAL this, PptSlice slice) {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn()) {
       inv.log("instantiate");
@@ -309,9 +309,9 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
   #endif
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
@@ -336,9 +336,9 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return super.isObviousStatically(vis);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -363,7 +363,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
    *    (A[] op B[]) ^ (i == j)  &rArr; A[..i] op B[..j]
    * </pre>
    */
-  private /*@Nullable*/ DiscardInfo superseq_implies(VarInfo[] vis) {
+  private @Nullable DiscardInfo superseq_implies(VarInfo[] vis) {
 
     // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
     VarInfo v1 = vis[0];
@@ -374,8 +374,8 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE)) {
       return null;
     }
-    /*@NonNull*/ SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
-    /*@NonNull*/ SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
+    @NonNull SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
+    @NonNull SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
     if ((der1.from_start != der2.from_start)
         || (der1.index_shift != der2.index_shift))
       return null;
@@ -406,7 +406,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-    /*@Pure*/
+    @Pure
     @Override
     public boolean is_symmetric() {
     return true;
@@ -421,7 +421,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 #endif
 
   @Override
-  public String repr(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
+  public String repr(@GuardSatisfied PAIRWISEINTEQUAL this) {
     return PAIRWISEINTEQUALstring + varNames() + ": ";
   }
 
@@ -429,9 +429,9 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return EQUALSstring;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied PAIRWISEINTEQUAL this, OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -443,26 +443,26 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
+  public String format_daikon(@GuardSatisfied PAIRWISEINTEQUAL this) {
     return var1().name() + " " + EQUALSstring + " " + var2().name() + " (elementwise)";
   }
 
-  public String format_esc(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
+  public String format_esc(@GuardSatisfied PAIRWISEINTEQUAL this) {
     String[] form = VarInfo.esc_quantify(var1(), var2());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")" + form[3];
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
+  public String format_simplify(@GuardSatisfied PAIRWISEINTEQUAL this) {
     String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(), var1(), var2());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
-  public String format_java_family(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this,*/ OutputFormat format) {
+  public String format_java_family(@GuardSatisfied PAIRWISEINTEQUAL this, OutputFormat format) {
     return "daikon.Quant." + EQUALSstringDBC + "(" + var1().name_using(format)
       + ", " + var2().name_using(format) + ")";
   }
 
-  public String format_csharp(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
+  public String format_csharp(@GuardSatisfied PAIRWISEINTEQUAL this) {
 
     String[] split1 = var1().csharp_array_split();
     String[] split2 = var2().csharp_array_split();
@@ -480,7 +480,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
+  public InvariantStatus check_modified(PRIMITIVE @Interned [] a1, PRIMITIVE @Interned [] a2, int count) {
     assert a1 != null && a2 != null
       : var1() + " " + var2() + " " + FileIO.get_linenum();
     if (a1.length != a2.length || a1.length == 0 || a2.length == 0) {
@@ -503,7 +503,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
     @Override
-    public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
+    public InvariantStatus add_modified(PRIMITIVE @Interned [] a1, PRIMITIVE @Interned [] a2,
                                         int count) {
       if (logDetail()) {
         log(debug, "saw add_modified (" + Arrays.toString(a1)
@@ -529,20 +529,20 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     }
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 
   // Look up a previously instantiated invariant.
-  public static /*@Nullable*/ PAIRWISEINTEQUAL find(PptSlice ppt) {
+  public static @Nullable PAIRWISEINTEQUAL find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof PAIRWISEINTEQUAL) {
@@ -553,9 +553,9 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
+  public @Nullable NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }
 
@@ -593,7 +593,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
           });
   #else
-    private static /*@Nullable*/ NISuppressionSet suppressions = null;
+    private static @Nullable NISuppressionSet suppressions = null;
   #endif
 
 }

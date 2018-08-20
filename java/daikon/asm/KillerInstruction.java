@@ -3,11 +3,8 @@ package daikon.asm;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Represents a set of instructions that may or may not be executed, and whose only effect is that
@@ -49,9 +46,9 @@ public class KillerInstruction implements IInstruction {
     return false;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied KillerInstruction this*/) {
+  public String toString(@GuardSatisfied KillerInstruction this) {
     StringBuilder b = new StringBuilder();
     for (X86Instruction i : instructions) {
       b.append("(potential)" + i + "\n");

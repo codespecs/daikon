@@ -7,14 +7,12 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-*/
 
 /**
  * ParameterDoclet is a JavaDoc doclet that collects information about the runtime configuration
@@ -78,14 +76,13 @@ public class ParameterDoclet {
   // ============================== NON-STATIC METHODS ==============================
 
   static class DocCategory {
-    public /*@Nullable*/ String prefixPattern;
-    public /*@Nullable*/ String fieldName;
+    public @Nullable String prefixPattern;
+    public @Nullable String fieldName;
     public String description;
     public String longBlurb;
     public Map<String, String> fields; // field -> description
 
-    public DocCategory(
-        /*@Nullable*/ String prefix, /*@Nullable*/ String name, String desc, String blurb) {
+    public DocCategory(@Nullable String prefix, @Nullable String name, String desc, String blurb) {
       prefixPattern = prefix;
       if (name == null) {
         fieldName = null;
@@ -221,7 +218,7 @@ public class ParameterDoclet {
     try {
       int i = field.lastIndexOf('.');
       @SuppressWarnings("signature") // application invariant
-      /*@ClassGetName*/ String classname = field.substring(0, i);
+      @ClassGetName String classname = field.substring(0, i);
       String fieldname = field.substring(i + 1);
       Class<?> c = ReflectionPlume.classForName(classname);
       Field f = c.getField(Configuration.PREFIX + fieldname);
@@ -258,8 +255,7 @@ public class ParameterDoclet {
       out.println();
 
       for (
-      /*@KeyFor("categories[c].fields")*/ String field :
-          CollectionsPlume.sortedKeySet(categories[c].fields)) {
+      @KeyFor("categories[c].fields") String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
@@ -295,8 +291,7 @@ public class ParameterDoclet {
       out.println();
 
       for (
-      /*@KeyFor("categories[c].fields")*/ String field :
-          CollectionsPlume.sortedKeySet(categories[c].fields)) {
+      @KeyFor("categories[c].fields") String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 

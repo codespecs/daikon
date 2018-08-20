@@ -2,8 +2,12 @@ package daikon.inv;
 
 import static daikon.inv.Invariant.asInvClass;
 
-import daikon.*;
-import daikon.diff.*;
+import daikon.Daikon;
+import daikon.Global;
+import daikon.LogHelper;
+import daikon.Ppt;
+import daikon.VarInfo;
+import daikon.diff.InvMap;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,15 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.EntryReader;
 import org.plumelib.util.Pair;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * An invariant feature extractor. This class creates a labeling of invariants. That is, it extracts
@@ -290,7 +293,7 @@ public final class FeatureExtractor {
     // and a Map of numbers to names
     TreeSet<IntDoublePair> allFeatures = new TreeSet<IntDoublePair>();
     HashMap<IntDoublePair, String> numbersToNames = new HashMap<IntDoublePair, String>();
-    for (Map.Entry</*@KeyFor("lookup")*/ Object, Integer> entry : lookup.entrySet()) {
+    for (Map.Entry<@KeyFor("lookup") Object, Integer> entry : lookup.entrySet()) {
       Object key = entry.getKey();
       int num = entry.getValue().intValue();
       IntDoublePair pair = new IntDoublePair(num, 0);
@@ -761,11 +764,9 @@ public final class FeatureExtractor {
     }
 
     @Override
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
-    public boolean equals(
-        /*>>>@GuardSatisfied IntDoublePair this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
+    public boolean equals(@GuardSatisfied IntDoublePair this, @GuardSatisfied @Nullable Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
         return ((number == other.number) && (value == other.value));
@@ -776,16 +777,16 @@ public final class FeatureExtractor {
 
     // returns a valid hashCode
     @Override
-    /*@Pure*/
-    public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
+    @Pure
+    public int hashCode(@GuardSatisfied IntDoublePair this) {
       return number;
     }
 
     // Compares an Object to this
     // Throws ClassCastException if argument is not an IntDoublePair
-    /*@Pure*/
+    @Pure
     @Override
-    public int compareTo(/*>>>@GuardSatisfied IntDoublePair this,*/ IntDoublePair p) {
+    public int compareTo(@GuardSatisfied IntDoublePair this, IntDoublePair p) {
       if (this.number < p.number) {
         return -1;
       } else if (this.number > p.number) {

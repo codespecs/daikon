@@ -31,6 +31,7 @@ env:
     - OS=fedora JDKVER=jdkany GROUP=misc
     - OS=fedora JDKVER=jdkany GROUP=kvasir
     - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
+    - OS=centos JDKVER=jdkany GROUP=misc
     - OS=centos JDKVER=jdkany GROUP=kvasir
 
 # Currently-failing jobs

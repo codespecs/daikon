@@ -9,11 +9,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Raw;
 
 /**
  * A stack of Lemmas that shadows the stack of assumptions that Simplify keeps. Keeping this stack
@@ -54,17 +52,15 @@ public class LemmaStack {
 
   /** Tell Simplify to assume a lemma, which should already be on our stack. */
   private void assume(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma
-          lemma)
+      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this, Lemma lemma)
       throws TimeoutException {
     session.request(new CmdAssume(lemma.formula));
   }
 
   /** Assume a list of lemmas. */
   private void assumeAll(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ List<
-              Lemma>
-          invs)
+      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,
+      List<Lemma> invs)
       throws TimeoutException {
     for (Lemma lem : invs) {
       assume(lem);
@@ -91,9 +87,8 @@ public class LemmaStack {
   }
 
   /** Try to start Simplify. */
-  /*@EnsuresNonNull("session")*/
-  private void startProver(
-      /*>>> @UnknownInitialization @Raw LemmaStack this*/) throws SimplifyError {
+  @EnsuresNonNull("session")
+  private void startProver(@UnknownInitialization @Raw LemmaStack this) throws SimplifyError {
     SessionManager session_try = SessionManager.attemptProverStartup();
     if (session_try != null) {
       session = session_try;
@@ -104,7 +99,7 @@ public class LemmaStack {
 
   /** Try to restart Simplify back where we left off, after killing it. */
   private void restartProver(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this*/)
+      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this)
       throws SimplifyError {
     startProver();
     try {
@@ -129,8 +124,7 @@ public class LemmaStack {
 
   /** Push an assumption onto our and Simplify's stacks. */
   public boolean pushLemma(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma
-          lem)
+      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this, Lemma lem)
       throws SimplifyError {
     SimpUtil.assert_well_formed(lem.formula);
     try {
@@ -157,9 +151,8 @@ public class LemmaStack {
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
   public void pushLemmas(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ List<
-              Lemma>
-          newLemmas)
+      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,
+      List<Lemma> newLemmas)
       throws SimplifyError {
     for (Lemma lem : newLemmas) {
       pushLemma(lem);
@@ -172,8 +165,7 @@ public class LemmaStack {
    * answer.
    */
   private char checkString(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ String
-          str)
+      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this, String str)
       throws SimplifyError {
     SimpUtil.assert_well_formed(str);
     CmdCheck cc = new CmdCheck(str);

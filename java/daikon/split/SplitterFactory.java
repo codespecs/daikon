@@ -1,6 +1,8 @@
 package daikon.split;
 
-import daikon.*;
+import daikon.Global;
+import daikon.PptMap;
+import daikon.PptTopLevel;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,13 +13,12 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jtb.ParseException;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.regex.qual.Regex;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.regex.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-*/
 
 /**
  * This class contains static methods {@link #parse_spinfofile(File)} which creates Splitterss from
@@ -34,7 +35,7 @@ public class SplitterFactory {
   // This must *not* be set in a static block, which happens before the
   // Configuration object has had a chance to possibly set
   // dkconfig_delete_splitters_on_exit.
-  private static /*@MonotonicNonNull*/ String tempdir;
+  private static @MonotonicNonNull String tempdir;
 
   /**
    * Boolean. If true, the temporary Splitter files are deleted on exit. Set it to "false" if you
@@ -59,7 +60,7 @@ public class SplitterFactory {
    */
   public static int dkconfig_compile_timeout = 20;
 
-  private static /*@MonotonicNonNull*/ FileCompiler fileCompiler; // lazily initialized
+  private static @MonotonicNonNull FileCompiler fileCompiler; // lazily initialized
 
   /**
    * guid is a counter that increments every time a file is written. It is used to ensure that every
@@ -93,7 +94,7 @@ public class SplitterFactory {
    * @param ppt the Ppt
    * @param spfiles a list of SpinfoFiles
    */
-  /*@RequiresNonNull("tempdir")*/
+  @RequiresNonNull("tempdir")
   public static void load_splitters(PptTopLevel ppt, List<SpinfoFile> spfiles) {
     Global.debugSplit.fine("<<enter>> load_splitters");
 
@@ -119,7 +120,7 @@ public class SplitterFactory {
             for (int k = 0; k < numsplitters; k++) {
               if (splitterObjects[i][k].splitterExists()) {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
-                /*@NonNull*/ Splitter splitter = splitterObjects[i][k].getSplitter();
+                @NonNull Splitter splitter = splitterObjects[i][k].getSplitter();
                 sp.add(splitter);
                 numGood++;
               } else {
@@ -168,7 +169,7 @@ public class SplitterFactory {
    * @param statementReplacer a StatementReplacer for the replace statements to be used in these
    *     splitterObjects
    */
-  /*@RequiresNonNull("tempdir")*/
+  @RequiresNonNull("tempdir")
   private static void loadSplitters(
       SplitterObject[] splitterObjects, PptTopLevel ppt, StatementReplacer statementReplacer) {
     Global.debugSplit.fine("<<enter>> loadSplitters - count: " + splitterObjects.length);
@@ -193,7 +194,7 @@ public class SplitterFactory {
       }
       String fileAddress = tempdir + fileName;
       @SuppressWarnings("signature") // safe, has been quoted
-      /*@BinaryName*/ String fileName_bn = fileName;
+      @BinaryName String fileName_bn = fileName;
       splitObj.setClassName(fileName_bn);
       try {
         BufferedWriter writer = UtilPlume.bufferedFileWriter(fileAddress + ".java");
@@ -279,7 +280,7 @@ public class SplitterFactory {
     return matchPptRegex(regex, ppt);
   }
 
-  private static boolean matchPptRegex(/*@Regex*/ String ppt_regex, PptTopLevel ppt) {
+  private static boolean matchPptRegex(@Regex String ppt_regex, PptTopLevel ppt) {
     // System.out.println("matchPptRegex: " + ppt_regex);
     Pattern pattern = Pattern.compile(ppt_regex);
     String name = ppt.name;

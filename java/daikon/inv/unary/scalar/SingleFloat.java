@@ -1,16 +1,14 @@
 package daikon.inv.unary.scalar;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.InvariantStatus;
 import daikon.inv.unary.UnaryInvariant;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import typequals.prototype.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Raw;
+import typequals.prototype.qual.Prototype;
 
 /** Abstract base class for invariants over one variable of type {@code double}. */
 public abstract class SingleFloat extends UnaryInvariant {
@@ -23,7 +21,7 @@ public abstract class SingleFloat extends UnaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SingleFloat() {
+  protected @Prototype SingleFloat() {
     super();
   }
 
@@ -34,7 +32,7 @@ public abstract class SingleFloat extends UnaryInvariant {
   }
 
   public VarInfo var(
-      /*>>>@GuardSatisfied @UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this*/) {
+          @GuardSatisfied @UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this) {
     return ppt.var_infos[0];
   }
 
@@ -42,7 +40,7 @@ public abstract class SingleFloat extends UnaryInvariant {
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   @Override
-  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
+  public InvariantStatus add(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     double value = ((Double) val).doubleValue();
@@ -54,7 +52,7 @@ public abstract class SingleFloat extends UnaryInvariant {
   }
 
   @Override
-  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
+  public InvariantStatus check(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     double value = ((Double) val).doubleValue();

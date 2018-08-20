@@ -4,12 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.Initialized;
+import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.NonRaw;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * The PureMethodInfo class is a subtype of DaikonVariableInfo used for "variable types" which
@@ -61,9 +60,9 @@ public class PureMethodInfo extends DaikonVariableInfo {
   /** Invokes this pure method on the given parentVal. This is safe because the method is pure! */
   @Override
   @SuppressWarnings("unchecked")
-  public /*@Nullable*/ Object getMyValFromParentVal(Object parentVal) {
+  public @Nullable Object getMyValFromParentVal(Object parentVal) {
     @SuppressWarnings("nullness") // not a class initializer, so meth != null
-    /*@NonNull*/ Method meth = (Method) minfo.member;
+    @NonNull Method meth = (Method) minfo.member;
     boolean changedAccess = false;
     Object retVal;
 
@@ -78,7 +77,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
       if (parentVal == null || parentVal instanceof NonsensicalList) {
         retVal = NonsensicalList.getInstance();
       } else {
-        ArrayList</*@Nullable*/ Object> retList = new ArrayList</*@Nullable*/ Object>();
+        ArrayList<@Nullable Object> retList = new ArrayList<@Nullable Object>();
 
         for (Object val : (List<Object>) parentVal) { // unchecked cast
           if (val == null || val instanceof NonsensicalObject) {
@@ -110,8 +109,8 @@ public class PureMethodInfo extends DaikonVariableInfo {
    * Returns an array corresponding to the current values of this pure method's arguments based on
    * the given parentVal.
    */
-  private /*@Nullable*/ Object[] getArgVals(Object parentVal) {
-    /*@Nullable*/ Object[] params = new /*@Nullable*/ Object[args.length];
+  private @Nullable Object[] getArgVals(Object parentVal) {
+    @Nullable Object[] params = new @Nullable Object[args.length];
 
     for (int i = 0; i < args.length; i++) {
       Object currentVal = args[i].getMyValFromParentVal(parentVal);
@@ -127,8 +126,8 @@ public class PureMethodInfo extends DaikonVariableInfo {
     return params;
   }
 
-  private static /*@Nullable*/ Object executePureMethod(
-      Method meth, Object receiverVal, /*@Nullable*/ Object[] argVals) {
+  private static @Nullable Object executePureMethod(
+      Method meth, Object receiverVal, @Nullable Object[] argVals) {
     // Between startPure() and endPure(), no output is done to the trace file.
     // Without this synchronization, other threads would observe that
     // startPure has been called and wouldn't do any output.
@@ -143,7 +142,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
         Runtime.startPure();
 
         @SuppressWarnings("nullness") // argVals is declared Nullable
-        /*@NonNull*/ /*@NonRaw*/ /*@Initialized*/ /*@GuardedBy({})*/ Object tmp_retVal = meth.invoke(receiverVal, argVals);
+        @NonNull @NonRaw @Initialized @GuardedBy({}) Object tmp_retVal = meth.invoke(receiverVal, argVals);
         retVal = tmp_retVal;
 
         if (meth.getReturnType().isPrimitive()) {
@@ -170,7 +169,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
    * Convert standard wrapped (boxed) Objects (i.e., Integers) to Chicory wrappers (ie,
    * Runtime.IntWrap). Should not be called if the Object was not auto-boxed from from a primitive!
    */
-  public static /*@Nullable*/ Object convertWrapper(/*@Nullable*/ Object obj) {
+  public static @Nullable Object convertWrapper(@Nullable Object obj) {
     if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList) {
       return obj;
     }
