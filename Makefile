@@ -43,16 +43,15 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 SCRIPT_FILES := Makefile \
 	daikon.cshrc daikon.bashrc daikonenv.bat \
 	dfepl dtrace-perl dtype-perl \
+	java-cpp \
 	kvasir-dtrace \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	trace-add-nonces.pl \
 	util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
-PLUME_SCRIPT_FILES := java-cpp lines-from
 
-SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
-                $(addprefix utils/plume-scripts/,$(PLUME_SCRIPT_FILES))
+SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
