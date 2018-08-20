@@ -70,12 +70,6 @@ public class DiffDummyInvariant extends Invariant {
 
   @Pure
   @Override
-  public boolean isInteresting() {
-    return interesting;
-  }
-
-  @Pure
-  @Override
   public boolean isSameInvariant(Invariant other) {
     return this.isSameFormula(other);
   }

@@ -1476,25 +1476,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return ppt.allPrestate();
   }
 
-  // The notion of "interesting" embodied by this method is
-  // unclear. You'd probably be better off using
-  // hasUninterestingConstant(), or some other filter.
-  // Uninteresting invariants will override this method to return
-  // false
-  @Pure
-  public boolean isInteresting(@NonPrototype Invariant this) {
-    return true;
-  }
-
   /**
-   * This is the test that's planned to replace the poorly specified "isInteresting" check. In the
-   * future, the set of interesting constants might be determined by a static analysis of the source
-   * code, but for the moment, we only consider -1, 0, 1, and 2 as interesting.
-   *
-   * <p>Intuitively, the justification for this test is that an invariant that includes an
-   * uninteresting constant (say, "size(x[]) &lt; 237") is likely to be an artifact of the way the
-   * program was tested, rather than a statement that would in fact hold over all possible
-   * executions.
+   * An invariant that includes an uninteresting constant (say, "size(x[]) &lt; 237") is likely to
+   * be an artifact of the way the program was tested, rather than a statement that would in fact
+   * hold over all possible executions.
    */
   public boolean hasUninterestingConstant(@NonPrototype Invariant this) {
     return false;
