@@ -161,7 +161,6 @@ public final class Diff {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     boolean printDiff = false;
-    boolean printUninteresting = false;
     boolean printAll = false;
     boolean includeUnjustified = true;
     boolean stats = false;
@@ -262,9 +261,6 @@ public final class Diff {
         case 'd':
           optionSelected = true;
           printDiff = true;
-          break;
-        case 'u':
-          printUninteresting = true;
           break;
         case 'a':
           optionSelected = true;
@@ -428,7 +424,7 @@ public final class Diff {
 
       RootNode pass_and_fail = diff.diffPptMap(manip1, manip2, includeUnjustified);
 
-      XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out, false, false, false);
+      XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out, false, false);
       pass_and_fail.accept(xiv);
 
       // remove for the latest version
@@ -520,8 +516,7 @@ public final class Diff {
 
     if (printDiff) {
       PrintDifferingInvariantsVisitor v =
-          new PrintDifferingInvariantsVisitor(
-              System.out, verbose, printEmptyPpts, printUninteresting);
+          new PrintDifferingInvariantsVisitor(System.out, verbose, printEmptyPpts);
       root.accept(v);
     }
 

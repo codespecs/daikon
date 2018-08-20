@@ -17,49 +17,30 @@ public class DiffDummyInvariant extends Invariant {
 
   public String formula;
   public double confidence;
-  public boolean interesting;
   public boolean isWorthPrinting;
 
   public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified) {
-    this(ppt, formula, justified, true, true);
-  }
-
-  public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified, boolean interesting) {
-    this(ppt, formula, justified, interesting, true);
+    this(ppt, formula, justified, true);
   }
 
   public DiffDummyInvariant(
-      PptSlice ppt,
-      String formula,
-      boolean justified,
-      boolean interesting,
-      boolean isWorthPrinting) {
+      PptSlice ppt, String formula, boolean justified, boolean isWorthPrinting) {
     this(
         ppt,
         formula,
         (justified ? Invariant.CONFIDENCE_JUSTIFIED : Invariant.CONFIDENCE_UNJUSTIFIED),
-        interesting,
         isWorthPrinting);
   }
 
   public DiffDummyInvariant(PptSlice ppt, String formula, double confidence) {
-    this(ppt, formula, confidence, true, true);
-  }
-
-  public DiffDummyInvariant(PptSlice ppt, String formula, double confidence, boolean interesting) {
-    this(ppt, formula, confidence, interesting, true);
+    this(ppt, formula, confidence, true);
   }
 
   public DiffDummyInvariant(
-      PptSlice ppt,
-      String formula,
-      double confidence,
-      boolean interesting,
-      boolean isWorthPrinting) {
+      PptSlice ppt, String formula, double confidence, boolean isWorthPrinting) {
     super(ppt);
     this.formula = formula;
     this.confidence = confidence;
-    this.interesting = interesting;
     this.isWorthPrinting = isWorthPrinting;
   }
 

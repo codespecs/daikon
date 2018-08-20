@@ -13,7 +13,7 @@ import java.io.PrintStream;
 public class PrintNullDiffVisitor extends PrintDifferingInvariantsVisitor {
 
   public PrintNullDiffVisitor(PrintStream ps, boolean verbose) {
-    super(ps, verbose, false, false);
+    super(ps, verbose, false);
   }
 
   @Override
