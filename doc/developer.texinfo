@@ -2137,17 +2137,11 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 @node    Distribution setup instructions
 @section Distribution setup instructions
 
-Install the latest version
-of the Checker Framework tools from @uref{https://checkerframework.org} and
-set the @env{CHECKERFRAMEWORK} environment variable as described in the
-@uref{https://checkerframework.org/manual/#installation, ,Installation}
-section of the manual.
-
 @need 1000
 The recommended setup for the distribution process:
 @itemize
 @item get a fresh copy of your Bash shell (e.g., log out and log back in)
-@item set @env{CHECKERFRAMEWORK} as described above
+@item @code{unset CHECKERFRAMEWORK}
 @item set @env{DAIKONDIR} as you would normally
 @item set @env{JAVA_HOME} to point to JDK 8
 @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
@@ -2307,9 +2301,6 @@ in the process.
 
 @node    Distribution steps
 @section Steps for making the distribution
-
-Use the Checker Framework Java compiler for the release process. Make sure the @env{CHECKERFRAMEWORK} environment
-variable is properly set.
 
 @enumerate
 
@@ -2476,7 +2467,7 @@ git clone --depth 3 https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk8
-export CHECKERFRAMEWORK=<path to lastest version of Checker Framework tools>
+unset CHECKERFRAMEWORK
 source scripts/daikon.bashrc
 make staging
 @end example
