@@ -22,7 +22,8 @@ elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
   return 2
 fi
 
-DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
+echo "DAIKONDIR=$DAIKONDIR"
 
 if [ -z "$DAIKONSCRIPTS" ]; then
   if [ -d ${DAIKONDIR}/scripts ]; then
