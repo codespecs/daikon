@@ -22,6 +22,7 @@ elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
   return 2
 fi
 
+echo "BASH_SOURCE[0] = ${BASH_SOURCE[0]}"
 DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
 echo "DAIKONDIR=$DAIKONDIR"
 
