@@ -12,12 +12,17 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
   VarInfo[] vars = {
     DiffTester.newIntVarInfo("x"), DiffTester.newIntVarInfo("y"), DiffTester.newIntVarInfo("z")
   };
+  /** The program point that contains the test invariants. */
   PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
-
+  /** The slice that contains the test invariants. */
   PptSlice slice0 = ppt.joiner_view;
+
+  /** An invariant that is justified. */
   Invariant null_1_just = new DiffDummyInvariant(slice0, "1", true);
+  /** An invariant that is justified but not worth printing. */
   Invariant null_noprint = new DiffDummyInvariant(slice0, "0", true, false);
 
+  /** Main method that runs tests. */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));

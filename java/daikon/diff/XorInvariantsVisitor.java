@@ -16,6 +16,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 
+  /** Create an instance of XorInvariantsVisitor. */
   public XorInvariantsVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
   }

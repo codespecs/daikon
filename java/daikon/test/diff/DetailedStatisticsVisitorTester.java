@@ -114,6 +114,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     root.accept(v);
   }
 
+  /** Validate that this class's constructor added exactly one of each arity and relationship. */
   public void testFreq() {
     for (int arity = 0; arity < DetailedStatisticsVisitor.NUM_ARITIES; arity++) {
       for (int rel = 0; rel < DetailedStatisticsVisitor.NUM_RELATIONSHIPS; rel++) {

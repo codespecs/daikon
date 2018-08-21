@@ -9,8 +9,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /** Prints the differing invariant pairs. */
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
 
+  /** Logger for debugging information. */
   public static final Logger debug = Logger.getLogger("daikon.diff.DetailedStatisticsVisitor");
 
+  /** Create an instance of PrintDifferingInvariantsVisitor. */
   public PrintDifferingInvariantsVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
   }

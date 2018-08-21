@@ -15,14 +15,19 @@ public class DiffDummyInvariant extends Invariant {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  /** A string representation of the formula that this dummy invariant represents. */
   public String formula;
+  /** The confidence fro this dummy invariant. */
   public double confidence;
+  /** Whether the invariant is worth printing. */
   public boolean isWorthPrinting;
 
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified) {
     this(ppt, formula, justified, true);
   }
 
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(
       PptSlice ppt, String formula, boolean justified, boolean isWorthPrinting) {
     this(
@@ -32,10 +37,12 @@ public class DiffDummyInvariant extends Invariant {
         isWorthPrinting);
   }
 
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(PptSlice ppt, String formula, double confidence) {
     this(ppt, formula, confidence, true);
   }
 
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(
       PptSlice ppt, String formula, double confidence, boolean isWorthPrinting) {
     super(ppt);

@@ -22,10 +22,11 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   private static final int FIELD_WIDTH = 5;
   private static final int LABEL_WIDTH = 7;
 
-  // Types of invariants
+  /** The number of arities for invariants; equivalently, 1 more than the max arity. */
   public static final int NUM_ARITIES = 4;
 
-  public static final String[] TYPE_LABELS = {"NInt", "N!Int", "UInt", "U!Int", "Bin", "Ter"};
+  /** A string representations for each arity. Length = NUM_ARITIES. */
+  public static final String[] ARITY_LABELS = {"Nul", "Una", "Bin", "Ter"};
 
   // Relationships between invariants
   public static final int NUM_RELATIONSHIPS = 12;
@@ -244,7 +245,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     pw.println(UtilPlume.rpad("TOTAL", FIELD_WIDTH));
 
     for (int arity = 0; arity < NUM_ARITIES; arity++) {
-      pw.print(UtilPlume.rpad(TYPE_LABELS[arity], LABEL_WIDTH));
+      pw.print(UtilPlume.rpad(ARITY_LABELS[arity], LABEL_WIDTH));
       for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
         int f = (int) freq[arity][rel];
         pw.print(UtilPlume.rpad(f, FIELD_WIDTH));
