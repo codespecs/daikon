@@ -22,6 +22,10 @@ elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
   return 2
 fi
 
+# TODO: diagnostic output should be removed before release is made
+echo "current directory: "
+pwd
+echo "BASH_SOURCE size: ${#BASH_SOURCE[@]}"
 echo "BASH_SOURCE = ${BASH_SOURCE}"
 # echo "BASH_SOURCE[0] = ${BASH_SOURCE[0]}"
 DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
