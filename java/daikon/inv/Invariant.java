@@ -701,14 +701,17 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // // itself on the PptSlice, and that's what really matters (right?).
   // public static abstract Invariant instantiate(PptSlice ppt);
 
+  /** Return true if this invariant uses the given variable. */
   public boolean usesVar(@NonPrototype Invariant this, VarInfo vi) {
     return ppt.usesVar(vi);
   }
 
+  /** Return true if this invariant uses the given variable. */
   public boolean usesVar(@NonPrototype Invariant this, String name) {
     return ppt.usesVar(name);
   }
 
+  /** Return true if this invariant uses the given variable or any variable derived from it. */
   public boolean usesVarDerived(@NonPrototype Invariant this, String name) {
     return ppt.usesVarDerived(name);
   }
@@ -787,6 +790,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return " [" + classname + "]";
   }
 
+  /** Return a printed representation of this invariant, in the given format. */
   @SideEffectFree
   public abstract String format_using(
       @GuardSatisfied @NonPrototype Invariant this, OutputFormat format);

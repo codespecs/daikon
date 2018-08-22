@@ -22,14 +22,25 @@ elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
   return 2
 fi
 
-DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
+  if [ -z ${DAIKONDIR+x} ]; then
+    echo "Cannot infer DAIKONDIR.  Please set it to an existing directory."
+    return 2
+  elif [ ! -d "$DAIKONDIR" ]; then
+    echo "DAIKONDIR is set to $DAIKONDIR"
+    echo "which doesn't exist.  Please set it to an existing directory."
+    return 2
+else
+  DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
+fi
 
 if [ -z "$DAIKONSCRIPTS" ]; then
   if [ -d ${DAIKONDIR}/scripts ]; then
     export DAIKONSCRIPTS=${DAIKONDIR}/scripts
   else
     echo "Cannot choose a value for environment variable DAIKONSCRIPTS."
-    echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
+    echo "Maybe DAIKONDIR is badly set: $DAIKONDIR"
+    echo "Please fix the problem.  Aborting daikon.bashrc ."
     return 2
   fi
 fi

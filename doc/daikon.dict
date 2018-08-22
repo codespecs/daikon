@@ -132,6 +132,7 @@ programmatically
 prover
 Randoop
 readelf
+refactored
 rethrown
 runnable
 runtime
@@ -139,6 +140,7 @@ runtimechecker
 screenshot
 screenshots
 signalling
+SIMD
 splitter
 splitters
 StackMap
