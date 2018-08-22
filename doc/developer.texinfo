@@ -2193,8 +2193,9 @@ by comparing the @file{REVISION} file to
 @url{http://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
 If so, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document ``Merging
-newer versions of Valgrind into Fjalar'', which appears in the @file{fjalar}
-repository.
+newer versions of Valgrind into Fjalar'', which appears
+@uref{https://github.com/codespecs/fjalar/blob/master/doc/valgrind-merge.texinfo,
+, in the @file{fjalar} repository}.
 
 
 @node    The day before the release
@@ -2438,6 +2439,9 @@ make update-and-commit-version
 @need 1000
 @item
 It is important to build the release candidate from a clean enlistment.
+(TODO: In the future, perhaps do all release-related work on a branch.
+Otherwise, use of the below commands requires committing changes to master,
+and there might be many commits if there is trouble with the release.)
 This is to ensure we are testing only the files intended for release and
 that those files are the same as a user would receive with a clone of
 the repository. This needs to be done in a separate, new Bash command
@@ -2452,8 +2456,9 @@ build everything to be distributed and copy it to the temporary staging area
 
 @example
 mkdir -p /tmp/$USER
-rm -rf /tmp/$USER/stage-daikon
-git clone --depth 3 https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
+cd /tmp/$USER
+rm -rf stage-daikon
+git clone --depth 3 https://github.com/codespecs/daikon stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk8
