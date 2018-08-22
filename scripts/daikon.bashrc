@@ -30,6 +30,7 @@ if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
     echo "DAIKONDIR is set to $DAIKONDIR"
     echo "which doesn't exist.  Please set it to an existing directory."
     return 2
+  fi
 else
   DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
 fi
