@@ -102,9 +102,9 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * difference in justifications.
    */
   private void addFrequencyBinary(@Nullable Invariant inv1, @Nullable Invariant inv2) {
-    int type = determineType(inv1, inv2);
+    int arity = determineArity(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
-    freq[type][relationship]++;
+    freq[arity][relationship]++;
   }
 
   /**
@@ -112,7 +112,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * unjustified, the table entry is incremented by the difference in justifications.
    */
   private void addFrequencyContinuous(@Nullable Invariant inv1, @Nullable Invariant inv2) {
-    int type = determineType(inv1, inv2);
+    int arity = determineArity(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
 
     switch (relationship) {
@@ -121,10 +121,10 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
         assert inv1 != null && inv2 != null
             : "@AssumeAssertion(nullness)"; // application invariant about return value of
         // determineRelationship
-        freq[type][relationship] += calculateConfidenceDifference(inv1, inv2);
+        freq[arity][relationship] += calculateConfidenceDifference(inv1, inv2);
         break;
       default:
-        freq[type][relationship]++;
+        freq[arity][relationship]++;
     }
   }
 
@@ -141,13 +141,8 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     return diff;
   }
 
-  /**
-   * Returns the type of the invariant pair. The type consists of the number of variables (0,1,2,3)
-   * and whether the pair is interesting or not. A pair is interesting if at least one invariant is
-   * interesting.
-   */
-  public static int determineType(@Nullable Invariant inv1, @Nullable Invariant inv2) {
-    int type;
+  /** Returns the arity of the invariant pair. */
+  public static int determineArity(@Nullable Invariant inv1, @Nullable Invariant inv2) {
 
     // Set inv to a non-null invariant
     @SuppressWarnings("nullness") // at least one argument is non-null
