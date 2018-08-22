@@ -2573,7 +2573,7 @@ Run the following commands:
 
 @smallexample
 NEW_VERSION=`cat doc/VERSION`
-curl -LO --retry 3 https://raw.github.com/plume-lib/trigger-travis/master/trigger-travis.sh -O /tmp/trigger-travis.sh
+(cd /tmp && curl -LO --retry 3 https://raw.github.com/plume-lib/trigger-travis/master/trigger-travis.sh)
 sh /tmp/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
 sh /tmp/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
