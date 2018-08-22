@@ -35,7 +35,7 @@ else
   # MacOS does not have "-e" argument to readlink
   # DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
   # Code from: https://stackoverflow.com/q/59895/173852
-  DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+  DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
 fi
 
 if [ -z "$DAIKONSCRIPTS" ]; then
