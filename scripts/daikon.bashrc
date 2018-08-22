@@ -24,11 +24,11 @@ fi
 
 if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
   if [ -z ${DAIKONDIR+x} ]; then
-    echo "Cannot infer DAIKONDIR.  Please set it to an existing directory."
+    echo "Cannot infer DAIKONDIR.  Please set DAIKONDIR to an existing directory."
     return 2
   elif [ ! -d "$DAIKONDIR" ]; then
     echo "DAIKONDIR is set to $DAIKONDIR"
-    echo "which doesn't exist.  Please set it to an existing directory."
+    echo "which doesn't exist.  Please set DAIKONDIR to an existing directory."
     return 2
   fi
 else
