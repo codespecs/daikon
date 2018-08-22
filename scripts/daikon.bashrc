@@ -32,7 +32,10 @@ if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
     return 2
   fi
 else
-  DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
+  # MacOS does not have "-e" argument to readlink
+  # DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
+  # Code from: https://stackoverflow.com/q/59895/173852
+  DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 fi
 
 if [ -z "$DAIKONSCRIPTS" ]; then

@@ -2573,9 +2573,10 @@ Run the following commands:
 
 @smallexample
 NEW_VERSION=`cat doc/VERSION`
-trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
+curl -LO --retry 3 https://raw.github.com/plume-lib/trigger-travis/master/trigger-travis.sh -O /tmp/trigger-travis.sh
+sh /tmp/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
-trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
+sh /tmp/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
 @end smallexample
 
@@ -2622,6 +2623,7 @@ continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
 Success is indicated by invariant output being written to the screen.
 
 @smallexample
+unset DAIKONDIR
 export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.8.0_144"
 export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
 mkdir -p ~/tmp
