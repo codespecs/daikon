@@ -258,14 +258,6 @@ public class Implication extends Joiner {
     return super.isSameInvariant(other);
   }
 
-  // An implication is only interesting if both the predicate and
-  // consequent are interesting
-  @Pure
-  @Override
-  public boolean isInteresting() {
-    return (predicate().isInteresting() && consequent().isInteresting());
-  }
-
   // If a constant managed to appear in a predicate, that's
   // interesting enough for us.
   @Override

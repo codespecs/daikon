@@ -92,12 +92,12 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     }
     bufPrint(">");
 
-    int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
-    String typeLabel = DetailedStatisticsVisitor.TYPE_LABELS[type];
+    int arity = DetailedStatisticsVisitor.determineArity(inv1, inv2);
+    String arityLabel = DetailedStatisticsVisitor.ARITY_LABELS[arity];
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
 
-    bufPrint(" (" + typeLabel + "," + relLabel + ")");
+    bufPrint(" (" + arityLabel + "," + relLabel + ")");
 
     bufPrintln();
   }
@@ -133,12 +133,12 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     }
     //    bufPrint(">");
 
-    int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
+    int arity = DetailedStatisticsVisitor.determineArity(inv1, inv2);
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
 
-    // String typeLabel = DetailedStatisticsVisitor.TYPE_LABELS[type];
+    // String arityLabel = DetailedStatisticsVisitor.ARITY_LABELS[arity];
     // String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
-    //    bufPrint(" (" + typeLabel + "," + relLabel + ")");
+    //    bufPrint(" (" + arityLabel + "," + relLabel + ")");
 
     bufPrintln();
   }

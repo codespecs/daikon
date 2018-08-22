@@ -103,12 +103,6 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
    * relationship, and printability.
    */
   protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
-    int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
-    if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING
-        || type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {
-      return false;
-    }
-
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2
         || rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2

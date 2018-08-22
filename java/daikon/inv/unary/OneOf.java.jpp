@@ -1978,19 +1978,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     return false;
   }
 
-  // OneOf invariants that indicate a small set of possible values are
-  // uninteresting.  OneOf invariants that indicate exactly one value
-  // are interesting.
-  @Pure
-  @Override
-  public boolean isInteresting() {
-    if (num_elts() > 1) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   @Override
   public boolean hasUninterestingConstant() {
 #if defined(SCALAR) || defined(ELT)

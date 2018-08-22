@@ -15,63 +15,45 @@ public class DiffDummyInvariant extends Invariant {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  /** A string representation of the formula that this dummy invariant represents. */
   public String formula;
+  /** The confidence fro this dummy invariant. */
   public double confidence;
-  public boolean interesting;
+  /** Whether the invariant is worth printing. */
   public boolean isWorthPrinting;
 
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified) {
-    this(ppt, formula, justified, true, true);
+    this(ppt, formula, justified, true);
   }
 
-  public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified, boolean interesting) {
-    this(ppt, formula, justified, interesting, true);
-  }
-
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(
-      PptSlice ppt,
-      String formula,
-      boolean justified,
-      boolean interesting,
-      boolean isWorthPrinting) {
+      PptSlice ppt, String formula, boolean justified, boolean isWorthPrinting) {
     this(
         ppt,
         formula,
         (justified ? Invariant.CONFIDENCE_JUSTIFIED : Invariant.CONFIDENCE_UNJUSTIFIED),
-        interesting,
         isWorthPrinting);
   }
 
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(PptSlice ppt, String formula, double confidence) {
-    this(ppt, formula, confidence, true, true);
+    this(ppt, formula, confidence, true);
   }
 
-  public DiffDummyInvariant(PptSlice ppt, String formula, double confidence, boolean interesting) {
-    this(ppt, formula, confidence, interesting, true);
-  }
-
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(
-      PptSlice ppt,
-      String formula,
-      double confidence,
-      boolean interesting,
-      boolean isWorthPrinting) {
+      PptSlice ppt, String formula, double confidence, boolean isWorthPrinting) {
     super(ppt);
     this.formula = formula;
     this.confidence = confidence;
-    this.interesting = interesting;
     this.isWorthPrinting = isWorthPrinting;
   }
 
   @Override
   protected Invariant resurrect_done(int[] permutation) {
     throw new UnsupportedOperationException();
-  }
-
-  @Pure
-  @Override
-  public boolean isInteresting() {
-    return interesting;
   }
 
   @Pure

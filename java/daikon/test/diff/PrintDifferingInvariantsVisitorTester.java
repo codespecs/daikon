@@ -12,13 +12,17 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
   VarInfo[] vars = {
     DiffTester.newIntVarInfo("x"), DiffTester.newIntVarInfo("y"), DiffTester.newIntVarInfo("z")
   };
+  /** The program point that contains the test invariants. */
   PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
-
+  /** The slice that contains the test invariants. */
   PptSlice slice0 = ppt.joiner_view;
-  Invariant null_int_1_just = new DiffDummyInvariant(slice0, "1", true);
-  Invariant null_noprint = new DiffDummyInvariant(slice0, "0", true, true, false);
-  Invariant null_uninteresting = new DiffDummyInvariant(slice0, "0", true, false, true);
 
+  /** An invariant that is justified. */
+  Invariant null_1_just = new DiffDummyInvariant(slice0, "1", true);
+  /** An invariant that is justified but not worth printing. */
+  Invariant null_noprint = new DiffDummyInvariant(slice0, "0", true, false);
+
+  /** Main method that runs tests. */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
@@ -35,27 +39,18 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
             "shouldPrint", new Class<?>[] {Invariant.class, Invariant.class});
     m.setAccessible(true);
 
-    PrintDifferingInvariantsVisitor v =
-        new PrintDifferingInvariantsVisitor(null, false, false, false);
+    PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor(null, false, false);
 
     Boolean b = (Boolean) m.invoke(v, new Object[] {null_noprint, null_noprint});
     assert !b.booleanValue();
 
-    // Test printing of uninteresting invariants
-    b = (Boolean) m.invoke(v, new Object[] {null_uninteresting, null_uninteresting});
-    assert !b.booleanValue();
-    PrintDifferingInvariantsVisitor vu =
-        new PrintDifferingInvariantsVisitor(null, false, false, true);
-    b = (Boolean) m.invoke(vu, new Object[] {null_uninteresting, null_uninteresting});
-    assert b.booleanValue();
-
-    b = (Boolean) m.invoke(v, new Object[] {null_int_1_just, null_noprint});
+    b = (Boolean) m.invoke(v, new Object[] {null_1_just, null_noprint});
     assert b.booleanValue();
 
     b = (Boolean) m.invoke(v, new Object[] {null, null_noprint});
     assert !b.booleanValue();
 
-    b = (Boolean) m.invoke(v, new Object[] {null, null_int_1_just});
+    b = (Boolean) m.invoke(v, new Object[] {null, null_1_just});
     assert b.booleanValue();
   }
 }

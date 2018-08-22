@@ -114,7 +114,7 @@ public class ParameterDoclet {
               "enabled",
               "Options to enable/disable filters",
               "@cindex filters, enabling/disabling\n"
-                  + "These configuration options enable or disable filters that suppress printing of certain invariants.  Invariants are filtered if they are found to be true but are considered uninteresting or redundant.  See @ref{Invariant filters}, for more information."),
+                  + "These configuration options enable or disable filters that suppress printing of certain invariants.  Invariants are filtered if they are redundant.  See @ref{Invariant filters}, for more information."),
           new DocCategory(
               "daikon.inv.",
               "enabled",
