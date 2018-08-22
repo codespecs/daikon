@@ -49,7 +49,7 @@
 @ifset final
 @c FINAL version
 @c Print out the Daikon version 5.7.0 release date
-@center August 20, 2018
+@center August 22, 2018
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.7.0, released August 20, 2018.
+It describes Daikon version 5.7.0, released August 22, 2018.
 
 @menu
 * Introduction::
