@@ -2581,7 +2581,8 @@ sh /tmp/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.t
 @end smallexample
 
 and then wait until the following
-two URLs indicate success:
+two URLs indicate success (it may take a while for the new jobs to show up,
+if Travis is busy running other jobs for the codespecs organization):
 @* @url{https://travis-ci.org/codespecs/test-daikon-staging}
 @* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx}
 
