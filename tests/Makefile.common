@@ -222,23 +222,22 @@ else
     JAVAC := $(JAVA_HOME)/bin/javac
   endif
 endif
-CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
+JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*
-CPJUNIT := ${DAIKONDIR}/java/lib/junit-4.12.jar
+DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
-export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
+export DAIKON_TESTS_CLASSPATH := .:$(JAVALIB_CLASSPATH):$(SCRATCH_FOR_DAIKON):$(DAIKON_CLASSPATH)
 ifeq (cygwin,$(OSTYPE))
-  export CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
+  export DAIKON_TESTS_CLASSPATH := $(shell cygpath -pw "$(DAIKON_TESTS_CLASSPATH)")
 endif
 
 # Dynamic instrumentation based java front end command.
-CHICORY := $(JAVA) -ea -cp "$(CLASSPATH)" daikon.Chicory
+CHICORY := $(JAVA) -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.Chicory
 CHICORY_EXEC := ${DAIKONDIR}/java/daikon/Chicory.class
 
 # As of JDK 1.3 (and 1.4, I think), don't use "-server" here.
 # It causes incorrect optimizations that are evidenced by ">>" right shifts.
-RUN_JAVA?=$(JAVA) -ea -Xmx1500m -cp "$(CLASSPATH)"  # -XX:MaxPermSize=256M
+RUN_JAVA?=$(JAVA) -ea -Xmx1500m -cp "$(DAIKON_TESTS_CLASSPATH)"  # -XX:MaxPermSize=256M
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DAIKON = $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.Daikon
 PRINT_INVARIANTS_CLASS?=${DAIKONDIR}/java/daikon/PrintInvariants.class
@@ -632,7 +631,6 @@ test-run:
 	@echo
 	@echo "### test-run (${PROJECT_FILE})"
 	@echo
-	@echo "CLASSPATH = $$CLASSPATH"
 	${RUN_JAVA} ${JAVA_ARGS} ${MAIN_CLASS} ${MAIN_ARGS}
 
 # generate invariants from the dtrace, decls, etc. data
@@ -737,7 +735,7 @@ ${PROJECT_FILE}.txt-chicory.diff: $(call goal_name,${PROJECT_FILE}.txt-chicory) 
 	@echo "### dtrace diff (${PROJECT_FILE})"
 	@echo
 	-rm -f $@
-	-java -cp "${CLASSPATH}" -ea daikon.tools.DtraceDiff \
+	-java -cp "${DAIKON_TESTS_CLASSPATH}" -ea daikon.tools.DtraceDiff \
 		$(call goal_name,${PROJECT_FILE}.txt-chicory) \
 	    ${PROJECT_FILE}.txt-chicory.dtrace > $@ 2>&1
 	cat $@
@@ -758,12 +756,12 @@ txt-jaif: $(PROJECT_FILE).txt-jaif
 	@echo
 	@echo "### run AnnotateNullable (${PROJECT_FILE})"
 	@echo
-	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output --no_show_progress \
+	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output --no_show_progress \
 	  $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz \
 	  --config ${DAIKONDIR}/java/daikon/annotate_nullable.config \
 	  --config_option daikon.Debug.show_stack_trace=true \
 	  -o $(PROJECT_FILE)-jaif.inv.gz
-	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
+	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx1024M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
 	  > $@-failed 2>&1
 	mv $@-failed $@
 else
@@ -1239,9 +1237,9 @@ ${PROJECT_FILE}.esc: merged/.merged-esc
 	@echo "Checking ${MERGED_INST_LIST_FILE}..."
 	@$(MAKE) --no-print-directory esc-cheat
 esc-force esc-cheat:
-	escjava2 -classpath merged:$$CLASSPATH -suggest ${MERGED_INST_LIST_FILE} 2>&1 | perl -ne ${ESC_STRIP_CAUTIONS} | tee ${PROJECT_FILE}.esc && exit $${PIPESTATUS[0]}
+	escjava2 -classpath merged:$$DAIKON_TESTS_CLASSPATH -suggest ${MERGED_INST_LIST_FILE} 2>&1 | perl -ne ${ESC_STRIP_CAUTIONS} | tee ${PROJECT_FILE}.esc && exit $${PIPESTATUS[0]}
 esc-force-direct:
-	escjava2 -classpath merged:$$CLASSPATH -suggest ${MERGED_INST_LIST_FILE}
+	escjava2 -classpath merged:$$DAIKON_TESTS_CLASSPATH -suggest ${MERGED_INST_LIST_FILE}
 esc-show:
 	cat ${PROJECT_FILE}.esc
 esc-clean:
@@ -1289,10 +1287,10 @@ $(RTC_SCRATCH)/violations.txt: $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
 	@echo
 	@echo "### run runtime-check tool (${PROJECT_FILE})"
 	@echo
-	cd scratch && java -ea -cp "$(CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) \
+	cd scratch && java -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) \
 		--make_all_fields_public ${INV_FILE} `cat $(INST_LIST_FILE)`
 	cd $(RTC_SCRATCH) && ${JAVAC} -g `find . $(FINDARGS) -name '*.java'`
-	cd $(RTC_SCRATCH) && ${JAVA} -ea -cp "$(CLASSPATH)" daikon.tools.runtimechecker.WriteViolationFile $(RTC_USER_FLAGS) \
+	cd $(RTC_SCRATCH) && ${JAVA} -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.WriteViolationFile $(RTC_USER_FLAGS) \
 		$(subst /,.,${MAIN_CLASS}) ${MAIN_ARGS}
 rtc-diff: rtc-violations.txt.diff
 rtc-violations.txt.diff: rtc-violations.txt.goal rtc-violations.txt
@@ -1395,6 +1393,7 @@ showvars:
 	@echo "java version:"
 	@${RUN_JAVA} -version
 	@echo "CLASSPATH           =" ${CLASSPATH}
+	@echo "DAIKON_TESTS_CLASSPATH =" ${DAIKON_TESTS_CLASSPATH}
 	@echo "SHELL               =" ${SHELL}
 	@echo "PATH                =" ${PATH}
 	@echo "GZCAT               =" ${GZCAT}
@@ -1447,8 +1446,8 @@ results summary:
 PROJECT_HELP:=${PROJECT_HELP}; echo ""
 
 dump_vars dump-vars dumpvars :
-	@echo "classpath =     " "$(CLASSPATH)"
-	@echo "RUN_JAVA =	   " "$(RUN_JAVA)"
+	@echo "DAIKON_TESTS_CLASSPATH =  " "$(DAIKON_TESTS_CLASSPATH)"
+	@echo "RUN_JAVA =	 " "$(RUN_JAVA)"
 	@echo "DCOMP_PREMAIN_W = " "$(DCOMP_PREMAIN_W)"
 	@echo "DAIKON_OPTIONS  = " "$(DAIKON_OPTIONS)"
 

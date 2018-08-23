@@ -88,16 +88,6 @@ else
   DAIKON_CLASSPATH := ${DAIKONDIR}/java
 endif
 
-## Add Checker Framework to classpath
-ifeq "$(wildcard ${CHECKERFRAMEWORK}/checker/build)" "${CHECKERFRAMEWORK}/checker/build"
-  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${CHECKERFRAMEWORK}/checker/build
-endif
-ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
-  ifneq (${CHECKERJAR}, $(findstring ${CHECKERJAR},$(DAIKON_CLASSPATH)))
-    DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):$(CHECKERJAR)
-  endif
-endif
-
 ## Add tools.jar and rt.jar, if they exist
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
   DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/tools.jar
@@ -1124,7 +1114,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 	@make java-files.txt
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS_COMMON) \
 		-doclet org.plumelib.javadoc.RequireJavadoc \
-                -docletpath "${CLASSPATH}" \
+                -docletpath "${DAIKON_CLASSPATH}" \
 		@java-files.txt
 	@rm -f java-files.txt
 

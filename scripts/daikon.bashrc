@@ -27,8 +27,8 @@ if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
     echo "Cannot infer DAIKONDIR.  Please set DAIKONDIR to an existing directory."
     return 2
   elif [ ! -d "$DAIKONDIR" ]; then
-    echo "DAIKONDIR is set to $DAIKONDIR"
-    echo "which doesn't exist.  Please set DAIKONDIR to an existing directory."
+    echo "DAIKONDIR is set to non-existent directory: $DAIKONDIR"
+    echo "Please set DAIKONDIR to an existing directory.  Aborting daikon.bashrc ."
     return 2
   fi
 else
@@ -53,43 +53,24 @@ if [ -z "$PLUMESCRIPTS" ]; then
   export PLUMESCRIPTS=${DAIKONDIR}/utils/plume-scripts
 fi
 
-# export DAIKONCLASS_SOURCES=1
-if [ $DAIKONCLASS_SOURCES ]; then
-  CPADD=${DAIKONDIR}/java
-else
-  CPADD=${DAIKONDIR}/daikon.jar
+JAVALIB_CLASSPATH=${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
+DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVALIB_CLASSPATH}
+# Avoid warnings about non-existent elements on classpath
+if [ -d ${DAIKONDIR}/java ]; then
+  DAIKON_CLASSPATH=${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKON_CLASSPATH}
 fi
-
-if [ ! -z "$CLASSPATH" ]; then
-  # For Cygwin we need to convert CLASSPATH to Windows format
-  # BUT - we assume existing CLASSPATH is already in Windows format
-  if [ "$OSTYPE" == "cygwin" ]; then
-    CPADD1="`cygpath -wp ${CPADD}`"
-    CPADD2="`cygpath -wp ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar`"
-    export CLASSPATH="${CPADD1};${CLASSPATH};${CPADD2}"
-  else
-    export CLASSPATH=${CPADD}:${CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
-  fi
-else
-  if [ -n "$PS1" ]; then echo "Warning: daikon.bashrc is setting CLASSPATH, which was previously unset"; fi
-  export CLASSPATH=${CPADD}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
-  # For Cygwin we need to convert CLASSPATH to windows format
-  if [ "$OSTYPE" == "cygwin" ]; then
-    export CLASSPATH="`cygpath -wp $CLASSPATH`"
-  fi
+# For Cygwin we need to convert CLASSPATH to windows format
+if [ "$OSTYPE" == "cygwin" ]; then
+  DAIKON_CLASSPATH="`cygpath -wp $DAIKON_CLASSPATH`"
 fi
+export DAIKON_CLASSPATH
 
-## Make sure the specified JDK is first on your path
-export PATH=$JAVA_HOME/bin:$PATH
-
-## Add the Daikon binaries to your path
-export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PATH}
+export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:$JAVA_HOME/bin:$PATH
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERL5LIB ]; then
   export PERL5LIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERL5LIB}
 fi
-
 if [ $PERLLIB ]; then
   export PERLLIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERLLIB}
 else

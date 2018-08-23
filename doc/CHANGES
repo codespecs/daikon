@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.8.0 (?? ??, 2018)
+
+The Daikon instructions no longer suggest to set CLASSPATH, which is bad style.
+Instead, a new environment variable DAIKON_CLASSPATH is set by daikon.bashrc.
+
+===========================================================================
+
 5.7.0 (August 20, 2018)
 
 Daikon now requires Java JDK 8; Java JDK 7 is no longer supported.

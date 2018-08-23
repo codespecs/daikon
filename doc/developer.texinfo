@@ -1349,8 +1349,8 @@ or modify old code, please try to add unit tests.
 This tests the formatting of invariants with specified input.  The
 tests are configured in the file @file{InvariantFormatTest.commands} under
 @file{daikon/test/}.  Make sure the @file{InvariantFormatTest.commands} file is
-in the classpath when this tester is run or the tester will not work.
-(It will just tell you that the file is not in the classpath.)
+in the classpath when this tester is run or the tester will fail,
+reporting that the file is not in the classpath.
 
 The file is formatted as follows:
 @example

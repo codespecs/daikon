@@ -21,10 +21,6 @@ export JAVA_HOME=${JAVA_HOME:-/afs/csail/group/pag/software/pkg/jdk}
 
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
-export DAIKON_LIBS=`/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*`
-export CLASSPATH=${DAIKON_LIBS}:.:${CLASSPATH}
-unset DAIKON_LIBS
-
 export LACKWIT_HOME=${INV}/front-end/c/lackwit
 
 # Remove duplicates so path and classpath don't get too long

@@ -14,6 +14,6 @@ clean:
 	rm -f *.java-parsed *.diff *.log
 
 %.java-parsed : %.java
-	-java -ea -cp .:$(DAIKONDIR)/java:$(CLASSPATH) jtb.JavaParserTest $< > $<.log 2>&1
+	-java -ea -cp .:$(DAIKON_CLASSPATH) jtb.JavaParserTest $< > $<.log 2>&1
 	-diff -u $< $@ > $@.diff 2>&1
 	@cat $@.diff
