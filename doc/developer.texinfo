@@ -192,9 +192,6 @@ export JAVA_HOME=/usr/lib/jvm/java
 export DAIKONDIR=$HOME/daikon
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
-@c Previously contained the following, but why?  Setting classpath globally
-@c is bad style.
-@c export CLASSPATH=.:$CLASSPATH
 
 
 @cindex .jpp files
@@ -204,19 +201,18 @@ When setting up environment pathname variables under Windows/Cygwin
 (such as @command{JAVA_HOME}) make sure that the
 pathname is specified in Linux format (e.g., @file{/cygdrive/c/daikon}
 rather than @file{C:\daikon}).  However, the
-@env{CLASSPATH} environment variable is a special case;
+classpath in a @command{-cp} or @command{-classpath} argument to @command{java}
+is a special case;
 as @command{java} is a Windows
-program, it expects @env{CLASSPATH} to be in Windows format.
+program, it expects classpath to be in Windows format.
 This is the only exception to Cygwin looking like Linux.
-Thus @env{CLASSPATH} must
+Thus the classpath must
 always be in Windows format; i.e., it should use semicolons (;) rather
 than colons (:) as a path separator.
 Using the wrong filename format or the wrong pathname separator
 is a common source of errors that will result in odd error
 messages and build failures.
 
-Please note this applies to a @command{-CLASSPATH} argument to
-@command{java} as well: it must have Windows pathnames.
 One easy way to deal with this is to use the @command{cygpath} utility:
 @example
 java -cp "`cygpath -wp linux/path/a:linux/path/b`" <other arguments>
@@ -1847,7 +1843,7 @@ Before working on code in Eclipse, you must import the code into
 the Eclipse workspace.  You also need to set up various compilation
 settings and specify jars and classes that should be in the
 compilation classpath.  (By default, Eclipse does not use your
-environment @env{Classpath}.)
+@env{CLASSPATH} environment variable.)
 
 @enumerate
 @item
@@ -1888,8 +1884,6 @@ Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
 Path", then "Libraries", then "Add External Jars" and add @file{tools.jar}
 and all @file{.jar} files in @file{daikon/java/lib/}.
-(See your @env{CLASSPATH}
-environment variable for full pathnames to these files.)
 @end enumerate
 
 Note that if you follow these directions, then
@@ -1898,7 +1892,7 @@ which you imported in the previous step}.
 Instead, the compiled classes appear in the Eclipse workspace
 directory. If you followed the setup instructions above, then the
 compiled code will be in "$HOME/.eclipse/Daikon/bin", which you
-should add to your @env{CLASSPATH} in order to use the updates you make from
+should add to your classpath in order to use the updates you make from
 Eclipse.
 
 

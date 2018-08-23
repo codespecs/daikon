@@ -43,8 +43,8 @@ endif
 # But doclint is enabled by default starting with Java 8.
 ifeq (cygwin, $(OSTYPE))
   ## Make the classpath explicit on the command line so it can be processed by *-cygwin
-  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea -classpath "${CLASSPATH}"
-  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin -classpath "${CLASSPATH}"
+  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea -classpath "${DAIKON_CLASSPATH}"
+  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin -classpath "${DAIKON_CLASSPATH}"
   JAVADOC ?= ${PLUMESCRIPTS}/javadoc-cygwin
   JAR ?= ${JAVA_HOME}/bin/jar
 else
@@ -86,58 +86,35 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
 ### Variables
 ###
 
-# These jar files only exist for the development version, not the
-# distributed version, of Daikon.  The if clause avoids a (harmless but
-# annoying) javac error message that they don't exist.
+## Classpath
+
+## Daikon compiled files
 ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-util.jar)" "${DAIKONDIR}/java/lib/daikon-util.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/*
+  # Add jar files that only exist for the development version, not the
+  # distributed version, of Daikon.  The if clause avoids a (harmless but
+  # annoying) javac error message that they don't exist.
+  DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
+else
+  DAIKON_CLASSPATH := ${DAIKONDIR}/java
+endif
+
+## Add Checker Framework to classpath
+ifeq "$(wildcard ${CHECKERFRAMEWORK}/checker/build)" "${CHECKERFRAMEWORK}/checker/build"
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${CHECKERFRAMEWORK}/checker/build
 endif
 ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
-    CLASSPATH_JARS2 = ${CHECKERJAR}
-endif
-
-# This probably shouldn't be unconditional??
-CLASSPATH := :${DAIKONDIR}/java:$(CLASSPATH)
-
-# Add necessary items to the classpath if they are not already there
-ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
-  CLASSPATH := .:$(CLASSPATH)
-endif
-# This DAIKON_CLASSPATH_PREFIX is intended to be set in Makefile.user
-ifdef DAIKON_CLASSPATH_PREFIX
-  CLASSPATH := ${DAIKON_CLASSPATH_PREFIX}:${CLASSPATH}
-endif
-ifdef CLASSPATH_JARS
-  CLASSPATH := $(CLASSPATH_JARS):$(CLASSPATH)
-endif
-ifeq "$(wildcard ${CHECKERFRAMEWORK}/checker/build)" "${CHECKERFRAMEWORK}/checker/build"
-  CLASSPATH := $(CLASSPATH):${CHECKERFRAMEWORK}/checker/build
-endif
-ifdef CLASSPATH_JARS2
-  ifneq (${CHECKERJAR}, $(findstring ${CHECKERJAR},$(CLASSPATH)))
-    CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS2)
-  endif
-endif
-ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
-  ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
-    CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/tools.jar
-  endif
-  ifneq "$(wildcard ${JAVA_HOME}/lib/rt.jar)" ""
-    CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/rt.jar
+  ifneq (${CHECKERJAR}, $(findstring ${CHECKERJAR},$(DAIKON_CLASSPATH)))
+    DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):$(CHECKERJAR)
   endif
 endif
 
-## Not necessary due to use of *-cygwin versions of Java programs.
-# # On cygwin, translate the classpath to windows format.  Only do so if
-# # this has not already been done (which is determined by looking for
-# # semicolons (;) in the classpath
-# ifeq (cygwin,$(OSTYPE))
-#   ifneq (;,$(findstring ;,$(CLASSPATH)))
-#     CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
-#   endif
-# endif
-
-export CLASSPATH
+## Add tools.jar and rt.jar, if they exist
+ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/tools.jar
+endif
+ifneq "$(wildcard ${JAVA_HOME}/lib/rt.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/rt.jar
+endif
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
@@ -425,7 +402,7 @@ update-libs:
 ### Variables passed down to subshells
 ###
 
-export CLASSPATH
+export DAIKON_CLASSPATH
 export CHECKERJAR
 export DAIKONDIR
 
@@ -466,6 +443,7 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
 	echo "CLASSPATH = ${CLASSPATH}"
+	echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
@@ -522,7 +500,7 @@ INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chi
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
-JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
+JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(DAIKON_CLASSPATH)
 
 # Build DynComp/Java, check the DF summary info and run a sanity test
 .PHONY: dyncomp dcomp
@@ -598,7 +576,6 @@ dyncomp-jdk-only dcomp-jdk-only :
 ../utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
-# Watch out if you have another copy of plume that is earlier on your classpath.
 .PHONY: update-plume-scripts
 update-plume-scripts:
 	${MAKE} -C .. update-plume-scripts
@@ -1132,10 +1109,6 @@ check-serialize:
 
 
 .PHONY: junit
-# Include CLASSPATH on command line for Cygwin compatibility.
-# Include . in CLASSPATH because you can have two versions of Daikon,
-# and you want to do junit tests on *this* version.
-# TestPlume.java requires the locale to be US.
 junit:
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA} daikon.test.MasterUnitTester
@@ -1155,7 +1128,7 @@ junit-all: junit
 CLOVER := $(HOME)/clover
 CLOVER_CMD := ${JAVA} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
-CLOVER_CP := $(subst ${DAIKONDIR}/java,$(CLOVER)/java,$(CLASSPATH))
+CLOVER_CP := $(subst ${DAIKONDIR}/java,$(CLOVER)/java,$(DAIKON_CLASSPATH))
 CLOVER_CP := $(CLOVER_CP):$(CLOVER)/clover-1.3.1/lib/clover.jar
 
 clover: all_directly
@@ -1186,8 +1159,8 @@ JAVADOC_DEST  = api
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
-                -docletpath "${CLASSPATH}" \
-                -classpath "$(subst ${DAIKONDIR}/java:,${CLASSPATH_JARS}:${CLASSPATH_JARS2}:,${CLASSPATH})"
+                -docletpath "${DAIKON_CLASSPATH}" \
+                -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
 
@@ -1221,16 +1194,8 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
-## This doesn't seem necessary any more
-# javadoc-lookup: doc-javadoc-lookup
-#
-# ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
-# doc-javadoc-lookup: api
-# 	find api -name '*.html' | xargs -n 100 ${PLUMESCRIPTS}/jdk-add-munged-anchor-names
-# 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
-
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.InvariantDoclet \
+	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${DAIKON_CLASSPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -1238,7 +1203,7 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 # resulting in a duplicate class warning.
 
 ../doc/config-options.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.ParameterDoclet \
+	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${DAIKON_CLASSPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
@@ -1253,13 +1218,6 @@ daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
 	${MAKE} compile
 
 
-# This file is no longer used; there's no point in keeping it around.
-# daikon/config/configurable.txt: $(AUTO_GENERATED_FILES)
-# 	${JAVADOC} -J-ea -doclet daikon.config.ParameterDoclet \
-# 		--list $@ \
-# 		$(JDOC_FILES)
-
-
 ###########################################################################
 ### For debugging the Makefile.
 ###
@@ -1270,8 +1228,7 @@ showvars:
 	@echo PWD = $(shell pwd)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo CLASSPATH = "${CLASSPATH}"
-	@echo CLASSPATH_JARS = $(CLASSPATH_JARS)
-	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
+	@echo DAIKON_CLASSPATH = "${DAIKON_CLASSPATH}"
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
 	@echo DAIKONDIR = "${DAIKONDIR}"

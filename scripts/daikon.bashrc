@@ -46,8 +46,8 @@ else
 fi
 
 if [ ! -z "$CLASSPATH" ]; then
-  # For Cygwin we need to convert CLASSPATH to Window's format
-  # BUT - we assume existing CLASSPATH is already in Window's format
+  # For Cygwin we need to convert CLASSPATH to Windows format
+  # BUT - we assume existing CLASSPATH is already in Windows format
   if [ "$OSTYPE" == "cygwin" ]; then
     CPADD1="`cygpath -wp ${CPADD}`"
     CPADD2="`cygpath -wp ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar`"

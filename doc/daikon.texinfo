@@ -546,13 +546,12 @@ Windows applications.
 
 The first option is to run Daikon using native Windows utilities.
 The is done in the normal fashion.  However, getting the correct
-value for @env{CLASSPATH} can be confusing.  As noted above, it
-must be
+classpath.  As noted above, it must be
 specified in Windows format (Windows paths and semicolon separators).
 It must include either @file{$DAIKONDIR/daikon.jar} or
 @file{$DAIKONDIR/java} (if you
-have recompiled the Daikon source).  A typical example for
-@env{CLASSPATH} might be:
+have recompiled the Daikon source but not rebuilt @file{daikon.jar}).
+A typical example for the classpath might be:
 
 @exampleindent 1
 @example
@@ -561,10 +560,6 @@ C:\cygwin64\home\user\invariants\daikon\daikon.jar;.;C:\Program Files
 jre\lib\rt.jar;C:\Program Files\Java\jdk1.7.0_45\lib\tools.jar
 @end example
 @exampleindent 4
-
-@noindent
-With this done, one may enter: @command{java daikon.Daikon} in any
-directory and Daikon should start up correctly.
 
 
 @node          Cygwin shell
@@ -581,25 +576,8 @@ programs (based on your machine type) found
 at @uref{http://cygwin.com/}.
 
 As noted above, when running any Java program (such as Daikon or Chicory),
-the @env{CLASSPATH} must be specified in Windows format.  Your initial
-install of the Java JDK will have set the basics for the @env{CLASSPATH}.
-When you installed Daikon, you were instructed to place into your
-shell initialization file commands to set @env{JAVA_HOME}
-and then @command{source $DAIKONDIR/scripts/daikon.bashrc}.  This will
-set @env{CLASSPATH} properly each time you start a Bash shell.  The
-result should be a value for @env{CLASSPATH} that looks something like:
-
-@exampleindent 1
-@example
-C:\cygwin64\home\user\invariants\daikon\daikon.jar;.;C:\Program Files
-(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.7.0_45\
-jre\lib\rt.jar;C:\Program Files\Java\jdk1.7.0_45\lib\tools.jar
-@end example
-@exampleindent 4
-
-If you wish to override @env{CLASSPATH} by using the @option{-classpath}
-(or @option{-cp}) option, you need to remember that the result must be
-in Windows format.  This can get confusing because the Cygwin
+the classpath must be specified in Windows format.
+This can get confusing because the Cygwin
 bash interpreter is going to process the command line prior to handing it
 off to @command{java}.  Hence:
 @exampleindent 1
@@ -637,7 +615,7 @@ existing environment variable that contains a Linux path, the @command{cygpath} 
 will do the job.  Thus, instead of:
 @exampleindent 1
 @example
-java -cp $HOME/invariants/daikon/daikon.jar daikon.Daikon
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon
 @end example
 @exampleindent 4
 
@@ -645,7 +623,7 @@ java -cp $HOME/invariants/daikon/daikon.jar daikon.Daikon
 (which will fail), use
 @exampleindent 1
 @example
-java -cp `cygpath -wp $HOME/invariants/daikon/daikon.jar` daikon.Daikon
+java -cp `cygpath -wp $DAIKONDIR/daikon.jar` daikon.Daikon
 @end example
 @exampleindent 4
 
@@ -653,7 +631,7 @@ java -cp `cygpath -wp $HOME/invariants/daikon/daikon.jar` daikon.Daikon
 (note the back quotes @samp{`}) and everything should work as expected. Or even better:
 @exampleindent 1
 @example
-java -cp "`cygpath -wp $HOME/invariants/daikon/daikon.jar`" daikon.Daikon
+java -cp "`cygpath -wp $DAIKONDIR/daikon.jar`" daikon.Daikon
 @end example
 @exampleindent 4
 
@@ -710,14 +688,14 @@ the last two steps.
 @exampleindent 1
 For example, if you usually run
 @example
-java mypackage.MyClass arg1 arg2 arg3
+java -cp myclasspath mypackage.MyClass arg1 arg2 arg3
 @end example
 
 @noindent
-then instead you would run
+then instead you would run these two commands:
 @example
-java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
-java daikon.Chicory --daikon \
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.DynComp mypackage.MyClass arg1 arg2 arg3
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.Chicory --daikon \
                     --comparability-file=MyClass.decls-DynComp \
                     mypackage.MyClass arg1 arg2 arg3
 @end example
@@ -784,18 +762,8 @@ Run the program under the control of DynComp to generate comparability
 information in the file @file{StackArTester.decls-DynComp}.
 
 @example
-java -cp .:$CLASSPATH daikon.DynComp DataStructures.StackArTester
+java -cp .:$DAIKONDIR/daikon.jar daikon.DynComp DataStructures.StackArTester
 @end example
-
-@noindent
-If you have not yet set the CLASSPATH, you may add it to the command
-line for now --- but don't forget to set it later.
-
-@exampleindent 0
-@smallexample
-java -cp "../../../daikon.jar:." daikon.DynComp DataStructures.StackArTester
-@end smallexample
-@exampleindent 1
 
 @item
 Run the program a second time, under the control of the Chicory front end.
@@ -804,7 +772,7 @@ Daikon infers invariants, prints them, and writes a binary representation
 of them to file @file{StackArTester.inv.gz}.
 
 @example
-java -cp .:$CLASSPATH daikon.Chicory --daikon \
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory --daikon \
      --comparability-file=StackArTester.decls-DynComp \
      DataStructures.StackArTester
 @end example
@@ -828,7 +796,7 @@ in order to create a trace file named
 @file{StackArTester.dtrace.gz}.
 
 @example
-java -cp .:$CLASSPATH daikon.Chicory \
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
      --comparability-file=StackArTester.decls-DynComp \
      DataStructures.StackArTester
 @end example
@@ -837,23 +805,24 @@ java -cp .:$CLASSPATH daikon.Chicory \
 Run Daikon on the trace file.
 
 @example
-java daikon.Daikon StackArTester.dtrace.gz
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester.dtrace.gz
 @end example
-(Note the classpath (@option{-cp}) argument is not needed as we are not
-running the @command{StackArTester} program.)
 
 Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
 
 @exampleindent 0
 @smallexample
-java daikon.Chicory --dtrace-file=StackArTester1.dtrace.gz \
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester1.dtrace.gz \
      --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java daikon.Chicory --dtrace-file=StackArTester2.dtrace.gz \
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester2.dtrace.gz \
      --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java daikon.Chicory --dtrace-file=StackArTester3.dtrace.gz \
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester3.dtrace.gz \
      --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java daikon.Daikon StackArTester*.dtrace.gz
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester*.dtrace.gz
 @end smallexample
 @exampleindent 1
 
@@ -887,7 +856,7 @@ to the end of the command that runs Daikon.)
 Use the @command{PrintInvariants} program to display the invariants.
 
 @example
-java daikon.PrintInvariants StackArTester.inv.gz
+java -cp $DAIKONDIR/daikon.jar daikon.PrintInvariants StackArTester.inv.gz
 @end example
 
 For more options to the @command{PrintInvariants} program, see @ref{Printing
@@ -899,7 +868,7 @@ into the Java source program.
 
 @example
 cd ..
-java daikon.tools.jtb.Annotate StackArTester.inv.gz \
+java -cp $DAIKONDIR/daikon.jar daikon.tools.jtb.Annotate StackArTester.inv.gz \
      DataStructures/StackAr.java
 @end example
 
@@ -925,16 +894,16 @@ such as either of:
 @exampleindent 1
 @example
 java mypackage.jar arguments
-java -cp <originalclasspath> mypackage.jar arguments
+java -cp myclasspath mypackage.jar arguments
 @end example
 
 @noindent
 then to detect invariants in that Java program,
-run these commands:
+run these two commands:
 
 @example
-java -cp mypackage.jar:<original classpath> daikon.DynComp <MyMain> arguments
-java -cp mypackage.jar:<original classpath> daikon.Chicory --daikon \
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.DynComp <MyMain> arguments
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.Chicory --daikon \
      --comparability-file=<MyMain>.decls-DynComp <MyMain> arguments
 @end example
 
@@ -1012,8 +981,8 @@ javac -g DataStructures/*.java
 
 @item Trace file generation and invariant detection
 @example
-java -cp .:$CLASSPATH daikon.DynComp DataStructures.QueueArTester
-java -cp .:$CLASSPATH daikon.Chicory --daikon \
+java -cp .:$DAIKONDIR/daikon.jar daikon.DynComp DataStructures.QueueArTester
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory --daikon \
      --comparability-file=QueueArTester.decls-DynComp \
      DataStructures.QueueArTester
 @end example
@@ -1026,14 +995,14 @@ Alternately, you can split the very last command into two parts:
 
 @item Trace file generation
 @example
-java -cp .:$CLASSPATH daikon.Chicory \
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
      --comparability-file=QueueArTester.decls-DynComp \
      DataStructures.QueueArTester
 @end example
 
 @item Invariant detection
 @example
-java daikon.Daikon QueueArTester.dtrace.gz
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon QueueArTester.dtrace.gz
 @end example
 @exampleindent 4
 
@@ -1154,7 +1123,7 @@ spurious).
 @item
 Run Daikon on the trace and declaration files.
 @smallexample
-java daikon.Daikon \
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon \
      --config_option daikon.derive.Derivation.disable_derived_variables=true \
      daikon-output/wordplay.decls daikon-output/wordplay.dtrace
 @end smallexample
@@ -1416,7 +1385,7 @@ cd daikon-output
 
 @item Run Daikon on the trace file
 @example
-java daikon.Daikon Birthday.decls test_bday-combined.dtrace
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon Birthday.decls test_bday-combined.dtrace
 @end example
 
 @item
@@ -1425,7 +1394,7 @@ they are also saved to file @file{Birthday.inv.gz}, which you can
 manipulate with the @command{PrintInvariants} program and other Daikon tools.
 For example:
 @example
-java daikon.PrintInvariants Birthday.inv.gz
+java -cp $DAIKONDIR/daikon.jar daikon.PrintInvariants Birthday.inv.gz
 @end example
 
 Invariants produced from Perl programs can be examined using the same
@@ -1448,7 +1417,7 @@ dtype-perl daikon-untyped/standalone.pl
 dfepl -T standalone.pl
 dtrace-perl daikon-instrumented/standalone.pl
 cd daikon-output
-java daikon.Daikon -o standalone.inv standalone-main.decls \
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon -o standalone.inv standalone-main.decls \
      standalone-combined.dtrace
 @end example
 @exampleindent 4
@@ -1492,7 +1461,8 @@ process, @pxref{Example usage}, and @pxref{Front ends (instrumentation)}.
 
 Run the Daikon invariant detector via the command
 @example
-java daikon.Daikon @i{[@var{flags}]} @var{dtrace-files...} \
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon \
+     @i{[@var{flags}]} @var{dtrace-files...} \
      @i{[@var{decls-files...}]} @i{[@var{spinfo-files...}]}
 @end example
 
@@ -1697,14 +1667,14 @@ them, then the confidence would be 1-1/2^9 = .998.
 There are two ways to print the confidence of each invariant.  You can
 use Diff (@pxref{Invariant Diff}):
 @example
-java daikon.diff.Diff MyFile.inv.gz
+java -cp $DAIKONDIR/daikon.jar daikon.diff.Diff MyFile.inv.gz
 @end example
 
 @noindent
 or you can use @command{PrintInvariants}
 (@pxref{Printing invariants}):
 @example
-java daikon.PrintInvariants --dbg daikon.PrintInvariants.repr \
+java -cp $DAIKONDIR/daikon.jar daikon.PrintInvariants --dbg daikon.PrintInvariants.repr \
      MyFile.inv.gz
 @end example
 @exampleindent 4
@@ -2809,7 +2779,7 @@ Run Daikon with the @file{.spinfo} file as one of its arguments.
 For example,
 @exampleindent 1
 @example
-java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 @end example
 @exampleindent 4
 @end enumerate
@@ -3128,7 +3098,7 @@ detection is often quite effective.
 The @command{CreateSpinfo} program takes Java source code as input and creates a
 splitter info file for each Java file; for instance,
 @example
-java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
+java -cp $DAIKONDIR/daikon.jar daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
 @end example
 
 @noindent
@@ -3165,7 +3135,7 @@ expand @command{CPP} commands into legal C, run either @command{cpp -P} or
 @example
 cpp -P foo.c foo.c-expanded
 cpp -P bar.c bar.c-expanded
-java daikon.tools.jtb.CreateSpinfoC \
+java -cp $DAIKONDIR/daikon.jar daikon.tools.jtb.CreateSpinfoC \
      foo.c-expanded bar.c-expanded
 @end example
 
@@ -3278,7 +3248,8 @@ not found over the entire data is a conditional invariant.
 To find splitting conditions using random selection, run the
 @command{daikon.tools.TraceSelect} program in the following way:
 @example
-java daikon.tools.TraceSelect @var{num_reps} @var{sample_size} [@var{options}] \
+java -cp $DAIKONDIR/daikon.jar daikon.tools.TraceSelect \
+    @var{num_reps} @var{sample_size} [@var{options}] \
     @var{dtrace_file} @var{decls_files ...} [@var{daikon_options}]
 @end example
 
@@ -3470,13 +3441,14 @@ To use Chicory, run your program as you normally would, but
 replace the @command{java} command with @command{java daikon.Chicory}.  For
 instance, if you usually run
 @example
-java mypackage.MyClass arg1 arg2 arg3
+java -cp myclasspath mypackage.MyClass arg1 arg2 arg3
 @end example
 
 @noindent
 then instead you would run
 @example
-java daikon.Chicory mypackage.MyClass arg1 arg2 arg3
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.Chicory \
+     mypackage.MyClass arg1 arg2 arg3
 @end example
 
 @noindent
@@ -3484,7 +3456,8 @@ This runs your program and creates file @file{MyClass.dtrace}
 in the current directory.
 Furthermore, a single command can both create a trace file and run Daikon:
 @example
-java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
 @noindent
@@ -3512,7 +3485,8 @@ class files from any version of Java.
 
 Chicory is invoked as follows:
 @example
-java daikon.Chicory @var{chicory-args} @var{classname} @var{args}
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     @var{chicory-args} @var{classname} @var{args}
 @end example
 
 @noindent
@@ -3564,8 +3538,10 @@ with regular expression
 
 @exampleindent 1
 @example
-java daikon.Chicory --ppt-select-pattern='bar$' ...
-java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     --ppt-select-pattern='bar$' ...
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     --ppt-select-pattern='C\.bar\(' ...
 @end example
 @exampleindent 4
 
@@ -3596,25 +3572,30 @@ parts of your program.
 @itemize
 @item omit a whole package:
 @smallexample
-java daikon.Chicory '--ppt-omit-pattern=^junit\.' ...
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     '--ppt-omit-pattern=^junit\.' ...
 @end smallexample
 @smallexample
-java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     '--ppt-omit-pattern=^daikon\.util\..*' ...
 @end smallexample
 
 @item omit a single class:
 @smallexample
-java daikon.Chicory '--ppt-omit-pattern=HashSetLinear\$HslIterator' ...
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     '--ppt-omit-pattern=HashSetLinear\$HslIterator' ...
 @end smallexample
 
 @item omit a single method:
 @smallexample
-java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()' ...
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     '--ppt-omit-pattern=StackAr.topAndPop()' ...
 @end smallexample
 
 @item omit a single program point:
 @smallexample
-java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(int):::EXIT33' ...
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     '--ppt-omit-pattern=StackAr.<init>(int):::EXIT33' ...
 @end smallexample
 
 @end itemize
@@ -4015,13 +3996,13 @@ To use DynComp, run your program as you normally would, but replace the
 @command{java} command with @command{java daikon.DynComp}.  For instance,
 if you usually run
 @example
-java mypackage.MyClass arg1 arg2 arg3
+java -cp myclasspath mypackage.MyClass arg1 arg2 arg3
 @end example
 
 @noindent
 then instead you would run
 @example
-java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.DynComp mypackage.MyClass arg1 arg2 arg3
 @end example
 
 @noindent
@@ -4030,7 +4011,8 @@ in the current directory.  The @file{.decls-DynComp} file may be passed to
 Chicory, as described in @ref{Detecting invariants in Java programs}.
 
 @example
-java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     --comparability-file=MyClass.decls-DynComp \
      mypackage.MyClass arg1 arg2 arg3
 @end example
 
@@ -4259,7 +4241,7 @@ you will need to rebuild @file{dcomp_rt.jar}.
 
 DynComp is invoked as follows:
 @example
-java daikon.DynComp @var{dyncomp-args} @var{classname} @var{args}
+java -cp @var{myclasspath}:$DAIKONDIR/daikon.jar daikon.DynComp @var{dyncomp-args} @var{classname} @var{args}
 @end example
 
 @noindent
@@ -5951,7 +5933,7 @@ named @file{daikon-@/output/@/foo.decls}.
 
 @example
 kvasir-dtrace --no-dyncomp --dtrace-no-decls --dtrace-file=- \
-    ./foo | java daikon.Daikon daikon-output/foo.decls -
+    ./foo | java -cp $DAIKONDIR/daikon.jar daikon.Daikon daikon-output/foo.decls -
 @end example
 
 When you run Kvasir the second time, you don't need to run DynComp
@@ -6607,7 +6589,7 @@ to see a usage message.
 In order to ensure all data is processed, use Daikon with the
 @option{--nohierarchy} option, as follows:
 @example
-java daikon.Daikon --nohierarchy myfile.decls myfile.dtrace
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon --nohierarchy myfile.decls myfile.dtrace
 @end example
 
 @noindent
@@ -6738,7 +6720,7 @@ invariants from a @file{.inv} file.
 
 @command{PrintInvariants} is invoked as follows:
 @example
-java daikon.PrintInvariants @i{[@var{flags}]} @var{inv-file}
+java -cp $DAIKONDIR/daikon.jar daikon.PrintInvariants @i{[@var{flags}]} @var{inv-file}
 @end example
 
 @command{PrintInvariants} shares many flags with Daikon.
@@ -6805,7 +6787,7 @@ Daikon on the N original @file{.dtrace} files.
 
 @command{MergeInvariants} is invoked as follows:
 @example
-java daikon.MergeInvariants @i{[@var{flags}]...} @var{file1} @var{file2}...
+java -cp $DAIKONDIR/daikon.jar daikon.MergeInvariants @i{[@var{flags}]...} @var{file1} @var{file2}...
 @end example
 
 @noindent
@@ -6856,7 +6838,7 @@ or compare the invariants generated by different runs of one program.
 
 Invariant diff is invoked as follows:
 @example
-java daikon.diff.Diff @i{[@var{flags}]...} @var{file1} [@var{file2}]
+java -cp $DAIKONDIR/daikon.jar daikon.diff.Diff @i{[@var{flags}]...} @var{file1} [@var{file2}]
 @end example
 
 @noindent
@@ -6979,7 +6961,7 @@ insertion:  @url{http://plse.cs.washington.edu/daikon/StackAr.html}.
 Invoke Annotate like this:
 @exampleindent 1
 @example
-java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
+java -cp $DAIKONDIR/daikon.jar daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
 @end example
 @exampleindent 4
 
@@ -7105,13 +7087,14 @@ The more thorough your test runs, the larger number of
 @code{@@Nullable} annotations @command{AnnotateNullable} will produce.
 
 @smallexample
-java daikon.Chicory --dtrace-file=an.dtrace.gz @emph{mypackage.MyClass arg1 arg2 ...}
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=an.dtrace.gz @emph{mypackage.MyClass arg1 arg2 ...}
 @end smallexample
 
 @item Run Daikon on the resulting @file{.dtrace} file:
 
 @smallexample
-java daikon.Daikon an.dtrace.gz --no_text_output \
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon an.dtrace.gz --no_text_output \
     --config @var{daikondir}/java/daikon/annotate_nullable.config
 @end smallexample
 
@@ -7135,7 +7118,7 @@ Run the @command{AnnotateNullable} tool to create an annotation index file.
 redirect its output to a @file{.jaif} file.
 
 @smallexample
-java daikon.AnnotateNullable an.inv.gz > nullable-annotations.jaif
+java -cp $DAIKONDIR/daikon.jar daikon.AnnotateNullable an.inv.gz > nullable-annotations.jaif
 @end smallexample
 
 @item
@@ -7158,7 +7141,7 @@ insert-annotations-to-source nullable-annotations.jaif \
 
 @command{AnnotateNullable} is invoked as follows:
 @smallexample
-java daikon.AnnotateNullable @i{[@var{flags}]} @var{inv-file}
+java -cp $DAIKONDIR/daikon.jar daikon.AnnotateNullable @i{[@var{flags}]} @var{inv-file}
 @end smallexample
 
 @noindent
@@ -7183,7 +7166,7 @@ instrumentation code that checks invariants as the program executes.
 For a full list of options, run:
 
 @example
-java daikon.tools.runtimechecker.Main help
+java -cp $DAIKONDIR/daikon.jar daikon.tools.runtimechecker.Main help
 @end example
 
 @noindent
@@ -7274,7 +7257,7 @@ java MyProg arg1 arg2
 @noindent
 then instead you would run
 @example
-java daikon.tools.runtimechecker.WriteViolationFile MyProg arg1 arg2
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.tools.runtimechecker.WriteViolationFile MyProg arg1 arg2
 @end example
 
 This will create a file called @file{violations.txt} in the
@@ -7380,7 +7363,7 @@ output file.
 
 @exampleindent 1
 @example
-java daikon.tools.InvariantChecker [@var{options}] @var{invariant-file} @var{dtrace-files}
+java -cp $DAIKONDIR/daikon.jar daikon.tools.InvariantChecker [@var{options}] @var{invariant-file} @var{dtrace-files}
 @end example
 @exampleindent 4
 
@@ -7445,7 +7428,7 @@ In order to use @command{LogicalCompare}, Simplify must be installed
 An invocation of @command{LogicalCompare} has the following form:
 
 @example
-java daikon.tools.compare.LogicalCompare [@var{options}] \
+java -cp $DAIKONDIR/daikon.jar daikon.tools.compare.LogicalCompare [@var{options}] \
     @var{weak-invs} @var{strong-invs} [@var{enter-ppt} [@var{exit-ppt}]]
 @end example
 
@@ -7642,7 +7625,7 @@ declarations or when one file is shorter than the other.
 
 @command{DtraceDiff} is invoked as follows:
 @example
-java daikon.tools.DtraceDiff [@var{flags}] \
+java -cp $DAIKONDIR/daikon.jar daikon.tools.DtraceDiff [@var{flags}] \
    [@var{declsfiles1}] @var{dtracefile1}  [@var{declsfiles2}] @var{dtracefile2}
 @end example
 
@@ -7768,8 +7751,7 @@ Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
 @end example
 
 @noindent
-means that you have not put @file{daikon.jar} on your classpath;
-@pxref{Installing Daikon}.
+means that you have not put @file{daikon.jar} on the classpath.
 
 More generally, an error such as one of these:
 @example
@@ -7778,20 +7760,19 @@ Exception in thread "main" java.lang.NoClassDefFoundError: mypackage/MyClass
 @end example
 
 @noindent
-means that Java did not find the class @file{mypackage.MyClass} on your
+means that Java did not find the class @file{mypackage.MyClass} on the
 classpath.  To correct the problem, you need to make sure that the
 directory or jar file that contains file @file{mypackage/MyClass.class}
 is on your classpath.
 The classpath is passed as a command-line argument such as @option{-cp} or
-@option{-classpath}; if no such command-line argument is passed, the
-classpath is determined from your @env{CLASSPATH} environment variable.
+@option{-classpath}.
 
 When investigating such a problem, you should verify that you can run your
 program when not using Daikon; for example, if you are trying to run
-@command{java daikon.Chicory mypackage.MyClass arg1 arg2 arg3}, then make
+@command{java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.Chicory mypackage.MyClass arg1 arg2 arg3}, then make
 sure that the identical command without @command{daikon.Chicory} works, in
-this case @command{java mypackage.MyClass arg1 arg2 arg3}.  In most
-cases, both commands issue the same error, which is unrelated to Daikon.
+this case @command{java -cp myclasspath:$DAIKONDIR/daikon.jar mypackage.MyClass arg1 arg2 arg3}.  If
+both commands issue the same error, then the problem is unrelated to Daikon.
 If the two commands behave differently, that is a bug in Daikon.
 
 
@@ -7844,7 +7825,8 @@ Passing a @file{.decls} file to Chicory is
 described in @ref{Detecting invariants in Java programs}, for example:
 
 @example
-java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
+java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
+     --comparability-file=MyClass.decls-DynComp \
      mypackage.MyClass arg1 arg2 arg3
 @end example
 
@@ -8623,13 +8605,14 @@ control.
 
 For example, if a command such as
 @example
-java daikon.Chicory DataStructures.StackArTester
+java -cp myclasspath:$DAIKONDIR/daikon.jar daikon.Chicory \
+     DataStructures.StackArTester args...
 @end example
 
 @noindent
 fails with an error, then first try
 @example
-java DataStructures.StackArTester
+java -cp myclasspath:$DAIKONDIR/daikon.jar DataStructures.StackArTester args...
 @end example
 
 @itemize
@@ -8644,7 +8627,7 @@ Chicory; please report it if it is not already explained in this manual.
 (If the error is ``couldn't find or load main class'' and the
 class that cannot be found is in Chicory itself, then there is not a bug in
 Chicory.  Rather, you have failed to put @file{daikon.jar} on the classpath
-when running Chicory, as described in @ref{Installing Daikon}.)
+when running Chicory.)
 @end itemize
 
 
@@ -8665,10 +8648,12 @@ BCEL must be in the classpath.  Normally it is found in daikon.jar.
 @end smallexample
 
 @noindent
-then the problem is most likely that your classpath does not contain
-daikon.jar.  If you are running a Daikon version after 5.2.20, then it
-could be caused by your classpath containing a previous version of
-daikon.jar.
+then the problem is most likely that the classpath does not contain
+@file{daikon.jar}.
+@c Old information, not needed any more.
+@c If you are running a Daikon version after 5.2.20, then it
+@c could be caused by the classpath containing a previous version of
+@c @file{daikon.jar}.
 
 @node       VerifyError constant pool index error
 @subsection VerifyError constant pool index error
@@ -8686,15 +8671,16 @@ Exception in thread "main" java.lang.VerifyError:
 @end smallexample
 
 @noindent
-then the problem is most likely that your classpath contains a version
+then the problem is most likely that the classpath contains a version
 of the BCEL library that is not compatible with Java 7.  The
 incompatible version might appear in @file{bcel.jar}, in Java's
 @file{rt.jar}, or elsewhere.  You should either remove that version of
-BCEL from your classpath, or you should ensure that it appears after
+BCEL from the classpath, or you should ensure that it appears after
 @file{daikon.jar}, which contains the correct version of BCEL@.  (If you
 are running Daikon from sources rather than from @file{daikon.jar}, then
 ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
-BCEL on your classpath.)
+BCEL on the classpath.)
+
 
 @node       ClassFormatError LVTT entry does not match
 @subsection ClassFormatError LVTT entry does not match
@@ -8710,16 +8696,16 @@ Exception in thread "main" java.lang.ClassFormatError:
 @end smallexample
 
 @noindent
-then the problem is most likely that your classpath contains a version
-of the BCEL library that is newer than the 6.0 Release.  A modification
+then the problem is most likely that the classpath contains a version
+of the BCEL library that is newer than the 6.0 release.  A modification
 was made to Apache BCEL after the 6.0 release that causes this problem.
 The incompatible version might appear in @file{bcel.jar}, in Java's
 @file{rt.jar}, or elsewhere.  You should either remove that version of
-BCEL from your classpath, or you should ensure that it appears after
+BCEL from the classpath, or you should ensure that it appears after
 @file{daikon.jar}, which contains the correct version of BCEL@.  (If you
 are running Daikon from sources rather than from @file{daikon.jar}, then
 ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
-BCEL on your classpath.)
+BCEL on the classpath.)
 
 @node       Attempted duplicate class definition error
 @subsection Attempted duplicate class definition error
