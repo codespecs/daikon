@@ -2,7 +2,7 @@ package daikon.inv.filter;
 
 import daikon.PrintInvariants;
 import daikon.VarInfo;
-import daikon.inv.*;
+import daikon.inv.Invariant;
 
 /**
  * Filter for not printing an Invariant if its VarInfos return isDerivedParameterAndUninteresting ==

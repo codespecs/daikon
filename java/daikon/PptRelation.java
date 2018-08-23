@@ -2,7 +2,8 @@ package daikon;
 
 import static daikon.FileIO.ParentRelation;
 
-import daikon.inv.*;
+import daikon.inv.Equality;
+import daikon.inv.Invariant;
 import daikon.split.PptSplitter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,16 +15,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
- * Class that builds and describes relations in the ppt hierachy. Building the relationship is
+ * Class that builds and describes relations in the ppt hierarchy. Building the relationship is
  * specific to each type of parent/child relationship (eg, method to object, exit to combined exit,
  * etc). The use of the relationship is general.
  *
@@ -41,7 +41,7 @@ public class PptRelation implements Serializable {
 
   /**
    * The different ppt/variable hierarchy relationships. Parent and User relations are specified in
-   * the declaration record of the ppt. ENTER_EXIT, EXIT_EXITNN, and PPT_COND are automtically
+   * the declaration record of the ppt. ENTER_EXIT, EXIT_EXITNN, and PPT_COND are automatically
    * constructed. MERGE_CHILD is not used by Daikon.
    */
   public enum PptRelationType {
@@ -119,7 +119,7 @@ public class PptRelation implements Serializable {
   /** Adds this relation to its child's parent list and its parent's children list. */
   @SuppressWarnings({"rawness", "initialization"}) // won't be used until initialization is finished
   private void connect(
-      /*>>>@UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
+      @UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
     child.parents.add(this);
@@ -127,14 +127,14 @@ public class PptRelation implements Serializable {
   }
 
   /** Returns the number of parent to child variable relations. */
-  /*@Pure*/
+  @Pure
   public int size() {
     return (parent_to_child_map.size());
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
+  public String toString(@GuardSatisfied PptRelation this) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
@@ -186,8 +186,7 @@ public class PptRelation implements Serializable {
    * all others are. The remaining relations (class&rarr;object, object&rarr;method,and
    * exit&rarr;exitNN) form a simple tree without duplication.
    */
-
-  /*@Pure*/
+  @Pure
   public boolean is_primary() {
     return ((relationship != PptRelationType.USER) && (relationship != PptRelationType.ENTER_EXIT));
   }
@@ -201,7 +200,7 @@ public class PptRelation implements Serializable {
    * Returns the parent variable that corresponds to childVar. Returns null if there is no
    * corresponding variable.
    */
-  public /*@Nullable*/ VarInfo parentVar(VarInfo childVar) {
+  public @Nullable VarInfo parentVar(VarInfo childVar) {
     return child_to_parent_map.get(childVar);
   }
 
@@ -209,7 +208,7 @@ public class PptRelation implements Serializable {
    * Like parentVar(VarInfo), but if no parent is found, tries every variable in the equality set
    * and returns null only if none of them has a parent.
    */
-  public /*@Nullable*/ VarInfo parentVarAnyInEquality(VarInfo childVar) {
+  public @Nullable VarInfo parentVarAnyInEquality(VarInfo childVar) {
     VarInfo result = parentVar(childVar);
     if (result != null) {
       return result;
@@ -230,7 +229,7 @@ public class PptRelation implements Serializable {
    * Returns the child variable that corresponds to parentVar. Returns null if there is no
    * corresponding variable.
    */
-  public /*@Nullable*/ VarInfo childVar(VarInfo parentVar) {
+  public @Nullable VarInfo childVar(VarInfo parentVar) {
     return parent_to_child_map.get(parentVar);
   }
 
@@ -342,8 +341,8 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation(parent, child, PptRelationType.PARENT);
 
-    debug.fine(parent.name() + " parent vars = " + VarInfo.arrayToString(parent.var_infos));
-    debug.fine(child.name() + " child vars = " + VarInfo.arrayToString(child.var_infos));
+    debug.fine(parent.name() + " parent vars = " + Arrays.toString(parent.var_infos));
+    debug.fine(child.name() + " child vars = " + Arrays.toString(child.var_infos));
 
     // Connect each 'this' variable between parent and child.
     // Note that these should be the only variables whose names match and
@@ -488,7 +487,7 @@ public class PptRelation implements Serializable {
       VarInfo[] vp_bases = vp.derived.getBases();
       // TODO: Is this "@Nullable" annotation correct?  (That is, can the
       // element value actually be null?)
-      /*@Nullable*/ VarInfo[] child_vp_bases = new VarInfo[vp_bases.length];
+      @Nullable VarInfo[] child_vp_bases = new VarInfo[vp_bases.length];
       for (int j = 0; j < vp_bases.length; j++) {
         child_vp_bases[j] = rel.childVar(vp_bases[j]);
       }
@@ -594,8 +593,8 @@ public class PptRelation implements Serializable {
     // assert that parent vars match child vars
     if (parent.var_infos.length != child.var_infos.length) {
       System.out.println("newMergeChildRel: in ppt " + parent.name() + " vars don't match");
-      System.out.println("parent vars= " + VarInfo.arrayToString(parent.var_infos));
-      System.out.println("child vars=  " + VarInfo.arrayToString(child.var_infos));
+      System.out.println("parent vars= " + Arrays.toString(parent.var_infos));
+      System.out.println("child vars=  " + Arrays.toString(child.var_infos));
       assert parent.var_infos.length == child.var_infos.length;
     }
 
@@ -607,8 +606,8 @@ public class PptRelation implements Serializable {
       if (!vc.name().equals(vp.name())) {
         System.out.println(
             "newMergeChildRel: in ppt " + parent.name() + " var " + vc.name() + " doesn't match");
-        System.out.println("par vars  = " + VarInfo.arrayToString(parent.var_infos));
-        System.out.println("child vars= " + VarInfo.arrayToString(child.var_infos));
+        System.out.println("par vars  = " + Arrays.toString(parent.var_infos));
+        System.out.println("child vars= " + Arrays.toString(child.var_infos));
         assert vc.name().equals(vp.name());
       }
       rel.child_to_parent_map.put(vc, vp);
@@ -652,7 +651,7 @@ public class PptRelation implements Serializable {
    * that children contains only the immediate descendants of the ppt.
    *
    * <p>This version should be used with the old version of declaration records. Use
-   * init_hierarchy_new() with new declararation records.
+   * init_hierarchy_new() with new declaration records.
    */
   public static void init_hierarchy(PptMap all_ppts) {
 

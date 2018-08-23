@@ -159,6 +159,12 @@
 
 package daikon.inv.binary.PACKAGE;
 
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;
@@ -172,14 +178,8 @@ import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
 import java.util.*;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Baseclass for binary numeric invariants.
@@ -218,14 +218,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExact() {
     return true;
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String repr(@GuardSatisfied CLASSNAME this) {
     return getClass().getSimpleName() + ": " + format()
       + (swap ? " [swapped]" : " [unswapped]");
   }
@@ -236,9 +236,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * The generic format string is obtained from the subclass specific get_format_str(). Instances of
    * %varN% are replaced by the variable name in the specified format.
    */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
 
     if (ppt == null) {
       return (String.format("proto ppt [class %s] format %s", getClass(),
@@ -394,7 +394,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * to insure that foo == bar as well. But that is not a requirement here (the fact that 'x[] op
    * y[]' implies that foo == bar when x[] and y[] are not missing).
    */
-  public /*@Nullable*/ DiscardInfo is_subsequence(VarInfo[] vis) {
+  public @Nullable DiscardInfo is_subsequence(VarInfo[] vis) {
 
     VarInfo v1 = var1(vis);
     VarInfo v2 = var2(vis);
@@ -407,8 +407,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return null;
     }
 
-    /*@NonNull*/ SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
-    /*@NonNull*/ SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
+    @NonNull SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
+    @NonNull SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
 
     // Both of the indices must be either from the start or up to the end.
     // It is not necessary to check that they match in any other way since
@@ -435,7 +435,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Checks to see if 'x[a] op y[b]' where 'x[] op y[]' and 'a == b'. Doesn't catch the case where
    * a = b+1.
    */
-  public /*@Nullable*/ DiscardInfo is_subscript(VarInfo[] vis) {
+  public @Nullable DiscardInfo is_subscript(VarInfo[] vis) {
 
     VarInfo v1 = var1(vis);
     VarInfo v2 = var2(vis);
@@ -448,8 +448,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return null;
     }
 
-    /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    /*@NonNull*/ SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    @NonNull SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    @NonNull SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
 
     // Make sure the shifts match
     if (der1.index_shift != der2.index_shift) {
@@ -464,7 +464,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     Class<? extends Invariant> pairwise_class;
     try {
       @SuppressWarnings("signature") // string manipulation; application invariants
-      /*@ClassGetName*/ String cstr_cgn = cstr;
+      @ClassGetName String cstr_cgn = cstr;
       pairwise_class = asInvClass(Class.forName(cstr_cgn));
     } catch (Exception e) {
       throw new Error("can't create class for " + cstr, e);
@@ -485,9 +485,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 #endif
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -567,7 +567,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * NOTE: this is not currently used. Many (if not all) of the missing table cells above could be
    * filled in with linear binary invariants (eg, m = n + 1).
    */
-  public /*@Nullable*/ InvDef array_sizes_eq(VarInfo v1, VarInfo v2) {
+  public @Nullable InvDef array_sizes_eq(VarInfo v1, VarInfo v2) {
 
     VarInfo v1_size = get_array_size(v1);
     VarInfo v2_size = get_array_size(v2);
@@ -602,7 +602,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    *
    * There are two cases that are not handled: x[..n] with an index shift and x[n..].
    */
-  public /*@Nullable*/ VarInfo get_array_size(VarInfo v) {
+  public @Nullable VarInfo get_array_size(VarInfo v) {
 
     assert v.rep_type.isArray();
 
@@ -623,7 +623,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Return a format string for the specified output format. Each instance of %varN% will be
    * replaced by the correct name for varN.
    */
-  public abstract String get_format_str(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format);
+  public abstract String get_format_str(@GuardSatisfied CLASSNAME this, OutputFormat format);
 
   /** Returns true if x and y don't invalidate the invariant. */
   public abstract boolean eq_check(PRIMITIVE x, PRIMITIVE y);
@@ -636,9 +636,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (new InvDef[][] {});
   }
 
-  public static List</*@Prototype*/ Invariant> get_proto_all() {
+  public static List<@Prototype Invariant> get_proto_all() {
 
-    List</*@Prototype*/ Invariant> result = new ArrayList</*@Prototype*/ Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
     #if (defined(STRING))
         result.add(SubString.get_proto(false));
         result.add(SubString.get_proto(true));
@@ -712,11 +712,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ Divides proto = new /*@Prototype*/ Divides(false);
-    private static /*@Prototype*/ Divides proto_swap = new /*@Prototype*/ Divides(true);
+    private static @Prototype Divides proto = new @Prototype Divides(false);
+    private static @Prototype Divides proto_swap = new @Prototype Divides(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ CLASSNAME get_proto(boolean swap) {
+    public static @Prototype CLASSNAME get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -736,12 +736,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected Divides instantiate_dyn(/*>>> @Prototype Divides this,*/ PptSlice slice) {
+    protected Divides instantiate_dyn(@Prototype Divides this, PptSlice slice) {
       return new Divides(slice, swap);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied Divides this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied Divides this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ 0 (MOD %var1% %var2%))";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
@@ -780,9 +780,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     #endif
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+    public @NonNull NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {
@@ -828,9 +828,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
      *
      * @return non-null value iff this invariant is obvious from other invariants in the same slice
      */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
       // First call super type's method, and if it returns non-null, then
       // this invariant is already known to be obvious, so just return
       // whatever reason the super type returned.
@@ -913,11 +913,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ Square proto = new /*@Prototype*/ Square(false);
-    private static /*@Prototype*/ Square proto_swap = new /*@Prototype*/ Square(true);
+    private static @Prototype Square proto = new @Prototype Square(false);
+    private static @Prototype Square proto_swap = new @Prototype Square(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ Square get_proto(boolean swap) {
+    public static @Prototype Square get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -936,12 +936,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return dkconfig_enabled;
     }
     @Override
-    protected Square instantiate_dyn(/*>>> @Prototype Square this,*/ PptSlice slice) {
+    protected Square instantiate_dyn(@Prototype Square this, PptSlice slice) {
       return new Square(slice, swap);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied Square this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied Square this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ %var1% (* %var2% %var2))";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
@@ -991,15 +991,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
-    protected /*@Prototype*/ ZeroTrack(boolean swap) {
+    protected @Prototype ZeroTrack(boolean swap) {
       super(swap);
     }
 
-    private static /*@Prototype*/ ZeroTrack proto = new /*@Prototype*/ ZeroTrack(false);
-    private static /*@Prototype*/ ZeroTrack proto_swap = new /*@Prototype*/ ZeroTrack(true);
+    private static @Prototype ZeroTrack proto = new @Prototype ZeroTrack(false);
+    private static @Prototype ZeroTrack proto_swap = new @Prototype ZeroTrack(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ ZeroTrack get_proto(boolean swap) {
+    public static @Prototype ZeroTrack get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -1019,12 +1019,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected ZeroTrack instantiate_dyn(/*>>> @Prototype ZeroTrack this,*/ PptSlice slice) {
+    protected ZeroTrack instantiate_dyn(@Prototype ZeroTrack this, PptSlice slice) {
       return new ZeroTrack(slice, swap);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied ZeroTrack this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied ZeroTrack this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(IMPLIES (EQ %var1% 0) (EQ %var2% 0))";
       } else if (format.isJavaFamily() || format == OutputFormat.CSHARPCONTRACT) {
@@ -1044,9 +1044,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+    public @NonNull NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {
@@ -1089,14 +1089,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
-    protected /*@Prototype*/ BitwiseComplement() {
+    protected @Prototype BitwiseComplement() {
       super(false);
     }
 
-    private static /*@Prototype*/ BitwiseComplement proto = new /*@Prototype*/ BitwiseComplement();
+    private static @Prototype BitwiseComplement proto = new @Prototype BitwiseComplement();
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ BitwiseComplement get_proto() {
+    public static @Prototype BitwiseComplement get_proto() {
       return proto;
     }
 
@@ -1112,18 +1112,18 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected BitwiseComplement instantiate_dyn(/*>>> @Prototype BitwiseComplement this,*/ PptSlice slice) {
+    protected BitwiseComplement instantiate_dyn(@Prototype BitwiseComplement this, PptSlice slice) {
       return new BitwiseComplement(slice);
     }
 
-    /*@Pure*/
+    @Pure
     @Override
     public boolean is_symmetric() {
       return true;
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied BitwiseComplement this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied BitwiseComplement this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ %var1% (~ %var2%))";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
@@ -1163,11 +1163,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ BitwiseSubset proto = new /*@Prototype*/ BitwiseSubset(false);
-    private static /*@Prototype*/ BitwiseSubset proto_swap = new /*@Prototype*/ BitwiseSubset(true);
+    private static @Prototype BitwiseSubset proto = new @Prototype BitwiseSubset(false);
+    private static @Prototype BitwiseSubset proto_swap = new @Prototype BitwiseSubset(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ BitwiseSubset get_proto(boolean swap) {
+    public static @Prototype BitwiseSubset get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -1187,12 +1187,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    public BitwiseSubset instantiate_dyn(/*>>> @Prototype BitwiseSubset this,*/ PptSlice slice) {
+    public BitwiseSubset instantiate_dyn(@Prototype BitwiseSubset this, PptSlice slice) {
       return new BitwiseSubset(slice, swap);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied BitwiseSubset this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied BitwiseSubset this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ %var1% (|java-bitwise-or| %var2% %var1%))";
       } else if (format == OutputFormat.DAIKON) {
@@ -1231,9 +1231,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     #endif
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+    public @NonNull NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {
@@ -1276,14 +1276,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
-    protected /*@Prototype*/ BitwiseAndZero() {
+    protected @Prototype BitwiseAndZero() {
       super(false);
     }
 
-    private static /*@Prototype*/ BitwiseAndZero proto = new /*@Prototype*/ BitwiseAndZero();
+    private static @Prototype BitwiseAndZero proto = new @Prototype BitwiseAndZero();
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ BitwiseAndZero get_proto() {
+    public static @Prototype BitwiseAndZero get_proto() {
       return proto;
     }
 
@@ -1299,12 +1299,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    public BitwiseAndZero instantiate_dyn(/*>>> @Prototype BitwiseAndZero this,*/ PptSlice slice) {
+    public BitwiseAndZero instantiate_dyn(@Prototype BitwiseAndZero this, PptSlice slice) {
       return new BitwiseAndZero(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied BitwiseAndZero this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied BitwiseAndZero this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ (|java-&| %var1% %var2%) 0)";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
@@ -1318,7 +1318,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /*@Pure*/
+    @Pure
     @Override
     public boolean is_symmetric() {
       return true;
@@ -1330,9 +1330,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
+    public @Nullable NISuppressionSet get_ni_suppressions() {
       return suppressions;
     }
 
@@ -1350,7 +1350,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
             new NISuppression(var2_eq_0, suppressee),
           });
     #else
-    private static /*@Nullable*/ NISuppressionSet suppressions = null;
+    private static @Nullable NISuppressionSet suppressions = null;
     #endif
   }
 
@@ -1373,11 +1373,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ ShiftZero proto = new /*@Prototype*/ ShiftZero(false);
-    private static /*@Prototype*/ ShiftZero proto_swap = new /*@Prototype*/ ShiftZero(true);
+    private static @Prototype ShiftZero proto = new @Prototype ShiftZero(false);
+    private static @Prototype ShiftZero proto_swap = new @Prototype ShiftZero(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ ShiftZero get_proto(boolean swap) {
+    public static @Prototype ShiftZero get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -1397,12 +1397,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected ShiftZero instantiate_dyn(/*>>> @Prototype ShiftZero this,*/ PptSlice slice) {
+    protected ShiftZero instantiate_dyn(@Prototype ShiftZero this, PptSlice slice) {
       return new ShiftZero(slice, swap);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied ShiftZero this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied ShiftZero this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ (|java->>| %var1% %var2%) 0)";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
@@ -1425,9 +1425,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+    public @NonNull NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {
@@ -1473,11 +1473,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(swap);
     }
 
-    private static /*@Prototype*/ SubString proto = new /*@Prototype*/ SubString(false);
-    private static /*@Prototype*/ SubString proto_swap = new /*@Prototype*/ SubString(true);
+    private static @Prototype SubString proto = new @Prototype SubString(false);
+    private static @Prototype SubString proto_swap = new @Prototype SubString(true);
 
     /** Returns the prototype invariant */
-    public static /*@Prototype*/ SubString get_proto(boolean swap) {
+    public static @Prototype SubString get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
       } else {
@@ -1497,12 +1497,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     @Override
-    protected SubString instantiate_dyn(/*>>> @Prototype SubString this,*/ PptSlice slice) {
+    protected SubString instantiate_dyn(@Prototype SubString this, PptSlice slice) {
       return new SubString(slice, swap);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied SubString this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied SubString this, OutputFormat format) {
       if (format == OutputFormat.DAIKON) {
         return "%var1% is a substring of %var2%";
       } else if (format.isJavaFamily()) {
@@ -1534,9 +1534,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+    public @NonNull NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {

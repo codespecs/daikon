@@ -1,15 +1,19 @@
 package daikon.inv.unary.string;
 
-import daikon.*;
-import daikon.inv.*;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.DiscardCode;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
+import daikon.inv.ValueSet;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents a string that contains only printable ascii characters (values 32 through 126 plus 9
@@ -28,14 +32,14 @@ public final class PrintableString extends SingleString {
     super(slice);
   }
 
-  public /*@Prototype*/ PrintableString() {
+  public @Prototype PrintableString() {
     super();
   }
 
-  private static /*@Prototype*/ PrintableString proto = new /*@Prototype*/ PrintableString();
+  private static @Prototype PrintableString proto = new @Prototype PrintableString();
 
   /** Returns the prototype invariant for PrintableString */
-  public static /*@Prototype*/ PrintableString get_proto() {
+  public static @Prototype PrintableString get_proto() {
     return proto;
   }
 
@@ -47,14 +51,14 @@ public final class PrintableString extends SingleString {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public PrintableString instantiate_dyn(/*>>> @Prototype PrintableString this,*/ PptSlice slice) {
+  public PrintableString instantiate_dyn(@Prototype PrintableString this, PptSlice slice) {
     return new PrintableString(slice);
   }
 
   /** Return description of invariant. Only Daikon format is implemented. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied PrintableString this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied PrintableString this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       return var().name() + " is printable";
     } else {
@@ -64,13 +68,13 @@ public final class PrintableString extends SingleString {
 
   /** Check to see if a only contains printable ascii characters */
   @Override
-  public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
+  public InvariantStatus add_modified(@Interned String a, int count) {
     return check_modified(a, count);
   }
 
   /** Check to see if a only contains printable ascii characters */
   @Override
-  public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
+  public InvariantStatus check_modified(@Interned String a, int count) {
     for (int ii = 0; ii < a.length(); ii++) {
       char ch = a.charAt(ii);
       if (ch > 126) {
@@ -97,16 +101,16 @@ public final class PrintableString extends SingleString {
    * Returns whether or not this is obvious statically. The only check is for static constants which
    * are obviously printable (or not) from their values.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (vis[0].isStaticConstant()) {
       return new DiscardInfo(this, DiscardCode.obvious, vis[0].name() + " is a static constant.");
     }
     return super.isObviousStatically(vis);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant o) {
     assert o instanceof PrintableString;

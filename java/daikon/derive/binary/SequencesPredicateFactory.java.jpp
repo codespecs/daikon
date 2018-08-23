@@ -24,13 +24,10 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 /** Factory for SequencesPredicate derived variables. */
 public final class CLASSNAME extends BinaryDerivationFactory {
@@ -40,7 +37,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
     Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
   @Override
-  public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo var1, VarInfo var2) {
+  public BinaryDerivation @Nullable [] instantiate(VarInfo var1, VarInfo var2) {
     boolean enabled = SEQUENCESPREDICATE.dkconfig_enabled;
     if (!enabled) return null;
 

@@ -16,7 +16,7 @@ The correct way to build the system is to run 'make'.
   #define SCALAR double
   #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceFloatArbitrarySubsequence
 #elif defined(STRING)
-  #define SCALAR /*@Interned*/ String
+  #define SCALAR @Interned String
   #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceStringArbitrarySubsequence
 #else
   #error "One of SCALAR, FLOAT, or STRING must be defined"
@@ -26,15 +26,13 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.ternary;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.interning.qual.Interned;
 import daikon.*;
 import daikon.derive.*;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
@@ -209,7 +207,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation 
     return seqvar();
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARARBITRARYSUBSEQUENCE)
@@ -218,7 +216,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation 
   }
 
   /** Returns the csharp name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String csharp_name(String index) {
     String lower = get_lower_bound().csharp_name();
@@ -228,7 +226,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation 
   }
 
   /** Returns the ESC name */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
   public String esc_name(String index) {
     return String.format(

@@ -3,14 +3,13 @@ package daikon;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.plumelib.util.ReflectionPlume;
 
 /**
  * PptName is an immutable ADT that represents naming data associated with a given program point,
@@ -33,19 +32,19 @@ public class PptName implements Serializable {
   // These are never changed but cannot be declared "final", because they
   // must be re-interned upon deserialization.
   /** Full program point name */
-  private /*@Interned*/ String fullname;
+  private @Interned String fullname;
 
   // fn_name and point together comprise fullname
   /** The part of fullname before ":::" */
-  private /*@Interned*/ String fn_name;
+  private @Interned String fn_name;
   /** Post-separator (separator is ":::") */
-  private /*@Interned*/ String point;
+  private @Interned String point;
 
   // cls and method together comprise fn_name
   /** Fully-qualified class name */
-  private /*@Nullable*/ /*@Interned*/ String cls;
+  private @Nullable @Interned String cls;
   /** Method signature, including types */
-  private final /*@Nullable*/ /*@Interned*/ String method;
+  private final @Nullable @Interned String method;
 
   // Representation invariant:
   //
@@ -96,8 +95,7 @@ public class PptName implements Serializable {
   }
 
   /** className or methodName (or both) must be non-null. */
-  public PptName(
-      /*@Nullable*/ String className, /*@Nullable*/ String methodName, String pointName) {
+  public PptName(@Nullable String className, @Nullable String methodName, String pointName) {
     if ((className == null) && (methodName == null)) {
       throw new UnsupportedOperationException("One of class or method must be non-null");
     }
@@ -132,7 +130,7 @@ public class PptName implements Serializable {
    * @return getName() [convenience accessor]
    * @see #getName()
    */
-  /*@Pure*/
+  @Pure
   public String name() {
     return getName();
   }
@@ -141,7 +139,7 @@ public class PptName implements Serializable {
    * @return the complete program point name e.g.
    *     "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84"
    */
-  /*@Pure*/
+  @Pure
   public String getName() {
     return fullname;
   }
@@ -150,7 +148,7 @@ public class PptName implements Serializable {
    * @return the fully-qualified class name, which uniquely identifies a given class. May be null.
    *     e.g. "DataStructures.StackAr"
    */
-  public /*@Nullable*/ String getFullClassName() {
+  public @Nullable String getFullClassName() {
     return cls;
   }
 
@@ -158,7 +156,7 @@ public class PptName implements Serializable {
    * @return the short name of the class, not including any additional context, such as the package
    *     it is in. May be null. e.g. "StackAr"
    */
-  public /*@Nullable*/ String getShortClassName() {
+  public @Nullable String getShortClassName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
     if (pt == -1) {
@@ -169,7 +167,7 @@ public class PptName implements Serializable {
   }
 
   /** @return a guess at the package name. May be null. */
-  public /*@Nullable*/ String getPackageName() {
+  public @Nullable String getPackageName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
     if (pt == -1) {
@@ -183,7 +181,7 @@ public class PptName implements Serializable {
    * @return the full name which can uniquely identify a method within a class. The name includes
    *     symbols for the argument types and return type. May be null. e.g. "pop()Ljava/lang/Object;"
    */
-  public /*@Nullable*/ String getSignature() {
+  public @Nullable String getSignature() {
     return method;
   }
 
@@ -191,7 +189,7 @@ public class PptName implements Serializable {
    * @return the name (identifier) of the method, not taking into account any arguments, return
    *     values, etc. May be null. e.g. "pop"
    */
-  public /*@Nullable*/ String getMethodName() {
+  public @Nullable String getMethodName() {
     if (method == null) return null;
     int lparen = method.indexOf('(');
     assert lparen >= 0;
@@ -203,7 +201,7 @@ public class PptName implements Serializable {
    *     information (such as ENTER or EXIT). May be null. e.g.
    *     "DataStructures.StackAr.pop()Ljava/lang/Object;"
    */
-  public /*@Nullable*/ /*@Interned*/ String getNameWithoutPoint() {
+  public @Nullable @Interned String getNameWithoutPoint() {
     return fn_name;
     // if (cls == null && method == null) {
     //   return null;
@@ -215,10 +213,10 @@ public class PptName implements Serializable {
 
   /**
    * @return something interesting and descriptive about the point in question, along the lines of
-   *     "ENTER" or "EXIT" or somesuch. The semantics of this method are not yet decided, so don't
-   *     try to do aynthing useful with this result. May be null. e.g. "EXIT84"
+   *     "ENTER" or "EXIT" or some such. The semantics of this method are not yet decided, so don't
+   *     try to do anything useful with this result. May be null. e.g. "EXIT84".
    */
-  public /*@Nullable*/ String getPoint() {
+  public @Nullable String getPoint() {
     return point;
   }
 
@@ -246,40 +244,40 @@ public class PptName implements Serializable {
   }
 
   /** @return true iff this name refers to a synthetic object instance program point */
-  /*@Pure*/
+  @Pure
   public boolean isObjectInstanceSynthetic() {
     return FileIO.object_suffix.equals(point);
   }
 
   /** @return true iff this name refers to a synthetic class instance program point */
-  /*@Pure*/
+  @Pure
   public boolean isClassStaticSynthetic() {
     return FileIO.class_static_suffix.equals(point);
   }
 
   /** @return true iff this name refers to program globals */
-  /*@Pure*/
+  @Pure
   public boolean isGlobalPoint() {
     return FileIO.global_suffix.equals(point);
   }
 
   /** @return true iff this name refers to a procedure exit point */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "point")
+  @Pure
   public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
 
   /** @return true iff this name refers to an abrupt completion point */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "point")
+  @Pure
   public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
   }
 
   /** @return true iff this name refers to a combined (synthetic) procedure exit point */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "point")
+  @Pure
   public boolean isCombinedExitPoint() {
     return (point != null) && point.equals(FileIO.exit_suffix);
   }
@@ -287,15 +285,15 @@ public class PptName implements Serializable {
   /**
    * @return true iff this name refers to an actual (not combined) procedure exit point (eg, EXIT22)
    */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "point")
+  @Pure
   public boolean isNumberedExitPoint() {
     return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
   }
 
   /** @return true iff this name refers to a procedure exit point */
-  /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "point")
+  @Pure
   public boolean isEnterPoint() {
     return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
@@ -324,7 +322,7 @@ public class PptName implements Serializable {
    *     The newer declaration format does not have &lt;init&gt; but their method name includes the
    *     class name. For compatibility both mechanisms are checked.
    */
-  /*@Pure*/
+  @Pure
   public boolean isConstructor() {
 
     if (method != null) {
@@ -334,7 +332,7 @@ public class PptName implements Serializable {
       if (cls == null) return false;
 
       @SuppressWarnings("signature") // cls is allowed to be arbitrary, especially for non-Java code
-      String class_name = UtilPlume.fullyQualifiedNameToSimpleName(cls);
+      String class_name = ReflectionPlume.fullyQualifiedNameToSimpleName(cls);
       assert method != null; // for nullness checker
       int arg_start = method.indexOf('(');
       String method_name = method;
@@ -418,30 +416,28 @@ public class PptName implements Serializable {
   // ==================== OBJECT METHODS ====================
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied PptName this*/) {
+  public String toString(@GuardSatisfied PptName this) {
     return fullname;
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
   @Override
-  public boolean equals(
-      /*>>>@GuardSatisfied PptName this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  public boolean equals(@GuardSatisfied PptName this, @GuardSatisfied @Nullable Object o) {
     return (o instanceof PptName) && equalsPptName((PptName) o);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public boolean equalsPptName(/*>>>@GuardSatisfied PptName this,*//*@GuardSatisfied*/ PptName o) {
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
+  public boolean equalsPptName(@GuardSatisfied PptName this, @GuardSatisfied PptName o) {
     return (o != null) && (o.fullname == fullname);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
+  public int hashCode(@GuardSatisfied PptName this) {
     return fullname.hashCode();
   }
 
@@ -455,7 +451,7 @@ public class PptName implements Serializable {
       if (cls != null) cls = cls.intern();
       if (method != null) {
         // method = method.intern();
-        UtilPlume.setFinalField(this, "method", method.intern());
+        ReflectionPlume.setFinalField(this, "method", method.intern());
       }
       if (point != null) point = point.intern();
     } catch (NoSuchFieldException e) {

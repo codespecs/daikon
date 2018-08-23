@@ -87,16 +87,16 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Pair;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents two sequences of PRIMITIVE values where one sequence is a subsequence of the
@@ -121,14 +121,14 @@ public class CLASSNAME extends SUPERCLASS {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected @Prototype CLASSNAME() {
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
+  private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
-  public static /*@Prototype*/ CLASSNAME get_proto() {
+  public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
@@ -140,7 +140,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+  protected CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
@@ -149,9 +149,9 @@ public class CLASSNAME extends SUPERCLASS {
     return new SUBSEQ_SWAP(ppt);
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
@@ -160,19 +160,19 @@ public class CLASSNAME extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_daikon(@GuardSatisfied CLASSNAME this) {
     String v1 = SUB_VAR().name();
     String v2 = SUPER_VAR().name();
     return v1 + " is a subsequence of " + v2;
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_csharp_contract(@GuardSatisfied CLASSNAME this) {
     String v1 = SUB_VAR().csharp_collection_string();
     String v2 = SUPER_VAR().csharp_collection_string();
     return v1 + ".IsSubsequence(" + v2 + ")";
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_simplify(@GuardSatisfied CLASSNAME this) {
     if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
     } else {
@@ -180,7 +180,7 @@ public class CLASSNAME extends SUPERCLASS {
     }
   }
 
-  private String format_simplify_defined(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  private String format_simplify_defined(@GuardSatisfied CLASSNAME this) {
     String[] sub_name = SUB_VAR().simplifyNameAndBounds();
     String[] super_name = SUPER_VAR().simplifyNameAndBounds();
 
@@ -197,7 +197,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // This is apparently broken somehow, though from the logs it's not
   // clear how. -- smcc
-  private String format_simplify_explicit(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  private String format_simplify_explicit(@GuardSatisfied CLASSNAME this) {
     return "format_simplify disabled";
 
     /* Since this doesn't work (since at least april 2003)
@@ -309,8 +309,8 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** @return a DiscardInfo, or null if the Invariant is not an obvious subsequence */
-  /*@Pure*/
-  public static /*@Nullable*/ DiscardInfo isObviousSubSequence(Invariant inv, VarInfo subvar, VarInfo supervar) {
+  @Pure
+  public static @Nullable DiscardInfo isObviousSubSequence(Invariant inv, VarInfo subvar, VarInfo supervar) {
     Pair<DiscardCode,String> pcds = isObviousSubSequence(subvar, supervar);
     if (pcds == null) {
       return null;
@@ -323,8 +323,8 @@ public class CLASSNAME extends SUPERCLASS {
    * @return a Pair of a DiscardCode and a discardReason string, or null if the Invariant is not an
    * obvious subsequence
    */
-  /*@Pure*/
-  public static /*@Nullable*/ Pair<DiscardCode,String> isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
+  @Pure
+  public static @Nullable Pair<DiscardCode,String> isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
     // Must typecheck since this could be called with non-sequence variables in
     // some methods.
     ProglangType rep1 = subvar.rep_type;
@@ -505,7 +505,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   // Look up a previously instantiated SubSequence relationship.
-  public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
+  public static @Nullable CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME) {
@@ -515,9 +515,9 @@ public class CLASSNAME extends SUPERCLASS {
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
 
     VarInfo subvar = SUB_VAR(vis);
     VarInfo supervar = SUPER_VAR(vis);
@@ -554,9 +554,9 @@ public class CLASSNAME extends SUPERCLASS {
 
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // System.out.println("checking isObviousImplied for: " + format());
     if (debug.isLoggable(Level.FINE)) {
@@ -827,7 +827,7 @@ public class CLASSNAME extends SUPERCLASS {
     return false;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant inv) {
     assert inv instanceof CLASSNAME;
@@ -835,9 +835,9 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** returns the ni-suppressions for SubSequence */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+  public @NonNull NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }
 

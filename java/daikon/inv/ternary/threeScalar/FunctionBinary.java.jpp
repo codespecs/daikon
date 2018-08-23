@@ -10,7 +10,7 @@
 
 #if defined(TYPELONG)
   #define CLASSNAME FunctionBinary
-  #define PROTOCLASSNAME /*@Prototype*/ FunctionBinary
+  #define PROTOCLASSNAME @Prototype FunctionBinary
   #define SUPERCLASS ThreeScalar
   #define PRIMITIVE long
   #define PRIMITIVE_CNAME Long
@@ -36,7 +36,7 @@
   #define BW_SUBSET NumericInt.BitwiseSubset
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME FunctionBinaryFloat
-  #define PROTOCLASSNAME /*@Prototype*/ FunctionBinaryFloat
+  #define PROTOCLASSNAME @Prototype FunctionBinaryFloat
   #define SUPERCLASS ThreeFloat
   #define PRIMITIVE double
   #define PRIMITIVE_CNAME Double
@@ -100,15 +100,14 @@ import daikon.suppress.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.MathPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Base class for each of the CLASSNAME functions and permutatons. Most of the work is done
@@ -142,7 +141,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected @Prototype CLASSNAME() {
     super();
   }
 
@@ -171,10 +170,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   // check_modified relies on func having no side effects.
   abstract PRIMITIVE func(PRIMITIVE arg1, PRIMITIVE arg2);
-  /*@Pure*/
+  @Pure
   abstract boolean is_symmetric();
-  abstract String[] get_method_name(/*>>>@GuardSatisfied CLASSNAME this*/);
-  abstract int get_var_order(/*>>>@GuardSatisfied CLASSNAME this*/);
+  abstract String[] get_method_name(@GuardSatisfied CLASSNAME this);
+  abstract int get_var_order(@GuardSatisfied CLASSNAME this);
   abstract void set_function_id(int function_id);
   abstract int get_function_id();
 
@@ -182,7 +181,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Map from function name (eg, MultiplyLong, MinimumFloat) to an array of instances (one for each
    * valid permutation) for that function.
    */
-  private static Map<String,/*@Prototype*/ CLASSNAME[]> functions = new LinkedHashMap<String,/*@Prototype*/ CLASSNAME[]>();
+  private static Map<String,@Prototype CLASSNAME[]> functions = new LinkedHashMap<String,@Prototype CLASSNAME[]>();
 
   /**
    * A list indexed by function number to an array of instances (one for each valid permutation) for
@@ -190,7 +189,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * faster access mechanism once we have the function id (which are calculated the first time
    * through).
    */
-  private static List</*@Prototype*/ CLASSNAME[]> func_list = new ArrayList</*@Prototype*/ CLASSNAME[]>();
+  private static List<@Prototype CLASSNAME[]> func_list = new ArrayList<@Prototype CLASSNAME[]>();
 
   private static void build_func_list() {
 
@@ -199,11 +198,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Build the map of functions to array of instances for that function
     debug.fine("Processing " + #CLASSNAME);
-    functions = new LinkedHashMap<String,/*@Prototype*/ CLASSNAME[]>();
+    functions = new LinkedHashMap<String,@Prototype CLASSNAME[]>();
     @SuppressWarnings("unchecked")
-    Class</*@Prototype*/ CLASSNAME>[] subclasses = (Class</*@Prototype*/ CLASSNAME>[]) CLASSNAME.class.getDeclaredClasses();
+    Class<@Prototype CLASSNAME>[] subclasses = (Class<@Prototype CLASSNAME>[]) CLASSNAME.class.getDeclaredClasses();
     for (int ii = 0; ii < subclasses.length; ii++) {
-      Class</*@Prototype*/ CLASSNAME> subc = subclasses[ii];
+      Class<@Prototype CLASSNAME> subc = subclasses[ii];
       String function = subc.getName();
       if (function.indexOf("CLOVER") >= 0) {
         continue;
@@ -213,17 +212,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (function.equals("SubClass")) {
         continue;
       }
-      /*@Prototype*/ CLASSNAME[] fb_arr = functions.get(function);
+      @Prototype CLASSNAME[] fb_arr = functions.get(function);
       if (fb_arr == null) {
-        fb_arr = new /*@Prototype*/ CLASSNAME[7];
+        fb_arr = new @Prototype CLASSNAME[7];
         functions.put(function, fb_arr);
         func_list.add(fb_arr);
       }
       int func_id = func_list.indexOf(fb_arr);
       @SuppressWarnings({"nonprototype"})
-      /*@Prototype*/ CLASSNAME fb;
+      @Prototype CLASSNAME fb;
       try {
-        Constructor</*@Prototype*/ CLASSNAME> con = subc.getDeclaredConstructor(new Class<?>[] {});
+        Constructor<@Prototype CLASSNAME> con = subc.getDeclaredConstructor(new Class<?>[] {});
         fb = con.newInstance(new Object[] {});
       }  catch (Exception e) {
         throw new Error(" can't create instance for " + subc.getName()
@@ -254,9 +253,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Instantiate all of the subclasses and return them
     List<Invariant> result = new ArrayList<Invariant>();
-    for (/*@Prototype*/ CLASSNAME[] fb_arr : func_list) {
+    for (@Prototype CLASSNAME[] fb_arr : func_list) {
       for (int jj = 1; jj < fb_arr.length; jj++) {
-        /*@Prototype*/ CLASSNAME fb = fb_arr[jj];
+        @Prototype CLASSNAME fb = fb_arr[jj];
         if (fb != null) {
           if (NIS.dkconfig_enabled) {
             NISuppressionSet ss = fb.get_ni_suppressions();
@@ -280,9 +279,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #endif
 
   /** Returns a list of all of the CLASSNAME prototype invariants. */
-  public static List</*@Prototype*/ Invariant> get_proto_all() {
+  public static List<@Prototype Invariant> get_proto_all() {
 
-    List</*@Prototype*/ Invariant> result = new ArrayList</*@Prototype*/ Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
 
     // If this is the first call
     if (functions.isEmpty()) {
@@ -290,9 +289,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     // Get the proto invariant for all of the subclasses and return them
-    for (/*@Prototype*/ CLASSNAME[] fb_arr : func_list) {
+    for (@Prototype CLASSNAME[] fb_arr : func_list) {
       for (int jj = 1; jj < fb_arr.length; jj++) {
-        /*@Prototype*/ CLASSNAME fb = fb_arr[jj];
+        @Prototype CLASSNAME fb = fb_arr[jj];
         if (fb != null) {
           result.add(fb);
         }
@@ -351,7 +350,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   protected Invariant resurrect_done(int[] permutation) {
 
     assert permutation.length == 3;
-    assert ArraysPlume.fn_is_permutation(permutation);
+    assert ArraysPlume.fnIsPermutation(permutation);
 
     int[] new_order = new int[3];
     int[] old_order = var_indices[get_var_order()];
@@ -404,7 +403,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       build_func_list();
     }
     int func_id = get_function_id();
-    /*@Prototype*/ CLASSNAME[] fb_arr = func_list.get(func_id);
+    @Prototype CLASSNAME[] fb_arr = func_list.get(func_id);
     assert fb_arr != null;
     for (int ii = 0; ii < fb_arr.length; ii++)
       if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order)) {
@@ -415,13 +414,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String repr(@GuardSatisfied CLASSNAME this) {
     return format();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
     if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     }
@@ -458,7 +457,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_simplify(@GuardSatisfied CLASSNAME this) {
     int var_order = get_var_order();
     String[] methodname = get_method_name();
     VarInfo[] vis = ppt.var_infos;
@@ -496,7 +495,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String format_csharp_contract(@GuardSatisfied CLASSNAME this) {
     int var_order = get_var_order();
     String[] methodname = get_method_name();
 
@@ -562,7 +561,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   // If our classes match, we must match
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     return true;
@@ -583,16 +582,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /** If the arg is a sequence size, return the sequence; otherwise return null. */
-  private /*@Nullable*/ VarInfo sized_sequence(VarInfo size) {
+  private @Nullable VarInfo sized_sequence(VarInfo size) {
     if (size.derived instanceof SequenceLength) {
       return ((SequenceLength)size.derived).base;
     }
     return null;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

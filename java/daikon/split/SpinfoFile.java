@@ -7,13 +7,14 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 import jtb.ParseException;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * SpinfoFile stores information parsed from a {@code .spinfo} file. The constructor parses the
@@ -112,10 +113,9 @@ public class SpinfoFile {
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @throws IOException if an I/O error occurs
    */
-  /*@RequiresNonNull("tempDir")*/
-  /*@EnsuresNonNull({"statementReplacer", "splitterObjects"})*/
-  public void parseFile(
-      /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile)
+  @RequiresNonNull("tempDir")
+  @EnsuresNonNull({"statementReplacer", "splitterObjects"})
+  public void parseFile(@UnknownInitialization @Raw SpinfoFile this, LineNumberReader spinfoFile)
       throws IOException {
     List<ReplaceStatement> replaceStatements = new ArrayList<ReplaceStatement>();
     List<List<String>> pptSections = new ArrayList<List<String>>();
@@ -166,7 +166,8 @@ public class SpinfoFile {
    * @param replaceStatements the List into which the ReplaceStatements are added
    */
   private void readReplaceStatements(
-      /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
+      @UnknownInitialization @Raw SpinfoFile this,
+      LineNumberReader spinfoFile,
       List<ReplaceStatement> replaceStatements)
       throws IOException, ParseException {
     String methodDeclaration = spinfoFile.readLine();
@@ -202,7 +203,8 @@ public class SpinfoFile {
    * @throws IOException if an I/O error occurs.
    */
   private void readPptStatements(
-      /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
+      @UnknownInitialization @Raw SpinfoFile this,
+      LineNumberReader spinfoFile,
       List<List<String>> pptSections,
       String pptName)
       throws IOException {
@@ -224,9 +226,9 @@ public class SpinfoFile {
    * @return an array of arrays with each array containing the SplitterObjects for one of lists of
    *     ppt statements found in pptSections
    */
-  /*@RequiresNonNull("tempDir")*/
+  @RequiresNonNull("tempDir")
   private SplitterObject[][] createSplitterObjects(
-      /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ List<List<String>> pptSections) {
+      @UnknownInitialization @Raw SpinfoFile this, List<List<String>> pptSections) {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
     for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<SplitterObject>();
@@ -292,9 +294,9 @@ public class SpinfoFile {
   }
 
   /** Returns whether the line is blank (or null). */
-  /*@EnsuresNonNullIf(result=false, expression="#1")*/
-  /*@Pure*/
-  private static boolean isBlank(/*@Nullable*/ String line) {
+  @EnsuresNonNullIf(result = false, expression = "#1")
+  @Pure
+  private static boolean isBlank(@Nullable String line) {
     return (line == null) || line.trim().equals("");
   }
 
@@ -302,7 +304,7 @@ public class SpinfoFile {
    * Returns whether the line is a spinfo file comment line. A line is a comment if it starts with a
    * (possibly indented) "#".
    */
-  /*@Pure*/
+  @Pure
   private static boolean isComment(String line) {
     return (line.trim().startsWith("#"));
   }
@@ -311,7 +313,7 @@ public class SpinfoFile {
    * Returns whether the line is a spinfo file formatting command. A line is a formatting command if
    * line is indented with a tab ("\t") or spaces (" ").
    */
-  /*@Pure*/
+  @Pure
   private static boolean isFormatting(String line) {
     return (line.startsWith("\t") || line.startsWith(" "));
   }

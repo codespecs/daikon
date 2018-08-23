@@ -5,15 +5,12 @@ import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.inv.OutputFormat;
 import java.util.ArrayList;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
   @Override
-  public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {
+  public UnaryDerivation @Nullable [] instantiate(VarInfo vi) {
     // System.out.println("SequenceMinMaxSumFactory.instantiate(" + vi.name + ")");
 
     if (vi.rep_type != ProglangType.INT_ARRAY) return null;

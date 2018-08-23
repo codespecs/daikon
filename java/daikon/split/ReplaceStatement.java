@@ -1,6 +1,6 @@
 package daikon.split;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -8,11 +8,8 @@ import java.util.List;
 import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * ReplaceStatement is an immutable data structure for holding the information of a replace
@@ -88,9 +85,9 @@ class ReplaceStatement {
   }
 
   /** Returns a string representation of this. */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied ReplaceStatement this*/) {
+  public String toString(@GuardSatisfied ReplaceStatement this) {
     StringBuilder params = new StringBuilder();
     for (int i = 0; i < parameters.length; i++) {
       params.append(parameters[i].toString());

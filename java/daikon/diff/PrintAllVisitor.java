@@ -1,13 +1,11 @@
 package daikon.diff;
 
-import daikon.*;
+import daikon.Global;
+import daikon.Ppt;
 import daikon.inv.Invariant;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Prints all the invariant pairs, including pairs containing identical invariants. */
 public class PrintAllVisitor extends DepthFirstVisitor {
@@ -49,7 +47,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
       ps.print("<");
       if (ppt1 == null) {
-        ps.print((/*@Nullable*/ String) null);
+        ps.print((@Nullable String) null);
       } else {
         ps.print(ppt1.name());
       }
@@ -57,7 +55,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
       if (ppt1 == null || ppt2 == null || !ppt1.name().equals(ppt2.name())) {
         ps.print(", ");
         if (ppt2 == null) {
-          ps.print((/*@Nullable*/ String) null);
+          ps.print((@Nullable String) null);
         } else {
           ps.print(ppt2.name());
         }
@@ -88,18 +86,18 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     }
     bufPrint(", ");
     if (inv2 == null) {
-      bufPrint((/*@Nullable*/ String) null);
+      bufPrint((@Nullable String) null);
     } else {
       printInvariant(inv2);
     }
     bufPrint(">");
 
-    int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
-    String typeLabel = DetailedStatisticsVisitor.TYPE_LABELS[type];
+    int arity = DetailedStatisticsVisitor.determineArity(inv1, inv2);
+    String arityLabel = DetailedStatisticsVisitor.ARITY_LABELS[arity];
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
 
-    bufPrint(" (" + typeLabel + "," + relLabel + ")");
+    bufPrint(" (" + arityLabel + "," + relLabel + ")");
 
     bufPrintln();
   }
@@ -135,12 +133,12 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     }
     //    bufPrint(">");
 
-    int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
+    int arity = DetailedStatisticsVisitor.determineArity(inv1, inv2);
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
 
-    // String typeLabel = DetailedStatisticsVisitor.TYPE_LABELS[type];
+    // String arityLabel = DetailedStatisticsVisitor.ARITY_LABELS[arity];
     // String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
-    //    bufPrint(" (" + typeLabel + "," + relLabel + ")");
+    //    bufPrint(" (" + arityLabel + "," + relLabel + ")");
 
     bufPrintln();
   }
@@ -188,11 +186,11 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
 
   // "prints" by appending to a string buffer
-  protected void bufPrint(/*@Nullable*/ String s) {
+  protected void bufPrint(@Nullable String s) {
     bufOutput.append(s);
   }
 
-  protected void bufPrintln(/*@Nullable*/ String s) {
+  protected void bufPrintln(@Nullable String s) {
     bufPrint(s);
     bufPrintln();
   }

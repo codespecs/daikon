@@ -1359,7 +1359,7 @@ int
 7
 
 DECLARE
-MapQuick1.GeoSegment.hashCode():::EXIT144
+MapQuick1.GeoSegment.hashCode():::EXIT141
 this
 MapQuick1.GeoSegment # isNonNull=true, isParam=true
 hashcode

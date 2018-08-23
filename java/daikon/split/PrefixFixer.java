@@ -1,14 +1,12 @@
 package daikon.split;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * PrefixFixer is a visitor for a jtb syntax tree that converts prefixes of variable name to part of
@@ -20,13 +18,13 @@ import org.checkerframework.dataflow.qual.*;
 class PrefixFixer extends DepthFirstVisitor {
 
   /** The last token visited by this. */
-  private /*@MonotonicNonNull*/ NodeToken lastToken;
+  private @MonotonicNonNull NodeToken lastToken;
 
   /** The token visited before lastToken. */
-  private /*@MonotonicNonNull*/ NodeToken twoTokensAgo;
+  private @MonotonicNonNull NodeToken twoTokensAgo;
 
   /** The token visited before twoTokensAgo. */
-  private /*@MonotonicNonNull*/ NodeToken threeTokensAgo;
+  private @MonotonicNonNull NodeToken threeTokensAgo;
 
   /** Creates a new instance of PrefixFixer to fix "." prefixes. */
   private PrefixFixer() {
@@ -89,8 +87,10 @@ class PrefixFixer extends DepthFirstVisitor {
    * Return whether n is at the end of a set of node tokens that form a prefixed name needing
    * fixing.
    */
-  /*@EnsuresNonNullIf(result=true, expression={"lastToken","twoTokensAgo","threeTokensAgo"})*/
-  /*@Pure*/
+  @EnsuresNonNullIf(
+      result = true,
+      expression = {"lastToken", "twoTokensAgo", "threeTokensAgo"})
+  @Pure
   private boolean isMatch(NodeToken n) {
     return ((!Visitors.isLParen(n))
         && lastToken != null

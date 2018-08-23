@@ -4,12 +4,11 @@ import static java.lang.System.out;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 @SuppressWarnings({
   "nullness", // uninitialized fields default to null
@@ -49,9 +48,10 @@ class Test {
     public void tta() {
       add(y);
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied A this*/) {
+    public String toString(@GuardSatisfied A this) {
       return ("A " + id);
     }
   }
@@ -69,9 +69,9 @@ class Test {
       long1 = l1;
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied C this*/) {
+    public String toString(@GuardSatisfied C this) {
       return cid;
     }
   }
@@ -264,10 +264,9 @@ class Test {
   // Tests the clone() method
   public static class G {
     static class Uncloneable {
-      /*@SideEffectFree*/
+      @SideEffectFree
       @Override
-      protected Object clone(
-          /*>>>@GuardSatisfied Uncloneable this*/) throws CloneNotSupportedException {
+      protected Object clone(@GuardSatisfied Uncloneable this) throws CloneNotSupportedException {
         //        return super.clone();
         throw new CloneNotSupportedException();
       }
@@ -326,30 +325,28 @@ class Test {
       this.y = y;
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    protected Object clone(/*>>>@GuardSatisfied Obj this*/) throws CloneNotSupportedException {
+    protected Object clone(@GuardSatisfied Obj this) throws CloneNotSupportedException {
       return super.clone();
     }
 
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     @Override
-    public boolean equals(
-        /*>>>@GuardSatisfied Obj this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    public boolean equals(@GuardSatisfied Obj this, @GuardSatisfied @Nullable Object obj) {
       return (obj instanceof Obj) && this.x == ((Obj) obj).x && this.y == ((Obj) obj).y;
     }
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied Obj this*/) {
+    public int hashCode(@GuardSatisfied Obj this) {
       return this.x + this.y;
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied Obj this*/) {
+    public String toString(@GuardSatisfied Obj this) {
       return String.valueOf(this.x) + String.valueOf(this.y);
     }
   }
@@ -363,12 +360,10 @@ class Test {
     }
 
     // Overrides Obj.equals
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     @Override
-    public boolean equals(
-        /*>>>@GuardSatisfied ObjSub this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    public boolean equals(@GuardSatisfied ObjSub this, @GuardSatisfied @Nullable Object obj) {
       return (obj instanceof ObjSub) && super.equals(obj) && this.z == ((ObjSub) obj).z;
     }
   }

@@ -41,18 +41,17 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # accidentally including things in the user's checkout that are not needed
 # by most users, but why not include everything that's in repository?)
 SCRIPT_FILES := Makefile \
-	daikon.cshrc daikon.bashrc daikonenv.bat \
+	daikon.bashrc daikonenv.bat \
 	dfepl dtrace-perl dtype-perl \
+	java-cpp \
 	kvasir-dtrace \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	trace-add-nonces.pl \
 	util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
-PLUME_SCRIPT_FILES := java-cpp lines-from
 
-SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
-                $(addprefix utils/plume-scripts/,$(PLUME_SCRIPT_FILES))
+SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
@@ -358,7 +357,7 @@ DISTTESTDIRJAVA := ${TMPDIR}/daikon.dist/daikon/java
 # 'distribution-check' target on a variety of client machines.
 # - verify we can open/unpack the distribution tar file
 # - run the junit verification tests on daikon.jar
-# - verify the released class files are all version 7
+# - verify the released class files are all version 8
 # - verify that we can rebuild the .class files from the .java files
 # - run the junit verification tests on the class files
 # - run the quick-test
@@ -370,8 +369,8 @@ test-staged-dist: $(STAGING_DIR)
 	(cd $(DISTTESTDIR); mv $(NEW_RELEASE_NAME) daikon)
 	(cd $(DISTTESTDIR)/daikon/java && \
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
-	## Make sure that all of the class files are 1.7 (version 51) or earlier.
-	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 51)
+	## Make sure that all of the class files are 1.8 (version 52) or earlier.
+	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 ../utils/plume-scripts/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
 	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR):$(DISTTESTDIRJAVA)/lib/junit-4.12.jar all_javac)
 	## Test that these new .class files work properly.
@@ -588,21 +587,13 @@ update-dist-version-file:
 	@echo -n "doc/VERSION now contains: "
 	@cat doc/VERSION
 
-JAR_FILES = \
-$(INV_DIR)/java/lib/bcel-util-all-0.0.4.jar \
-$(INV_DIR)/java/lib/commons-exec-1.3.jar \
-$(INV_DIR)/java/lib/java-getopt.jar \
-$(INV_DIR)/java/lib/options-all-0.3.1.jar \
-$(INV_DIR)/java/lib/plume-util-0.0.1.jar \
-$(INV_DIR)/java/lib/daikon-util.jar
-
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
 ## "make -C java clean; make daikon.jar".
 ## It seems that one must do "make compile" before "make daikon.jar".
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
 .PHONY: jar
 jar: daikon.jar
-daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $(JAR_FILES)
+daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ ${TMPDIR}/daikon-jar
 	install -d ${TMPDIR}/daikon-jar
 	# Compile Daikon and copy the resulting class files
@@ -610,15 +601,8 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	$(MAKE) -C java all_directly
 	cd java && find . \( -name "dcomp-rt*" \) -prune -o -name '*.class' -print \
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
-	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
-	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/bcel-util-all-0.0.4.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/commons-exec-1.3.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/options-all-0.3.1.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume-util-0.0.1.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/daikon-util.jar
+	for filename in $(JAR_DIR)/java/lib/*.jar ; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
@@ -755,7 +739,7 @@ ifndef NONETWORK
 	if test -d utils/checklink/.git ; then \
 	  (cd utils/checklink && git pull -q) \
 	elif ! test -d utils/checklink ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink || git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink)) \
 	fi
 endif
 
@@ -764,7 +748,7 @@ ifndef NONETWORK
 	if test -d utils/html-tools/.git ; then \
 	  (cd utils/html-tools && git pull -q) \
 	elif ! test -d utils/html-tools ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools || git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools)) \
 	fi
 endif
 
@@ -773,7 +757,7 @@ ifndef NONETWORK
 	if test -d utils/plume-scripts/.git ; then \
 	  (cd utils/plume-scripts && (git pull -q || echo "git pull failed")) \
 	elif ! test -d utils/plume-scripts ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
 	fi
 endif
 
@@ -782,7 +766,7 @@ ifndef NONETWORK
 	if test -d utils/run-google-java-format/.git ; then \
 	  (cd utils/run-google-java-format && git pull -q) \
 	elif ! test -d utils/run-google-java-format ; then \
-	  (mkdir -p utils && git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format) \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format || git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format)) \
 	fi
 endif
 

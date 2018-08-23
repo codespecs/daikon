@@ -1,10 +1,7 @@
 package daikon.chicory;
 
 import java.util.EnumSet;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * The ThisObjInfo class is a subtype of DaikonVariableInfo used for variable types which represent
@@ -35,7 +32,7 @@ public class ThisObjInfo extends DaikonVariableInfo {
    * @see daikon.chicory.DaikonVariableInfo#getChildValue(java.lang.Object)
    */
   @Override
-  public /*@Nullable*/ Object getMyValFromParentVal(Object val) {
+  public @Nullable Object getMyValFromParentVal(Object val) {
     throw new Error("shouldn't be called");
   }
 

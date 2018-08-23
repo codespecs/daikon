@@ -18,7 +18,7 @@ public final class Math__BigFloat_bmul__40 extends Splitter {
     orig_$y__a_is_defined_varinfo = ppt.find_var_by_name("orig($y._a.is_defined)");
   }
 
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new Math__BigFloat_bmul__40(ppt);
   }
 

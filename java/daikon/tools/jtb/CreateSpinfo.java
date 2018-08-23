@@ -16,11 +16,10 @@ import java.util.logging.Logger;
 import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 /**
  * Create a splitter info file from Java source.
@@ -195,7 +194,7 @@ public class CreateSpinfo {
   private static void filterConditions(Map<String, List<String>> conditionMap) {
     for (String key : conditionMap.keySet()) {
       List<String> conditions = conditionMap.get(key);
-      conditions = UtilPlume.removeDuplicates(conditions);
+      conditions = CollectionsPlume.removeDuplicates(conditions);
       conditions.remove("true");
       conditions.remove("false");
       conditionMap.put(key, conditions);
@@ -235,20 +234,19 @@ public class CreateSpinfo {
       PrintWriter output,
       Map<String, List<String>> conditions,
       Map<String, String> replaceStatements,
-      /*@Nullable*/ String packageName)
+      @Nullable String packageName)
       throws IOException {
     if (!replaceStatements.values().isEmpty()) {
       output.println("REPLACE");
       for (
-      /*@KeyFor("replaceStatements")*/ String declaration :
-          UtilPlume.sortedKeySet(replaceStatements)) {
+      @KeyFor("replaceStatements") String declaration : CollectionsPlume.sortedKeySet(replaceStatements)) {
         output.println(declaration);
         String replacement = replaceStatements.get(declaration);
         output.println(removeNewlines(replacement));
       }
       output.println();
     }
-    for (/*@KeyFor("conditions")*/ String method : UtilPlume.sortedKeySet(conditions)) {
+    for (@KeyFor("conditions") String method : CollectionsPlume.sortedKeySet(conditions)) {
       List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {

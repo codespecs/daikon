@@ -2,7 +2,7 @@ package daikon;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import daikon.chicory.*;
+import daikon.chicory.StreamRedirectThread;
 import daikon.util.RegexUtil;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,14 +15,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * This is the main class for Chicory which transforms the class files of a program to instrument it
@@ -33,11 +34,11 @@ import org.checkerframework.dataflow.qual.*;
 public class Chicory {
 
   @Option("File in which to put dtrace output")
-  public static /*@MonotonicNonNull*/ File dtrace_file = null;
+  public static @MonotonicNonNull File dtrace_file = null;
 
   /** Also see Daikon's {@code --var-omit-pattern} command-line argument. */
   @Option("Omit variables that match this regular expression.")
-  public static /*@Nullable*/ Pattern omit_var = null;
+  public static @Nullable Pattern omit_var = null;
 
   @Option("Directory in which to create output files")
   public static File output_dir = new File(".");
@@ -52,7 +53,7 @@ public class Chicory {
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
   @Option("Decl formatted file containing comparability information")
-  public static /*@Nullable*/ File comparability_file = null;
+  public static @Nullable File comparability_file = null;
 
   /**
    * If true, no variable values are printed. Static variables are not initialized yet when the
@@ -60,7 +61,7 @@ public class Chicory {
    * when the routine is exited. These .dtrace entries are purely for the benefit of tools that use
    * Chicory for program tracing, to determine when methods are entered and exited.
    */
-  @Option("Write static initialzer program points")
+  @Option("Write static initializer program points")
   public static boolean instrument_clinit = false;
 
   @Option("Include variables that are visible under normal java access rules")
@@ -79,7 +80,7 @@ public class Chicory {
   public static boolean debug_decl_print = false;
 
   @Option("Treat classes that match the regex as boot classes (do not instrument)")
-  public static /*@Nullable*/ Pattern boot_classes = null;
+  public static @Nullable Pattern boot_classes = null;
 
   // Should perhaps permit specifying the heap for the target program and
   // for Daikon separately.
@@ -94,20 +95,20 @@ public class Chicory {
 
   /**
    * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
-   * ChicoryPremain#premain}.
+   * daikon.chicory.ChicoryPremain#premain}.
    */
   @Option("Path to the Chicory agent jar file")
-  public static /*@MonotonicNonNull*/ File premain = null;
+  public static @MonotonicNonNull File premain = null;
 
   /**
    * The name of the file to read for a list of pure methods. Should be 1 method per line. Each
-   * method should be in the same format as format ouput by the purity analysis.
+   * method should be in the same format as format output by the purity analysis.
    */
   @Option("File of pure methods to use as additional Daikon variables")
-  public static /*@Nullable*/ File purity_file;
+  public static @Nullable File purity_file;
 
   @Option("Directory in which to find configuration files")
-  public static /*@Nullable*/ File config_dir = null;
+  public static @Nullable File config_dir = null;
 
   // Daikon is run in a separate process
   @Option("Run Daikon on the generated data trace file")
@@ -134,17 +135,17 @@ public class Chicory {
   private static int daikon_port = -1;
 
   /** Thread that copies output from target to our output */
-  public static /*@MonotonicNonNull*/ StreamRedirectThread out_thread;
+  public static @MonotonicNonNull StreamRedirectThread out_thread;
 
-  /** Thread that copies stderr from target to our stderr */
-  public static /*@MonotonicNonNull*/ StreamRedirectThread err_thread;
+  /** Thread that copies stderr from target to our stderr. */
+  public static @MonotonicNonNull StreamRedirectThread err_thread;
 
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
   /** daikon process for {@code --daikon} command-line option */
   // non-null if either daikon==true or daikon_online==true
-  public static /*@MonotonicNonNull*/ Process daikon_proc;
+  public static @MonotonicNonNull Process daikon_proc;
 
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
@@ -230,8 +231,8 @@ public class Chicory {
   }
 
   /** Return true iff a file name was specified to supply pure method names. */
-  /*@Pure*/
-  public static /*@Nullable*/ File get_purity_file() {
+  @Pure
+  public static @Nullable File get_purity_file() {
     return purity_file;
   }
 
@@ -333,7 +334,7 @@ public class Chicory {
       daikon_err.start();
 
       @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
-      /*@NonNull*/ InputStream daikonStdOut = daikon_proc.getInputStream();
+      @NonNull InputStream daikonStdOut = daikon_proc.getInputStream();
       // daikonReader escapes, so it is not closed in this method.
       BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut, UTF_8));
 
@@ -403,7 +404,9 @@ public class Chicory {
     for (String target_arg : target_args) {
       cmdlist.add(target_arg);
     }
-    if (verbose) System.out.printf("\nExecuting target program: %s\n", args_to_string(cmdlist));
+    if (verbose) {
+      System.out.printf("%nExecuting target program: %s%n", args_to_string(cmdlist));
+    }
     String[] cmdline = cmdlist.toArray(new String[cmdlist.size()]);
 
     // Execute the command, sending all output to our streams
@@ -478,7 +481,7 @@ public class Chicory {
   }
 
   /** Runs daikon either online or on the generated trace file. */
-  /*@EnsuresNonNull("daikon_proc")*/
+  @EnsuresNonNull("daikon_proc")
   public void runDaikon() {
 
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();
@@ -512,7 +515,7 @@ public class Chicory {
   }
 
   /** Wait for daikon to complete and return its exit status */
-  /*@RequiresNonNull("daikon_proc")*/
+  @RequiresNonNull("daikon_proc")
   private int waitForDaikon() {
     int result = redirect_wait(daikon_proc);
     return result;

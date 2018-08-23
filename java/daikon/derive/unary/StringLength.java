@@ -1,14 +1,13 @@
 package daikon.derive.unary;
 
-import daikon.*;
-import daikon.derive.*;
-import daikon.derive.binary.*;
-import daikon.derive.ternary.*;
+import daikon.ProglangType;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.derive.Derivation;
+import daikon.derive.ValueAndModified;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /** Length of String variables */
 public final class StringLength extends UnaryDerivation {
@@ -49,7 +48,7 @@ public final class StringLength extends UnaryDerivation {
     return VarInfo.make_scalar_str_func("length", ProglangType.INT, base);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Derivation other) {
     return (other instanceof StringLength);
@@ -57,14 +56,14 @@ public final class StringLength extends UnaryDerivation {
 
   /** Returns the ESC name */
   @Override
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String csharp_name(String index) {
     return String.format("%s.Length", base.csharp_name());
   }
 
   /** Returns the ESC name */
   @Override
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String esc_name(String index) {
     return String.format("%s.length()", base.esc_name());
   }
@@ -77,7 +76,7 @@ public final class StringLength extends UnaryDerivation {
 
   /** Returns the simplify name */
   @Override
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String simplify_name() {
     return String.format("(stringLength %s)", base.simplify_name());
   }

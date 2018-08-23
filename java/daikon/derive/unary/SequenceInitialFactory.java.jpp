@@ -22,12 +22,9 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.unary;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 public final class CLASSNAME extends UnaryDerivationFactory {
 
@@ -35,7 +32,7 @@ public final class CLASSNAME extends UnaryDerivationFactory {
     Logger.getLogger("daikon.derive.binary.SequenceInitialFactory");
 
   @Override
-  public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {
+  public UnaryDerivation @Nullable [] instantiate(VarInfo vi) {
     // System.out.println("SequenceInitialFactory.instantiate(" + vi + ")");
     // return (UnaryDerivation)new SequenceFirst(vi);
 

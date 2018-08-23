@@ -4,11 +4,9 @@ package daikon.test.diff;
 
 import daikon.*;
 import daikon.inv.*;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** A dummy invariant used for testing purposes. */
 public class DiffDummyInvariant extends Invariant {
@@ -17,51 +15,39 @@ public class DiffDummyInvariant extends Invariant {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  /** A string representation of the formula that this dummy invariant represents. */
   public String formula;
+  /** The confidence fro this dummy invariant. */
   public double confidence;
-  public boolean interesting;
+  /** Whether the invariant is worth printing. */
   public boolean isWorthPrinting;
 
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified) {
-    this(ppt, formula, justified, true, true);
+    this(ppt, formula, justified, true);
   }
 
-  public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified, boolean interesting) {
-    this(ppt, formula, justified, interesting, true);
-  }
-
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(
-      PptSlice ppt,
-      String formula,
-      boolean justified,
-      boolean interesting,
-      boolean isWorthPrinting) {
+      PptSlice ppt, String formula, boolean justified, boolean isWorthPrinting) {
     this(
         ppt,
         formula,
         (justified ? Invariant.CONFIDENCE_JUSTIFIED : Invariant.CONFIDENCE_UNJUSTIFIED),
-        interesting,
         isWorthPrinting);
   }
 
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(PptSlice ppt, String formula, double confidence) {
-    this(ppt, formula, confidence, true, true);
+    this(ppt, formula, confidence, true);
   }
 
-  public DiffDummyInvariant(PptSlice ppt, String formula, double confidence, boolean interesting) {
-    this(ppt, formula, confidence, interesting, true);
-  }
-
+  /** Create an instance of DiffDummyInvariant. */
   public DiffDummyInvariant(
-      PptSlice ppt,
-      String formula,
-      double confidence,
-      boolean interesting,
-      boolean isWorthPrinting) {
+      PptSlice ppt, String formula, double confidence, boolean isWorthPrinting) {
     super(ppt);
     this.formula = formula;
     this.confidence = confidence;
-    this.interesting = interesting;
     this.isWorthPrinting = isWorthPrinting;
   }
 
@@ -70,19 +56,13 @@ public class DiffDummyInvariant extends Invariant {
     throw new UnsupportedOperationException();
   }
 
-  /*@Pure*/
-  @Override
-  public boolean isInteresting() {
-    return interesting;
-  }
-
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameInvariant(Invariant other) {
     return this.isSameFormula(other);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     if (other instanceof DiffDummyInvariant) {
@@ -99,20 +79,20 @@ public class DiffDummyInvariant extends Invariant {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied DiffDummyInvariant this*/) {
+  public String repr(@GuardSatisfied DiffDummyInvariant this) {
     return "DiffDummyInvariant(" + ppt.arity() + "," + formula + "," + confidence + ")";
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied DiffDummyInvariant this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied DiffDummyInvariant this, OutputFormat format) {
     return repr();
   }
 
   // IsWorthPrinting should not be overridden by subclasses.
   // But this subclass is special:  it's not really an invariant,
   // but is only used for testing.
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isWorthPrinting() {
     return isWorthPrinting;

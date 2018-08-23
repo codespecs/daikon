@@ -2,8 +2,9 @@
 
 package daikon.diff;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptMap;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -11,11 +12,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.StringTokenizer;
-import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.plumelib.util.CollectionsPlume;
 
 /**
  * <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works across multiple files
@@ -137,7 +137,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       String data = st.nextToken();
       try {
         @SuppressWarnings("nullness") // map
-        /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
+        @NonNull ArrayList<String> formatAndFrequencyList = lastMap.get(key);
         formatAndFrequencyList.add(data);
       } catch (Exception e) {
         System.out.println(key + " error in MultiDiffVisitor");
@@ -145,7 +145,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     }
 
     // print it all
-    for (Map.Entry</*@KeyFor("lastMap")*/ String, ArrayList<String>> entry : lastMap.entrySet()) {
+    for (Map.Entry<@KeyFor("lastMap") String, ArrayList<String>> entry : lastMap.entrySet()) {
       String key = entry.getKey();
       ArrayList<String> al = entry.getValue();
       // don't print anything if there are no selective invariants
@@ -198,7 +198,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       String data = st.nextToken();
       try {
         @SuppressWarnings("nullness") // map
-        /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
+        @NonNull ArrayList<String> formatAndFrequencyList = lastMap.get(key);
         formatAndFrequencyList.add(data);
       } catch (Exception e) {
         out.println(key + " error in MultiDiffVisitor");
@@ -209,7 +209,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     String lastPpt = "";
     // sort them so that multiple exits will end up being adjacent
     // to each other when they are from the same method
-    for (/*@KeyFor("lastMap")*/ String key : UtilPlume.sortedKeySet(lastMap)) {
+    for (@KeyFor("lastMap") String key : CollectionsPlume.sortedKeySet(lastMap)) {
       ArrayList<String> al = lastMap.get(key);
       // don't print anything if there are no selective invariants
 
@@ -247,7 +247,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
   }
 
   @Override
-  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     return true; // super.shouldPrint (inv1, inv2) &&
     //    inv1.format().toString().indexOf(">") == -1 &&
     // inv1.format().toString().indexOf("orig") == -1;

@@ -28,13 +28,11 @@ package daikon.inv.ternary.threeScalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.ternary.TernaryInvariant;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Abstract base class for invariants over three numeric variables. An example is {@code z = ax + by
@@ -50,7 +48,7 @@ public abstract class CLASSNAME extends TernaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected @Prototype CLASSNAME() {
     super();
   }
 
@@ -64,20 +62,20 @@ public abstract class CLASSNAME extends TernaryInvariant {
             && vis[2].file_rep_type.IS_SCALAR);
   }
 
-  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var1(@GuardSatisfied CLASSNAME this) {
     return ppt.var_infos[0];
   }
 
-  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var2(@GuardSatisfied CLASSNAME this) {
     return ppt.var_infos[1];
   }
 
-  public VarInfo var3(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var3(@GuardSatisfied CLASSNAME this) {
     return ppt.var_infos[2];
   }
 
   @Override
-  public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count) {
+  public InvariantStatus check(@Interned Object val1, @Interned Object val2, @Interned Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
@@ -100,7 +98,7 @@ public abstract class CLASSNAME extends TernaryInvariant {
   }
 
   @Override
-  public InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count) {
+  public InvariantStatus add(@Interned Object val1, @Interned Object val2, @Interned Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;

@@ -1,12 +1,8 @@
 package daikon.diff;
 
-import daikon.*;
 import daikon.inv.Invariant;
 import java.io.PrintStream;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * <B>XorInvariantsVisitor</B> is a visitor that performs a standard Diff on two PptMaps, that is,
@@ -20,9 +16,9 @@ import org.checkerframework.checker.nullness.qual.*;
  */
 public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 
-  public XorInvariantsVisitor(
-      PrintStream ps, boolean verbose, boolean printEmptyPpts, boolean printUninteresting) {
-    super(ps, verbose, printEmptyPpts, printUninteresting);
+  /** Create an instance of XorInvariantsVisitor. */
+  public XorInvariantsVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
+    super(ps, verbose, printEmptyPpts);
   }
 
   @Override
@@ -54,13 +50,7 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
    * relationship, and printability.
    */
   @Override
-  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
-    int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
-    if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING
-        || type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {
-      return false;
-    }
-
+  protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2
         || rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2

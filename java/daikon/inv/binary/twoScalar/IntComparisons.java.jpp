@@ -61,7 +61,7 @@
   #define EQUAL_CLASS FloatEqual
 #else
   #define IS_STRING 1
-  #define PRIMITIVE /*@Interned*/ String
+  #define PRIMITIVE @Interned String
   #define PRIMITIVENONCOMMENT String
   #define ISTYPE isString()
   #define SUPERCLASS TwoString
@@ -69,7 +69,7 @@
   #define INT(x) String ## x
   #define SEQSEQINTEQUAL SeqSeqStringEqual
   #define SEQ_SUBSCRIPT SequenceStringSubscript
-  #define INT_TYPE /*@Interned*/ String
+  #define INT_TYPE @Interned String
   #define ONEOF OneOfString
   #define LESS_THAN_CLASS StringLessThan
   #define GREATER_THAN_CLASS StringGreaterThan
@@ -373,15 +373,15 @@ import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars. Prints as {@code x EQUALScode y}.
@@ -409,14 +409,14 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    super(ppt);
   }
 
-  protected /*@Prototype*/ INTEQUAL() {
+  protected @Prototype INTEQUAL() {
    super();
   }
 
-  private static /*@Prototype*/ INTEQUAL proto = new /*@Prototype*/ INTEQUAL();
+  private static @Prototype INTEQUAL proto = new @Prototype INTEQUAL();
 
   /** Returns the prototype invariant for INTEQUAL */
-  public static /*@Prototype*/ INTEQUAL get_proto() {
+  public static @Prototype INTEQUAL get_proto() {
     return proto;
   }
 
@@ -576,7 +576,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   /** Instantiate an invariant on the specified slice */
   @Override
-  protected INTEQUAL instantiate_dyn(/*>>> @Prototype INTEQUAL this,*/ PptSlice slice) {
+  protected INTEQUAL instantiate_dyn(@Prototype INTEQUAL this, PptSlice slice) {
     #if defined (NONEQUAL)
     // System.out.printf("Instantiating non-equal on %s and %s%n",
     //                     slice.var_infos[0], slice.var_infos[1]);
@@ -585,7 +585,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
 #ifdef EQUAL_OP
-  /*@Pure*/
+  @Pure
   public boolean is_equality_inv() {
     return true;
   }
@@ -606,7 +606,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
 #if (defined(EQUAL_OP) || defined(NONEQUAL_OP))
-  /*@Pure*/
+  @Pure
   @Override
   public boolean is_symmetric() {
     return true;
@@ -624,7 +624,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   // such as is_equal, is_lessequal, etc.
   // Look up a previously instantiated INTEQUAL relationship.
   // Should this implementation be made more efficient?
-  public static /*@Nullable*/ INTEQUAL find(PptSlice ppt) {
+  public static @Nullable INTEQUAL find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof INTEQUAL) {
@@ -643,13 +643,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied INTEQUAL this*/) {
+  public String repr(@GuardSatisfied INTEQUAL this) {
     return INTEQUALstring + varNames();
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied INTEQUAL this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied INTEQUAL this, OutputFormat format) {
 
     String var1name = var1().name_using(format);
     String var2name = var2().name_using(format);
@@ -810,7 +810,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
 #if defined(EQUAL_OP)
   @Override
-  public boolean enoughSamples(/*>>>@GuardSatisfied INTEQUAL this*/) {
+  public boolean enoughSamples(@GuardSatisfied INTEQUAL this) {
     return (ppt.num_samples() > 0);
   }
 
@@ -825,7 +825,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 #endif
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExact() {
     #if defined(EQUAL_OP)
@@ -847,7 +847,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   @Override
   public InvariantStatus add(
-      /*@Interned*/ Object v1, /*@Interned*/ Object v2, int mod_index, int count) {
+      @Interned Object v1, @Interned Object v2, int mod_index, int count) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(
           INTEQUALstring
@@ -865,13 +865,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     return super.add(v1, v2, mod_index, count);
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
 
@@ -920,7 +920,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
     final VarInfo var1 = vis[0];
     final VarInfo var2 = vis[1];
 
@@ -999,9 +999,9 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    * avoid circular isObvious relations. We only check if this.ppt.var_infos imply obviousness
    * rather than the cartesian product on the equality set.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
+  public @Nullable DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically(this.ppt.var_infos);
     } else {
@@ -1014,9 +1014,9 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    * avoid circular isObvious relations. We only check if this.ppt.var_infos imply obviousness
    * rather than the cartesian product on the equality set.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
+  public @Nullable DiscardInfo isObviousDynamically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousDynamically(this.ppt.var_infos);
     } else {
@@ -1025,9 +1025,9 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 #endif
 
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // JHP: We might consider adding a check over bounds.   If
     // x < c and y > c then we know that x < y.  Similarly for
@@ -1167,7 +1167,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    //   *  (y = ax + b) ^ (a == 1) ^ (b > 0) ==> y > x
    //   *  (y = ax + b) ^ (a == 1) ^ (b < 0) ==> y < x
 
-  private /*@Nullable*/ DiscardInfo lb_implies(VarInfo[] vis) {
+  private @Nullable DiscardInfo lb_implies(VarInfo[] vis) {
 
     // Look for a linear binary invariant over the same variables
     LINEARBINARY lb = (LINEARBINARY) ppt.parent.find_inv_by_class
@@ -1197,7 +1197,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    *
    * <pre>(x[] op y[]) ^ (i == j) &rArr; (x[i] op y[j])</pre>
    */
-  private /*@Nullable*/ DiscardInfo pairwise_implies(VarInfo[] vis) {
+  private @Nullable DiscardInfo pairwise_implies(VarInfo[] vis) {
 
     VarInfo v1 = vis[0];
     VarInfo v2 = vis[1];
@@ -1209,8 +1209,8 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT)) {
       return null;
     }
-    /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    /*@NonNull*/ SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    @NonNull SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    @NonNull SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
     if (der1.index_shift != der2.index_shift) {
       return null;
     }
@@ -1234,7 +1234,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    *
    * <pre>(x[] = y[]) &rArr; size(x[]) = size(y[])</pre>
    */
-  private /*@Nullable*/ DiscardInfo array_eq_implies(VarInfo[] vis) {
+  private @Nullable DiscardInfo array_eq_implies(VarInfo[] vis) {
 
     // Make sure v1 and v2 are size(array) with the same shift
     VarInfo v1 = vis[0];
@@ -1280,7 +1280,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
    *
    * <pre>(A[] has no dups) ^ (i != j) &rArr; a[i] != a[j]</pre>
    */
-  private /*@Nullable*/ DiscardInfo no_dups_implies(VarInfo[] vis) {
+  private @Nullable DiscardInfo no_dups_implies(VarInfo[] vis) {
 
     // Make sure v1 and v2 are SEQ_SUBSCRIPT from the same array
     VarInfo v1 = vis[0];
@@ -1291,8 +1291,8 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT)) {
       return null;
     }
-    /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    /*@NonNull*/ SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    @NonNull SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    @NonNull SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
 
     // The sequence vars must be equal (or the same)
     if (!ppt.parent.is_equal(der1.seqvar().canonicalRep(),
@@ -1319,13 +1319,13 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #endif
 
   /** NI suppressions, initialized in get_ni_suppressions() */
-  private static /*@Nullable*/ NISuppressionSet suppressions = null;
+  private static @Nullable NISuppressionSet suppressions = null;
 
 #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
   /** Returns the non-instantiating suppressions for this invariant. */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+  public @NonNull NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
         NISuppressee suppressee = new NISuppressee(INTEQUAL.class, 2);
@@ -1367,9 +1367,9 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 #else
   /** Returns the non-instantiating suppressions for this invariant. */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
+  public @Nullable NISuppressionSet get_ni_suppressions() {
     return null;
   }
 #endif

@@ -1,11 +1,9 @@
 package daikon.inv;
 
-import daikon.*;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This is a special implication invariant that guards any invariants that are over variables that
@@ -42,7 +40,7 @@ public class GuardingImplication extends Implication {
     return result;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isWorthPrinting() {
     return right.isWorthPrinting();
@@ -50,7 +48,7 @@ public class GuardingImplication extends Implication {
   }
 
   @Override
-  public boolean enoughSamples(/*>>>@GuardSatisfied GuardingImplication this*/) {
+  public boolean enoughSamples(@GuardSatisfied GuardingImplication this) {
     return right.enoughSamples();
   }
 

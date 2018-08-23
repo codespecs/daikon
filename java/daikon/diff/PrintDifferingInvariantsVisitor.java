@@ -4,22 +4,17 @@ import daikon.inv.Invariant;
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Prints the differing invariant pairs. */
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
 
+  /** Logger for debugging information. */
   public static final Logger debug = Logger.getLogger("daikon.diff.DetailedStatisticsVisitor");
 
-  private boolean printUninteresting;
-
-  public PrintDifferingInvariantsVisitor(
-      PrintStream ps, boolean verbose, boolean printEmptyPpts, boolean printUninteresting) {
+  /** Create an instance of PrintDifferingInvariantsVisitor. */
+  public PrintDifferingInvariantsVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
-    this.printUninteresting = printUninteresting;
   }
 
   @Override
@@ -35,13 +30,7 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
    * Returns true if the pair of invariants should be printed, depending on their type,
    * relationship, and printability.
    */
-  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
-    int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
-    if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING
-        || type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {
-      return printUninteresting;
-    }
-
+  protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2
         || rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2

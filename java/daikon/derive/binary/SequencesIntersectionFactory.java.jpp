@@ -37,14 +37,12 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.derive.Derivation;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up
@@ -57,7 +55,7 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
     Logger.getLogger("daikon.derive.binary." + SCALARSEQUENCESINTERSECTIONFACTORY_STRING);
 
   @Override
-  public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo seq1, VarInfo seq2) {
+  public BinaryDerivation @Nullable [] instantiate(VarInfo seq1, VarInfo seq2) {
 
     if (!SCALARSEQUENCESINTERSECTION.dkconfig_enabled) {
       return null;

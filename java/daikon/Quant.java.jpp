@@ -8,11 +8,12 @@ import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 import org.plumelib.util.FuzzyFloat;
 
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.PolyNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * The Quant library provides routines that operate on arrays and collections.
@@ -77,7 +78,7 @@ public final class Quant {
    * throws an exception, though a.length may.
    */
   // Not called from Quant; provided only for external use.
-  /*@Pure*/
+  @Pure
   public static int size(Object o) {
     if (o == null) {
       return Integer.MAX_VALUE; // return default value
@@ -96,7 +97,7 @@ public final class Quant {
    * If the argument is null, returns a default value (Integer.MAX_VALUE).
    */
   // Not called from Quant; provided only for external use.
-  /*@Pure*/
+  @Pure
   public static int size(Collection<?> o) {
     if (o == null) {
       return Integer.MAX_VALUE; // return default value
@@ -105,8 +106,8 @@ public final class Quant {
   }
 
   /** True iff the sequence contains no null elements. */
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
   public static boolean eltsNonNull(Object[] seq1) {
     if (seq1 == null) return false;
     for (int i = 0 ; i < seq1.length ; i++) {
@@ -168,8 +169,8 @@ public final class Quant {
 
   /** @see #noDups(Object[]) */
   @SuppressWarnings("interning") // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
   public static boolean noDups(Object seq) {
     if (seq == null) return false;
     return noDups(toObjArray(seq));
@@ -178,15 +179,15 @@ public final class Quant {
   /** @see #typeArray(Object[]) */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1"})*/
-  /* pure */ public static String /*@PolyNull*/ [] typeArray(/*@PolyNull*/ Object seq) {
+  /* pure */ public static String @PolyNull [] typeArray(@PolyNull Object seq) {
     if (seq == null) return null;
     return typeArray(toObjArray(seq));
   }
 
   /** @see #eltwiseEqual(Object[]) */
   @SuppressWarnings("interning") // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
   public static boolean eltwiseEqual(Object seq) {
     if (seq == null) return false;
     return eltwiseEqual(toObjArray(seq));
@@ -194,8 +195,8 @@ public final class Quant {
 
   /** @see #eltwiseNotEqual(Object[]) */
   @SuppressWarnings("interning") // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
   public static boolean eltwiseNotEqual(Object seq) {
     if (seq == null) return false;
     return eltwiseNotEqual(toObjArray(seq));
@@ -204,8 +205,8 @@ public final class Quant {
   /** @see #concat(Object[], Object[]) */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1","#2"})*/
-  /*@SideEffectFree*/
-  public static java.lang.Object /*@PolyNull*/ [] concat(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  @SideEffectFree
+  public static java.lang.Object @PolyNull [] concat(@PolyNull Object seq1, @PolyNull Object seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     return concat(toObjArray(seq1), toObjArray(seq2));
@@ -214,8 +215,8 @@ public final class Quant {
   /** @see #union(Object[], Object[]) */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1","#2"})*/
-  /*@SideEffectFree*/
-  public static java.lang.Object /*@PolyNull*/ [] union(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  @SideEffectFree
+  public static java.lang.Object @PolyNull [] union(@PolyNull Object seq1, @PolyNull Object seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     return union(toObjArray(seq1), toObjArray(seq2));
@@ -224,8 +225,8 @@ public final class Quant {
   /** @see #intersection(Object[], Object[]) */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1","#2"})*/
-  /*@SideEffectFree*/
-  public static java.lang.Object /*@PolyNull*/ [] intersection(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  @SideEffectFree
+  public static java.lang.Object @PolyNull [] intersection(@PolyNull Object seq1, @PolyNull Object seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     return intersection(toObjArray(seq1), toObjArray(seq2));
@@ -234,8 +235,8 @@ public final class Quant {
   /** @see #setDiff(Object[], Object[]) */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1","#2"})*/
-  /*@SideEffectFree*/
-  public static java.lang.Object /*@PolyNull*/ [] setDiff(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  @SideEffectFree
+  public static java.lang.Object @PolyNull [] setDiff(@PolyNull Object seq1, @PolyNull Object seq2) {
     if (seq1 == null) return null;
     if (seq2 == null) return null;
     return setDiff(toObjArray(seq1), toObjArray(seq2));
@@ -243,19 +244,19 @@ public final class Quant {
 
   /** @see #setEqual(Object[], Object[]) */
   @SuppressWarnings("interning")  // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean setEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean setEqual(@Nullable Object seq1, @Nullable Object seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return setEqual(toObjArray(seq1), toObjArray(seq2));
   }
 
   /** @see #isReverse(Object[], Object[]) */
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
   @SuppressWarnings("interning")  // cast from Object
-  /*@Pure*/
-  public static boolean isReverse(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  @Pure
+  public static boolean isReverse(@Nullable Object seq1, @Nullable Object seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return isReverse(toObjArray(seq1), toObjArray(seq2));
@@ -263,9 +264,9 @@ public final class Quant {
 
   /** @see #pairwiseEqual(Object[], Object[]) */
   @SuppressWarnings("interning")  // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseEqual(@Nullable Object seq1, @Nullable Object seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return pairwiseEqual(toObjArray(seq1), toObjArray(seq2));
@@ -273,9 +274,9 @@ public final class Quant {
 
   /** @see #pairwiseNotEqual(Object[], Object[]) */
   @SuppressWarnings("interning")  // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean pairwiseNotEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean pairwiseNotEqual(@Nullable Object seq1, @Nullable Object seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return pairwiseNotEqual(toObjArray(seq1), toObjArray(seq2));
@@ -283,9 +284,9 @@ public final class Quant {
 
   /** @see #lexEqual(Object[], Object[]) */
   @SuppressWarnings("interning")  // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexEqual(@Nullable Object seq1, @Nullable Object seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return lexEqual(toObjArray(seq1), toObjArray(seq2));
@@ -293,9 +294,9 @@ public final class Quant {
 
   /** @see #lexNotEqual(Object[], Object[]) */
   @SuppressWarnings("interning")  // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/
-  public static boolean lexNotEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  @EnsuresNonNullIf(result=true, expression={"#1","#2"})
+  @Pure
+  public static boolean lexNotEqual(@Nullable Object seq1, @Nullable Object seq2) {
     if (seq1 == null) return false;
     if (seq2 == null) return false;
     return lexNotEqual(toObjArray(seq1), toObjArray(seq2));
@@ -303,9 +304,9 @@ public final class Quant {
 
   /** @see #memberOf(Object, Object[]) */
   @SuppressWarnings("interning")  // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression="#2")*/
-  /*@Pure*/
-  public static boolean memberOf(Object elt, /*@Nullable*/ Object arr) {
+  @EnsuresNonNullIf(result=true, expression="#2")
+  @Pure
+  public static boolean memberOf(Object elt, @Nullable Object arr) {
     if (arr == null) return false;
     return memberOf(elt, toObjArray(arr));
   }
@@ -313,33 +314,33 @@ public final class Quant {
   /** @see #slice(Object[], int, int) */
   @SuppressWarnings("interning")  // cast from Object
   /*TODO: @AssertNonNullIfNonNull("#1")*/
-  /*@SideEffectFree*/
-  public static Object /*@PolyNull*/ [] slice(/*@PolyNull*/ Object seq, int start, int end) {
+  @SideEffectFree
+  public static Object @PolyNull [] slice(@PolyNull Object seq, int start, int end) {
     if (seq == null) return null;
     return slice(toObjArray(seq), start, end);
   }
 
   /** @see #eltsEqual(Object[], Object) */
   @SuppressWarnings("interning")  // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsEqual(/*@Nullable*/ Object arr, Object elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsEqual(@Nullable Object arr, Object elt) {
     if (arr == null) return false;
     return eltsEqual(toObjArray(arr), elt);
   }
 
   /** @see #eltsNotEqual(Object[], Object) */
   @SuppressWarnings("interning")  // cast from Object
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean eltsNotEqual(/*@Nullable*/ Object arr, Object elt) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean eltsNotEqual(@Nullable Object arr, Object elt) {
     if (arr == null) return false;
     return eltsNotEqual(toObjArray(arr), elt);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean isIntegralType(/*@Nullable*/ Class<?> c) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean isIntegralType(@Nullable Class<?> c) {
     if (c == null) return false;
     return
       (c.equals(Byte.TYPE)
@@ -348,17 +349,17 @@ public final class Quant {
        || c.equals(Long.TYPE));
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static boolean isRealType(/*@Nullable*/ Class<?> c) {
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
+  public static boolean isRealType(@Nullable Class<?> c) {
     if (c == null) return false;
     return
       (c.equals(Float.TYPE)
        || c.equals(Double.TYPE));
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
+  @EnsuresNonNullIf(result=true, expression="#1")
+  @Pure
   public static boolean isNumericType(Class<?> c) {
     if (c == null) return false;
     return isIntegralType(c) || isRealType(c);
@@ -368,7 +369,7 @@ public final class Quant {
    * AbstractCollection.
    */
   /*TODO: @AssertNonNullIfNonNull("#1")*/
-  public static Object /*@PolyNull*/ [] toObjArray(/*@PolyNull*/ Object o) {
+  public static Object @PolyNull [] toObjArray(@PolyNull Object o) {
     if (o == null) return null;
     if (o instanceof java.util.AbstractCollection<?>) {
       @SuppressWarnings({"unchecked", "interning"})

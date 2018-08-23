@@ -7,11 +7,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * DTraceWriter writes {@code .dtrace} program points to an output stream. It uses the trees created
@@ -61,9 +58,10 @@ public class DTraceWriter extends DaikonWriter {
 
   /** Prints the method entry program point in the dtrace file. */
   public void methodEntry(
-      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
+      @GuardSatisfied DTraceWriter this,
+      MethodInfo mi,
       int nonceVal,
-      /*@Nullable*/ Object obj,
+      @Nullable Object obj,
       Object[] args) {
     // don't print
     if (Runtime.dtrace_closed) {
@@ -94,7 +92,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /** Prints an entry program point for a static initializer in the dtrace file. */
-  public void clinitEntry(/*>>>@GuardSatisfied DTraceWriter this,*/ String pptname, int nonceVal) {
+  public void clinitEntry(@GuardSatisfied DTraceWriter this, String pptname, int nonceVal) {
     // don't print
     if (Runtime.dtrace_closed) {
       return;
@@ -107,10 +105,10 @@ public class DTraceWriter extends DaikonWriter {
 
   /** Prints the method exit program point in the dtrace file. */
   public void methodExit(
-      /*>>>@GuardSatisfied DTraceWriter this,*/
+      @GuardSatisfied DTraceWriter this,
       MethodInfo mi,
       int nonceVal,
-      /*@Nullable*/ Object obj,
+      @Nullable Object obj,
       Object[] args,
       Object ret_val,
       int lineNum) {
@@ -149,7 +147,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /** Prints an exit program point for a static initializer in the dtrace file. */
-  public void clinitExit(/*>>>@GuardSatisfied DTraceWriter this,*/ String pptname, int nonceVal) {
+  public void clinitExit(@GuardSatisfied DTraceWriter this, String pptname, int nonceVal) {
     // don't print
     if (Runtime.dtrace_closed) {
       return;
@@ -161,7 +159,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   // prints an invocation nonce entry in the dtrace
-  private void printNonce(/*>>>@GuardSatisfied DTraceWriter this,*/ int val) {
+  private void printNonce(@GuardSatisfied DTraceWriter this, int val) {
     outFile.println("this_invocation_nonce");
     outFile.println(val);
   }
@@ -178,7 +176,8 @@ public class DTraceWriter extends DaikonWriter {
    * @param ret_val the value returned from this method, only used for exit program points
    */
   private void traverse(
-      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
+      @GuardSatisfied DTraceWriter this,
+      MethodInfo mi,
       RootInfo root,
       Object[] args,
       Object thisObj,
@@ -218,9 +217,7 @@ public class DTraceWriter extends DaikonWriter {
 
   // traverse from the traversal pattern data structure and recurse
   private void traverseValue(
-      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
-      DaikonVariableInfo curInfo,
-      Object val) {
+      @GuardSatisfied DTraceWriter this, MethodInfo mi, DaikonVariableInfo curInfo, Object val) {
 
     if (curInfo.dTraceShouldPrint()) {
       if (!(curInfo instanceof StaticObjInfo)) {
@@ -432,7 +429,7 @@ public class DTraceWriter extends DaikonWriter {
    * @param theVals list of ObjectReferences
    * @return a list of Strings which are the names of the runtime types in the theVals param
    */
-  public static /*@Nullable*/ List<String> getTypeNameList(List<Object> theVals) {
+  public static @Nullable List<String> getTypeNameList(List<Object> theVals) {
     // Return null rather than NonsensicalList as NonsensicalList is
     // an array of Object and not String.
     if (theVals == null || theVals instanceof NonsensicalList) {
@@ -464,8 +461,7 @@ public class DTraceWriter extends DaikonWriter {
    * @param runtime should we use the runtime type or declared type?
    * @return the variable's type, with primitive wrappers removed, or null if the value is non-null
    */
-  public static /*@Nullable*/ Class<?> removeWrappers(
-      Object val, Class<?> declared, boolean runtime) {
+  public static @Nullable Class<?> removeWrappers(Object val, Class<?> declared, boolean runtime) {
     if (!runtime) return declared;
 
     if (val instanceof Runtime.PrimitiveWrapper) {

@@ -1,17 +1,15 @@
 package daikon.diff;
 
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /**
  * Computes statistics about the differences between the sets of invariants. The statistics can be
@@ -24,16 +22,11 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   private static final int FIELD_WIDTH = 5;
   private static final int LABEL_WIDTH = 7;
 
-  // Types of invariants
-  public static final int NUM_TYPES = 6;
-  public static final int TYPE_NULLARY_INTERESTING = 0;
-  public static final int TYPE_NULLARY_UNINTERESTING = 1;
-  public static final int TYPE_UNARY_INTERESTING = 2;
-  public static final int TYPE_UNARY_UNINTERESTING = 3;
-  public static final int TYPE_BINARY = 4;
-  public static final int TYPE_TERNARY = 5;
+  /** The number of arities for invariants; equivalently, 1 more than the max arity. */
+  public static final int NUM_ARITIES = 4;
 
-  public static final String[] TYPE_LABELS = {"NInt", "N!Int", "UInt", "U!Int", "Bin", "Ter"};
+  /** A string representations for each arity. Length = NUM_ARITIES. */
+  public static final String[] ARITY_LABELS = {"Nul", "Una", "Bin", "Ter"};
 
   // Relationships between invariants
   public static final int NUM_RELATIONSHIPS = 12;
@@ -71,11 +64,11 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   };
 
   /**
-   * Table of frequencies, indexed by type of invariant, and relationship between the invariants.
+   * Table of frequencies, indexed by arity of invariant, and relationship between the invariants.
    *
    * <p>Unfortunately, this is heterogeneous: some measurement are integers and others are doubles.
    */
-  private double[][] freq = new double[NUM_TYPES][NUM_RELATIONSHIPS];
+  private double[][] freq = new double[NUM_ARITIES][NUM_RELATIONSHIPS];
 
   private boolean continuousJustification;
 
@@ -96,7 +89,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Adds the difference between the two invariants to the appropriate entry in the frequencies
    * table.
    */
-  private void addFrequency(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  private void addFrequency(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     if (continuousJustification) {
       addFrequencyContinuous(inv1, inv2);
     } else {
@@ -108,18 +101,18 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Treats justification as a binary value. The table entry is incremented by 1 regardless of the
    * difference in justifications.
    */
-  private void addFrequencyBinary(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
-    int type = determineType(inv1, inv2);
+  private void addFrequencyBinary(@Nullable Invariant inv1, @Nullable Invariant inv2) {
+    int arity = determineArity(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
-    freq[type][relationship]++;
+    freq[arity][relationship]++;
   }
 
   /**
    * Treats justification as a continuous value. If one invariant is justified but the other is
    * unjustified, the table entry is incremented by the difference in justifications.
    */
-  private void addFrequencyContinuous(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
-    int type = determineType(inv1, inv2);
+  private void addFrequencyContinuous(@Nullable Invariant inv1, @Nullable Invariant inv2) {
+    int arity = determineArity(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
 
     switch (relationship) {
@@ -128,10 +121,10 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
         assert inv1 != null && inv2 != null
             : "@AssumeAssertion(nullness)"; // application invariant about return value of
         // determineRelationship
-        freq[type][relationship] += calculateConfidenceDifference(inv1, inv2);
+        freq[arity][relationship] += calculateConfidenceDifference(inv1, inv2);
         break;
       default:
-        freq[type][relationship]++;
+        freq[arity][relationship]++;
     }
   }
 
@@ -148,20 +141,12 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     return diff;
   }
 
-  /**
-   * Returns the type of the invariant pair. The type consists of the number of variables (0,1,2,3)
-   * and whether the pair is interesting or not. A pair is interesting if at least one invariant is
-   * interesting.
-   */
-  public static int determineType(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
-    int type;
+  /** Returns the arity of the invariant pair. */
+  public static int determineArity(@Nullable Invariant inv1, @Nullable Invariant inv2) {
 
     // Set inv to a non-null invariant
     @SuppressWarnings("nullness") // at least one argument is non-null
-    /*@NonNull*/ Invariant inv = (inv1 != null) ? inv1 : inv2;
-
-    boolean interesting =
-        ((inv1 != null && inv1.isInteresting()) || (inv2 != null && inv2.isInteresting()));
+    @NonNull Invariant inv = (inv1 != null) ? inv1 : inv2;
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(
@@ -171,38 +156,20 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
               + ((inv1 != null) ? inv1.repr() : "NULL")
               + " - "
               + ((inv2 != null) ? inv2.repr() : "NULL"));
-      debug.fine("Interesting: " + interesting);
     }
 
     int arity = inv.ppt.arity();
-    switch (arity) {
-      case 0:
-        type = interesting ? TYPE_NULLARY_INTERESTING : TYPE_NULLARY_UNINTERESTING;
-        break;
-      case 1:
-        type = interesting ? TYPE_UNARY_INTERESTING : TYPE_UNARY_UNINTERESTING;
-        break;
-      case 2:
-        type = TYPE_BINARY;
-        break;
-      case 3:
-        type = TYPE_TERNARY;
-        break;
-      default:
-        throw new Error("Invalid arity: " + arity);
-    }
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine("  type: " + type);
+      debug.fine("  arity: " + arity);
     }
-    return type;
+    return arity;
   }
 
   /**
    * Returns the relationship between the two invariants. There are twelve possible relationships,
    * described at the beginning of this file.
    */
-  public static int determineRelationship(
-      /*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  public static int determineRelationship(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     int relationship;
 
     if (inv1 == null) {
@@ -244,14 +211,14 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
 
-    for (int type = 0; type < NUM_TYPES; type++) {
+    for (int arity = 0; arity < NUM_ARITIES; arity++) {
       for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
         pw.println(
-            String.valueOf(type)
+            String.valueOf(arity)
                 + "\t"
                 + String.valueOf(rel)
                 + "\t"
-                + String.valueOf(freq[type][rel]));
+                + String.valueOf(freq[arity][rel]));
       }
     }
 
@@ -260,7 +227,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
 
   /** Returns a human-readable table of its data. */
   @SuppressWarnings("NarrowingCompoundAssignment") // due to heterogeneous freq array
-  /*@SideEffectFree*/
+  @SideEffectFree
   public String format() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -272,13 +239,13 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     }
     pw.println(UtilPlume.rpad("TOTAL", FIELD_WIDTH));
 
-    for (int type = 0; type < NUM_TYPES; type++) {
-      pw.print(UtilPlume.rpad(TYPE_LABELS[type], LABEL_WIDTH));
+    for (int arity = 0; arity < NUM_ARITIES; arity++) {
+      pw.print(UtilPlume.rpad(ARITY_LABELS[arity], LABEL_WIDTH));
       for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
-        int f = (int) freq[type][rel];
+        int f = (int) freq[arity][rel];
         pw.print(UtilPlume.rpad(f, FIELD_WIDTH));
       }
-      int s = (int) ArraysPlume.sum(freq[type]);
+      int s = (int) ArraysPlume.sum(freq[arity]);
       pw.print(UtilPlume.rpad(s, FIELD_WIDTH));
       pw.println();
     }
@@ -286,8 +253,8 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     pw.print(UtilPlume.rpad("TOTAL", LABEL_WIDTH));
     for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
       int sum = 0;
-      for (int type = 0; type < NUM_TYPES; type++) {
-        sum += freq[type][rel];
+      for (int arity = 0; arity < NUM_ARITIES; arity++) {
+        sum += freq[arity][rel];
       }
       pw.print(UtilPlume.rpad(sum, FIELD_WIDTH));
     }
@@ -301,19 +268,18 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Returns the frequency of pairs of invariants we have seen with this type and relationship. May
+   * Returns the frequency of pairs of invariants we have seen with this arity and relationship. May
    * be a non-integer, since we may be treating justification as a continuous value.
    */
-  public double freq(int type, int relationship) {
-    return freq[type][relationship];
+  public double freq(int arity, int relationship) {
+    return freq[arity][relationship];
   }
 
   /**
    * Returns true if the pair of invariants should be added to the frequency table, based on their
    * printability.
    */
-  private static boolean shouldAddFrequency(
-      /*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  private static boolean shouldAddFrequency(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     return (inv1 != null && inv1.isWorthPrinting()) || (inv2 != null && inv2.isWorthPrinting());
   }
 }

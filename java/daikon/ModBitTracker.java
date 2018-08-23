@@ -3,11 +3,10 @@ package daikon;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.BitSet;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.Raw;
 
 // "ModBitTracker" is a poor name for this class, since it tracks
 // whether a value is missing, not whether it is modified.
@@ -33,7 +32,7 @@ public class ModBitTracker implements Serializable, Cloneable {
   // In the future, I could imagine trying to optimize this with (say)
   // run-length encoding; but it's probably not worth it.
   // All elements of modbits_arrays at or past num_sets are null.
-  private /*@Nullable*/ BitSet[] modbits_arrays;
+  private @Nullable BitSet[] modbits_arrays;
 
   /**
    * Conceptually, there is a BitSet per variable. In actuality, when two different variables have
@@ -63,7 +62,7 @@ public class ModBitTracker implements Serializable, Cloneable {
   public ModBitTracker(int num_vars) {
     assert num_vars >= 0;
     this.num_vars = num_vars;
-    modbits_arrays = new /*@Nullable*/ BitSet[num_vars];
+    modbits_arrays = new @Nullable BitSet[num_vars];
     if (num_vars > 0) {
       modbits_arrays[0] = new BitSet();
       num_sets = 1;
@@ -93,7 +92,7 @@ public class ModBitTracker implements Serializable, Cloneable {
 
   /** Check the representation invariant. */
   public void checkRep(
-      /*>>>@UnknownInitialization(ModBitTracker.class) @Raw(ModBitTracker.class) ModBitTracker this*/) {
+      @UnknownInitialization(ModBitTracker.class) @Raw(ModBitTracker.class) ModBitTracker this) {
     assert index.length == num_vars;
     assert modbits_arrays.length == num_vars;
     for (int i = 0; i < num_vars; i++) {
@@ -137,7 +136,7 @@ public class ModBitTracker implements Serializable, Cloneable {
   /** Split the specified equivalence set into two pieces. Returns the index of the copy. */
   private int split(int split_index) {
     @SuppressWarnings("nullness") // application invariant: split_index is in range
-    /*@NonNull*/ BitSet bs = (BitSet) modbits_arrays[split_index].clone();
+    @NonNull BitSet bs = (BitSet) modbits_arrays[split_index].clone();
     modbits_arrays[num_sets] = bs;
     num_sets++;
     return num_sets - 1;
@@ -184,7 +183,7 @@ public class ModBitTracker implements Serializable, Cloneable {
     }
     for (int i = 0; i < num_sets; i++) {
       @SuppressWarnings("nullness") // application invariant: non-null up to index=num_sets
-      /*@NonNull*/ BitSet bs = modbits_arrays[i];
+      @NonNull BitSet bs = modbits_arrays[i];
       bs.set(num_samples, num_samples + count, this_bits[i]);
     }
     num_samples += count;

@@ -2,8 +2,17 @@ package daikon.tools;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.Daikon;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.LogHelper;
+import daikon.Ppt;
+import daikon.PptMap;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,11 +30,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
 
 /**
  * Extract the consequents of all Implication invariants that are predicated by membership in a
@@ -51,9 +58,9 @@ public class ExtractConsequent {
     // preferred form, with a pointer pack to the dispreferred
     // form. If we later see the preferred form, we replace the
     // placeholder and remove the dispreferred form.
-    /*@Nullable*/ String fakeFor;
+    @Nullable String fakeFor;
 
-    HashedConsequent(Invariant inv, /*@Nullable*/ String fakeFor) {
+    HashedConsequent(Invariant inv, @Nullable String fakeFor) {
       this.inv = inv;
       this.fakeFor = fakeFor;
     }
@@ -170,8 +177,8 @@ public class ExtractConsequent {
     for (String pptname : pptname_to_conditions.keySet()) {
       Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
           pptname_to_conditions.get(pptname);
-      for (Map.Entry</*@KeyFor("cluster_to_conditions")*/ String, Map<String, HashedConsequent>>
-          entry : cluster_to_conditions.entrySet()) {
+      for (Map.Entry<@KeyFor("cluster_to_conditions") String, Map<String, HashedConsequent>> entry :
+          cluster_to_conditions.entrySet()) {
         String predicate = entry.getKey();
         Map<String, HashedConsequent> conditions = entry.getValue();
         StringBuilder conjunctionJava = new StringBuilder();
@@ -179,7 +186,7 @@ public class ExtractConsequent {
         StringBuilder conjunctionESC = new StringBuilder();
         StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
         int count = 0;
-        for (Map.Entry</*@KeyFor("conditions")*/ String, HashedConsequent> entry2 :
+        for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
             conditions.entrySet()) {
           count++;
           String condIndex = entry2.getKey();
@@ -306,10 +313,6 @@ public class ExtractConsequent {
           cluster_inv = consequent;
         }
 
-        if (!inv.isInteresting()) {
-          continue;
-        }
-
         if (!inv.isWorthPrinting()) {
           continue;
         }
@@ -392,6 +395,7 @@ public class ExtractConsequent {
   private static boolean contains_constant_non_012(Invariant inv) {
     if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
       daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;
+      // TODO: isInteresting has been removed.  Do we need to deal with it specially here?
       // OneOf invariants that indicate a small set ( > 1 element) of
       // possible values are not interesting, and have already been
       // eliminated by the isInteresting check

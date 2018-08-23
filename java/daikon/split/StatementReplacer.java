@@ -1,16 +1,13 @@
 package daikon.split;
 
-import daikon.tools.jtb.*;
+import daikon.tools.jtb.Ast;
 import java.util.ArrayList;
 import java.util.List;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * StatementReplacer is a JTB syntax tree visitor that replaces method calls to one line methods
@@ -80,7 +77,7 @@ class StatementReplacer extends DepthFirstVisitor {
         replacements++;
       } catch (IllegalStateException e) {
         @SuppressWarnings("nullness") // library: ParseException is not yet annotated
-        /*@NonNull*/ String message = e.getMessage();
+        @NonNull String message = e.getMessage();
         // ParseException does not accept optional "cause" argument
         throw new ParseException(message);
       }
@@ -196,7 +193,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * prefixed with "this.". For example "get(5)" and "Collections.sort(new ArrayList())" are
    * "non-this" method calls.
    */
-  /*@Pure*/
+  @Pure
   private boolean isNonThisMethod(PrimaryExpression n) {
     return (n.f0.f0.choice instanceof Name
         && n.f1.size() > 0
@@ -208,7 +205,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * Returns whether n represents a "this" call to a method. "This" methods calls are prefixed with
    * "this.". For example "this.get(5)" is a "this" method call.
    */
-  /*@Pure*/
+  @Pure
   private boolean isThisDotMethod(PrimaryExpression n) {
     return (n.f0.f0.choice instanceof NodeToken
         && Visitors.isThis((NodeToken) n.f0.f0.choice)

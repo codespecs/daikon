@@ -1,16 +1,18 @@
 package daikon;
 
-import daikon.inv.*;
-import daikon.inv.binary.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.ternary.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.unary.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.stringsequence.*;
-import daikon.suppress.*;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.binary.twoScalar.LinearBinary;
+import daikon.inv.binary.twoScalar.LinearBinaryFloat;
+import daikon.inv.ternary.threeScalar.LinearTernary;
+import daikon.inv.ternary.threeScalar.LinearTernaryFloat;
+import daikon.inv.unary.scalar.OneOfFloat;
+import daikon.inv.unary.scalar.OneOfScalar;
+import daikon.inv.unary.sequence.OneOfFloatSequence;
+import daikon.inv.unary.sequence.OneOfSequence;
+import daikon.inv.unary.string.OneOfString;
+import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.suppress.NIS;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,13 +24,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Class that implements dynamic constants optimization. This optimization doesn't instantiate
@@ -110,7 +114,7 @@ public class DynamicConstants implements Serializable {
    * <p>Note that two objects of this class are equal if they refer to the same variable. This
    * allows these to be stored in sets.
    */
-  public static /*@Interned*/ class Constant implements Serializable {
+  public static @Interned class Constant implements Serializable {
 
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -124,7 +128,7 @@ public class DynamicConstants implements Serializable {
      * The value of the constant, or the previous constant value if constant==false and
      * previously_constant==true. Null iff count=0.
      */
-    public /*@MonotonicNonNull*/ /*@Interned*/ Object val = null;
+    public @MonotonicNonNull @Interned Object val = null;
 
     /** The sample count of the constant. */
     public int count = 0;
@@ -180,17 +184,15 @@ public class DynamicConstants implements Serializable {
      * Returns whether the specified variable is currently a constant OR was a constant at the
      * beginning of constants processing.
      */
-    /*@Pure*/
+    @Pure
     public boolean is_prev_constant() {
       return constant || previously_constant;
     }
 
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     @Override
-    public boolean equals(
-        /*>>>@GuardSatisfied Constant this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    public boolean equals(@GuardSatisfied Constant this, @GuardSatisfied @Nullable Object obj) {
       if (!(obj instanceof Constant)) {
         return false;
       }
@@ -198,16 +200,16 @@ public class DynamicConstants implements Serializable {
       return (c.vi == vi);
     }
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied Constant this*/) {
+    public int hashCode(@GuardSatisfied Constant this) {
       return (vi.hashCode());
     }
 
     @Override
     @SuppressWarnings("purity") // side effects to local state (string creation)
-    /*@SideEffectFree*/
-    public String toString(/*>>>@GuardSatisfied Constant this*/) {
+    @SideEffectFree
+    public String toString(@GuardSatisfied Constant this) {
 
       StringBuilder out = new StringBuilder();
       out.append(vi.name());
@@ -240,7 +242,7 @@ public class DynamicConstants implements Serializable {
 
     private ConIndexComparator() {}
 
-    /*@Pure*/
+    @Pure
     @Override
     public int compare(Constant con1, Constant con2) {
       return (con1.vi.varinfo_index - con2.vi.varinfo_index);
@@ -319,7 +321,7 @@ public class DynamicConstants implements Serializable {
 
     // Move any non-missing variables to the constant list and init their val.
     // If a variable is missing out of bounds, leave it on this list
-    // forever (guranteeing that invariants will never be instantiated over
+    // forever (guaranteeing that invariants will never be instantiated over
     // it).
     for (Iterator<Constant> i = missing_list.iterator(); i.hasNext(); ) {
       Constant con = i.next();
@@ -329,11 +331,11 @@ public class DynamicConstants implements Serializable {
       }
 
       if (missing(con.vi, vt)) {
-        // value is still missingg, nothing to do (we incremented its count above)
+        // value is still missing, nothing to do (we incremented its count above)
         continue;
       }
 
-      /*@Interned*/ Object val = con.vi.getValue(vt);
+      @Interned Object val = con.vi.getValue(vt);
       // the variable is not missing, so it is non-null
       assert val != null;
 
@@ -379,7 +381,7 @@ public class DynamicConstants implements Serializable {
     for (Constant con : non_con) {
       con.previously_constant = false;
       @SuppressWarnings("nullness") // reinitialization
-      /*@NonNull*/ Object nullValue = null;
+      @NonNull Object nullValue = null;
       con.val = nullValue;
       con.count = 0;
       con.checkRep();
@@ -400,7 +402,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns the Constant for the specified variable. */
-  /*@Pure*/
+  @Pure
   public Constant getConstant(VarInfo vi) {
 
     Constant result = all_vars[vi.varinfo_index];
@@ -409,7 +411,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable is currently a constant. */
-  /*@Pure*/
+  @Pure
   public boolean is_constant(VarInfo vi) {
 
     return getConstant(vi).constant;
@@ -419,7 +421,7 @@ public class DynamicConstants implements Serializable {
    * Returns whether the specified variable is currently a constant OR was a constant at the
    * beginning of constants processing.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_prev_constant(VarInfo vi) {
 
     return getConstant(vi).is_prev_constant();
@@ -429,15 +431,15 @@ public class DynamicConstants implements Serializable {
    * Returns the constant value of the specified variable, or null if the variable is not constant
    * or prev_constant. But, it is apparently only called on constants with a value.
    */
-  public /*@Interned*/ Object constant_value(VarInfo vi) {
+  public @Interned Object constant_value(VarInfo vi) {
 
     @SuppressWarnings("nullness") // non-missing value, so non-null val field
-    /*@NonNull*/ Object result = getConstant(vi).val;
+    @NonNull Object result = getConstant(vi).val;
     return result;
   }
 
   /** Returns whether the specified variable missing for all values so far. */
-  /*@Pure*/
+  @Pure
   public boolean is_missing(VarInfo vi) {
 
     return (getConstant(vi).always_missing);
@@ -447,7 +449,7 @@ public class DynamicConstants implements Serializable {
    * Returns whether the specified variable is currently missing OR was missing at the beginning of
    * constants processing.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_prev_missing(VarInfo vi) {
 
     Constant c = all_vars[vi.varinfo_index];
@@ -655,7 +657,7 @@ public class DynamicConstants implements Serializable {
       }
     }
 
-    // Debug print the created slies
+    // Debug print the created slices
     if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
       int[] slice_cnt = {0, 0, 0, 0};
       int[] inv_cnt = {0, 0, 0, 0};
@@ -809,7 +811,7 @@ public class DynamicConstants implements Serializable {
             debug.fine(String.format("considering slice %s %s %s", con1, con2, con3));
           }
 
-          // Look for a linearbinary over two variables.  If it doesn't
+          // Look for a LinearBinary over two variables.  If it doesn't
           // exist we don't create a LinearTernary
           Invariant lb = find_linear_binary(ppt.findSlice(con2.vi, con3.vi));
           if (lb == null) {
@@ -931,7 +933,7 @@ public class DynamicConstants implements Serializable {
    * Looks for a LinearBinary invariant in the specified slice. Will match either float or integer
    * versions.
    */
-  private /*@Nullable*/ Invariant find_linear_binary(/*@Nullable*/ PptSlice slice) {
+  private @Nullable Invariant find_linear_binary(@Nullable PptSlice slice) {
 
     // if (debug.isLoggable (Level.FINE))
     //  debug.fine ("considering slice " + slice);
@@ -1023,7 +1025,7 @@ public class DynamicConstants implements Serializable {
    * (default is on), only unary and binary invariants that can be suppressors in NIS suppressions
    * are created.
    */
-  /*@RequiresNonNull("NIS.suppressor_proto_invs")*/
+  @RequiresNonNull("NIS.suppressor_proto_invs")
   public List<PptSlice> create_constant_invs() {
 
     // Turn off track logging so that we don't get voluminous messages

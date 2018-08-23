@@ -1,6 +1,6 @@
 package daikon.inv.filter;
 
-import daikon.inv.*;
+import daikon.inv.Invariant;
 
 public class UnjustifiedFilter extends InvariantFilter {
   @Override

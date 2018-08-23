@@ -1,11 +1,14 @@
 package daikon.split;
 
-import daikon.*;
-import daikon.inv.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import daikon.Ppt;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.inv.DummyInvariant;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 // This splitter tests the condition "X>0".
 @SuppressWarnings("nullness") // uses private fields, client code not analyzed
@@ -15,10 +18,10 @@ public final class SplitterExample extends Splitter {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030218L;
 
-  static /*@Nullable*/ DummyInvariant dummyInvFactory;
-  private /*@Nullable*/ DummyInvariant dummyInv;
+  static @Nullable DummyInvariant dummyInvFactory;
+  private @Nullable DummyInvariant dummyInv;
 
-  private /*@Nullable*/ VarInfo x_varinfo;
+  private @Nullable VarInfo x_varinfo;
 
   public SplitterExample() {}
 
@@ -28,11 +31,11 @@ public final class SplitterExample extends Splitter {
   }
 
   @Override
-  public Splitter instantiate(Ppt ppt) {
+  public Splitter instantiateSplitter(Ppt ppt) {
     return new SplitterExample(ppt);
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="x_varinfo")*/
+  @EnsuresNonNullIf(result = true, expression = "x_varinfo")
   @Override
   public boolean valid() {
     return (x_varinfo != null);
@@ -41,7 +44,7 @@ public final class SplitterExample extends Splitter {
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // application invariant about private
   // variable
-  /*@RequiresNonNull("x_varinfo")*/
+  @RequiresNonNull("x_varinfo")
   @Override
   public boolean test(ValueTuple vt) {
     // Alternately, if x represents an array, use
@@ -54,14 +57,14 @@ public final class SplitterExample extends Splitter {
     return "X > 0";
   }
 
-  /*@EnsuresNonNull("dummyInvFactory")*/
+  @EnsuresNonNull("dummyInvFactory")
   @Override
   public void makeDummyInvariantFactory(DummyInvariant inv) {
     assert dummyInvFactory == null;
     dummyInvFactory = inv;
   }
 
-  /*@RequiresNonNull("dummyInvFactory")*/
+  @RequiresNonNull("dummyInvFactory")
   @Override
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
@@ -72,7 +75,7 @@ public final class SplitterExample extends Splitter {
   }
 
   @Override
-  public /*@Nullable*/ DummyInvariant getDummyInvariant() {
+  public @Nullable DummyInvariant getDummyInvariant() {
     return dummyInv;
   }
 }

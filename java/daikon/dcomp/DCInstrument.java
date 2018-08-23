@@ -24,17 +24,17 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.*;
 import org.apache.bcel.verifier.structurals.*;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.bcelutil.BcelUtil;
 import org.plumelib.bcelutil.InstructionListUtils;
 import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.bcelutil.StackTypes;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 /** Instruments a class file to perform Dynamic Comparability. */
 @SuppressWarnings({"nullness", "interning"}) //
@@ -45,7 +45,7 @@ class DCInstrument extends InstructionListUtils {
   protected MethodGen mgen;
   protected boolean in_jdk;
   protected InstructionFactory ifact;
-  protected /*@Nullable*/ ClassLoader loader;
+  protected @Nullable ClassLoader loader;
   protected boolean constructor_is_initialized;
 
   /** Local that stores the tag frame for the current method */
@@ -166,8 +166,8 @@ class DCInstrument extends InstructionListUtils {
       this.arg_types = arg_types;
     }
 
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    boolean equals(/*>>>@GuardSatisfied MethodDef this,*/ String name, Type[] arg_types) {
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    boolean equals(@GuardSatisfied MethodDef this, String name, Type[] arg_types) {
       if (!name.equals(this.name)) return false;
       if (this.arg_types.length != arg_types.length) {
         return false;
@@ -180,20 +180,18 @@ class DCInstrument extends InstructionListUtils {
       return true;
     }
 
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     @Override
-    public boolean equals(
-        /*>>>@GuardSatisfied MethodDef this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    public boolean equals(@GuardSatisfied MethodDef this, @GuardSatisfied @Nullable Object obj) {
       if (!(obj instanceof MethodDef)) return false;
       MethodDef md = (MethodDef) obj;
       return equals(md.name, md.arg_types);
     }
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied MethodDef this*/) {
+    public int hashCode(@GuardSatisfied MethodDef this) {
       int code = name.hashCode();
       for (Type arg : arg_types) {
         code += arg.hashCode();
@@ -215,15 +213,16 @@ class DCInstrument extends InstructionListUtils {
     public boolean contains(int offset) {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied CodeRange this*/) {
+    public String toString(@GuardSatisfied CodeRange this) {
       return String.format("Code range: %d..%d", start_pc, start_pc + len - 1);
     }
   }
 
   /** Initialize with the original class and whether or not the class is part of the JDK. */
-  public DCInstrument(JavaClass orig_class, boolean in_jdk, /*@Nullable*/ ClassLoader loader) {
+  public DCInstrument(JavaClass orig_class, boolean in_jdk, @Nullable ClassLoader loader) {
     super();
     this.orig_class = orig_class;
     this.in_jdk = in_jdk;
@@ -1468,7 +1467,7 @@ class DCInstrument extends InstructionListUtils {
    * @param ih handle of Instruction to translate
    * @param stack current contents of the stack
    */
-  /*@Nullable*/ InstructionList xform_inst(MethodGen mg, InstructionHandle ih, OperandStack stack) {
+  @Nullable InstructionList xform_inst(MethodGen mg, InstructionHandle ih, OperandStack stack) {
 
     Instruction inst = ih.getInstruction();
 
@@ -2059,11 +2058,11 @@ class DCInstrument extends InstructionListUtils {
             callee_instrumented = false;
           }
 
-          // UNDONE:
+          // TODO:
           // This is actually a general problem.  Correct solution would seem
           // to be a variation of "has_instrumented" to find target of virtual
           // call at runtime.
-          // These is just a hack to get through PASCALI corpus.
+          // This is just a hack to get through PASCALI corpus.
           String super_class = gen.getSuperclassName();
           if ((!super_class.equals("java.lang.Object")) && (BcelUtil.inJdk(super_class))) {
             callee_instrumented = false;
@@ -2174,11 +2173,11 @@ class DCInstrument extends InstructionListUtils {
             callee_instrumented = false;
           }
 
-          // UNDONE:
+          // TODO:
           // This is actually a general problem.  Correct solution would seem
           // to be a variation of "has_instrumented" to find target of virtual
           // call at runtime.
-          // These is just a hack to get through PASCALI corpus.
+          // This is just a hack to get through PASCALI corpus.
           String super_class = gen.getSuperclassName();
           if ((!super_class.equals("java.lang.Object")) && (BcelUtil.inJdk(super_class))) {
             callee_instrumented = false;
@@ -2257,7 +2256,7 @@ class DCInstrument extends InstructionListUtils {
   }
 
   /** Returns whether or not the specified classname is instrumented */
-  boolean callee_instrumented(/*@ClassGetName*/ String classname) {
+  boolean callee_instrumented(@ClassGetName String classname) {
 
     // System.out.printf("Checking callee instrumented on %s\n", classname);
 
@@ -2308,7 +2307,7 @@ class DCInstrument extends InstructionListUtils {
   }
 
   /** Returns true if the specified method is Object.equals() */
-  /*@Pure*/
+  @Pure
   boolean is_object_equals(String method_name, Type ret_type, Type[] args) {
     return (method_name.equals("equals")
         && ret_type == Type.BOOLEAN
@@ -2317,13 +2316,13 @@ class DCInstrument extends InstructionListUtils {
   }
 
   /** Returns true if the specified method is Object.clone() */
-  /*@Pure*/
+  @Pure
   boolean is_object_clone(String method_name, Type ret_type, Type[] args) {
     return method_name.equals("clone") && ret_type.equals(javalangObject) && (args.length == 0);
   }
 
   /** Returns true if the specified method is Object.toString() */
-  /*@Pure*/
+  @Pure
   boolean is_object_toString(String method_name, Type ret_type, Type[] args) {
     return method_name.equals("toString") && ret_type.equals(Type.STRING) && (args.length == 0);
   }
@@ -2435,7 +2434,7 @@ class DCInstrument extends InstructionListUtils {
    * Similar to handle_invoke, but doesn't perform special handling for primitives. (That is, it
    * does just about nothing.) Currently, does not treat equals or clone specially.
    */
-  /*@Nullable*/ InstructionList handle_invoke_refs_only(InvokeInstruction invoke) {
+  @Nullable InstructionList handle_invoke_refs_only(InvokeInstruction invoke) {
     boolean callee_instrumented;
     String classname = null;
 
@@ -2775,7 +2774,7 @@ class DCInstrument extends InstructionListUtils {
    * Returns the local variable used to store the return result. If it is not present, creates it
    * with the specified type. If the variable is known to already exist, the type can be null.
    */
-  LocalVariableGen get_return_local(MethodGen mg, /*@Nullable*/ Type return_type) {
+  LocalVariableGen get_return_local(MethodGen mg, @Nullable Type return_type) {
 
     // Find the local used for the return value
     LocalVariableGen return_local = null;
@@ -2806,7 +2805,7 @@ class DCInstrument extends InstructionListUtils {
    * Creates a MethodInfo corresponding to the specified method. The exit locations are filled in,
    * but the reflection information is not generated. Returns null if there are no instructions.
    */
-  protected /*@Nullable*/ MethodInfo create_method_info(ClassInfo class_info, MethodGen mg) {
+  protected @Nullable MethodInfo create_method_info(ClassInfo class_info, MethodGen mg) {
 
     // if (mg.getName().equals("<clinit>")) {
     //   // This case DOES occur at run time.  -MDE 1/22/2010
@@ -2825,7 +2824,7 @@ class DCInstrument extends InstructionListUtils {
 
     // Get the argument types for this method
     Type[] arg_types = mg.getArgumentTypes();
-    /*@ClassGetName*/ String[] arg_type_strings = new /*@ClassGetName*/ String[arg_types.length];
+    @ClassGetName String[] arg_type_strings = new @ClassGetName String[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++) {
       arg_type_strings[ii] = typeToClassGetName(arg_types[ii]);
       // System.out.printf("DCI arg types: %s %s%n", arg_types[ii], arg_type_strings[ii]);
@@ -3079,7 +3078,7 @@ class DCInstrument extends InstructionListUtils {
    * Returns whether or not this ppt should be included. A ppt is included if it matches ones of the
    * select patterns and doesn't match any of the omit patterns.
    */
-  public boolean should_track(/*@ClassGetName*/ String classname, String pptname) {
+  public boolean should_track(@ClassGetName String classname, String pptname) {
 
     debug_track.log("Considering tracking ppt %s %s%n", classname, pptname);
 
@@ -3370,7 +3369,7 @@ class DCInstrument extends InstructionListUtils {
    * Adjusts the tag stack for load constant opcodes. If the constant is a primitive, pushes its tag
    * on the tag stack. If the constant is a reference (string, class), does nothing.
    */
-  /*@Nullable*/ InstructionList ldc_tag(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList ldc_tag(Instruction inst, OperandStack stack) {
     Type type;
     if (inst instanceof LDC) // LDC_W extends LDC
     type = ((LDC) inst).getType(pool);
@@ -3417,13 +3416,13 @@ class DCInstrument extends InstructionListUtils {
   }
 
   /** Returns whether or not the specified type is a primitive (int, float, double, etc). */
-  /*@Pure*/
+  @Pure
   protected boolean is_primitive(Type type) {
     return ((type instanceof BasicType) && (type != Type.VOID));
   }
 
   /** Returns whether or not the specified type is a category 2 (8 byte) type. */
-  /*@Pure*/
+  @Pure
   protected boolean is_category2(Type type) {
     return ((type == Type.DOUBLE) || (type == Type.LONG));
   }
@@ -3432,7 +3431,7 @@ class DCInstrument extends InstructionListUtils {
    * Returns the type of the last instruction that modified the top of stack. A gross attempt to
    * figure out what is on the top of stack.
    */
-  protected /*@Nullable*/ Type find_last_push(InstructionHandle ih) {
+  protected @Nullable Type find_last_push(InstructionHandle ih) {
 
     for (ih = ih.getPrev(); ih != null; ih = ih.getPrev()) {
       Instruction inst = ih.getInstruction();
@@ -3450,7 +3449,7 @@ class DCInstrument extends InstructionListUtils {
    * Returns whether or not the invoke specified invokes a native method. This requires that the
    * class that contains the method to be loaded.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_native(InvokeInstruction invoke) {
 
     // Get the class of the method
@@ -3525,7 +3524,7 @@ class DCInstrument extends InstructionListUtils {
     else if (t == Type.LONG) return Long.TYPE;
     else if (t == Type.SHORT) return Short.TYPE;
     else if (t instanceof ObjectType || t instanceof ArrayType) {
-      /*@ClassGetName*/ String sig = typeToClassGetName(t);
+      @ClassGetName String sig = typeToClassGetName(t);
       try {
         return Class.forName(sig, false, loader);
       } catch (Exception e) {
@@ -3728,7 +3727,7 @@ class DCInstrument extends InstructionListUtils {
    * Returns whether or not tag fields are used within the specified class. We can safely use class
    * fields except in Object, String, and Class.
    */
-  public boolean tag_fields_ok(MethodGen mg, /*@ClassGetName*/ String classname) {
+  public boolean tag_fields_ok(MethodGen mg, @ClassGetName String classname) {
 
     if (BcelUtil.isConstructor(mg))
       if (!constructor_is_initialized) {
@@ -4215,7 +4214,7 @@ class DCInstrument extends InstructionListUtils {
   }
 
   /** Returns whether or not the method is defined in Object */
-  /*@Pure*/
+  @Pure
   public boolean is_object_method(String method_name, Type[] arg_types) {
     for (MethodDef md : obj_methods) {
       if (md.equals(method_name, arg_types)) {
@@ -4229,7 +4228,7 @@ class DCInstrument extends InstructionListUtils {
    * Returns whether or not the class is one of those that has values initialized by the JVM or
    * native methods.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_uninit_class(String classname) {
 
     for (String u_name : uninit_classes) {
@@ -4298,7 +4297,7 @@ class DCInstrument extends InstructionListUtils {
   public static void save_static_map(File file) throws IOException {
 
     PrintStream ps = new PrintStream(file);
-    for (Map.Entry</*@KeyFor("static_map")*/ String, Integer> entry : static_map.entrySet()) {
+    for (Map.Entry<@KeyFor("static_map") String, Integer> entry : static_map.entrySet()) {
       ps.printf("%s  %d%n", entry.getKey(), entry.getValue());
     }
     ps.close();

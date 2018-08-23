@@ -10,12 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.plumelib.util.Partitioner;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-*/
 
 /**
  * This class partitions Daikon trace files so that invocations of the same program point are
@@ -44,7 +41,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   }
 
   @Override
-  public boolean hasNext(/*>>>@GuardSatisfied DtracePartitioner this*/) {
+  public boolean hasNext(@GuardSatisfied DtracePartitioner this) {
     try {
       return br.ready();
     } catch (IOException e) {
@@ -55,12 +52,12 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
 
   /** Not implemented, because this class does not modify the underlying trace file. */
   @Override
-  public void remove(/*>>>@GuardSatisfied DtracePartitioner this*/) {
+  public void remove(@GuardSatisfied DtracePartitioner this) {
     throw new UnsupportedOperationException("Can not remove");
   }
 
   @Override
-  public String next(/*>>>@GuardSatisfied DtracePartitioner this*/) {
+  public String next(@GuardSatisfied DtracePartitioner this) {
     try {
       String ret = grabNextInvocation();
       if (ret.indexOf("EXIT") != -1) {
@@ -81,8 +78,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    * invocation delimter. Note that multiple blank lines between invocations might occur, so the
    * callee is responsible for checking if the returned String is a blank line.
    */
-  private String grabNextInvocation(
-      /*>>>@GuardSatisfied DtracePartitioner this*/) throws IOException {
+  private String grabNextInvocation(@GuardSatisfied DtracePartitioner this) throws IOException {
     StringBuilder sb = new StringBuilder();
     while (br.ready()) {
       String line = br.readLine();

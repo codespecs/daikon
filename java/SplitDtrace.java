@@ -9,13 +9,19 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import org.checkerframework.dataflow.qual.Pure;
 
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
-
-/** Date: 29/12/2006 */
+/**
+ * Takes one argument: a .dtrace or dtrace.gz file. Splits it into 100 files: the first file
+ * contains the first 1% of the original file, the second contains 1-2%, ... until the last one
+ * contains 99-100%.
+ */
 public final class SplitDtrace {
+  /**
+   * Entry point for SplitDtrace, which splits a trace file into 100 parts.
+   *
+   * @param args one argument, the name of the .dtrace or .dtrace.gz file
+   */
   public static void main(String[] args) throws IOException {
     if (args.length != 1) {
       throw new RuntimeException(
@@ -114,15 +120,18 @@ public final class SplitDtrace {
     }
     throw new RuntimeException("no nonce: " + res);
   }
-  /*@Pure*/
+
+  @Pure
   static boolean isEnter(ArrayList<String> res) {
     return res.get(0).contains(":::ENTER");
   }
-  /*@Pure*/
+
+  @Pure
   static boolean isExit(ArrayList<String> res) {
     return res.get(0).contains(":::EXIT");
   }
-  /*@Pure*/
+
+  @Pure
   static boolean isDeclare(ArrayList<String> res) {
     return res.get(0).equals("DECLARE");
   }
@@ -137,7 +146,7 @@ public final class SplitDtrace {
 
   @SuppressWarnings(
       "purity") // non-deterministic call to trim is used only for equals(), does not affect result
-  /*@Pure*/
+  @Pure
   static boolean isEmpty(String l) {
     return l.trim().equals("") || l.startsWith("#");
   }

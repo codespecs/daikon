@@ -140,15 +140,14 @@ import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
 import java.util.*;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents an invariant between a PRIMITIVE scalar and a a sequence of PRIMITIVE values. Prints
@@ -175,14 +174,14 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     super(ppt);
   }
 
-  protected /*@Prototype*/ SEQINTEQUAL() {
+  protected @Prototype SEQINTEQUAL() {
     super();
   }
 
-  private static /*@Prototype*/ SEQINTEQUAL proto = new /*@Prototype*/ SEQINTEQUAL();
+  private static @Prototype SEQINTEQUAL proto = new @Prototype SEQINTEQUAL();
 
   /** Returns the prototype invariant for SEQINTEQUAL */
-  public static /*@Prototype*/ SEQINTEQUAL get_proto() {
+  public static @Prototype SEQINTEQUAL get_proto() {
     return proto;
   }
 
@@ -224,7 +223,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
 
   /** instantiates the invariant on the specified slice */
   @Override
-  protected SEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQINTEQUAL this,*/ PptSlice slice) {
+  protected SEQINTEQUAL instantiate_dyn(@Prototype SEQINTEQUAL this, PptSlice slice) {
     return new SEQINTEQUAL(slice);
   }
 
@@ -239,9 +238,9 @@ public final class SEQINTEQUAL extends SUPERCLASS {
    * JHP: Note that these are not strict implications, these are merely uninteresting comparisons
    * (except when op is GreaterEqual for max and LessEqual for min).
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
 
     SequenceMin seqmin = null;
     SequenceMax seqmax = null;
@@ -260,21 +259,21 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     return null;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public SEQINTEQUAL clone(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
+  public SEQINTEQUAL clone(@GuardSatisfied SEQINTEQUAL this) {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
+  public String repr(@GuardSatisfied SEQINTEQUAL this) {
     return SEQINTEQUALstring + varNames() + ": ,falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied SEQINTEQUAL this, OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -286,21 +285,21 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
+  public String format_daikon(@GuardSatisfied SEQINTEQUAL this) {
     return seqvar().name() + " elements " + EQUALSstring + " " + sclvar().name();
   }
 
-  public String format_esc(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
+  public String format_esc(@GuardSatisfied SEQINTEQUAL this) {
     String[] form = VarInfo.esc_quantify(seqvar(), sclvar());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")" + form[3];
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
+  public String format_simplify(@GuardSatisfied SEQINTEQUAL this) {
     String[] form = VarInfo.simplify_quantify(seqvar(), sclvar());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
-  public String format_java_family(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
+  public String format_java_family(@GuardSatisfied SEQINTEQUAL this, OutputFormat format) {
     return "daikon.Quant." + EQUALSstringDBC + "("
         + seqvar().name_using(format)
         + ", "
@@ -308,7 +307,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
         + ")";
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
+  public String format_csharp_contract(@GuardSatisfied SEQINTEQUAL this) {
     String[] split = seqvar().csharp_array_split();
     return "Contract.ForAll("
         + split[0]
@@ -320,7 +319,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
+  public InvariantStatus check_modified(PRIMITIVE @Interned [] a, PRIMITIVE x, int count) {
     /*if (logDetail() || debug.isLoggable(Level.FINE))
       log(debug,"(" + EQUALSstring + " " + Arrays.toString(a)
       + " " + x);*/
@@ -336,7 +335,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
+  public InvariantStatus add_modified(PRIMITIVE @Interned [] a, PRIMITIVE x, int count) {
     return check_modified(a, x, count);
   }
 
@@ -365,7 +364,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     #endif
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExact() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
@@ -375,20 +374,20 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     #endif
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 
   // Look up a previously instantiated invariant.
-  public static /*@Nullable*/ SEQINTEQUAL find(PptSlice ppt) {
+  public static @Nullable SEQINTEQUAL find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof SEQINTEQUAL) {
@@ -406,9 +405,9 @@ public final class SEQINTEQUAL extends SUPERCLASS {
    *  (A[] == [])                        &rArr; (x op A[])
    * </pre>
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -503,9 +502,9 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
+  public @Nullable NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }
 
@@ -541,6 +540,6 @@ public final class SEQINTEQUAL extends SUPERCLASS {
             new NISuppression(v1_lt_v2, suppressee),
         });
 #else
-  private static /*@Nullable*/ NISuppressionSet suppressions = null;
+  private static @Nullable NISuppressionSet suppressions = null;
 #endif
 }

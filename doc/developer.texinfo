@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.6.7
+@center Daikon version 5.7.0
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.6.7 release date
-@center July 2, 2018
+@c Print out the Daikon version 5.7.0 release date
+@center August 22, 2018
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.6.7, released July 2, 2018.
+It describes Daikon version 5.7.0, released August 22, 2018.
 
 @menu
 * Introduction::
@@ -299,6 +299,8 @@ This is used to ensure that the output is the same under Unix and Windows.
 In order to compile Kvasir, the Daikon front end for the C language
 (@pxref{Kvasir,,,daikon,Daikon User Manual}), you will need some
 additional tools beyond those required to compile Daikon.
+
+Note that Kvasir does not work on MacOS.
 
 To install these dependencies under Ubuntu, run the command:
 @exampleindent 2
@@ -2024,7 +2026,7 @@ it twice) in order to generate formatted versions of the manual
 @chapter Making a distribution (making a release)
 
 This section provides the instructions for publishing a Daikon distribution,
-a.k.a.@ making a release.
+or making a release.
 If you only want to
 create the @file{daikon.tar} or @file{daikon.tar.gz} file in your own
 directory, then simply run @command{make daikon.tar} or @command{make daikon.tar.gz}.
@@ -2129,23 +2131,11 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 @node    Distribution setup instructions
 @section Distribution setup instructions
 
-The default version of the Java JDK on the majority of the CSE
-machines is now JDK 8.  However, for the time being, we wish to continue
-to distribute JDK 7 @file{.class} files as part of our distribution process;
-the intention is to maximize compatibility with our existing code base.
-Thus, all of our Makefiles invoke @samp{javac} with @samp{-source 7 -target 7}
-to ensure this is the case.  In addition, we wish to release Checker
-Framework enabled @file{.class} files.  You should install the latest version
-of the Checker Framework tools from @uref{https://checkerframework.org} and
-set the @env{CHECKERFRAMEWORK} environment variable as described in the
-@uref{https://checkerframework.org/manual/#installation, ,Installation}
-section of the manual.
-
 @need 1000
 The recommended setup for the distribution process:
 @itemize
 @item get a fresh copy of your Bash shell (e.g., log out and log back in)
-@item set @env{CHECKERFRAMEWORK} as described above
+@item @code{unset CHECKERFRAMEWORK}
 @item set @env{DAIKONDIR} as you would normally
 @item set @env{JAVA_HOME} to point to JDK 8
 @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
@@ -2197,8 +2187,9 @@ by comparing the @file{REVISION} file to
 @url{http://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
 If so, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document ``Merging
-newer versions of Valgrind into Fjalar'', which appears in the @file{fjalar}
-repository.
+newer versions of Valgrind into Fjalar'', which appears
+@uref{https://github.com/codespecs/fjalar/blob/master/doc/valgrind-merge.texinfo,
+, in the @file{fjalar} repository}.
 
 
 @node    The day before the release
@@ -2306,26 +2297,13 @@ in the process.
 @node    Distribution steps
 @section Steps for making the distribution
 
-Use the Checker Framework Java compiler for the release process. Make sure the @env{CHECKERFRAMEWORK} environment
-variable is properly set.
-
 @enumerate
 
 @need 1000
 @item
-Verify that Daikon passes its tests, under both JDK 7 and JDK 8.
+Verify that Daikon passes its tests.
 
-@c For Jenkins, visit each of the following URLs and verify that the job is green:
-@c @* @url{http://tern.cs.washington.edu:8080/job/daikon/}
-@c There is no Fjalar job on Jenkins.  The Fjalar tests fail on
-@c tern.cs.washington.edu, which runs Jenkins, because tern uses a
-@c different version of the C runtime.  Eventually, make Fjalar work
-@c consistently across all versions of the C runtime.
-@c @* @url{http://tern.cs.washington.edu:8080/job/fjalar/}
-@c @* @url{http://tern.cs.washington.edu:8080/job/daikon-typecheck/}
-
-For Travis CI,
-all of the following jobs should be green:
+All of the following jobs should be green:
 @exampleindent 0
 @example
 @* @url{https://travis-ci.org/codespecs/daikon}
@@ -2455,6 +2433,9 @@ make update-and-commit-version
 @need 1000
 @item
 It is important to build the release candidate from a clean enlistment.
+(TODO: In the future, perhaps do all release-related work on a branch.
+Otherwise, use of the below commands requires committing changes to master,
+and there might be many commits if there is trouble with the release.)
 This is to ensure we are testing only the files intended for release and
 that those files are the same as a user would receive with a clone of
 the repository. This needs to be done in a separate, new Bash command
@@ -2469,12 +2450,13 @@ build everything to be distributed and copy it to the temporary staging area
 
 @example
 mkdir -p /tmp/$USER
-rm -rf /tmp/$USER/stage-daikon
-git clone --depth 3 https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
+cd /tmp/$USER
+rm -rf stage-daikon
+git clone --depth 3 https://github.com/codespecs/daikon stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk8
-export CHECKERFRAMEWORK=<path to lastest version of Checker Framework tools>
+unset CHECKERFRAMEWORK
 source scripts/daikon.bashrc
 make staging
 @end example
@@ -2585,14 +2567,16 @@ Run the following commands:
 
 @smallexample
 NEW_VERSION=`cat doc/VERSION`
-$PLUMESCRIPTS/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
+(cd /tmp && curl -LO --retry 3 https://raw.github.com/plume-lib/trigger-travis/master/trigger-travis.sh)
+sh /tmp/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
-$PLUMESCRIPTS/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
+sh /tmp/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
 @end smallexample
 
 and then wait until the following
-two URLs indicate success:
+two URLs indicate success (it may take a while for the new jobs to show up,
+if Travis is busy running other jobs for the codespecs organization):
 @* @url{https://travis-ci.org/codespecs/test-daikon-staging}
 @* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx}
 
@@ -2634,7 +2618,8 @@ continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
 Success is indicated by invariant output being written to the screen.
 
 @smallexample
-export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.7.0_45"
+unset DAIKONDIR
+export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.8.0_144"
 export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
 mkdir -p ~/tmp
 cd ~/tmp

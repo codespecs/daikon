@@ -1,13 +1,14 @@
 package daikon.inv.filter;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.VarInfo;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
 import daikon.inv.unary.OneOf;
-import daikon.inv.unary.scalar.*;
-
-/*>>>
-import org.checkerframework.dataflow.qual.*;
-*/
+import daikon.inv.unary.scalar.OneOfFloat;
+import daikon.inv.unary.scalar.OneOfScalar;
+import org.checkerframework.dataflow.qual.Pure;
 
 public class OnlyConstantVariablesFilter extends InvariantFilter {
   @Override
@@ -52,7 +53,7 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     return true;
   }
 
-  /*@Pure*/
+  @Pure
   boolean isConstant(VarInfo vi) {
     PptTopLevel ppt = vi.ppt;
     boolean isStaticConstant = vi.is_static_constant;

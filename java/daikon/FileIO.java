@@ -43,18 +43,24 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import org.plumelib.util.StringBuilderDelimited;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
 
 public final class FileIO {
 
@@ -143,7 +149,7 @@ public final class FileIO {
   /** True if declaration records are in the new format -- that is, decl-version 2.0. */
   // Set by read_decl_version; by read_data_trace_record if the file is non-empty;
   // by read_serialized_pptmap; and by InvMap.readObject.
-  public static /*@MonotonicNonNull*/ Boolean new_decl_format = null;
+  public static @MonotonicNonNull Boolean new_decl_format = null;
 
   /**
    * Do not use this routine unless you know what you are doing. This routine breaks the
@@ -203,17 +209,18 @@ public final class FileIO {
   public static final class ParentRelation implements java.io.Serializable {
     static final long serialVersionUID = 20060622L;
     public PptRelationType rel_type;
-    public /*@Interned*/ String parent_ppt_name;
+    public @Interned String parent_ppt_name;
     public int id;
 
-    public ParentRelation(PptRelationType rel_type, /*@Interned*/ String parent_ppt_name, int id) {
+    public ParentRelation(PptRelationType rel_type, @Interned String parent_ppt_name, int id) {
       this.rel_type = rel_type;
       this.parent_ppt_name = parent_ppt_name;
       this.id = id;
     }
-    /*@SideEffectFree*/
+
+    @SideEffectFree
     @Override
-    public String toString(/*>>>@GuardSatisfied ParentRelation this*/) {
+    public String toString(@GuardSatisfied ParentRelation this) {
       return parent_ppt_name + "[" + id + "] " + rel_type;
     };
 
@@ -226,18 +233,18 @@ public final class FileIO {
   }
 
   // Utilities
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/
-  public static final boolean isComment(/*@Nullable*/ String s) {
+  @EnsuresNonNullIf(result = true, expression = "#1")
+  @Pure
+  public static final boolean isComment(@Nullable String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
 
   // Nullness-checking of read_data_trace_record(ParseState) works even
-  // without these two lines, since StringBuilderDelimited accepts null values.
+  // without these two lines, since StringJoiner accepts null values.
   @SuppressWarnings(
       "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is
   // ensured by call to reset()
-  /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
+  @EnsuresNonNullIf(result = true, expression = "#1.readLine()")
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {
@@ -296,13 +303,13 @@ public final class FileIO {
    * declaration will have been read in). Returns null if the ppt is excluded/omitted from this
    * execution of Daikon.
    */
-  private static /*@Nullable*/ PptTopLevel read_ppt_decl(ParseState state, String top_line)
+  private static @Nullable PptTopLevel read_ppt_decl(ParseState state, String top_line)
       throws IOException {
 
     // process the ppt record
     String line = top_line;
     Scanner scanner = new Scanner(line);
-    /*@Interned*/ String record_name = need(state, scanner, "'ppt'");
+    @Interned String record_name = need(state, scanner, "'ppt'");
     if (record_name != "ppt") { // interned
       decl_error(state, "found '%s' where 'ppt' expected", record_name);
     }
@@ -326,7 +333,7 @@ public final class FileIO {
       }
 
       scanner = new Scanner(line);
-      /*@Interned*/ String record = scanner.next().intern();
+      @Interned String record = scanner.next().intern();
       if (vardef == null) {
         if (record == "parent") { // interned
           ppt_parents.add(parse_ppt_parent(state, scanner));
@@ -417,7 +424,7 @@ public final class FileIO {
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
-      /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      @NonNull PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
       if (state.ppts_may_be_new) {
         check_decl_match(state, existing_ppt, vi_array);
@@ -469,7 +476,7 @@ public final class FileIO {
   // Read a declaration in the Version 1 format.  For version 2, see
   // read_ppt_decl.
   // The "DECLARE" line has already been read.
-  private static /*@Nullable*/ PptTopLevel read_declaration(ParseState state) throws IOException {
+  private static @Nullable PptTopLevel read_declaration(ParseState state) throws IOException {
 
     // We have just read the "DECLARE" line.
     String ppt_name = state.reader.readLine();
@@ -486,7 +493,7 @@ public final class FileIO {
 
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
-      /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      @NonNull PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
       if (state.ppts_may_be_new) {
         check_decl_match(state, existing_ppt, vi_array);
@@ -569,7 +576,7 @@ public final class FileIO {
    * Read a variable name, type, and comparability; construct a VarInfo. Return null after reading
    * the last variable in this program point declaration.
    */
-  private static /*@Nullable*/ VarInfo read_VarInfo(ParseState state, String ppt_name)
+  private static @Nullable VarInfo read_VarInfo(ParseState state, String ppt_name)
       throws IOException {
     LineNumberReader file = state.reader;
     int varcomp_format = state.varcomp_format;
@@ -596,7 +603,7 @@ public final class FileIO {
               + ppt_name);
     int equals_index = file_rep_type_string.indexOf(" = ");
     String static_constant_value_string = null;
-    /*@Interned*/ Object static_constant_value = null;
+    @Interned Object static_constant_value = null;
     boolean is_static_constant = false;
     if (equals_index != -1) {
       is_static_constant = true;
@@ -720,7 +727,7 @@ public final class FileIO {
         aux);
   }
 
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  @RequiresNonNull("FileIO.new_decl_format")
   private static int read_var_comparability(ParseState state, String line) throws IOException {
 
     // System.out.printf("read_var_comparability, line = '%s' %b%n", line,
@@ -747,21 +754,21 @@ public final class FileIO {
     }
   }
 
-  private static /*@Interned*/ String read_input_language(ParseState state, String line)
+  private static @Interned String read_input_language(ParseState state, String line)
       throws IOException {
 
     Scanner scanner = new Scanner(line);
     scanner.next();
-    /*@Interned*/ String input_lang = need(state, scanner, "input language");
+    @Interned String input_lang = need(state, scanner, "input language");
     need_eol(state, scanner);
     return input_lang;
   }
 
-  /*@EnsuresNonNull("FileIO.new_decl_format")*/
+  @EnsuresNonNull("FileIO.new_decl_format")
   private static void read_decl_version(ParseState state, String line) throws IOException {
     Scanner scanner = new Scanner(line);
     scanner.next();
-    /*@Interned*/ String version = need(state, scanner, "declaration version number");
+    @Interned String version = need(state, scanner, "declaration version number");
     need_eol(state, scanner);
     boolean new_df;
     if (version == "2.0") // interned
@@ -786,7 +793,7 @@ public final class FileIO {
   // implements java.util.List.  All those lines (including interspersed
   // comments) are returned.
   private static String read_list_implementors(LineNumberReader reader) throws IOException {
-    StringBuilderDelimited result = new StringBuilderDelimited(lineSep);
+    StringJoiner result = new StringJoiner(lineSep);
     for (; ; ) {
       String line = reader.readLine();
       if (line == null || line.equals("")) {
@@ -808,12 +815,12 @@ public final class FileIO {
   static final class Invocation implements Comparable<Invocation> {
     PptTopLevel ppt; // used in printing and in suppressing duplicates
     // Rather than a valuetuple, place its elements here.
-    /*@Nullable*/ Object[] vals;
+    @Nullable Object[] vals;
     int[] mods;
 
     static Object canonical_hashcode = new Object();
 
-    Invocation(PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods) {
+    Invocation(PptTopLevel ppt, @Nullable Object[] vals, int[] mods) {
       this.ppt = ppt;
       this.vals = vals;
       this.mods = mods;
@@ -821,13 +828,13 @@ public final class FileIO {
 
     // Print the Invocation on two lines, indented by two spaces
     // The receiver Invocation may be canonicalized or not.
-    String format(/*>>>@GuardSatisfied Invocation this*/) {
+    String format(@GuardSatisfied Invocation this) {
       return format(true);
     }
 
     // Print the Invocation on one or two lines, indented by two spaces.
     // The receiver Invocation may be canonicalized or not.
-    String format(/*>>>@GuardSatisfied Invocation this,*/ boolean show_values) {
+    String format(@GuardSatisfied Invocation this, boolean show_values) {
       if (!show_values) {
         return "  " + ppt.ppt_name.getNameWithoutPoint();
       }
@@ -861,8 +868,8 @@ public final class FileIO {
     }
 
     /** Change uses of hashcodes to canonical_hashcode. */
-    public /*@Interned*/ Invocation canonicalize() {
-      /*@Nullable*/ Object[] new_vals = new /*@Nullable*/ Object[vals.length];
+    public @Interned Invocation canonicalize() {
+      @Nullable Object[] new_vals = new @Nullable Object[vals.length];
       System.arraycopy(vals, 0, new_vals, 0, vals.length);
       VarInfo[] vis = ppt.var_infos;
       // Warning: abstraction violation!
@@ -871,16 +878,14 @@ public final class FileIO {
           new_vals[vi.value_index] = canonical_hashcode;
         }
       }
-      return new /*@Interned*/ Invocation(ppt, new_vals, mods);
+      return new @Interned Invocation(ppt, new_vals, mods);
     }
 
     // Return true if the invocations print the same
-    /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/
+    @EnsuresNonNullIf(result = true, expression = "#1")
+    @Pure
     @Override
-    public boolean equals(
-        /*>>>@GuardSatisfied Invocation this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
+    public boolean equals(@GuardSatisfied Invocation this, @GuardSatisfied @Nullable Object other) {
       if (other instanceof FileIO.Invocation) {
         return this.format().equals(((FileIO.Invocation) other).format());
       } else {
@@ -888,15 +893,15 @@ public final class FileIO {
       }
     }
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
+    public int compareTo(@GuardSatisfied Invocation this, Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 
-    /*@Pure*/
+    @Pure
     @Override
-    public int hashCode(/*>>>@GuardSatisfied Invocation this*/) {
+    public int hashCode(@GuardSatisfied Invocation this) {
       return this.format().hashCode();
     }
   }
@@ -960,7 +965,7 @@ public final class FileIO {
       while (true) {
         @SuppressWarnings(
             "nullness") // server_dir is a directory; this was checked when the variable was set
-        String /*@NonNull*/ [] dir_files = Daikon.server_dir.list();
+        String @NonNull [] dir_files = Daikon.server_dir.list();
         Arrays.sort(dir_files);
         boolean hasEnd = false;
         for (String f : dir_files) {
@@ -1102,9 +1107,9 @@ public final class FileIO {
      *
      * @see FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)
      */
-    /*@RequiresNonNull("FileIO.data_trace_state")*/
+    @RequiresNonNull("FileIO.data_trace_state")
     public void process_sample(
-        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
+        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
       FileIO.process_sample(all_ppts, ppt, vt, nonce);
     }
 
@@ -1174,7 +1179,7 @@ public final class FileIO {
    *       read_data_trace_record when it reads a record.
    * </ol>
    */
-  /*@UsesObjectEquals*/
+  @UsesObjectEquals
   public static class ParseState {
 
     //
@@ -1217,16 +1222,16 @@ public final class FileIO {
      * Current ppt. Used when status=DECL or SAMPLE. Can be null if this declaration was skipped
      * because of --ppt-select-pattern or --ppt-omit-pattern.
      */
-    public /*@Nullable*/ PptTopLevel ppt;
+    public @Nullable PptTopLevel ppt;
 
     /** The current nonce. Used when status=SAMPLE. */
-    public /*@Nullable*/ Integer nonce;
+    public @Nullable Integer nonce;
 
     /** The current set of values. Used when status=SAMPLE. */
-    public /*@Nullable*/ ValueTuple vt;
+    public @Nullable ValueTuple vt;
 
     /** Miscellaneous text in the parsed item */
-    public /*@Nullable*/ Object payload; // used when status=COMMENT
+    public @Nullable Object payload; // used when status=COMMENT
 
     /** Start parsing the given file. */
     public ParseState(
@@ -1269,7 +1274,7 @@ public final class FileIO {
 
       if (count_lines) {
         Daikon.progress = "Checking size of " + filename;
-        total_lines = UtilPlume.count_lines(raw_filename);
+        total_lines = UtilPlume.countLines(raw_filename);
       } else {
         // System.out.printf("no count %b %d %s %d %d\n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
@@ -1352,7 +1357,7 @@ public final class FileIO {
    */
   // The @MonotonicNonNull property is not true globally, but within every
   // method it's true, so it is a useful annotation.
-  public static /*@MonotonicNonNull*/ ParseState data_trace_state = null;
+  public static @MonotonicNonNull ParseState data_trace_state = null;
   // The variable is only ever cleared at the end of a routine that set it.
   @SuppressWarnings("nullness") // reinitialization
   private static void clear_data_trace_state() {
@@ -1463,7 +1468,7 @@ public final class FileIO {
    * into the state argument.
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
-  /*@RequiresNonNull("FileIO.data_trace_state")*/
+  @RequiresNonNull("FileIO.data_trace_state")
   // not guaranteed: File might be empty  EnsuresNonNull("FileIO.new_decl_format")
   public static void read_data_trace_record(ParseState state) throws IOException {
 
@@ -1482,7 +1487,7 @@ public final class FileIO {
       // This cleverness would not be necessary if every comment was followed by
       // a blank line.  We can't depend on that, though.
       if (isComment(line)) {
-        StringBuilderDelimited commentLines = new StringBuilderDelimited(lineSep);
+        StringJoiner commentLines = new StringJoiner(lineSep);
         commentLines.add(line);
         while (nextLineIsComment(reader)) {
           commentLines.add(reader.readLine());
@@ -1585,7 +1590,7 @@ public final class FileIO {
         new PptName(ppt_name);
       } catch (Throwable t) {
         @SuppressWarnings("nullness") // thrown exception always has a detail message
-        /*@NonNull*/ String message = t.getMessage();
+        @NonNull String message = t.getMessage();
         // Augment the message with line number information.
         if (!(t instanceof Daikon.UserError)) {
           message = String.format("Illegal program point name '%s' (%s)", ppt_name, message);
@@ -1634,7 +1639,7 @@ public final class FileIO {
         nonce = null;
       } else {
         @SuppressWarnings("nullness") // nonce_exists is true, so readLine() returns non-null
-        /*@NonNull*/ String nonce_header = reader.readLine(); // read & discard header
+        @NonNull String nonce_header = reader.readLine(); // read & discard header
         assert NONCE_HEADER.equals(nonce_header);
         String nonce_number = reader.readLine();
         if (nonce_number == null) {
@@ -1648,7 +1653,7 @@ public final class FileIO {
         }
       }
 
-      /*@Nullable*/ Object[] vals = new /*@Nullable*/ Object[vals_array_size];
+      @Nullable Object[] vals = new @Nullable Object[vals_array_size];
       int[] mods = new int[vals_array_size];
 
       // Read a single record from the trace file;
@@ -1698,9 +1703,9 @@ public final class FileIO {
    *
    * @param vt trace data only; modified by side effect to add derived vars
    */
-  /*@RequiresNonNull("FileIO.data_trace_state")*/
+  @RequiresNonNull("FileIO.data_trace_state")
   public static void process_sample(
-      PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
+      PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
 
     // Add orig variables.  This must be above the check below because
     // it saves away the orig values from enter points for later use
@@ -1801,7 +1806,7 @@ public final class FileIO {
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
         ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-        for (/*@KeyFor("call_hashmap")*/ Integer i : UtilPlume.sortedKeySet(call_hashmap)) {
+        for (@KeyFor("call_hashmap") Integer i : CollectionsPlume.sortedKeySet(call_hashmap)) {
           Invocation invok = call_hashmap.get(i);
           assert invok != null;
           invocations.add(invok);
@@ -1842,10 +1847,10 @@ public final class FileIO {
 
   /** Print the invocations in the collection, in order, and coalescing duplicates. */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
-    Map</*@Interned*/ String, Integer> counter = new LinkedHashMap</*@Interned*/ String, Integer>();
+    Map<@Interned String, Integer> counter = new LinkedHashMap<@Interned String, Integer>();
 
     for (Invocation invok_noncanonical : invocations) {
-      /*@Interned*/ Invocation invok = invok_noncanonical.canonicalize();
+      @Interned Invocation invok = invok_noncanonical.canonicalize();
       String invokString = invok.format(false).intern();
       if (counter.containsKey(invokString)) {
         Integer oldCount = counter.get(invokString);
@@ -1857,7 +1862,7 @@ public final class FileIO {
     }
 
     // Print the invocations in sorted order.
-    for (Map.Entry</*@Interned*/ String, Integer> invokEntry : counter.entrySet()) {
+    for (Map.Entry<@Interned String, Integer> invokEntry : counter.entrySet()) {
       System.out.println(
           invokEntry.getKey() + " : " + UtilPlume.nplural(invokEntry.getValue(), "invocation"));
     }
@@ -1866,12 +1871,12 @@ public final class FileIO {
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.  The ppt name and
   // invocation nonce (if any) have already been read.
-  /*@RequiresNonNull("FileIO.data_trace_state")*/
+  @RequiresNonNull("FileIO.data_trace_state")
   private static void read_vals_and_mods_from_trace_file(
       LineNumberReader reader,
       String filename,
       PptTopLevel ppt,
-      /*@Nullable*/ Object[] vals,
+      @Nullable Object[] vals,
       int[] mods)
       throws IOException {
     VarInfo[] vis = ppt.var_infos;
@@ -2149,17 +2154,17 @@ public final class FileIO {
    * See dkconfig_ignore_missing_enter for more info. If true is returned, this ppt should be
    * ignored by the caller.
    */
-  /*@RequiresNonNull("FileIO.data_trace_state")*/
+  @RequiresNonNull("FileIO.data_trace_state")
   public static boolean compute_orig_variables(
       PptTopLevel ppt,
       // HashMap cumulative_modbits,
-      /*@Nullable*/ Object[] vals,
+      @Nullable Object[] vals,
       int[] mods,
-      /*@Nullable*/ Integer nonce) {
+      @Nullable Integer nonce) {
     assert data_trace_state != null;
 
     VarInfo[] vis = ppt.var_infos;
-    /*@Interned*/ String fn_name = ppt.ppt_name.getNameWithoutPoint();
+    @Interned String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
     if (ppt_name.endsWith(enter_tag)) {
       Invocation invok = new Invocation(ppt, vals, mods);
@@ -2264,7 +2269,7 @@ public final class FileIO {
 
   /** Computes values of derived variables */
   public static void compute_derived_variables(
-      PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods) {
+      PptTopLevel ppt, @Nullable Object[] vals, int[] mods) {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
     // which we will do after we have all the values available.
     ValueTuple partial_vt = ValueTuple.makeUninterned(vals, mods);
@@ -2298,7 +2303,7 @@ public final class FileIO {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20060905L;
 
-    /*@RequiresNonNull("FileIO.new_decl_format")*/
+    @RequiresNonNull("FileIO.new_decl_format")
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;
@@ -2319,7 +2324,7 @@ public final class FileIO {
    * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
    * is converted to a PptMap.
    */
-  /*@EnsuresNonNull("FileIO.new_decl_format")*/
+  @EnsuresNonNull("FileIO.new_decl_format")
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
       throws IOException {
 
@@ -2536,9 +2541,9 @@ public final class FileIO {
     public VarKind kind = null;
     /** Name of variable that contains this variable (optional) */
     // seems non-null for arrays/sequences
-    public /*@Nullable*/ String enclosing_var_name;
+    public @Nullable String enclosing_var_name;
     /** the simple (not fully specified) name of this variable (optional) */
-    public /*@Nullable*/ String relative_name = null;
+    public @Nullable String relative_name = null;
     /** Type of reference for structure/class variables */
     public RefType ref_type = RefType.POINTER;
     /** Number of array dimensions (0 or 1) */
@@ -2547,7 +2552,7 @@ public final class FileIO {
      * Non-null iff (vardef.kind == VarKind.FUNCTION). The arguments that were used to create this
      * function application.
      */
-    public /*@Nullable*/ List<String> function_args = null;
+    public @Nullable List<String> function_args = null;
     /** The type of the variable as stored in the dtrace file (required) */
     public ProglangType rep_type = null;
     /** Declared type of the variable as an arbitrary string (required) */
@@ -2561,23 +2566,23 @@ public final class FileIO {
     /** Parent program points in ppt hierarchy (optional) */
     public List<VarParent> parents;
     /** Non-null if this 'variable' always has the same value (optional) */
-    public /*@Nullable*/ /*@Interned*/ Object static_constant_value = null;
+    public @Nullable @Interned Object static_constant_value = null;
     /**
      * Non-null if it is statically known that the value of the variable will be always greater than
      * or equal to this value.
      */
-    public /*@Nullable*/ String min_value = null;
+    public @Nullable String min_value = null;
     /**
      * Non-null if it is statically known that the value of the variable will be always less than or
      * equal to this value.
      */
-    public /*@Nullable*/ String max_value = null;
+    public @Nullable String max_value = null;
     /** Non-null if it is statically known that the array will have at least this many elements. */
-    public /*@Nullable*/ Integer min_length = null;
+    public @Nullable Integer min_length = null;
     /** Non-null if it is statically known that the array will have up to this many elements. */
-    public /*@Nullable*/ Integer max_length = null;
+    public @Nullable Integer max_length = null;
     /** Non-null if the set of valid values for the variable is statically known. */
-    public /*@Nullable*/ String valid_values = null;
+    public @Nullable String valid_values = null;
 
     /** Check representation invariants. */
     public void checkRep() {
@@ -2633,9 +2638,9 @@ public final class FileIO {
       comparability = VarComparabilityNone.it;
     }
 
-    /*@SideEffectFree*/
+    @SideEffectFree
     @Override
-    public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/) {
+    public VarDefinition clone(@GuardSatisfied VarDefinition this) {
       try {
         return (VarDefinition) super.clone();
       } catch (CloneNotSupportedException e) {
@@ -2703,7 +2708,7 @@ public final class FileIO {
 
     /** Parses the array record */
     public void parse_array(Scanner scanner) {
-      /*@Interned*/ String arr_str = need(scanner, "array dimensions");
+      @Interned String arr_str = need(scanner, "array dimensions");
       if (arr_str == "0") { // interned
         arr_dims = 0;
       } else if (arr_str == "1") { // interned
@@ -2723,13 +2728,13 @@ public final class FileIO {
     }
 
     public void parse_rep_type(Scanner scanner) {
-      /*@Interned*/ String rep_type_str = need(scanner, "rep type");
+      @Interned String rep_type_str = need(scanner, "rep type");
       need_eol(scanner);
       rep_type = ProglangType.rep_parse(rep_type_str);
     }
 
     public void parse_dec_type(Scanner scanner) {
-      /*@Interned*/ String declared_type_str = need(scanner, "declaration type");
+      @Interned String declared_type_str = need(scanner, "declaration type");
       need_eol(scanner);
       declared_type = ProglangType.parse(declared_type_str);
     }
@@ -2752,7 +2757,7 @@ public final class FileIO {
 
     /** Parses a comparability record */
     public void parse_comparability(Scanner scanner) {
-      /*@Interned*/ String comparability_str = need(scanner, "comparability");
+      @Interned String comparability_str = need(scanner, "comparability");
       need_eol(scanner);
       comparability =
           VarComparability.parse(state.varcomp_format, comparability_str, declared_type);
@@ -2791,7 +2796,7 @@ public final class FileIO {
 
     /** Parse a constant record */
     public void parse_constant(Scanner scanner) {
-      /*@Interned*/ String constant_str = need(scanner, "constant value");
+      @Interned String constant_str = need(scanner, "constant value");
       need_eol(scanner);
       try {
         static_constant_value = rep_type.parse_value(constant_str, null, "parse_constant");
@@ -2833,7 +2838,7 @@ public final class FileIO {
      * Helper function, returns the next string token unescaped and interned. Throw Daikon.UserError
      * if there is no next token.
      */
-    public /*@Interned*/ String need(Scanner scanner, String description) {
+    public @Interned String need(Scanner scanner, String description) {
       return (FileIO.need(state, scanner, description));
     }
 
@@ -2856,7 +2861,7 @@ public final class FileIO {
    * Helper function, returns the next string token unescaped and interned. Throws Daikon.UserError
    * if there is no next token.
    */
-  public static /*@Interned*/ String need(ParseState state, Scanner scanner, String description) {
+  public static @Interned String need(ParseState state, Scanner scanner, String description) {
     if (!scanner.hasNext()) {
       decl_error(state, "end-of-line found where %s expected", description);
     }
@@ -2877,15 +2882,15 @@ public final class FileIO {
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {
 
-    /*@Interned*/ String str = need(state, scanner, descr);
+    @Interned String str = need(state, scanner, descr);
     try {
       E e = Enum.valueOf(enum_class, str.toUpperCase());
       return e;
     } catch (Exception exception) {
       @SuppressWarnings(
           "nullness") // getEnumConstants returns non-null because enum_class is an enum class
-      E /*@NonNull*/ [] all = enum_class.getEnumConstants();
-      StringBuilderDelimited msg = new StringBuilderDelimited(", ");
+      E @NonNull [] all = enum_class.getEnumConstants();
+      StringJoiner msg = new StringJoiner(", ");
       for (E e : all) {
         msg.add(String.format("'%s'", e.name().toLowerCase()));
       }
@@ -2895,7 +2900,7 @@ public final class FileIO {
   }
 
   /** Call this to indicate a malformed declaration. */
-  private static void decl_error(ParseState state, String format, /*@Nullable*/ Object... args) {
+  private static void decl_error(ParseState state, String format, @Nullable Object... args) {
     @SuppressWarnings(
         "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
     String msg = String.format(format, args) + state.line_file_message();
@@ -2904,7 +2909,7 @@ public final class FileIO {
 
   /** Call this to indicate a malformed declaration. */
   private static void decl_error(
-      ParseState state, Throwable cause, String format, /*@Nullable*/ Object... args) {
+      ParseState state, Throwable cause, String format, @Nullable Object... args) {
     @SuppressWarnings(
         "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
     String msg = String.format(format, args) + state.line_file_message();
@@ -2921,8 +2926,8 @@ public final class FileIO {
   }
 
   /** Returns whether the line is the start of a ppt declaration */
-  /*@RequiresNonNull("FileIO.new_decl_format")*/
-  /*@Pure*/
+  @RequiresNonNull("FileIO.new_decl_format")
+  @Pure
   private static boolean is_declaration_header(String line) {
     if (new_decl_format) {
       return (line.startsWith("ppt "));

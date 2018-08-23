@@ -6,11 +6,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import org.plumelib.bcelutil.JvmUtil;
-
-/*>>>
-import org.checkerframework.checker.signature.qual.*;
-*/
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.plumelib.signature.Signatures;
 
 /** DaikonWriter is the parent class of DeclWriter and DTraceWriter. */
 public abstract class DaikonWriter {
@@ -171,7 +168,7 @@ public abstract class DaikonWriter {
     for (Class<?> arg : args) {
       if (arg_str.length() > 0) arg_str += ", ";
       if (arg.isArray()) {
-        arg_str += JvmUtil.fieldDescriptorToBinaryName(arg.getName());
+        arg_str += Signatures.fieldDescriptorToBinaryName(arg.getName());
       } else {
         arg_str += arg.getName();
       }
@@ -281,7 +278,7 @@ public abstract class DaikonWriter {
    * been declared in Java source code, except with '$' instead of '.' separating outer and inner
    * classes).
    */
-  public static /*@BinaryName*/ String stdClassName(Class<?> type) {
+  public static @BinaryName String stdClassName(Class<?> type) {
     return Runtime.classGetNameToBinaryName(type.getName());
   }
 

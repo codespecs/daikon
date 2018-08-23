@@ -58,6 +58,11 @@
 
 package daikon.inv.unary.PACKAGE;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import daikon.*;
 import daikon.Quantify.QuantFlags;
 import daikon.derive.unary.*;
@@ -69,14 +74,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Baseclass for unary range based invariants. Each invariant is a special stateless version of
@@ -97,7 +96,7 @@ public abstract class RANGE extends SUPERCLASS {
     super(ppt);
   }
 
-  protected /*@Prototype*/ RANGE() {
+  protected @Prototype RANGE() {
     super();
   }
 
@@ -125,9 +124,9 @@ public abstract class RANGE extends SUPERCLASS {
    * The generic format string is obtained from the subclass specific get_format_str(). Instances of
    * %var1% are replaced by the variable name in the specified format.
    */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied RANGE this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied RANGE this, OutputFormat format) {
 
     String fmt_str = get_format_str(format);
 
@@ -159,7 +158,7 @@ public abstract class RANGE extends SUPERCLASS {
 
 #if defined(SEQ)
   @Override
-  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] x, int count) {
+  public InvariantStatus check_modified(PRIMITIVE @Interned [] x, int count) {
     for (int i = 0; i < x.length; i++) {
       if (!eq_check(x[i])) {
         return InvariantStatus.FALSIFIED;
@@ -169,7 +168,7 @@ public abstract class RANGE extends SUPERCLASS {
   }
 
   @Override
-  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] x, int count) {
+  public InvariantStatus add_modified(PRIMITIVE @Interned [] x, int count) {
     return check_modified(x, count);
   }
 
@@ -196,13 +195,13 @@ public abstract class RANGE extends SUPERCLASS {
     return CONFIDENCE_JUSTIFIED;
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other.getClass() == getClass();
     return true;
   }
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
     return false;
@@ -212,9 +211,9 @@ public abstract class RANGE extends SUPERCLASS {
    * All range invariants except Even and PowerOfTwo are obvious since they represented by some
    * version of OneOf or Bound.
    */
-  /*@Pure*/
+  @Pure
   @Override
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     return new DiscardInfo(this, DiscardCode.obvious,
                             "Implied by Oneof or Bound");
@@ -224,7 +223,7 @@ public abstract class RANGE extends SUPERCLASS {
    * Looks for a OneOf invariant over vis. Used by Even and PowerOfTwo to dynamically suppress those
    * invariants if a OneOf exists.
    */
-  protected /*@Nullable*/ ONEOF find_oneof(VarInfo[] vis) {
+  protected @Nullable ONEOF find_oneof(VarInfo[] vis) {
     return (ONEOF) ppt.parent.find_inv_by_class(vis, ONEOF.class);
   }
 
@@ -232,7 +231,7 @@ public abstract class RANGE extends SUPERCLASS {
    * Return a format string for the specified output format. Each instance of %varN% will be
    * replaced by the correct name for varN.
    */
-  public abstract String get_format_str(/*>>>@GuardSatisfied RANGE this,*/ OutputFormat format);
+  public abstract String get_format_str(@GuardSatisfied RANGE this, OutputFormat format);
 
   /** Returns true if x and y don't invalidate the invariant. */
   public abstract boolean eq_check(PRIMITIVE x);
@@ -241,9 +240,9 @@ public abstract class RANGE extends SUPERCLASS {
    * Returns a list of prototypes of all of the range
    * invariants.
    */
-  public static List</*@Prototype*/ Invariant> get_proto_all() {
+  public static List<@Prototype Invariant> get_proto_all() {
 
-    List</*@Prototype*/ Invariant> result = new ArrayList</*@Prototype*/ Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
     result.add(EqualZero.get_proto());
     result.add(EqualOne.get_proto());
     result.add(EqualMinusOne.get_proto());
@@ -273,14 +272,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ EqualZero() {
+    protected @Prototype EqualZero() {
       super();
     }
 
-    private static /*@Prototype*/ EqualZero proto = new /*@Prototype*/ EqualZero();
+    private static @Prototype EqualZero proto = new @Prototype EqualZero();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ EqualZero get_proto() {
+    public static @Prototype EqualZero get_proto() {
       return proto;
     }
 
@@ -292,12 +291,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public EqualZero instantiate_dyn(/*>>> @Prototype EqualZero this,*/ PptSlice slice) {
+    public EqualZero instantiate_dyn(@Prototype EqualZero this, PptSlice slice) {
       return new EqualZero(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied EqualZero this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied EqualZero this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ 0 %var1%)";
       } else {
@@ -326,14 +325,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ EqualOne() {
+    protected @Prototype EqualOne() {
       super();
     }
 
-    private static /*@Prototype*/ EqualOne proto = new /*@Prototype*/ EqualOne();
+    private static @Prototype EqualOne proto = new @Prototype EqualOne();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ EqualOne get_proto() {
+    public static @Prototype EqualOne get_proto() {
       return proto;
     }
 
@@ -345,12 +344,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public EqualOne instantiate_dyn(/*>>> @Prototype EqualOne this,*/ PptSlice slice) {
+    public EqualOne instantiate_dyn(@Prototype EqualOne this, PptSlice slice) {
       return new EqualOne(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied EqualOne this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied EqualOne this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ 1 %var1%)";
       } else {
@@ -379,14 +378,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ EqualMinusOne() {
+    protected @Prototype EqualMinusOne() {
       super();
     }
 
-    private static /*@Prototype*/ EqualMinusOne proto = new /*@Prototype*/ EqualMinusOne();
+    private static @Prototype EqualMinusOne proto = new @Prototype EqualMinusOne();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ EqualMinusOne get_proto() {
+    public static @Prototype EqualMinusOne get_proto() {
       return proto;
     }
 
@@ -398,12 +397,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public EqualMinusOne instantiate_dyn(/*>>> @Prototype EqualMinusOne this,*/ PptSlice slice) {
+    public EqualMinusOne instantiate_dyn(@Prototype EqualMinusOne this, PptSlice slice) {
       return new EqualMinusOne(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied EqualMinusOne this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied EqualMinusOne this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ -1 %var1%)";
       } else {
@@ -432,14 +431,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ GreaterEqualZero() {
+    protected @Prototype GreaterEqualZero() {
       super();
     }
 
-    private static /*@Prototype*/ GreaterEqualZero proto = new /*@Prototype*/ GreaterEqualZero();
+    private static @Prototype GreaterEqualZero proto = new @Prototype GreaterEqualZero();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ GreaterEqualZero get_proto() {
+    public static @Prototype GreaterEqualZero get_proto() {
       return proto;
     }
 
@@ -451,12 +450,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public GreaterEqualZero instantiate_dyn(/*>>> @Prototype GreaterEqualZero this,*/ PptSlice slice) {
+    public GreaterEqualZero instantiate_dyn(@Prototype GreaterEqualZero this, PptSlice slice) {
       return new GreaterEqualZero(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied GreaterEqualZero this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied GreaterEqualZero this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(>= %var1% 0)";
       } else {
@@ -485,14 +484,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ GreaterEqual64() {
+    protected @Prototype GreaterEqual64() {
       super();
     }
 
-    private static /*@Prototype*/ GreaterEqual64 proto = new /*@Prototype*/ GreaterEqual64();
+    private static @Prototype GreaterEqual64 proto = new @Prototype GreaterEqual64();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ GreaterEqual64 get_proto() {
+    public static @Prototype GreaterEqual64 get_proto() {
       return proto;
     }
 
@@ -504,12 +503,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public GreaterEqual64 instantiate_dyn(/*>>> @Prototype GreaterEqual64 this,*/ PptSlice slice) {
+    public GreaterEqual64 instantiate_dyn(@Prototype GreaterEqual64 this, PptSlice slice) {
       return new GreaterEqual64(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied GreaterEqual64 this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied GreaterEqual64 this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(>= %var1% 64)";
       } else {
@@ -539,14 +538,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ BooleanVal() {
+    protected @Prototype BooleanVal() {
       super();
     }
 
-    private static /*@Prototype*/ BooleanVal proto = new /*@Prototype*/ BooleanVal();
+    private static @Prototype BooleanVal proto = new @Prototype BooleanVal();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ BooleanVal get_proto() {
+    public static @Prototype BooleanVal get_proto() {
       return proto;
     }
 
@@ -558,12 +557,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public BooleanVal instantiate_dyn(/*>>> @Prototype BooleanVal this,*/ PptSlice slice) {
+    public BooleanVal instantiate_dyn(@Prototype BooleanVal this, PptSlice slice) {
       return new BooleanVal(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied BooleanVal this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied BooleanVal this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(OR (EQ 0 %var1%) (EQ 1 %var1%))";
       } else {
@@ -596,14 +595,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ PowerOfTwo() {
+    protected @Prototype PowerOfTwo() {
       super();
     }
 
-    private static /*@Prototype*/ PowerOfTwo proto = new /*@Prototype*/ PowerOfTwo();
+    private static @Prototype PowerOfTwo proto = new @Prototype PowerOfTwo();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ PowerOfTwo get_proto() {
+    public static @Prototype PowerOfTwo get_proto() {
       return proto;
     }
 
@@ -615,12 +614,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public PowerOfTwo instantiate_dyn(/*>>> @Prototype PowerOfTwo this,*/ PptSlice slice) {
+    public PowerOfTwo instantiate_dyn(@Prototype PowerOfTwo this, PptSlice slice) {
       return new PowerOfTwo(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied PowerOfTwo this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied PowerOfTwo this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EXISTS (p) (EQ %var1% (pow 2 p)))";
       }
@@ -649,9 +648,9 @@ public abstract class RANGE extends SUPERCLASS {
      * Since PowerOfTwo is not covered by Bound or OneOf, it is not obvious
      * (and should thus be printed).
      */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
        ONEOF oneof = find_oneof(vis);
        if (oneof != null) {
@@ -682,14 +681,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ Even() {
+    protected @Prototype Even() {
       super();
     }
 
-    private static /*@Prototype*/ Even proto = new /*@Prototype*/ Even();
+    private static @Prototype Even proto = new @Prototype Even();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ Even get_proto() {
+    public static @Prototype Even get_proto() {
       return proto;
     }
 
@@ -701,12 +700,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public Even instantiate_dyn(/*>>> @Prototype Even this,*/ PptSlice slice) {
+    public Even instantiate_dyn(@Prototype Even this, PptSlice slice) {
       return new Even(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied Even this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied Even this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ (MOD %var1% 2) 0)";
       }
@@ -726,9 +725,9 @@ public abstract class RANGE extends SUPERCLASS {
      * Since Even is not covered by Bound or OneOf, it is not obvious
      * (and should thus be printed).
      */
-    /*@Pure*/
+    @Pure
     @Override
-    public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
        // If there is a oneof, it implies this
        ONEOF oneof = find_oneof(vis);
        if (oneof != null) {
@@ -754,14 +753,14 @@ public abstract class RANGE extends SUPERCLASS {
       super(ppt);
     }
 
-    protected /*@Prototype*/ Bound0_63() {
+    protected @Prototype Bound0_63() {
       super();
     }
 
-    private static /*@Prototype*/ Bound0_63 proto = new /*@Prototype*/ Bound0_63();
+    private static @Prototype Bound0_63 proto = new @Prototype Bound0_63();
 
     /** returns the prototype invariant */
-    public static /*@Prototype*/ Bound0_63 get_proto() {
+    public static @Prototype Bound0_63 get_proto() {
       return proto;
     }
 
@@ -773,12 +772,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** instantiates the invariant on the specified slice */
     @Override
-    public Bound0_63 instantiate_dyn(/*>>> @Prototype Bound0_63 this,*/ PptSlice slice) {
+    public Bound0_63 instantiate_dyn(@Prototype Bound0_63 this, PptSlice slice) {
       return new Bound0_63(slice);
     }
 
     @Override
-    public String get_format_str(/*>>>@GuardSatisfied Bound0_63 this,*/ OutputFormat format) {
+    public String get_format_str(@GuardSatisfied Bound0_63 this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(AND (>= %var1% 0) (>= 63 %var1%))";
       } else {

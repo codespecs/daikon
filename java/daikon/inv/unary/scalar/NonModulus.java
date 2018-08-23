@@ -1,17 +1,18 @@
 package daikon.inv.unary.scalar;
 
-import daikon.*;
-import daikon.inv.*;
+import daikon.PptSlice;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
 import org.plumelib.util.MathPlume;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.Prototype;
 
 /**
  * Represents long scalars that are never equal to {@code r (mod m)} where all other numbers in the
@@ -48,14 +49,14 @@ public class NonModulus extends SingleScalar {
     super(ppt);
   }
 
-  private /*@Prototype*/ NonModulus() {
+  private @Prototype NonModulus() {
     super();
   }
 
-  private static /*@Prototype*/ NonModulus proto = new /*@Prototype*/ NonModulus();
+  private static @Prototype NonModulus proto = new @Prototype NonModulus();
 
   /** Returns the prototype invariant for NonModulus */
-  public static /*@Prototype*/ NonModulus get_proto() {
+  public static @Prototype NonModulus get_proto() {
     return proto;
   }
 
@@ -76,26 +77,26 @@ public class NonModulus extends SingleScalar {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  protected NonModulus instantiate_dyn(/*>>> @Prototype NonModulus this,*/ PptSlice slice) {
+  protected NonModulus instantiate_dyn(@Prototype NonModulus this, PptSlice slice) {
     return new NonModulus(slice);
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public NonModulus clone(/*>>>@GuardSatisfied NonModulus this*/) {
+  public NonModulus clone(@GuardSatisfied NonModulus this) {
     NonModulus result = (NonModulus) super.clone();
     result.elements = new TreeSet<Long>(this.elements);
     return result;
   }
 
   @Override
-  public String repr(/*>>>@GuardSatisfied NonModulus this*/) {
+  public String repr(@GuardSatisfied NonModulus this) {
     return "NonModulus" + varNames() + ": m=" + modulus + ",r=" + remainder;
   }
 
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String format_using(/*>>>@GuardSatisfied NonModulus this,*/ OutputFormat format) {
+  public String format_using(@GuardSatisfied NonModulus this, OutputFormat format) {
     updateResults();
     String name = var().name_using(format);
 
@@ -137,7 +138,7 @@ public class NonModulus extends SingleScalar {
   }
 
   // Set either modulus and remainder, or no_result_yet.
-  void updateResults(/*>>>@GuardSatisfied NonModulus this*/) {
+  void updateResults(@GuardSatisfied NonModulus this) {
     if (results_accurate) {
       return;
     }
@@ -146,7 +147,7 @@ public class NonModulus extends SingleScalar {
     } else {
       // Do I want to communicate back some information about the smallest
       // possible modulus?
-      long[] result = MathPlume.nonmodulus_strict_long(elements.iterator());
+      long[] result = MathPlume.nonmodulusStrictLong(elements.iterator());
       if (result == null) {
         no_result_yet = true;
       } else {
@@ -169,7 +170,7 @@ public class NonModulus extends SingleScalar {
     if (elements.add(Intern.internedLong(value))
         && results_accurate
         && (!no_result_yet)
-        && (MathPlume.mod_positive(value, modulus) == remainder)) results_accurate = false;
+        && (MathPlume.modPositive(value, modulus) == remainder)) results_accurate = false;
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -184,7 +185,7 @@ public class NonModulus extends SingleScalar {
     return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_samples());
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant o) {
     NonModulus other = (NonModulus) o;
@@ -209,7 +210,7 @@ public class NonModulus extends SingleScalar {
     return ((modulus == this.modulus) && (remainder == this.remainder));
   }
 
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isExclusiveFormula(Invariant o) {
     updateResults();

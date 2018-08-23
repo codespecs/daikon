@@ -2,20 +2,25 @@ package daikon.suppress;
 
 import static daikon.inv.Invariant.asInvClass;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.*;
-import daikon.inv.unary.*;
+import daikon.Debug;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.ValueTuple;
+import daikon.VarInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.binary.BinaryInvariant;
+import daikon.inv.unary.UnaryInvariant;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Class that defines a suppressor invariant for use in non-instantiating suppressions. In
@@ -52,13 +57,13 @@ public class NISuppressor {
    * information about the suppressor for the current check. This is just used for debugging
    * purposes.
    */
-  /*@Nullable*/ String current_state_str = null;
+  @Nullable String current_state_str = null;
 
   /**
    * Sample invariant - used to check the suppressor over constants. this is a prototype invariant;
    * that is, sample_inv.ppt == null.
    */
-  /*@Prototype*/ Invariant sample_inv;
+  @Prototype Invariant sample_inv;
 
   /** Defines a unary suppressor. */
   public NISuppressor(int v1_index, Class<? extends Invariant> cls) {
@@ -72,8 +77,8 @@ public class NISuppressor {
     try {
       Method get_proto = inv_class.getMethod("get_proto", new Class<?>[] {});
       @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-      /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local =
-          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+      @NonNull @Prototype
+      Invariant sample_inv_local = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
       sample_inv = sample_inv_local;
       assert sample_inv != null;
     } catch (Exception e) {
@@ -107,7 +112,7 @@ public class NISuppressor {
       if (swap) {
         @SuppressWarnings("nullness") // static method, so null first arg is OK: swap_class()
         Class<? extends Invariant> tmp_cls =
-            asInvClass(swap_method.invoke(null, (Object /*@Nullable*/ []) null));
+            asInvClass(swap_method.invoke(null, (Object @Nullable []) null));
         cls = tmp_cls;
       }
 
@@ -123,14 +128,15 @@ public class NISuppressor {
       try {
         Method get_proto = inv_class.getMethod("get_proto", new Class<?>[] {boolean.class});
         @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-        /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local =
-            (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {Boolean.valueOf(swap)});
+        @NonNull @Prototype
+        Invariant sample_inv_local =
+            (@Prototype Invariant) get_proto.invoke(null, new Object[] {Boolean.valueOf(swap)});
         sample_inv = sample_inv_local;
       } catch (NoSuchMethodException e) {
         Method get_proto = inv_class.getMethod("get_proto", new Class<?>[] {});
         @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-        /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local =
-            (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+        @NonNull @Prototype
+        Invariant sample_inv_local = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
         sample_inv = sample_inv_local;
       }
     } catch (Exception e) {
@@ -165,7 +171,7 @@ public class NISuppressor {
    * Returns whether or not this suppressor is enabled. A suppressor is enabled if the invariant on
    * which it depends is enabled.
    */
-  /*@Pure*/
+  @Pure
   public boolean is_enabled() {
     return (sample_inv.enabled());
   }
@@ -203,7 +209,7 @@ public class NISuppressor {
    * @return the state of this suppressor which is one of (NIS.SuppressState.MATCH,
    *     NIS.SuppressState.VALID, NIS.SuppressState.INVALID, NIS.SuppressState.NONSENSICAL)
    */
-  public NIS.SuppressState check(PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
+  public NIS.SuppressState check(PptTopLevel ppt, VarInfo[] vis, @Nullable Invariant inv) {
 
     // Currently we only support unary and binary suppressors
     assert v3_index == -1;
@@ -221,7 +227,7 @@ public class NISuppressor {
               + " against inv "
               + ((inv != null) ? inv.format() : "null")
               + " over vars "
-              + VarInfo.arrayToString(vis)
+              + Arrays.toString(vis)
               + " in ppt "
               + ppt.name);
     }
@@ -487,9 +493,9 @@ public class NISuppressor {
    * Returns a string representation of the suppressor. Rather than show var indices as numbers, the
    * variables x, y, and z are shown instead with indices 0, 1, and 2 respectively.
    */
-  /*@SideEffectFree*/
+  @SideEffectFree
   @Override
-  public String toString(/*>>>@GuardSatisfied NISuppressor this*/) {
+  public String toString(@GuardSatisfied NISuppressor this) {
 
     String cname = inv_class.getCanonicalName();
 

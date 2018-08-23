@@ -1,13 +1,10 @@
 package daikon.inv.unary;
 
 import daikon.PptSlice;
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import typequals.*;
-*/
+import org.checkerframework.checker.interning.qual.Interned;
+import typequals.prototype.qual.Prototype;
 
 /** Exists simply to provide the do-nothing resusurrect_done method and abstract add method. */
 public abstract class UnaryInvariant extends Invariant {
@@ -20,7 +17,7 @@ public abstract class UnaryInvariant extends Invariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ UnaryInvariant() {
+  protected @Prototype UnaryInvariant() {
     super();
   }
 
@@ -32,7 +29,7 @@ public abstract class UnaryInvariant extends Invariant {
     return this;
   }
 
-  public abstract InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count);
+  public abstract InvariantStatus add(@Interned Object val, int mod_index, int count);
 
-  public abstract InvariantStatus check(/*@Interned*/ Object val1, int mod_index, int count);
+  public abstract InvariantStatus check(@Interned Object val1, int mod_index, int count);
 }

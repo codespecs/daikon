@@ -2,7 +2,7 @@
 
 package daikon.diff;
 
-import daikon.inv.*;
+import daikon.inv.Invariant;
 import java.io.PrintStream;
 
 /**
@@ -12,8 +12,9 @@ import java.io.PrintStream;
  */
 public class PrintNullDiffVisitor extends PrintDifferingInvariantsVisitor {
 
+  /** Create an instance of PrintNullDiffVisitor. */
   public PrintNullDiffVisitor(PrintStream ps, boolean verbose) {
-    super(ps, verbose, false, false);
+    super(ps, verbose, false);
   }
 
   @Override

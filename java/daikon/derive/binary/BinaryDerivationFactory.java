@@ -1,11 +1,8 @@
 package daikon.derive.binary;
 
-import daikon.*;
-import daikon.derive.*;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import daikon.VarInfo;
+import daikon.derive.DerivationFactory;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Factory to produce BinaryDerivation. */
 public abstract class BinaryDerivationFactory implements DerivationFactory {
@@ -20,5 +17,5 @@ public abstract class BinaryDerivationFactory implements DerivationFactory {
    *     base variables may have multiple derived variables, per type of derivation. Can also be
    *     null if the two variables have nothing to derive from.
    */
-  public abstract BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2);
+  public abstract BinaryDerivation @Nullable [] instantiate(VarInfo vi1, VarInfo vi2);
 }

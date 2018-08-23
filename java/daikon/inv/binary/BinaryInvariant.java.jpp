@@ -23,7 +23,7 @@
 #elif defined(TYPESTRING)
   #define PACKAGE twoString
   #define CLASSNAME TwoString
-  #define PRIMITIVE /*@Interned*/ String
+  #define PRIMITIVE @Interned String
   #define PRIMITIVE_SUPPRESS_INTERNED @SuppressWarnings("interned") // cast from interned value
   #define PRIMITIVENONCOMMENT String
   #define EXAMPLE_INVARIANT
@@ -32,7 +32,7 @@
 #elif defined(TYPEDOUBLESEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequenceFloat
-  #define PRIMITIVE double /*@Interned*/ []
+  #define PRIMITIVE double @Interned []
   #define PRIMITIVENONCOMMENT double[]
   #define EXAMPLE_INVARIANT An example is {@code a[] is a subsequence of b[]}.
   #define GET_VAL(obj) ((PRIMITIVE) obj)
@@ -40,7 +40,7 @@
 #elif defined(TYPELONGSEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequence
-  #define PRIMITIVE long /*@Interned*/ []
+  #define PRIMITIVE long @Interned []
   #define PRIMITIVENONCOMMENT long[]
   #define EXAMPLE_INVARIANT An example is {@code a[] is a subsequence of b[]}.
   #define GET_VAL(obj) ((PRIMITIVE) obj)
@@ -48,7 +48,7 @@
 #elif defined(TYPESTRINGSEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequenceString
-  #define PRIMITIVE /*@Interned*/ String /*@Interned*/ []
+  #define PRIMITIVE @Interned String @Interned []
   #define PRIMITIVENONCOMMENT String[]
   #define EXAMPLE_INVARIANT An example is {@code a[] is a subsequence of b[]}.
   #define GET_VAL(obj) ((PRIMITIVE) obj)
@@ -71,15 +71,13 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;
 import daikon.inv.binary.*;
+import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-
-/*>>>
-import org.checkerframework.checker.interning.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import typequals.*;
-*/
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /**
  * Base class for invariants over two variables of type PRIMITIVENONCOMMENT.
@@ -111,7 +109,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected @Prototype CLASSNAME() {
     super();
   }
 
@@ -142,7 +140,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
-    // assert ArraysPlume.fn_is_permutation(permutation);
+    // assert ArraysPlume.fnIsPermutation(permutation);
     if (permutation[0] == 1) {
       return resurrect_done_swapped();
     } else {
@@ -168,7 +166,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Returns the first variable. This is the only mechanism by which subclasses should access
    * variables.
    */
-  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var1(@GuardSatisfied CLASSNAME this) {
     if (swap) {
       return ppt.var_infos[1];
     } else {
@@ -180,7 +178,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Returns the first variable. This is the only mechanism by which subclasses should access
    * variables.
    */
-  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public VarInfo var2(@GuardSatisfied CLASSNAME this) {
     if (swap) {
       return ppt.var_infos[0];
     } else {
@@ -214,7 +212,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   @Override
   public InvariantStatus check(
-      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
+      @Interned Object val1, @Interned Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
@@ -238,7 +236,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   @Override
   public InvariantStatus add(
-      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
+      @Interned Object val1, @Interned Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
@@ -287,7 +285,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /** Returns a representation of the class. This includes the classname, variables, and swap state. */
   @Override
-  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  public String repr(@GuardSatisfied CLASSNAME this) {
     return getClass().getName() + " (" + var1().name() + ", "
       + var2().name() + ") [swap=" + swap + "]";
   }
@@ -296,7 +294,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Return true if both invariants are the same class and the order of the variables (swap) is the
    * same.
    */
-  /*@Pure*/
+  @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
     CLASSNAME inv = (CLASSNAME) other;
