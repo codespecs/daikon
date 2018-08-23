@@ -8662,10 +8662,6 @@ BCEL must be in the classpath.  Normally it is found in daikon.jar.
 @noindent
 then the problem is most likely that the classpath does not contain
 @file{daikon.jar}.
-@c Old information, not needed any more.
-@c If you are running a Daikon version after 5.2.20, then it
-@c could be caused by the classpath containing a previous version of
-@c @file{daikon.jar}.
 
 @node       ClassFormatError LVTT entry does not match
 @subsection ClassFormatError LVTT entry does not match
