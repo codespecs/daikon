@@ -8,8 +8,7 @@
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
-# Standard setting of classpath to include everything be correct
-# for both Windows, Mac, and Linux
+# Standard setting of classpath.
 include ${DAIKONDIR}/tests/Makefile.classpath
 
 CP      := $(DAIKONDIR)/java:$(CLASSPATH)

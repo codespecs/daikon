@@ -61,22 +61,10 @@ else
 fi
 
 if [ ! -z "$CLASSPATH" ]; then
-  # For Cygwin we need to convert CLASSPATH to Window's format
-  # BUT - we assume existing CLASSPATH is already in Window's format
-  if [ "$OSTYPE" == "cygwin" ]; then
-    CPADD1="`cygpath -wp ${CPADD}`"
-    CPADD2="`cygpath -wp ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar`"
-    export CLASSPATH="${CPADD1};${CLASSPATH};${CPADD2}"
-  else
-    export CLASSPATH=${CPADD}:${CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
-  fi
+  export CLASSPATH=${CPADD}:${CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 else
   if [ -n "$PS1" ]; then echo "Warning: daikon.bashrc is setting CLASSPATH, which was previously unset"; fi
   export CLASSPATH=${CPADD}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
-  # For Cygwin we need to convert CLASSPATH to windows format
-  if [ "$OSTYPE" == "cygwin" ]; then
-    export CLASSPATH="`cygpath -wp $CLASSPATH`"
-  fi
 fi
 
 ## Make sure the specified JDK is first on your path

@@ -192,39 +192,6 @@ export JAVA_HOME=/usr/lib/jvm/java
 export DAIKONDIR=$HOME/daikon
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
-@c Previously contained the following, but why?  Setting classpath globally
-@c is bad style.
-@c export CLASSPATH=.:$CLASSPATH
-
-
-@cindex .jpp files
-@cindex jpp files
-
-When setting up environment pathname variables under Windows/Cygwin
-(such as @command{JAVA_HOME}) make sure that the
-pathname is specified in Linux format (e.g., @file{/cygdrive/c/daikon}
-rather than @file{C:\daikon}).  However, the
-@env{CLASSPATH} environment variable is a special case;
-as @command{java} is a Windows
-program, it expects @env{CLASSPATH} to be in Windows format.
-This is the only exception to Cygwin looking like Linux.
-Thus @env{CLASSPATH} must
-always be in Windows format; i.e., it should use semicolons (;) rather
-than colons (:) as a path separator.
-Using the wrong filename format or the wrong pathname separator
-is a common source of errors that will result in odd error
-messages and build failures.
-
-Please note this applies to a @command{-CLASSPATH} argument to
-@command{java} as well: it must have Windows pathnames.
-One easy way to deal with this is to use the @command{cygpath} utility:
-@example
-java -cp "`cygpath -wp linux/path/a:linux/path/b`" <other arguments>
-@end example
-@noindent
-Note both the back quotes (@samp{`}) to force @command{cygpath} to be evaluated
-before calling @command{java} and the double quotes (@samp{"}) to protect against
-special characters and spaces in Windows paths.
 
 
 @menu
@@ -248,15 +215,6 @@ sudo apt-get install openjdk-8-jdk gcc ctags graphviz netpbm texlive texinfo
 Similar commands would be used with other package management systems
 on other operating systems.
 
-@cindex Windows, compiling
-To compile Daikon on Windows, the best approach is to first install the Cygwin
-toolset (available at @uref{http://cygwin.com/}), which
-contains everything you need to compile and run Linux programs under
-Windows.  You can install Cygwin by running one of the setup
-programs (based on your machine type) found
-at @uref{http://cygwin.com/install.html}.
-Then, install any necessary programs such as those below.
-
 @itemize @bullet
 
 @item
@@ -270,6 +228,9 @@ like the following.
 @example
 JAVAC ?= jikes -g +E +F
 @end example
+
+@cindex .jpp files
+@cindex jpp files
 
 @item
 the C preprocessor
@@ -289,10 +250,6 @@ include that common code.)
 @c needs version 4.7 or newer; version 4.7 was released in April 2004
 @command{makeinfo}.
 This is needed to make the documentation (via @command{make -C $DAIKONDIR/doc}).
-
-@item
-@command{dos2unix} or @command{perl}.
-This is used to ensure that the output is the same under Unix and Windows.
 
 @end itemize
 
@@ -1754,29 +1711,9 @@ and also
 
 
 @menu
-* Emacs commands::
 * Eclipse setup::
 * Editing daikon.texinfo::
 @end menu
-
-@node    Emacs commands
-@section Emacs commands
-
-
-The command @code{M-x daikon-tags-table} sets up Emacs to use the Daikon
-TAGS table, which lets you easily find definitions and search through the
-entire codebase in Emacs.  (You need to run this command once per instance
-of Emacs.)
-
-The commands @code{M-x daikon-info} and @code{M-x
-daikon-developer-info} view the Daikon manual and the Daikon Developer
-manual using the Info
-viewer within Emacs.  These commands also update all other versions of the
-manuals (HTML, PDF, etc.).
-You may also choose to use the stand-alone Info viewer, to
-use a Web browser to read the manual in HTML form, or to read the
-PDF version either electronically or on paper.
-
 
 @node    Eclipse setup
 @section Eclipse setup
@@ -1849,7 +1786,7 @@ Before working on code in Eclipse, you must import the code into
 the Eclipse workspace.  You also need to set up various compilation
 settings and specify jars and classes that should be in the
 compilation classpath.  (By default, Eclipse does not use your
-environment @env{Classpath}.)
+@env{CLASSPATH} environment variable.)
 
 @enumerate
 @item
@@ -1890,8 +1827,6 @@ Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
 Path", then "Libraries", then "Add External Jars" and add @file{tools.jar}
 and all @file{.jar} files in @file{daikon/java/lib/}.
-(See your @env{CLASSPATH}
-environment variable for full pathnames to these files.)
 @end enumerate
 
 Note that if you follow these directions, then
@@ -1900,7 +1835,7 @@ which you imported in the previous step}.
 Instead, the compiled classes appear in the Eclipse workspace
 directory. If you followed the setup instructions above, then the
 compiled code will be in "$HOME/.eclipse/Daikon/bin", which you
-should add to your @env{CLASSPATH} in order to use the updates you make from
+should add to your classpath in order to use the updates you make from
 Eclipse.
 
 
@@ -2609,31 +2544,6 @@ sh test-distribution.sh
 @end smallexample
 
 [Time: 4 min]
-
-
-@need 1000
-@item
-Test the distribution on a Windows machine
-with Cygwin installed, as a guest user (or at least one without
-environment variables such as @env{$DAIKONDIR} defined!).
-
-The output from the the commands below should show
-that @file{dcomp_rt.jar} is being built.  Next it should indicate that
-Kvasir was not built because this is not a Linux platform.  Then execution will
-continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
-Success is indicated by invariant output being written to the screen.
-
-@smallexample
-unset DAIKONDIR
-export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.8.0_144"
-export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
-mkdir -p ~/tmp
-cd ~/tmp
-curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
-sh test-distribution.sh
-@end smallexample
-
-[Time: 10 min]
 
 
 @need 1000
@@ -4474,7 +4384,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  lt IntLessThan makeEmpty LessThan GreaterThan orig theArray TR
 @c  LocalWords:  FloatLessThan DisjSets SequenceScalarSubscriptFactory pxref co
 @c  LocalWords:  Javadoc Varinfo logOn getClass foo vars isLoggable logDetail
-@c  LocalWords:  msg showTrackback args webserver addInvariant href emacsclient
+@c  LocalWords:  msg showTrackback args webserver addInvariant href
 @c  LocalWords:  inv PptTopLevel FileIO php isObviousStatically LCS Nimmer's cp
 @c  LocalWords:  isObviousDynamically Toh Win's nohierarchy noequality diffs pl
 @c  LocalWords:  diff InvariantFormatTest classpath ioa jml aString valueOf val
@@ -4492,7 +4402,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  hasDuplicates hasOrder hasNull nullTerminated isParam DynComp
 @c  LocalWords:  Hashcodes birthyear topLevel bottomLevel pptInfo toplevel conf
 @c  LocalWords:  bottomlevel namespace namespaces startup Makefiles toolset oro
-@c  LocalWords:  boolean deallocations suppressions substring traceback emacs
+@c  LocalWords:  boolean deallocations suppressions substring traceback Emacs
 @c  LocalWords:  filename tracebacks inferencing ExistingProjectIntoWorkspace
 @c  LocalWords:  screenshot popup junit jakarta getopt breakpoint TODO url Baz
 @c  LocalWords:  daikonuser mangold

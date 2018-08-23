@@ -80,12 +80,6 @@ DECL_FORMAT?=new
 
 NO_CSHARP=1
 
-ifeq ($(OS),Windows_NT)
-    UNAME_S := Windows_NT
-else
-    UNAME_S := $(shell uname -s)
-endif
-
 # -noleaf is needed if the filesystem could possibly be AFS (as it is
 # at MIT).  Non GNU versions of find don't support this option, so it
 # must be removed on those version.  Darwin is the only o/s we've
@@ -157,23 +151,6 @@ endif
 -include Makefile.user
 -include $(COMMON_HERE)/Makefile.user
 
-# Converts a unix pathname in to a windows pathname (does nothing on
-# non-Cygwin machines)
-ifeq (cygwin,$(OSTYPE))
-  WINDOWS_FILENAMES := | cygpath -w -f -
-else
-  WINDOWS_FILENAMES :=
-endif
-
-# WIN_CONVERT is a shell command that converts a list of files in unix
-# format to a list of files in the appropriate format for this platform.
-# Nothing is required on unix and cygpath is used on Windows
-ifeq (cygwin,$(OSTYPE))
-  WIN_CONVERT := cygpath -mi
-else
-  WIN_CONVERT := echo
-endif
-
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
 
@@ -205,22 +182,14 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-# Must use Java 1.8 or later.
-# On Cygwin, we use a script that converts the Unix-style pathnames in this
-# makefile to Windows pathnames.
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
 # they are on the path.
-ifeq (cygwin, $(OSTYPE))
-  JAVA := ${DAIKONDIR}/utils/plume-scripts/java-cygwin
-  JAVAC := ${DAIKONDIR}/utils/plume-scripts/javac-cygwin
+ifeq (darwin, $(OSTYPE))
+  JAVA  := java
+  JAVAC := javac
 else
-  ifeq (darwin, $(OSTYPE))
-    JAVA  := java
-    JAVAC := javac
-  else
-    JAVA  := $(JAVA_HOME)/bin/java
-    JAVAC := $(JAVA_HOME)/bin/javac
-  endif
+  JAVA  := $(JAVA_HOME)/bin/java
+  JAVAC := $(JAVA_HOME)/bin/javac
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
@@ -228,9 +197,6 @@ CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*
 CPJUNIT := ${DAIKONDIR}/java/lib/junit-4.12.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
-ifeq (cygwin,$(OSTYPE))
-  export CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
-endif
 
 # Dynamic instrumentation based java front end command.
 CHICORY := $(JAVA) -ea -cp "$(CLASSPATH)" daikon.Chicory
@@ -442,10 +408,6 @@ ${SCRATCH_FOR_DAIKON}/.exists:
 
 MAIN_JAVA:=$(patsubst %,${SOURCES}/%.java, $(subst .,/,${MAIN_CLASS}))
 MAIN2_JAVA:=$(patsubst %,${SOURCES}/%.java, $(subst .,/,${MAIN2_CLASS}))
-ifeq (cygwin,$(OSTYPE))
-  MAIN_JAVA := $(shell cygpath -m "$(MAIN_JAVA)")
-  MAIN2_JAVA := $(shell cygpath -mi "$(MAIN2_JAVA)")
-endif
 ALL_LIST_FILE:=${SCRATCH_FOR_DAIKON}/.all-files
 INST_LIST_FILE:=${SCRATCH_FOR_DAIKON}/.instrument-files
 
@@ -552,10 +514,6 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make dyncomp-diff   : Diff new DynComp data against goal file"
 
 DCOMP_PREMAIN := ${DAIKONDIR}/java/dcomp_premain.jar
-DCOMP_PREMAIN_W := $(DCOMP_PREMAIN)
-ifeq (cygwin,$(OSTYPE))
-  DCOMP_PREMAIN_W := $(shell cygpath -m "$(DCOMP_PREMAIN)")
-endif
 SHINY_PRINT ?= true
 DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
 			  --comparability-file=$(PROJECT_FILE).txt-cset \
@@ -658,13 +616,6 @@ else
 SPINFO_FILES=$(shell ls *.spinfo 2> /dev/null)
 DECLS_FILES:=
 DTRACE_FILES:=$(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
-endif
-ifeq (cygwin,$(OSTYPE))
-DTRACE_FILES_W := $(shell $(WIN_CONVERT) "$(DTRACE_FILES)")
-DECLS_FILES_W  := $(shell $(WIN_CONVERT) "$(DECLS_FILES)")
-SPINFO_FILES_W := $(shell $(WIN_CONVERT) "$(SPINFO_FILES)")
-MAP_FILES_W	   := $(shell $(WIN_CONVERT) "$(MAP_FILES)")
-INV_FILE_W	   := $(shell $(WIN_CONVERT) "$(INV_FILE)")
 endif
 
 ${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
@@ -1190,7 +1141,7 @@ merged/.merged-jml: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_V
 	touch merged/.merged-jml
 
 
-# This simply prepends merged/ to each file name, which helps emacs
+# This simply prepends merged/ to each file name, which helps Emacs
 # find the files without trouble.
 # (I cannot just do
 #   MERGED_INST_LIST_FILE=$(foreach file,`${INST_LIST_FILE}`,merged/${file})
@@ -1449,7 +1400,6 @@ PROJECT_HELP:=${PROJECT_HELP}; echo ""
 dump_vars dump-vars dumpvars :
 	@echo "classpath =     " "$(CLASSPATH)"
 	@echo "RUN_JAVA =	   " "$(RUN_JAVA)"
-	@echo "DCOMP_PREMAIN_W = " "$(DCOMP_PREMAIN_W)"
 	@echo "DAIKON_OPTIONS  = " "$(DAIKON_OPTIONS)"
 
 

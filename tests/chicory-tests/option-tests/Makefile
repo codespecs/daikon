@@ -21,24 +21,13 @@ CHICORY     = $(DAIKONDIR)/java/ChicoryPremain.jar
 PREMAIN		= $(CHICORY)
 CP          = $(DAIKONDIR)/java:$(CLASSPATH)
 
-# On cygwin, translate the premain path to windows format.  Only do so if
-# this has not already been done (which is determined by looking for
-# semicolons (:) in the name.  Only do this for PREMAIN, not for CHICORY
-# as CHICORY is used by make which will expect unix format
-ifeq (cygwin,$(OSTYPE))
-  ifneq (;,$(findstring :,$(PREMAIN)))
-    PREMAIN := '$(shell cygpath -w "$(PREMAIN)")'
-  endif
-endif
-
-
 TESTS		= online pptsel pptomit nesting stdvis varomit samples misc
 
 # This is the working directory, but not necessarily the directory in
 # which this Makefile is found.
 HERE := $(shell /bin/pwd)
 
-# Standard setup of CLASSPATH that works for Linux, Windows, and MacOSX
+# Standard setup of CLASSPATH
 include $(DAIKONDIR)/tests/Makefile.classpath
 
 diffs : $(foreach x, $(TESTS), $x.daikon.diff)

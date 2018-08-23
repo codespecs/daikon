@@ -20,13 +20,4 @@ ifdef CLASSPATH_JARS
   endif
 endif
 
-# On Cygwin, translate the classpath to Windows format.  Only do so if
-# this has not already been done, which is determined by looking for
-# semicolons (;) in the classpath.
-ifeq (cygwin,$(OSTYPE))
-  ifneq (;,$(findstring ;,$(CLASSPATH)))
-    CLASSPATH := $(shell cygpath -pws "$(CLASSPATH)")
-  endif
-endif
-
 export CLASSPATH
