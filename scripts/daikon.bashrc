@@ -1,6 +1,6 @@
 ## daikon.bashrc
 ## Daikon initialization file for Bourne shell (bash) users.
-## (This file should be kept in synch with daikon.cshrc and daikonenv.bat.)
+## (This file should be kept in synch with daikon.cshrc.)
 
 ## Wherever you source this file, you should set two environment variables:
 ##   JAVA_HOME      absolute pathname of the directory containing the JDK
