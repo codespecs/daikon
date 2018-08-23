@@ -20,12 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.7.0 (August 20, 2018)
-
-Daikon now requires Java JDK 8; Java JDK 7 is no longer supported.
+5.8.0 (?? ??, 2018)
 
 Daikon is no longer supported on Windows or Cygwin.
 Use Windows Subsystem for Linux (WSL) instead.
+
+===========================================================================
+
+5.7.0 (August 20, 2018)
+
+Daikon now requires Java JDK 8; Java JDK 7 is no longer supported.
 
 Implementation detail:  Daikon no longer uses the plume-lib repository, but
 smaller ones such as plume-scripts.
