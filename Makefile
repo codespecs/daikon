@@ -395,7 +395,7 @@ repository-test:
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
 	export JAVA_HOME=/usr/lib/jvm/java
-	source ${DAIKONDIR}/scripts/daikon.bashrc
+#	source ${DAIKONDIR}/scripts/daikon.bashrc
 	cd daikon && make
 
 

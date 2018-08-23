@@ -1,6 +1,6 @@
 ## daikon.bashrc
 ## Daikon initialization file for Bourne shell (bash) users.
-## (This file should be kept in synch with daikon.cshrc and daikonenv.bat.)
+## (This file should be kept in synch with daikonenv.bat.)
 
 ## Wherever you source this file, you should set two environment variables:
 ##   JAVA_HOME      absolute pathname of the directory containing the JDK
@@ -23,8 +23,9 @@ elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
 fi
 
 if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
+  # Cannot infer DAIKONDIR.
   if [ -z ${DAIKONDIR+x} ]; then
-    echo "Cannot infer DAIKONDIR.  Please set DAIKONDIR to an existing directory."
+    echo "Please set DAIKONDIR environment variable.  Aborting daikon.bashrc ."
     return 2
   elif [ ! -d "$DAIKONDIR" ]; then
     echo "DAIKONDIR is set to non-existent directory: $DAIKONDIR"
@@ -32,10 +33,11 @@ if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
     return 2
   fi
 else
+  ## Note that this overrides any previous setting.
   # MacOS does not have "-e" argument to readlink
-  # DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
+  # export DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
   # Code from: https://stackoverflow.com/q/59895/173852
-  DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
+  export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
 fi
 
 if [ -z "$DAIKONSCRIPTS" ]; then

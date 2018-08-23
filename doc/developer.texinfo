@@ -178,8 +178,8 @@ so you do not need to compile them yourself unless you make changes.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
-When you compile Daikon, environment variables @env{DAIKONDIR}
-and @env{JAVA_HOME} must be set.
+When you compile Daikon, environment variable
+@env{JAVA_HOME} must be set.
 See the installation instructions
 (@ref{Installing Daikon,,,daikon,Daikon User Manual}) for details.
 Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
@@ -189,8 +189,9 @@ that would enable you to compile Daikon might look like the following:
 @example
 export JAVA_HOME=/usr/lib/jvm/java
 
-export DAIKONDIR=$HOME/daikon
-source $DAIKONDIR/scripts/daikon.bashrc
+## Not required
+# export DAIKONDIR=$HOME/daikon
+# source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
 
@@ -2135,9 +2136,10 @@ The recommended setup for the distribution process:
 @itemize
 @item get a fresh copy of your Bash shell (e.g., log out and log back in)
 @item @code{unset CHECKERFRAMEWORK}
-@item set @env{DAIKONDIR} as you would normally
+@c TODO: Setting DAIKONDIR shoud not be necessary
+@c @item set @env{DAIKONDIR} as you would normally
 @item set @env{JAVA_HOME} to point to JDK 8
-@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
+@c @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
 This should fulfill most of the directory layout requirements noted above.
 As of 7/30/2018, @file{/homes/gws/markro/jdk8} contains the current version
@@ -2456,7 +2458,6 @@ cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk8
 unset CHECKERFRAMEWORK
-source scripts/daikon.bashrc
 make staging
 @end example
 

@@ -313,7 +313,7 @@ Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 export DAIKONDIR=@var{daikonparent}/daikon-5.7.1
 # The absolute pathname of the directory that contains the Java JDK
 export JAVA_HOME=@var{/usr/lib/jvm/java}
-source $DAIKONDIR/scripts/daikon.bashrc
+# source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
 A setting of @env{JAVA_HOME} that @emph{sometimes} works (it might not
@@ -425,7 +425,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 export DAIKONDIR=@var{daikonparent}/daikon-5.7.1
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.8.0_144
-source $DAIKONDIR/scripts/daikon.bashrc
+# source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
 @noindent
@@ -579,21 +579,10 @@ As noted above, when running any Java program (such as Daikon or Chicory),
 the @env{CLASSPATH} must be specified in Windows format.  Your initial
 install of the Java JDK will have set the basics for the @env{CLASSPATH}.
 When you installed Daikon, you were instructed to place into your
-shell initialization file commands to set @env{JAVA_HOME}
-and then @command{source $DAIKONDIR/scripts/daikon.bashrc}.  This will
-set @env{CLASSPATH} properly each time you start a Bash shell.  The
-result should be a value for @env{CLASSPATH} that looks something like:
+shell initialization file commands to set @env{JAVA_HOME} and @env{DAIKONDIR}.
 
-@exampleindent 1
-@example
-C:\cygwin64\home\user\invariants\daikon\daikon.jar;.;C:\Program Files
-(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.8.0_144\
-jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_144\lib\tools.jar
-@end example
-@exampleindent 4
-
-If you wish to override @env{CLASSPATH} by using the @option{-classpath}
-(or @option{-cp}) option, you need to remember that the result must be
+Recall that the @option{-classpath}
+(or @option{-cp}) option must be
 in Windows format.  This can get confusing because the Cygwin
 bash interpreter is going to process the command line prior to handing it
 off to @command{java}.  Hence:
