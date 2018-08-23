@@ -1,5 +1,7 @@
 DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
+DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
+
 tests :=  AbstractList17.java AnAbstractClass.java ConstructorTest.java Failure3.java ForStmt.java HelloWorld.java InnerStatic.java PowerOfTwo.java QueueAr.java RightShiftExample.java TimeZone.java
 
 results := $(tests:.java=.java-parsed)
