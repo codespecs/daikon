@@ -40,9 +40,8 @@ endif
 #   JAVADOC="~/research/types/jsr308-langtools/dist/bin/javadoc -Xdoclint:all,-missing" make javadoc
 # But doclint is enabled by default starting with Java 8.
 ifeq (cygwin, $(OSTYPE))
-  ## Make the classpath explicit on the command line so it can be processed by *-cygwin
-  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea -classpath "${DAIKON_CLASSPATH}"
-  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin -classpath "${DAIKON_CLASSPATH}"
+  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea
+  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin
   JAVADOC ?= ${PLUMESCRIPTS}/javadoc-cygwin
   JAR ?= ${JAVA_HOME}/bin/jar
 else
@@ -68,8 +67,9 @@ CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK_JAR_DIR}/javadoc.astub
 
 ### end of user customizations
 
-JAVAC_COMMAND := ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
-
+# Not := because DAIKON_CLASSPATH is set later in this file.
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
+JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 
 ###########################################################################
@@ -465,9 +465,9 @@ ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 chicory-test : daikon/chicory/inv_out.diff
 daikon/chicory/inv_out.diff : ChicoryPremain.jar
 	cd daikon/chicory && rm -f Test.log Test.dtrace.gz Test.inv.gz Test.inv.out
-	cd daikon/chicory && $(JAVA) daikon.Chicory --verbose --debug daikon.chicory.Test > Test.log
-	cd daikon/chicory && $(JAVA) daikon.Daikon --no_text_output --no_show_progress Test.dtrace.gz
-	cd daikon/chicory && $(JAVA) daikon.PrintInvariants Test.inv.gz > Test.inv.out
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.Chicory --verbose --debug daikon.chicory.Test > Test.log
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.Daikon --no_text_output --no_show_progress Test.dtrace.gz
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.PrintInvariants Test.inv.gz > Test.inv.out
 	-diff -uw daikon/chicory/Test.inv.out.goal daikon/chicory/Test.inv.out \
 	  > daikon/chicory/Test.inv.out.diff
 	@if test ! -s daikon/chicory/Test.inv.out.diff ; then echo No Errors; \
@@ -497,7 +497,7 @@ dcomp_premain.jar : $(wildcard $(INSTRUMENTATION_JAVA_FILES)) daikon/dcomp/manif
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA) \
+	$(JAVA_COMMAND) \
 	  daikon.DynComp $(DCOMP_ARGS) \
 	  --comparability-file=daikon/dcomp/std_dcomp_out.txt --rt-file=NONE \
 	  daikon/dcomp/Test
@@ -530,14 +530,13 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar $(ORIG_RT)
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-# was 1590
-	$(JAVA) -Xmx1500m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
+	$(JAVA_COMMAND) -Xmx1500m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA) -Xmx1600m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
+	$(JAVA_COMMAND) -Xmx1600m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 # Install the local version of the dyncomp specific rt.jar
@@ -647,7 +646,7 @@ very_clean: clean-generated-files
 
 
 run:	all
-	${JAVA} daikon.Daikon
+	${JAVA_COMMAND} daikon.Daikon
 
 ETAGS := $(shell command -v etags 2> /dev/null)
 
@@ -941,9 +940,9 @@ ${TYPEQUALS_CLASSES}: ${TYPEQUALS_JAVA_FILES}
 # These targets run the Interning checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
 check-interning-varinfo:
-	${JAVAC} ${JAVAC_INTERNING_ARGS} daikon/VarInfo.java
+	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} daikon/VarInfo.java
 check-interning-fileio:
-	${JAVAC} ${JAVAC_INTERNING_ARGS} daikon/FileIO.java
+	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} daikon/FileIO.java
 
 # "tail -1" is required when wc is given multiple arguments
 interning-counts:
@@ -1015,22 +1014,21 @@ check-serialize:
 .PHONY: junit
 junit:
 	@echo "Running unit (not system) tests..."
-	LC_ALL=en_US.UTF-8 ${JAVA} daikon.test.MasterUnitTester
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} daikon.test.MasterUnitTester
 
 junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
 	@# but I'm having trouble with that, apparently due to hard-coded
 	@# directory paths.  And these tests are slow, so we want them to
 	@# be separate anyway.
-	@echo ${JAVA} daikon.test.split.SplitterFactoryTest
-	@${JAVA} daikon.test.split.SplitterFactoryTest
+	${JAVA_COMMAND} daikon.test.split.SplitterFactoryTest
 
 ###
 ### Clover (code coverage)
 ###
 
 CLOVER := $(HOME)/clover
-CLOVER_CMD := ${JAVA} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
+CLOVER_CMD := ${JAVA_COMMAND} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
 CLOVER_CP := $(subst ${DAIKONDIR}/java,$(CLOVER)/java,$(DAIKON_CLASSPATH))
 CLOVER_CP := $(CLOVER_CP):$(CLOVER)/clover-1.3.1/lib/clover.jar
@@ -1050,7 +1048,7 @@ clover: all_directly
 	$(CLOVER_CMD) -i $(CLOVER)/clover.db -s daikon -d $(CLOVER)/java/daikon
 	$(CLOVER_CMD) -i $(CLOVER)/clover.db -s utilMDE -d $(CLOVER)/java/utilMDE
 	cd $(CLOVER)/java; \
-	  ${JAVAC} -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
+	  ${JAVAC_COMMAND} -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
 
 
 ###########################################################################
@@ -1169,6 +1167,7 @@ showvars:
 	@echo PLUMESCRIPTS = ${PLUMESCRIPTS}
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo JAVA = ${JAVA}
+	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
@@ -1204,7 +1203,7 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 	rm -f $@
 # Has expected errors while compiling splitter files.
 # Suppress output unless whole command fails.
-	(${JAVA} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1) || ${JAVA} daikon.test.split.SplitterFactoryTestUpdater
+	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1) || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater
 	chmod a-w $@
 
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
