@@ -70,6 +70,7 @@ CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK_JAR_DIR}/javadoc.astub
 # Not := because DAIKON_CLASSPATH is set later in this file.
 JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
+JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 
 
 ###########################################################################
@@ -1061,8 +1062,9 @@ JAVADOC_DEST = api
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
-                -docletpath "${DAIKON_CLASSPATH}" \
                 -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
+JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
+                -docletpath "${DAIKON_CLASSPATH}"
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
 
@@ -1083,7 +1085,7 @@ java-files.txt:
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make java-files.txt
-	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		@java-files.txt
 	@rm -f java-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1095,13 +1097,13 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
 	@make java-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < java-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < java-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
@@ -1110,7 +1112,7 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 requireJavadocPrivate: $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make java-files.txt
-	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS_COMMON) \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS_COMMON) \
 		-doclet org.plumelib.javadoc.RequireJavadoc \
                 -docletpath "${DAIKON_CLASSPATH}" \
 		@java-files.txt
@@ -1126,7 +1128,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${DAIKON_CLASSPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DAIKON_CLASSPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -1134,7 +1136,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 # resulting in a duplicate class warning.
 
 ../doc/config-options.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${DAIKON_CLASSPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DAIKON_CLASSPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
