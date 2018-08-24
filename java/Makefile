@@ -97,6 +97,10 @@ ifneq "$(wildcard ${JAVA_HOME}/lib/rt.jar)" ""
   DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/rt.jar
 endif
 
+# -docletpath doesn't seem to respect path wildcards as -cp does
+DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.3.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.3.jar:${DAIKON_CLASSPATH}
+
+
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
 # Therefore, this assignment uses "=" instead of ":=".
@@ -1128,7 +1132,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DAIKON_CLASSPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -1136,7 +1140,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 # resulting in a duplicate class warning.
 
 ../doc/config-options.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DAIKON_CLASSPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
