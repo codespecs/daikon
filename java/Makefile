@@ -93,8 +93,8 @@ endif
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
   DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/tools.jar
 endif
-ifneq "$(wildcard ${JAVA_HOME}/lib/rt.jar)" ""
-  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/rt.jar
+ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/jre/lib/rt.jar
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
