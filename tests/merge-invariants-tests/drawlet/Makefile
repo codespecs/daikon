@@ -15,7 +15,7 @@ DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --
 DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class
 CP     = $(DAIKONDIR)/java:$(CLASSPATH)
 
-include ${DAIKONDIR}/tests/Makefile.classpath
+DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 diffs: daikon.txt.diff
 daikon.txt.diff: drawlet.inv.gz merge.inv.gz
@@ -112,7 +112,7 @@ test_d2:
 update-goals:
 
 clean:
-	/bin/rm -rf *.inv.gz *.diff *.txt 
+	/bin/rm -rf *.inv.gz *.diff *.txt
 
 show-vars:
 	@echo PPT_OPTION = $(PPT_OPTION)

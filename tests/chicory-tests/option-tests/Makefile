@@ -38,8 +38,7 @@ TESTS		= online pptsel pptomit nesting stdvis varomit samples misc
 # which this Makefile is found.
 HERE := $(shell /bin/pwd)
 
-# Standard setup of CLASSPATH that works for Linux, Windows, and MacOSX
-include $(DAIKONDIR)/tests/Makefile.classpath
+DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 diffs : $(foreach x, $(TESTS), $x.daikon.diff)
 
