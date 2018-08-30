@@ -178,8 +178,8 @@ so you do not need to compile them yourself unless you make changes.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
-When you compile Daikon, environment variables @env{DAIKONDIR}
-and @env{JAVA_HOME} must be set.
+When you compile Daikon, environment variable
+@env{JAVA_HOME} must be set.
 See the installation instructions
 (@ref{Installing Daikon,,,daikon,Daikon User Manual}) for details.
 Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
@@ -189,12 +189,10 @@ that would enable you to compile Daikon might look like the following:
 @example
 export JAVA_HOME=/usr/lib/jvm/java
 
-export DAIKONDIR=$HOME/daikon
-source $DAIKONDIR/scripts/daikon.bashrc
+## Not required
+# export DAIKONDIR=$HOME/daikon
+# source $DAIKONDIR/scripts/daikon.bashrc
 @end example
-@c Previously contained the following, but why?  Setting classpath globally
-@c is bad style.
-@c export CLASSPATH=.:$CLASSPATH
 
 
 @cindex .jpp files
@@ -204,19 +202,18 @@ When setting up environment pathname variables under Windows/Cygwin
 (such as @command{JAVA_HOME}) make sure that the
 pathname is specified in Linux format (e.g., @file{/cygdrive/c/daikon}
 rather than @file{C:\daikon}).  However, the
-@env{CLASSPATH} environment variable is a special case;
+classpath in a @command{-cp} or @command{-classpath} argument to @command{java}
+is a special case;
 as @command{java} is a Windows
-program, it expects @env{CLASSPATH} to be in Windows format.
+program, it expects classpath to be in Windows format.
 This is the only exception to Cygwin looking like Linux.
-Thus @env{CLASSPATH} must
+Thus the classpath must
 always be in Windows format; i.e., it should use semicolons (;) rather
 than colons (:) as a path separator.
 Using the wrong filename format or the wrong pathname separator
 is a common source of errors that will result in odd error
 messages and build failures.
 
-Please note this applies to a @command{-CLASSPATH} argument to
-@command{java} as well: it must have Windows pathnames.
 One easy way to deal with this is to use the @command{cygpath} utility:
 @example
 java -cp "`cygpath -wp linux/path/a:linux/path/b`" <other arguments>
@@ -1352,9 +1349,8 @@ or modify old code, please try to add unit tests.
 
 This tests the formatting of invariants with specified input.  The
 tests are configured in the file @file{InvariantFormatTest.commands} under
-@file{daikon/test/}.  Make sure the @file{InvariantFormatTest.commands} file is
-in the classpath when this tester is run or the tester will not work.
-(It will just tell you that the file is not in the classpath.)
+@file{daikon/test/}.  The @file{InvariantFormatTest.commands} file must be
+in the classpath when this tester is run.
 
 The file is formatted as follows:
 @example
@@ -1849,7 +1845,7 @@ Before working on code in Eclipse, you must import the code into
 the Eclipse workspace.  You also need to set up various compilation
 settings and specify jars and classes that should be in the
 compilation classpath.  (By default, Eclipse does not use your
-environment @env{Classpath}.)
+@env{CLASSPATH} environment variable.)
 
 @enumerate
 @item
@@ -1890,8 +1886,6 @@ Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
 Path", then "Libraries", then "Add External Jars" and add @file{tools.jar}
 and all @file{.jar} files in @file{daikon/java/lib/}.
-(See your @env{CLASSPATH}
-environment variable for full pathnames to these files.)
 @end enumerate
 
 Note that if you follow these directions, then
@@ -1900,7 +1894,7 @@ which you imported in the previous step}.
 Instead, the compiled classes appear in the Eclipse workspace
 directory. If you followed the setup instructions above, then the
 compiled code will be in "$HOME/.eclipse/Daikon/bin", which you
-should add to your @env{CLASSPATH} in order to use the updates you make from
+should add to your classpath in order to use the updates you make from
 Eclipse.
 
 
@@ -2142,9 +2136,10 @@ The recommended setup for the distribution process:
 @itemize
 @item get a fresh copy of your Bash shell (e.g., log out and log back in)
 @item @code{unset CHECKERFRAMEWORK}
-@item set @env{DAIKONDIR} as you would normally
+@c TODO: Setting DAIKONDIR shoud not be necessary
+@c @item set @env{DAIKONDIR} as you would normally
 @item set @env{JAVA_HOME} to point to JDK 8
-@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
+@c @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
 This should fulfill most of the directory layout requirements noted above.
 As of 7/30/2018, @file{/homes/gws/markro/jdk8} contains the current version
@@ -2463,7 +2458,6 @@ cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk8
 unset CHECKERFRAMEWORK
-source scripts/daikon.bashrc
 make staging
 @end example
 

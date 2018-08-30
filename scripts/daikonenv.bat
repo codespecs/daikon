@@ -2,7 +2,7 @@
 
 REM daikonenv.bat
 REM Set up environment variables to run Daikon in a Windows NT command window.
-REM (This file should be kept in synch with daikon.bashrc and daikon.cshrc.)
+REM (This file should be kept in synch with daikon.bashrc.)
 
 REM Wherever you source this file, you should set two environment variables:
 REM   JAVA_HOME      absolute pathname of the directory containing the JDK
@@ -45,7 +45,7 @@ if "$PLUMESCRIPTS"=="" (
 REM set DAIKONCLASS_SOURCES=1
 
 REM For Windows, adjacent semicolons in CLASSPATH are harmless, but keep
-REM the CPADD logic for parallelism with daikon.bashrc and daikon.cshrc.
+REM the CPADD logic for parallelism with daikon.bashrc.
 if not "%DAIKONCLASS_SOURCES%"=="" (
   set CPADD=%DAIKONDIR%\java
 ) else (
