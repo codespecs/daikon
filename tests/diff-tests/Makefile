@@ -33,3 +33,4 @@ default:
 showvars:
 	echo "SUBDIRS = ${SUBDIRS}"
 	echo "CLASSPATH = $(CLASSPATH)"
+	echo "DAIKON_CLASSPATH = $(DAIKON_CLASSPATH)"

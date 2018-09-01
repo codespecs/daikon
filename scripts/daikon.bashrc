@@ -1,6 +1,5 @@
 ## daikon.bashrc
 ## Daikon initialization file for Bourne shell (bash) users.
-## (This file should be kept in synch with daikon.cshrc.)
 
 ## Wherever you source this file, you should set two environment variables:
 ##   JAVA_HOME      absolute pathname of the directory containing the JDK
@@ -23,19 +22,21 @@ elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
 fi
 
 if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
+  # Cannot infer DAIKONDIR.
   if [ -z ${DAIKONDIR+x} ]; then
-    echo "Cannot infer DAIKONDIR.  Please set DAIKONDIR to an existing directory."
+    echo "Please set DAIKONDIR environment variable.  Aborting daikon.bashrc ."
     return 2
   elif [ ! -d "$DAIKONDIR" ]; then
-    echo "DAIKONDIR is set to $DAIKONDIR"
-    echo "which doesn't exist.  Please set DAIKONDIR to an existing directory."
+    echo "DAIKONDIR is set to non-existent directory: $DAIKONDIR"
+    echo "Please set DAIKONDIR to an existing directory.  Aborting daikon.bashrc ."
     return 2
   fi
 else
+  ## Note that this overrides any previous setting.
   # MacOS does not have "-e" argument to readlink
-  # DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
+  # export DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
   # Code from: https://stackoverflow.com/q/59895/173852
-  DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
+  export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
 fi
 
 if [ -z "$DAIKONSCRIPTS" ]; then
@@ -53,31 +54,20 @@ if [ -z "$PLUMESCRIPTS" ]; then
   export PLUMESCRIPTS=${DAIKONDIR}/utils/plume-scripts
 fi
 
-# export DAIKONCLASS_SOURCES=1
-if [ $DAIKONCLASS_SOURCES ]; then
-  CPADD=${DAIKONDIR}/java
-else
-  CPADD=${DAIKONDIR}/daikon.jar
+JAVALIB_CLASSPATH=${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
+DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVALIB_CLASSPATH}
+# Avoid warnings about non-existent elements on classpath
+if [ -d ${DAIKONDIR}/java ]; then
+  DAIKON_CLASSPATH=${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKON_CLASSPATH}
 fi
+export DAIKON_CLASSPATH
 
-if [ ! -z "$CLASSPATH" ]; then
-  export CLASSPATH=${CPADD}:${CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
-else
-  if [ -n "$PS1" ]; then echo "Warning: daikon.bashrc is setting CLASSPATH, which was previously unset"; fi
-  export CLASSPATH=${CPADD}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
-fi
-
-## Make sure the specified JDK is first on your path
-export PATH=$JAVA_HOME/bin:$PATH
-
-## Add the Daikon binaries to your path
-export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PATH}
+export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:$JAVA_HOME/bin:$PATH
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERL5LIB ]; then
   export PERL5LIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERL5LIB}
 fi
-
 if [ $PERLLIB ]; then
   export PERLLIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERLLIB}
 else

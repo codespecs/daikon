@@ -25,9 +25,13 @@ Further documentation can be found in:
 Daikon is no longer supported on Windows or Cygwin.
 Use Windows Subsystem for Linux (WSL) instead.
 
+The Daikon instructions no longer suggest to set CLASSPATH, which is bad
+style.  Instead, a new environment variable DAIKON_CLASSPATH is set by
+daikon.bashrc, if you choose to use that script.
+
 ===========================================================================
 
-5.7.0 (August 20, 2018)
+5.7.0 (August 22, 2018)
 
 Daikon now requires Java JDK 8; Java JDK 7 is no longer supported.
 

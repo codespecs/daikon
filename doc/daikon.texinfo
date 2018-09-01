@@ -313,7 +313,7 @@ Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 export DAIKONDIR=@var{daikonparent}/daikon-5.7.1
 # The absolute pathname of the directory that contains the Java JDK
 export JAVA_HOME=@var{/usr/lib/jvm/java}
-source $DAIKONDIR/scripts/daikon.bashrc
+# source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
 A setting of @env{JAVA_HOME} that @emph{sometimes} works (it might not
@@ -8380,10 +8380,6 @@ BCEL must be in the classpath.  Normally it is found in daikon.jar.
 @noindent
 then the problem is most likely that the classpath does not contain
 @file{daikon.jar}.
-@c Old information, not needed any more.
-@c If you are running a Daikon version after 5.2.20, then it
-@c could be caused by the classpath containing a previous version of
-@c @file{daikon.jar}.
 
 @node       ClassFormatError LVTT entry does not match
 @subsection ClassFormatError LVTT entry does not match

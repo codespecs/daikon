@@ -360,14 +360,13 @@ test-staged-dist: $(STAGING_DIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz)
 	(cd $(DISTTESTDIR); mv $(NEW_RELEASE_NAME) daikon)
-	(cd $(DISTTESTDIR)/daikon/java && \
-	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) junit)
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 ../utils/plume-scripts/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
-	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR):$(DISTTESTDIRJAVA)/lib/junit-4.12.jar all_javac)
+	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make all_javac)
 	## Test that these new .class files work properly.
-	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) junit)
 	## Test the main target of the makefile.
 	cd $(DISTTESTDIR)/daikon && make
 	## Test that we can build docs.
@@ -389,7 +388,7 @@ repository-test:
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
 	export JAVA_HOME=/usr/lib/jvm/java
-	source ${DAIKONDIR}/scripts/daikon.bashrc
+#	source ${DAIKONDIR}/scripts/daikon.bashrc
 	cd daikon && make
 
 
