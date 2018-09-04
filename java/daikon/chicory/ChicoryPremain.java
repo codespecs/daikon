@@ -94,7 +94,6 @@ public class ChicoryPremain {
 
     // Setup argument fields in Runtime
     Runtime.nesting_depth = Chicory.nesting_depth;
-    Runtime.linked_lists = Chicory.linked_lists;
     Runtime.ppt_omit_pattern = Chicory.ppt_omit_pattern;
     Runtime.ppt_select_pattern = Chicory.ppt_select_pattern;
     Runtime.sample_start = Chicory.sample_start;

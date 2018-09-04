@@ -125,9 +125,6 @@ public class Chicory {
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
 
-  @Option("Render linked lists as vectors")
-  public static boolean linked_lists = true;
-
   @Option("Number of calls after which sampling will begin")
   public static int sample_start = 0;
 

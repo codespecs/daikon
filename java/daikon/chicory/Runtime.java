@@ -79,9 +79,6 @@ public class Runtime {
   //
   // Setups that control what information is written
   //
-  /** Render linked lists as vectors */
-  static boolean linked_lists = true;
-
   /** Depth to wich to examine structure components */
   static int nesting_depth = 2;
 
