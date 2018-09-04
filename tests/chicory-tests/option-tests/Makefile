@@ -86,16 +86,16 @@ misc.inv.gz : $(CLASS_FILES) $(CHICORY)
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 exception.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS_E)
 
 exceptionOmit.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) \
 	  --ppt-omit-pattern 'push|pop' \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS_E)
 
 exceptionSel.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) \
 	  --ppt-select-pattern 'push|pop' \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS_E)
 
