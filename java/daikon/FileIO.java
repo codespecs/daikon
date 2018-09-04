@@ -74,19 +74,31 @@ public final class FileIO {
   static final String declaration_header = "DECLARE";
 
   // Program point name tags
+  /** String used to append a ppt type to a ppt name. */
   public static final String ppt_tag_separator = ":::";
+  /** String used to identify entry ppt names. */
   public static final String enter_suffix = "ENTER";
+  /** String used to mark entry ppt names. */
   public static final String enter_tag = ppt_tag_separator + enter_suffix;
   // EXIT does not necessarily appear at the end of the program point name;
   // a number may follow it.
+  /** String used to identify exit ppt names. */
   public static final String exit_suffix = "EXIT";
+  /** String used to mark exit ppt names. */
   public static final String exit_tag = ppt_tag_separator + exit_suffix;
+  /** To be deleted. */
   public static final String throws_suffix = "THROWS";
+  /** To be deleted. */
   public static final String throws_tag = ppt_tag_separator + throws_suffix;
+
   public static final String object_suffix = "OBJECT";
+  /** String used to mark object ppt names. */
   public static final String object_tag = ppt_tag_separator + object_suffix;
+  /** String used to identify class ppt names. */
   public static final String class_static_suffix = "CLASS";
+  /** String used to mark class ppt names. */
   public static final String class_static_tag = ppt_tag_separator + class_static_suffix;
+  /** String used to identify global ppt names. */
   public static final String global_suffix = "GLOBAL";
 
   private static final String lineSep = Global.lineSep;

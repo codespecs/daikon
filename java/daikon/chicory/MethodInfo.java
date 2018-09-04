@@ -57,14 +57,14 @@ public class MethodInfo {
   /**
    * The root of the variable tree for the method entry program point.
    *
-   * <p>Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by Runtime and read by DeclWriter and DTraceWriter.
    */
   public @MonotonicNonNull RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
    *
-   * <p>Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by Runtime and read by DeclWriter and DTraceWriter.
    */
   public @MonotonicNonNull RootInfo traversalExit = null;
 

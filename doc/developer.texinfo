@@ -1244,6 +1244,10 @@ declared in a Daikon input file. Here we will describe how the
 @code{parent} records are typically used to connect program points into
 a dataflow hierarchy.
 
+Daikon uses three primary relationship types
+(@code{PARENT}, @code{ENTER-EXIT} and @code{EXIT-EXITNN}) to connect the program points
+into an acyclic dataflow hierarchy.
+
 @itemize
 @item
 A program point that represents the @code{ENTRY} or @code{EXIT} of a
@@ -1256,6 +1260,13 @@ non-static (instance) method will have a @code{parent} record that points to the
 @code{OBJECT} program point for the containing object.
 
 @item
+An @code{ENTER-EXIT} edge connects each method's @code{ENTER} program
+point with its corresponding @code{EXCEPTION} and @code{EXIT} program points.
+
+@item
+An @code{EXIT-EXITNN} edge connects each method's @code{EXIT} program
+point with each of its corresponding @code{EXIT<id>} program points.
+
 A program point that represents a @code{CLASS}
 will usually not have a @code{parent} record.
 
