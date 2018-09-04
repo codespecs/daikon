@@ -916,7 +916,9 @@ public class PptRelation implements Serializable {
       // if an exitNN point, parent is combined exit point
       if (ppt.is_subexit()) {
         PptTopLevel parent = all_ppts.get(pname.makeExit());
-        if (parent != null) rels.add(newCombinedExitExitNNRel(parent, ppt));
+        if (parent != null) {
+          rels.add(newCombinedExitExitNNRel(parent, ppt));
+        }
 
         // Connect combined exit points to enter points over orig variables
       } else if (ppt.is_combined_exit()) {

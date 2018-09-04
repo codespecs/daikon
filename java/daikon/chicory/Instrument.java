@@ -525,7 +525,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
             // If this is a return instruction, insert method exit instrumentation
             InstructionList new_il =
-                add_return_instrumentation(fullClassName, inst, context, shouldIncIter, exitIter);
+                generate_return_instrumentation(
+                    fullClassName, inst, context, shouldIncIter, exitIter);
 
             // Remember the next instruction to process
             InstructionHandle next_ih = ih.getNext();
@@ -609,11 +610,11 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /**
-   * Transforms return instructions to first assign the result to a local variable
-   * (return__$trace2_val) and then do the return. Also, calls Runtime.exit() immediately before the
-   * return.
+   * If this is a return instruction, generate new il to assign the result to a local variable
+   * (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This il wil be inserted
+   * immediately before the return.
    */
-  private @Nullable InstructionList add_return_instrumentation(
+  private @Nullable InstructionList generate_return_instrumentation(
       String fullClassName,
       Instruction inst,
       MethodContext c,
@@ -703,7 +704,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * Inserts instrumentation code at the start of the method. This includes adding a local variable
    * (this_invocation_nonce) that is initialized to Runtime.nonce++. This provides a unique id on
    * each method entry/exit that allows them to be matched up from the dtrace file. Inserts code to
-   * call Runtime.enter().
+   * call daikon.chicory.Runtime.enter().
    */
   private void add_entry_instrumentation(
       InstructionList il, MethodContext c, boolean shouldCallEnter) throws IOException {
@@ -831,8 +832,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   /**
    * Pushes the object, nonce, parameters, and return value on the stack and calls the specified
-   * Method (normally enter or exit) in Runtime. The parameters are passed as an array of objects.
-   * Any primitive values are wrapped in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc).
+   * Method (normally enter or exit) in daikon.chicory.Runtime. The parameters are passed as an
+   * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
+   * wrapper (IntWrap, FloatWrap, etc).
    */
   private InstructionList call_enter_exit(MethodContext c, String method_name, int line) {
 
@@ -885,9 +887,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     }
 
     // If this is an exit, push the return value and line number.
-    // The return value
-    // is stored in the local "return__$trace2_val"  If the return
-    // value is a primitive, wrap it in the appropriate runtime wrapper
+    // The return value is stored in the local "return__$trace2_val".
+    // If the return value is a primitive, wrap it in the appropriate wrapper.
     if (method_name.equals("exit")) {
       Type ret_type = mg.getReturnType();
       if (isVoid(ret_type)) {
@@ -924,7 +925,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   /**
    * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
    * for prim_type. prim_type should be one of the basic types (eg, Type.INT, Type.FLOAT, etc). The
-   * wrappers are those defined in Runtime.
+   * wrappers are those defined in daikon.chicory.Runtime.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
    */

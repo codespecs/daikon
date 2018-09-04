@@ -67,6 +67,7 @@ public class Runtime {
   //
   // Control over what classes (ppts) are instrumented
   //
+
   /** Ppts to omit (regular expression) */
   public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
@@ -79,12 +80,14 @@ public class Runtime {
   //
   // Setups that control what information is written
   //
+
   /** Depth to wich to examine structure components */
   static int nesting_depth = 2;
 
   //
   // Dtrace file vars
   //
+
   /** Max number of records in dtrace file */
   static long dtraceLimit = Long.MAX_VALUE;
 
@@ -95,9 +98,8 @@ public class Runtime {
   static boolean dtraceLimitTerminate = false;
 
   /** Dtrace output stream. Null if no_dtrace is true. */
-  // Not annotated *@MonotonicNonNull* because initialization and use
-  // happen in generated instrumentation code that cannot be type-checked
-  // by a source code checker.
+  // Not annotated *@MonotonicNonNull* because initialization and use happen in generated
+  // instrumentation code that cannot be type-checked by a source code checker.
   static @GuardedBy("<self>") PrintStream dtrace;
 
   /** Set to true when the dtrace stream is closed */
