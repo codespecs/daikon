@@ -642,8 +642,8 @@ clean-generated-files:
 
 # Could/should remove plume-scripts here, too.
 veryclean: very_clean
-very-clean: very_clean
-very_clean: clean-generated-files
+very_clean: very-clean
+very-clean: clean clean-generated-files
 	-rm -f TAGS
 	-rm -rf dcomp_premain.jar dcomp_rt.jar $(DCOMP_RT)
 	-rm -rf api

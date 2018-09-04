@@ -17,7 +17,7 @@ SRC_FILES = DataStructures/Comparable.java \
 			DataStructures/Underflow.java
 CLASS_FILES = $(subst .java,.class,$(SRC_FILES))
 TARGET_ARGS = DataStructures.StackArTester
-TARGET_ARGSE = DataStructures.StackArTesterException
+TARGET_ARGS_E = DataStructures.StackArTesterException
 DAIKON_ARGS = --no_text_output --no_show_progress --config config.txt --config_option daikon.Debug.show_stack_trace=true -o $@
 CHICORY     = $(DAIKONDIR)/java/ChicoryPremain.jar
 CHICORY_ARGS = --dtrace-file=$(basename $(basename $@)).dtrace
@@ -87,17 +87,17 @@ misc.inv.gz : $(CLASS_FILES) $(CHICORY)
 
 exception.inv.gz : $(CLASS_FILES) $(CHICORY)
 	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) \
-	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS_E)
 
 exceptionOmit.inv.gz : $(CLASS_FILES) $(CHICORY)
 	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) \
 	  --ppt-omit-pattern 'push|pop' \
-	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS_E)
 
 exceptionSel.inv.gz : $(CLASS_FILES) $(CHICORY)
 	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) \
 	  --ppt-select-pattern 'push|pop' \
-	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS_E)
 
 %.daikon.diff : %.inv.gz %.inv.txt.goal
 	java -cp .:$(DAIKON_CLASSPATH) daikon.PrintInvariants $< > $*.inv.txt

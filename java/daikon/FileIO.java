@@ -86,8 +86,6 @@ public final class FileIO {
   public static final String exit_suffix = "EXIT";
   /** String used to mark exit ppt names. */
   public static final String exit_tag = ppt_tag_separator + exit_suffix;
-  // public static final String throw_suffix = "THROW";
-  // public static final String throw_tag = ppt_tag_separator + throw_suffix;
   /** String used to identify uncaught exception ppt names. */
   public static final String exception_uncaught_suffix = "EXCEPTIONUNCAUGHT";
   /** String used to mark uncaught exception ppt names. */
@@ -1747,7 +1745,7 @@ public final class FileIO {
       //  and :::CLASS program points.  This scheme ensures that arbitrarly
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
-      //  Throws is a LEAF now, like Exit_nn
+      //  Throws is a LEAF, like Exit_nn.
 
       if (ppt.ppt_name.isEnterPoint()
           || ppt.ppt_name.isObjectInstanceSynthetic()

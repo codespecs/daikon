@@ -413,7 +413,7 @@ public class AnnotateNullable {
     )
     String returnType =
         returnVar == null ? "V" : Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
-    // Or an throw point
+    // Or a throw point
     if (returnVar == null) {
       returnVar = ppt.find_var_by_name("exception");
       returnType =

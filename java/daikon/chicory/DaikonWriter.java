@@ -142,7 +142,7 @@ public abstract class DaikonWriter {
    * @param name the method with modifiers and parameters, such as "public static void
    *     DataStructures.StackArTester.doNew(int size)"
    * @param short_name just the method's name ("&lt;init&gt;" for constructors)
-   * @param point such as "EXIT" or "ENTER"
+   * @param point program point type/suffix such as "EXIT" or "ENTER"
    * @return same thing as {@link #methodName(Member, String)}
    */
   private static String methodName(

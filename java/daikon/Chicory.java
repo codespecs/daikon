@@ -137,7 +137,7 @@ public class Chicory {
   /**
    * Chicory starts the target program in a new JVM with ChicoryPremain as an agent. The
    * remote_debug option will allow you to debug this process by establishing a conection between
-   * the Java Debugger and ChicoryPremain.
+   * the Java debugger and ChicoryPremain.
    */
   @Option("Enable remote debug")
   public static boolean remote_debug = false;
