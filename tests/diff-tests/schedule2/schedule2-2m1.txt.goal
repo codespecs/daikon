@@ -1,14 +1,33 @@
+<std.enqueue(int;process *;)int:::ENTER, null>
+  <prio >= -1 {1+}, null> (Una,JM)
 <std.enqueue(int;process *;)int:::EXIT, null>
-  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
-  <(return == 0)  ==>  (prio >= 0) {1+}, null> (NInt,JM)
-  <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (Nul,JM)
+  <(return == -4)  ==>  (prio >= -1) {1+}, null> (Nul,JM)
+  <(return == 0)  ==>  (prio >= 0) {1+}, null> (Nul,JM)
+  <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (Nul,JM)
+  <prio >= -1 {1+}, null> (Una,JM)
+  <return one of { -4, 0 } {1+}, null> (Una,JM)
 <std.get_command(int *;int *;float *;)int:::EXIT, null>
+  <(return == 0)  ==>  (*prio >= -1) {1+}, null> (Nul,JM)
+  <(return == 0)  ==>  (orig(*prio) >= -1) {1+}, null> (Nul,JM)
   <(orig(*command) == 0) ==> (*command == 0) {1+}, null> (Bin,JM)
+<std.get_process(int;float;process **;)int:::EXIT, null>
+  <return one of { -5, 0, 1 } {1+}, null> (Una,JM)
 <std.new_job(int;)int:::EXIT, null>
   <::next_pid >= orig(::next_pid) {1+}, null> (Bin,JM)
   <(::next_pid == 0) ==> (orig(::next_pid) == 0) {1+}, null> (Bin,JM)
-  <return == 0  (mod 4) {1+}, null> (UInt,JM)
+  <return == 0  (mod 4) {1+}, null> (Una,JM)
+  <return one of { -4, 0 } {1+}, null> (Una,JM)
+<std.put_end(int;process *;)int:::ENTER, null>
+  <prio >= -1 {1+}, null> (Una,JM)
 <std.put_end(int;process *;)int:::EXIT, null>
-  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
-  <(return == 0)  ==>  (prio >= 0) {1+}, null> (NInt,JM)
-  <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (Nul,JM)
+  <(return == -4)  ==>  (prio >= -1) {1+}, null> (Nul,JM)
+  <(return == 0)  ==>  (prio >= 0) {1+}, null> (Nul,JM)
+  <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (Nul,JM)
+  <prio >= -1 {1+}, null> (Una,JM)
+  <return one of { -4, 0 } {1+}, null> (Una,JM)
+<std.unblock(float;)int:::EXIT, null>
+  <return one of { -5, 0 } {1+}, null> (Una,JM)
+<std.upgrade_prio(int;float;)int:::EXIT, null>
+  <return one of { -5, -4, 0 } {1+}, null> (Una,JM)

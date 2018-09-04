@@ -41,18 +41,17 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # accidentally including things in the user's checkout that are not needed
 # by most users, but why not include everything that's in repository?)
 SCRIPT_FILES := Makefile \
-	daikon.cshrc daikon.bashrc daikonenv.bat \
+	daikon.bashrc daikonenv.bat \
 	dfepl dtrace-perl dtype-perl \
+	java-cpp \
 	kvasir-dtrace \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	trace-add-nonces.pl \
 	util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
-PLUME_SCRIPT_FILES := java-cpp lines-from
 
-SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
-                $(addprefix utils/plume-scripts/,$(PLUME_SCRIPT_FILES))
+SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
@@ -368,14 +367,13 @@ test-staged-dist: $(STAGING_DIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz)
 	(cd $(DISTTESTDIR); mv $(NEW_RELEASE_NAME) daikon)
-	(cd $(DISTTESTDIR)/daikon/java && \
-	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) junit)
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
-	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 52)
+	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 ../utils/plume-scripts/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
-	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR):$(DISTTESTDIRJAVA)/lib/junit-4.12.jar all_javac)
+	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make all_javac)
 	## Test that these new .class files work properly.
-	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) junit)
 	## Test the main target of the makefile.
 	cd $(DISTTESTDIR)/daikon && make
 	## Test that we can build docs.
@@ -397,7 +395,7 @@ repository-test:
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
 	export JAVA_HOME=/usr/lib/jvm/java
-	source ${DAIKONDIR}/scripts/daikon.bashrc
+#	source ${DAIKONDIR}/scripts/daikon.bashrc
 	cd daikon && make
 
 

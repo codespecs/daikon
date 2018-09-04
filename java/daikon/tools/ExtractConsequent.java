@@ -313,10 +313,6 @@ public class ExtractConsequent {
           cluster_inv = consequent;
         }
 
-        if (!inv.isInteresting()) {
-          continue;
-        }
-
         if (!inv.isWorthPrinting()) {
           continue;
         }
@@ -399,6 +395,7 @@ public class ExtractConsequent {
   private static boolean contains_constant_non_012(Invariant inv) {
     if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
       daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;
+      // TODO: isInteresting has been removed.  Do we need to deal with it specially here?
       // OneOf invariants that indicate a small set ( > 1 element) of
       // possible values are not interesting, and have already been
       // eliminated by the isInteresting check

@@ -22,7 +22,7 @@ DAIKON_ARGS = --no_text_output --no_show_progress --config config.txt --config_o
 CHICORY     = $(DAIKONDIR)/java/ChicoryPremain.jar
 CHICORY_ARGS = --dtrace-file=$(basename $(basename $@)).dtrace
 PREMAIN		= $(CHICORY)
-CP          = $(DAIKONDIR)/java:$(CLASSPATH)
+DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 # On cygwin, translate the premain path to windows format.  Only do so if
 # this has not already been done (which is determined by looking for
@@ -42,8 +42,7 @@ TESTS = online pptsel pptomit nesting stdvis varomit samples misc \
 # which this Makefile is found.
 HERE := $(shell /bin/pwd)
 
-# Standard setup of CLASSPATH that works for Linux, Windows, and MacOSX
-include $(DAIKONDIR)/tests/Makefile.classpath
+DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 diffs : $(foreach x, $(TESTS), $x.daikon.diff)
 
@@ -54,35 +53,35 @@ $(CLASS_FILES) :
 	javac -g `find . -name *.java`
 
 online.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) \
 	  --daikon-online --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 pptsel.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --ppt-select-pattern 'push|pop' \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) --ppt-select-pattern 'push|pop' \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 pptomit.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --ppt-omit-pattern 'push|pop' \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) --ppt-omit-pattern 'push|pop' \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 nesting.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --nesting-depth 0 \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) --nesting-depth 0 \
 	  --daikon-online --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 stdvis.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --std-visibility \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) --std-visibility \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 varomit.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --omit-var theArray \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) --omit-var theArray \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 samples.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --sample-start=100 \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) --sample-start=100 \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 misc.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java -cp $(CP) daikon.Chicory $(CHICORY_ARGS) --purity-file=StackAr.pure \
+	java -cp .:$(DAIKON_CLASSPATH) daikon.Chicory $(CHICORY_ARGS) --purity-file=StackAr.pure \
 	--premain=$(PREMAIN) --heap_size=100m \
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
@@ -101,7 +100,7 @@ exceptionSel.inv.gz : $(CLASS_FILES) $(CHICORY)
 	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGSE)
 
 %.daikon.diff : %.inv.gz %.inv.txt.goal
-	java -cp $(CP) daikon.PrintInvariants $< > $*.inv.txt
+	java -cp .:$(DAIKON_CLASSPATH) daikon.PrintInvariants $< > $*.inv.txt
 	-diff -w -u $*.inv.txt.goal $*.inv.txt > $@
 	@cat $@
 

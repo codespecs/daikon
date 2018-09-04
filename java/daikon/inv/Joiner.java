@@ -96,10 +96,4 @@ public abstract class Joiner extends Invariant {
         // && right.isSameFormula(other_joiner.right)
         && right.isSameInvariant(other_joiner.right));
   }
-
-  @Pure
-  @Override
-  public boolean isInteresting() {
-    return (left.isInteresting() && right.isInteresting());
-  }
 }

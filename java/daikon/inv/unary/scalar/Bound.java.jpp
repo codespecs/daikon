@@ -609,16 +609,6 @@ public class LOWERBOUND extends SINGLESCALAR {
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
 
-#ifndef IS_ELT
-  // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
-  // Use hasUninterestingConstant() instead. -SMcC 2/26/2003
-  @Pure
-  @Override
-  public boolean isInteresting() {
-    return (-1 < MIN1 && MIN1 < 2);
-  }
-#endif
-
   @Override
   public boolean hasUninterestingConstant() {
     // If the constant bound is not in some small range of interesting

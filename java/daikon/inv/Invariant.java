@@ -701,14 +701,17 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // // itself on the PptSlice, and that's what really matters (right?).
   // public static abstract Invariant instantiate(PptSlice ppt);
 
+  /** Return true if this invariant uses the given variable. */
   public boolean usesVar(@NonPrototype Invariant this, VarInfo vi) {
     return ppt.usesVar(vi);
   }
 
+  /** Return true if this invariant uses the given variable. */
   public boolean usesVar(@NonPrototype Invariant this, String name) {
     return ppt.usesVar(name);
   }
 
+  /** Return true if this invariant uses the given variable or any variable derived from it. */
   public boolean usesVarDerived(@NonPrototype Invariant this, String name) {
     return ppt.usesVarDerived(name);
   }
@@ -787,6 +790,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return " [" + classname + "]";
   }
 
+  /** Return a printed representation of this invariant, in the given format. */
   @SideEffectFree
   public abstract String format_using(
       @GuardSatisfied @NonPrototype Invariant this, OutputFormat format);
@@ -1476,25 +1480,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return ppt.allPrestate();
   }
 
-  // The notion of "interesting" embodied by this method is
-  // unclear. You'd probably be better off using
-  // hasUninterestingConstant(), or some other filter.
-  // Uninteresting invariants will override this method to return
-  // false
-  @Pure
-  public boolean isInteresting(@NonPrototype Invariant this) {
-    return true;
-  }
-
   /**
-   * This is the test that's planned to replace the poorly specified "isInteresting" check. In the
-   * future, the set of interesting constants might be determined by a static analysis of the source
-   * code, but for the moment, we only consider -1, 0, 1, and 2 as interesting.
-   *
-   * <p>Intuitively, the justification for this test is that an invariant that includes an
-   * uninteresting constant (say, "size(x[]) &lt; 237") is likely to be an artifact of the way the
-   * program was tested, rather than a statement that would in fact hold over all possible
-   * executions.
+   * An invariant that includes an uninteresting constant (say, "size(x[]) &lt; 237") is likely to
+   * be an artifact of the way the program was tested, rather than a statement that would in fact
+   * hold over all possible executions.
    */
   public boolean hasUninterestingConstant(@NonPrototype Invariant this) {
     return false;

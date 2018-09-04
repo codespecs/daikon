@@ -8,14 +8,11 @@
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
-# Standard setting of classpath to include everything be correct
-# for both Windows, Mac, and Linux
-include ${DAIKONDIR}/tests/Makefile.classpath
+DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
-CP      := $(DAIKONDIR)/java:$(CLASSPATH)
 PROGRAM := $(notdir $(shell pwd))
-DAIKON := java -cp $(CP) -Xmx800m daikon.Daikon
-INV_DIFF := java -cp $(CP) -Xmx800m daikon.diff.Diff
+DAIKON := java -cp $(DAIKON_CLASSPATH) -Xmx800m daikon.Daikon
+INV_DIFF := java -cp $(DAIKON_CLASSPATH) -Xmx800m daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
@@ -52,7 +49,6 @@ inv: $(INV_FILES)
 # line (ie, use $^).  The dependencies can't simply be repeated since
 # the % substitutions only work on the dependency line.
 $(INV_FILES): %.inv.gz: %.dtrace.gz $(PROGRAM).decls $(DAIKON_CLASS)
-	@echo "Temporary debugging output in daikon/tests/diff-tests/Makefile.common:  CLASSPATH = ${CLASSPATH}"
 	$(DAIKON) --config ../config.txt --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true -o $@ \
 		$(subst $(DAIKON_CLASS),,$^)
 
@@ -132,6 +128,7 @@ clean-output:
 .PHONY: showvars
 showvars:
 	@echo "CLASSPATH = $(CLASSPATH)"
+	@echo "DAIKON_CLASSPATH = $(DAIKON_CLASSPATH)"
 
 
 ### Local Variables:

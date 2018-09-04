@@ -122,6 +122,8 @@ my $INV = $ENV{"INV"};
 print_log("INV = $INV\n");
 # my $CLASSPATH = $ENV{"CLASSPATH"};
 # print_log("CLASSPATH = $CLASSPATH\n");
+# my $DAIKON_CLASSPATH = $ENV{"DAIKON_CLASSPATH"};
+# print_log("DAIKON_CLASSPATH = $DAIKON_CLASSPATH\n");
 # my $PATH = $ENV{"PATH"};
 # print_log("PATH = $PATH\n");
 

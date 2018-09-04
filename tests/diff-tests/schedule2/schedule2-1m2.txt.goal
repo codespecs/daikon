@@ -1,33 +1,47 @@
 <std.enqueue(int;process *;)int:::ENTER, null>
-  <prio >= 0 {1+}, null> (UInt,JM)
+  <prio >= 0 {1+}, null> (Una,JM)
 <std.enqueue(int;process *;)int:::EXIT, null>
-  <prio >= 0 {1+}, null> (UInt,JM)
-  <return == 0 {1+}, null> (UInt,JM)
+  <prio >= 0 {1+}, null> (Una,JM)
+  <return == 0 {1+}, null> (Una,JM)
 <std.get_command(int *;int *;float *;)int:::ENTER, null>
-  <*command != 0 {1+}, null> (UInt,JM)
+  <*prio >= -1 {1+}, null> (Una,JM)
+  <*command != 0 {1+}, null> (Una,JM)
 <std.get_command(int *;int *;float *;)int:::EXIT, null>
-  <(return == 1)  ==>  (*prio != 0) {1+}, null> (NInt,JM)
+  <(return == 1)  ==>  (*prio != 0) {1+}, null> (Nul,JM)
   <(*prio == 0) ==> (orig(*prio) == 0) {1+}, null> (Bin,JM)
-  <*command != 0 {1+}, null> (UInt,JM)
+  <*prio >= -1 {1+}, null> (Una,JM)
+  <*command != 0 {1+}, null> (Una,JM)
 <std.get_process(int;float;process **;)int:::ENTER, null>
-  <ratio >= 0.0 {1+}, null> (UInt,JM)
+  <ratio >= 0.0 {1+}, null> (Una,JM)
 <std.get_process(int;float;process **;)int:::EXIT, null>
-  <ratio >= 0.0 {1+}, null> (UInt,JM)
+  <ratio >= 0.0 {1+}, null> (Una,JM)
+  <return one of { 0, 1 } {1+}, null> (Una,JM)
+<std.new_job(int;)int:::ENTER, null>
+  <prio one of { 1, 2, 3 } {1+}, null> (Una,JM)
 <std.new_job(int;)int:::EXIT, null>
   <::next_pid - orig(::next_pid) - 1 == 0 {1+}, null> (Bin,JM)
-  <::next_pid >= 1 {1+}, null> (UInt,JM)
-  <return == 0 {1+}, null> (UInt,JM)
+  <::next_pid >= 1 {1+}, null> (Una,JM)
+  <prio one of { 1, 2, 3 } {1+}, null> (Una,JM)
+  <return == 0 {1+}, null> (Una,JM)
 <std.put_end(int;process *;)int:::ENTER, null>
-  <prio >= 0 {1+}, null> (UInt,JM)
+  <prio >= 0 {1+}, null> (Una,JM)
 <std.put_end(int;process *;)int:::EXIT, null>
-  <prio >= 0 {1+}, null> (UInt,JM)
-  <return == 0 {1+}, null> (UInt,JM)
+  <prio >= 0 {1+}, null> (Una,JM)
+  <return == 0 {1+}, null> (Una,JM)
 <std.schedule(int;int;float;)int:::ENTER, null>
-  <command != 0 {1+}, null> (UInt,JM)
-  <prio != 0 {1+}, null> (UInt,JM)
+  <prio >= -1 {1+}, null> (Una,JM)
+  <command != 0 {1+}, null> (Una,JM)
+  <prio != 0 {1+}, null> (Una,JM)
 <std.schedule(int;int;float;)int:::EXIT, null>
-  <return == 0  (mod 2) {1+}, null> (UInt,JM)
-  <command != 0 {1+}, null> (UInt,JM)
-  <prio != 0 {1+}, null> (UInt,JM)
+  <prio >= -1 {1+}, null> (Una,JM)
+  <return == 0  (mod 2) {1+}, null> (Una,JM)
+  <command != 0 {1+}, null> (Una,JM)
+  <prio != 0 {1+}, null> (Una,JM)
+  <return one of { -6, -4, 0 } {1+}, null> (Una,JM)
 <std.unblock(float;)int:::EXIT, null>
-  <return == 0 {1+}, null> (UInt,JM)
+  <return == 0 {1+}, null> (Una,JM)
+<std.upgrade_prio(int;float;)int:::ENTER, null>
+  <prio one of { 1, 2, 3 } {1+}, null> (Una,JM)
+<std.upgrade_prio(int;float;)int:::EXIT, null>
+  <prio one of { 1, 2, 3 } {1+}, null> (Una,JM)
+  <return one of { -4, 0 } {1+}, null> (Una,JM)

@@ -40,9 +40,8 @@ endif
 #   JAVADOC="~/research/types/jsr308-langtools/dist/bin/javadoc -Xdoclint:all,-missing" make javadoc
 # But doclint is enabled by default starting with Java 8.
 ifeq (cygwin, $(OSTYPE))
-  ## Make the classpath explicit on the command line so it can be processed by *-cygwin
-  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea -classpath "${CLASSPATH}"
-  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin -classpath "${CLASSPATH}"
+  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea
+  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin
   JAVADOC ?= ${PLUMESCRIPTS}/javadoc-cygwin
   JAR ?= ${JAVA_HOME}/bin/jar
 else
@@ -61,33 +60,46 @@ INSTALL ?= /usr/bin/install
 
 ifdef CHECKERFRAMEWORK
   CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+  CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK}/checker/resources/javadoc.astub
 endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
+CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK_JAR_DIR}/javadoc.astub
 
 ### end of user customizations
 
-JAVAC_COMMAND := ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
-
+# Not := because DAIKON_CLASSPATH is set later in this file.
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
+JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
+JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 
 
 ###########################################################################
 ### Variables
 ###
 
-# $CHECKERFRAMEWORK_JAR_DIR goes before java/lib/, to enable overriding local checker-qual.jar .
-CLASSPATH := :${DAIKONDIR}/java:$(CLASSPATH):.:${CF_JAR_DIR}/*:${DAIKONDIR}/java/lib/*
+## Classpath
 
-# These are necessary for javadoc (or were at one time).
-ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
-  ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
-    CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/tools.jar
-  endif
-  ifneq "$(wildcard ${JAVA_HOME}/lib/rt.jar)" ""
-    CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/rt.jar
-  endif
+## Daikon compiled files
+ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-util.jar)" "${DAIKONDIR}/java/lib/daikon-util.jar"
+  # Add jar files that only exist for the development version, not the
+  # distributed version, of Daikon.  The if clause avoids a (harmless but
+  # annoying) javac error message that they don't exist.
+  DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
+else
+  DAIKON_CLASSPATH := ${DAIKONDIR}/java
 endif
 
-export CLASSPATH
+## Add tools.jar and rt.jar, if they exist
+ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/tools.jar
+endif
+ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/jre/lib/rt.jar
+endif
+
+# -docletpath doesn't seem to respect path wildcards as -cp does
+DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.3.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.3.jar:${DAIKON_CLASSPATH}
+
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
@@ -375,7 +387,8 @@ update-libs:
 ### Variables passed down to subshells
 ###
 
-export CLASSPATH
+export DAIKON_CLASSPATH
+export CHECKERJAR
 export DAIKONDIR
 
 
@@ -415,6 +428,7 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
 	echo "CLASSPATH = ${CLASSPATH}"
+	echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
@@ -456,9 +470,9 @@ ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 chicory-test : daikon/chicory/inv_out.diff
 daikon/chicory/inv_out.diff : ChicoryPremain.jar
 	cd daikon/chicory && rm -f Test.log Test.dtrace.gz Test.inv.gz Test.inv.out
-	cd daikon/chicory && $(JAVA) daikon.Chicory --verbose --debug daikon.chicory.Test > Test.log
-	cd daikon/chicory && $(JAVA) daikon.Daikon --no_text_output --no_show_progress Test.dtrace.gz
-	cd daikon/chicory && $(JAVA) daikon.PrintInvariants Test.inv.gz > Test.inv.out
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.Chicory --verbose --debug daikon.chicory.Test > Test.log
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.Daikon --no_text_output --no_show_progress Test.dtrace.gz
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.PrintInvariants Test.inv.gz > Test.inv.out
 	-diff -uw daikon/chicory/Test.inv.out.goal daikon/chicory/Test.inv.out \
 	  > daikon/chicory/Test.inv.out.diff
 	@if test ! -s daikon/chicory/Test.inv.out.diff ; then echo No Errors; \
@@ -471,7 +485,7 @@ INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chi
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
-JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
+JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(DAIKON_CLASSPATH)
 
 # Build DynComp/Java, check the DF summary info and run a sanity test
 .PHONY: dyncomp dcomp
@@ -488,7 +502,7 @@ dcomp_premain.jar : $(wildcard $(INSTRUMENTATION_JAVA_FILES)) daikon/dcomp/manif
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA) \
+	$(JAVA_COMMAND) \
 	  daikon.DynComp $(DCOMP_ARGS) \
 	  --comparability-file=daikon/dcomp/std_dcomp_out.txt --rt-file=NONE \
 	  daikon/dcomp/Test
@@ -521,14 +535,13 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar $(ORIG_RT)
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-# was 1590
-	$(JAVA) -Xmx1500m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
+	$(JAVA_COMMAND) -Xmx1500m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA) -Xmx1600m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
+	$(JAVA_COMMAND) -Xmx1600m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 # Install the local version of the dyncomp specific rt.jar
@@ -547,7 +560,6 @@ dyncomp-jdk-only dcomp-jdk-only :
 ../utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
-# Watch out if you have another copy of plume that is earlier on your classpath.
 .PHONY: update-plume-scripts
 update-plume-scripts:
 	${MAKE} -C .. update-plume-scripts
@@ -639,7 +651,7 @@ very_clean: clean-generated-files
 
 
 run:	all
-	${JAVA} daikon.Daikon
+	${JAVA_COMMAND} daikon.Daikon
 
 ETAGS := $(shell command -v etags 2> /dev/null)
 
@@ -679,7 +691,7 @@ errorprone: compile errorprone-nocompile
 errorprone-nocompile:
 	${MAKE} lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar
 #	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
-	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
+	java -cp ${DAIKON_CLASSPATH} -Xbootclasspath/p:${DAIKONDIR}/java/lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
 # To create a patch file to apply changes:
 #	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # This didn't create the file though its output claimed it did:
@@ -759,7 +771,7 @@ endif
 # override (not augment) any other use of -Alint in this Makefile.
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 8 rather than version 9).
-CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK}/checker/resources/javadoc.astub -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar
+CHECKER_ARGS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar
 
 ## All of the following targets need to depend on "compile".
 
@@ -933,9 +945,9 @@ ${TYPEQUALS_CLASSES}: ${TYPEQUALS_JAVA_FILES}
 # These targets run the Interning checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
 check-interning-varinfo:
-	${JAVAC} ${JAVAC_INTERNING_ARGS} daikon/VarInfo.java
+	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} daikon/VarInfo.java
 check-interning-fileio:
-	${JAVAC} ${JAVAC_INTERNING_ARGS} daikon/FileIO.java
+	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} daikon/FileIO.java
 
 # "tail -1" is required when wc is given multiple arguments
 interning-counts:
@@ -1005,30 +1017,25 @@ check-serialize:
 
 
 .PHONY: junit
-# Include CLASSPATH on command line for Cygwin compatibility.
-# Include . in CLASSPATH because you can have two versions of Daikon,
-# and you want to do junit tests on *this* version.
-# TestPlume.java requires the locale to be US.
 junit:
 	@echo "Running unit (not system) tests..."
-	LC_ALL=en_US.UTF-8 ${JAVA} daikon.test.MasterUnitTester
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} daikon.test.MasterUnitTester
 
 junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
 	@# but I'm having trouble with that, apparently due to hard-coded
 	@# directory paths.  And these tests are slow, so we want them to
 	@# be separate anyway.
-	@echo ${JAVA} daikon.test.split.SplitterFactoryTest
-	@${JAVA} daikon.test.split.SplitterFactoryTest
+	${JAVA_COMMAND} daikon.test.split.SplitterFactoryTest
 
 ###
 ### Clover (code coverage)
 ###
 
 CLOVER := $(HOME)/clover
-CLOVER_CMD := ${JAVA} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
+CLOVER_CMD := ${JAVA_COMMAND} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
-CLOVER_CP := $(subst ${DAIKONDIR}/java,$(CLOVER)/java,$(CLASSPATH))
+CLOVER_CP := $(subst ${DAIKONDIR}/java,$(CLOVER)/java,$(DAIKON_CLASSPATH))
 CLOVER_CP := $(CLOVER_CP):$(CLOVER)/clover-1.3.1/lib/clover.jar
 
 clover: all_directly
@@ -1046,7 +1053,7 @@ clover: all_directly
 	$(CLOVER_CMD) -i $(CLOVER)/clover.db -s daikon -d $(CLOVER)/java/daikon
 	$(CLOVER_CMD) -i $(CLOVER)/clover.db -s utilMDE -d $(CLOVER)/java/utilMDE
 	cd $(CLOVER)/java; \
-	  ${JAVAC} -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
+	  ${JAVAC_COMMAND} -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
 
 
 ###########################################################################
@@ -1059,9 +1066,9 @@ JAVADOC_DEST = api
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
-                -classpath "$(subst ${DAIKONDIR}/java:,${CLASSPATH_JARS}:${CLASSPATH_JARS2}:,${CLASSPATH})"
+                -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
-                -docletpath "${CLASSPATH}"
+                -docletpath "${DAIKON_CLASSPATH}"
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
 
@@ -1082,7 +1089,7 @@ java-files.txt:
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make java-files.txt
-	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		@java-files.txt
 	@rm -f java-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1094,13 +1101,13 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
 	@make java-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < java-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < java-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
@@ -1109,9 +1116,9 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 requireJavadocPrivate: $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make java-files.txt
-	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS_COMMON) \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS_COMMON) \
 		-doclet org.plumelib.javadoc.RequireJavadoc \
-                -docletpath "${CLASSPATH}" \
+                -docletpath "${DAIKON_CLASSPATH}" \
 		@java-files.txt
 	@rm -f java-files.txt
 
@@ -1125,7 +1132,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.InvariantDoclet \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -1133,7 +1140,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 # resulting in a duplicate class warning.
 
 ../doc/config-options.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.ParameterDoclet \
+	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
@@ -1148,13 +1155,6 @@ daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
 	${MAKE} compile
 
 
-# This file is no longer used; there's no point in keeping it around.
-# daikon/config/configurable.txt: $(AUTO_GENERATED_FILES)
-# 	${JAVADOC} -J-ea -doclet daikon.config.ParameterDoclet \
-# 		--list $@ \
-# 		$(JDOC_FILES)
-
-
 ###########################################################################
 ### For debugging the Makefile.
 ###
@@ -1165,8 +1165,7 @@ showvars:
 	@echo PWD = $(shell pwd)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo CLASSPATH = "${CLASSPATH}"
-	@echo CLASSPATH_JARS = $(CLASSPATH_JARS)
-	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
+	@echo DAIKON_CLASSPATH = "${DAIKON_CLASSPATH}"
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
 	@echo DAIKONDIR = "${DAIKONDIR}"
@@ -1174,6 +1173,7 @@ showvars:
 	@echo PLUMESCRIPTS = ${PLUMESCRIPTS}
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo JAVA = ${JAVA}
+	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
@@ -1209,7 +1209,7 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 	rm -f $@
 # Has expected errors while compiling splitter files.
 # Suppress output unless whole command fails.
-	(${JAVA} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1) || ${JAVA} daikon.test.split.SplitterFactoryTestUpdater
+	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1) || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater
 	chmod a-w $@
 
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
