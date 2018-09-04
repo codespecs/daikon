@@ -274,8 +274,8 @@ public class AnnotateNullable {
 
   /**
    * Get the annotation for the specified variable. Returns @Nullable if samples were found for this
-   * variable and at least one sample contained a null value. Returns an empty string if no
-   * annotation is applicable. Otherwise, the return value contains a trailing space.
+   * variable and at least one sample contained a null value. Returns an (interned) empty string if
+   * no annotation is applicable. Otherwise, the return value contains a trailing space.
    */
   public static String get_annotation(PptTopLevel ppt, VarInfo vi) {
 
