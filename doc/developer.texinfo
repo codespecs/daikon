@@ -2118,8 +2118,7 @@ A clone of
 
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
-@c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
-@c or:       export JAVA_HOME=/usr/lib/jvm/java
+@c Example:  export JAVA_HOME=/usr/lib/jvm/java
 
 @item
 File @file{~/private/.travis-access-token} must contain the text after
@@ -2149,12 +2148,9 @@ The recommended setup for the distribution process:
 @item @code{unset CHECKERFRAMEWORK}
 @c TODO: Setting DAIKONDIR shoud not be necessary
 @c @item set @env{DAIKONDIR} as you would normally
-@item set @env{JAVA_HOME} to point to JDK 8
+@item set @env{JAVA_HOME} to point to JDK 8; for example, @code{export JAVA_HOME=/usr/lib/jvm/java}
 @c @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
-This should fulfill most of the directory layout requirements noted above.
-As of 7/30/2018, @file{/homes/gws/markro/jdk8} contains the current version
-of the Java 8 JDK, 1.8.0_181-b13.
 
 
 @need 1000
@@ -2467,7 +2463,7 @@ rm -rf stage-daikon
 git clone --depth 3 https://github.com/codespecs/daikon stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
-export JAVA_HOME=/homes/gws/markro/jdk8
+export JAVA_HOME=/usr/lib/jvm/java
 unset CHECKERFRAMEWORK
 make staging
 @end example

@@ -1240,11 +1240,6 @@ class DCInstrument extends InstructionListUtils {
     int offset = 1;
     if (mg.isStatic()) offset = 0;
 
-    // Encode the primitive parameter information in a string
-    // It seems incorrect to reset the MaxLocals based on the code
-    // at this point.  We have added special locals that won't
-    // be included.  Commented out 5/14/2014 - markro.
-    // mg.setMaxLocals();
     // allocate an extra slot to save the tag frame depth for debugging
     int frame_size = mg.getMaxLocals() + 1;
 
