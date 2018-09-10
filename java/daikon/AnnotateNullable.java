@@ -314,11 +314,8 @@ public class AnnotateNullable {
       }
     }
 
-    // Get the annotation for the return value
-    String return_annotation = "";
-    if (retvar != null) {
-      return_annotation = get_annotation(ppt, retvar);
-    }
+    // The formatted annotation for the return value with a leading space, or empty string
+    String return_annotation = (retvar == null ? "" : " " + get_annotation(ppt, retvar));
 
     // Look up the annotation for each parameter.
     List<String> names = new ArrayList<String>();
@@ -334,7 +331,7 @@ public class AnnotateNullable {
 
     // Print out the method declaration
     if (stub_format) {
-      System.out.printf("  %s %s(", return_annotation, ppt.ppt_name.getMethodName());
+      System.out.printf(" %s %s(", return_annotation, ppt.ppt_name.getMethodName());
       for (int i = 0; i < params.size(); i++) {
         if (i != 0) System.out.printf(" ,");
         System.out.printf("%s %s %s", annos.get(i), "type-goes-here", names.get(i));
@@ -342,7 +339,7 @@ public class AnnotateNullable {
       System.out.printf("); // %d samples%n", ppt.num_samples());
     } else {
       System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
-      System.out.printf("    return: %s%n", return_annotation);
+      System.out.printf("    return:%s%n", return_annotation);
       for (int i = 0; i < params.size(); i++) {
         // Print the annotation for this parameter
         System.out.printf("    parameter #%d : %s // %s%n", i, annos.get(i), names.get(i));
@@ -407,8 +404,9 @@ public class AnnotateNullable {
     // change Chicory to output it.
     VarInfo returnVar = ppt.find_var_by_name("return");
     @SuppressWarnings(
-        "signature") // application invariant: returnVar.type.toString() is a binary name (if
+        "signature" // application invariant: returnVar.type.toString() is a binary name (if
     // returnVar is non-null), because we are processing a Java program
+    )
     String returnType =
         returnVar == null ? "V" : Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
 

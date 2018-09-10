@@ -125,6 +125,12 @@ public class Chicory {
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
 
+  /**
+   * When this option is chosen, Chicory will record each program point until that program point has
+   * been executed sample-cnt times. Chicory will then begin sampling. Sampling starts at 10% and
+   * decreases by a factor of 10 each time another sample-cnt samples have been recorded. If
+   * sample-cnt is 0, then all calls will be recorded.
+   */
   @Option("Number of calls after which sampling will begin")
   public static int sample_start = 0;
 
