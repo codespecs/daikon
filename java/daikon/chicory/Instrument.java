@@ -275,7 +275,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     try {
       InstructionList il = mg.getInstructionList();
-      fetch_current_stack_map_table(mg, cg.getMajor());
+      set_current_stack_map_table(mg, cg.getMajor());
       MethodContext context = new MethodContext(cg, mg);
 
       for (InstructionHandle ih = il.getStart(); ih != null; ) {
@@ -465,7 +465,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
           }
 
           // Get existing StackMapTable (if present)
-          fetch_current_stack_map_table(mg, cg.getMajor());
+          set_current_stack_map_table(mg, cg.getMajor());
 
           fix_local_variable_table(mg);
 

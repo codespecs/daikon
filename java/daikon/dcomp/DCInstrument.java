@@ -329,7 +329,7 @@ class DCInstrument extends InstructionListUtils {
         InstructionList il = mg.getInstructionList();
         boolean has_code = (il != null);
         if (has_code) {
-          fetch_current_stack_map_table(mg, gen.getMajor());
+          set_current_stack_map_table(mg, gen.getMajor());
           build_unitialized_NEW_map(il);
         }
 
@@ -523,7 +523,7 @@ class DCInstrument extends InstructionListUtils {
         InstructionList il = mg.getInstructionList();
         boolean has_code = (il != null);
         if (has_code) {
-          fetch_current_stack_map_table(mg, gen.getMajor());
+          set_current_stack_map_table(mg, gen.getMajor());
           build_unitialized_NEW_map(il);
         }
 
@@ -655,7 +655,7 @@ class DCInstrument extends InstructionListUtils {
         InstructionList il = mg.getInstructionList();
         boolean has_code = (il != null);
         if (has_code) {
-          fetch_current_stack_map_table(mg, gen.getMajor());
+          set_current_stack_map_table(mg, gen.getMajor());
           build_unitialized_NEW_map(il);
         }
 
@@ -668,7 +668,7 @@ class DCInstrument extends InstructionListUtils {
           // real native method
           fix_native(gen, mg);
           has_code = true;
-          fetch_current_stack_map_table(mg, gen.getMajor());
+          set_current_stack_map_table(mg, gen.getMajor());
 
           // Add an argument of java.lang.DCompMarker to distinguish our version
           add_dcomp_arg(mg);
@@ -786,7 +786,7 @@ class DCInstrument extends InstructionListUtils {
         InstructionList il = mg.getInstructionList();
         boolean has_code = (il != null);
         if (has_code) {
-          fetch_current_stack_map_table(mg, gen.getMajor());
+          set_current_stack_map_table(mg, gen.getMajor());
           build_unitialized_NEW_map(il);
         }
 
@@ -799,7 +799,7 @@ class DCInstrument extends InstructionListUtils {
           // real native method
           fix_native_refs_only(gen, mg);
           has_code = true;
-          fetch_current_stack_map_table(mg, gen.getMajor());
+          set_current_stack_map_table(mg, gen.getMajor());
 
           // Add an argument of java.lang.DCompMarker to distinguish our version
           add_dcomp_arg(mg);
@@ -2920,7 +2920,7 @@ class DCInstrument extends InstructionListUtils {
 
     try {
       MethodGen cinit_gen = new MethodGen(cinit, gen.getClassName(), pool);
-      fetch_current_stack_map_table(cinit_gen, gen.getMajor());
+      set_current_stack_map_table(cinit_gen, gen.getMajor());
 
       // Add a call to DCRuntime.class_init to the beginning of the method
       InstructionList il = new InstructionList();
@@ -4205,7 +4205,7 @@ class DCInstrument extends InstructionListUtils {
 
     // Add the dcomp marker argument to indicate this is the
     // instrumented version of the method.
-    add_new_argument(mg, "marker", dcomp_marker);
+    add_new_parameter(mg, "marker", dcomp_marker);
   }
 
   /** Returns whether or not the method is defined in Object */
