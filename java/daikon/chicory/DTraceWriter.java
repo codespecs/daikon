@@ -103,7 +103,7 @@ public class DTraceWriter extends DaikonWriter {
     Runtime.incrementRecords();
   }
 
-  /** Prints the method exit program point in the dtrace file. */
+  /** Prints the method exit program point(s) in the dtrace file. */
   public void methodExit(
       @GuardSatisfied DTraceWriter this,
       MethodInfo mi,
@@ -118,7 +118,7 @@ public class DTraceWriter extends DaikonWriter {
 
     Member member = mi.member;
 
-    // gets the traversal pattern root for this method exit
+    // gets the traversal pattern root for this method's exits
     RootInfo root = mi.traversalExit;
     if (root == null) {
       throw new RuntimeException(
@@ -140,6 +140,32 @@ public class DTraceWriter extends DaikonWriter {
     outFile.println(DaikonWriter.methodExitName(member, lineNum));
     printNonce(nonceVal);
     traverse(mi, root, args, obj, ret_val);
+
+    outFile.println();
+
+    Runtime.incrementRecords();
+  }
+
+  /** Prints the method exception exit program point(s) in the dtrace file. */
+  public void methodExceptionExit(
+      MethodInfo mi,
+      int nonceVal,
+      /*@Nullable*/ Object obj,
+      Object[] args,
+      Throwable exception_val,
+      int lineNum) {
+    if (Runtime.dtrace_closed) return;
+
+    Member member = mi.member;
+
+    // gets the traversal pattern root for this method's exception exits
+    RootInfo root = mi.traversalException;
+    if (root == null)
+      throw new RuntimeException("Traversal pattern not initialized for method " + mi.method_name);
+
+    outFile.println(DaikonWriter.methodExceptionName(member, lineNum));
+    printNonce(nonceVal);
+    traverse(mi, root, args, obj, exception_val);
 
     outFile.println();
 
@@ -188,6 +214,8 @@ public class DTraceWriter extends DaikonWriter {
       Object val;
 
       if (child instanceof ReturnInfo) {
+        val = ret_val;
+      } else if (child instanceof ThrowInfo) {
         val = ret_val;
       } else if (child instanceof ThisObjInfo) {
         val = thisObj;

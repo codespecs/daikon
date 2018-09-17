@@ -64,23 +64,7 @@ public class RootInfo extends DaikonVariableInfo {
     // Don't build a tree for class initializers.
     if (mi.is_class_init()) return root;
 
-    // Clear the set of static variables
-    ppt_statics.clear();
-
-    // Print class variables.   Print class variables first because
-    // the depth goes deeper there ('this' is not counted).  This
-    // guarantees that any static variables in the class are found here
-    // and not below.
-    root.addClassVars(
-        mi.class_info,
-        Modifier.isStatic(mi.member.getModifiers()),
-        mi.member.getDeclaringClass(),
-        "",
-        depth);
-
-    // Print arguments
-    root.addParameters(
-        mi.class_info, mi.member, Arrays.<String>asList(mi.arg_names), /*offset = */ "", depth);
+    root = method_process(mi, depth);
 
     // Print return type information for methods only and not constructors
     if (mi.member instanceof Method) {
@@ -99,6 +83,59 @@ public class RootInfo extends DaikonVariableInfo {
 
     // debug_vars.log("exit exit_process%n");
 
+    return root;
+  }
+
+  /** Creates a RootInfo object for a method exception exit program point. */
+  public static RootInfo exception_process(MethodInfo mi, int depth) {
+    // debug_vars.clear("Building exception exit tree for %s%n", mi);
+
+    RootInfo root = new RootInfo();
+
+    // Don't build a tree for class initializers.
+    if (mi.is_class_init()) return root;
+
+    root = method_process(mi, depth);
+
+    // add a new ThrowInfo object to the traversal tree
+    Class<?> returnType = Throwable.class;
+    DaikonVariableInfo retInfo = new ThrowInfo(returnType);
+    root.addChild(retInfo);
+
+    retInfo.checkForDerivedVariables(returnType, "exception", "");
+
+    retInfo.addChildNodes(mi.class_info, returnType, "exception", "", depth);
+
+    DaikonVariableInfo childClass =
+        new DaikonClassInfo(
+            "exception" + class_suffix, classClassName, stringClassName, null, false);
+    retInfo.addChild(childClass);
+
+    // debug_vars.log("exit exception_process%n");
+
+    return root;
+  }
+
+  private static RootInfo method_process(MethodInfo mi, int depth) {
+    RootInfo root = new RootInfo();
+
+    // Clear the set of static variables
+    ppt_statics.clear();
+
+    // Print class variables.   Print class variables first because
+    // the depth goes deeper there ('this' is not counted).  This
+    // guarantees that any static variables in the class are found here
+    // and not below.
+    root.addClassVars(
+        mi.class_info,
+        Modifier.isStatic(mi.member.getModifiers()),
+        mi.member.getDeclaringClass(),
+        "",
+        depth);
+
+    // Print arguments
+    root.addParameters(
+        mi.class_info, mi.member, Arrays.<String>asList(mi.arg_names), /*offset = */ "", depth);
     return root;
   }
 

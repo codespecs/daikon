@@ -1,0 +1,82 @@
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.<init>() enter
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.<init>() exit
+  [1] [this]
+  [1] [Field classVar]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.isEvan(int parameter) enter
+  [1] [Parameter parameter]
+  [1] [this]
+  [1] [Field classVar]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.isEvan(int parameter) exit
+  [1] [Parameter parameter]
+  [1] [return]
+  [1] [this]
+  [1] [Field classVar]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int parameter) enter
+  [1] [Parameter parameter]
+  [1] [this]
+  [1] [Field classVar]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int parameter) exit
+  [1] [Parameter parameter]
+  [1] [return]
+  [1] [this]
+  [1] [Field classVar]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase1(int parameter) enter
+  [2] [Parameter parameter, Field classVar]
+  [1] [this]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase1(int parameter) exit
+  [3] [Parameter parameter, return, Field classVar]
+  [1] [this]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase2(int parameter) enter
+  [2] [Parameter parameter, Field classVar]
+  [1] [this]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase2(int parameter) exit
+  [3] [Parameter parameter, return, Field classVar]
+  [1] [this]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase3(int parameter) enter
+  [2] [Parameter parameter, Field classVar]
+  [1] [this]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase3(int parameter) exit
+  [3] [Parameter parameter, return, Field classVar]
+  [1] [this]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase4(int parameter) enter
+  [1] [Parameter parameter]
+  [1] [this]
+  [1] [Field classVar]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase4(int parameter) exit
+  [1] [Parameter parameter]
+  [1] [return]
+  [1] [this]
+  [1] [Field classVar]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase5(int parameter) enter
+  [2] [Parameter parameter, Field classVar]
+  [1] [this]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase5(int parameter) exit
+  [3] [Parameter parameter, return, Field classVar]
+  [1] [this]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase6(int parameter) enter
+  [2] [Parameter parameter, Field classVar]
+  [1] [this]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.testCase6(int parameter) exit
+  [3] [Parameter parameter, return, Field classVar]
+  [1] [this]
+
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field classVar]
+Variable sets for ExceptionHandling.DaikonAnalyseExceptions.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field classVar]

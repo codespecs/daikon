@@ -313,6 +313,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   @Nullable InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
     InvariantsAndModifiedVars requires_invs = null;
     InvariantsAndModifiedVars ensures_invs = null;
+    InvariantsAndModifiedVars throw_invs = null;
 
     List<PptTopLevel> matching_ppts = null;
     if (n instanceof MethodDeclaration) {
@@ -333,6 +334,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
           continue;
         }
         ensures_invs = invariants_for(ppt, ppts);
+      } else if (ppt.ppt_name.isExceptionPoint()) {
+        if (!ppt.ppt_name.isCombinedExceptionPoint()) {
+          continue;
+        }
+        throw_invs = invariants_for(ppt, ppts);
       }
     }
 
@@ -341,27 +347,34 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     //                     requires_invs, ensures_invs);
     // }
 
-    return new @Nullable InvariantsAndModifiedVars[] {requires_invs, ensures_invs};
+    return new @Nullable InvariantsAndModifiedVars[] {requires_invs, ensures_invs, throw_invs};
   }
 
   public void insertAlso(Node n) {
     addComment(n, "@ also" + lineSep, true);
   }
 
-  // n must be a MethodDeclaration or ConstructorDeclaration
-  public void insertBehavior(Node n) {
+  /**
+   * Insert invariants as annotations.
+   *
+   * @param n the node to be modified. It must be a MethodDeclaration or ConstructorDeclaration.
+   * @param exceptional a flag indicating if we are processing normal or exception invariants.
+   */
+  public void insertBehavior(Node n, boolean exceptional) {
     class InsertBehaviorVisitor extends DepthFirstVisitor {
       Node n;
       boolean behaviorInserted;
+      boolean exceptionalBehavior = false;
 
-      public InsertBehaviorVisitor(Node n) {
+      public InsertBehaviorVisitor(Node n, boolean exceptB) {
         super();
+        this.exceptionalBehavior = exceptB;
         this.n = n;
         behaviorInserted = false;
       }
 
       private String getBehaviorString() {
-        return "normal_behavior";
+        return !exceptionalBehavior ? "normal_behavior" : "exceptional_behavior";
       }
 
       @Override
@@ -413,7 +426,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
     }
 
-    InsertBehaviorVisitor v = new InsertBehaviorVisitor(n);
+    InsertBehaviorVisitor v = new InsertBehaviorVisitor(n, exceptional);
 
     // We are going to move back up the parse tree so we can look
     // at the Modifiers for this method (or constructor).
@@ -443,6 +456,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
+    InvariantsAndModifiedVars throws_invs = requires_and_ensures[2];
 
     String ensures_tag = Daikon.output_format.ensures_tag();
     String requires_tag = Daikon.output_format.requires_tag();
@@ -472,6 +486,21 @@ public class AnnotateVisitor extends DepthFirstVisitor {
           true);
     }
 
+    if (!lightweight) {
+      boolean excInserted =
+          insertInvariants(
+              n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+              requires_tag,
+              throws_invs,
+              lightweight);
+      if (excInserted) {
+        insertBehavior(n, true);
+        if (ensures_invs != null || requires_invs != null) {
+          insertAlso(n.getParent().getParent());
+        }
+      }
+    }
+
     boolean invariantInserted =
         insertInvariants(
             n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
@@ -499,7 +528,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       if (!invariantInserted) {
         insertJMLWorkaround(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */);
       }
-      insertBehavior(n);
+      insertBehavior(n, false);
       if (isImplementation
           || isOverride
           // temporary fix: not processed correctly by Ast.java
@@ -569,7 +598,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       if (!invariantInserted) {
         insertJMLWorkaround(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */);
       }
-      insertBehavior(n);
+      insertBehavior(n, false);
       addComment(
           n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
           JML_START_COMMENT,

@@ -106,7 +106,7 @@ public class AnnotateNullable {
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit() || !is_static_method(ppt)) {
+      if (!ppt.is_combined_exit() || !ppt.is_combined_exception() || !is_static_method(ppt)) {
         continue;
       }
 
@@ -314,7 +314,7 @@ public class AnnotateNullable {
       }
     }
 
-    // The formatted annotation for the return value with a leading space, or empty string
+    // The formatted annotation for the return value with a leading space, or the empty string.
     String return_annotation = (retvar == null ? "" : " " + get_annotation(ppt, retvar));
 
     // Look up the annotation for each parameter.
@@ -409,6 +409,14 @@ public class AnnotateNullable {
     )
     String returnType =
         returnVar == null ? "V" : Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
+    // Or a throw point
+    if (returnVar == null) {
+      returnVar = ppt.find_var_by_name("exception");
+      returnType =
+          returnVar == null
+              ? "V"
+              : "V throws " + Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
+    }
 
     return method + Signatures.arglistToJvm(java_args) + returnType;
   }

@@ -90,6 +90,50 @@ public abstract class DaikonWriter {
   }
 
   /**
+   * Constructs the program point name suffix for an exception exit
+   *
+   * @param lineNum the line number of a throw statement causing the exception exit or -1 for an
+   *     uncaught propagated exception (one caused by some execution of some other statement)
+   * @return the exception name suffix for Daikon
+   */
+  private static String exceptionSuffix(int lineNum) {
+    return lineNum < 0
+        ? daikon.FileIO.exception_uncaught_suffix
+        : daikon.FileIO.exception_suffix + lineNum;
+  }
+
+  /**
+   * Given a method, returns the method exception program point name for Daikon.
+   *
+   * @param method non-null method
+   * @param lineNum the line number of a throw statement causing the exception exit or -1 for an
+   *     uncaught propagated exception (one caused by some execution of some other statement)
+   * @return the decorated method exception name for Daikon
+   */
+  public static String methodExceptionName(Member method, int lineNum) {
+    return methodName(method, exceptionSuffix(lineNum));
+  }
+
+  /**
+   * Given a method, returns the method exception program point name for Daikon. Used when
+   * reflection information is not available.
+   *
+   * @param fullClassName fully-qualified class name, i.e., packageName.className
+   * @param types string representation of the declared types of the parameters. For example:
+   *     {"int", "java.lang.Object", "float"}.
+   * @param name the method name with modifiers and parameters
+   * @param short_name just the method's name ("&lt;init&gt;" for constructors)
+   * @param lineNum the line number of a throw statement in the method or -1 for an uncaught
+   *     exception
+   * @return the decorated method exception name for Daikon
+   * @see #methodName(String, String[], String, String, String)
+   */
+  public static String methodExceptionName(
+      String fullClassName, String[] types, String name, String short_name, int lineNum) {
+    return methodName(fullClassName, types, name, short_name, exceptionSuffix(lineNum));
+  }
+
+  /**
    * Constructs the program point name (which includes the point string at the end)
    *
    * @param fullClassName packageName.className

@@ -41,12 +41,12 @@ everything-%: quick-% nonquick-%
 	@echo ${HR}
 quick-%: SQD-% polycalc-% special-cases-% siemens-%
 	@echo ${HR}
-nonquick-%: dsaa-% mapquick-% javautil-% 6170-% large-% new-%
+nonquick-%: dsaa-% mapquick-% javautil-% 6170-% large-% new-% exception-%
 	@echo ${HR}
 
 # Canonical groupings
 
-SQD-%: do-StackAr-% do-QueueAr-% do-DisjSets-% 
+SQD-%: do-StackAr-% do-QueueAr-% do-DisjSets-%
 	@echo ${HR}
 polycalc-%: do-RatNum-% do-RatPoly-% do-RatPolyStack-% do-RatTermVec-%
 	@echo ${HR}
@@ -65,6 +65,8 @@ javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
 new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-%
+	@echo ${HR}
+exception-%: do-ExceptionHandling-%
 	@echo ${HR}
 
 # Extra groupings

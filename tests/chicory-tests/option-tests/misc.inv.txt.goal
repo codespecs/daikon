@@ -127,10 +127,34 @@ orig(this.topOfStack) <= size(this.theArray[])-1
 this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStack)]
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::ENTER
-this.isFull() == false
 x != null
 this.theArray.getClass().getName() != x.getClass().getName()
-this.topOfStack < size(this.theArray[])-1
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXCEPTION
+this == orig(this)
+this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
+this.theArray[] == orig(this.theArray[])
+this.topOfStack == orig(this.topOfStack)
+this.topOfStack == size(this.theArray[])-1
+this.topOfStack == orig(size(this.theArray[]))-1
+this.isEmpty() == this.isFull()
+this.isEmpty() == orig(this.isEmpty())
+this.isEmpty() == orig(this.isFull())
+x == orig(x)
+x.getClass().getName() == orig(x.getClass().getName())
+orig(this) == orig(x)
+this.theArray has only one value
+this.theArray[] == []
+this.theArray[].getClass().getName() == []
+this.isEmpty() == true
+exception has only one value
+exception.getClass().getName() == DataStructures.Overflow.class
+orig(this) has only one value
+orig(x) has only one value
+orig(x.getClass().getName()) == DataStructures.StackAr.class
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXCEPTION97
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
 this.theArray == orig(this.theArray)

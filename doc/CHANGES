@@ -20,6 +20,15 @@ Further documentation can be found in:
 
 ===========================================================================
 
+???
+
+Chicory:
+- Chicory instruments exceptional exits.  That means that Daikon is able
+  to infer invariants about when a Java method throws an exception.
+  The program point hierarchy is subject to change in the future.
+
+===========================================================================
+
 5.8.0 (?? ??, 2018)
 
 The Daikon instructions no longer suggest to set CLASSPATH, which is bad

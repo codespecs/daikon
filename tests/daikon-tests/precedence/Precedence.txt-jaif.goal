@@ -5,13 +5,21 @@ annotation @NonNull:
 package misc:
 class Precedence : // 3/- obj/class samples
   field i :  // int
-  method main([Ljava/lang/String;)V : // 1 samples
-    return: 
+  method main([Ljava/lang/String;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // args
+  method main([Ljava/lang/String;)V : // 1 samples
+    return:
+    parameter #0 :  // args
+  method <init>()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method <init>()V : // 1 samples
-    return: 
+    return:
+  method lets_calculate(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
+    parameter #0 :  // j
   method lets_calculate(I)I : // 1 samples
-    return: 
+    return:
     parameter #0 :  // j
 
 

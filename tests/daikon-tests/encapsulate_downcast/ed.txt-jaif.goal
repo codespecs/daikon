@@ -8,14 +8,22 @@ class EncapsulateDowncast : // 0/130 obj/class samples
   field SEED :  // int
   field random :  // java.util.Random
   field random2 :  // java.util.Random
-  method main([Ljava/lang/String;)V : // 1 samples
-    return: 
+  method main([Ljava/lang/String;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // argv
-  method showLastPerson(Ljava/util/Vector;)V : // 64 samples
-    return: 
+  method main([Ljava/lang/String;)V : // 1 samples
+    return:
+    parameter #0 :  // argv
+  method showLastPerson(Ljava/util/Vector;)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // list
+  method showLastPerson(Ljava/util/Vector;)V : // 64 samples
+    return:
+    parameter #0 :  // list
+  method <init>()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method <init>()V : // 0 samples
-    return: 
+    return:
 
 
 package misc:
@@ -23,12 +31,19 @@ class Person : // 609/- obj/class samples
   field _name :  // java.lang.String
   field _height :  // int
   field _weight :  // int
-  method <init>(Ljava/lang/String;II)V : // 609 samples
-    return: 
+  method <init>(Ljava/lang/String;II)V throws Ljava/lang/Throwable; : // 0 samples
+    return:
     parameter #0 :  // name
     parameter #1 :  // height
     parameter #2 :  // weight
+  method <init>(Ljava/lang/String;II)V : // 609 samples
+    return:
+    parameter #0 :  // name
+    parameter #1 :  // height
+    parameter #2 :  // weight
+  method getName()V throws Ljava/lang/Throwable; : // 0 samples
+    return:
   method getName()Ljava/lang/String; : // 0 samples
-    return: 
+    return:
 
 

@@ -116,8 +116,21 @@ DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
     Variables: this this.root x x.getClass().getName()
-x != null
 (x != null)  ==>  (\typeof(x) == \type(DataStructures.MyInteger))
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTION
+    Variables: this this.root x x.getClass().getName() exception exception.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName())
+      Modified variables: x.getClass().getName()
+      Unmodified variables: this this.root x
+this.root != null
+\result != null
+\typeof(\result) == \type(java.lang.NullPointerException)
+\old(x) == null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXCEPTIONUNCAUGHT
+    Variables: this this.root x x.getClass().getName() exception exception.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName())
+      Modified variables: x.getClass().getName()
+      Unmodified variables: this this.root x
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
     Variables: this this.root x x.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName())
@@ -125,17 +138,34 @@ DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
       Unmodified variables: this x x.getClass().getName()
 modifies this.root
 this.root != null
+\old(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
     Variables: this this.root x x.getClass().getName() t
-x != null
 (x != null)  ==>  (\typeof(x) == \type(DataStructures.MyInteger))
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTION
+    Variables: this this.root x x.getClass().getName() t exception exception.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName()) orig(t)
+      Modified variables: x.getClass().getName()
+      Unmodified variables: this this.root x t
+this.root == t
+this.root == \old(t)
+this.root != null
+\result != null
+\typeof(\result) == \type(java.lang.NullPointerException)
+\old(x) == null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXCEPTIONUNCAUGHT
+    Variables: this this.root x x.getClass().getName() t exception exception.getClass().getName() orig(this) orig(this.root) orig(x) orig(x.getClass().getName()) orig(t)
+      Modified variables: x.getClass().getName()
+      Unmodified variables: this this.root x t
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
     Variables: this this.root x x.getClass().getName() t return orig(this) orig(this.root) orig(x) orig(x.getClass().getName()) orig(t)
       Modified primitive arguments: t
       Unmodified variables: this this.root x x.getClass().getName()
 \result != null
+\old(x) != null
 ===========================================================================
 DataStructures.BinarySearchTree.isEmpty():::ENTER
     Variables: this this.root

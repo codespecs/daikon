@@ -86,11 +86,17 @@ public final class FileIO {
   public static final String exit_suffix = "EXIT";
   /** String used to mark exit ppt names. */
   public static final String exit_tag = ppt_tag_separator + exit_suffix;
-  /** To be deleted. */
-  public static final String throws_suffix = "THROWS";
-  /** To be deleted. */
-  public static final String throws_tag = ppt_tag_separator + throws_suffix;
-
+  /** String used to identify uncaught exception ppt names. */
+  public static final String exception_uncaught_suffix = "EXCEPTIONUNCAUGHT";
+  /** String used to mark uncaught exception ppt names. */
+  public static final String exception_uncaught_tag = ppt_tag_separator + exception_uncaught_suffix;
+  // EXCEPTION does not necessarily appear at the end of the program point name;
+  // a number may follow it.
+  /** String used to identify exception ppt names. */
+  public static final String exception_suffix = "EXCEPTION";
+  /** String used to mark exception ppt names. */
+  public static final String exception_tag = ppt_tag_separator + exception_suffix;
+  /** String used to identify object ppt names. */
   public static final String object_suffix = "OBJECT";
   /** String used to mark object ppt names. */
   public static final String object_tag = ppt_tag_separator + object_suffix;
@@ -1030,8 +1036,8 @@ public final class FileIO {
     for (PptTopLevel ppt_top_level : all_ppts.ppt_all_iterable()) {
       boolean is_program_point =
           (ppt_top_level.ppt_name.isExitPoint()
+              || ppt_top_level.ppt_name.isExceptionPoint()
               || ppt_top_level.ppt_name.isEnterPoint()
-              || ppt_top_level.ppt_name.isThrowsPoint()
               || ppt_top_level.ppt_name.isObjectInstanceSynthetic()
               || ppt_top_level.ppt_name.isClassStaticSynthetic()
               || ppt_top_level.ppt_name.isGlobalPoint());
@@ -1739,9 +1745,9 @@ public final class FileIO {
       //  and :::CLASS program points.  This scheme ensures that arbitrarly
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
+      //  Throws is a LEAF, like Exit_nn.
 
       if (ppt.ppt_name.isEnterPoint()
-          || ppt.ppt_name.isThrowsPoint()
           || ppt.ppt_name.isObjectInstanceSynthetic()
           || ppt.ppt_name.isClassStaticSynthetic()
           || ppt.ppt_name.isGlobalPoint()) {
@@ -1752,6 +1758,12 @@ public final class FileIO {
         // not Daikon.UserError; caller has more info (e.g., filename)
         throw new RuntimeException(
             "Bad program point name " + ppt.name + " is a combined exit point name");
+      }
+
+      if (ppt.ppt_name.isExceptionPoint() && ppt.ppt_name.isCombinedExceptionPoint()) {
+        // not Daikon.TerminationMessage; caller has more info (e.g., filename)
+        throw new RuntimeException(
+            "Bad program point name " + ppt.name + " is a combined exception point name");
       }
     }
 
@@ -2188,7 +2200,7 @@ public final class FileIO {
       return false;
     }
 
-    if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isThrowsPoint()) {
+    if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isExceptionPoint()) {
       Invocation invoc;
       // Set invoc
       {

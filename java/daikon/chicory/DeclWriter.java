@@ -289,6 +289,33 @@ public class DeclWriter extends DaikonWriter {
                 : mi.class_info.class_name + ".<clinit>" + FileIO.exit_tag + exitLoc);
         print_method(mi, exitRoot, exitName, PptType.SUBEXIT, comp_info);
       }
+
+      // TODO: a class initializer can have a throw statement.
+      // I think we need code similar to:
+      //  (member != null
+      //      ? methodEntryName(member)
+      //      : mi.class_info.class_name + ".<clinit>" + FileIO.enter_tag);
+
+      // Print exception program point for EACH athrow location in the method
+      // Note that there may not be an athrow.  They may get filtered out,
+      // or some methods don't have a throw (only an exit)
+      Set<Integer> theThrows = new HashSet<Integer>(mi.throw_locations);
+      for (Integer throwLoc : theThrows) {
+        // Get the root of the method's traversal pattern
+        RootInfo exceptionRoot = mi.traversalException;
+        assert exceptionRoot != null
+            : "Throw Traversal pattern not initialized at " + "method " + mi.method_name;
+
+        print_method(
+            mi,
+            exceptionRoot,
+            methodExceptionName(member, throwLoc.intValue()),
+            PptType.SUBEXIT,
+            comp_info);
+      }
+
+      RootInfo exceptionRoot = mi.traversalException;
+      print_method(mi, exceptionRoot, methodExceptionName(member, -1), PptType.SUBEXIT, comp_info);
     }
 
     print_class_ppt(cinfo, cinfo.class_name + ":::CLASS", comp_info);
