@@ -1,14 +1,6 @@
 // This tests to make sure that variables passed as arguments to the
 // same printf function call don't automatically count as comparable,
-// as they do in the current buggy version of DynComp as of 2005-06-09
-
-//void bar(char* s, int a, int b) {};
-
-// It seems that DynComp only thinks that two variables are falsely
-// comparable when the format string denotes that they are of the SAME
-// TYPE
-
-// This is no longer true.  markro 07/13/2016
+// as they did in the version of DynComp of 2005-06-09
 
 #include <stdio.h>
 

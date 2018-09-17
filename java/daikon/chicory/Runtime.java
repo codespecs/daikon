@@ -98,9 +98,8 @@ public class Runtime {
   static boolean dtraceLimitTerminate = false;
 
   /** Dtrace output stream. Null if no_dtrace is true. */
-  // Not annotated *@MonotonicNonNull* because initialization and use
-  // happen in generated instrumentation code that cannot be type-checked
-  // by a source code checker.
+  // Not annotated *@MonotonicNonNull* because initialization and use happen in generated
+  // instrumentation code that cannot be type-checked by a source code checker.
   static @GuardedBy("<self>") PrintStream dtrace;
 
   /** Set to true when the dtrace stream is closed */
