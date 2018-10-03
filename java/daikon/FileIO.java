@@ -1979,7 +1979,7 @@ public final class FileIO {
 
       if (!unescape_decl(line.trim()).equals(vi.str_name())) {
         throw new Daikon.UserError(
-            "Mismatch between .dtrace file and .decls file.  Expected variable "
+            "Mismatch between declaration and trace.  Expected variable "
                 + vi.name()
                 + ", got "
                 + line
