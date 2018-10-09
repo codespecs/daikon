@@ -47,10 +47,10 @@ public class DynComp {
   public static @Nullable File comparability_file = null;
 
   @Option("Only process program points matching the regex")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
   @Option("Ignore program points matching the regex")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
   @Option("Don't track primitives")
   public static boolean no_primitives = false;
@@ -307,7 +307,7 @@ public class DynComp {
     }
 
     // Build the command line to execute the target with the javaagent
-    List<String> cmdlist = new ArrayList<String>();
+    List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
     // cmdlist.add ("-verbose:class");
     cmdlist.add("-cp");

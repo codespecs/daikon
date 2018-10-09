@@ -136,7 +136,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * This function produces the format list for intialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
 
     // Add test formats - hard coded in
     result.add("daikon");

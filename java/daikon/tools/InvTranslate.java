@@ -38,7 +38,7 @@ public class InvTranslate {
   int quality = 0;
 
   /** Map of variables from inv to inv */
-  Map<String, String> var_map = new LinkedHashMap<String, String>();
+  Map<String, String> var_map = new LinkedHashMap<>();
 
   /** source invariant */
   Invariant inv1;
@@ -117,7 +117,7 @@ public class InvTranslate {
   public String toString(@GuardSatisfied InvTranslate this) {
     StringBuilder out = new StringBuilder();
 
-    List<String> mappings = new ArrayList<String>();
+    List<String> mappings = new ArrayList<>();
     for (String key : var_map.keySet()) {
       String value = var_map.get(key);
       mappings.add(key + "->" + value);

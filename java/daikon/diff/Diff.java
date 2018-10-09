@@ -592,7 +592,7 @@ public final class Diff {
 
     // Created sorted set of top level ppts, possibly including
     // conditional ppts
-    SortedSet<PptTopLevel> ppts = new TreeSet<PptTopLevel>(PPT_COMPARATOR);
+    SortedSet<PptTopLevel> ppts = new TreeSet<>(PPT_COMPARATOR);
     ppts.addAll(pptMap.asCollection());
 
     for (PptTopLevel ppt : ppts) {
@@ -708,8 +708,8 @@ public final class Diff {
       invs1 = map1.get(ppt1);
       Collections.sort(invs1, invSortComparator1);
     } else if (ppt1 != null && treeManip && !isCond(ppt1)) {
-      HashSet<String> repeatFilter = new HashSet<String>();
-      ArrayList<Invariant> ret = new ArrayList<Invariant>();
+      HashSet<String> repeatFilter = new HashSet<>();
+      ArrayList<Invariant> ret = new ArrayList<>();
       invs1 = map1.get(ppt1);
       for (Invariant inv : invs1) {
         if (

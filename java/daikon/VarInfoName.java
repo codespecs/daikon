@@ -410,7 +410,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
   private static final WeakHashMap<VarInfoName, WeakReference<VarInfoName>> internTable =
-      new WeakHashMap<VarInfoName, WeakReference<VarInfoName>>();
+      new WeakHashMap<>();
   // This does not make any guarantee that the components of the
   // VarInfoName are themselves interned.  Should it?  (I suspect so...)
   public VarInfoName intern() {
@@ -421,7 +421,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     } else {
       @SuppressWarnings("interning") // intern method
       VarInfoName this_interned = this;
-      internTable.put(this_interned, new WeakReference<VarInfoName>(this_interned));
+      internTable.put(this_interned, new WeakReference<>(this_interned));
       return this_interned;
     }
   }
@@ -1048,7 +1048,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     private List<String> elts_repr(@GuardSatisfied FunctionOfN this) {
-      List<String> elts = new ArrayList<String>(args.size());
+      List<String> elts = new ArrayList<>(args.size());
       for (VarInfoName vin : args) {
         elts.add(vin.repr());
       }
@@ -1130,7 +1130,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     @Override
     protected String identifier_name_impl() {
-      List<String> elts = new ArrayList<String>(args.size());
+      List<String> elts = new ArrayList<>(args.size());
       for (VarInfoName vin : args) {
         elts.add(vin.identifier_name());
       }
@@ -2793,7 +2793,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       // If o is getting replaced, then just replace it
       // otherwise, create a new function and check if arguments get replaced
       if (o == old) return _new;
-      ArrayList<VarInfoName> newArgs = new ArrayList<VarInfoName>();
+      ArrayList<VarInfoName> newArgs = new ArrayList<>();
       for (VarInfoName vin : o.args) {
         VarInfoName retval = vin.accept(this);
         newArgs.add(retval);
@@ -2882,7 +2882,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     // state and accessors
-    private final List<VarInfoName> result = new ArrayList<VarInfoName>();
+    private final List<VarInfoName> result = new ArrayList<>();
 
     /** Method returning the actual results (the nodes in order). */
     public List<VarInfoName> nodes() {
@@ -3246,7 +3246,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public static VarInfoName selectNth(
         VarInfoName root, @Nullable VarInfoName index_base, int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
-      List<VarInfoName> unquants = new ArrayList<VarInfoName>(qv.unquants());
+      List<VarInfoName> unquants = new ArrayList<>(qv.unquants());
       if (unquants.size() == 0) {
         // Nothing to do?
         return null;
@@ -3273,7 +3273,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public static VarInfoName selectNth(
         VarInfoName root, String index_base, boolean free, int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
-      List<VarInfoName> unquants = new ArrayList<VarInfoName>(qv.unquants());
+      List<VarInfoName> unquants = new ArrayList<>(qv.unquants());
       if (unquants.size() == 0) {
         // Nothing to do?
         return null;
@@ -3315,7 +3315,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     /** Return a fresh variable name that doesn't appear in the given variable names. */
     public static VarInfoName getFreeIndex(VarInfoName... vins) {
-      Set<String> simples = new HashSet<String>();
+      Set<String> simples = new HashSet<>();
       for (VarInfoName vin : vins) {
         simples.addAll(new SimpleNamesVisitor(vin).simples());
       }
@@ -3348,7 +3348,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       result.bound_vars = new ArrayList<VarInfoName[]>();
 
       // all of the simple identifiers used by these roots
-      Set<String> simples = new HashSet<String>();
+      Set<String> simples = new HashSet<>();
 
       // build helper for each roots; collect identifiers
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
@@ -3365,7 +3365,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       // replace the right stuff in the term
       char tmp = 'i';
       for (int i = 0; i < roots.length; i++) {
-        List<VarInfoName> uq = new ArrayList<VarInfoName>(helper[i].unquants());
+        List<VarInfoName> uq = new ArrayList<>(helper[i].unquants());
         if (uq.size() == 0) {
           // nothing needs quantification
           result.root_primes[i] = roots[i];

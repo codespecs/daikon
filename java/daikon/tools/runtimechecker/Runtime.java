@@ -12,7 +12,7 @@ import org.checkerframework.checker.lock.qual.GuardedBy;
 public class Runtime {
 
   /** A list of throwables seen when attempting to evaluate properties. */
-  public static List<Throwable> internalInvariantEvaluationErrors = new ArrayList<Throwable>();
+  public static List<Throwable> internalInvariantEvaluationErrors = new ArrayList<>();
 
   private static @GuardedBy("Runtime.class") List<Violation> violations =
       new ArrayList<Violation>();
@@ -32,7 +32,7 @@ public class Runtime {
 
   /** Returns the list of violations. */
   public static synchronized List<Violation> getViolations() {
-    List<Violation> retval = new ArrayList<Violation>();
+    List<Violation> retval = new ArrayList<>();
     for (Violation v : violations) {
       retval.add(v);
     }

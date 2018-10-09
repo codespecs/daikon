@@ -269,7 +269,7 @@ public abstract class PptSlice extends Ppt {
   /** Remove the invariants noted in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {
     if (invs.size() == 0) return;
-    List<Invariant> toRemove = new ArrayList<Invariant>();
+    List<Invariant> toRemove = new ArrayList<>();
     for (Invariant inv : invs) {
       if (omitTypes['r'] && inv.isReflexive()) toRemove.add(inv);
     }

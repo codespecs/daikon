@@ -32,7 +32,7 @@ public class NonModulus extends SingleScalar {
   public static boolean dkconfig_enabled = false;
 
   // Set elements = new HashSet();
-  SortedSet<Long> elements = new TreeSet<Long>();
+  SortedSet<Long> elements = new TreeSet<>();
 
   private long modulus = 0;
   private long remainder = 0;

@@ -117,7 +117,7 @@ public class PptNameMatcher {
   // given method or constructor declaration.
   private List<PptTopLevel> getMatchesInternal(PptMap ppts, Node methodOrConstructorDeclaration) {
 
-    List<PptTopLevel> result = new ArrayList<PptTopLevel>();
+    List<PptTopLevel> result = new ArrayList<>();
 
     for (PptTopLevel ppt : ppts.pptIterable()) {
       PptName ppt_name = ppt.ppt_name;

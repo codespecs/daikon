@@ -59,7 +59,7 @@ public class DeclReader {
   @Option("Specify the comparability type (implicit or none)")
   public static String comparability = "implicit";
 
-  public HashMap<String, DeclPpt> ppts = new LinkedHashMap<String, DeclPpt>();
+  public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
 
   /** Information about variables within a program point. */
   public static class DeclVarInfo {
@@ -192,14 +192,14 @@ public class DeclReader {
    */
   public static class DeclPpt {
     public String name;
-    public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<String, DeclVarInfo>();
+    public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
 
     /**
      * List of values for the program point. There is one entry in the list for each time the
      * program point is executed. That entry is a list of the values for each variable in the same
      * order as the variables were defined.
      */
-    List<List<@Interned Object>> data_values = new ArrayList<List<@Interned Object>>();
+    List<List<@Interned Object>> data_values = new ArrayList<>();
 
     public DeclPpt(String name) {
       this.name = name;
@@ -415,7 +415,7 @@ public class DeclReader {
       int num_vars = 0;
 
       // Map from rep type to the count of each declared type for that rep
-      Map<String, Map<String, Integer>> rep_map = new LinkedHashMap<String, Map<String, Integer>>();
+      Map<String, Map<String, Integer>> rep_map = new LinkedHashMap<>();
 
       // Loop through each ppt
       for (DeclPpt ppt : dr.ppts.values()) {
@@ -427,13 +427,13 @@ public class DeclReader {
         int ppt_total_set_size = 0;
 
         // Build a map from comparabilty to all of the variables with that comp
-        Map<String, List<DeclVarInfo>> comp_map = new LinkedHashMap<String, List<DeclVarInfo>>();
+        Map<String, List<DeclVarInfo>> comp_map = new LinkedHashMap<>();
         for (DeclVarInfo vi : ppt.vars.values()) {
 
           // Update the map that tracks the declared types for each rep type
           Map<String, Integer> dec_map = rep_map.get(vi.get_rep_type());
           if (dec_map == null) {
-            dec_map = new LinkedHashMap<String, Integer>();
+            dec_map = new LinkedHashMap<>();
             rep_map.put(vi.get_rep_type(), dec_map);
           }
           Integer cnt = dec_map.get(vi.get_type_name());
@@ -499,7 +499,7 @@ public class DeclReader {
    */
   public void declaration_types() {
 
-    Map<String, Integer> type_comp = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> type_comp = new LinkedHashMap<>();
     int next_comparability = 1;
 
     // Loop through each program point
@@ -531,7 +531,7 @@ public class DeclReader {
    */
   public void primitive_declaration_types() {
 
-    Map<String, Integer> type_comp = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> type_comp = new LinkedHashMap<>();
     int next_comparability = 1;
 
     // Loop through each program point
@@ -565,7 +565,7 @@ public class DeclReader {
   /** Sets the comparability to match the rep types. */
   public void rep_types() {
 
-    Map<String, Integer> type_comp = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> type_comp = new LinkedHashMap<>();
     int next_comparability = 1;
 
     // Loop through each program point

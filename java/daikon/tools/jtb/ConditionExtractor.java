@@ -44,9 +44,9 @@ class ConditionExtractor extends DepthFirstVisitor {
   private Deque<Object> resultTypes = new ArrayDeque<Object>(); // elements are ResultType or String
 
   // key = methodname (as String); value = conditional expressions (as Strings)
-  HashMap<String, List<String>> conditions = new HashMap<String, List<String>>();
+  HashMap<String, List<String>> conditions = new HashMap<>();
   // key = method declaration (String); value = method bodies (String)
-  HashMap<String, String> replaceStatements = new HashMap<String, String>();
+  HashMap<String, String> replaceStatements = new HashMap<>();
 
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
   /////
@@ -179,7 +179,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    *     tested against
    */
   public Collection<String> getCaseValues(NodeListOptional n) {
-    ArrayList<String> values = new ArrayList<String>();
+    ArrayList<String> values = new ArrayList<>();
     Enumeration<Node> e = n.elements();
     while (e.hasMoreElements()) {
       // in the nodeSequence for the switch statement,

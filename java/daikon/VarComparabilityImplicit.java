@@ -97,7 +97,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   static VarComparabilityImplicit parse(String rep, @Nullable ProglangType vartype) {
     // String rep_ = rep;          // for debugging
 
-    List<String> dim_reps = new ArrayList<String>();
+    List<String> dim_reps = new ArrayList<>();
     // handle array types
     while (rep.endsWith("]")) {
       int openpos = rep.lastIndexOf("[");

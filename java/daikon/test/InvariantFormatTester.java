@@ -87,7 +87,7 @@ public class InvariantFormatTester extends TestCase {
    * This function produces the format list for intialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
 
     // Add test formats - hard coded in
     result.add("daikon");
@@ -232,7 +232,7 @@ public class InvariantFormatTester extends TestCase {
    * @param output the place to where the test output is written
    */
   private boolean performTest(LineNumberReader commands, PrintStream output) {
-    List<FormatTestCase> invariantTestCases = new ArrayList<FormatTestCase>();
+    List<FormatTestCase> invariantTestCases = new ArrayList<>();
     boolean noTestFailed = true;
 
     // Need to be able to go to beginning of buffer for combining goals with the input

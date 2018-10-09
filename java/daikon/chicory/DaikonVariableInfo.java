@@ -127,7 +127,7 @@ public abstract class DaikonVariableInfo
    * Set of fully qualified static variable names for this ppt. Used to ensure that each static is
    * only included once (regardless of how many other variables may include its declaring class).
    */
-  protected static Set<String> ppt_statics = new LinkedHashSet<String>();
+  protected static Set<String> ppt_statics = new LinkedHashSet<>();
 
   /**
    * Constructs a non-array type DaikonVariableInfo object
@@ -236,7 +236,7 @@ public abstract class DaikonVariableInfo
 
   /** Returns the complete tree of variables as a list */
   public List<DaikonVariableInfo> tree_as_list() {
-    List<DaikonVariableInfo> list = new ArrayList<DaikonVariableInfo>();
+    List<DaikonVariableInfo> list = new ArrayList<>();
     list.add(this);
     for (DaikonVariableInfo dv : children) {
       list.addAll(dv.tree_as_list());
@@ -458,7 +458,7 @@ public abstract class DaikonVariableInfo
     // System.out.printf("getting fields for %s%n", type);
 
     // We need to get fields of superclass(es) as well.
-    List<Field> fields = new ArrayList<Field>();
+    List<Field> fields = new ArrayList<>();
     Class<?> c = type;
     while (c != null && c != Object.class) {
       fields.addAll(Arrays.asList(c.getDeclaredFields()));
@@ -579,7 +579,7 @@ public abstract class DaikonVariableInfo
         }
 
         // List containing all class variables, excluding pure methods with parameters
-        List<DaikonVariableInfo> siblings = new ArrayList<DaikonVariableInfo>(thisInfo.children);
+        List<DaikonVariableInfo> siblings = new ArrayList<>(thisInfo.children);
 
         // Pure methods with one parameter
         for (MethodInfo meth : typeInfo.method_infos) {

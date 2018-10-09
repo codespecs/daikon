@@ -86,9 +86,9 @@ public class BuildJDK {
 
   private static String static_map_fname = "dcomp_jdk_static_map";
 
-  private static List<String> all_classes = new ArrayList<String>();
+  private static List<String> all_classes = new ArrayList<>();
 
-  private static List<String> skipped_methods = new ArrayList<String>();
+  private static List<String> skipped_methods = new ArrayList<>();
 
   public static String[] known_skipped_methods = new String[] {
         /*
@@ -159,7 +159,7 @@ public class BuildJDK {
       System.out.printf("Restored %d entries in static map%n", DCInstrument.static_map.size());
 
       // Read in each specified classfile
-      Map<String, JavaClass> classmap = new LinkedHashMap<String, JavaClass>();
+      Map<String, JavaClass> classmap = new LinkedHashMap<>();
       for (File class_file : class_files) {
         if (class_file.toString().endsWith("java/lang/Object.class")) {
           System.out.printf("Skipping %s%n", class_file);
@@ -280,7 +280,7 @@ public class BuildJDK {
 
     // Map from classname to class so we can find out information about
     // classes we have not yet instrumented.
-    Map<String, JavaClass> classmap = new LinkedHashMap<String, JavaClass>();
+    Map<String, JavaClass> classmap = new LinkedHashMap<>();
 
     try {
 

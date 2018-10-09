@@ -439,7 +439,7 @@ class Test {
 
   public static void list_check(A a10, A a11) {
 
-    List<A> list = new ArrayList<A>();
+    List<A> list = new ArrayList<>();
     list.add(a10);
     list.add(a11);
     list.contains(a11);

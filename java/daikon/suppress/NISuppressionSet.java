@@ -572,7 +572,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   public void recurse_definitions(NISuppressionSet ss) {
 
     // Get all of the new suppressions
-    List<NISuppression> new_suppressions = new ArrayList<NISuppression>();
+    List<NISuppression> new_suppressions = new ArrayList<>();
     for (int i = 0; i < suppression_set.length; i++) {
       new_suppressions.addAll(suppression_set[i].recurse_definition(ss));
     }

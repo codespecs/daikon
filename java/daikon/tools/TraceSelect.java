@@ -174,12 +174,12 @@ public class TraceSelect {
       while (num_reps > 0) {
 
         DtracePartitioner dec = new DtracePartitioner(fileName);
-        MultiRandSelector<String> mrs = new MultiRandSelector<String>(numPerSample, dec);
+        MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, dec);
 
         while (dec.hasNext()) {
           mrs.accept(dec.next());
         }
-        List<String> al = new ArrayList<String>();
+        List<String> al = new ArrayList<>();
 
         for (Iterator<String> i = mrs.valuesIter(); i.hasNext(); ) {
           al.add(i.next());
@@ -238,7 +238,7 @@ public class TraceSelect {
     String[] daikonArgs = {dtraceName, "-o", dtraceName + ".inv"};
 
     // this part adds on the rest of the decls files
-    ArrayList<String> al = new ArrayList<String>();
+    ArrayList<String> al = new ArrayList<>();
     al.add(dtraceName);
     al.add("-o");
     al.add(dtraceName + ".inv");

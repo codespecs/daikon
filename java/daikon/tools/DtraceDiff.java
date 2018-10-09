@@ -91,9 +91,9 @@ public class DtraceDiff {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args) {
-    Set<File> declsfile1 = new HashSet<File>();
+    Set<File> declsfile1 = new HashSet<>();
     String dtracefile1 = null;
-    Set<File> declsfile2 = new HashSet<File>();
+    Set<File> declsfile2 = new HashSet<>();
     String dtracefile2 = null;
 
     LongOpt[] longopts =
@@ -250,8 +250,7 @@ public class DtraceDiff {
     FileIO.resetNewDeclFormat();
 
     try {
-      Map<PptTopLevel, PptTopLevel> pptmap =
-          new HashMap<PptTopLevel, PptTopLevel>(); // map ppts1 -> ppts2
+      Map<PptTopLevel, PptTopLevel> pptmap = new HashMap<>(); // map ppts1 -> ppts2
       PptMap ppts1 = FileIO.read_declaration_files(declsfile1);
       PptMap ppts2 = FileIO.read_declaration_files(declsfile2);
 

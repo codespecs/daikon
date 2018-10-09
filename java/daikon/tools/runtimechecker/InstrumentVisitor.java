@@ -55,8 +55,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
   // The methods and constructors that were visited (in other words,
   // those explicitly declared in the source).
-  public List<Method> visitedMethods = new ArrayList<Method>();
-  public List<Constructor<?>> visitedConstructors = new ArrayList<Constructor<?>>();
+  public List<Method> visitedMethods = new ArrayList<>();
+  public List<Constructor<?>> visitedConstructors = new ArrayList<>();
 
   // [[ TODO: I'm using xmlString() because it will definitely give
   // different values for different Properties. But if Properties
@@ -64,7 +64,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   // returns unique values for unique Properties, then I should be
   // able to use hashcode. So: make sure that the statements above
   // are all correct, and then use hashcode. ]]
-  private final Map<String, String> xmlStringToIndex = new HashMap<String, String>();
+  private final Map<String, String> xmlStringToIndex = new HashMap<>();
 
   private int varNumCounter = 0;
 
@@ -113,7 +113,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       Modifiers modifiers = (Modifiers) seq.elementAt(0);
       List<Node> modifierList = modifiers.f0.nodes;
 
-      List<Node> newModifiers = new ArrayList<Node>();
+      List<Node> newModifiers = new ArrayList<>();
       for (Node modifier : modifierList) {
         NodeChoice nc = (NodeChoice) modifier;
         NodeToken token = (NodeToken) nc.choice;
@@ -251,8 +251,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         "checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time.onEntry);");
 
     String name = Ast.getName(ctor);
-    List<String> parameters = new ArrayList<String>();
-    List<String> typesAndParameters = new ArrayList<String>();
+    List<String> parameters = new ArrayList<>();
+    List<String> typesAndParameters = new ArrayList<>();
     for (FormalParameter param : Ast.getParametersNoImplicit(ctor)) {
       parameters.add(Ast.getName(param));
       typesAndParameters.add(Ast.format(param));
@@ -307,7 +307,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   // Methods that we have created
-  private final Set<MethodDeclaration> generated_methods = new HashSet<MethodDeclaration>();
+  private final Set<MethodDeclaration> generated_methods = new HashSet<>();
 
   /** */
   // MethodDeclaration:
@@ -362,8 +362,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     String name = Ast.getName(method);
     String returnType = Ast.getReturnType(method);
     String maybeReturn = (returnType.equals("void") ? "" : "return");
-    List<String> typesAndParameters = new ArrayList<String>();
-    List<String> parameters = new ArrayList<String>();
+    List<String> typesAndParameters = new ArrayList<>();
+    List<String> parameters = new ArrayList<>();
     for (FormalParameter param : Ast.getParameters(method)) {
       parameters.add(Ast.getName(param));
       typesAndParameters.add(Ast.format(param));
@@ -776,7 +776,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
    * implemented Java format.
    */
   private static List<Invariant> filterInvariants(List<Invariant> invariants) {
-    List<Invariant> survivors = new ArrayList<Invariant>();
+    List<Invariant> survivors = new ArrayList<>();
     for (Invariant inv : invariants) {
 
       if (!inv.isValidExpression(OutputFormat.JAVA)) {
@@ -806,7 +806,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   private static List<String> getDeclaredThrowables(NodeOptional nodeOpt) {
-    List<String> declaredThrowables = new ArrayList<String>();
+    List<String> declaredThrowables = new ArrayList<>();
     if (nodeOpt.present()) {
       NodeSequence seq = (NodeSequence) nodeOpt.node;
       // There should only be two elements: "throws" and NameList
@@ -840,7 +840,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       List<String> declaredThrowables,
       boolean isStatic) {
 
-    //      List<String> declaredThrowablesLocal = new ArrayList<String>(declaredThrowables);
+    //      List<String> declaredThrowablesLocal = new ArrayList<>(declaredThrowables);
     //      declaredThrowablesLocal.remove("java.lang.RuntimeException");
     //      declaredThrowablesLocal.remove("RuntimeException");
     //      declaredThrowablesLocal.remove("java.lang.Error");
@@ -1069,7 +1069,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       // this transformation on a character list than by pattern
       // matching against a String.
       char[] chars = daikonrep.toCharArray();
-      List<Character> charList = new ArrayList<Character>();
+      List<Character> charList = new ArrayList<>();
       for (int j = 0; j < chars.length; j++) {
         char c = chars[j];
         if ((c == '\"') || (c == '\\')) {
@@ -1116,7 +1116,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
    */
   List<InvProp> getMajor(List<Invariant> invs) {
 
-    List<InvProp> ret = new ArrayList<InvProp>();
+    List<InvProp> ret = new ArrayList<>();
     for (Invariant i : invs) {
       Property p = toProperty(i);
       if (p.confidence >= confidenceThreshold) {
@@ -1132,7 +1132,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
    */
   List<InvProp> getMinor(List<Invariant> invs) {
 
-    List<InvProp> ret = new ArrayList<InvProp>();
+    List<InvProp> ret = new ArrayList<>();
     for (Invariant i : invs) {
       Property p = toProperty(i);
       if (p.confidence < confidenceThreshold) {
@@ -1184,7 +1184,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
   private StringBuilder createEmptyDeclaration(Method m) {
 
-    List<String> parameters = new ArrayList<String>();
+    List<String> parameters = new ArrayList<>();
     int paramCounter = 0;
     for (Class<?> c : m.getParameterTypes()) {
       parameters.add(Ast.classnameForSourceOutput(c) + " param" + paramCounter++);
@@ -1224,7 +1224,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
   private StringBuilder createEmptyDeclaration(Constructor<?> c) {
 
-    List<String> parameters = new ArrayList<String>();
+    List<String> parameters = new ArrayList<>();
     int paramCounter = 0;
     for (Class<?> cls : c.getParameterTypes()) {
       parameters.add(Ast.classnameForSourceOutput(cls) + " param" + paramCounter++);

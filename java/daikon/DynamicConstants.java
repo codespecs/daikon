@@ -86,20 +86,20 @@ public class DynamicConstants implements Serializable {
    *
    * <p>Each element, c, has c.constant = true, c.count &gt; 0, elt.val != null.
    */
-  List<Constant> con_list = new ArrayList<Constant>();
+  List<Constant> con_list = new ArrayList<>();
 
   /**
    * List of variables that have always been missing.
    *
    * <p>For each element c, c.always_missing = true or con.vi.missingOutOfBounds().
    */
-  List<Constant> missing_list = new ArrayList<Constant>();
+  List<Constant> missing_list = new ArrayList<>();
 
   // Same contents in both.  Why two data structures?
   /** List of all variables. Some may be non-constant. */
   Constant[] all_vars;
 
-  List<Constant> all_list = new ArrayList<Constant>();
+  List<Constant> all_list = new ArrayList<>();
 
   /** Program point of these constants. */
   PptTopLevel ppt;
@@ -282,8 +282,8 @@ public class DynamicConstants implements Serializable {
 
     // System.out.println("DynamicConstants.add : " + vt.toString(ppt.var_infos));
 
-    List<Constant> non_missing = new ArrayList<Constant>();
-    List<Constant> non_con = new ArrayList<Constant>();
+    List<Constant> non_missing = new ArrayList<>();
+    List<Constant> non_con = new ArrayList<>();
 
     // Check each constant, destroy any that are missing or different
     for (Iterator<Constant> i = con_list.iterator(); i.hasNext(); ) {
@@ -504,7 +504,7 @@ public class DynamicConstants implements Serializable {
     // between the non-constants and other variables will have already
     // been created when those other variables became non-constants.
     if (noncons.size() > 0) {
-      List<Constant> cons = new ArrayList<Constant>();
+      List<Constant> cons = new ArrayList<>();
       cons.addAll(con_list);
       cons.addAll(noncons);
       debug.fine("Instantiating non constants in ppt: " + ppt.name());
@@ -540,13 +540,13 @@ public class DynamicConstants implements Serializable {
   private void instantiate_views(List<Constant> list1, List<Constant> list2) {
 
     // Get list1 leaders
-    Set<Constant> leaders1 = new LinkedHashSet<Constant>();
+    Set<Constant> leaders1 = new LinkedHashSet<>();
     for (Constant con : list1) {
       if (con.vi.isCanonical()) leaders1.add(con);
     }
 
     // Get list2 leaders
-    Set<Constant> leaders2 = new LinkedHashSet<Constant>();
+    Set<Constant> leaders2 = new LinkedHashSet<>();
     for (Constant con : list2) {
       if (con.vi.isCanonical()) leaders2.add(con);
     }
@@ -557,7 +557,7 @@ public class DynamicConstants implements Serializable {
     }
 
     // any new views created
-    List<PptSlice> new_views = new ArrayList<PptSlice>();
+    List<PptSlice> new_views = new ArrayList<>();
 
     int mod = ValueTuple.MODIFIED;
 
@@ -735,7 +735,7 @@ public class DynamicConstants implements Serializable {
     // call remove_falsified() since that has side-effects (such as
     // NIS processing on the falsified invariants) that we don't want.
     for (PptSlice slice : new_views) {
-      List<Invariant> to_remove = new ArrayList<Invariant>();
+      List<Invariant> to_remove = new ArrayList<>();
       for (Invariant inv : slice.invs) {
         if (inv.is_false()) {
           to_remove.add(inv);
@@ -753,7 +753,7 @@ public class DynamicConstants implements Serializable {
 
     // Find all of the variable (non-constant) non-missing
     // integral/float leaders
-    List<Constant> vars = new ArrayList<Constant>();
+    List<Constant> vars = new ArrayList<>();
     for (Constant con : all) {
       if (con.always_missing || con.previous_missing) {
         continue;
@@ -774,7 +774,7 @@ public class DynamicConstants implements Serializable {
     }
 
     // Find all of the new non-constant integer/float leaders
-    List<Constant> new_leaders = new ArrayList<Constant>();
+    List<Constant> new_leaders = new ArrayList<>();
     for (Constant con : new_noncons) {
       if (!con.vi.isCanonical()) {
         continue;
@@ -999,7 +999,7 @@ public class DynamicConstants implements Serializable {
 
     // Don't do anything with variables that have always been missing.  They
     // should have no invariants over them.
-    List<Constant> non_missing = new ArrayList<Constant>();
+    List<Constant> non_missing = new ArrayList<>();
 
     instantiate_new_views(noncons, non_missing);
 
@@ -1034,7 +1034,7 @@ public class DynamicConstants implements Serializable {
     if (debug_on) LogHelper.setLevel("daikon.Debug", Level.OFF);
 
     // Get constant leaders
-    List<Constant> leaders = new ArrayList<Constant>(100);
+    List<Constant> leaders = new ArrayList<>(100);
     for (Constant con : con_list) {
       if (!con.vi.isCanonical()) {
         continue;
@@ -1050,7 +1050,7 @@ public class DynamicConstants implements Serializable {
       leaders.add(con);
     }
 
-    List<PptSlice> new_views = new ArrayList<PptSlice>(100);
+    List<PptSlice> new_views = new ArrayList<>(100);
     int mod = ValueTuple.MODIFIED;
 
     // Unary slices/invariants

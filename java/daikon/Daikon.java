@@ -473,7 +473,7 @@ public final class Daikon {
   public static @Nullable Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
-  public static ArrayList<@Prototype Invariant> proto_invs = new ArrayList<@Prototype Invariant>();
+  public static ArrayList<@Prototype Invariant> proto_invs = new ArrayList<>();
 
   /** Debug tracer. */
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
@@ -959,10 +959,10 @@ public final class Daikon {
     // LinkedHashSet because it can be confusing to users if files (of the
     // same type) are gratuitously processed in a different order than they
     // were supplied on the command line.
-    HashSet<File> decl_files = new LinkedHashSet<File>();
-    HashSet<String> dtrace_files = new LinkedHashSet<String>(); // file names or "-" or "+"
-    HashSet<File> spinfo_files = new LinkedHashSet<File>();
-    HashSet<File> map_files = new LinkedHashSet<File>();
+    HashSet<File> decl_files = new LinkedHashSet<>();
+    HashSet<String> dtrace_files = new LinkedHashSet<>(); // file names or "-" or "+"
+    HashSet<File> spinfo_files = new LinkedHashSet<>();
+    HashSet<File> map_files = new LinkedHashSet<>();
 
     LongOpt[] longopts =
         new LongOpt[] {
@@ -1841,7 +1841,7 @@ public final class Daikon {
   // and also filters out the invariants that have not seen enough
   // samples in ternary slices.
   static List<Invariant> filter_invs(List<Invariant> invs) {
-    List<Invariant> new_list = new ArrayList<Invariant>();
+    List<Invariant> new_list = new ArrayList<>();
 
     for (Invariant inv : invs) {
       VarInfo[] vars = inv.ppt.var_infos;
@@ -2398,7 +2398,7 @@ public final class Daikon {
       System.out.printf("%s%n", ppt.name());
       System.out.printf("  samples    = %n%d", ppt.num_samples());
       System.out.printf("  invariants = %n%d", ppt.invariant_cnt());
-      Map<ProglangType, Count> type_map = new LinkedHashMap<ProglangType, Count>();
+      Map<ProglangType, Count> type_map = new LinkedHashMap<>();
       int leader_cnt = 0;
       for (VarInfo v : ppt.var_infos) {
         if (!v.isCanonical()) {
@@ -2477,7 +2477,7 @@ public final class Daikon {
     ppt.equality_view.instantiate_invariants();
   }
 
-  private static List<SpinfoFile> spinfoFiles = new ArrayList<SpinfoFile>();
+  private static List<SpinfoFile> spinfoFiles = new ArrayList<>();
 
   /**
    * Create user-defined splitters. For each file in the input, add a SpinfoFile to the spinfoFiles
@@ -2537,7 +2537,7 @@ public final class Daikon {
     }
 
     // Keep track of all of the ppts in a set ordered by the ppt name
-    Set<String> ppts = new TreeSet<String>();
+    Set<String> ppts = new TreeSet<>();
 
     // Read all of the ppt names out of the decl files
     try {
@@ -2619,12 +2619,12 @@ public final class Daikon {
       }
 
       // get the new leaders
-      List<Equality> allNewInvs = new ArrayList<Equality>();
+      List<Equality> allNewInvs = new ArrayList<>();
 
       for (Invariant eq_as_inv : sliceEquality.invs) {
         Equality eq = (Equality) eq_as_inv;
         VarInfo leader = eq.leader();
-        List<VarInfo> vars = new ArrayList<VarInfo>();
+        List<VarInfo> vars = new ArrayList<>();
 
         for (VarInfo var : eq.getVars()) {
           if (!var.equals(leader)) {

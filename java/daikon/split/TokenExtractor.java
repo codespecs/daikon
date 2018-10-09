@@ -14,7 +14,7 @@ import jtb.visitor.*;
 class TokenExtractor extends DepthFirstVisitor {
 
   /** The tokens of expression. */
-  private List<NodeToken> tokens = new ArrayList<NodeToken>();
+  private List<NodeToken> tokens = new ArrayList<>();
 
   /** blocks public constructor. */
   private TokenExtractor() {

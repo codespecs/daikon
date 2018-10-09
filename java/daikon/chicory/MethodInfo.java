@@ -100,7 +100,7 @@ public class MethodInfo {
 
   // Use reserved keyword for basic type rather than signature to
   // avoid conflicts with user defined types.
-  private static HashMap<String, Class<?>> primitive_classes = new HashMap<String, Class<?>>(8);
+  private static HashMap<String, Class<?>> primitive_classes = new HashMap<>(8);
 
   static {
     primitive_classes.put("boolean", Boolean.TYPE);

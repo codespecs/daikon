@@ -131,7 +131,7 @@ public class Violation implements Serializable {
 
   // Collection of all the Violation objects created.
   // The key is the hashCode of the Violation that is the value.
-  private static HashMap<Integer, Violation> violationsMap = new HashMap<Integer, Violation>();
+  private static HashMap<Integer, Violation> violationsMap = new HashMap<>();
 
   // [[[ TODO: ensure args are not null (otherwise hashCode,
   // equals can break). Do the same thing for Property. ]]]
@@ -213,7 +213,7 @@ public class Violation implements Serializable {
    * equal to {@code thresh}.
    */
   public static Violation[] viosWithConfGEQ(Violation[] vios, double thresh) {
-    List<Violation> ret = new ArrayList<Violation>();
+    List<Violation> ret = new ArrayList<>();
     for (int i = 0; i < vios.length; i++) {
       Violation v = vios[i];
       Property a = v.property;
@@ -229,7 +229,7 @@ public class Violation implements Serializable {
    * thresh}.
    */
   public static Violation[] viosWithConfLT(Violation[] vios, double thresh) {
-    List<Violation> ret = new ArrayList<Violation>();
+    List<Violation> ret = new ArrayList<>();
     for (int i = 0; i < vios.length; i++) {
       Violation v = vios[i];
       Property a = v.property;
@@ -242,7 +242,7 @@ public class Violation implements Serializable {
 
   /** Returns all violations in {@code vios} with the given time. */
   public static Violation[] withTime(Violation[] vios, Time time) {
-    List<Violation> ret = new ArrayList<Violation>();
+    List<Violation> ret = new ArrayList<>();
     for (int i = 0; i < vios.length; i++) {
       Violation v = vios[i];
       if (v.time == time) {
@@ -254,7 +254,7 @@ public class Violation implements Serializable {
 
   /** Returns all violations in {@code vios} with the given king. */
   public static Violation[] withKind(Violation[] vios, Property.Kind kind) {
-    List<Violation> ret = new ArrayList<Violation>();
+    List<Violation> ret = new ArrayList<>();
     for (int i = 0; i < vios.length; i++) {
       if (kind == vios[i].property().kind()) {
         ret.add(vios[i]);
@@ -274,7 +274,7 @@ public class Violation implements Serializable {
     if (vioString == null || vioString.equals("")) {
       return new Violation[] {};
     }
-    Set<Violation> vios = new HashSet<Violation>();
+    Set<Violation> vios = new HashSet<>();
     String[] cutUp = vioString.split("<VIOLATION>");
     for (int splits = 0; splits < cutUp.length; splits++) {
       try {

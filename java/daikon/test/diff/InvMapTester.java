@@ -17,9 +17,9 @@ public class InvMapTester extends TestCase {
   private PptTopLevel pptA = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptB = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptC = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
-  private List<Invariant> invsA = new ArrayList<Invariant>();
-  private List<Invariant> invsB = new ArrayList<Invariant>();
-  private List<Invariant> invsC = new ArrayList<Invariant>();
+  private List<Invariant> invsA = new ArrayList<>();
+  private List<Invariant> invsB = new ArrayList<>();
+  private List<Invariant> invsC = new ArrayList<>();
 
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(LogHelper.INFO);

@@ -29,7 +29,7 @@ public class ClassInfo {
   // Does not include class initializers, so each element's .member field
   // is non-null.
   /** list of methods in the class */
-  public List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
+  public List<MethodInfo> method_infos = new ArrayList<>();
 
   /** this class's classloader */
   private ClassLoader loader;
@@ -47,7 +47,7 @@ public class ClassInfo {
   /** Mapping from field name to string representation of its value* */
   // only for static final primitives
   // which are declared by a CONSTANT VALUE in the code
-  public Map<String, String> staticMap = new HashMap<String, String>();
+  public Map<String, String> staticMap = new HashMap<>();
 
   /** Create ClassInfo with specified name */
   public ClassInfo(@BinaryName String class_name, ClassLoader theLoader) {

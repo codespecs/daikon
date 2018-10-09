@@ -47,10 +47,10 @@ public class Chicory {
   public static int nesting_depth = 2;
 
   @Option("Omit all program points that match")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
   @Option("Include only program points that match")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
   @Option("Decl formatted file containing comparability information")
   public static @Nullable File comparability_file = null;
@@ -377,7 +377,7 @@ public class Chicory {
     }
 
     // Build the command line to execute the target with the javaagent
-    List<String> cmdlist = new ArrayList<String>();
+    List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
 
     if (RemoteDebug) {
