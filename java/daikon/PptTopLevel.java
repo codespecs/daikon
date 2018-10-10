@@ -175,7 +175,7 @@ public class PptTopLevel extends Ppt {
     RETURN
   };
 
-  /** Attributes of this ppt */
+  /** Attributes of this ppt. */
   public EnumSet<PptFlags> flags = EnumSet.noneOf(PptFlags.class);
 
   /**
@@ -191,7 +191,7 @@ public class PptTopLevel extends Ppt {
     SUBEXIT
   }
 
-  /** Type of this program point */
+  /** Type of this program point. */
   public PptType type;
 
   /** Number of invariants after equality set processing for the last sample. */
@@ -225,7 +225,7 @@ public class PptTopLevel extends Ppt {
   /** Debug tracer for up-merging equality sets. */
   public static final Logger debugMerge = Logger.getLogger("daikon.PptTopLevel.merge");
 
-  /** Debug tracer for NIS suppression statistics */
+  /** Debug tracer for NIS suppression statistics. */
   public static final Logger debugNISStats = Logger.getLogger("daikon.PptTopLevel.NISStats");
 
   // public static final SimpleLog debug_varinfo = new SimpleLog(false);
@@ -241,7 +241,7 @@ public class PptTopLevel extends Ppt {
     return name;
   }
 
-  /** Permutation to swap the order of variables in a binary invariant */
+  /** Permutation to swap the order of variables in a binary invariant. */
   private static int[] permute_swap = new int[] {1, 0};
 
   /**
@@ -258,10 +258,10 @@ public class PptTopLevel extends Ppt {
 
   private int values_num_samples;
 
-  /** Keep track of which variables are valid (not missing) on each sample */
+  /** Keep track of which variables are valid (not missing) on each sample. */
   ModBitTracker mbtracker;
 
-  /** Keep track of values we have seen for each variable */
+  /** Keep track of values we have seen for each variable. */
   ValueSet[] value_sets;
 
   /**
@@ -419,7 +419,7 @@ public class PptTopLevel extends Ppt {
     init_vars();
   }
 
-  /** Restore/Create interns when reading serialized object */
+  /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
     if (name != null) {
@@ -518,12 +518,12 @@ public class PptTopLevel extends Ppt {
     return num_arrays;
   }
 
-  /** Iterate through each variable at this ppt */
+  /** Iterate through each variable at this ppt. */
   public Iterator<VarInfo> var_info_iterator() {
     return Arrays.<VarInfo>asList(var_infos).iterator();
   }
 
-  /** Returns the full name of the ppt */
+  /** Returns the full name of the ppt. */
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied PptTopLevel this) {
@@ -1517,7 +1517,7 @@ public class PptTopLevel extends Ppt {
   // I can't decide which loop it's more efficient to make the inner loop:
   // the loop over samples or the loop over slices.
 
-  /** Add the specified slices to this ppt */
+  /** Add the specified slices to this ppt. */
   public void addViews(List<PptSlice> slices_vector) {
     if (slices_vector.isEmpty()) return;
 
@@ -1917,7 +1917,7 @@ public class PptTopLevel extends Ppt {
     return (slice.is_inv_true(inv));
   }
 
-  /** Returns whether or not v1 is always non-zero */
+  /** Returns whether or not v1 is always non-zero. */
   @SuppressWarnings("purity") // caching
   @Pure
   public boolean is_nonzero(VarInfo v) {
@@ -4130,7 +4130,7 @@ public class PptTopLevel extends Ppt {
     return permute;
   }
 
-  /** Debug print slice/inv count information to the specified logger */
+  /** Debug print slice/inv count information to the specified logger. */
   public void debug_print_slice_info(Logger log, String descr, List<PptSlice> slices) {
 
     int inv_cnt = 0;

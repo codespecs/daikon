@@ -120,7 +120,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return cut + lastPart.indexOf("(");
   }
 
-  /** Returns true if the pair of invariants should be printed */
+  /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
       result = true,
       expression = {"#1", "#2"})
@@ -220,7 +220,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return (double) recall.size() / cnt.size();
   }
 
-  /** Prints the results of the correct set in a human-readable format */
+  /** Prints the results of the correct set in a human-readable format. */
   public void printFinal() {
     for (String ppt : goodMap.keySet()) {
       System.out.println();

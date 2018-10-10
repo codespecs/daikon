@@ -37,7 +37,7 @@ public class BuildJDK {
       "Instrument the given classfiles from the specified source directory (by default, src must be a jar file)")
   public static boolean classfiles = false;
 
-  /** Synopsis for the dcomp command line */
+  /** Synopsis for the dcomp command line. */
   public static final String synopsis =
       "daikon.BuildJDK [options] src dest [class_prefix | classfiles...]";
 
@@ -118,7 +118,7 @@ public class BuildJDK {
       };
 
   /**
-   * Invoke as: BuildJDK jarfile dest prefix
+   * Invoke as: BuildJDK jarfile dest prefix.
    *
    * <dl>
    *   <dt>jarfile
@@ -397,7 +397,7 @@ public class BuildJDK {
     }
   }
 
-  /** Copy our various helper classes to java/lang */
+  /** Copy our various helper classes to java/lang. */
   private void dump_helper_classes(String dest) throws java.io.IOException {
 
     File dir = new File(dest, "java" + File.separator + "lang");

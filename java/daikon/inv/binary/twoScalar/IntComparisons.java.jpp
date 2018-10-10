@@ -420,7 +420,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled */
+  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
@@ -574,7 +574,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   }
 
-  /** Instantiate an invariant on the specified slice */
+  /** Instantiate an invariant on the specified slice. */
   @Override
   protected INTEQUAL instantiate_dyn(@Prototype INTEQUAL this, PptSlice slice) {
     #if defined (NONEQUAL)

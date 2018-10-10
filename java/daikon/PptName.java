@@ -31,7 +31,7 @@ public class PptName implements Serializable {
 
   // These are never changed but cannot be declared "final", because they
   // must be re-interned upon deserialization.
-  /** Full program point name */
+  /** Full program point name. */
   private @Interned String fullname;
 
   // fn_name and point together comprise fullname
@@ -41,9 +41,9 @@ public class PptName implements Serializable {
   private @Interned String point;
 
   // cls and method together comprise fn_name
-  /** Fully-qualified class name */
+  /** Fully-qualified class name. */
   private @Nullable @Interned String cls;
-  /** Method signature, including types */
+  /** Method signature, including types. */
   private final @Nullable @Interned String method;
 
   // Representation invariant:
@@ -351,7 +351,7 @@ public class PptName implements Serializable {
     return false;
   }
 
-  /** Debugging output */
+  /** Debugging output. */
   public String repr() {
     return "PptName: fullname="
         + fullname

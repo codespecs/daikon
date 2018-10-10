@@ -30,7 +30,7 @@ public class DeclWriter extends DaikonWriter {
   //
   //  Class.getName() returns JVM names (eg, [Ljava.lang.String;)
 
-  /** Header string before each new method entry or exit point */
+  /** Header string before each new method entry or exit point. */
   public static final String declareHeader = "DECLARE";
 
   public static boolean debug = false;
@@ -48,7 +48,7 @@ public class DeclWriter extends DaikonWriter {
   private static int initial_compare_value = Integer.MAX_VALUE;
   private static int unique_compare_value;
 
-  /** Stream to write to */
+  /** Stream to write to. */
   private PrintStream outFile;
 
   /**
@@ -441,22 +441,22 @@ public class DeclWriter extends DaikonWriter {
    * defined in the declaration record. The VarRelation class tracks one relation.
    */
   private static class VarRelation {
-    /** Name of the program point for the parent */
+    /** Name of the program point for the parent. */
     String parent_ppt_name;
-    /** Prefix of the variable name that is not part of the parent name */
+    /** Prefix of the variable name that is not part of the parent name. */
     String local_prefix;
     /** Prefix of the parent that replaces the local prefix. Normally 'this'. */
     String parent_prefix;
-    /** Top level variable for the relation */
+    /** Top level variable for the relation. */
     String local_variable;
     /** Type of the relation (parent, user, etc) */
     String type;
-    /** Number that identifies this relation within this ppt */
+    /** Number that identifies this relation within this ppt. */
     int id;
 
     static SimpleLog debug = new SimpleLog(false);
 
-    /** Create a VarRelation */
+    /** Create a VarRelation. */
     public VarRelation(
         String parent_ppt_name,
         String type,
@@ -471,7 +471,7 @@ public class DeclWriter extends DaikonWriter {
       debug.log("Created %s", this);
     }
 
-    /** Create a var relation with the matching names */
+    /** Create a var relation with the matching names. */
     public VarRelation(String parent_ppt_name, String type) {
       this(parent_ppt_name, type, null, null, null);
     }

@@ -151,7 +151,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return dkconfig_enabled;
   }
 
-  /** CLASSNAME is only valid on IS_INTEGRAL types */
+  /** CLASSNAME is only valid on IS_INTEGRAL types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 

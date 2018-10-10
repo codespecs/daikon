@@ -834,7 +834,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       // }
     }
 
-    /** Returns the hashcode that is the base of the array */
+    /** Returns the hashcode that is the base of the array. */
     @Pure
     public VarInfoName get_term() {
       if (sequence instanceof Elements) {

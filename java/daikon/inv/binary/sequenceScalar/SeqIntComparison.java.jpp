@@ -185,13 +185,13 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled */
+  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Non-equal SeqIntComparison is only valid on integral types */
+  /** Non-equal SeqIntComparison is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 

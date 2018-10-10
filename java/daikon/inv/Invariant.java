@@ -2006,7 +2006,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return a string representation of the given invariants
+   * Return a string representation of the given invariants.
    *
    * @param invs the invariants to get a string representation of
    * @return a string representation of the given invariants

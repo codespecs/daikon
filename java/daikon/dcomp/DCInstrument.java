@@ -48,7 +48,7 @@ class DCInstrument extends InstructionListUtils {
   protected @Nullable ClassLoader loader;
   protected boolean constructor_is_initialized;
 
-  /** Local that stores the tag frame for the current method */
+  /** Local that stores the tag frame for the current method. */
   protected LocalVariableGen tag_frame_local;
 
   // Argument descriptors
@@ -200,7 +200,7 @@ class DCInstrument extends InstructionListUtils {
     }
   }
 
-  /** Class that defines a range of byte code within a method */
+  /** Class that defines a range of byte code within a method. */
   static class CodeRange {
     int start_pc;
     int len;
@@ -2250,7 +2250,7 @@ class DCInstrument extends InstructionListUtils {
     return il;
   }
 
-  /** Returns whether or not the specified classname is instrumented */
+  /** Returns whether or not the specified classname is instrumented. */
   boolean callee_instrumented(@ClassGetName String classname) {
 
     // System.out.printf("Checking callee instrumented on %s\n", classname);
@@ -3139,7 +3139,7 @@ class DCInstrument extends InstructionListUtils {
         + DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
   }
 
-  /** Convenience function to call a static method in DCRuntime */
+  /** Convenience function to call a static method in DCRuntime. */
   protected InvokeInstruction dcr_call(String method_name, Type ret_type, Type[] arg_types) {
 
     return ifact.createInvoke(
@@ -4190,7 +4190,7 @@ class DCInstrument extends InstructionListUtils {
     il.dispose();
   }
 
-  /** Returns the tag accessor method name */
+  /** Returns the tag accessor method name. */
   public static String tag_method_name(String typ, String classname, String fname) {
     return fname + "_" + classname.replace('.', '_') + "__$" + typ;
   }
@@ -4208,7 +4208,7 @@ class DCInstrument extends InstructionListUtils {
     add_new_parameter(mg, "marker", dcomp_marker);
   }
 
-  /** Returns whether or not the method is defined in Object */
+  /** Returns whether or not the method is defined in Object. */
   @Pure
   public boolean is_object_method(String method_name, Type[] arg_types) {
     for (MethodDef md : obj_methods) {

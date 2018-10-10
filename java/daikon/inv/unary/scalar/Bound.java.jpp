@@ -266,7 +266,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     return dkconfig_enabled;
   }
 
-  /** LOWERBOUND is only valid on integral types */
+  /** LOWERBOUND is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 

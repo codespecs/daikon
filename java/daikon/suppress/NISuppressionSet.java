@@ -613,7 +613,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     return new_ss;
   }
 
-  /** Returns the suppressee */
+  /** Returns the suppressee. */
   public NISuppressee get_suppressee() {
     return suppression_set[0].suppressee;
   }

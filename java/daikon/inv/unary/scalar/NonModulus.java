@@ -55,12 +55,12 @@ public class NonModulus extends SingleScalar {
 
   private static @Prototype NonModulus proto = new @Prototype NonModulus();
 
-  /** Returns the prototype invariant for NonModulus */
+  /** Returns the prototype invariant for NonModulus. */
   public static @Prototype NonModulus get_proto() {
     return proto;
   }
 
-  /** NonModulus is only valid on integral types */
+  /** NonModulus is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -69,7 +69,7 @@ public class NonModulus extends SingleScalar {
     return (vis[0].file_rep_type.baseIsIntegral());
   }
 
-  /** Returns whether or not this invariant is enabled */
+  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;

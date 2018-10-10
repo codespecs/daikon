@@ -99,7 +99,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
   /** used for invariants that are filtered by some means not in the above list */
   public static final DiscardCode filtered = new DiscardCode(13);
 
-  /** Each member of the enumeration is associated with a distinct int for comparability */
+  /** Each member of the enumeration is associated with a distinct int for comparability. */
   public final int enumValue;
 
   // Prevents the user from using DiscardCode types not in the enumeration
@@ -136,7 +136,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     }
   }
 
-  /** Returns the DiscardCode most associated with the given filter */
+  /** Returns the DiscardCode most associated with the given filter. */
   public static DiscardCode findCode(InvariantFilter filter) {
     if ((filter instanceof ObviousFilter) || (filter instanceof SimplifyFilter)) return obvious;
     else if (filter instanceof DerivedParameterFilter) return derived_param;
@@ -148,7 +148,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
   }
 
   /**
-   * Prints out a string describing the reason for discard
+   * Prints out a string describing the reason for discard.
    *
    * @return one of {"Not discarded", "Obvious, "Bad sample seen", "Unjustified confidence", "Few
    *     modified samples", "Not enough samples", "Non-canonical variable", "Implied post state",
@@ -179,7 +179,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
   }
 
   /**
-   * To prevent deserialization causing more DiscardCodes to be instantiated
+   * To prevent deserialization causing more DiscardCodes to be instantiated.
    *
    * @return one of the static DiscardCode instances
    */

@@ -44,7 +44,7 @@ public class CommonStringSequence extends SingleStringSequence {
 
   private static @Prototype CommonStringSequence proto = new @Prototype CommonStringSequence();
 
-  /** Returns the prototype invariant for CommonStringSequence */
+  /** Returns the prototype invariant for CommonStringSequence. */
   public static @Prototype CommonStringSequence get_proto() {
     return proto;
   }

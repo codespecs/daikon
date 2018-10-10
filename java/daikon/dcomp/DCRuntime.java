@@ -45,7 +45,7 @@ import org.plumelib.bcelutil.SimpleLog;
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
 public final class DCRuntime {
 
-  /** List of all instrumented methods */
+  /** List of all instrumented methods. */
   public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
 
   /**
@@ -54,26 +54,26 @@ public final class DCRuntime {
    */
   private static boolean in_enter_exit = false;
 
-  /** Object used to represent nonsensical values */
+  /** Object used to represent nonsensical values. */
   private static final Object nonsensical = new Object();
 
-  /** Object used to represent nonsensical list values */
+  /** Object used to represent nonsensical list values. */
   private static final Object nonsensical_list = new Object();
 
-  /** Depth to follow fields in classes */
+  /** Depth to follow fields in classes. */
   public static int depth = 2;
 
   /** static count of tags in the JDK. Used as an offset for non-JDK code. */
   static int max_jdk_static = 100000;
 
-  /** If the application exits with an exception, it should be placed here */
+  /** If the application exits with an exception, it should be placed here. */
   public static @Nullable Throwable exit_exception = null;
 
   /** Map from each primitive static name to the offset in static_tags. */
   // public static Map<String,Integer> static_map
   //   = new LinkedHashMap<String,Integer>();
 
-  /** Storage for each static tag */
+  /** Storage for each static tag. */
   public static List<@Nullable Object> static_tags = new ArrayList<@Nullable Object>();
 
   /**
@@ -97,15 +97,15 @@ public final class DCRuntime {
   public static SimpleLog map_info = new SimpleLog(false);
   public static final SimpleLog debug_df = new SimpleLog(false);
 
-  /** Simplifies printouts for debugging if we ignore toString */
+  /** Simplifies printouts for debugging if we ignore toString. */
   private static boolean ignore_toString = true;
 
-  /** If true, merge arrays and their indices */
+  /** If true, merge arrays and their indices. */
   private static boolean merge_arrays_and_indices = true;
 
-  /** Class to hold per-thread data */
+  /** Class to hold per-thread data. */
   private static class ThreadData {
-    /** Tag stack */
+    /** Tag stack. */
     Deque<Object> tag_stack;
 
     int tag_stack_depth;
@@ -127,7 +127,7 @@ public final class DCRuntime {
   /** List of all classes encountered. These are the classes that will have comparability output. */
   private static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
 
-  /** Set of classes whose static initializer has run */
+  /** Set of classes whose static initializer has run. */
   private static Set<String> init_classes = new HashSet<String>();
 
   /**
@@ -176,7 +176,7 @@ public final class DCRuntime {
   /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
   public static Class<?> dcompmarker = null;
 
-  /** Perform any initialization required before instrumentation begins */
+  /** Perform any initialization required before instrumentation begins. */
   public static void init() {
 
     debug_decl_print.enabled = DynComp.debug_decl_print;
@@ -779,7 +779,7 @@ public final class DCRuntime {
     while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
   }
 
-  /** Pushes the tag at tag_frame[index] on the tag stack */
+  /** Pushes the tag at tag_frame[index] on the tag stack. */
   public static void push_local_tag(Object[] tag_frame, int index) {
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
@@ -802,7 +802,7 @@ public final class DCRuntime {
     }
   }
 
-  /** Pushes the tag associated with the static static_num on the tag stack */
+  /** Pushes the tag associated with the static static_num on the tag stack. */
   public static void push_static_tag(int static_num) {
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
@@ -815,14 +815,14 @@ public final class DCRuntime {
     debug_primitive.log("push_static_tag[%d] %s%n", static_num, static_tag);
   }
 
-  /** Pushes an array reference on the tag stack */
+  /** Pushes an array reference on the tag stack. */
   public static void push_array_tag(Object arr_ref) {
     ThreadData td = thread_to_data.get(Thread.currentThread());
     td.tag_stack.push(arr_ref);
     debug_arr_index.log("push_array_tag %s%n", arr_ref);
   }
 
-  /** Pops the top of the tag stack into the tag storage for static_num */
+  /** Pops the top of the tag stack into the tag storage for static_num. */
   public static void pop_static_tag(int static_num) {
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
@@ -2712,14 +2712,14 @@ public final class DCRuntime {
     TagEntry.union(tag1, td.tag_stack.pop());
   }
 
-  /** Handles a dup opcode on a primitive */
+  /** Handles a dup opcode on a primitive. */
   public static void dup() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
     assert td.tag_stack.peek() != method_marker;
     td.tag_stack.push(td.tag_stack.peek());
   }
 
-  /** Handles a dup_x1 opcode on a primitive */
+  /** Handles a dup_x1 opcode on a primitive. */
   public static void dup_x1() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
     assert td.tag_stack.peek() != method_marker;
@@ -2982,7 +2982,7 @@ public final class DCRuntime {
   public abstract static class FieldTag {
 
     /**
-     * Gets the tag for the field
+     * Gets the tag for the field.
      *
      * @param parent object that contains the field (if any)
      * @param obj value of the field itself (if available and if its an object
@@ -2998,7 +2998,7 @@ public final class DCRuntime {
 
     Method get_tag;
 
-    /** Initialize with information from the field */
+    /** Initialize with information from the field. */
     StaticPrimitiveTag(FieldInfo fi) {
       assert fi.isStatic();
       assert fi.isPrimitive();
@@ -3013,7 +3013,7 @@ public final class DCRuntime {
       }
     }
 
-    /** Return the tag associated with this field */
+    /** Return the tag associated with this field. */
     @Override
     Object get_tag(Object parent, Object obj) {
       Object tag;
@@ -3040,16 +3040,16 @@ public final class DCRuntime {
    */
   public static class StaticReferenceTag extends FieldTag {
 
-    /** Corresponding java field */
+    /** Corresponding java field. */
     Field field;
 
-    /** Set to true when the class containing the field is initialized */
+    /** Set to true when the class containing the field is initialized. */
     boolean is_class_initialized = false;
 
-    /** Class that contains the field */
+    /** Class that contains the field. */
     Class<?> declaring_class;
 
-    /** Initialize for this field */
+    /** Initialize for this field. */
     public StaticReferenceTag(FieldInfo fi) {
 
       assert fi.isStatic();
@@ -3058,7 +3058,7 @@ public final class DCRuntime {
       declaring_class = field.getDeclaringClass();
     }
 
-    /** Gets the tag for this static reference */
+    /** Gets the tag for this static reference. */
     @Override
     public Object get_tag(Object parent, Object obj) {
 
@@ -3087,7 +3087,7 @@ public final class DCRuntime {
    */
   public static class PrimitiveArrayTag extends FieldTag {
 
-    /** The field number for this field inside its object */
+    /** The field number for this field inside its object. */
     int field_num;
 
     public PrimitiveArrayTag(FieldInfo fi) {
@@ -3095,7 +3095,7 @@ public final class DCRuntime {
       field_num = fi.get_field_num();
     }
 
-    /** Returns a list of object tags */
+    /** Returns a list of object tags. */
     @Override
     public Object get_tag(Object parent, Object obj) {
 

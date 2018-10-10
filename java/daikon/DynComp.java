@@ -114,11 +114,11 @@ public class DynComp {
 
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the dcomp command line */
+  /** Synopsis for the dcomp command line. */
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
 
   /**
-   * Entry point of DynComp
+   * Entry point of DynComp.
    *
    * @param args see usage for argument descriptions
    */
@@ -348,7 +348,7 @@ public class DynComp {
     // XXX check result!
   }
 
-  /** Wait for stream redirect threads to complete */
+  /** Wait for stream redirect threads to complete. */
   public int redirect_wait(Process p) {
 
     // Create the redirect threads and start them.
@@ -385,7 +385,7 @@ public class DynComp {
     return result;
   }
 
-  /** Returns elapsed time as a String since the start of the program */
+  /** Returns elapsed time as a String since the start of the program. */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }

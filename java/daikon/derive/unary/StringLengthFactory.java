@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class StringLengthFactory extends UnaryDerivationFactory {
 
-  /** Debug output */
+  /** Debug output. */
   public static final Logger debug = Logger.getLogger("daikon.derive.unary.StringLengthFactory");
 
   @Override

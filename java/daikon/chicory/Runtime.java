@@ -81,20 +81,20 @@ public class Runtime {
   // Setups that control what information is written
   //
 
-  /** Depth to wich to examine structure components */
+  /** Depth to wich to examine structure components. */
   static int nesting_depth = 2;
 
   //
   // Dtrace file vars
   //
 
-  /** Max number of records in dtrace file */
+  /** Max number of records in dtrace file. */
   static long dtraceLimit = Long.MAX_VALUE;
 
-  /** Number of records printed to date */
+  /** Number of records printed to date. */
   static long printedRecords = 0;
 
-  /** Terminate the program when the dtrace limit is reached */
+  /** Terminate the program when the dtrace limit is reached. */
   static boolean dtraceLimitTerminate = false;
 
   /** Dtrace output stream. Null if no_dtrace is true. */
@@ -102,7 +102,7 @@ public class Runtime {
   // instrumentation code that cannot be type-checked by a source code checker.
   static @GuardedBy("<self>") PrintStream dtrace;
 
-  /** Set to true when the dtrace stream is closed */
+  /** Set to true when the dtrace stream is closed. */
   static boolean dtrace_closed = false;
 
   /** True if no dtrace is being generated. */
@@ -110,11 +110,11 @@ public class Runtime {
 
   static String method_indent = "";
 
-  /** Decl writer setup for writing to the trace file */
+  /** Decl writer setup for writing to the trace file. */
   // Set in ChicoryPremain.premain().
   static DeclWriter decl_writer;
 
-  /** Dtrace writer setup for writing to the trace file */
+  /** Dtrace writer setup for writing to the trace file. */
   // Set in ChicoryPremain.premain().
   static @GuardedBy("Runtime.class") DTraceWriter dtrace_writer;
 
@@ -124,7 +124,7 @@ public class Runtime {
    */
   private static Set<String> initSet = new HashSet<String>();
 
-  /** Class of information about each active call */
+  /** Class of information about each active call. */
   private static class CallInfo {
     /** nonce of call */
     int nonce;
@@ -561,7 +561,7 @@ public class Runtime {
   }
 
   // Copied from daikon.Runtime
-  /** Specify the dtrace file to which to write */
+  /** Specify the dtrace file to which to write. */
   @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {
     System.out.printf("entered daikon.chicory.Runtime.setDtrace(%s, %b)...%n", filename, append);

@@ -62,7 +62,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   /** the location of the runtime support class */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  /** Debug information about which classes are transformed and why */
+  /** Debug information about which classes are transformed and why. */
   protected static SimpleLog debug_transform = new SimpleLog(false);
 
   public Instrument() {
@@ -974,7 +974,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /**
-   * Returns true iff mgen is a constructor
+   * Returns true iff mgen is a constructor.
    *
    * @return true iff mgen is a constructor
    */
@@ -990,7 +990,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /**
-   * Return an array of strings, each corresponding to mgen's argument types
+   * Return an array of strings, each corresponding to mgen's argument types.
    *
    * @return an array of strings, each corresponding to mgen's argument types
    */

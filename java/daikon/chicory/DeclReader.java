@@ -77,7 +77,7 @@ public class DeclReader {
       this.index = index;
     }
 
-    /** Returns the variable's name */
+    /** Returns the variable's name. */
     public String get_name() {
       return name;
     }
@@ -122,7 +122,7 @@ public class DeclReader {
       return (rep_type.equals("int"));
     }
 
-    /** Returns the comparability string from the decl file */
+    /** Returns the comparability string from the decl file. */
     public String get_comparability() {
       return comparability;
     }
@@ -246,12 +246,12 @@ public class DeclReader {
       return vars.get(var_name);
     }
 
-    /** Returns the ppt name */
+    /** Returns the ppt name. */
     public String get_name() {
       return name;
     }
 
-    /** Returns the name without the :::EXIT, :::ENTER, etc */
+    /** Returns the name without the :::EXIT, :::ENTER, etc. */
     public String get_short_name() {
       return name.replaceFirst(":::.*", "");
     }
@@ -262,7 +262,7 @@ public class DeclReader {
       return name;
     }
 
-    /** Returns the list of variables in their standard order */
+    /** Returns the list of variables in their standard order. */
     public List<DeclVarInfo> get_all_vars() {
       return new ArrayList<DeclVarInfo>(vars.values());
     }
@@ -619,7 +619,7 @@ public class DeclReader {
     decl_file.close();
   }
 
-  /** Returns a list of all of the program points */
+  /** Returns a list of all of the program points. */
   public List<DeclPpt> get_all_ppts() {
     return new ArrayList<DeclPpt>(ppts.values());
   }

@@ -113,7 +113,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return targetCnt > GOAL_REQUIREMENT_NUMBER;
   }
 
-  /** Anytime something matches, we should score it has correct */
+  /** Anytime something matches, we should score it has correct. */
   @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
@@ -189,7 +189,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return cut + lastPart.indexOf("(");
   }
 
-  /** Returns true if the pair of invariants should be printed */
+  /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
       result = true,
       expression = {"#1", "#2"})
@@ -296,7 +296,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return (double) correctSet.size() / cnt.size();
   }
 
-  /** Prints the results of the correct set in a human-readable format */
+  /** Prints the results of the correct set in a human-readable format. */
   public void printFinal() {
 
     System.out.println("CORRECT_FOUND: ");

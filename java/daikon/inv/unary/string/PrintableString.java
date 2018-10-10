@@ -38,7 +38,7 @@ public final class PrintableString extends SingleString {
 
   private static @Prototype PrintableString proto = new @Prototype PrintableString();
 
-  /** Returns the prototype invariant for PrintableString */
+  /** Returns the prototype invariant for PrintableString. */
   public static @Prototype PrintableString get_proto() {
     return proto;
   }
@@ -66,13 +66,13 @@ public final class PrintableString extends SingleString {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters */
+  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus add_modified(@Interned String a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters */
+  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus check_modified(@Interned String a, int count) {
     for (int ii = 0; ii < a.length(); ii++) {

@@ -209,7 +209,7 @@ public final class CLASSNAME extends BinaryDerivation {
     return (other instanceof CLASSNAME);
   }
 
-  /** Returns the ESC name */
+  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

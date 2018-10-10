@@ -197,7 +197,7 @@ public abstract class Derivation implements Serializable, Cloneable {
     throw new RuntimeException("csharp_name not implemented for " + this);
   }
 
-  /** Returns the name of this variable in simplify format */
+  /** Returns the name of this variable in simplify format. */
   @SideEffectFree
   public String simplify_name() {
     throw new RuntimeException(
@@ -237,7 +237,7 @@ public abstract class Derivation implements Serializable, Cloneable {
     return 1;
   }
 
-  /** Returns a string that corresponds to the the specified shift */
+  /** Returns a string that corresponds to the the specified shift. */
   protected String shift_str(int shift) {
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);

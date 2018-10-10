@@ -55,7 +55,7 @@ public class NIS {
   /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.suppress.NIS");
 
-  /** Debug Tracer for antecedent method */
+  /** Debug Tracer for antecedent method. */
   public static final Logger debugAnt = Logger.getLogger("daikon.suppress.NIS.Ant");
 
   /** Boolean. If true, enable non-instantiating suppressions. */
@@ -144,10 +144,10 @@ public class NIS {
   public static @MonotonicNonNull Map<Class<? extends Invariant>, Integer>
       suppressor_map_suppression_count;
 
-  /** List of all suppressions */
+  /** List of all suppressions. */
   static @MonotonicNonNull List<NISuppressionSet> all_suppressions;
 
-  /** List of suppressor invariant prototypes */
+  /** List of suppressor invariant prototypes. */
   public @MonotonicNonNull static List<@Prototype Invariant> suppressor_proto_invs;
 
   /**
@@ -168,26 +168,26 @@ public class NIS {
   // Statistics that are kept during processing.  Some of these are kept
   // and/or make sense for some approaches and not for others
 
-  /** Whether or not to keep statistics */
+  /** Whether or not to keep statistics. */
   public static boolean keep_stats = false;
-  /** Number of falsified invariants in the program point */
+  /** Number of falsified invariants in the program point. */
   public static int false_cnts = 0;
-  /** Number of falsified invariants in the program point that are potential suppressors */
+  /** Number of falsified invariants in the program point that are potential suppressors. */
   public static int false_invs = 0;
-  /** Number of suppressions processed */
+  /** Number of suppressions processed. */
   public static int suppressions_processed = 0;
-  /** Number of suppressions processed by the falsified method */
+  /** Number of suppressions processed by the falsified method. */
   public static int suppressions_processed_falsified = 0;
-  /** Number of invariants that are no longer suppressed by a suppression */
+  /** Number of invariants that are no longer suppressed by a suppression. */
   static int new_invs_cnt = 0;
-  /** Number of new_invs_cnt that are falsified by the sample */
+  /** Number of new_invs_cnt that are falsified by the sample. */
   public static int false_invs_cnt = 0;
-  /** Number of invariants actually created */
+  /** Number of invariants actually created. */
   public static int created_invs_cnt = 0;
-  /** Number of invariants that are still suppressed */
+  /** Number of invariants that are still suppressed. */
   static int still_suppressed_cnt = 0;
 
-  /** Total time spent in NIS processing */
+  /** Total time spent in NIS processing. */
   public static long duration = 0;
 
   /** First execution of dump_stats(). Used to dump a header. */
@@ -921,7 +921,7 @@ public class NIS {
     VarInfo[] vis;
     PptTopLevel ppt;
 
-    /** Create an invariant definition for a suppressed invariant */
+    /** Create an invariant definition for a suppressed invariant. */
     public SupInv(NISuppressee suppressee, VarInfo[] vis, PptTopLevel ppt) {
       this.suppressee = suppressee;
       this.vis = vis;
@@ -929,13 +929,13 @@ public class NIS {
       if (Debug.logOn()) log("Created " + suppressee);
     }
 
-    /** Track Log the specified message */
+    /** Track Log the specified message. */
     public void log(
         @UnknownInitialization(SupInv.class) @Raw(SupInv.class) SupInv this, String message) {
       if (Debug.logOn()) Debug.log(suppressee.sup_class, ppt, vis, message);
     }
 
-    /** Equal iff classes / swap variable / and variables match exactly */
+    /** Equal iff classes / swap variable / and variables match exactly. */
     @EnsuresNonNullIf(result = true, expression = "#1")
     @Pure
     @Override
@@ -962,7 +962,7 @@ public class NIS {
       return true;
     }
 
-    /** Hash on class and variables */
+    /** Hash on class and variables. */
     @Pure
     @Override
     public int hashCode(@GuardSatisfied SupInv this) {
@@ -973,12 +973,12 @@ public class NIS {
       return code;
     }
 
-    /** Check this invariant against the sample and return the result */
+    /** Check this invariant against the sample and return the result. */
     public InvariantStatus check(ValueTuple vt) {
       return suppressee.check(vt, vis);
     }
 
-    /** Returns true if the invariant is still suppressed */
+    /** Returns true if the invariant is still suppressed. */
     @SuppressWarnings("purity") // new object is not returned
     @Pure
     public boolean is_ni_suppressed() {
@@ -989,7 +989,7 @@ public class NIS {
       return (ss.suppressed(ppt, vis));
     }
 
-    /** Instantiate this invariant on the specified ppt */
+    /** Instantiate this invariant on the specified ppt. */
     public @Nullable Invariant instantiate(PptTopLevel ppt) {
       return suppressee.instantiate(vis, ppt);
     }
@@ -1010,7 +1010,7 @@ public class NIS {
       return cinv;
     }
 
-    /** Return string representation of the suppressed invariant */
+    /** Return string representation of the suppressed invariant. */
     @SideEffectFree
     @Override
     public String toString(@GuardSatisfied SupInv this) {
@@ -1037,10 +1037,10 @@ public class NIS {
      */
     Map<Class<? extends Invariant>, List<Invariant>> antecedent_map;
 
-    /** Number of antecedents that are false */
+    /** Number of antecedents that are false. */
     int false_cnt = 0;
 
-    /** Create with specified comparability */
+    /** Create with specified comparability. */
     public Antecedents(VarComparability comparability) {
 
       antecedent_map = new LinkedHashMap<Class<? extends Invariant>, List<Invariant>>();

@@ -20,7 +20,7 @@ public abstract class DaikonWriter {
   protected DaikonWriter() {}
 
   /**
-   * Determines if this field warrants an [ = val ] entry in decls file
+   * Determines if this field warrants an [ = val ] entry in decls file.
    *
    * @param field requires field != null
    * @return true iff field warrants an [ = val ] entry in the decls files
@@ -63,7 +63,7 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Given a method, returns the method exit program point name for Daikon
+   * Given a method, returns the method exit program point name for Daikon.
    *
    * @param method non-null method
    * @param lineNum the line number of a return statement in the method

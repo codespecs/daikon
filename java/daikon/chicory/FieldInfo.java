@@ -15,10 +15,10 @@ import org.checkerframework.dataflow.qual.Pure;
  * fields.
  */
 public class FieldInfo extends DaikonVariableInfo {
-  /** The corresponding Field */
+  /** The corresponding Field. */
   private Field field;
 
-  /** The offset of this field in its containing class */
+  /** The offset of this field in its containing class. */
   private int field_num;
 
   /** whether or not this is a static field */

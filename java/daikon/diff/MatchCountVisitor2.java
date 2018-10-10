@@ -49,7 +49,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     }
   }
 
-  /** Anytime a consequent matches a target, we should score it as correct */
+  /** Anytime a consequent matches a target, we should score it as correct. */
   @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
@@ -142,7 +142,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   }
 
   // Cannot be static because it uses instance variable "targSet"
-  /** Returns true if the pair of invariants should be printed */
+  /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
       result = true,
       expression = {"#1", "#2"})
@@ -263,7 +263,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     return (double) correctSet.size() / cnt.size();
   }
 
-  /** Prints the results of the correct set in a human-readable format */
+  /** Prints the results of the correct set in a human-readable format. */
   public void printFinal() {
     finish();
     System.out.println("CORRECT_FOUND: ");

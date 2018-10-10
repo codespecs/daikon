@@ -65,7 +65,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return vi;
   }
 
-  /** Returns the lower bound of the slice */
+  /** Returns the lower bound of the slice. */
   @Override
   public Quantify.Term get_lower_bound() {
     if (from_start) {
@@ -75,7 +75,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
-  /** Returns the upper bound of the slice */
+  /** Returns the upper bound of the slice. */
   @Override
   public Quantify.Term get_upper_bound() {
     if (from_start) {
@@ -85,7 +85,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
-  /** Returns the array variable for this slice */
+  /** Returns the array variable for this slice. */
   @Override
   public VarInfo get_array_var() {
     return seqvar();
@@ -101,7 +101,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return "\"SequenceSubsequence.java.jpp unimplemented\" != null"; // "interned"
   }
 
-  /** Returns the ESC name */
+  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {
@@ -135,7 +135,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
-  /** Adds one to the default complexity if index_shift is not 0 */
+  /** Adds one to the default complexity if index_shift is not 0. */
   @Override
   public int complexity() {
     return super.complexity() + ((index_shift != 0) ? 1 : 0);

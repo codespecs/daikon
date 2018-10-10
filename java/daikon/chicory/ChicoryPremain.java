@@ -49,7 +49,7 @@ public class ChicoryPremain {
 
   public static boolean debug = false;
 
-  /** Set of pure methods returned by Alexandru Salcianu's purity analysis */
+  /** Set of pure methods returned by Alexandru Salcianu's purity analysis. */
   // Non-null if doPurity == true
   private static @MonotonicNonNull Set<String> pureMethods = null;
 

@@ -137,7 +137,7 @@ public class Chicory {
   /** Daikon port number. Daikon writes this to stdout when it is started in online mode. */
   private static int daikon_port = -1;
 
-  /** Thread that copies output from target to our output */
+  /** Thread that copies output from target to our output. */
   public static @MonotonicNonNull StreamRedirectThread out_thread;
 
   /** Thread that copies stderr from target to our stderr. */
@@ -158,12 +158,12 @@ public class Chicory {
 
   private static final boolean RemoteDebug = false;
 
-  /** Flag to initiate a purity analysis and use results to create add vars */
+  /** Flag to initiate a purity analysis and use results to create add vars. */
   private static boolean purityAnalysis = false;
 
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the chicory command line */
+  /** Synopsis for the chicory command line. */
   public static final String synopsis = "daikon.Chicory [options] target [target-args]";
 
   /**
@@ -517,14 +517,14 @@ public class Chicory {
     }
   }
 
-  /** Wait for daikon to complete and return its exit status */
+  /** Wait for daikon to complete and return its exit status. */
   @RequiresNonNull("daikon_proc")
   private int waitForDaikon() {
     int result = redirect_wait(daikon_proc);
     return result;
   }
 
-  /** Wait for stream redirect threads to complete and return its exit status */
+  /** Wait for stream redirect threads to complete and return its exit status. */
   public int redirect_wait(Process p) {
 
     // Create the redirect theads and start them
@@ -583,7 +583,7 @@ public class Chicory {
     return outFile;
   }
 
-  /** Returns elapsed time as a String since the start of the program */
+  /** Returns elapsed time as a String since the start of the program. */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }

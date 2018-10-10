@@ -78,7 +78,7 @@ public class CLASSNAME extends SUPERCLASS {
     return dkconfig_enabled;
   }
 
-  /** Reverse only makes sense on ordered arrays */
+  /** Reverse only makes sense on ordered arrays. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 

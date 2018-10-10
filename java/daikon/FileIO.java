@@ -477,7 +477,7 @@ public final class FileIO {
       flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
   }
 
-  /** Parses a ppt-type record and returns the type */
+  /** Parses a ppt-type record and returns the type. */
   private static PptType parse_ppt_type(ParseState state, Scanner scanner) {
 
     PptType ppt_type = parse_enum_val(state, scanner, PptType.class, "ppt type");
@@ -1198,7 +1198,7 @@ public final class FileIO {
     // This is the global information about the state of the parser.
     //
 
-    /** Name of input file */
+    /** Name of input file. */
     public String filename;
 
     /** True if the current file is a declaration file. */
@@ -1210,13 +1210,13 @@ public final class FileIO {
      */
     public boolean ppts_may_be_new;
 
-    /** All of the ppts seen so far */
+    /** All of the ppts seen so far. */
     public PptMap all_ppts;
 
-    /** Input stream */
+    /** Input stream. */
     public LineNumberReader reader;
 
-    /** Total number of lines in the input file */
+    /** Total number of lines in the input file. */
     public long total_lines;
 
     /** Comparability format, either VarComparability.IMPLICIT or VarComparability.NONE. */
@@ -1242,7 +1242,7 @@ public final class FileIO {
     /** The current set of values. Used when status=SAMPLE. */
     public @Nullable ValueTuple vt;
 
-    /** Miscellaneous text in the parsed item */
+    /** Miscellaneous text in the parsed item. */
     public @Nullable Object payload; // used when status=COMMENT
 
     /** Start parsing the given file. */
@@ -2279,7 +2279,7 @@ public final class FileIO {
     return false;
   }
 
-  /** Computes values of derived variables */
+  /** Computes values of derived variables. */
   public static void compute_derived_variables(
       PptTopLevel ppt, @Nullable Object[] vals, int[] mods) {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
@@ -2545,7 +2545,7 @@ public final class FileIO {
       "nullness") // undocumented class needs documentation before annotating with nullness
   public static class VarDefinition implements java.io.Serializable, Cloneable {
     static final long serialVersionUID = 20060524L;
-    /** Current information about input file and previously parsed values */
+    /** Current information about input file and previously parsed values. */
     transient ParseState state;
     /** Name of the variable (required) */
     public String name;
@@ -2556,7 +2556,7 @@ public final class FileIO {
     public @Nullable String enclosing_var_name;
     /** the simple (not fully specified) name of this variable (optional) */
     public @Nullable String relative_name = null;
-    /** Type of reference for structure/class variables */
+    /** Type of reference for structure/class variables. */
     public RefType ref_type = RefType.POINTER;
     /** Number of array dimensions (0 or 1) */
     public int arr_dims = 0;
@@ -2573,7 +2573,7 @@ public final class FileIO {
     public EnumSet<VarFlags> flags = EnumSet.noneOf(VarFlags.class);
     /** Language specific variable flags (optional) */
     public EnumSet<LangFlags> lang_flags = EnumSet.noneOf(LangFlags.class);
-    /** Comparability of this variable (required */
+    /** Comparability of this variable (required. */
     public VarComparability comparability = null;
     /** Parent program points in ppt hierarchy (optional) */
     public List<VarParent> parents;
@@ -2671,7 +2671,7 @@ public final class FileIO {
       }
     }
 
-    /** Restore interned strings */
+    /** Restore interned strings. */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
       name = name.intern();
@@ -2689,7 +2689,7 @@ public final class FileIO {
       }
     }
 
-    /** Clears the parent relations, if any existed */
+    /** Clears the parent relations, if any existed. */
     public void clear_parent_relation() {
       parents.clear();
     }
@@ -2705,20 +2705,20 @@ public final class FileIO {
       need_eol(scanner);
     }
 
-    /** Parses the enclosing-var record */
+    /** Parses the enclosing-var record. */
     public void parse_enclosing_var_name(Scanner scanner) {
       enclosing_var_name = need(scanner, "enclosing variable name");
       need_eol(scanner);
     }
 
-    /** Parses the reference-type record */
+    /** Parses the reference-type record. */
     public void parse_reference_type(Scanner scanner) {
       RefType ref_type_local = parse_enum_val(scanner, RefType.class, "reference type");
       ref_type = ref_type_local;
       need_eol(scanner);
     }
 
-    /** Parses the array record */
+    /** Parses the array record. */
     public void parse_array(Scanner scanner) {
       @Interned String arr_str = need(scanner, "array dimensions");
       if (arr_str == "0") { // interned
@@ -2730,7 +2730,7 @@ public final class FileIO {
       }
     }
 
-    /** Parses the function-args record */
+    /** Parses the function-args record. */
     public void parse_function_args(Scanner scanner) {
 
       function_args = new ArrayList<String>();
@@ -2767,7 +2767,7 @@ public final class FileIO {
         lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
     }
 
-    /** Parses a comparability record */
+    /** Parses a comparability record. */
     public void parse_comparability(Scanner scanner) {
       @Interned String comparability_str = need(scanner, "comparability");
       need_eol(scanner);
@@ -2775,7 +2775,7 @@ public final class FileIO {
           VarComparability.parse(state.varcomp_format, comparability_str, declared_type);
     }
 
-    /** Parse a parent ppt record */
+    /** Parse a parent ppt record. */
     public void parse_parent(Scanner scanner, List<ParentRelation> ppt_parents) {
 
       String parent_ppt = need(scanner, "parent ppt");
@@ -2806,7 +2806,7 @@ public final class FileIO {
       need_eol(scanner);
     }
 
-    /** Parse a constant record */
+    /** Parse a constant record. */
     public void parse_constant(Scanner scanner) {
       @Interned String constant_str = need(scanner, "constant value");
       need_eol(scanner);
@@ -2817,31 +2817,31 @@ public final class FileIO {
       }
     }
 
-    /** Parse a minimum value record */
+    /** Parse a minimum value record. */
     public void parse_min_value(Scanner scanner) {
       this.min_value = need(scanner, "minimum value");
       need_eol(scanner);
     }
 
-    /** Parse a maximum value record */
+    /** Parse a maximum value record. */
     public void parse_max_value(Scanner scanner) {
       this.max_value = need(scanner, "maximum value");
       need_eol(scanner);
     }
 
-    /** Parse a minimum length record */
+    /** Parse a minimum length record. */
     public void parse_min_length(Scanner scanner) {
       this.min_length = Integer.parseInt(need(scanner, "minimum length"));
       need_eol(scanner);
     }
 
-    /** Parse a maximum length record */
+    /** Parse a maximum length record. */
     public void parse_max_length(Scanner scanner) {
       this.max_length = Integer.parseInt(need(scanner, "maximum length"));
       need_eol(scanner);
     }
 
-    /** Parse a valid values record */
+    /** Parse a valid values record. */
     public void parse_valid_values(Scanner scanner) {
       this.valid_values = scanner.nextLine();
     }
@@ -2937,7 +2937,7 @@ public final class FileIO {
     throw new Daikon.UserError(cause, msg);
   }
 
-  /** Returns whether the line is the start of a ppt declaration */
+  /** Returns whether the line is the start of a ppt declaration. */
   @RequiresNonNull("FileIO.new_decl_format")
   @Pure
   private static boolean is_declaration_header(String line) {

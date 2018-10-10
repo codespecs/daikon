@@ -202,7 +202,7 @@ public final class PrintInvariants {
 
   private static final String lineSep = Global.lineSep;
 
-  /** Regular expression that ppts must match to be printed */
+  /** Regular expression that ppts must match to be printed. */
   private static @Nullable Pattern ppt_regexp;
 
   /**
@@ -1589,14 +1589,14 @@ public final class PrintInvariants {
     }
   }
 
-  /** Prints all of the binary invariants over the specified variables */
+  /** Prints all of the binary invariants over the specified variables. */
   public static void print_all_invs(PptTopLevel ppt, VarInfo v1, VarInfo v2, String indent) {
     // Get any invariants in the local slice
     PptSlice slice = ppt.findSlice(v1, v2);
     print_all_invs(slice, indent);
   }
 
-  /** Prints all of the invariants in the specified slice */
+  /** Prints all of the invariants in the specified slice. */
   public static void print_all_invs(@Nullable PptSlice slice, String indent) {
 
     if (slice == null) return;

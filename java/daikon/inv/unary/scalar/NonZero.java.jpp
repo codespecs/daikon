@@ -108,7 +108,7 @@ public class NONZERO extends SINGLESCALAR {
     return dkconfig_enabled;
   }
 
-  /** Make sure the NonZero make sense on these vars */
+  /** Make sure the NonZero make sense on these vars. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 

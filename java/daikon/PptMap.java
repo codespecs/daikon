@@ -72,7 +72,7 @@ public class PptMap implements Serializable {
     return nameToPpt.containsKey(name);
   }
 
-  /** Returns all of the program points in the map */
+  /** Returns all of the program points in the map. */
   public Collection<PptTopLevel> all_ppts() {
     return (nameToPpt.values());
   }

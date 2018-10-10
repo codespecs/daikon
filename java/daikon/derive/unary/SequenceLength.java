@@ -134,7 +134,7 @@ public final class SequenceLength extends UnaryDerivation {
     return (other instanceof SequenceLength) && (((SequenceLength) other).shift == this.shift);
   }
 
-  /** Returns the ESC name */
+  /** Returns the ESC name. */
   @Override
   @SuppressWarnings("nullness")
   @SideEffectFree
@@ -154,14 +154,14 @@ public final class SequenceLength extends UnaryDerivation {
     }
   }
 
-  /** Returns the JML name */
+  /** Returns the JML name. */
   @Override
   public String jml_name(String index) {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.jml_name();
   }
 
-  /** Returns the Simplify name */
+  /** Returns the Simplify name. */
   @SideEffectFree
   @Override
   public String simplify_name() {
@@ -169,7 +169,7 @@ public final class SequenceLength extends UnaryDerivation {
     return ql.simplify_name();
   }
 
-  /** Returns the CSharpContract name */
+  /** Returns the CSharpContract name. */
   @SideEffectFree
   @Override
   public String csharp_name(String index) {
@@ -177,7 +177,7 @@ public final class SequenceLength extends UnaryDerivation {
     return ql.csharp_name();
   }
 
-  /** Adds one to the default complexity if shift is not 0 */
+  /** Adds one to the default complexity if shift is not 0. */
   @Override
   public int complexity() {
     return super.complexity() + ((shift != 0) ? 1 : 0);

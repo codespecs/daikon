@@ -15,7 +15,7 @@ import java.util.List;
 public class DaikonClassInfo extends DaikonVariableInfo {
 
   /**
-   * Constructs a DaikonClassInfo object
+   * Constructs a DaikonClassInfo object.
    *
    * @param theName the name of the variable
    * @param isArr true iff the variable represents an array of runtime classes
@@ -54,7 +54,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
 
   /**
    * Get a String representation of the given Object's runtime type and the corresponding "modified"
-   * value
+   * value.
    *
    * @param val the Object whose runtime class we wish to get a String representation of
    * @return string representation (suitable for a {@code .dtrace} file) of the given Object's
@@ -73,13 +73,13 @@ public class DaikonClassInfo extends DaikonVariableInfo {
     return valString;
   }
 
-  /** Returns function since essentially this is a call to a pure function */
+  /** Returns function since essentially this is a call to a pure function. */
   @Override
   public VarKind get_var_kind() {
     return VarKind.FUNCTION;
   }
 
-  /** Returns the name of this field */
+  /** Returns the name of this field. */
   @Override
   public String get_relative_name() {
     // need to skip the leading "."

@@ -332,7 +332,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns whether or not rep_type is a legal type */
+  /** Returns whether or not rep_type is a legal type. */
   static boolean legalRepType(ProglangType rep_type) {
     return ((rep_type == ProglangType.INT)
         || (rep_type == ProglangType.DOUBLE)
@@ -342,7 +342,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         || (rep_type == ProglangType.STRING_ARRAY));
   }
 
-  /** Returns whether or not constant_value is a legal constant */
+  /** Returns whether or not constant_value is a legal constant. */
   @EnsuresNonNullIf(result = false, expression = "#1")
   static boolean legalConstant(@Nullable Object constant_value) {
     return ((constant_value == null)
@@ -602,7 +602,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns true if all variables have a parent relation with the specified id */
+  /** Returns true if all variables have a parent relation with the specified id. */
   private static boolean allHaveRelation(int parent_relation_id, VarInfo... vs) {
     for (VarInfo vi : vs) {
       if (vi == null) {
@@ -622,7 +622,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return true;
   }
 
-  /** Create the specified VarInfo */
+  /** Create the specified VarInfo. */
   private VarInfo(
       VarInfoName name,
       ProglangType type,
@@ -681,7 +681,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     canBeMissing = false;
   }
 
-  /** Create the specified VarInfo */
+  /** Create the specified VarInfo. */
   public VarInfo(
       String name,
       ProglangType type,
@@ -702,7 +702,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     this.str_name = name.intern();
   }
 
-  /** Create the specified non-static VarInfo */
+  /** Create the specified non-static VarInfo. */
   private VarInfo(
       VarInfoName name,
       ProglangType type,
@@ -712,7 +712,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     this(name, type, file_rep_type, comparability, false, null, aux);
   }
 
-  /** Create the specified non-static VarInfo */
+  /** Create the specified non-static VarInfo. */
   public VarInfo(
       String name,
       ProglangType type,
@@ -724,7 +724,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     this.str_name = name.intern();
   }
 
-  /** Create a VarInfo with the same values as vi */
+  /** Create a VarInfo with the same values as vi. */
   public VarInfo(VarInfo vi) {
     this(
         vi.name(),
@@ -862,7 +862,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (o == null) ? "null" : o;
   }
 
-  /** Returns a complete string description of the variable */
+  /** Returns a complete string description of the variable. */
   public String repr() {
     return "<VarInfo "
         + var_info_name // vin ok
@@ -902,7 +902,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         + ">";
   }
 
-  /** Returns whether or not this variable is a static constant */
+  /** Returns whether or not this variable is a static constant. */
   @EnsuresNonNullIf(
       result = true,
       expression = {"constantValue()", "static_constant_value"})
@@ -924,14 +924,14 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns true if this is an "orig()" variable */
+  /** Returns true if this is an "orig()" variable. */
   @EnsuresNonNullIf(result = true, expression = "postState")
   @Pure
   public boolean isPrestate() {
     return postState != null;
   }
 
-  /** Returns true if this variable is derived from prestate variables */
+  /** Returns true if this variable is derived from prestate variables. */
   @SuppressWarnings("not.deterministic") // nondeterminism does not affect result
   @Pure
   public boolean isPrestateDerived() {
@@ -950,7 +950,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // return name.isAllPrestate();
   }
 
-  /** Returns true if this variable is a derived variable */
+  /** Returns true if this variable is a derived variable. */
   @EnsuresNonNullIf(result = true, expression = "this.derived")
   @Pure
   public boolean isDerived() {
@@ -1370,7 +1370,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return parent.parent_variable != null ? parent.parent_variable : name();
   }
 
-  /** Returns true iff the variable has a parent with the given parent_relation_id */
+  /** Returns true iff the variable has a parent with the given parent_relation_id. */
   private boolean has_parent(int parent_relation_id) {
     return get_parent(parent_relation_id) != null;
   }
@@ -1414,7 +1414,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return ((Long) raw).longValue();
   }
 
-  /** Return the value of an long[] variable */
+  /** Return the value of an long[] variable. */
   public long[] getIntArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1429,7 +1429,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (long[]) raw;
   }
 
-  /** Return the value of a double variable */
+  /** Return the value of a double variable. */
   public double getDoubleValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1444,7 +1444,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return ((Double) raw).doubleValue();
   }
 
-  /** Return the value of a double[] variable */
+  /** Return the value of a double[] variable. */
   public double[] getDoubleArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1459,12 +1459,12 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (double[]) raw;
   }
 
-  /** Return the value of a String variable */
+  /** Return the value of a String variable. */
   public String getStringValue(ValueTuple vt) {
     return (String) getValue(vt);
   }
 
-  /** Reteurn the value of a String[] array variable */
+  /** Reteurn the value of a String[] array variable. */
   public String[] getStringArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1557,7 +1557,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns the variable (if any) that represents the size of this sequence */
+  /** Returns the variable (if any) that represents the size of this sequence. */
   public @Nullable VarInfo sequenceSize() {
     if (sequenceSize != null) {
       return sequenceSize;
@@ -2786,7 +2786,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   private static Set<String> out_strings = new LinkedHashSet<String>();
 
-  /** If the message is new print it, otherwise discard it */
+  /** If the message is new print it, otherwise discard it. */
   @FormatMethod
   @SuppressWarnings(
       "formatter") // call to format method is correct because of @FormatMethod annotation
@@ -2798,7 +2798,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns whether or not this variable is a parameter */
+  /** Returns whether or not this variable is a parameter. */
   @Pure
   public boolean isParam() {
     if (FileIO.new_decl_format) {
@@ -2808,7 +2808,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Set this variable as a parameter */
+  /** Set this variable as a parameter. */
   public void set_is_param() {
     // System.out.printf("setting is_param for %s %n", name());
     if (FileIO.new_decl_format) {
@@ -2817,7 +2817,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     aux = aux.setValue(VarInfoAux.IS_PARAM, VarInfoAux.TRUE); // VIN
   }
 
-  /** Set whether or not this variable is a parameter */
+  /** Set whether or not this variable is a parameter. */
   public void set_is_param(boolean set) {
     if (set) {
       set_is_param();
@@ -3298,7 +3298,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns the name of this variable in simplify format */
+  /** Returns the name of this variable in simplify format. */
   @SideEffectFree
   public String simplify_name() {
     return simplify_name(null);
@@ -3837,13 +3837,13 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return var_info_name.isThis();
   }
 
-  /** Returns whether this is a size of an array or a prestate thereof */
+  /** Returns whether this is a size of an array or a prestate thereof. */
   @Pure
   public boolean is_size() {
     return (derived instanceof SequenceLength);
   }
 
-  /** Returns wehther or not this variable is a field */
+  /** Returns wehther or not this variable is a field. */
   @Pure
   public boolean is_field() {
     return (var_info_name instanceof VarInfoName.Field);
@@ -4289,13 +4289,13 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns true if this is an array or a slice */
+  /** Returns true if this is an array or a slice. */
   @Pure
   public boolean isArray() {
     return type.isArray();
   }
 
-  /** Returns true if this is a slice */
+  /** Returns true if this is a slice. */
   @Pure
   public boolean isSlice() {
     return isArray() && isDerived();

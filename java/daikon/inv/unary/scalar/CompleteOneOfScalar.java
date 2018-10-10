@@ -27,7 +27,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20091210L;
 
-  /** Information about each value encountered */
+  /** Information about each value encountered. */
   public static class Info implements Serializable {
     static final long serialVersionUID = 20091210L;
     public long val;
@@ -39,7 +39,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
     }
   }
 
-  /** List of values seen */
+  /** List of values seen. */
   @Unused(when = Prototype.class)
   public List<Info> vals;
 
@@ -57,7 +57,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
 
   private static @Prototype CompleteOneOfScalar proto = new @Prototype CompleteOneOfScalar();
 
-  /** Returns the prototype invariant for CompleteOneOFScalar */
+  /** Returns the prototype invariant for CompleteOneOFScalar. */
   public static @Prototype CompleteOneOfScalar get_proto() {
     return proto;
   }
@@ -89,13 +89,13 @@ public final class CompleteOneOfScalar extends SingleScalar {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters */
+  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus add_modified(long a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters */
+  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus check_modified(long a, int count) {
     for (Info val : vals) {

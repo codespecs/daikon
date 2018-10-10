@@ -467,7 +467,7 @@ public class NISuppressor {
     }
   }
 
-  /** Returns the variable index that corresponds to index */
+  /** Returns the variable index that corresponds to index. */
   private int translate_index(int index) {
 
     if (index == 0) return v1_index;
@@ -476,7 +476,7 @@ public class NISuppressor {
     else return index;
   }
 
-  /** Returns the invariant class of this suppressor */
+  /** Returns the invariant class of this suppressor. */
   public Class<? extends Invariant> get_inv_class() {
     return inv_class;
   }

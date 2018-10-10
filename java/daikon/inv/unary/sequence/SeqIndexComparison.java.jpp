@@ -210,7 +210,7 @@ public class CLASSNAME extends SUPERCLASS {
     return (dkconfig_enabled && !dkconfig_SeqIndexDisableAll);
   }
 
-  /** Check that SeqIndex comparisons make sense over these vars */
+  /** Check that SeqIndex comparisons make sense over these vars. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -236,7 +236,7 @@ public class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
-  /** Instantiate the invariant on the specified slice */
+  /** Instantiate the invariant on the specified slice. */
   @Override
   public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);

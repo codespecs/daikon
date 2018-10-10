@@ -317,13 +317,13 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled */
+  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Non-Equal SeqComparison is only valid on integral types */
+  /** Non-Equal SeqComparison is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -357,7 +357,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     return true;
   }
 
-  /** Instantiates the invariant on the specified slice */
+  /** Instantiates the invariant on the specified slice. */
   @Override
   protected SEQSEQINTEQUAL instantiate_dyn(@Prototype SEQSEQINTEQUAL this, PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.hasOrder() && slice.var_infos[1].aux.hasOrder();
