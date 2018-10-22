@@ -639,6 +639,15 @@ public final class Daikon {
     // }
   }
 
+  /** A parser error that should be reported, with better context, by the caller. */
+  public static class ParseError extends Exception {
+    static final long serialVersionUID = 20181021L;
+
+    ParseError(String s) {
+      super(s);
+    }
+  }
+
   /**
    * The arguments to daikon.Daikon are file names. Declaration file names end in ".decls", and data
    * trace file names end in ".dtrace".
