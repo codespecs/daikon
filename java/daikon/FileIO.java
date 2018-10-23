@@ -336,82 +336,87 @@ public final class FileIO {
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
     PptType ppt_type = PptType.POINT;
 
-    // Read the records that define this program point
-    while ((line = state.reader.readLine()) != null) {
-      // debug_decl.log("read line %s%n", line);
-      line = line.trim();
-      if (line.length() == 0) {
-        break;
-      }
+    try {
+      // Read the records that define this program point
+      while ((line = state.reader.readLine()) != null) {
+        // debug_decl.log("read line %s%n", line);
+        line = line.trim();
+        if (line.length() == 0) {
+          break;
+        }
 
-      scanner = new Scanner(line);
-      @Interned String record = scanner.next().intern();
-      if (vardef == null) {
-        if (record == "parent") { // interned
-          ppt_parents.add(parse_ppt_parent(state, scanner));
-        } else if (record == "flags") { // interned
-          parse_ppt_flags(state, scanner, ppt_flags);
-        } else if (record == "variable") { // interned
-          vardef = new VarDefinition(state, scanner);
-          // There is no need to check "varmap.containsKey(vardef.name)"
-          // because this is the first variable.
-          assert varmap.isEmpty();
-          if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
-        } else if (record == "ppt-type") { // interned
-          ppt_type = parse_ppt_type(state, scanner);
-        } else {
-          decl_error(state, "record '%s' found where %s expected", record, "'parent', 'flags'");
-        }
-      } else { // there must be a current variable
-        if (record == "var-kind") { // interned
-          vardef.parse_var_kind(scanner);
-        } else if (record == "enclosing-var") { // interned
-          vardef.parse_enclosing_var_name(scanner);
-        } else if (record == "reference-type") { // interned
-          vardef.parse_reference_type(scanner);
-        } else if (record == "array") { // interned
-          vardef.parse_array(scanner);
-        } else if (record == "function-args") { // interned
-          vardef.parse_function_args(scanner);
-        } else if (record == "rep-type") { // interned
-          vardef.parse_rep_type(scanner);
-        } else if (record == "dec-type") { // interned
-          vardef.parse_dec_type(scanner);
-        } else if (record == "flags") { // interned
-          vardef.parse_flags(scanner);
-        } else if (record == "lang-flags") { // interned
-          vardef.parse_lang_flags(scanner);
-        } else if (record == "parent") { // interned
-          vardef.parse_parent(scanner, ppt_parents);
-        } else if (record == "comparability") { // interned
-          vardef.parse_comparability(scanner);
-        } else if (record == "constant") { // interned
-          vardef.parse_constant(scanner);
-        } else if (record == "variable") { // interned
-          try {
-            vardef.checkRep(); // make sure the previous variable is ok
-          } catch (AssertionError e) {
-            decl_error(state, e);
+        scanner = new Scanner(line);
+        @Interned String record = scanner.next().intern();
+        if (vardef == null) {
+          if (record == "parent") { // interned
+            ppt_parents.add(parse_ppt_parent(state, scanner));
+          } else if (record == "flags") { // interned
+            parse_ppt_flags(state, scanner, ppt_flags);
+          } else if (record == "variable") { // interned
+            vardef = new VarDefinition(state, scanner);
+            // There is no need to check "varmap.containsKey(vardef.name)"
+            // because this is the first variable.
+            assert varmap.isEmpty();
+            if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
+          } else if (record == "ppt-type") { // interned
+            ppt_type = parse_ppt_type(state, scanner);
+          } else {
+            decl_error(state, "record '%s' found where %s expected", record, "'parent', 'flags'");
           }
-          vardef = new VarDefinition(state, scanner);
-          if (varmap.containsKey(vardef.name)) {
-            decl_error(state, "var %s declared twice", vardef.name);
+        } else { // there must be a current variable
+          if (record == "var-kind") { // interned
+            vardef.parse_var_kind(scanner);
+          } else if (record == "enclosing-var") { // interned
+            vardef.parse_enclosing_var_name(scanner);
+          } else if (record == "reference-type") { // interned
+            vardef.parse_reference_type(scanner);
+          } else if (record == "array") { // interned
+            vardef.parse_array(scanner);
+          } else if (record == "function-args") { // interned
+            vardef.parse_function_args(scanner);
+          } else if (record == "rep-type") { // interned
+            vardef.parse_rep_type(scanner);
+          } else if (record == "dec-type") { // interned
+            vardef.parse_dec_type(scanner);
+          } else if (record == "flags") { // interned
+            vardef.parse_flags(scanner);
+          } else if (record == "lang-flags") { // interned
+            vardef.parse_lang_flags(scanner);
+          } else if (record == "parent") { // interned
+            vardef.parse_parent(scanner, ppt_parents);
+          } else if (record == "comparability") { // interned
+            vardef.parse_comparability(scanner);
+          } else if (record == "constant") { // interned
+            vardef.parse_constant(scanner);
+          } else if (record == "variable") { // interned
+            try {
+              vardef.checkRep(); // make sure the previous variable is ok
+            } catch (AssertionError e) {
+              decl_error(state, e);
+            }
+            vardef = new VarDefinition(state, scanner);
+            if (varmap.containsKey(vardef.name)) {
+              decl_error(state, "var %s declared twice", vardef.name);
+            }
+            if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
+          } else if (record == "min-value") { // interned
+            vardef.parse_min_value(scanner);
+          } else if (record == "max-value") { // interned
+            vardef.parse_max_value(scanner);
+          } else if (record == "min-length") { // interned
+            vardef.parse_min_length(scanner);
+          } else if (record == "max-length") { // interned
+            vardef.parse_max_length(scanner);
+          } else if (record == "valid-values") { // interned
+            vardef.parse_valid_values(scanner);
+          } else {
+            decl_error(state, "Unexpected variable item '%s' found", record);
           }
-          if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
-        } else if (record == "min-value") { // interned
-          vardef.parse_min_value(scanner);
-        } else if (record == "max-value") { // interned
-          vardef.parse_max_value(scanner);
-        } else if (record == "min-length") { // interned
-          vardef.parse_min_length(scanner);
-        } else if (record == "max-length") { // interned
-          vardef.parse_max_length(scanner);
-        } else if (record == "valid-values") { // interned
-          vardef.parse_valid_values(scanner);
-        } else {
-          decl_error(state, "Unexpected variable item '%s' found", record);
         }
       }
+    } catch (Daikon.ParseError pe) {
+      decl_error(state, "%s", pe.getMessage());
+      throw new Error(); // this can't happen
     }
     if (vardef != null) {
       try {
@@ -2776,10 +2781,17 @@ public final class FileIO {
     }
 
     /** Parse a parent ppt record. */
-    public void parse_parent(Scanner scanner, List<ParentRelation> ppt_parents) {
+    public void parse_parent(Scanner scanner, List<ParentRelation> ppt_parents)
+        throws Daikon.ParseError {
 
       String parent_ppt = need(scanner, "parent ppt");
-      int parent_relation_id = Integer.parseInt(need(scanner, "parent id"));
+      String parent_relation_id_string = need(scanner, "parent id");
+      int parent_relation_id;
+      try {
+        parent_relation_id = Integer.parseInt(parent_relation_id_string);
+      } catch (NumberFormatException nfe) {
+        throw new Daikon.ParseError("Expected a number, found: " + parent_relation_id_string);
+      }
       String parent_variable = null;
 
       boolean found = false;
