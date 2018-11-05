@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresKeyForIf;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -365,6 +366,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @throws NumberFormatException if the value of the key cannot be parsed as an integer
    * @see #hasValue(String)
    */
+  @Pure
   public int getInt(@KeyFor("this.map") String key) {
     if (!hasValue(key)) {
       throw new RuntimeException(String.format("Key '%s' is not defined", key));
@@ -417,6 +419,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /** Return {@code true} if the value for the given key is defined, and {@code false} otherwise. */
+  @Pure
+  @EnsuresKeyForIf(result = true, expression = "#1", map = "map")
   public boolean hasValue(String key) {
     return map.containsKey(key);
   }
