@@ -25,6 +25,7 @@ checkin
 checkins
 classpath
 codebase
+codespecs
 comparabilities
 comparator
 ConcurrentModificationException
@@ -98,7 +99,7 @@ Kvasir
 Kvasir's
 lexicographically
 LLVM
-MacOSX
+macOS
 Makefile
 Makefiles
 Makefile's

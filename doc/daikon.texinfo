@@ -221,7 +221,7 @@ question will not be answered.
 @cindex installing Daikon
 
 Shortcut for the impatient:  skip directly to the installation instructions
-for @ref{Unix/Linux/MacOSX installation}, or @ref{Windows installation}.
+for @ref{Unix/Linux/macOS installation}, or @ref{Windows installation}.
 
 The main way to install Daikon is from a release, as explained in this
 section.
@@ -257,7 +257,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
 @menu
 * Requirements::
-* Unix/Linux/MacOSX installation::
+* Unix/Linux/macOS installation::
 * Windows installation::
 * Running Daikon under Windows::
 @end menu
@@ -281,8 +281,8 @@ If you wish to edit the Daikon source code and re-compile Daikon,
 @c helpful to users.
 
 
-@node       Unix/Linux/MacOSX installation
-@section    Unix/Linux/MacOSX installation
+@node       Unix/Linux/macOS installation
+@section    Unix/Linux/macOS installation
 
 @exampleindent 1
 @enumerate
@@ -4208,7 +4208,7 @@ containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
-On MacOSX, you might do:
+On macOS, you might do:
 
 @exampleindent 0
 @example
@@ -9334,7 +9334,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
 @c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
-@c  LocalWords:  Drager MacOSX I1 I2 invSortComparator1 invSortComparator2
+@c  LocalWords:  Drager macOS I1 I2 invSortComparator1 invSortComparator2
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
 @c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
 @c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx2048m ps1

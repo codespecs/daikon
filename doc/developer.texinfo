@@ -2569,7 +2569,7 @@ make test-staged-dist
 
 @need 1000
 @item
-Test the distribution on Ubuntu and MacOSX machines.
+Test the distribution on Ubuntu and macOS machines.
 Run the following commands:
 
 @smallexample
@@ -2591,8 +2591,8 @@ If there is a problem, fix it and start over.
 
 [Time: 15 min]
 
-Note that sometimes Travis has trouble starting MacOSX jobs.  You may wish to log on to a
-MacOSX machine (with the development tools installed) and run the tests manually.
+Note that sometimes Travis has trouble starting macOS jobs.  You may wish to log on to a
+macOS machine (with the development tools installed) and run the tests manually.
 The example below shows the commands required to do this.  The output
 should show a number of lines beginning with
 "Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
@@ -4486,7 +4486,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx vis su
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
-@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname MacOSX rt
+@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname macOS rt
 @c  LocalWords:  VarComparability instrumenter struct Hatcliff Sinha Vibha xref
 @c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
 @c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger
