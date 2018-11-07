@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.EntryReader;
-import org.plumelib.util.ReflectionPlume;
 
 /**
  * This class applies settings from a configuration file that lists variable names and values (see

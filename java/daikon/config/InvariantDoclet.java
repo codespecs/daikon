@@ -15,7 +15,7 @@ import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.plumelib.util.ReflectionPlume;
+import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 
 /**

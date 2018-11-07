@@ -113,8 +113,8 @@ import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
-import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 

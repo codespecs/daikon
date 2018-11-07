@@ -1,7 +1,6 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.util.ReflectionPlume;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -40,6 +39,7 @@ import org.plumelib.signature.Signatures;
  * class. Its subtypes are designed to represent specific types of variables, such as arguments,
  * arrays, etc.
  */
+@SuppressWarnings("deprecation") // uses ReflectionPlume from daikon.util
 public abstract class DaikonVariableInfo
     implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo> {
 
@@ -591,13 +591,14 @@ public abstract class DaikonVariableInfo
               // Get class type of the class variable
               try {
                 sibClass =
-                    ReflectionPlume.classForName(Signatures.binaryNameToClassGetName(sibType));
+                    daikon.util.ReflectionPlume.classForName(
+                        Signatures.binaryNameToClassGetName(sibType));
               } catch (ClassNotFoundException e) {
                 throw new Error(e);
               }
 
               // Add node if the class variable can be used as the pure method's parameter
-              if (ReflectionPlume.isSubtype(sibClass, meth.arg_types[0])) {
+              if (daikon.util.ReflectionPlume.isSubtype(sibClass, meth.arg_types[0])) {
                 DaikonVariableInfo[] arg = {sib};
                 StringBuilder buf = new StringBuilder();
                 DaikonVariableInfo newChild =

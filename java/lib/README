@@ -36,6 +36,9 @@ plume-util-1.0.5.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
   wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.0.5/plume-util-1.0.5.jar
 When you update this, remove the old one then remake daikon-util.jar (see above).
 
+reflection-util-0.0.6.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/0.0.1/reflection-util-0.0.1.jar
+
 require-javadoc-0.1.0.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/
   wget https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.1.0/require-javadoc-0.1.0.jar
 

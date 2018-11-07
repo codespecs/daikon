@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
-import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
