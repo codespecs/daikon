@@ -2146,8 +2146,9 @@ The recommended setup for the distribution process:
 @itemize
 @item get a fresh copy of your Bash shell (e.g., log out and log back in)
 @item @code{unset CHECKERFRAMEWORK}
-@c TODO: Setting DAIKONDIR shoud not be necessary
-@c @item set @env{DAIKONDIR} as you would normally
+@c DAIKONDIR is necessary only for the instructions in this file.
+@c Maybe use a different environment variable?
+@item set @env{DAIKONDIR} as you would normally
 @item set @env{JAVA_HOME} to point to JDK 8; for example, @code{export JAVA_HOME=/usr/lib/jvm/java}
 @c @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
@@ -2292,7 +2293,7 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 [Time: moments]
 
 @item
-Update dependencies in @file{daikon/java/lib/}.
+Update dependencies in @file{daikon/java/lib/}.  For details, see @file{daikon/java/lib/README}.
 
 @end itemize
 
