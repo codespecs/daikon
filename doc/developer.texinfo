@@ -2148,7 +2148,7 @@ The recommended setup for the distribution process:
 @item @code{unset CHECKERFRAMEWORK}
 @c DAIKONDIR is necessary only for the instructions in this file.
 @c Maybe use a different environment variable?
-@item set @env{DAIKONDIR} as you would normally
+@item set @env{DAIKONDIR} as you would normally:  @code{export DAIKONDIR=...}
 @item set @env{JAVA_HOME} to point to JDK 8; for example, @code{export JAVA_HOME=/usr/lib/jvm/java}
 @c @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
