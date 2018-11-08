@@ -666,7 +666,7 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	cp -p Makefile ${TMPDIR}/daikon/Makefile
 
 	# Daikon itself
-	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user --exclude PrototypeChecker.java --exclude VIndexChecker.java --exclude VIndexAnnotatedTypeFactory.java daikon jtb lib typequals
+	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user --exclude PrototypeChecker.java --exclude VIndexChecker.java --exclude VIndexAnnotatedTypeFactory.java daikon jtb lib typequals)
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
 	# Maybe I should do  $(MAKE) javadoc
