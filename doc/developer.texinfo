@@ -2488,7 +2488,7 @@ Next, check the staging website to see if it has any broken document links.
 make check-for-broken-doc-links
 @end example
 
-Review @file{check.log} and make corrections as appropriate.
+Review @file{checklink.log} and make corrections as appropriate.
 
 In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
@@ -2528,7 +2528,7 @@ Repeat the previous step to rebuild the release candidate.
 Repeat this step to verify your corrections.
 @end itemize
 
-If @file{check.log} contains an error message of the form:
+If @file{checklink.log} contains an error message of the form:
 @smallexample
 List of broken links and other issues:
 http://plse.cs.washington.edu/daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html
@@ -2570,7 +2570,7 @@ make test-staged-dist
 
 @need 1000
 @item
-Test the distribution on Ubuntu and macOS machines.
+Test the distribution on Ubuntu and macOS machines, on Travis CI.
 Run the following commands:
 
 @smallexample
@@ -2583,10 +2583,12 @@ sh /tmp/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.t
 @end smallexample
 
 and then wait until the following
-two URLs indicate success (it may take a while for the new jobs to show up,
-if Travis is busy running other jobs for the codespecs organization):
-@* @url{https://travis-ci.org/codespecs/test-daikon-staging}
-@* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx}
+two URLs indicate success:
+@* @url{https://travis-ci.org/codespecs/test-daikon-staging/builds}
+@* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx/builds}
+
+It may take a while for the new jobs to complete,
+if Travis is busy running other jobs for the codespecs organization.
 
 If there is a problem, fix it and start over.
 

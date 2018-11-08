@@ -528,7 +528,7 @@ NEW_VER := $(shell cat doc/VERSION)
 NEW_RELEASE_NAME := daikon-$(NEW_VER)
 
 check-for-broken-doc-links: update-checklink
-	${CHECKLINK}/checklink -q -r `grep -v '^#' ${CHECKLINK}/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
+	${CHECKLINK}/checklink -q -r `grep -v '^#' ${CHECKLINK}/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >checklink.log 2>&1
 
 HISTORY_DIR := $(STAGING_DIR)/history
 save-current-release:
