@@ -2506,7 +2506,7 @@ Here is a workflow that may be used to deal with broken links:
 @item
 Use the @samp{Wayback Machine}, http://archive.org/web/, to see what the old content was.
 @item
-Do a web search to see if the page has relocated elsewhere.
+Do a web search on the content to see if the page has relocated elsewhere.
 @item
 If the web search is not successful, email the maintainer of the old content.
 @end itemize

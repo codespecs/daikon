@@ -267,7 +267,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 @section    Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 8 (or later) JDK, including a
-@uref{http://www.oracle.com/technetwork/java/javase/overview/index.html,,
+@uref{https://www.oracle.com/technetwork/java/javase/overview/index.html,,
 Java Virtual Machine} and a Java compiler.
 
 If you wish to analyze C or C++ programs, you need a C or C++
