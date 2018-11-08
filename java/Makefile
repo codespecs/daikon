@@ -685,21 +685,27 @@ tags-without-generated-files: clean-generated-files
 
 # See version numbers at https://github.com/google/error-prone/releases
 ERRORPRONE_VERSION := 2.3.1
+ERRORPRONE_JAR_FILE := error_prone_ant-${ERRORPRONE_VERSION}.jar
+# For 2.3.2 and later
+# ERRORPRONE_JAR_FILE := error_prone_core-${ERRORPRONE_VERSION}-with-dependencies.jar
+ERRORPRONE_JAR_PATH := ${DAIKONDIR}/java/lib/tmp/${ERRORPRONE_JAR_FILE}
 
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 errorprone-nocompile:
-	${MAKE} lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar
-#	java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
-	java -cp ${DAIKON_CLASSPATH} -Xbootclasspath/p:${DAIKONDIR}/java/lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
+	${MAKE} lib/tmp/${ERRORPRONE_JAR_FILE}
+#	java -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Werror ${JAVA_FILES_FOR_STYLE}
+	java -cp ${DAIKON_CLASSPATH} -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
 # To create a patch file to apply changes:
-#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # This didn't create the file though its output claimed it did:
-#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${DAIKONDIR}/java/lib/error_prone_ant-${ERRORPRONE_VERSION}.jar com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:BoxedPrimitiveConstructor -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
+#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:BoxedPrimitiveConstructor -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
 # To apply the patch, see instructions in the Error Prone output.
 
-lib/tmp/error_prone_ant-${ERRORPRONE_VERSION}.jar:
-	(mkdir lib/tmp && cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/error_prone_ant-${ERRORPRONE_VERSION}.jar)
+lib/tmp/${ERRORPRONE_JAR_FILE}:
+	(mkdir -p lib/tmp && cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/${ERRORPRONE_JAR_FILE})
+# For 2.3.2 and later:
+# 	(mkdir -p lib/tmp && cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/error_prone_core/${ERRORPRONE_VERSION}/${ERRORPRONE_JAR_FILE})
 
 findbugs: .findbugs-output
 .PHONY: findbugs
