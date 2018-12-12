@@ -194,7 +194,7 @@ public class FieldInfo extends DaikonVariableInfo {
   /** static final fields are NOMOD. */
   @Override
   public EnumSet<VarFlags> get_var_flags() {
-    EnumSet<VarFlags> flags = super.get_var_flags();
+    EnumSet<VarFlags> flags = super.get_var_flags().clone();
     int modbits = field.getModifiers();
     if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits)) {
       flags.add(VarFlags.NOMOD);
