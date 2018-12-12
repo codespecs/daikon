@@ -135,7 +135,7 @@ public class StringInfo extends DaikonVariableInfo {
 
   @Override
   public EnumSet<VarFlags> get_var_flags() {
-    EnumSet<VarFlags> flags = super.get_var_flags().clone();
+    EnumSet<VarFlags> flags = super.get_var_flags();
     flags.add(VarFlags.SYNTHETIC);
     flags.add(VarFlags.TO_STRING);
     return flags;
