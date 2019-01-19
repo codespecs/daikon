@@ -217,11 +217,11 @@ public final class MergeInvariants {
           PptMap pmap = FileIO.read_serialized_pptmap(file, true);
           for (PptTopLevel ppt : pmap.pptIterable()) {
             if (merge_ppts.containsName(ppt.name())) {
-              // System.out.printf("Not adding ppt %s from %s\n", ppt, file);
+              // System.out.printf("Not adding ppt %s from %s%n", ppt, file);
               continue;
             }
             merge_ppts.add(ppt);
-            // System.out.printf("Adding ppt %s from %s\n", ppt, file);
+            // System.out.printf("Adding ppt %s from %s%n", ppt, file);
 
             // Make sure that the parents of this ppt are already in
             // the map.  This will be true if all possible children of
@@ -274,7 +274,7 @@ public final class MergeInvariants {
         continue;
       }
 
-      // System.out.printf("Including ppt %s, %d children\n", ppt,
+      // System.out.printf("Including ppt %s, %d children%n", ppt,
       //                   ppt.children.size());
 
       // Splitters should not have any children to begin with
@@ -291,7 +291,7 @@ public final class MergeInvariants {
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
-        // System.out.printf("found child %s from pmap %d\n", child, j);
+        // System.out.printf("found child %s from pmap %d%n", child, j);
         if (child == null) {
           continue;
         }

@@ -341,7 +341,7 @@ public final @Interned class ProglangType implements Serializable {
           && (((val & 0x80000000L) == 0x80000000L) && ((val & 0xFFFFFFFF00000000L) == 0))) {
         long orig = val;
         val |= 0xFFFFFFFF00000000L;
-        // System.out.printf("Warning: converted %d to %d\n", orig, val);
+        // System.out.printf("Warning: converted %d to %d%n", orig, val);
       }
       return val;
     }

@@ -218,7 +218,7 @@ public class ChicoryPremain {
 
       if (line != null) {
         pureMethods.add(line.trim());
-        // System.out.printf("Adding '%s' to list of pure methods\n",
+        // System.out.printf("Adding '%s' to list of pure methods%n",
         //                   line);
       }
     } while (line != null);
@@ -228,7 +228,7 @@ public class ChicoryPremain {
     } catch (IOException e) {
     }
 
-    // System.out.printf("leaving purify file\n");
+    // System.out.printf("leaving purify file%n");
 
   }
 

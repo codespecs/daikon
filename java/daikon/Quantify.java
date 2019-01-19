@@ -340,7 +340,7 @@ public class Quantify {
         simples.add(name);
       }
     }
-    // System.out.printf("simple names = %s\n", simples);
+    // System.out.printf("simple names = %s%n", simples);
 
     // Loop through each of the variables, choosing an index for each
     char tmp = 'i';
@@ -546,7 +546,7 @@ public class Quantify {
           Term index = qret.index;
           VarInfo arr_var = qret.var.get_array_var();
           arr_var_indexed = arr_var.simplify_name(index.simplify_name());
-          // System.out.printf("vi = %s, arr_var = %s\n", vi, arr_var);
+          // System.out.printf("vi = %s, arr_var = %s%n", vi, arr_var);
         } else {
           arr_var_indexed = qret.var.simplify_name();
         }

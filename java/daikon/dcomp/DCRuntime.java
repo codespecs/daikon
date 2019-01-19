@@ -1577,7 +1577,7 @@ public final class DCRuntime {
         ArrayInfo ai = (ArrayInfo) child;
         // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
-        // System.out.printf("found arr_tag %s for arr %s\n", arr_tags, tag);
+        // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
         // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
       } else { // not a primitive array
@@ -1739,7 +1739,7 @@ public final class DCRuntime {
         ArrayInfo ai = (ArrayInfo) child;
         // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
-        // System.out.printf("found arr_tag %s for arr %s\n", arr_tags, tag);
+        // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
         // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
       } else { // not a primitive array

@@ -252,13 +252,13 @@ public class DynComp {
     if (premain == null) {
       System.err.printf("Can't find dcomp_premain.jar on the classpath");
       if (daikon_dir == null) {
-        System.err.printf(" and $DAIKONDIR is not set.\n");
+        System.err.printf(" and $DAIKONDIR is not set.%n");
       } else {
-        System.err.printf(" or in $DAIKONDIR/java .\n");
+        System.err.printf(" or in $DAIKONDIR/java .%n");
       }
-      System.err.printf("It should be found in the directory where Daikon was installed.\n");
-      System.err.printf("Use the --premain switch to specify its location,\n");
-      System.err.printf("or change your classpath to include it.\n");
+      System.err.printf("It should be found in the directory where Daikon was installed.%n");
+      System.err.printf("Use the --premain switch to specify its location,%n");
+      System.err.printf("or change your classpath to include it.%n");
       System.exit(1);
     }
 
@@ -294,11 +294,11 @@ public class DynComp {
       if (rt_file == null) {
         System.err.printf("Can't find dcomp_rt.jar on the classpath");
         if (daikon_dir == null) {
-          System.err.printf(" and $DAIKONDIR is not set.\n");
+          System.err.printf(" and $DAIKONDIR is not set.%n");
         } else {
-          System.err.printf(" or in $DAIKONDIR/java .\n");
+          System.err.printf(" or in $DAIKONDIR/java .%n");
         }
-        System.err.printf("Probably you forgot to build it.\n");
+        System.err.printf("Probably you forgot to build it.%n");
         System.err.printf(
             "See the Daikon manual, section \"Instrumenting the "
                 + "JDK with DynComp\" for help.\n");
@@ -339,7 +339,7 @@ public class DynComp {
     try {
       dcomp_proc = rt.exec(cmdline);
     } catch (Throwable e) {
-      System.out.printf("Exception '%s' while executing '%s'\n", e, cmdline);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
       System.exit(1);
       throw new Error("Unreachable control flow");
     }

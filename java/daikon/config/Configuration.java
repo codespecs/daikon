@@ -267,7 +267,7 @@ public final class Configuration implements Serializable {
         value = unparsed.substring(1, unparsed.length() - 1);
       }
       value = ((String) value).intern();
-      // System.out.printf("setting %s to '%s'\n", field, value);
+      // System.out.printf("setting %s to '%s'%n", field, value);
     } else if ((type.getSuperclass() != null)
         && type.getSuperclass().getName().equals("java.lang.Enum")) {
       try {

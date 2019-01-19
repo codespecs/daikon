@@ -1059,7 +1059,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   @Pure
   public boolean isDerivedParam() {
     if (isDerivedParamCached != null) {
-      // System.out.printf("var %s is-derived-param = %b\n", name(),
+      // System.out.printf("var %s is-derived-param = %b%n", name(),
       //                   isDerivedParamCached);
       return isDerivedParamCached.booleanValue();
     }
@@ -1106,7 +1106,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       }
     }
 
-    // System.out.printf("var %s is-derived-param = %b\n", name(), result);
+    // System.out.printf("var %s is-derived-param = %b%n", name(), result);
     isDerivedParamCached = result ? Boolean.TRUE : Boolean.FALSE;
     return result;
   }
@@ -1116,13 +1116,13 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * valid in the new decl format.
    */
   private @Nullable VarInfo enclosing_param() {
-    // System.out.printf("Considering %s\n", this);
+    // System.out.printf("Considering %s%n", this);
     assert FileIO.new_decl_format;
     if (isPrestate()) {
       return postState.enclosing_param();
     }
     for (VarInfo evi = this; evi != null; evi = evi.enclosing_var) {
-      // System.out.printf("%s isParam=%b\n", evi, evi.isParam());
+      // System.out.printf("%s isParam=%b%n", evi, evi.isParam());
       if (evi.isParam()) {
         return evi;
       }
@@ -2904,7 +2904,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       return get_base_array().enclosing_var;
     } else {
       Elements elems = (new ElementsFinder(var_info_name)).elems(); // vin ok
-      // System.out.printf("term.name() = %s\n", elems.term.name());
+      // System.out.printf("term.name() = %s%n", elems.term.name());
       return ppt.find_var_by_name(elems.term.name());
     }
   }
@@ -3342,7 +3342,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
           return String.format("(select elems %s)", enclosing_var.simplify_name());
         }
         if (false && index.equals("|0|")) {
-          System.err.printf("index = %s\n", index);
+          System.err.printf("index = %s%n", index);
           Throwable t = new Throwable();
           t.printStackTrace();
         }
@@ -3396,7 +3396,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (!file_rep_type.isArray() || isDerived()) {
       result = null;
     } else {
-      // System.out.printf("Getting size name for %s [%s]\n", name(),
+      // System.out.printf("Getting size name for %s [%s]%n", name(),
       //                    get_length());
       result = get_length().simplify_name().intern();
     }
@@ -3554,7 +3554,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
               simplify_index_name,
               free,
               index_off);
-      // System.out.printf("sNth: index %s, free %b, off %d, result '%s'\n",
+      // System.out.printf("sNth: index %s, free %b, off %d, result '%s'%n",
       //                     simplify_index_name, free, index_off,
       //                     select.simplify_name());
       return select.simplify_name();
@@ -3618,7 +3618,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
 
     // Return the array properly indexed
-    // System.err.printf("lower bound type = %s [%s] %s\n", lower,
+    // System.err.printf("lower bound type = %s [%s] %s%n", lower,
     //                   lower.getClass(), complete_index);
     return simplify_name(complete_index);
   }
@@ -3740,7 +3740,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public int complexity() {
     if (!FileIO.new_decl_format) {
-      // System.out.printf("%s - %s\n", this, var_info_name.repr());
+      // System.out.printf("%s - %s%n", this, var_info_name.repr());
       return var_info_name.inOrderTraversal().size(); // vin ok
     }
 
@@ -3769,7 +3769,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // int old_cnt = var_info_name.inOrderTraversal().size();
     // if (cnt != old_cnt)
-    //   System.out.printf("var %s, new cnt = %d, old cnt = %d [%s]\n",
+    //   System.out.printf("var %s, new cnt = %d, old cnt = %d [%s]%n",
     //                 name(), cnt, old_cnt, var_info_name.inOrderTraversal());
     return cnt;
   }

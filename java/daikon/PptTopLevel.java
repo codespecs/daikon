@@ -1560,7 +1560,7 @@ public class PptTopLevel extends Ppt {
   /** Add a single slice to the views variable. */
   public void addSlice(PptSlice slice) {
 
-    // System.out.printf("Adding slice %s to ppt %s\n", slice, this);
+    // System.out.printf("Adding slice %s to ppt %s%n", slice, this);
 
     // Make sure the slice doesn't already exist (should never happen)
     PptSlice cslice = findSlice(slice.var_infos);
@@ -1724,7 +1724,7 @@ public class PptTopLevel extends Ppt {
 
       // Look for exact assignments
       for (Invariant inv : slice.invs) {
-        // System.out.printf("considering invariant %s, exact = %b\n",
+        // System.out.printf("considering invariant %s, exact = %b%n",
         //                   inv.format(), inv.isExact());
         if (inv.isExact() && inv.format_using(OutputFormat.DAIKON).startsWith(start)) {
           if (assignment_invs == null) {
@@ -1926,7 +1926,7 @@ public class PptTopLevel extends Ppt {
     // invariant can't exist
     PptSlice slice = findSlice(v.canonicalRep());
     if (slice == null) {
-      // System.out.printf("No slice for variable %s [leader %s]\n", v,
+      // System.out.printf("No slice for variable %s [leader %s]%n", v,
       //                   v.canonicalRep());
       return false;
     }
@@ -1940,9 +1940,9 @@ public class PptTopLevel extends Ppt {
 
     // Debug print the other invariants in this slice.
     if (false && !slice.is_inv_true(inv)) {
-      System.out.printf("%d invariants for variable %s in ppt %s\n", slice.invs.size(), v, name());
+      System.out.printf("%d invariants for variable %s in ppt %s%n", slice.invs.size(), v, name());
       for (Invariant other_inv : slice.invs) {
-        System.out.printf("Invariant %s in ppt %s\n", other_inv.format(), name());
+        System.out.printf("Invariant %s in ppt %s%n", other_inv.format(), name());
       }
     }
 
@@ -3314,7 +3314,7 @@ public class PptTopLevel extends Ppt {
       assert views.containsKey(this_key);
     }
 
-    // System.out.printf("equality for %s = %s\n", this, equality_view);
+    // System.out.printf("equality for %s = %s%n", this, equality_view);
 
     // We could check a lot more than just that slices are okay.  For
     // example, we could ensure that flow graph is correct.
@@ -3461,7 +3461,7 @@ public class PptTopLevel extends Ppt {
 
     // First do this for any children.
     for (PptRelation rel : children) {
-      // System.out.printf("merging child %s[%08X], in_merge = %b\n",
+      // System.out.printf("merging child %s[%08X], in_merge = %b%n",
       //                   rel.child, System.identityHashCode(rel.child),
       //                   rel.child.in_merge);
       if (!rel.child.in_merge) rel.child.mergeInvs();
@@ -3498,9 +3498,9 @@ public class PptTopLevel extends Ppt {
     // We'll reuse one dummy ValueTuple throughout, side-effecting its mods
     // array.
     if (false) {
-      System.out.printf("in ppt %s\n", name());
-      System.out.printf("  num_tracevars = %d\n", num_tracevars);
-      System.out.printf("  mbtracker.num_vars() = %d\n", mbtracker.num_vars());
+      System.out.printf("in ppt %s%n", name());
+      System.out.printf("  num_tracevars = %d%n", num_tracevars);
+      System.out.printf("  mbtracker.num_vars() = %d%n", mbtracker.num_vars());
       for (int ii = 0; ii < var_infos.length; ii++) {
         System.out.printf(
             "    Variable %s, index = %d\n", var_infos[ii], var_infos[ii].value_index);
@@ -3587,7 +3587,7 @@ public class PptTopLevel extends Ppt {
       PptRelation c1 = children.get(first_child);
       debugMerge.fine("looking at " + c1.child.name() + " " + c1.child.num_samples());
       if (c1.child.num_samples() > 0) {
-        // System.out.printf("First child equality set: %s\n",
+        // System.out.printf("First child equality set: %s%n",
         //                     c1.child.equality_view);
         emap = c1.get_child_equalities_as_parent();
         if (debugMerge.isLoggable(Level.FINE)) { // check before stringifying emap
@@ -3643,7 +3643,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    // System.out.printf("New equality set = %s\n", equality_view);
+    // System.out.printf("New equality set = %s%n", equality_view);
 
     if (debugTimeMerge.isLoggable(Level.FINE)) {
       long duration = System.nanoTime() - startTime;
@@ -3726,7 +3726,7 @@ public class PptTopLevel extends Ppt {
         continue;
       }
       if (constants != null && constants.is_missing(l)) {
-        // System.out.printf("skipping leader %s in ppt %s, always missing\n",
+        // System.out.printf("skipping leader %s in ppt %s, always missing%n",
         //                   l, name());
         continue;
       }
@@ -3841,7 +3841,7 @@ public class PptTopLevel extends Ppt {
     for (Iterator<PptSlice> i = rel.child.views_iterator(); i.hasNext(); ) {
       PptSlice cslice = i.next();
 
-      // System.out.printf("Processing slice %s\n", cslice);
+      // System.out.printf("Processing slice %s%n", cslice);
 
       // Matching parent variable info.  Skip this slice if there isn't a
       // match for each variable (such as with an enter-exit relation)

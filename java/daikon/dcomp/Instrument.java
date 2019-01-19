@@ -73,7 +73,7 @@ public class Instrument implements ClassFileTransformer {
     }
 
     if (DynComp.verbose) {
-      System.out.format("In dcomp.Instrument(): class = %s\n", className);
+      System.out.format("In dcomp.Instrument(): class = %s%n", className);
     }
 
     try {

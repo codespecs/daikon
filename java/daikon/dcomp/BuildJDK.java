@@ -253,7 +253,7 @@ public class BuildJDK {
     final String p = potentialJarFileName;
     try {
       String jar_name = findRtJarFilename(p);
-      System.out.printf("using jar file %s\n", jar_name);
+      System.out.printf("using jar file %s%n", jar_name);
       jfile = new JarFile(jar_name);
     } catch (ZipException e) {
       throw new ZipException(e.getMessage() + "; filename was " + p);
@@ -369,7 +369,7 @@ public class BuildJDK {
    */
   private void processClassFile(Map<String, JavaClass> classmap, File dfile, String classname)
       throws java.io.IOException {
-    if (verbose) System.out.printf("processing target %s\n", classname);
+    if (verbose) System.out.printf("processing target %s%n", classname);
     JavaClass jc = classmap.get(classname);
     assert jc != null : "@AssumeAssertion(nullness): seems to be non-null";
     DCInstrument dci = new DCInstrument(jc, true, null);
@@ -389,7 +389,7 @@ public class BuildJDK {
     }
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
-    if (verbose) System.out.printf("writing to file %s\n", classpath);
+    if (verbose) System.out.printf("writing to file %s%n", classpath);
     inst_jc.dump(classpath);
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {

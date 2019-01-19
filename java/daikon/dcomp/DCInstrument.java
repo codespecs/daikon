@@ -2253,7 +2253,7 @@ class DCInstrument extends InstructionListUtils {
   /** Returns whether or not the specified classname is instrumented. */
   boolean callee_instrumented(@ClassGetName String classname) {
 
-    // System.out.printf("Checking callee instrumented on %s\n", classname);
+    // System.out.printf("Checking callee instrumented on %s%n", classname);
 
     // Our copy of daikon.util is not instrumented.  It would be odd, though,
     // to see calls to this.
@@ -3059,7 +3059,7 @@ class DCInstrument extends InstructionListUtils {
     String[] sa = method_id.split(":");
     String m_classname = sa[0];
     String m_name = sa[1];
-    // System.out.printf("has_specified_method: %s:%s - %s.%s\n", m_classname,
+    // System.out.printf("has_specified_method: %s:%s - %s.%s%n", m_classname,
     //                    m_name, classname, m.getName());
 
     if (!m_classname.equals(classname)) return false;
@@ -3091,7 +3091,7 @@ class DCInstrument extends InstructionListUtils {
 
     // If any of the omit patterns match, exclude the ppt
     for (Pattern p : DynComp.ppt_omit_pattern) {
-      // System.out.printf("should_track: pattern '%s' on ppt '%s'\n",
+      // System.out.printf("should_track: pattern '%s' on ppt '%s'%n",
       //                    p, pptname);
       if (p.matcher(pptname).find()) {
         debug_track.log("  Omitting program point %s%n", pptname);
@@ -3587,7 +3587,7 @@ class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createLoad(Type.INT, 0));
       il.append(ifact.createConstant(1));
       il.append(new IADD());
-      // System.out.printf("adding 1 in %s.%s\n", gen.getClassName(),
+      // System.out.printf("adding 1 in %s.%s%n", gen.getClassName(),
       //                   mg.getName());
 
     } else { // normal call
@@ -3683,7 +3683,7 @@ class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createLoad(Type.INT, 0));
       il.append(ifact.createConstant(1));
       il.append(new IADD());
-      // System.out.printf("adding 1 in %s.%s\n", gen.getClassName(),
+      // System.out.printf("adding 1 in %s.%s%n", gen.getClassName(),
       //                   mg.getName());
 
     } else { // normal call

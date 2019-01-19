@@ -310,13 +310,13 @@ public class Chicory {
     if (premain == null) {
       System.err.printf("Can't find ChicoryPremain.jar on the classpath");
       if (daikon_dir == null) {
-        System.err.printf(" and $DAIKONDIR is not set.\n");
+        System.err.printf(" and $DAIKONDIR is not set.%n");
       } else {
-        System.err.printf(" or in $DAIKONDIR/java .\n");
+        System.err.printf(" or in $DAIKONDIR/java .%n");
       }
-      System.err.printf("It should be found in the directory where Daikon was installed.\n");
-      System.err.printf("Use the --premain switch to specify its location,\n");
-      System.err.printf("or change your classpath to include it.\n");
+      System.err.printf("It should be found in the directory where Daikon was installed.%n");
+      System.err.printf("Use the --premain switch to specify its location,%n");
+      System.err.printf("or change your classpath to include it.%n");
       System.exit(1);
     }
 
@@ -418,7 +418,7 @@ public class Chicory {
     try {
       chicory_proc = rt.exec(cmdline);
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'\n", e, cmdline);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
       System.exit(1);
     }
 
@@ -444,7 +444,7 @@ public class Chicory {
       assert daikon_proc != null
           : "@AssumeAssertion(nullness): conditional: just tested daikon_online, and ran runDaikon() earlier in this method";
       if (targetResult != 0) {
-        System.out.printf("Warning: Target exited with %d status\n", targetResult);
+        System.out.printf("Warning: Target exited with %d status%n", targetResult);
       }
 
       // Wait for the process to terminate and return the results
@@ -471,13 +471,13 @@ public class Chicory {
       }
 
       if (daikonResult != 0) {
-        System.out.printf("Warning: Daikon exited with %d status\n", daikonResult);
+        System.out.printf("Warning: Daikon exited with %d status%n", daikonResult);
       }
       System.exit(daikonResult);
     } else {
       // No daikon command specified, so just exit
       if (targetResult != 0) {
-        System.out.printf("Warning: Target exited with %d status\n", targetResult);
+        System.out.printf("Warning: Target exited with %d status%n", targetResult);
       }
       System.exit(targetResult);
     }
@@ -507,12 +507,12 @@ public class Chicory {
     // System.out.println("daikon command is " + daikon_cmd);
     // System.out.println("daikon command cmdstr " + cmdstr);
 
-    if (verbose) System.out.printf("\nExecuting daikon: %s\n", cmdstr);
+    if (verbose) System.out.printf("%nExecuting daikon: %s%n", cmdstr);
 
     try {
       daikon_proc = rt.exec(cmdstr);
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'\n", e, cmdstr);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdstr);
       System.exit(1);
     }
   }

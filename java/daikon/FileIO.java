@@ -505,7 +505,7 @@ public final class FileIO {
     ppt_name = ppt_name.intern();
     VarInfo[] vi_array = read_VarInfos(state, ppt_name);
 
-    // System.out.printf("Ppt %s with %d variables\n", ppt_name,
+    // System.out.printf("Ppt %s with %d variables%n", ppt_name,
     //                   vi_array.length);
 
     // This program point name has already been encountered.
@@ -1293,7 +1293,7 @@ public final class FileIO {
         Daikon.progress = "Checking size of " + filename;
         total_lines = UtilPlume.countLines(raw_filename);
       } else {
-        // System.out.printf("no count %b %d %s %d %d\n", is_decl_file,
+        // System.out.printf("no count %b %d %s %d %d%n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
         //  Daikon.dkconfig_progress_delay, (new File(raw_filename)).length());
       }
@@ -1583,11 +1583,11 @@ public final class FileIO {
       if (new_decl_format) ppt_name = unescape_decl(line); // interning bugfix: no need to intern
       ppt_name = user_mod_ppt_name(ppt_name);
       if (!ppt_included(ppt_name)) {
-        // System.out.printf("skipping ppt %s\n", line);
+        // System.out.printf("skipping ppt %s%n", line);
         while ((line != null) && !line.equals("")) line = reader.readLine();
         continue;
       }
-      // System.out.printf("Not skipping ppt  %s\n", line);
+      // System.out.printf("Not skipping ppt  %s%n", line);
 
       if (state.is_decl_file) {
         if ((!new_decl_format) && line.startsWith("ppt ")) {

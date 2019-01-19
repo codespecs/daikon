@@ -584,7 +584,7 @@ public class NIS {
       inv_cnt++;
     }
 
-    // System.out.printf("Invariants for ppt %s: %d\n", ppt, inv_cnt);
+    // System.out.printf("Invariants for ppt %s: %d%n", ppt, inv_cnt);
     if (false_cnt == 0) {
       return;
     }

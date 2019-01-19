@@ -531,7 +531,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public void pivot() {
     VarInfo newLeader = null;
     for (VarInfo var : vars) {
-      // System.out.printf("  processing %s\n", var);
+      // System.out.printf("  processing %s%n", var);
       if (newLeader == null) {
         newLeader = var;
       } else if (newLeader.isDerivedParamAndUninteresting()
@@ -556,7 +556,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         newLeader = var;
       }
     }
-    // System.out.printf("%s complexity = %d, %s complexity = %d\n", leaderCache,
+    // System.out.printf("%s complexity = %d, %s complexity = %d%n", leaderCache,
     //                    leaderCache.complexity(), newLeader,
     //                    newLeader.complexity());
     leaderCache = newLeader;

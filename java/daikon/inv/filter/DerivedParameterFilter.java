@@ -42,7 +42,7 @@ public class DerivedParameterFilter extends InvariantFilter {
         // ppt has to be a PptSlice, not a PptTopLevel
         PrintInvariants.debugFiltering.fine("\tconsidering DPF for " + vi.name());
         if (vi.isDerivedParamAndUninteresting()) {
-          // System.out.printf("derived and uninteresting: %s\n", vi.name());
+          // System.out.printf("derived and uninteresting: %s%n", vi.name());
           return true;
         }
       }

@@ -787,10 +787,10 @@ public final class PrintInvariants {
 
       if (false) {
         VarInfo v = ppt.find_var_by_name("size(/map.tiles[])");
-        System.out.printf("Found variable %s\n", v);
+        System.out.printf("Found variable %s%n", v);
         if (v != null) {
           List<Invariant> invs = ppt.find_assignment_inv(v);
-          System.out.printf("assignment invs = %s\n", invs);
+          System.out.printf("assignment invs = %s%n", invs);
         }
       }
 
@@ -871,7 +871,7 @@ public final class PrintInvariants {
 
     if (false) {
       for (PptSlice slice : ppt.viewsAsCollection()) {
-        System.out.printf("slice = %s, inv cnt = %d\n", slice, slice.invs.size());
+        System.out.printf("slice = %s, inv cnt = %d%n", slice, slice.invs.size());
       }
     }
     // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
@@ -1705,7 +1705,7 @@ public final class PrintInvariants {
     for (PptTopLevel ppt : ppts.pptIterable()) {
       inv_cnt += ppt.invariant_cnt();
     }
-    System.out.printf("%d invariants with suppressions removed\n", inv_cnt);
+    System.out.printf("%d invariants with suppressions removed%n", inv_cnt);
 
     // Count invariants again, adjusting the count for equality sets
     inv_cnt = 0;
@@ -1720,6 +1720,6 @@ public final class PrintInvariants {
         inv_cnt += cnt;
       }
     }
-    System.out.printf("%d invariants with equality removed\n", inv_cnt);
+    System.out.printf("%d invariants with equality removed%n", inv_cnt);
   }
 }
