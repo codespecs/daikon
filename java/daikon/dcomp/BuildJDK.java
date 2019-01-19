@@ -389,6 +389,7 @@ public class BuildJDK {
     }
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
+    if (verbose) System.out.printf("writing to file %s\n", classpath);
     inst_jc.dump(classpath);
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
