@@ -4319,7 +4319,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public void var_check() {
 
     if (false) {
-      if ((derived != null) && (derived instanceof SequenceSubsequence)) {
+      if (derived instanceof SequenceSubsequence) {
         if (name().contains("-1")) {
           SequenceSubsequence ss = (SequenceSubsequence) derived;
           // System.out.printf("checking %s[%08X] with derived %s[%08X]%n",

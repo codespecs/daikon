@@ -466,7 +466,7 @@ public class CLASSNAME extends SUPERCLASS {
 
     Derivation deriv = vis[0].derived;
 
-    if (deriv != null && ((deriv instanceof SequenceScalarSubsequence) || (deriv instanceof SequenceFloatSubsequence))) {
+    if ((deriv instanceof SequenceScalarSubsequence) || (deriv instanceof SequenceFloatSubsequence)) {
       // Find the slice with the full sequence, check for an invariant of this type
       PptSlice sliceToCheck;
 
