@@ -8745,6 +8745,8 @@ required in order to replicate the bug and verify that our fix corrects
 the problem.  If you do not provide complete information, we will not be
 able to assist you.
 
+@c If you update this, also update ../.github/ISSUE_TEMPLATE
+
 Your bug report should include:
 @itemize @bullet
 @item

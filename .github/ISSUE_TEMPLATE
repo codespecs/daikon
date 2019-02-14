@@ -1,1 +1,12 @@
-Thanks for submitting an issue.  Please see the [instructions for submitting an issue](https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Reporting-problems) to ensure that your report is not missing important information.
+Thanks for submitting an issue.
+As noted in the [instructions for submitting an issue](https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Reporting-problems), please include at least the following with your report:
+
+The version of Daikon, the output of `java -version`, and the operating system version.
+
+The commands you ran, so that we can paste them into a command terminal.  Please don't omit any steps, including installing software or setting environment varibales.
+
+A transcript of all the output (as text, not a screenshot).
+
+What you expected to happen instead.
+
+Files that are used by the commands you ran, such as original, uninstrumented source files and any inputs/tests used when you ran the program.
