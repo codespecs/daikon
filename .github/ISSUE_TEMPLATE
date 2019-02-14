@@ -1,5 +1,5 @@
 Thanks for submitting an issue.
-As noted in the [instructions for submitting an issue](https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Reporting-problems), please include at least the following with your report:
+As noted in the instructions for submitting an issue at https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Reporting-problems, please include at least the following with your report:
 
 The version of Daikon, the output of `java -version`, and the operating system version.
 
