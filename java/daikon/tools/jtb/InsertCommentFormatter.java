@@ -32,7 +32,7 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
   // columnshift != 0, columnshiftline != -1:
   //    column shifting being done, applies only to specified line
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   public InsertCommentFormatter(List<NodeToken> comments) {
     this.comments = comments;

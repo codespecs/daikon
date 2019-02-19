@@ -53,7 +53,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   private static final boolean debug = false;
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   public static final String JML_START_COMMENT = "/*@" + lineSep;
   public static final String JML_END_COMMENT = "@*/" + lineSep;

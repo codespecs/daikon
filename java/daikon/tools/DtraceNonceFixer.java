@@ -20,7 +20,7 @@ import org.plumelib.util.UtilPlume;
  */
 public class DtraceNonceFixer {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   private static String usage =
       UtilPlume.joinLines(

@@ -32,7 +32,7 @@ import org.plumelib.util.UtilPlume;
  */
 public class InvariantDoclet {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   /**
    * Invariants that match any of the specified regular expressions are purposefully missing enable

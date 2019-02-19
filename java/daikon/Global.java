@@ -29,7 +29,7 @@ public final class Global {
   /// Constants
   ///
 
-  public static final String lineSep = System.getProperty("line.separator");
+  public static final String lineSep = System.lineSeparator();
 
   // Regular expressions
   public static final java.util.regex.Pattern ws_regexp;

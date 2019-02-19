@@ -34,7 +34,7 @@ import org.plumelib.util.UtilPlume;
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   ///////////////////////////////////////////////////////////////////////////
   /// Visitors

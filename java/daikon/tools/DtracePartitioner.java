@@ -20,7 +20,7 @@ import org.plumelib.util.UtilPlume;
  */
 public class DtracePartitioner implements Partitioner<String, String>, Iterator<String> {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   // reading from the file as a lazy iterator
   private BufferedReader br;

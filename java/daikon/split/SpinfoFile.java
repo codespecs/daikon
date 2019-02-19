@@ -46,7 +46,7 @@ public class SpinfoFile {
   // splitterObject[i][k].getPptName() != splitterObject[j][k].getPptName() || i = j
   private SplitterObject[][] splitterObjects;
 
-  private static String lineSep = System.getProperty("line.separator");
+  private static String lineSep = System.lineSeparator();
 
   /**
    * Parses file spinfoFile.
