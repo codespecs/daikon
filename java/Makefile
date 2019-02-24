@@ -686,7 +686,7 @@ tags-without-generated-files: clean-generated-files
 # See version numbers at https://github.com/google/error-prone/releases
 ERRORPRONE_VERSION := 2.3.1
 ERRORPRONE_JAR_FILE := error_prone_ant-${ERRORPRONE_VERSION}.jar
-# For 2.3.2 and later:
+# For 2.3.2 and later (but I can't make the command work):
 # ERRORPRONE_JAR_FILE := error_prone_core-${ERRORPRONE_VERSION}-with-dependencies.jar
 ERRORPRONE_JAR_PATH := ${DAIKONDIR}/java/lib/tmp/${ERRORPRONE_JAR_FILE}
 
