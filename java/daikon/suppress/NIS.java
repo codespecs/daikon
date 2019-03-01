@@ -148,7 +148,7 @@ public class NIS {
   static @MonotonicNonNull List<NISuppressionSet> all_suppressions;
 
   /** List of suppressor invariant prototypes. */
-  public @MonotonicNonNull static List<@Prototype Invariant> suppressor_proto_invs;
+  public static @MonotonicNonNull List<@Prototype Invariant> suppressor_proto_invs;
 
   /**
    * List of invariants that are unsuppressed by the current sample. The {@link #falsified} and
