@@ -101,6 +101,7 @@ public final @Interned class ProglangType implements Serializable {
    * No public constructor: use parse() instead to get a canonical representation. basetype should
    * be interned.
    */
+  @SuppressWarnings("super.invocation.invalid") // never called twice with the same arguments
   private ProglangType(@Interned String basetype, int dimensions) {
     assert basetype == basetype.intern();
     this.base = basetype;

@@ -12,6 +12,7 @@ public final @Interned class InvariantStatus {
 
   private final String status;
 
+  @SuppressWarnings("super.invocation.invalid") // never called twice with the same arguments
   private InvariantStatus(String status) {
     this.status = status;
   }

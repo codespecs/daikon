@@ -895,7 +895,9 @@ public final class FileIO {
           new_vals[vi.value_index] = canonical_hashcode;
         }
       }
-      return new @Interned Invocation(ppt, new_vals, mods);
+      @SuppressWarnings("cast.unsafe.constructor.invocation")
+      @Interned Invocation result = new @Interned Invocation(ppt, new_vals, mods);
+      return result;
     }
 
     // Return true if the invocations print the same
