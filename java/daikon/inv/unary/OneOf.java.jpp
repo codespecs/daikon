@@ -1800,7 +1800,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<INT> setValidValues = new TreeSet<INT>();
       for (String s : vsValidValues) {
-        setValidValues.add(new INT(s));
+        setValidValues.add(s.intern());
       }
       Set<INT> setValuesInvariant = new TreeSet<INT>();
       for (INT e : elts) {
