@@ -68,7 +68,7 @@ CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK_JAR_DIR}/javadoc.astub
 ### end of user customizations
 
 # Not := because DAIKON_CLASSPATH is set later in this file.
-JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx1600m ${JAVAC_ARGS}
 JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 
@@ -1109,7 +1109,7 @@ javadoc-files.txt:
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
+	${JAVADOC_COMMAND} -J-Xmx1600m -J-ea $(JAVADOC_FLAGS) \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1121,13 +1121,13 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx1600m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
+	${JAVADOC_COMMAND} -J-Xmx1600m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
@@ -1136,7 +1136,7 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 requireJavadocPrivate: $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS_COMMON) \
+	${JAVADOC_COMMAND} -J-Xmx1600m -J-ea $(JAVADOC_FLAGS_COMMON) \
 		-doclet org.plumelib.javadoc.RequireJavadoc \
                 -docletpath "${DAIKON_CLASSPATH}" \
 		@javadoc-files.txt
@@ -1152,7 +1152,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
+	${JAVADOC_COMMAND} -J-Xmx1600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -1160,7 +1160,7 @@ requireJavadocPrivate: $(JAVA_FILES)
 # resulting in a duplicate class warning.
 
 ../doc/config-options.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
+	${JAVADOC_COMMAND} -J-Xmx1600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
