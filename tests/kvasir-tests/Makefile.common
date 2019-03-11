@@ -59,16 +59,17 @@ ifeq (washington,$(findstring washington,$(shell uname -n)))
 	GOAL := goal-CentOS-UWCSE
 else
 # Standard version of CentOS
-       GOAL := goal-CentOS-nonUWCSE
+       GOAL := goal-CentOS1810
 endif
+endif
+ifeq ($(OS_REL),7.5.1804)
+       GOAL := goal-CentOS1804
 endif
 ifeq ($(OS_REL),7.4.1708)
-# Standard version of CentOS
-       GOAL := goal-CentOS-nonUWCSE
+       GOAL := goal-CentOS1708
 endif
 ifeq ($(OS_REL),7.3.1611)
-# Standard version of CentOS
-       GOAL := goal-CentOS-nonUWCSE
+       GOAL := goal-CentOS1611
 endif
 # other versions of CentOS will use goal-CentOS if it exists
 # otherwise the default goal file
@@ -88,14 +89,18 @@ endif
 # otherwise the default goal file
 endif
 
-# The lastest version of Ubuntu (17.10) uses a gcc that gets
-# almost the same results as the one on Fedora26. However,
-# there are enough differences that we need additional goal files.
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),18.04)
+	GOAL := goal-Ubuntu1804
+endif
 ifeq ($(OS_REL),17.10)
 	GOAL := goal-Ubuntu1710
 endif
-# other versions of Ubuntu will use the default goal file
+ifeq ($(OS_REL),16.04)
+	GOAL := goal-Ubuntu1604
+endif
+# other versions of Ubuntu will use goal-Ubuntu if it exists
+# otherwise the default goal file
 endif
 
 # We test Kvasir on three different OS platforms: Ubuntu, Fedora and CentOS.
@@ -120,7 +125,12 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 						$(if $(shell if [ -f $(1).goal-Fedora ] ; then echo true; fi), \
 							$(1).goal-Fedora, \
 							$(1).goal), \
-						$(1).goal) \
+					    $(if $(findstring Ubuntu, $(OS_ID)), \
+						    $(if $(shell if [ -f $(1).goal-Ubuntu ] ; then echo true; fi), \
+							    $(1).goal-Ubuntu, \
+							    $(1).goal), \
+						    $(1).goal) \
+				     ) \
 				) \
 			)
 
