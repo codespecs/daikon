@@ -85,6 +85,9 @@ endif
 ifeq ($(OS_REL),26)
 	GOAL := goal-Fedora26
 endif
+ifeq ($(OS_REL),28)
+	GOAL := goal-Fedora28
+endif
 # other versions of Fedora will use goal-Fedora if it exists
 # otherwise the default goal file
 endif
