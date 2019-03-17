@@ -89,8 +89,7 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -198,8 +197,7 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -303,8 +301,7 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -406,8 +403,7 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -626,10 +622,9 @@ verbosity
 ::zSuffix
 ::zSuffix[..]
 action
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -673,10 +668,9 @@ strm[..].total_in_hi32 strm[..].total_in_lo32 strm[..].total_out_hi32 strm[..].t
 ::zSuffix[..]
 action
 return
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -718,10 +712,9 @@ strm[..].total_in_hi32 strm[..].total_in_lo32 strm[..].total_out_hi32 strm[..].t
 ::workFactor
 ::zSuffix
 ::zSuffix[..]
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -765,10 +758,9 @@ strm[..].total_in_hi32 strm[..].total_in_lo32 strm[..].total_out_hi32 strm[..].t
 ::zSuffix
 ::zSuffix[..]
 return
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -2612,8 +2604,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -2694,8 +2685,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -8827,8 +8817,7 @@ s[..].selectorMtf
 s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -8937,8 +8926,7 @@ s[..].selectorMtf
 s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9193,8 +9181,7 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9305,8 +9292,7 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9389,8 +9375,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9473,8 +9458,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9722,8 +9706,7 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9834,8 +9817,7 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9883,10 +9865,9 @@ bzlib.c.handle_compress():::ENTER
 ::workFactor
 ::zSuffix
 ::zSuffix[..]
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -9929,10 +9910,9 @@ bzlib.c.handle_compress():::EXIT0
 ::zSuffix
 ::zSuffix[..]
 return
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -10037,8 +10017,7 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -10149,8 +10128,7 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -10234,8 +10212,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -10318,8 +10295,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11460,8 +11436,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11541,8 +11516,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11622,8 +11596,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11703,8 +11676,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11784,8 +11756,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11865,8 +11836,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11946,8 +11916,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12027,8 +11996,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12127,8 +12095,7 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12227,8 +12194,7 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12329,8 +12295,7 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12431,8 +12396,7 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12512,8 +12476,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12593,8 +12556,7 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
