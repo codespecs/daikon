@@ -950,10 +950,10 @@ ppt B.setEverything():::EXIT0
 
 ppt B:::OBJECT
   ppt-type object
-  parent user C:::OBJECT 2
-  parent user D:::OBJECT 3
-  parent user E:::OBJECT 4
-  parent user A:::OBJECT 5
+  parent user C:::OBJECT 1
+  parent user D:::OBJECT 2
+  parent user E:::OBJECT 3
+  parent user A:::OBJECT 4
   variable this
     var-kind variable
     rep-type hashcode
@@ -1950,7 +1950,7 @@ ppt E.setEverything():::EXIT0
 
 ppt E:::OBJECT
   ppt-type object
-  parent user A:::OBJECT 1
+  parent user A:::OBJECT 5
   variable this
     var-kind variable
     rep-type hashcode
