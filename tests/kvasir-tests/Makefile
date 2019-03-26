@@ -188,8 +188,9 @@ small-real-tests__%:
 	@
 
 # omit povray test; see povray/README for details
+# omit flex_pristine test; see flex_pristine/README for details
 #medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__%  do-tcas__%
-medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%   do-tcas__%
+medium-real-tests__%: test-gzip__% do-bzip2__% do-perl__%   do-tcas__%
 	@
 
 # Omits povray and perl
