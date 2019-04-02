@@ -8102,7 +8102,7 @@ available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
 java -Xmx256m daikon.Chicory --comparability-file=MyClass.decls-DynComp \
-     --heap-size=1600m --daikon mypackage.MyClass arg1 arg2 arg3
+     --heap-size=2600m --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
 When using the Java @command{HotSpot} JVM, an additional parameter may need to
