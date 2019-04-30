@@ -20,6 +20,12 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.7.4 (??)
+
+[No substantive changes yet; remove this line when there is.]
+
+===========================================================================
+
 5.7.2 (November 7, 2018)
 
 The Daikon instructions no longer suggest to set CLASSPATH, which is bad
