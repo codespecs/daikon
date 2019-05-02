@@ -22,7 +22,8 @@ Further documentation can be found in:
 
 5.7.4 (??)
 
-[No substantive changes yet; remove this line when there is.]
+Updated the readelf, Valgrind, and BCEL libraries.  This should improve
+compatibility with operating systems and C versions.
 
 ===========================================================================
 
