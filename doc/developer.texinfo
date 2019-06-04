@@ -2464,7 +2464,7 @@ rm -rf stage-daikon
 git clone --depth 3 https://github.com/codespecs/daikon stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
-export JAVA_HOME=/usr/lib/jvm/java
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 unset CHECKERFRAMEWORK
 make staging
 @end example
