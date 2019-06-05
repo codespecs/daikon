@@ -203,7 +203,8 @@ import typequals.prototype.qual.Prototype;
  * The {@link #main} method is the main entry point for the Daikon invariant detector. The {@link
  * #mainHelper} method is the entry point, when called programmatically.
  */
-@SuppressWarnings("initialization.fields.uninitialized") // field all_ppts; deal with it later
+@SuppressWarnings(
+    "initialization.static.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
 
   private Daikon() {
