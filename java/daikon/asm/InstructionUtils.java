@@ -178,8 +178,9 @@ public class InstructionUtils {
   /**
    * Computes a set of binary variables that are guaranteed to be redundant.
    *
-   * <p>The redundant variables are returned as a map. Each entry &lt;rvar, leader&gt; represents a
-   * redundant variable rvar and its leader. If a variable is not in the map, it is not redundant.
+   * <p>The redundant variables are returned as a map. Each entry {@literal <rvar, leader>}
+   * represents a redundant variable rvar and its leader. If a variable is not in the map, it is not
+   * redundant.
    */
   public static Map<String, String> computeRedundantVars(List<IInstruction> path) {
 

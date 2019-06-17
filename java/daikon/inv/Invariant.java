@@ -727,7 +727,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Return a string representation of the variable names.
    *
-   * @return a string representation of the variable names.
+   * @return a string representation of the variable names
    */
   public final String varNames(@GuardSatisfied @NonPrototype Invariant this) {
     return ppt.varNames();
