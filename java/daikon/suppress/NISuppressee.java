@@ -241,10 +241,14 @@ public class NISuppressee {
    */
   public boolean get_swap() {
 
-    if (var_count != 2) return false;
+    if (var_count != 2) {
+      return false;
+    }
 
     BinaryInvariant binv = (BinaryInvariant) sample_inv;
-    if (binv.is_symmetric()) return false;
+    if (binv.is_symmetric()) {
+      return false;
+    }
     return (binv.get_swap());
   }
 

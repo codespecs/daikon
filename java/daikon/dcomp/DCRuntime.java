@@ -202,7 +202,9 @@ public final class DCRuntime {
   }
 
   public static void debug_print_call_stack() {
-    if (!debug) return;
+    if (!debug) {
+      return;
+    }
 
     StackTraceElement[] stack_trace;
     stack_trace = Thread.currentThread().getStackTrace();
@@ -1031,7 +1033,9 @@ public final class DCRuntime {
   public static void enter(Object[] tag_frame, @Nullable Object obj, int mi_index, Object[] args) {
 
     // Don't be recursive
-    if (in_enter_exit) return;
+    if (in_enter_exit) {
+      return;
+    }
     in_enter_exit = true;
 
     if (debug) {
@@ -1088,7 +1092,9 @@ public final class DCRuntime {
   public static void enter_refs_only(@Nullable Object obj, int mi_index, Object[] args) {
 
     // Don't be recursive
-    if (in_enter_exit) return;
+    if (in_enter_exit) {
+      return;
+    }
     in_enter_exit = true;
 
     if (debug) {
@@ -1155,7 +1161,9 @@ public final class DCRuntime {
       int exit_line_number) {
 
     // Don't be recursive
-    if (in_enter_exit) return;
+    if (in_enter_exit) {
+      return;
+    }
     in_enter_exit = true;
 
     if (debug) {
@@ -1202,7 +1210,9 @@ public final class DCRuntime {
       @Nullable Object obj, int mi_index, Object[] args, Object ret_val, int exit_line_number) {
 
     // Don't be recursive
-    if (in_enter_exit) return;
+    if (in_enter_exit) {
+      return;
+    }
     in_enter_exit = true;
 
     if (debug) {
@@ -1362,7 +1372,9 @@ public final class DCRuntime {
       if (fi.isStatic()) {
         if (fi.isPrimitive()) {
           // a static final primitive is a constant and there is no tag accessor
-          if (fi.isFinal()) return null;
+          if (fi.isFinal()) {
+            return null;
+          }
           fi.field_tag = new StaticPrimitiveTag(fi);
         } else {
           fi.field_tag = new StaticReferenceTag(fi);
@@ -1393,7 +1405,9 @@ public final class DCRuntime {
       if (fi.isStatic()) {
         if (fi.isPrimitive()) {
           // a static final primitive is a constant and there is no tag accessor
-          if (fi.isFinal()) return null;
+          if (fi.isFinal()) {
+            return null;
+          }
           //          fi.field_tag = new StaticPrimitiveTag (fi);
           throw new RuntimeException("fi should not be primitive!");
         } else {
@@ -1893,7 +1907,9 @@ public final class DCRuntime {
 
   private static void add_dv_stats(RootInfo root) {
 
-    if (root == null) return;
+    if (root == null) {
+      return;
+    }
     List<DaikonVariableInfo> dv_list = root.tree_as_list();
     for (DaikonVariableInfo dv : dv_list) {
       if (dv instanceof RootInfo) {
@@ -1990,7 +2006,9 @@ public final class DCRuntime {
     time_decl.indent();
     List<DVSet> l = get_comparable(mi.traversalEnter);
     // comp_list_ms += watch.snapshot(); watch.reset();
-    if (l == null) return null;
+    if (l == null) {
+      return null;
+    }
     time_decl.log("got %d comparable sets", l.size());
 
     // Print the enter point
@@ -2387,7 +2405,9 @@ public final class DCRuntime {
    */
   static @Nullable List<DVSet> get_comparable(RootInfo root) {
 
-    if (root == null) return null;
+    if (root == null) {
+      return null;
+    }
 
     // List of all of the sets of comparable daikon variables
     Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
@@ -2416,7 +2436,9 @@ public final class DCRuntime {
    * included as a key to all its children.
    */
   static @PolyNull Map<DaikonVariableInfo, DVSet> get_comparable_traced(@PolyNull RootInfo root) {
-    if (root == null) return null;
+    if (root == null) {
+      return null;
+    }
 
     // List of all of the parent-child relationships, where parent-child
     //   represents the equivalence relation of being comparable.
@@ -2829,7 +2851,9 @@ public final class DCRuntime {
     // Get the tag for the index and mark it as comparable with the array
     assert td.tag_stack.peek() != method_marker;
     Object index_tag = td.tag_stack.pop();
-    if (arr_ref == null) return;
+    if (arr_ref == null) {
+      return;
+    }
     debug_arr_index.log("Merging array '%s' and index '%s'", arr_ref, index_tag);
     if (merge_arrays_and_indices) TagEntry.union(arr_ref, index_tag);
 
@@ -2866,7 +2890,9 @@ public final class DCRuntime {
     // Get the tag for the index and mark it as comparable with the array
     assert td.tag_stack.peek() != method_marker;
     Object index_tag = td.tag_stack.pop();
-    if (arr_ref == null) return;
+    if (arr_ref == null) {
+      return;
+    }
     debug_arr_index.log("Merging array '%s' and index '%s'", arr_ref, index_tag);
     if (merge_arrays_and_indices) TagEntry.union(arr_ref, index_tag);
   }

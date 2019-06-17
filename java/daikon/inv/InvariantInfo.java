@@ -64,7 +64,9 @@ public class InvariantInfo {
    *     "var1,var3,var2", "var2,var1,var3"... etc.]
    */
   public @Nullable List<String> var_permutations() {
-    if (vars == null) return null;
+    if (vars == null) {
+      return null;
+    }
 
     // We know there can be at most 3 vars so it's not worth writing
     // a complicated routine that generates all permutations

@@ -863,7 +863,9 @@ public final class Daikon {
       }
 
       // exit the program
-      if (false) return;
+      if (false) {
+        return;
+      }
     }
 
     // Display invariants
@@ -2117,7 +2119,9 @@ public final class Daikon {
 
     @Override
     public void run() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       while (true) {
         if (shouldStop) {
           clear();
@@ -2133,7 +2137,9 @@ public final class Daikon {
     }
     /** Clear the display; good to do before printing to System.out. */
     public void clear() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       // "display("");" is wrong becuase it leaves the timestamp and writes
       // spaces across the screen.
       String status = UtilPlume.rpad("", dkconfig_progress_display_width - 1);
@@ -2146,7 +2152,9 @@ public final class Daikon {
      * display.
      */
     public void display() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
 
       String message;
       if (FileIO.data_trace_state != null) {
@@ -2162,7 +2170,9 @@ public final class Daikon {
     }
     /** Displays the given message. */
     public void display(String message) {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       String status =
           UtilPlume.rpad(
               "[" + df.format(new Date()) + "]: " + message, dkconfig_progress_display_width - 1);
@@ -2458,7 +2468,9 @@ public final class Daikon {
   /** Initialize the equality sets for each variable. */
   public static void setupEquality(PptTopLevel ppt) {
 
-    if (!Daikon.use_equality_optimization) return;
+    if (!Daikon.use_equality_optimization) {
+      return;
+    }
 
     // Skip points that are not leaves.
     if (use_dataflow_hierarchy) {
@@ -2479,7 +2491,9 @@ public final class Daikon {
         return;
       }
 
-      if (ppt.has_splitters()) return;
+      if (ppt.has_splitters()) {
+        return;
+      }
     }
 
     // Create the initial equality sets

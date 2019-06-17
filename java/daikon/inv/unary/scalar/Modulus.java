@@ -65,7 +65,9 @@ public class Modulus extends SingleScalar {
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types(vis)) return false;
+    if (!valid_types(vis)) {
+      return false;
+    }
 
     return (vis[0].file_rep_type.baseIsIntegral());
   }

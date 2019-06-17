@@ -454,7 +454,9 @@ public class InvariantChecker {
       }
 
       // If the point has no variables, skip it
-      if (ppt.var_infos.length == 0) return;
+      if (ppt.var_infos.length == 0) {
+        return;
+      }
 
       // We should have received sample here before, or there is nothing
       // to check.

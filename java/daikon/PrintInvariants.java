@@ -666,7 +666,9 @@ public final class PrintInvariants {
         temp = arg.substring(arg.indexOf('@')); // in case the pptname has a < in it
       else if (arg.indexOf('<') != -1) temp = arg.substring(arg.indexOf('<'));
       else if (arg.indexOf('@') != -1) temp = arg.substring(arg.indexOf('@'));
-      else return;
+      else {
+        return;
+      }
     }
     firstChar = temp.charAt(0);
 
@@ -1599,7 +1601,9 @@ public final class PrintInvariants {
   /** Prints all of the invariants in the specified slice. */
   public static void print_all_invs(@Nullable PptSlice slice, String indent) {
 
-    if (slice == null) return;
+    if (slice == null) {
+      return;
+    }
 
     for (Invariant inv : slice.invs) {
       System.out.printf("%s%s [%s]%n", indent, inv.format(), inv.getClass().getSimpleName());

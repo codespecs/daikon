@@ -71,7 +71,9 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   private String printIntersect(@GuardSatisfied CommonStringSequence this) {
-    if (intersect == null) return "{}";
+    if (intersect == null) {
+      return "{}";
+    }
 
     String result = "{";
     for (int i = 0; i < intersect.length; i++) {
@@ -85,8 +87,12 @@ public class CommonStringSequence extends SingleStringSequence {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied CommonStringSequence this, OutputFormat format) {
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
+    }
 
     return format_unimplemented(format);
   }
@@ -96,7 +102,9 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   public String format_csharp_contract(@GuardSatisfied CommonStringSequence this) {
-    if (intersect == null) return "()";
+    if (intersect == null) {
+      return "()";
+    }
 
     if (intersect.length == 1) {
       return var().csharp_name() + ".Contains(" + intersect[0] + ")";

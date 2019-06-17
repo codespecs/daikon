@@ -1730,7 +1730,9 @@ public final class FileIO {
     // it saves away the orig values from enter points for later use
     // by exit points.
     boolean ignore = compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
-    if (ignore) return;
+    if (ignore) {
+      return;
+    }
 
     // Only process the leaves of the ppt tree.
     // This test assumes that all leaves are numbered exit program points
@@ -1810,7 +1812,9 @@ public final class FileIO {
   /** Print each call that does not have a matching exit. */
   public static void process_unmatched_procedure_entries() {
 
-    if (dkconfig_unmatched_procedure_entries_quiet) return;
+    if (dkconfig_unmatched_procedure_entries_quiet) {
+      return;
+    }
 
     int unmatched_count = call_stack.size() + call_hashmap.size();
 

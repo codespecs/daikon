@@ -371,10 +371,14 @@ public final class Debug {
   public static void log(Logger debug, Class<?> inv_class, Ppt ppt, VarInfo[] vis, String msg) {
 
     // Try to log via the logger first
-    if (log(inv_class, ppt, vis, msg)) return;
+    if (log(inv_class, ppt, vis, msg)) {
+      return;
+    }
 
     // If debug isn't turned on, there is nothing to do
-    if (!debug.isLoggable(Level.FINE)) return;
+    if (!debug.isLoggable(Level.FINE)) {
+      return;
+    }
 
     // Get the non-qualified class name
     String class_str;
@@ -429,7 +433,9 @@ public final class Debug {
    * @return whether or not it logged anything
    */
   public boolean log(String msg) {
-    if (!logOn()) return false;
+    if (!logOn()) {
+      return false;
+    }
     return (log(cache_class, cache_ppt, cache_vis, msg));
   }
 
@@ -460,16 +466,24 @@ public final class Debug {
       VarInfo @Nullable [] vis,
       String msg) {
 
-    if (!debugTrack.isLoggable(Level.FINE)) return false;
+    if (!debugTrack.isLoggable(Level.FINE)) {
+      return false;
+    }
 
     // Make sure the class matches
-    if (!class_match(inv_class)) return false;
+    if (!class_match(inv_class)) {
+      return false;
+    }
 
     // Make sure the Ppt matches
-    if (!ppt_match(ppt)) return false;
+    if (!ppt_match(ppt)) {
+      return false;
+    }
 
     // Make sure the variables match
-    if (!var_match(vis)) return false;
+    if (!var_match(vis)) {
+      return false;
+    }
 
     // Get the non-qualified class name
     String class_str = "null";
@@ -549,8 +563,12 @@ public final class Debug {
    */
   public static boolean var_match(VarInfo @Nullable [] vis) {
 
-    if (debugTrackVars.length == 0) return true;
-    if (vis == null) return false;
+    if (debugTrackVars.length == 0) {
+      return true;
+    }
+    if (vis == null) {
+      return false;
+    }
 
     boolean match = false;
 
@@ -693,18 +711,42 @@ public final class Debug {
 
   /** Like Object.toString(), but handles null, and has special handling for arrays. */
   public static String toString(@Nullable Object val) {
-    if (val == null) return "none";
-    if (val instanceof String) return "\"" + val + "\"";
-    if (val instanceof VarInfo[]) return Arrays.toString((VarInfo[]) val);
-    if (val instanceof String[]) return Arrays.toString((String[]) val);
-    if (val instanceof boolean[]) return Arrays.toString((boolean[]) val);
-    if (val instanceof byte[]) return Arrays.toString((byte[]) val);
-    if (val instanceof char[]) return Arrays.toString((char[]) val);
-    if (val instanceof double[]) return Arrays.toString((double[]) val);
-    if (val instanceof float[]) return Arrays.toString((float[]) val);
-    if (val instanceof int[]) return Arrays.toString((int[]) val);
-    if (val instanceof long[]) return Arrays.toString((long[]) val);
-    if (val instanceof short[]) return Arrays.toString((short[]) val);
+    if (val == null) {
+      return "none";
+    }
+    if (val instanceof String) {
+      return "\"" + val + "\"";
+    }
+    if (val instanceof VarInfo[]) {
+      return Arrays.toString((VarInfo[]) val);
+    }
+    if (val instanceof String[]) {
+      return Arrays.toString((String[]) val);
+    }
+    if (val instanceof boolean[]) {
+      return Arrays.toString((boolean[]) val);
+    }
+    if (val instanceof byte[]) {
+      return Arrays.toString((byte[]) val);
+    }
+    if (val instanceof char[]) {
+      return Arrays.toString((char[]) val);
+    }
+    if (val instanceof double[]) {
+      return Arrays.toString((double[]) val);
+    }
+    if (val instanceof float[]) {
+      return Arrays.toString((float[]) val);
+    }
+    if (val instanceof int[]) {
+      return Arrays.toString((int[]) val);
+    }
+    if (val instanceof long[]) {
+      return Arrays.toString((long[]) val);
+    }
+    if (val instanceof short[]) {
+      return Arrays.toString((short[]) val);
+    }
     return val.toString();
   }
 

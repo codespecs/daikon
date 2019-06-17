@@ -168,7 +168,9 @@ class DCInstrument extends InstructionListUtils {
 
     @EnsuresNonNullIf(result = true, expression = "#1")
     boolean equals(@GuardSatisfied MethodDef this, String name, Type[] arg_types) {
-      if (!name.equals(this.name)) return false;
+      if (!name.equals(this.name)) {
+        return false;
+      }
       if (this.arg_types.length != arg_types.length) {
         return false;
       }
@@ -184,7 +186,9 @@ class DCInstrument extends InstructionListUtils {
     @Pure
     @Override
     public boolean equals(@GuardSatisfied MethodDef this, @GuardSatisfied @Nullable Object obj) {
-      if (!(obj instanceof MethodDef)) return false;
+      if (!(obj instanceof MethodDef)) {
+        return false;
+      }
       MethodDef md = (MethodDef) obj;
       return equals(md.name, md.arg_types);
     }
@@ -1066,7 +1070,9 @@ class DCInstrument extends InstructionListUtils {
   /** Adds a try/catch block around the entire method. */
   public void install_exception_handler(MethodGen mg) {
 
-    if (global_catch_il == null) return;
+    if (global_catch_il == null) {
+      return;
+    }
 
     InstructionList cur_il = mg.getInstructionList();
     InstructionHandle start = global_exception_handler.getStartPC();
@@ -1078,7 +1084,9 @@ class DCInstrument extends InstructionListUtils {
     global_catch_il = null;
     global_exception_handler = null;
 
-    if (!needStackMap) return;
+    if (!needStackMap) {
+      return;
+    }
 
     int exc_offset = exc.getPosition();
 
@@ -1160,7 +1168,9 @@ class DCInstrument extends InstructionListUtils {
 
     insert_at_method_start(mg, nl);
 
-    if (!needStackMap) return;
+    if (!needStackMap) {
+      return;
+    }
 
     // For Java 7 and beyond the StackMapTable is part of the
     // verification process.  We need to create and or update it to
@@ -2257,13 +2267,19 @@ class DCInstrument extends InstructionListUtils {
 
     // Our copy of daikon.util is not instrumented.  It would be odd, though,
     // to see calls to this.
-    if (classname.startsWith("daikon.util")) return false;
+    if (classname.startsWith("daikon.util")) {
+      return false;
+    }
 
     // Special case the execution trace tool.
-    // if (classname.startsWith("minst.Minst")) return false;
+    // if (classname.startsWith("minst.Minst")) {
+    //   return false;
+    // }
 
     // If its not a JDK class, presume its instrumented.
-    if (!BcelUtil.inJdk(classname)) return true;
+    if (!BcelUtil.inJdk(classname)) {
+      return true;
+    }
 
     // We have decided not to use the instrumented version of Random as
     // the method generates values based on an initial seed value.
@@ -2272,7 +2288,9 @@ class DCInstrument extends InstructionListUtils {
     // set when they should be distinct.
     // NOTE: If we find other classes that should not use the instrumented
     // versions, we should consider making this a searchable list.
-    if (classname.equals("java.util.Random")) return false;
+    if (classname.equals("java.util.Random")) {
+      return false;
+    }
 
     // Should we test the full_instrumentation flag?
     // or just assume if a JDK method/class is on omit list we
@@ -2567,7 +2585,9 @@ class DCInstrument extends InstructionListUtils {
   InstructionList load_store_field(MethodGen mg, FieldInstruction f) {
 
     Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) return null;
+    if (field_type instanceof ReferenceType) {
+      return null;
+    }
     ObjectType obj_type = (ObjectType) f.getReferenceType(pool);
     InstructionList il = new InstructionList();
     String classname = obj_type.getClassName();
@@ -2656,7 +2676,9 @@ class DCInstrument extends InstructionListUtils {
   InstructionList load_store_static(FieldInstruction f, String method) {
 
     Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) return null;
+    if (field_type instanceof ReferenceType) {
+      return null;
+    }
     String name = f.getClassName(pool) + "." + f.getFieldName(pool);
     // System.out.printf("static field name for %s = %s%n", f, name);
 
@@ -2720,7 +2742,9 @@ class DCInstrument extends InstructionListUtils {
     if (obj_type.getClassName().equals(orig_class.getClassName())) {
       int fcnt = 0;
       for (Field f : orig_class.getFields()) {
-        if (f.getName().equals(name)) return fcnt;
+        if (f.getName().equals(name)) {
+          return fcnt;
+        }
         if (f.getType() instanceof BasicType) fcnt++;
       }
       throw new Error("Can't find " + name + " in " + obj_type);
@@ -2738,7 +2762,9 @@ class DCInstrument extends InstructionListUtils {
     // Loop through all of the fields, counting the number of primitive fields
     int fcnt = 0;
     for (java.lang.reflect.Field f : obj_class.getDeclaredFields()) {
-      if (f.getName().equals(name)) return fcnt;
+      if (f.getName().equals(name)) {
+        return fcnt;
+      }
       if (f.getType().isPrimitive()) fcnt++;
     }
     throw new Error("Can't find " + name + " in " + obj_class);
@@ -2839,7 +2865,9 @@ class DCInstrument extends InstructionListUtils {
     int last_line_number = 0;
     boolean foundLine;
 
-    if (il == null) return null;
+    if (il == null) {
+      return null;
+    }
 
     for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
       foundLine = false;
@@ -3062,9 +3090,13 @@ class DCInstrument extends InstructionListUtils {
     // System.out.printf("has_specified_method: %s:%s - %s.%s%n", m_classname,
     //                    m_name, classname, m.getName());
 
-    if (!m_classname.equals(classname)) return false;
+    if (!m_classname.equals(classname)) {
+      return false;
+    }
 
-    if (!m_name.equals(m.getName())) return false;
+    if (!m_name.equals(m.getName())) {
+      return false;
+    }
 
     return true;
   }
@@ -3100,7 +3132,9 @@ class DCInstrument extends InstructionListUtils {
     }
 
     // If there are no select patterns, everything matches
-    if (DynComp.ppt_select_pattern.size() == 0) return true;
+    if (DynComp.ppt_select_pattern.size() == 0) {
+      return true;
+    }
 
     // One of the select patterns must match the ppt or the class to include
     for (Pattern p : DynComp.ppt_select_pattern) {
@@ -3178,7 +3212,9 @@ class DCInstrument extends InstructionListUtils {
     Type top = stack.peek();
     if (debug_dup.enabled)
       debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
-    if (!is_primitive(top)) return null;
+    if (!is_primitive(top)) {
+      return null;
+    }
     String method = "dup_x1";
     if (!is_primitive(stack.peek(1))) method = "dup";
     return build_il(dcr_call(method, Type.VOID, Type.NO_ARGS), inst);
@@ -3369,7 +3405,9 @@ class DCInstrument extends InstructionListUtils {
     if (inst instanceof LDC) // LDC_W extends LDC
     type = ((LDC) inst).getType(pool);
     else type = ((LDC2_W) inst).getType(pool);
-    if (!(type instanceof BasicType)) return null;
+    if (!(type instanceof BasicType)) {
+      return null;
+    }
     return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
   }
 
@@ -3510,15 +3548,23 @@ class DCInstrument extends InstructionListUtils {
 
     if (loader == null) loader = DCInstrument.class.getClassLoader();
 
-    if (t == Type.BOOLEAN) return Boolean.TYPE;
-    else if (t == Type.BYTE) return Byte.TYPE;
-    else if (t == Type.CHAR) return Character.TYPE;
-    else if (t == Type.DOUBLE) return Double.TYPE;
-    else if (t == Type.FLOAT) return Float.TYPE;
-    else if (t == Type.INT) return Integer.TYPE;
-    else if (t == Type.LONG) return Long.TYPE;
-    else if (t == Type.SHORT) return Short.TYPE;
-    else if (t instanceof ObjectType || t instanceof ArrayType) {
+    if (t == Type.BOOLEAN) {
+      return Boolean.TYPE;
+    } else if (t == Type.BYTE) {
+      return Byte.TYPE;
+    } else if (t == Type.CHAR) {
+      return Character.TYPE;
+    } else if (t == Type.DOUBLE) {
+      return Double.TYPE;
+    } else if (t == Type.FLOAT) {
+      return Float.TYPE;
+    } else if (t == Type.INT) {
+      return Integer.TYPE;
+    } else if (t == Type.LONG) {
+      return Long.TYPE;
+    } else if (t == Type.SHORT) {
+      return Short.TYPE;
+    } else if (t instanceof ObjectType || t instanceof ArrayType) {
       @ClassGetName String sig = typeToClassGetName(t);
       try {
         return Class.forName(sig, false, loader);
@@ -3798,7 +3844,9 @@ class DCInstrument extends InstructionListUtils {
    */
   public List<MethodGen> create_tag_accessors(ClassGen gen) {
 
-    if (gen.isInterface()) return null;
+    if (gen.isInterface()) {
+      return null;
+    }
 
     String classname = gen.getClassName();
     List<MethodGen> mlist = new ArrayList<MethodGen>();
@@ -4198,10 +4246,14 @@ class DCInstrument extends InstructionListUtils {
   public void add_dcomp_arg(MethodGen mg) {
 
     // Don't modify main or the JVM won't be able to find it.
-    if (BcelUtil.isMain(mg)) return;
+    if (BcelUtil.isMain(mg)) {
+      return;
+    }
 
     // Don't modify class init methods, they don't take arguments
-    if (BcelUtil.isClinit(mg)) return;
+    if (BcelUtil.isClinit(mg)) {
+      return;
+    }
 
     // Add the dcomp marker argument to indicate this is the
     // instrumented version of the method.

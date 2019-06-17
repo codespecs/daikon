@@ -160,7 +160,9 @@ public class PptSplitter implements Serializable {
 
     // Choose the appropriate conditional point based on the condition result
     PptConditional ppt_cond = choose_conditional(vt);
-    if (ppt_cond == null) return;
+    if (ppt_cond == null) {
+      return;
+    }
 
     /// ??? MDE
     // If any parent variables were missing out of bounds on this

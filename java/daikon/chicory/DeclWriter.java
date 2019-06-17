@@ -224,7 +224,9 @@ public class DeclWriter extends DaikonWriter {
    * variables to print, this method does nothing.
    */
   private void printClassPpt(ClassInfo cinfo, String name, DeclReader comp_info) {
-    if (num_class_vars(cinfo) == 0) return;
+    if (num_class_vars(cinfo) == 0) {
+      return;
+    }
 
     boolean printedHeader = false;
     RootInfo root = RootInfo.getClassPpt(cinfo, Runtime.nesting_depth);

@@ -50,7 +50,9 @@ public class PptCountVisitor extends PrintAllVisitor {
     @SuppressWarnings("nullness") // application invariant: calling context
     @NonNull PptTopLevel ppt = node.getPpt1();
 
-    if ((ppt instanceof PptConditional)) return;
+    if ((ppt instanceof PptConditional)) {
+      return;
+    }
     //        else super.visit (node);
 
     boolean report = countReport(node);
@@ -230,7 +232,9 @@ public class PptCountVisitor extends PrintAllVisitor {
    */
   private static boolean filterOut(@Nullable Invariant inv) {
 
-    if (inv == null) return true;
+    if (inv == null) {
+      return true;
+    }
     String str = inv.format_using(OutputFormat.JAVA);
     StringTokenizer st = new StringTokenizer(str, " ()");
     while (st.hasMoreTokens()) {

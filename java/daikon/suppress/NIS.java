@@ -214,7 +214,9 @@ public class NIS {
 
     // This should be the first statement in the method, but put it after the
     // field initalizations so that the Initialization Checker doesn't complain.
-    if (!dkconfig_enabled) return;
+    if (!dkconfig_enabled) {
+      return;
+    }
 
     // Get all defined suppressions.
     for (Invariant inv : Daikon.proto_invs) {
@@ -318,7 +320,9 @@ public class NIS {
         }
       }
 
-      if (hashFound) return;
+      if (hashFound) {
+        return;
+      }
     }
 
     // Get the suppression sets (if any) associated with this invariant
@@ -896,7 +900,9 @@ public class NIS {
   @RequiresNonNull("suppressor_map")
   public static void dump(Logger log) {
 
-    if (!log.isLoggable(Level.FINE)) return;
+    if (!log.isLoggable(Level.FINE)) {
+      return;
+    }
 
     for (Class<? extends Invariant> sclass : suppressor_map.keySet()) {
       List<NISuppressionSet> suppression_set_list = suppressor_map.get(sclass);
@@ -940,12 +946,18 @@ public class NIS {
     @Pure
     @Override
     public boolean equals(@GuardSatisfied SupInv this, @GuardSatisfied @Nullable Object obj) {
-      if (!(obj instanceof SupInv)) return false;
+      if (!(obj instanceof SupInv)) {
+        return false;
+      }
 
       // Class and variables must match
       SupInv sinv = (SupInv) obj;
-      if (sinv.suppressee.sup_class != suppressee.sup_class) return false;
-      if (vis.length != sinv.vis.length) return false;
+      if (sinv.suppressee.sup_class != suppressee.sup_class) {
+        return false;
+      }
+      if (vis.length != sinv.vis.length) {
+        return false;
+      }
       for (int i = 0; i < vis.length; i++) {
         if (vis[i] != sinv.vis[i]) {
           return false;
@@ -1002,11 +1014,19 @@ public class NIS {
      */
     public @Nullable Invariant already_exists() {
       Invariant cinv = ppt.find_inv_by_class(vis, suppressee.sup_class);
-      if (cinv == null) return null;
-      if (suppressee.var_count != 2) return cinv;
+      if (cinv == null) {
+        return null;
+      }
+      if (suppressee.var_count != 2) {
+        return cinv;
+      }
       BinaryInvariant binv = (BinaryInvariant) cinv;
-      if (binv.is_symmetric()) return cinv;
-      if (binv.get_swap() != suppressee.get_swap()) return null;
+      if (binv.is_symmetric()) {
+        return cinv;
+      }
+      if (binv.get_swap() != suppressee.get_swap()) {
+        return null;
+      }
       return cinv;
     }
 
@@ -1060,7 +1080,9 @@ public class NIS {
     public void add(Invariant inv) {
 
       // Only possible antecedents need to be added
-      if (!is_suppressor(inv.getClass())) return;
+      if (!is_suppressor(inv.getClass())) {
+        return;
+      }
 
       // Only antecedents comparable to this one should be added
       assert VarComparability.comparable(inv.get_comparability(), comparability);
@@ -1070,7 +1092,9 @@ public class NIS {
       // the same variables
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
         VarInfo v = inv.ppt.var_infos[i];
-        if (v.missingOutOfBounds()) return;
+        if (v.missingOutOfBounds()) {
+          return;
+        }
       }
 
       if (inv.is_false()) false_cnt++;

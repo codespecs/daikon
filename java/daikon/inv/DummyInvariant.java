@@ -199,13 +199,27 @@ public class DummyInvariant extends Invariant {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied DummyInvariant this, OutputFormat format) {
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.JAVA) return format_java();
-    if (format == OutputFormat.ESCJAVA) return format_esc();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
-    if (format == OutputFormat.JML) return format_jml();
-    if (format == OutputFormat.DBCJAVA) return format_dbc();
-    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp();
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.JAVA) {
+      return format_java();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return format_esc();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
+    if (format == OutputFormat.JML) {
+      return format_jml();
+    }
+    if (format == OutputFormat.DBCJAVA) {
+      return format_dbc();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp();
+    }
 
     return format_unimplemented(format);
   }

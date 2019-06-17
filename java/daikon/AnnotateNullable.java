@@ -396,7 +396,9 @@ public class AnnotateNullable {
     @NonNull String java_sig = ppt.ppt_name.getSignature();
     String java_args = java_sig.replace(method, "");
     // System.out.printf("m/s/a = %s %s %s%n", method, java_sig, java_args);
-    if (method.equals(ppt.ppt_name.getShortClassName())) method = "<init>";
+    if (method.equals(ppt.ppt_name.getShortClassName())) {
+      method = "<init>";
+    }
 
     // Problem:  I need the return type, but Chicory does not output it.
     // So, I could try to retrieve it from the "return" variable in the

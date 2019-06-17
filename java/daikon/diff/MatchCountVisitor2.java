@@ -116,7 +116,9 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   /** Grabs the splitting condition from a pptname. */
   private String extractPredicate(String s) {
     int cut = s.indexOf(";condition=");
-    if (cut == -1) return "NO_PREDICATE: ";
+    if (cut == -1) {
+      return "NO_PREDICATE: ";
+    }
     return s.substring(cut + 12, s.lastIndexOf('"'));
   }
 
@@ -185,10 +187,14 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
     return false;
 
-    //     if (5 == 5) return false;
+    //     if (5 == 5) {
+    //       return false;
+    //     }
     //
     //
-    //     if (inv == null) return true;
+    //     if (inv == null) {
+    //       return true;
+    //     }
     //     String str = inv.format_using(OutputFormat.JAVA);
     //     StringTokenizer st = new StringTokenizer (str, " ()],[");
     //     while (st.hasMoreTokens()) {

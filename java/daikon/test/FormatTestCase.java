@@ -349,7 +349,9 @@ class FormatTestCase {
     // consists of a type and its value.  For example
     // daikon.inv/binary.twoScalar.NumericInt$divides boolean true
     String line = getNextRealLine((BufferedReader) commands);
-    if (line == null) return null;
+    if (line == null) {
+      return null;
+    }
     String[] tokens = line.split("  *");
     @SuppressWarnings("signature") // user input, should be checked
     @BinaryName String className = tokens[0];
@@ -556,9 +558,15 @@ class FormatTestCase {
    * @return the arity of the invariant if it can be determined, -1 otherwise
    */
   private static int getArity(Class<? extends Invariant> classToTest) {
-    if (UnaryInvariant.class.isAssignableFrom(classToTest)) return 1;
-    if (BinaryInvariant.class.isAssignableFrom(classToTest)) return 2;
-    if (ThreeScalar.class.isAssignableFrom(classToTest)) return 3;
+    if (UnaryInvariant.class.isAssignableFrom(classToTest)) {
+      return 1;
+    }
+    if (BinaryInvariant.class.isAssignableFrom(classToTest)) {
+      return 2;
+    }
+    if (ThreeScalar.class.isAssignableFrom(classToTest)) {
+      return 3;
+    }
 
     return -1;
   }

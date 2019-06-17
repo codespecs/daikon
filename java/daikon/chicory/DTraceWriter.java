@@ -359,7 +359,9 @@ public class DTraceWriter extends DaikonWriter {
    * @return a List (with correct primitive wrappers) corresponding to the array
    */
   public static List<Object> getListFromArray(Object arrayVal) {
-    if (arrayVal instanceof NonsensicalObject) return nonsenseList;
+    if (arrayVal instanceof NonsensicalObject) {
+      return nonsenseList;
+    }
 
     if (!arrayVal.getClass().isArray()) {
       throw new RuntimeException(
@@ -462,7 +464,9 @@ public class DTraceWriter extends DaikonWriter {
    * @return the variable's type, with primitive wrappers removed, or null if the value is non-null
    */
   public static @Nullable Class<?> removeWrappers(Object val, Class<?> declared, boolean runtime) {
-    if (!runtime) return declared;
+    if (!runtime) {
+      return declared;
+    }
 
     if (val instanceof Runtime.PrimitiveWrapper) {
       return ((Runtime.PrimitiveWrapper) val).primitiveClass();

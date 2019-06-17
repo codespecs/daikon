@@ -47,7 +47,9 @@ public class ParentFilter extends InvariantFilter {
     }
 
     // If there are no parents, can't discard
-    if (inv.ppt.parent.parents == null) return false;
+    if (inv.ppt.parent.parents == null) {
+      return false;
+    }
 
     // Loop through each parent ppt getting the parent/child relation info
     outer:

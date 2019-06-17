@@ -214,7 +214,9 @@ public class LogicalCompare {
           VarInfo var2 = comp.var2();
           boolean vars_are_same =
               var1.prestate_name().equals(var2.name()) || var2.prestate_name().equals(var1.name());
-          if (vars_are_same) return false;
+          if (vars_are_same) {
+            return false;
+          }
         }
         //         if (inv instanceof OneOf || inv instanceof OneOfString ||
         //             inv instanceof OneOfString)

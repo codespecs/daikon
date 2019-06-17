@@ -163,7 +163,9 @@ class TagEntry extends WeakReference<Object> {
    */
   public TagEntry find() {
 
-    if (parent == null) return this;
+    if (parent == null) {
+      return this;
+    }
 
     // Find the tag at the top of the list
     TagEntry tag = this;
@@ -188,7 +190,9 @@ class TagEntry extends WeakReference<Object> {
   public static Object find(Object obj) {
     assert obj != null;
     TagEntry entry = object_map.get(obj);
-    if (entry == null) return obj;
+    if (entry == null) {
+      return obj;
+    }
     TagEntry root = entry.find();
 
     // It shouldn't matter that this isn't a member of the set, only that

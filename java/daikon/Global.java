@@ -94,7 +94,9 @@ public final class Global {
   public static int reported_invariants = 0;
 
   public static void output_statistics() {
-    if (!output_statistics) return;
+    if (!output_statistics) {
+      return;
+    }
 
     System.out.println(
         "===========================================================================");

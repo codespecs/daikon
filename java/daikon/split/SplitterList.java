@@ -62,7 +62,9 @@ public abstract class SplitterList {
 
   // This is only used by the debugging output in SplitterList.put().
   public static String formatSplitters(Splitter[] splits) {
-    if (splits == null) return "null";
+    if (splits == null) {
+      return "null";
+    }
     StringBuilder sb = new StringBuilder();
     sb.append("[");
     for (int i = 0; i < splits.length; i++) {

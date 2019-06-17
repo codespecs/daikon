@@ -453,7 +453,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public void relate_var() {
 
-    if (vardef == null) return;
+    if (vardef == null) {
+      return;
+    }
 
     // System.out.printf("enclosing var for %s is %s%n", str_name,
     //                   vardef.enclosing_var);
@@ -935,7 +937,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   @SuppressWarnings("not.deterministic") // nondeterminism does not affect result
   @Pure
   public boolean isPrestateDerived() {
-    if (postState != null) return true;
+    if (postState != null) {
+      return true;
+    }
     if (isDerived()) {
       for (VarInfo vi : derived.getBases()) {
         if (!vi.isPrestate()) {
@@ -971,7 +975,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     ArrayList<Derivation> result = new ArrayList<Derivation>();
     // This method is only called from the debugging routine 'repr()'.
     // So let's protect ourselves from a mistake somewhere else.
-    if (ppt == null) return result;
+    if (ppt == null) {
+      return result;
+    }
     VarInfo[] vis = ppt.var_infos;
     for (int i = 0; i < vis.length; i++) {
       VarInfo vi = vis[i];
@@ -1482,7 +1488,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /** Whether this VarInfo is the leader of its equality set. */
   @Pure
   public boolean isCanonical() {
-    if (equalitySet == null) return true;
+    if (equalitySet == null) {
+      return true;
+    }
     return (equalitySet.leader() == this);
   }
 
@@ -1511,7 +1519,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * derived from a sequence. Only works for scalars.
    */
   public @Nullable VarInfo isDerivedSequenceMember() {
-    if (derived == null) return null;
+    if (derived == null) {
+      return null;
+    }
 
     if (derived instanceof SequenceScalarSubscript) {
       SequenceScalarSubscript sss = (SequenceScalarSubscript) derived;
@@ -1544,7 +1554,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public @Nullable VarInfo isDerivedSubSequenceOf() {
 
-    if (derived == null) return null;
+    if (derived == null) {
+      return null;
+    }
 
     if (derived instanceof SequenceScalarSubsequence) {
       SequenceScalarSubsequence sss = (SequenceScalarSubsequence) derived;
@@ -1749,7 +1761,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     boolean samePpt = (vari.ppt == varj.ppt);
     assert samePpt;
     PptSlice indices_ppt = vari.ppt.findSlice_unordered(vari, varj);
-    if (indices_ppt == null) return false;
+    if (indices_ppt == null) {
+      return false;
+    }
 
     boolean vari_is_var1 = (vari == indices_ppt.var_infos[0]);
     LinearBinary lb = LinearBinary.find(indices_ppt);
@@ -1978,7 +1992,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // Stop now if we don't want to replace post vars with equivalent orig
     // vars
-    if (!PrintInvariants.dkconfig_remove_post_vars) return;
+    if (!PrintInvariants.dkconfig_remove_post_vars) {
+      return;
+    }
 
     // [[ find the ppt context for the post() term ]] (I used to
     // search the expression for this, but upon further reflection,
@@ -2086,7 +2102,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         && (var1.file_rep_type.isArray() && !var2.file_rep_type.isArray())) {
 
       // System.out.printf("comparableByType: case 1 %s%n", var1.eltsCompatible(var2));
-      if (var1.eltsCompatible(var2)) return true;
+      if (var1.eltsCompatible(var2)) {
+        return true;
+      }
     }
 
     // the check ensures that a scalar or string and elements of an array of the same type are
@@ -2095,7 +2113,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         && (!var1.file_rep_type.isArray() && var2.file_rep_type.isArray())) {
 
       // System.out.printf("comparableByType: case 2 %s%n", var2.eltsCompatible(var1));
-      if (var2.eltsCompatible(var1)) return true;
+      if (var2.eltsCompatible(var1)) {
+        return true;
+      }
     }
 
     if (Daikon.check_program_types && (var1.file_rep_type != var2.file_rep_type)) {
@@ -2316,7 +2336,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
                     "shouldBeGuarded(%s) [%s] %s %b",
                     viname, applyPreMaybe(viname), vi, ((vi == null) ? false : vi.canBeMissing)));
           }
-          if (vi == null) return false;
+          if (vi == null) {
+            return false;
+          }
           return vi.canBeMissing;
         }
         return false;
@@ -2670,7 +2692,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public @Nullable PptTopLevel find_object_ppt(PptMap all_ppts) {
 
     // Arrays don't have types
-    if (is_array()) return null;
+    if (is_array()) {
+      return null;
+    }
 
     // build the name of the object ppt based on the variable type
     String type_str = type.base().replaceFirst("\\$", ".");
@@ -2707,7 +2731,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     @Pure
     @Override
     public boolean equals(@GuardSatisfied Pair this, @GuardSatisfied @Nullable Object obj) {
-      if (!(obj instanceof Pair)) return false;
+      if (!(obj instanceof Pair)) {
+        return false;
+      }
 
       Pair o = (Pair) obj;
       return ((o.v1 == v1) && (o.v2 == v2));
@@ -3044,13 +3070,27 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   /** Returns the name of this variable in the specified format. */
   public String name_using(OutputFormat format) {
-    if (format == OutputFormat.DAIKON) return name();
-    if (format == OutputFormat.SIMPLIFY) return simplify_name();
-    if (format == OutputFormat.ESCJAVA) return esc_name();
-    if (format == OutputFormat.JAVA) return java_name();
-    if (format == OutputFormat.JML) return jml_name();
-    if (format == OutputFormat.DBCJAVA) return dbc_name();
-    if (format == OutputFormat.CSHARPCONTRACT) return csharp_name();
+    if (format == OutputFormat.DAIKON) {
+      return name();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return simplify_name();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return esc_name();
+    }
+    if (format == OutputFormat.JAVA) {
+      return java_name();
+    }
+    if (format == OutputFormat.JML) {
+      return jml_name();
+    }
+    if (format == OutputFormat.DBCJAVA) {
+      return dbc_name();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return csharp_name();
+    }
     throw new UnsupportedOperationException("Unknown format requested: " + format);
   }
 
@@ -3510,7 +3550,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public String @Nullable [] get_simplify_slice_bounds() {
     if (!FileIO.new_decl_format) {
       @Interned VarInfoName[] bounds = var_info_name.getSliceBounds(); // vin ok
-      if (bounds == null) return null;
+      if (bounds == null) {
+        return null;
+      }
       String[] str_bounds = new String[2];
       str_bounds[0] = bounds[0].simplify_name();
       str_bounds[1] = bounds[1].simplify_name();
@@ -3872,7 +3914,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   @Pure
   public boolean is_direct_array() {
     // Must be an array to be a direct array
-    if (!rep_type.isArray()) return false;
+    if (!rep_type.isArray()) {
+      return false;
+    }
 
     // If $Field or $Type appears before $Elements, false.
     // System.out.printf("%s flatten %s%n", name(), name);
@@ -4041,7 +4085,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * then orig is implied. This removes orig from orig variales and adds post to post variables.
    */
   private static String inside_name(@Nullable VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null) return "";
+    if (vi == null) {
+      return "";
+    }
 
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);

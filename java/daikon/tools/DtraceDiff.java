@@ -380,7 +380,9 @@ public class DtraceDiff {
       if (type.isPointerFileRep()) {
         long[] v1 = (long[]) val1;
         long[] v2 = (long[]) val2;
-        if (v1.length != v2.length) return false;
+        if (v1.length != v2.length) {
+          return false;
+        }
         for (int i = 0; i < v1.length; i++)
           if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i])) {
             return false;
@@ -389,7 +391,9 @@ public class DtraceDiff {
       } else if (type.baseIsScalar()) {
         long[] v1 = (long[]) val1;
         long[] v2 = (long[]) val2;
-        if (v1.length != v2.length) return false;
+        if (v1.length != v2.length) {
+          return false;
+        }
         for (int i = 0; i < v1.length; i++) {
           if (v1[i] != v2[i]) {
             return false;
@@ -399,7 +403,9 @@ public class DtraceDiff {
       } else if (type.baseIsFloat()) {
         double[] v1 = (double[]) val1;
         double[] v2 = (double[]) val2;
-        if (v1.length != v2.length) return false;
+        if (v1.length != v2.length) {
+          return false;
+        }
         for (int i = 0; i < v1.length; i++)
           if (!((Double.isNaN(v1[i]) && Double.isNaN(v2[i])) || Global.fuzzy.eq(v1[i], v2[i]))) {
             return false;
@@ -408,7 +414,9 @@ public class DtraceDiff {
       } else if (type.baseIsString()) {
         String[] v1 = (String[]) val1;
         String[] v2 = (String[]) val2;
-        if (v1.length != v2.length) return false;
+        if (v1.length != v2.length) {
+          return false;
+        }
         for (int i = 0; i < v1.length; i++) {
           // System.out.printf("string array[%d] %s %s%n", i, v1[i], v2[i]);
           if ((v1[i] == null) && (v2[i] == null)) {

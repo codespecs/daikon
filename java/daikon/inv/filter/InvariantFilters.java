@@ -234,7 +234,9 @@ public class InvariantFilters {
         foundOnce = true;
       }
     }
-    if (foundOnce) return;
+    if (foundOnce) {
+      return;
+    }
 
     throw new Error(
         "InvariantFilters.removeVariableFilter():  filter for variable '"

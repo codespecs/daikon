@@ -430,7 +430,9 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     public static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
-      if (endOfFile) return null;
+      if (endOfFile) {
+        return null;
+      }
       while (true) {
         String commandLine = getNextLine(commands).trim();
         int lineNumber = commands.getLineNumber();
@@ -464,7 +466,9 @@ public class InvariantAddAndCheckTester extends TestCase {
       @BinaryName String className = getNextRealLine(commands);
 
       // End of file reached
-      if (className == null) return true;
+      if (className == null) {
+        return true;
+      }
 
       // Load the class from file
       Class<? extends Invariant> classToTest = asInvClass(getClass(className));
@@ -821,9 +825,15 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return the arity of the invariant if it can be determined, -1 otherwise
      */
     private static int getArity(Class<? extends Invariant> classToTest) {
-      if (UnaryInvariant.class.isAssignableFrom(classToTest)) return 1;
-      if (BinaryInvariant.class.isAssignableFrom(classToTest)) return 2;
-      if (ThreeScalar.class.isAssignableFrom(classToTest)) return 3;
+      if (UnaryInvariant.class.isAssignableFrom(classToTest)) {
+        return 1;
+      }
+      if (BinaryInvariant.class.isAssignableFrom(classToTest)) {
+        return 2;
+      }
+      if (ThreeScalar.class.isAssignableFrom(classToTest)) {
+        return 3;
+      }
 
       return -1;
     }

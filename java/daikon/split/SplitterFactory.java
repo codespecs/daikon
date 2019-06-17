@@ -254,7 +254,9 @@ public class SplitterFactory {
 
   /** Determine whether a Ppt's name matches the given pattern. */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
-    if (ppt.name.equals(ppt_name)) return true;
+    if (ppt.name.equals(ppt_name)) {
+      return true;
+    }
     if (ppt_name.endsWith(":::EXIT")) {
       String regex = Pattern.quote(ppt_name) + "[0-9]+";
       if (matchPptRegex(regex, ppt)) {

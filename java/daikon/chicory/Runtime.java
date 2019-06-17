@@ -217,13 +217,17 @@ public class Runtime {
       method_indent = method_indent.concat("  ");
     }
 
-    if (dontProcessPpts()) return;
+    if (dontProcessPpts()) {
+      return;
+    }
 
     // Make sure that the in_dtrace flag matches the stack trace
     // check_in_dtrace();
 
     // Ignore this call if we are already processing a dtrace record
-    if (in_dtrace) return;
+    if (in_dtrace) {
+      return;
+    }
 
     // Note that we are processing a dtrace record until we return
     in_dtrace = true;
@@ -312,13 +316,17 @@ public class Runtime {
           "%smethod_exit  %s.%s%n", method_indent, mi.class_info.class_name, mi.method_name);
     }
 
-    if (dontProcessPpts()) return;
+    if (dontProcessPpts()) {
+      return;
+    }
 
     // Make sure that the in_dtrace flag matches the stack trace
     // check_in_dtrace();
 
     // Ignore this call if we are already processing a dtrace record
-    if (in_dtrace) return;
+    if (in_dtrace) {
+      return;
+    }
 
     // Note that we are processing a dtrace record until we return
     in_dtrace = true;
@@ -971,7 +979,9 @@ public class Runtime {
           // Do nothing; i gets incremented.
       }
     }
-    if (sb.length() == 0) return orig;
+    if (sb.length() == 0) {
+      return orig;
+    }
     sb.append(orig.substring(post_esc));
     return sb.toString();
   }

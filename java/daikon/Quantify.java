@@ -191,7 +191,9 @@ public class Quantify {
     @SideEffectFree
     @Override
     public String jml_name(boolean in_prestate) {
-      if (!in_prestate) return jml_name();
+      if (!in_prestate) {
+        return jml_name();
+      }
 
       VarInfo arr_var = get_check_array_var("JML");
       if (arr_var.isPrestate()) {
@@ -237,7 +239,9 @@ public class Quantify {
     @SideEffectFree
     private VarInfo get_check_array_var(String output_format) {
       VarInfo arr_var = sequence.get_base_array_hashcode();
-      if (arr_var != null) return arr_var;
+      if (arr_var != null) {
+        return arr_var;
+      }
 
       throw new Daikon.UserError(
           String.format(
@@ -286,7 +290,9 @@ public class Quantify {
     @SideEffectFree
     @Override
     public String jml_name(boolean in_prestate) {
-      if (!in_prestate) return jml_name();
+      if (!in_prestate) {
+        return jml_name();
+      }
 
       if (var.isPrestate()) {
         assert var.postState != null; // because isPrestate() = true

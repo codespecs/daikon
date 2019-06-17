@@ -17,7 +17,9 @@ public final class StringLengthFactory extends UnaryDerivationFactory {
       return null;
     }
 
-    if (!vi.file_rep_type.isString()) return null;
+    if (!vi.file_rep_type.isString()) {
+      return null;
+    }
 
     if (!StringLength.applicable(vi)) {
       Global.tautological_suppressed_derived_variables++;
