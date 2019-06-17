@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import junit.framework.*;
+import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
@@ -763,6 +764,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @param types the types that the VarInfos must have
      * @return an array of VarInfo objects that have the types corresponding to those in types
      */
+    @SuppressWarnings("interning")
     private static VarInfo[] getVarInfos(
         Class<? extends Invariant> classToTest, ProglangType[] types) {
       int numInfos = getArity(classToTest);
@@ -804,7 +806,8 @@ public class InvariantAddAndCheckTester extends TestCase {
       // invariant, "b" for the second, and so on
       // - The ProglangType will be specified in the parameters
       // - The comparability will be none
-      VarInfo result =
+      @SuppressWarnings("interning")
+      @Interned VarInfo result =
           new VarInfo(
               new String(new char[] {(char) ('a' + i)}) + arrayModifier,
               type,

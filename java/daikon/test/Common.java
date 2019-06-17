@@ -10,11 +10,13 @@ public class Common {
     throw new Error("do not instantiate");
   }
 
-  public static VarInfo makeIntVarInfo(String name) {
+  @SuppressWarnings("interning")
+  public static VarInfo newIntVarInfo(String name) {
     return new VarInfo(
         name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo makeHashcodeVarInfo(String name) {
     return new VarInfo(
         name,
@@ -24,6 +26,7 @@ public class Common {
         VarInfoAux.getDefault());
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo makeIntArrayVarInfo(String name) {
     return new VarInfo(
         name,
@@ -33,6 +36,7 @@ public class Common {
         VarInfoAux.getDefault());
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo makeHashcodeArrayVarInfo(String name) {
     return new VarInfo(
         name,

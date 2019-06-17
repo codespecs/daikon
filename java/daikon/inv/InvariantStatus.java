@@ -3,7 +3,7 @@ package daikon.inv;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
- * This class is an enumerated type representing the possible results of adding an sample to an
+ * This class is an enumerated type representing the possible results of adding a sample to an
  * invariant.
  */
 public enum InvariantStatus {

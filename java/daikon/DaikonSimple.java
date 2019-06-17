@@ -572,7 +572,9 @@ public class DaikonSimple {
           int len = ppt.num_tracevars + ppt.num_static_constant_vars;
           VarInfo[] exit_vars = new VarInfo[len];
           for (int j = 0; j < len; j++) {
-            exit_vars[j] = new VarInfo(ppt.var_infos[j]);
+            @SuppressWarnings("interning") // newly created, about to be used in a program point
+            @Interned VarInfo exit_var = new VarInfo(ppt.var_infos[j]);
+            exit_vars[j] = exit_var;
             exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
             exit_vars[j].value_index = ppt.var_infos[j].value_index;
             exit_vars[j].equalitySet = null;

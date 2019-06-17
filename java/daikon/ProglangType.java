@@ -19,8 +19,8 @@ import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
 
 /**
- * Represents the type of a variable, for its declared, dtrace file representation, and internal
- * representations. ProgLangTypes are interned, so they can be == compared.
+ * Represents the type of a variable, for its declared type, dtrace file representation, and
+ * internal representations. ProgLangTypes are interned, so they can be == compared.
  */
 
 // I could also consider using Class; however:
@@ -49,7 +49,7 @@ public final @Interned class ProglangType implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // With ArrayList search, this func was a hotspot (38%), so use a Map.
+  /** Maps from a base type name to its ProglangTypes and arrays with that base. */
   private static HashMap<@Interned String, List<ProglangType>> all_known_types =
       new HashMap<@Interned String, List<ProglangType>>();
 
@@ -86,8 +86,14 @@ public final @Interned class ProglangType implements Serializable {
     return base;
   }
 
-  private int dimensions; // number of dimensions
+  /** Number of dimensions. Zero for a non-array. */
+  private int dimensions;
 
+  /**
+   * Return the number of dimensions (zero for a non-array).
+   *
+   * @return the number of dimensions
+   */
   public int dimensions() {
     return dimensions;
   }
@@ -179,7 +185,7 @@ public final @Interned class ProglangType implements Serializable {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
 
-    // the string maps us to a vec of all plts with that base
+    // the string maps us to a vec of all ProglangTypes with that base
     List<ProglangType> v = all_known_types.get(t_base);
     if (v == null) return null;
 
@@ -210,11 +216,12 @@ public final @Interned class ProglangType implements Serializable {
   private static ProglangType intern(@Interned String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
-    ProglangType result = find(t_base, t_dims);
-    if (result != null) {
-      return result;
+    ProglangType existing = find(t_base, t_dims);
+    if (existing != null) {
+      return existing;
     }
-    result = new ProglangType(t_base, t_dims);
+    @SuppressWarnings("interning") // test above did not find one, so the new one is interned
+    @Interned ProglangType result = new ProglangType(t_base, t_dims);
 
     List<ProglangType> v = all_known_types.get(t_base);
     if (v == null) {

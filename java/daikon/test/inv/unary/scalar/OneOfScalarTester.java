@@ -15,7 +15,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 @SuppressWarnings("nullness") // testing code
 public class OneOfScalarTester extends TestCase {
 
-  private VarInfo[] vars = {Common.makeHashcodeVarInfo("x"), Common.makeIntVarInfo("y")};
+  private VarInfo[] vars = {Common.makeHashcodeVarInfo("x"), Common.newIntVarInfo("y")};
   private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
   private PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
   private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
@@ -27,6 +27,7 @@ public class OneOfScalarTester extends TestCase {
     junit.textui.TestRunner.run(new TestSuite(OneOfScalarTester.class));
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo newIntVarInfo(String name) {
     VarInfo result =
         new VarInfo(
@@ -38,6 +39,7 @@ public class OneOfScalarTester extends TestCase {
     return result;
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo newHashcodeVarInfo(String name) {
     VarInfo result =
         new VarInfo(
