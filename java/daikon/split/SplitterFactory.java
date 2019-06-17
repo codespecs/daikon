@@ -116,7 +116,7 @@ public class SplitterFactory {
             int numGood = 0;
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
-            List<Splitter> sp = new ArrayList<Splitter>();
+            List<Splitter> sp = new ArrayList<>();
             for (int k = 0; k < numsplitters; k++) {
               if (splitterObjects[i][k].splitterExists()) {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
@@ -209,7 +209,7 @@ public class SplitterFactory {
         debug.fine(ioe.toString());
       }
     }
-    List<String> fileNames = new ArrayList<String>();
+    List<String> fileNames = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       fileNames.add(splitterObjects[i].getFullSourcePath());
     }

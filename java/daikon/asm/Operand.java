@@ -115,7 +115,7 @@ public class Operand {
 
   static List<String> getExtendedRegisters(String expr) {
     Matcher m = registers32BitRegExp.matcher(expr);
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
     while (m.find()) {
       result.add(m.group());
     }

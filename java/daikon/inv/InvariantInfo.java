@@ -72,7 +72,7 @@ public class InvariantInfo {
     // a complicated routine that generates all permutations
     StringTokenizer st = new StringTokenizer(vars, ",");
     assert st.countTokens() <= 3;
-    ArrayList<String> result = new ArrayList<String>(3);
+    ArrayList<String> result = new ArrayList<>(3);
     if (st.countTokens() == 1) {
       result.add(vars);
       return result;

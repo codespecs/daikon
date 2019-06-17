@@ -50,15 +50,14 @@ public final @Interned class ProglangType implements Serializable {
   static final long serialVersionUID = 20020122L;
 
   // With ArrayList search, this func was a hotspot (38%), so use a Map.
-  private static HashMap<@Interned String, List<ProglangType>> all_known_types =
-      new HashMap<@Interned String, List<ProglangType>>();
+  private static HashMap<@Interned String, List<ProglangType>> all_known_types = new HashMap<>();
 
   /**
    * The set of (interned) names of classes that implement java.util.List. For a Java class, this is
    * a {@code @BinaryName}, but when Daikon is processing programs written in other languages, it
    * can be arbitrary.
    */
-  public static HashSet<String> list_implementors = new LinkedHashSet<String>();
+  public static HashSet<String> list_implementors = new LinkedHashSet<>();
 
   /**
    * If true, treat 32 bit values whose high bit is on, as a negative number (rather than as a 32
@@ -497,7 +496,7 @@ public final @Interned class ProglangType implements Serializable {
       value_strings = new String[0];
     } else if (base == BASE_STRING) {
       // This properly handles strings containing embedded spaces.
-      List<@Nullable String> v = new ArrayList<@Nullable String>();
+      List<@Nullable String> v = new ArrayList<>();
       StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
       parser.quoteChar('\"');
       try {

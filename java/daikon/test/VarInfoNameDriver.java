@@ -29,7 +29,7 @@ public class VarInfoNameDriver {
     run(System.in, System.out);
   }
 
-  private static final Map<String, Handler> handlers = new HashMap<String, Handler>();
+  private static final Map<String, Handler> handlers = new HashMap<>();
 
   public static void run(InputStream commands, PrintStream output) {
     try {
@@ -41,7 +41,7 @@ public class VarInfoNameDriver {
 
   private static void run_helper(InputStream _commands, PrintStream output) throws IOException {
     BufferedReader commands = new BufferedReader(new InputStreamReader(_commands, UTF_8));
-    Map<String, VarInfoName> variables = new HashMap<String, VarInfoName>();
+    Map<String, VarInfoName> variables = new HashMap<>();
 
     String command;
     while ((command = commands.readLine()) != null) {
@@ -419,7 +419,7 @@ public class VarInfoNameDriver {
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length >= 4;
       String func = args[1];
-      List<VarInfoName> function_vars = new ArrayList<VarInfoName>();
+      List<VarInfoName> function_vars = new ArrayList<>();
       for (int x = 2; x < args.length; x++) {
         function_vars.add(vars.get(args[x]));
       }

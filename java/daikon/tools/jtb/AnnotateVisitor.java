@@ -82,7 +82,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
    */
   public int maxInvariantsPP;
 
-  public List<NodeToken> addedComments = new ArrayList<NodeToken>();
+  public List<NodeToken> addedComments = new ArrayList<>();
 
   private Deque<ClassFieldInfo> cfis = new ArrayDeque<ClassFieldInfo>();
 
@@ -252,7 +252,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
                 cfv.ownedFieldNames(),
                 cfv.finalFieldNames(),
                 new ArrayList<String>(),
-                new HashMap<String, String>());
+                new HashMap<>());
       } else {
         cfi =
             new ClassFieldInfo(
@@ -862,7 +862,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // ppt is an :::OBJECT or :::CLASS program point.
   List<String> not_contains_null_fields(PptTopLevel ppt, List<String> allFieldNames) {
     // System.out.println("not_contains_null_fields(" + ppt + ")");
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
     for (String field : allFieldNames) {
       // System.out.println("field: " + field);
       VarInfo vi = findVar(field, ppt);
@@ -887,7 +887,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // ppt is an :::OBJECT or :::CLASS program point.
   HashMap<String, String> element_type_fields(PptTopLevel ppt, List<String> allFieldNames) {
     // System.out.println("element_type_fields(" + ppt + ")");
-    HashMap<String, String> result = new HashMap<String, String>();
+    HashMap<String, String> result = new HashMap<>();
     // FieldDeclaration[] fdecls = cfv.fieldDeclarations();
     // System.out.println("fields: " + Arrays.toString(fields));
     for (String field : allFieldNames) {

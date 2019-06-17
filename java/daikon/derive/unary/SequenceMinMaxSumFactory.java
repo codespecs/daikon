@@ -29,7 +29,7 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
       return null;
     }
 
-    ArrayList<UnaryDerivation> result = new ArrayList<UnaryDerivation>(3);
+    ArrayList<UnaryDerivation> result = new ArrayList<>(3);
     if (SequenceMin.dkconfig_enabled) {
       result.add(new SequenceMin(vi));
     }

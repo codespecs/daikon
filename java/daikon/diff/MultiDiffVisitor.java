@@ -37,7 +37,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     super(System.out, false);
     currMap = firstMap;
     programPointsList = new HashSet<String>();
-    freqList = new HashMap<String, Integer>();
+    freqList = new HashMap<>();
     justifiedList = new HashSet<String>();
   }
 
@@ -96,7 +96,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     // every sample of the MultiDiff
     int kill = 0;
     int unjustifiedKill = 0;
-    ArrayList<String> bigList = new ArrayList<String>();
+    ArrayList<String> bigList = new ArrayList<>();
 
     // New historgram stuff
     System.out.println("Histogram**************");
@@ -125,7 +125,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     // mapping:  program point names ->
     //                      ArrayList of inv.format_java() with frequency
 
-    HashMap<String, ArrayList<String>> lastMap = new HashMap<String, ArrayList<String>>();
+    HashMap<String, ArrayList<String>> lastMap = new HashMap<>();
     // One pass to fill each mapping with an empty ArrayList
     for (String key : programPointsList) {
       lastMap.put(key, new ArrayList<String>());
@@ -170,7 +170,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     // keeps track of suppressed invariants due to appearing in
     // every sample of the MultiDiff
     int kill = 0;
-    ArrayList<String> bigList = new ArrayList<String>();
+    ArrayList<String> bigList = new ArrayList<>();
 
     // This gets all of the output in the format:
     // inv.ppt.name() + "$" + inv1.format_java()
@@ -186,7 +186,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     // mapping:  program point names ->
     //                      ArrayList of inv.format_java() with frequency
 
-    HashMap<String, ArrayList<String>> lastMap = new HashMap<String, ArrayList<String>>();
+    HashMap<String, ArrayList<String>> lastMap = new HashMap<>();
     // One pass to fill each mapping with an empty ArrayList
     for (String key : programPointsList) {
       lastMap.put(key, new ArrayList<String>());

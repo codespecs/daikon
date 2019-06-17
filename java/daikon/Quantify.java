@@ -340,7 +340,7 @@ public class Quantify {
     }
 
     // Determine all of the simple identifiers used by the given variables (vars)
-    Set<String> simples = new HashSet<String>();
+    Set<String> simples = new HashSet<>();
     for (VarInfo vi : vars) {
       for (String name : vi.get_all_simple_names()) {
         simples.add(name);
@@ -545,7 +545,7 @@ public class Quantify {
       quantification = "(FORALL (" + int_list + ") (IMPLIES (AND " + conditions + ") ";
 
       // stringify the terms
-      List<String> avi_list = new ArrayList<String>(vars.length);
+      List<String> avi_list = new ArrayList<>(vars.length);
       for (QuantifyReturn qret : qrets) {
         String arr_var_indexed;
         if (qret.index != null) {

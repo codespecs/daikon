@@ -938,7 +938,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     #endif
 
     String[] split = var().csharp_array_split();
-    List<String> args_list = new ArrayList<String>();
+    List<String> args_list = new ArrayList<>();
     // Construct the array that unary value will be compared against.
     for (int i = 0; i < num_elts; i++) {
     #if defined(ELTSTRING)
@@ -1008,7 +1008,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       if (num_elts == 1) {
         result = varname + " == " + elts[0];
       } else {
-        List<String> e = new ArrayList<String>();
+        List<String> e = new ArrayList<>();
         for (int i = 0; i < num_elts; i++) {
           e.add(TOSTRING(elts[i]));
         }
@@ -1024,7 +1024,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
   #elif defined(STRING)
 
     if (is_type()) {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         for (int i = 0; i < num_elts; i++) {
              String str = elts[i];
              if ((str == null) || "null".equals(str)) {
@@ -1040,7 +1040,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
                ? (varname + " == null")
                : (varname + ".Equals(" + TOSTRING(str) + ")");
     } else {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         for (int i = 0; i < num_elts; i++) {
             String str = elts[i];
             names.add((str == null) ? "null" : TOSTRING(str));
@@ -1619,11 +1619,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       // (useful for booleans and numeric enumerations).
       if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
-        Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
+        Set<NUMWRAPPER> setValidValues = new TreeSet<>();
         for (String s : vsValidValues) {
           setValidValues.add(NUMWRAPPER.valueOf(s));
         }
-        Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
+        Set<NUMWRAPPER> setValuesInvariant = new TreeSet<>();
         for (INT e : elts) {
           setValuesInvariant.add(e);
         }
@@ -1717,11 +1717,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       #endif
 
       String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
-      Set<BASETYPE> setValidValues = new TreeSet<BASETYPE>();
+      Set<BASETYPE> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
         setValidValues.add(NEW_BASETYPE(s));
       }
-      Set<BASETYPE> setValuesInvariant = new TreeSet<BASETYPE>();
+      Set<BASETYPE> setValuesInvariant = new TreeSet<>();
       for (INT e : elts) {
         if (e == null) {
   continue;
@@ -1753,11 +1753,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
-      Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
+      Set<NUMWRAPPER> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
         setValidValues.add(NUMWRAPPER.valueOf(s));
       }
-      Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
+      Set<NUMWRAPPER> setValuesInvariant = new TreeSet<>();
       for (INT e : elts) {
         setValuesInvariant.add(e);
       }
@@ -1801,11 +1801,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
-      Set<INT> setValidValues = new TreeSet<INT>();
+      Set<INT> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
         setValidValues.add(s.intern());
       }
-      Set<INT> setValuesInvariant = new TreeSet<INT>();
+      Set<INT> setValuesInvariant = new TreeSet<>();
       for (INT e : elts) {
         if (e == null) {
   continue;
@@ -2149,7 +2149,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
    * integer in the order they are seen. These values will be consistent as long as new hashcodes do
    * not appear in the output. Not a perfect fix for regressions consistency, but workable.
    */
-  private static Map<Long,Long> dummy_hashcode_vals = new LinkedHashMap<Long,Long>();
+  private static Map<Long,Long> dummy_hashcode_vals = new LinkedHashMap<>();
   private static long next_dummy_hashcode = 1001;
 
   private long get_hashcode_val(@GuardSatisfied ONEOFSCALAR this, long hashcode) {

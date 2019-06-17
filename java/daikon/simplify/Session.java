@@ -82,7 +82,7 @@ public class Session {
    */
   public Session() {
     try {
-      List<String> newEnv = new ArrayList<String>();
+      List<String> newEnv = new ArrayList<>();
       if (dkconfig_simplify_max_iterations != 0) {
         newEnv.add("PROVER_KILL_ITER=" + dkconfig_simplify_max_iterations);
       }

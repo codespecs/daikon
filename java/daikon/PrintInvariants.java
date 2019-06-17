@@ -80,14 +80,14 @@ public final class PrintInvariants {
    */
   public static void resetPrestateExpressions() {
     varNameCounter = 0;
-    exprToVar = new HashMap<String, String>();
+    exprToVar = new HashMap<>();
   }
 
   // Used to create distinct variable names (see See dkconfig_replace_prestate).
   private static int varNameCounter = 0;
 
   // Maps prestate expressions to variable names (see See dkconfig_replace_prestate)>
-  private static Map<String, String> exprToVar = new HashMap<String, String>();
+  private static Map<String, String> exprToVar = new HashMap<>();
 
   /**
    * See dkconfig_replace_prestate.
@@ -217,15 +217,15 @@ public final class PrintInvariants {
    * and if the output format is JAVA, and the invariant prints as "x == null", the results of
    * print_invariant would look something like:
    *
-   * <pre>
-   * &lt;INVINFO&gt;
-   * &lt;INV&gt; x == null &lt;/INV&gt;
-   * &lt;SAMPLES&gt; 100 &lt;/SAMPLES&gt;
-   * &lt;DAIKON&gt; x == null &lt;/DAIKON&gt;
-   * &lt;DAIKONCLASS&gt; daikon.inv.unary.scalar.NonZero &lt;/DAIKONCLASS&gt;
-   * &lt;METHOD&gt; foo() &lt;/METHOD&gt;
-   * &lt;/INVINFO&gt;
-   * </pre>
+   * <pre>{@code
+   * <INVINFO>
+   * <INV> x == null </INV>
+   * <SAMPLES> 100 </SAMPLES>
+   * <DAIKON> x == null </DAIKON>
+   * <DAIKONCLASS> daikon.inv.unary.scalar.NonZero </DAIKONCLASS>
+   * <METHOD> foo() </METHOD>
+   * </INVINFO>
+   * }</pre>
    *
    * The above output is actually all in one line, although in this comment it's broken up into
    * multiple lines for clarity.
@@ -522,7 +522,7 @@ public final class PrintInvariants {
 
     // Uses the custom comparator to get the Ppt objects in sorted order
     Comparator<PptTopLevel> comparator = new Ppt.NameComparator();
-    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<PptTopLevel>(comparator);
+    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<>(comparator);
     ppts_sorted.addAll(ppts.asCollection());
 
     // Iterate over the PptTopLevels in ppts
@@ -946,10 +946,10 @@ public final class PrintInvariants {
 
     debugPrintModified.fine("Doing print_modified_vars for: " + ppt.name());
 
-    List<VarInfo> modified_vars = new ArrayList<VarInfo>();
-    List<VarInfo> reassigned_parameters = new ArrayList<VarInfo>();
-    List<VarInfo> unmodified_vars = new ArrayList<VarInfo>();
-    List<VarInfo> unmodified_orig_vars = new ArrayList<VarInfo>();
+    List<VarInfo> modified_vars = new ArrayList<>();
+    List<VarInfo> reassigned_parameters = new ArrayList<>();
+    List<VarInfo> unmodified_vars = new ArrayList<>();
+    List<VarInfo> unmodified_orig_vars = new ArrayList<>();
 
     // Loop through each variable at this ppt
     for (VarInfo vi : ppt.var_infos) {
@@ -1016,7 +1016,7 @@ public final class PrintInvariants {
 
     // Remove non-variables from the assignable output
     if (Daikon.output_format == OutputFormat.ESCJAVA || Daikon.output_format == OutputFormat.JML) {
-      List<VarInfo> mods = new ArrayList<VarInfo>();
+      List<VarInfo> mods = new ArrayList<>();
       for (VarInfo vi : modified_vars) {
         if (!vi.is_assignable_var()) {
           continue;
@@ -1100,9 +1100,9 @@ public final class PrintInvariants {
       // boolean hasOnlyOneValue = daikon.contains("has only one value");
 
       if (!postAndOrig) {
-        Set<String> sortedVariables = new HashSet<String>();
+        Set<String> sortedVariables = new HashSet<>();
         String sortedVars = "";
-        Set<String> variables = new HashSet<String>();
+        Set<String> variables = new HashSet<>();
         String vars = "";
 
         get_csharp_invariant_variables(inv, sortedVariables, true);
@@ -1330,7 +1330,7 @@ public final class PrintInvariants {
     Invariant[] invs_array = invs.toArray(new Invariant[invs.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
-    List<Invariant> result = new ArrayList<Invariant>(invs_array.length);
+    List<Invariant> result = new ArrayList<>(invs_array.length);
 
     for (int i = 0; i < invs_array.length; i++) {
       result.add(invs_array[i]);
@@ -1372,7 +1372,7 @@ public final class PrintInvariants {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<>(ppt.getInvariants());
 
     if (PptSplitter.debug.isLoggable(Level.FINE)) {
       PptSplitter.debug.fine("Joiner View for ppt " + ppt.name);
@@ -1390,7 +1390,7 @@ public final class PrintInvariants {
 
     Global.non_falsified_invariants += invs_array.length;
 
-    List<Invariant> accepted_invariants = new ArrayList<Invariant>();
+    List<Invariant> accepted_invariants = new ArrayList<>();
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
@@ -1615,7 +1615,7 @@ public final class PrintInvariants {
 
     boolean print_invs = false;
 
-    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<>(ppt.getInvariants());
     Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
 
     // Not Map, because keys are nullable
@@ -1638,7 +1638,7 @@ public final class PrintInvariants {
       }
       Map<Class<? extends Invariant>, Integer> inv_map = filter_map.get(filter_class);
       if (inv_map == null) {
-        inv_map = new LinkedHashMap<Class<? extends Invariant>, Integer>();
+        inv_map = new LinkedHashMap<>();
         filter_map.put(filter_class, inv_map);
       }
       Integer cnt = inv_map.get(inv.getClass());

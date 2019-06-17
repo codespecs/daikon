@@ -26,8 +26,7 @@ public abstract class SplitterList {
    */
   public static boolean dkconfig_all_splitters = true;
 
-  private static final HashMap<String, Splitter[]> ppt_splitters =
-      new LinkedHashMap<String, Splitter[]>();
+  private static final HashMap<String, Splitter[]> ppt_splitters = new LinkedHashMap<>();
 
   /** Associate an array of splitters with the program point pptname. */
   public static void put(String pptname, Splitter[] splits) {
@@ -166,7 +165,7 @@ public abstract class SplitterList {
    * @return an array of splitters
    */
   public static Splitter @Nullable [] get(String pptName) {
-    List<Splitter[]> splitterArrays = new ArrayList<Splitter[]>();
+    List<Splitter[]> splitterArrays = new ArrayList<>();
 
     for (String name : ppt_splitters.keySet()) {
       // name is a ppt name, assumed to begin with "ClassName.functionName"
@@ -187,7 +186,7 @@ public abstract class SplitterList {
       Global.debugSplit.fine("SplitterList.get found no splitters for " + pptName);
       return null;
     } else {
-      List<Splitter> splitters = new ArrayList<Splitter>();
+      List<Splitter> splitters = new ArrayList<>();
       for (Splitter[] tempsplitters : splitterArrays) {
         for (int j = 0; j < tempsplitters.length; j++) {
           splitters.add(tempsplitters[j]);
@@ -206,7 +205,7 @@ public abstract class SplitterList {
    * @return an array of splitters
    */
   public static Splitter[] get_all() {
-    List<Splitter> splitters = new ArrayList<Splitter>();
+    List<Splitter> splitters = new ArrayList<>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
       for (int i = 0; i < splitter_array.length; i++) {
         Splitter tempsplitter = splitter_array[i];

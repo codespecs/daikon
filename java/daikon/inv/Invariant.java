@@ -737,7 +737,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Return a string representation of the variable names.
    *
-   * @return a string representation of the variable names.
+   * @return a string representation of the variable names
    */
   public final String varNames(@GuardSatisfied @NonPrototype Invariant this) {
     return ppt.varNames();
@@ -1756,7 +1756,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
   /** Returns the union of calling VarInfo.getGuardingList on each element of the argument. */
   public static List<VarInfo> getGuardingList(VarInfo[] varInfos) {
-    List<VarInfo> guardingList = new ArrayList<VarInfo>();
+    List<VarInfo> guardingList = new ArrayList<>();
 
     for (int i = 0; i < varInfos.length; i++) {
       // debugGuarding.fine (varInfos[i]);
@@ -2049,7 +2049,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    */
   public static String toString(@NonPrototype Invariant[] invs) {
 
-    ArrayList<String> strings = new ArrayList<String>(invs.length);
+    ArrayList<String> strings = new ArrayList<>(invs.length);
     for (int i = 0; i < invs.length; i++) {
       if (invs[i] == null) {
         strings.add("null");

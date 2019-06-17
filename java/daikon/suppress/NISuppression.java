@@ -544,11 +544,11 @@ public class NISuppression {
   public List<NISuppression> recurse_definition(NISuppressionSet ss) {
 
     NISuppressee sse = ss.get_suppressee();
-    List<NISuppression> new_suppressions = new ArrayList<NISuppression>();
+    List<NISuppression> new_suppressions = new ArrayList<>();
 
     // Create a list of all of our suppressors that don't match the suppressee
     // of ss
-    List<NISuppressor> old_sors = new ArrayList<NISuppressor>();
+    List<NISuppressor> old_sors = new ArrayList<>();
     NISuppressor match = null;
     for (int i = 0; i < suppressors.length; i++) {
       if (suppressors[i].match(sse)) {
@@ -572,7 +572,7 @@ public class NISuppression {
     // suppressor.
     for (int i = 0; i < ss.suppression_set.length; i++) {
       NISuppression s = ss.suppression_set[i];
-      List<NISuppressor> sors = new ArrayList<NISuppressor>(old_sors);
+      List<NISuppressor> sors = new ArrayList<>(old_sors);
       for (int j = 0; j < s.suppressors.length; j++) {
         sors.add(s.suppressors[j].translate(match));
       }

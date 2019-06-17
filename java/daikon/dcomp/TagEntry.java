@@ -124,7 +124,7 @@ class TagEntry extends WeakReference<Object> {
       StackTraceElement first = blarg.get(0);
       return first.getClassName() + ":" + first.getMethodName() + "(), " + first.getLineNumber();
     } else {
-      ArrayList<String> blarg2 = new ArrayList<String>(daikon.DynComp.trace_line_depth);
+      ArrayList<String> blarg2 = new ArrayList<>(daikon.DynComp.trace_line_depth);
       try {
         for (int i = 0; i < daikon.DynComp.trace_line_depth; i++) {
           StackTraceElement ste = blarg.get(i);
@@ -260,7 +260,7 @@ class TagEntry extends WeakReference<Object> {
   /** Returns each of the sets with elements in each set on a separate line. */
   public static String dump() {
 
-    LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<Object, List<Object>>();
+    LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<>();
 
     /* Fill sets from object_map by placing every object in an ArrayList
      * whose key is its root. */

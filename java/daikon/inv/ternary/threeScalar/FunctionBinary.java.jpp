@@ -181,7 +181,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Map from function name (eg, MultiplyLong, MinimumFloat) to an array of instances (one for each
    * valid permutation) for that function.
    */
-  private static Map<String,@Prototype CLASSNAME[]> functions = new LinkedHashMap<String,@Prototype CLASSNAME[]>();
+  private static Map<String,@Prototype CLASSNAME[]> functions = new LinkedHashMap<>();
 
   /**
    * A list indexed by function number to an array of instances (one for each valid permutation) for
@@ -189,7 +189,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * faster access mechanism once we have the function id (which are calculated the first time
    * through).
    */
-  private static List<@Prototype CLASSNAME[]> func_list = new ArrayList<@Prototype CLASSNAME[]>();
+  private static List<@Prototype CLASSNAME[]> func_list = new ArrayList<>();
 
   private static void build_func_list() {
 
@@ -198,7 +198,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Build the map of functions to array of instances for that function
     debug.fine("Processing " + #CLASSNAME);
-    functions = new LinkedHashMap<String,@Prototype CLASSNAME[]>();
+    functions = new LinkedHashMap<>();
     @SuppressWarnings("unchecked")
     Class<@Prototype CLASSNAME>[] subclasses = (Class<@Prototype CLASSNAME>[]) CLASSNAME.class.getDeclaredClasses();
     for (int ii = 0; ii < subclasses.length; ii++) {
@@ -252,7 +252,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     // Instantiate all of the subclasses and return them
-    List<Invariant> result = new ArrayList<Invariant>();
+    List<Invariant> result = new ArrayList<>();
     for (@Prototype CLASSNAME[] fb_arr : func_list) {
       for (int jj = 1; jj < fb_arr.length; jj++) {
         @Prototype CLASSNAME fb = fb_arr[jj];
@@ -281,7 +281,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /** Returns a list of all of the CLASSNAME prototype invariants. */
   public static List<@Prototype Invariant> get_proto_all() {
 
-    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<>();
 
     // If this is the first call
     if (functions.isEmpty()) {

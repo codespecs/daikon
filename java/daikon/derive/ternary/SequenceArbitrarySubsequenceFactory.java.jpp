@@ -127,7 +127,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFacto
 
   private List<TernaryDerivation> instantiateWithOrder(
       VarInfo seqvar, VarInfo startvar, VarInfo endvar) {
-    List<TernaryDerivation> results = new ArrayList<TernaryDerivation>();
+    List<TernaryDerivation> results = new ArrayList<>();
     VarInfo seqsize = seqvar.sequenceSize();
     if (seqsize != null) {
       seqsize = seqsize.canonicalRep();
@@ -168,7 +168,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFacto
     //         return null;
     //       } else if (INTEQUAL.find(compar_slice) != null) {
     //         Global.nonsensical_suppressed_derived_variables += 3;
-    //         ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
+    //         ArrayList<BinaryDerivation> result = new ArrayList<>();
     //         if (enable_subscript) {
     //           result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true)); // a[i-1]
     //         }

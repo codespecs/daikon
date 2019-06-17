@@ -138,7 +138,7 @@ public class DeclWriter extends DaikonWriter {
 
       // Print exit program point for EACH exit location in the method
       // (that was encountered during this execution of the program).
-      Set<Integer> theExits = new HashSet<Integer>(mi.exit_locations);
+      Set<Integer> theExits = new HashSet<>(mi.exit_locations);
       assert theExits.size() > 0 : mi;
       for (Integer exitLoc : theExits) {
         // Get the root of the method's traversal pattern
@@ -279,7 +279,7 @@ public class DeclWriter extends DaikonWriter {
       // Print exit program point for EACH exit location in the method
       // Note that there may not be any exits.  They may get filtered out,
       // or some methods don't have an exit (only a throw)
-      Set<Integer> theExits = new HashSet<Integer>(mi.exit_locations);
+      Set<Integer> theExits = new HashSet<>(mi.exit_locations);
       for (Integer exitLoc : theExits) {
         // Get the root of the method's traversal pattern
         RootInfo exitRoot = mi.traversalExit;
@@ -324,7 +324,7 @@ public class DeclWriter extends DaikonWriter {
     outFile.println("ppt-type " + ppt_type.name().toLowerCase());
 
     // Look for and print any hierarchy relations
-    List<VarRelation> relations = new ArrayList<VarRelation>();
+    List<VarRelation> relations = new ArrayList<>();
     for (DaikonVariableInfo child : root) {
       find_relations(null, mi.is_static(), null, child, relations);
     }
@@ -399,7 +399,7 @@ public class DeclWriter extends DaikonWriter {
 
     // If there are any static variables, add the relation to
     // the class ppt
-    List<VarRelation> relations = new ArrayList<VarRelation>();
+    List<VarRelation> relations = new ArrayList<>();
     if (num_class_vars(cinfo) > 0) {
       VarRelation relation = new VarRelation(cinfo.class_name + ":::CLASS", "parent");
       relation.id = 1;

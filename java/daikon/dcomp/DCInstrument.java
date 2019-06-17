@@ -82,7 +82,7 @@ class DCInstrument extends InstructionListUtils {
   protected static SimpleLog debug_track = new SimpleLog(false);
 
   /** Keeps track of the methods that were not successfully instrumented. */
-  protected List<String> skipped_methods = new ArrayList<String>();
+  protected List<String> skipped_methods = new ArrayList<>();
 
   /**
    * Specifies if the jdk is instrumented. Calls to the JDK must be modified to remove the arguments
@@ -116,7 +116,7 @@ class DCInstrument extends InstructionListUtils {
    * in each subclass and each should return the same id. We thus will lookup the same name multiple
    * times.
    */
-  static Map<String, Integer> static_map = new LinkedHashMap<String, Integer>();
+  static Map<String, Integer> static_map = new LinkedHashMap<>();
 
   /**
    * Array of classes whose fields are not initialized from java. Since the fields are not
@@ -1258,7 +1258,7 @@ class DCInstrument extends InstructionListUtils {
     assert frame_size < 207 : frame_size + " " + mg.getClassName() + "." + mg.getName();
     String params = "" + (char) (frame_size + '0');
     // Character.forDigit (frame_size, Character.MAX_RADIX);
-    List<Integer> plist = new ArrayList<Integer>();
+    List<Integer> plist = new ArrayList<>();
     for (Type arg_type : arg_types) {
       if (arg_type instanceof BasicType) {
         plist.add(offset);
@@ -2853,11 +2853,11 @@ class DCInstrument extends InstructionListUtils {
 
     // Loop through each instruction and find the line number for each
     // return opcode
-    List<Integer> exit_locs = new ArrayList<Integer>();
+    List<Integer> exit_locs = new ArrayList<>();
 
     // Tells whether each exit loc in the method is included or not
     // (based on filters)
-    List<Boolean> isIncluded = new ArrayList<Boolean>();
+    List<Boolean> isIncluded = new ArrayList<>();
 
     // log ("Looking for exit points in %s%n", mg.getName());
     InstructionList il = mg.getInstructionList();
@@ -3867,9 +3867,9 @@ class DCInstrument extends InstructionListUtils {
     }
 
     String classname = gen.getClassName();
-    List<MethodGen> mlist = new ArrayList<MethodGen>();
+    List<MethodGen> mlist = new ArrayList<>();
 
-    Set<String> field_set = new HashSet<String>();
+    Set<String> field_set = new HashSet<>();
     Map<Field, Integer> field_map = build_field_map(gen.getJavaClass());
 
     // Build accessors for all fields declared in this class
@@ -3949,7 +3949,7 @@ class DCInstrument extends InstructionListUtils {
 
     // Object doesn't have any primitive fields
     if (jc.getClassName().equals("java.lang.Object")) {
-      return new LinkedHashMap<Field, Integer>();
+      return new LinkedHashMap<>();
     }
 
     // Get the offsets for each field in the superclasses.

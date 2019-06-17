@@ -253,7 +253,7 @@ public class CLASSNAME extends SUPERCLASS {
   public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
-    List<CORECLASS> cores = new ArrayList<CORECLASS>();
+    List<CORECLASS> cores = new ArrayList<>();
     for (Invariant inv : invs) {
       cores.add(((CLASSNAME) inv).core);
     }

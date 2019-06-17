@@ -161,10 +161,10 @@ public final class Debug {
   public VarInfo @Nullable [] cache_vis;
 
   /**
-   * Ordinarily, a client would have to supply a Class, Ppt, and List&lt;Varinfo&gt; with each call
-   * to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any) from
-   * vis that is on the debugTrackVar list. Essentially this creates a debug object that will print
-   * if any of the variables in vis are being tracked (and c and ppt match).
+   * Ordinarily, a client would have to supply a Class, Ppt, and {@code List<Varinfo>} with each
+   * call to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any)
+   * from vis that is on the debugTrackVar list. Essentially this creates a debug object that will
+   * print if any of the variables in vis are being tracked (and c and ppt match).
    */
   public Debug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     set(c, ppt, vis);
@@ -184,10 +184,10 @@ public final class Debug {
   }
 
   /**
-   * Ordinarily, a client would have to supply a Class, Ppt, and List&lt;Varinfo&gt; with each call
-   * to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any) from
-   * vis that is on the debugTrackVar list. Essentially this creates a debug object that will print
-   * if any of the variables in vis are being tracked (and c and ppt match).
+   * Ordinarily, a client would have to supply a Class, Ppt, and {@code List<Varinfo>} with each
+   * call to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any)
+   * from vis that is on the debugTrackVar list. Essentially this creates a debug object that will
+   * print if any of the variables in vis are being tracked (and c and ppt match).
    */
   public Debug(Class<?> c, Ppt ppt, List<VarInfo> vis) {
 

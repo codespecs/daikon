@@ -11,7 +11,7 @@ public class KillerInstructionTests extends TestCase {
 
   public static void testKillerInstruction1() {
 
-    List<X86Instruction> path = new ArrayList<X86Instruction>();
+    List<X86Instruction> path = new ArrayList<>();
     X86Instruction i1 = X86Instruction.parseInstruction("x.dll:0x01 pop eax ebx -> ecx edx");
     path.add(i1);
 
