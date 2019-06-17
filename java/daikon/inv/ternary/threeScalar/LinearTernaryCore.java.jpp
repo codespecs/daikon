@@ -429,7 +429,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
           // points fit in a line
           return InvariantStatus.NO_CHANGE;
         }
-      } else  {
+      } else {
 
         // still haven't seen enough values
         return InvariantStatus.NO_CHANGE;

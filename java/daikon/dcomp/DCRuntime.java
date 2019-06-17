@@ -412,7 +412,9 @@ public final class DCRuntime {
 
     Class<?> target_class; // The class whose method we will invoke
     if (null == active_clone_calls.get(o)) target_class = oc;
-    else target_class = active_clone_calls.get(o).getSuperclass();
+    else {
+      target_class = active_clone_calls.get(o).getSuperclass();
+    }
     active_clone_calls.put(o, target_class);
 
     Class<?> dcomp_marker;
@@ -1939,7 +1941,9 @@ public final class DCRuntime {
         else if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) static_final_cnt++;
         else if (Modifier.isStatic(modifiers)) static_cnt++;
         else if (dv.getName().startsWith("this")) this_instance_cnt++;
-        else other_instance_cnt++;
+        else {
+          other_instance_cnt++;
+        }
       } else if (dv instanceof ParameterInfo) {
         parameter_cnt++;
       } else {
@@ -2078,7 +2082,9 @@ public final class DCRuntime {
       // System.out.printf("Checking dv set %s%n", set);
       for (DaikonVariableInfo dv : set) {
         if (dv.isHashcode() || dv.isHashcodeArray()) hashcode_vars = true;
-        else non_hashcode_vars = true;
+        else {
+          non_hashcode_vars = true;
+        }
         // System.out.printf("dv = %s, hashcode_var = %b%n",
         //                   dv, dv.isHashcode() || dv.isHashcodeArray());
       }

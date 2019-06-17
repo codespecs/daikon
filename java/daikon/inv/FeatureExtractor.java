@@ -131,7 +131,9 @@ public final class FeatureExtractor {
         } else {
           throw new IOException("Invalid Argument List, repeated output type");
         }
-      } else throw new IOException("Invalid Argument List, {u,n,o,s,t}" + args[i]);
+      } else {
+        throw new IOException("Invalid Argument List, {u,n,o,s,t}" + args[i]);
+      }
     }
     if (output_file == null) {
       throw new IOException("Invalid Argumnent List, output file not specified");
@@ -969,7 +971,9 @@ public final class FeatureExtractor {
         if (args[i].equals("-t")) type = args[++i];
         else if (args[i].equals("-d")) trains.add(args[++i]);
         else if (args[i].equals("-s")) tests.add(args[++i]);
-        else throw new IOException("Invalid argument: " + args[i]);
+        else {
+          throw new IOException("Invalid argument: " + args[i]);
+        }
       }
       // Check if the required fields are specified.
       if (type == null) throw new IOException("You must specify a format type (C5 or SVMfu)");

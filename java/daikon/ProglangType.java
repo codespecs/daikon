@@ -545,7 +545,9 @@ public final @Interned class ProglangType implements Serializable {
         } else if (value_strings[i].equals("null")) result[i] = 0;
         else if (value_strings[i].equals("false")) result[i] = 0;
         else if (value_strings[i].equals("true")) result[i] = 1;
-        else result[i] = myParseLong(value_strings[i]);
+        else {
+          result[i] = myParseLong(value_strings[i]);
+        }
       }
       return Intern.intern(result);
     } else if (base == BASE_DOUBLE) {

@@ -3286,7 +3286,9 @@ class DCInstrument extends InstructionListUtils {
       if (is_category2(stack.peek(1))) op = "dup_x1";
       else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
       else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
-      else op = "dup";
+      else {
+        op = "dup";
+      }
     }
     if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     if (op != null) {
@@ -3404,7 +3406,9 @@ class DCInstrument extends InstructionListUtils {
     Type type;
     if (inst instanceof LDC) // LDC_W extends LDC
     type = ((LDC) inst).getType(pool);
-    else type = ((LDC2_W) inst).getType(pool);
+    else {
+      type = ((LDC2_W) inst).getType(pool);
+    }
     if (!(type instanceof BasicType)) {
       return null;
     }
