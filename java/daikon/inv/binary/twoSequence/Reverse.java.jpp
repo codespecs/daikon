@@ -87,8 +87,9 @@ public class CLASSNAME extends SUPERCLASS {
     }
 
     // Check to see that both arrays are ordered
-    if (!vis[0].aux.hasOrder() || !vis[1].aux.hasOrder())
+    if (!vis[0].aux.hasOrder() || !vis[1].aux.hasOrder()) {
       return false;
+    }
 
     return true;
   }
@@ -113,11 +114,19 @@ public class CLASSNAME extends SUPERCLASS {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
-    if (format.isJavaFamily()) return format_java_family(format);
+    if (format.isJavaFamily()) {
+      return format_java_family(format);
+    }
 
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
 
     return format_unimplemented(format);
   }

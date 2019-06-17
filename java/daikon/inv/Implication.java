@@ -199,7 +199,9 @@ public class Implication extends Joiner {
   public @Nullable DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
     //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
-    //     if (result != null) return result;
+    //     if (result != null) {
+    //       return result;
+    //     }
     //     assert orig_right.ppt.var_infos.length > 0;
     //     for (int ii = 0; ii < orig_right.ppt.var_infos.length; ii++ )
     //       assert orig_right.ppt.var_infos[ii] != null;
@@ -252,9 +254,15 @@ public class Implication extends Joiner {
   @Pure
   @Override
   public boolean isSameInvariant(Invariant other) {
-    if (other == null) return false;
-    if (!(other instanceof Implication)) return false;
-    if (iff != ((Implication) other).iff) return false;
+    if (other == null) {
+      return false;
+    }
+    if (!(other instanceof Implication)) {
+      return false;
+    }
+    if (iff != ((Implication) other).iff) {
+      return false;
+    }
     return super.isSameInvariant(other);
   }
 

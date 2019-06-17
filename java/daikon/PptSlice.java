@@ -221,7 +221,9 @@ public abstract class PptSlice extends Ppt {
     @Pure
     @Override
     public int compare(PptSlice slice1, PptSlice slice2) {
-      if (slice1 == slice2) return 0;
+      if (slice1 == slice2) {
+        return 0;
+      }
       // Don't do this assert, which prevents comparison across different Ppts.
       // (The assert check may be useful in some situations, though.)
       // assert slice1.parent == slice2.parent;
@@ -240,7 +242,9 @@ public abstract class PptSlice extends Ppt {
     @Pure
     @Override
     public int compare(PptSlice slice1, PptSlice slice2) {
-      if (slice1 == slice2) return 0;
+      if (slice1 == slice2) {
+        return 0;
+      }
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // assert slice1.parent == slice2.parent;
@@ -268,8 +272,10 @@ public abstract class PptSlice extends Ppt {
 
   /** Remove the invariants noted in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {
-    if (invs.size() == 0) return;
-    List<Invariant> toRemove = new ArrayList<Invariant>();
+    if (invs.size() == 0) {
+      return;
+    }
+    List<Invariant> toRemove = new ArrayList<>();
     for (Invariant inv : invs) {
       if (omitTypes['r'] && inv.isReflexive()) toRemove.add(inv);
     }

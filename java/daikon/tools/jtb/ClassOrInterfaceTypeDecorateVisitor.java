@@ -16,8 +16,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
   // A map from token images to "ungenerified" versions of the classes
   // or interfaces that the given identifiers extend.
-  HashMap<String, Deque<ClassOrInterfaceType>> shadowingMap =
-      new HashMap<String, Deque<ClassOrInterfaceType>>();
+  HashMap<String, Deque<ClassOrInterfaceType>> shadowingMap = new HashMap<>();
 
   // For debugging purposes.
   private void printShadowingMap() {
@@ -127,7 +126,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // f1 -> TypeParameter()
     // f2 -> ( "," TypeParameter() )*
     // f3 -> ">"
-    final List<TypeParameter> params = new ArrayList<TypeParameter>();
+    final List<TypeParameter> params = new ArrayList<>();
     n.accept(
         new DepthFirstVisitor() {
           @Override
@@ -268,8 +267,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   private static HashMap<String, Deque<ClassOrInterfaceType>> copy(
       HashMap<String, Deque<ClassOrInterfaceType>> m) {
 
-    HashMap<String, Deque<ClassOrInterfaceType>> newMap =
-        new HashMap<String, Deque<ClassOrInterfaceType>>();
+    HashMap<String, Deque<ClassOrInterfaceType>> newMap = new HashMap<>();
 
     for (Map.Entry<@KeyFor("m") String, Deque<ClassOrInterfaceType>> e : m.entrySet()) {
       String key = e.getKey();

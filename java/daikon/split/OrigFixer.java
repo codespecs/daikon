@@ -10,7 +10,7 @@ import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * OrigFixer is a visitor for a jtb syntax tree that replaces instances of of "orig()" with "orig_".
- * For example, "orig(x) &lt; y" would yield "orig_x &lt; y".
+ * For example, {@code orig(x) < y} would yield {@code orig_x < y}.
  */
 class OrigFixer extends DepthFirstVisitor {
 

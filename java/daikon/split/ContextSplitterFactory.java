@@ -112,7 +112,7 @@ public class ContextSplitterFactory {
 
   /** Read and parse a map file. */
   public static MapfileEntry[] parse_mapfile(File mapfile) throws IOException {
-    ArrayList<MapfileEntry> result = new ArrayList<MapfileEntry>();
+    ArrayList<MapfileEntry> result = new ArrayList<>();
 
     try {
       for (String reader_line : new EntryReader(mapfile.toString())) {
@@ -198,8 +198,7 @@ public class ContextSplitterFactory {
     // (~pptname) for the callee.  Second key is an idenfier for the
     // caller (based on granularity).  The value is a set of Integers
     // giving the ids that are associated with that callgraph edge.
-    Map<String, Map<String, Set<Long>>> callee2caller2ids =
-        new HashMap<String, Map<String, Set<Long>>>();
+    Map<String, Map<String, Set<Long>>> callee2caller2ids = new HashMap<>();
 
     // For each entry
     for (int i = 0; i < entries.length; i++) {
@@ -234,7 +233,7 @@ public class ContextSplitterFactory {
       // Place the ID into the mapping
       Map<String, Set<Long>> caller2ids = callee2caller2ids.get(callee_ppt_name);
       if (caller2ids == null) {
-        caller2ids = new LinkedHashMap<String, Set<Long>>();
+        caller2ids = new LinkedHashMap<>();
         callee2caller2ids.put(callee_ppt_name, caller2ids);
       }
       Set<Long> ids = caller2ids.get(caller_condition);
@@ -245,7 +244,7 @@ public class ContextSplitterFactory {
       ids.add(entry.id);
     } // for all entries
 
-    ArrayList<PptNameAndSplitters> result = new ArrayList<PptNameAndSplitters>();
+    ArrayList<PptNameAndSplitters> result = new ArrayList<>();
 
     // For each callee
     for (Map.Entry<@KeyFor("callee2caller2ids") String, Map<String, Set<Long>>> ipair :
@@ -259,7 +258,7 @@ public class ContextSplitterFactory {
       // For each caller of that callee
       for (Map.Entry<@KeyFor("caller2ids") String, Set<Long>> jpair : caller2ids.entrySet()) {
         String caller_condition = jpair.getKey();
-        List<Long> ids = new ArrayList<Long>(jpair.getValue());
+        List<Long> ids = new ArrayList<>(jpair.getValue());
 
         // Make a splitter
         long[] ids_array = new long[ids.size()];

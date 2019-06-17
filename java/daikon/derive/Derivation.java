@@ -212,7 +212,9 @@ public abstract class Derivation implements Serializable, Cloneable {
   public boolean is_prestate_version(Derivation d) {
 
     // The derivations must be of the same type
-    if (getClass() != d.getClass()) return false;
+    if (getClass() != d.getClass()) {
+      return false;
+    }
 
     // Each base of vi must be the prestate version of this
     VarInfo[] base1 = getBases();
@@ -249,7 +251,9 @@ public abstract class Derivation implements Serializable, Cloneable {
    * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_esc_name(VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null) return "";
+    if (vi == null) {
+      return "";
+    }
 
     if (in_orig) {
       if (vi.isPrestate()) {
@@ -268,7 +272,9 @@ public abstract class Derivation implements Serializable, Cloneable {
    * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_jml_name(VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null) return "";
+    if (vi == null) {
+      return "";
+    }
 
     if (in_orig) {
       if (vi.isPrestate()) {
@@ -287,7 +293,9 @@ public abstract class Derivation implements Serializable, Cloneable {
    * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_csharp_name(VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null) return "";
+    if (vi == null) {
+      return "";
+    }
 
     if (in_orig) {
       if (vi.isPrestate()) {

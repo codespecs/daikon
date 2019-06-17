@@ -155,10 +155,18 @@ public class SUBSET extends TWOSEQUENCE {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied SUBSET this, OutputFormat format) {
-    if (format == OutputFormat.DAIKON) return format();
-    if (format == OutputFormat.ESCJAVA) return format_esc();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
-    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
+    if (format == OutputFormat.DAIKON) {
+      return format();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return format_esc();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
+    }
     if (format.isJavaFamily()) {
       return format_java_family(format);
     }

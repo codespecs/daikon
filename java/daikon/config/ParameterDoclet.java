@@ -91,7 +91,7 @@ public class ParameterDoclet {
       }
       description = desc;
       longBlurb = blurb;
-      fields = new HashMap<String, String>();
+      fields = new HashMap<>();
     }
 
     public boolean matches(String fullname, String name) {

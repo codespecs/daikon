@@ -82,7 +82,9 @@ public abstract class Joiner extends Invariant {
   @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
-    if (!getClass().equals(other.getClass())) return false;
+    if (!getClass().equals(other.getClass())) {
+      return false;
+    }
     Joiner other_joiner = (Joiner) other;
     // Guards are necessary because the contract of isSameFormula states
     // that the argument is of the same class as the receiver.

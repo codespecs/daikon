@@ -146,7 +146,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * @param params the MethodParameters' whose names are desired
    */
   private List<String> getParameterNames(ReplaceStatement.MethodParameter[] params) {
-    List<String> args = new ArrayList<String>();
+    List<String> args = new ArrayList<>();
     for (int i = 0; i < params.length; i++) {
       args.add(params[i].name);
     }
@@ -222,7 +222,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * @return a list of arguments from the method call n
    */
   private List<String> getArgs(PrimaryExpression n) {
-    List<String> args = new ArrayList<String>();
+    List<String> args = new ArrayList<>();
     int index = n.f1.size() - 1;
     if (index > 1) {
       index = 1;
@@ -249,7 +249,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * @return a list of arguments from the method call n
    */
   private List<String> getNonThisArgs(PrimaryExpression n) {
-    List<String> args = new ArrayList<String>();
+    List<String> args = new ArrayList<>();
     int index = 0;
     Arguments argumentNode = (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
     if (argumentNode.f1.present()) {

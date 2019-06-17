@@ -131,7 +131,7 @@ public class NISuppressee {
   //    */
   //   public List<Invariant> instantiate_all (VarInfo[] vis, PptTopLevel ppt) {
   //
-  //     List<Invariant> created_list = new ArrayList<Invariant>();
+  //     List<Invariant> created_list = new ArrayList<>();
   //
   //     // Check for empty slots in vis, fail if there is more than one
   //     int missing_index = -1;
@@ -182,17 +182,18 @@ public class NISuppressee {
   public List<NIS.SupInv> find_all(
       VarInfo[] vis, PptTopLevel ppt, @Nullable Invariant @Nullable [] cinvs) {
 
-    List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
+    List<NIS.SupInv> created_list = new ArrayList<>();
 
     // Check for empty slots in vis, fail if there is more than one
     int missing_index = -1;
-    for (int i = 0; i < vis.length; i++)
+    for (int i = 0; i < vis.length; i++) {
       if (vis[i] == null) {
         assert missing_index == -1 : "Multiple empty vars";
         missing_index = i;
       } else {
         assert !vis[i].missingOutOfBounds();
       }
+    }
 
     // If all of the slots were full, specify the invariant
     if (missing_index == -1) {
@@ -241,10 +242,14 @@ public class NISuppressee {
    */
   public boolean get_swap() {
 
-    if (var_count != 2) return false;
+    if (var_count != 2) {
+      return false;
+    }
 
     BinaryInvariant binv = (BinaryInvariant) sample_inv;
-    if (binv.is_symmetric()) return false;
+    if (binv.is_symmetric()) {
+      return false;
+    }
     return (binv.get_swap());
   }
 

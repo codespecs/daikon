@@ -342,14 +342,16 @@ class FormatTestCase {
    */
   public static @Nullable FormatTestCase readFromFile(
       LineNumberReader commands, boolean generateGoals) {
-    List<SingleOutputTestCase> testCases = new ArrayList<SingleOutputTestCase>();
+    List<SingleOutputTestCase> testCases = new ArrayList<>();
 
     // The first line contains the class and its instantiate args
     // each token is separated by blanks.  Each argument to instantiate
     // consists of a type and its value.  For example
     // daikon.inv/binary.twoScalar.NumericInt$divides boolean true
     String line = getNextRealLine((BufferedReader) commands);
-    if (line == null) return null;
+    if (line == null) {
+      return null;
+    }
     String[] tokens = line.split("  *");
     @SuppressWarnings("signature") // user input, should be checked
     @BinaryName String className = tokens[0];
@@ -500,7 +502,7 @@ class FormatTestCase {
       }
     }
 
-    List<Object[]> samples = new ArrayList<Object[]>();
+    List<Object[]> samples = new ArrayList<>();
 
     // Get samples if they are needed to determine invariant data
     // e.g. to determine the exact nature of a linear relationship
@@ -556,9 +558,15 @@ class FormatTestCase {
    * @return the arity of the invariant if it can be determined, -1 otherwise
    */
   private static int getArity(Class<? extends Invariant> classToTest) {
-    if (UnaryInvariant.class.isAssignableFrom(classToTest)) return 1;
-    if (BinaryInvariant.class.isAssignableFrom(classToTest)) return 2;
-    if (ThreeScalar.class.isAssignableFrom(classToTest)) return 3;
+    if (UnaryInvariant.class.isAssignableFrom(classToTest)) {
+      return 1;
+    }
+    if (BinaryInvariant.class.isAssignableFrom(classToTest)) {
+      return 2;
+    }
+    if (ThreeScalar.class.isAssignableFrom(classToTest)) {
+      return 3;
+    }
 
     return -1;
   }
@@ -992,8 +1000,7 @@ class FormatTestCase {
     Method currentMethod;
     for (int i = 0; i < methods.length; i++) {
       currentMethod = methods[i];
-      if (currentMethod.getName().lastIndexOf("add_modified")
-          != -1) { // Method should be called add_modified
+      if (currentMethod.getName().lastIndexOf("add_modified") != -1) {
         return currentMethod;
       }
     }

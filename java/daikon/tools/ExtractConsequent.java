@@ -37,7 +37,7 @@ import org.plumelib.util.UtilPlume;
 /**
  * Extract the consequents of all Implication invariants that are predicated by membership in a
  * cluster, from a {@code .inv} file. An example of such an implication would be "(cluster ==
- * <em>NUM</em>) ==&gt; consequent". The consequent is only true in certain clusters, but is not
+ * <em>NUM</em>) &rArr; consequent". The consequent is only true in certain clusters, but is not
  * generally true for all executions of the program point to which the Implication belongs. These
  * resulting implications are written to standard output in the format of a splitter info file.
  */
@@ -71,7 +71,7 @@ public class ExtractConsequent {
    HashMaps whose keys are Strings (normalized java-format invariants)
      and whose values are HashedConsequent objects. */
   private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
-      new HashMap<String, Map<String, Map<String, HashedConsequent>>>();
+      new HashMap<>();
 
   private static String usage =
       UtilPlume.joinLines(
@@ -161,7 +161,7 @@ public class ExtractConsequent {
     // Retrieve Ppt objects in sorted order.
     // Use a custom comparator for a specific ordering
     Comparator<PptTopLevel> comparator = new Ppt.NameComparator();
-    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<PptTopLevel>(comparator);
+    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<>(comparator);
     ppts_sorted.addAll(ppts.asCollection());
 
     for (PptTopLevel ppt : ppts_sorted) {
@@ -173,7 +173,7 @@ public class ExtractConsequent {
 
     // All conditions at a program point.  A TreeSet to enable
     // deterministic output.
-    TreeSet<String> allConds = new TreeSet<String>();
+    TreeSet<String> allConds = new TreeSet<>();
     for (String pptname : pptname_to_conditions.keySet()) {
       Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
           pptname_to_conditions.get(pptname);
@@ -262,7 +262,7 @@ public class ExtractConsequent {
   public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {
     ppt.simplify_variable_names();
 
-    List<Invariant> invs = new ArrayList<Invariant>();
+    List<Invariant> invs = new ArrayList<>();
     if (invs.size() > 0) {
       String pptname = cleanup_pptname(ppt.name());
       for (Invariant maybe_as_inv : invs) {
@@ -366,13 +366,13 @@ public class ExtractConsequent {
   private static boolean store_invariant(
       String predicate, String index, HashedConsequent consequent, String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
-      pptname_to_conditions.put(pptname, new HashMap<String, Map<String, HashedConsequent>>());
+      pptname_to_conditions.put(pptname, new HashMap<>());
     }
 
     Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
         pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
-      cluster_to_conditions.put(predicate, new HashMap<String, HashedConsequent>());
+      cluster_to_conditions.put(predicate, new HashMap<>());
     }
 
     Map<String, HashedConsequent> conditions = cluster_to_conditions.get(predicate);

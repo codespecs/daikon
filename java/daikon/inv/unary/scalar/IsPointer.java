@@ -64,7 +64,9 @@ public class IsPointer extends SingleScalar {
 
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
-    if (!super.valid_types(vis)) return false;
+    if (!super.valid_types(vis)) {
+      return false;
+    }
 
     ProglangType file_rep_type = vis[0].file_rep_type;
 
@@ -86,7 +88,9 @@ public class IsPointer extends SingleScalar {
 
   @Pure
   private boolean isWithinPointerRange(long value) {
-    if (value == 0) return true;
+    if (value == 0) {
+      return true;
+    }
     return (value >= largestNonPointerValue) || (value <= smallestNonPointerValue);
   }
 
