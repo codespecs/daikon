@@ -61,7 +61,7 @@ public class NIS {
   /** Boolean. If true, enable non-instantiating suppressions. */
   public static boolean dkconfig_enabled = true;
 
-  /** Enum. Signifies which algorithm is used by NIS to process suppressions. */
+  /** Signifies which algorithm is used by NIS to process suppressions. */
   public enum SuppressionProcessor {
     HYBRID,
     ANTECEDENT,
