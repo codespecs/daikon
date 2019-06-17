@@ -1047,10 +1047,11 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #endif
     #if (defined(EQUAL) || defined(EQUALFLOAT))
       // a+c=b+c is implied, because a=b must have also been reported.
-      if (var1.is_add() && var2.is_add() && (var1.get_add_amount() == var2.get_add_amount()))
+      if (var1.is_add() && var2.is_add() && (var1.get_add_amount() == var2.get_add_amount())) {
         return new DiscardInfo(
             this, DiscardCode.obvious,
             "Invariants of the form a+c==b+c are implied since a==b is reported.");
+      }
     #endif
 
     DiscardInfo di = null;

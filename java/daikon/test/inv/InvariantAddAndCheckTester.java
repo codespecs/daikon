@@ -666,8 +666,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Method currentMethod;
       for (int i = 0; i < methods.length; i++) {
         currentMethod = methods[i];
-        if (currentMethod.getName().lastIndexOf("add_modified")
-            != -1) { // Method should be called add_modified
+        if (currentMethod.getName().lastIndexOf("add_modified") != -1) {
           return currentMethod;
         }
       }
@@ -687,8 +686,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Method currentMethod;
       for (int i = 0; i < methods.length; i++) {
         currentMethod = methods[i];
-        if (currentMethod.getName().lastIndexOf("check_modified")
-            != -1) { // Method should be called check_modified
+        if (currentMethod.getName().lastIndexOf("check_modified") != -1) {
           return currentMethod;
         }
       }

@@ -401,10 +401,11 @@ public final class CLASSNAME implements Serializable, Cloneable {
       // computation of the slope can be non-negligible.
 
       // skip points we've already seen
-      for (int i = 0; i < values_seen; i++)
+      for (int i = 0; i < values_seen; i++) {
         if (def_points[i].equals(x, y, z)) {
           return InvariantStatus.NO_CHANGE;
         }
+      }
 
       def_points[values_seen] = new Point(x, y, z);
       wrapper.log("Add: (%s, %s, %s)", x, y, z);

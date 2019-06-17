@@ -3470,10 +3470,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         }
       }
     } else {
-      for (VarInfo vi = this; vi != null; vi = vi.enclosing_var)
+      for (VarInfo vi = this; vi != null; vi = vi.enclosing_var) {
         if ((vi.var_kind == VarKind.VARIABLE) && vi.name().equals(varname)) {
           return true;
         }
+      }
     }
     return false;
   }

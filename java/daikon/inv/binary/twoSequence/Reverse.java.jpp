@@ -87,8 +87,9 @@ public class CLASSNAME extends SUPERCLASS {
     }
 
     // Check to see that both arrays are ordered
-    if (!vis[0].aux.hasOrder() || !vis[1].aux.hasOrder())
+    if (!vis[0].aux.hasOrder() || !vis[1].aux.hasOrder()) {
       return false;
+    }
 
     return true;
   }

@@ -216,17 +216,19 @@ public final class FeatureExtractor {
 
     ArrayList<Invariant> usefulResult = new ArrayList<Invariant>();
     ArrayList<Invariant> nonusefulResult = new ArrayList<Invariant>();
-    for (String useful : usefuls)
+    for (String useful : usefuls) {
       for (Iterator<Invariant> invs = readInvMap(new File(useful)).invariantIterator();
           invs.hasNext(); ) {
         usefulResult.add(invs.next());
       }
+    }
 
-    for (String nonuseful : nonusefuls)
+    for (String nonuseful : nonusefuls) {
       for (Iterator<Invariant> invs = readInvMap(new File(nonuseful)).invariantIterator();
           invs.hasNext(); ) {
         nonusefulResult.add(invs.next());
       }
+    }
 
     return Pair.of(usefulResult, nonusefulResult);
   }
@@ -592,11 +594,12 @@ public final class FeatureExtractor {
 
             counter = counter.intValue() + 1;
             answer.put(name, counter);
-            if (VarInfo.class.isAssignableFrom(currentClass))
+            if (VarInfo.class.isAssignableFrom(currentClass)) {
               for (int iC = 0; iC < NUM_VARS; iC++) {
                 counter = counter.intValue() + 1;
                 answer.put(iC + "_" + name, counter);
               }
+            }
           }
         }
       }
@@ -616,11 +619,12 @@ public final class FeatureExtractor {
             }
             counter = counter.intValue() + 1;
             answer.put(name, counter);
-            if (VarInfo.class.isAssignableFrom(currentClass))
+            if (VarInfo.class.isAssignableFrom(currentClass)) {
               for (int iC = 0; iC < NUM_VARS; iC++) {
                 counter = counter.intValue() + 1;
                 answer.put(iC + "_" + name, counter);
               }
+            }
           }
         }
       }
@@ -633,10 +637,11 @@ public final class FeatureExtractor {
     List<Class<? extends Invariant>> answer = new ArrayList<Class<? extends Invariant>>();
     if (top.isDirectory()) {
       File[] all = top.listFiles();
-      for (int i = 0; i < all.length; i++)
+      for (int i = 0; i < all.length; i++) {
         if (!(all[i].getAbsolutePath().indexOf("test") > -1)) {
           answer.addAll(getInvariantClasses(all[i]));
         }
+      }
     } else if (top.getName().endsWith(".class")) {
       String name = top.getAbsolutePath();
       name = name.substring(name.indexOf("daikon"), name.indexOf(".class"));
@@ -708,7 +713,7 @@ public final class FeatureExtractor {
     Field[] fields = inv.getClass().getFields();
 
     for (int i = 0; i < fields.length; i++) {
-      if (!BANNED_METHODS.contains(fields[i].getName()))
+      if (!BANNED_METHODS.contains(fields[i].getName())) {
         if (fields[i].getType().equals(Boolean.TYPE)) {
           answer.add(new IntDoublePair(lookup.get(fields[i].getName() + "Bool").intValue(), 1));
         } else if (TYPES.contains(fields[i].getType())) {
@@ -716,12 +721,13 @@ public final class FeatureExtractor {
               new IntDoublePair(
                   lookup.get(fields[i].getName() + "Float").intValue(), fields[i].getDouble(inv)));
         }
+      }
     }
 
     Method[] methods = inv.getClass().getMethods();
     for (int i = 0; i < methods.length; i++) {
       if (methods[i].getParameterTypes().length == 0) {
-        if (!BANNED_METHODS.contains(methods[i].getName()))
+        if (!BANNED_METHODS.contains(methods[i].getName())) {
           if (methods[i].getReturnType().equals(Boolean.TYPE)) {
             answer.add(new IntDoublePair(lookup.get(methods[i].getName() + "Bool").intValue(), 1));
           } else if (TYPES.contains(methods[i].getReturnType())) {
@@ -730,6 +736,7 @@ public final class FeatureExtractor {
                     lookup.get(methods[i].getName() + "Float").intValue(),
                     ((Number) methods[i].invoke(inv, new Object[0])).doubleValue()));
           }
+        }
       }
     }
 

@@ -387,10 +387,11 @@ public class DtraceDiff {
         if (v1.length != v2.length) {
           return false;
         }
-        for (int i = 0; i < v1.length; i++)
+        for (int i = 0; i < v1.length; i++) {
           if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i])) {
             return false;
           }
+        }
         return true;
       } else if (type.baseIsScalar()) {
         long[] v1 = (long[]) val1;
@@ -410,10 +411,11 @@ public class DtraceDiff {
         if (v1.length != v2.length) {
           return false;
         }
-        for (int i = 0; i < v1.length; i++)
+        for (int i = 0; i < v1.length; i++) {
           if (!((Double.isNaN(v1[i]) && Double.isNaN(v2[i])) || Global.fuzzy.eq(v1[i], v2[i]))) {
             return false;
           }
+        }
         return true;
       } else if (type.baseIsString()) {
         String[] v1 = (String[]) val1;

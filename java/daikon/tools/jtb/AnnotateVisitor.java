@@ -393,10 +393,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         Annotate.debug.fine("InsertBehavior visitor visiting a NodeListOptional");
         Annotate.debug.fine("With " + nlo.nodes.size() + " nodes");
 
-        if (nlo.present())
+        if (nlo.present()) {
           for (Enumeration<Node> e = nlo.elements(); e.hasMoreElements(); ) {
             e.nextElement().accept(this);
           }
+        }
 
         if (!behaviorInserted) {
           Annotate.debug.fine("addComment from nlo");

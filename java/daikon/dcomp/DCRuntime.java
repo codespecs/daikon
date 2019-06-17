@@ -2320,8 +2320,9 @@ public final class DCRuntime {
       if (tree.get(node) == null) {
         return;
       }
-      for (DaikonVariableInfo child : tree.get(node))
+      for (DaikonVariableInfo child : tree.get(node)) {
         if (child != node) print_tree(ps, tree, child, depth + 1);
+      }
     } else {
       for (int i = 0; i < depth; i++) {
         ps.printf("--");
@@ -2332,8 +2333,9 @@ public final class DCRuntime {
       if (tree.get(node) == null) {
         return;
       }
-      for (DaikonVariableInfo child : tree.get(node))
+      for (DaikonVariableInfo child : tree.get(node)) {
         if (child != node) print_tree(ps, tree, child, depth + 1);
+      }
     }
   }
 
