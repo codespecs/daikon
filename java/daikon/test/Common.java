@@ -46,7 +46,7 @@ public class Common {
 
     // If any of the variables have enclosing variables, include those in
     // the ppt as well.
-    List<VarInfo> vlist = new ArrayList<VarInfo>();
+    List<VarInfo> vlist = new ArrayList<>();
     for (VarInfo vi : vars) {
       if (vi.enclosing_var != null) vlist.add(vi.enclosing_var);
     }

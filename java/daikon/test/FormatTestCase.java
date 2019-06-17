@@ -342,7 +342,7 @@ class FormatTestCase {
    */
   public static @Nullable FormatTestCase readFromFile(
       LineNumberReader commands, boolean generateGoals) {
-    List<SingleOutputTestCase> testCases = new ArrayList<SingleOutputTestCase>();
+    List<SingleOutputTestCase> testCases = new ArrayList<>();
 
     // The first line contains the class and its instantiate args
     // each token is separated by blanks.  Each argument to instantiate
@@ -500,7 +500,7 @@ class FormatTestCase {
       }
     }
 
-    List<Object[]> samples = new ArrayList<Object[]>();
+    List<Object[]> samples = new ArrayList<>();
 
     // Get samples if they are needed to determine invariant data
     // e.g. to determine the exact nature of a linear relationship

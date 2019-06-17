@@ -14,7 +14,7 @@ import org.plumelib.util.Pair;
  */
 public abstract class Node<CONTENT extends @Nullable Object, CHILD> {
 
-  private List<CHILD> children = new ArrayList<CHILD>();
+  private List<CHILD> children = new ArrayList<>();
   // Nonsensical for RootNode
   private Pair<CONTENT, CONTENT> userObject;
 

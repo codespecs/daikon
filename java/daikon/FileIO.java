@@ -187,7 +187,7 @@ public final class FileIO {
   // old values of all variables in scope the last time the program point
   // was executed. This enables us to determine whether the values have been
   // modified since this program point was last executed.
-  static HashMap<PptTopLevel, String[]> ppt_to_value_reps = new HashMap<PptTopLevel, String[]>();
+  static HashMap<PptTopLevel, String[]> ppt_to_value_reps = new HashMap<>();
 
   // For debugging purposes: printing out a modified trace file with
   // changed modbits.
@@ -329,10 +329,10 @@ public final class FileIO {
     ppt_name = user_mod_ppt_name(ppt_name);
 
     /** Information that will populate the new program point. */
-    Map<String, VarDefinition> varmap = new LinkedHashMap<String, VarDefinition>();
+    Map<String, VarDefinition> varmap = new LinkedHashMap<>();
     /** The VarDefinition we are in the middle of reading, or null if we are not. */
     VarDefinition vardef = null;
-    List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
+    List<ParentRelation> ppt_parents = new ArrayList<>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
     PptType ppt_type = PptType.POINT;
 
@@ -433,7 +433,7 @@ public final class FileIO {
     }
 
     // Build the var infos from the var definitions.
-    List<VarInfo> vi_list = new ArrayList<VarInfo>(varmap.size());
+    List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
       vi_list.add(new VarInfo(vd));
     }
@@ -563,7 +563,7 @@ public final class FileIO {
   private static VarInfo[] read_VarInfos(ParseState state, String ppt_name) throws IOException {
 
     // The var_infos that will populate the new program point
-    List<VarInfo> var_infos = new ArrayList<VarInfo>();
+    List<VarInfo> var_infos = new ArrayList<>();
 
     // Each iteration reads a variable name, type, and comparability.
     // Possibly abstract this out into a separate function??
@@ -930,7 +930,7 @@ public final class FileIO {
 
   // Map key is a (global, not per-procedure) nonce.
   // The nonce indicates which returns are associated with which entries.
-  static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
+  static HashMap<Integer, Invocation> call_hashmap = new HashMap<>();
   // call_stack is for procedures without nonces.
   static Deque<Invocation> call_stack = new ArrayDeque<Invocation>();
 
@@ -1824,7 +1824,7 @@ public final class FileIO {
       System.out.println();
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
-        ArrayList<Invocation> invocations = new ArrayList<Invocation>();
+        ArrayList<Invocation> invocations = new ArrayList<>();
         for (@KeyFor("call_hashmap") Integer i : CollectionsPlume.sortedKeySet(call_hashmap)) {
           Invocation invok = call_hashmap.get(i);
           assert invok != null;
@@ -1866,7 +1866,7 @@ public final class FileIO {
 
   /** Print the invocations in the collection, in order, and coalescing duplicates. */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
-    Map<@Interned String, Integer> counter = new LinkedHashMap<@Interned String, Integer>();
+    Map<@Interned String, Integer> counter = new LinkedHashMap<>();
 
     for (Invocation invok_noncanonical : invocations) {
       @Interned Invocation invok = invok_noncanonical.canonicalize();
@@ -2977,7 +2977,7 @@ public final class FileIO {
     //                    dkconfig_rm_stack_dups);
 
     String[] stack = ppt_name.split("[|]");
-    List<String> nd_stack = new ArrayList<String>();
+    List<String> nd_stack = new ArrayList<>();
     for (String si : stack) {
       if (nd_stack.contains(si)) {
         continue;

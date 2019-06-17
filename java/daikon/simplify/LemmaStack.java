@@ -259,7 +259,7 @@ public class LemmaStack {
         }
       }
     } while (reduced);
-    List<Lemma> new_invs = new ArrayList<Lemma>();
+    List<Lemma> new_invs = new ArrayList<>();
     for (int i = 0; i < invs.length; i++) {
       if (!excluded[i]) new_invs.add(invs[i]);
     }
@@ -268,7 +268,7 @@ public class LemmaStack {
 
   private static List<Lemma> filterByClass(
       List<Lemma> lems, Set<Class<? extends Invariant>> blacklist) {
-    List<Lemma> new_lems = new ArrayList<Lemma>();
+    List<Lemma> new_lems = new ArrayList<>();
     for (Lemma lem : lems) {
       if (!blacklist.contains(lem.invClass())) {
         new_lems.add(lem);
@@ -327,7 +327,7 @@ public class LemmaStack {
   }
 
   public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) {
-    List<Lemma> assumptions = new ArrayList<Lemma>(lemmas);
+    List<Lemma> assumptions = new ArrayList<>(lemmas);
     List<Set<Class<? extends Invariant>>> found = new ArrayList<Set<Class<? extends Invariant>>>();
     try {
       unAssumeAll(lemmas);
@@ -474,7 +474,7 @@ public class LemmaStack {
     }
   }
 
-  private static SortedSet<Long> ints_seen = new TreeSet<Long>();
+  private static SortedSet<Long> ints_seen = new TreeSet<>();
 
   /** Keep track that we've seen this number in formulas, for the sake of pushOrdering. */
   public static void noticeInt(long i) {

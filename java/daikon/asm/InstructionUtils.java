@@ -46,7 +46,7 @@ public class InstructionUtils {
 
   private static void processComparables(
       X86Instruction instr, Set<String> vars, DSForest partition) {
-    List<String> comparables = new ArrayList<String>();
+    List<String> comparables = new ArrayList<>();
 
     Set<String> bvs = instr.getBinaryVarNames();
     for (String v : vars) {
@@ -67,7 +67,7 @@ public class InstructionUtils {
   }
 
   public static Set<String> getAllVarNames(List<IInstruction> path) {
-    Set<String> ret = new LinkedHashSet<String>();
+    Set<String> ret = new LinkedHashSet<>();
     for (IInstruction i : path) {
       ret.addAll(i.getBinaryVarNames());
     }
@@ -81,8 +81,8 @@ public class InstructionUtils {
   // To compute the upper limit, replace the invocations of
   // computeRedundantVars() with this call instead.
   public static Map<String, Set<String>> computeRedundantVarsFake(List<IInstruction> path) {
-    Map<String, Set<String>> redundants = new LinkedHashMap<String, Set<String>>();
-    Map<String, String> leaders = new LinkedHashMap<String, String>();
+    Map<String, Set<String>> redundants = new LinkedHashMap<>();
+    Map<String, String> leaders = new LinkedHashMap<>();
     Set<@KeyFor("leaders") String> varsUsedPreviously =
         new LinkedHashSet<@KeyFor("leaders") String>();
     for (IInstruction instr : path) {
@@ -103,7 +103,7 @@ public class InstructionUtils {
         }
       }
     }
-    Map<String, Set<String>> redundantsFinal = new LinkedHashMap<String, Set<String>>();
+    Map<String, Set<String>> redundantsFinal = new LinkedHashMap<>();
     for (Map.Entry<@KeyFor("redundants") String, Set<String>> e : redundants.entrySet()) {
       if (!e.getValue().isEmpty()) {
         redundantsFinal.put(e.getKey(), e.getValue());
@@ -118,10 +118,10 @@ public class InstructionUtils {
    */
   public static void computeRVarsLoad(List<IInstruction> path, Map<String, String> rvars) {
 
-    Set<String> allVarBases = new LinkedHashSet<String>();
+    Set<String> allVarBases = new LinkedHashSet<>();
 
     // Maps base names to the last time the bv was killed.
-    Map<String, Integer> timeKilled = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> timeKilled = new LinkedHashMap<>();
 
     for (int time = 0; time < path.size(); time++) {
       IInstruction instr = path.get(time);
@@ -190,18 +190,18 @@ public class InstructionUtils {
     // `base name', and to <address>:<name> as its `full name'.
 
     // Maps base names to the last time the bv was killed.
-    Map<String, Integer> timeKilled = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> timeKilled = new LinkedHashMap<>();
 
     // Maps base names to the last time a bv with the given base name
     // was declared a leader.
-    Map<String, Integer> leaders = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> leaders = new LinkedHashMap<>();
 
     // Maps full names to the set of other full names that represent
     // variables that are redundant to the key. We call the key the `leader'.
-    Map<String, Set<String>> redundantVars = new LinkedHashMap<String, Set<String>>();
+    Map<String, Set<String>> redundantVars = new LinkedHashMap<>();
 
     // For debugging only: the set of all addresses seen so far.
-    Set<String> addresses = new LinkedHashSet<String>();
+    Set<String> addresses = new LinkedHashSet<>();
 
     // We detect redundant variables as follows.
     // For each bv var that appears in the LHS of instruction i (appearing
@@ -266,8 +266,8 @@ public class InstructionUtils {
     // Also, compute statistics for redundant variables obtained via the analysis.
     int totalRedVars = 0;
     int totalVars = 0;
-    Map<String, String> result = new LinkedHashMap<String, String>();
-    // Map<String, Set<String>> redundantVarsFinal = new LinkedHashMap<String, Set<String>>();
+    Map<String, String> result = new LinkedHashMap<>();
+    // Map<String, Set<String>> redundantVarsFinal = new LinkedHashMap<>();
     for (Map.Entry<@KeyFor("redundantVars") String, Set<String>> e : redundantVars.entrySet()) {
       totalVars++;
       if (!e.getValue().isEmpty()) {

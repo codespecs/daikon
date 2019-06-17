@@ -48,7 +48,7 @@ public class X86Instruction implements IInstruction {
 
   @Override
   public Set<String> getBinaryVarNames() {
-    Set<String> retval = new LinkedHashSet<String>();
+    Set<String> retval = new LinkedHashSet<>();
 
     for (String s : args) {
 
@@ -162,7 +162,7 @@ public class X86Instruction implements IInstruction {
     String inst_opName = tokens[1];
 
     // Set args
-    List<String> inst_args = new ArrayList<String>();
+    List<String> inst_args = new ArrayList<>();
     int i = 2;
     for (; i < tokens.length; i++) {
       if (tokens[i].equals("->")) {
@@ -178,7 +178,7 @@ public class X86Instruction implements IInstruction {
     }
 
     // Set resultVars.
-    List<String> inst_killedVars = new ArrayList<String>();
+    List<String> inst_killedVars = new ArrayList<>();
     for (; i < tokens.length; i++) {
       if (!isValidRHSVar(tokens[i])) {
         throw new IllegalArgumentException("Invalid instruction string: " + s);

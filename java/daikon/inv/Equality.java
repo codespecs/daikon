@@ -222,7 +222,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public String format_java() {
     VarInfo leader = leader();
     String leaderName = leader.name();
-    List<String> clauses = new ArrayList<String>();
+    List<String> clauses = new ArrayList<>();
     for (VarInfo var : vars) {
       if (leader == var) {
         continue;
@@ -235,10 +235,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public String format_esc(@GuardSatisfied Equality this) {
     String result = "";
 
-    List<VarInfo> valid_equiv = new ArrayList<VarInfo>();
-    List<VarInfo> invalid_equiv = new ArrayList<VarInfo>();
+    List<VarInfo> valid_equiv = new ArrayList<>();
+    List<VarInfo> invalid_equiv = new ArrayList<>();
 
-    List<VarInfo> equal_vars = new ArrayList<VarInfo>();
+    List<VarInfo> equal_vars = new ArrayList<>();
 
     for (VarInfo other : vars) {
       if (other.isDerivedSequenceMinMaxSum()) {
@@ -343,7 +343,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public String format_java_family(@GuardSatisfied Equality this, OutputFormat format) {
     VarInfo leader = leader();
     String leaderName = leader.name_using(format);
-    List<String> clauses = new ArrayList<String>();
+    List<String> clauses = new ArrayList<>();
     for (VarInfo var : vars) {
       if (leader == var) {
         continue;
@@ -397,7 +397,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       numSamples += count;
     }
 
-    List<VarInfo> result = new ArrayList<VarInfo>();
+    List<VarInfo> result = new ArrayList<>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("Doing add at " + this.ppt.parent.name() + " for " + this);
     }

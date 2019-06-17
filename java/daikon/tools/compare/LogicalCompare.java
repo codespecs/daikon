@@ -137,7 +137,7 @@ public class LogicalCompare {
   private static boolean[] filters = new boolean[128];
 
   private static List<Invariant> filterInvariants(List<Invariant> invs, boolean isPost) {
-    List<Invariant> new_invs = new ArrayList<Invariant>();
+    List<Invariant> new_invs = new ArrayList<>();
     for (Invariant inv : invs) {
       Invariant guarded_inv = inv;
       //       System.err.println("Examining " + inv.format());
@@ -230,7 +230,7 @@ public class LogicalCompare {
   // Translate a vector of Invariants into a vector of Lemmas, without
   // changing the invariants.
   private static List<Lemma> translateStraight(List<Invariant> invs) {
-    List<Lemma> lems = new ArrayList<Lemma>();
+    List<Lemma> lems = new ArrayList<>();
     for (Invariant inv : invs) {
       lems.add(new InvariantLemma(inv));
     }
@@ -241,7 +241,7 @@ public class LogicalCompare {
   // discarding any invariants that represent only facts about a
   // routine's prestate.
   private static List<Lemma> translateRemovePre(List<Invariant> invs) {
-    List<Lemma> lems = new ArrayList<Lemma>();
+    List<Lemma> lems = new ArrayList<>();
     for (Invariant inv : invs) {
       if (!inv.isAllPrestate()) lems.add(new InvariantLemma(inv));
     }
@@ -254,7 +254,7 @@ public class LogicalCompare {
   // poststate context.
   // The arguments are invariants at the entry point, where no orig(...) variables exist.
   private static List<Lemma> translateAddOrig(List<Invariant> invs) {
-    List<Lemma> lems = new ArrayList<Lemma>();
+    List<Lemma> lems = new ArrayList<>();
     for (Invariant inv : invs) {
       lems.add(InvariantLemma.makeLemmaAddOrig(inv));
     }
@@ -278,7 +278,7 @@ public class LogicalCompare {
 
   @RequiresNonNull("lemmas")
   private static int checkConsequences(List<Lemma> assumptions, List<Lemma> consequences) {
-    Set<String> assumption_formulas = new HashSet<String>();
+    Set<String> assumption_formulas = new HashSet<>();
     for (Lemma lem : assumptions) {
       assumption_formulas.add(lem.formula);
     }
@@ -396,7 +396,7 @@ public class LogicalCompare {
       List<Lemma> safeAssumptions, List<Lemma> unsafeAssumptions, List<Lemma> consequences)
       throws SimplifyError {
     int mark = lemmas.markLevel();
-    List<Lemma> assumptions = new ArrayList<Lemma>();
+    List<Lemma> assumptions = new ArrayList<>();
     lemmas.pushOrdering();
     lemmas.pushLemmas(safeAssumptions);
     if (lemmas.checkForContradiction() == 'T') {
@@ -481,7 +481,7 @@ public class LogicalCompare {
       LemmaStack.printLemmas(System.out, Lemma.lemmasList());
       System.out.println("");
 
-      List<Lemma> v = new ArrayList<Lemma>();
+      List<Lemma> v = new ArrayList<>();
       v.addAll(translateAddOrig(a_pre));
       System.out.println("Weak preconditions (Apre):");
       LemmaStack.printLemmas(System.out, v);
@@ -509,9 +509,9 @@ public class LogicalCompare {
     if (opt_show_count) {
       System.out.println("Strong preconditions consist of " + t_pre.size() + " invariants.");
     }
-    List<Lemma> pre_assumptions = new ArrayList<Lemma>();
+    List<Lemma> pre_assumptions = new ArrayList<>();
     pre_assumptions.addAll(translateStraight(a_pre));
-    List<Lemma> pre_conclusions = new ArrayList<Lemma>();
+    List<Lemma> pre_conclusions = new ArrayList<>();
     pre_conclusions.addAll(translateStraight(t_pre));
     Collections.sort(pre_conclusions);
 
@@ -525,9 +525,9 @@ public class LogicalCompare {
 
     System.out.println("Testing postconditions:");
 
-    List<Lemma> post_assumptions_safe = new ArrayList<Lemma>();
-    List<Lemma> post_assumptions_unsafe = new ArrayList<Lemma>();
-    List<Lemma> post_conclusions = new ArrayList<Lemma>();
+    List<Lemma> post_assumptions_safe = new ArrayList<>();
+    List<Lemma> post_assumptions_unsafe = new ArrayList<>();
+    List<Lemma> post_conclusions = new ArrayList<>();
 
     post_assumptions_unsafe.addAll(translateAddOrig(a_pre));
     post_assumptions_safe.addAll(translateStraight(t_post));
@@ -646,7 +646,7 @@ public class LogicalCompare {
     Configuration.getInstance().apply("daikon.inv.Invariant.simplify_define_predicates=true");
     Configuration.getInstance().apply("daikon.simplify.Session.simplify_max_iterations=2147483647");
 
-    extra_assumptions = new LinkedHashMap<String, List<Lemma>>();
+    extra_assumptions = new LinkedHashMap<>();
 
     Getopt g = new Getopt("daikon.tools.compare.LogicalCompare", args, "h", longopts);
     int c;
@@ -799,7 +799,7 @@ public class LogicalCompare {
       Collection<@KeyFor("app_ppts.nameToPpt") String> app_ppt_names = app_ppts.nameStringSet();
       Collection<@KeyFor("test_ppts.nameToPpt") String> test_ppt_names = test_ppts.nameStringSet();
       // These are keys in both app_ppts and test_ppts.
-      Set<String> common_names = new TreeSet<String>();
+      Set<String> common_names = new TreeSet<>();
 
       for (String name : app_ppt_names) {
         @SuppressWarnings("nullness") // map: iterating over keyset

@@ -379,7 +379,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     return invokeList;
   }
 
-  // Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
+  // Map<Integer, InstructionHandle> offset_map = new HashMap<>();
   InstructionHandle[] offset_map;
 
   /**
@@ -393,7 +393,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   private ClassInfo instrument_all_methods(ClassGen cg, String fullClassName, ClassLoader loader) {
 
     ClassInfo class_info = new ClassInfo(cg.getClassName(), loader);
-    List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
+    List<MethodInfo> method_infos = new ArrayList<>();
 
     if (cg.getMajor() < Const.MAJOR_1_6) {
       System.out.printf(
@@ -1083,10 +1083,10 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     // Loop through each instruction and find the line number for each
     // return opcode
-    List<Integer> exit_locs = new ArrayList<Integer>();
+    List<Integer> exit_locs = new ArrayList<>();
 
     // tells whether each exit loc in the method is included or not (based on filters)
-    List<Boolean> isIncluded = new ArrayList<Boolean>();
+    List<Boolean> isIncluded = new ArrayList<>();
 
     debug_transform.log("Looking for exit points in %s%n", mgen.getName());
     InstructionList il = mgen.getInstructionList();

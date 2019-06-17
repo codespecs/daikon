@@ -254,7 +254,7 @@ public class DTraceWriter extends DaikonWriter {
       return nonsenseList;
     }
 
-    List<Object> fieldVals = new ArrayList<Object>();
+    List<Object> fieldVals = new ArrayList<>();
 
     for (Object theObj : theObjects) {
       if (theObj == null) {
@@ -368,7 +368,7 @@ public class DTraceWriter extends DaikonWriter {
     }
 
     int len = Array.getLength(arrayVal);
-    List<Object> arrList = new ArrayList<Object>(len);
+    List<Object> arrList = new ArrayList<>(len);
 
     Class<?> arrType = arrayVal.getClass().getComponentType();
 
@@ -436,7 +436,7 @@ public class DTraceWriter extends DaikonWriter {
       return null;
     }
 
-    List<String> typeNames = new ArrayList<String>(theVals.size());
+    List<String> typeNames = new ArrayList<>(theVals.size());
 
     for (Object ref : theVals) {
       if (ref == null) {

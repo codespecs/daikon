@@ -46,7 +46,7 @@ import org.plumelib.bcelutil.SimpleLog;
 public final class DCRuntime {
 
   /** List of all instrumented methods. */
-  public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
+  public static final List<MethodInfo> methods = new ArrayList<>();
 
   /**
    * Keep track of whether or not we are already processing an enter/exit so we can avoid recursion.
@@ -71,10 +71,10 @@ public final class DCRuntime {
 
   /** Map from each primitive static name to the offset in static_tags. */
   // public static Map<String,Integer> static_map
-  //   = new LinkedHashMap<String,Integer>();
+  //   = new LinkedHashMap<>();
 
   /** Storage for each static tag. */
-  public static List<@Nullable Object> static_tags = new ArrayList<@Nullable Object>();
+  public static List<@Nullable Object> static_tags = new ArrayList<>();
 
   /**
    * Object used to mark procedure entries in the tag stack. It is pushed on the stack at entry and
@@ -125,10 +125,10 @@ public final class DCRuntime {
       new WeakIdentityHashMap<Object, Object[]>();
 
   /** List of all classes encountered. These are the classes that will have comparability output. */
-  private static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
+  private static List<ClassInfo> all_classes = new ArrayList<>();
 
   /** Set of classes whose static initializer has run. */
-  private static Set<String> init_classes = new HashSet<String>();
+  private static Set<String> init_classes = new HashSet<>();
 
   /**
    * Class used as a tag for primitive constants. Only different from Object for debugging purposes.
@@ -242,14 +242,14 @@ public final class DCRuntime {
    * Object's original super.equals call. Once the equals call terminates, whether by returning a
    * value or by throwing an exception, the corresponding key is removed from this map.
    */
-  static Map<Object, Class<?>> active_equals_calls = new HashMap<Object, Class<?>>();
+  static Map<Object, Class<?>> active_equals_calls = new HashMap<>();
 
   /**
    * Tracks active {@code super.clone()} calls.
    *
    * @see active_equals_calls
    */
-  static Map<Object, Class<?>> active_clone_calls = new HashMap<Object, Class<?>>();
+  static Map<Object, Class<?>> active_clone_calls = new HashMap<>();
 
   /**
    * Handles {@code super.equals(Object)} calls.
@@ -560,7 +560,7 @@ public final class DCRuntime {
     return (obj1 != obj2);
   }
 
-  static Map<String, Integer> methodCountMap = new HashMap<String, Integer>(64);
+  static Map<String, Integer> methodCountMap = new HashMap<>(64);
 
   /**
    * Create the tag frame for this method. Pop the tags for any primitive parameters off of the tag
@@ -2036,7 +2036,7 @@ public final class DCRuntime {
     time_decl.log("print_decl_vars start");
 
     // Map from array name to comparability for its indices (if any)
-    Map<String, Integer> arr_index_map = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> arr_index_map = new LinkedHashMap<>();
 
     // Map from daikon variable to its comparability
     Map<DaikonVariableInfo, Integer> dv_comp_map =
@@ -2322,7 +2322,7 @@ public final class DCRuntime {
    * <p>"daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
    */
   private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
-    ArrayList<String> o = new ArrayList<String>();
+    ArrayList<String> o = new ArrayList<>();
     for (DaikonVariableInfo dvi : l) {
       o.add(skinyOutput(dvi, on));
     }
@@ -2400,7 +2400,7 @@ public final class DCRuntime {
     // Get each set, sort it, and add it to the list of all sets.  Then sort
     // the list of all sets.  The sorting is not critical except to create
     // a reproducible order
-    List<DVSet> set_list = new ArrayList<DVSet>(sets.size());
+    List<DVSet> set_list = new ArrayList<>(sets.size());
     for (DVSet dvs : sets.values()) {
       dvs.sort();
       set_list.add(dvs);
@@ -2527,7 +2527,7 @@ public final class DCRuntime {
     debug_merge_comp.indent();
 
     // Create a map relating destination names to their variables
-    Map<String, DaikonVariableInfo> dest_map = new LinkedHashMap<String, DaikonVariableInfo>();
+    Map<String, DaikonVariableInfo> dest_map = new LinkedHashMap<>();
     for (DaikonVariableInfo dvi : varlist(dest)) {
       dest_map.put(dvi.getName(), dvi);
     }
@@ -2944,7 +2944,7 @@ public final class DCRuntime {
   /** Returns all of the daikonvariables in the tree rooted at dvi in a list. */
   private static List<DaikonVariableInfo> varlist(DaikonVariableInfo dvi) {
 
-    List<DaikonVariableInfo> list = new ArrayList<DaikonVariableInfo>();
+    List<DaikonVariableInfo> list = new ArrayList<>();
     list.add(dvi);
     for (DaikonVariableInfo child : dvi) {
       list.addAll(varlist(child));
@@ -3103,7 +3103,7 @@ public final class DCRuntime {
       // assert obj == null: "primitive array object = " + obj_str (obj);
       @SuppressWarnings("unchecked")
       List<Object> parent_list = (List<Object>) parent;
-      List<Object> tag_list = new ArrayList<Object>(parent_list.size());
+      List<Object> tag_list = new ArrayList<>(parent_list.size());
       for (Object parent_element : parent_list) {
         Object[] tags = field_map.get(parent_element);
         if (tags == null) {
