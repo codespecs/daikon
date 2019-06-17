@@ -247,7 +247,7 @@ public class CLASSNAME extends SUPERCLASS {
       int ii = INDEXOF(intersect, a[i]);
       if ((ii != -1)
         && (INDEXOF(ArraysPlume.subarray(tmp,0,size), a[i]) == -1)) {
-        //System.out.println ("adding " + intersect[ii] + " at " + size);
+        // System.out.println ("adding " + intersect[ii] + " at " + size);
 
         // Carefully add the existing intersect value and not a[i].  These
         // are not necessarily the same when fuzzy floating point

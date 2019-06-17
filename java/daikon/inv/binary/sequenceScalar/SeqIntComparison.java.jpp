@@ -416,7 +416,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
 
     VarInfo seqvar = seqvar(vis);
     VarInfo sclvar = sclvar(vis);
-    //Debug.log (getClass(), ppt, vis, "Considering  over" + seqvar.name()
+    // Debug.log(getClass(), ppt, vis, "Considering  over" + seqvar.name()
     //           + " and " + sclvar.name());
 
     // Look for the same property over a supersequence of this one.  This

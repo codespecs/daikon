@@ -533,7 +533,7 @@ The test ensures that the method only appears once in the output.
   //    * Returns the minimum element in the array.
   //    */
   //   /* pure */ public static _TYPE min(_TYPE[] seq) {
-  //      //assert seq.length > 0;
+  //     // assert seq.length > 0;
   //     _TYPE retval = seq[0];
   //     for (int i = 1 ; i < seq.length ; i++) {
   //       if (lt(seq[i], retval)) {
@@ -548,7 +548,7 @@ The test ensures that the method only appears once in the output.
   //    * Returns the minimum element in the array.
   //    */
   //   /* pure */ public static _TYPE max(_TYPE[] seq) {
-  //      //assert seq.length > 0;
+  //     // assert seq.length > 0;
   //     _TYPE retval = seq[0];
   //     for (int i = 1 ; i < seq.length ; i++) {
   //       if (gt(seq[i], retval)) {
@@ -803,7 +803,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     if (elts == null) return false;
     if (arr == null) return false;
     if (!(elts.getClass().isArray() && arr.getClass().isArray())) {
-      //throw new IllegalArgumentException("both arguments must be arrays.");
+      // throw new IllegalArgumentException("both arguments must be arrays.");
       return false;
     }
     // We know that the two arguments are arrays of different types; if
@@ -1969,10 +1969,10 @@ The "defined(INT)" test ensures that it only appears once in the output.
     if (object == null) return null;
     if (fieldStr == null) return null;
 
-    //assert fieldStr != null && !"".equals(fieldStr);
+    // assert fieldStr != null && !"".equals(fieldStr);
     String[] fieldNames = fieldStr.split("\\.");
     _TYPE[] retval = COLLECT_TYPE(object, fieldNames, 0);
-    //System.err.println("%%% fieldArray returned: " + plume.Arrays.toString(retval));
+    // System.err.println("%%% fieldArray returned: " + plume.Arrays.toString(retval));
     return retval;
   }
 
@@ -1998,7 +1998,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
       field.setAccessible(true);
       // Class cls = field.getType();
       fieldObj = field.get(object);
-      //System.out.println("***fieldObj="+fieldObj);
+      // System.out.println("***fieldObj="+fieldObj);
 
     } catch (Exception e) {
       return null;
@@ -2046,7 +2046,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
         // error.  Then, this case becomes a run-time error.  -MDE
 
         // Just one element; return a one-element array.
-        //assert cls.equals(_TYPE_WRAPPER_NAME.TYPE);
+        // assert cls.equals(_TYPE_WRAPPER_NAME.TYPE);
         return new _TYPE[] { GETVALUE(fieldObj) };
       }
     } else {
@@ -2063,7 +2063,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
           if (oneEltArray == null) {
             throw new Error("bad fields: " + (obj == null ? "null" : obj.getClass()) + " " + Arrays.toString(fields) + " " + (fieldsStartIdx + 1));
           }
-          //assert oneEltArray.length == 1;
+          // assert oneEltArray.length == 1;
           intermediate[index++] = oneEltArray[0];
         }
         return intermediate;
@@ -2078,7 +2078,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
           if (oneEltArray == null) {
             throw new Error("bad fields: " + (obj == null ? "null" : obj.getClass()) + " " + Arrays.toString(fields) + " " + (fieldsStartIdx + 1));
           }
-          //assert oneEltArray.length == 1;
+          // assert oneEltArray.length == 1;
           intermediate[i] = oneEltArray[0];
         }
         return intermediate;

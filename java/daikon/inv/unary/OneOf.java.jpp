@@ -1507,7 +1507,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // Look for v in our list of previously seen values.  If it's
     // found, we're all set.
     for (int i = 0; i < num_elts; i++) {
-      //if (logDetail())
+      // if (logDetail())
       //  log ("add_modified (" + v + ")");
       if (EQUALS(elts[i], v)) {
         return InvariantStatus.NO_CHANGE;

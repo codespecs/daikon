@@ -262,7 +262,7 @@ public class ChicoryPremain {
    */
   //  private static void runPurityAnalysis(String targetApp)
   //  {
-  //      //Example args: --pa:assignable -q  -c DataStructures.StackAr
+  //      // Example args: --pa:assignable -q  -c DataStructures.StackAr
   //      String[] args = new String[] {"--pa:assignable", "-c", targetApp};
   //
   //      Set<HMethod> pureHMethods = harpoon.Main.SAMain.getPureMethods(args);

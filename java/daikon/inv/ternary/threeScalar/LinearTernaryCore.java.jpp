@@ -436,7 +436,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       }
     } else {
 
-      //at this point either a line or a plane must have been formed
+      // at this point either a line or a plane must have been formed
 
       // if line already broken, fit to plane equation
       if (line_flag == Flag.NO_LINE) {
@@ -463,7 +463,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
 
         // try to fit to the current line
         if (!try_points_linear(x, y, z)) {
-          //put the crucial point in, so that it can be tested against the new line
+          // put the crucial point in, so that it can be tested against the new line
           def_points[MINTRIPLES - 1] = new Point(x, y, z);
 
           // try to fit the points onto a line again (not sure if this
@@ -1351,7 +1351,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
         if (stat == InvariantStatus.FALSIFIED) {
           return null;
         }
-        //if (wrapper.is_false())
+        // if (wrapper.is_false())
         //  return null;
       }
     }

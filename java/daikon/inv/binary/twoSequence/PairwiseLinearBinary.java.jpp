@@ -124,7 +124,7 @@ public class CLASSNAME extends SUPERCLASS {
     }
 
     if (format == OutputFormat.DAIKON) return format_daikon();
-    //if (format == OutputFormat.JML) return format_jml();
+    // if (format == OutputFormat.JML) return format_jml();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format == OutputFormat.CSHARPCONTRACT) return format_csharp();
 

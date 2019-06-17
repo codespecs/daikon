@@ -222,10 +222,10 @@ public final class CLASSNAME extends SUPERCLASS {
   @Override
   public InvariantStatus add_modified(PRIMITIVE @Interned [] a, int count) {
 
-    //if (logOn()) {
+    // if (logOn()) {
     //  VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
     //  log ("max=" + vs.max() + " array=" + Arrays.toString (a));
-    //}
+    // }
 
     return (check_modified(a, count));
   }
