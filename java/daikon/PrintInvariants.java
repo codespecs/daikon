@@ -217,15 +217,15 @@ public final class PrintInvariants {
    * and if the output format is JAVA, and the invariant prints as "x == null", the results of
    * print_invariant would look something like:
    *
-   * <pre>
-   * &lt;INVINFO&gt;
-   * &lt;INV&gt; x == null &lt;/INV&gt;
-   * &lt;SAMPLES&gt; 100 &lt;/SAMPLES&gt;
-   * &lt;DAIKON&gt; x == null &lt;/DAIKON&gt;
-   * &lt;DAIKONCLASS&gt; daikon.inv.unary.scalar.NonZero &lt;/DAIKONCLASS&gt;
-   * &lt;METHOD&gt; foo() &lt;/METHOD&gt;
-   * &lt;/INVINFO&gt;
-   * </pre>
+   * <pre>{@code
+   * <INVINFO>
+   * <INV> x == null </INV>
+   * <SAMPLES> 100 </SAMPLES>
+   * <DAIKON> x == null </DAIKON>
+   * <DAIKONCLASS> daikon.inv.unary.scalar.NonZero </DAIKONCLASS>
+   * <METHOD> foo() </METHOD>
+   * </INVINFO>
+   * }</pre>
    *
    * The above output is actually all in one line, although in this comment it's broken up into
    * multiple lines for clarity.

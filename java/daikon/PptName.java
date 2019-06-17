@@ -318,9 +318,9 @@ public class PptName implements Serializable {
 
   /**
    * @return true iff this program point is a constructor entry or exit. There are two ways in which
-   *     this works. With the older declaration format, the method name starts with &lt;init&gt;.
-   *     The newer declaration format does not have &lt;init&gt; but their method name includes the
-   *     class name. For compatibility both mechanisms are checked.
+   *     this works. With the older declaration format, the method name starts with {@code <init>}.
+   *     The newer declaration format does not have {@code <init>} but their method name includes
+   *     the class name. For compatibility both mechanisms are checked.
    */
   @Pure
   public boolean isConstructor() {

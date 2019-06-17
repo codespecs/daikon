@@ -2983,7 +2983,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   /**
    * If the variable is an array, returns a valid C# 'Select' statement representing the array. For
-   * example, this.Array[].field would become this.Array.Select(x =&gt; x.field)
+   * example, this.Array[].field would become this.Array.Select(x &rArr; x.field)
    *
    * <p>If the variable is not an array, csharp_name() is returned.
    */
