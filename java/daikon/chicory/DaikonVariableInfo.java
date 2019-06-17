@@ -852,13 +852,17 @@ public abstract class DaikonVariableInfo
       if (type.equals(Double.TYPE)) return "double";
       else if (type.equals(Float.TYPE)) return "double";
       else if (type.equals(Boolean.TYPE)) return "boolean";
-      else return "int";
+      else {
+        return "int";
+      }
     } else if (type.getName().equals("java.lang.String")) {
       // if we are printing the actual array, the rep type is "java.lang.String"
       if (true) return "hashcode";
       if (asArray) return "java.lang.String";
       // otherwise, it is just a hashcode
-      else return "hashcode";
+      else {
+        return "hashcode";
+      }
     } else {
       return "hashcode";
     }

@@ -666,7 +666,9 @@ public final class PrintInvariants {
         temp = arg.substring(arg.indexOf('@')); // in case the pptname has a < in it
       else if (arg.indexOf('<') != -1) temp = arg.substring(arg.indexOf('<'));
       else if (arg.indexOf('@') != -1) temp = arg.substring(arg.indexOf('@'));
-      else return;
+      else {
+        return;
+      }
     }
     firstChar = temp.charAt(0);
 

@@ -473,7 +473,9 @@ public class NISuppressor {
     if (index == 0) return v1_index;
     else if (index == 1) return v2_index;
     else if (index == 2) return v3_index;
-    else return index;
+    else {
+      return index;
+    }
   }
 
   /** Returns the invariant class of this suppressor. */

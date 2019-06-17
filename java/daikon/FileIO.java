@@ -877,7 +877,9 @@ public final class FileIO {
           pw.print("<hashcode>");
         else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
         else if (val instanceof String) pw.print(UtilPlume.escapeNonASCII((String) val));
-        else pw.print(val);
+        else {
+          pw.print(val);
+        }
       }
       pw.println();
 
@@ -1456,7 +1458,9 @@ public final class FileIO {
       } else if ((data_trace_state.rtype == RecordType.EOF)
           || (data_trace_state.rtype == RecordType.TRUNCATED)) {
         break;
-      } else ; // don't need to do anything explicit for other records found
+      } else {
+        // don't need to do anything explicit for other records found
+      }
     }
 
     if (Global.debugPrintDtrace) {

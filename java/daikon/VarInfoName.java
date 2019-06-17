@@ -695,7 +695,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
           else if (c == '$') buf.append("_dollar_");
           else if (c == ':') buf.append("_colon_");
           else if (c == '*') buf.append("star_");
-          else throw new Error("Unexpected character in VarInfoName$Simple");
+          else {
+            throw new Error("Unexpected character in VarInfoName$Simple");
+          }
         }
         return buf.toString();
       }

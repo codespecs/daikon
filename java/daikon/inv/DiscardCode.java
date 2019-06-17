@@ -144,7 +144,9 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     else if (filter instanceof UnjustifiedFilter) return bad_confidence;
     else if (filter instanceof UnmodifiedVariableEqualityFilter) return unmodified_var;
     else if (filter instanceof VariableFilter) return var_filtered;
-    else return filtered;
+    else {
+      return filtered;
+    }
   }
 
   /**
