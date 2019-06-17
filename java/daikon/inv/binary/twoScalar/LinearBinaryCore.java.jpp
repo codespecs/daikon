@@ -162,10 +162,11 @@ public final class CLASSNAME implements Serializable, Cloneable {
       // the points in a pair are nearby, then roundoff errors in the
       // computation of the slope can be non-negligible.
 
-      for (int i = 0; i < values_seen; i++)
+      for (int i = 0; i < values_seen; i++) {
         if ((x_cache[i] == x) && (y_cache[i] == y)) {
           return InvariantStatus.NO_CHANGE;
         }
+      }
       x_cache[values_seen] = x;
       y_cache[values_seen] = y;
       values_seen++;

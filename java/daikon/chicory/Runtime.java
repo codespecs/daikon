@@ -1027,8 +1027,10 @@ public class Runtime {
     } else {
       if (dims > 0) // array of primitives
       result = primitiveClassesFromJvm.get(classname);
-      else // just a primitive
-      result = classname;
+      else {
+        // just a primitive
+        result = classname;
+      }
 
       if (result == null) {
         // As a failsafe, use the input; perhaps it is in Java, not JVML,

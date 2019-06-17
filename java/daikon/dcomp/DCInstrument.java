@@ -3176,8 +3176,9 @@ class DCInstrument extends InstructionListUtils {
    */
   InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (debug_dup.enabled)
+    if (debug_dup.enabled) {
       debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
+    }
     if (!is_primitive(top)) return null;
     String method = "dup_x1";
     if (!is_primitive(stack.peek(1))) method = "dup";
@@ -3201,8 +3202,10 @@ class DCInstrument extends InstructionListUtils {
       if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup2_x1";
       else if (is_primitive(stack.peek(1))) op = "dup2";
       else if (is_primitive(stack.peek(2))) op = "dup_x1";
-      else // neither value 1 nor value 2 is primitive
-      op = "dup";
+      else {
+        // neither value 1 nor value 2 is primitive
+        op = "dup";
+      }
     } else { // top is not primitive
       if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) {
         op = "dup_x1";
@@ -3230,8 +3233,10 @@ class DCInstrument extends InstructionListUtils {
     if (is_category2(top)) op = "dup";
     else if (is_primitive(top) && is_primitive(stack.peek(1))) op = "dup2";
     else if (is_primitive(top) || is_primitive(stack.peek(1))) op = "dup";
-    else // both of the top two items are not primitive, nothing to dup
-    op = null;
+    else {
+      // both of the top two items are not primitive, nothing to dup
+      op = null;
+    }
     if (debug_dup.enabled) debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
@@ -3269,8 +3274,10 @@ class DCInstrument extends InstructionListUtils {
       if (is_category2(stack.peek(1))) op = "dup_x1";
       else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
       else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
-      else // both values are references
-      op = "dup";
+      else {
+        // both values are references
+        op = "dup";
+      }
     } else if (is_primitive(top)) {
       if (is_category2(stack.peek(1))) {
         throw new Error("not supposed to happen " + stack_contents(stack, 3));
@@ -3283,13 +3290,17 @@ class DCInstrument extends InstructionListUtils {
       } else if (is_primitive(stack.peek(1))) {
         if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup2_x2";
         else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup2_x1";
-        else // both 2 and 3 are references
-        op = "dup2";
+        else {
+          // both 2 and 3 are references
+          op = "dup2";
+        }
       } else { // 1 is a reference
         if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
         else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
-        else // both 2 and 3 are references
-        op = "dup";
+        else {
+          // both 2 and 3 are references
+          op = "dup";
+        }
       }
     } else { // top is a reference
       if (is_category2(stack.peek(1))) {
@@ -3303,8 +3314,10 @@ class DCInstrument extends InstructionListUtils {
       } else if (is_primitive(stack.peek(1))) {
         if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
         else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
-        else // both 2 and 3 are references
-        op = "dup";
+        else {
+          // both 2 and 3 are references
+          op = "dup";
+        }
       } else { // 1 is a reference
         op = null; // nothing to dup
       }
@@ -3724,10 +3737,11 @@ class DCInstrument extends InstructionListUtils {
    */
   public boolean tag_fields_ok(MethodGen mg, @ClassGetName String classname) {
 
-    if (BcelUtil.isConstructor(mg))
+    if (BcelUtil.isConstructor(mg)) {
       if (!constructor_is_initialized) {
         return false;
       }
+    }
 
     if (!jdk_instrumented) {
       if (BcelUtil.inJdk(classname)) {

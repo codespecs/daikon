@@ -301,7 +301,7 @@ public class InvariantChecker {
     InvariantFilters fi = InvariantFilters.defaultFilters();
     // Set<String> allInvariantsStr = new HashSet<String>();
     Set<Invariant> allInvariants = new HashSet<Invariant>();
-    for (PptTopLevel ppt : ppts.all_ppts())
+    for (PptTopLevel ppt : ppts.all_ppts()) {
       for (PptSlice slice : ppt.views_iterable()) {
         for (Invariant inv : slice.invs) {
           if (doConf && inv.getConfidence() < Invariant.dkconfig_confidence_limit) {
@@ -326,6 +326,7 @@ public class InvariantChecker {
           // allInvariantsStr.add(n);
         }
       }
+    }
 
     // Read and process the data trace files
     FileIO.Processor processor = new InvariantCheckProcessor();

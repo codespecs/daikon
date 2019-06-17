@@ -186,13 +186,14 @@ public class NISuppressee {
 
     // Check for empty slots in vis, fail if there is more than one
     int missing_index = -1;
-    for (int i = 0; i < vis.length; i++)
+    for (int i = 0; i < vis.length; i++) {
       if (vis[i] == null) {
         assert missing_index == -1 : "Multiple empty vars";
         missing_index = i;
       } else {
         assert !vis[i].missingOutOfBounds();
       }
+    }
 
     // If all of the slots were full, specify the invariant
     if (missing_index == -1) {

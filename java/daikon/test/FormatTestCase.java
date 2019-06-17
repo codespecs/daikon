@@ -992,8 +992,7 @@ class FormatTestCase {
     Method currentMethod;
     for (int i = 0; i < methods.length; i++) {
       currentMethod = methods[i];
-      if (currentMethod.getName().lastIndexOf("add_modified")
-          != -1) { // Method should be called add_modified
+      if (currentMethod.getName().lastIndexOf("add_modified") != -1) {
         return currentMethod;
       }
     }

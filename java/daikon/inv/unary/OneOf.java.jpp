@@ -458,9 +458,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       return false;
     }
     sort_rep();
-    for (int i = 0; i < num_elts; i++)
-      if (!EQUALS(elts[i],other_elts[i])) // elements are interned
+    for (int i = 0; i < num_elts; i++) {
+      if (!EQUALS(elts[i],other_elts[i])) { // elements are interned
         return false;
+      }
+    }
     return true;
   }
 
@@ -1327,10 +1329,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
               && ELT_EQUALS(seq[j], seq[j + 3])) {
             // Compress a sequence of adjacent values
             int k = j + 4;
-            for (; k < seq.length; k++)
+            for (; k < seq.length; k++) {
               if (!ELT_EQUALS(seq[j], seq[k])) {
                 break;
               }
+            }
             k--;
             String index_name = VarInfo.get_simplify_free_index(var());
             String cond_left, cond_right;
@@ -1989,17 +1992,20 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     }
 #elif defined(SEQUENCE)
     for (int i = 0; i < num_elts; i++) {
-      for (int j = 0; j < elts[i].length; j++)
+      for (int j = 0; j < elts[i].length; j++) {
         if (elts[i][j] < -1 || elts[i][j] > 2) {
           return true;
         }
+      }
     }
 #elif defined(SEQUENCEFLOAT)
     for (int i = 0; i < num_elts; i++) {
-      for (int j = 0; j < elts[i].length; j++)
+      for (int j = 0; j < elts[i].length; j++) {
         if (elts[i][j] < -1.0 || elts[i][j] > 2.0
-            || elts[i][j] != (long)elts[i][j])
+            || elts[i][j] != (long)elts[i][j]) {
           return true;
+        }
+      }
     }
 #endif
     return false;
