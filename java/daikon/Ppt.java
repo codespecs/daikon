@@ -63,7 +63,7 @@ public abstract class Ppt implements Serializable {
     }
   }
 
-  protected static final List<Invariant> emptyInvList = new ArrayList<Invariant>();
+  protected static final List<Invariant> emptyInvList = new ArrayList<>();
 
   /** Returns a string rep of the specified variable names. */
   @SuppressWarnings("purity") // Impure side effects do not escape (string creation)

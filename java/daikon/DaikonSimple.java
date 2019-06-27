@@ -217,7 +217,7 @@ public class DaikonSimple {
     // dynamic constants optimization is turned on (so we do not do the
     // check here).
 
-    List<PptSlice> unary_views = new ArrayList<PptSlice>(ppt.var_infos.length);
+    List<PptSlice> unary_views = new ArrayList<>(ppt.var_infos.length);
     for (VarInfo vi : ppt.var_infos) {
 
       // /* if (!is_slice_ok(vi))
@@ -234,7 +234,7 @@ public class DaikonSimple {
     // / 2. all binary views
 
     // Binary slices/invariants.
-    List<PptSlice> binary_views = new ArrayList<PptSlice>();
+    List<PptSlice> binary_views = new ArrayList<>();
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 
@@ -265,7 +265,7 @@ public class DaikonSimple {
     binary_views = null;
 
     // 3. all ternary views
-    List<PptSlice> ternary_views = new ArrayList<PptSlice>();
+    List<PptSlice> ternary_views = new ArrayList<>();
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 
@@ -378,7 +378,7 @@ public class DaikonSimple {
 
     /** nonce -> List<Call,Call> * */
     // The first Call is the enter entry and the second is the object entry
-    Map<Integer, List<Call>> call_map = new LinkedHashMap<Integer, List<Call>>();
+    Map<Integer, List<Call>> call_map = new LinkedHashMap<>();
 
     // Flag for whether there are out of order entries in the
     // dtrace file. For unterminated calls (enter but
@@ -513,7 +513,7 @@ public class DaikonSimple {
       if (ppt_name.isEnterPoint()) {
         assert nonce != null;
         assert call_map.get(nonce) == null;
-        List<Call> value = new ArrayList<Call>();
+        List<Call> value = new ArrayList<>();
         value.add(new Call(ppt, vt));
 
         if (object_ppt != null) {

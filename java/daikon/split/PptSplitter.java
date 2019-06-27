@@ -160,7 +160,9 @@ public class PptSplitter implements Serializable {
 
     // Choose the appropriate conditional point based on the condition result
     PptConditional ppt_cond = choose_conditional(vt);
-    if (ppt_cond == null) return;
+    if (ppt_cond == null) {
+      return;
+    }
 
     /// ??? MDE
     // If any parent variables were missing out of bounds on this
@@ -284,7 +286,7 @@ public class PptSplitter implements Serializable {
     debug.fine("add_implications_pair: parent = " + parent.name);
 
     // Maps permuted invariants to their original invariants
-    Map<Invariant, Invariant> orig_invs = new LinkedHashMap<Invariant, Invariant>();
+    Map<Invariant, Invariant> orig_invs = new LinkedHashMap<>();
 
     List<@KeyFor("orig_invs") Invariant> same_invs_vec =
         new ArrayList<@KeyFor("orig_invs") Invariant>();
@@ -600,7 +602,7 @@ public class PptSplitter implements Serializable {
   @RequiresNonNull("parent.equality_view")
   private List<VarInfo[]> possible_slices() {
 
-    List<VarInfo[]> result = new ArrayList<VarInfo[]>();
+    List<VarInfo[]> result = new ArrayList<>();
 
     // Get an array of leaders at the parent to build slices over
     VarInfo[] leaders = parent.equality_view.get_leaders_sorted();
@@ -663,7 +665,7 @@ public class PptSplitter implements Serializable {
    */
   List<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
 
-    List<Invariant[]> result = new ArrayList<Invariant[]>();
+    List<Invariant[]> result = new ArrayList<>();
     for (Invariant inv1 : invs1) {
       for (Invariant inv2 : invs2) {
         // // This is a debugging tool, to make sure that various versions
@@ -690,11 +692,11 @@ public class PptSplitter implements Serializable {
    * program point.
    */
   List<@Nullable Invariant[]> different_invariants(List<Invariant> invs1, List<Invariant> invs2) {
-    SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
+    SortedSet<Invariant> ss1 = new TreeSet<>(icfp);
     ss1.addAll(invs1);
-    SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
+    SortedSet<Invariant> ss2 = new TreeSet<>(icfp);
     ss2.addAll(invs2);
-    List<@Nullable Invariant[]> result = new ArrayList<@Nullable Invariant[]>();
+    List<@Nullable Invariant[]> result = new ArrayList<>();
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
         opi.hasNext(); ) {
@@ -714,9 +716,9 @@ public class PptSplitter implements Serializable {
    */
   List<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
 
-    SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
+    SortedSet<Invariant> ss1 = new TreeSet<>(icfp);
     ss1.addAll(invs1);
-    SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
+    SortedSet<Invariant> ss2 = new TreeSet<>(icfp);
     ss2.addAll(invs2);
 
     ss1.retainAll(ss2);
@@ -724,8 +726,8 @@ public class PptSplitter implements Serializable {
 
     // // This seems like a rather complicated implementation.  Why can't it
     // // just use set intersection?
-    // List<@Nullable Invariant> result = new ArrayList<@Nullable Invariant>();
-    // for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
+    // List<@Nullable Invariant> result = new ArrayList<>();
+    // for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<>(ss1.iterator(),
     //                                 ss2.iterator(), icfp);
     //      opi.hasNext(); ) {
     //   Pair<@Nullable Invariant,@Nullable Invariant> pair = opi.next();

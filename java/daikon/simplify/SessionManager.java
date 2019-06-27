@@ -35,7 +35,9 @@ public class SessionManager {
   private static final boolean debug_mgr = debug.isLoggable(Level.FINE);
 
   public static void debugln(String s) {
-    if (!debug_mgr) return;
+    if (!debug_mgr) {
+      return;
+    }
     debug.fine(s);
   }
 
@@ -197,7 +199,9 @@ public class SessionManager {
           // That's probably what the catch block is for.
           mgr.pending.apply(session);
         } catch (Throwable e) {
-          if (finished) return;
+          if (finished) {
+            return;
+          }
           error = e.toString();
           e.printStackTrace();
         }

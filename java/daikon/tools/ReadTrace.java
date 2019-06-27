@@ -61,8 +61,7 @@ public class ReadTrace {
    */
   public static class CollectDataProcessor extends FileIO.Processor {
 
-    public Map<PptTopLevel, List<ValueTuple>> samples =
-        new LinkedHashMap<PptTopLevel, List<ValueTuple>>();
+    public Map<PptTopLevel, List<ValueTuple>> samples = new LinkedHashMap<>();
 
     /** Process the sample, by adding it to the {@code samples} map. */
     @RequiresNonNull("FileIO.data_trace_state")

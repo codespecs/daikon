@@ -46,7 +46,7 @@ import org.plumelib.bcelutil.SimpleLog;
 public final class DCRuntime {
 
   /** List of all instrumented methods. */
-  public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
+  public static final List<MethodInfo> methods = new ArrayList<>();
 
   /**
    * Keep track of whether or not we are already processing an enter/exit so we can avoid recursion.
@@ -71,10 +71,10 @@ public final class DCRuntime {
 
   /** Map from each primitive static name to the offset in static_tags. */
   // public static Map<String,Integer> static_map
-  //   = new LinkedHashMap<String,Integer>();
+  //   = new LinkedHashMap<>();
 
   /** Storage for each static tag. */
-  public static List<@Nullable Object> static_tags = new ArrayList<@Nullable Object>();
+  public static List<@Nullable Object> static_tags = new ArrayList<>();
 
   /**
    * Object used to mark procedure entries in the tag stack. It is pushed on the stack at entry and
@@ -125,10 +125,10 @@ public final class DCRuntime {
       new WeakIdentityHashMap<Object, Object[]>();
 
   /** List of all classes encountered. These are the classes that will have comparability output. */
-  private static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
+  private static List<ClassInfo> all_classes = new ArrayList<>();
 
   /** Set of classes whose static initializer has run. */
-  private static Set<String> init_classes = new HashSet<String>();
+  private static Set<String> init_classes = new HashSet<>();
 
   /**
    * Class used as a tag for primitive constants. Only different from Object for debugging purposes.
@@ -202,7 +202,9 @@ public final class DCRuntime {
   }
 
   public static void debug_print_call_stack() {
-    if (!debug) return;
+    if (!debug) {
+      return;
+    }
 
     StackTraceElement[] stack_trace;
     stack_trace = Thread.currentThread().getStackTrace();
@@ -242,14 +244,14 @@ public final class DCRuntime {
    * Object's original super.equals call. Once the equals call terminates, whether by returning a
    * value or by throwing an exception, the corresponding key is removed from this map.
    */
-  static Map<Object, Class<?>> active_equals_calls = new HashMap<Object, Class<?>>();
+  static Map<Object, Class<?>> active_equals_calls = new HashMap<>();
 
   /**
    * Tracks active {@code super.clone()} calls.
    *
    * @see active_equals_calls
    */
-  static Map<Object, Class<?>> active_clone_calls = new HashMap<Object, Class<?>>();
+  static Map<Object, Class<?>> active_clone_calls = new HashMap<>();
 
   /**
    * Handles {@code super.equals(Object)} calls.
@@ -410,7 +412,9 @@ public final class DCRuntime {
 
     Class<?> target_class; // The class whose method we will invoke
     if (null == active_clone_calls.get(o)) target_class = oc;
-    else target_class = active_clone_calls.get(o).getSuperclass();
+    else {
+      target_class = active_clone_calls.get(o).getSuperclass();
+    }
     active_clone_calls.put(o, target_class);
 
     Class<?> dcomp_marker;
@@ -560,7 +564,7 @@ public final class DCRuntime {
     return (obj1 != obj2);
   }
 
-  static Map<String, Integer> methodCountMap = new HashMap<String, Integer>(64);
+  static Map<String, Integer> methodCountMap = new HashMap<>(64);
 
   /**
    * Create the tag frame for this method. Pop the tags for any primitive parameters off of the tag
@@ -1031,7 +1035,9 @@ public final class DCRuntime {
   public static void enter(Object[] tag_frame, @Nullable Object obj, int mi_index, Object[] args) {
 
     // Don't be recursive
-    if (in_enter_exit) return;
+    if (in_enter_exit) {
+      return;
+    }
     in_enter_exit = true;
 
     if (debug) {
@@ -1088,7 +1094,9 @@ public final class DCRuntime {
   public static void enter_refs_only(@Nullable Object obj, int mi_index, Object[] args) {
 
     // Don't be recursive
-    if (in_enter_exit) return;
+    if (in_enter_exit) {
+      return;
+    }
     in_enter_exit = true;
 
     if (debug) {
@@ -1155,7 +1163,9 @@ public final class DCRuntime {
       int exit_line_number) {
 
     // Don't be recursive
-    if (in_enter_exit) return;
+    if (in_enter_exit) {
+      return;
+    }
     in_enter_exit = true;
 
     if (debug) {
@@ -1202,7 +1212,9 @@ public final class DCRuntime {
       @Nullable Object obj, int mi_index, Object[] args, Object ret_val, int exit_line_number) {
 
     // Don't be recursive
-    if (in_enter_exit) return;
+    if (in_enter_exit) {
+      return;
+    }
     in_enter_exit = true;
 
     if (debug) {
@@ -1362,7 +1374,9 @@ public final class DCRuntime {
       if (fi.isStatic()) {
         if (fi.isPrimitive()) {
           // a static final primitive is a constant and there is no tag accessor
-          if (fi.isFinal()) return null;
+          if (fi.isFinal()) {
+            return null;
+          }
           fi.field_tag = new StaticPrimitiveTag(fi);
         } else {
           fi.field_tag = new StaticReferenceTag(fi);
@@ -1393,7 +1407,9 @@ public final class DCRuntime {
       if (fi.isStatic()) {
         if (fi.isPrimitive()) {
           // a static final primitive is a constant and there is no tag accessor
-          if (fi.isFinal()) return null;
+          if (fi.isFinal()) {
+            return null;
+          }
           //          fi.field_tag = new StaticPrimitiveTag (fi);
           throw new RuntimeException("fi should not be primitive!");
         } else {
@@ -1893,7 +1909,9 @@ public final class DCRuntime {
 
   private static void add_dv_stats(RootInfo root) {
 
-    if (root == null) return;
+    if (root == null) {
+      return;
+    }
     List<DaikonVariableInfo> dv_list = root.tree_as_list();
     for (DaikonVariableInfo dv : dv_list) {
       if (dv instanceof RootInfo) {
@@ -1923,7 +1941,9 @@ public final class DCRuntime {
         else if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) static_final_cnt++;
         else if (Modifier.isStatic(modifiers)) static_cnt++;
         else if (dv.getName().startsWith("this")) this_instance_cnt++;
-        else other_instance_cnt++;
+        else {
+          other_instance_cnt++;
+        }
       } else if (dv instanceof ParameterInfo) {
         parameter_cnt++;
       } else {
@@ -1990,7 +2010,9 @@ public final class DCRuntime {
     time_decl.indent();
     List<DVSet> l = get_comparable(mi.traversalEnter);
     // comp_list_ms += watch.snapshot(); watch.reset();
-    if (l == null) return null;
+    if (l == null) {
+      return null;
+    }
     time_decl.log("got %d comparable sets", l.size());
 
     // Print the enter point
@@ -2036,7 +2058,7 @@ public final class DCRuntime {
     time_decl.log("print_decl_vars start");
 
     // Map from array name to comparability for its indices (if any)
-    Map<String, Integer> arr_index_map = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> arr_index_map = new LinkedHashMap<>();
 
     // Map from daikon variable to its comparability
     Map<DaikonVariableInfo, Integer> dv_comp_map =
@@ -2060,7 +2082,9 @@ public final class DCRuntime {
       // System.out.printf("Checking dv set %s%n", set);
       for (DaikonVariableInfo dv : set) {
         if (dv.isHashcode() || dv.isHashcodeArray()) hashcode_vars = true;
-        else non_hashcode_vars = true;
+        else {
+          non_hashcode_vars = true;
+        }
         // System.out.printf("dv = %s, hashcode_var = %b%n",
         //                   dv, dv.isHashcode() || dv.isHashcodeArray());
       }
@@ -2296,8 +2320,9 @@ public final class DCRuntime {
       if (tree.get(node) == null) {
         return;
       }
-      for (DaikonVariableInfo child : tree.get(node))
+      for (DaikonVariableInfo child : tree.get(node)) {
         if (child != node) print_tree(ps, tree, child, depth + 1);
+      }
     } else {
       for (int i = 0; i < depth; i++) {
         ps.printf("--");
@@ -2308,8 +2333,9 @@ public final class DCRuntime {
       if (tree.get(node) == null) {
         return;
       }
-      for (DaikonVariableInfo child : tree.get(node))
+      for (DaikonVariableInfo child : tree.get(node)) {
         if (child != node) print_tree(ps, tree, child, depth + 1);
+      }
     }
   }
 
@@ -2322,7 +2348,7 @@ public final class DCRuntime {
    * <p>"daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
    */
   private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
-    ArrayList<String> o = new ArrayList<String>();
+    ArrayList<String> o = new ArrayList<>();
     for (DaikonVariableInfo dvi : l) {
       o.add(skinyOutput(dvi, on));
     }
@@ -2387,7 +2413,9 @@ public final class DCRuntime {
    */
   static @Nullable List<DVSet> get_comparable(RootInfo root) {
 
-    if (root == null) return null;
+    if (root == null) {
+      return null;
+    }
 
     // List of all of the sets of comparable daikon variables
     Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
@@ -2400,7 +2428,7 @@ public final class DCRuntime {
     // Get each set, sort it, and add it to the list of all sets.  Then sort
     // the list of all sets.  The sorting is not critical except to create
     // a reproducible order
-    List<DVSet> set_list = new ArrayList<DVSet>(sets.size());
+    List<DVSet> set_list = new ArrayList<>(sets.size());
     for (DVSet dvs : sets.values()) {
       dvs.sort();
       set_list.add(dvs);
@@ -2416,7 +2444,9 @@ public final class DCRuntime {
    * included as a key to all its children.
    */
   static @PolyNull Map<DaikonVariableInfo, DVSet> get_comparable_traced(@PolyNull RootInfo root) {
-    if (root == null) return null;
+    if (root == null) {
+      return null;
+    }
 
     // List of all of the parent-child relationships, where parent-child
     //   represents the equivalence relation of being comparable.
@@ -2527,7 +2557,7 @@ public final class DCRuntime {
     debug_merge_comp.indent();
 
     // Create a map relating destination names to their variables
-    Map<String, DaikonVariableInfo> dest_map = new LinkedHashMap<String, DaikonVariableInfo>();
+    Map<String, DaikonVariableInfo> dest_map = new LinkedHashMap<>();
     for (DaikonVariableInfo dvi : varlist(dest)) {
       dest_map.put(dvi.getName(), dvi);
     }
@@ -2829,7 +2859,9 @@ public final class DCRuntime {
     // Get the tag for the index and mark it as comparable with the array
     assert td.tag_stack.peek() != method_marker;
     Object index_tag = td.tag_stack.pop();
-    if (arr_ref == null) return;
+    if (arr_ref == null) {
+      return;
+    }
     debug_arr_index.log("Merging array '%s' and index '%s'", arr_ref, index_tag);
     if (merge_arrays_and_indices) TagEntry.union(arr_ref, index_tag);
 
@@ -2866,7 +2898,9 @@ public final class DCRuntime {
     // Get the tag for the index and mark it as comparable with the array
     assert td.tag_stack.peek() != method_marker;
     Object index_tag = td.tag_stack.pop();
-    if (arr_ref == null) return;
+    if (arr_ref == null) {
+      return;
+    }
     debug_arr_index.log("Merging array '%s' and index '%s'", arr_ref, index_tag);
     if (merge_arrays_and_indices) TagEntry.union(arr_ref, index_tag);
   }
@@ -2944,7 +2978,7 @@ public final class DCRuntime {
   /** Returns all of the daikonvariables in the tree rooted at dvi in a list. */
   private static List<DaikonVariableInfo> varlist(DaikonVariableInfo dvi) {
 
-    List<DaikonVariableInfo> list = new ArrayList<DaikonVariableInfo>();
+    List<DaikonVariableInfo> list = new ArrayList<>();
     list.add(dvi);
     for (DaikonVariableInfo child : dvi) {
       list.addAll(varlist(child));
@@ -3103,7 +3137,7 @@ public final class DCRuntime {
       // assert obj == null: "primitive array object = " + obj_str (obj);
       @SuppressWarnings("unchecked")
       List<Object> parent_list = (List<Object>) parent;
-      List<Object> tag_list = new ArrayList<Object>(parent_list.size());
+      List<Object> tag_list = new ArrayList<>(parent_list.size());
       for (Object parent_element : parent_list) {
         Object[] tags = field_map.get(parent_element);
         if (tags == null) {

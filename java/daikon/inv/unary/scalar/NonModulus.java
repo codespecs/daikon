@@ -32,7 +32,7 @@ public class NonModulus extends SingleScalar {
   public static boolean dkconfig_enabled = false;
 
   // Set elements = new HashSet();
-  SortedSet<Long> elements = new TreeSet<Long>();
+  SortedSet<Long> elements = new TreeSet<>();
 
   private long modulus = 0;
   private long remainder = 0;
@@ -64,7 +64,9 @@ public class NonModulus extends SingleScalar {
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types(vis)) return false;
+    if (!valid_types(vis)) {
+      return false;
+    }
 
     return (vis[0].file_rep_type.baseIsIntegral());
   }
@@ -205,7 +207,9 @@ public class NonModulus extends SingleScalar {
   /** Returns true if this has the given modulus and remainder. */
   public boolean hasModulusRemainder(long modulus, long remainder) {
     updateResults();
-    if (no_result_yet) return false;
+    if (no_result_yet) {
+      return false;
+    }
 
     return ((modulus == this.modulus) && (remainder == this.remainder));
   }
@@ -214,11 +218,15 @@ public class NonModulus extends SingleScalar {
   @Override
   public boolean isExclusiveFormula(Invariant o) {
     updateResults();
-    if (no_result_yet) return false;
+    if (no_result_yet) {
+      return false;
+    }
     if (o instanceof NonModulus) {
       NonModulus other = (NonModulus) o;
       other.updateResults();
-      if (other.no_result_yet) return false;
+      if (other.no_result_yet) {
+        return false;
+      }
       return ((modulus == other.modulus) && (remainder != other.remainder));
     } else if (o instanceof Modulus) {
       Modulus other = (Modulus) o;

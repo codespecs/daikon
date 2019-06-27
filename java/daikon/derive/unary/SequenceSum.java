@@ -29,7 +29,9 @@ public final class SequenceSum extends UnaryDerivation {
       return ValueAndModified.MISSING_NONSENSICAL;
     }
     Object val = base.getValue(vt);
-    if (val == null) return ValueAndModified.MISSING_NONSENSICAL;
+    if (val == null) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
     if (val instanceof long[]) {
       long[] val_array = (long[]) val;
       long result = 0;

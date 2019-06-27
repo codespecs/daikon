@@ -53,8 +53,8 @@ public class InvariantFilters {
   // n) to O(n), but that functionality isn't used a whole lot and
   // there are only ~10 filters anyway.
 
-  List<InvariantFilter> propertyFilters = new ArrayList<InvariantFilter>();
-  List<VariableFilter> variableFilters = new ArrayList<VariableFilter>();
+  List<InvariantFilter> propertyFilters = new ArrayList<>();
+  List<VariableFilter> variableFilters = new ArrayList<>();
 
   public InvariantFilters() {
 
@@ -234,7 +234,9 @@ public class InvariantFilters {
         foundOnce = true;
       }
     }
-    if (foundOnce) return;
+    if (foundOnce) {
+      return;
+    }
 
     throw new Error(
         "InvariantFilters.removeVariableFilter():  filter for variable '"

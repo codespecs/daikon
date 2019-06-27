@@ -77,7 +77,7 @@ public class InvariantChecker {
           "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
           "      Print debug info on the specified invariant class, vars, and ppt");
 
-  public static List<String> dtrace_files = new ArrayList<String>();
+  public static List<String> dtrace_files = new ArrayList<>();
   static PrintStream output_stream = System.out;
   static int error_cnt = 0;
   static int sample_cnt = 0;
@@ -86,10 +86,10 @@ public class InvariantChecker {
   static boolean doFilter;
   static boolean doConf;
   static boolean quiet = true;
-  static HashSet<Invariant> failedInvariants = new HashSet<Invariant>(); // Yoav added
-  static HashSet<Invariant> testedInvariants = new HashSet<Invariant>(); // Yoav added
-  static HashSet<Invariant> activeInvariants = new HashSet<Invariant>(); // Yoav added
-  static LinkedHashSet<String> outputComma = new LinkedHashSet<String>(); // Yoav added
+  static HashSet<Invariant> failedInvariants = new HashSet<>(); // Yoav added
+  static HashSet<Invariant> testedInvariants = new HashSet<>(); // Yoav added
+  static HashSet<Invariant> activeInvariants = new HashSet<>(); // Yoav added
+  static LinkedHashSet<String> outputComma = new LinkedHashSet<>(); // Yoav added
 
   public static void main(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
@@ -224,7 +224,7 @@ public class InvariantChecker {
       throw new Daikon.UserError(
           "The directory " + dir_file + " is empty" + Global.lineSep + usage);
     }
-    ArrayList<File> invariants = new ArrayList<File>();
+    ArrayList<File> invariants = new ArrayList<>();
     for (File f : filesInDir) {
       if (f.toString().indexOf(".inv") != -1) {
         invariants.add(f);
@@ -234,7 +234,7 @@ public class InvariantChecker {
       throw new Daikon.UserError(
           "Did not find any invariant files in the directory " + dir_file + Global.lineSep + usage);
     }
-    ArrayList<File> dtraces = new ArrayList<File>();
+    ArrayList<File> dtraces = new ArrayList<>();
     for (File f : filesInDir) {
       if (f.toString().indexOf(".dtrace") != -1) {
         dtraces.add(f);
@@ -299,9 +299,9 @@ public class InvariantChecker {
 
     // Yoav: make sure we have unique invariants
     InvariantFilters fi = InvariantFilters.defaultFilters();
-    // Set<String> allInvariantsStr = new HashSet<String>();
-    Set<Invariant> allInvariants = new HashSet<Invariant>();
-    for (PptTopLevel ppt : ppts.all_ppts())
+    // Set<String> allInvariantsStr = new HashSet<>();
+    Set<Invariant> allInvariants = new HashSet<>();
+    for (PptTopLevel ppt : ppts.all_ppts()) {
       for (PptSlice slice : ppt.views_iterable()) {
         for (Invariant inv : slice.invs) {
           if (doConf && inv.getConfidence() < Invariant.dkconfig_confidence_limit) {
@@ -326,6 +326,7 @@ public class InvariantChecker {
           // allInvariantsStr.add(n);
         }
       }
+    }
 
     // Read and process the data trace files
     FileIO.Processor processor = new InvariantCheckProcessor();
@@ -373,7 +374,7 @@ public class InvariantChecker {
 
   public static class InvariantCheckProcessor extends FileIO.Processor {
 
-    Map<Integer, EnterCall> call_map = new LinkedHashMap<Integer, EnterCall>();
+    Map<Integer, EnterCall> call_map = new LinkedHashMap<>();
 
     /**
      * process the sample by checking it against each existing invariant and issuing an error if any
@@ -454,7 +455,9 @@ public class InvariantChecker {
       }
 
       // If the point has no variables, skip it
-      if (ppt.var_infos.length == 0) return;
+      if (ppt.var_infos.length == 0) {
+        return;
+      }
 
       // We should have received sample here before, or there is nothing
       // to check.

@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class PptFile {
 
-  public Map<String, List<String>> records = new LinkedHashMap<String, List<String>>();
+  public Map<String, List<String>> records = new LinkedHashMap<>();
 
   public static PptFile getPptFile(String fileName) {
     try {
@@ -41,7 +41,7 @@ public class PptFile {
     line = reader.readLine();
     boolean readingPptName = true;
     String name = null;
-    List<String> lines = new ArrayList<String>();
+    List<String> lines = new ArrayList<>();
 
     while (line != null) {
       if (readingPptName) {

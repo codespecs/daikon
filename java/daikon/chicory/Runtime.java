@@ -69,10 +69,10 @@ public class Runtime {
   //
 
   /** Ppts to omit (regular expression) */
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
   /** Ppts to include (regular expression) */
-  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
   /** Comparability information (if any) */
   static @Nullable DeclReader comp_info = null;
@@ -122,7 +122,7 @@ public class Runtime {
    * Which static initializers have been run. Each element of the Set is a fully qualified class
    * name.
    */
-  private static Set<String> initSet = new HashSet<String>();
+  private static Set<String> initSet = new HashSet<>();
 
   /** Class of information about each active call. */
   private static class CallInfo {
@@ -140,7 +140,7 @@ public class Runtime {
 
   /** Stack of active methods. */
   private static @GuardedBy("Runtime.class") Map<Thread, Deque<CallInfo>> thread_to_callstack =
-      new LinkedHashMap<Thread, Deque<CallInfo>>();
+      new LinkedHashMap<>();
 
   /**
    * Sample count at a call site to begin sampling. All previous calls will be recorded. Sampling
@@ -217,13 +217,17 @@ public class Runtime {
       method_indent = method_indent.concat("  ");
     }
 
-    if (dontProcessPpts()) return;
+    if (dontProcessPpts()) {
+      return;
+    }
 
     // Make sure that the in_dtrace flag matches the stack trace
     // check_in_dtrace();
 
     // Ignore this call if we are already processing a dtrace record
-    if (in_dtrace) return;
+    if (in_dtrace) {
+      return;
+    }
 
     // Note that we are processing a dtrace record until we return
     in_dtrace = true;
@@ -312,13 +316,17 @@ public class Runtime {
           "%smethod_exit  %s.%s%n", method_indent, mi.class_info.class_name, mi.method_name);
     }
 
-    if (dontProcessPpts()) return;
+    if (dontProcessPpts()) {
+      return;
+    }
 
     // Make sure that the in_dtrace flag matches the stack trace
     // check_in_dtrace();
 
     // Ignore this call if we are already processing a dtrace record
-    if (in_dtrace) return;
+    if (in_dtrace) {
+      return;
+    }
 
     // Note that we are processing a dtrace record until we return
     in_dtrace = true;
@@ -380,7 +388,7 @@ public class Runtime {
 
     Throwable st = new Throwable();
     st.fillInStackTrace();
-    List<StackTraceElement> enter_exit_list = new ArrayList<StackTraceElement>();
+    List<StackTraceElement> enter_exit_list = new ArrayList<>();
     for (StackTraceElement ste : st.getStackTrace()) {
       if (ste.getClassName().endsWith("chicory.Runtime")
           && (ste.getMethodName().equals("enter") || ste.getMethodName().equals("exit")))
@@ -971,12 +979,14 @@ public class Runtime {
           // Do nothing; i gets incremented.
       }
     }
-    if (sb.length() == 0) return orig;
+    if (sb.length() == 0) {
+      return orig;
+    }
     sb.append(orig.substring(post_esc));
     return sb.toString();
   }
 
-  private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<String, String>(8);
+  private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<>(8);
 
   static {
     primitiveClassesFromJvm.put("Z", "boolean");
@@ -1027,8 +1037,10 @@ public class Runtime {
     } else {
       if (dims > 0) // array of primitives
       result = primitiveClassesFromJvm.get(classname);
-      else // just a primitive
-      result = classname;
+      else {
+        // just a primitive
+        result = classname;
+      }
 
       if (result == null) {
         // As a failsafe, use the input; perhaps it is in Java, not JVML,

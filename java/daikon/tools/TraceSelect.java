@@ -174,12 +174,12 @@ public class TraceSelect {
       while (num_reps > 0) {
 
         DtracePartitioner dec = new DtracePartitioner(fileName);
-        MultiRandSelector<String> mrs = new MultiRandSelector<String>(numPerSample, dec);
+        MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, dec);
 
         while (dec.hasNext()) {
           mrs.accept(dec.next());
         }
-        List<String> al = new ArrayList<String>();
+        List<String> al = new ArrayList<>();
 
         for (Iterator<String> i = mrs.valuesIter(); i.hasNext(); ) {
           al.add(i.next());
@@ -238,7 +238,7 @@ public class TraceSelect {
     String[] daikonArgs = {dtraceName, "-o", dtraceName + ".inv"};
 
     // this part adds on the rest of the decls files
-    ArrayList<String> al = new ArrayList<String>();
+    ArrayList<String> al = new ArrayList<>();
     al.add(dtraceName);
     al.add("-o");
     al.add(dtraceName + ".inv");
@@ -344,10 +344,18 @@ class InvocationComparator implements Comparator<String> {
 
   private int getType(String s1) {
     // we want ENTER to come before EXIT
-    if (s1.indexOf("CLASS") != -1) return -1;
-    if (s1.indexOf("OBJECT") != -1) return 0;
-    if (s1.indexOf("ENTER") != -1) return 1;
-    if (s1.indexOf("EXIT") != -1) return 2;
+    if (s1.indexOf("CLASS") != -1) {
+      return -1;
+    }
+    if (s1.indexOf("OBJECT") != -1) {
+      return 0;
+    }
+    if (s1.indexOf("ENTER") != -1) {
+      return 1;
+    }
+    if (s1.indexOf("EXIT") != -1) {
+      return 2;
+    }
     System.out.println("ERROR" + s1);
     return 0;
   }

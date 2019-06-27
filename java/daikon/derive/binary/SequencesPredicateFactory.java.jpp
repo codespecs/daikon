@@ -39,7 +39,9 @@ public final class CLASSNAME extends BinaryDerivationFactory {
   @Override
   public BinaryDerivation @Nullable [] instantiate(VarInfo var1, VarInfo var2) {
     boolean enabled = SEQUENCESPREDICATE.dkconfig_enabled;
-    if (!enabled) return null;
+    if (!enabled) {
+      return null;
+    }
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("Trying to instantiate " + var1.name() + " and " + var2.name());
