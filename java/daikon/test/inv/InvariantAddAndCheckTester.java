@@ -603,6 +603,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return the InvariantStatus produced by invoking invariantToTest's add_modified method on the
      *     arguments represented by params
      */
+    @SuppressWarnings("interning:cast.unsafe") // reflection
     private static InvariantStatus getAddStatus(Object[] params) {
       try {
         return (InvariantStatus) addModified.invoke(invariantToTest, params);
@@ -615,6 +616,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return the InvariantStatus produced by invoking invariantToTest's check_modified method on
      *     the arguments represented by params
      */
+    @SuppressWarnings("interning:cast.unsafe") // reflection
     private static InvariantStatus getCheckStatus(Object[] params) {
       try {
         return (InvariantStatus) checkModified.invoke(invariantToTest, params);
