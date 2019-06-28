@@ -41,8 +41,6 @@ public final class FileCompiler {
 
   static {
     try {
-      @SuppressWarnings(
-          "regex") // output of escapeNonJava() can appear in a character class in a regex
       @Regex(1) String java_filename_re
           // A javac error message may consist of several lines of output.
           // The filename will be found at the beginning of the first line,
