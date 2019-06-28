@@ -38,7 +38,7 @@ public class AnnotateNullable {
   // static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
 
   /** Map from a class name to the list of static functions for that class. */
-  static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<String, List<PptTopLevel>>();
+  static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<>();
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
@@ -97,7 +97,7 @@ public class AnnotateNullable {
       if (ppt.is_object()) {
         String classname = ppt.name().replace(":::OBJECT", "");
         assert !class_map.containsKey(classname) : classname;
-        List<PptTopLevel> static_methods = new ArrayList<PptTopLevel>();
+        List<PptTopLevel> static_methods = new ArrayList<>();
         class_map.put(classname, static_methods);
       }
     }
@@ -300,7 +300,7 @@ public class AnnotateNullable {
     assert ppt.type == PptType.EXIT : ppt;
 
     // Get all of the parameters to the method and the return value
-    List<VarInfo> params = new ArrayList<VarInfo>();
+    List<VarInfo> params = new ArrayList<>();
     VarInfo retvar = null;
     for (VarInfo vi : ppt.var_infos) {
       if (vi.var_kind == VarInfo.VarKind.RETURN) {
@@ -318,8 +318,8 @@ public class AnnotateNullable {
     String return_annotation = (retvar == null ? "" : " " + get_annotation(ppt, retvar));
 
     // Look up the annotation for each parameter.
-    List<String> names = new ArrayList<String>();
-    List<String> annos = new ArrayList<String>();
+    List<String> names = new ArrayList<>();
+    List<String> annos = new ArrayList<>();
     for (VarInfo param : params) {
       String annotation = "";
       names.add(param.name());
@@ -396,7 +396,9 @@ public class AnnotateNullable {
     @NonNull String java_sig = ppt.ppt_name.getSignature();
     String java_args = java_sig.replace(method, "");
     // System.out.printf("m/s/a = %s %s %s%n", method, java_sig, java_args);
-    if (method.equals(ppt.ppt_name.getShortClassName())) method = "<init>";
+    if (method.equals(ppt.ppt_name.getShortClassName())) {
+      method = "<init>";
+    }
 
     // Problem:  I need the return type, but Chicory does not output it.
     // So, I could try to retrieve it from the "return" variable in the

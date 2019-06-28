@@ -16,7 +16,7 @@ import org.checkerframework.checker.nullness.qual.KeyFor;
 public class InstructionUtilsTest extends TestCase {
 
   public static void testComputeRedundantVars1() {
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
@@ -37,8 +37,8 @@ public class InstructionUtilsTest extends TestCase {
     if (redundantVars.length == 0) {
       return;
     }
-    Set<String> redExpected = new LinkedHashSet<String>(Arrays.<String>asList(redundantVars));
-    Set<String> redActual = new LinkedHashSet<String>(); // redMap.get(leader);
+    Set<String> redExpected = new LinkedHashSet<>(Arrays.<String>asList(redundantVars));
+    Set<String> redActual = new LinkedHashSet<>(); // redMap.get(leader);
     for (Map.Entry<@KeyFor("redMap") String, String> e : redMap.entrySet()) {
       if (e.getValue().equals(leader)) redActual.add(e.getKey());
     }
@@ -46,7 +46,7 @@ public class InstructionUtilsTest extends TestCase {
   }
 
   public static void testComputeRedundantVars1a() {
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x02 pop ecx edx");
 
@@ -56,7 +56,7 @@ public class InstructionUtilsTest extends TestCase {
   }
 
   public static void testComputeRedundantVars1b() {
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x02 pop ebx eax");
 
@@ -68,7 +68,7 @@ public class InstructionUtilsTest extends TestCase {
   }
 
   public static void testComputeRedundantVars2() {
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x02 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x03 pop eax ebx -> eax ebx");
@@ -81,7 +81,7 @@ public class InstructionUtilsTest extends TestCase {
   }
 
   public static void testComputeRedundantVars3() {
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     addX86Instruction(path, "x.dll:0x02 pop eax ebx ecx -> ecx eax");
     addX86Instruction(path, "x.dll:0x03 pop eax ebx -> ecx eax");
@@ -97,7 +97,7 @@ public class InstructionUtilsTest extends TestCase {
   }
 
   public static void testComputeRedundantVars4() {
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     addX86Instruction(path, "x.dll:0x01 pop eax");
     addX86Instruction(path, "x.dll:0x02 pop eax");
     addX86Instruction(path, "x.dll:0x03 pop eax");
@@ -118,7 +118,7 @@ public class InstructionUtilsTest extends TestCase {
     new ArrayList<X86Instruction>().add(i);
     KillerInstruction killer = new KillerInstruction(new ArrayList<X86Instruction>());
 
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     path.add(killer);
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     path.add(killer);
@@ -142,14 +142,14 @@ public class InstructionUtilsTest extends TestCase {
   public static void testComputeRedundantVars6() {
 
     // Should be like previous test, but no redundant ebx or eax variables.
-    List<X86Instruction> instrsForKiller = new ArrayList<X86Instruction>();
+    List<X86Instruction> instrsForKiller = new ArrayList<>();
     X86Instruction i = X86Instruction.parseInstruction("x.dll:0x00 pop eax ebx -> ebx ax");
     instrsForKiller.add(i);
     i = X86Instruction.parseInstruction("x.dll:0x00 pop eax ebx -> eax");
     instrsForKiller.add(i);
     KillerInstruction killer = new KillerInstruction(instrsForKiller);
 
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     path.add(killer);
     addX86Instruction(path, "x.dll:0x01 pop eax ebx -> ecx edx");
     path.add(killer);
@@ -170,7 +170,7 @@ public class InstructionUtilsTest extends TestCase {
 
   // A kill of any memor location makes any deref var non-redundant.
   public static void testComputeRedundantVars7() {
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     addX86Instruction(path, "x.dll:0x01 pop eax [4+ebx] -> ecx");
     addX86Instruction(path, "x.dll:0x02 pop esi edi -> [0+ecx]");
     addX86Instruction(path, "x.dll:0x03 push [4+ebx] ebx ->  ebx");
@@ -182,7 +182,7 @@ public class InstructionUtilsTest extends TestCase {
   }
 
   public static void testComputeRedundantVars8() {
-    List<IInstruction> path = new ArrayList<IInstruction>();
+    List<IInstruction> path = new ArrayList<>();
     addX86Instruction(path, "x.dll:0x01 pop eax [4+ebx] -> ecx");
     addX86Instruction(path, "x.dll:0x02 pop esi edi -> ebx");
     addX86Instruction(path, "x.dll:0x03 push [4+ebx] ebx ->  ebx");

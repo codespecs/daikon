@@ -58,7 +58,7 @@ public class PptSlice0 extends PptSlice {
 
   // This should not be transient:  more implications can be created during
   // printing, for instance due to guarding.
-  private transient HashSet<ImplicationWrapper> invariantsSeen = new HashSet<ImplicationWrapper>();
+  private transient HashSet<ImplicationWrapper> invariantsSeen = new HashSet<>();
 
   // In lieu of a readResolve method.
   private void initInvariantsSeen() {
@@ -199,7 +199,9 @@ public class PptSlice0 extends PptSlice {
     @Override
     public boolean equals(
         @GuardSatisfied ImplicationWrapper this, @GuardSatisfied @Nullable Object o) {
-      if (o == null) return false;
+      if (o == null) {
+        return false;
+      }
       assert o instanceof ImplicationWrapper;
       ImplicationWrapper other = (ImplicationWrapper) o;
       if (hashCode() != other.hashCode()) {

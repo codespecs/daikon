@@ -382,12 +382,24 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /** @return name of this in the specified format */
   public String name_using(OutputFormat format, VarInfo vi) {
 
-    if (format == OutputFormat.DAIKON) return name();
-    if (format == OutputFormat.SIMPLIFY) return simplify_name();
-    if (format == OutputFormat.ESCJAVA) return esc_name();
-    if (format == OutputFormat.JAVA) return java_name(vi);
-    if (format == OutputFormat.JML) return jml_name(vi);
-    if (format == OutputFormat.DBCJAVA) return dbc_name(vi);
+    if (format == OutputFormat.DAIKON) {
+      return name();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return simplify_name();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return esc_name();
+    }
+    if (format == OutputFormat.JAVA) {
+      return java_name(vi);
+    }
+    if (format == OutputFormat.JML) {
+      return jml_name(vi);
+    }
+    if (format == OutputFormat.DBCJAVA) {
+      return dbc_name(vi);
+    }
     throw new UnsupportedOperationException("Unknown format requested: " + format);
   }
 
@@ -410,7 +422,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
   private static final WeakHashMap<VarInfoName, WeakReference<VarInfoName>> internTable =
-      new WeakHashMap<VarInfoName, WeakReference<VarInfoName>>();
+      new WeakHashMap<>();
   // This does not make any guarantee that the components of the
   // VarInfoName are themselves interned.  Should it?  (I suspect so...)
   public VarInfoName intern() {
@@ -421,7 +433,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     } else {
       @SuppressWarnings("interning") // intern method
       VarInfoName this_interned = this;
-      internTable.put(this_interned, new WeakReference<VarInfoName>(this_interned));
+      internTable.put(this_interned, new WeakReference<>(this_interned));
       return this_interned;
     }
   }
@@ -569,7 +581,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   @Override
   public int compareTo(@GuardSatisfied VarInfoName this, VarInfoName other) {
     int nameCmp = name().compareTo(other.name());
-    if (nameCmp != 0) return nameCmp;
+    if (nameCmp != 0) {
+      return nameCmp;
+    }
     int reprCmp = repr().compareTo(other.repr());
     return reprCmp;
   }
@@ -695,7 +709,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
           else if (c == '$') buf.append("_dollar_");
           else if (c == ':') buf.append("_colon_");
           else if (c == '*') buf.append("star_");
-          else throw new Error("Unexpected character in VarInfoName$Simple");
+          else {
+            throw new Error("Unexpected character in VarInfoName$Simple");
+          }
         }
         return buf.toString();
       }
@@ -775,7 +791,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     while (vin instanceof Field) {
       vin = ((Field) vin).term;
     }
-    if (!(vin instanceof Slice)) return null;
+    if (!(vin instanceof Slice)) {
+      return null;
+    }
     Slice slice = (Slice) vin;
     @Interned VarInfoName[] ret = new @Interned VarInfoName[2];
     if (slice.i != null) {
@@ -1048,7 +1066,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     private List<String> elts_repr(@GuardSatisfied FunctionOfN this) {
-      List<String> elts = new ArrayList<String>(args.size());
+      List<String> elts = new ArrayList<>(args.size());
       for (VarInfoName vin : args) {
         elts.add(vin.repr());
       }
@@ -1130,7 +1148,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     @Override
     protected String identifier_name_impl() {
-      List<String> elts = new ArrayList<String>(args.size());
+      List<String> elts = new ArrayList<>(args.size());
       for (VarInfoName vin : args) {
         elts.add(vin.identifier_name());
       }
@@ -2447,18 +2465,32 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     @Override
     public VarInfoName visitSubscript(Subscript o) {
-      if (o == goal) return goal;
-      if (o.sequence.accept(this) != null) return goal;
-      if (o.index.accept(this) != null) return goal;
+      if (o == goal) {
+        return goal;
+      }
+      if (o.sequence.accept(this) != null) {
+        return goal;
+      }
+      if (o.index.accept(this) != null) {
+        return goal;
+      }
       return null;
     }
 
     @Override
     public VarInfoName visitSlice(Slice o) {
-      if (o == goal) return goal;
-      if (o.sequence.accept(this) != null) return goal;
-      if ((o.i != null) && (o.i.accept(this) != null)) return goal;
-      if ((o.j != null) && (o.j.accept(this) != null)) return goal;
+      if (o == goal) {
+        return goal;
+      }
+      if (o.sequence.accept(this) != null) {
+        return goal;
+      }
+      if ((o.i != null) && (o.i.accept(this) != null)) {
+        return goal;
+      }
+      if ((o.j != null) && (o.j.accept(this) != null)) {
+        return goal;
+      }
       return null;
     }
   }
@@ -2516,10 +2548,14 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     @Override
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       VarInfoName result = null;
-      if (goals.contains(o)) return o;
+      if (goals.contains(o)) {
+        return o;
+      }
       for (VarInfoName vin : o.args) {
         result = vin.accept(this);
-        if (result != null) return result;
+        if (result != null) {
+          return result;
+        }
       }
       return result;
     }
@@ -2536,13 +2572,17 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     @Override
     public VarInfoName visitPrestate(Prestate o) {
-      if (goals.contains(o)) return o;
+      if (goals.contains(o)) {
+        return o;
+      }
       return super.visitPrestate(o);
     }
 
     @Override
     public VarInfoName visitPoststate(Poststate o) {
-      if (goals.contains(o)) return o;
+      if (goals.contains(o)) {
+        return o;
+      }
       return super.visitPoststate(o);
     }
 
@@ -2558,19 +2598,29 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     @Override
     public VarInfoName visitSubscript(Subscript o) {
-      if (goals.contains(o)) return o;
+      if (goals.contains(o)) {
+        return o;
+      }
       VarInfoName temp = o.sequence.accept(this);
-      if (temp != null) return temp;
+      if (temp != null) {
+        return temp;
+      }
       temp = o.index.accept(this);
-      if (temp != null) return temp;
+      if (temp != null) {
+        return temp;
+      }
       return null;
     }
 
     @Override
     public VarInfoName visitSlice(Slice o) {
-      if (goals.contains(o)) return o;
+      if (goals.contains(o)) {
+        return o;
+      }
       VarInfoName temp = o.sequence.accept(this);
-      if (temp != null) return temp;
+      if (temp != null) {
+        return temp;
+      }
       if (o.i != null) {
         temp = o.i.accept(this);
         if (temp != null) {
@@ -2617,7 +2667,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     @Override
     public Boolean visitSubscript(Subscript o) {
       Boolean temp = o.sequence.accept(this);
-      if (temp == null) return temp;
+      if (temp == null) {
+        return temp;
+      }
       temp = o.index.accept(this);
       return temp;
     }
@@ -2625,7 +2677,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     @Override
     public Boolean visitSlice(Slice o) {
       Boolean temp = o.sequence.accept(this);
-      if (temp == null) return temp;
+      if (temp == null) {
+        return temp;
+      }
       if (o.i != null) {
         temp = o.i.accept(this);
         if (temp == null) {
@@ -2792,8 +2846,10 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public VarInfoName visitFunctionOfN(FunctionOfN o) {
       // If o is getting replaced, then just replace it
       // otherwise, create a new function and check if arguments get replaced
-      if (o == old) return _new;
-      ArrayList<VarInfoName> newArgs = new ArrayList<VarInfoName>();
+      if (o == old) {
+        return _new;
+      }
+      ArrayList<VarInfoName> newArgs = new ArrayList<>();
       for (VarInfoName vin : o.args) {
         VarInfoName retval = vin.accept(this);
         newArgs.add(retval);
@@ -2860,7 +2916,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     @Override
     public VarInfoName visitSimple(Simple o) {
-      if (o.name.equals("return")) return o;
+      if (o.name.equals("return")) {
+        return o;
+      }
       return o.applyPoststate();
     }
 
@@ -2882,7 +2940,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     // state and accessors
-    private final List<VarInfoName> result = new ArrayList<VarInfoName>();
+    private final List<VarInfoName> result = new ArrayList<>();
 
     /** Method returning the actual results (the nodes in order). */
     public List<VarInfoName> nodes() {
@@ -3246,7 +3304,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public static VarInfoName selectNth(
         VarInfoName root, @Nullable VarInfoName index_base, int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
-      List<VarInfoName> unquants = new ArrayList<VarInfoName>(qv.unquants());
+      List<VarInfoName> unquants = new ArrayList<>(qv.unquants());
       if (unquants.size() == 0) {
         // Nothing to do?
         return null;
@@ -3273,7 +3331,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public static VarInfoName selectNth(
         VarInfoName root, String index_base, boolean free, int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
-      List<VarInfoName> unquants = new ArrayList<VarInfoName>(qv.unquants());
+      List<VarInfoName> unquants = new ArrayList<>(qv.unquants());
       if (unquants.size() == 0) {
         // Nothing to do?
         return null;
@@ -3315,7 +3373,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     /** Return a fresh variable name that doesn't appear in the given variable names. */
     public static VarInfoName getFreeIndex(VarInfoName... vins) {
-      Set<String> simples = new HashSet<String>();
+      Set<String> simples = new HashSet<>();
       for (VarInfoName vin : vins) {
         simples.addAll(new SimpleNamesVisitor(vin).simples());
       }
@@ -3348,7 +3406,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       result.bound_vars = new ArrayList<VarInfoName[]>();
 
       // all of the simple identifiers used by these roots
-      Set<String> simples = new HashSet<String>();
+      Set<String> simples = new HashSet<>();
 
       // build helper for each roots; collect identifiers
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
@@ -3365,7 +3423,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       // replace the right stuff in the term
       char tmp = 'i';
       for (int i = 0; i < roots.length; i++) {
-        List<VarInfoName> uq = new ArrayList<VarInfoName>(helper[i].unquants());
+        List<VarInfoName> uq = new ArrayList<>(helper[i].unquants());
         if (uq.size() == 0) {
           // nothing needs quantification
           result.root_primes[i] = roots[i];

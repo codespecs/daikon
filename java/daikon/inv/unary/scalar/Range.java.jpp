@@ -242,7 +242,7 @@ public abstract class RANGE extends SUPERCLASS {
    */
   public static List<@Prototype Invariant> get_proto_all() {
 
-    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<>();
     result.add(EqualZero.get_proto());
     result.add(EqualOne.get_proto());
     result.add(EqualMinusOne.get_proto());

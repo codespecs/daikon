@@ -33,9 +33,9 @@ public class SplitterFactoryTestUpdater {
   private static String targetDir = "daikon/test/split/targets/";
   private static String splitDir = "daikon/test/split/";
 
-  private static ArrayList<ArrayList<File>> spinfoFileLists = new ArrayList<ArrayList<File>>();
-  private static ArrayList<ArrayList<File>> declsFileLists = new ArrayList<ArrayList<File>>();
-  private static ArrayList<String> classNames = new ArrayList<String>();
+  private static ArrayList<ArrayList<File>> spinfoFileLists = new ArrayList<>();
+  private static ArrayList<ArrayList<File>> declsFileLists = new ArrayList<>();
+  private static ArrayList<String> classNames = new ArrayList<>();
 
   private SplitterFactoryTestUpdater() {} // blocks public constructor
 
@@ -65,9 +65,9 @@ public class SplitterFactoryTestUpdater {
    * @see #generateSplitters(List, List)
    */
   private static void generateSplitters(String spinfoFile, String declsFile) {
-    List<String> spinfo = new ArrayList<String>();
+    List<String> spinfo = new ArrayList<>();
     spinfo.add(spinfoFile);
-    List<String> decls = new ArrayList<String>();
+    List<String> decls = new ArrayList<>();
     decls.add(declsFile);
     generateSplitters(spinfo, decls);
   }
@@ -79,8 +79,8 @@ public class SplitterFactoryTestUpdater {
    * @param decls the decls files that should be used in generating the splitter java files
    */
   private static void generateSplitters(List<String> spinfos, List<String> decls) {
-    HashSet<File> declsFileSet = new HashSet<File>();
-    HashSet<File> spinfoFiles = new HashSet<File>();
+    HashSet<File> declsFileSet = new HashSet<>();
+    HashSet<File> spinfoFiles = new HashSet<>();
     PptMap allPpts = new PptMap();
     for (String spinfoFile : spinfos) {
       spinfoFile = targetDir + spinfoFile;
@@ -263,7 +263,7 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  /** Sets up the test by generating the needed splitter java files. */");
     ps.println("  private static void createSplitterFiles(String spinfo, String decl) {");
-    ps.println("    List<String> spinfoFiles = new ArrayList<String>();");
+    ps.println("    List<String> spinfoFiles = new ArrayList<>();");
     ps.println("    spinfoFiles.add(spinfo);");
     ps.println("    List<String> declsFiles = Collections.singletonList(decl);");
     ps.println("    createSplitterFiles(spinfoFiles, declsFiles);");
@@ -272,7 +272,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("  /** Sets up the test by generating the needed splitter java files. */");
     ps.println(
         "  private static void createSplitterFiles(List<String> spinfos, List<String> decls) {");
-    ps.println("    Set<File> spFiles = new HashSet<File>();");
+    ps.println("    Set<File> spFiles = new HashSet<>();");
     ps.println("    PptMap allPpts = new PptMap();");
     ps.println("    for (String spinfo : spinfos) {");
     ps.println("      spFiles.add(new File(spinfo));");

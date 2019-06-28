@@ -470,10 +470,15 @@ public class NISuppressor {
   /** Returns the variable index that corresponds to index. */
   private int translate_index(int index) {
 
-    if (index == 0) return v1_index;
-    else if (index == 1) return v2_index;
-    else if (index == 2) return v3_index;
-    else return index;
+    if (index == 0) {
+      return v1_index;
+    } else if (index == 1) {
+      return v2_index;
+    } else if (index == 2) {
+      return v3_index;
+    } else {
+      return index;
+    }
   }
 
   /** Returns the invariant class of this suppressor. */

@@ -151,7 +151,7 @@ public class DSForestTest extends TestCase {
 
     // Create expected partition from ss.
     Set<Set<String>> expectedSets = new LinkedHashSet<Set<String>>();
-    Set<String> currentSet = new LinkedHashSet<String>();
+    Set<String> currentSet = new LinkedHashSet<>();
     for (String s : ss) {
       if (s == null) {
         expectedSets.add(currentSet);

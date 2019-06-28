@@ -120,9 +120,9 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     SCALAR[] val1_array = (SCALAR[]) val1;
     int val2 = base2.getIndexValue(full_vt) + index_shift;
     if ((val2 < 0) || (val2 >= val1_array.length)) {
-      //if (!missing_array_bounds)
-        // System.out.println ("out of bounds" + base1.name() + " "
-        //                    + base2.name() + " @" + base1.ppt.name());
+      // if (!missing_array_bounds)
+      //   System.out.println ("out of bounds" + base1.name() + " "
+      //                      + base2.name() + " @" + base1.ppt.name());
       missing_array_bounds = true;
       return ValueAndModified.MISSING_NONSENSICAL;
     }

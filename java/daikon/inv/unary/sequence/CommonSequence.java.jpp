@@ -137,9 +137,15 @@ public class CLASSNAME extends SUPERCLASS {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
 
     return format_unimplemented(format);
   }
@@ -247,7 +253,7 @@ public class CLASSNAME extends SUPERCLASS {
       int ii = INDEXOF(intersect, a[i]);
       if ((ii != -1)
         && (INDEXOF(ArraysPlume.subarray(tmp,0,size), a[i]) == -1)) {
-        //System.out.println ("adding " + intersect[ii] + " at " + size);
+        // System.out.println ("adding " + intersect[ii] + " at " + size);
 
         // Carefully add the existing intersect value and not a[i].  These
         // are not necessarily the same when fuzzy floating point

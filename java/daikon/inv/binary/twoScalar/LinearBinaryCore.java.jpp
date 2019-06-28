@@ -90,7 +90,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     }
   }
 
-//There is no more need for swap because the equation is in standard form.
+// There is no more need for swap because the equation is in standard form.
   public void swap() {
     // was a swap
     if (values_seen < MINPAIRS) {
@@ -104,7 +104,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
         b = 0;
         c = 0;
       } else {
-    //since the equation is already in standard form, just guarantee that the x coefficient is positive
+    // since the equation is already in standard form, just guarantee that the x coefficient is positive
 
         if (b < 0) {
           a = -b;
@@ -162,10 +162,11 @@ public final class CLASSNAME implements Serializable, Cloneable {
       // the points in a pair are nearby, then roundoff errors in the
       // computation of the slope can be non-negligible.
 
-      for (int i = 0; i < values_seen; i++)
+      for (int i = 0; i < values_seen; i++) {
         if ((x_cache[i] == x) && (y_cache[i] == y)) {
           return InvariantStatus.NO_CHANGE;
         }
+      }
       x_cache[values_seen] = x;
       y_cache[values_seen] = y;
       values_seen++;
@@ -289,7 +290,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
         if (new_c < min_c) min_c = new_c;
         if (new_c > max_c) max_c = new_c;
 
-        //pick a new a, b, c as the average of their endpoints
+        // pick a new a, b, c as the average of their endpoints
         new_a = (min_a + max_a) / 2;
         new_b = (min_b + max_b) / 2;
         new_c = (min_c + max_c) / 2;
@@ -498,7 +499,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   public String format_using(
       OutputFormat format, String vix, String viy, double u, double v, double w) {
 
-    //recall that a, b, c in the linear binary equation means ax + by + c = 0;
+    // recall that a, b, c in the linear binary equation means ax + by + c = 0;
     if (u == 0 && v == 0 && w == 0) {
       return wrapper.format_too_few_samples(format, "0 * " + vix + "+ 0 * " + viy + " + 0 == 0");
     }

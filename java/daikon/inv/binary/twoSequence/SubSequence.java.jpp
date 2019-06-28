@@ -152,10 +152,18 @@ public class CLASSNAME extends SUPERCLASS {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
-    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
-    if (format.isJavaFamily()) return format_unimplemented(format);
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
+    }
+    if (format.isJavaFamily()) {
+      return format_unimplemented(format);
+    }
 
     return format_unimplemented(format);
   }
@@ -765,11 +773,12 @@ public class CLASSNAME extends SUPERCLASS {
         VarInfo index2 = sss2.sclvar();
         int shift2 = sss2.index_shift;
         boolean start2 = sss2.from_start;
-        if (start1 == start2)
+        if (start1 == start2) {
           if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
             inv.log("True from comparing indices");
             return true;
           }
+        }
       } else {
         throw new Error("how can this happen? " + subvar.name()
                         + " " + (subvar.derived == null
