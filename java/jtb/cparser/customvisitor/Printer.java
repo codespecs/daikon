@@ -1,9 +1,9 @@
 package jtb.cparser.customvisitor;
 
-import java.io.*;
-import java.util.*;
 import jtb.cparser.syntaxtree.*;
 import jtb.cparser.visitor.*;
+import java.util.*;
+import java.io.*;
 
 public class Printer extends DepthFirstVisitor {
 
@@ -14,7 +14,7 @@ public class Printer extends DepthFirstVisitor {
   private File file;
 
   static {
-    ArrayList<String> temp = new ArrayList<>();
+    ArrayList<String> temp = new ArrayList<String>();
     temp.add("(unsigned)");
     temp.add("(unsignedshortint)");
     temp.add("(__ctype)");
@@ -44,10 +44,13 @@ public class Printer extends DepthFirstVisitor {
   }
 
   public boolean shouldPrint(String curr, int index) {
-    return (index >= 0
-        && ((index + curr.length() == buffer.length())
-            || (index >= 1 && !Character.isLetterOrDigit(buffer.charAt(index - 1)))
-            || !Character.isLetterOrDigit(buffer.charAt(index + curr.length()))));
+    return (index >= 0 &&
+            ((index+curr.length() == buffer.length()) ||
+             (index >=1 && !Character.isLetterOrDigit(buffer.charAt(index-1)))
+             ||
+             !Character.isLetterOrDigit(buffer.charAt(index+curr.length())))
+            );
+
   }
 
   public void commit() {
@@ -75,15 +78,16 @@ public class Printer extends DepthFirstVisitor {
     this.filter.addAll(badExpressions);
   }
 
+
   public void visit(LogicalANDExpression n) {
-    if (n.f0 != null) {
+    if (n.f0 !=null) {
       n.f0.accept(this);
     }
     n.f1.accept(this);
   }
 
   public void visit(LogicalORExpression n) {
-    if (n.f0 != null) {
+    if (n.f0 !=null) {
       n.f0.accept(this);
     }
     n.f1.accept(this);
@@ -102,4 +106,5 @@ public class Printer extends DepthFirstVisitor {
     }
     n.f1.accept(this);
   }
+
 }
