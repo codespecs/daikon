@@ -138,7 +138,6 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @SuppressWarnings("signature") // string manipulation (checker should handle)
     @BinaryName String fullClassName = className.replace("/", ".");
     // String fullClassName = className;
 
