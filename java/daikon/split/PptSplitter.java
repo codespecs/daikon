@@ -494,8 +494,9 @@ public class PptSplitter implements Serializable {
           dummy2.negate();
           orig_invs.put(dummy1, dummy1);
           orig_invs.put(dummy2, dummy2);
-          @SuppressWarnings(
-              "keyfor") // BUG in Daikon, possibly, because these are not keys; need to investigate
+          // @SuppressWarnings(
+          //     "keyfor") // BUG in Daikon, possibly, because these are not keys; need to
+          // investigate
           @KeyFor("orig_invs") Invariant[] dummy_pair = new @KeyFor("orig_invs") Invariant[] {dummy1, dummy2};
           exclusive_invs_vec.add(dummy_pair);
           // Don't add the dummy_pair, as it would just be removed afterward.

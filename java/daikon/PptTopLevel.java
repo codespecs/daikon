@@ -436,7 +436,8 @@ public class PptTopLevel extends Ppt {
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
-  @SuppressWarnings("fields.uninitialized") // violates invariants; also uses helper function
+  @SuppressWarnings(
+      "nullness:fields.uninitialized") // violates invariants; also uses helper function
   public PptTopLevel(String name, VarInfo[] var_infos) {
     super(var_infos);
     this.name = name;
@@ -1002,7 +1003,7 @@ public class PptTopLevel extends Ppt {
    */
   @SuppressWarnings({
     "flowexpr.parse.error",
-    "contracts.precondition.not.satisfied"
+    "nullness:contracts.precondition.not.satisfied"
   }) // private field
   @RequiresNonNull({
     "NIS.suppressor_map",
@@ -2733,7 +2734,7 @@ public class PptTopLevel extends Ppt {
    * Configuration variable "pairwise_implications" controls whether all or only the first two
    * conditional program points are considered.
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   public void addImplications() {
 
     if (PptSplitter.dkconfig_disable_splitting) {
@@ -3701,7 +3702,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Build actual equality sets that match the pairs we found
-    @SuppressWarnings("keyfor") // checker weakness: keyfor: read-only Set permits covariance
+    // @SuppressWarnings("keyfor") // checker weakness: keyfor: read-only Set permits covariance
     Set<VarInfo.Pair> emap_keySet = emap.keySet();
     equality_view.instantiate_from_pairs(emap_keySet);
     if (debugMerge.isLoggable(Level.FINE)) {
@@ -3772,7 +3773,7 @@ public class PptTopLevel extends Ppt {
    * of the suppressed invariants in each of the children, performing the merge, and then removing
    * them.
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   @RequiresNonNull("equality_view")
   public void merge_invs_multiple_children() {
 

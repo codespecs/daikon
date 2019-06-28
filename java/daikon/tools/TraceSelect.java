@@ -267,7 +267,6 @@ public class TraceSelect {
     return;
   }
 
-  @SuppressWarnings("nullness") // reinitialization
   private static void reinitializeDaikon() {
     daikon.Daikon.inv_file = null;
   }

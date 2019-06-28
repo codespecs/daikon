@@ -1687,7 +1687,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
   }
 #elif defined(IS_SEQUENCE)
   /** {@inheritDoc} */
-  @SuppressWarnings("keyfor")   // needs EnsureQualifier
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
