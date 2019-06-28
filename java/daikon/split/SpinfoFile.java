@@ -118,7 +118,7 @@ public class SpinfoFile {
   public void parseFile(@UnknownInitialization @Raw SpinfoFile this, LineNumberReader spinfoFile)
       throws IOException {
     List<ReplaceStatement> replaceStatements = new ArrayList<>();
-    List<List<String>> pptSections = new ArrayList<List<String>>();
+    List<List<String>> pptSections = new ArrayList<>();
     try {
       String line = spinfoFile.readLine();
       while (line != null) {

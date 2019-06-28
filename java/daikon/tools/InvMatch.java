@@ -122,7 +122,7 @@ public class InvMatch {
    */
   static List<List<InvTranslate>> match_ppt(PptTopLevel ppt1, PptTopLevel ppt2) {
 
-    List<List<InvTranslate>> xlate_list = new ArrayList<List<InvTranslate>>();
+    List<List<InvTranslate>> xlate_list = new ArrayList<>();
 
     for (Iterator<Invariant> i = ppt1.invariants_iterator(); i.hasNext(); ) {
       Invariant inv1 = i.next();
@@ -155,7 +155,7 @@ public class InvMatch {
       }
     }
 
-    List<List<InvTranslate>> valid_translations = new ArrayList<List<InvTranslate>>();
+    List<List<InvTranslate>> valid_translations = new ArrayList<>();
     List<InvTranslate> current_translation = new ArrayList<>();
     consider_xlate(valid_translations, current_translation, xlate_list, 0);
 

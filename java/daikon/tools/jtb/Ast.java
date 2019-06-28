@@ -786,7 +786,7 @@ public class Ast {
     List<Constructor<?>> publicConstructors = Arrays.<Constructor<?>>asList(c.getConstructors());
     List<Constructor<?>> declaredConstructors =
         Arrays.<Constructor<?>>asList(c.getDeclaredConstructors());
-    List<Constructor<?>> allConstructors = new ArrayList<Constructor<?>>();
+    List<Constructor<?>> allConstructors = new ArrayList<>();
     allConstructors.addAll(publicConstructors);
     allConstructors.addAll(declaredConstructors);
 

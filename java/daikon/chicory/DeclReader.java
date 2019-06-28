@@ -199,7 +199,7 @@ public class DeclReader {
      * program point is executed. That entry is a list of the values for each variable in the same
      * order as the variables were defined.
      */
-    List<List<@Interned Object>> data_values = new ArrayList<List<@Interned Object>>();
+    List<List<@Interned Object>> data_values = new ArrayList<>();
 
     public DeclPpt(String name) {
       this.name = name;

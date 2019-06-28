@@ -56,7 +56,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   // The methods and constructors that were visited (in other words,
   // those explicitly declared in the source).
   public List<Method> visitedMethods = new ArrayList<>();
-  public List<Constructor<?>> visitedConstructors = new ArrayList<Constructor<?>>();
+  public List<Constructor<?>> visitedConstructors = new ArrayList<>();
 
   // [[ TODO: I'm using xmlString() because it will definitely give
   // different values for different Properties. But if Properties

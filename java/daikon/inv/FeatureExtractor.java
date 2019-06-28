@@ -634,7 +634,7 @@ public final class FeatureExtractor {
 
   private static List<Class<? extends Invariant>> getInvariantClasses(File top)
       throws ClassNotFoundException {
-    List<Class<? extends Invariant>> answer = new ArrayList<Class<? extends Invariant>>();
+    List<Class<? extends Invariant>> answer = new ArrayList<>();
     if (top.isDirectory()) {
       File[] all = top.listFiles();
       for (int i = 0; i < all.length; i++) {

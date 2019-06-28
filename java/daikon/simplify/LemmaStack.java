@@ -330,7 +330,7 @@ public class LemmaStack {
 
   public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) {
     List<Lemma> assumptions = new ArrayList<>(lemmas);
-    List<Set<Class<? extends Invariant>>> found = new ArrayList<Set<Class<? extends Invariant>>>();
+    List<Set<Class<? extends Invariant>>> found = new ArrayList<>();
     try {
       unAssumeAll(lemmas);
       if (checkString(result) == 'F') {
