@@ -308,20 +308,19 @@ public class Implication extends Joiner {
   @Override
   @FormatMethod
   @SuppressWarnings({
-    "override.receiver.invalid", // sound overriding, not expressible in Checker Framework
-    "method.invocation.invalid", // call to format is OK
-    "formatter"
-  }) // call to format method is correct because of @FormatMethod annotation
+    "nullness:override.receiver.invalid", // sound overriding, not expressible in Checker Framework
+  })
   public boolean log(
       @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,
       String format,
       @Nullable Object... args) {
-    String msg = format;
-    if (args.length > 0) msg = String.format(format, args);
+    String msg = (args.length == 0) ? format : String.format(format, args);
+    @SuppressWarnings("nullness:method.invocation.invalid")
+    String formatted = format();
     return (right.log(
         msg
             + " [for implication "
-            + format()
+            + formatted
             + " ("
             + (orig_right == null ? "null" : orig_right.format())
             + ")]"));

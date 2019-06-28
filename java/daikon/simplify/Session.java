@@ -108,12 +108,10 @@ public class Session {
       }
 
       // set up command stream
-      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       PrintStream tmp_input = new PrintStream(process.getOutputStream());
       input = tmp_input;
 
       // set up result stream
-      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       @NonNull InputStream is = process.getInputStream();
       output = new BufferedReader(new InputStreamReader(is, UTF_8));
 

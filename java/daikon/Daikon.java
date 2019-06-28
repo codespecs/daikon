@@ -204,7 +204,7 @@ import typequals.prototype.qual.Prototype;
  * #mainHelper} method is the entry point, when called programmatically.
  */
 @SuppressWarnings(
-    "initialization.static.fields.uninitialized") // field all_ppts; deal with it later
+    "nullness:initialization.static.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
 
   private Daikon() {
@@ -699,7 +699,7 @@ public final class Daikon {
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
    * called progrmmatically.
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   public static void mainHelper(final String[] args) {
     // Cleanup from any previous runs
     cleanup();
@@ -2059,7 +2059,7 @@ public final class Daikon {
    * two return statements are enabled by default (though other splitters can be defined by the
    * user).
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied")
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied")
   public static void setup_splitters(PptTopLevel ppt) {
     if (PptSplitter.dkconfig_disable_splitting) {
       return;
@@ -2205,7 +2205,7 @@ public final class Daikon {
    * have been loaded, all of the program points have been setup, and candidate invariants have been
    * instantiated. This routine processes data to falsify the candidate invariants.
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {

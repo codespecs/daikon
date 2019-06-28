@@ -71,7 +71,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     }
   }
 
-  @SuppressWarnings("purity") // Impure side effects do not escape
+  @SuppressWarnings("all:purity") // Impure side effects do not escape
   @Pure
   private boolean countReport(PptNode input) {
 
@@ -93,7 +93,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return reportCnt > REPORT_REQUIREMENT_NUMBER;
   }
 
-  @SuppressWarnings("purity") // Impure side effects do not escape
+  @SuppressWarnings("all:purity") // Impure side effects do not escape
   @Pure
   private boolean countTarget(PptNode input) {
 

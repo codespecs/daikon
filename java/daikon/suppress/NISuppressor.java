@@ -262,7 +262,6 @@ public class NISuppressor {
         assert sample_inv.valid_types(sup_vis);
         if (sample_inv.instantiate_ok(sup_vis)) {
           UnaryInvariant uinv = (UnaryInvariant) sample_inv;
-          @SuppressWarnings("nullness") // elements of ppt.constants have a constant_value
           InvariantStatus status =
               uinv.check(ppt.constants.constant_value(v1), ValueTuple.MODIFIED, 1);
           valid = (status == InvariantStatus.NO_CHANGE);

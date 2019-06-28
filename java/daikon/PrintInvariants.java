@@ -305,7 +305,7 @@ public final class PrintInvariants {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called progrmmatically.
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException {

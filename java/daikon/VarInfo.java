@@ -934,7 +934,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns true if this variable is derived from prestate variables. */
-  @SuppressWarnings("not.deterministic") // nondeterminism does not affect result
+  @SuppressWarnings("all:not.deterministic") // nondeterminism does not affect result
   @Pure
   public boolean isPrestateDerived() {
     if (postState != null) {
@@ -1061,7 +1061,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * method is called. Subsequent calls use these cached values.
    */
   @EnsuresNonNullIf(result = true, expression = "getDerivedParam()")
-  @SuppressWarnings("purity") // created object is not returned
+  @SuppressWarnings("all:purity") // created object is not returned
   @Pure
   public boolean isDerivedParam() {
     if (isDerivedParamCached != null) {
@@ -1173,7 +1173,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * In any case, the variable must have a postState VarInfoName, and equality invariants need to
    * have already been computed.
    */
-  @SuppressWarnings("purity") // set cache field
+  @SuppressWarnings("all:purity") // set cache field
   @Pure
   public boolean isDerivedParamAndUninteresting() {
     if (isDerivedParamAndUninterestingCached != null) {
@@ -2814,8 +2814,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   /** If the message is new print it, otherwise discard it. */
   @FormatMethod
-  @SuppressWarnings(
-      "formatter") // call to format method is correct because of @FormatMethod annotation
   static void debug_print_once(String format, @Nullable Object... args) {
     String msg = String.format(format, args);
     if (!out_strings.contains(msg)) {

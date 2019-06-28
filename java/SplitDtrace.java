@@ -145,7 +145,8 @@ public final class SplitDtrace {
   }
 
   @SuppressWarnings(
-      "purity") // non-deterministic call to trim is used only for equals(), does not affect result
+      "all:purity") // non-deterministic call to trim is used only for equals(), does not affect
+  // result
   @Pure
   static boolean isEmpty(String l) {
     return l.trim().equals("") || l.startsWith("#");
