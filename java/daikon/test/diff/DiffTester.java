@@ -42,15 +42,10 @@ public class DiffTester extends TestCase {
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo newIntVarInfo(String name) {
-    VarInfo result =
-        new VarInfo(
-            name,
-            ProglangType.INT,
-            ProglangType.INT,
-            VarComparabilityNone.it,
-            VarInfoAux.getDefault());
-    return result;
+    return new VarInfo(
+        name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
   }
 
   public DiffTester(String name) throws Exception {

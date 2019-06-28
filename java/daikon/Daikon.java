@@ -1814,7 +1814,9 @@ public final class Daikon {
         VarInfo[] exit_vars = new VarInfo[len];
         // System.out.printf("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
-          exit_vars[j] = new VarInfo(ppt.var_infos[j]);
+          @SuppressWarnings("interning") // about to be used in new program point
+          @Interned VarInfo exit_var = new VarInfo(ppt.var_infos[j]);
+          exit_vars[j] = exit_var;
           // System.out.printf("exitNN name '%s', exit name '%s'%n",
           //                   ppt.var_infos[j].name(), exit_vars[j].name());
           exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
