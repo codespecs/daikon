@@ -62,7 +62,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   /** the location of the runtime support class */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  /** Debug information about which classes are transformed and why */
+  /** Debug information about which classes are transformed and why. */
   protected static SimpleLog debug_transform = new SimpleLog(false);
 
   public Instrument() {
@@ -638,7 +638,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     boolean shouldInclude = shouldIncIter.next();
 
-    if (!shouldInclude) return null;
+    if (!shouldInclude) {
+      return null;
+    }
 
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
@@ -974,7 +976,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /**
-   * Returns true iff mgen is a constructor
+   * Returns true iff mgen is a constructor.
    *
    * @return true iff mgen is a constructor
    */
@@ -990,7 +992,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /**
-   * Return an array of strings, each corresponding to mgen's argument types
+   * Return an array of strings, each corresponding to mgen's argument types.
    *
    * @return an array of strings, each corresponding to mgen's argument types
    */
@@ -1194,9 +1196,15 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test")) {
       return true;
     }
-    if (classname.equals("daikon/PptTopLevel$PptType")) return true;
-    if (classname.startsWith("org/plumelib/bcelutil")) return true;
-    if (classname.startsWith("daikon/util")) return true;
+    if (classname.equals("daikon/PptTopLevel$PptType")) {
+      return true;
+    }
+    if (classname.startsWith("org/plumelib/bcelutil")) {
+      return true;
+    }
+    if (classname.startsWith("daikon/util")) {
+      return true;
+    }
     return false;
   }
 }

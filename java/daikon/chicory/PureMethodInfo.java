@@ -16,10 +16,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class PureMethodInfo extends DaikonVariableInfo {
 
-  /** The MethodInfo object for this pure method */
+  /** The MethodInfo object for this pure method. */
   private MethodInfo minfo;
 
-  /** An array containing the parameters of this pure method */
+  /** An array containing the parameters of this pure method. */
   private DaikonVariableInfo[] args;
 
   public PureMethodInfo(
@@ -201,7 +201,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
     return VarKind.FUNCTION;
   }
 
-  /** Return the short name of the method as the relative name */
+  /** Return the short name of the method as the relative name. */
   @Override
   public String get_relative_name() {
     return minfo.method_name;

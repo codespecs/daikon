@@ -344,10 +344,18 @@ class InvocationComparator implements Comparator<String> {
 
   private int getType(String s1) {
     // we want ENTER to come before EXIT
-    if (s1.indexOf("CLASS") != -1) return -1;
-    if (s1.indexOf("OBJECT") != -1) return 0;
-    if (s1.indexOf("ENTER") != -1) return 1;
-    if (s1.indexOf("EXIT") != -1) return 2;
+    if (s1.indexOf("CLASS") != -1) {
+      return -1;
+    }
+    if (s1.indexOf("OBJECT") != -1) {
+      return 0;
+    }
+    if (s1.indexOf("ENTER") != -1) {
+      return 1;
+    }
+    if (s1.indexOf("EXIT") != -1) {
+      return 2;
+    }
     System.out.println("ERROR" + s1);
     return 0;
   }

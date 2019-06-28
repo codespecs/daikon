@@ -37,7 +37,7 @@ import org.plumelib.util.UtilPlume;
 /**
  * Extract the consequents of all Implication invariants that are predicated by membership in a
  * cluster, from a {@code .inv} file. An example of such an implication would be "(cluster ==
- * <em>NUM</em>) ==&gt; consequent". The consequent is only true in certain clusters, but is not
+ * <em>NUM</em>) &rArr; consequent". The consequent is only true in certain clusters, but is not
  * generally true for all executions of the program point to which the Implication belongs. These
  * resulting implications are written to standard output in the format of a splitter info file.
  */

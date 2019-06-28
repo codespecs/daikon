@@ -34,7 +34,7 @@ import org.checkerframework.checker.signature.qual.FieldDescriptor;
 })
 public final class Runtime {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   // Constructor
   private Runtime() {

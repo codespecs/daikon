@@ -118,7 +118,7 @@ public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
     return (other instanceof SCALARSEQUENCESINTERSECTION);
   }
 
-  /** Returns the ESC name for sequence subsequence */
+  /** Returns the ESC name for sequence subsequence. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

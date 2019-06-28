@@ -1,0 +1,25 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./StackCppTestInline
+==PID== 
+Private stuff: 42
+My first stack:
+Fifth line
+Fourth line
+Third line
+Second line
+First line
+numStacksCreated: 1
+publicNumLinksCreated: 5
+
+Private stuff: 42
+My second stack:
+Cuatro
+Tres
+Dos
+Uno
+numStacksCreated: 2
+publicNumLinksCreated: 9
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

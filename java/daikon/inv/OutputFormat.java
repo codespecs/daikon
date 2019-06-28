@@ -23,13 +23,13 @@ public enum OutputFormat {
   },
   /** ESC/Java's annotation language -- a variant of JML. */
   ESCJAVA("ESC/Java"),
-  /** Java boolean expression */
+  /** Java boolean expression. */
   JAVA("Java"),
-  /** Java Modeling Language */
+  /** Java Modeling Language. */
   JML("JML"),
   /** Simplify theorem prover. First order logical expressions, expressed in Lisp-style parens. */
   SIMPLIFY("Simplify"),
-  /** C# Code Contract */
+  /** C# Code Contract. */
   CSHARPCONTRACT("CSharpContract");
 
   final String name;

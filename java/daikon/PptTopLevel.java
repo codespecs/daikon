@@ -113,8 +113,8 @@ import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
-import org.plumelib.util.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
@@ -175,7 +175,7 @@ public class PptTopLevel extends Ppt {
     RETURN
   };
 
-  /** Attributes of this ppt */
+  /** Attributes of this ppt. */
   public EnumSet<PptFlags> flags = EnumSet.noneOf(PptFlags.class);
 
   /**
@@ -191,7 +191,7 @@ public class PptTopLevel extends Ppt {
     SUBEXIT
   }
 
-  /** Type of this program point */
+  /** Type of this program point. */
   public PptType type;
 
   /** Number of invariants after equality set processing for the last sample. */
@@ -225,7 +225,7 @@ public class PptTopLevel extends Ppt {
   /** Debug tracer for up-merging equality sets. */
   public static final Logger debugMerge = Logger.getLogger("daikon.PptTopLevel.merge");
 
-  /** Debug tracer for NIS suppression statistics */
+  /** Debug tracer for NIS suppression statistics. */
   public static final Logger debugNISStats = Logger.getLogger("daikon.PptTopLevel.NISStats");
 
   // public static final SimpleLog debug_varinfo = new SimpleLog(false);
@@ -241,7 +241,7 @@ public class PptTopLevel extends Ppt {
     return name;
   }
 
-  /** Permutation to swap the order of variables in a binary invariant */
+  /** Permutation to swap the order of variables in a binary invariant. */
   private static int[] permute_swap = new int[] {1, 0};
 
   /**
@@ -258,10 +258,10 @@ public class PptTopLevel extends Ppt {
 
   private int values_num_samples;
 
-  /** Keep track of which variables are valid (not missing) on each sample */
+  /** Keep track of which variables are valid (not missing) on each sample. */
   ModBitTracker mbtracker;
 
-  /** Keep track of values we have seen for each variable */
+  /** Keep track of values we have seen for each variable. */
   ValueSet[] value_sets;
 
   /**
@@ -291,8 +291,12 @@ public class PptTopLevel extends Ppt {
         "flowexpr.parse.error") // Checker Framework bug: splitters is a field in this class
     @EnsuresNonNullIf(result = true, expression = "splitters")
     public boolean hasNext(@GuardSatisfied CondIterator this) {
-      if (splitters == null) return false;
-      if (splitter_index >= splitters.size()) return false;
+      if (splitters == null) {
+        return false;
+      }
+      if (splitter_index >= splitters.size()) {
+        return false;
+      }
       return true;
     }
 
@@ -419,7 +423,7 @@ public class PptTopLevel extends Ppt {
     init_vars();
   }
 
-  /** Restore/Create interns when reading serialized object */
+  /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
     if (name != null) {
@@ -518,12 +522,12 @@ public class PptTopLevel extends Ppt {
     return num_arrays;
   }
 
-  /** Iterate through each variable at this ppt */
+  /** Iterate through each variable at this ppt. */
   public Iterator<VarInfo> var_info_iterator() {
     return Arrays.<VarInfo>asList(var_infos).iterator();
   }
 
-  /** Returns the full name of the ppt */
+  /** Returns the full name of the ppt. */
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied PptTopLevel this) {
@@ -635,7 +639,9 @@ public class PptTopLevel extends Ppt {
    * @param vis must not contain static constant VarInfos
    */
   void addVarInfos(VarInfo[] vis) {
-    if (vis.length == 0) return;
+    if (vis.length == 0) {
+      return;
+    }
     int old_length = var_infos.length;
     /*NNC:@MonotonicNonNull*/ VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
     assert mbtracker.num_samples() == 0;
@@ -1516,9 +1522,11 @@ public class PptTopLevel extends Ppt {
   // I can't decide which loop it's more efficient to make the inner loop:
   // the loop over samples or the loop over slices.
 
-  /** Add the specified slices to this ppt */
+  /** Add the specified slices to this ppt. */
   public void addViews(List<PptSlice> slices_vector) {
-    if (slices_vector.isEmpty()) return;
+    if (slices_vector.isEmpty()) {
+      return;
+    }
 
     // Don't modify the actual parameter
     @SuppressWarnings("unchecked")
@@ -1559,7 +1567,7 @@ public class PptTopLevel extends Ppt {
   /** Add a single slice to the views variable. */
   public void addSlice(PptSlice slice) {
 
-    // System.out.printf("Adding slice %s to ppt %s\n", slice, this);
+    // System.out.printf("Adding slice %s to ppt %s%n", slice, this);
 
     // Make sure the slice doesn't already exist (should never happen)
     PptSlice cslice = findSlice(slice.var_infos);
@@ -1723,7 +1731,7 @@ public class PptTopLevel extends Ppt {
 
       // Look for exact assignments
       for (Invariant inv : slice.invs) {
-        // System.out.printf("considering invariant %s, exact = %b\n",
+        // System.out.printf("considering invariant %s, exact = %b%n",
         //                   inv.format(), inv.isExact());
         if (inv.isExact() && inv.format_using(OutputFormat.DAIKON).startsWith(start)) {
           if (assignment_invs == null) {
@@ -1780,12 +1788,16 @@ public class PptTopLevel extends Ppt {
 
     // If there is no proto invariant, we can't look for it.  This happens
     // if the invariant is not enabled.
-    if (proto == null) return null;
+    if (proto == null) {
+      return null;
+    }
 
     // Get the slice and instantiate the possible antecedent over it
     PptSlice slice = get_temp_slice(v);
     Invariant antecedent_inv = proto.instantiate(slice);
-    if (antecedent_inv == null) return null;
+    if (antecedent_inv == null) {
+      return null;
+    }
 
     // Check to see if the antecedent is true
     if (slice.is_inv_true(antecedent_inv)) {
@@ -1805,7 +1817,9 @@ public class PptTopLevel extends Ppt {
     VarInfo leader = v.canonicalRep();
 
     DiscardInfo di = check_implied(imp_inv, leader, proto);
-    if (di == null) return null;
+    if (di == null) {
+      return null;
+    }
 
     // Build a new discardString that includes the variable equality
     String reason = di.discardString();
@@ -1822,12 +1836,16 @@ public class PptTopLevel extends Ppt {
 
     // If there is no prototype invariant, we can't look for it.  This happens
     // if the invariant is not enabled.
-    if (proto == null) return null;
+    if (proto == null) {
+      return null;
+    }
 
     // Get the slice and instantiate the possible antecedent over it
     PptSlice slice = get_temp_slice(v1, v2);
     Invariant antecedent_inv = proto.instantiate(slice);
-    if (antecedent_inv == null) return null;
+    if (antecedent_inv == null) {
+      return null;
+    }
 
     // Permute the antecedent if necessary
     if (v1.varinfo_index > v2.varinfo_index) antecedent_inv = antecedent_inv.permute(permute_swap);
@@ -1843,7 +1861,9 @@ public class PptTopLevel extends Ppt {
   public boolean check_implied(DiscardInfo di, VarInfo v1, VarInfo v2, @Prototype Invariant proto) {
 
     DiscardInfo di2 = check_implied(di.inv, v1, v2, proto);
-    if (di2 == null) return false;
+    if (di2 == null) {
+      return false;
+    }
 
     di.add_implied(di2.discardString());
     return true;
@@ -1860,7 +1880,9 @@ public class PptTopLevel extends Ppt {
     VarInfo leader2 = v2.canonicalRep();
 
     DiscardInfo di = check_implied(imp_inv, leader1, leader2, proto);
-    if (di == null) return null;
+    if (di == null) {
+      return null;
+    }
 
     // If the variables match the leader, the current reason is good
     if ((leader1 == v1) && (leader2 == v2)) {
@@ -1907,7 +1929,9 @@ public class PptTopLevel extends Ppt {
       inv = SubSetFloat.get_proto().instantiate(slice);
     }
 
-    if (inv == null) return false;
+    if (inv == null) {
+      return false;
+    }
 
     // If the varinfos are out of order swap
     if (v1.varinfo_index > v2.varinfo_index) inv = inv.permute(permute_swap);
@@ -1916,7 +1940,7 @@ public class PptTopLevel extends Ppt {
     return (slice.is_inv_true(inv));
   }
 
-  /** Returns whether or not v1 is always non-zero */
+  /** Returns whether or not v1 is always non-zero. */
   @SuppressWarnings("purity") // caching
   @Pure
   public boolean is_nonzero(VarInfo v) {
@@ -1925,23 +1949,27 @@ public class PptTopLevel extends Ppt {
     // invariant can't exist
     PptSlice slice = findSlice(v.canonicalRep());
     if (slice == null) {
-      // System.out.printf("No slice for variable %s [leader %s]\n", v,
+      // System.out.printf("No slice for variable %s [leader %s]%n", v,
       //                   v.canonicalRep());
       return false;
     }
 
     // Get a prototype of the invariant we are looking for
     @Prototype Invariant proto = NonZero.get_proto();
-    if (proto == null) return false;
+    if (proto == null) {
+      return false;
+    }
 
     Invariant inv = proto.instantiate(slice);
-    if (inv == null) return false;
+    if (inv == null) {
+      return false;
+    }
 
     // Debug print the other invariants in this slice.
     if (false && !slice.is_inv_true(inv)) {
-      System.out.printf("%d invariants for variable %s in ppt %s\n", slice.invs.size(), v, name());
+      System.out.printf("%d invariants for variable %s in ppt %s%n", slice.invs.size(), v, name());
       for (Invariant other_inv : slice.invs) {
-        System.out.printf("Invariant %s in ppt %s\n", other_inv.format(), name());
+        System.out.printf("Invariant %s in ppt %s%n", other_inv.format(), name());
       }
     }
 
@@ -1999,7 +2027,9 @@ public class PptTopLevel extends Ppt {
     // Return whether or not the invariant is true in the slice
     Invariant inv = proto.instantiate(slice);
     // System.out.printf("invariant = %s", inv);
-    if (inv == null) return false;
+    if (inv == null) {
+      return false;
+    }
     return (slice.is_inv_true(inv));
   }
 
@@ -2075,7 +2105,9 @@ public class PptTopLevel extends Ppt {
       throw new Error("unexpected type " + v1.rep_type);
     }
 
-    if (inv == null) return false;
+    if (inv == null) {
+      return false;
+    }
 
     // If the varinfos are out of order swap
     if (v1.varinfo_index > v2.varinfo_index) {
@@ -2126,7 +2158,9 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    if (inv == null) return false;
+    if (inv == null) {
+      return false;
+    }
 
     return (slice.is_inv_true(inv));
   }
@@ -2305,13 +2339,21 @@ public class PptTopLevel extends Ppt {
       return false;
     }
 
-    if (is_constant(var)) return false;
+    if (is_constant(var)) {
+      return false;
+    }
 
-    if (is_missing(var)) return false;
+    if (is_missing(var)) {
+      return false;
+    }
 
-    if (!var.isCanonical()) return false;
+    if (!var.isCanonical()) {
+      return false;
+    }
 
-    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant) return false;
+    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant) {
+      return false;
+    }
 
     return true;
   }
@@ -2330,11 +2372,17 @@ public class PptTopLevel extends Ppt {
       return false;
     }
 
-    if (is_missing(var)) return false;
+    if (is_missing(var)) {
+      return false;
+    }
 
-    if (!var.isCanonical()) return false;
+    if (!var.isCanonical()) {
+      return false;
+    }
 
-    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant) return false;
+    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant) {
+      return false;
+    }
 
     return true;
   }
@@ -2355,15 +2403,23 @@ public class PptTopLevel extends Ppt {
       return false;
     }
 
-    if (!is_var_ok_binary(var)) return false;
+    if (!is_var_ok_binary(var)) {
+      return false;
+    }
 
     // arrays are not allowed in ternary invariants
-    if (var.rep_type.isArray()) return false;
+    if (var.rep_type.isArray()) {
+      return false;
+    }
 
     // For now, variable must be integral or float
-    if (!var.file_rep_type.isIntegral() && !var.file_rep_type.isFloat()) return false;
+    if (!var.file_rep_type.isIntegral() && !var.file_rep_type.isFloat()) {
+      return false;
+    }
 
-    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant) return false;
+    if (PrintInvariants.dkconfig_static_const_infer && var.is_static_constant) {
+      return false;
+    }
 
     return true;
   }
@@ -2541,7 +2597,9 @@ public class PptTopLevel extends Ppt {
    */
   public PptSlice get_or_instantiate_slice(VarInfo vi) {
     PptSlice result = findSlice(vi);
-    if (result != null) return result;
+    if (result != null) {
+      return result;
+    }
 
     // We may do inference over static constants
     // assert ! vi.isStaticConstant();
@@ -2565,7 +2623,9 @@ public class PptTopLevel extends Ppt {
     }
 
     PptSlice result = findSlice(v1, v2);
-    if (result != null) return result;
+    if (result != null) {
+      return result;
+    }
 
     // We may do inference over static constants
     // assert ! v1.isStaticConstant();
@@ -2600,7 +2660,9 @@ public class PptTopLevel extends Ppt {
     }
 
     PptSlice result = findSlice(v1, v2, v3);
-    if (result != null) return result;
+    if (result != null) {
+      return result;
+    }
 
     // We may do inference over static constants
     // assert ! v1.isStaticConstant();
@@ -2674,11 +2736,15 @@ public class PptTopLevel extends Ppt {
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public void addImplications() {
 
-    if (PptSplitter.dkconfig_disable_splitting) return;
+    if (PptSplitter.dkconfig_disable_splitting) {
+      return;
+    }
 
     // Will this code be a problem at a parent point if one of its children
     // has no samples and thus no implications?
-    if (num_samples() == 0) return;
+    if (num_samples() == 0) {
+      return;
+    }
 
     // Add implications from each splitter
     if (splitters != null) {
@@ -2719,7 +2785,9 @@ public class PptTopLevel extends Ppt {
     if (debugEqualTo.isLoggable(Level.FINE)) {
       debugEqualTo.fine("PostProcessingEquality for: " + this.name());
     }
-    if (num_samples() == 0) return;
+    if (num_samples() == 0) {
+      return;
+    }
 
     assert equality_view != null : "ppt = " + ppt_name + " children = " + children;
     assert equality_view != null : "@AssumeAssertion(nullness): application invariant";
@@ -3313,7 +3381,7 @@ public class PptTopLevel extends Ppt {
       assert views.containsKey(this_key);
     }
 
-    // System.out.printf("equality for %s = %s\n", this, equality_view);
+    // System.out.printf("equality for %s = %s%n", this, equality_view);
 
     // We could check a lot more than just that slices are okay.  For
     // example, we could ensure that flow graph is correct.
@@ -3395,7 +3463,9 @@ public class PptTopLevel extends Ppt {
    */
   public String equality_sets_txt() {
 
-    if (equality_view == null) return "null";
+    if (equality_view == null) {
+      return "null";
+    }
 
     StringJoiner out = new StringJoiner(", ");
     for (Invariant inv : equality_view.invs) {
@@ -3460,7 +3530,7 @@ public class PptTopLevel extends Ppt {
 
     // First do this for any children.
     for (PptRelation rel : children) {
-      // System.out.printf("merging child %s[%08X], in_merge = %b\n",
+      // System.out.printf("merging child %s[%08X], in_merge = %b%n",
       //                   rel.child, System.identityHashCode(rel.child),
       //                   rel.child.in_merge);
       if (!rel.child.in_merge) rel.child.mergeInvs();
@@ -3497,9 +3567,9 @@ public class PptTopLevel extends Ppt {
     // We'll reuse one dummy ValueTuple throughout, side-effecting its mods
     // array.
     if (false) {
-      System.out.printf("in ppt %s\n", name());
-      System.out.printf("  num_tracevars = %d\n", num_tracevars);
-      System.out.printf("  mbtracker.num_vars() = %d\n", mbtracker.num_vars());
+      System.out.printf("in ppt %s%n", name());
+      System.out.printf("  num_tracevars = %d%n", num_tracevars);
+      System.out.printf("  mbtracker.num_vars() = %d%n", mbtracker.num_vars());
       for (int ii = 0; ii < var_infos.length; ii++) {
         System.out.printf(
             "    Variable %s, index = %d\n", var_infos[ii], var_infos[ii].value_index);
@@ -3586,7 +3656,7 @@ public class PptTopLevel extends Ppt {
       PptRelation c1 = children.get(first_child);
       debugMerge.fine("looking at " + c1.child.name() + " " + c1.child.num_samples());
       if (c1.child.num_samples() > 0) {
-        // System.out.printf("First child equality set: %s\n",
+        // System.out.printf("First child equality set: %s%n",
         //                     c1.child.equality_view);
         emap = c1.get_child_equalities_as_parent();
         if (debugMerge.isLoggable(Level.FINE)) { // check before stringifying emap
@@ -3642,7 +3712,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    // System.out.printf("New equality set = %s\n", equality_view);
+    // System.out.printf("New equality set = %s%n", equality_view);
 
     if (debugTimeMerge.isLoggable(Level.FINE)) {
       long duration = System.nanoTime() - startTime;
@@ -3725,7 +3795,7 @@ public class PptTopLevel extends Ppt {
         continue;
       }
       if (constants != null && constants.is_missing(l)) {
-        // System.out.printf("skipping leader %s in ppt %s, always missing\n",
+        // System.out.printf("skipping leader %s in ppt %s, always missing%n",
         //                   l, name());
         continue;
       }
@@ -3839,7 +3909,7 @@ public class PptTopLevel extends Ppt {
     for (Iterator<PptSlice> i = rel.child.views_iterator(); i.hasNext(); ) {
       PptSlice cslice = i.next();
 
-      // System.out.printf("Processing slice %s\n", cslice);
+      // System.out.printf("Processing slice %s%n", cslice);
 
       // Matching parent variable info.  Skip this slice if there isn't a
       // match for each variable (such as with an enter-exit relation)
@@ -3901,7 +3971,9 @@ public class PptTopLevel extends Ppt {
           break;
         }
       }
-      if (pv == null) return null;
+      if (pv == null) {
+        return null;
+      }
 
       // Make sure that the parent equality set is a subset of the child
       // equality set
@@ -3942,10 +4014,14 @@ public class PptTopLevel extends Ppt {
     debugConditional.fine("attempting merge conditional for " + name());
 
     // If there are no children, there is nothing to do
-    if (children.size() == 0) return;
+    if (children.size() == 0) {
+      return;
+    }
 
     // If there are no splitters there is nothing to do
-    if (!has_splitters()) return;
+    if (!has_splitters()) {
+      return;
+    }
 
     if (debugConditional.isLoggable(Level.FINE)) {
       debugConditional.fine("Merge conditional for " + name());
@@ -4128,7 +4204,7 @@ public class PptTopLevel extends Ppt {
     return permute;
   }
 
-  /** Debug print slice/inv count information to the specified logger */
+  /** Debug print slice/inv count information to the specified logger. */
   public void debug_print_slice_info(Logger log, String descr, List<PptSlice> slices) {
 
     int inv_cnt = 0;
@@ -4344,7 +4420,9 @@ public class PptTopLevel extends Ppt {
    */
   public static void print_equality_stats(Logger log, PptMap all_ppts) {
 
-    if (!log.isLoggable(Level.FINE)) return;
+    if (!log.isLoggable(Level.FINE)) {
+      return;
+    }
 
     boolean show_details = true;
 

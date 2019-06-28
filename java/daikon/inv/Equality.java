@@ -190,15 +190,25 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   @Override
   public String format_using(@GuardSatisfied Equality this, OutputFormat format) {
 
-    if (format.isJavaFamily()) return format_java_family(format);
+    if (format.isJavaFamily()) {
+      return format_java_family(format);
+    }
 
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return format_esc();
+    }
     // Commented out by MDE 7/27/2003.  I can't figure out whether
     // to just change JAVA_IDENTIFIER to IDENTIFIER, or whether other
     // changes are also necessary.
-    // if (format == OutputFormat.JAVA_IDENTIFIER) return format_java();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    // if (format == OutputFormat.JAVA_IDENTIFIER) {
+    //   return format_java();
+    // }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
     return format_unimplemented(format);
   }
 
@@ -531,7 +541,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public void pivot() {
     VarInfo newLeader = null;
     for (VarInfo var : vars) {
-      // System.out.printf("  processing %s\n", var);
+      // System.out.printf("  processing %s%n", var);
       if (newLeader == null) {
         newLeader = var;
       } else if (newLeader.isDerivedParamAndUninteresting()
@@ -556,7 +566,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         newLeader = var;
       }
     }
-    // System.out.printf("%s complexity = %d, %s complexity = %d\n", leaderCache,
+    // System.out.printf("%s complexity = %d, %s complexity = %d%n", leaderCache,
     //                    leaderCache.complexity(), newLeader,
     //                    newLeader.complexity());
     leaderCache = newLeader;

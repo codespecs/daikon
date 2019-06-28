@@ -204,7 +204,7 @@ public abstract class PptSlice extends Ppt {
     assert ArraysPlume.fnIsPermutation(permutation);
   }
 
-  /** Return an approximation of the number of samples seen on this slice */
+  /** Return an approximation of the number of samples seen on this slice. */
   public abstract int num_samples(@UnknownInitialization @GuardSatisfied PptSlice this);
 
   /** Return an approximation of the number of distinct values seen on this slice. */
@@ -221,7 +221,9 @@ public abstract class PptSlice extends Ppt {
     @Pure
     @Override
     public int compare(PptSlice slice1, PptSlice slice2) {
-      if (slice1 == slice2) return 0;
+      if (slice1 == slice2) {
+        return 0;
+      }
       // Don't do this assert, which prevents comparison across different Ppts.
       // (The assert check may be useful in some situations, though.)
       // assert slice1.parent == slice2.parent;
@@ -240,7 +242,9 @@ public abstract class PptSlice extends Ppt {
     @Pure
     @Override
     public int compare(PptSlice slice1, PptSlice slice2) {
-      if (slice1 == slice2) return 0;
+      if (slice1 == slice2) {
+        return 0;
+      }
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // assert slice1.parent == slice2.parent;
@@ -268,7 +272,9 @@ public abstract class PptSlice extends Ppt {
 
   /** Remove the invariants noted in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {
-    if (invs.size() == 0) return;
+    if (invs.size() == 0) {
+      return;
+    }
     List<Invariant> toRemove = new ArrayList<>();
     for (Invariant inv : invs) {
       if (omitTypes['r'] && inv.isReflexive()) toRemove.add(inv);
@@ -282,7 +288,7 @@ public abstract class PptSlice extends Ppt {
    */
   public void repCheck() {
 
-    // System.out.printf("Checking slice %s\n", this);
+    // System.out.printf("Checking slice %s%n", this);
 
     // Make sure that each variable is a leader.  There is one exception to this
     // rule.  Post processing of equality sets creates equality invariants between the
@@ -290,7 +296,7 @@ public abstract class PptSlice extends Ppt {
     // in binary (two variable) slices if it is in the same equality set as the
     // other variable.
     for (VarInfo vi : var_infos) {
-      // System.out.printf("equality set for vi %s = %s\n", vi, vi.equalitySet);
+      // System.out.printf("equality set for vi %s = %s%n", vi, vi.equalitySet);
       if (!vi.isCanonical()) {
         assert var_infos.length == 2 : this + " - " + vi;
         assert var_infos[0].canonicalRep() == var_infos[1].canonicalRep() : this + " - " + vi;

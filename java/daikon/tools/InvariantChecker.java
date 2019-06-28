@@ -301,17 +301,17 @@ public class InvariantChecker {
     InvariantFilters fi = InvariantFilters.defaultFilters();
     // Set<String> allInvariantsStr = new HashSet<>();
     Set<Invariant> allInvariants = new HashSet<>();
-    for (PptTopLevel ppt : ppts.all_ppts())
+    for (PptTopLevel ppt : ppts.all_ppts()) {
       for (PptSlice slice : ppt.views_iterable()) {
         for (Invariant inv : slice.invs) {
           if (doConf && inv.getConfidence() < Invariant.dkconfig_confidence_limit) {
-            // System.out.printf("inv ignored (conf): %s:%s\n", inv.ppt.name(),
+            // System.out.printf("inv ignored (conf): %s:%s%n", inv.ppt.name(),
             //                   inv.format());
             continue;
           }
 
           if (doFilter && fi.shouldKeep(inv) == null) {
-            // System.out.printf("inv ignored (filter): %s:%s\n",
+            // System.out.printf("inv ignored (filter): %s:%s%n",
             //                     inv.ppt.name(), inv.format());
             continue;
           }
@@ -326,6 +326,7 @@ public class InvariantChecker {
           // allInvariantsStr.add(n);
         }
       }
+    }
 
     // Read and process the data trace files
     FileIO.Processor processor = new InvariantCheckProcessor();
@@ -353,7 +354,7 @@ public class InvariantChecker {
             + ".");
     if (false) {
       for (Invariant inv : failedInvariants) {
-        System.out.printf("+%s:%s\n", inv.ppt.name(), inv.format());
+        System.out.printf("+%s:%s%n", inv.ppt.name(), inv.format());
       }
     }
   }
@@ -420,7 +421,7 @@ public class InvariantChecker {
           add(ec.ppt, ec.vt, all_ppts);
         } else { // didn't find the enter
           if (!quiet) {
-            System.out.printf("couldn't find enter for nonce %d at ppt %s\n", nonce, ppt.name());
+            System.out.printf("couldn't find enter for nonce %d at ppt %s%n", nonce, ppt.name());
           }
           return;
         }
@@ -454,7 +455,9 @@ public class InvariantChecker {
       }
 
       // If the point has no variables, skip it
-      if (ppt.var_infos.length == 0) return;
+      if (ppt.var_infos.length == 0) {
+        return;
+      }
 
       // We should have received sample here before, or there is nothing
       // to check.
@@ -504,7 +507,7 @@ public class InvariantChecker {
 
           // Yoav added
           if (!activeInvariants.contains(inv)) {
-            // System.out.printf("skipping invariant %s:%s\n", inv.ppt.name(),
+            // System.out.printf("skipping invariant %s:%s%n", inv.ppt.name(),
             //                   inv.format());
             continue;
           }

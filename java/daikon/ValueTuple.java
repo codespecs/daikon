@@ -387,7 +387,9 @@ public final class ValueTuple implements Cloneable {
   @Pure
   @Override
   public boolean equals(@GuardSatisfied ValueTuple this, @GuardSatisfied @Nullable Object obj) {
-    if (!(obj instanceof ValueTuple)) return false;
+    if (!(obj instanceof ValueTuple)) {
+      return false;
+    }
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);
   }
@@ -482,7 +484,9 @@ public final class ValueTuple implements Cloneable {
   }
 
   public static String valToString(@Nullable Object val) {
-    if (val == null) return "null";
+    if (val == null) {
+      return "null";
+    }
     if (val instanceof long[]) {
       return (Arrays.toString((long[]) val));
     } else if (val instanceof int[]) {

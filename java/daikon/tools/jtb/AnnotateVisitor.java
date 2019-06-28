@@ -53,7 +53,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   private static final boolean debug = false;
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   public static final String JML_START_COMMENT = "/*@" + lineSep;
   public static final String JML_END_COMMENT = "@*/" + lineSep;
@@ -393,10 +393,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         Annotate.debug.fine("InsertBehavior visitor visiting a NodeListOptional");
         Annotate.debug.fine("With " + nlo.nodes.size() + " nodes");
 
-        if (nlo.present())
+        if (nlo.present()) {
           for (Enumeration<Node> e = nlo.elements(); e.hasMoreElements(); ) {
             e.nextElement().accept(this);
           }
+        }
 
         if (!behaviorInserted) {
           Annotate.debug.fine("addComment from nlo");

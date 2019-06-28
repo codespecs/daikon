@@ -48,7 +48,7 @@ class DCInstrument extends InstructionListUtils {
   protected @Nullable ClassLoader loader;
   protected boolean constructor_is_initialized;
 
-  /** Local that stores the tag frame for the current method */
+  /** Local that stores the tag frame for the current method. */
   protected LocalVariableGen tag_frame_local;
 
   // Argument descriptors
@@ -168,7 +168,9 @@ class DCInstrument extends InstructionListUtils {
 
     @EnsuresNonNullIf(result = true, expression = "#1")
     boolean equals(@GuardSatisfied MethodDef this, String name, Type[] arg_types) {
-      if (!name.equals(this.name)) return false;
+      if (!name.equals(this.name)) {
+        return false;
+      }
       if (this.arg_types.length != arg_types.length) {
         return false;
       }
@@ -184,7 +186,9 @@ class DCInstrument extends InstructionListUtils {
     @Pure
     @Override
     public boolean equals(@GuardSatisfied MethodDef this, @GuardSatisfied @Nullable Object obj) {
-      if (!(obj instanceof MethodDef)) return false;
+      if (!(obj instanceof MethodDef)) {
+        return false;
+      }
       MethodDef md = (MethodDef) obj;
       return equals(md.name, md.arg_types);
     }
@@ -200,7 +204,7 @@ class DCInstrument extends InstructionListUtils {
     }
   }
 
-  /** Class that defines a range of byte code within a method */
+  /** Class that defines a range of byte code within a method. */
   static class CodeRange {
     int start_pc;
     int len;
@@ -1066,7 +1070,9 @@ class DCInstrument extends InstructionListUtils {
   /** Adds a try/catch block around the entire method. */
   public void install_exception_handler(MethodGen mg) {
 
-    if (global_catch_il == null) return;
+    if (global_catch_il == null) {
+      return;
+    }
 
     InstructionList cur_il = mg.getInstructionList();
     InstructionHandle start = global_exception_handler.getStartPC();
@@ -1078,7 +1084,9 @@ class DCInstrument extends InstructionListUtils {
     global_catch_il = null;
     global_exception_handler = null;
 
-    if (!needStackMap) return;
+    if (!needStackMap) {
+      return;
+    }
 
     int exc_offset = exc.getPosition();
 
@@ -1160,7 +1168,9 @@ class DCInstrument extends InstructionListUtils {
 
     insert_at_method_start(mg, nl);
 
-    if (!needStackMap) return;
+    if (!needStackMap) {
+      return;
+    }
 
     // For Java 7 and beyond the StackMapTable is part of the
     // verification process.  We need to create and or update it to
@@ -2250,20 +2260,26 @@ class DCInstrument extends InstructionListUtils {
     return il;
   }
 
-  /** Returns whether or not the specified classname is instrumented */
+  /** Returns whether or not the specified classname is instrumented. */
   boolean callee_instrumented(@ClassGetName String classname) {
 
-    // System.out.printf("Checking callee instrumented on %s\n", classname);
+    // System.out.printf("Checking callee instrumented on %s%n", classname);
 
     // Our copy of daikon.util is not instrumented.  It would be odd, though,
     // to see calls to this.
-    if (classname.startsWith("daikon.util")) return false;
+    if (classname.startsWith("daikon.util")) {
+      return false;
+    }
 
     // Special case the execution trace tool.
-    // if (classname.startsWith("minst.Minst")) return false;
+    // if (classname.startsWith("minst.Minst")) {
+    //   return false;
+    // }
 
     // If its not a JDK class, presume its instrumented.
-    if (!BcelUtil.inJdk(classname)) return true;
+    if (!BcelUtil.inJdk(classname)) {
+      return true;
+    }
 
     // We have decided not to use the instrumented version of Random as
     // the method generates values based on an initial seed value.
@@ -2272,7 +2288,9 @@ class DCInstrument extends InstructionListUtils {
     // set when they should be distinct.
     // NOTE: If we find other classes that should not use the instrumented
     // versions, we should consider making this a searchable list.
-    if (classname.equals("java.util.Random")) return false;
+    if (classname.equals("java.util.Random")) {
+      return false;
+    }
 
     // Should we test the full_instrumentation flag?
     // or just assume if a JDK method/class is on omit list we
@@ -2567,7 +2585,9 @@ class DCInstrument extends InstructionListUtils {
   InstructionList load_store_field(MethodGen mg, FieldInstruction f) {
 
     Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) return null;
+    if (field_type instanceof ReferenceType) {
+      return null;
+    }
     ObjectType obj_type = (ObjectType) f.getReferenceType(pool);
     InstructionList il = new InstructionList();
     String classname = obj_type.getClassName();
@@ -2656,7 +2676,9 @@ class DCInstrument extends InstructionListUtils {
   InstructionList load_store_static(FieldInstruction f, String method) {
 
     Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) return null;
+    if (field_type instanceof ReferenceType) {
+      return null;
+    }
     String name = f.getClassName(pool) + "." + f.getFieldName(pool);
     // System.out.printf("static field name for %s = %s%n", f, name);
 
@@ -2720,7 +2742,9 @@ class DCInstrument extends InstructionListUtils {
     if (obj_type.getClassName().equals(orig_class.getClassName())) {
       int fcnt = 0;
       for (Field f : orig_class.getFields()) {
-        if (f.getName().equals(name)) return fcnt;
+        if (f.getName().equals(name)) {
+          return fcnt;
+        }
         if (f.getType() instanceof BasicType) fcnt++;
       }
       throw new Error("Can't find " + name + " in " + obj_type);
@@ -2738,7 +2762,9 @@ class DCInstrument extends InstructionListUtils {
     // Loop through all of the fields, counting the number of primitive fields
     int fcnt = 0;
     for (java.lang.reflect.Field f : obj_class.getDeclaredFields()) {
-      if (f.getName().equals(name)) return fcnt;
+      if (f.getName().equals(name)) {
+        return fcnt;
+      }
       if (f.getType().isPrimitive()) fcnt++;
     }
     throw new Error("Can't find " + name + " in " + obj_class);
@@ -2839,7 +2865,9 @@ class DCInstrument extends InstructionListUtils {
     int last_line_number = 0;
     boolean foundLine;
 
-    if (il == null) return null;
+    if (il == null) {
+      return null;
+    }
 
     for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
       foundLine = false;
@@ -3059,12 +3087,16 @@ class DCInstrument extends InstructionListUtils {
     String[] sa = method_id.split(":");
     String m_classname = sa[0];
     String m_name = sa[1];
-    // System.out.printf("has_specified_method: %s:%s - %s.%s\n", m_classname,
+    // System.out.printf("has_specified_method: %s:%s - %s.%s%n", m_classname,
     //                    m_name, classname, m.getName());
 
-    if (!m_classname.equals(classname)) return false;
+    if (!m_classname.equals(classname)) {
+      return false;
+    }
 
-    if (!m_name.equals(m.getName())) return false;
+    if (!m_name.equals(m.getName())) {
+      return false;
+    }
 
     return true;
   }
@@ -3091,7 +3123,7 @@ class DCInstrument extends InstructionListUtils {
 
     // If any of the omit patterns match, exclude the ppt
     for (Pattern p : DynComp.ppt_omit_pattern) {
-      // System.out.printf("should_track: pattern '%s' on ppt '%s'\n",
+      // System.out.printf("should_track: pattern '%s' on ppt '%s'%n",
       //                    p, pptname);
       if (p.matcher(pptname).find()) {
         debug_track.log("  Omitting program point %s%n", pptname);
@@ -3100,7 +3132,9 @@ class DCInstrument extends InstructionListUtils {
     }
 
     // If there are no select patterns, everything matches
-    if (DynComp.ppt_select_pattern.size() == 0) return true;
+    if (DynComp.ppt_select_pattern.size() == 0) {
+      return true;
+    }
 
     // One of the select patterns must match the ppt or the class to include
     for (Pattern p : DynComp.ppt_select_pattern) {
@@ -3139,7 +3173,7 @@ class DCInstrument extends InstructionListUtils {
         + DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
   }
 
-  /** Convenience function to call a static method in DCRuntime */
+  /** Convenience function to call a static method in DCRuntime. */
   protected InvokeInstruction dcr_call(String method_name, Type ret_type, Type[] arg_types) {
 
     return ifact.createInvoke(
@@ -3176,9 +3210,12 @@ class DCInstrument extends InstructionListUtils {
    */
   InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (debug_dup.enabled)
+    if (debug_dup.enabled) {
       debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
-    if (!is_primitive(top)) return null;
+    }
+    if (!is_primitive(top)) {
+      return null;
+    }
     String method = "dup_x1";
     if (!is_primitive(stack.peek(1))) method = "dup";
     return build_il(dcr_call(method, Type.VOID, Type.NO_ARGS), inst);
@@ -3201,8 +3238,10 @@ class DCInstrument extends InstructionListUtils {
       if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup2_x1";
       else if (is_primitive(stack.peek(1))) op = "dup2";
       else if (is_primitive(stack.peek(2))) op = "dup_x1";
-      else // neither value 1 nor value 2 is primitive
-      op = "dup";
+      else {
+        // neither value 1 nor value 2 is primitive
+        op = "dup";
+      }
     } else { // top is not primitive
       if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) {
         op = "dup_x1";
@@ -3230,8 +3269,10 @@ class DCInstrument extends InstructionListUtils {
     if (is_category2(top)) op = "dup";
     else if (is_primitive(top) && is_primitive(stack.peek(1))) op = "dup2";
     else if (is_primitive(top) || is_primitive(stack.peek(1))) op = "dup";
-    else // both of the top two items are not primitive, nothing to dup
-    op = null;
+    else {
+      // both of the top two items are not primitive, nothing to dup
+      op = null;
+    }
     if (debug_dup.enabled) debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
@@ -3250,7 +3291,9 @@ class DCInstrument extends InstructionListUtils {
       if (is_category2(stack.peek(1))) op = "dup_x1";
       else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
       else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
-      else op = "dup";
+      else {
+        op = "dup";
+      }
     }
     if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     if (op != null) {
@@ -3269,8 +3312,10 @@ class DCInstrument extends InstructionListUtils {
       if (is_category2(stack.peek(1))) op = "dup_x1";
       else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
       else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
-      else // both values are references
-      op = "dup";
+      else {
+        // both values are references
+        op = "dup";
+      }
     } else if (is_primitive(top)) {
       if (is_category2(stack.peek(1))) {
         throw new Error("not supposed to happen " + stack_contents(stack, 3));
@@ -3283,13 +3328,17 @@ class DCInstrument extends InstructionListUtils {
       } else if (is_primitive(stack.peek(1))) {
         if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup2_x2";
         else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup2_x1";
-        else // both 2 and 3 are references
-        op = "dup2";
+        else {
+          // both 2 and 3 are references
+          op = "dup2";
+        }
       } else { // 1 is a reference
         if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
         else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
-        else // both 2 and 3 are references
-        op = "dup";
+        else {
+          // both 2 and 3 are references
+          op = "dup";
+        }
       }
     } else { // top is a reference
       if (is_category2(stack.peek(1))) {
@@ -3303,8 +3352,10 @@ class DCInstrument extends InstructionListUtils {
       } else if (is_primitive(stack.peek(1))) {
         if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
         else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
-        else // both 2 and 3 are references
-        op = "dup";
+        else {
+          // both 2 and 3 are references
+          op = "dup";
+        }
       } else { // 1 is a reference
         op = null; // nothing to dup
       }
@@ -3368,8 +3419,12 @@ class DCInstrument extends InstructionListUtils {
     Type type;
     if (inst instanceof LDC) // LDC_W extends LDC
     type = ((LDC) inst).getType(pool);
-    else type = ((LDC2_W) inst).getType(pool);
-    if (!(type instanceof BasicType)) return null;
+    else {
+      type = ((LDC2_W) inst).getType(pool);
+    }
+    if (!(type instanceof BasicType)) {
+      return null;
+    }
     return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
   }
 
@@ -3510,15 +3565,23 @@ class DCInstrument extends InstructionListUtils {
 
     if (loader == null) loader = DCInstrument.class.getClassLoader();
 
-    if (t == Type.BOOLEAN) return Boolean.TYPE;
-    else if (t == Type.BYTE) return Byte.TYPE;
-    else if (t == Type.CHAR) return Character.TYPE;
-    else if (t == Type.DOUBLE) return Double.TYPE;
-    else if (t == Type.FLOAT) return Float.TYPE;
-    else if (t == Type.INT) return Integer.TYPE;
-    else if (t == Type.LONG) return Long.TYPE;
-    else if (t == Type.SHORT) return Short.TYPE;
-    else if (t instanceof ObjectType || t instanceof ArrayType) {
+    if (t == Type.BOOLEAN) {
+      return Boolean.TYPE;
+    } else if (t == Type.BYTE) {
+      return Byte.TYPE;
+    } else if (t == Type.CHAR) {
+      return Character.TYPE;
+    } else if (t == Type.DOUBLE) {
+      return Double.TYPE;
+    } else if (t == Type.FLOAT) {
+      return Float.TYPE;
+    } else if (t == Type.INT) {
+      return Integer.TYPE;
+    } else if (t == Type.LONG) {
+      return Long.TYPE;
+    } else if (t == Type.SHORT) {
+      return Short.TYPE;
+    } else if (t instanceof ObjectType || t instanceof ArrayType) {
       @ClassGetName String sig = typeToClassGetName(t);
       try {
         return Class.forName(sig, false, loader);
@@ -3587,7 +3650,7 @@ class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createLoad(Type.INT, 0));
       il.append(ifact.createConstant(1));
       il.append(new IADD());
-      // System.out.printf("adding 1 in %s.%s\n", gen.getClassName(),
+      // System.out.printf("adding 1 in %s.%s%n", gen.getClassName(),
       //                   mg.getName());
 
     } else { // normal call
@@ -3683,7 +3746,7 @@ class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createLoad(Type.INT, 0));
       il.append(ifact.createConstant(1));
       il.append(new IADD());
-      // System.out.printf("adding 1 in %s.%s\n", gen.getClassName(),
+      // System.out.printf("adding 1 in %s.%s%n", gen.getClassName(),
       //                   mg.getName());
 
     } else { // normal call
@@ -3724,10 +3787,11 @@ class DCInstrument extends InstructionListUtils {
    */
   public boolean tag_fields_ok(MethodGen mg, @ClassGetName String classname) {
 
-    if (BcelUtil.isConstructor(mg))
+    if (BcelUtil.isConstructor(mg)) {
       if (!constructor_is_initialized) {
         return false;
       }
+    }
 
     if (!jdk_instrumented) {
       if (BcelUtil.inJdk(classname)) {
@@ -3798,7 +3862,9 @@ class DCInstrument extends InstructionListUtils {
    */
   public List<MethodGen> create_tag_accessors(ClassGen gen) {
 
-    if (gen.isInterface()) return null;
+    if (gen.isInterface()) {
+      return null;
+    }
 
     String classname = gen.getClassName();
     List<MethodGen> mlist = new ArrayList<>();
@@ -4190,7 +4256,7 @@ class DCInstrument extends InstructionListUtils {
     il.dispose();
   }
 
-  /** Returns the tag accessor method name */
+  /** Returns the tag accessor method name. */
   public static String tag_method_name(String typ, String classname, String fname) {
     return fname + "_" + classname.replace('.', '_') + "__$" + typ;
   }
@@ -4198,17 +4264,21 @@ class DCInstrument extends InstructionListUtils {
   public void add_dcomp_arg(MethodGen mg) {
 
     // Don't modify main or the JVM won't be able to find it.
-    if (BcelUtil.isMain(mg)) return;
+    if (BcelUtil.isMain(mg)) {
+      return;
+    }
 
     // Don't modify class init methods, they don't take arguments
-    if (BcelUtil.isClinit(mg)) return;
+    if (BcelUtil.isClinit(mg)) {
+      return;
+    }
 
     // Add the dcomp marker argument to indicate this is the
     // instrumented version of the method.
     add_new_parameter(mg, "marker", dcomp_marker);
   }
 
-  /** Returns whether or not the method is defined in Object */
+  /** Returns whether or not the method is defined in Object. */
   @Pure
   public boolean is_object_method(String method_name, Type[] arg_types) {
     for (MethodDef md : obj_methods) {

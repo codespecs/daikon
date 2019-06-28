@@ -175,7 +175,9 @@ public class LemmaStack {
       restartProver();
       return '?';
     }
-    if (cc.unknown) return '?';
+    if (cc.unknown) {
+      return '?';
+    }
     return cc.valid ? 'T' : 'F';
   }
 

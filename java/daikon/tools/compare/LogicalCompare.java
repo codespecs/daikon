@@ -183,7 +183,7 @@ public class LogicalCompare {
           || simp.indexOf("OutputFormat:Simplify") != -1
           || simp.indexOf("Simplify not implemented") != -1) {
         // Noisy, since we should be able to handle most invariants now
-        System.out.println("Bad Simplify formatting:\n  " + inv.format() + "\n  " + simp);
+        System.out.println("Bad Simplify formatting:%n  " + inv.format() + "%n  " + simp);
         continue;
       }
       if (inv.format_using(OutputFormat.DAIKON).indexOf("warning: too few samples") != -1) {
@@ -214,7 +214,9 @@ public class LogicalCompare {
           VarInfo var2 = comp.var2();
           boolean vars_are_same =
               var1.prestate_name().equals(var2.name()) || var2.prestate_name().equals(var1.name());
-          if (vars_are_same) return false;
+          if (vars_are_same) {
+            return false;
+          }
         }
         //         if (inv instanceof OneOf || inv instanceof OneOfString ||
         //             inv instanceof OneOfString)

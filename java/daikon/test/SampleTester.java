@@ -194,7 +194,9 @@ public class SampleTester extends TestCase {
       else if (ltype.equals("vars")) proc_vars(cmd);
       else if (ltype.equals("data")) proc_data(cmd, fp, filename);
       else if (ltype.equals("assert")) proc_assert(cmd);
-      else parse_error("unknown line type: " + ltype);
+      else {
+        parse_error("unknown line type: " + ltype);
+      }
     }
   }
 

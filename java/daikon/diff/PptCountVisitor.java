@@ -50,7 +50,9 @@ public class PptCountVisitor extends PrintAllVisitor {
     @SuppressWarnings("nullness") // application invariant: calling context
     @NonNull PptTopLevel ppt = node.getPpt1();
 
-    if ((ppt instanceof PptConditional)) return;
+    if ((ppt instanceof PptConditional)) {
+      return;
+    }
     //        else super.visit (node);
 
     boolean report = countReport(node);
@@ -113,7 +115,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return targetCnt > GOAL_REQUIREMENT_NUMBER;
   }
 
-  /** Anytime something matches, we should score it has correct */
+  /** Anytime something matches, we should score it has correct. */
   @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
@@ -189,7 +191,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return cut + lastPart.indexOf("(");
   }
 
-  /** Returns true if the pair of invariants should be printed */
+  /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
       result = true,
       expression = {"#1", "#2"})
@@ -230,7 +232,9 @@ public class PptCountVisitor extends PrintAllVisitor {
    */
   private static boolean filterOut(@Nullable Invariant inv) {
 
-    if (inv == null) return true;
+    if (inv == null) {
+      return true;
+    }
     String str = inv.format_using(OutputFormat.JAVA);
     StringTokenizer st = new StringTokenizer(str, " ()");
     while (st.hasMoreTokens()) {
@@ -296,7 +300,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return (double) correctSet.size() / cnt.size();
   }
 
-  /** Prints the results of the correct set in a human-readable format */
+  /** Prints the results of the correct set in a human-readable format. */
   public void printFinal() {
 
     System.out.println("CORRECT_FOUND: ");

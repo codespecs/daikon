@@ -202,7 +202,7 @@ public final class PrintInvariants {
 
   private static final String lineSep = Global.lineSep;
 
-  /** Regular expression that ppts must match to be printed */
+  /** Regular expression that ppts must match to be printed. */
   private static @Nullable Pattern ppt_regexp;
 
   /**
@@ -217,15 +217,15 @@ public final class PrintInvariants {
    * and if the output format is JAVA, and the invariant prints as "x == null", the results of
    * print_invariant would look something like:
    *
-   * <pre>
-   * &lt;INVINFO&gt;
-   * &lt;INV&gt; x == null &lt;/INV&gt;
-   * &lt;SAMPLES&gt; 100 &lt;/SAMPLES&gt;
-   * &lt;DAIKON&gt; x == null &lt;/DAIKON&gt;
-   * &lt;DAIKONCLASS&gt; daikon.inv.unary.scalar.NonZero &lt;/DAIKONCLASS&gt;
-   * &lt;METHOD&gt; foo() &lt;/METHOD&gt;
-   * &lt;/INVINFO&gt;
-   * </pre>
+   * <pre>{@code
+   * <INVINFO>
+   * <INV> x == null </INV>
+   * <SAMPLES> 100 </SAMPLES>
+   * <DAIKON> x == null </DAIKON>
+   * <DAIKONCLASS> daikon.inv.unary.scalar.NonZero </DAIKONCLASS>
+   * <METHOD> foo() </METHOD>
+   * </INVINFO>
+   * }</pre>
    *
    * The above output is actually all in one line, although in this comment it's broken up into
    * multiple lines for clarity.
@@ -666,7 +666,9 @@ public final class PrintInvariants {
         temp = arg.substring(arg.indexOf('@')); // in case the pptname has a < in it
       else if (arg.indexOf('<') != -1) temp = arg.substring(arg.indexOf('<'));
       else if (arg.indexOf('@') != -1) temp = arg.substring(arg.indexOf('@'));
-      else return;
+      else {
+        return;
+      }
     }
     firstChar = temp.charAt(0);
 
@@ -787,10 +789,10 @@ public final class PrintInvariants {
 
       if (false) {
         VarInfo v = ppt.find_var_by_name("size(/map.tiles[])");
-        System.out.printf("Found variable %s\n", v);
+        System.out.printf("Found variable %s%n", v);
         if (v != null) {
           List<Invariant> invs = ppt.find_assignment_inv(v);
-          System.out.printf("assignment invs = %s\n", invs);
+          System.out.printf("assignment invs = %s%n", invs);
         }
       }
 
@@ -871,7 +873,7 @@ public final class PrintInvariants {
 
     if (false) {
       for (PptSlice slice : ppt.viewsAsCollection()) {
-        System.out.printf("slice = %s, inv cnt = %d\n", slice, slice.invs.size());
+        System.out.printf("slice = %s, inv cnt = %d%n", slice, slice.invs.size());
       }
     }
     // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
@@ -1589,17 +1591,19 @@ public final class PrintInvariants {
     }
   }
 
-  /** Prints all of the binary invariants over the specified variables */
+  /** Prints all of the binary invariants over the specified variables. */
   public static void print_all_invs(PptTopLevel ppt, VarInfo v1, VarInfo v2, String indent) {
     // Get any invariants in the local slice
     PptSlice slice = ppt.findSlice(v1, v2);
     print_all_invs(slice, indent);
   }
 
-  /** Prints all of the invariants in the specified slice */
+  /** Prints all of the invariants in the specified slice. */
   public static void print_all_invs(@Nullable PptSlice slice, String indent) {
 
-    if (slice == null) return;
+    if (slice == null) {
+      return;
+    }
 
     for (Invariant inv : slice.invs) {
       System.out.printf("%s%s [%s]%n", indent, inv.format(), inv.getClass().getSimpleName());
@@ -1705,7 +1709,7 @@ public final class PrintInvariants {
     for (PptTopLevel ppt : ppts.pptIterable()) {
       inv_cnt += ppt.invariant_cnt();
     }
-    System.out.printf("%d invariants with suppressions removed\n", inv_cnt);
+    System.out.printf("%d invariants with suppressions removed%n", inv_cnt);
 
     // Count invariants again, adjusting the count for equality sets
     inv_cnt = 0;
@@ -1720,6 +1724,6 @@ public final class PrintInvariants {
         inv_cnt += cnt;
       }
     }
-    System.out.printf("%d invariants with equality removed\n", inv_cnt);
+    System.out.printf("%d invariants with equality removed%n", inv_cnt);
   }
 }

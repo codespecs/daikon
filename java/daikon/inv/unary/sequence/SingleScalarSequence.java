@@ -32,7 +32,7 @@ public abstract class SingleScalarSequence extends SingleSequence {
         && vis[0].file_rep_type.isArray());
   }
 
-  /** Returns whether or not the specified types are valid */
+  /** Returns whether or not the specified types are valid. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);

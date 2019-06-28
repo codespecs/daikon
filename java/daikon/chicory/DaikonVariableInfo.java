@@ -1,7 +1,6 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.util.ReflectionPlume;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -40,6 +39,7 @@ import org.plumelib.signature.Signatures;
  * class. Its subtypes are designed to represent specific types of variables, such as arguments,
  * arrays, etc.
  */
+@SuppressWarnings("deprecation") // uses ReflectionPlume from daikon.util
 public abstract class DaikonVariableInfo
     implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo> {
 
@@ -49,13 +49,13 @@ public abstract class DaikonVariableInfo
   /** The variable name. Sensible for all subtypes except RootInfo. */
   private final @Interned String name;
 
-  /** The child nodes */
+  /** The child nodes. */
   public List<DaikonVariableInfo> children;
 
-  /** True iff this variable is an array */
+  /** True iff this variable is an array. */
   protected final boolean isArray;
 
-  /** Print debug information about the variables */
+  /** Print debug information about the variables. */
   static SimpleLog debug_vars = new SimpleLog(false);
 
   private static SimpleLog debug_array = new SimpleLog(true);
@@ -85,7 +85,7 @@ public abstract class DaikonVariableInfo
 
   public static final String class_suffix_relative_name = class_suffix.substring(1);
 
-  /** Determines whether or not synthetic variables should be ignored */
+  /** Determines whether or not synthetic variables should be ignored. */
   private static boolean skip_synthetic = true;
 
   /**
@@ -107,13 +107,13 @@ public abstract class DaikonVariableInfo
   /** Arguments used to create a function. Access via {@link #get_func_args()} method. */
   @Nullable String function_args = null;
 
-  /** True iff the DeclWriter should print this variable */
+  /** True iff the DeclWriter should print this variable. */
   protected boolean declShouldPrint = true;
 
-  /** True iff the DTraceWriter should print this variable */
+  /** True iff the DTraceWriter should print this variable. */
   protected boolean dtraceShouldPrint = true;
 
-  /** True iff the DTraceWriter should print the children of this variable */
+  /** True iff the DTraceWriter should print the children of this variable. */
   protected boolean dtraceShouldPrintChildren = true;
 
   /**
@@ -130,7 +130,7 @@ public abstract class DaikonVariableInfo
   protected static Set<String> ppt_statics = new LinkedHashSet<>();
 
   /**
-   * Constructs a non-array type DaikonVariableInfo object
+   * Constructs a non-array type DaikonVariableInfo object.
    *
    * @param theName the name of the variable
    */
@@ -139,7 +139,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Constructs a DaikonVariableInfo object
+   * Constructs a DaikonVariableInfo object.
    *
    * @param theName the variable's name
    * @param arr true iff the variable is an array
@@ -166,7 +166,9 @@ public abstract class DaikonVariableInfo
 
   /** Returns the name of this variable. */
   public @Nullable String getName(@GuardSatisfied DaikonVariableInfo this) {
-    if (name == null) return null;
+    if (name == null) {
+      return null;
+    }
 
     if (Chicory.new_decl_format) {
       return name.replaceFirst("\\[]", "[..]");
@@ -199,7 +201,7 @@ public abstract class DaikonVariableInfo
     return getClass().getName() + ":" + getName();
   }
 
-  /** Returns a string representative of this node and its children */
+  /** Returns a string representative of this node and its children. */
   public String treeString() {
     return getStringBuilder(new StringBuilder("--")).toString();
   }
@@ -234,7 +236,7 @@ public abstract class DaikonVariableInfo
     return Collections.unmodifiableList(children).iterator();
   }
 
-  /** Returns the complete tree of variables as a list */
+  /** Returns the complete tree of variables as a list. */
   public List<DaikonVariableInfo> tree_as_list() {
     List<DaikonVariableInfo> list = new ArrayList<>();
     list.add(this);
@@ -591,13 +593,14 @@ public abstract class DaikonVariableInfo
               // Get class type of the class variable
               try {
                 sibClass =
-                    ReflectionPlume.classForName(Signatures.binaryNameToClassGetName(sibType));
+                    daikon.util.ReflectionPlume.classForName(
+                        Signatures.binaryNameToClassGetName(sibType));
               } catch (ClassNotFoundException e) {
                 throw new Error(e);
               }
 
               // Add node if the class variable can be used as the pure method's parameter
-              if (ReflectionPlume.isSubtype(sibClass, meth.arg_types[0])) {
+              if (daikon.util.ReflectionPlume.isSubtype(sibClass, meth.arg_types[0])) {
                 DaikonVariableInfo[] arg = {sib};
                 StringBuilder buf = new StringBuilder();
                 DaikonVariableInfo newChild =
@@ -848,16 +851,27 @@ public abstract class DaikonVariableInfo
     if (type == null) {
       return "hashcode";
     } else if (type.isPrimitive()) {
-      if (type.equals(Double.TYPE)) return "double";
-      else if (type.equals(Float.TYPE)) return "double";
-      else if (type.equals(Boolean.TYPE)) return "boolean";
-      else return "int";
+      if (type.equals(Double.TYPE)) {
+        return "double";
+      } else if (type.equals(Float.TYPE)) {
+        return "double";
+      } else if (type.equals(Boolean.TYPE)) {
+        return "boolean";
+      } else {
+        return "int";
+      }
     } else if (type.getName().equals("java.lang.String")) {
       // if we are printing the actual array, the rep type is "java.lang.String"
-      if (true) return "hashcode";
-      if (asArray) return "java.lang.String";
+      if (true) {
+        return "hashcode";
+      }
+      if (asArray) {
+        return "java.lang.String";
+      }
       // otherwise, it is just a hashcode
-      else return "hashcode";
+      else {
+        return "hashcode";
+      }
     } else {
       return "hashcode";
     }
@@ -877,7 +891,9 @@ public abstract class DaikonVariableInfo
     // For some reason, abstracts seems to be set on arrays
     // and primitives.  This is a temporary fix to get things
     // close.
-    if (type.isPrimitive()) return false;
+    if (type.isPrimitive()) {
+      return false;
+    }
     if (type.isArray()) {
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
@@ -916,7 +932,9 @@ public abstract class DaikonVariableInfo
     int modifiers = field.getModifiers();
 
     // If the field is within the current class, it is always visible
-    if (current.equals(fclass)) return true;
+    if (current.equals(fclass)) {
+      return true;
+    }
 
     if (!std_visibility) {
       // If the field is in any instrumented class it is always visible
@@ -933,10 +951,14 @@ public abstract class DaikonVariableInfo
 
     // Otherwise we consider the variable not to be visible, even
     // though it is.  This mimics dfej behavior
-    if (!std_visibility) return false;
+    if (!std_visibility) {
+      return false;
+    }
 
     // Everything in the same class is visible
-    if (current == fclass) return true;
+    if (current == fclass) {
+      return true;
+    }
 
     // If the field is in the same package, it's visible if it is
     // not private or protected.
@@ -1021,7 +1043,9 @@ public abstract class DaikonVariableInfo
    * the correct child to this node.
    */
   protected void checkForRuntimeClass(Class<?> type, String theName, String offset) {
-    if (!shouldAddRuntimeClass(type)) return;
+    if (!shouldAddRuntimeClass(type)) {
+      return;
+    }
 
     String postString = ""; // either array braces or an empty string
 
@@ -1043,7 +1067,9 @@ public abstract class DaikonVariableInfo
    * Checks the given type to see if it is a string. If so, it adds the correct child to this node.
    */
   private void checkForString(Class<?> type, String theName, String offset) {
-    if (!type.equals(String.class)) return;
+    if (!type.equals(String.class)) {
+      return;
+    }
 
     String postString = ""; // either array braces or an empty string
     if (isArray) postString = "[]";
@@ -1074,7 +1100,9 @@ public abstract class DaikonVariableInfo
     Class<?>[] interfaces = type.getInterfaces();
     for (Class<?> inter : interfaces) {
       // System.out.println("  implements: " + inter.getName());
-      if (inter.equals(java.util.List.class)) return true;
+      if (inter.equals(java.util.List.class)) {
+        return true;
+      }
     }
     return false;
   }
@@ -1099,7 +1127,9 @@ public abstract class DaikonVariableInfo
     debug_vars.log("enter addChildNodes:%n");
     debug_vars.log("  name: %s, offset: %s%n", theName, offset);
 
-    if (type.isPrimitive()) return;
+    if (type.isPrimitive()) {
+      return;
+    }
 
     // Convert the internal reflection name for an outer class
     // 'this' field to the Java language format.
@@ -1110,7 +1140,9 @@ public abstract class DaikonVariableInfo
 
     if (type.isArray()) {
       // don't go into more than one dimension of a multi-dimensional array
-      if (isArray) return;
+      if (isArray) {
+        return;
+      }
 
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
@@ -1213,7 +1245,7 @@ public abstract class DaikonVariableInfo
     return repTypeName;
   }
 
-  /** Return the rep type name without the constant value */
+  /** Return the rep type name without the constant value. */
   public String getRepTypeNameOnly() {
     return repTypeName.replaceFirst(" = .*", "");
   }
@@ -1262,20 +1294,22 @@ public abstract class DaikonVariableInfo
     return name.compareTo(dv.name);
   }
 
-  /** Returns whether or not this variable is an array */
+  /** Returns whether or not this variable is an array. */
   public boolean isArray() {
     return isArray;
   }
 
-  /** Returns the direct child that is an array, null if one does not exist */
+  /** Returns the direct child that is an array, null if one does not exist. */
   public @Nullable DaikonVariableInfo array_child() {
     for (DaikonVariableInfo dv : children) {
-      if (dv.isArray()) return dv;
+      if (dv.isArray()) {
+        return dv;
+      }
     }
     return null;
   }
 
-  /** Returns whether or not this variable has a rep type of hashcode */
+  /** Returns whether or not this variable has a rep type of hashcode. */
   public boolean isHashcode() {
     return getRepTypeName().equals("hashcode");
   }
@@ -1284,7 +1318,7 @@ public abstract class DaikonVariableInfo
     return getRepTypeName().equals("hashcode[]");
   }
 
-  /** Returns whether or not the declared type of this variable is int */
+  /** Returns whether or not the declared type of this variable is int. */
   public boolean isInt() {
     String[] sarr = getTypeName().split("  *");
     return sarr[0].equals("int");
@@ -1301,7 +1335,7 @@ public abstract class DaikonVariableInfo
     return null;
   }
 
-  /** Empty set of variable flags */
+  /** Empty set of variable flags. */
   private static EnumSet<VarFlags> empty_var_flags = EnumSet.noneOf(VarFlags.class);
 
   /**

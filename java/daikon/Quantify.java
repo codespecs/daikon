@@ -13,7 +13,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 /** Helper classes for quantification for various output formats. */
 public class Quantify {
 
-  /** Flags describing how quantifications are to be built */
+  /** Flags describing how quantifications are to be built. */
   public enum QuantFlags {
     /** two indices where they refer to corresponding positions */
     ELEMENT_WISE,
@@ -21,7 +21,7 @@ public class Quantify {
     ADJACENT,
     /** two indices are different */
     DISTINCT,
-    /** Return the names of the index variables */
+    /** Return the names of the index variables. */
     INCLUDE_INDEX;
 
     /** set with just ELEMENT_WISE turned on */
@@ -45,7 +45,7 @@ public class Quantify {
     }
   }
 
-  /** Returns a set with ELEMENT_WISE turned on if specified */
+  /** Returns a set with ELEMENT_WISE turned on if specified. */
   public static EnumSet<QuantFlags> get_flags(boolean elementwise) {
     if (elementwise) {
       return EnumSet.of(QuantFlags.ELEMENT_WISE);
@@ -119,7 +119,7 @@ public class Quantify {
     }
   }
 
-  /** Represents a constant integer */
+  /** Represents a constant integer. */
   public static class Constant extends Term {
     int val;
 
@@ -138,7 +138,7 @@ public class Quantify {
     }
   }
 
-  /** Represents the length of a sequence and an optional offset */
+  /** Represents the length of a sequence and an optional offset. */
   public static class Length extends Term {
     VarInfo sequence;
     int offset;
@@ -191,7 +191,9 @@ public class Quantify {
     @SideEffectFree
     @Override
     public String jml_name(boolean in_prestate) {
-      if (!in_prestate) return jml_name();
+      if (!in_prestate) {
+        return jml_name();
+      }
 
       VarInfo arr_var = get_check_array_var("JML");
       if (arr_var.isPrestate()) {
@@ -237,7 +239,9 @@ public class Quantify {
     @SideEffectFree
     private VarInfo get_check_array_var(String output_format) {
       VarInfo arr_var = sequence.get_base_array_hashcode();
-      if (arr_var != null) return arr_var;
+      if (arr_var != null) {
+        return arr_var;
+      }
 
       throw new Daikon.UserError(
           String.format(
@@ -286,7 +290,9 @@ public class Quantify {
     @SideEffectFree
     @Override
     public String jml_name(boolean in_prestate) {
-      if (!in_prestate) return jml_name();
+      if (!in_prestate) {
+        return jml_name();
+      }
 
       if (var.isPrestate()) {
         assert var.postState != null; // because isPrestate() = true
@@ -340,7 +346,7 @@ public class Quantify {
         simples.add(name);
       }
     }
-    // System.out.printf("simple names = %s\n", simples);
+    // System.out.printf("simple names = %s%n", simples);
 
     // Loop through each of the variables, choosing an index for each
     char tmp = 'i';
@@ -546,7 +552,7 @@ public class Quantify {
           Term index = qret.index;
           VarInfo arr_var = qret.var.get_array_var();
           arr_var_indexed = arr_var.simplify_name(index.simplify_name());
-          // System.out.printf("vi = %s, arr_var = %s\n", vi, arr_var);
+          // System.out.printf("vi = %s, arr_var = %s%n", vi, arr_var);
         } else {
           arr_var_indexed = qret.var.simplify_name();
         }
@@ -586,14 +592,14 @@ public class Quantify {
       return arr_vars_indexed[num];
     }
 
-    /** Returns the specified index */
+    /** Returns the specified index. */
     @SuppressWarnings("nullness:return.type.incompatible") // possible application invariant?
     public String get_index(int num) {
       assert indices[num] != null; // will this assertion fail?
       return indices[num];
     }
 
-    /** Returns the string to be appended to the end of the quantification */
+    /** Returns the string to be appended to the end of the quantification. */
     public String get_closer() {
       return "))"; // close IMPLIES, FORALL
     }

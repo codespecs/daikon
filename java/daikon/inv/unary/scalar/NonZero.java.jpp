@@ -64,8 +64,8 @@ import typequals.prototype.qual.Prototype;
 // This also serves as NonNull.
 
 /**
- * Represents long scalars that are non-zero. Prints as {@code x != 0}, or as <code>x !=
- * null</code> for pointer types.
+ * Represents long scalars that are non-zero. Prints as {@code x != 0}, or as {@code x !=
+ * null} for pointer types.
  */
 #else
 /** Represents double scalars that are non-zero. Prints as {@code x != 0}. */
@@ -108,7 +108,7 @@ public class NONZERO extends SINGLESCALAR {
     return dkconfig_enabled;
   }
 
-  /** Make sure the NonZero make sense on these vars */
+  /** Make sure the NonZero make sense on these vars. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 

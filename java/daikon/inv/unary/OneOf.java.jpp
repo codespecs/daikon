@@ -458,9 +458,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       return false;
     }
     sort_rep();
-    for (int i = 0; i < num_elts; i++)
-      if (!EQUALS(elts[i],other_elts[i])) // elements are interned
+    for (int i = 0; i < num_elts; i++) {
+      if (!EQUALS(elts[i],other_elts[i])) { // elements are interned
         return false;
+      }
+    }
     return true;
   }
 
@@ -1327,10 +1329,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
               && ELT_EQUALS(seq[j], seq[j + 3])) {
             // Compress a sequence of adjacent values
             int k = j + 4;
-            for (; k < seq.length; k++)
+            for (; k < seq.length; k++) {
               if (!ELT_EQUALS(seq[j], seq[k])) {
                 break;
               }
+            }
             k--;
             String index_name = VarInfo.get_simplify_free_index(var());
             String cond_left, cond_right;
@@ -1507,7 +1510,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // Look for v in our list of previously seen values.  If it's
     // found, we're all set.
     for (int i = 0; i < num_elts; i++) {
-      //if (logDetail())
+      // if (logDetail())
       //  log ("add_modified (" + v + ")");
       if (EQUALS(elts[i], v)) {
         return InvariantStatus.NO_CHANGE;
@@ -1602,7 +1605,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       if (num_elts == 1
           && v.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
           && v.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-        @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
         int min = v.aux.getInt(VarInfoAux.MINIMUM_VALUE),
             max = v.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
         if (min == max && min == elts[0]) {
@@ -1616,7 +1618,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       // We can check if all values in the list match with the ones we know about
       // (useful for booleans and numeric enumerations).
       if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-        @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
         Set<NUMWRAPPER> setValidValues = new TreeSet<>();
         for (String s : vsValidValues) {
@@ -1715,7 +1716,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       #define NEW_BASETYPE
       #endif
 
-      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<BASETYPE> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
@@ -1752,7 +1752,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<NUMWRAPPER> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
@@ -1801,11 +1800,10 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<INT> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
-        setValidValues.add(new INT(s));
+        setValidValues.add(s.intern());
       }
       Set<INT> setValuesInvariant = new TreeSet<>();
       for (INT e : elts) {
@@ -1994,17 +1992,20 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     }
 #elif defined(SEQUENCE)
     for (int i = 0; i < num_elts; i++) {
-      for (int j = 0; j < elts[i].length; j++)
+      for (int j = 0; j < elts[i].length; j++) {
         if (elts[i][j] < -1 || elts[i][j] > 2) {
           return true;
         }
+      }
     }
 #elif defined(SEQUENCEFLOAT)
     for (int i = 0; i < num_elts; i++) {
-      for (int j = 0; j < elts[i].length; j++)
+      for (int j = 0; j < elts[i].length; j++) {
         if (elts[i][j] < -1.0 || elts[i][j] > 2.0
-            || elts[i][j] != (long)elts[i][j])
+            || elts[i][j] != (long)elts[i][j]) {
           return true;
+        }
+      }
     }
 #endif
     return false;

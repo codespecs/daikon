@@ -195,16 +195,26 @@ public class X86Instruction implements IInstruction {
   }
 
   private static boolean isValidRHSVar(String s) {
-    if (Operand.isRegister(s)) return true;
-    if (Operand.isDeref(s)) return true;
+    if (Operand.isRegister(s)) {
+      return true;
+    }
+    if (Operand.isDeref(s)) {
+      return true;
+    }
     return false;
   }
 
   // Refine if needed.
   private static boolean isValidLHSOp(String s) {
-    if (Operand.isConstant(s)) return true;
-    if (Operand.isRegister(s)) return true;
-    if (Operand.isDeref(s)) return true;
+    if (Operand.isConstant(s)) {
+      return true;
+    }
+    if (Operand.isRegister(s)) {
+      return true;
+    }
+    if (Operand.isDeref(s)) {
+      return true;
+    }
     return false;
   }
 
@@ -295,7 +305,9 @@ public class X86Instruction implements IInstruction {
     }
 
     if (Operand.isDeref(var)) {
-      if (killedVars.contains(var)) return true;
+      if (killedVars.contains(var)) {
+        return true;
+      }
       for (String reg : Operand.getExtendedRegisters(var)) {
         for (String killedVar : killedVars) {
           // [...eax...] killed by [...eax...]

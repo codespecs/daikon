@@ -160,7 +160,9 @@ public class PptSplitter implements Serializable {
 
     // Choose the appropriate conditional point based on the condition result
     PptConditional ppt_cond = choose_conditional(vt);
-    if (ppt_cond == null) return;
+    if (ppt_cond == null) {
+      return;
+    }
 
     /// ??? MDE
     // If any parent variables were missing out of bounds on this
@@ -270,13 +272,13 @@ public class PptSplitter implements Serializable {
     for (PptTopLevel pchild : ppts) {
       // System.out.printf("splitter child = %s%n", pchild.name());
       if (pchild.equality_view == null) {
-        System.out.printf("this: %s\n", this);
-        System.out.printf("pchild: %s[%08X]\n", pchild, System.identityHashCode(pchild));
-        System.out.printf("pchild.children: %s\n", pchild.children);
+        System.out.printf("this: %s%n", this);
+        System.out.printf("pchild: %s[%08X]%n", pchild, System.identityHashCode(pchild));
+        System.out.printf("pchild.children: %s%n", pchild.children);
         for (PptRelation rel : pchild.children) {
-          System.out.printf("  relation = %s\n", rel);
+          System.out.printf("  relation = %s%n", rel);
         }
-        System.out.printf("parent: %s\n", parent);
+        System.out.printf("parent: %s%n", parent);
         throw new Error();
       }
     }

@@ -45,17 +45,17 @@ public class PptRelation implements Serializable {
    * constructed. MERGE_CHILD is not used by Daikon.
    */
   public enum PptRelationType {
-    /** Acyclic relationship to a parent, eg, method to its object */
+    /** Acyclic relationship to a parent, eg, method to its object. */
     PARENT,
     /** Possibly cyclic relationship, eg. nested object instances */
     USER,
-    /** Entrance of method to exit of method */
+    /** Entrance of method to exit of method. */
     ENTER_EXIT,
-    /** Combined exit to numbered exit of a method */
+    /** Combined exit to numbered exit of a method. */
     EXIT_EXITNN,
-    /** Relation between the same ppt in two different PptMaps */
+    /** Relation between the same ppt in two different PptMaps. */
     MERGE_CHILD,
-    /** Relation from a program point to its conditional ppts */
+    /** Relation from a program point to its conditional ppts. */
     PPT_PPTCOND
   };
 

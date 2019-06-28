@@ -199,7 +199,9 @@ public class PptSlice0 extends PptSlice {
     @Override
     public boolean equals(
         @GuardSatisfied ImplicationWrapper this, @GuardSatisfied @Nullable Object o) {
-      if (o == null) return false;
+      if (o == null) {
+        return false;
+      }
       assert o instanceof ImplicationWrapper;
       ImplicationWrapper other = (ImplicationWrapper) o;
       if (hashCode() != other.hashCode()) {

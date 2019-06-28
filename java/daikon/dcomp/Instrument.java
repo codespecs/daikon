@@ -44,7 +44,9 @@ public class Instrument implements ClassFileTransformer {
     // System.out.printf("transform on %s%n", className);
 
     // See comments in Premain.java about meaning and use of in_shutdown.
-    if (Premain.in_shutdown) return null;
+    if (Premain.in_shutdown) {
+      return null;
+    }
 
     // If already instrumented, nothing to do
     // (This set will be empty if DynComp.no_jdk is true)
@@ -73,7 +75,7 @@ public class Instrument implements ClassFileTransformer {
     }
 
     if (DynComp.verbose) {
-      System.out.format("In dcomp.Instrument(): class = %s\n", className);
+      System.out.format("In dcomp.Instrument(): class = %s%n", className);
     }
 
     try {
@@ -123,9 +125,15 @@ public class Instrument implements ClassFileTransformer {
         || classname.startsWith("daikon/chicory/")) {
       return true;
     }
-    if (classname.equals("daikon/PptTopLevel$PptType")) return true;
-    if (classname.startsWith("org/plumelib/bcelutil")) return true;
-    if (classname.startsWith("daikon/util")) return true;
+    if (classname.equals("daikon/PptTopLevel$PptType")) {
+      return true;
+    }
+    if (classname.startsWith("org/plumelib/bcelutil")) {
+      return true;
+    }
+    if (classname.startsWith("daikon/util")) {
+      return true;
+    }
     return false;
   }
 }

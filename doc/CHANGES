@@ -20,11 +20,27 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.8.0 (?? ??, 2018)
+5.7.4 (June 1, 2018)
+
+Updated the readelf, Valgrind, and BCEL libraries.  This should improve
+compatibility with operating systems and C versions.
+
+===========================================================================
+
+5.7.2 (November 7, 2018)
 
 The Daikon instructions no longer suggest to set CLASSPATH, which is bad
 style.  Instead, a new environment variable DAIKON_CLASSPATH is set by
 daikon.bashrc, if you choose to use that script.
+
+The DAIKONDIR environment variable is not needed.  It is only used for
+documentation purposes in the manual.
+
+Daikon runs on Cygwin.  However, the Daikon developers no longer support
+building Daikon on Cygwin, which requires tricky translation between
+Windows and Unix paths.  If you want to develop Daikon on a computer that
+runs Windows, we suggest using Linux in a virtual machine, or Linux
+Subsystem for Windows (available since August 2016).
 
 ===========================================================================
 

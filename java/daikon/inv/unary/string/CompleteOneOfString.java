@@ -30,7 +30,7 @@ public final class CompleteOneOfString extends SingleString {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20091210L;
 
-  /** Information about each value encountered */
+  /** Information about each value encountered. */
   public static class Info implements Serializable {
     static final long serialVersionUID = 20091210L;
     public String val;
@@ -47,7 +47,7 @@ public final class CompleteOneOfString extends SingleString {
     }
   }
 
-  /** List of values seen */
+  /** List of values seen. */
   @Unused(when = Prototype.class)
   public List<Info> vals;
 
@@ -65,7 +65,7 @@ public final class CompleteOneOfString extends SingleString {
 
   private static @Prototype CompleteOneOfString proto = new @Prototype CompleteOneOfString();
 
-  /** Returns the prototype invariant for CompleteOneOFString */
+  /** Returns the prototype invariant for CompleteOneOFString. */
   public static @Prototype CompleteOneOfString get_proto() {
     return proto;
   }
@@ -101,13 +101,13 @@ public final class CompleteOneOfString extends SingleString {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters */
+  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus add_modified(@Interned String a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters */
+  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus check_modified(@Interned String a, int count) {
     for (Info val : vals) {

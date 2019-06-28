@@ -41,7 +41,9 @@ public final class DiscReasonMap {
    * <p>Requires: inv != null &and; disc_info != null &and; disc_info.shouldDiscard()
    */
   public static void put(Invariant inv, DiscardInfo disc_info) {
-    if (!PrintInvariants.print_discarded_invariants) return;
+    if (!PrintInvariants.print_discarded_invariants) {
+      return;
+    }
 
     assert disc_info != null;
 
@@ -65,13 +67,17 @@ public final class DiscReasonMap {
   }
 
   public static void put(Invariant inv, DiscardCode discardCode, String discardString) {
-    if (!PrintInvariants.print_discarded_invariants) return;
+    if (!PrintInvariants.print_discarded_invariants) {
+      return;
+    }
 
     put(inv, new DiscardInfo(inv, discardCode, discardString));
   }
 
   public static void put(String vars, String ppt, DiscardInfo disc_info) {
-    if (!PrintInvariants.print_discarded_invariants) return;
+    if (!PrintInvariants.print_discarded_invariants) {
+      return;
+    }
 
     assert disc_info != null;
 

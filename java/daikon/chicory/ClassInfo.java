@@ -41,7 +41,7 @@ public class ClassInfo {
   /** DaikonVariables for the class (static vars only) */
   public @MonotonicNonNull RootInfo traversalClass;
 
-  /** Whether or not any methods in this class were instrumented */
+  /** Whether or not any methods in this class were instrumented. */
   public boolean shouldInclude = false;
 
   /** Mapping from field name to string representation of its value* */
@@ -49,13 +49,13 @@ public class ClassInfo {
   // which are declared by a CONSTANT VALUE in the code
   public Map<String, String> staticMap = new HashMap<>();
 
-  /** Create ClassInfo with specified name */
+  /** Create ClassInfo with specified name. */
   public ClassInfo(@BinaryName String class_name, ClassLoader theLoader) {
     this.class_name = class_name;
     loader = theLoader;
   }
 
-  /** Set the list of methods */
+  /** Set the list of methods. */
   public void set_method_infos(List<MethodInfo> method_infos) {
     this.method_infos = method_infos;
   }
@@ -142,7 +142,7 @@ public class ClassInfo {
     }
   }
 
-  /** Initializes the daikon variables for the object and class ppts */
+  /** Initializes the daikon variables for the object and class ppts. */
   public void init_traversal(int depth) {
     if (traversalObject == null) traversalObject = RootInfo.getObjectPpt(this, depth);
     if (traversalClass == null) traversalClass = RootInfo.getClassPpt(this, depth);

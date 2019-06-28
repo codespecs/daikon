@@ -120,9 +120,9 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     SCALAR[] val1_array = (SCALAR[]) val1;
     int val2 = base2.getIndexValue(full_vt) + index_shift;
     if ((val2 < 0) || (val2 >= val1_array.length)) {
-      //if (!missing_array_bounds)
-        // System.out.println ("out of bounds" + base1.name() + " "
-        //                    + base2.name() + " @" + base1.ppt.name());
+      // if (!missing_array_bounds)
+      //   System.out.println ("out of bounds" + base1.name() + " "
+      //                      + base2.name() + " @" + base1.ppt.name());
       missing_array_bounds = true;
       return ValueAndModified.MISSING_NONSENSICAL;
     }
@@ -146,7 +146,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
   }
 
-  /** Returns the ESC name for sequence subscript */
+  /** Returns the ESC name for sequence subscript. */
   @SuppressWarnings("nullness")
   @SideEffectFree
   @Override
@@ -163,7 +163,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     }
   }
 
-  /** Returns the JML name for sequence subscript */
+  /** Returns the JML name for sequence subscript. */
   @SuppressWarnings("nullness")
   @Override
   public String jml_name(String index) {
@@ -189,7 +189,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     }
   }
 
-  /** Returns the CSHARPCONTRACT name for sequence subscript */
+  /** Returns the CSHARPCONTRACT name for sequence subscript. */
   @SuppressWarnings("nullness")
   @SideEffectFree
   @Override
@@ -207,7 +207,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     }
   }
 
-  /** Return the simplify name for sequence subscript */
+  /** Return the simplify name for sequence subscript. */
   @SuppressWarnings("nullness")
   @SideEffectFree
   @Override
@@ -223,7 +223,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
         "(select (select elems %s) %s)", seqvar().enclosing_var.simplify_name(), subscript);
   }
 
-  /** Adds one to the default complexity if index_shift is not 0 */
+  /** Adds one to the default complexity if index_shift is not 0. */
   @Override
   public int complexity() {
     return super.complexity() + ((index_shift != 0) ? 1 : 0);

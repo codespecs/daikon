@@ -116,7 +116,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled */
+  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;

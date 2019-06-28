@@ -28,16 +28,24 @@ public final class SequenceMin extends UnaryDerivation {
   @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
     Object val = base.getValue(vt);
-    if (val == null) return ValueAndModified.MISSING_NONSENSICAL;
+    if (val == null) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
     if (val instanceof long[]) {
       long[] val_array = (long[]) val;
-      if (val_array.length == 0) return ValueAndModified.MISSING_NONSENSICAL;
+      if (val_array.length == 0) {
+        return ValueAndModified.MISSING_NONSENSICAL;
+      }
       return new ValueAndModified(Intern.internedLong(ArraysPlume.min(val_array)), source_mod);
     } else if (val instanceof double[]) {
       double[] val_array = (double[]) val;
-      if (val_array.length == 0) return ValueAndModified.MISSING_NONSENSICAL;
+      if (val_array.length == 0) {
+        return ValueAndModified.MISSING_NONSENSICAL;
+      }
       return new ValueAndModified(Intern.internedDouble(ArraysPlume.min(val_array)), source_mod);
 
     } else {
@@ -56,7 +64,7 @@ public final class SequenceMin extends UnaryDerivation {
     return (other instanceof SequenceMin);
   }
 
-  /** Returns the ESC name */
+  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

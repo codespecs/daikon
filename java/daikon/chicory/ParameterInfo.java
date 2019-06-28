@@ -26,14 +26,14 @@ public class ParameterInfo extends DaikonVariableInfo {
    */
   private final int param_offset;
 
-  /** Argument type */
+  /** Argument type. */
   private final Class<?> argType;
 
-  /** True if this parameter is of a primitive type */
+  /** True if this parameter is of a primitive type. */
   boolean isPrimitive;
 
   /**
-   * Constructs an ParameterInfo object with the specified name
+   * Constructs an ParameterInfo object with the specified name.
    *
    * @param theName the variable name (used in the declaration)
    */
@@ -77,7 +77,7 @@ public class ParameterInfo extends DaikonVariableInfo {
     return argType;
   }
 
-  /** Returns whether or not this parameter is a primitive type */
+  /** Returns whether or not this parameter is a primitive type. */
   @Pure
   public boolean isPrimitive() {
     return isPrimitive;
@@ -89,7 +89,7 @@ public class ParameterInfo extends DaikonVariableInfo {
     return VarKind.VARIABLE;
   }
 
-  /** Add IS_PARM to list of variable flags */
+  /** Add IS_PARM to list of variable flags. */
   @Override
   public EnumSet<VarFlags> get_var_flags() {
     // System.out.printf("%s is a parameter%n", this);

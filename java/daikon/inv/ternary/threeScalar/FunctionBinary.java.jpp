@@ -151,7 +151,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return dkconfig_enabled;
   }
 
-  /** CLASSNAME is only valid on IS_INTEGRAL types */
+  /** CLASSNAME is only valid on IS_INTEGRAL types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -405,10 +405,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
     int func_id = get_function_id();
     @Prototype CLASSNAME[] fb_arr = func_list.get(func_id);
     assert fb_arr != null;
-    for (int ii = 0; ii < fb_arr.length; ii++)
+    for (int ii = 0; ii < fb_arr.length; ii++) {
       if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order)) {
         return (fb_arr[ii].instantiate_dyn(ppt));
       }
+    }
 
     throw new Error("Could not find new ordering");
   }
@@ -473,16 +474,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
     } else if (methodname[1].equals(" || ")) {
       func = "|java-logical-or|";
     } else if (methodname[1].equals(", ")) {
-      if (methodname[0].equals("java.lang.Math.min("))
+      if (methodname[0].equals("java.lang.Math.min(")) {
         func = "min";
-      else if (methodname[0].equals("java.lang.Math.max("))
+      } else if (methodname[0].equals("java.lang.Math.max(")) {
         func = "max";
-      else if (methodname[0].equals("org.plumelib.util.MathPlume.gcd("))
+      } else if (methodname[0].equals("org.plumelib.util.MathPlume.gcd(")) {
         func = "gcd";
-      else if (methodname[0].equals("java.lang.Math.pow("))
+      } else if (methodname[0].equals("java.lang.Math.pow(")) {
         func = "pow";
-      else if (methodname[0].equals("org.plumelib.util.MathPlume.logicalXor("))
+      } else if (methodname[0].equals("org.plumelib.util.MathPlume.logicalXor(")) {
         func = "|java-logical-xor|";
+      }
     } else {
       assert methodname[0].equals("");
       assert methodname[2].equals("");
@@ -538,16 +540,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     String func = null;
     if (methodname[1].equals(", ")) {
-      if (methodname[0].equals("java.lang.Math.min("))
+      if (methodname[0].equals("java.lang.Math.min(")) {
         func = "Math.Min";
-      else if (methodname[0].equals("java.lang.Math.max("))
+      } else if (methodname[0].equals("java.lang.Math.max(")) {
         func = "Math.Max";
-      else if (methodname[0].equals("org.plumelib.util.MathPlume.gcd("))
+      } else if (methodname[0].equals("org.plumelib.util.MathPlume.gcd(")) {
         return result + " == CSharpDaikonLib.Extensions.GCD(" + arg1 + ", " + arg2 + ")";
-      else if (methodname[0].equals("java.lang.Math.pow("))
+      } else if (methodname[0].equals("java.lang.Math.pow(")) {
         return result + " == " + arg1 + ".Pow(" + arg2 + ")";
-      else if (methodname[0].equals("org.plumelib.util.MathPlume.logicalXor("))
+      } else if (methodname[0].equals("org.plumelib.util.MathPlume.logicalXor(")) {
         return result + " == (" + arg1 + " ^ " + arg2 + ")";
+      }
     } else {
       assert methodname[0].equals("");
       assert methodname[2].equals("");

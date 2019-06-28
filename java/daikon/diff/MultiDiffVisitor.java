@@ -113,9 +113,10 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       // don't print something true in EVERY set
       else if (freq == total) {
         kill++;
+      } else {
+        // don't print something that was never justified
+        unjustifiedKill++;
       }
-      // don't print something that was never justified
-      else unjustifiedKill++;
     }
     System.out.println("Invariants appearing in all: " + kill);
     System.out.println("Invariants never justified: " + unjustifiedKill);

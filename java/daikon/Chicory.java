@@ -137,7 +137,7 @@ public class Chicory {
   /** Daikon port number. Daikon writes this to stdout when it is started in online mode. */
   private static int daikon_port = -1;
 
-  /** Thread that copies output from target to our output */
+  /** Thread that copies output from target to our output. */
   public static @MonotonicNonNull StreamRedirectThread out_thread;
 
   /** Thread that copies stderr from target to our stderr. */
@@ -158,12 +158,12 @@ public class Chicory {
 
   private static final boolean RemoteDebug = false;
 
-  /** Flag to initiate a purity analysis and use results to create add vars */
+  /** Flag to initiate a purity analysis and use results to create add vars. */
   private static boolean purityAnalysis = false;
 
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the chicory command line */
+  /** Synopsis for the chicory command line. */
   public static final String synopsis = "daikon.Chicory [options] target [target-args]";
 
   /**
@@ -310,13 +310,13 @@ public class Chicory {
     if (premain == null) {
       System.err.printf("Can't find ChicoryPremain.jar on the classpath");
       if (daikon_dir == null) {
-        System.err.printf(" and $DAIKONDIR is not set.\n");
+        System.err.printf(" and $DAIKONDIR is not set.%n");
       } else {
-        System.err.printf(" or in $DAIKONDIR/java .\n");
+        System.err.printf(" or in $DAIKONDIR/java .%n");
       }
-      System.err.printf("It should be found in the directory where Daikon was installed.\n");
-      System.err.printf("Use the --premain switch to specify its location,\n");
-      System.err.printf("or change your classpath to include it.\n");
+      System.err.printf("It should be found in the directory where Daikon was installed.%n");
+      System.err.printf("Use the --premain switch to specify its location,%n");
+      System.err.printf("or change your classpath to include it.%n");
       System.exit(1);
     }
 
@@ -418,7 +418,7 @@ public class Chicory {
     try {
       chicory_proc = rt.exec(cmdline);
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'\n", e, cmdline);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
       System.exit(1);
     }
 
@@ -444,7 +444,7 @@ public class Chicory {
       assert daikon_proc != null
           : "@AssumeAssertion(nullness): conditional: just tested daikon_online, and ran runDaikon() earlier in this method";
       if (targetResult != 0) {
-        System.out.printf("Warning: Target exited with %d status\n", targetResult);
+        System.out.printf("Warning: Target exited with %d status%n", targetResult);
       }
 
       // Wait for the process to terminate and return the results
@@ -471,13 +471,13 @@ public class Chicory {
       }
 
       if (daikonResult != 0) {
-        System.out.printf("Warning: Daikon exited with %d status\n", daikonResult);
+        System.out.printf("Warning: Daikon exited with %d status%n", daikonResult);
       }
       System.exit(daikonResult);
     } else {
       // No daikon command specified, so just exit
       if (targetResult != 0) {
-        System.out.printf("Warning: Target exited with %d status\n", targetResult);
+        System.out.printf("Warning: Target exited with %d status%n", targetResult);
       }
       System.exit(targetResult);
     }
@@ -507,24 +507,24 @@ public class Chicory {
     // System.out.println("daikon command is " + daikon_cmd);
     // System.out.println("daikon command cmdstr " + cmdstr);
 
-    if (verbose) System.out.printf("\nExecuting daikon: %s\n", cmdstr);
+    if (verbose) System.out.printf("%nExecuting daikon: %s%n", cmdstr);
 
     try {
       daikon_proc = rt.exec(cmdstr);
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'\n", e, cmdstr);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdstr);
       System.exit(1);
     }
   }
 
-  /** Wait for daikon to complete and return its exit status */
+  /** Wait for daikon to complete and return its exit status. */
   @RequiresNonNull("daikon_proc")
   private int waitForDaikon() {
     int result = redirect_wait(daikon_proc);
     return result;
   }
 
-  /** Wait for stream redirect threads to complete and return its exit status */
+  /** Wait for stream redirect threads to complete and return its exit status. */
   public int redirect_wait(Process p) {
 
     // Create the redirect theads and start them
@@ -583,7 +583,7 @@ public class Chicory {
     return outFile;
   }
 
-  /** Returns elapsed time as a String since the start of the program */
+  /** Returns elapsed time as a String since the start of the program. */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }

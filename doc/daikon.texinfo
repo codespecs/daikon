@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.7.1
+@center Daikon version 5.7.4
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.7.1 release date
-@center August 23, 2018
+@c Print out the Daikon version 5.7.4 release date
+@center June 1, 2019
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.7.1, released August 23, 2018.
+It describes Daikon version 5.7.4, released June 1, 2019.
 
 @menu
 * Introduction::
@@ -221,7 +221,7 @@ question will not be answered.
 @cindex installing Daikon
 
 Shortcut for the impatient:  skip directly to the installation instructions
-for @ref{Unix/Linux/MacOSX installation}, or @ref{Windows installation}.
+for @ref{Unix/Linux/macOS installation}, or @ref{Windows installation}.
 
 The main way to install Daikon is from a release, as explained in this
 section.
@@ -257,7 +257,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
 @menu
 * Requirements::
-* Unix/Linux/MacOSX installation::
+* Unix/Linux/macOS installation::
 * Windows installation::
 * Running Daikon under Windows::
 @end menu
@@ -267,7 +267,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 @section    Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 8 (or later) JDK, including a
-@uref{http://www.oracle.com/technetwork/java/javase/overview/index.html,,
+@uref{https://www.oracle.com/technetwork/java/javase/overview/index.html,,
 Java Virtual Machine} and a Java compiler.
 
 If you wish to analyze C or C++ programs, you need a C or C++
@@ -281,8 +281,8 @@ If you wish to edit the Daikon source code and re-compile Daikon,
 @c helpful to users.
 
 
-@node       Unix/Linux/MacOSX installation
-@section    Unix/Linux/MacOSX installation
+@node       Unix/Linux/macOS installation
+@section    Unix/Linux/macOS installation
 
 @exampleindent 1
 @enumerate
@@ -293,12 +293,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.7.1.tar.gz
-tar zxf daikon-5.7.1.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.7.4.tar.gz
+tar zxf daikon-5.7.4.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.7.1/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.7.4/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:
@@ -310,7 +310,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.7.1
+export DAIKONDIR=@var{daikonparent}/daikon-5.7.4
 # The absolute pathname of the directory that contains the Java JDK
 export JAVA_HOME=@var{/usr/lib/jvm/java}
 # source $DAIKONDIR/scripts/daikon.bashrc
@@ -407,12 +407,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.7.1.tar.gz
-tar zxf daikon-5.7.1.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.7.4.tar.gz
+tar zxf daikon-5.7.4.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.7.1/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.7.4/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:
@@ -422,7 +422,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.7.1
+export DAIKONDIR=@var{daikonparent}/daikon-5.7.4
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.8.0_144
 # source $DAIKONDIR/scripts/daikon.bashrc
@@ -3882,7 +3882,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.7.1.jar
+--premain=C:\lib\daikon-5.7.4.jar
 @end example
 
 @item --heap-size=@var{max_heap}
@@ -4208,7 +4208,7 @@ containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
-On MacOSX, you might do:
+On macOS, you might do:
 
 @exampleindent 0
 @example
@@ -8102,7 +8102,7 @@ available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
 java -Xmx256m daikon.Chicory --comparability-file=MyClass.decls-DynComp \
-     --heap-size=1600m --daikon mypackage.MyClass arg1 arg2 arg3
+     --heap-size=2600m --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
 When using the Java @command{HotSpot} JVM, an additional parameter may need to
@@ -8745,6 +8745,8 @@ required in order to replicate the bug and verify that our fix corrects
 the problem.  If you do not provide complete information, we will not be
 able to assist you.
 
+@c If you update this, also update ../.github/ISSUE_TEMPLATE
+
 Your bug report should include:
 @itemize @bullet
 @item
@@ -8850,7 +8852,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.7.1, released August 23, 2018.
+This manual describes Daikon version 5.7.4, released June 1, 2019.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGES,,@file{doc/CHANGES}}
 in the distribution; this section gives a
@@ -8865,7 +8867,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.7.1
+@cindex Daikon version 5.7.4
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
@@ -9117,54 +9119,80 @@ its users.
 
 The following individuals have contributed to Daikon:
 @nospellcheck{
-Yuriy Brun,
-Jake Cockrell,
-David Cok,
-Forrest Coward,
+@c You can approximate this by running the following command:
+@c   git-authors --texinfo --punctuation
+@c but it's incomplete because it needs to look at other repositories such
+@c as Fjalar and Celeriac.
 Adam Czeisler,
-Brian Demsky,
 Alan Donovan,
-Nii Dodoo,
-Kellen Donohue,
 Alan Dunn,
-Michael Ernst,
-Eric Fellheimer,
-Antonio Garcia-Dominguez,
-William Griswold,
-Florian Gross,
-Philip Guo,
-Melissa Hao,
-Michael Harder,
-Dieter von Holten,
-Greg Jay,
-Josh Kataoka,
-Lee Lin,
-Allen Liu,
-Sandra Loosemore,
-Vikash Mansinghka,
-Stephen McCamant,
-Samir Meghani,
-Benjamin Morse,
-Jelani Nelson,
-Ryan Newton,
-Jeremy Nimmer,
-Toh Ne Win,
-David Notkin,
-Carlos Pacheco,
-Jeff Perkins,
-Jaime Quinonez,
-Mark Roberts,
-Robert Rudd,
 Alexandru Salcianu,
-Todd Schiller,
-Kathryn Shih,
-Eric Spishak,
-Laure Thompson,
-Matthew Tschantz,
-Iuliu Vasilescu,
+Allen Liu,
+Antonio Garcia-Dominguez,
+Benjamin Morse,
+Brian Demsky,
+Carlos Pacheco,
+Cemal Akcaba,
+Charles Tam,
+Charlie Garrett,
 Chen Xiao,
+Danny Dig,
+Darko Marinov,
+David Cok,
+David McArthur,
+David Notkin,
+Derek Rayside,
+Dieter von Holten,
+Emily Marcus,
+Eric Fellheimer,
+Eric Spishak,
+Florian Gross,
+Florian S. Gross,
+Forrest Coward,
+Galen Pickard,
+Greg Jay,
+Greg Sullivan,
+Gustavo Santos,
+Iuliu Vasilescu,
+Jaime Quinonez,
+Jake Cockrell,
+James Anderson,
+Javier Thaine,
+Jeff Perkins,
+Jeff Yuan,
+Jelani Nelson,
+Jeremy Nimmer,
+Jonathan Burke,
+Josh Kataoka,
+Kathryn Shih,
+Kellen Donohue,
+Konstantin Weitz,
+Laure Thompson,
+Lee Lin,
+Mark Roberts,
+Matthew Tschantz,
+Melissa Hao,
+Michael Ernst,
+Michael Harder,
+Nii Dodoo,
+Philip Guo,
+Robert Rudd,
+Ryan Newton,
+Samir Meghani,
+Sandra Loosemore,
+Stephen Garland,
+Stephen McCamant,
+Sung Kim,
+Suzanne Millstein,
 Tao Xie,
-Jeff Yuan.
+Tatyana Nikolova,
+Todd Schiller,
+Toh Ne Win,
+Vikash Mansinghka,
+Werner Dietl,
+William Griswold,
+Yoav Zibin,
+Yuriy Brun.
 }
 
 @nospellcheck{Craig Kaplan} carved the Daikon logo.
@@ -9334,7 +9362,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
 @c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
-@c  LocalWords:  Drager MacOSX I1 I2 invSortComparator1 invSortComparator2
+@c  LocalWords:  Drager macOS I1 I2 invSortComparator1 invSortComparator2
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
 @c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
 @c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx2048m ps1

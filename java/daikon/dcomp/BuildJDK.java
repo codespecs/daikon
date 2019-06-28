@@ -37,7 +37,7 @@ public class BuildJDK {
       "Instrument the given classfiles from the specified source directory (by default, src must be a jar file)")
   public static boolean classfiles = false;
 
-  /** Synopsis for the dcomp command line */
+  /** Synopsis for the dcomp command line. */
   public static final String synopsis =
       "daikon.BuildJDK [options] src dest [class_prefix | classfiles...]";
 
@@ -118,7 +118,7 @@ public class BuildJDK {
       };
 
   /**
-   * Invoke as: BuildJDK jarfile dest prefix
+   * Invoke as: BuildJDK jarfile dest prefix.
    *
    * <dl>
    *   <dt>jarfile
@@ -253,7 +253,7 @@ public class BuildJDK {
     final String p = potentialJarFileName;
     try {
       String jar_name = findRtJarFilename(p);
-      System.out.printf("using jar file %s\n", jar_name);
+      System.out.printf("using jar file %s%n", jar_name);
       jfile = new JarFile(jar_name);
     } catch (ZipException e) {
       throw new ZipException(e.getMessage() + "; filename was " + p);
@@ -369,7 +369,7 @@ public class BuildJDK {
    */
   private void processClassFile(Map<String, JavaClass> classmap, File dfile, String classname)
       throws java.io.IOException {
-    if (verbose) System.out.printf("processing target %s\n", classname);
+    if (verbose) System.out.printf("processing target %s%n", classname);
     JavaClass jc = classmap.get(classname);
     assert jc != null : "@AssumeAssertion(nullness): seems to be non-null";
     DCInstrument dci = new DCInstrument(jc, true, null);
@@ -389,6 +389,7 @@ public class BuildJDK {
     }
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
+    if (verbose) System.out.printf("writing to file %s%n", classpath);
     inst_jc.dump(classpath);
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
@@ -397,7 +398,7 @@ public class BuildJDK {
     }
   }
 
-  /** Copy our various helper classes to java/lang */
+  /** Copy our various helper classes to java/lang. */
   private void dump_helper_classes(String dest) throws java.io.IOException {
 
     File dir = new File(dest, "java" + File.separator + "lang");

@@ -203,7 +203,8 @@ import typequals.prototype.qual.Prototype;
  * The {@link #main} method is the main entry point for the Daikon invariant detector. The {@link
  * #mainHelper} method is the entry point, when called programmatically.
  */
-@SuppressWarnings("initialization.fields.uninitialized") // field all_ppts; deal with it later
+@SuppressWarnings(
+    "initialization.static.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
 
   private Daikon() {
@@ -217,9 +218,9 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.7.1";
+  public static final String release_version = "5.7.4";
   /** The date for the current version of Daikon. */
-  public static final String release_date = "August 23, 2018";
+  public static final String release_date = "June 1, 2019";
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
       "Daikon version "
@@ -639,6 +640,15 @@ public final class Daikon {
     // }
   }
 
+  /** A parser error that should be reported, with better context, by the caller. */
+  public static class ParseError extends Exception {
+    static final long serialVersionUID = 20181021L;
+
+    ParseError(String s) {
+      super(s);
+    }
+  }
+
   /**
    * The arguments to daikon.Daikon are file names. Declaration file names end in ".decls", and data
    * trace file names end in ".dtrace".
@@ -853,7 +863,9 @@ public final class Daikon {
       }
 
       // exit the program
-      if (false) return;
+      if (false) {
+        return;
+      }
     }
 
     // Display invariants
@@ -1722,7 +1734,7 @@ public final class Daikon {
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      // System.out.printf("considering ppt %s parents: %s, children: %s\n",
+      // System.out.printf("considering ppt %s parents: %s, children: %s%n",
       //                     ppt.name, ppt.parents, ppt.children);
       if (ppt.parents.size() == 0) {
         ppt.mergeInvs();
@@ -1802,7 +1814,9 @@ public final class Daikon {
         VarInfo[] exit_vars = new VarInfo[len];
         // System.out.printf("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
-          exit_vars[j] = new VarInfo(ppt.var_infos[j]);
+          @SuppressWarnings("interning") // about to be used in new program point
+          @Interned VarInfo exit_var = new VarInfo(ppt.var_infos[j]);
+          exit_vars[j] = exit_var;
           // System.out.printf("exitNN name '%s', exit name '%s'%n",
           //                   ppt.var_infos[j].name(), exit_vars[j].name());
           exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
@@ -2107,7 +2121,9 @@ public final class Daikon {
 
     @Override
     public void run() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       while (true) {
         if (shouldStop) {
           clear();
@@ -2123,7 +2139,9 @@ public final class Daikon {
     }
     /** Clear the display; good to do before printing to System.out. */
     public void clear() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       // "display("");" is wrong becuase it leaves the timestamp and writes
       // spaces across the screen.
       String status = UtilPlume.rpad("", dkconfig_progress_display_width - 1);
@@ -2136,7 +2154,9 @@ public final class Daikon {
      * display.
      */
     public void display() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
 
       String message;
       if (FileIO.data_trace_state != null) {
@@ -2152,7 +2172,9 @@ public final class Daikon {
     }
     /** Displays the given message. */
     public void display(String message) {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       String status =
           UtilPlume.rpad(
               "[" + df.format(new Date()) + "]: " + message, dkconfig_progress_display_width - 1);
@@ -2448,7 +2470,9 @@ public final class Daikon {
   /** Initialize the equality sets for each variable. */
   public static void setupEquality(PptTopLevel ppt) {
 
-    if (!Daikon.use_equality_optimization) return;
+    if (!Daikon.use_equality_optimization) {
+      return;
+    }
 
     // Skip points that are not leaves.
     if (use_dataflow_hierarchy) {
@@ -2469,7 +2493,9 @@ public final class Daikon {
         return;
       }
 
-      if (ppt.has_splitters()) return;
+      if (ppt.has_splitters()) {
+        return;
+      }
     }
 
     // Create the initial equality sets

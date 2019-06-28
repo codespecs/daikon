@@ -179,8 +179,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     values otherwise
    */
   public static final double conf_is_ge(double x, double goal) {
-    if (x >= goal) return 1;
-    if (x <= 1) return 0;
+    if (x >= goal) {
+      return 1;
+    }
+    if (x <= 1) {
+      return 0;
+    }
     double result = 1 - (goal - x) / (goal - 1);
     assert 0 <= result && result <= 1
         : "conf_is_ge: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")";
@@ -198,8 +202,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *     x&le;1, other values otherwise
    */
   public static final double prob_is_ge(double x, double goal) {
-    if (x >= goal) return 0;
-    if (x <= 1) return 1;
+    if (x >= goal) {
+      return 0;
+    }
+    if (x <= 1) {
+      return 1;
+    }
     double result = (goal - x) / (goal - 1);
     assert 0 <= result && result <= 1
         : "prob_is_ge: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")";
@@ -634,7 +642,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     // Return the first variable that is not always-comparable
     for (int i = 0; i < ppt.var_infos.length; i++) {
       VarComparability vc = ppt.var_infos[i].comparability;
-      if (!vc.alwaysComparable()) return vc;
+      if (!vc.alwaysComparable()) {
+        return vc;
+      }
     }
 
     // All the variables are always-comparable, just return the first one
@@ -727,7 +737,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Return a string representation of the variable names.
    *
-   * @return a string representation of the variable names.
+   * @return a string representation of the variable names
    */
   public final String varNames(@GuardSatisfied @NonPrototype Invariant this) {
     return ppt.varNames();
@@ -962,7 +972,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @return a printed representation of the string, for Simplify
    */
   public static String simplify_format_string(String s) {
-    if (s == null) return "null";
+    if (s == null) {
+      return "null";
+    }
     StringBuilder buf = new StringBuilder("|_string_");
     if (s.length() > 150) {
       // Simplify can't handle long strings (its input routines have a
@@ -1015,7 +1027,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     @Pure
     @Override
     public int compare(@NonPrototype Invariant inv1, @NonPrototype Invariant inv2) {
-      if (inv1 == inv2) return 0;
+      if (inv1 == inv2) {
+        return 0;
+      }
 
       // Guarding implications should compare as if they were without the
       // guarding predicate
@@ -1035,7 +1049,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       VarInfo[] vis1 = inv1.ppt.var_infos;
       VarInfo[] vis2 = inv2.ppt.var_infos;
       int arity_cmp = vis1.length - vis2.length;
-      if (arity_cmp != 0) return arity_cmp;
+      if (arity_cmp != 0) {
+        return arity_cmp;
+      }
       // Comparing on variable index is wrong in general:  variables of the
       // same name may have different indices at different program points.
       // However, it's safe if the invariants are from the same program
@@ -1065,7 +1081,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
           int cmp1 = (name1in2 == -1) ? 0 : vis1[i].varinfo_index - name1in2;
           int cmp2 = (name2in1 == -1) ? 0 : vis2[i].varinfo_index - name2in1;
           int cmp = MathPlume.sign(cmp1) + MathPlume.sign(cmp2);
-          if (cmp != 0) return cmp;
+          if (cmp != 0) {
+            return cmp;
+          }
         }
       }
 
@@ -1208,7 +1226,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public boolean is_ni_suppressed() {
 
     NISuppressionSet ss = get_ni_suppressions();
-    if (ss == null) return false;
+    if (ss == null) {
+      return false;
+    }
     boolean suppressed = ss.suppressed(ppt);
     if (suppressed && Debug.logOn() && (Daikon.current_inv != null)) {
       Daikon.current_inv.log("inv %s suppressed: %s", format(), ss);
@@ -1279,7 +1299,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public boolean isObviousStatically_AllInEquality(@NonPrototype Invariant this) {
     // If the leaders aren't statically obvious, then clearly not all
     // combinations are.
-    if (isObviousStatically() == null) return false;
+    if (isObviousStatically() == null) {
+      return false;
+    }
 
     for (int i = 0; i < ppt.var_infos.length; i++) {
       if (ppt.var_infos[i].equalitySet.getVars().size() > 1) {
@@ -1303,7 +1325,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   @Pure
   public @Nullable DiscardInfo isObviousStatically_SomeInEquality(@NonPrototype Invariant this) {
     DiscardInfo result = isObviousStatically();
-    if (result != null) return result;
+    if (result != null) {
+      return result;
+    }
     return isObviousStatically_SomeInEqualityHelper(
         this.ppt.var_infos, new /*NNC:@MonotonicNonNull*/ VarInfo[this.ppt.var_infos.length], 0);
   }
@@ -1437,7 +1461,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   @Pure
   public @Nullable DiscardInfo isObviousDynamically_SomeInEquality(@NonPrototype Invariant this) {
     DiscardInfo result = isObviousDynamically();
-    if (result != null) return result;
+    if (result != null) {
+      return result;
+    }
     return isObviousDynamically_SomeInEqualityHelper(
         this.ppt.var_infos, new /*NNC:@MonotonicNonNull*/ VarInfo[this.ppt.var_infos.length], 0);
   }
@@ -1502,7 +1528,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       }
 
       int compareClass = compareClass(inv1, inv2);
-      if (compareClass != 0) return compareClass;
+      if (compareClass != 0) {
+        return compareClass;
+      }
 
       return compareVariables(inv1, inv2);
     }
@@ -1518,7 +1546,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
           String df1 = inv1.format();
           String df2 = inv2.format();
           int cmp = df1.compareTo(df2);
-          if (cmp != 0) return cmp;
+          if (cmp != 0) {
+            return cmp;
+          }
           return inv1.ppt.var_infos.length - inv2.ppt.var_infos.length;
         }
         return 0;
@@ -1544,7 +1574,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
         VarInfo var1 = vars1[i];
         VarInfo var2 = vars2[i];
         int compare = var1.name().compareTo(var2.name());
-        if (compare != 0) return compare;
+        if (compare != 0) {
+          return compare;
+        }
       }
 
       // All the variable names matched
@@ -1553,7 +1585,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
     private int compareImplications(Implication inv1, Implication inv2) {
       int comparePredicate = compare(inv1.predicate(), inv2.predicate());
-      if (comparePredicate != 0) return comparePredicate;
+      if (comparePredicate != 0) {
+        return comparePredicate;
+      }
 
       return compare(inv1.consequent(), inv2.consequent());
     }
@@ -1623,7 +1657,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     @Pure
     @Override
     public boolean equals(@GuardSatisfied Match this, @GuardSatisfied @Nullable Object obj) {
-      if (!(obj instanceof Match)) return false;
+      if (!(obj instanceof Match)) {
+        return false;
+      }
 
       Match ic = (Match) obj;
       return (ic.inv.match(inv));
@@ -2006,7 +2042,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return a string representation of the given invariants
+   * Return a string representation of the given invariants.
    *
    * @param invs the invariants to get a string representation of
    * @return a string representation of the given invariants
@@ -2067,7 +2103,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * This does not consider PairwiseIntComparison to be an equality invariant.
    */
   public boolean isEqualityComparison() {
-    if (!(this instanceof EqualityComparison)) return false;
+    if (!(this instanceof EqualityComparison)) {
+      return false;
+    }
     double chance_conf = ((EqualityComparison) this).eq_confidence();
     return chance_conf > Invariant.dkconfig_confidence_limit;
   }

@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.ReflectionPlume;
+import org.plumelib.reflection.ReflectionPlume;
 
 /**
  * PptName is an immutable ADT that represents naming data associated with a given program point,
@@ -31,7 +31,7 @@ public class PptName implements Serializable {
 
   // These are never changed but cannot be declared "final", because they
   // must be re-interned upon deserialization.
-  /** Full program point name */
+  /** Full program point name. */
   private @Interned String fullname;
 
   // fn_name and point together comprise fullname
@@ -41,9 +41,9 @@ public class PptName implements Serializable {
   private @Interned String point;
 
   // cls and method together comprise fn_name
-  /** Fully-qualified class name */
+  /** Fully-qualified class name. */
   private @Nullable @Interned String cls;
-  /** Method signature, including types */
+  /** Method signature, including types. */
   private final @Nullable @Interned String method;
 
   // Representation invariant:
@@ -157,7 +157,9 @@ public class PptName implements Serializable {
    *     it is in. May be null. e.g. "StackAr"
    */
   public @Nullable String getShortClassName() {
-    if (cls == null) return null;
+    if (cls == null) {
+      return null;
+    }
     int pt = cls.lastIndexOf('.');
     if (pt == -1) {
       return cls;
@@ -168,7 +170,9 @@ public class PptName implements Serializable {
 
   /** @return a guess at the package name. May be null. */
   public @Nullable String getPackageName() {
-    if (cls == null) return null;
+    if (cls == null) {
+      return null;
+    }
     int pt = cls.lastIndexOf('.');
     if (pt == -1) {
       return null;
@@ -190,7 +194,9 @@ public class PptName implements Serializable {
    *     values, etc. May be null. e.g. "pop"
    */
   public @Nullable String getMethodName() {
-    if (method == null) return null;
+    if (method == null) {
+      return null;
+    }
     int lparen = method.indexOf('(');
     assert lparen >= 0;
     return method.substring(0, lparen);
@@ -206,8 +212,8 @@ public class PptName implements Serializable {
     // if (cls == null && method == null) {
     //   return null;
     // }
-    // if (cls == null) return method;
-    // if (method == null) return cls;
+    // if (cls == null) { return method; }
+    // if (method == null) { return cls; }
     // return (cls + "." + method).intern();
   }
 
@@ -318,18 +324,22 @@ public class PptName implements Serializable {
 
   /**
    * @return true iff this program point is a constructor entry or exit. There are two ways in which
-   *     this works. With the older declaration format, the method name starts with &lt;init&gt;.
-   *     The newer declaration format does not have &lt;init&gt; but their method name includes the
-   *     class name. For compatibility both mechanisms are checked.
+   *     this works. With the older declaration format, the method name starts with {@code <init>}.
+   *     The newer declaration format does not have {@code <init>} but their method name includes
+   *     the class name. For compatibility both mechanisms are checked.
    */
   @Pure
   public boolean isConstructor() {
 
     if (method != null) {
 
-      if (method.startsWith("<init>")) return true;
+      if (method.startsWith("<init>")) {
+        return true;
+      }
 
-      if (cls == null) return false;
+      if (cls == null) {
+        return false;
+      }
 
       @SuppressWarnings("signature") // cls is allowed to be arbitrary, especially for non-Java code
       String class_name = ReflectionPlume.fullyQualifiedNameToSimpleName(cls);
@@ -345,13 +355,15 @@ public class PptName implements Serializable {
       // System.out.println ("class_name = " + class_name);
       // System.out.println ("method_name = " + method_name);
 
-      if (class_name.equals(method_name)) return true;
+      if (class_name.equals(method_name)) {
+        return true;
+      }
     }
 
     return false;
   }
 
-  /** Debugging output */
+  /** Debugging output. */
   public String repr() {
     return "PptName: fullname="
         + fullname

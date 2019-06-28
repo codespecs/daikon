@@ -176,6 +176,7 @@ public class DynamicConstants implements Serializable {
           : toString();
     }
 
+    @SuppressWarnings("super.invocation.invalid")
     public Constant(VarInfo vi) {
       this.vi = vi;
     }
@@ -262,7 +263,8 @@ public class DynamicConstants implements Serializable {
 
     // Start everything off as missing (since we haven't seen any values yet)
     for (VarInfo vi : ppt.var_infos) {
-      Constant c = new Constant(vi);
+      @SuppressWarnings("interning") // one Constant per VarInfo
+      @Interned Constant c = new Constant(vi);
       all_list.add(c);
       missing_list.add(c);
     }

@@ -40,7 +40,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * methods; it should never be instantiated.
  */
 @SuppressWarnings({
-  "initialization.fields.uninitialized", // library initialized in code added by run-time
+  "initialization.static.fields.uninitialized", // library initialized in code added by run-time
   // instrumentation
   "JavaLangClash" // same class name as one in java.lang.
 })
@@ -81,20 +81,20 @@ public class Runtime {
   // Setups that control what information is written
   //
 
-  /** Depth to wich to examine structure components */
+  /** Depth to wich to examine structure components. */
   static int nesting_depth = 2;
 
   //
   // Dtrace file vars
   //
 
-  /** Max number of records in dtrace file */
+  /** Max number of records in dtrace file. */
   static long dtraceLimit = Long.MAX_VALUE;
 
-  /** Number of records printed to date */
+  /** Number of records printed to date. */
   static long printedRecords = 0;
 
-  /** Terminate the program when the dtrace limit is reached */
+  /** Terminate the program when the dtrace limit is reached. */
   static boolean dtraceLimitTerminate = false;
 
   /** Dtrace output stream. Null if no_dtrace is true. */
@@ -102,7 +102,7 @@ public class Runtime {
   // instrumentation code that cannot be type-checked by a source code checker.
   static @GuardedBy("<self>") PrintStream dtrace;
 
-  /** Set to true when the dtrace stream is closed */
+  /** Set to true when the dtrace stream is closed. */
   static boolean dtrace_closed = false;
 
   /** True if no dtrace is being generated. */
@@ -110,11 +110,11 @@ public class Runtime {
 
   static String method_indent = "";
 
-  /** Decl writer setup for writing to the trace file */
+  /** Decl writer setup for writing to the trace file. */
   // Set in ChicoryPremain.premain().
   static DeclWriter decl_writer;
 
-  /** Dtrace writer setup for writing to the trace file */
+  /** Dtrace writer setup for writing to the trace file. */
   // Set in ChicoryPremain.premain().
   static @GuardedBy("Runtime.class") DTraceWriter dtrace_writer;
 
@@ -124,7 +124,7 @@ public class Runtime {
    */
   private static Set<String> initSet = new HashSet<>();
 
-  /** Class of information about each active call */
+  /** Class of information about each active call. */
   private static class CallInfo {
     /** nonce of call */
     int nonce;
@@ -217,13 +217,17 @@ public class Runtime {
       method_indent = method_indent.concat("  ");
     }
 
-    if (dontProcessPpts()) return;
+    if (dontProcessPpts()) {
+      return;
+    }
 
     // Make sure that the in_dtrace flag matches the stack trace
     // check_in_dtrace();
 
     // Ignore this call if we are already processing a dtrace record
-    if (in_dtrace) return;
+    if (in_dtrace) {
+      return;
+    }
 
     // Note that we are processing a dtrace record until we return
     in_dtrace = true;
@@ -312,13 +316,17 @@ public class Runtime {
           "%smethod_exit  %s.%s%n", method_indent, mi.class_info.class_name, mi.method_name);
     }
 
-    if (dontProcessPpts()) return;
+    if (dontProcessPpts()) {
+      return;
+    }
 
     // Make sure that the in_dtrace flag matches the stack trace
     // check_in_dtrace();
 
     // Ignore this call if we are already processing a dtrace record
-    if (in_dtrace) return;
+    if (in_dtrace) {
+      return;
+    }
 
     // Note that we are processing a dtrace record until we return
     in_dtrace = true;
@@ -561,7 +569,7 @@ public class Runtime {
   }
 
   // Copied from daikon.Runtime
-  /** Specify the dtrace file to which to write */
+  /** Specify the dtrace file to which to write. */
   @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {
     System.out.printf("entered daikon.chicory.Runtime.setDtrace(%s, %b)...%n", filename, append);
@@ -971,7 +979,9 @@ public class Runtime {
           // Do nothing; i gets incremented.
       }
     }
-    if (sb.length() == 0) return orig;
+    if (sb.length() == 0) {
+      return orig;
+    }
     sb.append(orig.substring(post_esc));
     return sb.toString();
   }
@@ -1027,8 +1037,10 @@ public class Runtime {
     } else {
       if (dims > 0) // array of primitives
       result = primitiveClassesFromJvm.get(classname);
-      else // just a primitive
-      result = classname;
+      else {
+        // just a primitive
+        result = classname;
+      }
 
       if (result == null) {
         // As a failsafe, use the input; perhaps it is in Java, not JVML,

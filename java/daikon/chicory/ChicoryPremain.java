@@ -49,7 +49,7 @@ public class ChicoryPremain {
 
   public static boolean debug = false;
 
-  /** Set of pure methods returned by Alexandru Salcianu's purity analysis */
+  /** Set of pure methods returned by Alexandru Salcianu's purity analysis. */
   // Non-null if doPurity == true
   private static @MonotonicNonNull Set<String> pureMethods = null;
 
@@ -218,7 +218,7 @@ public class ChicoryPremain {
 
       if (line != null) {
         pureMethods.add(line.trim());
-        // System.out.printf("Adding '%s' to list of pure methods\n",
+        // System.out.printf("Adding '%s' to list of pure methods%n",
         //                   line);
       }
     } while (line != null);
@@ -228,7 +228,7 @@ public class ChicoryPremain {
     } catch (IOException e) {
     }
 
-    // System.out.printf("leaving purify file\n");
+    // System.out.printf("leaving purify file%n");
 
   }
 
@@ -262,7 +262,7 @@ public class ChicoryPremain {
    */
   //  private static void runPurityAnalysis(String targetApp)
   //  {
-  //      //Example args: --pa:assignable -q  -c DataStructures.StackAr
+  //      // Example args: --pa:assignable -q  -c DataStructures.StackAr
   //      String[] args = new String[] {"--pa:assignable", "-c", targetApp};
   //
   //      Set<HMethod> pureHMethods = harpoon.Main.SAMain.getPureMethods(args);

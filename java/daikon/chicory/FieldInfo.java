@@ -15,10 +15,10 @@ import org.checkerframework.dataflow.qual.Pure;
  * fields.
  */
 public class FieldInfo extends DaikonVariableInfo {
-  /** The corresponding Field */
+  /** The corresponding Field. */
   private Field field;
 
-  /** The offset of this field in its containing class */
+  /** The offset of this field in its containing class. */
   private int field_num;
 
   /** whether or not this is a static field */
@@ -61,7 +61,7 @@ public class FieldInfo extends DaikonVariableInfo {
     field_num = num_prim_fields(superclass);
     for (Field f : clazz.getDeclaredFields()) {
       if (f.equals(field)) {
-        // System.out.printf("field %s has field num %d\n", field,
+        // System.out.printf("field %s has field num %d%n", field,
         //                   field_num);
         return;
       }

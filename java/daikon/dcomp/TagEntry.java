@@ -38,7 +38,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @SuppressWarnings("interning")
 class TagEntry extends WeakReference<Object> {
 
-  /** Maps each object to its entry in the Union-Find datastructure */
+  /** Maps each object to its entry in the Union-Find datastructure. */
   public static final WeakIdentityHashMap<Object, TagEntry> object_map =
       new WeakIdentityHashMap<Object, TagEntry>();
 
@@ -60,7 +60,7 @@ class TagEntry extends WeakReference<Object> {
 
   protected String trace_loc = "";
 
-  /** Create an entry as a separate set */
+  /** Create an entry as a separate set. */
   public TagEntry(Object obj) {
     super(obj);
     this.parent = null;
@@ -68,7 +68,7 @@ class TagEntry extends WeakReference<Object> {
     // System.out.printf("Make %s with parent %s%n", this, this.parent);
   }
 
-  /** Create an entry and add it to an existing set */
+  /** Create an entry and add it to an existing set. */
   public TagEntry(Object obj, TagEntry parent) {
     super(obj);
     this.parent = parent;
@@ -163,7 +163,9 @@ class TagEntry extends WeakReference<Object> {
    */
   public TagEntry find() {
 
-    if (parent == null) return this;
+    if (parent == null) {
+      return this;
+    }
 
     // Find the tag at the top of the list
     TagEntry tag = this;
@@ -188,7 +190,9 @@ class TagEntry extends WeakReference<Object> {
   public static Object find(Object obj) {
     assert obj != null;
     TagEntry entry = object_map.get(obj);
-    if (entry == null) return obj;
+    if (entry == null) {
+      return obj;
+    }
     TagEntry root = entry.find();
 
     // It shouldn't matter that this isn't a member of the set, only that
@@ -288,7 +292,7 @@ class TagEntry extends WeakReference<Object> {
     return out;
   }
 
-  /** Returns the tracer of this node */
+  /** Returns the tracer of this node. */
   public @Nullable TagEntry getTracer() {
     return tracer;
   }

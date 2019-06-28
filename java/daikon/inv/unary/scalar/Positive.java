@@ -42,7 +42,7 @@ public class Positive extends SingleScalar {
 
   private static @Prototype Positive proto = new @Prototype Positive();
 
-  /** Returns the prototype invariant */
+  /** Returns the prototype invariant. */
   public static @Prototype Positive get_proto() {
     return proto;
   }

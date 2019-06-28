@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.EntryReader;
-import org.plumelib.util.ReflectionPlume;
 
 /**
  * This class applies settings from a configuration file that lists variable names and values (see
@@ -267,7 +267,7 @@ public final class Configuration implements Serializable {
         value = unparsed.substring(1, unparsed.length() - 1);
       }
       value = ((String) value).intern();
-      // System.out.printf("setting %s to '%s'\n", field, value);
+      // System.out.printf("setting %s to '%s'%n", field, value);
     } else if ((type.getSuperclass() != null)
         && type.getSuperclass().getName().equals("java.lang.Enum")) {
       try {

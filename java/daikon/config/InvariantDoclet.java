@@ -15,7 +15,7 @@ import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.plumelib.util.ReflectionPlume;
+import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
@@ -32,7 +32,7 @@ import org.plumelib.util.UtilPlume;
  */
 public class InvariantDoclet {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   /**
    * Invariants that match any of the specified regular expressions are purposefully missing enable
