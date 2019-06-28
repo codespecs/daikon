@@ -1749,7 +1749,7 @@ public class PptTopLevel extends Ppt {
    * Looks up the slice for v1. If the slice does not exist, one is created (but not added into the
    * list of slices for this ppt).
    */
-  @SuppressWarnings("purity") // caching
+  @SuppressWarnings("all:purity") // caching
   @Pure
   public PptSlice get_temp_slice(VarInfo v) {
 
@@ -1763,7 +1763,7 @@ public class PptTopLevel extends Ppt {
    * Looks up the slice for v1 and v2. They do not have to be in order. If the slice does not exist,
    * one is created (but not added into the list of slices for this ppt).
    */
-  @SuppressWarnings("purity") // caching
+  @SuppressWarnings("all:purity") // caching
   @Pure
   public PptSlice get_temp_slice(VarInfo v1, VarInfo v2) {
 
@@ -1910,7 +1910,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not v1 is a subset of v2. */
-  @SuppressWarnings("purity") // side effects to local state
+  @SuppressWarnings("all:purity") // side effects to local state
   @Pure
   public boolean is_subset(VarInfo v1, VarInfo v2) {
 
@@ -1941,7 +1941,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not v1 is always non-zero. */
-  @SuppressWarnings("purity") // caching
+  @SuppressWarnings("all:purity") // caching
   @Pure
   public boolean is_nonzero(VarInfo v) {
 

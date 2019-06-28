@@ -328,7 +328,7 @@ public abstract class PptSlice extends Ppt {
 
   /** For debugging only. */
   @Override
-  @SuppressWarnings("purity") // string creation
+  @SuppressWarnings("all:purity") // string creation
   @SideEffectFree
   public String toString(@GuardSatisfied PptSlice this) {
     StringBuilder sb = new StringBuilder();

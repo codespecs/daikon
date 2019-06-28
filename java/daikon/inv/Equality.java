@@ -137,7 +137,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    *
    * @return the canonical VarInfo of this
    */
-  @SuppressWarnings("purity") // set cache field
+  @SuppressWarnings("all:purity") // set cache field
   @Pure
   public VarInfo leader(
       @GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this) {

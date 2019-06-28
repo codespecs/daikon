@@ -235,7 +235,7 @@ public class Quantify {
      * Looks up the array variable which is the base of this array. Throws an exception if one does
      * not exist.
      */
-    @SuppressWarnings("sideeffectfree") // throws exception in case of error
+    @SuppressWarnings("all:sideeffectfree") // throws exception in case of error
     @SideEffectFree
     private VarInfo get_check_array_var(String output_format) {
       VarInfo arr_var = sequence.get_base_array_hashcode();

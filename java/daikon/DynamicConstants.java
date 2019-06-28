@@ -208,7 +208,7 @@ public class DynamicConstants implements Serializable {
     }
 
     @Override
-    @SuppressWarnings("purity") // side effects to local state (string creation)
+    @SuppressWarnings("all:purity") // side effects to local state (string creation)
     @SideEffectFree
     public String toString(@GuardSatisfied Constant this) {
 

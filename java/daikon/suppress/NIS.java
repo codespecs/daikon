@@ -989,7 +989,7 @@ public class NIS {
     }
 
     /** Returns true if the invariant is still suppressed. */
-    @SuppressWarnings("purity") // new object is not returned
+    @SuppressWarnings("all:purity") // new object is not returned
     @Pure
     public boolean is_ni_suppressed() {
 

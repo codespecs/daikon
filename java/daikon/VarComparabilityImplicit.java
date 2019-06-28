@@ -161,7 +161,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     }
   }
 
-  @SuppressWarnings("purity") // Override the purity checker
+  @SuppressWarnings("all:purity") // Override the purity checker
   @Pure
   static boolean comparable(
       @GuardSatisfied VarComparabilityImplicit type1,

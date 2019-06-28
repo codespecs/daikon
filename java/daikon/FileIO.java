@@ -2940,8 +2940,7 @@ public final class FileIO {
 
   /** Call this to indicate a malformed declaration. */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
-    @SuppressWarnings(
-        "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
+    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(msg);
   }
@@ -2949,8 +2948,7 @@ public final class FileIO {
   /** Call this to indicate a malformed declaration. */
   private static void decl_error(
       ParseState state, Throwable cause, String format, @Nullable Object... args) {
-    @SuppressWarnings(
-        "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
+    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(cause, msg);
   }
