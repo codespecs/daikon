@@ -435,7 +435,9 @@ public final class FileIO {
     // Build the var infos from the var definitions.
     List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
-      vi_list.add(new VarInfo(vd));
+      @SuppressWarnings("interned") // about to be used in a new program point
+      @Interned VarInfo vi = new VarInfo(vd);
+      vi_list.add(vi);
     }
     VarInfo[] vi_array = vi_list.toArray(new VarInfo[vi_list.size()]);
 
@@ -734,14 +736,17 @@ public final class FileIO {
           filename);
     }
 
-    return new VarInfo(
-        varname,
-        prog_type,
-        file_rep_type,
-        comparability,
-        is_static_constant,
-        static_constant_value,
-        aux);
+    @SuppressWarnings("interning")
+    @Interned VarInfo result =
+        new VarInfo(
+            varname,
+            prog_type,
+            file_rep_type,
+            comparability,
+            is_static_constant,
+            static_constant_value,
+            aux);
+    return result;
   }
 
   @RequiresNonNull("FileIO.new_decl_format")

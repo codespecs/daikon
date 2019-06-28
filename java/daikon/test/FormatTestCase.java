@@ -579,6 +579,7 @@ class FormatTestCase {
    * @param i a unique identifier that determines the name to be used
    * @return a VarInfo object that described the type
    */
+  @SuppressWarnings("interning")
   private static VarInfo getVarInfo(ProglangType type, int i) {
     assert type != null : "Unexpected null variable type passed to getVarInfo";
 
