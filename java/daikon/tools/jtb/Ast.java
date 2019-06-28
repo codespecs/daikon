@@ -623,7 +623,7 @@ public class Ast {
       }
 
       @Override
-      @SuppressWarnings("interned")
+      @SuppressWarnings("interning")
       public void visit(NodeToken node) {
         if (!seenPredecessor) {
           if (node == predecessor) {

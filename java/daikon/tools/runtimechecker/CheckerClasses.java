@@ -19,7 +19,7 @@ public class CheckerClasses {
     return classes;
   }
 
-  @SuppressWarnings("interned")
+  @SuppressWarnings("interning")
   public void addDeclaration(ClassOrInterfaceBody clazz, StringBuilder decl) {
 
     for (CheckerClass c : classes) {

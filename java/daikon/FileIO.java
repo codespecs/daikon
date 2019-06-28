@@ -435,7 +435,7 @@ public final class FileIO {
     // Build the var infos from the var definitions.
     List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
-      @SuppressWarnings("interned") // about to be used in a new program point
+      @SuppressWarnings("interning") // about to be used in a new program point
       @Interned VarInfo vi = new VarInfo(vd);
       vi_list.add(vi);
     }
@@ -902,7 +902,7 @@ public final class FileIO {
           new_vals[vi.value_index] = canonical_hashcode;
         }
       }
-      @SuppressWarnings("cast.unsafe.constructor.invocation")
+      @SuppressWarnings("interning:cast.unsafe.constructor.invocation")
       @Interned Invocation result = new @Interned Invocation(ppt, new_vals, mods);
       return result;
     }
