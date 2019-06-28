@@ -122,6 +122,7 @@ JAVA_FILES_FOR_FORMAT = $(shell grep -r --include '*.java' --exclude-dir '*daiko
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
 TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
+TAG_FILES_NO_JTB = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -path './jtb' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -653,7 +654,12 @@ very-clean: clean clean-generated-files
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
 
-ETAGS := $(shell command -v etags 2> /dev/null)
+ETAGS_EXISTS := $(shell command -v etags 2> /dev/null)
+ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
+ETAGS := etags --language-force=java
+else
+ETAGS := etags --language=java
+endif
 
 TAGS:	tags
 .PHONY: etags tags
@@ -661,22 +667,25 @@ etags:	tags
 tags: ../utils/plume-scripts
 ifndef ETAGS
 	$(error etags is not available, please install it)
-else
+endif
 	@echo etags '*.java ...'
-ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
-	@etags --language-force=java ${TAG_FILES}
-else
-	@etags --language=java ${TAG_FILES}
-endif
-endif
+	@$(ETAGS) ${TAG_FILES}
+
 # A TAGS file that does not contain generated files
 # When doing certain search/replace tasks, it's better to omit generated files
 tags-nogen: tags-without-generated-files
 tags-sans-generated: tags-without-generated-files
 tags-without-generated-files: clean-generated-files
-	@echo etags '*.java ...'
 	$(MAKE) tags
 	$(MAKE) compile
+
+# A TAGS file that does not contain jtb-generated files.
+tags-nojtb: ../utils/plume-scripts
+ifndef ETAGS
+	$(error etags is not available, please install it)
+endif
+	@echo etags '*.java ...'
+	@$(ETAGS) ${TAG_FILES_NO_JTB}
 
 
 ###########################################################################
