@@ -182,7 +182,6 @@ public final class CLASSNAME extends BinaryDerivation {
       return new ValueAndModified(Intern.intern(result), mod);
     } else if (val1 instanceof Object[]) {
       @Interned Object[] result = new @Interned Object[count];
-      @SuppressWarnings("interning") // object invariant: array elements are interned
       @Interned Object[] values = (@Interned Object[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {

@@ -375,7 +375,6 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 #endif
 
-  @SuppressWarnings("interning") // clone method re-does interning
   @SideEffectFree
   @Override
   public ONEOFSCALAR clone(@GuardSatisfied ONEOFSCALAR this) {
@@ -415,7 +414,6 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
   }
 
-  @SuppressWarnings("interning") // generics bug in (at least interning) checker
 #if defined(STRING) || defined(ELTSTRING)
   static Comparator<String> comparator = new UtilPlume.NullableStringComparator();
   #define COMPARATOR_ARG , comparator
@@ -2029,7 +2027,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
-  @SuppressWarnings("interning") // readObject re-interns
   private void readObject(ObjectInputStream in) throws IOException,
     ClassNotFoundException {
     in.defaultReadObject();
@@ -2055,7 +2052,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
    *     variable order in parent_ppt.
    * @param parent_ppt slice that will contain the new invariant
    */
-  @SuppressWarnings("interning") // cloning requires re-interning
   @Override
   public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
