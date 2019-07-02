@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.interning.qual.InternMethod;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
@@ -54,7 +55,7 @@ import org.plumelib.util.UtilPlume;
  * classes are specific types of names, like applying a function to something. For example, "a" is a
  * name, and "sin(a)" is a name that is the name "a" with the function "sin" applied to it.
  */
-@SuppressWarnings({"nullness", "interning"}) // deprecated file
+@SuppressWarnings("nullness") // deprecated file
 public abstract @Interned class VarInfoName implements Serializable, Comparable<VarInfoName> {
 
   /** Debugging Logger. */
@@ -425,6 +426,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       new WeakHashMap<>();
   // This does not make any guarantee that the components of the
   // VarInfoName are themselves interned.  Should it?  (I suspect so...)
+  @InternMethod
   public VarInfoName intern() {
     WeakReference<VarInfoName> ref = internTable.get(this);
     if (ref != null) {
@@ -432,7 +434,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return result;
     } else {
       @SuppressWarnings("interning") // intern method
-      VarInfoName this_interned = this;
+      @Interned VarInfoName this_interned = this;
       internTable.put(this_interned, new WeakReference<>(this_interned));
       return this_interned;
     }
@@ -2384,7 +2386,6 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * Use to report whether a node is in a pre- or post-state context. Throws an assertion error if a
    * given goal isn't present.
    */
-  @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class NodeFinder extends AbstractVisitor<VarInfoName> {
     /**
      * Creates a new NodeFinder.
@@ -2499,7 +2500,6 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * Finds if a given VarInfoName is contained in a set of nodes in the VarInfoName tree using ==
    * comparison. Recurse through everything except fields, so in x.a, we don't look at a.
    */
-  @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class Finder extends AbstractVisitor<VarInfoName> {
     // state and accessors
     private final Set<VarInfoName> goals;
@@ -2737,7 +2737,6 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * Use to traverse a tree, find the first (elements ...) node, and report whether it's in pre or
    * post-state.
    */
-  @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class ElementsFinder extends AbstractVisitor<Elements> {
     public ElementsFinder(VarInfoName name) {
       elems = name.accept(this);
@@ -2813,7 +2812,6 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * A Replacer is a Visitor that makes a copy of a tree, but replaces some node (and its children)
    * with another. The result is *not* interned; the client must do that if desired.
    */
-  @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class Replacer extends AbstractVisitor<VarInfoName> {
     private final VarInfoName old;
     private final VarInfoName _new;
@@ -3201,9 +3199,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     /**
      * A FreeVar is very much like a Simple, except that it doesn't care if it's in prestate or
-     * poststate for simplify formatting.
+     * poststate for simpli
+     *
+     * <p>fy formatting.
      */
-    public static class FreeVar extends Simple {
+    public static @Interned class FreeVar extends Simple {
       // We are Serializable, so we specify a version to allow changes to
       // method signatures without breaking serialization.  If you add or
       // remove fields, you should change this number to the current date.
@@ -3314,7 +3314,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
           index_vin = index_base;
           if (index_off != 0) index_vin = index_vin.applyAdd(index_off);
         } else {
-          index_vin = new Simple(index_off + "");
+          index_vin = new Simple(index_off + "").intern();
         }
         VarInfoName to_replace = unquants.get(0);
         @Interned VarInfoName[] replace_result = replace(root, to_replace, index_vin);
@@ -3340,7 +3340,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         if (index_base != null) {
           if (index_off != 0) index_base += "+" + index_off;
           if (free) {
-            index_vin = new FreeVar(index_base);
+            index_vin = new FreeVar(index_base).intern();
           } else {
             index_vin = VarInfoName.parse(index_base);
           }
@@ -3348,7 +3348,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
           //  System.out.printf("selectNth: '%s' '%s'%n", index_base,
           //                     index_vin);
         } else {
-          index_vin = new Simple(index_off + "");
+          index_vin = new Simple(index_off + "").intern();
         }
         VarInfoName to_replace = unquants.get(0);
         VarInfoName[] replace_result = replace(root, to_replace, index_vin);
@@ -3377,7 +3377,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       for (VarInfoName vin : vins) {
         simples.addAll(new SimpleNamesVisitor(vin).simples());
       }
-      return new FreeVar(freshDistinctFrom(simples));
+      return new FreeVar(freshDistinctFrom(simples)).intern();
     }
 
     /** Record type for return value of the quantify method below. */
