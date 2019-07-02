@@ -830,7 +830,7 @@ JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 ## Code in dcomp directory is not called directly; annotations would be useless.
 INDEX_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
-INTERNING_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
+INTERNING_SKIPDEFS = daikon\.Quant\|^daikon\.dcomp\|^jtb\.
 ALLSYSTEMS_SKIPDEFS=^jtb\.
 INDEX_JAVA_FILES = ${DAIKON_JAVA_FILES}
 # Intern.java implements interning and so has very many annotations.  VarInfoName
