@@ -3199,9 +3199,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     /**
      * A FreeVar is very much like a Simple, except that it doesn't care if it's in prestate or
-     * poststate for simpli
-     *
-     * <p>fy formatting.
+     * poststate for simplify formatting.
      */
     public static @Interned class FreeVar extends Simple {
       // We are Serializable, so we specify a version to allow changes to
