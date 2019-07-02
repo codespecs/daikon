@@ -365,7 +365,6 @@ public final class ValueTuple implements Cloneable {
    * ValueTuple, fills it in with derived variables, and only then interns it; the alternative would
    * be for derived variables to take separate vals and mods arguments. No one else should use it!
    */
-  @SuppressWarnings("interning") // interning constructor
   public static ValueTuple makeUninterned(@Nullable Object[] vals, int[] mods) {
     return new ValueTuple(vals, mods, false);
   }
