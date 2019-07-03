@@ -353,7 +353,7 @@ workflows:
       - non-txt-diff-fedora:
           requires:
             - non-txt-diff-ubuntu
-      - misc-fedora~
+      - misc-fedora:
           requires:
             - misc-ubuntu
       - kvasir-fedora:
