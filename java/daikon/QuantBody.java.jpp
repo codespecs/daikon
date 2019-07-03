@@ -577,7 +577,7 @@ The test ensures that the method only appears once in the output.
    * elements in the other array. If both arrays are empty, returns a new empty array.
    */
 #if defined(OBJECT) || defined(STRING)
-  @SuppressWarnings({"UnnecessaryTypeArgument"}) // generics bug in Checker Framework?
+  @SuppressWarnings({"UnnecessaryTypeArgument"})
 #endif
   @SideEffectFree
   public static _TYPE @PolyNull [] concat(_TYPE @PolyNull [] seq1, _TYPE @PolyNull [] seq2) {
