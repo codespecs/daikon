@@ -107,9 +107,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.NonRaw;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -236,8 +234,7 @@ public class PptTopLevel extends Ppt {
 
   @Pure
   @Override
-  public String name(
-          @GuardSatisfied @UnknownInitialization(PptTopLevel.class) @Raw(PptTopLevel.class) PptTopLevel this) {
+  public String name(@GuardSatisfied @UnknownInitialization(PptTopLevel.class) PptTopLevel this) {
     return name;
   }
 
@@ -385,10 +382,7 @@ public class PptTopLevel extends Ppt {
   // This was renamed to the joiner_view because it no longer just for
   // implications, but instead for any Invariants that represents a
   // "joining" of two others (such as and, or, etc)
-  @SuppressWarnings({
-    "rawness",
-    "initialization"
-  }) // field won't be used until object is initialized
+  @SuppressWarnings({"initialization"}) // field won't be used until object is initialized
   public PptSlice0 joiner_view = new PptSlice0(this);
 
   /** Holds Equality invariants. Never null after invariants are instantiated. */
@@ -447,7 +441,7 @@ public class PptTopLevel extends Ppt {
 
   @RequiresNonNull("var_infos")
   @EnsuresNonNull({"mbtracker", "views", "value_sets"})
-  private void init_vars(@UnderInitialization(Ppt.class) @Raw PptTopLevel this) {
+  private void init_vars(@UnderInitialization(Ppt.class) PptTopLevel this) {
 
     // debug_varinfo.log("initializing var_infos %s", Arrays.toString(var_infos));
     // debug_varinfo.tb();
@@ -494,8 +488,8 @@ public class PptTopLevel extends Ppt {
 
     for (VarInfo vi : var_infos) {
       // TODO: This should not be necessary, since initialization is now complete
-      @SuppressWarnings({"rawness", "initialization"}) // initialization is now complete
-      @Initialized @NonRaw PptTopLevel initializedThis = this;
+      @SuppressWarnings({"initialization"}) // initialization is now complete
+      @Initialized PptTopLevel initializedThis = this;
       vi.ppt = initializedThis;
     }
 

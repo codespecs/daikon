@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
@@ -139,8 +138,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    */
   @SuppressWarnings("all:purity") // set cache field
   @Pure
-  public VarInfo leader(
-      @GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this) {
+  public VarInfo leader(@GuardSatisfied @UnknownInitialization(Equality.class) Equality this) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }

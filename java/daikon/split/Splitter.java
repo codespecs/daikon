@@ -8,7 +8,6 @@ import java.io.Serializable;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 
 /**
  * A Splitter represents a test that can be used to separate all samples into two parts. For
@@ -46,8 +45,7 @@ public abstract class Splitter implements Serializable {
    * implementation should always set the "instantiated" protected field to true, if that field is
    * present in the Splitter class.
    */
-  public abstract Splitter instantiateSplitter(
-      @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt ppt);
+  public abstract Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) Ppt ppt);
 
   /** True for an instantiated (non-"factory") splitter. */
   protected boolean instantiated = false;
