@@ -10,7 +10,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 
 // This is a fake PptSlice for use with Implication invariants.
@@ -34,8 +33,7 @@ public class PptSlice0 extends PptSlice {
   }
 
   @Override
-  public final int arity(
-      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this) {
+  public final int arity(@UnknownInitialization(PptSlice.class) PptSlice0 this) {
     return 0;
   }
 

@@ -35,7 +35,6 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
@@ -2020,7 +2019,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    */
   @FormatMethod
   public boolean log(
-      @UnknownInitialization(Invariant.class) @Raw(Invariant.class) @NonPrototype Invariant this,
+      @UnknownInitialization(Invariant.class) @NonPrototype Invariant this,
       String format,
       @Nullable Object... args) {
     if (ppt != null) {

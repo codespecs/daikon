@@ -21,7 +21,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -51,8 +50,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   @Override
-  public final int arity(
-      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this) {
+  public final int arity(@UnknownInitialization(PptSlice.class) PptSliceEquality this) {
     throw new Error("Don't call arity on PptSliceEquality");
   }
 

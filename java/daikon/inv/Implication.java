@@ -13,7 +13,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.NonPrototype;
@@ -285,9 +284,7 @@ public class Implication extends Joiner {
    */
   @Override
   public void log(
-      /*NOT: @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ Logger
-          log,
-      String msg) {
+      /*NOT: @UnknownInitialization(Implication.class) Implication this,*/ Logger log, String msg) {
 
     right.log(
         log,
@@ -311,7 +308,7 @@ public class Implication extends Joiner {
     "nullness:override.receiver.invalid", // sound overriding, not expressible in Checker Framework
   })
   public boolean log(
-      @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,
+      @UnknownInitialization(Implication.class) Implication this,
       String format,
       @Nullable Object... args) {
     String msg = (args.length == 0) ? format : String.format(format, args);
