@@ -811,9 +811,7 @@ JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -i
 # JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
 JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-## The "-J-Dcheckers.skipUses='^daikon.Debug'" should really be just for rawness, not for nullness.
-JAVAC_NULLNESS_RAW_ARGS = -processor org.checkerframework.checker.nullness.NullnessRawnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}' -J-Dcheckers.skipUses='^daikon.Debug'
-JAVAC_NULLNESS_FBC_ARGS = -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}' -J-Dcheckers.skipUses='^daikon.Debug'
+JAVAC_NULLNESS_ARGS = -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_PROTOTYPE_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
@@ -905,27 +903,9 @@ check-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
 
-check-nullness: check-nullness-raw check-nullness-fbc
-
-check-nullness-raw: compile compile-typequals
-	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
-check-nullness-fbc: compile compile-typequals
-	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
-
-# These targets run the Nullness checker on just one file.
-# Typical command:
-# NULLNESS_RAW_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-raw-onefile
-# NULLNESS_RAW_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
-# NULLNESS_RAW_ONEFILE ?= daikon/FileIO.java
-NULLNESS_RAW_ONEFILE ?= daikon/inv/Invariant.java
-check-nullness-raw-onefile: compile compile-typequals
-	${MAKE} check-nullness-raw-onefile-norecompile
-check-nullness-raw-onefile-norecompile:
-	${JAVAC_COMMAND} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_RAW_ONEFILE}
+check-nullness: compile compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 
 # These targets run the Nullness checker on just one file.
@@ -934,12 +914,10 @@ check-nullness-raw-onefile-norecompile:
 # NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_ONEFILE ?= daikon/FileIO.java
 NULLNESS_ONEFILE ?= daikon/Daikon.java
-check-nullness-onefile: check-nullness-fbc-onefile
-check-nullness-fbc-onefile: compile compile-typequals
-	${MAKE} check-nullness-fbc-onefile-norecompile
-check-nullness-onefile-norecompile: check-nullness-fbc-onefile-norecompile
-check-nullness-fbc-onefile-norecompile:
-	${JAVAC_COMMAND} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
+check-nullness-onefile: compile compile-typequals
+	${MAKE} check-nullness-onefile-norecompile
+check-nullness-onefile-norecompile:
+	${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
 
 check-prototype: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
@@ -1015,7 +993,7 @@ nullness-counts:
 # 	@echo -n " / "
 # 	@echo ${DAIKON_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
 	@echo -n "Lines with nullness annotations: "
-	@grep '@AssertNonNullIfFalse\|@AssertNonNullIfTrue\|@AssertParametersNonNull\|@KeyFor\|@LazyNonNull\|@NonNull\|@NonNullOnEntry\|@NonRaw\|@Nullable\|@PolyNull\|@PolyRaw\|@Pure\|@Raw' ${NULLNESS_JAVA_FILES} | wc -l
+	@grep '@AssertNonNullIfFalse\|@AssertNonNullIfTrue\|@AssertParametersNonNull\|@KeyFor\|@LazyNonNull\|@NonNull\|@NonNullOnEntry\|@Nullable\|@PolyNull\|@Pure' ${NULLNESS_JAVA_FILES} | wc -l
 	@echo -n "Lines with @SuppressWarnings annotation or castNonNull method call: "
 	@grep '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES} | wc -l
 	@grep -n '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES}

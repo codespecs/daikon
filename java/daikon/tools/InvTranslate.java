@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
 
@@ -102,7 +101,7 @@ public class InvTranslate {
 
   /** Add the specified variable names to the variable translation. */
   private void add_variable_map(
-          @UnknownInitialization(daikon.tools.InvTranslate.class) @Raw(daikon.tools.InvTranslate.class) InvTranslate this,
+      @UnknownInitialization(daikon.tools.InvTranslate.class) InvTranslate this,
       String v1_name,
       String v2_name) {
 

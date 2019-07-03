@@ -219,7 +219,6 @@ import org.checkerframework.checker.initialization.qual.Initialized;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.NonRaw;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -919,7 +918,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
 public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
-    @NonNull @NonRaw @Initialized // UNDONE: don't understand why needed (markro)
+    @NonNull @Initialized // UNDONE: don't understand why needed (markro)
     String result;
 
 #if defined(IS_ELT)
@@ -940,7 +939,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // Construct the array that unary value will be compared against.
     for (int i = 0; i < num_elts; i++) {
     #if defined(ELTSTRING)
-      @NonNull @NonRaw @Initialized // UNDONE: don't understand why needed (markro)
+      @NonNull @Initialized // UNDONE: don't understand why needed (markro)
       String arg = is_type() ? "typeof(" + elts[i] + ")" : TOSTRING(elts[i]);
       args_list.add(arg);
     #else

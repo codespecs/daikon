@@ -14,7 +14,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -54,8 +53,7 @@ public abstract class PptSlice extends Ppt {
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
 
-  public abstract int arity(
-      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this);
+  public abstract int arity(@UnknownInitialization(PptSlice.class) PptSlice this);
 
   /**
    * The invariants contained in this slice. This should not be used directly, in general. In
@@ -83,8 +81,7 @@ public abstract class PptSlice extends Ppt {
   @Override
   @SuppressWarnings(
       "initialization:override.receiver.invalid") // see comment on overridden definition in Ppt
-  public final String name(
-      @GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this) {
+  public final String name(@GuardSatisfied @UnknownInitialization(PptSlice.class) PptSlice this) {
     return parent.name + varNames(var_infos);
   }
 
