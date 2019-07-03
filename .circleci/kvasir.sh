@@ -6,6 +6,8 @@ set -o verbose
 set -o xtrace
 export SHELLOPTS
 
+export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`}
+
 make showvars compile daikon.jar
 
 echo ".travis-build.sh is running kvasir and DynComp tests"
