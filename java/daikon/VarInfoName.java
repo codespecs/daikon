@@ -55,7 +55,7 @@ import org.plumelib.util.UtilPlume;
  * classes are specific types of names, like applying a function to something. For example, "a" is a
  * name, and "sin(a)" is a name that is the name "a" with the function "sin" applied to it.
  */
-@SuppressWarnings("nullness") // deprecated file
+@SuppressWarnings({"nullness", "interning"}) // deprecated file
 public abstract @Interned class VarInfoName implements Serializable, Comparable<VarInfoName> {
 
   /** Debugging Logger. */
@@ -3201,7 +3201,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
      * A FreeVar is very much like a Simple, except that it doesn't care if it's in prestate or
      * poststate for simplify formatting.
      */
-    public static @Interned class FreeVar extends Simple {
+    public static class FreeVar extends Simple {
       // We are Serializable, so we specify a version to allow changes to
       // method signatures without breaking serialization.  If you add or
       // remove fields, you should change this number to the current date.
@@ -3312,7 +3312,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
           index_vin = index_base;
           if (index_off != 0) index_vin = index_vin.applyAdd(index_off);
         } else {
-          index_vin = new Simple(index_off + "").intern();
+          index_vin = new Simple(Integer.toString(index_off)).intern();
         }
         VarInfoName to_replace = unquants.get(0);
         @Interned VarInfoName[] replace_result = replace(root, to_replace, index_vin);
@@ -3338,7 +3338,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         if (index_base != null) {
           if (index_off != 0) index_base += "+" + index_off;
           if (free) {
-            index_vin = new FreeVar(index_base).intern();
+            index_vin = new FreeVar(index_base);
           } else {
             index_vin = VarInfoName.parse(index_base);
           }
@@ -3346,7 +3346,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
           //  System.out.printf("selectNth: '%s' '%s'%n", index_base,
           //                     index_vin);
         } else {
-          index_vin = new Simple(index_off + "").intern();
+          index_vin = new Simple(Integer.toString(index_off));
         }
         VarInfoName to_replace = unquants.get(0);
         VarInfoName[] replace_result = replace(root, to_replace, index_vin);
@@ -3375,7 +3375,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       for (VarInfoName vin : vins) {
         simples.addAll(new SimpleNamesVisitor(vin).simples());
       }
-      return new FreeVar(freshDistinctFrom(simples)).intern();
+      return new FreeVar(freshDistinctFrom(simples));
     }
 
     /** Record type for return value of the quantify method below. */
