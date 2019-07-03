@@ -572,7 +572,7 @@ The test ensures that the method only appears once in the output.
    * <p>If either array is null, returns null. If either array is empty, returns only those
    * elements in the other array. If both arrays are empty, returns a new empty array.
    */
-  @SuppressWarnings({"interning", "UnnecessaryTypeArgument"}) // generics bug in Checker Framework?
+  @SuppressWarnings({"interning"}) // generics bug in Checker Framework?
   @SideEffectFree
   public static _TYPE @PolyNull [] concat(_TYPE @PolyNull [] seq1, _TYPE @PolyNull [] seq2) {
     if (seq1 == null) {
@@ -581,7 +581,7 @@ The test ensures that the method only appears once in the output.
     if (seq2 == null) {
       return null;
     }
-    return ArraysPlume._TYPE_ARG concat(seq1, seq2);
+    return ArraysPlume.concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
