@@ -11,7 +11,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -86,8 +85,7 @@ public abstract class Ppt implements Serializable {
 
   /** Return a string representation of the variable names. */
   @SideEffectFree
-  public String varNames(
-      @GuardSatisfied @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this) {
+  public String varNames(@GuardSatisfied @UnknownInitialization(Ppt.class) Ppt this) {
     return (varNames(var_infos));
   }
 
@@ -96,7 +94,7 @@ public abstract class Ppt implements Serializable {
    * variable.
    */
   @Pure
-  public int indexOf(@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this, String varname) {
+  public int indexOf(@UnknownInitialization(Ppt.class) Ppt this, String varname) {
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].name().equals(varname)) {
         return i;
@@ -108,7 +106,7 @@ public abstract class Ppt implements Serializable {
   /** Returns the VarInfo with the specified name. Null if the name is not found. */
   @Pure
   public @Nullable VarInfo find_var_by_name(
-      @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this, String varname) {
+      @UnknownInitialization(Ppt.class) Ppt this, String varname) {
     // System.out.printf("Ppt.find_var_by_name(%s): %s%n", varname, this);
     int i = indexOf(varname);
     if (i == -1) {

@@ -109,7 +109,7 @@ public final class PPTSLICE1 extends PptSlice {
 
   @Override
   public final int arity(
-      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PPTSLICE1 this) {
+      @UnknownInitialization(PptSlice.class) PPTSLICE1 this) {
     return ARITY;
   }
   /**

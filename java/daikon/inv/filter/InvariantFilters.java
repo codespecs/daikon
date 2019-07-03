@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 
 //  This class contains a collection of invariant filters, and allows other
 //  code to perform invariant filtering.  To filter invariants, do the
@@ -90,7 +89,7 @@ public class InvariantFilters {
   }
 
   void addPropertyFilter(
-          @UnknownInitialization(InvariantFilters.class) @Raw(InvariantFilters.class) InvariantFilters this,
+      @UnknownInitialization(InvariantFilters.class) InvariantFilters this,
       InvariantFilter filter) {
     propertyFilters.add(filter);
   }

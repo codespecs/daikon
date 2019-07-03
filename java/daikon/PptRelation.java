@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -117,9 +116,8 @@ public class PptRelation implements Serializable {
   }
 
   /** Adds this relation to its child's parent list and its parent's children list. */
-  @SuppressWarnings({"rawness", "initialization"}) // won't be used until initialization is finished
-  private void connect(
-      @UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this) {
+  @SuppressWarnings({"initialization"}) // won't be used until initialization is finished
+  private void connect(@UnderInitialization(PptRelation.class) PptRelation this) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
     child.parents.add(this);

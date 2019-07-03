@@ -39,8 +39,6 @@ public class DSForest {
     public int id;
 
     @SuppressWarnings({
-      "nullnessrawness:initialization.invalid.field.write.unknown",
-      "nullnessrawness:assignment.type.incompatible",
       "nullness:initialization.invalid.field.write.unknown",
       "nullness:assignment.type.incompatible"
     }) // weakness of FBC type system
