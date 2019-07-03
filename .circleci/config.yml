@@ -345,12 +345,45 @@ workflows:
       - misc-ubuntu
       - kvasir-ubuntu
       - quick-txt-diff-fedora
+          requires:
+            - quick-txt-diff-ubuntu
       - nonquick-txt-diff-fedora
+          requires:
+            - nonquick-txt-diff-ubuntu
       - non-txt-diff-fedora
+          requires:
+            - non-txt-diff-ubuntu
       - misc-fedora
+          requires:
+            - misc-ubuntu
       - kvasir-fedora
+          requires:
+            - kvasir-ubuntu
       - quick-txt-diff-centos
+          requires:
+            - quick-txt-diff-ubuntu
       - nonquick-txt-diff-centos
+          requires:
+            - nonquick-txt-diff-ubuntu
       - non-txt-diff-centos
+          requires:
+            - non-txt-diff-ubuntu
       - misc-centos
-      - kvasir-centos
+          requires:
+            - misc-ubuntu
+      - trigger-downstream:
+          requires:
+            - quick-txt-diff-ubuntu
+            - nonquick-txt-diff-ubuntu
+            - non-txt-diff-ubuntu
+            - misc-ubuntu
+            - kvasir-ubuntu
+            - quick-txt-diff-fedora
+            - nonquick-txt-diff-fedora
+            - non-txt-diff-fedora
+            - misc-fedora
+            - kvasir-fedora
+            - quick-txt-diff-centos
+            - nonquick-txt-diff-centos
+            - non-txt-diff-centos
+            - misc-centos
