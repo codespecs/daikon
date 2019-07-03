@@ -310,7 +310,7 @@ jobs:
       - image: mdernst/ubuntu-for-daikon-jdkany
 
     steps:
-      true
+      - run: echo "Need to implement trigger-downstream"
 
       ## TODO!
       # script: |
