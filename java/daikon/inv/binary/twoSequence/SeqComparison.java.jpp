@@ -287,7 +287,6 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   /** Debugging logger. */
   static final Logger debug = Logger.getLogger("daikon.inv.binary.twoSequence." + SEQSEQINTEQUALstring);
 
-  @SuppressWarnings("interning")  // bug with generics
   static Comparator<PRIMITIVE[]> comparator = ARRAYCOMPARATOR;
 
   boolean orderMatters;

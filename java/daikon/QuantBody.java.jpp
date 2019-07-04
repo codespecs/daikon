@@ -163,7 +163,9 @@ The correct way to build the system is to run 'make'.
    * Returns the ith element of the array or collection argument. If the argument is null or not an
    * array or collection, returns a default value (BAD_VALUE).
    */
+#if defined(OBJECT) || defined(STRING)
   @SuppressWarnings("interning") // reflection
+#endif
 #if defined(BOOLEAN)
   @EnsuresNonNullIf(result=true, expression="#1")
 #endif
@@ -182,7 +184,9 @@ The correct way to build the system is to run 'make'.
     }
   }
 
+#if defined(OBJECT) || defined(STRING)
   @SuppressWarnings("interning") // called reflectively
+#endif
 #if defined(BOOLEAN)
   @EnsuresNonNullIf(result=true, expression="#1")
 #endif
@@ -572,7 +576,9 @@ The test ensures that the method only appears once in the output.
    * <p>If either array is null, returns null. If either array is empty, returns only those
    * elements in the other array. If both arrays are empty, returns a new empty array.
    */
-  @SuppressWarnings({"interning", "UnnecessaryTypeArgument"}) // generics bug in Checker Framework?
+#if defined(OBJECT) || defined(STRING)
+  @SuppressWarnings({"UnnecessaryTypeArgument"})
+#endif
   @SideEffectFree
   public static _TYPE @PolyNull [] concat(_TYPE @PolyNull [] seq1, _TYPE @PolyNull [] seq2) {
     if (seq1 == null) {
@@ -2145,7 +2151,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * @return if the resulting collection is of non-primitive type, then returns an array of type
    * Object[]. Returns null if any array or field access causes an exception.
    */
+#if defined(OBJECT) || defined(STRING)
   @SuppressWarnings("interning") // reflection
+#endif
   @SideEffectFree
   public static _TYPE_NAME @Nullable [] COLLECT_TYPE(@Nullable Object object, @Nullable String fieldStr) {
 
@@ -2163,7 +2171,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return retval;
   }
 
+#if defined(OBJECT) || defined(STRING)
   @SuppressWarnings("interning") // reflection
+#endif
   /** Helper method for COLLECT_TYPE(Object, String).
    * Operates on a subset of the fields: those in fields[fieldsStartIdx..].
    * @see COLLECT_TYPE(Object, String)
@@ -2289,7 +2299,6 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * <pre>x.f.g.h</pre>.
    * Returns a default value if any field access causes an exception.
    */
-  @SuppressWarnings("interning") // reflection
   @SideEffectFree
   public static BAD_VALUE_QUALIFIER _TYPE_NAME COLLECT_TYPE_FIELD(Object object, String fieldStr) {
 
