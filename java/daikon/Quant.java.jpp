@@ -438,9 +438,8 @@ public final class Quant {
       return null;
     }
     if (o instanceof java.util.AbstractCollection<?>) {
-      @SuppressWarnings({"unchecked", "interning"})
+      @SuppressWarnings({"unchecked"})
         AbstractCollection<Object> ac = (AbstractCollection<Object>)o;
-      @SuppressWarnings("interning") // generics bug in checker?
       Object [] result = ac.toArray(new java.lang.Object []{});
       return result;
     } else if (o.getClass().isArray()) {

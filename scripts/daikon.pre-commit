@@ -24,3 +24,15 @@ if [ ! -z "$CHANGED_FILES" ]; then
         echo "Some files have trailing whitespace: ${FILES_WITH_TRAILING_SPACES}" && exit 1
     fi
 fi
+
+if command -v circleci 2>/dev/null; then
+## From https://circleci.com/blog/circleci-hacks-validate-circleci-config-on-every-commit-with-a-git-hook/
+# The following line is needed by the CircleCI Local Build Tool (due to Docker interactivity)
+exec < /dev/tty
+# If validation fails, tell Git to stop and provide error message. Otherwise, continue.
+if ! eMSG=$(circleci config validate -c .circleci/config.yml); then
+	echo "CircleCI configuration failed validation."
+	echo $eMSG
+	exit 1
+fi
+fi

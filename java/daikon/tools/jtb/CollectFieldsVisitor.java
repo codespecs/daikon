@@ -7,8 +7,6 @@ import jtb.visitor.*;
 import org.checkerframework.checker.initialization.qual.Initialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.checker.nullness.qual.NonRaw;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /**
@@ -19,8 +17,8 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
 
   public CollectFieldsVisitor(ClassOrInterfaceDeclaration n, boolean include_nested_classes) {
     this.include_nested_classes = include_nested_classes;
-    @SuppressWarnings({"rawness", "initialization"}) // not used until fully initialized
-    @Initialized @NonRaw CollectFieldsVisitor thisNonRaw = this;
+    @SuppressWarnings({"initialization"}) // not used until fully initialized
+    @Initialized CollectFieldsVisitor thisNonRaw = this;
     n.accept(thisNonRaw);
     updateCache();
   }
@@ -40,7 +38,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
 
   @RequiresNonNull("fieldDecls")
   @EnsuresNonNull({"allNames", "ownedNames", "finalNames"})
-  private void updateCache(@UnknownInitialization @Raw CollectFieldsVisitor this) {
+  private void updateCache(@UnknownInitialization CollectFieldsVisitor this) {
     if (cached) {
       assert allNames != null : "@AssumeAssertion(nullness): flag indicates initialization";
       assert ownedNames != null : "@AssumeAssertion(nullness): flag indicates initialization";

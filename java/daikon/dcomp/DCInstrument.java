@@ -37,7 +37,7 @@ import org.plumelib.bcelutil.SimpleLog;
 import org.plumelib.bcelutil.StackTypes;
 
 /** Instruments a class file to perform Dynamic Comparability. */
-@SuppressWarnings({"nullness", "interning"}) //
+@SuppressWarnings({"nullness"}) //
 class DCInstrument extends InstructionListUtils {
 
   protected JavaClass orig_class;

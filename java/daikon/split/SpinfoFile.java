@@ -11,7 +11,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.UtilPlume;
@@ -115,7 +114,7 @@ public class SpinfoFile {
    */
   @RequiresNonNull("tempDir")
   @EnsuresNonNull({"statementReplacer", "splitterObjects"})
-  public void parseFile(@UnknownInitialization @Raw SpinfoFile this, LineNumberReader spinfoFile)
+  public void parseFile(@UnknownInitialization SpinfoFile this, LineNumberReader spinfoFile)
       throws IOException {
     List<ReplaceStatement> replaceStatements = new ArrayList<>();
     List<List<String>> pptSections = new ArrayList<>();
@@ -166,7 +165,7 @@ public class SpinfoFile {
    * @param replaceStatements the List into which the ReplaceStatements are added
    */
   private void readReplaceStatements(
-      @UnknownInitialization @Raw SpinfoFile this,
+      @UnknownInitialization SpinfoFile this,
       LineNumberReader spinfoFile,
       List<ReplaceStatement> replaceStatements)
       throws IOException, ParseException {
@@ -203,7 +202,7 @@ public class SpinfoFile {
    * @throws IOException if an I/O error occurs.
    */
   private void readPptStatements(
-      @UnknownInitialization @Raw SpinfoFile this,
+      @UnknownInitialization SpinfoFile this,
       LineNumberReader spinfoFile,
       List<List<String>> pptSections,
       String pptName)
@@ -228,7 +227,7 @@ public class SpinfoFile {
    */
   @RequiresNonNull("tempDir")
   private SplitterObject[][] createSplitterObjects(
-      @UnknownInitialization @Raw SpinfoFile this, List<List<String>> pptSections) {
+      @UnknownInitialization SpinfoFile this, List<List<String>> pptSections) {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<>();
     for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<>();

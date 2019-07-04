@@ -82,7 +82,6 @@ public final class SequencesConcat extends BinaryDerivation {
 
     } else if (var1().rep_type == ProglangType.STRING_ARRAY) {
       // val1 instanceof String[] || val2 instanceof String[]
-      @SuppressWarnings("interning") // object invariant: array elements are interned
       @Interned String[] result =
           ArraysPlume.concat(
               val1 == null ? null : (@Interned String[]) val1,

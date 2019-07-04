@@ -7,7 +7,6 @@ import daikon.inv.unary.UnaryInvariant;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.Raw;
 import typequals.prototype.qual.Prototype;
 
 /** Abstract base class for invariants over one variable of type {@code String}. */
@@ -31,8 +30,7 @@ public abstract class SingleString extends UnaryInvariant {
     return ((vis.length == 1) && vis[0].file_rep_type.isString());
   }
 
-  public VarInfo var(
-          @GuardSatisfied @UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this) {
+  public VarInfo var(@GuardSatisfied @UnknownInitialization(SingleString.class) SingleString this) {
     return ppt.var_infos[0];
   }
 

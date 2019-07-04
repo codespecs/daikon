@@ -30,7 +30,6 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -934,8 +933,7 @@ public class NIS {
     }
 
     /** Track Log the specified message. */
-    public void log(
-        @UnknownInitialization(SupInv.class) @Raw(SupInv.class) SupInv this, String message) {
+    public void log(@UnknownInitialization(SupInv.class) SupInv this, String message) {
       if (Debug.logOn()) Debug.log(suppressee.sup_class, ppt, vis, message);
     }
 
