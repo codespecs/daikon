@@ -511,6 +511,9 @@ public class InvariantChecker {
 
           // String invRep = invariant2str(ppt, inv);
           testedInvariants.add(inv);
+          
+          // Store string representation of original invariant for verbose mode
+          String invRep = quiet ? null : inv.format();
 
           InvariantStatus status = inv.add_sample(vt, 1);
           sample_cnt++;
@@ -520,7 +523,7 @@ public class InvariantChecker {
                   "At ppt "
                       + ppt.name
                       + ", Invariant '"
-                      + inv.format()
+                      + invRep
                       + "' invalidated by sample "
                       + Debug.toString(slice.var_infos, vt)
                       + "at line "
