@@ -46,7 +46,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /** Java reserved words that are replaced by replaceReservedWords. */
   private static final @Regex String[] reservedWords = new @Regex String[] {"return"};
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   /**
    * Creates a new instance of SplitterJavaSource.
@@ -363,7 +363,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /** Eliminates all non-normal variables from varInfos. See isNormalVar() for details. */
   private static VarInfo[] filterNonVars(VarInfo[] varInfos) {
-    List<VarInfo> filteredList = new ArrayList<VarInfo>();
+    List<VarInfo> filteredList = new ArrayList<>();
     for (VarInfo vi : varInfos) {
       if (isNormalVar(vi)) {
         filteredList.add(vi);
@@ -660,7 +660,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
     Global.debugSplit.fine("<<enter>> makeVariableManagerArray");
 
-    List<VariableManager> variableManagerList = new ArrayList<VariableManager>();
+    List<VariableManager> variableManagerList = new ArrayList<>();
     List<String> classVars = findPossibleClassVariables(condition);
     for (VarInfo varInfo : varInfos) {
       try {
@@ -706,7 +706,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
     Global.debugSplit.fine(
         "TokenExtractor.extractTokens(" + condition + ") ==> " + Arrays.toString(tokens));
-    Set<String> variables = new LinkedHashSet<String>();
+    Set<String> variables = new LinkedHashSet<>();
 
     for (int i = 0; i < tokens.length; i++) {
       NodeToken token = tokens[i];

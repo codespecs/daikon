@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /** Represents a set of classes created by the instrumenter to check invariants. */
 public class CheckerClasses {
 
-  protected List<CheckerClass> classes = new ArrayList<CheckerClass>();
+  protected List<CheckerClass> classes = new ArrayList<>();
 
   public void addCheckerClass(ClassOrInterfaceBody clazz) {
     classes.add(new CheckerClass(clazz));
@@ -19,7 +19,7 @@ public class CheckerClasses {
     return classes;
   }
 
-  @SuppressWarnings("interned")
+  @SuppressWarnings("interning")
   public void addDeclaration(ClassOrInterfaceBody clazz, StringBuilder decl) {
 
     for (CheckerClass c : classes) {

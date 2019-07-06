@@ -173,7 +173,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
           return null;
         } else if (INTEQUAL.find(compar_slice) != null) {
           Global.nonsensical_suppressed_derived_variables += 3;
-          ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
+          ArrayList<BinaryDerivation> result = new ArrayList<>();
           if (enable_subscript) {
             result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true)); // a[i-1]
           }
@@ -252,7 +252,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
             : null;
         } else if (lower_bound == 0) {
           Global.nonsensical_suppressed_derived_variables += 1;
-          ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
+          ArrayList<BinaryDerivation> result = new ArrayList<>();
           if (enable_subscript) {
             result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, false)); // a[i]
           }
@@ -329,7 +329,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
 
     // End of applicability tests; now actually create the invariants
 
-    List<BinaryDerivation> result = new ArrayList<BinaryDerivation>(6);
+    List<BinaryDerivation> result = new ArrayList<>(6);
     if (enable_subscript) {
       // a[i]
       result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, false));

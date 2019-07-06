@@ -17,7 +17,9 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
       return null;
     }
 
-    if (!vi.is_direct_array()) return null;
+    if (!vi.is_direct_array()) {
+      return null;
+    }
 
     if (!vi.aux.hasSize()) {
       // Don't derive if auxiliary info says size of this collection

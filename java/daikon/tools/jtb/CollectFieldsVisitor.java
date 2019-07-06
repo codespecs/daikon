@@ -28,7 +28,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   /** True if this visitor should include nested classes, false otherwise. */
   private boolean include_nested_classes;
 
-  private List<FieldDeclaration> fieldDecls = new ArrayList<FieldDeclaration>();
+  private List<FieldDeclaration> fieldDecls = new ArrayList<>();
 
   // Why does this class store arrays instead of, say, List<String>?  Is
   // that just for efficiency?

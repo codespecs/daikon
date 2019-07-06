@@ -127,7 +127,7 @@ public abstract class DaikonVariableInfo
    * Set of fully qualified static variable names for this ppt. Used to ensure that each static is
    * only included once (regardless of how many other variables may include its declaring class).
    */
-  protected static Set<String> ppt_statics = new LinkedHashSet<String>();
+  protected static Set<String> ppt_statics = new LinkedHashSet<>();
 
   /**
    * Constructs a non-array type DaikonVariableInfo object.
@@ -166,7 +166,9 @@ public abstract class DaikonVariableInfo
 
   /** Returns the name of this variable. */
   public @Nullable String getName(@GuardSatisfied DaikonVariableInfo this) {
-    if (name == null) return null;
+    if (name == null) {
+      return null;
+    }
 
     if (Chicory.new_decl_format) {
       return name.replaceFirst("\\[]", "[..]");
@@ -236,7 +238,7 @@ public abstract class DaikonVariableInfo
 
   /** Returns the complete tree of variables as a list. */
   public List<DaikonVariableInfo> tree_as_list() {
-    List<DaikonVariableInfo> list = new ArrayList<DaikonVariableInfo>();
+    List<DaikonVariableInfo> list = new ArrayList<>();
     list.add(this);
     for (DaikonVariableInfo dv : children) {
       list.addAll(dv.tree_as_list());
@@ -458,7 +460,7 @@ public abstract class DaikonVariableInfo
     // System.out.printf("getting fields for %s%n", type);
 
     // We need to get fields of superclass(es) as well.
-    List<Field> fields = new ArrayList<Field>();
+    List<Field> fields = new ArrayList<>();
     Class<?> c = type;
     while (c != null && c != Object.class) {
       fields.addAll(Arrays.asList(c.getDeclaredFields()));
@@ -579,7 +581,7 @@ public abstract class DaikonVariableInfo
         }
 
         // List containing all class variables, excluding pure methods with parameters
-        List<DaikonVariableInfo> siblings = new ArrayList<DaikonVariableInfo>(thisInfo.children);
+        List<DaikonVariableInfo> siblings = new ArrayList<>(thisInfo.children);
 
         // Pure methods with one parameter
         for (MethodInfo meth : typeInfo.method_infos) {
@@ -849,16 +851,27 @@ public abstract class DaikonVariableInfo
     if (type == null) {
       return "hashcode";
     } else if (type.isPrimitive()) {
-      if (type.equals(Double.TYPE)) return "double";
-      else if (type.equals(Float.TYPE)) return "double";
-      else if (type.equals(Boolean.TYPE)) return "boolean";
-      else return "int";
+      if (type.equals(Double.TYPE)) {
+        return "double";
+      } else if (type.equals(Float.TYPE)) {
+        return "double";
+      } else if (type.equals(Boolean.TYPE)) {
+        return "boolean";
+      } else {
+        return "int";
+      }
     } else if (type.getName().equals("java.lang.String")) {
       // if we are printing the actual array, the rep type is "java.lang.String"
-      if (true) return "hashcode";
-      if (asArray) return "java.lang.String";
+      if (true) {
+        return "hashcode";
+      }
+      if (asArray) {
+        return "java.lang.String";
+      }
       // otherwise, it is just a hashcode
-      else return "hashcode";
+      else {
+        return "hashcode";
+      }
     } else {
       return "hashcode";
     }
@@ -878,7 +891,9 @@ public abstract class DaikonVariableInfo
     // For some reason, abstracts seems to be set on arrays
     // and primitives.  This is a temporary fix to get things
     // close.
-    if (type.isPrimitive()) return false;
+    if (type.isPrimitive()) {
+      return false;
+    }
     if (type.isArray()) {
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
@@ -917,7 +932,9 @@ public abstract class DaikonVariableInfo
     int modifiers = field.getModifiers();
 
     // If the field is within the current class, it is always visible
-    if (current.equals(fclass)) return true;
+    if (current.equals(fclass)) {
+      return true;
+    }
 
     if (!std_visibility) {
       // If the field is in any instrumented class it is always visible
@@ -934,10 +951,14 @@ public abstract class DaikonVariableInfo
 
     // Otherwise we consider the variable not to be visible, even
     // though it is.  This mimics dfej behavior
-    if (!std_visibility) return false;
+    if (!std_visibility) {
+      return false;
+    }
 
     // Everything in the same class is visible
-    if (current == fclass) return true;
+    if (current == fclass) {
+      return true;
+    }
 
     // If the field is in the same package, it's visible if it is
     // not private or protected.
@@ -1022,7 +1043,9 @@ public abstract class DaikonVariableInfo
    * the correct child to this node.
    */
   protected void checkForRuntimeClass(Class<?> type, String theName, String offset) {
-    if (!shouldAddRuntimeClass(type)) return;
+    if (!shouldAddRuntimeClass(type)) {
+      return;
+    }
 
     String postString = ""; // either array braces or an empty string
 
@@ -1044,7 +1067,9 @@ public abstract class DaikonVariableInfo
    * Checks the given type to see if it is a string. If so, it adds the correct child to this node.
    */
   private void checkForString(Class<?> type, String theName, String offset) {
-    if (!type.equals(String.class)) return;
+    if (!type.equals(String.class)) {
+      return;
+    }
 
     String postString = ""; // either array braces or an empty string
     if (isArray) postString = "[]";
@@ -1075,7 +1100,9 @@ public abstract class DaikonVariableInfo
     Class<?>[] interfaces = type.getInterfaces();
     for (Class<?> inter : interfaces) {
       // System.out.println("  implements: " + inter.getName());
-      if (inter.equals(java.util.List.class)) return true;
+      if (inter.equals(java.util.List.class)) {
+        return true;
+      }
     }
     return false;
   }
@@ -1100,7 +1127,9 @@ public abstract class DaikonVariableInfo
     debug_vars.log("enter addChildNodes:%n");
     debug_vars.log("  name: %s, offset: %s%n", theName, offset);
 
-    if (type.isPrimitive()) return;
+    if (type.isPrimitive()) {
+      return;
+    }
 
     // Convert the internal reflection name for an outer class
     // 'this' field to the Java language format.
@@ -1111,7 +1140,9 @@ public abstract class DaikonVariableInfo
 
     if (type.isArray()) {
       // don't go into more than one dimension of a multi-dimensional array
-      if (isArray) return;
+      if (isArray) {
+        return;
+      }
 
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
@@ -1271,7 +1302,9 @@ public abstract class DaikonVariableInfo
   /** Returns the direct child that is an array, null if one does not exist. */
   public @Nullable DaikonVariableInfo array_child() {
     for (DaikonVariableInfo dv : children) {
-      if (dv.isArray()) return dv;
+      if (dv.isArray()) {
+        return dv;
+      }
     }
     return null;
   }

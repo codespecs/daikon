@@ -32,7 +32,7 @@ import org.plumelib.util.UtilPlume;
  */
 public class InvariantDoclet {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   /**
    * Invariants that match any of the specified regular expressions are purposefully missing enable
@@ -80,7 +80,7 @@ public class InvariantDoclet {
 
   public InvariantDoclet(RootDoc doc) {
     root = doc;
-    cmap = new TreeMap<ClassDoc, Set<@KeyFor("cmap") ClassDoc>>();
+    cmap = new TreeMap<>();
   }
 
   /** Process a javadoc tree and create the specified invariant output. */
@@ -203,7 +203,7 @@ public class InvariantDoclet {
     String last_comment = "";
     int permute_cnt = 0;
 
-    TreeSet<ClassDoc> list = new TreeSet<ClassDoc>();
+    TreeSet<ClassDoc> list = new TreeSet<>();
     gather_derived_classes(cd, list);
     for (ClassDoc dc : list) {
       if (dc.isAbstract()) {
@@ -380,7 +380,7 @@ public class InvariantDoclet {
    */
   public List<FieldDoc> find_fields(ClassDoc cd, String prefix) {
 
-    List<FieldDoc> list = new ArrayList<FieldDoc>();
+    List<FieldDoc> list = new ArrayList<>();
 
     for (FieldDoc f : cd.fields()) {
       if (f.name().startsWith(prefix)) list.add(f);

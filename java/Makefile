@@ -68,7 +68,7 @@ CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK_JAR_DIR}/javadoc.astub
 ### end of user customizations
 
 # Not := because DAIKON_CLASSPATH is set later in this file.
-JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx2600m ${JAVAC_ARGS}
 JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 
@@ -98,7 +98,7 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
-DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.5.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.4.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.1.jar:${DAIKON_CLASSPATH}
+DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.5.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.4.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.3.jar:${DAIKON_CLASSPATH}
 
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -122,6 +122,7 @@ JAVA_FILES_FOR_FORMAT = $(shell grep -r --include '*.java' --exclude-dir '*daiko
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
 TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
+TAG_FILES_NO_JTB = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -path './jtb' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -541,7 +542,7 @@ dcomp_rt.jar : dcomp_premain.jar $(ORIG_RT)
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA_COMMAND) -Xmx1600m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
+	$(JAVA_COMMAND) -Xmx2600m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 # Install the local version of the dyncomp specific rt.jar
@@ -653,7 +654,12 @@ very-clean: clean clean-generated-files
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
 
-ETAGS := $(shell command -v etags 2> /dev/null)
+ETAGS_EXISTS := $(shell command -v etags 2> /dev/null)
+ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
+ETAGS := etags --language-force=java
+else
+ETAGS := etags --language=java
+endif
 
 TAGS:	tags
 .PHONY: etags tags
@@ -661,22 +667,25 @@ etags:	tags
 tags: ../utils/plume-scripts
 ifndef ETAGS
 	$(error etags is not available, please install it)
-else
+endif
 	@echo etags '*.java ...'
-ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
-	@etags --language-force=java ${TAG_FILES}
-else
-	@etags --language=java ${TAG_FILES}
-endif
-endif
+	@$(ETAGS) ${TAG_FILES}
+
 # A TAGS file that does not contain generated files
 # When doing certain search/replace tasks, it's better to omit generated files
 tags-nogen: tags-without-generated-files
 tags-sans-generated: tags-without-generated-files
 tags-without-generated-files: clean-generated-files
-	@echo etags '*.java ...'
 	$(MAKE) tags
 	$(MAKE) compile
+
+# A TAGS file that does not contain jtb-generated files.
+tags-nojtb: ../utils/plume-scripts
+ifndef ETAGS
+	$(error etags is not available, please install it)
+endif
+	@echo etags '*.java ...'
+	@$(ETAGS) ${TAG_FILES_NO_JTB}
 
 
 ###########################################################################
@@ -686,7 +695,7 @@ tags-without-generated-files: clean-generated-files
 # See version numbers at https://github.com/google/error-prone/releases
 ERRORPRONE_VERSION := 2.3.1
 ERRORPRONE_JAR_FILE := error_prone_ant-${ERRORPRONE_VERSION}.jar
-# For 2.3.2 and later:
+# For 2.3.2 and later (but I can't make the command work):
 # ERRORPRONE_JAR_FILE := error_prone_core-${ERRORPRONE_VERSION}-with-dependencies.jar
 ERRORPRONE_JAR_PATH := ${DAIKONDIR}/java/lib/tmp/${ERRORPRONE_JAR_FILE}
 
@@ -792,7 +801,7 @@ endif
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 8 rather than version 9).
 # JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
-CHECKER_ARGS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar ${JAVACHECK_EXTRA_ARGS}
+CHECKER_ARGS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar ${JAVACHECK_EXTRA_ARGS}
 
 ## All of the following targets need to depend on "compile".
 
@@ -810,13 +819,13 @@ JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingCh
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_REGEX_QUAL_ARGS = -processor org.checkerframework.checker.experimental.regex_qual.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-# -AsuppressWarnings=method.guarantee.violated,override.sideeffect.invalid is temporary.
+# -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect.invalid is temporary.
 # Once the Purity Checker and -AsuggestPureMethods are fixed, they can be run on plume-lib
 # and Daikon and this can be removed. The method.guarantee.violated warning is issued by
 # the Lock Checker when a method calls another method with a weaker side effect guarantee.
 # The override.sideeffect.invalid warning is issued by the Lock Checker when the side effect
 # annotation on the overridder method is weaker than that on the overridden method.
-JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=method.guarantee.violated,override.sideeffect.invalid -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect.invalid -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 ## Code in dcomp directory is not called directly; annotations would be useless.
@@ -1090,8 +1099,6 @@ JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
                 -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DAIKON_CLASSPATH}"
-# javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
-JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
 
 # Daikon packages except for util (which is just a copy of plume)
 DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
@@ -1109,7 +1116,7 @@ javadoc-files.txt:
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
+	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1121,13 +1128,13 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
+	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
@@ -1136,7 +1143,7 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 requireJavadocPrivate: $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS_COMMON) \
+	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS_COMMON) \
 		-doclet org.plumelib.javadoc.RequireJavadoc \
                 -docletpath "${DAIKON_CLASSPATH}" \
 		@javadoc-files.txt
@@ -1151,18 +1158,20 @@ requireJavadocPrivate: $(JAVA_FILES)
 # 	find api -name '*.html' | xargs -n 100 ${PLUMESCRIPTS}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
-../doc/invariants-doc.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
+../doc/invariants-doc.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
-		$(JDOC_FILES)
+		@javadoc-files.txt
+	@rm -f javadoc-files.txt
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
 
-../doc/config-options.texinfo: ../utils/plume-scripts ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
-	${JAVADOC_COMMAND} -J-Xmx1000m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
+../doc/config-options.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
-		$(JDOC_FILES)
+		@javadoc-files.txt
+	@rm -f javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
 
 daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java

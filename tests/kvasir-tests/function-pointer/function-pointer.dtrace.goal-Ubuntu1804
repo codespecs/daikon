@@ -1,0 +1,44 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+
+..apply():::ENTER
+this_invocation_nonce
+1
+fp
+<HEAP_ADDR>
+1
+fp[..]
+nonsensical
+2
+val
+42
+1
+
+..apply():::EXIT0
+this_invocation_nonce
+1
+fp
+<HEAP_ADDR>
+1
+fp[..]
+nonsensical
+2
+return
+3
+1
+val
+42
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+return
+0
+1
+

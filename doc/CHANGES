@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.7.4 (June 1, 2018)
+
+Updated the readelf, Valgrind, and BCEL libraries.  This should improve
+compatibility with operating systems and C versions.
+
+===========================================================================
+
 5.7.2 (November 7, 2018)
 
 The Daikon instructions no longer suggest to set CLASSPATH, which is bad

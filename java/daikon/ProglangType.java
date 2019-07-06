@@ -19,8 +19,8 @@ import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
 
 /**
- * Represents the type of a variable, for its declared, dtrace file representation, and internal
- * representations. ProgLangTypes are interned, so they can be == compared.
+ * Represents the type of a variable, for its declared type, dtrace file representation, and
+ * internal representations. ProgLangTypes are interned, so they can be == compared.
  */
 
 // I could also consider using Class; however:
@@ -49,16 +49,15 @@ public final @Interned class ProglangType implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // With ArrayList search, this func was a hotspot (38%), so use a Map.
-  private static HashMap<@Interned String, List<ProglangType>> all_known_types =
-      new HashMap<@Interned String, List<ProglangType>>();
+  /** Maps from a base type name to its ProglangTypes and arrays with that base. */
+  private static HashMap<@Interned String, List<ProglangType>> all_known_types = new HashMap<>();
 
   /**
    * The set of (interned) names of classes that implement java.util.List. For a Java class, this is
    * a {@code @BinaryName}, but when Daikon is processing programs written in other languages, it
    * can be arbitrary.
    */
-  public static HashSet<String> list_implementors = new LinkedHashSet<String>();
+  public static HashSet<String> list_implementors = new LinkedHashSet<>();
 
   /**
    * If true, treat 32 bit values whose high bit is on, as a negative number (rather than as a 32
@@ -86,8 +85,14 @@ public final @Interned class ProglangType implements Serializable {
     return base;
   }
 
-  private int dimensions; // number of dimensions
+  /** Number of dimensions. Zero for a non-array. */
+  private int dimensions;
 
+  /**
+   * Return the number of dimensions (zero for a non-array).
+   *
+   * @return the number of dimensions
+   */
   public int dimensions() {
     return dimensions;
   }
@@ -101,6 +106,7 @@ public final @Interned class ProglangType implements Serializable {
    * No public constructor: use parse() instead to get a canonical representation. basetype should
    * be interned.
    */
+  @SuppressWarnings("super.invocation.invalid") // never called twice with the same arguments
   private ProglangType(@Interned String basetype, int dimensions) {
     assert basetype == basetype.intern();
     this.base = basetype;
@@ -178,9 +184,11 @@ public final @Interned class ProglangType implements Serializable {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
 
-    // the string maps us to a vec of all plts with that base
+    // the string maps us to a vec of all ProglangTypes with that base
     List<ProglangType> v = all_known_types.get(t_base);
-    if (v == null) return null;
+    if (v == null) {
+      return null;
+    }
 
     // now search for the right dimension
     for (ProglangType candidate : v) {
@@ -209,11 +217,12 @@ public final @Interned class ProglangType implements Serializable {
   private static ProglangType intern(@Interned String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
-    ProglangType result = find(t_base, t_dims);
-    if (result != null) {
-      return result;
+    ProglangType existing = find(t_base, t_dims);
+    if (existing != null) {
+      return existing;
     }
-    result = new ProglangType(t_base, t_dims);
+    @SuppressWarnings("interning") // test above did not find one, so the new one is interned
+    @Interned ProglangType result = new ProglangType(t_base, t_dims);
 
     List<ProglangType> v = all_known_types.get(t_base);
     if (v == null) {
@@ -235,7 +244,9 @@ public final @Interned class ProglangType implements Serializable {
     // objects.  Callers should really find this out from other information
     // in the variable, but this will old code that relied on the pseudo
     // dimensions of lists to work
-    if (dimensions == 0) return OBJECT;
+    if (dimensions == 0) {
+      return OBJECT;
+    }
     assert base == base.intern() : "Uninterned base " + base;
     return ProglangType.intern(base, dimensions - 1);
   }
@@ -429,16 +440,26 @@ public final @Interned class ProglangType implements Serializable {
       // File rep type might be int, boolean, or hashcode.
       // If we had the declared type, we could do error-checking here.
       // (Example:  no hashcode should be negative, nor any boolean > 1.)
-      if (value.equals("nonsensical")) return null;
-      if (value.equals("false") || value.equals("0")) return LongZero;
-      if (value.equals("true") || value.equals("1")) return LongOne;
-      if (value.equals("null")) return LongZero;
+      if (value.equals("nonsensical")) {
+        return null;
+      }
+      if (value.equals("false") || value.equals("0")) {
+        return LongZero;
+      }
+      if (value.equals("true") || value.equals("1")) {
+        return LongOne;
+      }
+      if (value.equals("null")) {
+        return LongZero;
+      }
       return Intern.internedLong(myParseLong(value));
     } else if (base == BASE_DOUBLE) {
       // Must ignore case, because dfej outputs "NaN", while dfec
       // outputs "nan".  dfec outputs "nan", because this string
       // comes from the C++ library.
-      if (value.equalsIgnoreCase("NaN")) return DoubleNaN;
+      if (value.equalsIgnoreCase("NaN")) {
+        return DoubleNaN;
+      }
       if (value.equalsIgnoreCase("Infinity") || value.equals("inf")) {
         return DoublePositiveInfinity;
       }
@@ -482,7 +503,7 @@ public final @Interned class ProglangType implements Serializable {
       value_strings = new String[0];
     } else if (base == BASE_STRING) {
       // This properly handles strings containing embedded spaces.
-      List<@Nullable String> v = new ArrayList<@Nullable String>();
+      List<@Nullable String> v = new ArrayList<>();
       StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
       parser.quoteChar('\"');
       try {
@@ -525,18 +546,22 @@ public final @Interned class ProglangType implements Serializable {
     if (base == BASE_INT) {
       long[] result = new long[len];
       for (int i = 0; i < len; i++) {
-        if (value_strings[i].equals("nonsensical")) return null;
-        else if (value_strings[i].equals("null")) result[i] = 0;
+        if (value_strings[i].equals("nonsensical")) {
+          return null;
+        } else if (value_strings[i].equals("null")) result[i] = 0;
         else if (value_strings[i].equals("false")) result[i] = 0;
         else if (value_strings[i].equals("true")) result[i] = 1;
-        else result[i] = myParseLong(value_strings[i]);
+        else {
+          result[i] = myParseLong(value_strings[i]);
+        }
       }
       return Intern.intern(result);
     } else if (base == BASE_DOUBLE) {
       double[] result = new double[len];
       for (int i = 0; i < len; i++) {
-        if (value_strings[i].equals("nonsensical")) return null;
-        else if (value_strings[i].equals("null")) result[i] = 0;
+        if (value_strings[i].equals("nonsensical")) {
+          return null;
+        } else if (value_strings[i].equals("null")) result[i] = 0;
         else if (value_strings[i].equalsIgnoreCase("NaN")) result[i] = Double.NaN;
         else if (value_strings[i].equalsIgnoreCase("Infinity") || value_strings[i].equals("inf")) {
           result[i] = Double.POSITIVE_INFINITY;
@@ -703,10 +728,14 @@ public final @Interned class ProglangType implements Serializable {
     if (this == other) { // ProglangType objects are interned
       return true;
     }
-    if (this.dimensions != other.dimensions) return false;
+    if (this.dimensions != other.dimensions) {
+      return false;
+    }
     boolean thisIntegral = this.baseIsIntegral();
     boolean otherIntegral = other.baseIsIntegral();
-    if (thisIntegral && otherIntegral) return true;
+    if (thisIntegral && otherIntegral) {
+      return true;
+    }
     // Make Object castable to everything, except booleans
     if (((this.base == BASE_OBJECT) && other.baseIsObject()) // interned strings
         || ((other.base == BASE_OBJECT) && baseIsObject())) { // interned strings
@@ -724,10 +753,14 @@ public final @Interned class ProglangType implements Serializable {
   public boolean comparableOrSuperclassOf(ProglangType other) {
     if (this == other) // ProglangType objects are interned
     return true;
-    if (this.dimensions != other.dimensions) return false;
+    if (this.dimensions != other.dimensions) {
+      return false;
+    }
     boolean thisIntegral = this.baseIsIntegral();
     boolean otherIntegral = other.baseIsIntegral();
-    if (thisIntegral && otherIntegral) return true;
+    if (thisIntegral && otherIntegral) {
+      return true;
+    }
     // Make Object castable to everything, except booleans
     if ((this.base == BASE_OBJECT) && other.baseIsObject()) // interned strings
     return true;
@@ -738,7 +771,9 @@ public final @Interned class ProglangType implements Serializable {
   // For Java programs, a @BinaryName.
   @SideEffectFree
   public String format(@GuardSatisfied ProglangType this) {
-    if (dimensions == 0) return base;
+    if (dimensions == 0) {
+      return base;
+    }
 
     StringBuilder sb = new StringBuilder();
     sb.append(base);

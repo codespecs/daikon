@@ -122,8 +122,6 @@ public final class ValueTuple implements Cloneable {
     return mods[value_index] == MISSING_NONSENSICAL;
   }
 
-  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // dependent property
-  @EnsuresNonNullIf(result = false, expression = "this.vals[#1]")
   @Pure
   boolean isMissingFlow(
       @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this,
@@ -131,7 +129,9 @@ public final class ValueTuple implements Cloneable {
     return mods[value_index] == MISSING_FLOW;
   }
 
-  @SuppressWarnings("nullness") // postcondition: array expression
+  @SuppressWarnings(
+      "nullness:contracts.conditional.postcondition.not.satisfied") // dependent: vals[i] is
+  // non-null if mods[i] != MISSING_*
   @EnsuresNonNullIf(result = false, expression = "vals[#1]")
   @Pure
   boolean isMissing(
@@ -387,7 +387,9 @@ public final class ValueTuple implements Cloneable {
   @Pure
   @Override
   public boolean equals(@GuardSatisfied ValueTuple this, @GuardSatisfied @Nullable Object obj) {
-    if (!(obj instanceof ValueTuple)) return false;
+    if (!(obj instanceof ValueTuple)) {
+      return false;
+    }
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);
   }
@@ -482,7 +484,9 @@ public final class ValueTuple implements Cloneable {
   }
 
   public static String valToString(@Nullable Object val) {
-    if (val == null) return "null";
+    if (val == null) {
+      return "null";
+    }
     if (val instanceof long[]) {
       return (Arrays.toString((long[]) val));
     } else if (val instanceof int[]) {

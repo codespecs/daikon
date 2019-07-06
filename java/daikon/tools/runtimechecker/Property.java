@@ -20,7 +20,7 @@ public class Property implements Serializable {
   private static final long serialVersionUID = 1L;
 
   // Maps into all the Property objects created.
-  private static HashMap<Integer, Property> propertiesMap = new HashMap<Integer, Property>();
+  private static HashMap<Integer, Property> propertiesMap = new HashMap<>();
 
   // The name of the method that this property describes.
   private final String method;
@@ -292,7 +292,7 @@ public class Property implements Serializable {
       return new Property[] {};
     }
     // Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
-    Set<Property> annos = new HashSet<Property>();
+    Set<Property> annos = new HashSet<>();
     for (String location : annoStrings) {
       if (location == null || location.equals("")) {
         continue;
@@ -344,7 +344,7 @@ public class Property implements Serializable {
   //  * The properties in {@code annas} with the given kind.
   //  */
   // public static Property[] getKind(Property[] annas, Kind kind) {
-  //     List<Property> retval = new ArrayList<Property>();
+  //     List<Property> retval = new ArrayList<>();
   //     for (int i = 0; i < annas.length; i++) {
   //         if (kind == annas[i].kind) {
   //             retval.add(annas[i]);

@@ -46,7 +46,7 @@ public class SpinfoFile {
   // splitterObject[i][k].getPptName() != splitterObject[j][k].getPptName() || i = j
   private SplitterObject[][] splitterObjects;
 
-  private static String lineSep = System.getProperty("line.separator");
+  private static String lineSep = System.lineSeparator();
 
   /**
    * Parses file spinfoFile.
@@ -117,8 +117,8 @@ public class SpinfoFile {
   @EnsuresNonNull({"statementReplacer", "splitterObjects"})
   public void parseFile(@UnknownInitialization @Raw SpinfoFile this, LineNumberReader spinfoFile)
       throws IOException {
-    List<ReplaceStatement> replaceStatements = new ArrayList<ReplaceStatement>();
-    List<List<String>> pptSections = new ArrayList<List<String>>();
+    List<ReplaceStatement> replaceStatements = new ArrayList<>();
+    List<List<String>> pptSections = new ArrayList<>();
     try {
       String line = spinfoFile.readLine();
       while (line != null) {
@@ -208,7 +208,7 @@ public class SpinfoFile {
       List<List<String>> pptSections,
       String pptName)
       throws IOException {
-    List<String> pptSection = new ArrayList<String>();
+    List<String> pptSection = new ArrayList<>();
     pptSection.add(pptName);
     String line = spinfoFile.readLine();
     while ((line != null) && (!line.trim().equals(""))) {
@@ -229,9 +229,9 @@ public class SpinfoFile {
   @RequiresNonNull("tempDir")
   private SplitterObject[][] createSplitterObjects(
       @UnknownInitialization @Raw SpinfoFile this, List<List<String>> pptSections) {
-    List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
+    List<SplitterObject[]> splittersForAllPpts = new ArrayList<>();
     for (List<String> pptSection : pptSections) {
-      List<SplitterObject> splittersForThisPpt = new ArrayList<SplitterObject>();
+      List<SplitterObject> splittersForThisPpt = new ArrayList<>();
       if (pptSection.size() > 0) {
         String pptName = pptSection.get(0).trim();
         SplitterObject splitObj = null;

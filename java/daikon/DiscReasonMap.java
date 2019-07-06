@@ -31,7 +31,7 @@ public final class DiscReasonMap {
 
   @EnsuresNonNull("the_map")
   public static void initialize() {
-    the_map = new HashMap<String, HashMap<String, List<DiscardInfo>>>();
+    the_map = new HashMap<>();
   }
 
   /**
@@ -41,7 +41,9 @@ public final class DiscReasonMap {
    * <p>Requires: inv != null &and; disc_info != null &and; disc_info.shouldDiscard()
    */
   public static void put(Invariant inv, DiscardInfo disc_info) {
-    if (!PrintInvariants.print_discarded_invariants) return;
+    if (!PrintInvariants.print_discarded_invariants) {
+      return;
+    }
 
     assert disc_info != null;
 
@@ -65,13 +67,17 @@ public final class DiscReasonMap {
   }
 
   public static void put(Invariant inv, DiscardCode discardCode, String discardString) {
-    if (!PrintInvariants.print_discarded_invariants) return;
+    if (!PrintInvariants.print_discarded_invariants) {
+      return;
+    }
 
     put(inv, new DiscardInfo(inv, discardCode, discardString));
   }
 
   public static void put(String vars, String ppt, DiscardInfo disc_info) {
-    if (!PrintInvariants.print_discarded_invariants) return;
+    if (!PrintInvariants.print_discarded_invariants) {
+      return;
+    }
 
     assert disc_info != null;
 
@@ -106,14 +112,14 @@ public final class DiscReasonMap {
         }
         disc_infos.add(disc_info);
       } else {
-        List<DiscardInfo> temp = new ArrayList<DiscardInfo>(1);
+        List<DiscardInfo> temp = new ArrayList<>(1);
         temp.add(disc_info);
         ppt_hashmap.put(vars, temp);
       }
     } else {
       // In case where nothing from this inv's PptTopLevel has been discarded yet
-      HashMap<String, List<DiscardInfo>> new_map = new HashMap<String, List<DiscardInfo>>();
-      List<DiscardInfo> temp = new ArrayList<DiscardInfo>();
+      HashMap<String, List<DiscardInfo>> new_map = new HashMap<>();
+      List<DiscardInfo> temp = new ArrayList<>();
       temp.add(disc_info);
       new_map.put(vars, temp);
       the_map.put(ppt, new_map);
@@ -129,14 +135,14 @@ public final class DiscReasonMap {
    *     any of the 3 params to be a wildcard, they can pass that/those param(s) in as null.
    */
   public static List<DiscardInfo> returnMatches_from_ppt(InvariantInfo invInfo) {
-    ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
+    ArrayList<DiscardInfo> result = new ArrayList<>();
     HashMap<String, List<DiscardInfo>> vars_map_from_ppt = the_map.get(invInfo.ppt());
 
     if (vars_map_from_ppt == null) {
       return result;
     }
 
-    List<DiscardInfo> di_list = new ArrayList<DiscardInfo>();
+    List<DiscardInfo> di_list = new ArrayList<>();
     if (invInfo.vars() != null) {
       // The user entered the vars in a specific order, but let's give
       // them matching invariants that have those vars in any order.
@@ -173,7 +179,7 @@ public final class DiscReasonMap {
     @NonNull HashMap<String, List<DiscardInfo>> vars_map = the_map.get(ppt);
     assert vars_map != null;
 
-    ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
+    ArrayList<DiscardInfo> result = new ArrayList<>();
     for (List<DiscardInfo> ldi : vars_map.values()) {
       result.addAll(ldi);
     }

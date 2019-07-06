@@ -13,7 +13,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 public class CmdCheck implements Cmd {
   public static final Logger debug = Logger.getLogger("daikon.simplify.CmdCheck");
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   public final String proposition;
   public boolean valid = false;

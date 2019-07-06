@@ -168,7 +168,9 @@ public class NISuppression {
     // Get the antecedents that match our suppressors.  Return if there are
     // no antecedents for a particular suppressor.
     List<Invariant>[] antecedents = antecedents_for_suppressors(ants);
-    if (antecedents == null) return;
+    if (antecedents == null) {
+      return;
+    }
 
     // Recursively check each combination of possible antecedents that
     // match our suppressors for suppressions
@@ -194,7 +196,9 @@ public class NISuppression {
     // Get the antecedents that match our suppressors.  Return if there are
     // no antecedents for a particular suppressor.
     List<Invariant>[] antecedents = antecedents_for_suppressors(ants);
-    if (antecedents == null) return;
+    if (antecedents == null) {
+      return;
+    }
 
     int total_false_cnt = 0;
     for (int i = 0; i < antecedents.length; i++) {
@@ -207,7 +211,9 @@ public class NISuppression {
       total_false_cnt += false_cnt;
     }
 
-    if (total_false_cnt == 0) return;
+    if (total_false_cnt == 0) {
+      return;
+    }
 
     // Recursively check each combination of possible antecedents that
     // match our suppressors for suppressions
@@ -404,7 +410,9 @@ public class NISuppression {
     // Make sure this invariant really matches this suppressor.  We know
     // the class already matches, but if the invariant has a swap variable
     // it must match as well
-    if (!supor.match(inv)) return null;
+    if (!supor.match(inv)) {
+      return null;
+    }
 
     // Assign the variables from this invariant into vis.  If a variable
     // is already there and doesn't match this variable, then this
@@ -536,11 +544,11 @@ public class NISuppression {
   public List<NISuppression> recurse_definition(NISuppressionSet ss) {
 
     NISuppressee sse = ss.get_suppressee();
-    List<NISuppression> new_suppressions = new ArrayList<NISuppression>();
+    List<NISuppression> new_suppressions = new ArrayList<>();
 
     // Create a list of all of our suppressors that don't match the suppressee
     // of ss
-    List<NISuppressor> old_sors = new ArrayList<NISuppressor>();
+    List<NISuppressor> old_sors = new ArrayList<>();
     NISuppressor match = null;
     for (int i = 0; i < suppressors.length; i++) {
       if (suppressors[i].match(sse)) {
@@ -551,7 +559,9 @@ public class NISuppression {
     }
 
     // If we didn't match any suppressor there is nothing to do
-    if (match == null) return new_suppressions;
+    if (match == null) {
+      return new_suppressions;
+    }
 
     // Right now this only works if we match exactly one suppressor
     assert (old_sors.size() + 1) == suppressors.length;
@@ -562,7 +572,7 @@ public class NISuppression {
     // suppressor.
     for (int i = 0; i < ss.suppression_set.length; i++) {
       NISuppression s = ss.suppression_set[i];
-      List<NISuppressor> sors = new ArrayList<NISuppressor>(old_sors);
+      List<NISuppressor> sors = new ArrayList<>(old_sors);
       for (int j = 0; j < s.suppressors.length; j++) {
         sors.add(s.suppressors[j].translate(match));
       }

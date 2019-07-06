@@ -21,7 +21,7 @@ import org.plumelib.util.UtilPlume;
  */
 public class ParameterDoclet {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   /** Entry point for this doclet (invoked by javadoc). */
   public static boolean start(RootDoc doc) throws IOException {
@@ -91,7 +91,7 @@ public class ParameterDoclet {
       }
       description = desc;
       longBlurb = blurb;
-      fields = new HashMap<String, String>();
+      fields = new HashMap<>();
     }
 
     public boolean matches(String fullname, String name) {

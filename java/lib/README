@@ -3,8 +3,8 @@ This directory contains dependences that are put in daikon.jar.
 All .jar files in this directory should contain Java 8 bytecodes,
 so that Daikon will run under Java 8.
 
-bcel-6.2.0.2.jar
-  wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel/6.2.0.2/bcel-6.2.0.2.jar
+bcel-6.3.1.jar
+  wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel/6.3.1/bcel-6.3.1.jar
 
 bcel-util-1.1.4.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
   wget https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/1.1.4/bcel-util-1.1.4.jar
@@ -36,8 +36,8 @@ plume-util-1.0.5.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
   wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.0.5/plume-util-1.0.5.jar
 When you update this, remove the old one then remake daikon-util.jar (see above).
 
-reflection-util-0.0.6.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
-  wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/0.0.1/reflection-util-0.0.1.jar
+reflection-util-0.0.3.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/0.0.3/reflection-util-0.0.3.jar
 
 require-javadoc-0.1.0.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/
   wget https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.1.0/require-javadoc-0.1.0.jar

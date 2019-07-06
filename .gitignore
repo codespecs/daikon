@@ -29,6 +29,7 @@ java/**/*.class
 java/lib/tmp
 # Temporary file used during compilation
 java/java_files.txt
+java/javadoc-files.txt
 # Javadoc
 java/api
 
