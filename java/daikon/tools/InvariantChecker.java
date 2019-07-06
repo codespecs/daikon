@@ -511,7 +511,7 @@ public class InvariantChecker {
 
           // String invRep = invariant2str(ppt, inv);
           testedInvariants.add(inv);
-          
+
           // Store string representation of original invariant for verbose mode
           String invRep = quiet ? null : inv.format();
 
