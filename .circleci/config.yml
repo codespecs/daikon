@@ -20,7 +20,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/quick-txt-diff.sh
+      - run: ./scripts/test-quick-txt-diff.sh
 
   nonquick-txt-diff-ubuntu:
 
@@ -40,7 +40,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/nonquick-txt-diff.sh
+      - run: ./scripts/test-nonquick-txt-diff.sh
 
   non-txt-diff-ubuntu:
 
@@ -60,7 +60,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/non-txt-diff.sh
+      - run: ./scripts/test-non-txt-diff.sh
 
   misc-ubuntu:
 
@@ -80,7 +80,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/misc.sh
+      - run: ./scripts/test-misc.sh
 
   kvasir-ubuntu:
 
@@ -100,7 +100,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/kvasir.sh
+      - run: ./scripts/test-kvasir.sh
 
   quick-txt-diff-fedora:
 
@@ -120,7 +120,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/quick-txt-diff.sh
+      - run: ./scripts/test-quick-txt-diff.sh
 
   nonquick-txt-diff-fedora:
 
@@ -140,7 +140,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/nonquick-txt-diff.sh
+      - run: ./scripts/test-nonquick-txt-diff.sh
 
   non-txt-diff-fedora:
 
@@ -160,7 +160,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/non-txt-diff.sh
+      - run: ./scripts/test-non-txt-diff.sh
 
   misc-fedora:
 
@@ -180,7 +180,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/misc.sh
+      - run: ./scripts/test-misc.sh
 
   kvasir-fedora:
 
@@ -200,7 +200,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/kvasir.sh
+      - run: ./scripts/test-kvasir.sh
 
   quick-txt-diff-centos:
 
@@ -220,7 +220,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/quick-txt-diff.sh
+      - run: ./scripts/test-quick-txt-diff.sh
 
   nonquick-txt-diff-centos:
 
@@ -240,7 +240,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/nonquick-txt-diff.sh
+      - run: ./scripts/test-nonquick-txt-diff.sh
 
   non-txt-diff-centos:
 
@@ -260,7 +260,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/non-txt-diff.sh
+      - run: ./scripts/test-non-txt-diff.sh
 
   misc-centos:
 
@@ -281,7 +281,7 @@ jobs:
             - ".git"
 
       - run:
-          command: ./.circleci/misc.sh
+          command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
   kvasir-centos:
@@ -302,7 +302,7 @@ jobs:
           paths:
             - ".git"
 
-      - run: ./.circleci/kvasir.sh
+      - run: ./scripts/test-kvasir.sh
 
   trigger-downstream:
 
