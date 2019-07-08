@@ -368,7 +368,12 @@ public final class Debug {
    * @see #log(Logger, String)
    * @see #log(String)
    */
-  public static void log(Logger debug, Class<?> inv_class, Ppt ppt, VarInfo[] vis, String msg) {
+  public static void log(
+      Logger debug,
+      @Nullable Class<?> inv_class,
+      @Nullable Ppt ppt,
+      VarInfo @Nullable [] vis,
+      String msg) {
 
     // Try to log via the logger first
     if (log(inv_class, ppt, vis, msg)) {
@@ -548,7 +553,8 @@ public final class Debug {
   }
 
   /** Returns whether or not the specified ppt matches the ppts being tracked. */
-  public static boolean ppt_match(@Nullable Ppt ppt) {
+  public static boolean ppt_match(
+      @Nullable @UnknownInitialization(daikon.PptTopLevel.class) Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
       return ((ppt != null) && strContainsElem(ppt.name(), debugTrackPpt));

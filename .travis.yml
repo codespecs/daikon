@@ -27,10 +27,14 @@ env:
     - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
-    - OS=fedora JDKVER=jdkany GROUP=misc
+## Fails on Travis but not on CircleCI.
+## This might be https://bugs.openjdk.java.net/browse/JDK-8215542
+#    - OS=fedora JDKVER=jdkany GROUP=misc
     - OS=fedora JDKVER=jdkany GROUP=kvasir
     - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
-    - OS=centos JDKVER=jdkany GROUP=misc
+## Fails on Travis but not on CircleCI.
+## This might be https://bugs.openjdk.java.net/browse/JDK-8215542
+#    - OS=centos JDKVER=jdkany GROUP=misc
     - OS=centos JDKVER=jdkany GROUP=kvasir
 
 # Currently-failing jobs
