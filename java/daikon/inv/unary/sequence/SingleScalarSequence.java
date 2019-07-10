@@ -6,7 +6,6 @@ import daikon.inv.InvariantStatus;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.plumelib.util.Intern;
 import typequals.prototype.qual.Prototype;
 
@@ -32,7 +31,7 @@ public abstract class SingleScalarSequence extends SingleSequence {
         && vis[0].file_rep_type.isArray());
   }
 
-  /** Returns whether or not the specified types are valid */
+  /** Returns whether or not the specified types are valid. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);
@@ -41,7 +40,7 @@ public abstract class SingleScalarSequence extends SingleSequence {
   // Identical to superclass definition, and therefore gratuitious
   @Override
   public VarInfo var(
-          @GuardSatisfied @UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleScalarSequence this) {
+      @GuardSatisfied @UnknownInitialization(SingleSequence.class) SingleScalarSequence this) {
     return ppt.var_infos[0];
   }
 

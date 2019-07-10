@@ -40,14 +40,14 @@ public class DTraceWriter extends DaikonWriter {
   protected static final String classClassName = "java.lang.Class";
   protected static final String stringClassName = "java.lang.String";
 
-  /** Where to print output */
+  /** Where to print output. */
   private PrintStream outFile;
 
   /** debug information about daikon variables */
   private boolean debug_vars = false;
 
   /**
-   * Initializes the DTraceWriter
+   * Initializes the DTraceWriter.
    *
    * @param writer stream to write to
    */
@@ -244,7 +244,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Returns a list of values of the field for each Object in theObjects
+   * Returns a list of values of the field for each Object in theObjects.
    *
    * @param theObjects list of Objects, each must have the Field field
    * @param field which field of theObjects we are probing
@@ -254,7 +254,7 @@ public class DTraceWriter extends DaikonWriter {
       return nonsenseList;
     }
 
-    List<Object> fieldVals = new ArrayList<Object>();
+    List<Object> fieldVals = new ArrayList<>();
 
     for (Object theObj : theObjects) {
       if (theObj == null) {
@@ -353,13 +353,15 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Return a List derived from an aray
+   * Return a List derived from an aray.
    *
    * @param arrayVal must be an array type
    * @return a List (with correct primitive wrappers) corresponding to the array
    */
   public static List<Object> getListFromArray(Object arrayVal) {
-    if (arrayVal instanceof NonsensicalObject) return nonsenseList;
+    if (arrayVal instanceof NonsensicalObject) {
+      return nonsenseList;
+    }
 
     if (!arrayVal.getClass().isArray()) {
       throw new RuntimeException(
@@ -368,7 +370,7 @@ public class DTraceWriter extends DaikonWriter {
     }
 
     int len = Array.getLength(arrayVal);
-    List<Object> arrList = new ArrayList<Object>(len);
+    List<Object> arrList = new ArrayList<>(len);
 
     Class<?> arrType = arrayVal.getClass().getComponentType();
 
@@ -424,7 +426,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Returns a list of Strings which are the names of the runtime types in the theVals param
+   * Returns a list of Strings which are the names of the runtime types in the theVals param.
    *
    * @param theVals list of ObjectReferences
    * @return a list of Strings which are the names of the runtime types in the theVals param
@@ -436,7 +438,7 @@ public class DTraceWriter extends DaikonWriter {
       return null;
     }
 
-    List<String> typeNames = new ArrayList<String>(theVals.size());
+    List<String> typeNames = new ArrayList<>(theVals.size());
 
     for (Object ref : theVals) {
       if (ref == null) {
@@ -462,7 +464,9 @@ public class DTraceWriter extends DaikonWriter {
    * @return the variable's type, with primitive wrappers removed, or null if the value is non-null
    */
   public static @Nullable Class<?> removeWrappers(Object val, Class<?> declared, boolean runtime) {
-    if (!runtime) return declared;
+    if (!runtime) {
+      return declared;
+    }
 
     if (val instanceof Runtime.PrimitiveWrapper) {
       return ((Runtime.PrimitiveWrapper) val).primitiveClass();

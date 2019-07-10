@@ -219,7 +219,6 @@ import org.checkerframework.checker.initialization.qual.Initialized;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.NonRaw;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -375,7 +374,6 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 #endif
 
-  @SuppressWarnings("interning") // clone method re-does interning
   @SideEffectFree
   @Override
   public ONEOFSCALAR clone(@GuardSatisfied ONEOFSCALAR this) {
@@ -415,7 +413,6 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
   }
 
-  @SuppressWarnings("interning") // generics bug in (at least interning) checker
 #if defined(STRING) || defined(ELTSTRING)
   static Comparator<String> comparator = new UtilPlume.NullableStringComparator();
   #define COMPARATOR_ARG , comparator
@@ -458,9 +455,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       return false;
     }
     sort_rep();
-    for (int i = 0; i < num_elts; i++)
-      if (!EQUALS(elts[i],other_elts[i])) // elements are interned
+    for (int i = 0; i < num_elts; i++) {
+      if (!EQUALS(elts[i],other_elts[i])) { // elements are interned
         return false;
+      }
+    }
     return true;
   }
 
@@ -919,7 +918,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
 public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
-    @NonNull @NonRaw @Initialized // UNDONE: don't understand why needed (markro)
+    @NonNull @Initialized // UNDONE: don't understand why needed (markro)
     String result;
 
 #if defined(IS_ELT)
@@ -936,11 +935,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     #endif
 
     String[] split = var().csharp_array_split();
-    List<String> args_list = new ArrayList<String>();
+    List<String> args_list = new ArrayList<>();
     // Construct the array that unary value will be compared against.
     for (int i = 0; i < num_elts; i++) {
     #if defined(ELTSTRING)
-      @NonNull @NonRaw @Initialized // UNDONE: don't understand why needed (markro)
+      @NonNull @Initialized // UNDONE: don't understand why needed (markro)
       String arg = is_type() ? "typeof(" + elts[i] + ")" : TOSTRING(elts[i]);
       args_list.add(arg);
     #else
@@ -1006,7 +1005,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       if (num_elts == 1) {
         result = varname + " == " + elts[0];
       } else {
-        List<String> e = new ArrayList<String>();
+        List<String> e = new ArrayList<>();
         for (int i = 0; i < num_elts; i++) {
           e.add(TOSTRING(elts[i]));
         }
@@ -1022,7 +1021,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
   #elif defined(STRING)
 
     if (is_type()) {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         for (int i = 0; i < num_elts; i++) {
              String str = elts[i];
              if ((str == null) || "null".equals(str)) {
@@ -1038,7 +1037,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
                ? (varname + " == null")
                : (varname + ".Equals(" + TOSTRING(str) + ")");
     } else {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         for (int i = 0; i < num_elts; i++) {
             String str = elts[i];
             names.add((str == null) ? "null" : TOSTRING(str));
@@ -1327,10 +1326,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
               && ELT_EQUALS(seq[j], seq[j + 3])) {
             // Compress a sequence of adjacent values
             int k = j + 4;
-            for (; k < seq.length; k++)
+            for (; k < seq.length; k++) {
               if (!ELT_EQUALS(seq[j], seq[k])) {
                 break;
               }
+            }
             k--;
             String index_name = VarInfo.get_simplify_free_index(var());
             String cond_left, cond_right;
@@ -1507,7 +1507,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // Look for v in our list of previously seen values.  If it's
     // found, we're all set.
     for (int i = 0; i < num_elts; i++) {
-      //if (logDetail())
+      // if (logDetail())
       //  log ("add_modified (" + v + ")");
       if (EQUALS(elts[i], v)) {
         return InvariantStatus.NO_CHANGE;
@@ -1602,7 +1602,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       if (num_elts == 1
           && v.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
           && v.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-        @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
         int min = v.aux.getInt(VarInfoAux.MINIMUM_VALUE),
             max = v.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
         if (min == max && min == elts[0]) {
@@ -1616,13 +1615,12 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       // We can check if all values in the list match with the ones we know about
       // (useful for booleans and numeric enumerations).
       if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-        @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
-        Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
+        Set<NUMWRAPPER> setValidValues = new TreeSet<>();
         for (String s : vsValidValues) {
           setValidValues.add(NUMWRAPPER.valueOf(s));
         }
-        Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
+        Set<NUMWRAPPER> setValuesInvariant = new TreeSet<>();
         for (INT e : elts) {
           setValuesInvariant.add(e);
         }
@@ -1686,7 +1684,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
   }
 #elif defined(IS_SEQUENCE)
   /** {@inheritDoc} */
-  @SuppressWarnings("keyfor")   // needs EnsureQualifier
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -1715,13 +1712,12 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       #define NEW_BASETYPE
       #endif
 
-      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
-      Set<BASETYPE> setValidValues = new TreeSet<BASETYPE>();
+      Set<BASETYPE> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
         setValidValues.add(NEW_BASETYPE(s));
       }
-      Set<BASETYPE> setValuesInvariant = new TreeSet<BASETYPE>();
+      Set<BASETYPE> setValuesInvariant = new TreeSet<>();
       for (INT e : elts) {
         if (e == null) {
   continue;
@@ -1752,13 +1748,12 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
-      Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
+      Set<NUMWRAPPER> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
         setValidValues.add(NUMWRAPPER.valueOf(s));
       }
-      Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
+      Set<NUMWRAPPER> setValuesInvariant = new TreeSet<>();
       for (INT e : elts) {
         setValuesInvariant.add(e);
       }
@@ -1801,13 +1796,12 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
-      @SuppressWarnings("keyfor") // https://tinyurl.com/cfissue/1606 EnsuresQualifierIf with args
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
-      Set<INT> setValidValues = new TreeSet<INT>();
+      Set<INT> setValidValues = new TreeSet<>();
       for (String s : vsValidValues) {
-        setValidValues.add(new INT(s));
+        setValidValues.add(s.intern());
       }
-      Set<INT> setValuesInvariant = new TreeSet<INT>();
+      Set<INT> setValuesInvariant = new TreeSet<>();
       for (INT e : elts) {
         if (e == null) {
   continue;
@@ -1994,17 +1988,20 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     }
 #elif defined(SEQUENCE)
     for (int i = 0; i < num_elts; i++) {
-      for (int j = 0; j < elts[i].length; j++)
+      for (int j = 0; j < elts[i].length; j++) {
         if (elts[i][j] < -1 || elts[i][j] > 2) {
           return true;
         }
+      }
     }
 #elif defined(SEQUENCEFLOAT)
     for (int i = 0; i < num_elts; i++) {
-      for (int j = 0; j < elts[i].length; j++)
+      for (int j = 0; j < elts[i].length; j++) {
         if (elts[i][j] < -1.0 || elts[i][j] > 2.0
-            || elts[i][j] != (long)elts[i][j])
+            || elts[i][j] != (long)elts[i][j]) {
           return true;
+        }
+      }
     }
 #endif
     return false;
@@ -2029,7 +2026,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
-  @SuppressWarnings("interning") // readObject re-interns
   private void readObject(ObjectInputStream in) throws IOException,
     ClassNotFoundException {
     in.defaultReadObject();
@@ -2055,7 +2051,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
    *     variable order in parent_ppt.
    * @param parent_ppt slice that will contain the new invariant
    */
-  @SuppressWarnings("interning") // cloning requires re-interning
   @Override
   public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
@@ -2148,7 +2143,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
    * integer in the order they are seen. These values will be consistent as long as new hashcodes do
    * not appear in the output. Not a perfect fix for regressions consistency, but workable.
    */
-  private static Map<Long,Long> dummy_hashcode_vals = new LinkedHashMap<Long,Long>();
+  private static Map<Long,Long> dummy_hashcode_vals = new LinkedHashMap<>();
   private static long next_dummy_hashcode = 1001;
 
   private long get_hashcode_val(@GuardSatisfied ONEOFSCALAR this, long hashcode) {

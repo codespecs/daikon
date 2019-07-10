@@ -59,7 +59,7 @@ class NameFixer extends DepthFirstVisitor {
   }
 
   /**
-   * Fixes unqualifed class member variables
+   * Fixes unqualifed class member variables.
    *
    * @param expression a valid segment of java code
    * @param className is name of the containing class

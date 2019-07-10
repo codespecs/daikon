@@ -74,19 +74,31 @@ public final class FileIO {
   static final String declaration_header = "DECLARE";
 
   // Program point name tags
+  /** String used to append a ppt type to a ppt name. */
   public static final String ppt_tag_separator = ":::";
+  /** String used to identify entry ppt names. */
   public static final String enter_suffix = "ENTER";
+  /** String used to mark entry ppt names. */
   public static final String enter_tag = ppt_tag_separator + enter_suffix;
   // EXIT does not necessarily appear at the end of the program point name;
   // a number may follow it.
+  /** String used to identify exit ppt names. */
   public static final String exit_suffix = "EXIT";
+  /** String used to mark exit ppt names. */
   public static final String exit_tag = ppt_tag_separator + exit_suffix;
+  /** To be deleted. */
   public static final String throws_suffix = "THROWS";
+  /** To be deleted. */
   public static final String throws_tag = ppt_tag_separator + throws_suffix;
+
   public static final String object_suffix = "OBJECT";
+  /** String used to mark object ppt names. */
   public static final String object_tag = ppt_tag_separator + object_suffix;
+  /** String used to identify class ppt names. */
   public static final String class_static_suffix = "CLASS";
+  /** String used to mark class ppt names. */
   public static final String class_static_tag = ppt_tag_separator + class_static_suffix;
+  /** String used to identify global ppt names. */
   public static final String global_suffix = "GLOBAL";
 
   private static final String lineSep = Global.lineSep;
@@ -175,7 +187,7 @@ public final class FileIO {
   // old values of all variables in scope the last time the program point
   // was executed. This enables us to determine whether the values have been
   // modified since this program point was last executed.
-  static HashMap<PptTopLevel, String[]> ppt_to_value_reps = new HashMap<PptTopLevel, String[]>();
+  static HashMap<PptTopLevel, String[]> ppt_to_value_reps = new HashMap<>();
 
   // For debugging purposes: printing out a modified trace file with
   // changed modbits.
@@ -317,89 +329,94 @@ public final class FileIO {
     ppt_name = user_mod_ppt_name(ppt_name);
 
     /** Information that will populate the new program point. */
-    Map<String, VarDefinition> varmap = new LinkedHashMap<String, VarDefinition>();
+    Map<String, VarDefinition> varmap = new LinkedHashMap<>();
     /** The VarDefinition we are in the middle of reading, or null if we are not. */
     VarDefinition vardef = null;
-    List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
+    List<ParentRelation> ppt_parents = new ArrayList<>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
     PptType ppt_type = PptType.POINT;
 
-    // Read the records that define this program point
-    while ((line = state.reader.readLine()) != null) {
-      // debug_decl.log("read line %s%n", line);
-      line = line.trim();
-      if (line.length() == 0) {
-        break;
-      }
+    try {
+      // Read the records that define this program point
+      while ((line = state.reader.readLine()) != null) {
+        // debug_decl.log("read line %s%n", line);
+        line = line.trim();
+        if (line.length() == 0) {
+          break;
+        }
 
-      scanner = new Scanner(line);
-      @Interned String record = scanner.next().intern();
-      if (vardef == null) {
-        if (record == "parent") { // interned
-          ppt_parents.add(parse_ppt_parent(state, scanner));
-        } else if (record == "flags") { // interned
-          parse_ppt_flags(state, scanner, ppt_flags);
-        } else if (record == "variable") { // interned
-          vardef = new VarDefinition(state, scanner);
-          // There is no need to check "varmap.containsKey(vardef.name)"
-          // because this is the first variable.
-          assert varmap.isEmpty();
-          if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
-        } else if (record == "ppt-type") { // interned
-          ppt_type = parse_ppt_type(state, scanner);
-        } else {
-          decl_error(state, "record '%s' found where %s expected", record, "'parent', 'flags'");
-        }
-      } else { // there must be a current variable
-        if (record == "var-kind") { // interned
-          vardef.parse_var_kind(scanner);
-        } else if (record == "enclosing-var") { // interned
-          vardef.parse_enclosing_var_name(scanner);
-        } else if (record == "reference-type") { // interned
-          vardef.parse_reference_type(scanner);
-        } else if (record == "array") { // interned
-          vardef.parse_array(scanner);
-        } else if (record == "function-args") { // interned
-          vardef.parse_function_args(scanner);
-        } else if (record == "rep-type") { // interned
-          vardef.parse_rep_type(scanner);
-        } else if (record == "dec-type") { // interned
-          vardef.parse_dec_type(scanner);
-        } else if (record == "flags") { // interned
-          vardef.parse_flags(scanner);
-        } else if (record == "lang-flags") { // interned
-          vardef.parse_lang_flags(scanner);
-        } else if (record == "parent") { // interned
-          vardef.parse_parent(scanner, ppt_parents);
-        } else if (record == "comparability") { // interned
-          vardef.parse_comparability(scanner);
-        } else if (record == "constant") { // interned
-          vardef.parse_constant(scanner);
-        } else if (record == "variable") { // interned
-          try {
-            vardef.checkRep(); // make sure the previous variable is ok
-          } catch (AssertionError e) {
-            decl_error(state, e);
+        scanner = new Scanner(line);
+        @Interned String record = scanner.next().intern();
+        if (vardef == null) {
+          if (record == "parent") { // interned
+            ppt_parents.add(parse_ppt_parent(state, scanner));
+          } else if (record == "flags") { // interned
+            parse_ppt_flags(state, scanner, ppt_flags);
+          } else if (record == "variable") { // interned
+            vardef = new VarDefinition(state, scanner);
+            // There is no need to check "varmap.containsKey(vardef.name)"
+            // because this is the first variable.
+            assert varmap.isEmpty();
+            if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
+          } else if (record == "ppt-type") { // interned
+            ppt_type = parse_ppt_type(state, scanner);
+          } else {
+            decl_error(state, "record '%s' found where %s expected", record, "'parent', 'flags'");
           }
-          vardef = new VarDefinition(state, scanner);
-          if (varmap.containsKey(vardef.name)) {
-            decl_error(state, "var %s declared twice", vardef.name);
+        } else { // there must be a current variable
+          if (record == "var-kind") { // interned
+            vardef.parse_var_kind(scanner);
+          } else if (record == "enclosing-var") { // interned
+            vardef.parse_enclosing_var_name(scanner);
+          } else if (record == "reference-type") { // interned
+            vardef.parse_reference_type(scanner);
+          } else if (record == "array") { // interned
+            vardef.parse_array(scanner);
+          } else if (record == "function-args") { // interned
+            vardef.parse_function_args(scanner);
+          } else if (record == "rep-type") { // interned
+            vardef.parse_rep_type(scanner);
+          } else if (record == "dec-type") { // interned
+            vardef.parse_dec_type(scanner);
+          } else if (record == "flags") { // interned
+            vardef.parse_flags(scanner);
+          } else if (record == "lang-flags") { // interned
+            vardef.parse_lang_flags(scanner);
+          } else if (record == "parent") { // interned
+            vardef.parse_parent(scanner, ppt_parents);
+          } else if (record == "comparability") { // interned
+            vardef.parse_comparability(scanner);
+          } else if (record == "constant") { // interned
+            vardef.parse_constant(scanner);
+          } else if (record == "variable") { // interned
+            try {
+              vardef.checkRep(); // make sure the previous variable is ok
+            } catch (AssertionError e) {
+              decl_error(state, e);
+            }
+            vardef = new VarDefinition(state, scanner);
+            if (varmap.containsKey(vardef.name)) {
+              decl_error(state, "var %s declared twice", vardef.name);
+            }
+            if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
+          } else if (record == "min-value") { // interned
+            vardef.parse_min_value(scanner);
+          } else if (record == "max-value") { // interned
+            vardef.parse_max_value(scanner);
+          } else if (record == "min-length") { // interned
+            vardef.parse_min_length(scanner);
+          } else if (record == "max-length") { // interned
+            vardef.parse_max_length(scanner);
+          } else if (record == "valid-values") { // interned
+            vardef.parse_valid_values(scanner);
+          } else {
+            decl_error(state, "Unexpected variable item '%s' found", record);
           }
-          if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
-        } else if (record == "min-value") { // interned
-          vardef.parse_min_value(scanner);
-        } else if (record == "max-value") { // interned
-          vardef.parse_max_value(scanner);
-        } else if (record == "min-length") { // interned
-          vardef.parse_min_length(scanner);
-        } else if (record == "max-length") { // interned
-          vardef.parse_max_length(scanner);
-        } else if (record == "valid-values") { // interned
-          vardef.parse_valid_values(scanner);
-        } else {
-          decl_error(state, "Unexpected variable item '%s' found", record);
         }
       }
+    } catch (Daikon.ParseError pe) {
+      decl_error(state, "%s", pe.getMessage());
+      throw new Error(); // this can't happen
     }
     if (vardef != null) {
       try {
@@ -416,9 +433,11 @@ public final class FileIO {
     }
 
     // Build the var infos from the var definitions.
-    List<VarInfo> vi_list = new ArrayList<VarInfo>(varmap.size());
+    List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
-      vi_list.add(new VarInfo(vd));
+      @SuppressWarnings("interning") // about to be used in a new program point
+      @Interned VarInfo vi = new VarInfo(vd);
+      vi_list.add(vi);
     }
     VarInfo[] vi_array = vi_list.toArray(new VarInfo[vi_list.size()]);
 
@@ -465,7 +484,7 @@ public final class FileIO {
       flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
   }
 
-  /** Parses a ppt-type record and returns the type */
+  /** Parses a ppt-type record and returns the type. */
   private static PptType parse_ppt_type(ParseState state, Scanner scanner) {
 
     PptType ppt_type = parse_enum_val(state, scanner, PptType.class, "ppt type");
@@ -488,7 +507,7 @@ public final class FileIO {
     ppt_name = ppt_name.intern();
     VarInfo[] vi_array = read_VarInfos(state, ppt_name);
 
-    // System.out.printf("Ppt %s with %d variables\n", ppt_name,
+    // System.out.printf("Ppt %s with %d variables%n", ppt_name,
     //                   vi_array.length);
 
     // This program point name has already been encountered.
@@ -546,7 +565,7 @@ public final class FileIO {
   private static VarInfo[] read_VarInfos(ParseState state, String ppt_name) throws IOException {
 
     // The var_infos that will populate the new program point
-    List<VarInfo> var_infos = new ArrayList<VarInfo>();
+    List<VarInfo> var_infos = new ArrayList<>();
 
     // Each iteration reads a variable name, type, and comparability.
     // Possibly abstract this out into a separate function??
@@ -717,14 +736,17 @@ public final class FileIO {
           filename);
     }
 
-    return new VarInfo(
-        varname,
-        prog_type,
-        file_rep_type,
-        comparability,
-        is_static_constant,
-        static_constant_value,
-        aux);
+    @SuppressWarnings("interning")
+    @Interned VarInfo result =
+        new VarInfo(
+            varname,
+            prog_type,
+            file_rep_type,
+            comparability,
+            is_static_constant,
+            static_constant_value,
+            aux);
+    return result;
   }
 
   @RequiresNonNull("FileIO.new_decl_format")
@@ -860,7 +882,9 @@ public final class FileIO {
           pw.print("<hashcode>");
         else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
         else if (val instanceof String) pw.print(UtilPlume.escapeNonASCII((String) val));
-        else pw.print(val);
+        else {
+          pw.print(val);
+        }
       }
       pw.println();
 
@@ -878,7 +902,9 @@ public final class FileIO {
           new_vals[vi.value_index] = canonical_hashcode;
         }
       }
-      return new @Interned Invocation(ppt, new_vals, mods);
+      @SuppressWarnings("interning:cast.unsafe.constructor.invocation")
+      @Interned Invocation result = new @Interned Invocation(ppt, new_vals, mods);
+      return result;
     }
 
     // Return true if the invocations print the same
@@ -911,7 +937,7 @@ public final class FileIO {
 
   // Map key is a (global, not per-procedure) nonce.
   // The nonce indicates which returns are associated with which entries.
-  static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
+  static HashMap<Integer, Invocation> call_hashmap = new HashMap<>();
   // call_stack is for procedures without nonces.
   static Deque<Invocation> call_stack = new ArrayDeque<Invocation>();
 
@@ -1186,7 +1212,7 @@ public final class FileIO {
     // This is the global information about the state of the parser.
     //
 
-    /** Name of input file */
+    /** Name of input file. */
     public String filename;
 
     /** True if the current file is a declaration file. */
@@ -1198,13 +1224,13 @@ public final class FileIO {
      */
     public boolean ppts_may_be_new;
 
-    /** All of the ppts seen so far */
+    /** All of the ppts seen so far. */
     public PptMap all_ppts;
 
-    /** Input stream */
+    /** Input stream. */
     public LineNumberReader reader;
 
-    /** Total number of lines in the input file */
+    /** Total number of lines in the input file. */
     public long total_lines;
 
     /** Comparability format, either VarComparability.IMPLICIT or VarComparability.NONE. */
@@ -1230,7 +1256,7 @@ public final class FileIO {
     /** The current set of values. Used when status=SAMPLE. */
     public @Nullable ValueTuple vt;
 
-    /** Miscellaneous text in the parsed item */
+    /** Miscellaneous text in the parsed item. */
     public @Nullable Object payload; // used when status=COMMENT
 
     /** Start parsing the given file. */
@@ -1276,7 +1302,7 @@ public final class FileIO {
         Daikon.progress = "Checking size of " + filename;
         total_lines = UtilPlume.countLines(raw_filename);
       } else {
-        // System.out.printf("no count %b %d %s %d %d\n", is_decl_file,
+        // System.out.printf("no count %b %d %s %d %d%n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
         //  Daikon.dkconfig_progress_delay, (new File(raw_filename)).length());
       }
@@ -1437,7 +1463,9 @@ public final class FileIO {
       } else if ((data_trace_state.rtype == RecordType.EOF)
           || (data_trace_state.rtype == RecordType.TRUNCATED)) {
         break;
-      } else ; // don't need to do anything explicit for other records found
+      } else {
+        // don't need to do anything explicit for other records found
+      }
     }
 
     if (Global.debugPrintDtrace) {
@@ -1566,11 +1594,11 @@ public final class FileIO {
       if (new_decl_format) ppt_name = unescape_decl(line); // interning bugfix: no need to intern
       ppt_name = user_mod_ppt_name(ppt_name);
       if (!ppt_included(ppt_name)) {
-        // System.out.printf("skipping ppt %s\n", line);
+        // System.out.printf("skipping ppt %s%n", line);
         while ((line != null) && !line.equals("")) line = reader.readLine();
         continue;
       }
-      // System.out.printf("Not skipping ppt  %s\n", line);
+      // System.out.printf("Not skipping ppt  %s%n", line);
 
       if (state.is_decl_file) {
         if ((!new_decl_format) && line.startsWith("ppt ")) {
@@ -1711,7 +1739,9 @@ public final class FileIO {
     // it saves away the orig values from enter points for later use
     // by exit points.
     boolean ignore = compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
-    if (ignore) return;
+    if (ignore) {
+      return;
+    }
 
     // Only process the leaves of the ppt tree.
     // This test assumes that all leaves are numbered exit program points
@@ -1759,7 +1789,7 @@ public final class FileIO {
       return;
     }
 
-    @SuppressWarnings("flowexpr.parse.error") // https://tinyurl.com/cfissue/862
+    @SuppressWarnings("nullness:flowexpr.parse.error") // https://tinyurl.com/cfissue/862
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
@@ -1791,7 +1821,9 @@ public final class FileIO {
   /** Print each call that does not have a matching exit. */
   public static void process_unmatched_procedure_entries() {
 
-    if (dkconfig_unmatched_procedure_entries_quiet) return;
+    if (dkconfig_unmatched_procedure_entries_quiet) {
+      return;
+    }
 
     int unmatched_count = call_stack.size() + call_hashmap.size();
 
@@ -1805,7 +1837,7 @@ public final class FileIO {
       System.out.println();
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
-        ArrayList<Invocation> invocations = new ArrayList<Invocation>();
+        ArrayList<Invocation> invocations = new ArrayList<>();
         for (@KeyFor("call_hashmap") Integer i : CollectionsPlume.sortedKeySet(call_hashmap)) {
           Invocation invok = call_hashmap.get(i);
           assert invok != null;
@@ -1847,7 +1879,7 @@ public final class FileIO {
 
   /** Print the invocations in the collection, in order, and coalescing duplicates. */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
-    Map<@Interned String, Integer> counter = new LinkedHashMap<@Interned String, Integer>();
+    Map<@Interned String, Integer> counter = new LinkedHashMap<>();
 
     for (Invocation invok_noncanonical : invocations) {
       @Interned Invocation invok = invok_noncanonical.canonicalize();
@@ -1967,7 +1999,7 @@ public final class FileIO {
 
       if (!unescape_decl(line.trim()).equals(vi.str_name())) {
         throw new Daikon.UserError(
-            "Mismatch between .dtrace file and .decls file.  Expected variable "
+            "Mismatch between declaration and trace.  Expected variable "
                 + vi.name()
                 + ", got "
                 + line
@@ -2267,7 +2299,7 @@ public final class FileIO {
     return false;
   }
 
-  /** Computes values of derived variables */
+  /** Computes values of derived variables. */
   public static void compute_derived_variables(
       PptTopLevel ppt, @Nullable Object[] vals, int[] mods) {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
@@ -2533,7 +2565,7 @@ public final class FileIO {
       "nullness") // undocumented class needs documentation before annotating with nullness
   public static class VarDefinition implements java.io.Serializable, Cloneable {
     static final long serialVersionUID = 20060524L;
-    /** Current information about input file and previously parsed values */
+    /** Current information about input file and previously parsed values. */
     transient ParseState state;
     /** Name of the variable (required) */
     public String name;
@@ -2544,7 +2576,7 @@ public final class FileIO {
     public @Nullable String enclosing_var_name;
     /** the simple (not fully specified) name of this variable (optional) */
     public @Nullable String relative_name = null;
-    /** Type of reference for structure/class variables */
+    /** Type of reference for structure/class variables. */
     public RefType ref_type = RefType.POINTER;
     /** Number of array dimensions (0 or 1) */
     public int arr_dims = 0;
@@ -2561,7 +2593,7 @@ public final class FileIO {
     public EnumSet<VarFlags> flags = EnumSet.noneOf(VarFlags.class);
     /** Language specific variable flags (optional) */
     public EnumSet<LangFlags> lang_flags = EnumSet.noneOf(LangFlags.class);
-    /** Comparability of this variable (required */
+    /** Comparability of this variable (required. */
     public VarComparability comparability = null;
     /** Parent program points in ppt hierarchy (optional) */
     public List<VarParent> parents;
@@ -2659,7 +2691,7 @@ public final class FileIO {
       }
     }
 
-    /** Restore interned strings */
+    /** Restore interned strings. */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
       name = name.intern();
@@ -2677,7 +2709,7 @@ public final class FileIO {
       }
     }
 
-    /** Clears the parent relations, if any existed */
+    /** Clears the parent relations, if any existed. */
     public void clear_parent_relation() {
       parents.clear();
     }
@@ -2693,20 +2725,20 @@ public final class FileIO {
       need_eol(scanner);
     }
 
-    /** Parses the enclosing-var record */
+    /** Parses the enclosing-var record. */
     public void parse_enclosing_var_name(Scanner scanner) {
       enclosing_var_name = need(scanner, "enclosing variable name");
       need_eol(scanner);
     }
 
-    /** Parses the reference-type record */
+    /** Parses the reference-type record. */
     public void parse_reference_type(Scanner scanner) {
       RefType ref_type_local = parse_enum_val(scanner, RefType.class, "reference type");
       ref_type = ref_type_local;
       need_eol(scanner);
     }
 
-    /** Parses the array record */
+    /** Parses the array record. */
     public void parse_array(Scanner scanner) {
       @Interned String arr_str = need(scanner, "array dimensions");
       if (arr_str == "0") { // interned
@@ -2718,7 +2750,7 @@ public final class FileIO {
       }
     }
 
-    /** Parses the function-args record */
+    /** Parses the function-args record. */
     public void parse_function_args(Scanner scanner) {
 
       function_args = new ArrayList<String>();
@@ -2755,7 +2787,7 @@ public final class FileIO {
         lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
     }
 
-    /** Parses a comparability record */
+    /** Parses a comparability record. */
     public void parse_comparability(Scanner scanner) {
       @Interned String comparability_str = need(scanner, "comparability");
       need_eol(scanner);
@@ -2763,11 +2795,18 @@ public final class FileIO {
           VarComparability.parse(state.varcomp_format, comparability_str, declared_type);
     }
 
-    /** Parse a parent ppt record */
-    public void parse_parent(Scanner scanner, List<ParentRelation> ppt_parents) {
+    /** Parse a parent ppt record. */
+    public void parse_parent(Scanner scanner, List<ParentRelation> ppt_parents)
+        throws Daikon.ParseError {
 
       String parent_ppt = need(scanner, "parent ppt");
-      int parent_relation_id = Integer.parseInt(need(scanner, "parent id"));
+      String parent_relation_id_string = need(scanner, "parent id");
+      int parent_relation_id;
+      try {
+        parent_relation_id = Integer.parseInt(parent_relation_id_string);
+      } catch (NumberFormatException nfe) {
+        throw new Daikon.ParseError("Expected a number, found: " + parent_relation_id_string);
+      }
       String parent_variable = null;
 
       boolean found = false;
@@ -2794,7 +2833,7 @@ public final class FileIO {
       need_eol(scanner);
     }
 
-    /** Parse a constant record */
+    /** Parse a constant record. */
     public void parse_constant(Scanner scanner) {
       @Interned String constant_str = need(scanner, "constant value");
       need_eol(scanner);
@@ -2805,31 +2844,31 @@ public final class FileIO {
       }
     }
 
-    /** Parse a minimum value record */
+    /** Parse a minimum value record. */
     public void parse_min_value(Scanner scanner) {
       this.min_value = need(scanner, "minimum value");
       need_eol(scanner);
     }
 
-    /** Parse a maximum value record */
+    /** Parse a maximum value record. */
     public void parse_max_value(Scanner scanner) {
       this.max_value = need(scanner, "maximum value");
       need_eol(scanner);
     }
 
-    /** Parse a minimum length record */
+    /** Parse a minimum length record. */
     public void parse_min_length(Scanner scanner) {
       this.min_length = Integer.parseInt(need(scanner, "minimum length"));
       need_eol(scanner);
     }
 
-    /** Parse a maximum length record */
+    /** Parse a maximum length record. */
     public void parse_max_length(Scanner scanner) {
       this.max_length = Integer.parseInt(need(scanner, "maximum length"));
       need_eol(scanner);
     }
 
-    /** Parse a valid values record */
+    /** Parse a valid values record. */
     public void parse_valid_values(Scanner scanner) {
       this.valid_values = scanner.nextLine();
     }
@@ -2901,8 +2940,7 @@ public final class FileIO {
 
   /** Call this to indicate a malformed declaration. */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
-    @SuppressWarnings(
-        "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
+    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(msg);
   }
@@ -2910,8 +2948,7 @@ public final class FileIO {
   /** Call this to indicate a malformed declaration. */
   private static void decl_error(
       ParseState state, Throwable cause, String format, @Nullable Object... args) {
-    @SuppressWarnings(
-        "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
+    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(cause, msg);
   }
@@ -2925,7 +2962,7 @@ public final class FileIO {
     throw new Daikon.UserError(cause, msg);
   }
 
-  /** Returns whether the line is the start of a ppt declaration */
+  /** Returns whether the line is the start of a ppt declaration. */
   @RequiresNonNull("FileIO.new_decl_format")
   @Pure
   private static boolean is_declaration_header(String line) {
@@ -2951,7 +2988,7 @@ public final class FileIO {
     //                    dkconfig_rm_stack_dups);
 
     String[] stack = ppt_name.split("[|]");
-    List<String> nd_stack = new ArrayList<String>();
+    List<String> nd_stack = new ArrayList<>();
     for (String si : stack) {
       if (nd_stack.contains(si)) {
         continue;

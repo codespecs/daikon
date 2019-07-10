@@ -35,11 +35,11 @@ public class InvMap implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20090612L;
 
-  private Map<PptTopLevel, List<Invariant>> pptToInvs = new HashMap<PptTopLevel, List<Invariant>>();
+  private Map<PptTopLevel, List<Invariant>> pptToInvs = new HashMap<>();
   // The purpose of this field is apparently to permit the ppts to be
   // extracted in the same order in which they were inserted.
   // Why not use a LinkedHashMap?  Maybe because it was only added in JDK 1.4.
-  private List<PptTopLevel> ppts = new ArrayList<PptTopLevel>();
+  private List<PptTopLevel> ppts = new ArrayList<>();
 
   public InvMap() {}
 
@@ -93,7 +93,7 @@ public class InvMap implements Serializable {
 
   // Returns a sorted iterator over the Ppts using c as the comparator
   public Iterator<PptTopLevel> pptSortedIterator(Comparator<PptTopLevel> c) {
-    List<PptTopLevel> ppts_copy = new ArrayList<PptTopLevel>(ppts);
+    List<PptTopLevel> ppts_copy = new ArrayList<>(ppts);
     Collections.sort(ppts_copy, c);
     return ppts_copy.iterator();
   }
@@ -104,7 +104,7 @@ public class InvMap implements Serializable {
   // necessarily that in which they were added, depending on calling
   // sequences.
   public Iterator<Invariant> invariantIterator() {
-    ArrayList<Invariant> answer = new ArrayList<Invariant>();
+    ArrayList<Invariant> answer = new ArrayList<>();
     for (PptTopLevel ppt : ppts) {
       answer.addAll(get(ppt));
     }

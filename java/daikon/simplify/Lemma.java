@@ -41,7 +41,7 @@ public class Lemma implements Comparable<Lemma> {
 
   /** Convenience function to give you lemmas[], but as a vector. */
   public static List<Lemma> lemmasList() {
-    List<Lemma> v = new ArrayList<Lemma>();
+    List<Lemma> v = new ArrayList<>();
     for (int i = 0; i < lemmas.length; i++) {
       v.add(lemmas[i]);
     }

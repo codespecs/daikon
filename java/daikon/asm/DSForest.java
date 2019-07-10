@@ -25,7 +25,7 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 public class DSForest {
 
   // Maps the elements of the partition to their corresponding nodes.
-  HashMap<String, DSForestNode> elements = new LinkedHashMap<String, DSForestNode>();
+  HashMap<String, DSForestNode> elements = new LinkedHashMap<>();
 
   // Counter for node unique ids.
   private static int idCounter = 0;
@@ -39,8 +39,8 @@ public class DSForest {
     public int id;
 
     @SuppressWarnings({
-      "initialization.invalid.field.write.unknown",
-      "assignment.type.incompatible"
+      "nullness:initialization.invalid.field.write.unknown",
+      "nullness:assignment.type.incompatible"
     }) // weakness of FBC type system
     public DSForestNode(String element) {
       this.element = element;
@@ -104,7 +104,7 @@ public class DSForest {
   // one disjoint set.
   public Set<Set<String>> getSets() {
 
-    Map<Integer, Set<String>> sets = new LinkedHashMap<Integer, Set<String>>();
+    Map<Integer, Set<String>> sets = new LinkedHashMap<>();
     Set<Set<String>> retval = new LinkedHashSet<Set<String>>();
 
     for (DSForestNode n : elements.values()) {

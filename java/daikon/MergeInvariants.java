@@ -67,7 +67,7 @@ public final class MergeInvariants {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called progrmmatically.
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException {
@@ -150,9 +150,9 @@ public final class MergeInvariants {
 
     daikon.LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
-    List<File> inv_files = new ArrayList<File>();
+    List<File> inv_files = new ArrayList<>();
     File decl_file = null;
-    Set<File> splitter_files = new TreeSet<File>();
+    Set<File> splitter_files = new TreeSet<>();
 
     // Get each file specified
     for (int i = g.getOptind(); i < args.length; i++) {
@@ -189,7 +189,7 @@ public final class MergeInvariants {
     NIS.init_ni_suppression();
 
     // Read in each of the specified maps
-    List<PptMap> pptmaps = new ArrayList<PptMap>();
+    List<PptMap> pptmaps = new ArrayList<>();
     for (File file : inv_files) {
       debugProgress.fine("Processing " + file);
       PptMap ppts = FileIO.read_serialized_pptmap(file, true);
@@ -217,11 +217,11 @@ public final class MergeInvariants {
           PptMap pmap = FileIO.read_serialized_pptmap(file, true);
           for (PptTopLevel ppt : pmap.pptIterable()) {
             if (merge_ppts.containsName(ppt.name())) {
-              // System.out.printf("Not adding ppt %s from %s\n", ppt, file);
+              // System.out.printf("Not adding ppt %s from %s%n", ppt, file);
               continue;
             }
             merge_ppts.add(ppt);
-            // System.out.printf("Adding ppt %s from %s\n", ppt, file);
+            // System.out.printf("Adding ppt %s from %s%n", ppt, file);
 
             // Make sure that the parents of this ppt are already in
             // the map.  This will be true if all possible children of
@@ -249,7 +249,7 @@ public final class MergeInvariants {
       // Build the result pptmap from the specific decls file
       debugProgress.fine("Building result ppt map from decls file");
       Daikon.create_splitters(splitter_files);
-      List<File> decl_files = new ArrayList<File>();
+      List<File> decl_files = new ArrayList<>();
       decl_files.add(decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
       merge_ppts.trimToSize();
@@ -274,7 +274,7 @@ public final class MergeInvariants {
         continue;
       }
 
-      // System.out.printf("Including ppt %s, %d children\n", ppt,
+      // System.out.printf("Including ppt %s, %d children%n", ppt,
       //                   ppt.children.size());
 
       // Splitters should not have any children to begin with
@@ -291,7 +291,7 @@ public final class MergeInvariants {
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
-        // System.out.printf("found child %s from pmap %d\n", child, j);
+        // System.out.printf("found child %s from pmap %d%n", child, j);
         if (child == null) {
           continue;
         }
@@ -425,7 +425,9 @@ public final class MergeInvariants {
     }
 
     // Nothing to do if there are no splitters here
-    if (!ppt.has_splitters()) return;
+    if (!ppt.has_splitters()) {
+      return;
+    }
 
     assert child.splitters != null
         : "@AssumeAssertion(nullness): correlated: ppt.has_splitters() == child.has_splitters(), and ppt.has_splitters() == true";

@@ -197,7 +197,7 @@ public abstract class Derivation implements Serializable, Cloneable {
     throw new RuntimeException("csharp_name not implemented for " + this);
   }
 
-  /** Returns the name of this variable in simplify format */
+  /** Returns the name of this variable in simplify format. */
   @SideEffectFree
   public String simplify_name() {
     throw new RuntimeException(
@@ -212,7 +212,9 @@ public abstract class Derivation implements Serializable, Cloneable {
   public boolean is_prestate_version(Derivation d) {
 
     // The derivations must be of the same type
-    if (getClass() != d.getClass()) return false;
+    if (getClass() != d.getClass()) {
+      return false;
+    }
 
     // Each base of vi must be the prestate version of this
     VarInfo[] base1 = getBases();
@@ -237,7 +239,7 @@ public abstract class Derivation implements Serializable, Cloneable {
     return 1;
   }
 
-  /** Returns a string that corresponds to the the specified shift */
+  /** Returns a string that corresponds to the the specified shift. */
   protected String shift_str(int shift) {
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);
@@ -249,7 +251,9 @@ public abstract class Derivation implements Serializable, Cloneable {
    * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_esc_name(VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null) return "";
+    if (vi == null) {
+      return "";
+    }
 
     if (in_orig) {
       if (vi.isPrestate()) {
@@ -268,7 +272,9 @@ public abstract class Derivation implements Serializable, Cloneable {
    * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_jml_name(VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null) return "";
+    if (vi == null) {
+      return "";
+    }
 
     if (in_orig) {
       if (vi.isPrestate()) {
@@ -287,7 +293,9 @@ public abstract class Derivation implements Serializable, Cloneable {
    * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_csharp_name(VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null) return "";
+    if (vi == null) {
+      return "";
+    }
 
     if (in_orig) {
       if (vi.isPrestate()) {

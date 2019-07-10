@@ -31965,6 +31965,13 @@ gv[..].sv_refcnt
 ..Perl_dump_vindent():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 file
 file[..]
 file[..]->flags
@@ -32036,6 +32043,13 @@ pat
 ..Perl_dump_vindent():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 file
 file[..]
 file[..]->flags
@@ -67610,6 +67624,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vcatpvf():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
@@ -67617,6 +67638,13 @@ sv[..].sv_any[0]
 ..Perl_sv_vcatpvf():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
@@ -67624,6 +67652,13 @@ sv[..].sv_any[0]
 ..Perl_sv_vcatpvf_mg():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67635,6 +67670,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vcatpvf_mg():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67646,6 +67688,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vcatpvfn():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 maybe_tainted
 pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
@@ -67662,6 +67711,13 @@ svmax
 ..Perl_sv_vcatpvfn():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 maybe_tainted
 pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
@@ -67678,6 +67734,13 @@ svmax
 ..Perl_sv_vsetpvf():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67689,6 +67752,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67700,6 +67770,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf_mg():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67711,6 +67788,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf_mg():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67722,6 +67806,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvfn():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 maybe_tainted
 pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
@@ -67738,6 +67829,13 @@ svmax
 ..Perl_sv_vsetpvfn():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 maybe_tainted
 pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
@@ -68481,31 +68579,73 @@ return[..]
 ..Perl_vcroak():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vcroak():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vdeb():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vdeb():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vdie():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vdie():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 return
 return[..]
@@ -68546,11 +68686,25 @@ return[..].op_type
 ..Perl_vform():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vform():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 return
 
@@ -68591,6 +68745,13 @@ to_what
 ..Perl_vload_module():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 flags
 name
 name[..]
@@ -68608,6 +68769,13 @@ ver[..].sv_refcnt
 ..Perl_vload_module():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 flags
 name
 name[..]
@@ -68625,11 +68793,25 @@ ver[..].sv_refcnt
 ..Perl_vmess():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vmess():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat return return[..].sv_any return[..].sv_flags return[..].sv_refcnt
 return[..]
 return[..].sv_any[0]
@@ -68637,11 +68819,25 @@ return[..].sv_any[0]
 ..Perl_vnewSVpvf():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vnewSVpvf():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 return
 return[..]
@@ -68653,22 +68849,50 @@ return[..].sv_refcnt
 ..Perl_vwarn():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vwarn():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vwarner():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 err
 pat
 
 ..Perl_vwarner():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 err
 pat
 
@@ -68773,6 +68997,13 @@ utf8
 ..S_vdie_croak_common():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 msglen
 msglen[..] pat utf8[..]
 utf8
@@ -68780,6 +69011,13 @@ utf8
 ..S_vdie_croak_common():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 msglen
 msglen[..] pat return utf8[..]
 utf8

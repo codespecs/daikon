@@ -111,7 +111,6 @@ public final class CLASSNAME extends UnaryDerivation {
       int real_index = (index < 0 ? val_array.length + index : index);
       return new ValueAndModified(Intern.INTERNEDLONG(val_array[real_index]), source_mod);
     } else {
-      @SuppressWarnings("interning") // object invariant: array elements are interned
       @Interned Object[] val_array = (@Interned Object[]) val;
       if (val_array.length < minLength) {
         return ValueAndModified.MISSING_NONSENSICAL;
@@ -133,7 +132,7 @@ public final class CLASSNAME extends UnaryDerivation {
       && (((CLASSNAME) other).index == this.index);
   }
 
-  /** Returns the ESC name */
+  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

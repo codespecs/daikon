@@ -7,7 +7,6 @@ import daikon.inv.unary.UnaryInvariant;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.plumelib.util.Intern;
 import typequals.prototype.qual.Prototype;
 
@@ -35,7 +34,7 @@ public abstract class SingleStringSequence extends UnaryInvariant {
   }
 
   public VarInfo var(
-          @GuardSatisfied @UnknownInitialization(SingleStringSequence.class) @Raw(SingleStringSequence.class) SingleStringSequence this) {
+          @GuardSatisfied @UnknownInitialization(SingleStringSequence.class) SingleStringSequence this) {
     return ppt.var_infos[0];
   }
 

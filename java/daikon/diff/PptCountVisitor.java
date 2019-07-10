@@ -29,16 +29,16 @@ public class PptCountVisitor extends PrintAllVisitor {
   private static final int GOAL_REQUIREMENT_NUMBER = 1;
 
   // invariants found by the splitting
-  private HashSet<String> cnt = new HashSet<String>();
+  private HashSet<String> cnt = new HashSet<>();
   // target set of invariants
-  private HashSet<String> targSet = new HashSet<String>();
+  private HashSet<String> targSet = new HashSet<>();
   // invariants found matching
-  private HashSet<String> correctSet = new HashSet<String>();
+  private HashSet<String> correctSet = new HashSet<>();
 
   // invariants reported but not correct
-  private HashSet<String> incorrectSet = new HashSet<String>();
+  private HashSet<String> incorrectSet = new HashSet<>();
 
-  private HashMap<String, HashSet<String>> goodMap = new HashMap<String, HashSet<String>>();
+  private HashMap<String, HashSet<String>> goodMap = new HashMap<>();
 
   public PptCountVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
@@ -50,7 +50,9 @@ public class PptCountVisitor extends PrintAllVisitor {
     @SuppressWarnings("nullness") // application invariant: calling context
     @NonNull PptTopLevel ppt = node.getPpt1();
 
-    if ((ppt instanceof PptConditional)) return;
+    if ((ppt instanceof PptConditional)) {
+      return;
+    }
     //        else super.visit (node);
 
     boolean report = countReport(node);
@@ -69,7 +71,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     }
   }
 
-  @SuppressWarnings("purity") // Impure side effects do not escape
+  @SuppressWarnings("all:purity") // Impure side effects do not escape
   @Pure
   private boolean countReport(PptNode input) {
 
@@ -91,7 +93,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return reportCnt > REPORT_REQUIREMENT_NUMBER;
   }
 
-  @SuppressWarnings("purity") // Impure side effects do not escape
+  @SuppressWarnings("all:purity") // Impure side effects do not escape
   @Pure
   private boolean countTarget(PptNode input) {
 
@@ -113,7 +115,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return targetCnt > GOAL_REQUIREMENT_NUMBER;
   }
 
-  /** Anytime something matches, we should score it has correct */
+  /** Anytime something matches, we should score it has correct. */
   @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
@@ -189,7 +191,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return cut + lastPart.indexOf("(");
   }
 
-  /** Returns true if the pair of invariants should be printed */
+  /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
       result = true,
       expression = {"#1", "#2"})
@@ -230,7 +232,9 @@ public class PptCountVisitor extends PrintAllVisitor {
    */
   private static boolean filterOut(@Nullable Invariant inv) {
 
-    if (inv == null) return true;
+    if (inv == null) {
+      return true;
+    }
     String str = inv.format_using(OutputFormat.JAVA);
     StringTokenizer st = new StringTokenizer(str, " ()");
     while (st.hasMoreTokens()) {
@@ -296,7 +300,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return (double) correctSet.size() / cnt.size();
   }
 
-  /** Prints the results of the correct set in a human-readable format */
+  /** Prints the results of the correct set in a human-readable format. */
   public void printFinal() {
 
     System.out.println("CORRECT_FOUND: ");

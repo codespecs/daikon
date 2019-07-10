@@ -22,13 +22,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class MatchCountVisitor extends PrintAllVisitor {
 
   // invariants found by the splitting
-  private HashSet<String> cnt = new HashSet<String>();
+  private HashSet<String> cnt = new HashSet<>();
   // target set of invariants
-  private HashSet<String> targSet = new HashSet<String>();
+  private HashSet<String> targSet = new HashSet<>();
   // invariants found matching
-  private HashSet<String> recall = new HashSet<String>();
+  private HashSet<String> recall = new HashSet<>();
 
-  private HashMap<String, HashSet<String>> goodMap = new HashMap<String, HashSet<String>>();
+  private HashMap<String, HashSet<String>> goodMap = new HashMap<>();
 
   public MatchCountVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
@@ -120,7 +120,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return cut + lastPart.indexOf("(");
   }
 
-  /** Returns true if the pair of invariants should be printed */
+  /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
       result = true,
       expression = {"#1", "#2"})
@@ -220,7 +220,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return (double) recall.size() / cnt.size();
   }
 
-  /** Prints the results of the correct set in a human-readable format */
+  /** Prints the results of the correct set in a human-readable format. */
   public void printFinal() {
     for (String ppt : goodMap.keySet()) {
       System.out.println();

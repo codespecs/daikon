@@ -521,7 +521,7 @@ NEW_VER := $(shell cat doc/VERSION)
 NEW_RELEASE_NAME := daikon-$(NEW_VER)
 
 check-for-broken-doc-links: update-checklink
-	${CHECKLINK}/checklink -q -r `grep -v '^#' ${CHECKLINK}/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
+	${CHECKLINK}/checklink -q -r `grep -v '^#' ${CHECKLINK}/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >checklink.log 2>&1
 
 HISTORY_DIR := $(STAGING_DIR)/history
 save-current-release:
@@ -611,6 +611,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 # checkout.
 daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 
+	-chmod -R +w ${TMPDIR}/daikon-* ${TMPDIR}/daikon-*.tar ${TMPDIR}/daikon-*.zip ${TMPDIR}/daikon
 	-rm -rf ${TMPDIR}/daikon-* ${TMPDIR}/daikon-*.tar ${TMPDIR}/daikon-*.zip ${TMPDIR}/daikon
 	mkdir ${TMPDIR}/daikon
 
@@ -658,9 +659,8 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	cp -p Makefile ${TMPDIR}/daikon/Makefile
 
 	# Daikon itself
-	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon jtb lib)
+	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user --exclude PrototypeChecker.java --exclude VIndexChecker.java --exclude VIndexAnnotatedTypeFactory.java daikon jtb lib typequals)
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
-	cp -p java/README.txt ${TMPDIR}/daikon/java/README.txt
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
 	# Maybe I should do  $(MAKE) javadoc
 	# Don't do  $(MAKE) clean  which deletes .class files

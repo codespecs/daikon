@@ -23,16 +23,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class MatchCountVisitor2 extends PrintAllVisitor {
 
   // invariants found by the splitting
-  private HashSet<String> cnt = new HashSet<String>();
+  private HashSet<String> cnt = new HashSet<>();
   // target set of invariants
-  private HashSet<String> targSet = new HashSet<String>();
+  private HashSet<String> targSet = new HashSet<>();
   // invariants found matching
-  private HashSet<String> correctSet = new HashSet<String>();
+  private HashSet<String> correctSet = new HashSet<>();
 
   // invariants reported but not correct
-  private HashSet<String> incorrectSet = new HashSet<String>();
+  private HashSet<String> incorrectSet = new HashSet<>();
 
-  private HashMap<String, HashSet<String>> goodMap = new HashMap<String, HashSet<String>>();
+  private HashMap<String, HashSet<String>> goodMap = new HashMap<>();
 
   public MatchCountVisitor2(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
@@ -49,7 +49,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     }
   }
 
-  /** Anytime a consequent matches a target, we should score it as correct */
+  /** Anytime a consequent matches a target, we should score it as correct. */
   @Override
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
@@ -116,7 +116,9 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   /** Grabs the splitting condition from a pptname. */
   private String extractPredicate(String s) {
     int cut = s.indexOf(";condition=");
-    if (cut == -1) return "NO_PREDICATE: ";
+    if (cut == -1) {
+      return "NO_PREDICATE: ";
+    }
     return s.substring(cut + 12, s.lastIndexOf('"'));
   }
 
@@ -142,7 +144,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   }
 
   // Cannot be static because it uses instance variable "targSet"
-  /** Returns true if the pair of invariants should be printed */
+  /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
       result = true,
       expression = {"#1", "#2"})
@@ -185,10 +187,14 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
     return false;
 
-    //     if (5 == 5) return false;
+    //     if (5 == 5) {
+    //       return false;
+    //     }
     //
     //
-    //     if (inv == null) return true;
+    //     if (inv == null) {
+    //       return true;
+    //     }
     //     String str = inv.format_using(OutputFormat.JAVA);
     //     StringTokenizer st = new StringTokenizer (str, " ()],[");
     //     while (st.hasMoreTokens()) {
@@ -263,7 +269,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     return (double) correctSet.size() / cnt.size();
   }
 
-  /** Prints the results of the correct set in a human-readable format */
+  /** Prints the results of the correct set in a human-readable format. */
   public void printFinal() {
     finish();
     System.out.println("CORRECT_FOUND: ");

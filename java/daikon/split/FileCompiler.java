@@ -41,8 +41,6 @@ public final class FileCompiler {
 
   static {
     try {
-      @SuppressWarnings(
-          "regex") // output of escapeNonJava() can appear in a character class in a regex
       @Regex(1) String java_filename_re
           // A javac error message may consist of several lines of output.
           // The filename will be found at the beginning of the first line,
@@ -218,7 +216,7 @@ public final class FileCompiler {
       throws IOException {
     // search the error string and extract the files with errors.
     if (errorString != null) {
-      HashSet<String> errorClasses = new HashSet<String>();
+      HashSet<String> errorClasses = new HashSet<>();
       Matcher m = java_filename_pattern.matcher(errorString);
       while (m.find()) {
         @SuppressWarnings(
@@ -227,7 +225,7 @@ public final class FileCompiler {
         errorClasses.add(sansExtension);
       }
       // Collect all the files that were not compiled into retry
-      List<String> retry = new ArrayList<String>();
+      List<String> retry = new ArrayList<>();
       String filenames = "";
       for (String sourceFileName : fileNames) {
         sourceFileName = sourceFileName.trim();

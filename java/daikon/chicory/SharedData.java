@@ -24,9 +24,9 @@ public class SharedData {
   public static final @GuardedBy("<self>") Deque<ClassInfo> new_classes =
       new ArrayDeque<ClassInfo>();
 
-  /** List of all instrumented classes */
-  public static final @GuardedBy("<self>") List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
+  /** List of all instrumented classes. */
+  public static final @GuardedBy("<self>") List<ClassInfo> all_classes = new ArrayList<>();
 
-  /** List of all instrumented methods */
-  public static final @GuardedBy("<self>") List<MethodInfo> methods = new ArrayList<MethodInfo>();
+  /** List of all instrumented methods. */
+  public static final @GuardedBy("<self>") List<MethodInfo> methods = new ArrayList<>();
 }

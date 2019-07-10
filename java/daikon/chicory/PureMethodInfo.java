@@ -7,7 +7,6 @@ import java.util.List;
 import org.checkerframework.checker.initialization.qual.Initialized;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.NonRaw;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
@@ -16,10 +15,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class PureMethodInfo extends DaikonVariableInfo {
 
-  /** The MethodInfo object for this pure method */
+  /** The MethodInfo object for this pure method. */
   private MethodInfo minfo;
 
-  /** An array containing the parameters of this pure method */
+  /** An array containing the parameters of this pure method. */
   private DaikonVariableInfo[] args;
 
   public PureMethodInfo(
@@ -77,7 +76,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
       if (parentVal == null || parentVal instanceof NonsensicalList) {
         retVal = NonsensicalList.getInstance();
       } else {
-        ArrayList<@Nullable Object> retList = new ArrayList<@Nullable Object>();
+        ArrayList<@Nullable Object> retList = new ArrayList<>();
 
         for (Object val : (List<Object>) parentVal) { // unchecked cast
           if (val == null || val instanceof NonsensicalObject) {
@@ -132,9 +131,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
     // Without this synchronization, other threads would observe that
     // startPure has been called and wouldn't do any output.
     synchronized (Runtime.class) {
-      // Initialization is unnecessary, but without it the Rawness Checker issues an error at the
-      // return statement.
-      Object retVal = null;
+      Object retVal;
       try {
         // TODO is this the best way to handle this problem?
         // (when we invoke a pure method, Runtime.Enter should not be
@@ -142,7 +139,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
         Runtime.startPure();
 
         @SuppressWarnings("nullness") // argVals is declared Nullable
-        @NonNull @NonRaw @Initialized @GuardedBy({}) Object tmp_retVal = meth.invoke(receiverVal, argVals);
+        @NonNull @Initialized @GuardedBy({}) Object tmp_retVal = meth.invoke(receiverVal, argVals);
         retVal = tmp_retVal;
 
         if (meth.getReturnType().isPrimitive()) {
@@ -201,7 +198,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
     return VarKind.FUNCTION;
   }
 
-  /** Return the short name of the method as the relative name */
+  /** Return the short name of the method as the relative name. */
   @Override
   public String get_relative_name() {
     return minfo.method_name;

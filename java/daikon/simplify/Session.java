@@ -18,7 +18,6 @@ import org.checkerframework.checker.lock.qual.Holding;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 
 /**
  * A session is a channel to the Simplify theorem-proving tool. Once a session is started, commands
@@ -82,7 +81,7 @@ public class Session {
    */
   public Session() {
     try {
-      List<String> newEnv = new ArrayList<String>();
+      List<String> newEnv = new ArrayList<>();
       if (dkconfig_simplify_max_iterations != 0) {
         newEnv.add("PROVER_KILL_ITER=" + dkconfig_simplify_max_iterations);
       }
@@ -108,12 +107,10 @@ public class Session {
       }
 
       // set up command stream
-      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       PrintStream tmp_input = new PrintStream(process.getOutputStream());
       input = tmp_input;
 
       // set up result stream
-      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       @NonNull InputStream is = process.getInputStream();
       output = new BufferedReader(new InputStreamReader(is, UTF_8));
 
@@ -135,8 +132,7 @@ public class Session {
   }
 
   /* package access */ void sendLine(
-      @UnknownInitialization(Session.class) @Raw(Session.class) @GuardSatisfied Session this,
-      String s) {
+      @UnknownInitialization(Session.class) @GuardSatisfied Session this, String s) {
     if (dkconfig_trace_input) {
       assert trace_file != null
           : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if dkconfig_trace_input is true";

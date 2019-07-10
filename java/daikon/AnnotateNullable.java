@@ -38,7 +38,7 @@ public class AnnotateNullable {
   // static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
 
   /** Map from a class name to the list of static functions for that class. */
-  static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<String, List<PptTopLevel>>();
+  static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<>();
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
@@ -97,7 +97,7 @@ public class AnnotateNullable {
       if (ppt.is_object()) {
         String classname = ppt.name().replace(":::OBJECT", "");
         assert !class_map.containsKey(classname) : classname;
-        List<PptTopLevel> static_methods = new ArrayList<PptTopLevel>();
+        List<PptTopLevel> static_methods = new ArrayList<>();
         class_map.put(classname, static_methods);
       }
     }
@@ -274,8 +274,8 @@ public class AnnotateNullable {
 
   /**
    * Get the annotation for the specified variable. Returns @Nullable if samples were found for this
-   * variable and at least one sample contained a null value. Returns an empty string if no
-   * annotation is applicable. Otherwise, the return value contains a trailing space.
+   * variable and at least one sample contained a null value. Returns an (interned) empty string if
+   * no annotation is applicable. Otherwise, the return value contains a trailing space.
    */
   public static String get_annotation(PptTopLevel ppt, VarInfo vi) {
 
@@ -300,7 +300,7 @@ public class AnnotateNullable {
     assert ppt.type == PptType.EXIT : ppt;
 
     // Get all of the parameters to the method and the return value
-    List<VarInfo> params = new ArrayList<VarInfo>();
+    List<VarInfo> params = new ArrayList<>();
     VarInfo retvar = null;
     for (VarInfo vi : ppt.var_infos) {
       if (vi.var_kind == VarInfo.VarKind.RETURN) {
@@ -314,15 +314,12 @@ public class AnnotateNullable {
       }
     }
 
-    // Get the annotation for the return value
-    String return_annotation = "";
-    if (retvar != null) {
-      return_annotation = get_annotation(ppt, retvar);
-    }
+    // The formatted annotation for the return value with a leading space, or empty string
+    String return_annotation = (retvar == null ? "" : " " + get_annotation(ppt, retvar));
 
     // Look up the annotation for each parameter.
-    List<String> names = new ArrayList<String>();
-    List<String> annos = new ArrayList<String>();
+    List<String> names = new ArrayList<>();
+    List<String> annos = new ArrayList<>();
     for (VarInfo param : params) {
       String annotation = "";
       names.add(param.name());
@@ -334,7 +331,7 @@ public class AnnotateNullable {
 
     // Print out the method declaration
     if (stub_format) {
-      System.out.printf("  %s %s(", return_annotation, ppt.ppt_name.getMethodName());
+      System.out.printf(" %s %s(", return_annotation, ppt.ppt_name.getMethodName());
       for (int i = 0; i < params.size(); i++) {
         if (i != 0) System.out.printf(" ,");
         System.out.printf("%s %s %s", annos.get(i), "type-goes-here", names.get(i));
@@ -342,7 +339,7 @@ public class AnnotateNullable {
       System.out.printf("); // %d samples%n", ppt.num_samples());
     } else {
       System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
-      System.out.printf("    return: %s%n", return_annotation);
+      System.out.printf("    return:%s%n", return_annotation);
       for (int i = 0; i < params.size(); i++) {
         // Print the annotation for this parameter
         System.out.printf("    parameter #%d : %s // %s%n", i, annos.get(i), names.get(i));
@@ -399,7 +396,9 @@ public class AnnotateNullable {
     @NonNull String java_sig = ppt.ppt_name.getSignature();
     String java_args = java_sig.replace(method, "");
     // System.out.printf("m/s/a = %s %s %s%n", method, java_sig, java_args);
-    if (method.equals(ppt.ppt_name.getShortClassName())) method = "<init>";
+    if (method.equals(ppt.ppt_name.getShortClassName())) {
+      method = "<init>";
+    }
 
     // Problem:  I need the return type, but Chicory does not output it.
     // So, I could try to retrieve it from the "return" variable in the
@@ -407,8 +406,9 @@ public class AnnotateNullable {
     // change Chicory to output it.
     VarInfo returnVar = ppt.find_var_by_name("return");
     @SuppressWarnings(
-        "signature") // application invariant: returnVar.type.toString() is a binary name (if
+        "signature" // application invariant: returnVar.type.toString() is a binary name (if
     // returnVar is non-null), because we are processing a Java program
+    )
     String returnType =
         returnVar == null ? "V" : Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
 

@@ -28,7 +28,9 @@ public class RootInfo extends DaikonVariableInfo {
     RootInfo root = new RootInfo();
 
     // Don't build a tree for class initializers.
-    if (mi.is_class_init()) return root;
+    if (mi.is_class_init()) {
+      return root;
+    }
 
     // Clear the set of static variables
     ppt_statics.clear();
@@ -62,7 +64,9 @@ public class RootInfo extends DaikonVariableInfo {
     RootInfo root = new RootInfo();
 
     // Don't build a tree for class initializers.
-    if (mi.is_class_init()) return root;
+    if (mi.is_class_init()) {
+      return root;
+    }
 
     // Clear the set of static variables
     ppt_statics.clear();

@@ -114,7 +114,7 @@ public class InstrumentHandler extends CommandHandler {
 
       System.out.println("Instrumenting " + oneFile.fileName);
 
-      List<CheckerClass> checkerClasses = new ArrayList<CheckerClass>();
+      List<CheckerClass> checkerClasses = new ArrayList<>();
 
       for (TypeDeclaration decl : oneFile.roots) {
 
@@ -261,7 +261,7 @@ public class InstrumentHandler extends CommandHandler {
       System.out.println("Error: No .java file arguments supplied.");
       return errorWhileReadingArguments;
     }
-    List<String> javaFileNames = new ArrayList<String>();
+    List<String> javaFileNames = new ArrayList<>();
     for (; argindex < args.length; argindex++) {
       String javafile = args[argindex];
       if (!javafile.endsWith(".java")) {

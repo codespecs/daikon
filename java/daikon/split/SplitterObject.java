@@ -12,7 +12,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.ReflectionPlume;
+import org.plumelib.reflection.ReflectionPlume;
 import typequals.prototype.qual.Prototype;
 
 /**

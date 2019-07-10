@@ -21,7 +21,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings("nullness") // to do.  member field is tricky.
 public class MethodInfo {
 
-  /** Class that contains this method */
+  /** Class that contains this method. */
   public ClassInfo class_info;
 
   /**
@@ -36,7 +36,7 @@ public class MethodInfo {
    */
   public String method_name;
 
-  /** Array of argument names for this method */
+  /** Array of argument names for this method. */
   public String[] arg_names;
 
   /**
@@ -45,33 +45,33 @@ public class MethodInfo {
    */
   public @ClassGetName String[] arg_type_strings;
 
-  /** Array of argument types as classes for this method */
+  /** Array of argument types as classes for this method. */
   public Class<?>[] arg_types;
 
   /** exit locations for this method */
   public List<Integer> exit_locations;
 
-  /** Tells whether each exit point in method is instrumented, based on filters */
+  /** Tells whether each exit point in method is instrumented, based on filters. */
   public List<Boolean> is_included;
 
   /**
    * The root of the variable tree for the method entry program point.
    *
-   * <p>Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by Runtime and read by DeclWriter and DTraceWriter.
    */
   public @MonotonicNonNull RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
    *
-   * <p>Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by Runtime and read by DeclWriter and DTraceWriter.
    */
   public @MonotonicNonNull RootInfo traversalExit = null;
 
-  /** The number of times this method has been called */
+  /** The number of times this method has been called. */
   public int call_cnt = 0;
 
-  /** The number of times we have captured the output for this method */
+  /** The number of times we have captured the output for this method. */
   public int capture_cnt = 0;
 
   /**
@@ -100,7 +100,7 @@ public class MethodInfo {
 
   // Use reserved keyword for basic type rather than signature to
   // avoid conflicts with user defined types.
-  private static HashMap<String, Class<?>> primitive_classes = new HashMap<String, Class<?>>(8);
+  private static HashMap<String, Class<?>> primitive_classes = new HashMap<>(8);
 
   static {
     primitive_classes.put("boolean", Boolean.TYPE);
@@ -113,7 +113,7 @@ public class MethodInfo {
     primitive_classes.put("short", Short.TYPE);
   }
 
-  /** Populates this class with data from reflection */
+  /** Populates this class with data from reflection. */
   public void initViaReflection() {
 
     // Get the Class for each argument type
@@ -175,7 +175,7 @@ public class MethodInfo {
   }
 
   /**
-   * Returns true iff this method is a constructor
+   * Returns true iff this method is a constructor.
    *
    * @return true iff this method is a constructor
    */
@@ -184,13 +184,13 @@ public class MethodInfo {
     return (method_name.equals("<init>") || method_name.equals(""));
   }
 
-  /** Returns whether or not this method is a class initializer */
+  /** Returns whether or not this method is a class initializer. */
   @Pure
   public boolean is_class_init() {
     return (method_name.equals("<clinit>"));
   }
 
-  /** Returns whether or not this method is static */
+  /** Returns whether or not this method is static. */
   @RequiresNonNull("member")
   @Pure
   public boolean is_static() {

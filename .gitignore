@@ -29,6 +29,7 @@ java/**/*.class
 java/lib/tmp
 # Temporary file used during compilation
 java/java_files.txt
+java/javadoc-files.txt
 # Javadoc
 java/api
 
@@ -334,8 +335,7 @@ scripts/trace-untruncate-fast
 # Testing
 daikon-direct-output.txt
 java/make-check-all-output.txt*
-make-check-nullness-raw-output.txt*
-make-check-nullness-fbc-output.txt*
+make-check-nullness-output.txt*
 tests/chicory-tests/option-tests/DataStructures
 tests/chicory-tests/option-tests/StackArTester.dtrace.gz
 tests/chicory-tests/option-tests/StackArTesterException.dtrace.gz

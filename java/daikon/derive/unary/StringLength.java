@@ -9,7 +9,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
 
-/** Length of String variables */
+/** Length of String variables. */
 public final class StringLength extends UnaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -54,27 +54,27 @@ public final class StringLength extends UnaryDerivation {
     return (other instanceof StringLength);
   }
 
-  /** Returns the ESC name */
+  /** Returns the ESC name. */
   @Override
   @SideEffectFree
   public String csharp_name(String index) {
     return String.format("%s.Length", base.csharp_name());
   }
 
-  /** Returns the ESC name */
+  /** Returns the ESC name. */
   @Override
   @SideEffectFree
   public String esc_name(String index) {
     return String.format("%s.length()", base.esc_name());
   }
 
-  /** Returns the JML name */
+  /** Returns the JML name. */
   @Override
   public String jml_name(String index) {
     return String.format("%s.length()", base.jml_name());
   }
 
-  /** Returns the simplify name */
+  /** Returns the simplify name. */
   @Override
   @SideEffectFree
   public String simplify_name() {

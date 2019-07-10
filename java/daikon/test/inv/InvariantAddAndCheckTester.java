@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import junit.framework.*;
+import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
@@ -136,7 +137,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * This function produces the format list for intialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
 
     // Add test formats - hard coded in
     result.add("daikon");
@@ -430,7 +431,9 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     public static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
-      if (endOfFile) return null;
+      if (endOfFile) {
+        return null;
+      }
       while (true) {
         String commandLine = getNextLine(commands).trim();
         int lineNumber = commands.getLineNumber();
@@ -464,7 +467,9 @@ public class InvariantAddAndCheckTester extends TestCase {
       @BinaryName String className = getNextRealLine(commands);
 
       // End of file reached
-      if (className == null) return true;
+      if (className == null) {
+        return true;
+      }
 
       // Load the class from file
       Class<? extends Invariant> classToTest = asInvClass(getClass(className));
@@ -662,8 +667,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Method currentMethod;
       for (int i = 0; i < methods.length; i++) {
         currentMethod = methods[i];
-        if (currentMethod.getName().lastIndexOf("add_modified")
-            != -1) { // Method should be called add_modified
+        if (currentMethod.getName().lastIndexOf("add_modified") != -1) {
           return currentMethod;
         }
       }
@@ -683,8 +687,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Method currentMethod;
       for (int i = 0; i < methods.length; i++) {
         currentMethod = methods[i];
-        if (currentMethod.getName().lastIndexOf("check_modified")
-            != -1) { // Method should be called check_modified
+        if (currentMethod.getName().lastIndexOf("check_modified") != -1) {
           return currentMethod;
         }
       }
@@ -804,7 +807,8 @@ public class InvariantAddAndCheckTester extends TestCase {
       // invariant, "b" for the second, and so on
       // - The ProglangType will be specified in the parameters
       // - The comparability will be none
-      VarInfo result =
+      @SuppressWarnings("interning")
+      @Interned VarInfo result =
           new VarInfo(
               new String(new char[] {(char) ('a' + i)}) + arrayModifier,
               type,
@@ -821,9 +825,15 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return the arity of the invariant if it can be determined, -1 otherwise
      */
     private static int getArity(Class<? extends Invariant> classToTest) {
-      if (UnaryInvariant.class.isAssignableFrom(classToTest)) return 1;
-      if (BinaryInvariant.class.isAssignableFrom(classToTest)) return 2;
-      if (ThreeScalar.class.isAssignableFrom(classToTest)) return 3;
+      if (UnaryInvariant.class.isAssignableFrom(classToTest)) {
+        return 1;
+      }
+      if (BinaryInvariant.class.isAssignableFrom(classToTest)) {
+        return 2;
+      }
+      if (ThreeScalar.class.isAssignableFrom(classToTest)) {
+        return 3;
+      }
 
       return -1;
     }

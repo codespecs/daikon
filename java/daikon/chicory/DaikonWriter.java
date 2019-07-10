@@ -15,12 +15,12 @@ public abstract class DaikonWriter {
   protected static final boolean no_modifiers_ppt = true;
 
   /** Platform-dependent line separator. Should be "\n" on Unix. */
-  public static final String lineSep = System.getProperty("line.separator");
+  public static final String lineSep = System.lineSeparator();
 
   protected DaikonWriter() {}
 
   /**
-   * Determines if this field warrants an [ = val ] entry in decls file
+   * Determines if this field warrants an [ = val ] entry in decls file.
    *
    * @param field requires field != null
    * @return true iff field warrants an [ = val ] entry in the decls files
@@ -37,64 +37,69 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Given a method, returns the method entry program point name for Daikon
+   * Given a method, returns the method entry program point name for Daikon.
    *
    * @param method non-null method
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(Member method) {
-    return methodName(method, "ENTER");
+    return methodName(method, daikon.FileIO.enter_suffix);
   }
 
   /**
-   * Given a method, returns the method entry program point name for Daikon method entry name for
-   * Daikon. Used when reflection information is not available
+   * Given a method, returns the method entry program point name for Daikon. Used when reflection
+   * information is not available.
    *
-   * @param types argument types
+   * @param fullClassName packageName.className
+   * @param types string representation of the declared types of the parameters
+   * @param name the method with modifiers and parameters, such as "public static void
+   *     DataStructures.StackArTester.doNew(int size)"
+   * @param short_name just the method's name ("{@code <init>}" for constructors)
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(
       String fullClassName, String[] types, String name, String short_name) {
-    return methodName(fullClassName, types, name, short_name, "ENTER");
+    return methodName(fullClassName, types, name, short_name, daikon.FileIO.enter_suffix);
   }
+
   /**
-   * Given a method, returns the method exit program point name for Daikon
+   * Given a method, returns the method exit program point name for Daikon.
    *
-   * @param method require method != null
-   * @param lineNum the line number of the exit point of the method
+   * @param method non-null method
+   * @param lineNum the line number of a return statement in the method
    * @return the decorated method exit name for Daikon
    */
   public static String methodExitName(Member method, int lineNum) {
-    return methodName(method, "EXIT" + lineNum);
+    return methodName(method, daikon.FileIO.exit_suffix + lineNum);
   }
+
   /**
-   * Given a method, returns the method exit program point name for Daikon
+   * Given a method, returns the method exit program point name for Daikon. Used when reflection
+   * information is not available.
    *
-   * @param types argument types
-   * @param lineNum the line number of the exit point of the method
-   * @return the decorated method entry name for Daikon
+   * @param fullClassName packageName.className
+   * @param types string representation of the declared types of the parameters
+   * @param name the method name with modifiers and parameters
+   * @param short_name just the method's name ("{@code <init>}" for constructors)
+   * @param lineNum the line number of a return statement in the method
+   * @return the decorated method exit name for Daikon
    */
   public static String methodExitName(
       String fullClassName, String[] types, String name, String short_name, int lineNum) {
-    return methodName(fullClassName, types, name, short_name, "EXIT" + lineNum);
+    return methodName(fullClassName, types, name, short_name, daikon.FileIO.exit_suffix + lineNum);
   }
 
   /**
    * Constructs the program point name (which includes the point string at the end)
    *
    * @param fullClassName packageName.className
-   * @param types string representation of the declared types of the parameters. for example:
-   *     {"int", "java.lang.Object", "float"}
-   * @param name the method with modifiers and parameters
-   * @param short_name just the method's name (except it is "<init>" for constructors)
-   *     <p>So a corresponding name/short_name pair could be:
-   *     <pre>
-   *    name: public static void DataStructures.StackArTester.doNew(int size)
-   *    short_name: doNew
-   * </pre>
-   *
-   * @param point usually "EXIT" or "ENTER"
-   * @return same thing as methodName(Member, point)
+   * @param types string representation of the declared types of the parameters. For example:
+   *     {"int", "java.lang.Object", "float"}.
+   * @param name the method with modifiers and parameters, such as "public static void
+   *     DataStructures.StackArTester.doNew(int size)"
+   * @param short_name just the method's name ("{@code <init>}" for constructors)
+   * @param point program point type/suffix such as "EXIT" or "ENTER"
+   * @return same thing as {@link #methodName(Member, String)}
    */
   private static String methodName(
       String fullClassName, String[] types, String name, String short_name, String point) {

@@ -8,7 +8,7 @@ import org.plumelib.util.UtilPlume;
 /** Supplies a static method htmlToTexinfo that converts HTML to Texinfo format. */
 public class HtmlToTexinfo {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   public static @Regex(1) Pattern javadocAtCode;
 

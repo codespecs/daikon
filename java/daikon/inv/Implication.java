@@ -13,7 +13,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.NonPrototype;
@@ -199,7 +198,9 @@ public class Implication extends Joiner {
   public @Nullable DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
     //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
-    //     if (result != null) return result;
+    //     if (result != null) {
+    //       return result;
+    //     }
     //     assert orig_right.ppt.var_infos.length > 0;
     //     for (int ii = 0; ii < orig_right.ppt.var_infos.length; ii++ )
     //       assert orig_right.ppt.var_infos[ii] != null;
@@ -252,9 +253,15 @@ public class Implication extends Joiner {
   @Pure
   @Override
   public boolean isSameInvariant(Invariant other) {
-    if (other == null) return false;
-    if (!(other instanceof Implication)) return false;
-    if (iff != ((Implication) other).iff) return false;
+    if (other == null) {
+      return false;
+    }
+    if (!(other instanceof Implication)) {
+      return false;
+    }
+    if (iff != ((Implication) other).iff) {
+      return false;
+    }
     return super.isSameInvariant(other);
   }
 
@@ -277,9 +284,7 @@ public class Implication extends Joiner {
    */
   @Override
   public void log(
-      /*NOT: @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ Logger
-          log,
-      String msg) {
+      /*NOT: @UnknownInitialization(Implication.class) Implication this,*/ Logger log, String msg) {
 
     right.log(
         log,
@@ -300,20 +305,19 @@ public class Implication extends Joiner {
   @Override
   @FormatMethod
   @SuppressWarnings({
-    "override.receiver.invalid", // sound overriding, not expressible in Checker Framework
-    "method.invocation.invalid", // call to format is OK
-    "formatter"
-  }) // call to format method is correct because of @FormatMethod annotation
+    "nullness:override.receiver.invalid", // sound overriding, not expressible in Checker Framework
+  })
   public boolean log(
-      @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,
+      @UnknownInitialization(Implication.class) Implication this,
       String format,
       @Nullable Object... args) {
-    String msg = format;
-    if (args.length > 0) msg = String.format(format, args);
+    String msg = (args.length == 0) ? format : String.format(format, args);
+    @SuppressWarnings("nullness:method.invocation.invalid")
+    String formatted = format();
     return (right.log(
         msg
             + " [for implication "
-            + format()
+            + formatted
             + " ("
             + (orig_right == null ? "null" : orig_right.format())
             + ")]"));

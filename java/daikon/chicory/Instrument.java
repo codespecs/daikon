@@ -62,7 +62,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   /** the location of the runtime support class */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  /** Debug information about which classes are transformed and why */
+  /** Debug information about which classes are transformed and why. */
   protected static SimpleLog debug_transform = new SimpleLog(false);
 
   public Instrument() {
@@ -138,7 +138,6 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @SuppressWarnings("signature") // string manipulation (checker should handle)
     @BinaryName String fullClassName = className.replace("/", ".");
     // String fullClassName = className;
 
@@ -275,7 +274,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     try {
       InstructionList il = mg.getInstructionList();
-      fetch_current_stack_map_table(mg, cg.getMajor());
+      set_current_stack_map_table(mg, cg.getMajor());
       MethodContext context = new MethodContext(cg, mg);
 
       for (InstructionHandle ih = il.getStart(); ih != null; ) {
@@ -379,7 +378,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     return invokeList;
   }
 
-  // Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
+  // Map<Integer, InstructionHandle> offset_map = new HashMap<>();
   InstructionHandle[] offset_map;
 
   /**
@@ -393,7 +392,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   private ClassInfo instrument_all_methods(ClassGen cg, String fullClassName, ClassLoader loader) {
 
     ClassInfo class_info = new ClassInfo(cg.getClassName(), loader);
-    List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
+    List<MethodInfo> method_infos = new ArrayList<>();
 
     if (cg.getMajor() < Const.MAJOR_1_6) {
       System.out.printf(
@@ -465,7 +464,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
           }
 
           // Get existing StackMapTable (if present)
-          fetch_current_stack_map_table(mg, cg.getMajor());
+          set_current_stack_map_table(mg, cg.getMajor());
 
           fix_local_variable_table(mg);
 
@@ -525,7 +524,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
             // If this is a return instruction, insert method exit instrumentation
             InstructionList new_il =
-                add_return_instrumentation(fullClassName, inst, context, shouldIncIter, exitIter);
+                generate_return_instrumentation(
+                    fullClassName, inst, context, shouldIncIter, exitIter);
 
             // Remember the next instruction to process
             InstructionHandle next_ih = ih.getNext();
@@ -602,18 +602,17 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   // This method exists only to suppress interning warnings
-  @SuppressWarnings("interning") // special, unique value
   @Pure
   private static boolean isVoid(Type t) {
     return t == Type.VOID;
   }
 
   /**
-   * Transforms return instructions to first assign the result to a local variable
-   * (return__$trace2_val) and then do the return. Also, calls Runtime.exit() immediately before the
-   * return.
+   * If this is a return instruction, generate new il to assign the result to a local variable
+   * (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This il wil be inserted
+   * immediately before the return.
    */
-  private @Nullable InstructionList add_return_instrumentation(
+  private @Nullable InstructionList generate_return_instrumentation(
       String fullClassName,
       Instruction inst,
       MethodContext c,
@@ -637,7 +636,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     boolean shouldInclude = shouldIncIter.next();
 
-    if (!shouldInclude) return null;
+    if (!shouldInclude) {
+      return null;
+    }
 
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
@@ -703,7 +704,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * Inserts instrumentation code at the start of the method. This includes adding a local variable
    * (this_invocation_nonce) that is initialized to Runtime.nonce++. This provides a unique id on
    * each method entry/exit that allows them to be matched up from the dtrace file. Inserts code to
-   * call Runtime.enter().
+   * call daikon.chicory.Runtime.enter().
    */
   private void add_entry_instrumentation(
       InstructionList il, MethodContext c, boolean shouldCallEnter) throws IOException {
@@ -831,8 +832,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   /**
    * Pushes the object, nonce, parameters, and return value on the stack and calls the specified
-   * Method (normally enter or exit) in Runtime. The parameters are passed as an array of objects.
-   * Any primitive values are wrapped in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc).
+   * Method (normally enter or exit) in daikon.chicory.Runtime. The parameters are passed as an
+   * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
+   * wrapper (IntWrap, FloatWrap, etc).
    */
   private InstructionList call_enter_exit(MethodContext c, String method_name, int line) {
 
@@ -885,9 +887,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     }
 
     // If this is an exit, push the return value and line number.
-    // The return value
-    // is stored in the local "return__$trace2_val"  If the return
-    // value is a primitive, wrap it in the appropriate runtime wrapper
+    // The return value is stored in the local "return__$trace2_val".
+    // If the return value is a primitive, wrap it in the appropriate wrapper.
     if (method_name.equals("exit")) {
       Type ret_type = mg.getReturnType();
       if (isVoid(ret_type)) {
@@ -924,7 +925,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   /**
    * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
    * for prim_type. prim_type should be one of the basic types (eg, Type.INT, Type.FLOAT, etc). The
-   * wrappers are those defined in Runtime.
+   * wrappers are those defined in daikon.chicory.Runtime.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
    */
@@ -973,7 +974,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /**
-   * Returns true iff mgen is a constructor
+   * Returns true iff mgen is a constructor.
    *
    * @return true iff mgen is a constructor
    */
@@ -989,7 +990,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /**
-   * Return an array of strings, each corresponding to mgen's argument types
+   * Return an array of strings, each corresponding to mgen's argument types.
    *
    * @return an array of strings, each corresponding to mgen's argument types
    */
@@ -1082,10 +1083,10 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     // Loop through each instruction and find the line number for each
     // return opcode
-    List<Integer> exit_locs = new ArrayList<Integer>();
+    List<Integer> exit_locs = new ArrayList<>();
 
     // tells whether each exit loc in the method is included or not (based on filters)
-    List<Boolean> isIncluded = new ArrayList<Boolean>();
+    List<Boolean> isIncluded = new ArrayList<>();
 
     debug_transform.log("Looking for exit points in %s%n", mgen.getName());
     InstructionList il = mgen.getInstructionList();
@@ -1193,9 +1194,15 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test")) {
       return true;
     }
-    if (classname.equals("daikon/PptTopLevel$PptType")) return true;
-    if (classname.startsWith("org/plumelib/bcelutil")) return true;
-    if (classname.startsWith("daikon/util")) return true;
+    if (classname.equals("daikon/PptTopLevel$PptType")) {
+      return true;
+    }
+    if (classname.startsWith("org/plumelib/bcelutil")) {
+      return true;
+    }
+    if (classname.startsWith("daikon/util")) {
+      return true;
+    }
     return false;
   }
 }

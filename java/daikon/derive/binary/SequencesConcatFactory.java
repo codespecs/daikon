@@ -18,7 +18,9 @@ public final class SequencesConcatFactory extends BinaryDerivationFactory {
   public BinaryDerivation @Nullable [] instantiate(VarInfo var1, VarInfo var2) {
 
     boolean enabled = SequencesConcat.dkconfig_enabled;
-    if (!enabled) return null;
+    if (!enabled) {
+      return null;
+    }
 
     if (var1.type != var2.type || var1.rep_type != var2.rep_type) {
       // Is this really necessary since we're checking comparability?
@@ -31,7 +33,9 @@ public final class SequencesConcatFactory extends BinaryDerivationFactory {
       return null;
     }
 
-    if (!VarComparability.comparable(var1, var2)) return null;
+    if (!VarComparability.comparable(var1, var2)) {
+      return null;
+    }
 
     if (var1.derived != null || var2.derived != null) {
       // From derived variables.  Don't derive.
@@ -39,7 +43,9 @@ public final class SequencesConcatFactory extends BinaryDerivationFactory {
     }
 
     // We don't want concats of arrays with themselves
-    if (var1.name().equals(var2.name())) return null;
+    if (var1.name().equals(var2.name())) {
+      return null;
+    }
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(

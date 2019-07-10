@@ -30,7 +30,7 @@ public class DeclWriter extends DaikonWriter {
   //
   //  Class.getName() returns JVM names (eg, [Ljava.lang.String;)
 
-  /** Header string before each new method entry or exit point */
+  /** Header string before each new method entry or exit point. */
   public static final String declareHeader = "DECLARE";
 
   public static boolean debug = false;
@@ -48,7 +48,7 @@ public class DeclWriter extends DaikonWriter {
   private static int initial_compare_value = Integer.MAX_VALUE;
   private static int unique_compare_value;
 
-  /** Stream to write to */
+  /** Stream to write to. */
   private PrintStream outFile;
 
   /**
@@ -138,7 +138,7 @@ public class DeclWriter extends DaikonWriter {
 
       // Print exit program point for EACH exit location in the method
       // (that was encountered during this execution of the program).
-      Set<Integer> theExits = new HashSet<Integer>(mi.exit_locations);
+      Set<Integer> theExits = new HashSet<>(mi.exit_locations);
       assert theExits.size() > 0 : mi;
       for (Integer exitLoc : theExits) {
         // Get the root of the method's traversal pattern
@@ -224,7 +224,9 @@ public class DeclWriter extends DaikonWriter {
    * variables to print, this method does nothing.
    */
   private void printClassPpt(ClassInfo cinfo, String name, DeclReader comp_info) {
-    if (num_class_vars(cinfo) == 0) return;
+    if (num_class_vars(cinfo) == 0) {
+      return;
+    }
 
     boolean printedHeader = false;
     RootInfo root = RootInfo.getClassPpt(cinfo, Runtime.nesting_depth);
@@ -277,7 +279,7 @@ public class DeclWriter extends DaikonWriter {
       // Print exit program point for EACH exit location in the method
       // Note that there may not be any exits.  They may get filtered out,
       // or some methods don't have an exit (only a throw)
-      Set<Integer> theExits = new HashSet<Integer>(mi.exit_locations);
+      Set<Integer> theExits = new HashSet<>(mi.exit_locations);
       for (Integer exitLoc : theExits) {
         // Get the root of the method's traversal pattern
         RootInfo exitRoot = mi.traversalExit;
@@ -322,7 +324,7 @@ public class DeclWriter extends DaikonWriter {
     outFile.println("ppt-type " + ppt_type.name().toLowerCase());
 
     // Look for and print any hierarchy relations
-    List<VarRelation> relations = new ArrayList<VarRelation>();
+    List<VarRelation> relations = new ArrayList<>();
     for (DaikonVariableInfo child : root) {
       find_relations(null, mi.is_static(), null, child, relations);
     }
@@ -397,7 +399,7 @@ public class DeclWriter extends DaikonWriter {
 
     // If there are any static variables, add the relation to
     // the class ppt
-    List<VarRelation> relations = new ArrayList<VarRelation>();
+    List<VarRelation> relations = new ArrayList<>();
     if (num_class_vars(cinfo) > 0) {
       VarRelation relation = new VarRelation(cinfo.class_name + ":::CLASS", "parent");
       relation.id = 1;
@@ -441,22 +443,22 @@ public class DeclWriter extends DaikonWriter {
    * defined in the declaration record. The VarRelation class tracks one relation.
    */
   private static class VarRelation {
-    /** Name of the program point for the parent */
+    /** Name of the program point for the parent. */
     String parent_ppt_name;
-    /** Prefix of the variable name that is not part of the parent name */
+    /** Prefix of the variable name that is not part of the parent name. */
     String local_prefix;
     /** Prefix of the parent that replaces the local prefix. Normally 'this'. */
     String parent_prefix;
-    /** Top level variable for the relation */
+    /** Top level variable for the relation. */
     String local_variable;
     /** Type of the relation (parent, user, etc) */
     String type;
-    /** Number that identifies this relation within this ppt */
+    /** Number that identifies this relation within this ppt. */
     int id;
 
     static SimpleLog debug = new SimpleLog(false);
 
-    /** Create a VarRelation */
+    /** Create a VarRelation. */
     public VarRelation(
         String parent_ppt_name,
         String type,
@@ -471,7 +473,7 @@ public class DeclWriter extends DaikonWriter {
       debug.log("Created %s", this);
     }
 
-    /** Create a var relation with the matching names */
+    /** Create a var relation with the matching names. */
     public VarRelation(String parent_ppt_name, String type) {
       this(parent_ppt_name, type, null, null, null);
     }

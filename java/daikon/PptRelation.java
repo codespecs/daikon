@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -45,17 +44,17 @@ public class PptRelation implements Serializable {
    * constructed. MERGE_CHILD is not used by Daikon.
    */
   public enum PptRelationType {
-    /** Acyclic relationship to a parent, eg, method to its object */
+    /** Acyclic relationship to a parent, eg, method to its object. */
     PARENT,
     /** Possibly cyclic relationship, eg. nested object instances */
     USER,
-    /** Entrance of method to exit of method */
+    /** Entrance of method to exit of method. */
     ENTER_EXIT,
-    /** Combined exit to numbered exit of a method */
+    /** Combined exit to numbered exit of a method. */
     EXIT_EXITNN,
-    /** Relation between the same ppt in two different PptMaps */
+    /** Relation between the same ppt in two different PptMaps. */
     MERGE_CHILD,
-    /** Relation from a program point to its conditional ppts */
+    /** Relation from a program point to its conditional ppts. */
     PPT_PPTCOND
   };
 
@@ -89,8 +88,8 @@ public class PptRelation implements Serializable {
 
     this.parent = parent;
     this.child = child;
-    parent_to_child_map = new LinkedHashMap<VarInfo,VarInfo>();
-    child_to_parent_map = new LinkedHashMap<VarInfo,VarInfo>();
+    parent_to_child_map = new LinkedHashMap<>();
+    child_to_parent_map = new LinkedHashMap<>();
     // rel_type is one of the above relationship types because this is a
     // private constructor, called only within this file.
     relationship = rel_type;
@@ -108,8 +107,8 @@ public class PptRelation implements Serializable {
 
     this.parent = parent;
     this.child = child;
-    parent_to_child_map = new LinkedHashMap<VarInfo, VarInfo>();
-    child_to_parent_map = new LinkedHashMap<VarInfo, VarInfo>();
+    parent_to_child_map = new LinkedHashMap<>();
+    child_to_parent_map = new LinkedHashMap<>();
     // rel_type is one of the above relationship types because this is a
     // private constructor, called only within this file.
     relationship = rel_type;
@@ -117,9 +116,8 @@ public class PptRelation implements Serializable {
   }
 
   /** Adds this relation to its child's parent list and its parent's children list. */
-  @SuppressWarnings({"rawness", "initialization"}) // won't be used until initialization is finished
-  private void connect(
-      @UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this) {
+  @SuppressWarnings({"initialization"}) // won't be used until initialization is finished
+  private void connect(@UnderInitialization(PptRelation.class) PptRelation this) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
     child.parents.add(this);
@@ -253,7 +251,7 @@ public class PptRelation implements Serializable {
             + parent.name()
             + " "
             + relationship);
-    Map<VarInfo.Pair, VarInfo.Pair> emap = new LinkedHashMap<VarInfo.Pair, VarInfo.Pair>();
+    Map<VarInfo.Pair, VarInfo.Pair> emap = new LinkedHashMap<>();
 
     if (child.equality_view == null) {
       throw new Error(
@@ -826,7 +824,7 @@ public class PptRelation implements Serializable {
         PptSplitter ppt_split = ii.next();
 
         // list of children that match this splitter
-        List<SplitChild> split_children = new ArrayList<SplitChild>();
+        List<SplitChild> split_children = new ArrayList<>();
 
         // Create a list of children for this splitter
         child_loop:
@@ -886,7 +884,7 @@ public class PptRelation implements Serializable {
       PptName pname = ppt.ppt_name;
       // rels is solely for debugging; each relation is stored in the
       // parent and child ppts
-      List<PptRelation> rels = new ArrayList<PptRelation>();
+      List<PptRelation> rels = new ArrayList<>();
       Daikon.debugProgress.fine("Processing ppt " + pname);
       debug.fine("Processing ppt " + pname);
 
@@ -916,7 +914,9 @@ public class PptRelation implements Serializable {
       // if an exitNN point, parent is combined exit point
       if (ppt.is_subexit()) {
         PptTopLevel parent = all_ppts.get(pname.makeExit());
-        if (parent != null) rels.add(newCombinedExitExitNNRel(parent, ppt));
+        if (parent != null) {
+          rels.add(newCombinedExitExitNNRel(parent, ppt));
+        }
 
         // Connect combined exit points to enter points over orig variables
       } else if (ppt.is_combined_exit()) {
@@ -981,7 +981,7 @@ public class PptRelation implements Serializable {
         PptSplitter ppt_split = ii.next();
 
         // list of children that match this splitter
-        List<SplitChild> split_children = new ArrayList<SplitChild>();
+        List<SplitChild> split_children = new ArrayList<>();
 
         // Create a list of children for this splitter
         child_loop:

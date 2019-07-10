@@ -29,7 +29,7 @@ public final class Global {
   /// Constants
   ///
 
-  public static final String lineSep = System.getProperty("line.separator");
+  public static final String lineSep = System.lineSeparator();
 
   // Regular expressions
   public static final java.util.regex.Pattern ws_regexp;
@@ -94,7 +94,9 @@ public final class Global {
   public static int reported_invariants = 0;
 
   public static void output_statistics() {
-    if (!output_statistics) return;
+    if (!output_statistics) {
+      return;
+    }
 
     System.out.println(
         "===========================================================================");
@@ -205,6 +207,5 @@ public final class Global {
   public static FuzzyFloat fuzzy = new FuzzyFloat();
 
   /* Map of statistics for each ppt. */
-  public static Map<PptTopLevel, List<PptTopLevel.Stats>> stats_map =
-      new LinkedHashMap<PptTopLevel, List<PptTopLevel.Stats>>();
+  public static Map<PptTopLevel, List<PptTopLevel.Stats>> stats_map = new LinkedHashMap<>();
 }

@@ -64,13 +64,15 @@ public class InvariantInfo {
    *     "var1,var3,var2", "var2,var1,var3"... etc.]
    */
   public @Nullable List<String> var_permutations() {
-    if (vars == null) return null;
+    if (vars == null) {
+      return null;
+    }
 
     // We know there can be at most 3 vars so it's not worth writing
     // a complicated routine that generates all permutations
     StringTokenizer st = new StringTokenizer(vars, ",");
     assert st.countTokens() <= 3;
-    ArrayList<String> result = new ArrayList<String>(3);
+    ArrayList<String> result = new ArrayList<>(3);
     if (st.countTokens() == 1) {
       result.add(vars);
       return result;

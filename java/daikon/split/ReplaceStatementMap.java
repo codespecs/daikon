@@ -23,7 +23,7 @@ class ReplaceStatementMap {
    *     of this
    */
   ReplaceStatementMap(List<ReplaceStatement> replaceStatements) {
-    map = new HashMap<String, ReplaceStatement>();
+    map = new HashMap<>();
     for (ReplaceStatement replaceStatement : replaceStatements) {
       map.put(replaceStatement.getName(), replaceStatement);
     }

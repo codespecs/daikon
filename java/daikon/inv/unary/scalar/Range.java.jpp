@@ -242,7 +242,7 @@ public abstract class RANGE extends SUPERCLASS {
    */
   public static List<@Prototype Invariant> get_proto_all() {
 
-    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<>();
     result.add(EqualZero.get_proto());
     result.add(EqualOne.get_proto());
     result.add(EqualMinusOne.get_proto());
@@ -283,7 +283,7 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return ONEOF.dkconfig_enabled;
@@ -336,7 +336,7 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return ONEOF.dkconfig_enabled;
@@ -389,7 +389,7 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return ONEOF.dkconfig_enabled;
@@ -442,7 +442,7 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled;
@@ -495,7 +495,7 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled;
@@ -549,7 +549,7 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;
@@ -764,7 +764,7 @@ public abstract class RANGE extends SUPERCLASS {
       return proto;
     }
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;

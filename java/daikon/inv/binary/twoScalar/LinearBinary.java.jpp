@@ -72,18 +72,18 @@ public class CLASSNAME extends SUPERCLASS {
 
   private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
-  /** Returns a prototype CLASSNAME invariant */
+  /** Returns a prototype CLASSNAME invariant. */
   public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled */
+  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** LinearBinary is only valid on integral types */
+  /** LinearBinary is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -101,7 +101,7 @@ public class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
-  /** Instantiate an invariant on the specified slice */
+  /** Instantiate an invariant on the specified slice. */
   @Override
   protected CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
@@ -158,7 +158,7 @@ public class CLASSNAME extends SUPERCLASS {
   public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
-    List<CORECLASS> cores = new ArrayList<CORECLASS>();
+    List<CORECLASS> cores = new ArrayList<>();
     for (Invariant inv : invs) {
       cores.add(((CLASSNAME) inv).core);
     }
@@ -289,7 +289,7 @@ public class CLASSNAME extends SUPERCLASS {
   // Returns a vector of LinearBinary objects.
   // This ought to produce an iterator instead.
   public static List<CLASSNAME> findAll(VarInfo vi) {
-    List<CLASSNAME> result = new ArrayList<CLASSNAME>();
+    List<CLASSNAME> result = new ArrayList<>();
     for (PptSlice view : vi.ppt.views_iterable()) {
       if ((view.arity() == 2) && view.usesVar(vi)) {
         CLASSNAME lb = CLASSNAME.find(view);

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
 
@@ -37,8 +36,8 @@ public class InvTranslate {
    */
   int quality = 0;
 
-  /** Map of variables from inv to inv */
-  Map<String, String> var_map = new LinkedHashMap<String, String>();
+  /** Map of variables from inv to inv. */
+  Map<String, String> var_map = new LinkedHashMap<>();
 
   /** source invariant */
   Invariant inv1;
@@ -102,7 +101,7 @@ public class InvTranslate {
 
   /** Add the specified variable names to the variable translation. */
   private void add_variable_map(
-          @UnknownInitialization(daikon.tools.InvTranslate.class) @Raw(daikon.tools.InvTranslate.class) InvTranslate this,
+      @UnknownInitialization(daikon.tools.InvTranslate.class) InvTranslate this,
       String v1_name,
       String v2_name) {
 
@@ -117,7 +116,7 @@ public class InvTranslate {
   public String toString(@GuardSatisfied InvTranslate this) {
     StringBuilder out = new StringBuilder();
 
-    List<String> mappings = new ArrayList<String>();
+    List<String> mappings = new ArrayList<>();
     for (String key : var_map.keySet()) {
       String value = var_map.get(key);
       mappings.add(key + "->" + value);

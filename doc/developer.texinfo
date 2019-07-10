@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.7.1
+@center Daikon version 5.7.4
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.7.1 release date
-@center August 23, 2018
+@c Print out the Daikon version 5.7.4 release date
+@center June 1, 2019
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.7.1, released August 23, 2018.
+It describes Daikon version 5.7.4, released June 1, 2019.
 
 @menu
 * Introduction::
@@ -1205,6 +1205,10 @@ declared in a Daikon input file. Here we will describe how the
 @code{parent} records are typically used to connect program points into
 a dataflow hierarchy.
 
+Daikon uses three primary relationship types
+(@code{PARENT}, @code{ENTER-EXIT} and @code{EXIT-EXITNN}) to connect the program points
+into an acyclic dataflow hierarchy.
+
 @itemize
 @item
 A program point that represents the @code{ENTRY} or @code{EXIT} of a
@@ -1217,6 +1221,13 @@ non-static (instance) method will have a @code{parent} record that points to the
 @code{OBJECT} program point for the containing object.
 
 @item
+An @code{ENTER-EXIT} edge connects each method's @code{ENTER} program
+point with its corresponding @code{EXCEPTION} and @code{EXIT} program points.
+
+@item
+An @code{EXIT-EXITNN} edge connects each method's @code{EXIT} program
+point with each of its corresponding @code{EXIT<id>} program points.
+
 A program point that represents a @code{CLASS}
 will usually not have a @code{parent} record.
 
@@ -2048,8 +2059,7 @@ A clone of
 
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
-@c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
-@c or:       export JAVA_HOME=/usr/lib/jvm/java
+@c Example:  export JAVA_HOME=/usr/lib/jvm/java
 
 @item
 File @file{~/private/.travis-access-token} must contain the text after
@@ -2077,14 +2087,12 @@ The recommended setup for the distribution process:
 @itemize
 @item get a fresh copy of your Bash shell (e.g., log out and log back in)
 @item @code{unset CHECKERFRAMEWORK}
-@c TODO: Setting DAIKONDIR shoud not be necessary
-@c @item set @env{DAIKONDIR} as you would normally
-@item set @env{JAVA_HOME} to point to JDK 8
+@c DAIKONDIR is necessary only for the instructions in this file.
+@c Maybe use a different environment variable?
+@item set @env{DAIKONDIR} as you would normally:  @code{export DAIKONDIR=...}
+@item set @env{JAVA_HOME} to point to JDK 8; for example, @code{export JAVA_HOME=/usr/lib/jvm/java}
 @c @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
-This should fulfill most of the directory layout requirements noted above.
-As of 7/30/2018, @file{/homes/gws/markro/jdk8} contains the current version
-of the Java 8 JDK, 1.8.0_181-b13.
 
 
 @need 1000
@@ -2226,7 +2234,7 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 [Time: moments]
 
 @item
-Update dependencies in @file{daikon/java/lib/}.
+Update dependencies in @file{daikon/java/lib/}.  For details, see @file{daikon/java/lib/README}.
 
 @end itemize
 
@@ -2397,7 +2405,7 @@ rm -rf stage-daikon
 git clone --depth 3 https://github.com/codespecs/daikon stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
-export JAVA_HOME=/homes/gws/markro/jdk8
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 unset CHECKERFRAMEWORK
 make staging
 @end example
@@ -2421,7 +2429,7 @@ Next, check the staging website to see if it has any broken document links.
 make check-for-broken-doc-links
 @end example
 
-Review @file{check.log} and make corrections as appropriate.
+Review @file{checklink.log} and make corrections as appropriate.
 
 In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
@@ -2439,7 +2447,7 @@ Here is a workflow that may be used to deal with broken links:
 @item
 Use the @samp{Wayback Machine}, http://archive.org/web/, to see what the old content was.
 @item
-Do a web search to see if the page has relocated elsewhere.
+Do a web search on the content to see if the page has relocated elsewhere.
 @item
 If the web search is not successful, email the maintainer of the old content.
 @end itemize
@@ -2461,7 +2469,7 @@ Repeat the previous step to rebuild the release candidate.
 Repeat this step to verify your corrections.
 @end itemize
 
-If @file{check.log} contains an error message of the form:
+If @file{checklink.log} contains an error message of the form:
 @smallexample
 List of broken links and other issues:
 http://plse.cs.washington.edu/daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html
@@ -2503,7 +2511,7 @@ make test-staged-dist
 
 @need 1000
 @item
-Test the distribution on Ubuntu and MacOSX machines.
+Test the distribution on Ubuntu and macOS machines, on Travis CI.
 Run the following commands:
 
 @smallexample
@@ -2516,17 +2524,19 @@ sh /tmp/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.t
 @end smallexample
 
 and then wait until the following
-two URLs indicate success (it may take a while for the new jobs to show up,
-if Travis is busy running other jobs for the codespecs organization):
-@* @url{https://travis-ci.org/codespecs/test-daikon-staging}
-@* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx}
+two URLs indicate success:
+@* @url{https://travis-ci.org/codespecs/test-daikon-staging/builds}
+@* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx/builds}
+
+It may take a while for the new jobs to complete,
+if Travis is busy running other jobs for the codespecs organization.
 
 If there is a problem, fix it and start over.
 
 [Time: 15 min]
 
-Note that sometimes Travis has trouble starting MacOSX jobs.  You may wish to log on to a
-MacOSX machine (with the development tools installed) and run the tests manually.
+Note that sometimes Travis has trouble starting macOS jobs.  You may wish to log on to a
+macOS machine (with the development tools installed) and run the tests manually.
 The example below shows the commands required to do this.  The output
 should show a number of lines beginning with
 "Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
@@ -4395,7 +4405,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx vis su
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
-@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname MacOSX rt
+@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname macOS rt
 @c  LocalWords:  VarComparability instrumenter struct Hatcliff Sinha Vibha xref
 @c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
 @c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger

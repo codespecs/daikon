@@ -370,20 +370,20 @@
 ..Perl_sv_unmagic() ENTER/24: 2 EXIT0/27: 2
 ..Perl_sv_unref_flags() ENTER/24: 5 EXIT0/24: 5
 ..Perl_sv_upgrade() ENTER/24: 2428 EXIT0/27: 2428
-..Perl_sv_vcatpvf() ENTER/30: 3 EXIT0/30: 3
-..Perl_sv_vcatpvfn() ENTER/60: 8 EXIT0/60: 8
-..Perl_sv_vsetpvfn() ENTER/60: 5 EXIT0/60: 5
+..Perl_sv_vcatpvf() ENTER/51: 3 EXIT0/51: 3
+..Perl_sv_vcatpvfn() ENTER/81: 8 EXIT0/81: 8
+..Perl_sv_vsetpvfn() ENTER/81: 5 EXIT0/81: 5
 ..Perl_unshare_hek() ENTER/18: 3 EXIT0/18: 3
 ..Perl_uvuni_to_utf8() ENTER/12: 3 EXIT0/18: 3
 ..Perl_uvuni_to_utf8_flags() ENTER/15: 3 EXIT0/21: 3
-..Perl_vcroak() ENTER/12: 3
-..Perl_vdie() ENTER/12: 1
-..Perl_vform() ENTER/12: 1 EXIT0/15: 1
-..Perl_vmess() ENTER/12: 4 EXIT0/30: 4
+..Perl_vcroak() ENTER/33: 3
+..Perl_vdie() ENTER/33: 1
+..Perl_vform() ENTER/33: 1 EXIT0/36: 1
+..Perl_vmess() ENTER/33: 4 EXIT0/51: 4
 ..Perl_yylex() ENTER/3: 3683 EXIT0/6: 3683
 ..Perl_yyparse() ENTER/3: 4 EXIT0/6: 3
 ..S_sortsv_desc() ENTER/33: 4 EXIT0/33: 4
-..S_vdie_croak_common() ENTER/24: 4 EXIT0/27: 4
+..S_vdie_croak_common() ENTER/45: 4 EXIT0/48: 4
 ..main() ENTER/18: 1
 ..perl_alloc() ENTER/3: 1 EXIT0/12: 1
 ..perl_construct() ENTER/12: 1 EXIT0/12: 1

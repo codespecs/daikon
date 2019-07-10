@@ -86,7 +86,7 @@ public abstract class VarComparability {
   }
 
   /** Returns whether two comparabilities are comparable. */
-  @SuppressWarnings("purity") // Override the purity checker
+  @SuppressWarnings("all:purity") // Override the purity checker
   @Pure
   public static boolean comparable(
       @GuardSatisfied VarComparability type1, @GuardSatisfied VarComparability type2) {

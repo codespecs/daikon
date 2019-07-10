@@ -47,10 +47,10 @@ public class DynComp {
   public static @Nullable File comparability_file = null;
 
   @Option("Only process program points matching the regex")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
   @Option("Ignore program points matching the regex")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
   @Option("Don't track primitives")
   public static boolean no_primitives = false;
@@ -114,11 +114,11 @@ public class DynComp {
 
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the dcomp command line */
+  /** Synopsis for the dcomp command line. */
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
 
   /**
-   * Entry point of DynComp
+   * Entry point of DynComp.
    *
    * @param args see usage for argument descriptions
    */
@@ -250,13 +250,13 @@ public class DynComp {
     if (premain == null) {
       System.err.printf("Can't find dcomp_premain.jar on the classpath");
       if (daikon_dir == null) {
-        System.err.printf(" and $DAIKONDIR is not set.\n");
+        System.err.printf(" and $DAIKONDIR is not set.%n");
       } else {
-        System.err.printf(" or in $DAIKONDIR/java .\n");
+        System.err.printf(" or in $DAIKONDIR/java .%n");
       }
-      System.err.printf("It should be found in the directory where Daikon was installed.\n");
-      System.err.printf("Use the --premain switch to specify its location,\n");
-      System.err.printf("or change your classpath to include it.\n");
+      System.err.printf("It should be found in the directory where Daikon was installed.%n");
+      System.err.printf("Use the --premain switch to specify its location,%n");
+      System.err.printf("or change your classpath to include it.%n");
       System.exit(1);
     }
 
@@ -292,11 +292,11 @@ public class DynComp {
       if (rt_file == null) {
         System.err.printf("Can't find dcomp_rt.jar on the classpath");
         if (daikon_dir == null) {
-          System.err.printf(" and $DAIKONDIR is not set.\n");
+          System.err.printf(" and $DAIKONDIR is not set.%n");
         } else {
-          System.err.printf(" or in $DAIKONDIR/java .\n");
+          System.err.printf(" or in $DAIKONDIR/java .%n");
         }
-        System.err.printf("Probably you forgot to build it.\n");
+        System.err.printf("Probably you forgot to build it.%n");
         System.err.printf(
             "See the Daikon manual, section \"Instrumenting the "
                 + "JDK with DynComp\" for help.\n");
@@ -305,7 +305,7 @@ public class DynComp {
     }
 
     // Build the command line to execute the target with the javaagent
-    List<String> cmdlist = new ArrayList<String>();
+    List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
     // cmdlist.add ("-verbose:class");
     cmdlist.add("-cp");
@@ -337,7 +337,7 @@ public class DynComp {
     try {
       dcomp_proc = rt.exec(cmdline);
     } catch (Throwable e) {
-      System.out.printf("Exception '%s' while executing '%s'\n", e, cmdline);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
       System.exit(1);
       throw new Error("Unreachable control flow");
     }
@@ -346,15 +346,13 @@ public class DynComp {
     // XXX check result!
   }
 
-  /** Wait for stream redirect threads to complete */
+  /** Wait for stream redirect threads to complete. */
   public int redirect_wait(Process p) {
 
     // Create the redirect threads and start them.
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
 
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
 
@@ -383,7 +381,7 @@ public class DynComp {
     return result;
   }
 
-  /** Returns elapsed time as a String since the start of the program */
+  /** Returns elapsed time as a String since the start of the program. */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }

@@ -638,7 +638,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   public static List<@Prototype Invariant> get_proto_all() {
 
-    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<>();
     #if (defined(STRING))
         result.add(SubString.get_proto(false));
         result.add(SubString.get_proto(true));
@@ -662,7 +662,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       result.add(ShiftZero.get_proto(false));
       result.add(ShiftZero.get_proto(true));
     #endif
-    // System.out.printf("%s get proto: %s\n", CLASSNAME.class, result);
+    // System.out.printf("%s get proto: %s%n", CLASSNAME.class, result);
     return result;
   }
 
@@ -715,7 +715,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static @Prototype Divides proto = new @Prototype Divides(false);
     private static @Prototype Divides proto_swap = new @Prototype Divides(true);
 
-    /** Returns the prototype invariant */
+    /** Returns the prototype invariant. */
     public static @Prototype CLASSNAME get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
@@ -729,7 +729,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff divides invariants should be considered. */
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -916,7 +916,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static @Prototype Square proto = new @Prototype Square(false);
     private static @Prototype Square proto_swap = new @Prototype Square(true);
 
-    /** Returns the prototype invariant */
+    /** Returns the prototype invariant. */
     public static @Prototype Square get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
@@ -930,7 +930,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff square invariants should be considered. */
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -998,7 +998,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static @Prototype ZeroTrack proto = new @Prototype ZeroTrack(false);
     private static @Prototype ZeroTrack proto_swap = new @Prototype ZeroTrack(true);
 
-    /** Returns the prototype invariant */
+    /** Returns the prototype invariant. */
     public static @Prototype ZeroTrack get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
@@ -1012,7 +1012,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff zero-track invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1095,7 +1095,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     private static @Prototype BitwiseComplement proto = new @Prototype BitwiseComplement();
 
-    /** Returns the prototype invariant */
+    /** Returns the prototype invariant. */
     public static @Prototype BitwiseComplement get_proto() {
       return proto;
     }
@@ -1105,7 +1105,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff bitwise complement invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1166,7 +1166,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static @Prototype BitwiseSubset proto = new @Prototype BitwiseSubset(false);
     private static @Prototype BitwiseSubset proto_swap = new @Prototype BitwiseSubset(true);
 
-    /** Returns the prototype invariant */
+    /** Returns the prototype invariant. */
     public static @Prototype BitwiseSubset get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
@@ -1180,7 +1180,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff bitwise subset invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1282,7 +1282,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     private static @Prototype BitwiseAndZero proto = new @Prototype BitwiseAndZero();
 
-    /** Returns the prototype invariant */
+    /** Returns the prototype invariant. */
     public static @Prototype BitwiseAndZero get_proto() {
       return proto;
     }
@@ -1292,7 +1292,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff BitwiseAndZero invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1376,7 +1376,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static @Prototype ShiftZero proto = new @Prototype ShiftZero(false);
     private static @Prototype ShiftZero proto_swap = new @Prototype ShiftZero(true);
 
-    /** Returns the prototype invariant */
+    /** Returns the prototype invariant. */
     public static @Prototype ShiftZero get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
@@ -1390,7 +1390,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff ShiftZero invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1476,7 +1476,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static @Prototype SubString proto = new @Prototype SubString(false);
     private static @Prototype SubString proto_swap = new @Prototype SubString(true);
 
-    /** Returns the prototype invariant */
+    /** Returns the prototype invariant. */
     public static @Prototype SubString get_proto(boolean swap) {
       if (swap) {
         return proto_swap;
@@ -1490,7 +1490,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff SubString invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled */
+    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1523,7 +1523,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (y.contains(x));
     }
 
-    /** Justified as long as there are samples */
+    /** Justified as long as there are samples. */
     @Override
     protected double computeConfidence() {
       if (ppt.num_samples() == 0) {

@@ -109,7 +109,7 @@ public class CLASSNAME extends SUPERCLASS {
     return dkconfig_enabled;
   }
 
-  /** LinearTernary is only valid on non-constant integral types */
+  /** LinearTernary is only valid on non-constant integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -292,7 +292,7 @@ public class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
-  /** Instantiate the invariant on the specified slice */
+  /** Instantiate the invariant on the specified slice. */
   @Override
   public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
@@ -417,7 +417,7 @@ public class CLASSNAME extends SUPERCLASS {
   // Returns a vector of CLASSNAME objects.
   // This ought to produce an iterator instead.
   public static List<CLASSNAME> findAll(VarInfo vi) {
-    List<CLASSNAME> result = new ArrayList<CLASSNAME>();
+    List<CLASSNAME> result = new ArrayList<>();
     for (PptSlice view : vi.ppt.views_iterable()) {
       if ((view.arity() == 3) && view.usesVar(vi)) {
         CLASSNAME lt = CLASSNAME.find(view);
@@ -446,7 +446,7 @@ public class CLASSNAME extends SUPERCLASS {
   public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
-    List<CORECLASS> cores = new ArrayList<CORECLASS>();
+    List<CORECLASS> cores = new ArrayList<>();
     for (Invariant inv : invs) {
       cores.add(((CLASSNAME) inv).core);
     }

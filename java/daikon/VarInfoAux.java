@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresKeyForIf;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -146,7 +147,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
         // We use default values if none are specified.  We initialize
         // here rather than above to save time when there are no tokens.
 
-        map = new HashMap<@Interned String, @Interned String>(theDefault.map);
+        map = new HashMap<>(theDefault.map);
       }
 
       @Interned String token;
@@ -224,8 +225,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /** Special handler for deserialization. */
   private @Interned Object readResolve() throws ObjectStreamException {
     isInterned = false;
-    Map<@Interned String, @Interned String> newMap =
-        new HashMap<@Interned String, @Interned String>();
+    Map<@Interned String, @Interned String> newMap = new HashMap<>();
     for (String key : map.keySet()) {
       newMap.put(key.intern(), map.get(key).intern());
     }
@@ -241,8 +241,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /** Make the default map here. */
   private VarInfoAux() {
-    HashMap<@Interned String, @Interned String> defaultMap =
-        new HashMap<@Interned String, @Interned String>();
+    HashMap<@Interned String, @Interned String> defaultMap = new HashMap<>();
     // The following are default values.
     defaultMap.put(HAS_DUPLICATES, TRUE);
     defaultMap.put(HAS_ORDER, TRUE);
@@ -342,7 +341,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     // Necessary because various static methods call intern(), possibly before static field
     // interningMap's initializer would be executed.
     if (interningMap == null) {
-      interningMap = new HashMap<VarInfoAux, @Interned VarInfoAux>();
+      interningMap = new HashMap<>();
     }
 
     @Interned VarInfoAux result;
@@ -365,6 +364,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @throws NumberFormatException if the value of the key cannot be parsed as an integer
    * @see #hasValue(String)
    */
+  @Pure
   public int getInt(@KeyFor("this.map") String key) {
     if (!hasValue(key)) {
       throw new RuntimeException(String.format("Key '%s' is not defined", key));
@@ -388,7 +388,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
       StreamTokenizer tok = new StreamTokenizer(new StringReader(sValue));
       tok.quoteChar('"');
       tok.whitespaceChars(' ', ' ');
-      ArrayList<String> lValues = new ArrayList<String>();
+      ArrayList<String> lValues = new ArrayList<>();
 
       int tokInfo = tok.nextToken();
       while (tokInfo != StreamTokenizer.TT_EOF) {
@@ -417,6 +417,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /** Return {@code true} if the value for the given key is defined, and {@code false} otherwise. */
+  @Pure
+  @EnsuresKeyForIf(result = true, expression = "#1", map = "map")
   public boolean hasValue(String key) {
     return map.containsKey(key);
   }
@@ -430,8 +432,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /** Return a new VarInfoAux with the desired value set. Does not modify this. */
   public @Interned VarInfoAux setValue(String key, String value) {
-    HashMap<@Interned String, @Interned String> newMap =
-        new HashMap<@Interned String, @Interned String>(this.map);
+    HashMap<@Interned String, @Interned String> newMap = new HashMap<>(this.map);
     newMap.put(key.intern(), value.intern());
     return new VarInfoAux(newMap).intern();
   }

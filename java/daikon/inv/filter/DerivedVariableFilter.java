@@ -50,7 +50,7 @@ public class DerivedVariableFilter extends InvariantFilter {
       if (vi.derived == null) {
         continue;
       }
-      // System.out.printf("Comparing %s to %s\n",
+      // System.out.printf("Comparing %s to %s%n",
       //                   vi.derived.getClass().getName(), class_re);
       assert class_re != null
           : "@AssumeAssertion(nullness): limited side effects don't affect this field";

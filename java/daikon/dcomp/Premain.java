@@ -45,7 +45,7 @@ public class Premain {
    * Set of pre_instrumented jdk classes. Needed so that we will instrument classes generated on the
    * fly in the jdk.
    */
-  public static Set<String> pre_instrumented = new LinkedHashSet<String>();
+  public static Set<String> pre_instrumented = new LinkedHashSet<>();
 
   // One of the last phases for DynComp is to write out the comparability values
   // after the user program completes execution.  One of the steps is to assign
@@ -111,7 +111,7 @@ public class Premain {
     // Find out what classes are already loaded
     // Class<?>[] loaded_classes = inst.getAllLoadedClasses();
     // for (Class<?> loaded_class : loaded_classes) {
-    // System.out.printf("loaded class = %s\n", loaded_class.getName());
+    // System.out.printf("loaded class = %s%n", loaded_class.getName());
     // }
 
     // Setup the shutdown hook
