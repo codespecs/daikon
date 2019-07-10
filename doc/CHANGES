@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.7.4 (June 1, 2019)
+5.7.4 (??)
 
 Updated the readelf, Valgrind, and BCEL libraries.  This should improve
 compatibility with operating systems and C versions.
