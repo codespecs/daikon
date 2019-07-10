@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.7.6 (??)
+5.8.0 (??)
 
 Daikon is no longer supported on Windows or Cygwin.
 Use Windows Subsystem for Linux (WSL) instead.
