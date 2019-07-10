@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.7.6 (??)
+
+Daikon is no longer supported on Windows or Cygwin.
+Use Windows Subsystem for Linux (WSL) instead.
+
+===========================================================================
+
 5.7.4 (June 1, 2018)
 
 Updated the readelf, Valgrind, and BCEL libraries.  This should improve
@@ -28,9 +35,6 @@ compatibility with operating systems and C versions.
 ===========================================================================
 
 5.7.2 (November 7, 2018)
-
-Daikon is no longer supported on Windows or Cygwin.
-Use Windows Subsystem for Linux (WSL) instead.
 
 The Daikon instructions no longer suggest to set CLASSPATH, which is bad
 style.  Instead, a new environment variable DAIKON_CLASSPATH is set by
