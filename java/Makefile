@@ -14,43 +14,12 @@ HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 
 USER ?= daikonbuild
 
-#
-# Do some basic configuration checking:
-#  - Make sure uname and OSTYPE match up
-#  - On Windows, make sure that find is the Unix find and not the Windows find
-#
-ifeq (cygwin,$(OSTYPE))
-else
-  UNAME := $(shell uname)
-  ifeq (CYGWIN,$(findstring CYGWIN,$(UNAME)))
-    # OSTYPE is a bash variable, not an environment variable.  Set it if necessary
-    OSTYPE := cygwin
-  endif
-endif
-ifeq (cygwin,$(OSTYPE))
-  FIND_VERSION := $(shell find -version)
-  ifneq (GNU,$(findstring GNU,$(FIND_VERSION)))
-    $(error the find command in the path must be the Linux(GNU) find $(FIND_VERSION))
-  endif
-endif
-
+JAVA ?= java -ea
 # For debugging, add -verbose flag to javac command
-
-# To run doclint, do
-#   JAVADOC="~/research/types/jsr308-langtools/dist/bin/javadoc -Xdoclint:all,-missing" make javadoc
-# But doclint is enabled by default starting with Java 8.
-ifeq (cygwin, $(OSTYPE))
-  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea
-  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin
-  JAVADOC ?= ${PLUMESCRIPTS}/javadoc-cygwin
-  JAR ?= ${JAVA_HOME}/bin/jar
-else
-  JAVA ?= java -ea
-  # JAVAC ?= javac -g -Xlint:unchecked
-  JAVAC ?= javac
-  JAVADOC ?= javadoc
-  JAR ?= jar
-endif
+# JAVAC ?= javac -g -Xlint:unchecked
+JAVAC ?= javac
+JAVADOC ?= javadoc
+JAR ?= jar
 
 # Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
@@ -738,7 +707,7 @@ findbugs: .findbugs-output
 	$(MAKE) findbugs-nocompile
 
 # WARNING: This does not use the class files, but the .jar file.
-# So make sure it's up to date before using this
+# So make sure it's up to date before using this.
 # WARNING: I don't think this will work unless you're logged on as Michael Ernst.
 findbugs-nocompile:
 	rm -f .findbugs-output
@@ -1127,14 +1096,6 @@ requireJavadocPrivate: $(JAVA_FILES)
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 
-
-## This doesn't seem necessary any more
-# javadoc-lookup: doc-javadoc-lookup
-#
-# ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
-# doc-javadoc-lookup: api
-# 	find api -name '*.html' | xargs -n 100 ${PLUMESCRIPTS}/jdk-add-munged-anchor-names
-# 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \

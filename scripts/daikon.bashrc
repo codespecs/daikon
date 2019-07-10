@@ -1,6 +1,5 @@
 ## daikon.bashrc
 ## Daikon initialization file for Bourne shell (bash) users.
-## (This file should be kept in synch with daikonenv.bat.)
 
 ## Wherever you source this file, you should set two environment variables:
 ##   JAVA_HOME      absolute pathname of the directory containing the JDK
@@ -60,10 +59,6 @@ DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVALIB_CLASSPATH}
 # Avoid warnings about non-existent elements on classpath
 if [ -d ${DAIKONDIR}/java ]; then
   DAIKON_CLASSPATH=${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKON_CLASSPATH}
-fi
-# For Cygwin we need to convert CLASSPATH to windows format
-if [ "$OSTYPE" == "cygwin" ]; then
-  DAIKON_CLASSPATH="`cygpath -wp $DAIKON_CLASSPATH`"
 fi
 export DAIKON_CLASSPATH
 
