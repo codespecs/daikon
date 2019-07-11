@@ -623,11 +623,13 @@ very-clean: clean clean-generated-files
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
 
-ETAGS_EXISTS := $(shell command -v etags 2> /dev/null)
+ifneq (,$(shell which etags))
+## The etags program exists
 ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
 ETAGS := etags --language-force=java
 else
 ETAGS := etags --language=java
+endif
 endif
 
 TAGS:	tags
