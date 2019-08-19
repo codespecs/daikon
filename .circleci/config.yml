@@ -304,6 +304,46 @@ jobs:
 
       - run: ./scripts/test-kvasir.sh
 
+  typecheck:
+
+    docker:
+      - image: mdernst/ubuntu-for-daikon-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`} && make showvars && make -C java typecheck
+
+  dummy:
+
+    docker:
+      - image: mdernst/ubuntu-for-daikon-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: echo "dummy"
+
   trigger-downstream:
 
     docker:
@@ -333,26 +373,6 @@ jobs:
       #       fi
       #
       #     fi
-
-  typecheck:
-
-    docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
-
-    steps:
-
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-
-      - run: export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`} && make showvars && make -C java typecheck
 
 workflows:
   version: 2
