@@ -1,0 +1,151 @@
+jobs:
+
+- job: quick_txt_diff_ubuntu
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-quick-txt-diff.sh
+    displayName: test-quick-txt-diff.sh
+
+- job: nonquick_txt_diff_ubuntu
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-nonquick-txt-diff.sh
+    displayName: test-nonquick-txt-diff.sh
+
+- job: non_txt_diff_ubuntu
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-non-txt-diff.sh
+    displayName: test-non-txt-diff.sh
+
+- job: misc_ubuntu
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdkany
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-misc.sh
+    displayName: test-misc.sh
+
+- job: kvasir_ubuntu
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdkany
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-kvasir.sh
+    displayName: test-kvasir.sh
+
+- job: quick_txt_diff_fedora
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-quick-txt-diff.sh
+    displayName: test-quick-txt-diff.sh
+
+- job: nonquick_txt_diff_fedora
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-nonquick-txt-diff.sh
+    displayName: test-nonquick-txt-diff.sh
+
+- job: non_txt_diff_fedora
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-non-txt-diff.sh
+    displayName: test-non-txt-diff.sh
+
+- job: misc_fedora
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdkany
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-misc.sh
+    displayName: test-misc.sh
+
+- job: kvasir_fedora
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdkany
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-kvasir.sh
+    displayName: test-kvasir.sh
+
+- job: quick_txt_diff_centos
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-quick-txt-diff.sh
+    displayName: test-quick-txt-diff.sh
+
+- job: nonquick_txt_diff_centos
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-nonquick-txt-diff.sh
+    displayName: test-nonquick-txt-diff.sh
+
+- job: non_txt_diff_centos
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdk8
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-non-txt-diff.sh
+    displayName: test-non-txt-diff.sh
+
+- job: misc_centos
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdkany
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-misc.sh
+    displayName: test-misc.sh
+
+- job: kvasir_centos
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/ubuntu-for-daikon-jdkany
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-kvasir.sh
+    displayName: test-kvasir.sh
