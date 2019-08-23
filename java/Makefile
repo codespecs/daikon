@@ -757,13 +757,6 @@ endif
 check-format:
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
 	${MAKE} -C .. update-run-google-java-format
-	echo "For debugging:"
-	pwd
-	ls -al ..
-	ls -al ../utils
-	ls -al ../utils/run-google-java-format
-	ls -al /usr/bin
-	/usr/bin/python --version
 	@../utils/run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
 endif
 
