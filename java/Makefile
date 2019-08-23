@@ -763,7 +763,7 @@ ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
 	ls -al ../utils
 	ls -al ../utils/run-google-java-format
 	ls -al /usr/bin
-	/usr/bin/python -v
+	/usr/bin/python --version
 	@../utils/run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
 endif
 
