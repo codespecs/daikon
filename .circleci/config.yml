@@ -105,7 +105,7 @@ jobs:
   quick-txt-diff-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/fedora-for-daikon-jdk8
 
     steps:
 
@@ -125,7 +125,7 @@ jobs:
   nonquick-txt-diff-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/fedora-for-daikon-jdk8
 
     steps:
 
@@ -145,7 +145,7 @@ jobs:
   non-txt-diff-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/fedora-for-daikon-jdk8
 
     steps:
 
@@ -165,7 +165,7 @@ jobs:
   misc-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/fedora-for-daikon-jdkany
 
     steps:
 
@@ -185,7 +185,7 @@ jobs:
   kvasir-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/fedora-for-daikon-jdkany
 
     steps:
 
@@ -205,7 +205,7 @@ jobs:
   quick-txt-diff-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/centos-for-daikon-jdk8
 
     steps:
 
@@ -225,7 +225,7 @@ jobs:
   nonquick-txt-diff-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/centos-for-daikon-jdk8
 
     steps:
 
@@ -245,7 +245,7 @@ jobs:
   non-txt-diff-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/centos-for-daikon-jdk8
 
     steps:
 
@@ -265,7 +265,7 @@ jobs:
   misc-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/centos-for-daikon-jdkany
 
     steps:
 
@@ -287,7 +287,7 @@ jobs:
   kvasir-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/centos-for-daikon-jdkany
 
     steps:
 
