@@ -274,7 +274,7 @@ compiler such as @command{gcc}.
 If you wish to edit the Daikon source code and re-compile Daikon,
 @pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
-Daikon is supported on Unix-like environments, including Linux, MacOSX, and
+Daikon is supported on Unix-like environments, including Linux, Mac OS X, and
 Windows Subsystem for Linux (WSL).  It is not supported on Windows or Cygwin.
 
 @c The explicit installation instructions, segregated by OS type, is
@@ -3937,7 +3937,7 @@ containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
-On macOS, you might do:
+On Mac OS, you might do:
 
 @exampleindent 0
 @example
@@ -9091,7 +9091,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
 @c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
-@c  LocalWords:  Drager macOS I1 I2 invSortComparator1 invSortComparator2
+@c  LocalWords:  Drager I1 I2 invSortComparator1 invSortComparator2
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
 @c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
 @c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx2048m ps1
