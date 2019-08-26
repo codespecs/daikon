@@ -14,7 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
-import org.plumelib.signature.Signatures;
+import org.plumelib.reflection.Signatures;
 
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which reference variables have seen

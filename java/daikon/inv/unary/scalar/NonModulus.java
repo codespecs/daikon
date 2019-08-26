@@ -172,7 +172,7 @@ public class NonModulus extends SingleScalar {
     if (elements.add(Intern.internedLong(value))
         && results_accurate
         && (!no_result_yet)
-        && (MathPlume.modPositive(value, modulus) == remainder)) results_accurate = false;
+        && (MathPlume.modNonnegative(value, modulus) == remainder)) results_accurate = false;
     return InvariantStatus.NO_CHANGE;
   }
 
