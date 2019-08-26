@@ -187,7 +187,7 @@ public class Modulus extends SingleScalar {
         return InvariantStatus.FALSIFIED;
       }
       modulus = new_modulus;
-      remainder = MathPlume.modPositive(value, modulus);
+      remainder = MathPlume.modNonnegative(value, modulus);
     } else {
       long new_modulus_long = Math.abs(MathPlume.gcd(modulus, value1 - value));
       int new_modulus;
