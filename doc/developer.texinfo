@@ -2264,29 +2264,11 @@ All of the following jobs should be green:
 @html
 <img src="https://api.travis-ci.org/codespecs/fjalar.svg?branch=master" alt="Travis codespecs/fjalar status"/>
 @end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck}
+@* @url{https://dev.azure.com/codespecs/daikon/_build/latest?definitionId=1&branchName=master}
 @html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck.svg?branch=master" alt="Travis typetests/daikon-typecheck status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-formatter}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-formatter.svg?branch=master" alt="Travis typetests/daikon-typecheck-formatter status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-interning}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-interning.svg?branch=master" alt="Travis typetests/daikon-typecheck-interning status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-nullness}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-nullness.svg?branch=master" alt="Travis typetests/daikon-typecheck-nullness status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-regex}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-regex.svg?branch=master" alt="Travis typetests/daikon-typecheck-regex status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-signature}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-signature.svg?branch=master" alt="Travis typetests/daikon-typecheck-signature status"/>
+<img
+src="https://dev.azure.com/codespecs/daikon/_apis/build/status/codespecs.daikon?branchName=master"
+alt="Azure Pipelines codespecs/daikon status"/>
 @end html
 @end example
 @exampleindent 1
