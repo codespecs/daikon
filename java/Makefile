@@ -29,6 +29,7 @@ INSTALL ?= /usr/bin/install
 
 ifdef CHECKERFRAMEWORK
   CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+  CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
   CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK}/checker/resources/javadoc.astub
 endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
@@ -67,7 +68,7 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
-DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.5.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.4.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.3.jar:${DAIKON_CLASSPATH}
+DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.10.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.5.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.4.jar:${DAIKON_CLASSPATH}
 
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -772,7 +773,7 @@ endif
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 8 rather than version 9).
 # JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
-CHECKER_ARGS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar ${JAVACHECK_EXTRA_ARGS}
+CHECKER_ARGS ?= -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC} -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar ${JAVACHECK_EXTRA_ARGS}
 
 ## All of the following targets need to depend on "compile".
 

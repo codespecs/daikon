@@ -332,7 +332,7 @@ tags:
 
 # This is the target we use to verify that the software we are about
 # to distribute runs correctly in a variety of target environments.
-# Currently, we test CentOS, Fedora, MacOSX, and Ubuntu client machines.
+# Currently, we test CentOS, Fedora, Mac OS X, and Ubuntu client machines.
 distribution-check:
 	$(MAKE) -C scripts
 ifdef DAIKONCLASS_SOURCES

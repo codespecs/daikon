@@ -33,7 +33,7 @@ if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
   fi
 else
   ## Note that this overrides any previous setting.
-  # MacOS does not have "-e" argument to readlink
+  # Mac OS does not have "-e" argument to readlink
   # export DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
   # Code from: https://stackoverflow.com/q/59895/173852
   export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
