@@ -10,7 +10,8 @@ export SHELLOPTS
 
 export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`}
 
-make showvars compile daikon.jar
+make showvars
+make compile daikon.jar
 
 (cd .. && git clone https://github.com/typetools/checker-framework.git)
 (cd ../checker-framework && source checker/bin-devel/build.sh)
