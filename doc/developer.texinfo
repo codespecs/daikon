@@ -262,7 +262,7 @@ In order to compile Kvasir, the Daikon front end for the C language
 (@pxref{Kvasir,,,daikon,Daikon User Manual}), you will need some
 additional tools beyond those required to compile Daikon.
 
-Note that Kvasir does not work on MacOS.
+Note that Kvasir does not work on Mac OS.
 
 To install these dependencies under Ubuntu, run the command:
 @exampleindent 2
@@ -2264,29 +2264,11 @@ All of the following jobs should be green:
 @html
 <img src="https://api.travis-ci.org/codespecs/fjalar.svg?branch=master" alt="Travis codespecs/fjalar status"/>
 @end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck}
+@* @url{https://dev.azure.com/codespecs/daikon/_build/latest?definitionId=1&branchName=master}
 @html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck.svg?branch=master" alt="Travis typetests/daikon-typecheck status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-formatter}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-formatter.svg?branch=master" alt="Travis typetests/daikon-typecheck-formatter status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-interning}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-interning.svg?branch=master" alt="Travis typetests/daikon-typecheck-interning status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-nullness}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-nullness.svg?branch=master" alt="Travis typetests/daikon-typecheck-nullness status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-regex}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-regex.svg?branch=master" alt="Travis typetests/daikon-typecheck-regex status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-signature}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-signature.svg?branch=master" alt="Travis typetests/daikon-typecheck-signature status"/>
+<img
+src="https://dev.azure.com/codespecs/daikon/_apis/build/status/codespecs.daikon?branchName=master"
+alt="Azure Pipelines codespecs/daikon status"/>
 @end html
 @end example
 @exampleindent 1
@@ -2511,7 +2493,7 @@ make test-staged-dist
 
 @need 1000
 @item
-Test the distribution on Ubuntu and macOS machines, on Travis CI.
+Test the distribution on Ubuntu and Mac OS machines, on Travis CI.
 Run the following commands:
 
 @smallexample
@@ -2535,8 +2517,8 @@ If there is a problem, fix it and start over.
 
 [Time: 15 min]
 
-Note that sometimes Travis has trouble starting macOS jobs.  You may wish to log on to a
-macOS machine (with the development tools installed) and run the tests manually.
+Note that sometimes Travis has trouble starting Mac OS jobs.  You may wish to log on to a
+Mac OS machine (with the development tools installed) and run the tests manually.
 The example below shows the commands required to do this.  The output
 should show a number of lines beginning with
 "Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
@@ -4405,7 +4387,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx vis su
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
-@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname macOS rt
+@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname rt
 @c  LocalWords:  VarComparability instrumenter struct Hatcliff Sinha Vibha xref
 @c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
 @c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger

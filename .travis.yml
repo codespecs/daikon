@@ -97,29 +97,5 @@ script:
      export TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG &&
      ./.travis-build.sh $GROUP"
 
-jobs:
-  include:
-    - stage: trigger-downstream
-      script: |
-          echo "TRAVIS_BRANCH=$TRAVIS_BRANCH TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
-          if [[ ($TRAVIS_BRANCH == master) &&
-                ($TRAVIS_PULL_REQUEST == false) ]] ; then
-            SLUGOWNER=${TRAVIS_REPO_SLUG%/*}
-            if [[ "$SLUGOWNER" == "" ]]; then
-              SLUGOWNER=typetests
-            fi
-            echo "SLUGOWNER = $SLUGOWNER"
-
-            curl -LO --retry 3 https://raw.github.com/plume-lib/trigger-travis/master/trigger-travis.sh
-
-            git ls-remote https://github.com/${SLUGOWNER}/daikon-typecheck.git &>-
-            if [ "$?" -eq 0 ]; then
-              sh trigger-travis.sh ${SLUGOWNER} daikon-typecheck $TRAVIS_ACCESS_TOKEN
-            elif [[ "${SLUGOWNER}" == "codespecs" ]]; then
-              sh trigger-travis.sh typetests daikon-typecheck $TRAVIS_ACCESS_TOKEN
-            fi
-
-          fi
-
 git:
   depth: 9

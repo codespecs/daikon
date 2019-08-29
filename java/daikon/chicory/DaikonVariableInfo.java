@@ -24,7 +24,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.bcelutil.SimpleLog;
-import org.plumelib.signature.Signatures;
+import org.plumelib.reflection.Signatures;
 
 /**
  * Each DaikonVariableInfo object is a node in the tree structure of the variables in the target
