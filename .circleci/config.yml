@@ -450,6 +450,9 @@ workflows:
       - misc-centos:
           requires:
             - misc-ubuntu
+      - typecheck
+      - typecheck2
+      - dummy
       - trigger-downstream:
           requires:
             - quick-txt-diff-ubuntu
@@ -466,3 +469,6 @@ workflows:
             - nonquick-txt-diff-centos
             - non-txt-diff-centos
             - misc-centos
+            - typecheck
+            - typecheck2
+            - dummy
