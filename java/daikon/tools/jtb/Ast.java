@@ -28,7 +28,7 @@ import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.plumelib.signature.Signatures;
+import org.plumelib.reflection.Signatures;
 import org.plumelib.util.UtilPlume;
 
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
