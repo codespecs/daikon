@@ -362,6 +362,7 @@ jobs:
           paths:
             - ".git"
 
+      - run: env
       - run: scripts/test-typecheck.sh
 
   dummy:
