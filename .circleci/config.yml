@@ -324,7 +324,7 @@ jobs:
 
       - run: ./scripts/test-kvasir.sh
 
-  typecheck:
+  typecheck-with-included-CF:
 
     docker:
       - image: mdernst/ubuntu-for-daikon-jdk8
@@ -342,9 +342,13 @@ jobs:
           paths:
             - ".git"
 
-      - run: export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`} && make showvars && make -C java typecheck
+      - run: |
+          export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`}
+          make showvars
+          make compile daikon.jar
+          make -C java typecheck
 
-  typecheck2:
+  typecheck-with-locally-built-CF:
 
     docker:
       - image: mdernst/ubuntu-for-daikon-jdk8
@@ -451,8 +455,8 @@ workflows:
       - misc-centos:
           requires:
             - misc-ubuntu
-      - typecheck
-      - typecheck2
+      - typecheck-with-included-CF
+      - typecheck-with-locally-built-CF
       - dummy
       - trigger-downstream:
           requires:
@@ -470,6 +474,6 @@ workflows:
             - nonquick-txt-diff-centos
             - non-txt-diff-centos
             - misc-centos
-            - typecheck
-            - typecheck2
+            - typecheck-with-included-CF
+            - typecheck-with-locally-built-CF
             - dummy
