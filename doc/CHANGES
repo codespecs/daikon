@@ -1121,7 +1121,7 @@ Kvasir
 
 4.5.5 (April 1 2009)
 
-Support for Daikon and DynComp for Java has been improved for MacOSX.
+Support for Daikon and DynComp for Java has been improved for Mac OS X.
 The Daikon user and developer manuals were enhanced.
 
 Daikon
@@ -1136,14 +1136,14 @@ Daikon
 
         Detail was added to the section (6.5) on Loop invariants
 
-        Information on compiling Daikon for MacOSX was added to
+        Information on compiling Daikon for Mac OS X was added to
         section 2.1 of the Daikon Developers manual.
 
 DynComp Java
 
     Documentation
 
-        Information describing how to create an instrumented JDK on MacOSX
+        Information describing how to create an instrumented JDK on Mac OS X
         was added to Section 7.2.1 (Instrumenting the JDK with DynComp)
 
 -------------------------------------------
@@ -2561,7 +2561,7 @@ Daikon
 
   User Changes
 
-    Daikon runs on MacOS (the Apple Macintosh).  This is not due to a
+    Daikon runs on Mac OS (the Apple Macintosh).  This is not due to a
     change in Daikon, but because Apple has finally released a Java 1.5
     JVM.
 
@@ -4119,4 +4119,4 @@ Added linear ternary invariants, of the form z = ax + by + c.
  LocalWords:  Cygwin mainHelper MergeInvariants glibc decls structs Nullness un
  LocalWords:  auxprogs argc argv Radu Vanciu OneOfSequence fstack chk bashrc
  LocalWords:  cshrc config disambig Christoph Csallner std configs dfec Xlint
- LocalWords:  MacOS int premain
+ LocalWords:  int premain
