@@ -19,25 +19,20 @@ make -C java error-prone
 make -C java check-format
 
 # Documentation
-java -version
-java -version 2>&1 | grep -q '"1.8'
-echo $?
-cat /etc/os-release
 if java -version 2>&1 | grep -q '"1.8'; then
   echo "Java version 8"
   # Java version 8
   if grep -q Ubuntu /etc/os-release; then
-    echo "Ubuntu"
+    # echo "Ubuntu"
+    :
   else
     # Not Ubuntu
-    echo "Not Ubuntu"
-    echo "setting SKIP_JAVADOC"
     SKIP_JAVADOC=1
   fi
 else
-  echo "Not Java version 8"
+  # echo "Not Java version 8"
+  :
 fi
-echo SKIP_JAVADOC = $SKIP_JAVADOC
 if [ -z ${SKIP_JAVADOC+x} ]; then
   :
 else

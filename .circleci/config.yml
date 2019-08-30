@@ -185,8 +185,26 @@ jobs:
   kvasir-fedora:
 
     docker:
-# TODO:
-#      - image: mdernst/daikon-fedora-jdk8-plus
+      - image: mdernst/daikon-fedora-jdk8-plus
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-kvasir.sh
+
+  kvasir-fedora-old-container:
+
+    docker:
       - image: mdernst/fedora-for-daikon-jdkany
 
     steps:
@@ -359,6 +377,9 @@ workflows:
           requires:
             - misc-ubuntu
       - kvasir-fedora:
+          requires:
+            - kvasir-ubuntu
+      - kvasir-fedora-old-container:
           requires:
             - kvasir-ubuntu
       - quick-txt-diff-centos:
