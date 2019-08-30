@@ -9,6 +9,12 @@ bcel-6.3.1.jar
 bcel-util-1.1.5.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
   wget https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/1.1.5/bcel-util-1.1.5.jar
 
+chceker-qual.jar
+  wget https://search.maven.org/remotecontent?filepath=org/checkerframework/checker-qual/2.10.1/checker-qual-2.10.1.jar -O checker-qual.jar
+
+checker-framework/
+  ... TODO: document how to update
+
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
 daikon-util.jar : Just like plume-util-*.jar, but in package daikon.util.

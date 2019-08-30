@@ -30,6 +30,7 @@ import org.plumelib.util.UtilPlume;
  *   <dd>Text format, with each name preceded by "+" characters to indicate depth in the tree.
  * </dl>
  */
+@SuppressWarnings("removal") // in JDK 9+, ClassDoc, RootDoc, etc. are deprecated
 public class InvariantDoclet {
 
   private static final String lineSep = System.lineSeparator();
