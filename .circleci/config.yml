@@ -65,7 +65,7 @@ jobs:
   misc-ubuntu:
 
     docker:
-      - image: mdernst/daikon-ubuntu-jdkany
+      - image: mdernst/daikon-ubuntu-jdk8-plus
 
     steps:
 
@@ -85,7 +85,7 @@ jobs:
   kvasir-ubuntu:
 
     docker:
-      - image: mdernst/daikon-ubuntu-jdkany
+      - image: mdernst/daikon-ubuntu-jdk8-plus
 
     steps:
 
@@ -185,7 +185,7 @@ jobs:
   kvasir-fedora:
 
     docker:
-      - image: mdernst/daikon-fedora-jdkany
+      - image: mdernst/daikon-fedora-jdk8-plus
 
     steps:
 
@@ -307,7 +307,7 @@ jobs:
   trigger-downstream:
 
     docker:
-      - image: mdernst/daikon-ubuntu-jdkany
+      - image: mdernst/daikon-ubuntu-jdk8-plus
 
     steps:
       - run: echo "TODO implement trigger-downstream"

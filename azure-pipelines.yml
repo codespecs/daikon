@@ -33,7 +33,7 @@ jobs:
 - job: misc_ubuntu
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/daikon-ubuntu-jdkany:latest
+  container: mdernst/daikon-ubuntu-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -43,7 +43,7 @@ jobs:
 - job: kvasir_ubuntu
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/daikon-ubuntu-jdkany:latest
+  container: mdernst/daikon-ubuntu-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -98,7 +98,7 @@ jobs:
 - job: kvasir_fedora
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/daikon-fedora-jdkany:latest
+  container: mdernst/daikon-fedora-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
