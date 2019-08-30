@@ -13,8 +13,8 @@
 #    category to contain it.
 #
 
-FIND_VERSION := $(shell make --version 2>&1 | head -1)
-ifeq (4.,$(findstring 4.,$(FIND_VERSION)))
+ifeq (4.0,$(firstword $(sort $(MAKE_VERSION) 4.0)))
+  # Version 4.0 or higher
   MPARG := -Orecurse
 else
   MPARG :=
