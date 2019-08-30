@@ -22,11 +22,17 @@ make -C java check-format
 java -version
 cat /etc/os-release
 if java -version 2>&1 | grep -q '"1.8'; then
+  echo "Not Java version 8"
+else
+  echo "Java version 8"
   # Java version 8
   if grep -q Ubuntu /etc/os-release; then
     # Not Ubuntu
+    echo "Not Ubuntu"
     echo "setting SKIP_JAVADOC"
     SKIP_JAVADOC=1
+  else
+    echo "Ubuntu"
   fi
 fi
 echo SKIP_JAVADOC = $SKIP_JAVADOC
