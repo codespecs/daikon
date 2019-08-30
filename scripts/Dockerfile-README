@@ -18,7 +18,7 @@ Preliminaries:
 Create the Docker image:
 
 # Alias to create the Docker image, in an empty directory, and upload to Docker Hub.
-# Takes about 12 minutes for jdk8, about 1 hour for jdkany.
+# Takes about 12 minutes for jdk8, about 1 hour for jdk8-plus.
 alias create_upload_docker_image=' \
   rm -rf dockerdir && \
   mkdir -p dockerdir && \
@@ -34,7 +34,7 @@ export PROJECT=daikon
 create_upload_docker_image
 
 export OS=ubuntu
-export JDKVER=jdkany
+export JDKVER=jdk8-plus
 export PROJECT=daikon
 create_upload_docker_image
 
@@ -44,19 +44,19 @@ export PROJECT=daikon
 create_upload_docker_image
 
 export OS=fedora
-export JDKVER=jdkany
+export JDKVER=jdk8-plus
 export PROJECT=daikon
 create_upload_docker_image
 
-export OS=fedora24
-export JDKVER=jdk8
-export PROJECT=daikon
-create_upload_docker_image
-
-export OS=fedora24
-export JDKVER=jdkany
-export PROJECT=daikon
-create_upload_docker_image
+# export OS=fedora24
+# export JDKVER=jdk8
+# export PROJECT=daikon
+# create_upload_docker_image
+#
+# export OS=fedora24
+# export JDKVER=jdk8-plus
+# export PROJECT=daikon
+# create_upload_docker_image
 
 # export OS=fedora23
 # export JDKVER=jdk8
@@ -64,7 +64,7 @@ create_upload_docker_image
 # create_upload_docker_image
 #
 # export OS=fedora23
-# export JDKVER=jdkany
+# export JDKVER=jdk8-plus
 # export PROJECT=daikon
 # create_upload_docker_image
 
@@ -74,7 +74,7 @@ export PROJECT=daikon
 create_upload_docker_image
 
 export OS=centos
-export JDKVER=jdkany
+export JDKVER=jdk8-plus
 export PROJECT=daikon
 create_upload_docker_image
 
