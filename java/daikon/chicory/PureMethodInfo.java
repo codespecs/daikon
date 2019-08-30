@@ -58,7 +58,10 @@ public class PureMethodInfo extends DaikonVariableInfo {
 
   /** Invokes this pure method on the given parentVal. This is safe because the method is pure! */
   @Override
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({
+    "unchecked",
+    "deprecation" // in Java 9+, use canAccess instead of isAccessible
+  })
   public @Nullable Object getMyValFromParentVal(Object parentVal) {
     @SuppressWarnings("nullness") // not a class initializer, so meth != null
     @NonNull Method meth = (Method) minfo.member;
