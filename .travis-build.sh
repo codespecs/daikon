@@ -36,7 +36,7 @@ export SHELLOPTS
 if [[ "${GROUP}" == "quick-txt-diff" || "${GROUP}" == "all" ]]; then
   echo ".travis-build.sh is running quick-txt-diff tests"
   make dyncomp-jdk
-  MAKE_VERSION=$(shell make --version 2>&1 | head -1)
+  MAKE_VERSION=$(make --version 2>&1 | head -1)
   if [[ $MAKE_VERSION =~ "GNU Make 4" ]]; then
     MPARG_ARG="MPARG=-Otarget"
   fi
