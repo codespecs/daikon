@@ -25,7 +25,7 @@ jobs:
   quick-txt-diff-ubuntu-DUPLICATE:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-ubuntu-jdk8
 
     steps:
 
@@ -225,7 +225,7 @@ jobs:
   kvasir-fedora-old-docker-container:
 
     docker:
-      - image: mdernst/fedora-for-daikon-jdkany
+      - image: mdernst/daikon-fedora-jdk8-plus
 
     steps:
 
