@@ -19,5 +19,5 @@ echo ".travis-build.sh is running kvasir and DynComp tests"
 export -n SHELLOPTS
 make kvasir
 
-make -C tests/dyncomp-tests regression-tests
-make -C tests/kvasir-tests regression-tests
+make -C tests/dyncomp-tests --jobs=1 regression-tests
+make -C tests/kvasir-tests --jobs=1 regression-tests
