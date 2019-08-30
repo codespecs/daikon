@@ -98,7 +98,8 @@ jobs:
 - job: kvasir_fedora
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/daikon-fedora-jdk8-plus:latest
+#TODO:  container: mdernst/daikon-fedora-jdk8-plus:latest
+  container: mdernst/fedora-for-daikon-jdkany:latest
   steps:
   - checkout: self
     fetchDepth: 25

@@ -185,7 +185,9 @@ jobs:
   kvasir-fedora:
 
     docker:
-      - image: mdernst/daikon-fedora-jdk8-plus
+# TODO:
+#      - image: mdernst/daikon-fedora-jdk8-plus
+      - image: mdernst/fedora-for-daikon-jdkany
 
     steps:
 
