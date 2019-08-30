@@ -3094,6 +3094,7 @@ public final class DCRuntime {
 
     /** Gets the tag for this static reference. */
     @Override
+    @SuppressWarnings("deprecation") // in Java 9+, use canAccess instead of isAccessible
     public Object get_tag(Object parent, Object obj) {
 
       // assert parent == null && obj == null;
