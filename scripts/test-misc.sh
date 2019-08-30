@@ -20,22 +20,13 @@ make -C java check-format
 
 # Documentation
 if java -version 2>&1 | grep -q '"1.8'; then
-  echo "Java version 8"
   # Java version 8
-  if grep -q Ubuntu /etc/os-release; then
-    # echo "Ubuntu"
-    :
-  else
+  if ! grep -q Ubuntu /etc/os-release; then
     # Not Ubuntu
     SKIP_JAVADOC=1
   fi
-else
-  # echo "Not Java version 8"
-  :
 fi
-if [ -z ${SKIP_JAVADOC+x} ]; then
-  :
-else
+if [ ! -z ${SKIP_JAVADOC+x} ]; then
   echo Skipping javadoc because of https://bugs.openjdk.java.net/browse/JDK-8215542
   exit
 fi
