@@ -3656,6 +3656,24 @@ all times.
 @end enumerate
 
 
+@node       Troubleshooting Chicory
+@subsection Troubleshooting Chicory
+
+A message like
+
+@example
+Chicory warning: ClassFile: ... - classfile version (49) is out of date and may not be processed correctly.
+@example
+
+@noindent
+means that your program uses an old classfile format that is missing
+information that Chicory uses during instrumentation.  Chicory might work
+properly, or it might not.  You can eliminate the warning by re-compiling
+your program, using a @code{-target} command-line argument for a more
+recent version of Java.  (In the example above, classfile version
+49 corresponds to Java 5, which was released in 2004; Java 6 was released
+in 2006, and Java 8 was released in 2014.)
+
 
 @node    DynComp for Java
 @section DynComp dynamic comparability (abstract type) analysis for Java
