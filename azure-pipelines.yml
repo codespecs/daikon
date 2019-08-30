@@ -3,7 +3,7 @@ jobs:
 - job: quick_txt_diff_ubuntu
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/ubuntu-for-daikon-jdk8:latest
+  container: mdernst/daikon-ubuntu-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -13,7 +13,7 @@ jobs:
 - job: nonquick_txt_diff_ubuntu
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/ubuntu-for-daikon-jdk8:latest
+  container: mdernst/daikon-ubuntu-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -23,7 +23,7 @@ jobs:
 - job: non_txt_diff_ubuntu
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/ubuntu-for-daikon-jdk8:latest
+  container: mdernst/daikon-ubuntu-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -33,7 +33,7 @@ jobs:
 - job: misc_ubuntu
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/ubuntu-for-daikon-jdkany:latest
+  container: mdernst/daikon-ubuntu-jdkany:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -43,7 +43,7 @@ jobs:
 - job: kvasir_ubuntu
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/ubuntu-for-daikon-jdkany:latest
+  container: mdernst/daikon-ubuntu-jdkany:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -53,7 +53,7 @@ jobs:
 - job: quick_txt_diff_fedora
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/fedora-for-daikon-jdk8:latest
+  container: mdernst/daikon-fedora-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -63,7 +63,7 @@ jobs:
 - job: nonquick_txt_diff_fedora
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/fedora-for-daikon-jdk8:latest
+  container: mdernst/daikon-fedora-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -73,7 +73,7 @@ jobs:
 - job: non_txt_diff_fedora
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/fedora-for-daikon-jdk8:latest
+  container: mdernst/daikon-fedora-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -83,7 +83,7 @@ jobs:
 - job: misc_fedora
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/fedora-for-daikon-jdk8:latest
+  container: mdernst/daikon-fedora-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -98,7 +98,7 @@ jobs:
 - job: kvasir_fedora
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/fedora-for-daikon-jdkany:latest
+  container: mdernst/daikon-fedora-jdkany:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -108,7 +108,7 @@ jobs:
 - job: quick_txt_diff_centos
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/centos-for-daikon-jdk8:latest
+  container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -118,7 +118,7 @@ jobs:
 - job: nonquick_txt_diff_centos
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/centos-for-daikon-jdk8:latest
+  container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -128,7 +128,7 @@ jobs:
 - job: non_txt_diff_centos
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/centos-for-daikon-jdk8:latest
+  container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -138,7 +138,7 @@ jobs:
 - job: misc_centos
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/centos-for-daikon-jdk8:latest
+  container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -148,7 +148,7 @@ jobs:
 - job: kvasir_centos
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/centos-for-daikon-jdk8:latest
+  container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
