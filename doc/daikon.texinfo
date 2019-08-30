@@ -3213,6 +3213,7 @@ class files from any version of Java.
 @menu
 * Chicory options::
 * Static fields (global variables)::
+* Troubleshooting Chicory::
 @end menu
 
 @node       Chicory options
@@ -3663,7 +3664,7 @@ A message like
 
 @example
 Chicory warning: ClassFile: ... - classfile version (49) is out of date and may not be processed correctly.
-@example
+@end example
 
 @noindent
 means that your program uses an old classfile format that is missing
