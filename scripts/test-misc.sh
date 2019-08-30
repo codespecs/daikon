@@ -19,6 +19,20 @@ make -C java error-prone
 make -C java check-format
 
 # Documentation
+if java -version 2>&1 | grep -q '"1.8'; then
+  # Java version 8
+  if grep -q Ubuntu /etc/os-release; then
+    # Not Ubuntu
+    SKIP_JAVADOC=1
+  fi
+fi
+if [ -z ${SKIP_JAVADOC+x} ]; then
+  :
+else
+  echo Skipping javadoc because of https://bugs.openjdk.java.net/browse/JDK-8215542
+  exit
+fi
+
 make javadoc doc-all
 
 git -C /tmp/plume-scripts pull > /dev/null 2>&1 \
