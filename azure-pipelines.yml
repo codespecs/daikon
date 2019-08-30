@@ -158,7 +158,7 @@ jobs:
 - job: kvasir_centos
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/daikon-centos-jdk8:latest
+  container: mdernst/daikon-centos-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -168,7 +168,7 @@ jobs:
 - job: kvasir_centos_old_container
   pool:
     vmImage: 'ubuntu-16.04'
-  container: mdernst/centos-for-daikon-jdk8:latest
+  container: mdernst/centos-for-daikon-jdk8any:latest
   steps:
   - checkout: self
     fetchDepth: 25

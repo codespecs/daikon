@@ -307,7 +307,7 @@ jobs:
   kvasir-centos:
 
     docker:
-      - image: mdernst/daikon-centos-jdk8
+      - image: mdernst/daikon-centos-jdk8-plus
 
     steps:
 
