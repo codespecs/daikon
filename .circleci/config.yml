@@ -347,7 +347,7 @@ jobs:
   typecheck-with-included-CF:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-ubuntu-jdk8
 
     steps:
 
@@ -371,7 +371,7 @@ jobs:
   typecheck-with-locally-built-CF:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-ubuntu-jdk8
 
     steps:
 
@@ -392,7 +392,7 @@ jobs:
   dummy:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-ubuntu-jdk8
 
     steps:
 
