@@ -165,7 +165,7 @@ jobs:
   misc-fedora:
 
     docker:
-      - image: mdernst/daikon-fedora-jdk8-plus
+      - image: mdernst/daikon-fedora-jdk8
 
     steps:
 
@@ -285,7 +285,7 @@ jobs:
   misc-centos:
 
     docker:
-      - image: mdernst/daikon-centos-jdk8-plus
+      - image: mdernst/daikon-centos-jdk8
 
     steps:
 
