@@ -321,10 +321,13 @@ AssertionResult.AssertionResult(bool) ENTER/672: 19 EXIT0/672: 19
 AssertionResult.operator\_bool()\_const ENTER/669: 19 EXIT0/672: 19
 AssertionResult.~AssertionResult() ENTER/669: 19 EXIT0/669: 19
 DeathTestFactory.DeathTestFactory() ENTER/420: 1 EXIT0/420: 1
+DeathTestFactory.~DeathTestFactory() ENTER/420: 1 EXIT0/420: 1
 DefaultDeathTestFactory.DefaultDeathTestFactory() ENTER/420: 1 EXIT0/420: 1
 DefaultDeathTestFactory.~DefaultDeathTestFactory() ENTER/420: 1 EXIT0/420: 1
 DefaultGlobalTestPartResultReporter.DefaultGlobalTestPartResultReporter(testing::internal::UnitTestImpl*) ENTER/1428: 1 EXIT0/1428: 1
+DefaultGlobalTestPartResultReporter.~DefaultGlobalTestPartResultReporter() ENTER/690: 1 EXIT0/690: 1
 DefaultPerThreadTestPartResultReporter.DefaultPerThreadTestPartResultReporter(testing::internal::UnitTestImpl*) ENTER/1428: 1 EXIT0/1428: 1
+DefaultPerThreadTestPartResultReporter.~DefaultPerThreadTestPartResultReporter() ENTER/690: 1 EXIT0/690: 1
 FactorialTest_Negative_Test.FactorialTest_Negative_Test() ENTER/654: 1 EXIT0/654: 1
 FactorialTest_Negative_Test.TestBody() ENTER/654: 1 EXIT0/654: 1
 FactorialTest_Negative_Test.~FactorialTest_Negative_Test() ENTER/654: 1 EXIT0/654: 1
@@ -363,6 +366,7 @@ OsStackTraceGetter.OsStackTraceGetter() ENTER/444: 1 EXIT0/444: 1
 OsStackTraceGetter.UponLeavingGTest() ENTER/444: 34 EXIT0/444: 34
 OsStackTraceGetter.~OsStackTraceGetter() ENTER/444: 1 EXIT0/444: 1
 OsStackTraceGetterInterface.OsStackTraceGetterInterface() ENTER/420: 1 EXIT0/420: 1
+OsStackTraceGetterInterface.~OsStackTraceGetterInterface() ENTER/420: 1 EXIT0/420: 1
 ParameterizedTestCaseRegistry.ParameterizedTestCaseRegistry() ENTER/453: 1 EXIT0/453: 1
 ParameterizedTestCaseRegistry.RegisterTests() ENTER/453: 1 EXIT0/453: 1
 ParameterizedTestCaseRegistry.~ParameterizedTestCaseRegistry() ENTER/453: 1 EXIT0/453: 1
@@ -400,6 +404,7 @@ String.~String() ENTER/660: 167 EXIT0/660: 167
 Test.SetUpTestCase() ENTER/648: 2 EXIT0/648: 2
 Test.TearDownTestCase() ENTER/648: 2 EXIT0/648: 2
 Test.Test() ENTER/420: 6 EXIT0/420: 6
+Test.~Test() ENTER/420: 6 EXIT0/420: 6
 TestCase.AddTestInfo(testing::TestInfo*) ENTER/624: 6 EXIT0/624: 6
 TestCase.ClearResult() ENTER/525: 2 EXIT0/525: 2
 TestCase.ClearTestCaseResult(testing::TestCase*) ENTER/525: 2 EXIT0/525: 2
@@ -432,6 +437,7 @@ TestCaseNameIs.TestCaseNameIs(testing::internal::TestCaseNameIs\_const&) ENTER/4
 TestCaseNameIs.operator()(testing::TestCase\_const*)\_const ENTER/540: 7 EXIT0/543: 7
 TestCaseNameIs.~TestCaseNameIs() ENTER/429: 12 EXIT0/429: 12
 TestEventListener.TestEventListener() ENTER/420: 2 EXIT0/420: 2
+TestEventListener.~TestEventListener() ENTER/420: 2 EXIT0/420: 2
 TestEventListeners.Append(testing::TestEventListener*) ENTER/453: 1 EXIT0/453: 1
 TestEventListeners.Release(testing::TestEventListener*) ENTER/453: 1 EXIT0/459: 1
 TestEventListeners.SetDefaultResultPrinter(testing::TestEventListener*) ENTER/453: 1 EXIT0/453: 1
@@ -455,6 +461,7 @@ TestEventRepeater.Release(testing::TestEventListener*) ENTER/462: 1 EXIT0/468: 1
 TestEventRepeater.TestEventRepeater() ENTER/456: 1 EXIT0/456: 1
 TestEventRepeater.~TestEventRepeater() ENTER/456: 1 EXIT0/456: 1
 TestFactoryBase.TestFactoryBase() ENTER/654: 6 EXIT0/654: 6
+TestFactoryBase.~TestFactoryBase() ENTER/654: 6 EXIT0/654: 6
 TestFactoryImpl_FactorialTest_Negative_Test_.CreateTest() ENTER/654: 1 EXIT0/660: 1
 TestFactoryImpl_FactorialTest_Positive_Test_.CreateTest() ENTER/654: 1 EXIT0/660: 1
 TestFactoryImpl_FactorialTest_Zero_Test_.CreateTest() ENTER/654: 1 EXIT0/660: 1
@@ -471,6 +478,7 @@ TestInfo.test_case_name()\_const ENTER/513: 6 EXIT0/516: 6
 TestInfo.type_param()\_const ENTER/513: 6 EXIT0/516: 6
 TestInfo.~TestInfo() ENTER/513: 6 EXIT0/513: 6
 TestPartResultReporterInterface.TestPartResultReporterInterface() ENTER/420: 2 EXIT0/420: 2
+TestPartResultReporterInterface.~TestPartResultReporterInterface() ENTER/420: 2 EXIT0/420: 2
 TestResult.Clear() ENTER/510: 6 EXIT0/510: 6
 TestResult.Failed()\_const ENTER/510: 38 EXIT0/513: 38
 TestResult.HasFatalFailure()\_const ENTER/510: 13 EXIT0/513: 13
@@ -495,6 +503,7 @@ UnitTest.listeners() ENTER/708: 8 EXIT0/738: 8
 UnitTest.successful_test_count()\_const ENTER/708: 1 EXIT0/711: 1
 UnitTest.test_case_to_run_count()\_const ENTER/708: 2 EXIT0/711: 2
 UnitTest.test_to_run_count()\_const ENTER/708: 2 EXIT0/711: 2
+UnitTest.~UnitTest() ENTER/708: 1 EXIT0/708: 1
 UnitTestImpl.AddTestInfo(void\_(*)(),\_void\_(*)(),\_testing::TestInfo*) ENTER/1263: 6 EXIT0/1263: 6
 UnitTestImpl.ClearNonAdHocTestResult() ENTER/1152: 1 EXIT0/1152: 1
 UnitTestImpl.ConfigureStreamingOutput() ENTER/1152: 1 EXIT0/1152: 1
