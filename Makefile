@@ -198,8 +198,10 @@ else
 VALGRIND_ARCH := x86
 endif
 
+# TEMPORARY 2nd line is temporary while testing fix
 ../fjalar:
 	(cd .. && git clone ${GIT_OPTIONS} https://github.com/codespecs/fjalar.git fjalar)
+	(cd ../fjalar && git co fix-inlining)
 
 fjalar/valgrind/Makefile.am:
 	# If fjalar/valgrind/Makefile.am does not exist, then this must be a fresh
