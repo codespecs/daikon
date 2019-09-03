@@ -376,10 +376,9 @@ workflows:
       - misc-fedora:
           requires:
             - misc-ubuntu
-## TODO
-       - kvasir-fedora-new-docker-container:
-           requires:
-             - kvasir-ubuntu
+      - kvasir-fedora-new-docker-container:
+          requires:
+            - kvasir-ubuntu
       - kvasir-fedora-old-docker-container:
           requires:
             - kvasir-ubuntu
