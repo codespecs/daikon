@@ -137,6 +137,9 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 				) \
 			)
 
+show-os:
+	@echo $(OS_ID) $(OS_REL)
+
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1
 DTRACE_EXT := .dtrace.gz
