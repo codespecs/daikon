@@ -98,14 +98,6 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
 
 REPOSITORY := https://github.com/codespecs/daikon.git
 
-## These seem to be used only by the test-staged-dist target.
-# It would be nicer to automatically set JAVA_HOME, or to not need it to be set.
-ifndef JAVA_HOME
-$(error JAVA_HOME is not set)
-endif
-RTJAR := $(JAVA_HOME)/jre/lib/rt.jar
-TOOLSJAR := $(JAVA_HOME)/lib/tools.jar
-
 RSYNC_AR := rsync -aR
 
 GIT_OPTIONS ?=
@@ -387,7 +379,6 @@ repository-test:
 	git clone $(REPOSITORY) daikon
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
-	export JAVA_HOME=/usr/lib/jvm/java
 #	source ${DAIKONDIR}/scripts/daikon.bashrc
 	cd daikon && make
 

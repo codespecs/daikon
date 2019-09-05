@@ -60,11 +60,12 @@ else
 endif
 
 ## Add tools.jar and rt.jar, if they exist
-ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
-  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/tools.jar
+INFERRED_JAVA_HOME=${JAVA_HOME:-`dirname $(dirname $(readlink -f $(which javac)))`}
+ifneq "$(wildcard ${INFERRED_JAVA_HOME}/lib/tools.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${INFERRED_JAVA_HOME}/lib/tools.jar
 endif
-ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
-  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/jre/lib/rt.jar
+ifneq "$(wildcard ${INFERRED_JAVA_HOME}/jre/lib/rt.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${INFERRED_JAVA_HOME}/jre/lib/rt.jar
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
@@ -454,7 +455,7 @@ daikon/chicory/inv_out.diff : ChicoryPremain.jar
 #
 INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
-ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
+ORIG_RT ?= $(INFERRED_JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(DAIKON_CLASSPATH)
 
@@ -1133,6 +1134,7 @@ showvars:
 	@echo PATH = $(PATH)
 
 	@echo JAVA_HOME = $(JAVA_HOME)
+	@echo INFERRED_JAVA_HOME = $(INFERRED_JAVA_HOME)
 	which java
 	which javac
 	@echo JAVA = ${JAVA}

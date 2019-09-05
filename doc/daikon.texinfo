@@ -311,19 +311,8 @@ Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
 export DAIKONDIR=@var{daikonparent}/daikon-5.7.4
-# The absolute pathname of the directory that contains the Java JDK
-export JAVA_HOME=@var{/usr/lib/jvm/java}
 # source $DAIKONDIR/scripts/daikon.bashrc
 @end example
-
-A setting of @env{JAVA_HOME} that @emph{sometimes} works (it might not
-because @command{java} might be the version in the JDK or in the JRE) is:
-
-@exampleindent 0
-@smallexample
-export JAVA_HOME=$@{JAVA_HOME:-$(dirname $(dirname $(dirname $(readlink -f $(/usr/bin/which java)))))@}
-@end smallexample
-@exampleindent 1
 
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
@@ -3951,18 +3940,9 @@ instrumented copy of the JDK@.  Use the following command:
 make -C $DAIKONDIR/java dcomp_rt.jar
 @end example
 
-Make sure the @env{JAVA_HOME} environment variable is set to the directory
-containing your JDK@.  This command instruments the classes in the
+This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
-
-On Mac OS, you might do:
-
-@exampleindent 0
-@example
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_122.jdk/Home
-@end example
-@exampleindent 4
 
 @noindent
 Building @file{dcomp_rt} requires 10-30 minutes to complete and uses 1024 MB of

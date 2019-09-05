@@ -1,9 +1,6 @@
 ## daikon.bashrc
 ## Daikon initialization file for Bourne shell (bash) users.
 
-## Wherever you source this file, you should set two environment variables:
-##   JAVA_HOME      absolute pathname of the directory containing the JDK
-##                  (or "none" if you don't have it)
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
 ##        files, instead of the default, which is to use daikon.jar.  This is
@@ -11,13 +8,9 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-if [ -z "$JAVA_HOME" ]; then
-  echo "JAVA_HOME environment variable is not set."
-  echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
-  return 2
-elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
-  echo "JAVA_HOME is set to non-existent directory: $JAVA_HOME"
-  echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
+INFERRED_JAVA_HOME=${JAVA_HOME:-`dirname $(dirname $(readlink -f $(which javac)))`}
+if [ ! -d "$INFERRED_JAVA_HOME" ]; then
+  echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
   return 2
 fi
 
@@ -54,7 +47,7 @@ if [ -z "$PLUMESCRIPTS" ]; then
   export PLUMESCRIPTS=${DAIKONDIR}/utils/plume-scripts
 fi
 
-JAVALIB_CLASSPATH=${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
+JAVALIB_CLASSPATH=${INFERRED_JAVA_HOME}/jre/lib/rt.jar:${INFERRED_JAVA_HOME}/lib/tools.jar
 DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVALIB_CLASSPATH}
 # Avoid warnings about non-existent elements on classpath
 if [ -d ${DAIKONDIR}/java ]; then
@@ -62,7 +55,7 @@ if [ -d ${DAIKONDIR}/java ]; then
 fi
 export DAIKON_CLASSPATH
 
-export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:$JAVA_HOME/bin:$PATH
+export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${INFERRED_JAVA_HOME}/bin:$PATH
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERL5LIB ]; then

@@ -184,14 +184,15 @@ CP_PARENTS := rsync -aR
 
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
 # they are on the path.
+INFERRED_JAVA_HOME=${JAVA_HOME:-`dirname $(dirname $(readlink -f $(which javac)))`}
 ifeq (darwin, $(OSTYPE))
   JAVA  := java
   JAVAC := javac
 else
-  JAVA  := $(JAVA_HOME)/bin/java
-  JAVAC := $(JAVA_HOME)/bin/javac
+  JAVA  := $(INFERRED_JAVA_HOME)/bin/java
+  JAVAC := $(INFERRED_JAVA_HOME)/bin/javac
 endif
-JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
+JAVALIB_CLASSPATH := $(INFERRED_JAVA_HOME)/jre/lib/rt.jar:$(INFERRED_JAVA_HOME)/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
@@ -1324,6 +1325,7 @@ showvars:
 	@echo "CWD                 =" ${CWD}
 
 	@echo "JAVA_HOME           =" ${JAVA_HOME}
+	@echo "INFERRED_JAVA_HOME  =" ${INFERRED_JAVA_HOME}
 	@echo "RUN_JAVA            =" ${RUN_JAVA}
 	@echo "java version:"
 	@${RUN_JAVA} -version

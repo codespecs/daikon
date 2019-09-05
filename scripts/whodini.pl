@@ -17,8 +17,6 @@ use File::Copy;
 use File::Path;
 use POSIX qw(tmpnam);
 
-$ENV{"JAVA_HOME"} = "/g2/jdk";
-
 my $escjava_executable = "/g4/projects/invariants/tools/escjava/current/bin/escjava";
 
 # Algorithm for this script:
