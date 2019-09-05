@@ -357,15 +357,15 @@ public class DtraceDiff {
               : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
           throw new DiffError(
               String.format(
-                  "ppt %s (%s at line %d) is missing at end of %s",
-                  state2.ppt.name(), dtracefile2, state2.get_linenum(), dtracefile1));
+                  "ppt %s is at line %d in %s but is missing at end of %s",
+                  state2.ppt.name(), state2.get_linenum(), dtracefile2, dtracefile1));
         } else {
           assert state1.ppt != null
               : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
           throw new DiffError(
               String.format(
-                  "ppt %s (%s at line %d) is missing at end of %s",
-                  state1.ppt.name(), dtracefile1, state1.get_linenum(), dtracefile2));
+                  "ppt %s is at line %d in %s but is missing at end of %s",
+                  state1.ppt.name(), state1.get_linenum(), dtracefile1, dtracefile2));
         }
       }
     } catch (IOException e) {
