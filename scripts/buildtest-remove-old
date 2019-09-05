@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# Used by the cron job that runs as user daikonbuildtest
-# Removes all build subdirectories older than 5 days
-
-cd $HOME/build
-find . -name "[[:digit:]]*" -type d -maxdepth 1 -mtime +5 -exec rm -r {} \;
-
-
