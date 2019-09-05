@@ -373,26 +373,6 @@ jobs:
           command: scripts/test-typecheck.sh
           no_output_timeout: 30m
 
-  dummy:
-
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk8
-
-    steps:
-
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-
-      - run: echo "dummy"
-
   trigger-downstream:
 
     docker:
@@ -422,6 +402,7 @@ jobs:
       #       fi
       #
       #     fi
+
 
 workflows:
   version: 2
@@ -465,7 +446,6 @@ workflows:
             - misc-ubuntu
 #      - typecheck-with-included-CF
       - typecheck-with-locally-built-CF
-      - dummy
       - trigger-downstream:
           requires:
             - quick-txt-diff-ubuntu
@@ -484,4 +464,3 @@ workflows:
             - misc-centos
 #            - typecheck-with-included-CF
             - typecheck-with-locally-built-CF
-            - dummy
