@@ -1134,7 +1134,9 @@ showvars:
 
 	@echo JAVA_HOME = $(JAVA_HOME)
 	which java
+	java -version
 	which javac
+	javac -version
 	@echo JAVA = ${JAVA}
 	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}

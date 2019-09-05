@@ -366,7 +366,9 @@ jobs:
           export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`}
           make showvars
           make compile daikon.jar
-          make -C java typecheck
+      - run:
+          command: export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`} && make -C java typecheck
+          no_output_timeout: 30m
 
   typecheck-with-locally-built-CF:
 
@@ -387,7 +389,9 @@ jobs:
             - ".git"
 
       - run: env
-      - run: scripts/test-typecheck.sh
+      - run:
+          command: scripts/test-typecheck.sh
+          no_output_timeout: 30m
 
   dummy:
 
