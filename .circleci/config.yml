@@ -202,25 +202,25 @@ jobs:
 
       - run: ./scripts/test-kvasir.sh
 
-  kvasir-fedora-old-docker-container:
+# kvasir-fedora-old-docker-container:
 
-    docker:
-      - image: mdernst/fedora-for-daikon-jdkany
+#   docker:
+#     - image: mdernst/fedora-for-daikon-jdkany
 
-    steps:
+#   steps:
 
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+#     - restore_cache:
+#         keys:
+#           - source-v1-{{ .Branch }}-{{ .Revision }}
+#           - source-v1-{{ .Branch }}-
+#           - source-v1-
+#     - checkout
+#     - save_cache:
+#         key: source-v1-{{ .Branch }}-{{ .Revision }}
+#         paths:
+#           - ".git"
 
-      - run: ./scripts/test-kvasir.sh
+#     - run: ./scripts/test-kvasir.sh
 
   quick-txt-diff-centos:
 

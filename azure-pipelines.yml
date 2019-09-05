@@ -90,7 +90,6 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-## TODO
 - job: kvasir_fedora_new_docker_container
   pool:
     vmImage: 'ubuntu-16.04'
@@ -101,15 +100,15 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: kvasir_fedora_old_docker_container
-  pool:
-    vmImage: 'ubuntu-16.04'
-  container: mdernst/fedora-for-daikon-jdkany:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-kvasir.sh
-    displayName: test-kvasir.sh
+#- job: kvasir_fedora_old_docker_container
+#  pool:
+#    vmImage: 'ubuntu-16.04'
+#  container: mdernst/fedora-for-daikon-jdkany:latest
+#  steps:
+#  - checkout: self
+#    fetchDepth: 25
+#  - bash: ./scripts/test-kvasir.sh
+#    displayName: test-kvasir.sh
 
 - job: quick_txt_diff_centos
   pool:
