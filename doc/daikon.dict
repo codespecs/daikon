@@ -11,6 +11,7 @@ arity
 Athlon
 Automata
 basename
+bashrc
 BCEL
 BIBDIR
 biconditional
@@ -23,6 +24,7 @@ CentOS
 changeset
 checkin
 checkins
+checklink
 classpath
 codebase
 codespecs
@@ -35,7 +37,7 @@ CSE
 customizable
 customizations
 CVS
-cygwin
+Cygwin
 daikon
 Daikon
 Daikon's
@@ -64,6 +66,7 @@ FileIOProgress
 fjalar
 Fjalar
 Fjalar's
+gcc
 getters
 gdb
 GitHub

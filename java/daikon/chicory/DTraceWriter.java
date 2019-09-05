@@ -275,6 +275,7 @@ public class DTraceWriter extends DaikonWriter {
    *     a type which contains the field classField.
    * @return the value of the classField field in theObj
    */
+  @SuppressWarnings("deprecation") // in Java 9+, use canAccess instead of isAccessible
   public static Object getValue(Field classField, Object theObj) {
     // if we don't have a real object, return NonsensicalValue
     if ((theObj == null) || (theObj instanceof NonsensicalObject)) {
@@ -313,6 +314,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /** Similar to {@link DTraceWriter#getValue}, but used for static fields. */
+  @SuppressWarnings("deprecation") // in Java 9+, use canAccess instead of isAccessible
   public static Object getStaticValue(Field classField) {
     if (!classField.isAccessible()) classField.setAccessible(true);
 

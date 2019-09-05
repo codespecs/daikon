@@ -208,9 +208,7 @@ public class DynComp {
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s\n", path_separator);
-    if (path_separator == null) {
-      path_separator = ";"; // should work for windows at least...
-    } else if (!RegexUtil.isRegex(path_separator)) {
+    if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.BugInDaikon(
           "Bad regexp "
               + path_separator

@@ -14,43 +14,12 @@ HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 
 USER ?= daikonbuild
 
-#
-# Do some basic configuration checking:
-#  - Make sure uname and OSTYPE match up
-#  - On Windows, make sure that find is the Unix find and not the Windows find
-#
-ifeq (cygwin,$(OSTYPE))
-else
-  UNAME := $(shell uname)
-  ifeq (CYGWIN,$(findstring CYGWIN,$(UNAME)))
-    # OSTYPE is a bash variable, not an environment variable.  Set it if necessary
-    OSTYPE := cygwin
-  endif
-endif
-ifeq (cygwin,$(OSTYPE))
-  FIND_VERSION := $(shell find -version)
-  ifneq (GNU,$(findstring GNU,$(FIND_VERSION)))
-    $(error the find command in the path must be the Linux(GNU) find $(FIND_VERSION))
-  endif
-endif
-
+JAVA ?= java -ea
 # For debugging, add -verbose flag to javac command
-
-# To run doclint, do
-#   JAVADOC="~/research/types/jsr308-langtools/dist/bin/javadoc -Xdoclint:all,-missing" make javadoc
-# But doclint is enabled by default starting with Java 8.
-ifeq (cygwin, $(OSTYPE))
-  JAVA ?= ${PLUMESCRIPTS}/java-cygwin -ea
-  JAVAC ?= ${PLUMESCRIPTS}/javac-cygwin
-  JAVADOC ?= ${PLUMESCRIPTS}/javadoc-cygwin
-  JAR ?= ${JAVA_HOME}/bin/jar
-else
-  JAVA ?= java -ea
-  # JAVAC ?= javac -g -Xlint:unchecked
-  JAVAC ?= javac
-  JAVADOC ?= javadoc
-  JAR ?= jar
-endif
+# JAVAC ?= javac -g -Xlint:unchecked
+JAVAC ?= javac
+JAVADOC ?= javadoc
+JAR ?= jar
 
 # Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
@@ -60,6 +29,7 @@ INSTALL ?= /usr/bin/install
 
 ifdef CHECKERFRAMEWORK
   CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+  CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
   CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK}/checker/resources/javadoc.astub
 endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
@@ -98,7 +68,7 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
-DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.5.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.4.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.3.jar:${DAIKON_CLASSPATH}
+DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.10.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.5.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.4.jar:${DAIKON_CLASSPATH}
 
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -654,11 +624,13 @@ very-clean: clean clean-generated-files
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
 
-ETAGS_EXISTS := $(shell command -v etags 2> /dev/null)
+ifneq (,$(shell which etags))
+## The etags program exists
 ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
 ETAGS := etags --language-force=java
 else
 ETAGS := etags --language=java
+endif
 endif
 
 TAGS:	tags
@@ -738,7 +710,7 @@ findbugs: .findbugs-output
 	$(MAKE) findbugs-nocompile
 
 # WARNING: This does not use the class files, but the .jar file.
-# So make sure it's up to date before using this
+# So make sure it's up to date before using this.
 # WARNING: I don't think this will work unless you're logged on as Michael Ernst.
 findbugs-nocompile:
 	rm -f .findbugs-output
@@ -801,7 +773,7 @@ endif
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 8 rather than version 9).
 # JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
-CHECKER_ARGS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar ${JAVACHECK_EXTRA_ARGS}
+CHECKER_ARGS ?= -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC} -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar ${JAVACHECK_EXTRA_ARGS}
 
 ## All of the following targets need to depend on "compile".
 
@@ -849,11 +821,8 @@ show_nullness_java_files:
 	@echo DAIKON_JAVA_FILES:
 	@echo ${DAIKON_JAVA_FILES}
 
-## Reinstate prototype and vindex checkers later.
-# check-all: check-formatter check-interning check-nullness check-regex check-signature check-prototype check-vindex
-## check-regex-qual target runs extremely slowly.
-# check-all: check-formatter check-interning check-nullness check-regex check-regex-qual check-signature
-check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock check-index
+## Reinstate these dependencies later:  check-prototype check-vindex
+check-all: check-formatter check-index check-interning check-lock check-nullness check-regex check-signature
 typecheck: check-all
 
 check-index: ${INDEX_JAVA_FILES} compile
@@ -1128,14 +1097,6 @@ requireJavadocPrivate: $(JAVA_FILES)
 	@rm -f javadoc-files.txt
 
 
-## This doesn't seem necessary any more
-# javadoc-lookup: doc-javadoc-lookup
-#
-# ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
-# doc-javadoc-lookup: api
-# 	find api -name '*.html' | xargs -n 100 ${PLUMESCRIPTS}/jdk-add-munged-anchor-names
-# 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
-
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
@@ -1167,30 +1128,39 @@ daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
 ###
 
 showvars:
-	which java
-	which javac
 	@echo PWD = $(shell pwd)
-	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
-	@echo CLASSPATH = "${CLASSPATH}"
-	@echo DAIKON_CLASSPATH = "${DAIKON_CLASSPATH}"
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
-	@echo DAIKONDIR = "${DAIKONDIR}"
-	@echo DAIKONSCRIPTS = ${DAIKONSCRIPTS}
-	@echo PLUMESCRIPTS = ${PLUMESCRIPTS}
-	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
+
+	@echo JAVA_HOME = $(JAVA_HOME)
+	which java
+	which javac
 	@echo JAVA = ${JAVA}
 	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
+
+	@echo CLASSPATH = "${CLASSPATH}"
+	@echo DAIKON_CLASSPATH = "${DAIKON_CLASSPATH}"
+
+	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
+	@echo DAIKONDIR = "${DAIKONDIR}"
+	@echo DAIKONSCRIPTS = ${DAIKONSCRIPTS}
+	@echo PLUMESCRIPTS = ${PLUMESCRIPTS}
+	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo JAVA_FILES_FOR_STYLE = $(JAVA_FILES_FOR_STYLE)
 	@echo JAVA_FILES_FOR_FORMAT = $(JAVA_FILES_FOR_FORMAT)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
 	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)
-	@echo JAVA_HOME = $(JAVA_HOME)
+
+	@echo CHECKERFRAMEWORK = $(CHECKERFRAMEWORK)
+	@echo CHECKERFRAMEWORK_JAR_DIR = $(CHECKERFRAMEWORK_JAR_DIR)
+	@echo CHECKERFRAMEWORK_JAVAC = $(CHECKERFRAMEWORK_JAVAC)
+	@echo CHECKERFRAMEWORK_JAVADOC_ASTUB = $(CHECKERFRAMEWORK_JAVADOC_ASTUB)
+
 
 dump: showvars
 

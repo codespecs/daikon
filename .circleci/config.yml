@@ -5,7 +5,7 @@ jobs:
   quick-txt-diff-ubuntu:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-ubuntu-jdk8
 
     steps:
 
@@ -25,7 +25,7 @@ jobs:
   nonquick-txt-diff-ubuntu:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-ubuntu-jdk8
 
     steps:
 
@@ -45,7 +45,7 @@ jobs:
   non-txt-diff-ubuntu:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-ubuntu-jdk8
 
     steps:
 
@@ -65,7 +65,7 @@ jobs:
   misc-ubuntu:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/daikon-ubuntu-jdk8-plus
 
     steps:
 
@@ -85,7 +85,7 @@ jobs:
   kvasir-ubuntu:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/daikon-ubuntu-jdk8-plus
 
     steps:
 
@@ -105,7 +105,7 @@ jobs:
   quick-txt-diff-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-fedora-jdk8
 
     steps:
 
@@ -125,7 +125,7 @@ jobs:
   nonquick-txt-diff-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-fedora-jdk8
 
     steps:
 
@@ -145,7 +145,7 @@ jobs:
   non-txt-diff-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-fedora-jdk8
 
     steps:
 
@@ -165,7 +165,7 @@ jobs:
   misc-fedora:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/daikon-fedora-jdk8
 
     steps:
 
@@ -182,10 +182,30 @@ jobs:
 
       - run: ./scripts/test-misc.sh
 
-  kvasir-fedora:
+  kvasir-fedora-new-docker-container:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/daikon-fedora-jdk8-plus
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-kvasir.sh
+
+  kvasir-fedora-old-docker-container:
+
+    docker:
+      - image: mdernst/fedora-for-daikon-jdkany
 
     steps:
 
@@ -205,7 +225,7 @@ jobs:
   quick-txt-diff-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-centos-jdk8
 
     steps:
 
@@ -225,7 +245,7 @@ jobs:
   nonquick-txt-diff-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-centos-jdk8
 
     steps:
 
@@ -245,7 +265,7 @@ jobs:
   non-txt-diff-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdk8
+      - image: mdernst/daikon-centos-jdk8
 
     steps:
 
@@ -265,7 +285,7 @@ jobs:
   misc-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/daikon-centos-jdk8
 
     steps:
 
@@ -287,7 +307,7 @@ jobs:
   kvasir-centos:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/daikon-centos-jdk8-plus
 
     steps:
 
@@ -307,7 +327,7 @@ jobs:
   trigger-downstream:
 
     docker:
-      - image: mdernst/ubuntu-for-daikon-jdkany
+      - image: mdernst/daikon-ubuntu-jdk8-plus
 
     steps:
       - run: echo "TODO implement trigger-downstream"
@@ -353,7 +373,11 @@ workflows:
       - misc-fedora:
           requires:
             - misc-ubuntu
-      - kvasir-fedora:
+## TODO
+#       - kvasir-fedora-new-docker-container:
+#           requires:
+#             - kvasir-ubuntu
+      - kvasir-fedora-old-docker-container:
           requires:
             - kvasir-ubuntu
       - quick-txt-diff-centos:
@@ -379,7 +403,7 @@ workflows:
             - nonquick-txt-diff-fedora
             - non-txt-diff-fedora
             - misc-fedora
-            - kvasir-fedora
+            - kvasir-fedora-old-docker-container
             - quick-txt-diff-centos
             - nonquick-txt-diff-centos
             - non-txt-diff-centos
