@@ -74,7 +74,7 @@ public final class Runtime {
   // This section is lifted from plume/UtilPlume.java and should be kept
   // in synch with that version.
 
-  private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<String, String>(8);
+  private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<>(8);
 
   static {
     primitiveClassesFromJvm.put("Z", "boolean");

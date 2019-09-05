@@ -8,7 +8,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
@@ -117,26 +116,21 @@ public final class ValueTuple implements Cloneable {
 
   @Pure
   boolean isMissingNonsensical(
-      @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this,
-      int value_index) {
+      @UnknownInitialization(ValueTuple.class) ValueTuple this, int value_index) {
     return mods[value_index] == MISSING_NONSENSICAL;
   }
 
-  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // dependent property
-  @EnsuresNonNullIf(result = false, expression = "this.vals[#1]")
   @Pure
-  boolean isMissingFlow(
-      @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this,
-      int value_index) {
+  boolean isMissingFlow(@UnknownInitialization(ValueTuple.class) ValueTuple this, int value_index) {
     return mods[value_index] == MISSING_FLOW;
   }
 
-  @SuppressWarnings("nullness") // postcondition: array expression
+  @SuppressWarnings(
+      "nullness:contracts.conditional.postcondition.not.satisfied") // dependent: vals[i] is
+  // non-null if mods[i] != MISSING_*
   @EnsuresNonNullIf(result = false, expression = "vals[#1]")
   @Pure
-  boolean isMissing(
-      @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this,
-      int value_index) {
+  boolean isMissing(@UnknownInitialization(ValueTuple.class) ValueTuple this, int value_index) {
     return (isMissingNonsensical(value_index) || isMissingFlow(value_index));
   }
 
@@ -322,8 +316,7 @@ public final class ValueTuple implements Cloneable {
     return result;
   }
 
-  public void checkRep(
-      @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this) {
+  public void checkRep(@UnknownInitialization(ValueTuple.class) ValueTuple this) {
     assert vals.length == mods.length;
     for (int i = 0; i < vals.length; i++) {
       assert 0 <= mods[i] && mods[i] < MODBIT_VALUES
@@ -365,7 +358,6 @@ public final class ValueTuple implements Cloneable {
    * ValueTuple, fills it in with derived variables, and only then interns it; the alternative would
    * be for derived variables to take separate vals and mods arguments. No one else should use it!
    */
-  @SuppressWarnings("interning") // interning constructor
   public static ValueTuple makeUninterned(@Nullable Object[] vals, int[] mods) {
     return new ValueTuple(vals, mods, false);
   }
@@ -387,7 +379,9 @@ public final class ValueTuple implements Cloneable {
   @Pure
   @Override
   public boolean equals(@GuardSatisfied ValueTuple this, @GuardSatisfied @Nullable Object obj) {
-    if (!(obj instanceof ValueTuple)) return false;
+    if (!(obj instanceof ValueTuple)) {
+      return false;
+    }
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);
   }
@@ -482,7 +476,9 @@ public final class ValueTuple implements Cloneable {
   }
 
   public static String valToString(@Nullable Object val) {
-    if (val == null) return "null";
+    if (val == null) {
+      return "null";
+    }
     if (val instanceof long[]) {
       return (Arrays.toString((long[]) val));
     } else if (val instanceof int[]) {

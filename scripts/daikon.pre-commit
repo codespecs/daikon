@@ -16,11 +16,23 @@ fi
 # This is to handle non-.java files, since the above already handled .java files.
 # May need to remove files that are allowed to have trailing whitespace or are
 # not text files.
-CHANGED_FILES=`git diff --staged --name-only --diff-filter=ACM | grep -v '.class$' | grep -v '.gz$' | grep -v '.jar$' | grep -v '.png$' | grep -v '.txt-chicory.goal$' | grep -v '.txt-jaif.goal$' | grep -v '.txt-merge-esc.goal$' | grep -v '.txt-merge-jml.goal$' | grep -v '.xcf$' | grep -v '/api/' | grep -v '/.git/' | grep -v examples/c-examples  | grep -v kvasir-tests` || true
+CHANGED_FILES=`git diff --staged --name-only --diff-filter=ACM | grep -v '.class$' | grep -v '.gz$' | grep -v '.jar$' | grep -v '.png$' | grep -v '.txt-chicory.goal$' | grep -v '.txt-jaif.goal$' | grep -v '.txt-merge-esc.goal$' | grep -v '.txt-merge-jml.goal$' | grep -v '.xcf$' | grep -v '/api/' | grep -v '/.git/' | grep -v examples/c-examples | grep -v kvasir-tests | grep -v 'java/jtb/'` || true
 if [ ! -z "$CHANGED_FILES" ]; then
     # echo "CHANGED_FILES: ${CHANGED_FILES}"
     FILES_WITH_TRAILING_SPACES=`grep -l -s '[[:blank:]]$' ${CHANGED_FILES} 2>&1` || true
     if [ ! -z "$FILES_WITH_TRAILING_SPACES" ]; then
         echo "Some files have trailing whitespace: ${FILES_WITH_TRAILING_SPACES}" && exit 1
     fi
+fi
+
+if command -v circleci 2>/dev/null; then
+## From https://circleci.com/blog/circleci-hacks-validate-circleci-config-on-every-commit-with-a-git-hook/
+# The following line is needed by the CircleCI Local Build Tool (due to Docker interactivity)
+exec < /dev/tty
+# If validation fails, tell Git to stop and provide error message. Otherwise, continue.
+if ! eMSG=$(circleci config validate -c .circleci/config.yml); then
+	echo "CircleCI configuration failed validation."
+	echo $eMSG
+	exit 1
+fi
 fi

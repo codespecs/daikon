@@ -97,7 +97,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   static VarComparabilityImplicit parse(String rep, @Nullable ProglangType vartype) {
     // String rep_ = rep;          // for debugging
 
-    List<String> dim_reps = new ArrayList<String>();
+    List<String> dim_reps = new ArrayList<>();
     // handle array types
     while (rep.endsWith("]")) {
       int openpos = rep.lastIndexOf("[");
@@ -161,13 +161,17 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     }
   }
 
-  @SuppressWarnings("purity") // Override the purity checker
+  @SuppressWarnings("all:purity") // Override the purity checker
   @Pure
   static boolean comparable(
       @GuardSatisfied VarComparabilityImplicit type1,
       @GuardSatisfied VarComparabilityImplicit type2) {
-    if (type1.alwaysComparable()) return true;
-    if (type2.alwaysComparable()) return true;
+    if (type1.alwaysComparable()) {
+      return true;
+    }
+    if (type2.alwaysComparable()) {
+      return true;
+    }
     if ((type1.dimensions > 0) && (type2.dimensions > 0)) {
       // Both are arrays
       return (comparable(

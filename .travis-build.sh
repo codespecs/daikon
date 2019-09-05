@@ -36,7 +36,11 @@ export SHELLOPTS
 if [[ "${GROUP}" == "quick-txt-diff" || "${GROUP}" == "all" ]]; then
   echo ".travis-build.sh is running quick-txt-diff tests"
   make dyncomp-jdk
-  make -C tests MPARG=-Otarget quick-txt-diff results
+  MAKE_VERSION=$(make --version 2>&1 | head -1)
+  if [[ $MAKE_VERSION =~ "GNU Make 4" ]]; then
+    MPARG_ARG="MPARG=-Otarget"
+  fi
+  make -C tests $MPARG_ARG quick-txt-diff results
 fi
 
 if [[ "${GROUP}" == "nonquick-txt-diff" || "${GROUP}" == "all" ]]; then
@@ -64,16 +68,14 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   # Documentation
   make javadoc doc-all
 
-  # $TRAVIS_COMMIT_RANGE is empty for builds triggered by the initial commit of a new branch.
-  if [ -n "$TRAVIS_COMMIT_RANGE" ] ; then
-    # Until https://github.com/travis-ci/travis-ci/issues/4596 is fixed, $TRAVIS_COMMIT_RANGE is a
-    # good argument to `git diff` but a bad argument to `git log` (they interpret "..." differently!).
-    (git diff $TRAVIS_COMMIT_RANGE > /tmp/diff.txt 2>&1) || true
-    (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
-    [ -s /tmp/diff.txt ] || ([[ "${TRAVIS_BRANCH}" != "master" && "${TRAVIS_EVENT_TYPE}" == "push" ]] || (echo "/tmp/diff.txt is empty; try pulling base branch into compare branch" && false))
-    wget https://raw.githubusercontent.com/plume-lib/plume-scripts/master/lint-diff.py
-    python lint-diff.py --strip-diff=2 --strip-lint=1 /tmp/diff.txt /tmp/warnings.txt
-  fi
+  git -C /tmp/plume-scripts pull > /dev/null 2>&1 \
+    || git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
+  eval `/tmp/plume-scripts/ci-info DEFAULT-ORGANIZATION`
+  # if [ "$CI_IS_PR" == "true" ] ; then
+  (git diff $CI_COMMIT_RANGE > /tmp/diff.txt 2>&1) || true
+  (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
+  [ -s /tmp/diff.txt ] || (echo "/tmp/diff.txt is empty; try pulling base branch (often master) into compare branch (often feature branch)" && false)
+  python /tmp/plume-scripts/lint-diff.py --strip-diff=2 --strip-lint=1 /tmp/diff.txt /tmp/warnings.txt
 fi
 
 if [[ "${GROUP}" == "kvasir" || "${GROUP}" == "all" ]]; then

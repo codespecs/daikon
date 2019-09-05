@@ -98,16 +98,24 @@ public class Operand {
   }
 
   static boolean isRegister(String s) {
-    if (is8BitReg(s)) return true;
-    if (is16BitReg(s)) return true;
-    if (isExtendedReg(s)) return true;
-    if (isFPUReg(s)) return true;
+    if (is8BitReg(s)) {
+      return true;
+    }
+    if (is16BitReg(s)) {
+      return true;
+    }
+    if (isExtendedReg(s)) {
+      return true;
+    }
+    if (isFPUReg(s)) {
+      return true;
+    }
     return false;
   }
 
   static List<String> getExtendedRegisters(String expr) {
     Matcher m = registers32BitRegExp.matcher(expr);
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
     while (m.find()) {
       result.add(m.group());
     }
@@ -125,7 +133,9 @@ public class Operand {
   // Looks something like [32991844+]
   static boolean isDerefdNumber(String s) {
 
-    if (!isDeref(s)) return false;
+    if (!isDeref(s)) {
+      return false;
+    }
 
     String withoutBrackets = s.substring(1, s.length() - 1);
     // TODO a regexp would be more succint.

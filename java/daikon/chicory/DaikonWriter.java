@@ -7,7 +7,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import org.checkerframework.checker.signature.qual.BinaryName;
-import org.plumelib.signature.Signatures;
+import org.plumelib.reflection.Signatures;
 
 /** DaikonWriter is the parent class of DeclWriter and DTraceWriter. */
 public abstract class DaikonWriter {
@@ -54,7 +54,7 @@ public abstract class DaikonWriter {
    * @param types string representation of the declared types of the parameters
    * @param name the method with modifiers and parameters, such as "public static void
    *     DataStructures.StackArTester.doNew(int size)"
-   * @param short_name just the method's name ("&lt;init&gt;" for constructors)
+   * @param short_name just the method's name ("{@code <init>}" for constructors)
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(
@@ -80,7 +80,7 @@ public abstract class DaikonWriter {
    * @param fullClassName packageName.className
    * @param types string representation of the declared types of the parameters
    * @param name the method name with modifiers and parameters
-   * @param short_name just the method's name ("&lt;init&gt;" for constructors)
+   * @param short_name just the method's name ("{@code <init>}" for constructors)
    * @param lineNum the line number of a return statement in the method
    * @return the decorated method exit name for Daikon
    */
@@ -97,7 +97,7 @@ public abstract class DaikonWriter {
    *     {"int", "java.lang.Object", "float"}.
    * @param name the method with modifiers and parameters, such as "public static void
    *     DataStructures.StackArTester.doNew(int size)"
-   * @param short_name just the method's name ("&lt;init&gt;" for constructors)
+   * @param short_name just the method's name ("{@code <init>}" for constructors)
    * @param point program point type/suffix such as "EXIT" or "ENTER"
    * @return same thing as {@link #methodName(Member, String)}
    */

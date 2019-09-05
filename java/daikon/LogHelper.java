@@ -143,7 +143,7 @@ public final class LogHelper {
     setupLogs(l, new DaikonLogFormatter());
   }
 
-  private static final Set<Logger> allLoggers = new HashSet<Logger>();
+  private static final Set<Logger> allLoggers = new HashSet<>();
 
   /**
    * Changes the logging priority of a sub category. Also caches the logger to avoid

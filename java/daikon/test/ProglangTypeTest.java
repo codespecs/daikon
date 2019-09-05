@@ -18,7 +18,6 @@ public class ProglangTypeTest extends TestCase {
     super(name);
   }
 
-  @SuppressWarnings("interning") // bug in interned checker wrt defaults & genercis
   static Comparator<long[]> longarrcomparator = new ArraysPlume.LongArrayComparatorLexical();
 
   static Comparator<String[]> comparrcomparator =

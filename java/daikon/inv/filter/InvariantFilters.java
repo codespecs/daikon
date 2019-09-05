@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 
 //  This class contains a collection of invariant filters, and allows other
 //  code to perform invariant filtering.  To filter invariants, do the
@@ -53,8 +52,8 @@ public class InvariantFilters {
   // n) to O(n), but that functionality isn't used a whole lot and
   // there are only ~10 filters anyway.
 
-  List<InvariantFilter> propertyFilters = new ArrayList<InvariantFilter>();
-  List<VariableFilter> variableFilters = new ArrayList<VariableFilter>();
+  List<InvariantFilter> propertyFilters = new ArrayList<>();
+  List<VariableFilter> variableFilters = new ArrayList<>();
 
   public InvariantFilters() {
 
@@ -90,7 +89,7 @@ public class InvariantFilters {
   }
 
   void addPropertyFilter(
-          @UnknownInitialization(InvariantFilters.class) @Raw(InvariantFilters.class) InvariantFilters this,
+      @UnknownInitialization(InvariantFilters.class) InvariantFilters this,
       InvariantFilter filter) {
     propertyFilters.add(filter);
   }
@@ -234,7 +233,9 @@ public class InvariantFilters {
         foundOnce = true;
       }
     }
-    if (foundOnce) return;
+    if (foundOnce) {
+      return;
+    }
 
     throw new Error(
         "InvariantFilters.removeVariableFilter():  filter for variable '"

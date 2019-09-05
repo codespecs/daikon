@@ -21,7 +21,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -51,8 +50,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   @Override
-  public final int arity(
-      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this) {
+  public final int arity(@UnknownInitialization(PptSlice.class) PptSliceEquality this) {
     throw new Error("Don't call arity on PptSliceEquality");
   }
 
@@ -152,8 +150,7 @@ public class PptSliceEquality extends PptSlice {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PptSliceEquality.instantiate_invariants: " + parent.name() + " vars:");
     }
-    LinkedHashMap<VarInfoAndComparability, List<VarInfo>> multiMap =
-        new LinkedHashMap<VarInfoAndComparability, List<VarInfo>>();
+    LinkedHashMap<VarInfoAndComparability, List<VarInfo>> multiMap = new LinkedHashMap<>();
     for (VarInfo vi : var_infos) {
       VarInfoAndComparability viac = new VarInfoAndComparability(vi);
       addToBindingList(multiMap, viac, vi);
@@ -199,8 +196,8 @@ public class PptSliceEquality extends PptSlice {
   public void instantiate_from_pairs(Set<VarInfo.Pair> eset) {
 
     // Build a map from each variable to all those that are equal to it
-    Map<VarInfo, List<VarInfo>> varmap = new LinkedHashMap<VarInfo, List<VarInfo>>();
-    Map<VarInfo, Integer> sample_cnt_map = new LinkedHashMap<VarInfo, Integer>();
+    Map<VarInfo, List<VarInfo>> varmap = new LinkedHashMap<>();
+    Map<VarInfo, Integer> sample_cnt_map = new LinkedHashMap<>();
     for (VarInfo.Pair cp : eset) {
       List<VarInfo> vlist = varmap.get(cp.v1);
       if (vlist == null) {
@@ -223,7 +220,7 @@ public class PptSliceEquality extends PptSlice {
     // Loop through each variable, building the appropriate equality set
     // for each.  Note that variables that are distinct still have an
     // equality set (albeit with only the one variable)
-    ArrayList<Invariant> newInvs = new ArrayList<Invariant>();
+    ArrayList<Invariant> newInvs = new ArrayList<>();
     for (VarInfo v : var_infos) {
       if (v.equalitySet != null) {
         continue;
@@ -258,8 +255,8 @@ public class PptSliceEquality extends PptSlice {
   @Override
   public List<Invariant> add(ValueTuple vt, int count) {
 
-    ArrayList<Equality> allNewInvs = new ArrayList<Equality>();
-    ArrayList<Invariant> weakenedInvs = new ArrayList<Invariant>();
+    ArrayList<Equality> allNewInvs = new ArrayList<>();
+    ArrayList<Invariant> weakenedInvs = new ArrayList<>();
 
     // Loop through each existing equality invariant
     for (Invariant invar : invs) {
@@ -276,7 +273,7 @@ public class PptSliceEquality extends PptSlice {
         List<Equality> newInvs = createEqualityInvs(nonEqualVis, vt, inv, count);
 
         // Get a list of all of the new non-missing leaders
-        List<VarInfo> newInvsLeaders = new ArrayList<VarInfo>(newInvs.size());
+        List<VarInfo> newInvsLeaders = new ArrayList<>(newInvs.size());
         for (Equality eq : newInvs) {
           if ((parent.constants == null) || !parent.constants.is_missing(eq.leader())) {
             newInvsLeaders.add(eq.leader());
@@ -338,9 +335,8 @@ public class PptSliceEquality extends PptSlice {
   private List<Equality> createEqualityInvs(
       List<VarInfo> vis, ValueTuple vt, Equality leader, int count) {
     assert vis.size() > 0;
-    HashMap<Object, List<VarInfo>> multiMap =
-        new HashMap<Object, List<VarInfo>>(); /* key is a value */
-    List<VarInfo> out_of_bounds = new ArrayList<VarInfo>();
+    HashMap<Object, List<VarInfo>> multiMap = new HashMap<>(); /* key is a value */
+    List<VarInfo> out_of_bounds = new ArrayList<>();
     for (VarInfo vi : vis) {
       if (vi.missingOutOfBounds()) {
         out_of_bounds.add(vi);
@@ -414,7 +410,7 @@ public class PptSliceEquality extends PptSlice {
     /*NNC:@MonotonicNonNull*/ Equality[] resultArray = new Equality[vis.size()];
     for (int i = 0; i < vis.size(); i++) {
       VarInfo vi = vis.get(i);
-      List<VarInfo> list = new ArrayList<VarInfo>();
+      List<VarInfo> list = new ArrayList<>();
       list.add(vi);
       Equality eq = new Equality(list, this);
       eq.setSamples(leader.numSamples());
@@ -465,8 +461,8 @@ public class PptSliceEquality extends PptSlice {
    */
   public List<Invariant> copyInvsFromLeader(VarInfo leader, List<VarInfo> newVis) {
 
-    List<Invariant> falsified_invs = new ArrayList<Invariant>();
-    List<PptSlice> newSlices = new ArrayList<PptSlice>();
+    List<Invariant> falsified_invs = new ArrayList<>();
+    List<PptSlice> newSlices = new ArrayList<>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(
           "copyInvsFromLeader: "
@@ -663,7 +659,7 @@ public class PptSliceEquality extends PptSlice {
 
   /** Returns an array of all of the leaders sorted by varinfo_index for this equality view. */
   public VarInfo[] get_leaders_sorted() {
-    List<VarInfo> leaders = new ArrayList<VarInfo>(invs.size());
+    List<VarInfo> leaders = new ArrayList<>(invs.size());
     for (Invariant inv : invs) {
       VarInfo leader = ((Equality) inv).leader();
       assert leader != null;

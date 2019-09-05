@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.UtilPlume;
@@ -137,10 +136,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    *
    * @return the canonical VarInfo of this
    */
-  @SuppressWarnings("purity") // set cache field
+  @SuppressWarnings("all:purity") // set cache field
   @Pure
-  public VarInfo leader(
-      @GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this) {
+  public VarInfo leader(@GuardSatisfied @UnknownInitialization(Equality.class) Equality this) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }
@@ -190,15 +188,25 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   @Override
   public String format_using(@GuardSatisfied Equality this, OutputFormat format) {
 
-    if (format.isJavaFamily()) return format_java_family(format);
+    if (format.isJavaFamily()) {
+      return format_java_family(format);
+    }
 
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return format_esc();
+    }
     // Commented out by MDE 7/27/2003.  I can't figure out whether
     // to just change JAVA_IDENTIFIER to IDENTIFIER, or whether other
     // changes are also necessary.
-    // if (format == OutputFormat.JAVA_IDENTIFIER) return format_java();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    // if (format == OutputFormat.JAVA_IDENTIFIER) {
+    //   return format_java();
+    // }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
     return format_unimplemented(format);
   }
 
@@ -222,7 +230,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public String format_java() {
     VarInfo leader = leader();
     String leaderName = leader.name();
-    List<String> clauses = new ArrayList<String>();
+    List<String> clauses = new ArrayList<>();
     for (VarInfo var : vars) {
       if (leader == var) {
         continue;
@@ -235,10 +243,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public String format_esc(@GuardSatisfied Equality this) {
     String result = "";
 
-    List<VarInfo> valid_equiv = new ArrayList<VarInfo>();
-    List<VarInfo> invalid_equiv = new ArrayList<VarInfo>();
+    List<VarInfo> valid_equiv = new ArrayList<>();
+    List<VarInfo> invalid_equiv = new ArrayList<>();
 
-    List<VarInfo> equal_vars = new ArrayList<VarInfo>();
+    List<VarInfo> equal_vars = new ArrayList<>();
 
     for (VarInfo other : vars) {
       if (other.isDerivedSequenceMinMaxSum()) {
@@ -343,7 +351,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   public String format_java_family(@GuardSatisfied Equality this, OutputFormat format) {
     VarInfo leader = leader();
     String leaderName = leader.name_using(format);
-    List<String> clauses = new ArrayList<String>();
+    List<String> clauses = new ArrayList<>();
     for (VarInfo var : vars) {
       if (leader == var) {
         continue;
@@ -397,7 +405,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       numSamples += count;
     }
 
-    List<VarInfo> result = new ArrayList<VarInfo>();
+    List<VarInfo> result = new ArrayList<>();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("Doing add at " + this.ppt.parent.name() + " for " + this);
     }

@@ -12,7 +12,7 @@ import org.checkerframework.checker.lock.qual.GuardedBy;
 public class Runtime {
 
   /** A list of throwables seen when attempting to evaluate properties. */
-  public static List<Throwable> internalInvariantEvaluationErrors = new ArrayList<Throwable>();
+  public static List<Throwable> internalInvariantEvaluationErrors = new ArrayList<>();
 
   private static @GuardedBy("Runtime.class") List<Violation> violations =
       new ArrayList<Violation>();
@@ -32,7 +32,7 @@ public class Runtime {
 
   /** Returns the list of violations. */
   public static synchronized List<Violation> getViolations() {
-    List<Violation> retval = new ArrayList<Violation>();
+    List<Violation> retval = new ArrayList<>();
     for (Violation v : violations) {
       retval.add(v);
     }
@@ -56,7 +56,9 @@ public class Runtime {
 
   // Works for non-negative values
   public static final boolean isPowerOfTwo(int x) {
-    if (x == 0) return true;
+    if (x == 0) {
+      return true;
+    }
     // If x is a power of two, then x - 1 has no bits in common with x
     // OTOH, if x is not a power of two, then x and x - 1 have the same
     // most-significant bit set, so they have at least one bit in common.
@@ -68,7 +70,9 @@ public class Runtime {
   private static int smallestNonPointerValue = -100000;
 
   public static final boolean isWithinPointerRange(int value) {
-    if (value == 0) return true;
+    if (value == 0) {
+      return true;
+    }
     return (value >= largestNonPointerValue) || (value <= smallestNonPointerValue);
   }
 }

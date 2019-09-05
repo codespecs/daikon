@@ -187,7 +187,7 @@ public final class FileIO {
   // old values of all variables in scope the last time the program point
   // was executed. This enables us to determine whether the values have been
   // modified since this program point was last executed.
-  static HashMap<PptTopLevel, String[]> ppt_to_value_reps = new HashMap<PptTopLevel, String[]>();
+  static HashMap<PptTopLevel, String[]> ppt_to_value_reps = new HashMap<>();
 
   // For debugging purposes: printing out a modified trace file with
   // changed modbits.
@@ -329,10 +329,10 @@ public final class FileIO {
     ppt_name = user_mod_ppt_name(ppt_name);
 
     /** Information that will populate the new program point. */
-    Map<String, VarDefinition> varmap = new LinkedHashMap<String, VarDefinition>();
+    Map<String, VarDefinition> varmap = new LinkedHashMap<>();
     /** The VarDefinition we are in the middle of reading, or null if we are not. */
     VarDefinition vardef = null;
-    List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
+    List<ParentRelation> ppt_parents = new ArrayList<>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
     PptType ppt_type = PptType.POINT;
 
@@ -433,9 +433,11 @@ public final class FileIO {
     }
 
     // Build the var infos from the var definitions.
-    List<VarInfo> vi_list = new ArrayList<VarInfo>(varmap.size());
+    List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
-      vi_list.add(new VarInfo(vd));
+      @SuppressWarnings("interning") // about to be used in a new program point
+      @Interned VarInfo vi = new VarInfo(vd);
+      vi_list.add(vi);
     }
     VarInfo[] vi_array = vi_list.toArray(new VarInfo[vi_list.size()]);
 
@@ -563,7 +565,7 @@ public final class FileIO {
   private static VarInfo[] read_VarInfos(ParseState state, String ppt_name) throws IOException {
 
     // The var_infos that will populate the new program point
-    List<VarInfo> var_infos = new ArrayList<VarInfo>();
+    List<VarInfo> var_infos = new ArrayList<>();
 
     // Each iteration reads a variable name, type, and comparability.
     // Possibly abstract this out into a separate function??
@@ -734,14 +736,17 @@ public final class FileIO {
           filename);
     }
 
-    return new VarInfo(
-        varname,
-        prog_type,
-        file_rep_type,
-        comparability,
-        is_static_constant,
-        static_constant_value,
-        aux);
+    @SuppressWarnings("interning")
+    @Interned VarInfo result =
+        new VarInfo(
+            varname,
+            prog_type,
+            file_rep_type,
+            comparability,
+            is_static_constant,
+            static_constant_value,
+            aux);
+    return result;
   }
 
   @RequiresNonNull("FileIO.new_decl_format")
@@ -877,7 +882,9 @@ public final class FileIO {
           pw.print("<hashcode>");
         else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
         else if (val instanceof String) pw.print(UtilPlume.escapeNonASCII((String) val));
-        else pw.print(val);
+        else {
+          pw.print(val);
+        }
       }
       pw.println();
 
@@ -895,7 +902,7 @@ public final class FileIO {
           new_vals[vi.value_index] = canonical_hashcode;
         }
       }
-      @SuppressWarnings("cast.unsafe.constructor.invocation")
+      @SuppressWarnings("interning:cast.unsafe.constructor.invocation")
       @Interned Invocation result = new @Interned Invocation(ppt, new_vals, mods);
       return result;
     }
@@ -930,7 +937,7 @@ public final class FileIO {
 
   // Map key is a (global, not per-procedure) nonce.
   // The nonce indicates which returns are associated with which entries.
-  static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
+  static HashMap<Integer, Invocation> call_hashmap = new HashMap<>();
   // call_stack is for procedures without nonces.
   static Deque<Invocation> call_stack = new ArrayDeque<Invocation>();
 
@@ -1456,7 +1463,9 @@ public final class FileIO {
       } else if ((data_trace_state.rtype == RecordType.EOF)
           || (data_trace_state.rtype == RecordType.TRUNCATED)) {
         break;
-      } else ; // don't need to do anything explicit for other records found
+      } else {
+        // don't need to do anything explicit for other records found
+      }
     }
 
     if (Global.debugPrintDtrace) {
@@ -1730,7 +1739,9 @@ public final class FileIO {
     // it saves away the orig values from enter points for later use
     // by exit points.
     boolean ignore = compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
-    if (ignore) return;
+    if (ignore) {
+      return;
+    }
 
     // Only process the leaves of the ppt tree.
     // This test assumes that all leaves are numbered exit program points
@@ -1778,7 +1789,7 @@ public final class FileIO {
       return;
     }
 
-    @SuppressWarnings("flowexpr.parse.error") // https://tinyurl.com/cfissue/862
+    @SuppressWarnings("nullness:flowexpr.parse.error") // https://tinyurl.com/cfissue/862
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
@@ -1810,7 +1821,9 @@ public final class FileIO {
   /** Print each call that does not have a matching exit. */
   public static void process_unmatched_procedure_entries() {
 
-    if (dkconfig_unmatched_procedure_entries_quiet) return;
+    if (dkconfig_unmatched_procedure_entries_quiet) {
+      return;
+    }
 
     int unmatched_count = call_stack.size() + call_hashmap.size();
 
@@ -1824,7 +1837,7 @@ public final class FileIO {
       System.out.println();
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
-        ArrayList<Invocation> invocations = new ArrayList<Invocation>();
+        ArrayList<Invocation> invocations = new ArrayList<>();
         for (@KeyFor("call_hashmap") Integer i : CollectionsPlume.sortedKeySet(call_hashmap)) {
           Invocation invok = call_hashmap.get(i);
           assert invok != null;
@@ -1866,7 +1879,7 @@ public final class FileIO {
 
   /** Print the invocations in the collection, in order, and coalescing duplicates. */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
-    Map<@Interned String, Integer> counter = new LinkedHashMap<@Interned String, Integer>();
+    Map<@Interned String, Integer> counter = new LinkedHashMap<>();
 
     for (Invocation invok_noncanonical : invocations) {
       @Interned Invocation invok = invok_noncanonical.canonicalize();
@@ -2927,8 +2940,7 @@ public final class FileIO {
 
   /** Call this to indicate a malformed declaration. */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
-    @SuppressWarnings(
-        "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
+    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(msg);
   }
@@ -2936,8 +2948,7 @@ public final class FileIO {
   /** Call this to indicate a malformed declaration. */
   private static void decl_error(
       ParseState state, Throwable cause, String format, @Nullable Object... args) {
-    @SuppressWarnings(
-        "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
+    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(cause, msg);
   }
@@ -2977,7 +2988,7 @@ public final class FileIO {
     //                    dkconfig_rm_stack_dups);
 
     String[] stack = ppt_name.split("[|]");
-    List<String> nd_stack = new ArrayList<String>();
+    List<String> nd_stack = new ArrayList<>();
     for (String si : stack) {
       if (nd_stack.contains(si)) {
         continue;

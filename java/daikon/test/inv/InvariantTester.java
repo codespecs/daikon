@@ -21,6 +21,7 @@ public class InvariantTester extends TestCase {
     super(name);
   }
 
+  @SuppressWarnings("interning")
   public VarInfo newIntVarInfo(String name) {
     return new VarInfo(
         name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
@@ -29,7 +30,7 @@ public class InvariantTester extends TestCase {
   public void testClassVarnameComparator() {
     Comparator<Invariant> c = new Invariant.ClassVarnameComparator();
 
-    VarInfo[] vars = {Common.makeIntVarInfo("x"), Common.makeIntVarInfo("y")};
+    VarInfo[] vars = {Common.newIntVarInfo("x"), Common.newIntVarInfo("y")};
     PptTopLevel ppt = Common.makePptTopLevel("Foo:::OBJECT", vars);
     PptSlice slice = new PptSlice2(ppt, vars);
 
@@ -80,14 +81,14 @@ public class InvariantTester extends TestCase {
     inv6 = Implication.makeImplication(ppt, inv4, inv1, false, inv4, inv1);
     assert c.compare(inv5, inv6) < 0;
 
-    VarInfo[] vars2 = {Common.makeIntVarInfo("x"), Common.makeIntVarInfo("z")};
+    VarInfo[] vars2 = {Common.newIntVarInfo("x"), Common.newIntVarInfo("z")};
     PptTopLevel ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);
     PptSlice slice2 = new PptSlice2(ppt2, vars2);
     inv2 = NumericInt.BitwiseComplement.get_proto().instantiate(slice2);
     assert c.compare(inv1, inv2) < 0;
 
-    vars2[0] = Common.makeIntVarInfo("a");
-    vars2[1] = Common.makeIntVarInfo("y");
+    vars2[0] = Common.newIntVarInfo("a");
+    vars2[1] = Common.newIntVarInfo("y");
     ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);
     slice2 = new PptSlice2(ppt2, vars2);
     inv2 = NumericInt.BitwiseComplement.get_proto().instantiate(slice2);

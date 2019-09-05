@@ -31,7 +31,6 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.CollectionsPlume;
@@ -592,7 +591,7 @@ public final class Diff {
 
     // Created sorted set of top level ppts, possibly including
     // conditional ppts
-    SortedSet<PptTopLevel> ppts = new TreeSet<PptTopLevel>(PPT_COMPARATOR);
+    SortedSet<PptTopLevel> ppts = new TreeSet<>(PPT_COMPARATOR);
     ppts.addAll(pptMap.asCollection());
 
     for (PptTopLevel ppt : ppts) {
@@ -708,8 +707,8 @@ public final class Diff {
       invs1 = map1.get(ppt1);
       Collections.sort(invs1, invSortComparator1);
     } else if (ppt1 != null && treeManip && !isCond(ppt1)) {
-      HashSet<String> repeatFilter = new HashSet<String>();
-      ArrayList<Invariant> ret = new ArrayList<Invariant>();
+      HashSet<String> repeatFilter = new HashSet<>();
+      ArrayList<Invariant> ret = new ArrayList<>();
       invs1 = map1.get(ppt1);
       for (Invariant inv : invs1) {
         if (
@@ -842,7 +841,7 @@ public final class Diff {
 
   /** Use the comparator for sorting both sets and creating the pair tree. */
   @EnsuresNonNull({"invSortComparator1", "invSortComparator2", "invPairComparator"})
-  public void setAllInvComparators(@UnknownInitialization @Raw Diff this, Comparator<Invariant> c) {
+  public void setAllInvComparators(@UnknownInitialization Diff this, Comparator<Invariant> c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);
     setInvPairComparator(c);
@@ -870,21 +869,19 @@ public final class Diff {
 
   /** Use the comparator for sorting the first set. */
   @EnsuresNonNull("invSortComparator1")
-  public void setInvSortComparator1(
-      @UnknownInitialization @Raw Diff this, Comparator<Invariant> c) {
+  public void setInvSortComparator1(@UnknownInitialization Diff this, Comparator<Invariant> c) {
     invSortComparator1 = c;
   }
 
   /** Use the comparator for sorting the second set. */
   @EnsuresNonNull("invSortComparator2")
-  public void setInvSortComparator2(
-      @UnknownInitialization @Raw Diff this, Comparator<Invariant> c) {
+  public void setInvSortComparator2(@UnknownInitialization Diff this, Comparator<Invariant> c) {
     invSortComparator2 = c;
   }
 
   /** Use the comparator for creating the pair tree. */
   @EnsuresNonNull("invPairComparator")
-  public void setInvPairComparator(@UnknownInitialization @Raw Diff this, Comparator<Invariant> c) {
+  public void setInvPairComparator(@UnknownInitialization Diff this, Comparator<Invariant> c) {
     invPairComparator = c;
   }
 }

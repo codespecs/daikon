@@ -204,7 +204,7 @@ import typequals.prototype.qual.Prototype;
  * #mainHelper} method is the entry point, when called programmatically.
  */
 @SuppressWarnings(
-    "initialization.static.fields.uninitialized") // field all_ppts; deal with it later
+    "nullness:initialization.static.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
 
   private Daikon() {
@@ -474,7 +474,7 @@ public final class Daikon {
   public static @Nullable Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
-  public static ArrayList<@Prototype Invariant> proto_invs = new ArrayList<@Prototype Invariant>();
+  public static ArrayList<@Prototype Invariant> proto_invs = new ArrayList<>();
 
   /** Debug tracer. */
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
@@ -699,7 +699,7 @@ public final class Daikon {
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
    * called progrmmatically.
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   public static void mainHelper(final String[] args) {
     // Cleanup from any previous runs
     cleanup();
@@ -863,7 +863,9 @@ public final class Daikon {
       }
 
       // exit the program
-      if (false) return;
+      if (false) {
+        return;
+      }
     }
 
     // Display invariants
@@ -969,10 +971,10 @@ public final class Daikon {
     // LinkedHashSet because it can be confusing to users if files (of the
     // same type) are gratuitously processed in a different order than they
     // were supplied on the command line.
-    HashSet<File> decl_files = new LinkedHashSet<File>();
-    HashSet<String> dtrace_files = new LinkedHashSet<String>(); // file names or "-" or "+"
-    HashSet<File> spinfo_files = new LinkedHashSet<File>();
-    HashSet<File> map_files = new LinkedHashSet<File>();
+    HashSet<File> decl_files = new LinkedHashSet<>();
+    HashSet<String> dtrace_files = new LinkedHashSet<>(); // file names or "-" or "+"
+    HashSet<File> spinfo_files = new LinkedHashSet<>();
+    HashSet<File> map_files = new LinkedHashSet<>();
 
     LongOpt[] longopts =
         new LongOpt[] {
@@ -1812,7 +1814,9 @@ public final class Daikon {
         VarInfo[] exit_vars = new VarInfo[len];
         // System.out.printf("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
-          exit_vars[j] = new VarInfo(ppt.var_infos[j]);
+          @SuppressWarnings("interning") // about to be used in new program point
+          @Interned VarInfo exit_var = new VarInfo(ppt.var_infos[j]);
+          exit_vars[j] = exit_var;
           // System.out.printf("exitNN name '%s', exit name '%s'%n",
           //                   ppt.var_infos[j].name(), exit_vars[j].name());
           exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
@@ -1851,7 +1855,7 @@ public final class Daikon {
   // and also filters out the invariants that have not seen enough
   // samples in ternary slices.
   static List<Invariant> filter_invs(List<Invariant> invs) {
-    List<Invariant> new_list = new ArrayList<Invariant>();
+    List<Invariant> new_list = new ArrayList<>();
 
     for (Invariant inv : invs) {
       VarInfo[] vars = inv.ppt.var_infos;
@@ -2055,7 +2059,7 @@ public final class Daikon {
    * two return statements are enabled by default (though other splitters can be defined by the
    * user).
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied")
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied")
   public static void setup_splitters(PptTopLevel ppt) {
     if (PptSplitter.dkconfig_disable_splitting) {
       return;
@@ -2117,7 +2121,9 @@ public final class Daikon {
 
     @Override
     public void run() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       while (true) {
         if (shouldStop) {
           clear();
@@ -2133,7 +2139,9 @@ public final class Daikon {
     }
     /** Clear the display; good to do before printing to System.out. */
     public void clear() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       // "display("");" is wrong becuase it leaves the timestamp and writes
       // spaces across the screen.
       String status = UtilPlume.rpad("", dkconfig_progress_display_width - 1);
@@ -2146,7 +2154,9 @@ public final class Daikon {
      * display.
      */
     public void display() {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
 
       String message;
       if (FileIO.data_trace_state != null) {
@@ -2162,7 +2172,9 @@ public final class Daikon {
     }
     /** Displays the given message. */
     public void display(String message) {
-      if (dkconfig_progress_delay == -1) return;
+      if (dkconfig_progress_delay == -1) {
+        return;
+      }
       String status =
           UtilPlume.rpad(
               "[" + df.format(new Date()) + "]: " + message, dkconfig_progress_display_width - 1);
@@ -2193,7 +2205,7 @@ public final class Daikon {
    * have been loaded, all of the program points have been setup, and candidate invariants have been
    * instantiated. This routine processes data to falsify the candidate invariants.
    */
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
@@ -2408,7 +2420,7 @@ public final class Daikon {
       System.out.printf("%s%n", ppt.name());
       System.out.printf("  samples    = %n%d", ppt.num_samples());
       System.out.printf("  invariants = %n%d", ppt.invariant_cnt());
-      Map<ProglangType, Count> type_map = new LinkedHashMap<ProglangType, Count>();
+      Map<ProglangType, Count> type_map = new LinkedHashMap<>();
       int leader_cnt = 0;
       for (VarInfo v : ppt.var_infos) {
         if (!v.isCanonical()) {
@@ -2458,7 +2470,9 @@ public final class Daikon {
   /** Initialize the equality sets for each variable. */
   public static void setupEquality(PptTopLevel ppt) {
 
-    if (!Daikon.use_equality_optimization) return;
+    if (!Daikon.use_equality_optimization) {
+      return;
+    }
 
     // Skip points that are not leaves.
     if (use_dataflow_hierarchy) {
@@ -2479,7 +2493,9 @@ public final class Daikon {
         return;
       }
 
-      if (ppt.has_splitters()) return;
+      if (ppt.has_splitters()) {
+        return;
+      }
     }
 
     // Create the initial equality sets
@@ -2487,7 +2503,7 @@ public final class Daikon {
     ppt.equality_view.instantiate_invariants();
   }
 
-  private static List<SpinfoFile> spinfoFiles = new ArrayList<SpinfoFile>();
+  private static List<SpinfoFile> spinfoFiles = new ArrayList<>();
 
   /**
    * Create user-defined splitters. For each file in the input, add a SpinfoFile to the spinfoFiles
@@ -2547,7 +2563,7 @@ public final class Daikon {
     }
 
     // Keep track of all of the ppts in a set ordered by the ppt name
-    Set<String> ppts = new TreeSet<String>();
+    Set<String> ppts = new TreeSet<>();
 
     // Read all of the ppt names out of the decl files
     try {
@@ -2629,12 +2645,12 @@ public final class Daikon {
       }
 
       // get the new leaders
-      List<Equality> allNewInvs = new ArrayList<Equality>();
+      List<Equality> allNewInvs = new ArrayList<>();
 
       for (Invariant eq_as_inv : sliceEquality.invs) {
         Equality eq = (Equality) eq_as_inv;
         VarInfo leader = eq.leader();
-        List<VarInfo> vars = new ArrayList<VarInfo>();
+        List<VarInfo> vars = new ArrayList<>();
 
         for (VarInfo var : eq.getVars()) {
           if (!var.equals(leader)) {

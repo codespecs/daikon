@@ -47,10 +47,10 @@ public class Chicory {
   public static int nesting_depth = 2;
 
   @Option("Omit all program points that match")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
   @Option("Include only program points that match")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
   @Option("Decl formatted file containing comparability information")
   public static @Nullable File comparability_file = null;
@@ -260,9 +260,7 @@ public class Chicory {
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s\n", path_separator);
-    if (path_separator == null) {
-      path_separator = ";"; // should work for windows at least...
-    } else if (!RegexUtil.isRegex(path_separator)) {
+    if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.UserError(
           "Bad regexp "
               + path_separator
@@ -330,13 +328,11 @@ public class Chicory {
     if (daikon_online) {
       runDaikon();
 
-      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       StreamRedirectThread tmp_daikon_err =
           new StreamRedirectThread("stderr", daikon_proc.getErrorStream(), System.err);
       daikon_err = tmp_daikon_err;
       daikon_err.start();
 
-      @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
       @NonNull InputStream daikonStdOut = daikon_proc.getInputStream();
       // daikonReader escapes, so it is not closed in this method.
       BufferedReader daikonReader = new BufferedReader(new InputStreamReader(daikonStdOut, UTF_8));
@@ -377,7 +373,7 @@ public class Chicory {
     }
 
     // Build the command line to execute the target with the javaagent
-    List<String> cmdlist = new ArrayList<String>();
+    List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
 
     if (RemoteDebug) {
@@ -422,7 +418,6 @@ public class Chicory {
       System.exit(1);
     }
 
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread stdin_thread =
         new StreamRedirectThread("stdin", System.in, chicory_proc.getOutputStream(), false);
     stdin_thread.start();
@@ -528,11 +523,9 @@ public class Chicory {
   public int redirect_wait(Process p) {
 
     // Create the redirect theads and start them
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err);
 
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out);
 

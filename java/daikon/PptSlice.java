@@ -14,7 +14,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -54,8 +53,7 @@ public abstract class PptSlice extends Ppt {
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
 
-  public abstract int arity(
-      @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this);
+  public abstract int arity(@UnknownInitialization(PptSlice.class) PptSlice this);
 
   /**
    * The invariants contained in this slice. This should not be used directly, in general. In
@@ -83,8 +81,7 @@ public abstract class PptSlice extends Ppt {
   @Override
   @SuppressWarnings(
       "initialization:override.receiver.invalid") // see comment on overridden definition in Ppt
-  public final String name(
-      @GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this) {
+  public final String name(@GuardSatisfied @UnknownInitialization(PptSlice.class) PptSlice this) {
     return parent.name + varNames(var_infos);
   }
 
@@ -221,7 +218,9 @@ public abstract class PptSlice extends Ppt {
     @Pure
     @Override
     public int compare(PptSlice slice1, PptSlice slice2) {
-      if (slice1 == slice2) return 0;
+      if (slice1 == slice2) {
+        return 0;
+      }
       // Don't do this assert, which prevents comparison across different Ppts.
       // (The assert check may be useful in some situations, though.)
       // assert slice1.parent == slice2.parent;
@@ -240,7 +239,9 @@ public abstract class PptSlice extends Ppt {
     @Pure
     @Override
     public int compare(PptSlice slice1, PptSlice slice2) {
-      if (slice1 == slice2) return 0;
+      if (slice1 == slice2) {
+        return 0;
+      }
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // assert slice1.parent == slice2.parent;
@@ -268,8 +269,10 @@ public abstract class PptSlice extends Ppt {
 
   /** Remove the invariants noted in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {
-    if (invs.size() == 0) return;
-    List<Invariant> toRemove = new ArrayList<Invariant>();
+    if (invs.size() == 0) {
+      return;
+    }
+    List<Invariant> toRemove = new ArrayList<>();
     for (Invariant inv : invs) {
       if (omitTypes['r'] && inv.isReflexive()) toRemove.add(inv);
     }
@@ -322,7 +325,7 @@ public abstract class PptSlice extends Ppt {
 
   /** For debugging only. */
   @Override
-  @SuppressWarnings("purity") // string creation
+  @SuppressWarnings("all:purity") // string creation
   @SideEffectFree
   public String toString(@GuardSatisfied PptSlice this) {
     StringBuilder sb = new StringBuilder();

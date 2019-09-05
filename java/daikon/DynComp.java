@@ -47,10 +47,10 @@ public class DynComp {
   public static @Nullable File comparability_file = null;
 
   @Option("Only process program points matching the regex")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
   @Option("Ignore program points matching the regex")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
   @Option("Don't track primitives")
   public static boolean no_primitives = false;
@@ -208,9 +208,7 @@ public class DynComp {
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s\n", path_separator);
-    if (path_separator == null) {
-      path_separator = ";"; // should work for windows at least...
-    } else if (!RegexUtil.isRegex(path_separator)) {
+    if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.BugInDaikon(
           "Bad regexp "
               + path_separator
@@ -307,7 +305,7 @@ public class DynComp {
     }
 
     // Build the command line to execute the target with the javaagent
-    List<String> cmdlist = new ArrayList<String>();
+    List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
     // cmdlist.add ("-verbose:class");
     cmdlist.add("-cp");
@@ -352,11 +350,9 @@ public class DynComp {
   public int redirect_wait(Process p) {
 
     // Create the redirect threads and start them.
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
 
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
 

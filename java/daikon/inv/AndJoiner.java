@@ -46,7 +46,7 @@ public class AndJoiner extends Joiner {
   @Override
   public String format_using(@GuardSatisfied AndJoiner this, OutputFormat format) {
     List<Invariant> invs = conjuncts();
-    List<String> invStrings = new ArrayList<String>(invs.size());
+    List<String> invStrings = new ArrayList<>(invs.size());
     for (Invariant inv : invs) {
       invStrings.add(inv.format_using(format));
     }
@@ -65,7 +65,7 @@ public class AndJoiner extends Joiner {
   }
 
   public List<Invariant> conjuncts(@GuardSatisfied AndJoiner this) {
-    List<Invariant> result = new ArrayList<Invariant>(2);
+    List<Invariant> result = new ArrayList<>(2);
     if (left instanceof AndJoiner) {
       result.addAll(((AndJoiner) left).conjuncts());
     } else {

@@ -114,7 +114,7 @@ class ReplaceStatement {
     @Override
     public void visit(MethodDeclaration n) {
       methodName = methodName + Ast.getName(n);
-      List<MethodParameter> params = new ArrayList<MethodParameter>();
+      List<MethodParameter> params = new ArrayList<>();
       List<FormalParameter> formalParameters = Ast.getParameters(n);
       for (FormalParameter fp : formalParameters) {
         String paramName = Ast.getName(fp);
