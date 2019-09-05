@@ -1137,7 +1137,7 @@ showvars:
 	@echo INFERRED_JAVA_HOME = $(INFERRED_JAVA_HOME)
 	dirname $(shell dirname $(shell readlink -f $(shell which javac)))
 	which java
-	java -verson
+	java -version
 	which javac
 	javac -version
 	@echo JAVA = ${JAVA}
