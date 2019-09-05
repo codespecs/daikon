@@ -3,15 +3,14 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM centos
+FROM fedora24
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
 #  * Put "apt-get update" and "apt-get install" in the same RUN command.
 #  * Do not run "apt-get upgrade"; instead get upstream to update.
-# CentOS 8 will use dnf instead of yum.
-RUN yum -q -y upgrade && yum -q -y install \
+RUN dnf -qy upgrade && dnf -qy install \
   autoconf \
   automake \
   bc \
@@ -21,14 +20,17 @@ RUN yum -q -y upgrade && yum -q -y install \
   m4 \
   make \
   redhat-lsb \
+  rsync \
   tar \
   unzip \
   which \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel \
-&& yum -q -y install \
-  ctags \
+&& dnf -q clean all
+
+RUN dnf -qy install \
   curl \
+  ctags \
   gcc-c++ \
   graphviz \
   netpbm \
@@ -38,4 +40,4 @@ RUN yum -q -y upgrade && yum -q -y install \
   texinfo-tex \
   texlive \
   wget \
-&& yum -q clean all
+&& dnf -q clean all

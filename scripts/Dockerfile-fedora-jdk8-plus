@@ -3,7 +3,7 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM fedora24
+FROM fedora
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
@@ -26,7 +26,9 @@ RUN dnf -qy upgrade && dnf -qy install \
   which \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel \
-&& dnf -qy install \
+&& dnf -q clean all
+
+dnf -qy install \
   curl \
   ctags \
   gcc-c++ \
