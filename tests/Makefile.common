@@ -184,7 +184,8 @@ CP_PARENTS := rsync -aR
 
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
 # they are on the path.
-INFERRED_JAVA_HOME=${JAVA_HOME:-`dirname $(dirname $(readlink -f $(which javac)))`}
+JAVA_HOME_FROM_JAVAC=`dirname $(dirname $(readlink -f $(which javac)))`
+INFERRED_JAVA_HOME=${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC}
 ifeq (darwin, $(OSTYPE))
   JAVA  := java
   JAVAC := javac

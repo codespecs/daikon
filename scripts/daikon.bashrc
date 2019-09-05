@@ -8,7 +8,8 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-INFERRED_JAVA_HOME=${JAVA_HOME:-`dirname $(dirname $(readlink -f $(which javac)))`}
+JAVA_HOME_FROM_JAVAC=`dirname $(dirname $(readlink -f $(which javac)))`
+INFERRED_JAVA_HOME=${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC`}
 if [ ! -d "$INFERRED_JAVA_HOME" ]; then
   echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
   return 2
