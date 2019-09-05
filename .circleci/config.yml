@@ -463,7 +463,7 @@ workflows:
       - misc-centos:
           requires:
             - misc-ubuntu
-      - typecheck-with-included-CF
+#      - typecheck-with-included-CF
       - typecheck-with-locally-built-CF
       - dummy
       - trigger-downstream:
@@ -482,6 +482,6 @@ workflows:
             - nonquick-txt-diff-centos
             - non-txt-diff-centos
             - misc-centos
-            - typecheck-with-included-CF
+#            - typecheck-with-included-CF
             - typecheck-with-locally-built-CF
             - dummy
