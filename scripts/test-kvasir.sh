@@ -25,6 +25,7 @@ fi
 
 # The Valgrind configure script fails if SHELLOPTS is defined.
 export -n SHELLOPTS
+
 make -f tests/kvasir-tests/Makefile.common show-os
 
 make kvasir
