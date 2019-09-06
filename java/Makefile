@@ -1136,6 +1136,7 @@ showvars:
 	@echo PATH = $(PATH)
 
 	@echo JAVA_HOME = $(JAVA_HOME)
+	@echo JAVA_HOME_FROM_JAVAC = $(JAVA_HOME_FROM_JAVAC)
 	@echo INFERRED_JAVA_HOME = $(INFERRED_JAVA_HOME)
 	dirname $(shell dirname $(shell readlink -f $(shell which javac)))
 	which java
