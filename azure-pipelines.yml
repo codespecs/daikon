@@ -159,3 +159,18 @@ jobs:
     fetchDepth: 25
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
+
+- job: typecheck
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/daikon-ubuntu-jdk8:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`}
+      java -version
+      javac -version
+    displayName: show environment
+  - bash: ./scripts/test-typecheck.sh
+    displayName: test-typecheck.sh

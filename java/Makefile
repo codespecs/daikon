@@ -1134,7 +1134,9 @@ showvars:
 
 	@echo JAVA_HOME = $(JAVA_HOME)
 	which java
+	java -version
 	which javac
+	javac -version
 	@echo JAVA = ${JAVA}
 	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}
@@ -1148,6 +1150,7 @@ showvars:
 	@echo DAIKONDIR = "${DAIKONDIR}"
 	@echo DAIKONSCRIPTS = ${DAIKONSCRIPTS}
 	@echo PLUMESCRIPTS = ${PLUMESCRIPTS}
+
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo JAVA_FILES_FOR_STYLE = $(JAVA_FILES_FOR_STYLE)
