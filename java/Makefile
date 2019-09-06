@@ -61,14 +61,12 @@ endif
 
 ## Add tools.jar and rt.jar, if they exist
 
-WHICH_JAVAC := $(shell which javac)
-JAVA_HOME_FROM_JAVAC := $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
-INFERRED_JAVA_HOME := ${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC}
-ifneq "$(wildcard ${INFERRED_JAVA_HOME}/lib/tools.jar)" ""
-  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${INFERRED_JAVA_HOME}/lib/tools.jar
+JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
+ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/tools.jar
 endif
-ifneq "$(wildcard ${INFERRED_JAVA_HOME}/jre/lib/rt.jar)" ""
-  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${INFERRED_JAVA_HOME}/jre/lib/rt.jar
+ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
+  DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/jre/lib/rt.jar
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
@@ -458,7 +456,7 @@ daikon/chicory/inv_out.diff : ChicoryPremain.jar
 #
 INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
-ORIG_RT ?= $(INFERRED_JAVA_HOME)/jre/lib/rt.jar
+ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(DAIKON_CLASSPATH)
 
@@ -1137,10 +1135,6 @@ showvars:
 	@echo PATH = $(PATH)
 
 	@echo JAVA_HOME = $(JAVA_HOME)
-	@echo JAVA_HOME_FROM_JAVAC = $(JAVA_HOME_FROM_JAVAC)
-	@echo JAVA_HOME_FROM_JAVAC_2 = $(JAVA_HOME_FROM_JAVAC_2)
-	@echo WHICH_JAVAC = $(WHICH_JAVAC)
-	@echo INFERRED_JAVA_HOME = $(INFERRED_JAVA_HOME)
 	echo $(dirname $(readlink -f $(which javac)))
 	dirname $(dirname $(readlink -f $(which javac)))
 	which java
