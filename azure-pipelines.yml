@@ -169,7 +169,6 @@ jobs:
   - checkout: self
     fetchDepth: 25
   - bash: |
-      export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`}
       java -version
       javac -version
     displayName: show environment
