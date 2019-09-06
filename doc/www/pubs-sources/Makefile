@@ -29,7 +29,7 @@ clean-abstracts:
 	\rm -f *-abstract.html
 
 pull-bibfiles:
-	git -C ${BIBDIR} pull
+	cd ${BIBDIR} && git pull
 
 .PHONY: index.html
 index.html: pull-bibfiles
