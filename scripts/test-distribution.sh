@@ -1,10 +1,7 @@
 #!/bin/sh
 
 # Download the distribution and run "make distribution-check".
-# The environment variable JAVA_HOME must be set.
 
-
-if [ -z "${JAVA_HOME+xxx}" ]; then echo JAVA_HOME is not set; exit 1; fi
 
 # Fail the whole script if any command fails
 set -e

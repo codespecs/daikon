@@ -121,7 +121,6 @@ sub run {
 
     chdir($builds_dir);
 
-    $ENV{"JAVA_HOME"} = "none";
     # We used to use "--rsync_location=$host_machine.$domain:$rsync_loc"
     # to make a fresh copy from the host machine, but after we switched
     # to VMware 5.5, big rsyncs started mysteriously hanging. So instead

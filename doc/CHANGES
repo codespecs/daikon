@@ -30,6 +30,9 @@ system to process that trace file.
 Updated the readelf, Valgrind, and BCEL libraries.  This should improve
 compatibility with operating systems and C versions.
 
+Daikon no longer requires the JAVA_HOME environment variable to be set,
+if the `javac` executable is on the path.
+
 ===========================================================================
 
 5.7.2 (November 7, 2018)
