@@ -324,6 +324,55 @@ jobs:
 
       - run: ./scripts/test-kvasir.sh
 
+  typecheck-with-included-CF:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: |
+          export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`}
+          make showvars
+          make compile daikon.jar
+      - run:
+          command: export JAVA_HOME=${JAVA_HOME:-`which javac|xargs readlink -f|xargs dirname|xargs dirname`} && make -C java typecheck
+          no_output_timeout: 30m
+
+  typecheck-with-locally-built-CF:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: env
+      - run:
+          command: scripts/test-typecheck.sh
+          no_output_timeout: 30m
+
   trigger-downstream:
 
     docker:
@@ -392,6 +441,8 @@ workflows:
       - misc-centos:
           requires:
             - misc-ubuntu
+#      - typecheck-with-included-CF
+      - typecheck-with-locally-built-CF
       - trigger-downstream:
           requires:
             - quick-txt-diff-ubuntu
@@ -408,3 +459,5 @@ workflows:
             - nonquick-txt-diff-centos
             - non-txt-diff-centos
             - misc-centos
+#            - typecheck-with-included-CF
+            - typecheck-with-locally-built-CF
