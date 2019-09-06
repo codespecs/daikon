@@ -343,12 +343,10 @@ jobs:
             - ".git"
 
       - run: |
-          JAVA_HOME_FROM_JAVAC=`dirname $(dirname $(readlink -f $(which javac)))`
-          export JAVA_HOME=${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC}
           make showvars
           make compile daikon.jar
       - run:
-          command: JAVA_HOME_FROM_JAVAC=`dirname $(dirname $(readlink -f $(which javac)))` && export JAVA_HOME=${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC} && make -C java typecheck
+          command: make -C java typecheck
           no_output_timeout: 30m
 
   typecheck-with-locally-built-CF:

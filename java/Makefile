@@ -60,7 +60,6 @@ else
 endif
 
 ## Add tools.jar and rt.jar, if they exist
-
 JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
   DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/tools.jar
@@ -1135,8 +1134,6 @@ showvars:
 	@echo PATH = $(PATH)
 
 	@echo JAVA_HOME = $(JAVA_HOME)
-	echo $(dirname $(readlink -f $(which javac)))
-	dirname $(dirname $(readlink -f $(which javac)))
 	which java
 	java -version
 	which javac
