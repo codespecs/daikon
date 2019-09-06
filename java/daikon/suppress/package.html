@@ -52,12 +52,12 @@ suppression is able to use Equality invariants for suppressing.
 </ul>
 
 <p>
-Invariants are suppressed by SuppressionLink's, each of which stores a
+Invariants are suppressed by SuppressionLinks, each of which stores a
 suppressed invariant and a list of suppressors (since a conjunction of
 invariants may together suppress one other invariant).  The class that
 generates SuppressionLink objects is a SuppressionFactory.  There are
-many different kinds of SuppressionFactory's, one for each suppression
-rule we have.  Most SuppressionFactory's are attached to the
+many different kinds of SuppressionFactorys, one for each suppression
+rule we have.  Most SuppressionFactorys are attached to the
 invariant classes that they would suppress.
 </p>
 
@@ -65,7 +65,7 @@ invariant classes that they would suppress.
 Suppression itself happens at the PptTopLevel.  Initially (or after
 some small set of samples are fed) a PptTopLevel iterates through its
 invariants and attempts to suppress them by its attemptSuppression()
-method, which asks the invariant's associated SuppressionFactory's to
+method, which asks the invariant's associated SuppressionFactorys to
 attempt suppression.  Each SuppressionFactory in turn generates
 SuppressionTemplates, which are lists of Invariant types and VarInfos
 that would be able to make a valid SuppressionLink.  The
@@ -83,8 +83,8 @@ through PptTopLevel.add():
 
 <ul>
 
-<li> Make a set of PptSlice's called "viewsToCheck" that have to be
-given the sample.  Initially, the set is all the PptSlice's.
+<li> Make a set of PptSlices called "viewsToCheck" that have to be
+given the sample.  Initially, the set is all the PptSlices.
 </li>
 
 <li> Check invariants in viewsToCheck by calling their add() method.
@@ -113,7 +113,7 @@ The only interface for suppressing an invariant is through the
 attemptSuppression() method in PptTopLevel (i.e. don't try to suppress
 an Invariant any other way).  The only interface for finding
 invariants that are potential suppressors is through
-PptTopLevel.fillSuppressionTemplate().  SuppressionFactory's should
+PptTopLevel.fillSuppressionTemplate().  SuppressionFactorys should
 not attempt to find invariants on their own, because
 fillSuppressionTemplate respects the global option of whether a
 suppressed invariant may suppress another invariant (and later,
@@ -124,11 +124,11 @@ the suppressors were found using fillSuppressionTemplate()).
 </p>
 
 <p>
-How SuppressionFactory's are discovered by Daikon: every time an
+How SuppressionFactorys are discovered by Daikon: every time an
 Invariant is checked for whether it is suppressed, its
 getSuppressionFactories() method is called.  Each Invariant subtype
 implements getSuppressionFactories() to return the relevant
-SuppressionFactory's.
+SuppressionFactorys.
 </p>
 
 <p>
@@ -176,7 +176,7 @@ use proper cycle detection between invariant dependencies: the
 invariants that remain from suppression must be able to logically get
 the invariants that are suppressed, in some order.  Maybe this is a
 way of saying "suppressors must have path cover".  Then again, if
-all our SuppressionFactory's are statically proved to be acyclic,
+all our SuppressionFactorys are statically proved to be acyclic,
 then we don't need to worry.
 </p>
 
