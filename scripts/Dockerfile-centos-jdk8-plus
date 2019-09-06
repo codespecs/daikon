@@ -33,6 +33,7 @@ RUN yum -q -y install \
   curl \
   gcc-c++ \
   graphviz \
+  jq \
   netpbm \
   python \
   texi2html \
