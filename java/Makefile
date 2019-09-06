@@ -61,7 +61,7 @@ endif
 
 ## Add tools.jar and rt.jar, if they exist
 
-WHICH_JAVAC := $(which javac)
+WHICH_JAVAC := $(shell which javac)
 JAVA_HOME_FROM_JAVAC := $(dirname $(dirname $(readlink -f $(which javac))))
 JAVA_HOME_FROM_JAVAC_2 := $(shell dirname $(dirname $(readlink -f $(which javac))))
 INFERRED_JAVA_HOME := ${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC}
