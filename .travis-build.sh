@@ -70,12 +70,8 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
 
   git -C /tmp/plume-scripts pull > /dev/null 2>&1 \
     || git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
-  eval `/tmp/plume-scripts/ci-info DEFAULT-ORGANIZATION`
-  # if [ "$CI_IS_PR" == "true" ] ; then
-  (git diff $CI_COMMIT_RANGE > /tmp/diff.txt 2>&1) || true
   (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
-  [ -s /tmp/diff.txt ] || (echo "/tmp/diff.txt is empty; try pulling base branch (often master) into compare branch (often feature branch)" && false)
-  python /tmp/plume-scripts/lint-diff.py --strip-diff=2 --strip-lint=1 /tmp/diff.txt /tmp/warnings.txt
+  /tmp/plume-scripts/ci-lint-diff /tmp/warnings.txt
 fi
 
 if [[ "${GROUP}" == "kvasir" || "${GROUP}" == "all" ]]; then
