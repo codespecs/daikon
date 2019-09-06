@@ -34,14 +34,7 @@ make javadoc doc-all
 git -C /tmp/plume-scripts pull > /dev/null 2>&1 \
   || git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
 eval `/tmp/plume-scripts/ci-info`
-set +e
-git diff $CI_COMMIT_RANGE > /tmp/diff.txt 2>&1
-if [ $? == 2 ]; then
-  echo "git diff exited with status 2"
-  cat /tmp/diff.txt
-  exit 2
-fi
-set -e
+(git diff $CI_COMMIT_RANGE > /tmp/diff.txt 2>&1) || true
 (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
 [ -s /tmp/diff.txt ] || (echo "/tmp/diff.txt is empty for $CI_COMMIT_RANGE; try pulling base branch (often master) into compare branch (often your feature branch)" && false)
 python /tmp/plume-scripts/lint-diff.py --guess-strip /tmp/diff.txt /tmp/warnings.txt
