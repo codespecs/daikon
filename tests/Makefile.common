@@ -184,6 +184,7 @@ CP_PARENTS := rsync -aR
 
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
 # they are on the path.
+JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
 ifeq (darwin, $(OSTYPE))
   JAVA  := java
   JAVAC := javac

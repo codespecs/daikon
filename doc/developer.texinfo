@@ -178,21 +178,10 @@ so you do not need to compile them yourself unless you make changes.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
-When you compile Daikon, environment variable
-@env{JAVA_HOME} must be set.
+When you compile Daikon, either environment variable
+@env{JAVA_HOME} must be set, or @code{javac} must be on the execution path.
 See the installation instructions
-(@ref{Installing Daikon,,,daikon,Daikon User Manual}) for details.
-Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
-(for Fedora or Ubuntu)
-that would enable you to compile Daikon might look like the following:
-
-@example
-export JAVA_HOME=/usr/lib/jvm/java
-
-## Not required
-# export DAIKONDIR=$HOME/daikon
-# source $DAIKONDIR/scripts/daikon.bashrc
-@end example
+(@ref{Installing Daikon,,,daikon,Daikon User Manual}) for more details.
 
 
 @menu
@@ -1566,8 +1555,7 @@ process) the next time you run the tests.
 
 As when you install or compile Daikon, when you run the tests
 environment variable @env{DAIKONDIR}
-should be set.  Additionally, environment variable
-@env{JAVA_HOME} should be the directory containing the Java JDK@.
+should be set.
 
 You should generally run the regression tests before checking it a
 change (especially any non-trivial change).  If any of the regression
@@ -2059,6 +2047,7 @@ A clone of
 
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
+[TODO: Is this really necessary?]
 @c Example:  export JAVA_HOME=/usr/lib/jvm/java
 
 @item
