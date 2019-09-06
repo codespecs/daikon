@@ -37,6 +37,8 @@ jobs:
   steps:
   - checkout: self
     fetchDepth: 25
+  - bash: env | sort
+    displayName: environment
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
