@@ -311,6 +311,7 @@ Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
 export DAIKONDIR=@var{daikonparent}/daikon-5.7.4
+# Either JAVA_HOME must be set, or javac must be on the execution path.
 # source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -3940,6 +3941,8 @@ instrumented copy of the JDK@.  Use the following command:
 make -C $DAIKONDIR/java dcomp_rt.jar
 @end example
 
+Either the @env{JAVA_HOME} environment variable must be set, or
+@code{javac} must be on the execution path.
 This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.

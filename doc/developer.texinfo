@@ -178,6 +178,8 @@ so you do not need to compile them yourself unless you make changes.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
+When you compile Daikon, either environment variable
+@env{JAVA_HOME} must be set, or @code{javac} must be on the execution path.
 See the installation instructions
 (@ref{Installing Daikon,,,daikon,Daikon User Manual}) for more details.
 
