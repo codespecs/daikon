@@ -61,8 +61,8 @@ endif
 
 ## Add tools.jar and rt.jar, if they exist
 
-JAVA_HOME_FROM_JAVAC=`dirname $(dirname $(readlink -f $(which javac)))`
-INFERRED_JAVA_HOME=${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC}
+JAVA_HOME_FROM_JAVAC := $(dirname $(dirname $(readlink -f $(which javac))))
+INFERRED_JAVA_HOME := ${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC}
 ifneq "$(wildcard ${INFERRED_JAVA_HOME}/lib/tools.jar)" ""
   DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${INFERRED_JAVA_HOME}/lib/tools.jar
 endif
