@@ -16,11 +16,13 @@ echo ".travis-build.sh is running kvasir and DynComp tests"
 # build; however, it means that they are run on each branch and pull request.
 
 # Get correct version of Kvasir/fjalar
-git -C /tmp/plume-scripts pull > /dev/null 2>&1 \
-  || git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
-eval `/tmp/plume-scripts/ci-info codespecs`
 if [ ! -d ../fjalar ] ; then
-  git clone ${GIT_OPTIONS} https://github.com/$CI_ORGANIZATION/fjalar.git -b $CI_BRANCH ../fjalar
+  git -C /tmp/plume-scripts pull > /dev/null 2>&1 \
+    || git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
+  eval `/tmp/plume-scripts/ci-info codespecs`
+  REPO=`/tmp/plume-scripts/git-find-fork ${CI_ORGANIZATION} codespecs fjalar`
+  BRANCH=`/tmp/plume-scripts/git-find-branch ${REPO} ${CI_BRANCH}`
+  (cd .. && git clone -b ${BRANCH} --single-branch --depth 1 ${REPO})
 fi
 
 # The Valgrind configure script fails if SHELLOPTS is defined.
