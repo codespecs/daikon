@@ -62,7 +62,7 @@ endif
 ## Add tools.jar and rt.jar, if they exist
 
 WHICH_JAVAC := $(shell which javac)
-JAVA_HOME_FROM_JAVAC := $(dirname $(dirname $(readlink -f $(which javac))))
+JAVA_HOME := $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
 JAVA_HOME_FROM_JAVAC_2 := $(shell dirname $(dirname $(readlink -f $(which javac))))
 INFERRED_JAVA_HOME := ${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC}
 ifneq "$(wildcard ${INFERRED_JAVA_HOME}/lib/tools.jar)" ""
