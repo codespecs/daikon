@@ -28,6 +28,11 @@ RUN yum -q -y upgrade && yum -q -y install \
   java-1.8.0-openjdk-devel \
 && yum -q clean all
 
+# This enables the repository that contains jq
+RUN yum -q -y install \
+  epel-release \
+&& yum -q clean all
+
 RUN yum -q -y install \
   ctags \
   curl \
