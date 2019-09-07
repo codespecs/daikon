@@ -50,6 +50,20 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
+- job: typecheck
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: mdernst/daikon-ubuntu-jdk8:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show environment
+  - bash: ./scripts/test-typecheck.sh
+    displayName: test-typecheck.sh
+
 - job: quick_txt_diff_fedora
   pool:
     vmImage: 'ubuntu-16.04'
@@ -159,17 +173,3 @@ jobs:
     fetchDepth: 25
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
-
-- job: typecheck
-  pool:
-    vmImage: 'ubuntu-16.04'
-  container: mdernst/daikon-ubuntu-jdk8:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: |
-      java -version
-      javac -version
-    displayName: show environment
-  - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
