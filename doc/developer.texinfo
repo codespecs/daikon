@@ -2097,12 +2097,13 @@ set -o pipefail
 @end smallexample
 
 @noindent
-Each of the two commands should print exactly 4 lines:
+Each of the two commands should print exactly these lines:
 
 @example
 Already up-to-date.
 On branch master
 Your branch is up-to-date with 'origin/master'.
+
 nothing to commit, working directory clean
 @end example
 
@@ -2245,19 +2246,17 @@ Verify that Daikon passes its tests.
 All of the following jobs should be green:
 @exampleindent 0
 @example
-@* @url{https://travis-ci.org/codespecs/daikon}
-@html
-<img src="https://api.travis-ci.org/codespecs/daikon.svg?branch=master" alt="Travis codespecs/daikon status"/>
-@end html
-@* @url{https://travis-ci.org/codespecs/fjalar}
-@html
-<img src="https://api.travis-ci.org/codespecs/fjalar.svg?branch=master" alt="Travis codespecs/fjalar status"/>
-@end html
 @* @url{https://dev.azure.com/codespecs/daikon/_build/latest?definitionId=1&branchName=master}
 @html
 <img
 src="https://dev.azure.com/codespecs/daikon/_apis/build/status/codespecs.daikon?branchName=master"
 alt="Azure Pipelines codespecs/daikon status"/>
+@end html
+@* @url{https://dev.azure.com/codespecs/fjalar/_build/latest?definitionId=1&branchName=master}
+@html
+<img
+src="https://dev.azure.com/codespecs/fjalar/_apis/build/status/codespecs.fjalar?branchName=master"
+alt="Azure Pipelines codespecs/fjalar status"/>
 @end html
 @end example
 @exampleindent 1
