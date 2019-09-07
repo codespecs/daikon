@@ -31,8 +31,8 @@ fi
 
 make javadoc doc-all
 
-git -C /tmp/plume-scripts pull > /dev/null 2>&1 \
-  || git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
+(cd /tmp/plume-scripts && git pull > /dev/null 2>&1) \
+  || (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
 eval `/tmp/plume-scripts/ci-info`
 (git diff $CI_COMMIT_RANGE > /tmp/diff.txt 2>&1) || true
 (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
