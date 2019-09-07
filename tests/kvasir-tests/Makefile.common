@@ -88,6 +88,9 @@ endif
 ifeq ($(OS_REL),28)
 	GOAL := goal-Fedora28
 endif
+ifeq ($(OS_REL),30)
+	GOAL := goal-Fedora30
+endif
 # other versions of Fedora will use goal-Fedora if it exists
 # otherwise the default goal file
 endif
@@ -136,6 +139,9 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 				     ) \
 				) \
 			)
+
+show-os:
+	@echo $(OS_ID) $(OS_REL)
 
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1

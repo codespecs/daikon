@@ -202,25 +202,25 @@ jobs:
 
       - run: ./scripts/test-kvasir.sh
 
-  kvasir-fedora-old-docker-container:
+# kvasir-fedora-old-docker-container:
 
-    docker:
-      - image: mdernst/fedora-for-daikon-jdkany
+#   docker:
+#     - image: mdernst/fedora-for-daikon-jdkany
 
-    steps:
+#   steps:
 
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+#     - restore_cache:
+#         keys:
+#           - source-v1-{{ .Branch }}-{{ .Revision }}
+#           - source-v1-{{ .Branch }}-
+#           - source-v1-
+#     - checkout
+#     - save_cache:
+#         key: source-v1-{{ .Branch }}-{{ .Revision }}
+#         paths:
+#           - ".git"
 
-      - run: ./scripts/test-kvasir.sh
+#     - run: ./scripts/test-kvasir.sh
 
   quick-txt-diff-centos:
 
@@ -421,13 +421,12 @@ workflows:
       - misc-fedora:
           requires:
             - misc-ubuntu
-## TODO
-#       - kvasir-fedora-new-docker-container:
-#           requires:
-#             - kvasir-ubuntu
-      - kvasir-fedora-old-docker-container:
+      - kvasir-fedora-new-docker-container:
           requires:
             - kvasir-ubuntu
+#     - kvasir-fedora-old-docker-container:
+#         requires:
+#           - kvasir-ubuntu
       - quick-txt-diff-centos:
           requires:
             - quick-txt-diff-ubuntu
@@ -453,7 +452,7 @@ workflows:
             - nonquick-txt-diff-fedora
             - non-txt-diff-fedora
             - misc-fedora
-            - kvasir-fedora-old-docker-container
+#           - kvasir-fedora-old-docker-container
             - quick-txt-diff-centos
             - nonquick-txt-diff-centos
             - non-txt-diff-centos

@@ -28,11 +28,12 @@ RUN dnf -qy upgrade && dnf -qy install \
   java-1.8.0-openjdk-devel \
 && dnf -q clean all
 
-dnf -qy install \
+RUN dnf -qy install \
   curl \
   ctags \
   gcc-c++ \
   graphviz \
+  jq \
   netpbm \
   python \
   texi2html \

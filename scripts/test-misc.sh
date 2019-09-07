@@ -30,8 +30,8 @@ if [ ! -z ${SKIP_JAVADOC+x} ]; then
 else
   make javadoc doc-all
 
-  git -C /tmp/plume-scripts pull > /dev/null 2>&1 \
-    || git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
+  (cd /tmp/plume-scripts && git pull > /dev/null 2>&1) \
+    || (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
   (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
   /tmp/plume-scripts/ci-lint-diff /tmp/warnings.txt
 fi
