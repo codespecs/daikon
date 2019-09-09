@@ -1059,9 +1059,18 @@ javadoc: api
 javadoc-files.txt:
 	find . \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' \) -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
 
+ifeq ($(shell java -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*"/\1.\2/p;'),1.8)
+  ifneq ($(shell sed -n ';s/^NAME="\(.*\)"/\1/p;' /etc/os-release),Ubuntu)
+    SKIP_JAVADOC=1
+  endif
+endif
+
 # Build javadoc using the daikon package and all subpackages of daikon.
 .PHONY: api
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
+ifdef SKIP_JAVADOC
+	@echo Skipping javadoc because of https://bugs.openjdk.java.net/browse/JDK-8215542
+else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) \
@@ -1070,6 +1079,7 @@ api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
 	cp -pf ../doc/daikon-favicon.png $(JAVADOC_DEST)
 	cd $(JAVADOC_DEST) && $(HTMLTOOLS)/html-add-favicon . daikon-favicon.png
+endif
 
 # Run Javadoc on each file individually, to determine which one is crashing Javadoc.
 # Then, you need to do binary search on that file.
