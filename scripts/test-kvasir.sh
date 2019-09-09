@@ -17,10 +17,7 @@ echo ".travis-build.sh is running kvasir and DynComp tests"
 if [ ! -d ../fjalar ] ; then
   (cd /tmp/plume-scripts && git pull > /dev/null 2>&1) \
     || (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
-  eval `/tmp/plume-scripts/ci-info codespecs`
-  REPO=`/tmp/plume-scripts/git-find-fork ${CI_ORGANIZATION} codespecs fjalar`
-  BRANCH=`/tmp/plume-scripts/git-find-branch ${REPO} ${CI_BRANCH}`
-  (cd .. && git clone -b ${BRANCH} --single-branch --depth 1 ${REPO})
+  /tmp/plume-scripts/git-clone-related codespecs fjalar
 fi
 
 # The Valgrind configure script fails if SHELLOPTS is defined.
