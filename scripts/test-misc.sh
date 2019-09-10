@@ -28,6 +28,13 @@ if [ ! -z ${SKIP_JAVADOC+x} ]; then
   echo Skipping javadoc because of https://bugs.openjdk.java.net/browse/JDK-8215542
   exit
 else
+  git --no-pager branch -a
+  echo
+  git --no-pager show master
+  echo
+  git --no-pager show darwin-java-home
+  echo
+
   make javadoc doc-all
 
   (cd /tmp/plume-scripts && git pull > /dev/null 2>&1) \
