@@ -15,7 +15,7 @@ echo ".travis-build.sh is running kvasir and DynComp tests"
 
 # Get correct version of Kvasir/fjalar
 if [ ! -d ../fjalar ] ; then
-  (cd /tmp/plume-scripts && git pull > /dev/null 2>&1) \
+  (cd /tmp/plume-scripts && git pull) > /dev/null 2>&1 \
     || (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
   /tmp/plume-scripts/git-clone-related codespecs fjalar
 fi
