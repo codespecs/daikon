@@ -398,8 +398,7 @@ workflows:
       - non-txt-diff-fedora:
           requires:
             - non-txt-diff-ubuntu
-      - misc-fedora
-#       - misc-fedora:
+      - misc-fedora:
 #           requires:
 #             - misc-ubuntu
       - kvasir-fedora:
@@ -414,8 +413,7 @@ workflows:
       - non-txt-diff-centos:
           requires:
             - non-txt-diff-ubuntu
-      - misc-centos
-#       - misc-centos:
+      - misc-centos:
 #           requires:
 #             - misc-ubuntu
 #      - typecheck-with-included-CF
