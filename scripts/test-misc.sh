@@ -37,7 +37,7 @@ else
 
   make javadoc doc-all
 
-  (cd /tmp/plume-scripts && git pull > /dev/null 2>&1) \
+  (cd /tmp/plume-scripts && git pull) > /dev/null 2>&1 \
     || (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
   (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
   /tmp/plume-scripts/ci-lint-diff /tmp/warnings.txt
