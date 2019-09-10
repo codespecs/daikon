@@ -60,7 +60,11 @@ else
 endif
 
 ## Add tools.jar and rt.jar, if they exist
-JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
+ifeq ($(shell uname), Darwin)
+  JAVA_HOME ?= $(/usr/libexec/java_home)
+else
+  JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
+endif
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
   DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/lib/tools.jar
 endif
