@@ -399,8 +399,8 @@ workflows:
           requires:
             - non-txt-diff-ubuntu
       - misc-fedora:
-#           requires:
-#             - misc-ubuntu
+          requires:
+            - misc-ubuntu
       - kvasir-fedora:
           requires:
             - kvasir-ubuntu
@@ -414,8 +414,8 @@ workflows:
           requires:
             - non-txt-diff-ubuntu
       - misc-centos:
-#           requires:
-#             - misc-ubuntu
+          requires:
+            - misc-ubuntu
 #      - typecheck-with-included-CF
       - typecheck-with-locally-built-CF
       - trigger-downstream:
