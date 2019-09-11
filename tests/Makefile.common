@@ -182,16 +182,13 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-# On Darwin, java/javac aren't in a standard JDK directory, so we presume
-# they are on the path.
-JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
-ifeq (darwin, $(OSTYPE))
-  JAVA  := java
-  JAVAC := javac
+ifeq ($(shell uname), Darwin)
+  JAVA_HOME ?= $(/usr/libexec/java_home)
 else
-  JAVA  := $(JAVA_HOME)/bin/java
-  JAVAC := $(JAVA_HOME)/bin/javac
+  JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
 endif
+JAVA  := $(JAVA_HOME)/bin/java
+JAVAC := $(JAVA_HOME)/bin/javac
 JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
