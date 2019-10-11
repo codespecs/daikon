@@ -19,7 +19,10 @@ import org.plumelib.util.UtilPlume;
  * options for the Daikon tools. Refer to the {@code --config} command-line option in the Daikon
  * manual for an introduction to the configuration system.
  */
-@SuppressWarnings("removal") // in JDK 9+, ClassDoc, RootDoc, etc. are deprecated
+@SuppressWarnings({
+  "deprecation", // in JDK 9+, ClassDoc, RootDoc, etc. are deprecated
+  "removal" // in JDK 11, ClassDoc, RootDoc, etc. are deprecated and marked for removal
+})
 public class ParameterDoclet {
 
   private static final String lineSep = System.lineSeparator();
