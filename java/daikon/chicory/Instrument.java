@@ -158,20 +158,20 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     if (Chicory.boot_classes != null) {
       Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
       if (matcher.find()) {
-        debug_transform.log("ignoring sys class %s, matches boot_classes regex", fullClassName);
+        debug_transform.log("ignoring sys class %s, matches boot_classes regex%n", fullClassName);
         return null;
       }
     } else if (loader == null) {
-      debug_transform.log("ignoring system class %s, class loader == null", fullClassName);
+      debug_transform.log("ignoring system class %s, class loader == null%n", fullClassName);
       return null;
     } else if (loader.getParent() == null) {
-      debug_transform.log("ignoring system class %s, parent loader == null\n", fullClassName);
+      debug_transform.log("ignoring system class %s, parent loader == null%n", fullClassName);
       return null;
     } else if (fullClassName.startsWith("sun.reflect")) {
-      debug_transform.log("ignoring system class %s, in sun.reflect package", fullClassName);
+      debug_transform.log("ignoring system class %s, in sun.reflect package%n", fullClassName);
       return null;
     } else if (fullClassName.startsWith("com.sun")) {
-      debug_transform.log("Class from com.sun package %s with nonnull loaders\n", fullClassName);
+      debug_transform.log("Class from com.sun package %s with nonnull loaders%n", fullClassName);
     }
 
     // Don't intrument our code
@@ -256,7 +256,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         // njc.dump(filename);
         return (njc.getBytes());
       } else {
-        debug_transform.log("not including class %s (filtered out)", className);
+        debug_transform.log("not including class %s (filtered out)%n", className);
         // No changes to the bytecodes
         return null;
       }

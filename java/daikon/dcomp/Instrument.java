@@ -41,16 +41,18 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // System.out.printf("transform on %s%n", className);
+    if (DynComp.verbose) System.out.printf("transform on %s%n", className);
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) {
+      if (DynComp.verbose) System.out.printf("Skipping in_shutdown class %s%n", className);
       return null;
     }
 
     // If already instrumented, nothing to do
     // (This set will be empty if DynComp.no_jdk is true)
     if (Premain.pre_instrumented.contains(className)) {
+      if (DynComp.verbose) System.out.printf("Skipping pre_instrumented JDK class %s%n", className);
       return null;
     }
 
@@ -60,6 +62,7 @@ public class Instrument implements ClassFileTransformer {
     if (BcelUtil.inJdkInternalform(className)) {
       // If we are not using an instrumented JDK, then skip this class.
       if (DynComp.no_jdk) {
+        if (DynComp.verbose) System.out.printf("Skipping no_jdk JDK class %s%n", className);
         return null;
       }
 
@@ -70,6 +73,7 @@ public class Instrument implements ClassFileTransformer {
       // We're not in a JDK class
       // Don't instrument our own classes
       if (is_dcomp(className)) {
+        if (DynComp.verbose) System.out.printf("Skipping is_dcomp class %s%n", className);
         return null;
       }
     }
