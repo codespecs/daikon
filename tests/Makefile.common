@@ -215,25 +215,21 @@ export LC_ALL=C
 
 default: help
 
-# The general form of a Java version number is n.n.n_nn.
-# To simplify scanning, I only look at the major version
-# number and the update number.  Thus I assume the version
-# number is of the form: 1.<major>.0_<update>
-# Currently, the only versions that matter for Daikon testing
-# is if <major> is 8 or not (this will need to change when
-# Java 9 is released); and, if it is Java 8, if <update> > 91.
-# As of 1.8.0_92 there was a javac change that affects the line
-# numbers assigned to EXIT ppts in a few cases.
+# The general form of a Java version number prior to Java 9
+# is 1.n.n_n. For Java 9 or later it is n.n.n.n.
+# Currently, we only look for the release number, which is
+# the first 'n' in either case.
 
-JAVA_VERSION_STRING := $(shell $(RUN_JAVA) -version 2>&1 | head -1)
-JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.* 1\.\(.\).*/\1/')
-JAVA_UPDATE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.*_//')
-NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+ifneq (,$(findstring 1.,$(JAVA_VERSION_STRING)))
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/1\.\(.\).*/\1/')
+else
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+endif
+JAVA8_OR_NEWER := $(shell echo $(JAVA_RELEASE_NUMBER)\>7 | bc)
 
-# TODO:
-# Will need to support Java 8 and 9 at some point.
-ifneq ($(JAVA_RELEASE_NUMBER), 8)
-    $(error Must use Java version 8)
+ifneq ($(JAVA8_OR_NEWER), 1)
+    $(error Must use Java version 8 or later)
 endif
 
 # Function to compute goal filename extension.  Java 8 is now the default.
@@ -241,12 +237,12 @@ endif
 # otherwise, use filename.test.goal
 # Reasons for different behavior between Java 8 and Java 9 include:
 # (Unkown at this point.)
+# (There are no .goal.j9 files at present.)
 #
 # The argument ($(1)) is '<filename>.<test>'
-
-# Now we have an additional complication.  If we are using an older Java8
-# (<update> < 92) then if filename.test.goal.j8o exists, use it;
-# otherwise, use filename.test.goal
+#
+# This goal_name does not apply to kvasir-tests which
+# have their own goal_name calculation.
 
 goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
 				$(1).goal, \
@@ -1370,7 +1366,7 @@ endif
 
 
 results summary:
-	@$(MAKE) --no-print-directory BASE?=`/bin/pwd` -C ../.. $@
+	@$(MAKE) -i --no-print-directory BASE?=`/bin/pwd` -C ../.. $@
 
 
 ###########################################################################
