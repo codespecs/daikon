@@ -593,8 +593,7 @@ public abstract class DaikonVariableInfo
               // Get class type of the class variable
               try {
                 sibClass =
-                    ReflectionPlume.classForName(
-                        Signatures.binaryNameToClassGetName(sibType));
+                    ReflectionPlume.classForName(Signatures.binaryNameToClassGetName(sibType));
               } catch (ClassNotFoundException e) {
                 throw new Error(e);
               }
