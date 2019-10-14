@@ -1,7 +1,9 @@
 package daikon.chicory;
 
-import daikon.util.EntryReader;
-import daikon.util.Intern;
+import daikon.plumelib.options.Option;
+import daikon.plumelib.options.Options;
+import daikon.plumelib.util.EntryReader;
+import daikon.plumelib.util.Intern;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -15,8 +17,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 /**
  * Reads declaration files and provides methods to access the information within them. A declaration

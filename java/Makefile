@@ -50,7 +50,7 @@ JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 ## Classpath
 
 ## Daikon compiled files
-ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-util.jar)" "${DAIKONDIR}/java/lib/daikon-util.jar"
+ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-plumelib.jar)" "${DAIKONDIR}/java/lib/daikon-plumelib.jar"
   # Add jar files that only exist for the development version, not the
   # distributed version, of Daikon.  The if clause avoids a (harmless but
   # annoying) javac error message that they don't exist.
@@ -73,7 +73,7 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
-DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.10.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.5.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.4.jar:${DAIKON_CLASSPATH}
+DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.10.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.5.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.4.jar:${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -540,19 +540,19 @@ dyncomp-jdk-only dcomp-jdk-only :
 update-plume-scripts:
 	${MAKE} -C .. update-plume-scripts
 
-# Checks that daikon.util, rather than plume, is imported by source files
-# that do instrumentation.  Should also check that daikon.util is never
+# Checks that daikon.plumelib, rather than plume, is imported by source files
+# that do instrumentation.  Should also check that daikon.plumelib is never
 # imported by non-instrumentation files.
 .PHONY: plume-import-check
 plume-import-check :
-	@echo -n "Checking that imports of plume and daikon.util are correct..."
-	@if [ -n "`grep '^import org.plumelib.util' $(INSTRUMENTATION_JAVA_FILES)`" ]; then \
+	@echo -n "Checking that imports of plume and daikon.plumelib are correct..."
+	@if [ -n "`grep '^import org.plumelib' $(INSTRUMENTATION_JAVA_FILES)`" ]; then \
 	echo ""; \
-	echo "*** ERROR: Do not import org.plumelib.util from DynComp code. It would be"; \
+	echo "*** ERROR: Do not import org.plumelib.* from DynComp code. It would be"; \
 	echo " instrumented when DynComp or Chicory is run. Please use the"; \
-	echo " (identical) daikon.util package, which will not be instrumented."; \
+	echo " (identical) daikon.plumelib package, which will not be instrumented."; \
 	echo "The following files import from plume:"; \
-	grep -n '^import org.plumelib.util' $(INSTRUMENTATION_JAVA_FILES); \
+	grep -n '^import org.plumelib.*' $(INSTRUMENTATION_JAVA_FILES); \
 	else \
 	echo "done"; \
 	fi
