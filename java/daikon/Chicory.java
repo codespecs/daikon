@@ -3,7 +3,10 @@ package daikon;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.chicory.StreamRedirectThread;
-import daikon.util.RegexUtil;
+import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.options.Option;
+import daikon.plumelib.options.Options;
+import daikon.plumelib.util.RegexUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +24,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.bcelutil.SimpleLog;
-import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 /**
  * This is the main class for Chicory which transforms the class files of a program to instrument it

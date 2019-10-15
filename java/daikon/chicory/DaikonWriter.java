@@ -1,13 +1,13 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.plumelib.reflection.Signatures;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import org.checkerframework.checker.signature.qual.BinaryName;
-import org.plumelib.reflection.Signatures;
 
 /** DaikonWriter is the parent class of DeclWriter and DTraceWriter. */
 public abstract class DaikonWriter {

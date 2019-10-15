@@ -3,6 +3,7 @@ package daikon.chicory;
 import daikon.Chicory;
 import daikon.FileIO;
 import daikon.PptTopLevel.PptType;
+import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.PrintStream;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.bcelutil.SimpleLog;
 
 /**
  * DeclWriter writes the {@code .decls} file to a stream. It uses traversal pattern trees (see
