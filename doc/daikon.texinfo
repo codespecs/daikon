@@ -149,8 +149,8 @@ that holds at a certain point or points in a program; these are often
 seen in assert statements, documentation, and formal specifications.
 Invariants can be useful in program understanding and a host of other
 applications.  Examples include @samp{x.field > abs(y)}; @samp{y = 2*x+3};
-@samp{array a is sorted}; @samp{for all list objects lst, lst.next.prev =
-lst}; @samp{for all treenode objects n, n.left.value < n.right.value}; @samp{p
+@samp{array a is sorted}; for all list objects lst, @samp{lst.next.prev =
+lst}; for all treenode objects n, @samp{n.left.value < n.right.value}; @samp{p
 != null => p.content in myArray}; and many more.  You can extend Daikon
 to add new properties (@pxref{Enhancing Daikon output}, or
 @pxref{New invariants,,,developer,Daikon Developer Manual}).
