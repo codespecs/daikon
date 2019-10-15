@@ -4,6 +4,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
+import daikon.plumelib.options.Option;
+import daikon.plumelib.options.Options;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +21,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
-import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 public class Premain {
 

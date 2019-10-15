@@ -14,7 +14,8 @@ import daikon.chicory.RootInfo;
 import daikon.chicory.StaticObjInfo;
 import daikon.chicory.StringInfo;
 import daikon.chicory.ThisObjInfo;
-import daikon.util.WeakIdentityHashMap;
+import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.util.WeakIdentityHashMap;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -40,7 +41,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.bcelutil.SimpleLog;
 
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
 public final class DCRuntime {

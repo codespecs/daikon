@@ -1,6 +1,7 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
+import daikon.plumelib.bcelutil.BcelUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
@@ -12,7 +13,6 @@ import org.apache.bcel.generic.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.bcelutil.BcelUtil;
 
 public class Instrument implements ClassFileTransformer {
 
@@ -132,10 +132,7 @@ public class Instrument implements ClassFileTransformer {
     if (classname.equals("daikon/PptTopLevel$PptType")) {
       return true;
     }
-    if (classname.startsWith("org/plumelib/bcelutil")) {
-      return true;
-    }
-    if (classname.startsWith("daikon/util")) {
+    if (classname.startsWith("daikon/plumelib")) {
       return true;
     }
     return false;

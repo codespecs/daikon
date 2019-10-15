@@ -1,6 +1,6 @@
 package daikon.chicory;
 
-import daikon.util.EntryReader;
+import daikon.plumelib.util.EntryReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

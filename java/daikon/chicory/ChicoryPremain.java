@@ -6,7 +6,10 @@ import static daikon.tools.nullness.NullnessUtil.castNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
-import daikon.util.UtilPlume;
+import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.options.Option;
+import daikon.plumelib.options.Options;
+import daikon.plumelib.util.UtilPlume;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,9 +33,6 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
-import org.plumelib.bcelutil.SimpleLog;
-import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 public class ChicoryPremain {
 

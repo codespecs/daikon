@@ -1,6 +1,8 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.plumelib.bcelutil.InstructionListUtils;
+import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
@@ -45,8 +47,6 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.bcelutil.InstructionListUtils;
-import org.plumelib.bcelutil.SimpleLog;
 
 /**
  * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
@@ -1197,10 +1197,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     if (classname.equals("daikon/PptTopLevel$PptType")) {
       return true;
     }
-    if (classname.startsWith("org/plumelib/bcelutil")) {
-      return true;
-    }
-    if (classname.startsWith("daikon/util")) {
+    if (classname.startsWith("daikon/plumelib")) {
       return true;
     }
     return false;

@@ -2,7 +2,7 @@ package daikon.dcomp;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.util.WeakIdentityHashMap;
+import daikon.plumelib.util.WeakIdentityHashMap;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
