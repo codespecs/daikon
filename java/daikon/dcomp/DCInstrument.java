@@ -4,7 +4,11 @@ import daikon.DynComp;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
 import daikon.chicory.MethodInfo;
-import daikon.util.EntryReader;
+import daikon.plumelib.bcelutil.BcelUtil;
+import daikon.plumelib.bcelutil.InstructionListUtils;
+import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.bcelutil.StackTypes;
+import daikon.plumelib.util.EntryReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -31,10 +35,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.bcelutil.BcelUtil;
-import org.plumelib.bcelutil.InstructionListUtils;
-import org.plumelib.bcelutil.SimpleLog;
-import org.plumelib.bcelutil.StackTypes;
 
 /** Instruments a class file to perform Dynamic Comparability. */
 @SuppressWarnings({"nullness"}) //
@@ -260,7 +260,7 @@ class DCInstrument extends InstructionListUtils {
 
     // Don't instrument DynComp classes. (But DO instrument Daikon classes.)
     if (classname.startsWith("daikon.chicory")
-        || classname.startsWith("daikon.util")
+        || classname.startsWith("daikon.plumelib")
         || (classname.startsWith("daikon.dcomp") && !classname.startsWith("daikon.dcomp.Test"))) {
       debug_transform.log("Skipping DynComp class %s%n", gen.getClassName());
       return null;
@@ -453,7 +453,7 @@ class DCInstrument extends InstructionListUtils {
 
     // Don't instrument DynComp classes. (But DO instrument Daikon classes.)
     if (classname.startsWith("daikon.chicory")
-        || classname.startsWith("daikon.util")
+        || classname.startsWith("daikon.plumelib")
         || (classname.startsWith("daikon.dcomp") && !classname.startsWith("daikon.dcomp.Test"))) {
       debug_transform.log("(refs_only)Skipping DynComp class %s%n", gen.getClassName());
       return null;
@@ -2265,9 +2265,9 @@ class DCInstrument extends InstructionListUtils {
 
     // System.out.printf("Checking callee instrumented on %s%n", classname);
 
-    // Our copy of daikon.util is not instrumented.  It would be odd, though,
+    // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
     // to see calls to this.
-    if (classname.startsWith("daikon.util")) {
+    if (classname.startsWith("daikon.plumelib")) {
       return false;
     }
 

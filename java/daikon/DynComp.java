@@ -1,7 +1,10 @@
 package daikon;
 
 import daikon.chicory.StreamRedirectThread;
-import daikon.util.RegexUtil;
+import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.options.Option;
+import daikon.plumelib.options.Options;
+import daikon.plumelib.util.RegexUtil;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -10,9 +13,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.plumelib.bcelutil.SimpleLog;
-import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 /**
  * This is the main class for DynComp. It uses the javaagent switch to java (which allows classes to

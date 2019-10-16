@@ -3,6 +3,8 @@ package daikon.dcomp;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
+import daikon.plumelib.options.Option;
+import daikon.plumelib.options.Options;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,8 +25,6 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
-import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 /**
  * Converts each file in the JDK. Each method is doubled. The new methods are distinguished by a
