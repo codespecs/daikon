@@ -2274,7 +2274,7 @@ Do a very clean rebuild of everything.
 
 @example
 cd $DAIKONDIR
-make very-clean
+make very-clean clean-kvasir
 make rebuild-everything
 @end example
 
@@ -2316,18 +2316,21 @@ Travis jobs to complete.
 
 @need 1000
 @item
-Set the version number in file @file{$DAIKONDIR/doc/VERSION}
-to an even number.
-You may do this manually, or if the revision number just needs to be incremented
+Set the version number to an even number.
+You may:
+@itemize
+@item
+Manually editfile @file{$DAIKONDIR/doc/VERSION}, or
+@item
+If the revision number just needs to be incremented
 by 1 (to go from odd to even) you may use:
-
-@c "cd $DAIKONDIR" because the previous commands changed the working directory
 @example
 make update-dist-version-file
 @end example
+@end itemize
 
 Note that if a new feature has been added, or if some change has made
-the current version incompatible from the previous release (such a
+the current version incompatible from the previous release (such as a
 change in the dtrace file format or revised names for tool options),
 then you should manually edit the VERSION file to increment the minor
 version number and reset the revision number to zero.
@@ -2385,7 +2388,7 @@ will be a list of files that were added/removed since the
 last release.
 If any of these differences is unexpected, then investigate.
 If any corrections are required, do so back in the main
-repository, commit the changes and
+repository, commit the changes, and
 then repeat this step.
 
 [Time: 23 min]
