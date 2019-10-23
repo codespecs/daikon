@@ -9054,7 +9054,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  Renieris NTT varname VarInfoName hasDuplicates hasOrder len gc
 @c  LocalWords:  hasNull nullTerminated isParam hashCode VarComparability IDE
 @c  LocalWords:  makeEmpty topLevel bottomLevel pptInfo MyInteger printindex mw
-@c  LocalWords:  basename globalVar staticVar funcStaticVar myName foo
+@c  LocalWords:  basename globalVar staticVar funcStaticVar myName foo WSL
 @c  LocalWords:  TerminationMessage HotSpot daikonPrintArrayMissing javacc invs
 @c  LocalWords:  sourcing toString struct uninstrumented Garbervetsky classfile
 @c  LocalWords:  UnsupportedClassVersionError DtraceDiff VerifyError procedurei
@@ -9082,7 +9082,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  firstparagraphindent codequotebacktick exampleindent dfn
 @c  LocalWords:  evenheading thispage thischaptername thischapternum hfuzz
 @c  LocalWords:  oddheading thissectionnum thissectionname everyfooting d1
-@c  LocalWords:  QuickTime QTSystem QTJava arg1 arg2 arg3 MyMain
+@c  LocalWords:  QuickTime QTSystem QTJava arg1 arg2 arg3 MyMain Makefile
 @c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx256m var1
 @c  LocalWords:  prepended computeConfidence numsamples getName var2 var3
 @c  LocalWords:  jcc Java2 seq1 CSharpContract myString otherString EXIT48
@@ -9093,7 +9093,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
 @c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
-@c  LocalWords:  Drager I1 I2 invSortComparator1 invSortComparator2
+@c  LocalWords:  Drager I1 I2 invSortComparator1 invSortComparator2 prover
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
 @c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
 @c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx2048m ps1

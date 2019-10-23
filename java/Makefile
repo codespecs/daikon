@@ -778,7 +778,12 @@ endif
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 8 rather than version 9).
 # JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
-CHECKER_ARGS ?= -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC} -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar ${JAVACHECK_EXTRA_ARGS}
+CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar ${JAVACHECK_EXTRA_ARGS}
+ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
+  CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC} -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar
+else
+  CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+endif
 
 ## All of the following targets need to depend on "compile".
 
