@@ -654,6 +654,7 @@ public abstract class DaikonVariableInfo
 
   /** Adds the decl info for a pure method. */
   // TODO factor out shared code with printDeclVar
+  @SuppressWarnings("deprecation") // in Java 9+, use canAccess instead of isAccessible
   protected DaikonVariableInfo addPureMethodDecl(
       ClassInfo curClass,
       MethodInfo minfo,
@@ -728,6 +729,7 @@ public abstract class DaikonVariableInfo
    *
    * @return the newly created DaikonVariableInfo object, whose parent is this
    */
+  @SuppressWarnings("deprecation") // in Java 9+, use canAccess instead of isAccessible
   protected DaikonVariableInfo addDeclVar(Field field, String offset, StringBuilder buf) {
     debug_vars.log("enter addDeclVar(field):%n");
     debug_vars.log("  field: %s, offset: %s%n", field, offset);
