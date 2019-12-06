@@ -670,6 +670,7 @@ endif
 ###
 
 # See version numbers at https://github.com/google/error-prone/releases
+# I'm having trouble upgrading past 2.3.1.
 ERRORPRONE_VERSION := 2.3.1
 ERRORPRONE_JAR_FILE := error_prone_ant-${ERRORPRONE_VERSION}.jar
 # For 2.3.2 and later (but I can't make the command work):
@@ -685,7 +686,7 @@ errorprone-nocompile:
 # 	javac \
 # 	  -J-Xbootclasspath/p:javac-9+181-r4173-1.jar \
 # 	  -XDcompilePolicy=simple \
-# 	  -processorpath ${DAIKONDIR}/java/lib/tmp/error_prone_core-2.3.2-with-dependencies.jar:${DAIKONDIR}/java/lib/tmp/dataflow-2.5.7.jar:${DAIKONDIR}/java/lib/tmp/javacutil-2.5.7.jar:${DAIKONDIR}/java/lib/tmp/jFormatString-3.0.0.jar \
+# 	  -processorpath ${DAIKONDIR}/java/lib/tmp/${ERRORPRONE_JAR_FILE}:${DAIKONDIR}/java/lib/tmp/dataflow-2.5.7.jar:${DAIKONDIR}/java/lib/tmp/javacutil-2.5.7.jar:${DAIKONDIR}/java/lib/tmp/jFormatString-3.0.0.jar \
 # 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF' \
 # 	  -Xmaxwarns 100000  \
 # 	  ${JAVA_FILES_FOR_STYLE}
