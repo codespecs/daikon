@@ -68,8 +68,11 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   # Documentation
   make javadoc doc-all
 
-  (cd /tmp/plume-scripts && git pull) > /dev/null 2>&1 \
-    || (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
+  if [ -d "/tmp/plume-scripts" ] ; then
+    git -C /tmp/plume-scripts pull -q > /dev/null 2>&1
+  else
+    git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
+  fi
   (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
   /tmp/plume-scripts/ci-lint-diff /tmp/warnings.txt
 fi
