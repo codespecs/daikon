@@ -264,7 +264,8 @@ public class LemmaStack {
       List<Lemma> lems, Set<Class<? extends Invariant>> blacklist) {
     List<Lemma> new_lems = new ArrayList<>();
     for (Lemma lem : lems) {
-      if (!blacklist.contains(lem.invClass())) {
+      Class<? extends Invariant> cls = lem.invClass();
+      if (cls != null && !blacklist.contains(cls)) {
         new_lems.add(lem);
       }
     }

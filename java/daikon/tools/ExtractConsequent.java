@@ -49,6 +49,7 @@ public class ExtractConsequent {
   private static class HashedConsequent {
     Invariant inv;
 
+    // This field, `fakeFor`, is a simplified/preferred version of the invariant.
     // We prefer "x < y", "x > y", and "x == y" to the conditions
     // "x >= y", "x <= y", and "x != y" that (respectively) give the
     // same split.  When we see a dispreferred form, we index it by
@@ -58,7 +59,7 @@ public class ExtractConsequent {
     // preferred form, with a pointer pack to the dispreferred
     // form. If we later see the preferred form, we replace the
     // placeholder and remove the dispreferred form.
-    @Nullable String fakeFor;
+    final @Nullable String fakeFor;
 
     HashedConsequent(Invariant inv, @Nullable String fakeFor) {
       this.inv = inv;

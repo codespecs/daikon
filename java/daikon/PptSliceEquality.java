@@ -439,7 +439,9 @@ public class PptSliceEquality extends PptSlice {
    * @param value the value to insert into the List mapped to key
    */
   private <T> void addToBindingList(Map<T, List<VarInfo>> map, T key, VarInfo value) {
-    assert key != null;
+    if (key == null) {
+      throw new IllegalArgumentException();
+    }
     List<VarInfo> elements = map.get(key);
     if (elements == null) {
       elements = new ArrayList<VarInfo>();
