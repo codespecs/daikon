@@ -19,7 +19,7 @@ checker-framework/
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
 daikon-plumelib.jar : Contains bcel-util, options, plume-util and reflection-util, but in package daikon.plumelib.
-To create, run from this directory:
+To create, run from this directory, using JDK 8 (does not build under JDK 11):
 mkdir -p ~/java && \
 (cd ~/java && \
 (git clone https://github.com/pantsbuild/jarjar jarjar-pantsbuild > /dev/null 2>&1 \
