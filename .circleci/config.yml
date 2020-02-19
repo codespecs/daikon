@@ -6,8 +6,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -28,8 +26,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -50,8 +46,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -72,8 +66,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-ubuntu-jdk8-plus
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -94,8 +86,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-ubuntu-jdk8-plus
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -116,8 +106,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-fedora-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -138,8 +126,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-fedora-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -160,8 +146,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-fedora-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -182,8 +166,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-fedora-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -204,8 +186,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-fedora-jdk8-plus
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -226,8 +206,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-centos-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -248,8 +226,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-centos-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -270,8 +246,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-centos-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -292,8 +266,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-centos-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -316,8 +288,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-centos-jdk8-plus
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -338,8 +308,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -365,8 +333,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
 
@@ -390,8 +356,6 @@ jobs:
 
     docker:
       - image: mdernst/daikon-ubuntu-jdk8-plus
-        environment:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
 
     steps:
       - run: echo "TODO implement trigger-downstream"
