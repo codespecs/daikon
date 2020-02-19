@@ -86,18 +86,18 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
   /**
    * Floating-point number between 0 and 1. Invariants are displayed only if the confidence that the
-   * invariant did not occur by chance is greater than this. (May also be set via the
-   * <tt>--conf_limit</tt> command-line option to Daikon; refer to manual.)
+   * invariant did not occur by chance is greater than this. (May also be set via the {@code
+   * --conf_limit} command-line option to Daikon; refer to manual.)
    */
   public static double dkconfig_confidence_limit = .99;
 
   /**
-   * A boolean value. If true, Daikon's Simplify output (printed when the <tt>--format simplify</tt>
-   * flag is enabled, and used internally by <tt>--suppress_redundant</tt>) will include new
+   * A boolean value. If true, Daikon's Simplify output (printed when the {@code --format simplify}
+   * flag is enabled, and used internally by {@code --suppress_redundant}) will include new
    * predicates representing some complex relationships in invariants, such as lexical ordering
    * among sequences. If false, some complex relationships will appear in the output as complex
    * quantified formulas, while others will not appear at all. When enabled, Simplify may be able to
-   * make more inferences, allowing <tt>--suppress_redundant</tt> to suppress more redundant
+   * make more inferences, allowing {@code --suppress_redundant} to suppress more redundant
    * invariants, but Simplify may also run more slowly.
    */
   public static boolean dkconfig_simplify_define_predicates = false;

@@ -53,7 +53,7 @@ public class HtmlToTexinfo {
     s = UtilPlume.replaceString(s, "<br>", "@*");
     s = UtilPlume.replaceString(s, lineSep + lineSep + "<p>", lineSep + lineSep);
     s = UtilPlume.replaceString(s, "<p>", "@*@*");
-    // Sadly, Javadoc prohibits the <samp> tag.  Use <tt> instead.
+    // Sadly, Javadoc prohibits the <samp> tag.  Use <code> instead.
     s = UtilPlume.replaceString(s, "<samp>", "@samp{");
     s = UtilPlume.replaceString(s, "</samp>", "}");
     s = UtilPlume.replaceString(s, "<code>", "@code{");
@@ -68,8 +68,8 @@ public class HtmlToTexinfo {
     s = UtilPlume.replaceString(s, "</pre>" + lineSep, lineSep + "@end example" + lineSep);
     s = UtilPlume.replaceString(s, lineSep + "</pre>", lineSep + "@end example" + lineSep);
     s = UtilPlume.replaceString(s, "</pre>", lineSep + "@end example" + lineSep);
-    // Catch-all for parameters, filenames, etc. for which there
-    // is no specific HTML formatting.
+    // Catch-all for parameters, filenames, etc. for which there is no specific HTML formatting.
+    // But Javadoc should use <code>...</code> rather than <tt>.
     s = UtilPlume.replaceString(s, "<tt>", "@code{");
     s = UtilPlume.replaceString(s, "</tt>", "}");
 
