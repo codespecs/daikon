@@ -26,12 +26,10 @@ RUN yum -q -y upgrade && yum -q -y install \
   which \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel \
-&& yum -q clean all
 
 # This enables the repository that contains jq
 RUN yum -q -y install \
   epel-release \
-&& yum -q clean all
 
 RUN yum -q -y install \
   ctags \
@@ -46,4 +44,5 @@ RUN yum -q -y install \
   texinfo-tex \
   texlive \
   wget \
-&& yum -q clean all
+
+RUN yum -q clean all

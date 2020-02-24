@@ -26,7 +26,6 @@ RUN dnf -qy upgrade && dnf -qy install \
   which \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel \
-&& dnf -q clean all
 
 RUN dnf -qy install \
   curl \
@@ -41,4 +40,5 @@ RUN dnf -qy install \
   texinfo-tex \
   texlive \
   wget \
-&& dnf -q clean all
+
+RUN dnf -q clean all

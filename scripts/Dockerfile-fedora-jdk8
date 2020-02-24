@@ -24,4 +24,5 @@ RUN dnf -qy upgrade && dnf -qy install \
   which \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel \
-&& dnf -q clean all
+
+RUN dnf -q clean all
