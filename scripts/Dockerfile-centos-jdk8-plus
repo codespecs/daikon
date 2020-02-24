@@ -32,11 +32,14 @@ RUN yum -q -y install \
   epel-release \
 
 RUN yum -q -y install \
+  jq \
+
+RUN yum -q -y install \
   ctags \
   curl \
+  ctags \
   gcc-c++ \
   graphviz \
-  jq \
   netpbm \
   python \
   texi2html \

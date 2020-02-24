@@ -25,4 +25,11 @@ RUN yum -q -y upgrade && yum -q -y install \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel \
 
+# This enables the repository that contains jq
+RUN yum -q -y install \
+  epel-release \
+
+RUN yum -q -y install \
+  jq \
+
 RUN yum -q clean all

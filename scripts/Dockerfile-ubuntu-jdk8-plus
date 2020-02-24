@@ -28,6 +28,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   gcc \
   git \
   graphviz \
+  jq \
   m4 \
   make \
   netpbm \
@@ -48,7 +49,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   curl \
   g++ \
   graphviz \
-  jq \
   libc6-dbg \
   lsb-release \
   texi2html \

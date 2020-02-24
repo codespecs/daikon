@@ -26,6 +26,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   gcc \
   git \
   graphviz \
+  jq \
   m4 \
   make \
   netpbm \
