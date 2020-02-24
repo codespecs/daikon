@@ -26,7 +26,7 @@ import org.plumelib.reflection.Signatures;
  *
  * <p>Since only the NonZero invariant is used, Daikon processing time can be significantly reduced
  * by turning off derived variables and all invariants other than daikon.inv.unary.scalar.NonZero.
- * This is not necessary, however, for correct operation. File <tt>annotate_nullable.config</tt> in
+ * This is not necessary, however, for correct operation. File {@code annotate_nullable.config} in
  * the distribution does this.
  */
 public class AnnotateNullable {

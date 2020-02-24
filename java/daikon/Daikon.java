@@ -2089,8 +2089,8 @@ public final class Daikon {
 
   /**
    * The number of columns of progress information to display. In many Unix shells, this can be set
-   * to an appropriate value by <tt>--config_option
-   * daikon.Daikon.progress_display_width=$COLUMNS</tt>.
+   * to an appropriate value by {@code --config_option
+   * daikon.Daikon.progress_display_width=$COLUMNS}.
    */
   public static int dkconfig_progress_display_width = 80;
 
