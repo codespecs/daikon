@@ -39,7 +39,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   ant \
   maven \
   python \
-  rsync \
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get clean \
