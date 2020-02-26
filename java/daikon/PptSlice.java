@@ -80,7 +80,7 @@ public abstract class PptSlice extends Ppt {
   @SideEffectFree
   @Override
   @SuppressWarnings(
-      "initialization:override.receiver.invalid") // see comment on overridden definition in Ppt
+      "nullness:override.receiver.invalid") // see comment on overridden definition in Ppt
   public final String name(@GuardSatisfied @UnknownInitialization(PptSlice.class) PptSlice this) {
     return parent.name + varNames(var_infos);
   }

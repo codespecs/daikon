@@ -22,7 +22,7 @@ public final class CallerContextSplitter extends Splitter {
 
   /** Create a new splitter for the given ppt using this as a prototype. */
   @SuppressWarnings(
-      "initialization:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
+      "nullness:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
   @Override
   public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) Ppt ppt) {
     return new CallerContextSplitter(ppt, ids, condition);

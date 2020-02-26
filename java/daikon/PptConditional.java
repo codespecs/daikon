@@ -34,7 +34,7 @@ public final class PptConditional extends PptTopLevel {
         ctor_vis_helper(parent, splitter, splitter_inverse));
     // assert splitter.instantiated() == false;
     this.parent = parent;
-    @SuppressWarnings({"initialization"}) // won't be used until it's fully initialized
+    @SuppressWarnings({"nullness"}) // won't be used until it's fully initialized
     @Initialized PptConditional thisNonRaw = this;
     this.splitter = splitter.instantiateSplitter(thisNonRaw);
     this.splitter_inverse = splitter_inverse;

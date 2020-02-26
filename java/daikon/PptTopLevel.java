@@ -382,7 +382,7 @@ public class PptTopLevel extends Ppt {
   // This was renamed to the joiner_view because it no longer just for
   // implications, but instead for any Invariants that represents a
   // "joining" of two others (such as and, or, etc)
-  @SuppressWarnings({"initialization"}) // field won't be used until object is initialized
+  @SuppressWarnings({"nullness"}) // field won't be used until object is initialized
   public PptSlice0 joiner_view = new PptSlice0(this);
 
   /** Holds Equality invariants. Never null after invariants are instantiated. */
@@ -488,7 +488,7 @@ public class PptTopLevel extends Ppt {
 
     for (VarInfo vi : var_infos) {
       // TODO: This should not be necessary, since initialization is now complete
-      @SuppressWarnings({"initialization"}) // initialization is now complete
+      @SuppressWarnings({"nullness"}) // initialization is now complete
       @Initialized PptTopLevel initializedThis = this;
       vi.ppt = initializedThis;
     }

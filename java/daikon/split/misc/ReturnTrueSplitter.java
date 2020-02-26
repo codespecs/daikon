@@ -31,7 +31,7 @@ public final class ReturnTrueSplitter extends Splitter {
   }
 
   @SuppressWarnings(
-      "initialization:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
+      "nullness:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
   @Override
   public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) Ppt ppt) {
     return new ReturnTrueSplitter(ppt);
