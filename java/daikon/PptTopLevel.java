@@ -383,7 +383,8 @@ public class PptTopLevel extends Ppt {
   // implications, but instead for any Invariants that represents a
   // "joining" of two others (such as and, or, etc)
   @SuppressWarnings({
-    "nullness:assignment.type.incompatible" // field won't be used until object is initialized
+    "nullness:assignment.type.incompatible", // field won't be used until object is initialized
+    "nullness:argument.type.incompatible" // ditto
   })
   public PptSlice0 joiner_view = new PptSlice0(this);
 
