@@ -93,7 +93,7 @@ public class ParameterInfo extends DaikonVariableInfo {
   @Override
   public EnumSet<VarFlags> get_var_flags() {
     // System.out.printf("%s is a parameter%n", this);
-    EnumSet<VarFlags> var_flags = super.get_var_flags().clone();
+    EnumSet<VarFlags> var_flags = super.get_var_flags();
     var_flags.add(VarFlags.IS_PARAM);
     return var_flags;
   }

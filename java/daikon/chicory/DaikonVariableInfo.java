@@ -1344,7 +1344,7 @@ public abstract class DaikonVariableInfo
    * flags that they add.
    */
   public EnumSet<VarFlags> get_var_flags() {
-    return empty_var_flags;
+    return empty_var_flags.clone();
   }
 
   /** Returns true iff the variable is static. Overridden by subclasses that can be static. */
