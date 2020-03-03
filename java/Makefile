@@ -29,11 +29,11 @@ INSTALL ?= /usr/bin/install
 
 ifdef CHECKERFRAMEWORK
   CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
-  CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
-  CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK}/checker/resources/javadoc.astub
 endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
-CHECKERFRAMEWORK_JAVADOC_ASTUB ?= ${CHECKERFRAMEWORK_JAR_DIR}/javadoc.astub
+CHECKERFRAMEWORK_JAR ?= ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar
+CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
+
 
 ### end of user customizations
 
@@ -779,7 +779,7 @@ endif
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 8 rather than version 9).
 # JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
-CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=${CHECKERFRAMEWORK_JAVADOC_ASTUB} -processorpath ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar ${JAVACHECK_EXTRA_ARGS}
+CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -Astubs=checker.jar/javadoc.astub -processorpath ${CHECKERFRAMEWORK_JAR} ${JAVACHECK_EXTRA_ARGS}
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC} -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar
 else
@@ -1182,8 +1182,8 @@ showvars:
 
 	@echo CHECKERFRAMEWORK = $(CHECKERFRAMEWORK)
 	@echo CHECKERFRAMEWORK_JAR_DIR = $(CHECKERFRAMEWORK_JAR_DIR)
+	@echo CHECKERFRAMEWORK_JAR = $(CHECKERFRAMEWORK_JAR)
 	@echo CHECKERFRAMEWORK_JAVAC = $(CHECKERFRAMEWORK_JAVAC)
-	@echo CHECKERFRAMEWORK_JAVADOC_ASTUB = $(CHECKERFRAMEWORK_JAVADOC_ASTUB)
 
 
 dump: showvars
