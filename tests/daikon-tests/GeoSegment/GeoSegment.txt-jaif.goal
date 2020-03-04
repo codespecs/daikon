@@ -8,7 +8,7 @@ class GeoPoint : // 475142/475142 obj/class samples
   field latitude :  // int
   field longitude :  // int
   method <init>(II)V : // 164 samples
-    return: 
+    return:
     parameter #0 :  // latitude
     parameter #1 :  // longitude
   method distanceTo(LMapQuick1/GeoPoint;)D : // 3132 samples
@@ -33,7 +33,7 @@ class GeoSegment : // 260252/- obj/class samples
   field REP_SCALE_FACTOR :  // double
   field p2 :  // MapQuick1.GeoPoint
   method <init>(Ljava/lang/String;LMapQuick1/GeoPoint;LMapQuick1/GeoPoint;)V : // 82 samples
-    return: 
+    return:
     parameter #0 :  // name
     parameter #1 :  // p1
     parameter #2 :  // p2

@@ -9,17 +9,17 @@ class Vector13 : // 41700/41700 obj/class samples
   field elementCount :  // int
   field capacityIncrement :  // int
   method <init>()V : // 5 samples
-    return: 
+    return:
   method <init>(I)V : // 260 samples
-    return: 
+    return:
     parameter #0 :  // initialCapacity
   method <init>(II)V : // 1785 samples
-    return: 
+    return:
     parameter #0 :  // initialCapacity
     parameter #1 :  // capacityIncrement
   method addElement(Ljava/lang/Object;)V : // 3760 samples
-    return: 
-    parameter #0 : @Nullable  // obj
+    return:
+    parameter #0 : @Nullable // obj
   method capacity()I : // 0 samples
     return: 
   method clone()Ljava/lang/Object; : // 150 samples
@@ -28,21 +28,21 @@ class Vector13 : // 41700/41700 obj/class samples
     return: 
     parameter #0 :  // elem
   method copyInto([Ljava/lang/Object;)V : // 450 samples
-    return: 
+    return:
     parameter #0 :  // anArray
   method elementAt(I)Ljava/lang/Object; : // 375 samples
-    return: @Nullable 
+    return: @Nullable
     parameter #0 :  // index
   method elements()Ljava/util/Enumeration; : // 300 samples
     return: 
   method ensureCapacity(I)V : // 900 samples
-    return: 
+    return:
     parameter #0 :  // minCapacity
   method ensureCapacityHelper(I)V : // 1450 samples
-    return: 
+    return:
     parameter #0 :  // minCapacity
   method firstElement()Ljava/lang/Object; : // 125 samples
-    return: @Nullable 
+    return: @Nullable
   method indexOf(Ljava/lang/Object;)I : // 900 samples
     return: 
     parameter #0 :  // elem
@@ -51,13 +51,13 @@ class Vector13 : // 41700/41700 obj/class samples
     parameter #0 :  // elem
     parameter #1 :  // index
   method insertElementAt(Ljava/lang/Object;I)V : // 150 samples
-    return: 
-    parameter #0 : @Nullable  // obj
+    return:
+    parameter #0 : @Nullable // obj
     parameter #1 :  // index
   method isEmpty()Z : // 150 samples
     return: 
   method lastElement()Ljava/lang/Object; : // 125 samples
-    return: @Nullable 
+    return: @Nullable
   method lastIndexOf(Ljava/lang/Object;)I : // 750 samples
     return: 
     parameter #0 :  // elem
@@ -66,25 +66,25 @@ class Vector13 : // 41700/41700 obj/class samples
     parameter #0 :  // elem
     parameter #1 :  // index
   method removeAllElements()V : // 150 samples
-    return: 
+    return:
   method removeElement(Ljava/lang/Object;)Z : // 150 samples
     return: 
     parameter #0 :  // obj
   method removeElementAt(I)V : // 190 samples
-    return: 
+    return:
     parameter #0 :  // index
   method setElementAt(Ljava/lang/Object;I)V : // 375 samples
-    return: 
-    parameter #0 : @Nullable  // obj
+    return:
+    parameter #0 : @Nullable // obj
     parameter #1 :  // index
   method setSize(I)V : // 150 samples
-    return: 
+    return:
     parameter #0 :  // newSize
   method size()I : // 300 samples
     return: 
   method toString()Ljava/lang/String; : // 150 samples
     return: 
   method trimToSize()V : // 150 samples
-    return: 
+    return:
 
 
