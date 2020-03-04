@@ -30,7 +30,7 @@ public class PptMap implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
-  private final Map<String, PptTopLevel> nameToPpt = new LinkedHashMap<String, PptTopLevel>();
+  private final Map<String, PptTopLevel> nameToPpt = new LinkedHashMap<>();
 
   public void add(PptTopLevel ppt) {
     nameToPpt.put(ppt.name(), ppt);
@@ -101,7 +101,7 @@ public class PptMap implements Serializable {
   // https://bugs.openjdk.java.net/browse/JDK-8195646
   @SuppressWarnings("lock") // JLS bug: can't write receiver annotation on method of anonymous class
   public Iterator<PptTopLevel> pptIterator() {
-    TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
+    TreeSet<PptTopLevel> sorted = new TreeSet<>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
     // Use a (live) view iterator to get concurrent modification
     // exceptions, and an iterator over sorted to get consistency.
@@ -150,7 +150,7 @@ public class PptMap implements Serializable {
   // https://bugs.openjdk.java.net/browse/JDK-8195646
   @SuppressWarnings("lock") // JLS bug: can't write receiver annotation on method of anonymous class
   public Iterator<PptTopLevel> ppt_all_iterator() {
-    TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
+    TreeSet<PptTopLevel> sorted = new TreeSet<>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
     // Use a (live) view iterator to get concurrent modification
     // exceptions, and an iterator over sorted to get consistency.

@@ -161,10 +161,10 @@ public final class Debug {
   public VarInfo @Nullable [] cache_vis;
 
   /**
-   * Ordinarily, a client would have to supply a Class, Ppt, and List&lt;Varinfo&gt; with each call
-   * to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any) from
-   * vis that is on the debugTrackVar list. Essentially this creates a debug object that will print
-   * if any of the variables in vis are being tracked (and c and ppt match).
+   * Ordinarily, a client would have to supply a Class, Ppt, and {@code List<Varinfo>} with each
+   * call to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any)
+   * from vis that is on the debugTrackVar list. Essentially this creates a debug object that will
+   * print if any of the variables in vis are being tracked (and c and ppt match).
    */
   public Debug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     set(c, ppt, vis);
@@ -184,10 +184,10 @@ public final class Debug {
   }
 
   /**
-   * Ordinarily, a client would have to supply a Class, Ppt, and List&lt;Varinfo&gt; with each call
-   * to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any) from
-   * vis that is on the debugTrackVar list. Essentially this creates a debug object that will print
-   * if any of the variables in vis are being tracked (and c and ppt match).
+   * Ordinarily, a client would have to supply a Class, Ppt, and {@code List<Varinfo>} with each
+   * call to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any)
+   * from vis that is on the debugTrackVar list. Essentially this creates a debug object that will
+   * print if any of the variables in vis are being tracked (and c and ppt match).
    */
   public Debug(Class<?> c, Ppt ppt, List<VarInfo> vis) {
 
@@ -368,13 +368,22 @@ public final class Debug {
    * @see #log(Logger, String)
    * @see #log(String)
    */
-  public static void log(Logger debug, Class<?> inv_class, Ppt ppt, VarInfo[] vis, String msg) {
+  public static void log(
+      Logger debug,
+      @Nullable Class<?> inv_class,
+      @Nullable Ppt ppt,
+      VarInfo @Nullable [] vis,
+      String msg) {
 
     // Try to log via the logger first
-    if (log(inv_class, ppt, vis, msg)) return;
+    if (log(inv_class, ppt, vis, msg)) {
+      return;
+    }
 
     // If debug isn't turned on, there is nothing to do
-    if (!debug.isLoggable(Level.FINE)) return;
+    if (!debug.isLoggable(Level.FINE)) {
+      return;
+    }
 
     // Get the non-qualified class name
     String class_str;
@@ -429,7 +438,9 @@ public final class Debug {
    * @return whether or not it logged anything
    */
   public boolean log(String msg) {
-    if (!logOn()) return false;
+    if (!logOn()) {
+      return false;
+    }
     return (log(cache_class, cache_ppt, cache_vis, msg));
   }
 
@@ -460,16 +471,24 @@ public final class Debug {
       VarInfo @Nullable [] vis,
       String msg) {
 
-    if (!debugTrack.isLoggable(Level.FINE)) return false;
+    if (!debugTrack.isLoggable(Level.FINE)) {
+      return false;
+    }
 
     // Make sure the class matches
-    if (!class_match(inv_class)) return false;
+    if (!class_match(inv_class)) {
+      return false;
+    }
 
     // Make sure the Ppt matches
-    if (!ppt_match(ppt)) return false;
+    if (!ppt_match(ppt)) {
+      return false;
+    }
 
     // Make sure the variables match
-    if (!var_match(vis)) return false;
+    if (!var_match(vis)) {
+      return false;
+    }
 
     // Get the non-qualified class name
     String class_str = "null";
@@ -534,7 +553,8 @@ public final class Debug {
   }
 
   /** Returns whether or not the specified ppt matches the ppts being tracked. */
-  public static boolean ppt_match(@Nullable Ppt ppt) {
+  public static boolean ppt_match(
+      @Nullable @UnknownInitialization(daikon.PptTopLevel.class) Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
       return ((ppt != null) && strContainsElem(ppt.name(), debugTrackPpt));
@@ -549,8 +569,12 @@ public final class Debug {
    */
   public static boolean var_match(VarInfo @Nullable [] vis) {
 
-    if (debugTrackVars.length == 0) return true;
-    if (vis == null) return false;
+    if (debugTrackVars.length == 0) {
+      return true;
+    }
+    if (vis == null) {
+      return false;
+    }
 
     boolean match = false;
 
@@ -693,18 +717,42 @@ public final class Debug {
 
   /** Like Object.toString(), but handles null, and has special handling for arrays. */
   public static String toString(@Nullable Object val) {
-    if (val == null) return "none";
-    if (val instanceof String) return "\"" + val + "\"";
-    if (val instanceof VarInfo[]) return Arrays.toString((VarInfo[]) val);
-    if (val instanceof String[]) return Arrays.toString((String[]) val);
-    if (val instanceof boolean[]) return Arrays.toString((boolean[]) val);
-    if (val instanceof byte[]) return Arrays.toString((byte[]) val);
-    if (val instanceof char[]) return Arrays.toString((char[]) val);
-    if (val instanceof double[]) return Arrays.toString((double[]) val);
-    if (val instanceof float[]) return Arrays.toString((float[]) val);
-    if (val instanceof int[]) return Arrays.toString((int[]) val);
-    if (val instanceof long[]) return Arrays.toString((long[]) val);
-    if (val instanceof short[]) return Arrays.toString((short[]) val);
+    if (val == null) {
+      return "none";
+    }
+    if (val instanceof String) {
+      return "\"" + val + "\"";
+    }
+    if (val instanceof VarInfo[]) {
+      return Arrays.toString((VarInfo[]) val);
+    }
+    if (val instanceof String[]) {
+      return Arrays.toString((String[]) val);
+    }
+    if (val instanceof boolean[]) {
+      return Arrays.toString((boolean[]) val);
+    }
+    if (val instanceof byte[]) {
+      return Arrays.toString((byte[]) val);
+    }
+    if (val instanceof char[]) {
+      return Arrays.toString((char[]) val);
+    }
+    if (val instanceof double[]) {
+      return Arrays.toString((double[]) val);
+    }
+    if (val instanceof float[]) {
+      return Arrays.toString((float[]) val);
+    }
+    if (val instanceof int[]) {
+      return Arrays.toString((int[]) val);
+    }
+    if (val instanceof long[]) {
+      return Arrays.toString((long[]) val);
+    }
+    if (val instanceof short[]) {
+      return Arrays.toString((short[]) val);
+    }
     return val.toString();
   }
 

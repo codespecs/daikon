@@ -1,6 +1,6 @@
 package daikon.chicory;
 
-import daikon.util.EntryReader;
+import daikon.plumelib.util.EntryReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class DTraceReader extends DeclReader {
 
     List<DeclVarInfo> vars = ppt.get_all_vars();
 
-    List<@Interned Object> var_data_list = new ArrayList<@Interned Object>();
+    List<@Interned Object> var_data_list = new ArrayList<>();
     for (DeclVarInfo vi : vars) {
       @Interned Object obj = vi.read_data(dtrace_file);
       var_data_list.add(obj);

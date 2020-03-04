@@ -30,7 +30,6 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -61,7 +60,7 @@ public class NIS {
   /** Boolean. If true, enable non-instantiating suppressions. */
   public static boolean dkconfig_enabled = true;
 
-  /** Enum. Signifies which algorithm is used by NIS to process suppressions. */
+  /** Signifies which algorithm is used by NIS to process suppressions. */
   public enum SuppressionProcessor {
     HYBRID,
     ANTECEDENT,
@@ -148,14 +147,14 @@ public class NIS {
   static @MonotonicNonNull List<NISuppressionSet> all_suppressions;
 
   /** List of suppressor invariant prototypes. */
-  public @MonotonicNonNull static List<@Prototype Invariant> suppressor_proto_invs;
+  public static @MonotonicNonNull List<@Prototype Invariant> suppressor_proto_invs;
 
   /**
    * List of invariants that are unsuppressed by the current sample. The {@link #falsified} and
    * {@link #process_falsified_invs} methods add created invariants to this list. This list is
    * cleared by {@link #apply_samples}.
    */
-  public static List<Invariant> new_invs = new ArrayList<Invariant>();
+  public static List<Invariant> new_invs = new ArrayList<>();
 
   /**
    * List of invariants that are unsuppressed and then falsified by the current sample. This list is
@@ -163,7 +162,7 @@ public class NIS {
    * sample is applied to invariants in new_invs. The list is only used when the falsified method is
    * used for processing suppressions.
    */
-  public static List<Invariant> newly_falsified = new ArrayList<Invariant>();
+  public static List<Invariant> newly_falsified = new ArrayList<>();
 
   // Statistics that are kept during processing.  Some of these are kept
   // and/or make sense for some approaches and not for others
@@ -207,14 +206,16 @@ public class NIS {
 
     // Creating these here, rather than where they are declared, allows
     // this method to be called multiple times without a problem.
-    suppressor_map = new LinkedHashMap<Class<? extends Invariant>, List<NISuppressionSet>>(256);
-    suppressor_map_suppression_count = new LinkedHashMap<Class<? extends Invariant>, Integer>(256);
+    suppressor_map = new LinkedHashMap<>(256);
+    suppressor_map_suppression_count = new LinkedHashMap<>(256);
     all_suppressions = new ArrayList<NISuppressionSet>();
     suppressor_proto_invs = new ArrayList<@Prototype Invariant>();
 
     // This should be the first statement in the method, but put it after the
     // field initalizations so that the Initialization Checker doesn't complain.
-    if (!dkconfig_enabled) return;
+    if (!dkconfig_enabled) {
+      return;
+    }
 
     // Get all defined suppressions.
     for (Invariant inv : Daikon.proto_invs) {
@@ -318,7 +319,9 @@ public class NIS {
         }
       }
 
-      if (hashFound) return;
+      if (hashFound) {
+        return;
+      }
     }
 
     // Get the suppression sets (if any) associated with this invariant
@@ -584,7 +587,7 @@ public class NIS {
       inv_cnt++;
     }
 
-    // System.out.printf("Invariants for ppt %s: %d\n", ppt, inv_cnt);
+    // System.out.printf("Invariants for ppt %s: %d%n", ppt, inv_cnt);
     if (false_cnt == 0) {
       return;
     }
@@ -597,8 +600,7 @@ public class NIS {
     if (debugAnt.isLoggable(Level.FINE)) ppt.debug_invs(debugAnt);
 
     // Find all antecedents and organize them by their variables comparability
-    Map<VarComparability, Antecedents> comp_ants =
-        new LinkedHashMap<VarComparability, Antecedents>();
+    Map<VarComparability, Antecedents> comp_ants = new LinkedHashMap<>();
     store_antecedents_by_comparability(ppt.views_iterator(), comp_ants);
 
     if (ppt.constants != null) {
@@ -619,7 +621,7 @@ public class NIS {
       for (Antecedents ants : comp_ants.values()) {
         List<Invariant> eq_invs = ants.get(IntEqual.class);
         if ((eq_invs != null) && (eq_invs.size() > 1000)) {
-          Map<VarInfo, Count> var_map = new LinkedHashMap<VarInfo, Count>();
+          Map<VarInfo, Count> var_map = new LinkedHashMap<>();
           System.out.printf(
               "ppt %s, comparability %s has %s equality invs%n",
               ppt.name, ants.comparability, eq_invs.size());
@@ -670,7 +672,7 @@ public class NIS {
     // Loop through each suppression creating each invariant that
     // is suppressed by that suppression.  Each set of comparable antecedents
     // is processed separately
-    Set<SupInv> unsuppressed_invs = new LinkedHashSet<SupInv>();
+    Set<SupInv> unsuppressed_invs = new LinkedHashSet<>();
     for (NISuppressionSet ss : all_suppressions) {
       for (NISuppression sup : ss) {
         suppressions_processed++;
@@ -760,8 +762,7 @@ public class NIS {
   public static List<Invariant> create_suppressed_invs(PptTopLevel ppt) {
 
     // Find all antecedents and organize them by their variables comparability
-    Map<VarComparability, Antecedents> comp_ants =
-        new LinkedHashMap<VarComparability, Antecedents>();
+    Map<VarComparability, Antecedents> comp_ants = new LinkedHashMap<>();
     store_antecedents_by_comparability(ppt.views_iterator(), comp_ants);
 
     // Add always-comparable antecedents to each of the other maps.
@@ -770,7 +771,7 @@ public class NIS {
     // Loop through each suppression creating each invariant that
     // is suppressed by that suppression.  Each set of comparable antecedents
     // is processed separately.
-    Set<SupInv> suppressed_invs = new LinkedHashSet<SupInv>();
+    Set<SupInv> suppressed_invs = new LinkedHashSet<>();
     for (NISuppressionSet ss : all_suppressions) {
       for (NISuppression sup : ss) {
         for (Antecedents ants : comp_ants.values()) {
@@ -780,7 +781,7 @@ public class NIS {
     }
 
     // Create each invariant and add it to its slice.
-    List<Invariant> created_invs = new ArrayList<Invariant>(suppressed_invs.size());
+    List<Invariant> created_invs = new ArrayList<>(suppressed_invs.size());
     for (SupInv supinv : suppressed_invs) {
       Invariant inv = supinv.instantiate(ppt);
       if (inv != null) {
@@ -896,7 +897,9 @@ public class NIS {
   @RequiresNonNull("suppressor_map")
   public static void dump(Logger log) {
 
-    if (!log.isLoggable(Level.FINE)) return;
+    if (!log.isLoggable(Level.FINE)) {
+      return;
+    }
 
     for (Class<? extends Invariant> sclass : suppressor_map.keySet()) {
       List<NISuppressionSet> suppression_set_list = suppressor_map.get(sclass);
@@ -930,8 +933,7 @@ public class NIS {
     }
 
     /** Track Log the specified message. */
-    public void log(
-        @UnknownInitialization(SupInv.class) @Raw(SupInv.class) SupInv this, String message) {
+    public void log(@UnknownInitialization(SupInv.class) SupInv this, String message) {
       if (Debug.logOn()) Debug.log(suppressee.sup_class, ppt, vis, message);
     }
 
@@ -940,12 +942,18 @@ public class NIS {
     @Pure
     @Override
     public boolean equals(@GuardSatisfied SupInv this, @GuardSatisfied @Nullable Object obj) {
-      if (!(obj instanceof SupInv)) return false;
+      if (!(obj instanceof SupInv)) {
+        return false;
+      }
 
       // Class and variables must match
       SupInv sinv = (SupInv) obj;
-      if (sinv.suppressee.sup_class != suppressee.sup_class) return false;
-      if (vis.length != sinv.vis.length) return false;
+      if (sinv.suppressee.sup_class != suppressee.sup_class) {
+        return false;
+      }
+      if (vis.length != sinv.vis.length) {
+        return false;
+      }
       for (int i = 0; i < vis.length; i++) {
         if (vis[i] != sinv.vis[i]) {
           return false;
@@ -979,7 +987,7 @@ public class NIS {
     }
 
     /** Returns true if the invariant is still suppressed. */
-    @SuppressWarnings("purity") // new object is not returned
+    @SuppressWarnings("all:purity") // new object is not returned
     @Pure
     public boolean is_ni_suppressed() {
 
@@ -1002,11 +1010,19 @@ public class NIS {
      */
     public @Nullable Invariant already_exists() {
       Invariant cinv = ppt.find_inv_by_class(vis, suppressee.sup_class);
-      if (cinv == null) return null;
-      if (suppressee.var_count != 2) return cinv;
+      if (cinv == null) {
+        return null;
+      }
+      if (suppressee.var_count != 2) {
+        return cinv;
+      }
       BinaryInvariant binv = (BinaryInvariant) cinv;
-      if (binv.is_symmetric()) return cinv;
-      if (binv.get_swap() != suppressee.get_swap()) return null;
+      if (binv.is_symmetric()) {
+        return cinv;
+      }
+      if (binv.get_swap() != suppressee.get_swap()) {
+        return null;
+      }
       return cinv;
     }
 
@@ -1043,7 +1059,7 @@ public class NIS {
     /** Create with specified comparability. */
     public Antecedents(VarComparability comparability) {
 
-      antecedent_map = new LinkedHashMap<Class<? extends Invariant>, List<Invariant>>();
+      antecedent_map = new LinkedHashMap<>();
       this.comparability = comparability;
     }
 
@@ -1060,7 +1076,9 @@ public class NIS {
     public void add(Invariant inv) {
 
       // Only possible antecedents need to be added
-      if (!is_suppressor(inv.getClass())) return;
+      if (!is_suppressor(inv.getClass())) {
+        return;
+      }
 
       // Only antecedents comparable to this one should be added
       assert VarComparability.comparable(inv.get_comparability(), comparability);
@@ -1070,7 +1088,9 @@ public class NIS {
       // the same variables
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
         VarInfo v = inv.ppt.var_infos[i];
-        if (v.missingOutOfBounds()) return;
+        if (v.missingOutOfBounds()) {
+          return;
+        }
       }
 
       if (inv.is_false()) false_cnt++;

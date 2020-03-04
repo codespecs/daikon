@@ -110,7 +110,9 @@ public abstract class BinaryInvariant extends Invariant {
     } else {
       ppt = this.ppt.parent.findSlice(v1, v2);
     }
-    if (ppt == null) return null;
+    if (ppt == null) {
+      return null;
+    }
 
     // The following is complicated because we are inconsistent in
     // how we handle permutations in binary invariants.  Some

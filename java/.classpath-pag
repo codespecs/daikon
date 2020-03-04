@@ -2,11 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/bcel-util-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/bcel-util-1.1.5.jar"/>
 	<classpathentry kind="lib" path="lib/java-getopt.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="lib/options-all-0.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/require-javadoc-0.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/require-javadoc-0.1.2.jar"/>
 	<classpathentry kind="lib" path="/afs/csail.mit.edu/u/m/mernst/java/jdk/lib/tools.jar"/>
 	<classpathentry kind="lib" path="lib/bcel.jar"/>
 	<classpathentry kind="output" path=""/>

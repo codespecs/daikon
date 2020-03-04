@@ -28,6 +28,7 @@ public class OneOfSequenceTester extends TestCase {
     junit.textui.TestRunner.run(new TestSuite(OneOfSequenceTester.class));
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo newIntArrayVarInfo(String name) {
     VarInfo result =
         new VarInfo(
@@ -39,6 +40,7 @@ public class OneOfSequenceTester extends TestCase {
     return result;
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo newHashcodeArrayVarInfo(String name) {
     VarInfo result =
         new VarInfo(

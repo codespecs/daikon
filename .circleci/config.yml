@@ -1,0 +1,440 @@
+version: 2.1
+
+jobs:
+
+  quick-txt-diff-ubuntu:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-quick-txt-diff.sh
+
+  nonquick-txt-diff-ubuntu:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
+  non-txt-diff-ubuntu:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-non-txt-diff.sh
+
+  misc-ubuntu:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8-plus
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-misc.sh
+
+  kvasir-ubuntu:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8-plus
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-kvasir.sh
+
+  quick-txt-diff-fedora:
+
+    docker:
+      - image: mdernst/daikon-fedora-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-quick-txt-diff.sh
+
+  nonquick-txt-diff-fedora:
+
+    docker:
+      - image: mdernst/daikon-fedora-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
+  non-txt-diff-fedora:
+
+    docker:
+      - image: mdernst/daikon-fedora-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-non-txt-diff.sh
+
+  misc-fedora:
+
+    docker:
+      - image: mdernst/daikon-fedora-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-misc.sh
+
+  kvasir-fedora:
+
+    docker:
+      - image: mdernst/daikon-fedora-jdk8-plus
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-kvasir.sh
+
+  quick-txt-diff-centos:
+
+    docker:
+      - image: mdernst/daikon-centos-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-quick-txt-diff.sh
+
+  nonquick-txt-diff-centos:
+
+    docker:
+      - image: mdernst/daikon-centos-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
+  non-txt-diff-centos:
+
+    docker:
+      - image: mdernst/daikon-centos-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-non-txt-diff.sh
+
+  misc-centos:
+
+    docker:
+      - image: mdernst/daikon-centos-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
+
+  kvasir-centos:
+
+    docker:
+      - image: mdernst/daikon-centos-jdk8-plus
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: ./scripts/test-kvasir.sh
+
+  typecheck-with-included-CF:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: |
+          make showvars
+          make compile daikon.jar
+      - run:
+          command: make -C java typecheck
+          no_output_timeout: 30m
+
+  typecheck-with-locally-built-CF:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8
+
+    steps:
+
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run: env
+      - run:
+          command: scripts/test-typecheck.sh
+          no_output_timeout: 30m
+
+  trigger-downstream:
+
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk8-plus
+
+    steps:
+      - run: echo "TODO implement trigger-downstream"
+
+      ## TODO!
+      # script: |
+      #     if [ -d "/tmp/plume-scripts" ] ; then
+      #       git -C /tmp/plume-scripts pull -q > /dev/null 2>&1
+      #     else
+      #       git -C /tmp clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
+      #     fi
+      #     eval `/tmp/plume-scripts/ci-info DEFAULT-ORGANIZATION`
+      #     if [[ ($CI_BRANCH == master) &&
+      #           ($CI_IS_PR == false)) ]] ; then
+      #
+      #       curl -LO --retry 3 https://raw.github.com/plume-lib/trigger-travis/master/trigger-travis.sh
+      #
+      #       git ls-remote https://github.com/${CI_ORGANIZATION}/daikon-typecheck.git &>-
+      #       if [ "$?" -eq 0 ]; then
+      #         sh trigger-travis.sh ${CI_ORGANIZATION} daikon-typecheck $TRAVIS_ACCESS_TOKEN
+      #       elif [[ "${CI_ORGANIZATION}" == "codespecs" ]]; then
+      #         sh trigger-travis.sh typetests daikon-typecheck $TRAVIS_ACCESS_TOKEN
+      #       fi
+      #
+      #     fi
+
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - quick-txt-diff-ubuntu
+      - nonquick-txt-diff-ubuntu
+      - non-txt-diff-ubuntu
+      - misc-ubuntu
+      - kvasir-ubuntu
+      - quick-txt-diff-fedora:
+          requires:
+            - quick-txt-diff-ubuntu
+      - nonquick-txt-diff-fedora:
+          requires:
+            - nonquick-txt-diff-ubuntu
+      - non-txt-diff-fedora:
+          requires:
+            - non-txt-diff-ubuntu
+      - misc-fedora:
+          requires:
+            - misc-ubuntu
+      - kvasir-fedora:
+          requires:
+            - kvasir-ubuntu
+      - quick-txt-diff-centos:
+          requires:
+            - quick-txt-diff-ubuntu
+      - nonquick-txt-diff-centos:
+          requires:
+            - nonquick-txt-diff-ubuntu
+      - non-txt-diff-centos:
+          requires:
+            - non-txt-diff-ubuntu
+      - misc-centos:
+          requires:
+            - misc-ubuntu
+#      - typecheck-with-included-CF
+      - typecheck-with-locally-built-CF
+      - trigger-downstream:
+          requires:
+            - quick-txt-diff-ubuntu
+            - nonquick-txt-diff-ubuntu
+            - non-txt-diff-ubuntu
+            - misc-ubuntu
+            - kvasir-ubuntu
+            - quick-txt-diff-fedora
+            - nonquick-txt-diff-fedora
+            - non-txt-diff-fedora
+            - misc-fedora
+            - quick-txt-diff-centos
+            - nonquick-txt-diff-centos
+            - non-txt-diff-centos
+            - misc-centos
+#            - typecheck-with-included-CF
+            - typecheck-with-locally-built-CF

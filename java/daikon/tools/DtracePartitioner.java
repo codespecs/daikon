@@ -20,7 +20,7 @@ import org.plumelib.util.UtilPlume;
  */
 public class DtracePartitioner implements Partitioner<String, String>, Iterator<String> {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   // reading from the file as a lazy iterator
   private BufferedReader br;
@@ -128,10 +128,10 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     try {
       System.out.println("Entering patchValues");
       // Keep a list of enters that are so far unmatched
-      Set<String> unreturned = new HashSet<String>(enters);
+      Set<String> unreturned = new HashSet<>(enters);
 
       // Build a hashmap of values to watch
-      HashMap<Object /*String or Integer*/, String> nonceMap = new HashMap<Object, String>();
+      HashMap<Object /*String or Integer*/, String> nonceMap = new HashMap<>();
       for (String enterStr : enters) {
         // it could be an OBJECT or CLASS invocation ppt, ignore those
         // by putting them in the HashMap to themselves, they'll
@@ -171,7 +171,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       // Return a list of all the invocations where matching ENTER and
       // EXIT points were found as well as the OBJECT and CLASS
       // invocations.
-      ArrayList<String> al = new ArrayList<String>();
+      ArrayList<String> al = new ArrayList<>();
       for (String s : nonceMap.values()) {
         al.add(s);
       }

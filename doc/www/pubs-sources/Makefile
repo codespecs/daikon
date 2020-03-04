@@ -29,13 +29,13 @@ clean-abstracts:
 	\rm -f *-abstract.html
 
 pull-bibfiles:
-	git -C ${BIBDIR} pull
+	cd ${BIBDIR} && git pull
 
 .PHONY: index.html
 index.html: pull-bibfiles
 # Avoid error "Cannot write to index.html"
 	rm -f $@
-	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-INVARIANTDETECTION -headfoot ../pubs-sources/index-headfoot.html -to $(notdir $@)-1 -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-INVARIANTDETECTION -headfoot ../pubs-sources/index-headfoot.html -to $(notdir $@)-1 -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Specification inference") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-METHODOLOGYUSINGDAIKON -headfoot $(notdir $@)-1 -to $(notdir $@)-2 -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-DAIKONTESTSUBJECT -headfoot $(notdir $@)-2 -to $(notdir $@) -filter 'defined($$rec{"usesdaikonastestsubject"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	rm -f $(notdir $@)-1 $(notdir $@)-2
@@ -56,7 +56,7 @@ writable-abstracts:
 abstracts: pull-bibfiles writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
 
 abstracts-invariantdetection:
-	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${HTMLTOOLS}/html-canonical-urls -validurls ${HTMLTOOLS}/html-valid-urls -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${HTMLTOOLS}/html-canonical-urls -validurls ${HTMLTOOLS}/html-valid-urls -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Specification inference") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
 	${BWBIN}/htmlabstract-split.pl \
 	  -headfoot ../pubs-sources/abstract-headfoot-technique.html \

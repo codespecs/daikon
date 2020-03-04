@@ -42,15 +42,10 @@ public class DiffTester extends TestCase {
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
   }
 
+  @SuppressWarnings("interning")
   public static VarInfo newIntVarInfo(String name) {
-    VarInfo result =
-        new VarInfo(
-            name,
-            ProglangType.INT,
-            ProglangType.INT,
-            VarComparabilityNone.it,
-            VarInfoAux.getDefault());
-    return result;
+    return new VarInfo(
+        name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
   }
 
   public DiffTester(String name) throws Exception {
@@ -114,7 +109,7 @@ public class DiffTester extends TestCase {
       PptSlice slicez = new PptSlice1(ppt, new VarInfo[] {vars[2]});
       Invariant invz = LowerBound.get_proto().instantiate(slicez);
       slicez.addInvariant(invz);
-      List<PptSlice> v = new ArrayList<PptSlice>();
+      List<PptSlice> v = new ArrayList<>();
       v.add(slicex);
       v.add(slicey);
       v.add(slicez);
@@ -136,7 +131,7 @@ public class DiffTester extends TestCase {
       PptSlice slicez = new PptSlice1(ppt, new VarInfo[] {vars[2]});
       Invariant invz = LowerBound.get_proto().instantiate(slicez);
       slicez.addInvariant(invz);
-      List<PptSlice> v = new ArrayList<PptSlice>();
+      List<PptSlice> v = new ArrayList<>();
       v.add(slicey);
       v.add(slicex);
       v.add(slicez);
@@ -157,7 +152,7 @@ public class DiffTester extends TestCase {
       PptSlice slicez = new PptSlice1(ppt, new VarInfo[] {vars[2]});
       Invariant invz = LowerBound.get_proto().instantiate(slicez);
       slicez.addInvariant(invz);
-      List<PptSlice> v = new ArrayList<PptSlice>();
+      List<PptSlice> v = new ArrayList<>();
       v.add(slicex);
       v.add(slicey);
       v.add(slicez);
@@ -446,7 +441,7 @@ public class DiffTester extends TestCase {
     PptSlice slice = new PptSlice1(ppt, vars);
     Invariant inv = NonModulus.get_proto().instantiate(slice);
     slice.addInvariant(inv);
-    List<PptSlice> v = new ArrayList<PptSlice>();
+    List<PptSlice> v = new ArrayList<>();
     v.add(slice);
     map.add(ppt);
 

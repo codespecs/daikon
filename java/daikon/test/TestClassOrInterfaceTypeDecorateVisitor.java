@@ -22,8 +22,8 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
 
   public static class UngenerifiedTypeCollector extends DepthFirstVisitor {
     // These two lists have the same length.
-    List<ClassOrInterfaceType> generifieds = new ArrayList<ClassOrInterfaceType>();
-    List<ClassOrInterfaceType> ungenerifieds = new ArrayList<ClassOrInterfaceType>();
+    List<ClassOrInterfaceType> generifieds = new ArrayList<>();
+    List<ClassOrInterfaceType> ungenerifieds = new ArrayList<>();
 
     @Override
     public void visit(ClassOrInterfaceType n) {
@@ -116,7 +116,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
   }
 
   private static StringBuilder expectedAnswerBuffer = new StringBuilder();
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   static {
     expectedAnswerBuffer.append("Collection results:\n");

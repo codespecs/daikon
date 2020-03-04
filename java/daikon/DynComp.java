@@ -1,7 +1,10 @@
 package daikon;
 
 import daikon.chicory.StreamRedirectThread;
-import daikon.util.RegexUtil;
+import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.options.Option;
+import daikon.plumelib.options.Options;
+import daikon.plumelib.util.RegexUtil;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -10,9 +13,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.plumelib.bcelutil.SimpleLog;
-import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 /**
  * This is the main class for DynComp. It uses the javaagent switch to java (which allows classes to
@@ -47,10 +47,10 @@ public class DynComp {
   public static @Nullable File comparability_file = null;
 
   @Option("Only process program points matching the regex")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
   @Option("Ignore program points matching the regex")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
   @Option("Don't track primitives")
   public static boolean no_primitives = false;
@@ -208,9 +208,7 @@ public class DynComp {
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s\n", path_separator);
-    if (path_separator == null) {
-      path_separator = ";"; // should work for windows at least...
-    } else if (!RegexUtil.isRegex(path_separator)) {
+    if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.BugInDaikon(
           "Bad regexp "
               + path_separator
@@ -252,13 +250,13 @@ public class DynComp {
     if (premain == null) {
       System.err.printf("Can't find dcomp_premain.jar on the classpath");
       if (daikon_dir == null) {
-        System.err.printf(" and $DAIKONDIR is not set.\n");
+        System.err.printf(" and $DAIKONDIR is not set.%n");
       } else {
-        System.err.printf(" or in $DAIKONDIR/java .\n");
+        System.err.printf(" or in $DAIKONDIR/java .%n");
       }
-      System.err.printf("It should be found in the directory where Daikon was installed.\n");
-      System.err.printf("Use the --premain switch to specify its location,\n");
-      System.err.printf("or change your classpath to include it.\n");
+      System.err.printf("It should be found in the directory where Daikon was installed.%n");
+      System.err.printf("Use the --premain switch to specify its location,%n");
+      System.err.printf("or change your classpath to include it.%n");
       System.exit(1);
     }
 
@@ -294,11 +292,11 @@ public class DynComp {
       if (rt_file == null) {
         System.err.printf("Can't find dcomp_rt.jar on the classpath");
         if (daikon_dir == null) {
-          System.err.printf(" and $DAIKONDIR is not set.\n");
+          System.err.printf(" and $DAIKONDIR is not set.%n");
         } else {
-          System.err.printf(" or in $DAIKONDIR/java .\n");
+          System.err.printf(" or in $DAIKONDIR/java .%n");
         }
-        System.err.printf("Probably you forgot to build it.\n");
+        System.err.printf("Probably you forgot to build it.%n");
         System.err.printf(
             "See the Daikon manual, section \"Instrumenting the "
                 + "JDK with DynComp\" for help.\n");
@@ -307,7 +305,7 @@ public class DynComp {
     }
 
     // Build the command line to execute the target with the javaagent
-    List<String> cmdlist = new ArrayList<String>();
+    List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
     // cmdlist.add ("-verbose:class");
     cmdlist.add("-cp");
@@ -339,7 +337,7 @@ public class DynComp {
     try {
       dcomp_proc = rt.exec(cmdline);
     } catch (Throwable e) {
-      System.out.printf("Exception '%s' while executing '%s'\n", e, cmdline);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
       System.exit(1);
       throw new Error("Unreachable control flow");
     }
@@ -352,11 +350,9 @@ public class DynComp {
   public int redirect_wait(Process p) {
 
     // Create the redirect threads and start them.
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
 
-    @SuppressWarnings("nullness") // didn't redirect stream, so getter returns non-null
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
 

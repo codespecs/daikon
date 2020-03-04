@@ -191,7 +191,9 @@ public class Quantify {
     @SideEffectFree
     @Override
     public String jml_name(boolean in_prestate) {
-      if (!in_prestate) return jml_name();
+      if (!in_prestate) {
+        return jml_name();
+      }
 
       VarInfo arr_var = get_check_array_var("JML");
       if (arr_var.isPrestate()) {
@@ -233,11 +235,13 @@ public class Quantify {
      * Looks up the array variable which is the base of this array. Throws an exception if one does
      * not exist.
      */
-    @SuppressWarnings("sideeffectfree") // throws exception in case of error
+    @SuppressWarnings("all:sideeffectfree") // throws exception in case of error
     @SideEffectFree
     private VarInfo get_check_array_var(String output_format) {
       VarInfo arr_var = sequence.get_base_array_hashcode();
-      if (arr_var != null) return arr_var;
+      if (arr_var != null) {
+        return arr_var;
+      }
 
       throw new Daikon.UserError(
           String.format(
@@ -286,7 +290,9 @@ public class Quantify {
     @SideEffectFree
     @Override
     public String jml_name(boolean in_prestate) {
-      if (!in_prestate) return jml_name();
+      if (!in_prestate) {
+        return jml_name();
+      }
 
       if (var.isPrestate()) {
         assert var.postState != null; // because isPrestate() = true
@@ -334,13 +340,13 @@ public class Quantify {
     }
 
     // Determine all of the simple identifiers used by the given variables (vars)
-    Set<String> simples = new HashSet<String>();
+    Set<String> simples = new HashSet<>();
     for (VarInfo vi : vars) {
       for (String name : vi.get_all_simple_names()) {
         simples.add(name);
       }
     }
-    // System.out.printf("simple names = %s\n", simples);
+    // System.out.printf("simple names = %s%n", simples);
 
     // Loop through each of the variables, choosing an index for each
     char tmp = 'i';
@@ -539,14 +545,14 @@ public class Quantify {
       quantification = "(FORALL (" + int_list + ") (IMPLIES (AND " + conditions + ") ";
 
       // stringify the terms
-      List<String> avi_list = new ArrayList<String>(vars.length);
+      List<String> avi_list = new ArrayList<>(vars.length);
       for (QuantifyReturn qret : qrets) {
         String arr_var_indexed;
         if (qret.index != null) {
           Term index = qret.index;
           VarInfo arr_var = qret.var.get_array_var();
           arr_var_indexed = arr_var.simplify_name(index.simplify_name());
-          // System.out.printf("vi = %s, arr_var = %s\n", vi, arr_var);
+          // System.out.printf("vi = %s, arr_var = %s%n", vi, arr_var);
         } else {
           arr_var_indexed = qret.var.simplify_name();
         }

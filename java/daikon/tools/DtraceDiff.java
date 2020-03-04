@@ -91,9 +91,9 @@ public class DtraceDiff {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args) {
-    Set<File> declsfile1 = new HashSet<File>();
+    Set<File> declsfile1 = new HashSet<>();
     String dtracefile1 = null;
-    Set<File> declsfile2 = new HashSet<File>();
+    Set<File> declsfile2 = new HashSet<>();
     String dtracefile2 = null;
 
     LongOpt[] longopts =
@@ -230,11 +230,15 @@ public class DtraceDiff {
       if (args[i].indexOf(".decls") != -1) {
         if (dtracefile1 == null) declsfile1.add(new File(args[i]));
         else if (dtracefile2 == null) declsfile2.add(new File(args[i]));
-        else throw new daikon.Daikon.UserError(usage);
+        else {
+          throw new daikon.Daikon.UserError(usage);
+        }
       } else { // presume any other file is a dtrace file
         if (dtracefile1 == null) dtracefile1 = args[i];
         else if (dtracefile2 == null) dtracefile2 = args[i];
-        else throw new daikon.Daikon.UserError(usage);
+        else {
+          throw new daikon.Daikon.UserError(usage);
+        }
       }
     }
     if ((dtracefile1 == null) || (dtracefile2 == null)) {
@@ -246,12 +250,11 @@ public class DtraceDiff {
   public static void dtraceDiff(
       Set<File> declsfile1, String dtracefile1, Set<File> declsfile2, String dtracefile2) {
 
-    // System.out.printf("dtrace files = %s, %s\n", dtracefile1, dtracefile2);
+    // System.out.printf("dtrace files = %s, %s%n", dtracefile1, dtracefile2);
     FileIO.resetNewDeclFormat();
 
     try {
-      Map<PptTopLevel, PptTopLevel> pptmap =
-          new HashMap<PptTopLevel, PptTopLevel>(); // map ppts1 -> ppts2
+      Map<PptTopLevel, PptTopLevel> pptmap = new HashMap<>(); // map ppts1 -> ppts2
       PptMap ppts1 = FileIO.read_declaration_files(declsfile1);
       PptMap ppts2 = FileIO.read_declaration_files(declsfile2);
 
@@ -354,15 +357,15 @@ public class DtraceDiff {
               : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
           throw new DiffError(
               String.format(
-                  "ppt %s (%s at line %d) is missing at end of %s",
-                  state2.ppt.name(), dtracefile2, state2.get_linenum(), dtracefile1));
+                  "ppt %s is at line %d in %s but is missing at end of %s",
+                  state2.ppt.name(), state2.get_linenum(), dtracefile2, dtracefile1));
         } else {
           assert state1.ppt != null
               : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
           throw new DiffError(
               String.format(
-                  "ppt %s (%s at line %d) is missing at end of %s",
-                  state1.ppt.name(), dtracefile1, state1.get_linenum(), dtracefile2));
+                  "ppt %s is at line %d in %s but is missing at end of %s",
+                  state1.ppt.name(), state1.get_linenum(), dtracefile1, dtracefile2));
         }
       }
     } catch (IOException e) {
@@ -380,16 +383,21 @@ public class DtraceDiff {
       if (type.isPointerFileRep()) {
         long[] v1 = (long[]) val1;
         long[] v2 = (long[]) val2;
-        if (v1.length != v2.length) return false;
-        for (int i = 0; i < v1.length; i++)
+        if (v1.length != v2.length) {
+          return false;
+        }
+        for (int i = 0; i < v1.length; i++) {
           if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i])) {
             return false;
           }
+        }
         return true;
       } else if (type.baseIsScalar()) {
         long[] v1 = (long[]) val1;
         long[] v2 = (long[]) val2;
-        if (v1.length != v2.length) return false;
+        if (v1.length != v2.length) {
+          return false;
+        }
         for (int i = 0; i < v1.length; i++) {
           if (v1[i] != v2[i]) {
             return false;
@@ -399,16 +407,21 @@ public class DtraceDiff {
       } else if (type.baseIsFloat()) {
         double[] v1 = (double[]) val1;
         double[] v2 = (double[]) val2;
-        if (v1.length != v2.length) return false;
-        for (int i = 0; i < v1.length; i++)
+        if (v1.length != v2.length) {
+          return false;
+        }
+        for (int i = 0; i < v1.length; i++) {
           if (!((Double.isNaN(v1[i]) && Double.isNaN(v2[i])) || Global.fuzzy.eq(v1[i], v2[i]))) {
             return false;
           }
+        }
         return true;
       } else if (type.baseIsString()) {
         String[] v1 = (String[]) val1;
         String[] v2 = (String[]) val2;
-        if (v1.length != v2.length) return false;
+        if (v1.length != v2.length) {
+          return false;
+        }
         for (int i = 0; i < v1.length; i++) {
           // System.out.printf("string array[%d] %s %s%n", i, v1[i], v2[i]);
           if ((v1[i] == null) && (v2[i] == null)) {

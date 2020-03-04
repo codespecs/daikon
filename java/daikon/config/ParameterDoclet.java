@@ -19,9 +19,13 @@ import org.plumelib.util.UtilPlume;
  * options for the Daikon tools. Refer to the {@code --config} command-line option in the Daikon
  * manual for an introduction to the configuration system.
  */
+@SuppressWarnings({
+  "deprecation", // in JDK 9+, ClassDoc, RootDoc, etc. are deprecated
+  "removal" // in JDK 11, ClassDoc, RootDoc, etc. are deprecated and marked for removal
+})
 public class ParameterDoclet {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   /** Entry point for this doclet (invoked by javadoc). */
   public static boolean start(RootDoc doc) throws IOException {
@@ -91,7 +95,7 @@ public class ParameterDoclet {
       }
       description = desc;
       longBlurb = blurb;
-      fields = new HashMap<String, String>();
+      fields = new HashMap<>();
     }
 
     public boolean matches(String fullname, String name) {

@@ -411,7 +411,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     rep_type = file_rep_type.fileTypeToRepType();
 
     // Create the VarInfoAux information
-    final List<String> auxstrs = new ArrayList<String>();
+    final List<String> auxstrs = new ArrayList<>();
     if (var_flags.contains(VarFlags.IS_PARAM)) {
       auxstrs.add(VarInfoAux.IS_PARAM + "=true");
     }
@@ -453,7 +453,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public void relate_var() {
 
-    if (vardef == null) return;
+    if (vardef == null) {
+      return;
+    }
 
     // System.out.printf("enclosing var for %s is %s%n", str_name,
     //                   vardef.enclosing_var);
@@ -520,7 +522,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     function_args = Arrays.asList(bases);
 
     // Build the string name
-    List<String> arg_names = new ArrayList<String>();
+    List<String> arg_names = new ArrayList<>();
     for (VarInfo vi : bases) {
       arg_names.add(vi.name());
     }
@@ -932,10 +934,12 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns true if this variable is derived from prestate variables. */
-  @SuppressWarnings("not.deterministic") // nondeterminism does not affect result
+  @SuppressWarnings("all:not.deterministic") // nondeterminism does not affect result
   @Pure
   public boolean isPrestateDerived() {
-    if (postState != null) return true;
+    if (postState != null) {
+      return true;
+    }
     if (isDerived()) {
       for (VarInfo vi : derived.getBases()) {
         if (!vi.isPrestate()) {
@@ -968,10 +972,12 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   /** Return all derived variables that build off this one. */
   public List<Derivation> derivees() {
-    ArrayList<Derivation> result = new ArrayList<Derivation>();
+    ArrayList<Derivation> result = new ArrayList<>();
     // This method is only called from the debugging routine 'repr()'.
     // So let's protect ourselves from a mistake somewhere else.
-    if (ppt == null) return result;
+    if (ppt == null) {
+      return result;
+    }
     VarInfo[] vis = ppt.var_infos;
     for (int i = 0; i < vis.length; i++) {
       VarInfo vi = vis[i];
@@ -992,7 +998,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * the bases of this derivation.
    */
   public List<VarInfo> get_all_constituent_vars() {
-    List<VarInfo> vars = new ArrayList<VarInfo>();
+    List<VarInfo> vars = new ArrayList<>();
     if (isDerived()) {
       for (VarInfo vi : derived.getBases()) {
         vars.addAll(vi.get_all_constituent_vars());
@@ -1011,7 +1017,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public List<String> get_all_simple_names() {
     assert FileIO.new_decl_format;
-    List<String> names = new ArrayList<String>();
+    List<String> names = new ArrayList<>();
     if (isDerived()) {
       for (VarInfo vi : derived.getBases()) {
         names.addAll(vi.get_all_simple_names());
@@ -1055,11 +1061,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * method is called. Subsequent calls use these cached values.
    */
   @EnsuresNonNullIf(result = true, expression = "getDerivedParam()")
-  @SuppressWarnings("purity") // created object is not returned
+  @SuppressWarnings("all:purity") // created object is not returned
   @Pure
   public boolean isDerivedParam() {
     if (isDerivedParamCached != null) {
-      // System.out.printf("var %s is-derived-param = %b\n", name(),
+      // System.out.printf("var %s is-derived-param = %b%n", name(),
       //                   isDerivedParamCached);
       return isDerivedParamCached.booleanValue();
     }
@@ -1072,7 +1078,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (!FileIO.new_decl_format) {
       // Determine the result from VarInfoName
       Set<VarInfo> paramVars = ppt.getParamVars();
-      Set<VarInfoName> param_names = new LinkedHashSet<VarInfoName>();
+      Set<VarInfoName> param_names = new LinkedHashSet<>();
       for (VarInfo vi : paramVars) {
         param_names.add(vi.var_info_name); // vin ok
       }
@@ -1106,7 +1112,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       }
     }
 
-    // System.out.printf("var %s is-derived-param = %b\n", name(), result);
+    // System.out.printf("var %s is-derived-param = %b%n", name(), result);
     isDerivedParamCached = result ? Boolean.TRUE : Boolean.FALSE;
     return result;
   }
@@ -1116,13 +1122,13 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * valid in the new decl format.
    */
   private @Nullable VarInfo enclosing_param() {
-    // System.out.printf("Considering %s\n", this);
+    // System.out.printf("Considering %s%n", this);
     assert FileIO.new_decl_format;
     if (isPrestate()) {
       return postState.enclosing_param();
     }
     for (VarInfo evi = this; evi != null; evi = evi.enclosing_var) {
-      // System.out.printf("%s isParam=%b\n", evi, evi.isParam());
+      // System.out.printf("%s isParam=%b%n", evi, evi.isParam());
       if (evi.isParam()) {
         return evi;
       }
@@ -1167,7 +1173,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * In any case, the variable must have a postState VarInfoName, and equality invariants need to
    * have already been computed.
    */
-  @SuppressWarnings("purity") // set cache field
+  @SuppressWarnings("all:purity") // set cache field
   @Pure
   public boolean isDerivedParamAndUninteresting() {
     if (isDerivedParamAndUninterestingCached != null) {
@@ -1482,7 +1488,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /** Whether this VarInfo is the leader of its equality set. */
   @Pure
   public boolean isCanonical() {
-    if (equalitySet == null) return true;
+    if (equalitySet == null) {
+      return true;
+    }
     return (equalitySet.leader() == this);
   }
 
@@ -1511,7 +1519,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * derived from a sequence. Only works for scalars.
    */
   public @Nullable VarInfo isDerivedSequenceMember() {
-    if (derived == null) return null;
+    if (derived == null) {
+      return null;
+    }
 
     if (derived instanceof SequenceScalarSubscript) {
       SequenceScalarSubscript sss = (SequenceScalarSubscript) derived;
@@ -1544,7 +1554,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public @Nullable VarInfo isDerivedSubSequenceOf() {
 
-    if (derived == null) return null;
+    if (derived == null) {
+      return null;
+    }
 
     if (derived instanceof SequenceScalarSubsequence) {
       SequenceScalarSubsequence sss = (SequenceScalarSubsequence) derived;
@@ -1749,7 +1761,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     boolean samePpt = (vari.ppt == varj.ppt);
     assert samePpt;
     PptSlice indices_ppt = vari.ppt.findSlice_unordered(vari, varj);
-    if (indices_ppt == null) return false;
+    if (indices_ppt == null) {
+      return false;
+    }
 
     boolean vari_is_var1 = (vari == indices_ppt.var_infos[0]);
     LinearBinary lb = LinearBinary.find(indices_ppt);
@@ -1978,7 +1992,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // Stop now if we don't want to replace post vars with equivalent orig
     // vars
-    if (!PrintInvariants.dkconfig_remove_post_vars) return;
+    if (!PrintInvariants.dkconfig_remove_post_vars) {
+      return;
+    }
 
     // [[ find the ppt context for the post() term ]] (I used to
     // search the expression for this, but upon further reflection,
@@ -2086,7 +2102,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         && (var1.file_rep_type.isArray() && !var2.file_rep_type.isArray())) {
 
       // System.out.printf("comparableByType: case 1 %s%n", var1.eltsCompatible(var2));
-      if (var1.eltsCompatible(var2)) return true;
+      if (var1.eltsCompatible(var2)) {
+        return true;
+      }
     }
 
     // the check ensures that a scalar or string and elements of an array of the same type are
@@ -2095,7 +2113,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         && (!var1.file_rep_type.isArray() && var2.file_rep_type.isArray())) {
 
       // System.out.printf("comparableByType: case 2 %s%n", var2.eltsCompatible(var1));
-      if (var2.eltsCompatible(var1)) return true;
+      if (var2.eltsCompatible(var1)) {
+        return true;
+      }
     }
 
     if (Daikon.check_program_types && (var1.file_rep_type != var2.file_rep_type)) {
@@ -2256,7 +2276,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return result;
   }
 
-  static Set<String> addVarMessages = new HashSet<String>();
+  static Set<String> addVarMessages = new HashSet<>();
 
   /**
    * Finds a list of variables that must be guarded for this VarInfo to be guaranteed to not be
@@ -2316,7 +2336,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
                     "shouldBeGuarded(%s) [%s] %s %b",
                     viname, applyPreMaybe(viname), vi, ((vi == null) ? false : vi.canBeMissing)));
           }
-          if (vi == null) return false;
+          if (vi == null) {
+            return false;
+          }
           return vi.canBeMissing;
         }
         return false;
@@ -2324,7 +2346,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitSimple(Simple o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         // No recursion:  no children
         if (!o.name.equals("this")) {
           result = addVar(result, o);
@@ -2337,7 +2359,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitSizeOf(SizeOf o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.sequence.accept(this));
         }
@@ -2350,7 +2372,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitFunctionOf(FunctionOf o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.argument.accept(this));
         }
@@ -2364,7 +2386,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitFunctionOfN(FunctionOfN o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (shouldBeGuarded(o)) {
           for (VarInfoName arg : o.args) {
             result.addAll(arg.accept(this));
@@ -2380,7 +2402,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitField(Field o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
           Invariant.debugGuarding.fine(
               String.format("visitField: shouldBeGuarded(%s) => %s", o.name(), shouldBeGuarded(o)));
@@ -2397,7 +2419,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitTypeOf(TypeOf o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.term.accept(this));
         }
@@ -2436,7 +2458,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitAdd(Add o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.term.accept(this));
         }
@@ -2449,7 +2471,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitElements(Elements o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.term.accept(this));
         }
@@ -2462,7 +2484,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitSubscript(Subscript o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.sequence.accept(this));
           result.addAll(o.index.accept(this));
@@ -2476,7 +2498,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
       @Override
       public List<VarInfo> visitSlice(Slice o) {
-        List<VarInfo> result = new ArrayList<VarInfo>();
+        List<VarInfo> result = new ArrayList<>();
         if (shouldBeGuarded(o)) {
           result.addAll(o.sequence.accept(this));
           if (o.i != null) result.addAll(o.i.accept(this));
@@ -2581,7 +2603,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       assert !ArraysPlume.anyNull(result);
       return result;
     } else { // new format
-      List<VarInfo> result = new ArrayList<VarInfo>();
+      List<VarInfo> result = new ArrayList<>();
 
       if (Daikon.dkconfig_guardNulls == "never") // interned
       return result;
@@ -2617,7 +2639,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * all of the enclosing variables of all of the bases.
    */
   public List<VarInfo> get_all_enclosing_vars() {
-    List<VarInfo> result = new ArrayList<VarInfo>();
+    List<VarInfo> result = new ArrayList<>();
     if (isDerived()) {
       for (VarInfo base : derived.getBases()) {
         result.addAll(base.get_all_enclosing_vars());
@@ -2670,7 +2692,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public @Nullable PptTopLevel find_object_ppt(PptMap all_ppts) {
 
     // Arrays don't have types
-    if (is_array()) return null;
+    if (is_array()) {
+      return null;
+    }
 
     // build the name of the object ppt based on the variable type
     String type_str = type.base().replaceFirst("\\$", ".");
@@ -2707,7 +2731,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     @Pure
     @Override
     public boolean equals(@GuardSatisfied Pair this, @GuardSatisfied @Nullable Object obj) {
-      if (!(obj instanceof Pair)) return false;
+      if (!(obj instanceof Pair)) {
+        return false;
+      }
 
       Pair o = (Pair) obj;
       return ((o.v1 == v1) && (o.v2 == v2));
@@ -2763,7 +2789,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public Set<VarInfo> get_equalitySet_vars() {
     if (equalitySet == null) {
-      HashSet<VarInfo> set = new HashSet<VarInfo>();
+      HashSet<VarInfo> set = new HashSet<>();
       set.add(this);
       return set;
     } else {
@@ -2784,12 +2810,10 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  private static Set<String> out_strings = new LinkedHashSet<String>();
+  private static Set<String> out_strings = new LinkedHashSet<>();
 
   /** If the message is new print it, otherwise discard it. */
   @FormatMethod
-  @SuppressWarnings(
-      "formatter") // call to format method is correct because of @FormatMethod annotation
   static void debug_print_once(String format, @Nullable Object... args) {
     String msg = String.format(format, args);
     if (!out_strings.contains(msg)) {
@@ -2904,7 +2928,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       return get_base_array().enclosing_var;
     } else {
       Elements elems = (new ElementsFinder(var_info_name)).elems(); // vin ok
-      // System.out.printf("term.name() = %s\n", elems.term.name());
+      // System.out.printf("term.name() = %s%n", elems.term.name());
       return ppt.find_var_by_name(elems.term.name());
     }
   }
@@ -2962,7 +2986,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   // Map java objects to C# objects.
-  private static final Map<String, String> csharp_types = new HashMap<String, String>();
+  private static final Map<String, String> csharp_types = new HashMap<>();
 
   static {
     csharp_types.put("java.lang.String", "string");
@@ -2983,7 +3007,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   /**
    * If the variable is an array, returns a valid C# 'Select' statement representing the array. For
-   * example, this.Array[].field would become this.Array.Select(x =&gt; x.field)
+   * example, this.Array[].field would become this.Array.Select(x &rArr; x.field)
    *
    * <p>If the variable is not an array, csharp_name() is returned.
    */
@@ -3044,13 +3068,27 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   /** Returns the name of this variable in the specified format. */
   public String name_using(OutputFormat format) {
-    if (format == OutputFormat.DAIKON) return name();
-    if (format == OutputFormat.SIMPLIFY) return simplify_name();
-    if (format == OutputFormat.ESCJAVA) return esc_name();
-    if (format == OutputFormat.JAVA) return java_name();
-    if (format == OutputFormat.JML) return jml_name();
-    if (format == OutputFormat.DBCJAVA) return dbc_name();
-    if (format == OutputFormat.CSHARPCONTRACT) return csharp_name();
+    if (format == OutputFormat.DAIKON) {
+      return name();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return simplify_name();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return esc_name();
+    }
+    if (format == OutputFormat.JAVA) {
+      return java_name();
+    }
+    if (format == OutputFormat.JML) {
+      return jml_name();
+    }
+    if (format == OutputFormat.DBCJAVA) {
+      return dbc_name();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return csharp_name();
+    }
     throw new UnsupportedOperationException("Unknown format requested: " + format);
   }
 
@@ -3342,7 +3380,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
           return String.format("(select elems %s)", enclosing_var.simplify_name());
         }
         if (false && index.equals("|0|")) {
-          System.err.printf("index = %s\n", index);
+          System.err.printf("index = %s%n", index);
           Throwable t = new Throwable();
           t.printStackTrace();
         }
@@ -3396,7 +3434,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (!file_rep_type.isArray() || isDerived()) {
       result = null;
     } else {
-      // System.out.printf("Getting size name for %s [%s]\n", name(),
+      // System.out.printf("Getting size name for %s [%s]%n", name(),
       //                    get_length());
       result = get_length().simplify_name().intern();
     }
@@ -3430,10 +3468,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         }
       }
     } else {
-      for (VarInfo vi = this; vi != null; vi = vi.enclosing_var)
+      for (VarInfo vi = this; vi != null; vi = vi.enclosing_var) {
         if ((vi.var_kind == VarKind.VARIABLE) && vi.name().equals(varname)) {
           return true;
         }
+      }
     }
     return false;
   }
@@ -3510,7 +3549,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public String @Nullable [] get_simplify_slice_bounds() {
     if (!FileIO.new_decl_format) {
       @Interned VarInfoName[] bounds = var_info_name.getSliceBounds(); // vin ok
-      if (bounds == null) return null;
+      if (bounds == null) {
+        return null;
+      }
       String[] str_bounds = new String[2];
       str_bounds[0] = bounds[0].simplify_name();
       str_bounds[1] = bounds[1].simplify_name();
@@ -3554,7 +3595,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
               simplify_index_name,
               free,
               index_off);
-      // System.out.printf("sNth: index %s, free %b, off %d, result '%s'\n",
+      // System.out.printf("sNth: index %s, free %b, off %d, result '%s'%n",
       //                     simplify_index_name, free, index_off,
       //                     select.simplify_name());
       return select.simplify_name();
@@ -3618,7 +3659,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
 
     // Return the array properly indexed
-    // System.err.printf("lower bound type = %s [%s] %s\n", lower,
+    // System.err.printf("lower bound type = %s [%s] %s%n", lower,
     //                   lower.getClass(), complete_index);
     return simplify_name(complete_index);
   }
@@ -3740,7 +3781,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public int complexity() {
     if (!FileIO.new_decl_format) {
-      // System.out.printf("%s - %s\n", this, var_info_name.repr());
+      // System.out.printf("%s - %s%n", this, var_info_name.repr());
       return var_info_name.inOrderTraversal().size(); // vin ok
     }
 
@@ -3769,7 +3810,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // int old_cnt = var_info_name.inOrderTraversal().size();
     // if (cnt != old_cnt)
-    //   System.out.printf("var %s, new cnt = %d, old cnt = %d [%s]\n",
+    //   System.out.printf("var %s, new cnt = %d, old cnt = %d [%s]%n",
     //                 name(), cnt, old_cnt, var_info_name.inOrderTraversal());
     return cnt;
   }
@@ -3872,7 +3913,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   @Pure
   public boolean is_direct_array() {
     // Must be an array to be a direct array
-    if (!rep_type.isArray()) return false;
+    if (!rep_type.isArray()) {
+      return false;
+    }
 
     // If $Field or $Type appears before $Elements, false.
     // System.out.printf("%s flatten %s%n", name(), name);
@@ -4041,7 +4084,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * then orig is implied. This removes orig from orig variales and adds post to post variables.
    */
   private static String inside_name(@Nullable VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null) return "";
+    if (vi == null) {
+      return "";
+    }
 
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);
@@ -4319,7 +4364,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public void var_check() {
 
     if (false) {
-      if ((derived != null) && (derived instanceof SequenceSubsequence)) {
+      if (derived instanceof SequenceSubsequence) {
         if (name().contains("-1")) {
           SequenceSubsequence ss = (SequenceSubsequence) derived;
           // System.out.printf("checking %s[%08X] with derived %s[%08X]%n",

@@ -80,12 +80,6 @@ DECL_FORMAT?=new
 
 NO_CSHARP=1
 
-ifeq ($(OS),Windows_NT)
-    UNAME_S := Windows_NT
-else
-    UNAME_S := $(shell uname -s)
-endif
-
 # -noleaf is needed if the filesystem could possibly be AFS (as it is
 # at MIT).  Non GNU versions of find don't support this option, so it
 # must be removed on those version.  Darwin is the only o/s we've
@@ -157,23 +151,6 @@ endif
 -include Makefile.user
 -include $(COMMON_HERE)/Makefile.user
 
-# Converts a unix pathname in to a windows pathname (does nothing on
-# non-Cygwin machines)
-ifeq (cygwin,$(OSTYPE))
-  WINDOWS_FILENAMES := | cygpath -w -f -
-else
-  WINDOWS_FILENAMES :=
-endif
-
-# WIN_CONVERT is a shell command that converts a list of files in unix
-# format to a list of files in the appropriate format for this platform.
-# Nothing is required on unix and cygpath is used on Windows
-ifeq (cygwin,$(OSTYPE))
-  WIN_CONVERT := cygpath -mi
-else
-  WIN_CONVERT := echo
-endif
-
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
 
@@ -205,31 +182,18 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-# Must use Java 1.8 or later.
-# On Cygwin, we use a script that converts the Unix-style pathnames in this
-# makefile to Windows pathnames.
-# On Darwin, java/javac aren't in a standard JDK directory, so we presume
-# they are on the path.
-ifeq (cygwin, $(OSTYPE))
-  JAVA := ${DAIKONDIR}/utils/plume-scripts/java-cygwin
-  JAVAC := ${DAIKONDIR}/utils/plume-scripts/javac-cygwin
+ifeq ($(shell uname), Darwin)
+  JAVA_HOME ?= $(/usr/libexec/java_home)
 else
-  ifeq (darwin, $(OSTYPE))
-    JAVA  := java
-    JAVAC := javac
-  else
-    JAVA  := $(JAVA_HOME)/bin/java
-    JAVAC := $(JAVA_HOME)/bin/javac
-  endif
+  JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
 endif
+JAVA  := $(JAVA_HOME)/bin/java
+JAVAC := $(JAVA_HOME)/bin/javac
 JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 export DAIKON_TESTS_CLASSPATH := .:$(JAVALIB_CLASSPATH):$(SCRATCH_FOR_DAIKON):$(DAIKON_CLASSPATH)
-ifeq (cygwin,$(OSTYPE))
-  export DAIKON_TESTS_CLASSPATH := $(shell cygpath -pw "$(DAIKON_TESTS_CLASSPATH)")
-endif
 
 # Dynamic instrumentation based java front end command.
 CHICORY := $(JAVA) -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.Chicory
@@ -245,45 +209,27 @@ PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
 
-# This test should use "command -v" instead of "which"
-ifndef DOS2UNIX
-  WHICHDOS2UNIX := $(shell which dos2unix)
-  ifneq ($(WHICHDOS2UNIX),)
-    DOS2UNIX = $(WHICHDOS2UNIX) --quiet
-  else
-    ifneq ($(shell which perl),)
-      DOS2UNIX = perl -pi -e 's/\r\n|\n|\r/\n/g'
-    else
-      $(error Install either dos2unix or perl)
-    endif
-  endif
-endif
-
 # For deterministic sorting
 export LC_ALL=C
 
 
 default: help
 
-# The general form of a Java version number is n.n.n_nn.
-# To simplify scanning, I only look at the major version
-# number and the update number.  Thus I assume the version
-# number is of the form: 1.<major>.0_<update>
-# Currently, the only versions that matter for Daikon testing
-# is if <major> is 8 or not (this will need to change when
-# Java 9 is released); and, if it is Java 8, if <update> > 91.
-# As of 1.8.0_92 there was a javac change that affects the line
-# numbers assigned to EXIT ppts in a few cases.
+# The general form of a Java version number prior to Java 9
+# is 1.n.n_n. For Java 9 or later it is n.n.n.n.
+# Currently, we only look for the release number, which is
+# the first 'n' in either case.
 
-JAVA_VERSION_STRING := $(shell $(RUN_JAVA) -version 2>&1 | head -1)
-JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.* 1\.\(.\).*/\1/')
-JAVA_UPDATE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.*_//')
-NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+ifneq (,$(findstring 1.,$(JAVA_VERSION_STRING)))
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/1\.\(.\).*/\1/')
+else
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+endif
+JAVA8_OR_NEWER := $(shell echo $(JAVA_RELEASE_NUMBER)\>7 | bc)
 
-# TODO:
-# Will need to support Java 8 and 9 at some point.
-ifneq ($(JAVA_RELEASE_NUMBER), 8)
-    $(error Must use Java version 8)
+ifneq ($(JAVA8_OR_NEWER), 1)
+    $(error Must use Java version 8 or later)
 endif
 
 # Function to compute goal filename extension.  Java 8 is now the default.
@@ -291,12 +237,12 @@ endif
 # otherwise, use filename.test.goal
 # Reasons for different behavior between Java 8 and Java 9 include:
 # (Unkown at this point.)
+# (There are no .goal.j9 files at present.)
 #
 # The argument ($(1)) is '<filename>.<test>'
-
-# Now we have an additional complication.  If we are using an older Java8
-# (<update> < 92) then if filename.test.goal.j8o exists, use it;
-# otherwise, use filename.test.goal
+#
+# This goal_name does not apply to kvasir-tests which
+# have their own goal_name calculation.
 
 goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
 				$(1).goal, \
@@ -441,10 +387,6 @@ ${SCRATCH_FOR_DAIKON}/.exists:
 
 MAIN_JAVA:=$(patsubst %,${SOURCES}/%.java, $(subst .,/,${MAIN_CLASS}))
 MAIN2_JAVA:=$(patsubst %,${SOURCES}/%.java, $(subst .,/,${MAIN2_CLASS}))
-ifeq (cygwin,$(OSTYPE))
-  MAIN_JAVA := $(shell cygpath -m "$(MAIN_JAVA)")
-  MAIN2_JAVA := $(shell cygpath -mi "$(MAIN2_JAVA)")
-endif
 ALL_LIST_FILE:=${SCRATCH_FOR_DAIKON}/.all-files
 INST_LIST_FILE:=${SCRATCH_FOR_DAIKON}/.instrument-files
 
@@ -551,10 +493,6 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make dyncomp-diff   : Diff new DynComp data against goal file"
 
 DCOMP_PREMAIN := ${DAIKONDIR}/java/dcomp_premain.jar
-DCOMP_PREMAIN_W := $(DCOMP_PREMAIN)
-ifeq (cygwin,$(OSTYPE))
-  DCOMP_PREMAIN_W := $(shell cygpath -m "$(DCOMP_PREMAIN)")
-endif
 SHINY_PRINT ?= true
 DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
 			  --comparability-file=$(PROJECT_FILE).txt-cset \
@@ -657,13 +595,6 @@ SPINFO_FILES=$(shell ls *.spinfo 2> /dev/null)
 DECLS_FILES:=
 DTRACE_FILES:=$(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 endif
-ifeq (cygwin,$(OSTYPE))
-DTRACE_FILES_W := $(shell $(WIN_CONVERT) "$(DTRACE_FILES)")
-DECLS_FILES_W  := $(shell $(WIN_CONVERT) "$(DECLS_FILES)")
-SPINFO_FILES_W := $(shell $(WIN_CONVERT) "$(SPINFO_FILES)")
-MAP_FILES_W	   := $(shell $(WIN_CONVERT) "$(MAP_FILES)")
-INV_FILE_W	   := $(shell $(WIN_CONVERT) "$(INV_FILE)")
-endif
 
 ${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
 	@echo
@@ -723,8 +654,6 @@ ${PROJECT_FILE}.txt-chicory.dtrace : $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrac
 # zcat into head that truncates causes a non-zero status, so ignore failures
 	${GZCAT} ${DTRACE_FILES} | head -n 100000 \
 	  > ${PROJECT_FILE}.txt-chicory.dtrace || true
-# trace-untruncate fails on files with DOS line endings
-	${DOS2UNIX} ${PROJECT_FILE}.txt-chicory.dtrace
 	${TRACE_UNTRUNCATE} ${PROJECT_FILE}.txt-chicory.dtrace
 
 txt-chicory-diff: ${PROJECT_FILE}.txt-chicory.diff
@@ -1188,7 +1117,7 @@ merged/.merged-jml: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_V
 	touch merged/.merged-jml
 
 
-# This simply prepends merged/ to each file name, which helps emacs
+# This simply prepends merged/ to each file name, which helps Emacs
 # find the files without trouble.
 # (I cannot just do
 #   MERGED_INST_LIST_FILE=$(foreach file,`${INST_LIST_FILE}`,merged/${file})
@@ -1437,7 +1366,7 @@ endif
 
 
 results summary:
-	@$(MAKE) --no-print-directory BASE?=`/bin/pwd` -C ../.. $@
+	@$(MAKE) -i --no-print-directory BASE?=`/bin/pwd` -C ../.. $@
 
 
 ###########################################################################
@@ -1448,7 +1377,6 @@ PROJECT_HELP:=${PROJECT_HELP}; echo ""
 dump_vars dump-vars dumpvars :
 	@echo "DAIKON_TESTS_CLASSPATH =  " "$(DAIKON_TESTS_CLASSPATH)"
 	@echo "RUN_JAVA =	 " "$(RUN_JAVA)"
-	@echo "DCOMP_PREMAIN_W = " "$(DCOMP_PREMAIN_W)"
 	@echo "DAIKON_OPTIONS  = " "$(DAIKON_OPTIONS)"
 
 

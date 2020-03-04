@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.7.3
+@center Daikon version 5.7.4
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.7.3 release date
-@center November 8, 2018
+@c Print out the Daikon version 5.7.4 release date
+@center June 1, 2019
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.7.3, released November 8, 2018.
+It describes Daikon version 5.7.4, released June 1, 2019.
 
 @menu
 * Introduction::
@@ -149,8 +149,8 @@ that holds at a certain point or points in a program; these are often
 seen in assert statements, documentation, and formal specifications.
 Invariants can be useful in program understanding and a host of other
 applications.  Examples include @samp{x.field > abs(y)}; @samp{y = 2*x+3};
-@samp{array a is sorted}; @samp{for all list objects lst, lst.next.prev =
-lst}; @samp{for all treenode objects n, n.left.value < n.right.value}; @samp{p
+@samp{array a is sorted}; for all list objects lst, @samp{lst.next.prev =
+lst}; for all treenode objects n, @samp{n.left.value < n.right.value}; @samp{p
 != null => p.content in myArray}; and many more.  You can extend Daikon
 to add new properties (@pxref{Enhancing Daikon output}, or
 @pxref{New invariants,,,developer,Daikon Developer Manual}).
@@ -220,8 +220,8 @@ question will not be answered.
 @chapter Installing Daikon
 @cindex installing Daikon
 
-Shortcut for the impatient:  skip directly to the installation instructions
-for @ref{Unix/Linux/macOS installation}, or @ref{Windows installation}.
+Shortcut for the impatient:  skip directly to the @ref{Installation}
+instructions.
 
 The main way to install Daikon is from a release, as explained in this
 section.
@@ -257,9 +257,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
 @menu
 * Requirements::
-* Unix/Linux/macOS installation::
-* Windows installation::
-* Running Daikon under Windows::
+* Installation::
 @end menu
 
 
@@ -276,13 +274,15 @@ compiler such as @command{gcc}.
 If you wish to edit the Daikon source code and re-compile Daikon,
 @pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
+Daikon is supported on Unix-like environments, including Linux, Mac OS X, and
+Windows Subsystem for Linux (WSL).  It is not supported on Windows or Cygwin.
 
 @c The explicit installation instructions, segregated by OS type, is
 @c helpful to users.
 
 
-@node       Unix/Linux/macOS installation
-@section    Unix/Linux/macOS installation
+@node       Installation
+@section    Installation
 
 @exampleindent 1
 @enumerate
@@ -293,12 +293,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.7.3.tar.gz
-tar zxf daikon-5.7.3.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.7.4.tar.gz
+tar zxf daikon-5.7.4.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.7.3/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.7.4/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:
@@ -310,20 +310,10 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.7.3
-# The absolute pathname of the directory that contains the Java JDK
-export JAVA_HOME=@var{/usr/lib/jvm/java}
+export DAIKONDIR=@var{daikonparent}/daikon-5.7.4
+# Either JAVA_HOME must be set, or javac must be on the execution path.
 # source $DAIKONDIR/scripts/daikon.bashrc
 @end example
-
-A setting of @env{JAVA_HOME} that @emph{sometimes} works (it might not
-because @command{java} might be the version in the JDK or in the JRE) is:
-
-@exampleindent 0
-@smallexample
-export JAVA_HOME=$@{JAVA_HOME:-$(dirname $(dirname $(dirname $(readlink -f $(/usr/bin/which java)))))@}
-@end smallexample
-@exampleindent 1
 
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
@@ -373,276 +363,6 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 
 @end enumerate
 @exampleindent 4
-
-@node       Windows installation
-@section    Windows installation
-
-If you use Windows, an easy way to use Daikon is to run it under Windows
-Subsystem for Linux (WSL).
-
-The remainder of this section describes how to proceed if you prefer to use
-Daikon under Windows.
-
-To perform a complete install on
-Windows, it is necessary to install the Cygwin toolset.
-After you have installed Daikon, you can run it using either Cygwin or
-the regular Windows shell (@pxref{Running Daikon under Windows}).
-
-The Cygwin toolset (available at
-@uref{http://cygwin.com/}) contains everything you need
-to compile and run Linux programs under Windows.  You can install Cygwin
-by running the appropriate setup program; either
-@uref{http://cygwin.com/setup-x86.exe} or
-@uref{http://cygwin.com/setup-x86_64.exe},
-as determined by your machine type.
-The default installation of Cygwin is sufficient for installing Daikon.
-
-
-@exampleindent 1
-@enumerate
-@item
-Choose the directory where you want to install Daikon; we'll call this
-the @var{daikonparent} directory.  In this directory, download and
-unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
-
-@example
-cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.7.3.tar.gz
-tar zxf daikon-5.7.3.tar.gz
-@end example
-
-@noindent
-This creates a @file{@var{daikonparent}/daikon-5.7.3/} subdirectory.
-
-@item
-Place three commands in your shell initialization file @file{~/.bashrc}:
-set two environment variables
-and source a Daikon startup file.
-Do not use a Windows shell; use the Cygwin bash shell instead.
-
-@example
-# The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.7.3
-# The full Linux pathname of the directory that contains the Java JDK
-export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.8.0_144
-# source $DAIKONDIR/scripts/daikon.bashrc
-@end example
-
-@noindent
-Use the Cygwin/Linux path style (e.g., @code{/cygdrive/c/daikon}) rather than the
-windows path style (@code{C:\daikon}).
-Some users have reported problems when using pathnames
-with spaces.  You can avoid the problem by using the @command{ln} command to add a
-symbolic link without spaces to @code{Program Files}.
-
-@example
-cd /cygdrive/c
-ln -s "Program Files" program_files
-@end example
-
-@noindent
-and then the JAVA_HOME line becomes:
-@example
-export JAVA_HOME=/cygdrive/c/program_files/Java/jdk1.8.0_144
-@end example
-
-@c You can also
-@c set the environment variables in the registry (right-click My Computer,
-@c and then click Properties; click the Advanced tab; click Environment
-@c variables), but that only reduces the number of steps you have to do for
-@c each shell from 3 (two variables plus running the @file{daikonenv.bat}
-@c file) to 1 (running the @file{daikonenv.bat} file).
-
-After editing your shell initialization file, either execute the commands
-you placed in it, or else log out and log back in to achieve the same
-effect.
-
-@item
-Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{$DAIKONDIR/scripts/daikon.bashrc}.
-
-You may customize them by setting environment variables, or by adding a
-@file{Makefile.user} file to directory @file{$DAIKONDIR/java} (it is
-automatically read at the beginning of the main Makefile, and prevents
-you from having to edit the main Makefile directly).
-
-The one variable you must customize is
-to define the @env{OSTYPE} variable to be @samp{cygwin}.
-@example
-OSTYPE = cygwin
-@end example
-
-@item
-Compile Daikon and build other tools.
-@c Note that this step is @emph{not} required if you only want to use Daikon
-@c with its .NET front end (Celeriac).
-@c This step is required for using other tools such as DynComp.
-
-@example
-make -C $DAIKONDIR rebuild-everything
-@end example
-
-@noindent
-This builds the various executables used by Daikon, such as the
-JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
-If you need more
-information about compiling Daikon, see
-@ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
-If you have trouble compiling the C/C++ front end Kvasir, see
-@xref{Installing Kvasir}.  Note that
-Kvasir does not work under Cygwin.
-
-Note that running this make command may take 20 minutes or more,
-depending on your computer.
-On Windows, running @command{make} requires
-that @uref{http://www.cygwin.com/,Cygwin} be installed.
-
-Optionally, download other executables, such as
-the Simplify theorem prover (@pxref{Installing Simplify}).
-
-@end enumerate
-@exampleindent 4
-
-
-@node       Running Daikon under Windows
-@section    Running Daikon under Windows
-@cindex Windows
-@cindex Microsoft Windows
-
-After you have installed Daikon under Windows (@pxref{Windows
-installation}), you can run it either using native Windows utilities, or
-using the Cygwin environment --- it's your choice.
-
-Daikon is a @strong{command-line application} (and so are its related
-programs, such as Chicory).  You should invoke them from a command shell
---- either a Windows command shell or a Cygwin command shell --- rather
-than by double-clicking their icons.  In any event, double-clicking
-would not supply the proper arguments to the program.
-
-First, a little background/review.   Java on Linux separates its
-@env{CLASSPATH} entries using the colon (@samp{:}) while Java on Windows
-separates the entries with a semi-colon (@samp{;}). There is a good reason
-for this; on Windows the colon would have been impractical as it is
-used in file paths (@file{c:\}); on Linux the semi-colon is impractical,
-as it is used to end a command line.  The tricky bit is that Cygwin
-provides a Linux like environment on top of Windows.  So Cygwin mainly
-wants colon separators but @command{java} is a Windows application, so it wants
-semi-colons.  Another point is that when a Cygwin shell starts up,
-it copies the Windows environment into its Linux like environment with
-no changes --- except for the @env{PATH} variable.  This it converts
-to Linux format (with colons) and adds "/usr/local/bin:/usr/bin:" to
-the front.  Hence, it is all set to run both Cygwin and existing
-Windows applications.
-
-
-@menu
-* Windows command line::
-* Cygwin shell::
-@end menu
-
-
-@node          Windows command line
-@subsection    Windows command line
-
-The first option is to run Daikon using native Windows utilities.
-The is done in the normal fashion.  However, getting the correct
-classpath.  As noted above, it must be
-specified in Windows format (Windows paths and semicolon separators).
-It must include either @file{$DAIKONDIR/daikon.jar} or
-@file{$DAIKONDIR/java} (if you
-have recompiled the Daikon source but not rebuilt @file{daikon.jar}).
-A typical example for the classpath might be:
-
-@exampleindent 1
-@example
-C:\cygwin64\home\user\invariants\daikon\daikon.jar;.;C:\Program Files
-(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.8.0_144\
-jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_144\lib\tools.jar
-@end example
-@exampleindent 4
-
-
-@node          Cygwin shell
-@subsection    Cygwin shell
-
-@cindex Cygwin toolset
-
-The second option for Windows (and the one we recommend) is to run
-Daikon using the Cygwin toolset
-(available at @uref{http://cygwin.com/}), which
-contains everything you need to compile and run Linux programs under
-Windows.  You can install Cygwin by simply running one of the setup
-programs (based on your machine type) found
-at @uref{http://cygwin.com/}.
-
-As noted above, when running any Java program (such as Daikon or Chicory),
-the @env{CLASSPATH} must be specified in Windows format.  Your initial
-install of the Java JDK will have set the basics for the @env{CLASSPATH}.
-When you installed Daikon, you were instructed to place into your
-shell initialization file commands to set @env{JAVA_HOME} and @env{DAIKONDIR}.
-
-Recall that the @option{-classpath}
-(or @option{-cp}) option must be
-in Windows format.  This can get confusing because the Cygwin
-bash interpreter is going to process the command line prior to handing it
-off to @command{java}.  Hence:
-@exampleindent 1
-@example
-java -cp c:\cygwin64\home\user\invariants\daikon\daikon.jar daikon.Daikon
-@end example
-@exampleindent 4
-
-@noindent
-will fail as the backslash @samp{\} is processed by bash and removed.  Any of
-the following will work:
-
-@tex
-\global\hfuzz=35pt
-@end tex
-@exampleindent 1
-@example
-java -cp c:\\cygwin64\\home\\user\\invariants\\daikon\\daikon.jar daikon.Daikon
-java -cp "c:\cygwin64\home\user\invariants\daikon\daikon.jar" daikon.Daikon
-java -cp c:/cygwin64/home/user/invariants/daikon/daikon.jar daikon.Daikon
-@end example
-@exampleindent 4
-@tex
-\global\hfuzz=1pt
-@end tex
-
-The last is interesting as this is almost the same as on ``real'' Linux.  Windows
-accepts either forward (@samp{/}) or backward (@samp{\}) slashes as directory separators
-in paths.  There are similar command parsing issues with parenthesis and blanks.
-These are legal in Windows paths, but will cause bash to get confused.
-In general, enclosing a valid Windows path within double quotes (@samp{"})
-is the preferred way to avoid these problems.
-If you find it more convenient to use Linux paths, or want to use an
-existing environment variable that contains a Linux path, the @command{cygpath} tool
-will do the job.  Thus, instead of:
-@exampleindent 1
-@example
-java -cp $DAIKONDIR/daikon.jar daikon.Daikon
-@end example
-@exampleindent 4
-
-@noindent
-(which will fail), use
-@exampleindent 1
-@example
-java -cp `cygpath -wp $DAIKONDIR/daikon.jar` daikon.Daikon
-@end example
-@exampleindent 4
-
-@noindent
-(note the back quotes @samp{`}) and everything should work as expected. Or even better:
-@exampleindent 1
-@example
-java -cp "`cygpath -wp $DAIKONDIR/daikon.jar`" daikon.Daikon
-@end example
-@exampleindent 4
-
-@noindent
-since there may be some Windows path characters contained in the environment variables.
 
 
 @node    Example usage
@@ -879,8 +599,7 @@ java -cp $DAIKONDIR/daikon.jar daikon.tools.jtb.Annotate StackArTester.inv.gz \
 @end example
 
 (Here and elsewhere in the manual, the continuation character @samp{\} is
-used to split a long command across lines.  Windows uses the @samp{^}
-character instead.)
+used to split a long command across lines.)
 
 Now examine file @file{DataStructures/StackAr.java-escannotated}.
 For more information about the Annotate program, see @ref{Annotate}.
@@ -3477,13 +3196,14 @@ enabled (the @option{-g} command-line switch to @command{javac});
 otherwise, Chicory uses the names @code{arg0}, @code{arg1}, @dots{} as
 the names of method arguments.
 
-Chicory must be run in a version 7 (or later) JVM, but it is
+Chicory must be run in a version 8 (or later) JVM, but it is
 backward-compatible with older versions of Java code.  Chicory can process
 class files from any version of Java.
 
 @menu
 * Chicory options::
 * Static fields (global variables)::
+* Troubleshooting Chicory::
 @end menu
 
 @node       Chicory options
@@ -3882,7 +3602,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.7.3.jar
+--premain=C:\lib\daikon-5.7.4.jar
 @end example
 
 @item --heap-size=@var{max_heap}
@@ -3926,6 +3646,24 @@ This produces a single formula that is valid for all global variables at
 all times.
 @end enumerate
 
+
+@node       Troubleshooting Chicory
+@subsection Troubleshooting Chicory
+
+A message like
+
+@example
+Chicory warning: ClassFile: ... - classfile version (49) is out of date and may not be processed correctly.
+@end example
+
+@noindent
+means that your program uses an old classfile format that is missing
+information that Chicory uses during instrumentation.  Chicory might work
+properly, or it might not.  You can eliminate the warning by re-compiling
+your program, using a @code{-target} command-line argument for a more
+recent version of Java.  (In the example above, classfile version
+49 corresponds to Java 5, which was released in 2004; Java 6 was released
+in 2006, and Java 8 was released in 2014.)
 
 
 @node    DynComp for Java
@@ -4203,18 +3941,11 @@ instrumented copy of the JDK@.  Use the following command:
 make -C $DAIKONDIR/java dcomp_rt.jar
 @end example
 
-Make sure the @env{JAVA_HOME} environment variable is set to the directory
-containing your JDK@.  This command instruments the classes in the
+Either the @env{JAVA_HOME} environment variable must be set, or
+@code{javac} must be on the execution path.
+This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
-
-On macOS, you might do:
-
-@exampleindent 0
-@example
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_122.jdk/Home
-@end example
-@exampleindent 4
 
 @noindent
 Building @file{dcomp_rt} requires 10-30 minutes to complete and uses 1024 MB of
@@ -8102,7 +7833,7 @@ available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
 java -Xmx256m daikon.Chicory --comparability-file=MyClass.decls-DynComp \
-     --heap-size=1600m --daikon mypackage.MyClass arg1 arg2 arg3
+     --heap-size=2600m --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
 When using the Java @command{HotSpot} JVM, an additional parameter may need to
@@ -8745,6 +8476,8 @@ required in order to replicate the bug and verify that our fix corrects
 the problem.  If you do not provide complete information, we will not be
 able to assist you.
 
+@c If you update this, also update ../.github/ISSUE_TEMPLATE
+
 Your bug report should include:
 @itemize @bullet
 @item
@@ -8790,7 +8523,7 @@ Daikon to another.
 @item
 the JDK or JRE version (e.g., the complete output of @samp{java
 -version}), and operating system and revision you are using (e.g.,
-Debian stable, Windows @nospellcheck{XP} service pack 2, etc)
+Ubuntu 18.04).
 @item
 any other information that you consider relevant.
 @end itemize
@@ -8850,7 +8583,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.7.3, released November 8, 2018.
+This manual describes Daikon version 5.7.4, released June 1, 2019.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGES,,@file{doc/CHANGES}}
 in the distribution; this section gives a
@@ -8865,7 +8598,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.7.3
+@cindex Daikon version 5.7.4
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
@@ -9117,54 +8850,80 @@ its users.
 
 The following individuals have contributed to Daikon:
 @nospellcheck{
-Yuriy Brun,
-Jake Cockrell,
-David Cok,
-Forrest Coward,
+@c You can approximate this by running the following command:
+@c   git-authors --texinfo --punctuation
+@c but it's incomplete because it needs to look at other repositories such
+@c as Fjalar and Celeriac.
 Adam Czeisler,
-Brian Demsky,
 Alan Donovan,
-Nii Dodoo,
-Kellen Donohue,
 Alan Dunn,
-Michael Ernst,
-Eric Fellheimer,
-Antonio Garcia-Dominguez,
-William Griswold,
-Florian Gross,
-Philip Guo,
-Melissa Hao,
-Michael Harder,
-Dieter von Holten,
-Greg Jay,
-Josh Kataoka,
-Lee Lin,
-Allen Liu,
-Sandra Loosemore,
-Vikash Mansinghka,
-Stephen McCamant,
-Samir Meghani,
-Benjamin Morse,
-Jelani Nelson,
-Ryan Newton,
-Jeremy Nimmer,
-Toh Ne Win,
-David Notkin,
-Carlos Pacheco,
-Jeff Perkins,
-Jaime Quinonez,
-Mark Roberts,
-Robert Rudd,
 Alexandru Salcianu,
-Todd Schiller,
-Kathryn Shih,
-Eric Spishak,
-Laure Thompson,
-Matthew Tschantz,
-Iuliu Vasilescu,
+Allen Liu,
+Antonio Garcia-Dominguez,
+Benjamin Morse,
+Brian Demsky,
+Carlos Pacheco,
+Cemal Akcaba,
+Charles Tam,
+Charlie Garrett,
 Chen Xiao,
+Danny Dig,
+Darko Marinov,
+David Cok,
+David McArthur,
+David Notkin,
+Derek Rayside,
+Dieter von Holten,
+Emily Marcus,
+Eric Fellheimer,
+Eric Spishak,
+Florian Gross,
+Florian S. Gross,
+Forrest Coward,
+Galen Pickard,
+Greg Jay,
+Greg Sullivan,
+Gustavo Santos,
+Iuliu Vasilescu,
+Jaime Quinonez,
+Jake Cockrell,
+James Anderson,
+Javier Thaine,
+Jeff Perkins,
+Jeff Yuan,
+Jelani Nelson,
+Jeremy Nimmer,
+Jonathan Burke,
+Josh Kataoka,
+Kathryn Shih,
+Kellen Donohue,
+Konstantin Weitz,
+Laure Thompson,
+Lee Lin,
+Mark Roberts,
+Matthew Tschantz,
+Melissa Hao,
+Michael Ernst,
+Michael Harder,
+Nii Dodoo,
+Philip Guo,
+Robert Rudd,
+Ryan Newton,
+Samir Meghani,
+Sandra Loosemore,
+Stephen Garland,
+Stephen McCamant,
+Sung Kim,
+Suzanne Millstein,
 Tao Xie,
-Jeff Yuan.
+Tatyana Nikolova,
+Todd Schiller,
+Toh Ne Win,
+Vikash Mansinghka,
+Werner Dietl,
+William Griswold,
+Yoav Zibin,
+Yuriy Brun.
 }
 
 @nospellcheck{Craig Kaplan} carved the Daikon logo.
@@ -9234,7 +8993,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  inlined makeinfo daikonemail setchapternewpage ifinfo hboxes
 @c  LocalWords:  finalout titlepage titlefont eps pdf txt png jpg vskip pt img
 @c  LocalWords:  filll src alt ifnothtml dir ifnottex GUIs ifhtml detailmenu pl
-@c  LocalWords:  Cygwin StackAr Diff orig dfepl CSV convertcsv dfej dfec gcc cd
+@c  LocalWords:  StackAr Diff orig dfepl CSV convertcsv dfej dfec gcc cd
 @c  LocalWords:  applets EDG spinfo InvariantChecker LogicalCompare dtrace inv
 @c  LocalWords:  runtimechecker javac Lackwit pptname uref abs lst treenode IOA
 @c  LocalWords:  myArray PathFinder pxref cindex samp classpath xref var wget
@@ -9295,7 +9054,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  Renieris NTT varname VarInfoName hasDuplicates hasOrder len gc
 @c  LocalWords:  hasNull nullTerminated isParam hashCode VarComparability IDE
 @c  LocalWords:  makeEmpty topLevel bottomLevel pptInfo MyInteger printindex mw
-@c  LocalWords:  cygwin basename globalVar staticVar funcStaticVar myName foo
+@c  LocalWords:  basename globalVar staticVar funcStaticVar myName foo WSL
 @c  LocalWords:  TerminationMessage HotSpot daikonPrintArrayMissing javacc invs
 @c  LocalWords:  sourcing toString struct uninstrumented Garbervetsky classfile
 @c  LocalWords:  UnsupportedClassVersionError DtraceDiff VerifyError procedurei
@@ -9323,7 +9082,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  firstparagraphindent codequotebacktick exampleindent dfn
 @c  LocalWords:  evenheading thispage thischaptername thischapternum hfuzz
 @c  LocalWords:  oddheading thissectionnum thissectionname everyfooting d1
-@c  LocalWords:  QuickTime QTSystem QTJava cygpath arg1 arg2 arg3 MyMain
+@c  LocalWords:  QuickTime QTSystem QTJava arg1 arg2 arg3 MyMain Makefile
 @c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx256m var1
 @c  LocalWords:  prepended computeConfidence numsamples getName var2 var3
 @c  LocalWords:  jcc Java2 seq1 CSharpContract myString otherString EXIT48
@@ -9334,7 +9093,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
 @c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
-@c  LocalWords:  Drager macOS I1 I2 invSortComparator1 invSortComparator2
+@c  LocalWords:  Drager I1 I2 invSortComparator1 invSortComparator2 prover
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
 @c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
 @c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx2048m ps1

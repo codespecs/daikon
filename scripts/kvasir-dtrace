@@ -1,5 +1,5 @@
 #!/bin/sh
-DAIKONDIR=$(realpath $(dirname $(readlink -f "$0"))/..)
+DAIKONDIR="$(cd "$(dirname "$0")"/.. && pwd -P)"
 if [ ! -d "$DAIKONDIR/fjalar" ]
 then
     echo "Kvasir is not installed; to install it, run:    make -C $DAIKONDIR kvasir"

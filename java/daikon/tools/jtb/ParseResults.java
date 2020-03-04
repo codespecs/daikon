@@ -26,7 +26,7 @@ public class ParseResults {
 
   public String fileName;
 
-  public List<TypeDeclaration> roots = new ArrayList<TypeDeclaration>();
+  public List<TypeDeclaration> roots = new ArrayList<>();
 
   public CompilationUnit compilationUnit;
 
@@ -49,7 +49,7 @@ public class ParseResults {
 
   public static List<ParseResults> parse(List<String> javaFileNames, boolean discardComments) {
 
-    List<ParseResults> retval = new ArrayList<ParseResults>();
+    List<ParseResults> retval = new ArrayList<>();
 
     for (String javaFileName : javaFileNames) {
       ParseResults results = parse(javaFileName, discardComments);

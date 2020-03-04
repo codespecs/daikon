@@ -19,6 +19,9 @@ public class HtmlToTexinfoTest extends TestCase {
     testHtmlToTexinfo(
         "The <tt>--conf_limit</tt> command-line option to Daikon",
         "The @code{--conf_limit} command-line option to Daikon");
+    testHtmlToTexinfo(
+        "The <code>--conf_limit</code> command-line option to Daikon",
+        "The @code{--conf_limit} command-line option to Daikon");
   }
 
   private void testHtmlToTexinfo(String in, String expected) {
@@ -31,6 +34,9 @@ public class HtmlToTexinfoTest extends TestCase {
     testJavadocHtmlToTexinfo("some &lt;text&gt; &amp; I like {it}", "some <text> & I like @{it@}");
     testJavadocHtmlToTexinfo(
         "The <tt>--conf_limit</tt> command-line option to Daikon",
+        "The @code{--conf_limit} command-line option to Daikon");
+    testJavadocHtmlToTexinfo(
+        "The <code>--conf_limit</code> command-line option to Daikon",
         "The @code{--conf_limit} command-line option to Daikon");
 
     // Additional test casess

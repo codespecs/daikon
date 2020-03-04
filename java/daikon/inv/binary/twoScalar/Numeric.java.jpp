@@ -638,7 +638,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   public static List<@Prototype Invariant> get_proto_all() {
 
-    List<@Prototype Invariant> result = new ArrayList<@Prototype Invariant>();
+    List<@Prototype Invariant> result = new ArrayList<>();
     #if (defined(STRING))
         result.add(SubString.get_proto(false));
         result.add(SubString.get_proto(true));
@@ -662,7 +662,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       result.add(ShiftZero.get_proto(false));
       result.add(ShiftZero.get_proto(true));
     #endif
-    // System.out.printf("%s get proto: %s\n", CLASSNAME.class, result);
+    // System.out.printf("%s get proto: %s%n", CLASSNAME.class, result);
     return result;
   }
 

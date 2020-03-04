@@ -233,12 +233,22 @@ public class CLASSNAME extends SUPERCLASS {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
-    if (format.isJavaFamily()) return format_java_family(format);
+    if (format.isJavaFamily()) {
+      return format_java_family(format);
+    }
 
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.ESCJAVA) return format_esc();
-    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return format_esc();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
 
     return format_unimplemented(format);
   }
@@ -466,7 +476,7 @@ public class CLASSNAME extends SUPERCLASS {
 
     Derivation deriv = vis[0].derived;
 
-    if (deriv != null && ((deriv instanceof SequenceScalarSubsequence) || (deriv instanceof SequenceFloatSubsequence))) {
+    if ((deriv instanceof SequenceScalarSubsequence) || (deriv instanceof SequenceFloatSubsequence)) {
       // Find the slice with the full sequence, check for an invariant of this type
       PptSlice sliceToCheck;
 

@@ -22,17 +22,6 @@ CHICORY_ARGS = --dtrace-file=$(basename $(basename $@)).dtrace
 PREMAIN		= $(CHICORY)
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
-# On cygwin, translate the premain path to windows format.  Only do so if
-# this has not already been done (which is determined by looking for
-# semicolons (:) in the name.  Only do this for PREMAIN, not for CHICORY
-# as CHICORY is used by make which will expect unix format
-ifeq (cygwin,$(OSTYPE))
-  ifneq (;,$(findstring :,$(PREMAIN)))
-    PREMAIN := '$(shell cygpath -w "$(PREMAIN)")'
-  endif
-endif
-
-
 TESTS		= online pptsel pptomit nesting stdvis varomit samples misc
 
 # This is the working directory, but not necessarily the directory in

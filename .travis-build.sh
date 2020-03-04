@@ -36,7 +36,11 @@ export SHELLOPTS
 if [[ "${GROUP}" == "quick-txt-diff" || "${GROUP}" == "all" ]]; then
   echo ".travis-build.sh is running quick-txt-diff tests"
   make dyncomp-jdk
-  make -C tests MPARG=-Otarget quick-txt-diff results
+  MAKE_VERSION=$(make --version 2>&1 | head -1)
+  if [[ $MAKE_VERSION =~ "GNU Make 4" ]]; then
+    MPARG_ARG="MPARG=-Otarget"
+  fi
+  make -C tests $MPARG_ARG quick-txt-diff results
 fi
 
 if [[ "${GROUP}" == "nonquick-txt-diff" || "${GROUP}" == "all" ]]; then
@@ -64,11 +68,13 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   # Documentation
   make javadoc doc-all
 
-  (git diff "${TRAVIS_COMMIT_RANGE/.../..}" > /tmp/diff.txt 2>&1) || true
+  if [ -d "/tmp/plume-scripts" ] ; then
+    (cd /tmp/plume-scripts && git pull -q) > /dev/null 2>&1
+  else
+    (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
+  fi
   (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
-  [ -s /tmp/diff.txt ] || ([[ "${TRAVIS_BRANCH}" != "master" && "${TRAVIS_EVENT_TYPE}" == "push" ]] || (echo "/tmp/diff.txt is empty" && false))
-  wget https://raw.githubusercontent.com/plume-lib/plume-scripts/master/lint-diff.py
-  python lint-diff.py --strip-diff=2 --strip-lint=1 /tmp/diff.txt /tmp/warnings.txt
+  /tmp/plume-scripts/ci-lint-diff /tmp/warnings.txt
 fi
 
 if [[ "${GROUP}" == "kvasir" || "${GROUP}" == "all" ]]; then

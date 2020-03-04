@@ -37,7 +37,7 @@ public final class SplitDtrace {
     String line;
     int declNum = 1;
     int recNum = 0;
-    ArrayList<String> rec = new ArrayList<String>();
+    ArrayList<String> rec = new ArrayList<>();
     while (true) {
       readRec(reader, rec);
       if (isDeclare(rec)) {
@@ -76,8 +76,8 @@ public final class SplitDtrace {
     BufferedReader reader = getStream(filename);
 
     int currRecCount = 0;
-    HashSet<Integer> nonceSet = new HashSet<Integer>();
-    ArrayList<String> rec = new ArrayList<String>();
+    HashSet<Integer> nonceSet = new HashSet<>();
+    ArrayList<String> rec = new ArrayList<>();
     while (true) {
       readRec(reader, rec);
       if (isDeclare(rec)) writer.newLine();
@@ -145,7 +145,8 @@ public final class SplitDtrace {
   }
 
   @SuppressWarnings(
-      "purity") // non-deterministic call to trim is used only for equals(), does not affect result
+      "all:purity") // non-deterministic call to trim is used only for equals(), does not affect
+  // result
   @Pure
   static boolean isEmpty(String l) {
     return l.trim().equals("") || l.startsWith("#");

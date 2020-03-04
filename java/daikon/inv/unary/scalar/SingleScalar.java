@@ -7,7 +7,6 @@ import daikon.inv.unary.UnaryInvariant;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.Raw;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -27,8 +26,7 @@ public abstract class SingleScalar extends UnaryInvariant {
     super();
   }
 
-  public VarInfo var(
-          @GuardSatisfied @UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this) {
+  public VarInfo var(@GuardSatisfied @UnknownInitialization(SingleScalar.class) SingleScalar this) {
     return ppt.var_infos[0];
   }
 

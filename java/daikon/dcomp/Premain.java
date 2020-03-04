@@ -4,6 +4,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
+import daikon.plumelib.options.Option;
+import daikon.plumelib.options.Options;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +21,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
-import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 public class Premain {
 
@@ -45,7 +45,7 @@ public class Premain {
    * Set of pre_instrumented jdk classes. Needed so that we will instrument classes generated on the
    * fly in the jdk.
    */
-  public static Set<String> pre_instrumented = new LinkedHashSet<String>();
+  public static Set<String> pre_instrumented = new LinkedHashSet<>();
 
   // One of the last phases for DynComp is to write out the comparability values
   // after the user program completes execution.  One of the steps is to assign
@@ -111,7 +111,7 @@ public class Premain {
     // Find out what classes are already loaded
     // Class<?>[] loaded_classes = inst.getAllLoadedClasses();
     // for (Class<?> loaded_class : loaded_classes) {
-    // System.out.printf("loaded class = %s\n", loaded_class.getName());
+    // System.out.printf("loaded class = %s%n", loaded_class.getName());
     // }
 
     // Setup the shutdown hook

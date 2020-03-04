@@ -1,6 +1,8 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.plumelib.bcelutil.InstructionListUtils;
+import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
@@ -45,8 +47,6 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.bcelutil.InstructionListUtils;
-import org.plumelib.bcelutil.SimpleLog;
 
 /**
  * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
@@ -138,7 +138,6 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @SuppressWarnings("signature") // string manipulation (checker should handle)
     @BinaryName String fullClassName = className.replace("/", ".");
     // String fullClassName = className;
 
@@ -159,20 +158,20 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     if (Chicory.boot_classes != null) {
       Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
       if (matcher.find()) {
-        debug_transform.log("ignoring sys class %s, matches boot_classes regex", fullClassName);
+        debug_transform.log("ignoring sys class %s, matches boot_classes regex%n", fullClassName);
         return null;
       }
     } else if (loader == null) {
-      debug_transform.log("ignoring system class %s, class loader == null", fullClassName);
+      debug_transform.log("ignoring system class %s, class loader == null%n", fullClassName);
       return null;
     } else if (loader.getParent() == null) {
-      debug_transform.log("ignoring system class %s, parent loader == null\n", fullClassName);
+      debug_transform.log("ignoring system class %s, parent loader == null%n", fullClassName);
       return null;
     } else if (fullClassName.startsWith("sun.reflect")) {
-      debug_transform.log("ignoring system class %s, in sun.reflect package", fullClassName);
+      debug_transform.log("ignoring system class %s, in sun.reflect package%n", fullClassName);
       return null;
     } else if (fullClassName.startsWith("com.sun")) {
-      debug_transform.log("Class from com.sun package %s with nonnull loaders\n", fullClassName);
+      debug_transform.log("Class from com.sun package %s with nonnull loaders%n", fullClassName);
     }
 
     // Don't intrument our code
@@ -257,7 +256,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         // njc.dump(filename);
         return (njc.getBytes());
       } else {
-        debug_transform.log("not including class %s (filtered out)", className);
+        debug_transform.log("not including class %s (filtered out)%n", className);
         // No changes to the bytecodes
         return null;
       }
@@ -379,7 +378,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     return invokeList;
   }
 
-  // Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
+  // Map<Integer, InstructionHandle> offset_map = new HashMap<>();
   InstructionHandle[] offset_map;
 
   /**
@@ -393,7 +392,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   private ClassInfo instrument_all_methods(ClassGen cg, String fullClassName, ClassLoader loader) {
 
     ClassInfo class_info = new ClassInfo(cg.getClassName(), loader);
-    List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
+    List<MethodInfo> method_infos = new ArrayList<>();
 
     if (cg.getMajor() < Const.MAJOR_1_6) {
       System.out.printf(
@@ -603,7 +602,6 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   // This method exists only to suppress interning warnings
-  @SuppressWarnings("interning") // special, unique value
   @Pure
   private static boolean isVoid(Type t) {
     return t == Type.VOID;
@@ -638,7 +636,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     boolean shouldInclude = shouldIncIter.next();
 
-    if (!shouldInclude) return null;
+    if (!shouldInclude) {
+      return null;
+    }
 
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
@@ -1083,10 +1083,10 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     // Loop through each instruction and find the line number for each
     // return opcode
-    List<Integer> exit_locs = new ArrayList<Integer>();
+    List<Integer> exit_locs = new ArrayList<>();
 
     // tells whether each exit loc in the method is included or not (based on filters)
-    List<Boolean> isIncluded = new ArrayList<Boolean>();
+    List<Boolean> isIncluded = new ArrayList<>();
 
     debug_transform.log("Looking for exit points in %s%n", mgen.getName());
     InstructionList il = mgen.getInstructionList();
@@ -1194,9 +1194,12 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test")) {
       return true;
     }
-    if (classname.equals("daikon/PptTopLevel$PptType")) return true;
-    if (classname.startsWith("org/plumelib/bcelutil")) return true;
-    if (classname.startsWith("daikon/util")) return true;
+    if (classname.equals("daikon/PptTopLevel$PptType")) {
+      return true;
+    }
+    if (classname.startsWith("daikon/plumelib")) {
+      return true;
+    }
     return false;
   }
 }

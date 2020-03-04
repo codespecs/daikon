@@ -41,7 +41,7 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # accidentally including things in the user's checkout that are not needed
 # by most users, but why not include everything that's in repository?)
 SCRIPT_FILES := Makefile \
-	daikon.bashrc daikonenv.bat \
+	daikon.bashrc \
 	dfepl dtrace-perl dtype-perl \
 	java-cpp \
 	kvasir-dtrace \
@@ -86,15 +86,8 @@ WWW_PARENT ?= /cse/web/research/plse
 WWW_DIR := $(WWW_PARENT)/daikon
 INV_DIR := $(shell pwd)
 
-ifeq (cygwin,$(OSTYPE))
-#JAVA tools need Windows path on Windows
-JAR_DIR := `cygpath -wp $(INV_DIR)`
-# for install-test target
-QT_PATH := `cygpath -wp ../../../daikon.jar:.`
-else
 JAR_DIR := $(INV_DIR)
 QT_PATH := ../../../daikon.jar:.
-endif
 
 # Staging area for the distribution
 STAGING_DIR := $(WWW_PARENT)/staging-daikon
@@ -104,14 +97,6 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
                     download/index.html download/doc/index.html
 
 REPOSITORY := https://github.com/codespecs/daikon.git
-
-## These seem to be used only by the test-staged-dist target.
-# It would be nicer to automatically set JAVA_HOME, or to not need it to be set.
-ifndef JAVA_HOME
-$(error JAVA_HOME is not set)
-endif
-RTJAR := $(JAVA_HOME)/jre/lib/rt.jar
-TOOLSJAR := $(JAVA_HOME)/lib/tools.jar
 
 RSYNC_AR := rsync -aR
 
@@ -339,7 +324,7 @@ tags:
 
 # This is the target we use to verify that the software we are about
 # to distribute runs correctly in a variety of target environments.
-# Currently, we test Windows(Cygwin), Fedora and Ubuntu client machines.
+# Currently, we test CentOS, Fedora, Mac OS X, and Ubuntu client machines.
 distribution-check:
 	$(MAKE) -C scripts
 ifdef DAIKONCLASS_SOURCES
@@ -394,7 +379,6 @@ repository-test:
 	git clone $(REPOSITORY) daikon
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
-	export JAVA_HOME=/usr/lib/jvm/java
 #	source ${DAIKONDIR}/scripts/daikon.bashrc
 	cd daikon && make
 

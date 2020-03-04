@@ -65,7 +65,9 @@ public class Modulus extends SingleScalar {
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types(vis)) return false;
+    if (!valid_types(vis)) {
+      return false;
+    }
 
     return (vis[0].file_rep_type.baseIsIntegral());
   }
@@ -185,7 +187,7 @@ public class Modulus extends SingleScalar {
         return InvariantStatus.FALSIFIED;
       }
       modulus = new_modulus;
-      remainder = MathPlume.modPositive(value, modulus);
+      remainder = MathPlume.modNonnegative(value, modulus);
     } else {
       long new_modulus_long = Math.abs(MathPlume.gcd(modulus, value1 - value));
       int new_modulus;

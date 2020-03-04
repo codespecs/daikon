@@ -59,7 +59,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 public class Annotation {
 
   // Maps into all the Annotation objects created.
-  private static HashMap<Integer, Annotation> annotationsMap = new HashMap<Integer, Annotation>();
+  private static HashMap<Integer, Annotation> annotationsMap = new HashMap<>();
 
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
@@ -195,7 +195,7 @@ public class Annotation {
       return new Annotation[] {};
     }
     // Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
-    Set<Annotation> annos = new HashSet<Annotation>();
+    Set<Annotation> annos = new HashSet<>();
     for (String location : annoStrings) {
       if (location == null || location.equals("")) {
         continue;
@@ -312,7 +312,7 @@ public class Annotation {
   //  * The annotations in {@code annas} of kind {@code kind}.
   //  */
   // public static Annotation[] getKind(Annotation[] annas, Kind kind) {
-  //   List<Annotation> retval = new ArrayList<Annotation>();
+  //   List<Annotation> retval = new ArrayList<>();
   //   for (int i = 0; i < annas.length; i++) {
   //     if (kind == annas[i].kind) {
   //       retval.add(annas[i]);

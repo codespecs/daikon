@@ -22,13 +22,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class MatchCountVisitor extends PrintAllVisitor {
 
   // invariants found by the splitting
-  private HashSet<String> cnt = new HashSet<String>();
+  private HashSet<String> cnt = new HashSet<>();
   // target set of invariants
-  private HashSet<String> targSet = new HashSet<String>();
+  private HashSet<String> targSet = new HashSet<>();
   // invariants found matching
-  private HashSet<String> recall = new HashSet<String>();
+  private HashSet<String> recall = new HashSet<>();
 
-  private HashMap<String, HashSet<String>> goodMap = new HashMap<String, HashSet<String>>();
+  private HashMap<String, HashSet<String>> goodMap = new HashMap<>();
 
   public MatchCountVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);

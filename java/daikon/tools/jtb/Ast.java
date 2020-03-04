@@ -28,13 +28,13 @@ import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.plumelib.signature.Signatures;
+import org.plumelib.reflection.Signatures;
 import org.plumelib.util.UtilPlume;
 
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.lineSeparator();
 
   ///////////////////////////////////////////////////////////////////////////
   /// Visitors
@@ -623,7 +623,7 @@ public class Ast {
       }
 
       @Override
-      @SuppressWarnings("interned")
+      @SuppressWarnings("interning")
       public void visit(NodeToken node) {
         if (!seenPredecessor) {
           if (node == predecessor) {
@@ -749,7 +749,7 @@ public class Ast {
 
     List<Method> publicMethods = Arrays.<Method>asList(c.getMethods());
     List<Method> declaredMethods = Arrays.<Method>asList(c.getDeclaredMethods());
-    List<Method> allMethods = new ArrayList<Method>();
+    List<Method> allMethods = new ArrayList<>();
     allMethods.addAll(publicMethods);
     allMethods.addAll(declaredMethods);
 
@@ -786,7 +786,7 @@ public class Ast {
     List<Constructor<?>> publicConstructors = Arrays.<Constructor<?>>asList(c.getConstructors());
     List<Constructor<?>> declaredConstructors =
         Arrays.<Constructor<?>>asList(c.getDeclaredConstructors());
-    List<Constructor<?>> allConstructors = new ArrayList<Constructor<?>>();
+    List<Constructor<?>> allConstructors = new ArrayList<>();
     allConstructors.addAll(publicConstructors);
     allConstructors.addAll(declaredConstructors);
 
@@ -1018,7 +1018,7 @@ public class Ast {
   // parameters.
   public static List<FormalParameter> getParameters(MethodDeclaration m) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+      public List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1036,7 +1036,7 @@ public class Ast {
   // inner classes.
   public static List<FormalParameter> getParametersNoImplicit(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+      public List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1054,7 +1054,7 @@ public class Ast {
   // parameters.
   public static List<FormalParameter> getParameters(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+      public List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1121,7 +1121,7 @@ public class Ast {
   public static Set<String> getVariableNames(Node expr) {
 
     class GetSymbolNamesVisitor extends DepthFirstVisitor {
-      public Set<String> symbolNames = new HashSet<String>();
+      public Set<String> symbolNames = new HashSet<>();
 
       @Override
       public void visit(Name n) {
@@ -1200,14 +1200,14 @@ public class Ast {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List<Invariant> invs_vector = new ArrayList<Invariant>(ppt.getInvariants());
+    List<Invariant> invs_vector = new ArrayList<>(ppt.getInvariants());
 
     Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
     Global.non_falsified_invariants += invs_array.length;
 
-    List<Invariant> accepted_invariants = new ArrayList<Invariant>();
+    List<Invariant> accepted_invariants = new ArrayList<>();
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];

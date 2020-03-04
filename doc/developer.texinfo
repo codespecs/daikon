@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.7.3
+@center Daikon version 5.7.4
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.7.3 release date
-@center November 8, 2018
+@c Print out the Daikon version 5.7.4 release date
+@center June 1, 2019
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.7.3, released November 8, 2018.
+It describes Daikon version 5.7.4, released June 1, 2019.
 
 @menu
 * Introduction::
@@ -178,50 +178,10 @@ so you do not need to compile them yourself unless you make changes.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
-When you compile Daikon, environment variable
-@env{JAVA_HOME} must be set.
+When you compile Daikon, either environment variable
+@env{JAVA_HOME} must be set, or @code{javac} must be on the execution path.
 See the installation instructions
-(@ref{Installing Daikon,,,daikon,Daikon User Manual}) for details.
-Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
-(for Fedora or Ubuntu)
-that would enable you to compile Daikon might look like the following:
-
-@example
-export JAVA_HOME=/usr/lib/jvm/java
-
-## Not required
-# export DAIKONDIR=$HOME/daikon
-# source $DAIKONDIR/scripts/daikon.bashrc
-@end example
-
-
-@cindex .jpp files
-@cindex jpp files
-
-When setting up environment pathname variables under Windows/Cygwin
-(such as @command{JAVA_HOME}) make sure that the
-pathname is specified in Linux format (e.g., @file{/cygdrive/c/daikon}
-rather than @file{C:\daikon}).  However, the
-classpath in a @command{-cp} or @command{-classpath} argument to @command{java}
-is a special case;
-as @command{java} is a Windows
-program, it expects classpath to be in Windows format.
-This is the only exception to Cygwin looking like Linux.
-Thus the classpath must
-always be in Windows format; i.e., it should use semicolons (;) rather
-than colons (:) as a path separator.
-Using the wrong filename format or the wrong pathname separator
-is a common source of errors that will result in odd error
-messages and build failures.
-
-One easy way to deal with this is to use the @command{cygpath} utility:
-@example
-java -cp "`cygpath -wp linux/path/a:linux/path/b`" <other arguments>
-@end example
-@noindent
-Note both the back quotes (@samp{`}) to force @command{cygpath} to be evaluated
-before calling @command{java} and the double quotes (@samp{"}) to protect against
-special characters and spaces in Windows paths.
+(@ref{Installing Daikon,,,daikon,Daikon User Manual}) for more details.
 
 
 @menu
@@ -245,15 +205,6 @@ sudo apt-get install openjdk-8-jdk gcc ctags graphviz netpbm texlive texinfo
 Similar commands would be used with other package management systems
 on other operating systems.
 
-@cindex Windows, compiling
-To compile Daikon on Windows, the best approach is to first install the Cygwin
-toolset (available at @uref{http://cygwin.com/}), which
-contains everything you need to compile and run Linux programs under
-Windows.  You can install Cygwin by running one of the setup
-programs (based on your machine type) found
-at @uref{http://cygwin.com/install.html}.
-Then, install any necessary programs such as those below.
-
 @itemize @bullet
 
 @item
@@ -267,6 +218,9 @@ like the following.
 @example
 JAVAC ?= jikes -g +E +F
 @end example
+
+@cindex .jpp files
+@cindex jpp files
 
 @item
 the C preprocessor
@@ -287,10 +241,6 @@ include that common code.)
 @command{makeinfo}.
 This is needed to make the documentation (via @command{make -C $DAIKONDIR/doc}).
 
-@item
-@command{dos2unix} or @command{perl}.
-This is used to ensure that the output is the same under Unix and Windows.
-
 @end itemize
 
 
@@ -301,7 +251,7 @@ In order to compile Kvasir, the Daikon front end for the C language
 (@pxref{Kvasir,,,daikon,Daikon User Manual}), you will need some
 additional tools beyond those required to compile Daikon.
 
-Note that Kvasir does not work on MacOS.
+Note that Kvasir does not work on Mac OS.
 
 To install these dependencies under Ubuntu, run the command:
 @exampleindent 2
@@ -1605,8 +1555,7 @@ process) the next time you run the tests.
 
 As when you install or compile Daikon, when you run the tests
 environment variable @env{DAIKONDIR}
-should be set.  Additionally, environment variable
-@env{JAVA_HOME} should be the directory containing the Java JDK@.
+should be set.
 
 You should generally run the regression tests before checking it a
 change (especially any non-trivial change).  If any of the regression
@@ -1761,29 +1710,9 @@ and also
 
 
 @menu
-* Emacs commands::
 * Eclipse setup::
 * Editing daikon.texinfo::
 @end menu
-
-@node    Emacs commands
-@section Emacs commands
-
-
-The command @code{M-x daikon-tags-table} sets up Emacs to use the Daikon
-TAGS table, which lets you easily find definitions and search through the
-entire codebase in Emacs.  (You need to run this command once per instance
-of Emacs.)
-
-The commands @code{M-x daikon-info} and @code{M-x
-daikon-developer-info} view the Daikon manual and the Daikon Developer
-manual using the Info
-viewer within Emacs.  These commands also update all other versions of the
-manuals (HTML, PDF, etc.).
-You may also choose to use the stand-alone Info viewer, to
-use a Web browser to read the manual in HTML form, or to read the
-PDF version either electronically or on paper.
-
 
 @node    Eclipse setup
 @section Eclipse setup
@@ -2118,6 +2047,7 @@ A clone of
 
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
+[TODO: Is this really necessary?]
 @c Example:  export JAVA_HOME=/usr/lib/jvm/java
 
 @item
@@ -2167,12 +2097,13 @@ set -o pipefail
 @end smallexample
 
 @noindent
-Each of the two commands should print exactly 4 lines:
+Each of the two commands should print exactly these lines:
 
 @example
 Already up-to-date.
 On branch master
 Your branch is up-to-date with 'origin/master'.
+
 nothing to commit, working directory clean
 @end example
 
@@ -2315,37 +2246,17 @@ Verify that Daikon passes its tests.
 All of the following jobs should be green:
 @exampleindent 0
 @example
-@* @url{https://travis-ci.org/codespecs/daikon}
+@* @url{https://dev.azure.com/codespecs/daikon/_build/latest?definitionId=1&branchName=master}
 @html
-<img src="https://api.travis-ci.org/codespecs/daikon.svg?branch=master" alt="Travis codespecs/daikon status"/>
+<img
+src="https://dev.azure.com/codespecs/daikon/_apis/build/status/codespecs.daikon?branchName=master"
+alt="Azure Pipelines codespecs/daikon status"/>
 @end html
-@* @url{https://travis-ci.org/codespecs/fjalar}
+@* @url{https://dev.azure.com/codespecs/fjalar/_build/latest?definitionId=1&branchName=master}
 @html
-<img src="https://api.travis-ci.org/codespecs/fjalar.svg?branch=master" alt="Travis codespecs/fjalar status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck.svg?branch=master" alt="Travis typetests/daikon-typecheck status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-formatter}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-formatter.svg?branch=master" alt="Travis typetests/daikon-typecheck-formatter status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-interning}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-interning.svg?branch=master" alt="Travis typetests/daikon-typecheck-interning status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-nullness}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-nullness.svg?branch=master" alt="Travis typetests/daikon-typecheck-nullness status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-regex}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-regex.svg?branch=master" alt="Travis typetests/daikon-typecheck-regex status"/>
-@end html
-@* @url{https://travis-ci.org/typetests/daikon-typecheck-signature}
-@html
-<img src="https://api.travis-ci.org/typetests/daikon-typecheck-signature.svg?branch=master" alt="Travis typetests/daikon-typecheck-signature status"/>
+<img
+src="https://dev.azure.com/codespecs/fjalar/_apis/build/status/codespecs.fjalar?branchName=master"
+alt="Azure Pipelines codespecs/fjalar status"/>
 @end html
 @end example
 @exampleindent 1
@@ -2363,7 +2274,7 @@ Do a very clean rebuild of everything.
 
 @example
 cd $DAIKONDIR
-make very-clean
+make very-clean clean-kvasir
 make rebuild-everything
 @end example
 
@@ -2405,18 +2316,21 @@ Travis jobs to complete.
 
 @need 1000
 @item
-Set the version number in file @file{$DAIKONDIR/doc/VERSION}
-to an even number.
-You may do this manually, or if the revision number just needs to be incremented
+Set the version number to an even number.
+You may:
+@itemize
+@item
+Manually editfile @file{$DAIKONDIR/doc/VERSION}, or
+@item
+If the revision number just needs to be incremented
 by 1 (to go from odd to even) you may use:
-
-@c "cd $DAIKONDIR" because the previous commands changed the working directory
 @example
 make update-dist-version-file
 @end example
+@end itemize
 
 Note that if a new feature has been added, or if some change has made
-the current version incompatible from the previous release (such a
+the current version incompatible from the previous release (such as a
 change in the dtrace file format or revised names for tool options),
 then you should manually edit the VERSION file to increment the minor
 version number and reset the revision number to zero.
@@ -2464,7 +2378,7 @@ rm -rf stage-daikon
 git clone --depth 3 https://github.com/codespecs/daikon stage-daikon
 cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
-export JAVA_HOME=/usr/lib/jvm/java
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 unset CHECKERFRAMEWORK
 make staging
 @end example
@@ -2474,7 +2388,7 @@ will be a list of files that were added/removed since the
 last release.
 If any of these differences is unexpected, then investigate.
 If any corrections are required, do so back in the main
-repository, commit the changes and
+repository, commit the changes, and
 then repeat this step.
 
 [Time: 23 min]
@@ -2570,7 +2484,7 @@ make test-staged-dist
 
 @need 1000
 @item
-Test the distribution on Ubuntu and macOS machines, on Travis CI.
+Test the distribution on Ubuntu and Mac OS machines, on Travis CI.
 Run the following commands:
 
 @smallexample
@@ -2594,8 +2508,8 @@ If there is a problem, fix it and start over.
 
 [Time: 15 min]
 
-Note that sometimes Travis has trouble starting macOS jobs.  You may wish to log on to a
-macOS machine (with the development tools installed) and run the tests manually.
+Note that sometimes Travis has trouble starting Mac OS jobs.  You may wish to log on to a
+Mac OS machine (with the development tools installed) and run the tests manually.
 The example below shows the commands required to do this.  The output
 should show a number of lines beginning with
 "Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
@@ -2613,31 +2527,6 @@ sh test-distribution.sh
 @end smallexample
 
 [Time: 4 min]
-
-
-@need 1000
-@item
-Test the distribution on a Windows machine
-with Cygwin installed, as a guest user (or at least one without
-environment variables such as @env{$DAIKONDIR} defined!).
-
-The output from the the commands below should show
-that @file{dcomp_rt.jar} is being built.  Next it should indicate that
-Kvasir was not built because this is not a Linux platform.  Then execution will
-continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
-Success is indicated by invariant output being written to the screen.
-
-@smallexample
-unset DAIKONDIR
-export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.8.0_144"
-export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
-mkdir -p ~/tmp
-cd ~/tmp
-curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
-sh test-distribution.sh
-@end smallexample
-
-[Time: 10 min]
 
 
 @need 1000
@@ -4478,7 +4367,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  lt IntLessThan makeEmpty LessThan GreaterThan orig theArray TR
 @c  LocalWords:  FloatLessThan DisjSets SequenceScalarSubscriptFactory pxref co
 @c  LocalWords:  Javadoc Varinfo logOn getClass foo vars isLoggable logDetail
-@c  LocalWords:  msg showTrackback args webserver addInvariant href emacsclient
+@c  LocalWords:  msg showTrackback args webserver addInvariant href
 @c  LocalWords:  inv PptTopLevel FileIO php isObviousStatically LCS Nimmer's cp
 @c  LocalWords:  isObviousDynamically Toh Win's nohierarchy noequality diffs pl
 @c  LocalWords:  diff InvariantFormatTest classpath ioa jml aString valueOf val
@@ -4489,14 +4378,14 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx vis su
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
-@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname macOS rt
+@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname rt
 @c  LocalWords:  VarComparability instrumenter struct Hatcliff Sinha Vibha xref
 @c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
 @c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger
 @c  LocalWords:  hasDuplicates hasOrder hasNull nullTerminated isParam DynComp
 @c  LocalWords:  Hashcodes birthyear topLevel bottomLevel pptInfo toplevel conf
 @c  LocalWords:  bottomlevel namespace namespaces startup Makefiles toolset oro
-@c  LocalWords:  boolean deallocations suppressions substring traceback emacs
+@c  LocalWords:  boolean deallocations suppressions substring traceback Emacs
 @c  LocalWords:  filename tracebacks inferencing ExistingProjectIntoWorkspace
 @c  LocalWords:  screenshot popup junit jakarta getopt breakpoint TODO url Baz
 @c  LocalWords:  daikonuser mangold

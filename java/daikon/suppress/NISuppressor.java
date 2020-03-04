@@ -240,7 +240,7 @@ public class NISuppressor {
       // If the underlying inariant can't be instantiated over these variables,
       // this can't possibly be true
       if (!instantiate_ok(new VarInfo[] {v1})) {
-        // System.out.printf("suppressor %s invalid over variable %s\n",
+        // System.out.printf("suppressor %s invalid over variable %s%n",
         //                   this, v1);
         return (state = NIS.SuppressState.INVALID);
       }
@@ -262,7 +262,6 @@ public class NISuppressor {
         assert sample_inv.valid_types(sup_vis);
         if (sample_inv.instantiate_ok(sup_vis)) {
           UnaryInvariant uinv = (UnaryInvariant) sample_inv;
-          @SuppressWarnings("nullness") // elements of ppt.constants have a constant_value
           InvariantStatus status =
               uinv.check(ppt.constants.constant_value(v1), ValueTuple.MODIFIED, 1);
           valid = (status == InvariantStatus.NO_CHANGE);
@@ -314,7 +313,7 @@ public class NISuppressor {
       // If the underlying inariant can't be instantiated over these variables,
       // this can't possibly be true
       if (!instantiate_ok(new VarInfo[] {v1, v2})) {
-        // System.out.printf("suppressor %s invalid over variables %s & %s\n",
+        // System.out.printf("suppressor %s invalid over variables %s & %s%n",
         //                  this, v1, v2);
         return (state = NIS.SuppressState.INVALID);
       }
@@ -470,10 +469,15 @@ public class NISuppressor {
   /** Returns the variable index that corresponds to index. */
   private int translate_index(int index) {
 
-    if (index == 0) return v1_index;
-    else if (index == 1) return v2_index;
-    else if (index == 2) return v3_index;
-    else return index;
+    if (index == 0) {
+      return v1_index;
+    } else if (index == 1) {
+      return v2_index;
+    } else if (index == 2) {
+      return v3_index;
+    } else {
+      return index;
+    }
   }
 
   /** Returns the invariant class of this suppressor. */

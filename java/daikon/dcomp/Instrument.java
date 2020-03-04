@@ -1,6 +1,7 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
+import daikon.plumelib.bcelutil.BcelUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
@@ -12,7 +13,6 @@ import org.apache.bcel.generic.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.bcelutil.BcelUtil;
 
 public class Instrument implements ClassFileTransformer {
 
@@ -41,14 +41,18 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // System.out.printf("transform on %s%n", className);
+    if (DynComp.verbose) System.out.printf("transform on %s%n", className);
 
     // See comments in Premain.java about meaning and use of in_shutdown.
-    if (Premain.in_shutdown) return null;
+    if (Premain.in_shutdown) {
+      if (DynComp.verbose) System.out.printf("Skipping in_shutdown class %s%n", className);
+      return null;
+    }
 
     // If already instrumented, nothing to do
     // (This set will be empty if DynComp.no_jdk is true)
     if (Premain.pre_instrumented.contains(className)) {
+      if (DynComp.verbose) System.out.printf("Skipping pre_instrumented JDK class %s%n", className);
       return null;
     }
 
@@ -58,6 +62,7 @@ public class Instrument implements ClassFileTransformer {
     if (BcelUtil.inJdkInternalform(className)) {
       // If we are not using an instrumented JDK, then skip this class.
       if (DynComp.no_jdk) {
+        if (DynComp.verbose) System.out.printf("Skipping no_jdk JDK class %s%n", className);
         return null;
       }
 
@@ -68,12 +73,13 @@ public class Instrument implements ClassFileTransformer {
       // We're not in a JDK class
       // Don't instrument our own classes
       if (is_dcomp(className)) {
+        if (DynComp.verbose) System.out.printf("Skipping is_dcomp class %s%n", className);
         return null;
       }
     }
 
     if (DynComp.verbose) {
-      System.out.format("In dcomp.Instrument(): class = %s\n", className);
+      System.out.format("In dcomp.Instrument(): class = %s%n", className);
     }
 
     try {
@@ -123,9 +129,12 @@ public class Instrument implements ClassFileTransformer {
         || classname.startsWith("daikon/chicory/")) {
       return true;
     }
-    if (classname.equals("daikon/PptTopLevel$PptType")) return true;
-    if (classname.startsWith("org/plumelib/bcelutil")) return true;
-    if (classname.startsWith("daikon/util")) return true;
+    if (classname.equals("daikon/PptTopLevel$PptType")) {
+      return true;
+    }
+    if (classname.startsWith("daikon/plumelib")) {
+      return true;
+    }
     return false;
   }
 }

@@ -131,12 +131,22 @@ public final class CLASSNAME extends SUPERCLASS {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
-    if (format.isJavaFamily()) return format_java_family(format);
+    if (format.isJavaFamily()) {
+      return format_java_family(format);
+    }
 
-    if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.ESCJAVA) return format_esc();
-    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    }
+    if (format == OutputFormat.ESCJAVA) {
+      return format_esc();
+    }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
+    }
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
 
     return format_unimplemented(format);
   }
@@ -222,10 +232,10 @@ public final class CLASSNAME extends SUPERCLASS {
   @Override
   public InvariantStatus add_modified(PRIMITIVE @Interned [] a, int count) {
 
-    //if (logOn()) {
+    // if (logOn()) {
     //  VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
     //  log ("max=" + vs.max() + " array=" + Arrays.toString (a));
-    //}
+    // }
 
     return (check_modified(a, count));
   }

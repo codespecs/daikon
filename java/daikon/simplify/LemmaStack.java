@@ -11,7 +11,6 @@ import java.util.Stack;
 import java.util.TreeSet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.checker.nullness.qual.Raw;
 
 /**
  * A stack of Lemmas that shadows the stack of assumptions that Simplify keeps. Keeping this stack
@@ -51,16 +50,13 @@ public class LemmaStack {
   private SessionManager session;
 
   /** Tell Simplify to assume a lemma, which should already be on our stack. */
-  private void assume(
-      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this, Lemma lemma)
+  private void assume(@UnknownInitialization(LemmaStack.class) LemmaStack this, Lemma lemma)
       throws TimeoutException {
     session.request(new CmdAssume(lemma.formula));
   }
 
   /** Assume a list of lemmas. */
-  private void assumeAll(
-      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,
-      List<Lemma> invs)
+  private void assumeAll(@UnknownInitialization(LemmaStack.class) LemmaStack this, List<Lemma> invs)
       throws TimeoutException {
     for (Lemma lem : invs) {
       assume(lem);
@@ -88,7 +84,7 @@ public class LemmaStack {
 
   /** Try to start Simplify. */
   @EnsuresNonNull("session")
-  private void startProver(@UnknownInitialization @Raw LemmaStack this) throws SimplifyError {
+  private void startProver(@UnknownInitialization LemmaStack this) throws SimplifyError {
     SessionManager session_try = SessionManager.attemptProverStartup();
     if (session_try != null) {
       session = session_try;
@@ -98,8 +94,7 @@ public class LemmaStack {
   }
 
   /** Try to restart Simplify back where we left off, after killing it. */
-  private void restartProver(
-      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this)
+  private void restartProver(@UnknownInitialization(LemmaStack.class) LemmaStack this)
       throws SimplifyError {
     startProver();
     try {
@@ -123,8 +118,7 @@ public class LemmaStack {
   }
 
   /** Push an assumption onto our and Simplify's stacks. */
-  public boolean pushLemma(
-      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this, Lemma lem)
+  public boolean pushLemma(@UnknownInitialization(LemmaStack.class) LemmaStack this, Lemma lem)
       throws SimplifyError {
     SimpUtil.assert_well_formed(lem.formula);
     try {
@@ -151,8 +145,7 @@ public class LemmaStack {
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
   public void pushLemmas(
-      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,
-      List<Lemma> newLemmas)
+      @UnknownInitialization(LemmaStack.class) LemmaStack this, List<Lemma> newLemmas)
       throws SimplifyError {
     for (Lemma lem : newLemmas) {
       pushLemma(lem);
@@ -164,8 +157,7 @@ public class LemmaStack {
    * Simplify says yes, 'F' if Simplify says no, or '?' if we have to kill Simplify because it won't
    * answer.
    */
-  private char checkString(
-      @UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this, String str)
+  private char checkString(@UnknownInitialization(LemmaStack.class) LemmaStack this, String str)
       throws SimplifyError {
     SimpUtil.assert_well_formed(str);
     CmdCheck cc = new CmdCheck(str);
@@ -175,7 +167,9 @@ public class LemmaStack {
       restartProver();
       return '?';
     }
-    if (cc.unknown) return '?';
+    if (cc.unknown) {
+      return '?';
+    }
     return cc.valid ? 'T' : 'F';
   }
 
@@ -259,7 +253,7 @@ public class LemmaStack {
         }
       }
     } while (reduced);
-    List<Lemma> new_invs = new ArrayList<Lemma>();
+    List<Lemma> new_invs = new ArrayList<>();
     for (int i = 0; i < invs.length; i++) {
       if (!excluded[i]) new_invs.add(invs[i]);
     }
@@ -268,9 +262,10 @@ public class LemmaStack {
 
   private static List<Lemma> filterByClass(
       List<Lemma> lems, Set<Class<? extends Invariant>> blacklist) {
-    List<Lemma> new_lems = new ArrayList<Lemma>();
+    List<Lemma> new_lems = new ArrayList<>();
     for (Lemma lem : lems) {
-      if (!blacklist.contains(lem.invClass())) {
+      Class<? extends Invariant> cls = lem.invClass();
+      if (cls != null && !blacklist.contains(cls)) {
         new_lems.add(lem);
       }
     }
@@ -327,8 +322,8 @@ public class LemmaStack {
   }
 
   public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) {
-    List<Lemma> assumptions = new ArrayList<Lemma>(lemmas);
-    List<Set<Class<? extends Invariant>>> found = new ArrayList<Set<Class<? extends Invariant>>>();
+    List<Lemma> assumptions = new ArrayList<>(lemmas);
+    List<Set<Class<? extends Invariant>>> found = new ArrayList<>();
     try {
       unAssumeAll(lemmas);
       if (checkString(result) == 'F') {
@@ -474,7 +469,7 @@ public class LemmaStack {
     }
   }
 
-  private static SortedSet<Long> ints_seen = new TreeSet<Long>();
+  private static SortedSet<Long> ints_seen = new TreeSet<>();
 
   /** Keep track that we've seen this number in formulas, for the sake of pushOrdering. */
   public static void noticeInt(long i) {

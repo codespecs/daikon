@@ -7,7 +7,6 @@ import java.util.List;
 import org.checkerframework.checker.initialization.qual.Initialized;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.NonRaw;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
@@ -59,7 +58,10 @@ public class PureMethodInfo extends DaikonVariableInfo {
 
   /** Invokes this pure method on the given parentVal. This is safe because the method is pure! */
   @Override
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({
+    "unchecked",
+    "deprecation" // in Java 9+, use canAccess instead of isAccessible
+  })
   public @Nullable Object getMyValFromParentVal(Object parentVal) {
     @SuppressWarnings("nullness") // not a class initializer, so meth != null
     @NonNull Method meth = (Method) minfo.member;
@@ -77,7 +79,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
       if (parentVal == null || parentVal instanceof NonsensicalList) {
         retVal = NonsensicalList.getInstance();
       } else {
-        ArrayList<@Nullable Object> retList = new ArrayList<@Nullable Object>();
+        ArrayList<@Nullable Object> retList = new ArrayList<>();
 
         for (Object val : (List<Object>) parentVal) { // unchecked cast
           if (val == null || val instanceof NonsensicalObject) {
@@ -132,9 +134,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
     // Without this synchronization, other threads would observe that
     // startPure has been called and wouldn't do any output.
     synchronized (Runtime.class) {
-      // Initialization is unnecessary, but without it the Rawness Checker issues an error at the
-      // return statement.
-      Object retVal = null;
+      Object retVal;
       try {
         // TODO is this the best way to handle this problem?
         // (when we invoke a pure method, Runtime.Enter should not be
@@ -142,7 +142,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
         Runtime.startPure();
 
         @SuppressWarnings("nullness") // argVals is declared Nullable
-        @NonNull @NonRaw @Initialized @GuardedBy({}) Object tmp_retVal = meth.invoke(receiverVal, argVals);
+        @NonNull @Initialized @GuardedBy({}) Object tmp_retVal = meth.invoke(receiverVal, argVals);
         retVal = tmp_retVal;
 
         if (meth.getReturnType().isPrimitive()) {

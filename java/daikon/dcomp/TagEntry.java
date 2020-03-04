@@ -2,7 +2,7 @@ package daikon.dcomp;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.util.WeakIdentityHashMap;
+import daikon.plumelib.util.WeakIdentityHashMap;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,7 +124,7 @@ class TagEntry extends WeakReference<Object> {
       StackTraceElement first = blarg.get(0);
       return first.getClassName() + ":" + first.getMethodName() + "(), " + first.getLineNumber();
     } else {
-      ArrayList<String> blarg2 = new ArrayList<String>(daikon.DynComp.trace_line_depth);
+      ArrayList<String> blarg2 = new ArrayList<>(daikon.DynComp.trace_line_depth);
       try {
         for (int i = 0; i < daikon.DynComp.trace_line_depth; i++) {
           StackTraceElement ste = blarg.get(i);
@@ -163,7 +163,9 @@ class TagEntry extends WeakReference<Object> {
    */
   public TagEntry find() {
 
-    if (parent == null) return this;
+    if (parent == null) {
+      return this;
+    }
 
     // Find the tag at the top of the list
     TagEntry tag = this;
@@ -188,7 +190,9 @@ class TagEntry extends WeakReference<Object> {
   public static Object find(Object obj) {
     assert obj != null;
     TagEntry entry = object_map.get(obj);
-    if (entry == null) return obj;
+    if (entry == null) {
+      return obj;
+    }
     TagEntry root = entry.find();
 
     // It shouldn't matter that this isn't a member of the set, only that
@@ -256,7 +260,7 @@ class TagEntry extends WeakReference<Object> {
   /** Returns each of the sets with elements in each set on a separate line. */
   public static String dump() {
 
-    LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<Object, List<Object>>();
+    LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<>();
 
     /* Fill sets from object_map by placing every object in an ArrayList
      * whose key is its root. */

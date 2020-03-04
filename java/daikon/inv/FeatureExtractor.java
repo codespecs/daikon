@@ -100,8 +100,8 @@ public final class FeatureExtractor {
     }
 
     // First, parse the arguments
-    ArrayList<String> usefuls = new ArrayList<String>();
-    ArrayList<String> nonusefuls = new ArrayList<String>();
+    ArrayList<String> usefuls = new ArrayList<>();
+    ArrayList<String> nonusefuls = new ArrayList<>();
     String output_file = null;
     String output_words = null;
     String output_type = null;
@@ -131,7 +131,9 @@ public final class FeatureExtractor {
         } else {
           throw new IOException("Invalid Argument List, repeated output type");
         }
-      } else throw new IOException("Invalid Argument List, {u,n,o,s,t}" + args[i]);
+      } else {
+        throw new IOException("Invalid Argument List, {u,n,o,s,t}" + args[i]);
+      }
     }
     if (output_file == null) {
       throw new IOException("Invalid Argumnent List, output file not specified");
@@ -197,7 +199,7 @@ public final class FeatureExtractor {
   // Takes a vector of invariants and returns a vector of
   // the string representations of those invariants in the same order
   private static ArrayList<String> getStrings(ArrayList<Invariant> invs) {
-    ArrayList<String> answer = new ArrayList<String>();
+    ArrayList<String> answer = new ArrayList<>();
     for (Invariant current : invs) {
       answer.add(current.ppt.parent.name + ":::" + current.format());
     }
@@ -212,19 +214,21 @@ public final class FeatureExtractor {
       ArrayList<String> usefuls, ArrayList<String> nonusefuls)
       throws IOException, ClassNotFoundException {
 
-    ArrayList<Invariant> usefulResult = new ArrayList<Invariant>();
-    ArrayList<Invariant> nonusefulResult = new ArrayList<Invariant>();
-    for (String useful : usefuls)
+    ArrayList<Invariant> usefulResult = new ArrayList<>();
+    ArrayList<Invariant> nonusefulResult = new ArrayList<>();
+    for (String useful : usefuls) {
       for (Iterator<Invariant> invs = readInvMap(new File(useful)).invariantIterator();
           invs.hasNext(); ) {
         usefulResult.add(invs.next());
       }
+    }
 
-    for (String nonuseful : nonusefuls)
+    for (String nonuseful : nonusefuls) {
       for (Iterator<Invariant> invs = readInvMap(new File(nonuseful)).invariantIterator();
           invs.hasNext(); ) {
         nonusefulResult.add(invs.next());
       }
+    }
 
     return Pair.of(usefulResult, nonusefulResult);
   }
@@ -249,7 +253,7 @@ public final class FeatureExtractor {
   //
   //     for (int i = 1; i < args.length-1; i+=2) {
   //       // good contains string reps of invariants in Non-Buggy.inv
-  //       HashSet<String> good = new HashSet<String>();
+  //       HashSet<String> good = new HashSet<>();
   //       for (Iterator goodppts =
   //              FileIO.read_serialized_pptmap(new File(args[i]), false).pptIterator();
   //            goodppts.hasNext(); ) {
@@ -259,7 +263,7 @@ public final class FeatureExtractor {
   //       }
   //
   //       // bad contains actual invariants in Buggy.inv
-  //       ArrayList<Invariant> bad = new ArrayList<Invariant>();
+  //       ArrayList<Invariant> bad = new ArrayList<>();
   //       for (Iterator<PptTopLevel> badppts =
   //              FileIO.read_serialized_pptmap(new File(args[i+1]),false).pptIterator();
   //            badppts.hasNext(); ) {
@@ -291,8 +295,8 @@ public final class FeatureExtractor {
 
     // First create a TreeSet of all the Feature Numbers and 0 as value
     // and a Map of numbers to names
-    TreeSet<IntDoublePair> allFeatures = new TreeSet<IntDoublePair>();
-    HashMap<IntDoublePair, String> numbersToNames = new HashMap<IntDoublePair, String>();
+    TreeSet<IntDoublePair> allFeatures = new TreeSet<>();
+    HashMap<IntDoublePair, String> numbersToNames = new HashMap<>();
     for (Map.Entry<@KeyFor("lookup") Object, Integer> entry : lookup.entrySet()) {
       Object key = entry.getKey();
       int num = entry.getValue().intValue();
@@ -505,8 +509,8 @@ public final class FeatureExtractor {
 
   private static void compactSVMFeatureFile(File input, File output) throws IOException {
     BufferedReader br = UtilPlume.bufferedFileReader(input);
-    HashSet<String> vectors = new HashSet<String>();
-    ArrayList<String> outputData = new ArrayList<String>();
+    HashSet<String> vectors = new HashSet<>();
+    ArrayList<String> outputData = new ArrayList<>();
     while (br.ready()) {
       String line = br.readLine();
       if (vectors.contains(line)) {
@@ -529,7 +533,7 @@ public final class FeatureExtractor {
   // compacts an SVMfu file to remove repeats.
   private static void compactSVMfuFeatureFile(File input, File output) throws IOException {
     BufferedReader br = UtilPlume.bufferedFileReader(input);
-    HashSet<String> vectors = new HashSet<String>();
+    HashSet<String> vectors = new HashSet<>();
     br.readLine();
     while (br.ready()) vectors.add(br.readLine());
     br.close();
@@ -554,7 +558,7 @@ public final class FeatureExtractor {
 
   // Calculate a HashMap of every feature to a unique integer.
   private static HashMap<Object, Integer> getFullMapping() throws ClassNotFoundException {
-    HashMap<Object, Integer> answer = new HashMap<Object, Integer>();
+    HashMap<Object, Integer> answer = new HashMap<>();
     Integer counter = 0;
 
     // get a set of all Invariant classes
@@ -590,11 +594,12 @@ public final class FeatureExtractor {
 
             counter = counter.intValue() + 1;
             answer.put(name, counter);
-            if (VarInfo.class.isAssignableFrom(currentClass))
+            if (VarInfo.class.isAssignableFrom(currentClass)) {
               for (int iC = 0; iC < NUM_VARS; iC++) {
                 counter = counter.intValue() + 1;
                 answer.put(iC + "_" + name, counter);
               }
+            }
           }
         }
       }
@@ -614,11 +619,12 @@ public final class FeatureExtractor {
             }
             counter = counter.intValue() + 1;
             answer.put(name, counter);
-            if (VarInfo.class.isAssignableFrom(currentClass))
+            if (VarInfo.class.isAssignableFrom(currentClass)) {
               for (int iC = 0; iC < NUM_VARS; iC++) {
                 counter = counter.intValue() + 1;
                 answer.put(iC + "_" + name, counter);
               }
+            }
           }
         }
       }
@@ -628,13 +634,14 @@ public final class FeatureExtractor {
 
   private static List<Class<? extends Invariant>> getInvariantClasses(File top)
       throws ClassNotFoundException {
-    List<Class<? extends Invariant>> answer = new ArrayList<Class<? extends Invariant>>();
+    List<Class<? extends Invariant>> answer = new ArrayList<>();
     if (top.isDirectory()) {
       File[] all = top.listFiles();
-      for (int i = 0; i < all.length; i++)
+      for (int i = 0; i < all.length; i++) {
         if (!(all[i].getAbsolutePath().indexOf("test") > -1)) {
           answer.addAll(getInvariantClasses(all[i]));
         }
+      }
     } else if (top.getName().endsWith(".class")) {
       String name = top.getAbsolutePath();
       name = name.substring(name.indexOf("daikon"), name.indexOf(".class"));
@@ -671,7 +678,7 @@ public final class FeatureExtractor {
   private static ArrayList<TreeSet<IntDoublePair>> getReflectFeatures(
       ArrayList<Invariant> invariants, HashMap<Object, Integer> lookup)
       throws IllegalAccessException, InvocationTargetException {
-    ArrayList<TreeSet<IntDoublePair>> answer = new ArrayList<TreeSet<IntDoublePair>>();
+    ArrayList<TreeSet<IntDoublePair>> answer = new ArrayList<>();
     // for each invariant, extract all the features and build a new TreeSet
     for (Invariant inv : invariants) {
       answer.add(new TreeSet<IntDoublePair>(getReflectFeatures(inv, lookup)));
@@ -684,7 +691,7 @@ public final class FeatureExtractor {
   private static TreeSet<IntDoublePair> getReflectFeatures(
       Object inv, HashMap<Object, Integer> lookup)
       throws IllegalAccessException, InvocationTargetException {
-    TreeSet<IntDoublePair> answer = new TreeSet<IntDoublePair>();
+    TreeSet<IntDoublePair> answer = new TreeSet<>();
     if (inv instanceof Invariant) {
       if (lookup.get(inv.getClass()) == null) {
         throw new NullPointerException(
@@ -706,7 +713,7 @@ public final class FeatureExtractor {
     Field[] fields = inv.getClass().getFields();
 
     for (int i = 0; i < fields.length; i++) {
-      if (!BANNED_METHODS.contains(fields[i].getName()))
+      if (!BANNED_METHODS.contains(fields[i].getName())) {
         if (fields[i].getType().equals(Boolean.TYPE)) {
           answer.add(new IntDoublePair(lookup.get(fields[i].getName() + "Bool").intValue(), 1));
         } else if (TYPES.contains(fields[i].getType())) {
@@ -714,12 +721,13 @@ public final class FeatureExtractor {
               new IntDoublePair(
                   lookup.get(fields[i].getName() + "Float").intValue(), fields[i].getDouble(inv)));
         }
+      }
     }
 
     Method[] methods = inv.getClass().getMethods();
     for (int i = 0; i < methods.length; i++) {
       if (methods[i].getParameterTypes().length == 0) {
-        if (!BANNED_METHODS.contains(methods[i].getName()))
+        if (!BANNED_METHODS.contains(methods[i].getName())) {
           if (methods[i].getReturnType().equals(Boolean.TYPE)) {
             answer.add(new IntDoublePair(lookup.get(methods[i].getName() + "Bool").intValue(), 1));
           } else if (TYPES.contains(methods[i].getReturnType())) {
@@ -728,12 +736,13 @@ public final class FeatureExtractor {
                     lookup.get(methods[i].getName() + "Float").intValue(),
                     ((Number) methods[i].invoke(inv, new Object[0])).doubleValue()));
           }
+        }
       }
     }
 
     // cleanup answer
-    TreeSet<IntDoublePair> final_answer = new TreeSet<IntDoublePair>();
-    HashSet<Integer> index = new HashSet<Integer>();
+    TreeSet<IntDoublePair> final_answer = new TreeSet<>();
+    HashSet<Integer> index = new HashSet<>();
     for (IntDoublePair current : answer) {
       Integer current_number = current.number;
       if (!(index.contains(current_number))) {
@@ -832,7 +841,7 @@ public final class FeatureExtractor {
         System.out.println(USAGE);
         throw new Daikon.UserError("No arguments found");
       }
-      ArrayList<String> inputs = new ArrayList<String>();
+      ArrayList<String> inputs = new ArrayList<>();
       boolean normalize = false;
       String output = null;
       String type = null;
@@ -858,8 +867,8 @@ public final class FeatureExtractor {
       if (inputs.size() == 0) throw new IOException("You must specify at least one input file");
 
       // Load the input files into 2 HashSets, pos and neg.
-      HashSet<String> pos = new HashSet<String>();
-      HashSet<String> neg = new HashSet<String>();
+      HashSet<String> pos = new HashSet<>();
+      HashSet<String> neg = new HashSet<>();
 
       for (String s : inputs) {
         for (String vector : new EntryReader(s)) {
@@ -884,8 +893,8 @@ public final class FeatureExtractor {
 
       // Now create two vectors, posvectors and negvectors, of the
       // positive and negative vectors respectively.
-      ArrayList<String> posvectors = new ArrayList<String>();
-      ArrayList<String> negvectors = new ArrayList<String>();
+      ArrayList<String> posvectors = new ArrayList<>();
+      ArrayList<String> negvectors = new ArrayList<>();
 
       for (String vector : neg) {
         if (!(pos.contains(vector))) {
@@ -962,14 +971,16 @@ public final class FeatureExtractor {
         System.out.println(USAGE);
         throw new Daikon.UserError("No arguments found");
       }
-      ArrayList<String> trains = new ArrayList<String>();
-      ArrayList<String> tests = new ArrayList<String>();
+      ArrayList<String> trains = new ArrayList<>();
+      ArrayList<String> tests = new ArrayList<>();
       String type = null;
       for (int i = 0; i < args.length; i++) {
         if (args[i].equals("-t")) type = args[++i];
         else if (args[i].equals("-d")) trains.add(args[++i]);
         else if (args[i].equals("-s")) tests.add(args[++i]);
-        else throw new IOException("Invalid argument: " + args[i]);
+        else {
+          throw new IOException("Invalid argument: " + args[i]);
+        }
       }
       // Check if the required fields are specified.
       if (type == null) throw new IOException("You must specify a format type (C5 or SVMfu)");
@@ -979,8 +990,8 @@ public final class FeatureExtractor {
       }
 
       // Load the train files into 2 HashSets, pos and neg.
-      HashSet<String> pos = new HashSet<String>();
-      HashSet<String> neg = new HashSet<String>();
+      HashSet<String> pos = new HashSet<>();
+      HashSet<String> neg = new HashSet<>();
 
       for (String s : trains) {
         for (String vector : new EntryReader(s)) {
@@ -1004,8 +1015,8 @@ public final class FeatureExtractor {
       }
 
       // Load the test files into two vectors: testBad and testGood
-      ArrayList<String> testGood = new ArrayList<String>();
-      ArrayList<String> testBad = new ArrayList<String>();
+      ArrayList<String> testGood = new ArrayList<>();
+      ArrayList<String> testBad = new ArrayList<>();
 
       for (String s : trains) {
         for (String vector : new EntryReader(s)) {
@@ -1089,8 +1100,8 @@ public final class FeatureExtractor {
 
   public static int oneMoreOrderThanLargestFeature = 100000;
 
-  public static HashSet<Class> TYPES = new HashSet<Class>();
-  public static HashSet<String> BANNED_METHODS = new HashSet<String>();
+  public static HashSet<Class> TYPES = new HashSet<>();
+  public static HashSet<String> BANNED_METHODS = new HashSet<>();
   public static String CLASSES = "/PAG/g5/users/brun/research/invariants/daikon.ver3";
   public static int NUM_VARS = 8;
 

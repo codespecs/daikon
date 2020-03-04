@@ -87,7 +87,7 @@ public final class Configuration implements Serializable {
 
   public void replay() {
     // Make a copy of the statements, since apply mutates the list.
-    List<String> copy = new ArrayList<String>(statements);
+    List<String> copy = new ArrayList<>(statements);
     for (String statement : copy) {
       apply(statement);
     }
@@ -109,7 +109,7 @@ public final class Configuration implements Serializable {
 
   // ============================== ADT COMPONENT ==============================
 
-  private List<String> statements = new ArrayList<String>();
+  private List<String> statements = new ArrayList<>();
 
   public void apply(InputStream input) {
     assert input != null;
@@ -267,7 +267,7 @@ public final class Configuration implements Serializable {
         value = unparsed.substring(1, unparsed.length() - 1);
       }
       value = ((String) value).intern();
-      // System.out.printf("setting %s to '%s'\n", field, value);
+      // System.out.printf("setting %s to '%s'%n", field, value);
     } else if ((type.getSuperclass() != null)
         && type.getSuperclass().getName().equals("java.lang.Enum")) {
       try {

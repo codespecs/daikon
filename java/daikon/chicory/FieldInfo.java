@@ -61,7 +61,7 @@ public class FieldInfo extends DaikonVariableInfo {
     field_num = num_prim_fields(superclass);
     for (Field f : clazz.getDeclaredFields()) {
       if (f.equals(field)) {
-        // System.out.printf("field %s has field num %d\n", field,
+        // System.out.printf("field %s has field num %d%n", field,
         //                   field_num);
         return;
       }

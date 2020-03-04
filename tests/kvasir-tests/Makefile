@@ -13,8 +13,8 @@
 #    category to contain it.
 #
 
-FIND_VERSION := $(shell make --version 2>&1 | head -1)
-ifeq (4.,$(findstring 4.,$(FIND_VERSION)))
+ifeq (4.0,$(firstword $(sort $(MAKE_VERSION) 4.0)))
+  # Version 4.0 or higher
   MPARG := -Orecurse
 else
   MPARG :=
@@ -188,8 +188,9 @@ small-real-tests__%:
 	@
 
 # omit povray test; see povray/README for details
+# omit flex_pristine test; see flex_pristine/README for details
 #medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__%  do-tcas__%
-medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%   do-tcas__%
+medium-real-tests__%: test-gzip__% do-bzip2__% do-perl__%   do-tcas__%
 	@
 
 # Omits povray and perl
