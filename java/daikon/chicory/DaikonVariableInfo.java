@@ -1340,7 +1340,7 @@ public abstract class DaikonVariableInfo
   private static EnumSet<VarFlags> empty_var_flags = EnumSet.noneOf(VarFlags.class);
 
   /**
-   * Returns the variable flags for this variable. Subclasses should call super() and or in any
+   * Returns the variable flags for this variable. Subclasses should call super(), then add in any
    * flags that they add.
    */
   public EnumSet<VarFlags> get_var_flags() {
