@@ -6,8 +6,8 @@ so that Daikon will run under Java 8.
 bcel-6.4.1.1.jar
   wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel/6.4.1.1/bcel-6.4.1.1.jar
 
-bcel-util-1.1.7.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
-  wget https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/1.1.7/bcel-util-1.1.7.jar
+bcel-util-1.1.8.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/1.1.8/bcel-util-1.1.8.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
@@ -28,6 +28,7 @@ mkdir -p ~/java && \
   || (cd jarjar-pantsbuild && git pull)) && \
 cd jarjar-pantsbuild && \
 ./pants doc test ::) && \
+\rm -f daikon-plumelib.jar
 ./create-daikon-plumelib.sh
 
 java-getopt-1.0.14.0.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.checkerframework.annotatedlib%22%20a%3A%22java-getopt%22
