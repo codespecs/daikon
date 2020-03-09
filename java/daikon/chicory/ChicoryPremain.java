@@ -326,13 +326,17 @@ public class ChicoryPremain {
    *   <li>the offical 6.1 release version
    *   <li>the PLSE 6.1 release version (includes LocalVariableGen fix)
    *   <li>the offical 6.2 release version (includes LocalVariableGen fix)
+   *   <li>the offical 6.3 release version
+   *   <li>the offical 6.3.1 release version
+   *   <li>the offical 6.4.1 release version
+   *   <li>the PLSE 6.4.1.1 release version (includes JDK 11 support)
    * </ul>
    *
-   * Currently, only DynComp cares about the LocalVariableGen fix, so we are looking for the offical
-   * 6.1 release version (or newer) and DynComp will check for the fixed version later. There are
-   * two classes present in 6.1 and subsequent releases that are not in previous versions. Thus, we
-   * can identify the correct version of BCEL by the presence of the class:
-   * org.apache.bcel.classfile.ConstantModule.class
+   * Currently, only DynComp cares about the LocalVariableGen fix or the JDK 11 support, so we are
+   * looking for the offical 6.1 release version (or newer) and DynComp will check for the 6.4.1.1
+   * version later. There are two classes present in 6.1 and subsequent releases that are not in
+   * previous versions. Thus, we can identify the correct version of BCEL by the presence of the
+   * class: org.apache.bcel.classfile.ConstantModule.class
    *
    * <p>Earlier versions of Chicory inspected all version of BCEL found on the path and selected the
    * correct one, if present. We now (9/15/16) simplify this to say the first BCEL found must be the
