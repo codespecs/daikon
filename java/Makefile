@@ -459,7 +459,6 @@ daikon/chicory/inv_out.diff : ChicoryPremain.jar
 #
 INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
-ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(DAIKON_CLASSPATH)
 
@@ -508,17 +507,34 @@ DCOMP_RT	:= dcomp-rt
 #DCOMP_JDK	:= /tmp/$(USER)/dcomp-j2sdk-1.5
 J2SDK15		:= /usr/lib/j2sdk1.5-sun
 dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
-dcomp_rt.jar : dcomp_premain.jar $(ORIG_RT)
+dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA_COMMAND) -Xmx1500m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
-	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
+	$(JAVA_COMMAND) -Xmx1500m daikon.dcomp.BuildJDK $(DCOMP_RT)
+	@if test -f $(DCOMP_RT)/META-INF/MANIFEST.MF; then \
+	  # Java 8 \
+	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
+	else \
+	  # Java 9+ \
+	  # There appears to be a bug in the java reflection invoke code that it \
+	  # does not check that the arg list matches.  Hence, it tries to invoke \
+	  # our instrumented version from non instrumented code.  This causes a \
+	  # failure during java initialization of boot layer.  Thus we must remove \
+	  # the problem classes from dcomp_rt.jar. \
+	  rm $(DCOMP_RT)/java/lang/invoke/VarHandleInts?Field*.class; \
+	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
+	fi
 
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA_COMMAND) -Xmx2600m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
-	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
+	$(JAVA_COMMAND) -Xmx2600m daikon.dcomp.BuildJDK --no-primitives $(DCOMP_RT)
+	@if test -f $(DCOMP_RT)/META-INF/MANIFEST.MF; then \
+	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
+	else \
+	  rm $(DCOMP_RT)/java/lang/invoke/VarHandleInts?Field*.class; \
+	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
+	fi
 
 # Install the local version of the dyncomp specific rt.jar
 install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
@@ -527,7 +543,12 @@ install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
 # Only rebuild the jar file, don't recreate the contents of $(DCOMP_RT).
 # Useful if editing only one file in the jar.
 dyncomp-jdk-only dcomp-jdk-only :
-	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
+	@if test -f $(DCOMP_RT)/META-INF/MANIFEST.MF; then \
+	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
+	else \
+	  rm $(DCOMP_RT)/java/lang/invoke/VarHandleInts?Field*.class; \
+	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
+	fi
 
 ## These two rules create the directories if absent but don't update them.
 ../utils/plume-scripts:
@@ -1052,7 +1073,8 @@ JAVADOC_DEST = api
 # ${DAIKONDIR}/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package"
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
-				-d $(JAVADOC_DEST) \
+                -source 8 \
+                -d $(JAVADOC_DEST) \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
                 -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
