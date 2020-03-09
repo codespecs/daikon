@@ -1,2 +1,2 @@
 Premain-Class: daikon.dcomp.Premain
-Can-Redefine-Classes: true
+Can-Retransform-Classes: true
