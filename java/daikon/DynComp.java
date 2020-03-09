@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.chicory.StreamRedirectThread;
+import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -74,9 +75,6 @@ public class DynComp {
   @Option("Use faster but less precise algorithm on omitted ppts")
   public static boolean approximate_omitted_ppts = false;
 
-  @Option("Don't continue after instrumentation error")
-  public static boolean quit_if_error = false;
-
   @Option("Trace output file")
   // Null if shouldn't do output
   public static @Nullable File trace_file = null;
@@ -102,12 +100,6 @@ public class DynComp {
   // Set by start_target()
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
   public static @MonotonicNonNull File premain = null;
-
-  // /** Thread that copies output from target to our output */
-  // public static StreamRedirectThread out_thread;
-
-  // /** Thread that copies stderr from target to our stderr */
-  // public static StreamRedirectThread err_thread;
 
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
@@ -316,9 +308,24 @@ public class DynComp {
     // rounded up to nearest G(igabyte)
     cmdlist.add(
         "-Xmx" + (int) Math.ceil(java.lang.Runtime.getRuntime().maxMemory() / 1073741824.0) + "G");
-    if (!no_jdk) {
-      // prepend to rather than replace bootclasspath
-      cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
+
+    if (BcelUtil.javaVersion <= 8) {
+      if (!no_jdk) {
+        // prepend to rather than replace bootclasspath
+        cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
+      }
+    } else {
+      if (!no_jdk) {
+        // If we are processing JDK classes, then we need our code on the bootclasspath as well.
+        // Otherwise, references to DCRuntime from the JDK would fail.
+        cmdlist.add("-Xbootclasspath/a:" + rt_file + path_separator + cp);
+        // allow java.base to access daikon.jar (for instrumentation runtime)
+        cmdlist.add("--add-reads");
+        cmdlist.add("java.base=ALL-UNNAMED");
+        // replace default java.base with our instrumented version
+        cmdlist.add("--patch-module");
+        cmdlist.add("java.base=" + rt_file);
+      }
     }
 
     cmdlist.add(String.format("-javaagent:%s=%s", premain, premain_args));
