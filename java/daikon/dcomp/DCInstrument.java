@@ -666,14 +666,12 @@ class DCInstrument extends InstructionListUtils {
    * General Java Runtime instrumentation strategy:
    *
    * <p>It is a bit of a misnomer, but the Daikon code and documentation uses the term JDK to refer
-   * to the Java Runtime Environment class libraries. Prior to Java 9, they were usually found in:
-   * <br>
-   * <path to your java installation>/jre/lib/rt.jar <br>
-   * For these versions of Java, we pre-instrumented the entire rt.jar.
+   * to the Java Runtime Environment class libraries. In Java 8 and earlier, they were usually found
+   * in {@code <your java installation>/jre/lib/rt.jar}. For these versions of Java, we
+   * pre-instrumented the entire rt.jar.
    *
-   * <p>Post Java 8, the Java Runtime classes have been divided into modules that are usually found
-   * in: <br>
-   * <path to your java installation>/jmods/*.jmod
+   * <p>In Java 9 and later, the Java Runtime classes have been divided into modules that are
+   * usually found in: {@code <your java installation>/jmods/*.jmod}.
    *
    * <p>With the conversion to modules for Java 9 and beyond, we have elected to pre-instrument only
    * java.base.jmod and instrument all other Java Runtime (aka JDK) classes dynamically as they are
@@ -684,23 +682,24 @@ class DCInstrument extends InstructionListUtils {
    * This means we cannot pre-instrument classes in the same manner as was done for Java 8 as this
    * would introduce references to the DynComp runtime (DCRuntime.java).
    *
-   * <p>As an additional complication, the retransformClasses method of the Java Instrumentation
-   * Interface does not allow adding additional methods or changing method signatures. Hence, we
-   * have adopted the following strategy: We will pre-instrument java.base in order to add the
-   * instrumented versions of the JDK methods. However, these instrumented methods are dummys that
-   * are missing external references to DCRuntime and will never be executed. At DynComp runtime we
-   * reinstrument these methods, discarding the dummy versions and replacing them with the correctly
-   * instrumented versions.
+   * <p>As an additional complication, the {@code retransformClasses} method of the Java
+   * Instrumentation Interface does not allow adding additional methods or changing method
+   * signatures. Hence, we have adopted the following strategy: We will pre-instrument java.base in
+   * order to add the instrumented versions of the JDK methods. However, these instrumented methods
+   * are dummies that are missing external references to DCRuntime and will never be executed. At
+   * DynComp runtime we reinstrument these methods, discarding the bodies of the dummy versions and
+   * replacing them with the correctly instrumented versions.
    *
    * <p>A simpler approach would be to just instrument JDK classes as they are loaded. However, a
    * significant number of JDK classes (>800) are loaded prior to DynComp receiving control.
    * Experiments have shown that not having these classes instrumented can lead to DynComp producing
-   * comparability sets quite different than those provided by pre Java 9 versions of Daikon.
+   * comparability sets quite different than those provided by the Java 8 version of Daikon.
    */
 
   /**
-   * Instruments a JDK class to perform dynamic comparabilty and returns the new class definition. A
-   * second version of each method in the class is created which is instrumented for comparability.
+   * Instruments a JDK class to perform dynamic comparability and returns the new class definition.
+   * A second version of each method in the class is created which is instrumented for
+   * comparability.
    */
   public JavaClass instrument_jdk() {
 
