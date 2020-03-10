@@ -311,6 +311,7 @@ class DCInstrument extends InstructionListUtils {
           debug_transform.log("Added equals method%n");
           add_equals_method(gen);
         }
+
         // Add DCompInstrumented interface and the required
         // equals_dcomp_instrumented method.
         add_dcomp_interface(gen);
@@ -537,7 +538,9 @@ class DCInstrument extends InstructionListUtils {
         // Note whether we want to track the daikon variables in this method
         boolean track = should_track(classname, methodEntryName(classname, m));
         // If any one method is tracked, then the class is tracked.
-        if (track) track_class = true;
+        if (track) {
+          track_class = true;
+        }
 
         // If we are tracking variables, make sure the class is public
         if (track && !gen.isPublic()) {
@@ -977,11 +980,11 @@ class DCInstrument extends InstructionListUtils {
       } catch (Throwable t) {
         if (debug_instrument.enabled) t.printStackTrace();
         skip_method(mgen);
-        if (!BuildJDK.quit_if_error) {
-          System.out.printf("Unexpected error processing %s.%s: %s%n", classname, m.getName(), t);
-          System.out.printf("Method is NOT instrumented%n");
-        } else {
+        if (BuildJDK.quit_if_error) {
           throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
+        } else {
+          System.out.printf("Unexpected error processing %s.%s: %s%n", classname, m.getName(), t);
+          System.out.printf("Method is NOT instrumented.%n");
         }
       }
     }
@@ -4469,7 +4472,7 @@ class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Removes the place holder instrumentation methods added by BuildJDK. This method is never called
+   * Removes the placeholder instrumentation methods added by BuildJDK. This method is never called
    * for Java 8.
    */
   void remove_dummy_instrumentation() {
