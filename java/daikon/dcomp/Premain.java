@@ -53,8 +53,7 @@ public class Premain {
       new HashSet<>(
           Arrays.asList(
               // Packages to support reflection and Lambda expressions cause instrumentation
-              // problems
-              // and probably don't affect user program comparibility values.
+              // problems and probably don't affect user program comparibility values.
               "java.lang.invoke", "java.lang.reflect", "jdk.internal.reflect"));
 
   /** Set of classes known to cause problems when instrumented. */
