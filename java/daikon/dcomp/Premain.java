@@ -45,64 +45,56 @@ public class Premain {
   @Option("Turn on most DCRuntime debugging options")
   public static boolean debug_dcruntime_all = false;
 
-  protected static String[] problem_packages_array =
-      new String[] {
-        // Packages to support reflection and Lambda expressions cause instrumentation problems
-        // and probably don't affect user program comparibility values.
-        "java.lang.invoke", "java.lang.reflect", "jdk.internal.reflect",
-      };
-
-  protected static String[] problem_classes_array =
-      new String[] {
-        // Interfaces marked @FunctionalInterface should not be instrumented
-        // as they are used by LambdaExpressions.  Since BCEL won't let us
-        // inspect the annotations, we must manually add to problem classes.
-        "java.util.regex.Pattern$CharPredicate",
-        // <clinit> gets JNI during initialization.
-        "java.lang.StackTraceElement$HashedModules",
-      };
-
-  protected static String[] problem_methods_array =
-      new String[] {
-        // The following methods call Reflection.getCallerClass().
-        // These methods are annotated with @CallerSensitive to
-        // indicate 'skip me when looking at call stack'.
-        // When we create the instrumented version of these methods we
-        // should include this annotation.  However, BCEL does not support
-        // this at this time.  So for now, we do not instrument these methods.
-        // (There are many more in the jdk sources, but so far no problems.)
-        "java.lang.Class.forName",
-        "java.lang.Class.newInstance",
-        // There is a problem in the instrumented code for DecimalFormat that I have
-        // not be able to debug.  It does not crash, but causes floating point rounding
-        // to return incorrect results.  Don't instrument these methods for now.
-        "java.text.DecimalFormat.applyPattern",
-        "java.text.DecimalFormat.format",
-        // There is a problem in the instrumented code for BufferedReader that I have
-        // not be able to debug.  It does not crash, but readLine() will sometimes
-        // trucate the result string. Don't instrument this method for now.
-        "java.io.BufferedReader.readLine",
-        // There is a problem in the instrumented code for StringBuffer that I have
-        // not be able to debug.  It does not crash, but toString() will sometimes
-        // return an empty string. Don't instrument this method for now.
-        "java.lang.StringBuffer.append",
-        "java.lang.StringBuffer.toString",
-      };
-
   /** Set of pre_instrumented jdk classes. */
   protected static Set<String> pre_instrumented = new HashSet<>();
 
   /** Set of packages known to cause problems when instrumented. */
   protected static Set<String> problem_packages =
-      new HashSet<>(Arrays.asList(problem_packages_array));
+      new HashSet<>(
+          Arrays.asList(
+              // Packages to support reflection and Lambda expressions cause instrumentation
+              // problems
+              // and probably don't affect user program comparibility values.
+              "java.lang.invoke", "java.lang.reflect", "jdk.internal.reflect"));
 
   /** Set of classes known to cause problems when instrumented. */
   protected static Set<String> problem_classes =
-      new HashSet<>(Arrays.asList(problem_classes_array));
+      new HashSet<>(
+          Arrays.asList(
+              // Interfaces marked @FunctionalInterface should not be instrumented
+              // as they are used by LambdaExpressions.  Since BCEL won't let us
+              // inspect the annotations, we must manually add to problem classes.
+              "java.util.regex.Pattern$CharPredicate",
+              // <clinit> gets JNI during initialization.
+              "java.lang.StackTraceElement$HashedModules"));
 
   /** Set of methods known to cause problems when instrumented. */
   protected static Set<String> problem_methods =
-      new HashSet<>(Arrays.asList(problem_methods_array));
+      new HashSet<>(
+          Arrays.asList(
+              // The following methods call Reflection.getCallerClass().
+              // These methods are annotated with @CallerSensitive to
+              // indicate 'skip me when looking at call stack'.
+              // When we create the instrumented version of these methods we
+              // should include this annotation.  However, BCEL does not support
+              // this at this time.  So for now, we do not instrument these methods.
+              // (There are many more in the jdk sources, but so far no problems.)
+              "java.lang.Class.forName",
+              "java.lang.Class.newInstance",
+              // There is a problem in the instrumented code for DecimalFormat that I have
+              // not be able to debug.  It does not crash, but causes floating point rounding
+              // to return incorrect results.  Don't instrument these methods for now.
+              "java.text.DecimalFormat.applyPattern",
+              "java.text.DecimalFormat.format",
+              // There is a problem in the instrumented code for BufferedReader that I have
+              // not be able to debug.  It does not crash, but readLine() will sometimes
+              // trucate the result string. Don't instrument this method for now.
+              "java.io.BufferedReader.readLine",
+              // There is a problem in the instrumented code for StringBuffer that I have
+              // not be able to debug.  It does not crash, but toString() will sometimes
+              // return an empty string. Don't instrument this method for now.
+              "java.lang.StringBuffer.append",
+              "java.lang.StringBuffer.toString"));
 
   // One of the last phases for DynComp is to write out the comparability values
   // after the user program completes execution.  One of the steps is to assign
@@ -120,10 +112,13 @@ public class Premain {
   protected static boolean in_shutdown = false;
   protected static boolean retransform_preloads;
   private static Set<Class<?>> previously_processed_classes = new HashSet<>();
-  protected static Instrumentation instr;
+
+  // For debugging
+  // protected static Instrumentation instr;
 
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
-    instr = inst;
+    // For debugging
+    // this.instr = inst;
 
     // Because DynComp started Premain in a separate process, we must rescan
     // the options to setup the DynComp static variables.
@@ -169,12 +164,12 @@ public class Premain {
 
       // Verify that current no-primitives flag setting matches the setting used to
       // generate dcomp_rt.jar (via the BuildJDK tool).
-      String line = reader.readLine().trim();
-      if (!line.startsWith("no_primitives: ")) {
+      String noPrimitivesLine = reader.readLine().trim();
+      if (!noPrimitivesLine.startsWith("no_primitives: ")) {
         System.err.println("First line of jdk_classes.txt does not contain no_primitives flag.");
         System.exit(1);
       }
-      if (DynComp.no_primitives != line.equalsIgnoreCase("no_primitives: true")) {
+      if (DynComp.no_primitives != noPrimitivesLine.equalsIgnoreCase("no_primitives: true")) {
         System.err.println(
             "no-primitives flag does not match setting used to generate dcomp_rt.jar.");
         System.exit(1);
@@ -182,7 +177,7 @@ public class Premain {
 
       // Read in the list of pre-instrumented classes
       while (true) {
-        line = reader.readLine();
+        String line = reader.readLine();
         if (line == null) {
           break;
         }
@@ -211,13 +206,10 @@ public class Premain {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
 
-    // check that we got a newer version of BCEL that includes JDK 11 support.
+    // Check that we got a newer version of BCEL that includes JDK 11 support.
     try {
       Class<?> c = loader.loadClass("org.apache.bcel.generic.FieldGenOrMethodGen");
       c.getMethod("removeAnnotationEntries", (Class<?>[]) null);
-      // previous check was that we have at least version 6.2 of BCEL
-      // Class<?> c = loader.loadClass("org.apache.bcel.generic.LocalVariableGen");
-      // c.getMethod("getLiveToEnd", (Class<?>[]) null);
     } catch (Exception e) {
       System.err.printf("%nBCEL jar found is not the version included with the Daikon release.%n");
       System.exit(1);
@@ -326,7 +318,6 @@ public class Premain {
       if (DynComp.verbose) {
         System.out.println("in shutdown");
       }
-      System.out.println("in shutdown");
       in_shutdown = true;
 
       // for debugging

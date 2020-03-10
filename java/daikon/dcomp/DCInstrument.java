@@ -46,7 +46,7 @@ class DCInstrument extends InstructionListUtils {
   /** Is the current class a member of the JDK? */
   protected boolean in_jdk;
   /**
-   * Is this the first phase of instrumenting a member of the JDK? (via BuildJDK) This flag is
+   * Is this the first phase of instrumenting a member of the JDK (via BuildJDK)? This flag is
    * set/reset in daikon.dcomp.DCInstrument. This flag will never be true for Java 8.
    */
   protected boolean initial_jdk_instrument;

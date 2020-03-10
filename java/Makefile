@@ -516,7 +516,7 @@ dcomp_rt.jar : dcomp_premain.jar
 	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
 	else \
 	  # Java 9+ \
-	  # There appears to be a bug in the java reflection invoke code that it \
+	  # There appears to be a bug in the Java reflection invoke code that it \
 	  # does not check that the arg list matches.  Hence, it tries to invoke \
 	  # our instrumented version from non instrumented code.  This causes a \
 	  # failure during java initialization of boot layer.  Thus we must remove \

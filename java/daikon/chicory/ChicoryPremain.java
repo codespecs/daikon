@@ -312,7 +312,7 @@ public class ChicoryPremain {
 
   /**
    * Classloader for the BCEL code. Using this classloader guarantees that we get the correct
-   * version of BCEL and not a possible incompatible version from elsewhere on the users classpath.
+   * version of BCEL and not a possible incompatible version from elsewhere on the user's classpath.
    * We also load daikon.chicory.Instrument via this (since that class is the user of all of the
    * BCEL classes). All references to BCEL must be within that class (so that all references to BCEL
    * will get resolved by this classloader).

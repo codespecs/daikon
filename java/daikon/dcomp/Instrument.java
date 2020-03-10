@@ -51,7 +51,7 @@ public class Instrument implements ClassFileTransformer {
 
     if (BcelUtil.javaVersion > 8) {
       // If this class was pre-instrumented (via BuildJDK)
-      // let DCInstrument know we need to correct instrumentation.
+      // let DCInstrument know we need to correct the instrumentation.
       if (Premain.pre_instrumented.contains(className)) {
         DCInstrument.retransforming = true;
       } else {
@@ -84,9 +84,9 @@ public class Instrument implements ClassFileTransformer {
       }
 
       if (BcelUtil.javaVersion > 8) {
-        int i = className.lastIndexOf('/');
-        if (i > 0) {
-          String packageName = className.substring(0, i).replace('/', '.');
+        int lastSlashPos = className.lastIndexOf('/');
+        if (lastSlashPos > 0) {
+          String packageName = className.substring(0, lastSlashPos).replace('/', '.');
           if (Premain.problem_packages.contains(packageName)) {
             if (DynComp.verbose) System.out.printf("Skipping problem package %s%n", packageName);
             return null;
@@ -107,7 +107,6 @@ public class Instrument implements ClassFileTransformer {
 
       in_jdk = true;
       if (DynComp.verbose) System.out.printf("Instrumenting JDK class %s%n", className);
-
     } else {
 
       // We're not in a JDK class
