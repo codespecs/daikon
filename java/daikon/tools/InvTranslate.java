@@ -10,7 +10,6 @@ import java.util.Map;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.UtilPlume;
 
 /**
  * Provides a variable translation over an invariant at one program point (perhaps in a different
@@ -121,7 +120,7 @@ public class InvTranslate {
       String value = var_map.get(key);
       mappings.add(key + "->" + value);
     }
-    out.append(UtilPlume.join(mappings, ", "));
+    out.append(String.join(", ", mappings));
 
     out.append(" [Quality=" + quality + "]");
     if ((inv1 != null) && (inv2 != null)) {

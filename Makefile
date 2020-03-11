@@ -7,6 +7,14 @@ DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/utils/checklink
 
+PLUMESCRIPTS ?= ${DAIKONDIR}/utils/plume-scripts
+SORT_DIRECTORY_ORDER = ${PLUMESCRIPTS}/sort-directory-order
+ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
+  # Until "make ../plume-scripts" has been run, sort-directory-order is not available.
+  SORT_DIRECTORY_ORDER = sort
+endif
+
+
 ##########################################################################
 ### Variables
 ###
@@ -54,7 +62,7 @@ SCRIPT_FILES := Makefile \
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
-DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
+DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print | ${SORT_DIRECTORY_ORDER})
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/simplify/daikon-background.txt \
 	daikon/simplify/daikon-background-defined.txt \
@@ -80,7 +88,7 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/test/dtracediff/Hanoi-truncated.dtrace.gz
 
 # the following is only used in the "make showvars" target
-WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|/.\#|.bak$$|uw/|pubs/')
+WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|/.\#|.bak$$|uw/|pubs/' | ${SORT_DIRECTORY_ORDER})
 
 WWW_PARENT ?= /cse/web/research/plse
 WWW_DIR := $(WWW_PARENT)/daikon

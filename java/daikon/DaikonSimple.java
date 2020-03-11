@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.util.UtilPlume;
 
 /**
  * DaikonSimple reads a declaration file and trace file and outputs a list of likely invariants
@@ -50,22 +49,20 @@ public class DaikonSimple {
   // public static File inv_file = null;
 
   private static String usage =
-      UtilPlume.join(
-          new String[] {
-            "",
-            "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> <dtrace_file>",
-            "  -h, --" + Daikon.help_SWITCH,
-            "      Display this usage message",
-            // "  -o, <inv_file> ",
-            // "      Writes output to <inv_file>",
-            "  --" + Daikon.debugAll_SWITCH,
-            "      Turns on all debug flags (voluminous output)",
-            "  --" + Daikon.debug_SWITCH + " logger",
-            "      Turns on the specified debug logger",
-            "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
-            "      Print debug info on the specified invariant class, vars, and ppt",
-          },
-          lineSep);
+      String.join(
+          lineSep,
+          "",
+          "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> <dtrace_file>",
+          "  -h, --" + Daikon.help_SWITCH,
+          "      Display this usage message",
+          // "  -o, <inv_file> ",
+          // "      Writes output to <inv_file>",
+          "  --" + Daikon.debugAll_SWITCH,
+          "      Turns on all debug flags (voluminous output)",
+          "  --" + Daikon.debug_SWITCH + " logger",
+          "      Turns on the specified debug logger",
+          "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
+          "      Print debug info on the specified invariant class, vars, and ppt");
 
   // a pptMap that contains all the program points
   public static PptMap all_ppts;
