@@ -45,7 +45,7 @@ fi
 # relative Java filenames.  If the corresponding Java file doesn't exist,
 # discard the file (this happens for inner classes, two classes in a file,
 # and perhaps some other cases).
-cd $scratch
+cd $scratch || exit
 files=`find . $find_args -name '*.class' | fgrep -v '$' | sed s/class/java/ | sed 's/\.\///' | sort`
 for file in $files; do
   if [ -e $sources/$file ] ; then
