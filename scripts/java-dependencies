@@ -46,7 +46,7 @@ fi
 # discard the file (this happens for inner classes, two classes in a file,
 # and perhaps some other cases).
 cd $scratch
-files=$(find . $find_args -name '*.class' | fgrep -v '$' | sed s/class/java/ | sed 's/\.\///' | sort)
+files=$(find . $find_args -name '*.class' | grep -v -F '$' | sed s/class/java/ | sed 's/\.\///' | sort)
 for file in $files; do
   if [ -e $sources/$file ] ; then
     echo $file
