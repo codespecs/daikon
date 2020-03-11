@@ -55,7 +55,7 @@ public class AndJoiner extends Joiner {
         || format.isJavaFamily()
         || format == OutputFormat.CSHARPCONTRACT) {
       // Forrest
-      return "(" + String.join(", invStrings) && (") + ")";
+      return "(" + UtilPlume.join(") && (", invStrings) + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
       return "(AND" + String.join(" ", invStrings) + ")";
     } else {
