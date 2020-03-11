@@ -41,7 +41,6 @@ import org.checkerframework.framework.qual.Unused;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.MathPlume;
-import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
@@ -2054,7 +2053,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
         strings.add(invs[i].format());
       }
     }
-    return UtilPlume.join(strings, ", ");
+    return String.join(", ", strings);
   }
 
   /**

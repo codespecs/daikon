@@ -68,7 +68,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * Represents information about a particular variable for a program point. This object doesn't hold
@@ -435,7 +434,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
     // Sadly, String.join is only available from Java 8:
     // https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#join-java.lang.CharSequence-java.lang.Iterable-
-    final String auxstr = UtilPlume.join(auxstrs, ", ");
+    final String auxstr = String.join(", ", auxstrs);
 
     try {
       aux = VarInfoAux.parse(auxstr);
@@ -526,7 +525,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     for (VarInfo vi : bases) {
       arg_names.add(vi.name());
     }
-    str_name = String.format("%s(%s)", name, UtilPlume.join(arg_names, ",")).intern();
+    str_name = String.format("%s(%s)", name, String.join(",", arg_names)).intern();
 
     // The parent ppt is the same as the base if each varinfo in the
     // derivation has the same parent
