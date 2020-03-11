@@ -45,7 +45,7 @@ public class DynComp {
 
   @Option("Output file for comparability sets")
   // If null, do no output
-  public static @Nullable File comparability_file = null;
+  public static @MonotonicNonNull File comparability_file = null;
 
   @Option("Only process program points matching the regex")
   public static List<Pattern> ppt_select_pattern = new ArrayList<>();
@@ -77,7 +77,7 @@ public class DynComp {
 
   @Option("Trace output file")
   // Null if shouldn't do output
-  public static @Nullable File trace_file = null;
+  public static @MonotonicNonNull File trace_file = null;
 
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;

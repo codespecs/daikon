@@ -36,11 +36,9 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 
 public class ChicoryPremain {
 
-  /**
-   * Any command line options declared here are 'hidden' as they cannot be accessed from Chicory.
-   * These are internal debugging options that may be used when ChicoryPremain is invoked directly
-   * from the command line.
-   */
+  // These command-line options cannot be accessed from Chicory.  These are internal debugging
+  // options that may be used when ChicoryPremain is invoked directly from the command line.
+
   @Option("socket port to communicate with Daikon")
   public static int daikon_port = -1;
 
