@@ -8,6 +8,7 @@ import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.bcelutil.StackTypes;
+import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.EntryReader;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -105,7 +107,7 @@ class DCInstrument extends InstructionListUtils {
 
   protected static boolean exclude_object = true;
   protected static String instrumentation_interface;
-  protected static String dcomp_prefix;
+  protected static @DotSeparatedIdentifiers String dcomp_prefix;
   /**
    * We add a dummy local variable to JDK methods during the initial jdk instrumentation (via
    * BuildJDK) as a flag to indicate that the method needs to be re-instrumented at runtime. This is
@@ -256,11 +258,11 @@ class DCInstrument extends InstructionListUtils {
     } else {
       dcomp_prefix = "daikon.dcomp";
     }
-    dcomp_marker = new ObjectType(dcomp_prefix + ".DCompMarker");
+    dcomp_marker = new ObjectType(Signatures.addPackage(dcomp_prefix, "DCompMarker"));
     if (BcelUtil.javaVersion == 8) {
       dcomp_prefix = "daikon.dcomp";
     }
-    instrumentation_interface = dcomp_prefix + ".DCompInstrumented";
+    instrumentation_interface = Signatures.addPackage(dcomp_prefix, "DCompInstrumented");
 
     // System.out.printf("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
@@ -2560,7 +2562,8 @@ class DCInstrument extends InstructionListUtils {
     // Create the interface type that indicates whether or not this method exists
     String cap_method_name = method_name.substring(0, 1).toUpperCase() + method_name.substring(1);
     @SuppressWarnings("signature") // string manipulation
-    ObjectType dcomp_interface = new ObjectType(dcomp_prefix + ".DComp" + cap_method_name);
+    ObjectType dcomp_interface =
+        new ObjectType(Signatures.addPackage(dcomp_prefix, "DComp" + cap_method_name));
 
     // For now only handle methods without any arguments
     assert arg_types.length == 0 : invoke;
@@ -4425,10 +4428,10 @@ class DCInstrument extends InstructionListUtils {
    */
   void handle_object(ClassGen gen) {
     Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
-    if (cl != null) gen.addInterface(dcomp_prefix + ".DCompClone");
+    if (cl != null) gen.addInterface(Signatures.addPackage(dcomp_prefix, "DCompClone"));
 
     Method ts = gen.containsMethod("toString", "()Ljava/lang/String;");
-    if (ts != null) gen.addInterface(dcomp_prefix + ".DCompToString");
+    if (ts != null) gen.addInterface(Signatures.addPackage(dcomp_prefix, "DCompToString"));
   }
 
   // NOT USED
