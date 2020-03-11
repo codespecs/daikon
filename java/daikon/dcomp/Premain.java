@@ -163,7 +163,12 @@ public class Premain {
 
       // Verify that current no-primitives flag setting matches the setting used to
       // generate dcomp_rt.jar (via the BuildJDK tool).
-      String noPrimitivesLine = reader.readLine().trim();
+      String noPrimitivesLine = reader.readLine();
+      if (noPrimitivesLine == null) {
+        System.err.println("jdk_classes.txt is an empty file.");
+        System.exit(1);
+      }
+      noPrimitivesLine = noPrimitivesLine.trim();
       if (!noPrimitivesLine.startsWith("no_primitives: ")) {
         System.err.println("First line of jdk_classes.txt does not contain no_primitives flag.");
         System.exit(1);
@@ -304,8 +309,7 @@ public class Premain {
       }
     }
     previously_processed_classes = new HashSet<>(Arrays.asList(loaded_classes));
-    Class<?>[] classes_to_retransform = new Class<?>[class_list.size()];
-    return class_list.toArray(classes_to_retransform);
+    return class_list.toArray(new Class<?>[class_list.size()]);
   }
 
   /** Shutdown thread that writes out the comparability results. */

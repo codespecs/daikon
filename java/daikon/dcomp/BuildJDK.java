@@ -371,6 +371,8 @@ public class BuildJDK {
                 new String[0]);
         dcomp_instrumented.setMinor(0);
         dcomp_instrumented.setMajor(java_class_version);
+        @SuppressWarnings(
+            "nullness:argument.type.incompatible") // null instruction list is ok for abstract
         MethodGen mg =
             new MethodGen(
                 Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
