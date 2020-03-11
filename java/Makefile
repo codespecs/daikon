@@ -73,7 +73,7 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
-DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.10.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.5.jar:${DAIKONDIR}/java/lib/reflection-util-0.0.4.jar:${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
+DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.1.3.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.8.jar:${DAIKONDIR}/java/lib/reflection-util-0.2.2.jar:${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
