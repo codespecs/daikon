@@ -24,7 +24,7 @@ if java -version 2>&1 | grep -q '"1.8'; then
     SKIP_JAVADOC=1
   fi
 fi
-if [ ! -z ${SKIP_JAVADOC+x} ]; then
+if [ -n "${SKIP_JAVADOC+x}" ]; then
   echo Skipping javadoc because of https://bugs.openjdk.java.net/browse/JDK-8215542
   exit
 else
