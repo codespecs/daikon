@@ -6,10 +6,9 @@
 # by Philip Guo
 
 import re
+import sys
 
 pptNameRE = re.compile(':::')
-
-import sys
 
 f = open(sys.argv[1], 'r')
 allLines = [line.strip() for line in f.readlines()]
@@ -44,21 +43,19 @@ for line in allLines:
 
         curPptSetSizes = []
 
-
     # (Ignore blank lines) ... we hit a space-delimited list of
     # comparable variables
     elif line:
         # Size of comparability set for that line (mostly gonna be 1)
         curPptSetSizes.append(len(line.split()))
 
-
 # Now pptInfoDict should be initialized with all numerical data.
 # We can now crunch numbers and produce useful-looking results
 
 sumOfAvgs = 0
-numPpts = len(pptInfoDict.keys())
+numPpts = len(list(pptInfoDict.keys()))
 
-totalSquareVars = 0;
+totalSquareVars = 0
 totalVars = 0
 
 totalSquareVarsNoComp = 0
@@ -66,7 +63,7 @@ totalSquareVarsNoComp = 0
 for ppt in pptInfoDict:
     compSetSizesAtPpt = pptInfoDict[ppt]
     totalVarsAtPpt = sum(compSetSizesAtPpt)
-    squareVarsAtPpt = sum([(i*i) for i in compSetSizesAtPpt])
+    squareVarsAtPpt = sum([(i * i) for i in compSetSizesAtPpt])
 
     if totalVarsAtPpt > 0:
         avgForPpt = float(squareVarsAtPpt) / float(totalVarsAtPpt)
@@ -84,8 +81,7 @@ for ppt in pptInfoDict:
 #    print "Total # vars:     ", totalVarsAtPpt
 #    print "Average set size: ", avgForPpt
 
-
 #print
 #print "Unweighted average:", ((sumOfAvgs) / float(numPpts))
-print "Weighted average:", (float(totalSquareVars) / float(totalVars))
-print "Avg. (No comparability):", (float(totalSquareVarsNoComp) / float(totalVars))
+print("Weighted average:", (float(totalSquareVars) / float(totalVars)))
+print("Avg. (No comparability):", (float(totalSquareVarsNoComp) / float(totalVars)))

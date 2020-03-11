@@ -3,6 +3,20 @@ KMDIR = ../tools/kmeans
 
 all: difftbl cluster clgroup kmeans trace-untruncate-fast
 
+SH_SCRIPTS = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)sh' * | grep -v .git | grep -v "~" | grep -v addrfilter | grep -v mail-stackoverflow.sh)
+BASH_SCRIPTS = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)bash' * | grep -v .git | grep -v "~")
+shell-script-style:
+	shellcheck --format=gcc ${SH_SCRIPTS} ${BASH_SCRIPTS}
+	checkbashisms ${SH_SCRIPTS}
+showvars:
+	@echo "SH_SCRIPTS=${SH_SCRIPTS}"
+	@echo "BASH_SCRIPTS=${BASH_SCRIPTS}"
+
+PYTHON_FILES=$(wildcard *.py)
+python-style:
+	yapf -i --style='{column_limit: 100}' ${PYTHON_FILES}
+	pylint -f parseable --disable=W,invalid-name ${PYTHON_FILES}
+
 clean:
 	rm -f difftbl cluster clgroup kmeans trace-untruncate-fast
 	$(MAKE) -C $(HIERDIR) clean

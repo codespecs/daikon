@@ -13,6 +13,7 @@ make compile daikon.jar
 
 (cd .. && git clone https://github.com/typetools/checker-framework.git)
 (cd ../checker-framework && source checker/bin-devel/build.sh)
-export CHECKERFRAMEWORK=`realpath ../checker-framework`
+CHECKERFRAMEWORK=$(realpath ../checker-framework)
+export CHECKERFRAMEWORK
 
 make -C java typecheck

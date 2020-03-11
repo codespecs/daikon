@@ -7,6 +7,7 @@
 # Warning: This was hacked together by copy/paste from
 # dfec-to-kvasir.py so some of the comments may make no sense at all
 
+import re
 import sys
 
 # Process command-line args:
@@ -14,7 +15,6 @@ declsF = open(sys.argv[1], 'r')
 allLines = [line.strip() for line in declsF.readlines()]
 declsF.close()
 
-import re
 
 def StripCompNumber(comp_num):
     if '[' in comp_num:
@@ -22,12 +22,14 @@ def StripCompNumber(comp_num):
     else:
         return comp_num
 
+
 # Strips all comments after #
 # space-delimited token:
 # Input:  int # isParam=true
 # Output: int
 def StripComments(comp_num):
     return comp_num.split('#')[0].strip()
+
 
 # States:
 # About to read in ...
@@ -38,10 +40,10 @@ def StripComments(comp_num):
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
 class State:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = range(6)
+    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
+
 
 myState = State.Uninit
-
 
 # Key: program point name
 # Value: A list of 5-element sub-lists
@@ -102,13 +104,12 @@ for line in allLines:
         # variable or another thing
         myState = State.VarName
 
-
 # Now we are going to initialize the declaredTypeCompNum of each entry
 # within KvasirPptMap.  All variables with identical declared type
 # strings will have the same comparability number at each program
 # point.
 for ppt in KvasirPptMap:
-    curCompNum = 1 # Start at 1 and monotonically increase
+    curCompNum = 1  # Start at 1 and monotonically increase
 
     # Key: declared type; Value: comp. num associated with that type
     decTypesMap = {}
@@ -118,33 +119,32 @@ for ppt in KvasirPptMap:
     for elt in curVarList:
         curDecType = StripComments(elt[1])
         if curDecType in decTypesMap:
-            elt.append(decTypesMap[curDecType]) # Use the stored comp. num
+            elt.append(decTypesMap[curDecType])  # Use the stored comp. num
         else:
-            elt.append(curCompNum) # Use a fresh new comp. num
-            decTypesMap[curDecType] = curCompNum # and add the entry to the map
-            curCompNum += 1 # Don't forget to increment this!
-
+            elt.append(curCompNum)  # Use a fresh new comp. num
+            decTypesMap[curDecType] = curCompNum  # and add the entry to the map
+            curCompNum += 1  # Don't forget to increment this!
 
 # Output the various .decls files
 # (Read these names from KvasirPptNames to preserve ordering)
 for ppt in KvasirPptNames:
 
-    print "DECLARE"
-    print ppt
+    print("DECLARE")
+    print(ppt)
 
     for varEntry in KvasirPptMap[ppt]:
 
         # Variable name
-        print varEntry[0]
+        print(varEntry[0])
 
         # Declared type
-        print varEntry[1]
+        print(varEntry[1])
 
         # Representation type
-        print varEntry[2]
+        print(varEntry[2])
 
         # Comp. num (based on declared types only):
-        print str(varEntry[4])
+        print(str(varEntry[4]))
 
     # Newline separating neighboring program points
-    print
+    print()

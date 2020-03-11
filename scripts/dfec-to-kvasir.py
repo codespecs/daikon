@@ -32,6 +32,7 @@
 # should be compatible with the resulting .dtrace file so that Daikon
 # can run on both sets of output.
 
+import re
 import sys
 
 # Process command-line args:
@@ -51,9 +52,6 @@ outputNoCompDeclsF = open(sys.argv[6], 'w')
 
 outputVarsF = open(sys.argv[7], 'w')
 
-
-
-import re
 DfecGlobalRE = re.compile('^::')
 
 # Dfec and Kvasir variable differences:
@@ -75,11 +73,13 @@ DfecGlobalRE = re.compile('^::')
 # Kvasir uses the bracket notation (unless disambiguation
 # information is provided)
 
+
 # Converts variable var's name from Dfec conventions
 # to Kvasir conventions and returns it as the result
 def ConvertDfecVarName(var):
     globalConverted = DfecGlobalRE.sub('/', var)
     return globalConverted.replace('->', '[].')
+
 
 # Ok, we are going to just strip off everything before
 # the '/', if there is one, because Dfec does not print
@@ -93,6 +93,7 @@ def ConvertKvasirVarName(var):
     else:
         return var
 
+
 # Kvasir does not support comparability for array indices
 # so strip those off.
 # e.g. '104[105]' becomes '104'
@@ -101,6 +102,7 @@ def StripCompNumber(comp_num):
         return comp_num[:comp_num.find('[')]
     else:
         return comp_num
+
 
 # Dfec and Kvasir program point name differences:
 
@@ -127,6 +129,7 @@ def StripCompNumber(comp_num):
 
 # Input:  'std.ccladd(int;int;)void:::ENTER'
 # Output: ('ccladd', 'ENTER')
+
 
 def StripDfecPptName(ppt):
     fnname, enterOrExit = ppt.split(':::')
@@ -160,7 +163,7 @@ def StripKvasirPptName(ppt):
     # e.g. for 'flex.c.yy_push_state():::EXIT0',
     # we want 'yy_push_state'
     else:
-        fnname = fnname[fnname.rfind('.')+1:fnname.find('(')]
+        fnname = fnname[fnname.rfind('.') + 1:fnname.find('(')]
 
     # Just return 'ENTER' or 'EXIT' with no numbers
     # (This means that we can only keep one exit ppt)
@@ -182,10 +185,10 @@ def StripKvasirPptName(ppt):
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
 class State:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = range(6)
+    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
+
 
 myState = State.Uninit
-
 
 # Run the state machine to build up a map (DfecPptMap)
 # where the keys are program point names (stripped using StripDfecPptName)
@@ -193,7 +196,7 @@ myState = State.Uninit
 # values are comparability numbers
 DfecPptMap = {}
 
-curVarMap = 0 # The current variable map
+curVarMap = 0  # The current variable map
 curVarName = ""
 
 for line in DfecAllLines:
@@ -235,7 +238,6 @@ for line in DfecAllLines:
         # we'll branch according to whether it's a real
         # variable or another thing
         myState = State.VarName
-
 
 # Key: program point name
 # Value: A list of 5-element sub-lists
@@ -310,7 +312,7 @@ def StripComments(comp_num):
 # strings will have the same comparability number at each program
 # point.
 for ppt in KvasirPptMap:
-    curCompNum = 1 # Start at 1 and monotonically increase
+    curCompNum = 1  # Start at 1 and monotonically increase
 
     # Key: declared type; Value: comp. num associated with that type
     decTypesMap = {}
@@ -320,12 +322,11 @@ for ppt in KvasirPptMap:
     for elt in curVarList:
         curDecType = StripComments(elt[1])
         if curDecType in decTypesMap:
-            elt.append(decTypesMap[curDecType]) # Use the stored comp. num
+            elt.append(decTypesMap[curDecType])  # Use the stored comp. num
         else:
-            elt.append(curCompNum) # Use a fresh new comp. num
-            decTypesMap[curDecType] = curCompNum # and add the entry to the map
-            curCompNum += 1 # Don't forget to increment this!
-
+            elt.append(curCompNum)  # Use a fresh new comp. num
+            decTypesMap[curDecType] = curCompNum  # and add the entry to the map
+            curCompNum += 1  # Don't forget to increment this!
 
 # Now both DfecPptMap and KvasirPptMap should be initialized.  We want
 # to now iterate through KvasirPptMap, translate program
@@ -339,7 +340,6 @@ for ppt in KvasirPptMap:
 # Dfec-generated .decls file to outputLackwitDeclsF and one with
 # the numbers gathered from DynComp to outputDynCompDeclsF.
 
-
 ResultMap = {}
 
 for ppt in KvasirPptMap:
@@ -348,16 +348,16 @@ for ppt in KvasirPptMap:
         KvasirVarList = KvasirPptMap[ppt]
         DfecVarMap = DfecPptMap[stripped]
 
-#        print "KvasirVarList:"
-#        print KvasirVarList
-#        print "DfecVarMap:"
-#        print DfecVarMap
-#        print
-#        print
+        #        print "KvasirVarList:"
+        #        print KvasirVarList
+        #        print "DfecVarMap:"
+        #        print DfecVarMap
+        #        print
+        #        print
 
         curResultVarList = []
 
-#        print ppt
+        #        print ppt
 
         # Now iterate through the Kvasir variable list:
         for entry in KvasirVarList:
@@ -385,12 +385,10 @@ for ppt in KvasirPptMap:
                 # Each entry should be the following:
                 #  (variable name, dec. type, rep. type,
                 #           (Lackwit comp. num, Kvasir comp. num, dec. type comp num)
-                curResultVarList.append((var, decType, repType,
-                                         (DfecVarMap[varToLookup],
-                                          kvasirCompNum,
-                                          decTypeCompNum)))
+                curResultVarList.append((var, decType, repType, (DfecVarMap[varToLookup],
+                                                                 kvasirCompNum, decTypeCompNum)))
                 if DfecVarMap[varToLookup] == "":
-                    print "EMPTY COMP. NUMBER!", var, varToLookup
+                    print("EMPTY COMP. NUMBER!", var, varToLookup)
 
                 # Only for debugging
 #                DfecVarMap.pop(varToLookup)
@@ -419,29 +417,21 @@ outputVarsF.write("globals\n")
 exampleVarList = ResultMap[KvasirPptNames[0]]
 
 for varEntry in exampleVarList:
-    if '/' in varEntry[0]: # only print out globals and file-statics
+    if '/' in varEntry[0]:  # only print out globals and file-statics
         outputVarsF.write(varEntry[0])
         outputVarsF.write("\n")
 
 outputVarsF.write("\n")
 
-
 # Filter KvasirPptNames to remove any program points that are NOT
 # in the Dfec-generated .decls file:
-KvasirPptNames = [name for
-                  name in KvasirPptNames
-                  if (StripKvasirPptName(name) in DfecPptMap)]
-
+KvasirPptNames = [name for name in KvasirPptNames if (StripKvasirPptName(name) in DfecPptMap)]
 
 #
 
-outputNoCompDeclsF.write("VarComparability\nnone\n\n");
+outputNoCompDeclsF.write("VarComparability\nnone\n\n")
 
-
-allDeclsFiles = [outputLackwitDeclsF,
-                 outputDynCompDeclsF,
-                 outputDecTypesDeclsF,
-                 outputNoCompDeclsF]
+allDeclsFiles = [outputLackwitDeclsF, outputDynCompDeclsF, outputDecTypesDeclsF, outputNoCompDeclsF]
 
 # Output the various .decls files
 # (Read these names from KvasirPptNames to preserve ordering)
@@ -498,7 +488,7 @@ for ppt in KvasirPptNames:
 
         # Don't print out globals or file-static vars in the
         # var-list-file for individual program points
-        if isExit and not ('/' in varEntry[0]):
+        if isExit and not '/' in varEntry[0]:
             outputVarsF.write(varEntry[0])
             outputVarsF.write("\n")
 
@@ -509,12 +499,9 @@ for ppt in KvasirPptNames:
     if isExit:
         outputVarsF.write("\n")
 
-
 #print '# Dfec ppts:', len(DfecPptMap.keys())
 #print '# Kvasir ppts:', len(KvasirPptMap.keys())
 #print '# Common ppts:', len(ResultMap.keys())
-
-
 
 for f in allDeclsFiles:
     f.close()

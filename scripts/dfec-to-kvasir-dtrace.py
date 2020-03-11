@@ -14,8 +14,6 @@ kvasirDeclsF = open(sys.argv[1], 'r')
 kvasirDeclsAllLines = [line.strip() for line in kvasirDeclsF.readlines()]
 kvasirDeclsF.close()
 
-
-
 import re
 DfecGlobalRE = re.compile('^::')
 
@@ -38,11 +36,13 @@ DfecGlobalRE = re.compile('^::')
 # Kvasir uses the bracket notation (unless disambiguation
 # information is provided)
 
+
 # Converts variable var's name from Dfec conventions
 # to Kvasir conventions and returns it as the result
 def ConvertDfecVarName(var):
     globalConverted = DfecGlobalRE.sub('/', var)
     return globalConverted.replace('->', '[].')
+
 
 # Ok, we are going to just strip off everything before
 # the '/', if there is one, because Dfec does not print
@@ -56,6 +56,7 @@ def ConvertKvasirVarName(var):
     else:
         return var
 
+
 # Kvasir does not support comparability for array indices
 # so strip those off.
 # e.g. '104[105]' becomes '104'
@@ -64,6 +65,7 @@ def StripCompNumber(comp_num):
         return comp_num[:comp_num.find('[')]
     else:
         return comp_num
+
 
 # Dfec and Kvasir program point name differences:
 
@@ -90,6 +92,7 @@ def StripCompNumber(comp_num):
 
 # Input:  'std.ccladd(int;int;)void:::ENTER'
 # Output: ('ccladd', 'ENTER')
+
 
 def StripDfecPptName(ppt):
     fnname, enterOrExit = ppt.split(':::')
@@ -123,7 +126,7 @@ def StripKvasirPptName(ppt):
     # e.g. for 'flex.c.yy_push_state():::EXIT0',
     # we want 'yy_push_state'
     else:
-        fnname = fnname[fnname.rfind('.')+1:fnname.find('(')]
+        fnname = fnname[fnname.rfind('.') + 1:fnname.find('(')]
 
     # Just return 'ENTER' or 'EXIT' with no numbers
     # (This means that we can only keep one exit ppt)
@@ -145,9 +148,10 @@ def StripKvasirPptName(ppt):
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
 class DeclsState:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = range(6)
+    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
 
-curVarMap = 0 # The current variable map
+
+curVarMap = 0  # The current variable map
 curVarName = ""
 
 # Key: program point name (stripped using StripKvasirPptName)
@@ -183,7 +187,7 @@ for line in kvasirDeclsAllLines:
             myState = DeclsState.DecType
 
     elif myState == DeclsState.DecType:
-#        curVarList[-1].append(line)
+        #        curVarList[-1].append(line)
         myState = DeclsState.RepType
 
     elif myState == DeclsState.RepType:
@@ -191,7 +195,7 @@ for line in kvasirDeclsAllLines:
         myState = DeclsState.CompNum
 
     elif myState == DeclsState.CompNum:
-#        curVarList[-1].append(line)
+        #        curVarList[-1].append(line)
 
         # Assume we are gonna read another variable.
         # When we actually read the subsequent line,
@@ -207,7 +211,7 @@ def processPpt(pptName, varInfo):
     stripped = StripDfecPptName(pptName)
 
     if stripped in KvasirPptMap:
-        print KvasirPptMap[stripped][0]
+        print(KvasirPptMap[stripped][0])
 
         # Iterate thru all variables in .decls file (to preserve
         # order) and print ut the corresponding entries in the .dtrace
@@ -232,24 +236,26 @@ def processPpt(pptName, varInfo):
 
             if varToLookup in varInfo:
                 stuff = varInfo[varToLookup]
-                print varName
+                print(varName)
 
-                if repType[-2:] == '[]' and stuff[0][0] != '[' and stuff[0] != "uninit" and stuff[0] != "nonsensical":
-                    print '[', stuff[0], ']'
+                if repType[-2:] == '[]' and stuff[0][0] != '[' and stuff[0] != "uninit" and stuff[
+                        0] != "nonsensical":
+                    print('[', stuff[0], ']')
                 else:
-                    print stuff[0]
+                    print(stuff[0])
 
-                print stuff[1]
+                print(stuff[1])
             # Total cop out ... print blank
             else:
-                print varName
+                print(varName)
 
-                print "uninit"
+                print("uninit")
 
-                print "2"
+                print("2")
 
         # Blank line ends this ppt
-        print
+        print()
+
 
 # .dtrace States:
 # About to read in ...
@@ -259,7 +265,8 @@ def processPpt(pptName, varInfo):
 # 3 = modbit
 # 4 = Ignore nonce
 class DtraceState:
-    Uninit, VarName, Value, Modbit, IgnoreNonce = range(5)
+    Uninit, VarName, Value, Modbit, IgnoreNonce = list(range(5))
+
 
 dState = DtraceState.Uninit
 
@@ -313,7 +320,6 @@ for line in open(sys.argv[2], 'r'):
         curVarName = None
         curVarInfo = None
         dState = DtraceState.VarName
-
 
 ##ResultMap = {}
 
@@ -400,18 +406,15 @@ for line in open(sys.argv[2], 'r'):
 
 ##outputVarsF.write("\n")
 
-
 ### Filter KvasirPptNames to remove any program points that are NOT
 ### in the Dfec-generated .decls file:
 ##KvasirPptNames = [name for
 ##                  name in KvasirPptNames
 ##                  if (StripKvasirPptName(name) in DfecPptMap)]
 
-
 ###
 
 ##outputNoCompDeclsF.write("VarComparability\nnone\n\n");
-
 
 ##allDeclsFiles = [outputLackwitDeclsF,
 ##                 outputDynCompDeclsF,
@@ -484,12 +487,9 @@ for line in open(sys.argv[2], 'r'):
 ##    if isExit:
 ##        outputVarsF.write("\n")
 
-
 ###print '# Dfec ppts:', len(DfecPptMap.keys())
 ###print '# Kvasir ppts:', len(KvasirPptMap.keys())
 ###print '# Common ppts:', len(ResultMap.keys())
-
-
 
 ##for f in allDeclsFiles:
 ##    f.close()
