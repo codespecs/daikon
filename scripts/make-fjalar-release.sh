@@ -13,9 +13,9 @@
 
 # Alternate approach: check out from CVS instead
 mkdir /tmp/fjalar-release
-cd /tmp/fjalar-release
+cd /tmp/fjalar-release || exit
 cvs -d /afs/csail.mit.edu/group/pag/projects/invariants/.CVS co -P valgrind-3
-cd valgrind-3
+cd valgrind-3 || exit
 
 # - Remove all CVS/ directories:
 
@@ -51,16 +51,14 @@ find . -type d -name CVS | xargs rm -rf
 # diff -ur valgrind-kvasir valgrind \
 #   >$DAIKONDIR/kvasir/fjalar/notes/fjalar-release.patch
 
-patch -p0 <$DAIKONDIR/kvasir/fjalar/notes/fjalar-release.patch
+patch -p0 < "$DAIKONDIR/kvasir/fjalar/notes/fjalar-release.patch"
 
 # It would actually be nice to just do the autogen.sh again, since
 # that's all that really affects the release. But this is more
 # future-proof, and it has the side benefit of checking that the
 # release actually builds!
 ./auto-everything.sh
-cd valgrind
-make distclean
-cd ..
+(cd valgrind && make distclean)
 
 # - Remove notes subdirectory and other misc. subdirectories within fjalar/
 
@@ -79,7 +77,7 @@ ln -s valgrind-3/valgrind/fjalar fjalar-source
 # - Replace the valgrind-3/valgrind/fjalar/README file with the
 # following contents (below the line)
 
-cp $DAIKONDIR/kvasir/fjalar/notes/fjalar-release-README valgrind-3/valgrind/fjalar/README
+cp "$DAIKONDIR"/kvasir/fjalar/notes/fjalar-release-README valgrind-3/valgrind/fjalar/README
 
 # - ln -s valgrind-3/valgrind/fjalar/README README to create a
 # convenient link from the top level to the Fjalar README file
