@@ -272,6 +272,6 @@ public class CreateSpinfo {
     for (int i = 0; i < lines.length; i++) {
       lines[i] = lines[i].trim();
     }
-    return UtilPlume.join(lines, " ");
+    return String.join(" ", lines);
   }
 }

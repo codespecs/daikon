@@ -451,7 +451,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       code.append("retval_instrument = ");
     }
 
-    code.append("internal$" + name + "(" + UtilPlume.join(parameters, ", ") + ");");
+    code.append("internal$" + name + "(" + String.join(", ", parameters) + ");");
 
     exitChecks(code, matching_ppts, pptmap, declaredThrowables, isStatic);
 
@@ -929,7 +929,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "("
             + "Object thiz"
             + (parameters.size() > 0 ? ", " : "")
-            + UtilPlume.join(parameters, ", ")
+            + String.join(", ", parameters)
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -967,7 +967,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "Object thiz "
             + (returnType.equals("void") ? "" : ", " + returnType + " checker_returnval")
             + (parameters.size() > 0 ? ", " : "")
-            + UtilPlume.join(parameters, ", ")
+            + String.join(", ", parameters)
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -1001,7 +1001,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "Preconditions_"
             + methodName
             + "("
-            + UtilPlume.join(parameters, ", ")
+            + String.join(", ", parameters)
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -1037,7 +1037,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "("
             + "Object thiz "
             + (parameters.size() > 0 ? ", " : "")
-            + UtilPlume.join(parameters, ", ")
+            + String.join(", ", parameters)
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
@@ -1087,7 +1087,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     code.append("<INVINFO>");
     code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
     code.append("<DAIKON>" + daikonrep + "</DAIKON>");
-    code.append("<INV>" + UtilPlume.escapeNonJava(javarep) + "</INV>");
+    code.append("<INV>" + UtilPlume.escapeJava(javarep) + "</INV>");
     code.append("<DAIKONCLASS>" + inv.getClass().toString() + "</DAIKONCLASS>");
     code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature() + "</METHOD>");
     code.append("</INVINFO>");
@@ -1201,7 +1201,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "("
               + "Object thiz"
               + (parameters.size() > 0 ? ", " : "")
-              + UtilPlume.join(parameters, ", ")
+              + String.join(", ", parameters)
               + ") { /* no properties for this member */ }");
 
       code.append(
@@ -1215,7 +1215,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                   ? ""
                   : (", " + Ast.classnameForSourceOutput(m.getReturnType()) + " checker_returnval"))
               + (parameters.size() > 0 ? ", " : "")
-              + UtilPlume.join(parameters, ", ")
+              + String.join(", ", parameters)
               + ") { /* no properties for this member */ }");
     }
 
@@ -1248,7 +1248,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "Preconditions_"
               + baseClassName
               + "("
-              + UtilPlume.join(parameters, ", ")
+              + String.join(", ", parameters)
               + ") { /* no properties for this member */ }");
 
       code.append(
@@ -1259,7 +1259,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + "("
               + "Object thiz "
               + (parameters.size() > 0 ? ", " : "")
-              + UtilPlume.join(parameters, ", ")
+              + String.join(", ", parameters)
               + ") { /* no properties for this member */ }");
     }
 

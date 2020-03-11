@@ -146,21 +146,22 @@ jobs:
             - ".git"
       - run: ./scripts/test-misc.sh
 
-  kvasir-fedora-jdk8:
-    docker:
-      - image: mdernst/daikon-fedora-jdk8-plus
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-kvasir.sh
+  ## Flaky; needs to be fixed.
+  # kvasir-fedora-jdk8:
+  #   docker:
+  #     - image: mdernst/daikon-fedora-jdk8-plus
+  #   steps:
+  #     - restore_cache:
+  #         keys:
+  #           - source-v1-{{ .Branch }}-{{ .Revision }}
+  #           - source-v1-{{ .Branch }}-
+  #           - source-v1-
+  #     - checkout
+  #     - save_cache:
+  #         key: source-v1-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - ".git"
+  #     - run: ./scripts/test-kvasir.sh
 
   quick-txt-diff-centos-jdk8:
     docker:
@@ -307,9 +308,9 @@ workflows:
       - misc-fedora-jdk8:
           requires:
             - misc-ubuntu-jdk8
-      - kvasir-fedora-jdk8:
-          requires:
-            - kvasir-ubuntu-jdk8
+      # - kvasir-fedora-jdk8:
+      #     requires:
+      #       - kvasir-ubuntu-jdk8
       - quick-txt-diff-centos-jdk8:
           requires:
             - quick-txt-diff-ubuntu-jdk8
