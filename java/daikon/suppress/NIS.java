@@ -33,7 +33,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
 // Outstanding NIS todo list
@@ -1034,7 +1033,7 @@ public class NIS {
       for (int i = 0; i < vis.length; i++) {
         names[i] = vis[i].name();
       }
-      return suppressee + "[" + UtilPlume.join(names, ", ") + "]";
+      return suppressee + "[" + String.join(", ", names) + "]";
     }
   }
 

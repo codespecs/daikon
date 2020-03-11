@@ -22,7 +22,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
@@ -237,7 +236,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
       clauses.add(String.format("(%s == %s)", leaderName, var.name()));
     }
-    return UtilPlume.join(clauses, " && ");
+    return String.join(" && ", clauses);
   }
 
   public String format_esc(@GuardSatisfied Equality this) {
@@ -375,7 +374,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         }
       }
     }
-    return UtilPlume.join(clauses, " && ");
+    return String.join(" && ", clauses);
   }
 
   @SideEffectFree

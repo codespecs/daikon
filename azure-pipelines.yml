@@ -104,15 +104,16 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: kvasir_fedora_jdk8
-  pool:
-    vmImage: 'ubuntu-18.04'
-  container: mdernst/daikon-fedora-jdk8-plus:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-kvasir.sh
-    displayName: test-kvasir.sh
+## Flaky; needs to be fixed.
+# - job: kvasir_fedora_jdk8
+#   pool:
+#     vmImage: 'ubuntu-18.04'
+#   container: mdernst/daikon-fedora-jdk8-plus:latest
+#   steps:
+#   - checkout: self
+#     fetchDepth: 25
+#   - bash: ./scripts/test-kvasir.sh
+#     displayName: test-kvasir.sh
 
 - job: quick_txt_diff_centos_jdk8
   pool:
