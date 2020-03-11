@@ -22,7 +22,6 @@ endif
 # Set the NONETWORK variable to avoid network operations.  Example:
 #   make NONETWORK=true compile
 
-
 # note that for right now, we are only copying the html and texinfo
 # versions of the developer manual (though the PDF version is also built)
 IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.dot
