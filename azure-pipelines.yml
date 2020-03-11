@@ -1,8 +1,8 @@
 jobs:
 
-- job: quick_txt_diff_ubuntu
+- job: quick_txt_diff_ubuntu_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-ubuntu-jdk8:latest
   steps:
   - checkout: self
@@ -10,9 +10,9 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu
+- job: nonquick_txt_diff_ubuntu_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-ubuntu-jdk8:latest
   steps:
   - checkout: self
@@ -20,9 +20,9 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: non_txt_diff_ubuntu
+- job: non_txt_diff_ubuntu_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-ubuntu-jdk8:latest
   steps:
   - checkout: self
@@ -30,9 +30,9 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: misc_ubuntu
+- job: misc_ubuntu_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
   steps:
   - checkout: self
@@ -40,9 +40,9 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: kvasir_ubuntu
+- job: kvasir_ubuntu_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
   steps:
   - checkout: self
@@ -50,9 +50,9 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: typecheck
+- job: typecheck_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-ubuntu-jdk8:latest
   steps:
   - checkout: self
@@ -64,9 +64,9 @@ jobs:
   - bash: ./scripts/test-typecheck.sh
     displayName: test-typecheck.sh
 
-- job: quick_txt_diff_fedora
+- job: quick_txt_diff_fedora_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-fedora-jdk8:latest
   steps:
   - checkout: self
@@ -74,9 +74,9 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: nonquick_txt_diff_fedora
+- job: nonquick_txt_diff_fedora_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-fedora-jdk8:latest
   steps:
   - checkout: self
@@ -84,9 +84,9 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: non_txt_diff_fedora
+- job: non_txt_diff_fedora_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-fedora-jdk8:latest
   steps:
   - checkout: self
@@ -94,9 +94,9 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: misc_fedora
+- job: misc_fedora_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-fedora-jdk8:latest
   steps:
   - checkout: self
@@ -104,9 +104,9 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: kvasir_fedora
+- job: kvasir_fedora_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-fedora-jdk8-plus:latest
   steps:
   - checkout: self
@@ -114,9 +114,9 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: quick_txt_diff_centos
+- job: quick_txt_diff_centos_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
@@ -124,9 +124,9 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: nonquick_txt_diff_centos
+- job: nonquick_txt_diff_centos_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
@@ -134,9 +134,9 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: non_txt_diff_centos
+- job: non_txt_diff_centos_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
@@ -144,9 +144,9 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: misc_centos
+- job: misc_centos_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-centos-jdk8:latest
   steps:
   - checkout: self
@@ -154,9 +154,9 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: kvasir_centos
+- job: kvasir_centos_jdk8
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   container: mdernst/daikon-centos-jdk8-plus:latest
   steps:
   - checkout: self
