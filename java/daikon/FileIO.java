@@ -2995,6 +2995,6 @@ public final class FileIO {
       }
       nd_stack.add(si);
     }
-    return UtilPlume.join(nd_stack, "|").intern();
+    return String.join("|", nd_stack).intern();
   }
 }

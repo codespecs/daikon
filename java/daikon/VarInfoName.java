@@ -101,7 +101,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     // a quoted string
     if (name.startsWith("\"") && name.endsWith("\"")) {
       String content = name.substring(1, name.length() - 1);
-      if (content.equals(UtilPlume.escapeNonJava(UtilPlume.unescapeNonJava(content)))) {
+      if (content.equals(UtilPlume.escapeJava(UtilPlume.unescapeJava(content)))) {
         return (new Simple(name)).intern();
       }
     }
@@ -1076,7 +1076,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     private String elts_repr_commas(@GuardSatisfied FunctionOfN this) {
-      return UtilPlume.join(elts_repr(), ", ");
+      return String.join(", ", elts_repr());
     }
 
     @Override
@@ -1154,7 +1154,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       for (VarInfoName vin : args) {
         elts.add(vin.identifier_name());
       }
-      return function + "_of_" + UtilPlume.join(elts, "_comma_") + "___";
+      return function + "_of_" + String.join("_comma_", elts) + "___";
     }
 
     /** Shortcut getter to avoid repeated type casting. */
