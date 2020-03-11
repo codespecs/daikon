@@ -596,7 +596,7 @@ public class NISuppression {
     String suppressorsString =
         (suppressors.length == 1)
             ? suppressors[0].toString()
-            : "(" + UtilPlume.join(suppressors, " && ") + ")";
+            : "(" + UtilPlume.join(" && ", suppressors) + ")";
     return suppressorsString + " ==> " + suppressee;
   }
 

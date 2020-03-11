@@ -10,7 +10,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
@@ -51,14 +50,14 @@ public class AndJoiner extends Joiner {
       invStrings.add(inv.format_using(format));
     }
     if (format == OutputFormat.DAIKON) {
-      return UtilPlume.join(invStrings, " and ");
+      return String.join(" and ", invStrings);
     } else if (format == OutputFormat.ESCJAVA
         || format.isJavaFamily()
         || format == OutputFormat.CSHARPCONTRACT) {
       // Forrest
-      return "(" + UtilPlume.join(invStrings, ") && (") + ")";
+      return "(" + String.join(", invStrings) && (") + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
-      return "(AND" + UtilPlume.join(invStrings, " ") + ")";
+      return "(AND" + String.join(" ", invStrings) + ")";
     } else {
       return format_unimplemented(format);
     }
