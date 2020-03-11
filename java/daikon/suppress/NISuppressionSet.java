@@ -629,6 +629,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied NISuppressionSet this) {
-    return "{ " + UtilPlume.join(suppression_set, ", ") + " }";
+    return "{ " + UtilPlume.join(", ", suppression_set) + " }";
   }
 }
