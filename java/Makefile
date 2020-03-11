@@ -681,7 +681,7 @@ error-prone: errorprone
 errorprone: compile errorprone-nocompile
 errorprone-nocompile:
 	${MAKE} lib/tmp/${ERRORPRONE_JAR_FILE}
-	java -cp ${DAIKON_CLASSPATH} -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
+	java -cp ${DAIKON_CLASSPATH} -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Werror -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
 ## For 2.3.2 and later (but it isn't working for me):
 # 	javac \
 # 	  -J-Xbootclasspath/p:javac-9+181-r4173-1.jar \
