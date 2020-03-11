@@ -257,7 +257,7 @@ public class BuildJDK {
         translate_modules_directory(module, module.toString().length());
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new Error(e);
     }
   }
 
@@ -269,7 +269,7 @@ public class BuildJDK {
           translate_modules_directory(subpath, modulePrefixLength);
         }
       } catch (IOException e) {
-        e.printStackTrace();
+        throw new Error(e);
       }
     } else {
       try {
