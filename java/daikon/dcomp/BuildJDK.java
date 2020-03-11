@@ -258,8 +258,7 @@ public class BuildJDK {
     FileSystem fs = FileSystems.getFileSystem(URI.create("jrt:/"));
     Path modules = fs.getPath("/modules");
     System.out.printf("using modules file %s%n", System.getProperty("java.home") + "/lib/modules");
-    try {
-      DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modules, "java.base*");
+    try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modules, "java.base*")) {
       for (Path module : directoryStream) {
         translate_modules_directory(module, module.toString().length());
       }
@@ -271,8 +270,7 @@ public class BuildJDK {
   void translate_modules_directory(Path path, int modulePrefixLength) {
 
     if (Files.isDirectory(path)) {
-      try {
-        DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
+      try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
         for (Path subpath : directoryStream) {
           translate_modules_directory(subpath, modulePrefixLength);
         }
