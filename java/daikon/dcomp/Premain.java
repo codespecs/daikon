@@ -199,7 +199,8 @@ public class Premain {
     ClassLoader loader = new daikon.chicory.ChicoryPremain.ChicoryLoader();
     try {
       transformer =
-          loader.loadClass("daikon.dcomp.Instrument").getDeclaredConstructor().newInstance();
+          (ClassFileTransformer)
+              loader.loadClass("daikon.dcomp.Instrument").getDeclaredConstructor().newInstance();
       @SuppressWarnings("unchecked")
       Class<Instrument> c = (Class<Instrument>) transformer.getClass();
       if (DynComp.verbose) {

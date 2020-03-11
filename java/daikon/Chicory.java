@@ -177,8 +177,7 @@ public class Chicory {
     Options options = new Options(synopsis, Chicory.class);
     options.setParseAfterArg(false);
     String[] target_args = options.parse(true, args);
-    boolean ok = check_args(options, target_args);
-    if (!ok) System.exit(1);
+    check_args(options, target_args);
 
     // Turn on basic logging if the debug was selected
     basic.enabled = debug;
@@ -204,24 +203,20 @@ public class Chicory {
   }
 
   /**
-   * Check the resulting arguments for legality. Prints a message and returns false if there was an
+   * Check the command-line arguments for legality. Prints a message and exits if there was an
    * error.
    */
-  public static boolean check_args(Options options, String[] target_args) {
-
-    // Make sure arguments have legal values
+  public static void check_args(Options options, String[] target_args) {
     if (nesting_depth < 0) {
       System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
       options.printUsage();
-      return false;
+      System.exit(1);
     }
     if (target_args.length == 0) {
       System.out.println("target program must be specified");
       options.printUsage();
-      return false;
+      System.exit(1);
     }
-
-    return true;
   }
 
   /**

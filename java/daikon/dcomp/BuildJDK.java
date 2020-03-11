@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipException;
 import org.apache.bcel.*;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
@@ -40,14 +39,14 @@ import org.apache.bcel.generic.*;
  */
 public class BuildJDK {
 
-  @Option("Instrument the given classfile list)")
+  /** The "java.home" system property. */
+  public static final String java_home = System.getProperty("java.home");
+
+  @Option("Instrument the classfiles given on the command line")
   public static boolean classfiles = false;
 
-  @Option("Don't continue after instrumentation error")
+  @Option("Halt if an instrumentation error occurs")
   public static boolean quit_if_error = false;
-
-  /** Synopsis for the dcomp command line. */
-  public static final String synopsis = "daikon.BuildJDK [options] dest [classfiles...]";
 
   private static boolean verbose = false;
 
@@ -59,19 +58,23 @@ public class BuildJDK {
 
   private static List<String> skipped_methods = new ArrayList<>();
 
-  public static String[] known_skipped_methods = new String[] {};
+  public static List<String> known_uninstrumentable_methods =
+      Arrays.asList(
+          // None at present
+          );
 
   private Map<String, InputStream> classmap = new HashMap<>();
 
   /** Instruments each class file in Java runtime and puts the result in dest. */
   public static void main(String[] args) throws IOException {
 
-    System.out.println("Starting at " + new Date());
+    System.out.println("BuildJDK starting at " + new Date());
 
-    Options options = new Options(synopsis, BuildJDK.class, DynComp.class);
+    Options options =
+        new Options(
+            "daikon.BuildJDK [options] dest [classfiles...]", BuildJDK.class, DynComp.class);
     String[] cl_args = options.parse(true, args);
-    boolean ok = check_args(options, cl_args);
-    if (!ok) System.exit(1);
+    check_args(options, cl_args);
     verbose = DynComp.verbose;
 
     BuildJDK build = new BuildJDK();
@@ -81,16 +84,16 @@ public class BuildJDK {
 
       // Arguments are <destdir> <classfiles>...
       File[] class_files = new File[cl_args.length - 1];
-      for (int ii = 1; ii < cl_args.length; ii++) {
-        class_files[ii - 1] = new File(cl_args[ii]);
+      for (int i = 1; i < cl_args.length; i++) {
+        class_files[i - 1] = new File(cl_args[i]);
       }
 
-      // The classfiles argument is usually used to do some testing.
+      // The classfiles argument is usually used for testing.
       // But if we're using it to fix a broken classfile, then we need
       // to restore the static map from when our runtime jar was originally
       // built.  We assume it is in the destination directory.
       DCInstrument.restore_static_map(new File(dest_dir, static_map_fname));
-      System.out.printf("Restored %d entries in static map%n", DCInstrument.static_map.size());
+      System.out.printf("Restored %d entries in static map.%n", DCInstrument.static_map.size());
 
       // Read in each specified classfile
       for (File class_file : class_files) {
@@ -124,81 +127,79 @@ public class BuildJDK {
       } else {
         build.translate_jar();
       }
-      build.translate_classes(build, dest_dir);
+      build.translate_classes(dest_dir);
 
       // Write out the static map
-      System.out.printf("Found %d statics%n", DCInstrument.static_map.size());
+      System.out.printf("Found %d statics.%n", DCInstrument.static_map.size());
       DCInstrument.save_static_map(new File(dest_dir, static_map_fname));
 
       // Write out the list of all classes in the jar file
       File jdk_classes_dir = new File(dest_dir, "java/lang");
       File jdk_classes_file = new File(jdk_classes_dir, "jdk_classes.txt");
-      PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name());
       System.out.printf("Writing all classes to %s%n", jdk_classes_file);
-      pw.println("no_primitives: " + DynComp.no_primitives);
-      for (String classname : all_classes) {
-        pw.println(classname);
+      try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
+        pw.println("no_primitives: " + DynComp.no_primitives);
+        for (String classname : all_classes) {
+          pw.println(classname);
+        }
       }
-      pw.flush();
-      pw.close();
 
       // Print out any methods that could not be instrumented
       print_skipped_methods();
     }
-    System.out.println("done at " + new Date());
+    System.out.println("BuildJDK done at " + new Date());
   }
 
   /**
    * Check the arguments for legality. Verify java.home and JAVA_HOME match. Prints a message and
    * returns false if there is an error.
    */
-  public static boolean check_args(Options options, String[] target_args) {
+  public static void check_args(Options options, String[] target_args) {
 
     if (classfiles) {
       if (target_args.length < 1) {
         System.out.println("must specify destination dir");
         options.printUsage();
-        return false;
+        System.exit(1);
       }
       if (target_args.length < 2) {
         System.out.println("must specify classfiles to instrument");
         options.printUsage();
-        return false;
+        System.exit(1);
       }
     } else {
       if (target_args.length < 1) {
         System.out.println("must specify source jar and destination dir");
         options.printUsage();
-        return false;
+        System.exit(1);
       }
       if (target_args.length > 1) {
-        System.out.println("too many arguments");
+        System.out.println("too many arguments: found " + target_args.length + ", expected 1");
         options.printUsage();
-        return false;
+        System.exit(1);
       }
     }
 
-    String java_home = System.getProperty("java.home");
     String JAVA_HOME = System.getenv("JAVA_HOME");
     if (JAVA_HOME == null) {
       if (verbose) {
         System.out.println("JAVA_HOME not defined; using java.home:");
         System.out.println("  " + java_home);
       }
-      return true;
+      JAVA_HOME = java_home;
     }
 
     File jrt = new File(JAVA_HOME);
     if (!jrt.exists()) {
       System.out.printf("Directory at JAVA_HOME (%s) does not exist.%n", jrt);
-      return false;
+      System.exit(1);
     }
 
     try {
       jrt = jrt.getCanonicalFile();
     } catch (Exception e) {
-      System.out.printf("Error geting canonical file at JAVA_HOME: %s.", jrt);
-      return false;
+      System.out.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
+      System.exit(1);
     }
 
     JAVA_HOME = jrt.getAbsolutePath();
@@ -206,12 +207,11 @@ public class BuildJDK {
       System.out.printf(
           "JAVA_HOME (%s) does not agree with java.home (%s).%n", JAVA_HOME, java_home);
       System.out.printf("Please correct your Java environment.%n");
-      return false;
+      System.exit(1);
     }
-
-    return true;
   }
 
+  // In Java 9 and later, just call: inputStream.transferTo(outputstream), then close the streams.
   void copyStreams(InputStream fis, OutputStream fos) throws Exception {
     byte[] buf = new byte[1024];
     int i = 0;
@@ -224,16 +224,10 @@ public class BuildJDK {
 
   void translate_jar() throws java.io.IOException {
 
-    JarFile jfile;
-    String jar_name = System.getProperty("java.home") + "/lib/rt.jar";
+    String jar_name = java_home + "/lib/rt.jar";
     System.out.printf("using jar file %s%n", jar_name);
     try {
-      jfile = new JarFile(jar_name);
-    } catch (ZipException e) {
-      throw new ZipException(e.getMessage() + "; jar file was " + jar_name);
-    }
-
-    try {
+      JarFile jfile = new JarFile(jar_name);
       // Get each class to be instrumented and store it away
       Enumeration<JarEntry> entries = jfile.entries();
       while (entries.hasMoreElements()) {
@@ -249,7 +243,7 @@ public class BuildJDK {
         classmap.put(entryName, is);
       }
     } catch (Exception e) {
-      throw new Error(e);
+      throw new Error("Problem while reading " + jar_name, e);
     }
   }
 
@@ -257,7 +251,7 @@ public class BuildJDK {
 
     FileSystem fs = FileSystems.getFileSystem(URI.create("jrt:/"));
     Path modules = fs.getPath("/modules");
-    System.out.printf("using modules file %s%n", System.getProperty("java.home") + "/lib/modules");
+    System.out.printf("using modules file %s%n", java_home + "/lib/modules");
     try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modules, "java.base*")) {
       for (Path module : directoryStream) {
         translate_modules_directory(module, module.toString().length());
@@ -290,7 +284,7 @@ public class BuildJDK {
     }
   }
 
-  void translate_classes(BuildJDK build, File dest_dir) throws java.io.IOException {
+  void translate_classes(File dest_dir) throws java.io.IOException {
 
     try {
       // Create the destination directory
@@ -298,15 +292,18 @@ public class BuildJDK {
 
       // Process each file.
       for (String className : classmap.keySet()) {
-        if (verbose) System.out.println(className);
+        if (verbose) System.out.println("translate_classes: " + className);
 
         if (className.equals("module-info.class")) {
           System.out.printf("Skipping file %s%n", className);
           continue;
         }
 
-        if (className.endsWith(".class")) all_classes.add(className.replace(".class", ""));
+        if (className.endsWith(".class")) {
+          all_classes.add(className.replace(".class", ""));
+        }
         if (!className.endsWith(".class") || className.equals("java/lang/Object.class")) {
+          // Copy non-.class files (and Object.class) unchanged.
           File destfile = new File(className);
           if (destfile.getParent() == null || BcelUtil.javaVersion > 8) {
             if (verbose) System.out.printf("Skipping file %s%n", destfile);
@@ -332,15 +329,15 @@ public class BuildJDK {
 
         // Instrument the class file.
         try {
-          build.processClassFile(jc, dest_dir, className);
+          processClassFile(jc, dest_dir, className);
         } catch (Throwable e) {
           throw new Error("Couldn't instrument " + className, e);
         }
       }
 
-      // bit of a hack, but seems ok
+      // A bit of a hack, but seems OK.
       int java_class_version = BcelUtil.javaVersion + 44;
-      String dest = dest_dir.getName();
+      String dest_dir_name = dest_dir.getName();
 
       // Create the DcompMarker class (used to identify instrumented calls)
       ClassGen dcomp_marker =
@@ -356,7 +353,8 @@ public class BuildJDK {
           .getJavaClass()
           .dump(
               new File(
-                  dest, "java" + File.separator + "lang" + File.separator + "DCompMarker.class"));
+                  dest_dir_name,
+                  "java" + File.separator + "lang" + File.separator + "DCompMarker.class"));
 
       if (BcelUtil.javaVersion > 8) {
         // Create the DcompInstrumented interface
@@ -386,7 +384,7 @@ public class BuildJDK {
             .getJavaClass()
             .dump(
                 new File(
-                    dest,
+                    dest_dir_name,
                     "java" + File.separator + "lang" + File.separator + "DCompInstrumented.class"));
 
         // Create the DCompClone interface
@@ -403,7 +401,8 @@ public class BuildJDK {
             .getJavaClass()
             .dump(
                 new File(
-                    dest, "java" + File.separator + "lang" + File.separator + "DCompClone.class"));
+                    dest_dir_name,
+                    "java" + File.separator + "lang" + File.separator + "DCompClone.class"));
 
         // Create the DCompToString interface
         ClassGen dcomp_tostring =
@@ -419,7 +418,7 @@ public class BuildJDK {
             .getJavaClass()
             .dump(
                 new File(
-                    dest,
+                    dest_dir_name,
                     "java" + File.separator + "lang" + File.separator + "DCompToString.class"));
       }
 
@@ -474,39 +473,28 @@ public class BuildJDK {
       return;
     }
 
-    // Determine if all of them were known to be bad
-    List<String> known_bad_list = Arrays.asList(known_skipped_methods);
-    boolean all_known = true;
-    for (String method : skipped_methods) {
-      if (!known_bad_list.contains(method)) {
-        all_known = false;
-        break;
-      }
-    }
+    System.out.println(
+        "Warning: The following JDK methods could not be instrumented. DynComp will");
+    System.out.println("still work as long as these methods are not called by your application.");
+    System.out.println("If your application calls one, it will throw a NoSuchMethodException.");
 
-    if (all_known) {
-      System.out.printf(
-          "Warning, the following JDK methods could not be instrumented.%n"
-              + "These are known problems.  DynComp will still work as long as%n"
-              + "these methods are not called by your applications.%n"
-              + "If your application calls one, it will throw a NoSuchMethodException.%n");
-      for (String method : skipped_methods) {
+    List<String> unknown = new ArrayList<>(skipped_methods);
+    unknown.removeAll(known_uninstrumentable_methods);
+    List<String> known = new ArrayList<>(skipped_methods);
+    known.retainAll(known_uninstrumentable_methods);
+
+    if (!unknown.isEmpty()) {
+      System.out.println("Please report the following problems to the Daikon maintainers.");
+      System.out.println(
+          "Please give sufficient details; see \"Reporting problems\" in the Daikon manual.");
+      for (String method : unknown) {
         System.out.printf("  %s%n", method);
       }
-    } else { // some methods have not been previously seen
-      System.out.printf(
-          "Warning: the following JDK methods could not be instrumented.%n"
-              + "Please report any line that starts with [unexpected] so we can look into them.%n"
-              + "Please give sufficient details; see \"Reporting problems\" in the Daikon manual.%n"
-              + "DynComp will still work as long as these methods are not called%n"
-              + "by your applications.%n"
-              + "If your application calls one, it will throw a NoSuchMethodException.%n");
-      for (String method : skipped_methods) {
-        if (known_bad_list.contains(method)) {
-          System.out.printf("  %s%n", method);
-        } else {
-          System.out.printf("  [unexpected] %s%n", method);
-        }
+    }
+    if (!known.isEmpty()) {
+      System.out.printf("The following are known problems; you do not need to report them.");
+      for (String method : known) {
+        System.out.printf("  %s%n", method);
       }
     }
   }
