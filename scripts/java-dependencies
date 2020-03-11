@@ -20,7 +20,7 @@ debug=
 
 # get the arguments
 if [ $# -ne 3 ]; then
-    echo `basename $0`" takes 3 arguments, but $# were supplied"
+    echo $(basename $0)" takes 3 arguments, but $# were supplied"
     exit 1
 fi
 sources="$1"
@@ -29,13 +29,13 @@ javac="$3"
 
 # Determine if we have GNU find.  GNU find requires -noleaf on AFS filesystems.
 find_args=""
-gnu=`find --version 2>&1 | grep -c GNU`
+gnu=$(find --version 2>&1 | grep -c GNU)
 if [ $gnu ] ; then
   find_args="-noleaf"
 fi
 
 # compile the java files
-scratch=`mktemp -d -t build_all_list_file.XXXXXX`
+scratch=$(mktemp -d -t build_all_list_file.XXXXXX)
 $javac -d $scratch -sourcepath $sources $main
 if [ $status ] ; then
   exit 1
@@ -46,7 +46,7 @@ fi
 # discard the file (this happens for inner classes, two classes in a file,
 # and perhaps some other cases).
 cd $scratch
-files=`find . $find_args -name '*.class' | fgrep -v '$' | sed s/class/java/ | sed 's/\.\///' | sort`
+files=$(find . $find_args -name '*.class' | fgrep -v '$' | sed s/class/java/ | sed 's/\.\///' | sort)
 for file in $files; do
   if [ -e $sources/$file ] ; then
     echo $file
