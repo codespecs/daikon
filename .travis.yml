@@ -22,15 +22,14 @@ env:
     - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
     - OS=ubuntu JDKVER=jdk8-plus GROUP=misc
     - OS=ubuntu JDKVER=jdk8-plus GROUP=kvasir
-## Fedora 23 is old, don't bother testing it any more.
-#  - OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
 ## Fails on Travis but not on CircleCI.
 ## This might be https://bugs.openjdk.java.net/browse/JDK-8215542
 #    - OS=fedora JDKVER=jdk8-plus GROUP=misc
-    - OS=fedora JDKVER=jdk8-plus GROUP=kvasir
+## Flaky; needs to be fixed.
+#    - OS=fedora JDKVER=jdk8-plus GROUP=kvasir
     - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
 ## Fails on Travis but not on CircleCI.
 ## This might be https://bugs.openjdk.java.net/browse/JDK-8215542

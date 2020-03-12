@@ -73,7 +73,7 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
-DOCLETPATH := ${DAIKONDIR}/java/lib/plume-util-1.0.10.jar:${DAIKONDIR}/java/lib/bcel-util-1.1.8.jar:${DAIKONDIR}/java/lib/reflection-util-0.2.2.jar:${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
+DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -495,6 +495,7 @@ dyncomp-test-jdk dcomp-test-jdk : dcomp_premain.jar
 	-diff -u daikon/dcomp/jdk_dcomp_out.goal daikon/dcomp/jdk_dcomp_out.txt \
 	  > daikon/dcomp/jdk_dcomp_out.diff
 	@cat daikon/dcomp/jdk_dcomp_out.diff
+# TODO: This produces output in nondeterministic order
 	@find daikon/dcomp -name '*.diff' -printf "%8s    %p\n"
 
 dyncomp-update-goals dcomp-update-goals:
@@ -1022,6 +1023,7 @@ tests: junit
 check-serialize:
 #	for each non-gui class, run serialver
 #	accept only "is not Serializable" or "UID = 200#####" as output
+# TODO: This produces ouput in nondeterministic order
 	@find daikon -follow -name 'gui' -prune -o -name '*.class' -print | perl -ne 's|\.class\n$$||; s|/|.|g; print "Checking $$_... \t"; $$_ =~ s|\$$|\\\$$|g; $$msg =`serialver -J-Djava.compiler=NONE $$_ 2>&1`; if ($$msg =~ m/is not Serializable/) { print "ok (not serialized)\n"; next; } if ($$msg =~m/UID = (200\d[01]\d[0123]\d)L;/) { print "ok ($$1)\n"; next; }  print "WARNING: incorrect: $$msg";'
 
 

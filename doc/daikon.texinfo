@@ -3965,7 +3965,7 @@ If the instrumented JDK is in a non-standard location, use the
 @option{--rt-file} switch to specify its location, or change your classpath
 to include it.
 
-One final note: if you update your JDK in any way (such as a OS upgrade),
+One final note: if you update your JDK in any way (such as an OS upgrade),
 you will need to rebuild @file{dcomp_rt.jar}.
 
 
