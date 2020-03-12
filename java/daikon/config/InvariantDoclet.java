@@ -354,7 +354,9 @@ public class InvariantDoclet {
           try {
             c = ReflectionPlume.classForName(classname);
           } catch (Throwable e) {
-            System.err.printf("Exception in ReflectionPlume.classForName(%s): %s", fullname, e);
+            System.err.printf(
+                "Exception in ReflectionPlume.classForName(%s); fullname=%s: %s%n",
+                classname, fullname, e);
             return -1;
           }
           Field f = c.getField(enable_name);
