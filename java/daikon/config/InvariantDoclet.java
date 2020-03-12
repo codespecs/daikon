@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.ReflectionPlume;
@@ -259,7 +260,8 @@ public class InvariantDoclet {
       }
 
       // Make sure that all invariants have enable variables
-      if (true && (find_enabled(dc) == -1)) {
+      Boolean enabledInitValue = find_enabled(dc);
+      if (enabledInitValue == null) {
         boolean ok_without_enable = false;
         for (String re : invs_without_enables) {
           if (dc.name().matches("^" + re + "$")) {
@@ -267,11 +269,13 @@ public class InvariantDoclet {
             break;
           }
         }
-        if (!ok_without_enable) throw new RuntimeException("No enable variable for " + dc.name());
+        if (!ok_without_enable) {
+          throw new Error("No enable variable for " + dc.name());
+        }
       }
 
       // Note whether this invariant is turned off by default
-      if (find_enabled(dc) == 0) {
+      if (enabledInitValue != null && !enabledInitValue) {
         out.println();
         out.println("This invariant is not enabled by default.  See the configuration option");
         out.println("@samp{" + dc + ".enabled}.");
@@ -333,9 +337,9 @@ public class InvariantDoclet {
    * Looks for a field named dkconfig_enabled in the class and find out what it is initialized to.
    *
    * @param cd class in which to look for dkconfig_enabled
-   * @return 1 for true, 0 for false, -1 if there was an error or there was no such field
+   * @return the setting for the dkconfig_enabled variable in the class, or null if no such field
    */
-  public int find_enabled(ClassDoc cd) {
+  public @Nullable Boolean find_enabled(ClassDoc cd) {
 
     String enable_name = Configuration.PREFIX + "enabled";
     // System.out.println ("Looking for " + enable_name);
@@ -354,24 +358,22 @@ public class InvariantDoclet {
           try {
             c = ReflectionPlume.classForName(classname);
           } catch (Throwable e) {
-            System.err.printf("Exception in ReflectionPlume.classForName(%s): %s", fullname, e);
-            return -1;
+            throw new Error(
+                String.format(
+                    "Exception in ReflectionPlume.classForName(%s); fullname=%s%n",
+                    classname, fullname),
+                e);
           }
           Field f = c.getField(enable_name);
           @SuppressWarnings("nullness") // f has boolean type, so result is non-null Boolean
           @NonNull Object value = f.get(null);
-          if (((Boolean) value).booleanValue()) {
-            return 1;
-          } else {
-            return 0;
-          }
+          return (Boolean) value;
         } catch (Exception e) {
-          System.err.println(e);
-          return -1;
+          throw new Error("In find_enabled(" + cd + ")", e);
         }
       }
     }
-    return -1;
+    return null;
   }
 
   /**
