@@ -359,7 +359,7 @@ public class InvariantDoclet {
           } catch (Throwable e) {
             throw new Error(
                 String.format(
-                    "Exception in ReflectionPlume.classForName(%s); fullname=%s: %s%n",
+                    "Exception in ReflectionPlume.classForName(%s); fullname=%s%n",
                     classname, fullname),
                 e);
           }
