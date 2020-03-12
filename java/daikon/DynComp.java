@@ -45,7 +45,7 @@ public class DynComp {
 
   @Option("Output file for comparability sets")
   // If null, do no output
-  public static @Nullable File comparability_file = null;
+  public static @MonotonicNonNull File comparability_file = null;
 
   @Option("Only process program points matching the regex")
   public static List<Pattern> ppt_select_pattern = new ArrayList<>();
@@ -77,7 +77,7 @@ public class DynComp {
 
   @Option("Trace output file")
   // Null if shouldn't do output
-  public static @Nullable File trace_file = null;
+  public static @MonotonicNonNull File trace_file = null;
 
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;
@@ -120,8 +120,7 @@ public class DynComp {
     Options options = new Options(synopsis, DynComp.class);
     // options.ignore_options_after_arg (true);
     String[] target_args = options.parse(true, args);
-    boolean ok = check_args(options, target_args);
-    if (!ok) System.exit(1);
+    check_args(options, target_args);
 
     // Turn on basic logging if the debug was selected
     basic.enabled = debug;
@@ -147,21 +146,19 @@ public class DynComp {
   }
 
   /**
-   * Check the resulting arguments for legality. Prints a message and returns false if there was an
+   * Check the command-line arguments for legality. Prints a message and exits if there was an
    * error.
    */
-  public static boolean check_args(Options options, String[] target_args) {
-
-    // Make sure arguments have legal values
+  public static void check_args(Options options, String[] target_args) {
     if (nesting_depth < 0) {
       System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
       options.printUsage();
-      return false;
+      System.exit(1);
     }
     if (target_args.length == 0) {
       System.out.println("target program must be specified");
       options.printUsage();
-      return false;
+      System.exit(1);
     }
     if (rt_file != null && rt_file.getName().equalsIgnoreCase("NONE")) {
       no_jdk = true;
@@ -171,10 +168,8 @@ public class DynComp {
       // if --rt-file was given, but doesn't exist
       System.out.printf("rt-file %s does not exist%n", rt_file);
       options.printUsage();
-      return false;
+      System.exit(1);
     }
-
-    return true;
   }
 
   /**
