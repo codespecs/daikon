@@ -35,7 +35,7 @@ if [ $gnu ] ; then
 fi
 
 # compile the java files
-scratch=`mktemp -d -t build_all_list_file.XXXXXX`
+scratch=$(mktemp -d -t build_all_list_file.XXXXXX)
 $javac -d $scratch -sourcepath $sources $main
 if [ $status ] ; then
   exit 1
@@ -46,7 +46,7 @@ fi
 # discard the file (this happens for inner classes, two classes in a file,
 # and perhaps some other cases).
 cd $scratch
-files=`find . $find_args -name '*.class' | fgrep -v '$' | sed s/class/java/ | sed 's/\.\///' | sort`
+files=$(find . $find_args -name '*.class' | fgrep -v '$' | sed s/class/java/ | sed 's/\.\///' | sort)
 for file in $files; do
   if [ -e $sources/$file ] ; then
     echo $file
