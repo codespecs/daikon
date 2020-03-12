@@ -28,16 +28,15 @@ main="$2"
 javac="$3"
 
 # Determine if we have GNU find.  GNU find requires -noleaf on AFS filesystems.
+# Don't quote find_args when it is used.
 find_args=""
-gnu=`find --version 2>&1 | grep -c GNU`
-if [ $gnu ] ; then
+if [ find . --version 2>&1 | grep -q GNU ] ; then
   find_args="-noleaf"
 fi
 
 # compile the java files
 scratch=`mktemp -d -t build_all_list_file.XXXXXX`
-$javac -d $scratch -sourcepath $sources $main
-if [ $status ] ; then
+if ! $javac -d $scratch -sourcepath $sources $main ; then
   exit 1
 fi
 
