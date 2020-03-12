@@ -10,4 +10,4 @@ then
     echo "Kvasir is not built; to build it, run:    make -C $DAIKONDIR kvasir"
     exit 1
 fi
-$DAIKONDIR/fjalar/valgrind/inst/bin/valgrind --tool=fjalar "$@"
+"$DAIKONDIR/fjalar/valgrind/inst/bin/valgrind" --tool=fjalar "$@"
