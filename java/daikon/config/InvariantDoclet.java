@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.ReflectionPlume;
@@ -338,7 +339,7 @@ public class InvariantDoclet {
    * @param cd class in which to look for dkconfig_enabled
    * @return the setting for the dkconfig_enabled variable in the class, or null if no such field
    */
-  public Boolean find_enabled(ClassDoc cd) {
+  public @Nullable Boolean find_enabled(ClassDoc cd) {
 
     String enable_name = Configuration.PREFIX + "enabled";
     // System.out.println ("Looking for " + enable_name);
