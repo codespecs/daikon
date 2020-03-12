@@ -74,7 +74,7 @@ public class Premain {
               // When we create the instrumented version of these methods we
               // should include this annotation.  However, BCEL does not support
               // this at this time.  So for now, we do not instrument these methods.
-              // (There are many more in the Jdk sources, but so far no problems.)
+              // (There are many more in the JDK sources, but so far no problems.)
               "java.lang.Class.forName",
               "java.lang.Class.newInstance",
 
