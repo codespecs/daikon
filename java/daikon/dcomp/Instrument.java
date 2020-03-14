@@ -97,12 +97,6 @@ public class Instrument implements ClassFileTransformer {
           if (DynComp.verbose) System.out.printf("Skipping problem class %s%n", className);
           return null;
         }
-
-        if (className.startsWith("java/lang/invoke/VarHandleInts")) {
-          if (DynComp.verbose)
-            System.out.printf("Skipping java/lang/invoke/VarHandleInts class %s%n", className);
-          return null;
-        }
       }
 
       in_jdk = true;

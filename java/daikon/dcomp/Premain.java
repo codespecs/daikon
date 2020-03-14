@@ -61,7 +61,7 @@ public class Premain {
               // as they are used by LambdaExpressions.  Since BCEL won't let us
               // inspect the annotations, we must manually add to problem classes.
               "java.util.regex.Pattern$CharPredicate",
-              // <clinit> gets JNI during initialization.
+              // <clinit> gets a JNI error during initialization.
               "java.lang.StackTraceElement$HashedModules"));
 
   /** Set of methods known to cause problems when instrumented. */
@@ -210,7 +210,9 @@ public class Premain {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
 
-    // Check that we got a newer version of BCEL that includes JDK 11 support.
+    // Check that we got a newer version of BCEL that includes JDK 11 support. At present,
+    // this is only the PLSE 6.4.1.1 release version.  We can verify this version by the
+    // presence of the method FieldGenOrMethodGen.removeAnnotationEntries().
     try {
       Class<?> c = loader.loadClass("org.apache.bcel.generic.FieldGenOrMethodGen");
       c.getMethod("removeAnnotationEntries", (Class<?>[]) null);
