@@ -27,7 +27,7 @@ set -o pipefail
 
 export SHELLOPTS
 
-./.travis-build-without-test.sh
+make showvars compile daikon.jar
 
 # The JDK was built already; there is no need to rebuild it again.
 # Don't use "-d" to debug ant, because that results in a log so long
