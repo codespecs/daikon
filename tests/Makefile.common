@@ -224,13 +224,25 @@ default: help
 
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 startJVS := $(shell echo start$(JAVA_VERSION_STRING))
-ifneq (,$(findstring start1.,$(startJVS)))
-  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/1\.\(.\).*/\1/')
+ifneq (,$(findstring start1.8,$(startJVS)))
+  JAVA_RELEASE_NUMBER := 8
+  JAVA11_OR_NEWER := 0
 else
+  # Old Java releases (e.g. 7) will set JAVA_RELEASE_NUMBER to 1.
+  # This will cause the JAVA8_OR_NEWER test to fail as desired.
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
+    JAVA11_OR_NEWER := 1
+  else
+    JAVA11_OR_NEWER := 0
+  endif
 endif
-JAVA8_OR_NEWER := $(shell echo $(JAVA_RELEASE_NUMBER)\>7 | bc)
-JAVA11_OR_NEWER := $(shell echo $(JAVA_RELEASE_NUMBER)\>10 | bc)
+
+ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 8),1)
+  JAVA8_OR_NEWER := 1
+else
+  JAVA8_OR_NEWER := 0
+endif
 
 ifneq ($(JAVA8_OR_NEWER), 1)
     $(error Must use Java version 8 or later)

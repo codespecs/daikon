@@ -7,10 +7,8 @@ import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.nio.file.DirectoryStream;
@@ -34,8 +32,8 @@ import org.apache.bcel.generic.*;
 
 /**
  * Converts each file in the JDK. Each method is doubled. The new methods are distinguished by a
- * final parameter of type ?? and are instrumented to track comparability. User code will call the
- * new methods, but instrumentation code is unchanged and calls the original methods.
+ * final parameter of type DCompMarker and are instrumented to track comparability. User code will
+ * call the new methods, but instrumentation code is unchanged and calls the original methods.
  */
 public class BuildJDK {
 
@@ -45,6 +43,7 @@ public class BuildJDK {
   @Option("Instrument the classfiles given on the command line")
   public static boolean classfiles = false;
 
+  // Used for debugging; tested in DCInstrument.
   @Option("Halt if an instrumentation error occurs")
   public static boolean quit_if_error = false;
 
@@ -63,7 +62,10 @@ public class BuildJDK {
           // None at present
           );
 
-  private Map<String, InputStream> classmap = new HashMap<>();
+  // We want to share code to read members of a jar file (JDK 8) or members of a
+  // module file (JDK 9+). We accomplish this by saving an InputStream for
+  // each member class we find.
+  private Map<String, InputStream> class_stream_map = new HashMap<>();
 
   /** Instruments each class file in Java runtime and puts the result in dest. */
   public static void main(String[] args) throws IOException {
@@ -211,17 +213,6 @@ public class BuildJDK {
     }
   }
 
-  // In Java 9 and later, just call: inputStream.transferTo(outputstream), then close the streams.
-  void copyStreams(InputStream fis, OutputStream fos) throws Exception {
-    byte[] buf = new byte[1024];
-    int i = 0;
-    while ((i = fis.read(buf)) != -1) {
-      fos.write(buf, 0, i);
-    }
-    fis.close();
-    fos.close();
-  }
-
   void translate_jar() throws java.io.IOException {
 
     String jar_name = java_home + "/lib/rt.jar";
@@ -240,7 +231,7 @@ public class BuildJDK {
 
         // Get the InputStream for this file
         InputStream is = jfile.getInputStream(entry);
-        classmap.put(entryName, is);
+        class_stream_map.put(entryName, is);
       }
     } catch (Exception e) {
       throw new Error("Problem while reading " + jar_name, e);
@@ -277,7 +268,7 @@ public class BuildJDK {
         final String entryName = pathString.substring(modulePrefixLength + 1);
         // Get the InputStream for this file
         InputStream is = Files.newInputStream(path);
-        classmap.put(entryName, is);
+        class_stream_map.put(entryName, is);
       } catch (Exception e) {
         throw new Error(e);
       }
@@ -291,7 +282,7 @@ public class BuildJDK {
       dest_dir.mkdirs();
 
       // Process each file.
-      for (String className : classmap.keySet()) {
+      for (String className : class_stream_map.keySet()) {
         if (verbose) System.out.println("translate_classes: " + className);
 
         if (className.equals("module-info.class")) {
@@ -303,7 +294,8 @@ public class BuildJDK {
           all_classes.add(className.replace(".class", ""));
         }
         if (!className.endsWith(".class") || className.equals("java/lang/Object.class")) {
-          // Copy non-.class files (and Object.class) unchanged.
+          // Copy non-.class files (and Object.class) unchanged (JDK 8).
+          // For JDK 9+ we do not copy as these items will be loaded from the original module file.
           File destfile = new File(className);
           if (destfile.getParent() == null || BcelUtil.javaVersion > 8) {
             if (verbose) System.out.printf("Skipping file %s%n", destfile);
@@ -313,12 +305,14 @@ public class BuildJDK {
           dir.mkdirs();
           File destpath = new File(dir, destfile.getName());
           if (verbose) System.out.println("Copying Object or non-classfile: " + destpath);
-          copyStreams(classmap.get(className), new FileOutputStream(destpath));
+          try (InputStream in = class_stream_map.get(className)) {
+            Files.copy(in, destpath.toPath());
+          }
           continue;
         }
 
         // Get the binary for this class
-        InputStream is = classmap.get(className);
+        InputStream is = class_stream_map.get(className);
         JavaClass jc;
         try {
           ClassParser parser = new ClassParser(is, className);
@@ -335,11 +329,13 @@ public class BuildJDK {
         }
       }
 
+      // Convert from JDK version number to ClassFile major_version.
       // A bit of a hack, but seems OK.
       int java_class_version = BcelUtil.javaVersion + 44;
       String dest_dir_name = dest_dir.getName();
 
       // Create the DcompMarker class (used to identify instrumented calls)
+      // Needed for all JDK versions.
       ClassGen dcomp_marker =
           new ClassGen(
               "java.lang.DCompMarker",
@@ -356,6 +352,7 @@ public class BuildJDK {
                   dest_dir_name,
                   "java" + File.separator + "lang" + File.separator + "DCompMarker.class"));
 
+      // The remainer of the generated classes are needed for JDK 9+ only.
       if (BcelUtil.javaVersion > 8) {
         // Create the DcompInstrumented interface
         ClassGen dcomp_instrumented =
@@ -457,7 +454,8 @@ public class BuildJDK {
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
-          "Processed %d/%d classes at %tc%n", _numFilesProcessed, classmap.size(), new Date());
+          "Processed %d/%d classes at %tc%n",
+          _numFilesProcessed, class_stream_map.size(), new Date());
     }
   }
 
