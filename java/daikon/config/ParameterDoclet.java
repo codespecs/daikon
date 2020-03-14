@@ -1,7 +1,6 @@
 package daikon.config;
 
 import com.sun.javadoc.*;
-import daikon.plumelib.reflection.ReflectionPlume;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
@@ -11,6 +10,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
 
