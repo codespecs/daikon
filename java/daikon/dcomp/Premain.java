@@ -201,13 +201,12 @@ public class Premain {
       transformer =
           (ClassFileTransformer)
               loader.loadClass("daikon.dcomp.Instrument").getDeclaredConstructor().newInstance();
-      @SuppressWarnings("unchecked")
-      Class<Instrument> c = (Class<Instrument>) transformer.getClass();
-      if (DynComp.verbose) {
-        System.out.printf("Classloader of tranformer = %s%n", c.getClassLoader());
-      }
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
+    }
+    if (DynComp.verbose) {
+      System.out.printf(
+          "Classloader of tranformer = %s%n", transformer.getClass().getClassLoader());
     }
 
     // Check that we got a newer version of BCEL that includes JDK 11 support. At present,
