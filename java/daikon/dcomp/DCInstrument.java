@@ -815,6 +815,7 @@ class DCInstrument extends InstructionListUtils {
         }
 
         remove_local_variable_type_table(mg);
+
         // Remove all RuntimeAnnotations (if any), as they do not apply
         // to the instrumented version of the method.
         mg.removeAnnotationEntries();
@@ -894,6 +895,7 @@ class DCInstrument extends InstructionListUtils {
         debug_transform.log("Added equals method(refs_only)%n");
         add_equals_method(gen);
       }
+
       // Add DCompInstrumented interface and the required
       // equals_dcomp_instrumented method.
       add_dcomp_interface(gen);
@@ -967,6 +969,7 @@ class DCInstrument extends InstructionListUtils {
         }
 
         remove_local_variable_type_table(mg);
+
         // Remove all RuntimeAnnotations (if any), as they do not apply
         // to the instrumented version of the method.
         mg.removeAnnotationEntries();
@@ -2165,6 +2168,7 @@ class DCInstrument extends InstructionListUtils {
    */
   InstructionList handle_invoke(InvokeInstruction invoke) {
     boolean callee_instrumented;
+
     // Get information about the call
     String method_name = invoke.getMethodName(pool);
     String classname = null;
