@@ -854,8 +854,11 @@ show_nullness_java_files:
 	@echo DAIKON_JAVA_FILES:
 	@echo ${DAIKON_JAVA_FILES}
 
-## Reinstate these dependencies later:  check-prototype check-vindex
-check-all: check-formatter check-index check-interning check-lock check-nullness check-regex check-signature
+## TODO: Reinstate these dependencies later:  check-prototype check-vindex
+# Check is in two parts because Travis won't run jobs longer than 50 minutes.
+check-part1: check-formatter check-index check-interning check-lock
+check-part2: check-nullness check-regex check-signature
+check-all: check-part1 check-part2
 typecheck: check-all
 
 check-index: ${INDEX_JAVA_FILES} compile
