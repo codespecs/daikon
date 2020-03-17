@@ -17,6 +17,8 @@ checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-f
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework-$VER/checker/dist/jdk8.jar checker-framework/
   mv -f checker-framework-$VER/checker/dist/checker-qual.jar .
   rm -rf checker-framework-$VER.zip checker-framework-$VER
+If environment variable CHECKERFRAMEWORK is set, it is used instead of
+these files.
 
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
