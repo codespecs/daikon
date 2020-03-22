@@ -15,12 +15,12 @@ echo ".travis-build.sh is running kvasir and DynComp tests"
 
 # Get correct version of Kvasir/fjalar
 if [ ! -d ../fjalar ] ; then
-  if [ -d "/tmp/plume-scripts" ] ; then
-    (cd /tmp/plume-scripts && git pull -q) > /dev/null 2>&1
+  if [ -d "/tmp/$USER/plume-scripts" ] ; then
+    (cd "/tmp/$USER/plume-scripts" && git pull -q) > /dev/null 2>&1
   else
-    (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
+    mkdir -p "/tmp/$USER" && (cd "/tmp/$USER" && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
   fi
-  /tmp/plume-scripts/git-clone-related codespecs fjalar
+  "/tmp/$USER/plume-scripts/git-clone-related" codespecs fjalar
 fi
 
 # The Valgrind configure script fails if SHELLOPTS is defined.

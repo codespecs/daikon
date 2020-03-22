@@ -71,7 +71,7 @@ jobs:
   - bash: |
       java -version
       javac -version
-    displayName: show environment
+    displayName: show Java version
   - bash: ./scripts/test-typecheck.sh
     displayName: test-typecheck.sh
 
