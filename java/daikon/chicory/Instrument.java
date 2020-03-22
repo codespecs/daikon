@@ -155,7 +155,6 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     // but some do not.  The check for the sun.reflect package is a hack
     // to catch all of these.  A more consistent mechanism to determine
     // boot classes would be preferrable.
-    // Starting with Java 9 sun.reflect => jdk.internal.reflect.
     if (Chicory.boot_classes != null) {
       Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
       if (matcher.find()) {
@@ -172,6 +171,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       debug_transform.log("ignoring system class %s, in sun.reflect package%n", fullClassName);
       return null;
     } else if (fullClassName.startsWith("jdk.internal.reflect")) {
+      // Starting with Java 9 sun.reflect => jdk.internal.reflect.
       debug_transform.log(
           "ignoring system class %s, in jdk.internal.reflect package", fullClassName);
       return null;
