@@ -1094,7 +1094,7 @@ javadoc: api
 # Don't run Javadoc on files that require the Checker Framework.
 .PHONY: javadoc-files.txt
 javadoc-files.txt:
-	find . \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' \) -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
+	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' \) -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
 
 ifeq ($(shell java -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*"/\1.\2/p;'),1.8)
   ifneq ($(shell sed -n ';s/^NAME="\(.*\)"/\1/p;' /etc/os-release),Ubuntu)
