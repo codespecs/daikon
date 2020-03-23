@@ -1993,8 +1993,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return (Debug.logOn());
   }
 
+  // Using `@link` leads to javadoc -Xdoclint:all crashing with:
+  // "com.sun.tools.javac.code.Type$AnnotatedType cannot be cast to
+  // com.sun.tools.javac.code.Type$ClassType"
   /**
-   * Logs a description of the invariant and the specified msg via the logger as described in {@link
+   * Logs a description of the invariant and the specified msg via the logger as described in {@code
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
    *
    * @param log where to log the message
@@ -2008,8 +2011,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     }
   }
 
+  // Using `@link` leads to javadoc -Xdoclint:all crashing with:
+  // "com.sun.tools.javac.code.Type$AnnotatedType cannot be cast to
+  // com.sun.tools.javac.code.Type$ClassType"
   /**
-   * Logs a description of the invariant and the specified msg via the logger as described in {@link
+   * Logs a description of the invariant and the specified msg via the logger as described in {@code
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
    *
    * @param format a format string

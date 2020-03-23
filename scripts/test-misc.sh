@@ -35,6 +35,6 @@ else
   else
     mkdir -p "/tmp/$USER" && git -C "/tmp/$USER" clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
   fi
-  (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
+  (make -C java api-private requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
   "/tmp/$USER/plume-scripts/ci-lint-diff" /tmp/warnings.txt
 fi
