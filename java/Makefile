@@ -1061,7 +1061,7 @@ JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
                 -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
-                -docletpath "${DAIKON_CLASSPATH}"
+                -docletpath "${DOCLETPATH}"
 
 # Daikon packages except for util (which is just a copy of plume)
 DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
@@ -1102,6 +1102,7 @@ api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
 	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
+	@rm -f javadoc-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
@@ -1117,6 +1118,7 @@ requireJavadocPrivate: jar $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS_COMMON) \
+		-private \
 		-doclet org.plumelib.javadoc.RequireJavadoc \
                 -docletpath "${DOCLETPATH}" \
 		@javadoc-files.txt
