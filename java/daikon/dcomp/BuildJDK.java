@@ -185,15 +185,14 @@ public class BuildJDK {
     String JAVA_HOME = System.getenv("JAVA_HOME");
     if (JAVA_HOME == null) {
       if (verbose) {
-        System.out.println("JAVA_HOME not defined; using java.home:");
-        System.out.println("  " + java_home);
+        System.out.println("JAVA_HOME not defined; using java.home: " + java_home);
       }
       JAVA_HOME = java_home;
     }
 
     File jrt = new File(JAVA_HOME);
     if (!jrt.exists()) {
-      System.out.printf("Directory at JAVA_HOME (%s) does not exist.%n", jrt);
+      System.out.printf("Java home directory %s does not exist.%n", jrt);
       System.exit(1);
     }
 
