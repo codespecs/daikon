@@ -53,14 +53,17 @@ OS_REL := $(shell lsb_release -sr)
 GOAL := goal
 
 ifeq ($(OS_ID),CentOS)
-ifeq ($(OS_REL),7.6.1810)
+ifeq ($(OS_REL),7.7.1908)
 ifeq (washington,$(findstring washington,$(shell uname -n)))
 # UW CSE version of CentOS
 	GOAL := goal-CentOS-UWCSE
 else
 # Standard version of CentOS
-       GOAL := goal-CentOS1810
+       GOAL := goal-CentOS1908
 endif
+endif
+ifeq ($(OS_REL),7.6.1810)
+       GOAL := goal-CentOS1810
 endif
 ifeq ($(OS_REL),7.5.1804)
        GOAL := goal-CentOS1804
