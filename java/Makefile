@@ -1079,6 +1079,7 @@ JAVADOC_DEST = api
 # "Multiple sources of package comments found for package"
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
                 -source 8 \
+                -Xmaxerrs 100000 -Xmaxwarns 100000 \
                 -d $(JAVADOC_DEST) \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
                 -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
@@ -1110,7 +1111,7 @@ ifdef SKIP_JAVADOC
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) \
+	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1119,6 +1120,7 @@ else
 endif
 
 # Run Javadoc on each file individually, to determine which one is crashing Javadoc.
+# Search the *-javadoc-output.txt files to find out which one contains the crash log.
 # Then, you need to do binary search on that file.
 api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
@@ -1130,7 +1132,7 @@ api-test-each: ../utils/plume-scripts ../utils/html-tools
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) -private \
+	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
@@ -1192,6 +1194,7 @@ showvars:
 	@echo JAVAC = ${JAVAC}
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
+	@echo SKIP_JAVADOC = ${SKIP_JAVADOC}
 
 	@echo CLASSPATH = "${CLASSPATH}"
 	@echo DAIKON_CLASSPATH = "${DAIKON_CLASSPATH}"
