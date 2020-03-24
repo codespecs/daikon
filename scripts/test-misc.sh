@@ -8,7 +8,7 @@ set -o verbose
 set -o xtrace
 export SHELLOPTS
 
-make showvars compile daikon.jar
+make compile daikon.jar
 
 # Code style & quality
 make -C java error-prone
