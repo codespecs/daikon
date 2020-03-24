@@ -39,7 +39,10 @@ import org.apache.bcel.generic.*;
  */
 public class BuildJDK {
 
-  /** The "java.home" system property. */
+  /**
+   * The "java.home" system property. Note that there is also a JAVA_HOME variable that contains
+   * {@code System.getenv("JAVA_HOME")}.
+   */
   public static final String java_home = System.getProperty("java.home");
 
   @Option("Instrument the classfiles given on the command line")
@@ -65,7 +68,10 @@ public class BuildJDK {
 
   private Map<String, InputStream> classmap = new HashMap<>();
 
-  /** Instruments each class file in Java runtime and puts the result in dest. */
+  /**
+   * Instruments each class file in the Java runtime and puts the result in the first non-option
+   * command-line argument.
+   */
   public static void main(String[] args) throws IOException {
 
     System.out.println("BuildJDK starting at " + new Date());
