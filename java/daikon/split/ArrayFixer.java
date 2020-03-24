@@ -95,8 +95,6 @@ class ArrayFixer extends DepthFirstVisitor {
    * @param root the root of a jtb syntax tree
    * @param names is a List of Strings that are the names of all the variables in statement
    * @param varInfos is a List of VarInfos for all the variables named in names
-   * @return condition with all variable referring to arrays suffixed with "_identity" or "_array"
-   *     as needed
    */
   public static void fixArrays(Node root, String[] names, VarInfo[] varInfos) {
     ArrayFixer fixer = new ArrayFixer(names, varInfos);
