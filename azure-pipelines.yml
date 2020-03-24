@@ -48,6 +48,8 @@ jobs:
   steps:
   - checkout: self
     fetchDepth: 25
+  - bash: make showvars
+    displayName: make showvars
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
@@ -112,6 +114,8 @@ jobs:
   steps:
   - checkout: self
     fetchDepth: 25
+  - bash: make showvars
+    displayName: make showvars
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
@@ -163,6 +167,8 @@ jobs:
   steps:
   - checkout: self
     fetchDepth: 25
+  - bash: make showvars
+    displayName: make showvars
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
