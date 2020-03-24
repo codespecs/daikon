@@ -39,6 +39,9 @@ else
   # second) to avoid assuming that they both produce absolute filenames or both
   # produce filenames relative to the same directory.
   (make -C java api-private > /tmp/ap-warnings.txt 2>&1) || true
+  # Temporary, for debugging
+  head -n 1000 /tmp/ap-warnings.txt
+  tail -n 1000 /tmp/ap-warnings.txt
   "/tmp/$USER/plume-scripts/ci-lint-diff" /tmp/ap-warnings.txt
   (make -C java requireJavadocPrivate > /tmp/rj-warnings.txt 2>&1) || true
   "/tmp/$USER/plume-scripts/ci-lint-diff" /tmp/rj-warnings.txt
