@@ -43,6 +43,10 @@ public class DynComp {
   @Option("-f Output filename for Daikon decl file")
   public static @Nullable String decl_file = null;
 
+  /**
+   * Output filename for a more easily human-readable file summarizing comparability sets. The file
+   * is intended primarily for debugging.
+   */
   @Option("Output file for comparability sets")
   // If null, do no output
   public static @MonotonicNonNull File comparability_file = null;
@@ -72,9 +76,14 @@ public class DynComp {
   @Option("Display abridged variable names")
   public static boolean abridged_vars = false;
 
+  /** Use faster but less precise algorithm on omitted ppts. */
   @Option("Use faster but less precise algorithm on omitted ppts")
   public static boolean approximate_omitted_ppts = false;
 
+  /**
+   * If specified, write a human-readable file showing some of the interactions that occurred. The
+   * file is intended primarily for debugging.
+   */
   @Option("Trace output file")
   // Null if shouldn't do output
   public static @MonotonicNonNull File trace_file = null;

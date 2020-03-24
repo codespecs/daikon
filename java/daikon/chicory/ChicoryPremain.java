@@ -34,11 +34,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 
+/**
+ * This class is the entry point for the Chicory instrumentation agent. It is the only code in
+ * ChicoryPremain.jar.
+ */
 public class ChicoryPremain {
 
   // These command-line options cannot be accessed from Chicory.  These are internal debugging
   // options that may be used when ChicoryPremain is invoked directly from the command line.
 
+  /** Socket port to communicate with Daikon. */
   @Option("socket port to communicate with Daikon")
   public static int daikon_port = -1;
 
