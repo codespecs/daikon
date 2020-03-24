@@ -278,8 +278,11 @@ public class Implication extends Joiner {
     return predicate().isAllPrestate() && consequent().isAllPrestate();
   }
 
+  // Using `@link` leads to javadoc -Xdoclint:all crashing with:
+  // "com.sun.tools.javac.code.Type$AnnotatedType cannot be cast to
+  // com.sun.tools.javac.code.Type$ClassType"
   /**
-   * Logs a description of the invariant and the specified msg via the logger as described in {@link
+   * Logs a description of the invariant and the specified msg via the logger as described in {@code
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}. Uses the consequent as the logger.
    */
   @Override
@@ -296,9 +299,12 @@ public class Implication extends Joiner {
             + ")]");
   }
 
+  // Using `@link` leads to javadoc -Xdoclint:all crashing with:
+  // "com.sun.tools.javac.code.Type$AnnotatedType cannot be cast to
+  // com.sun.tools.javac.code.Type$ClassType"
   /**
-   * Logs a description of the invariant and the specified msg via the logger as described in {@link
-   * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}. Uses the consequent as the logger
+   * Logs a description of the invariant and the specified msg via the logger as described in {@code
+   * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}. Uses the consequent as the logger.
    *
    * @return whether or not it logged anything
    */

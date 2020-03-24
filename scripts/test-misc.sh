@@ -35,6 +35,14 @@ else
   else
     mkdir -p "/tmp/$USER" && git -C "/tmp/$USER" clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
   fi
-  (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
-  "/tmp/$USER/plume-scripts/ci-lint-diff" /tmp/warnings.txt
+
+  # The `api-private` and `requireJavadocPrivate` commands are
+  # separate (and thus the first might mask failure of the second) to
+  # avoid assuming that they both produce absolute filenames or both
+  # produce filenames relative to the same directory.
+  # The `grep -v` prevents the make target failure from throwing off prefix guessing.
+  (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > /tmp/ap-warnings.txt ) || true
+  "/tmp/$USER/plume-scripts/ci-lint-diff" /tmp/ap-warnings.txt
+  (make -C java requireJavadocPrivate 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadocPrivate' failed" > /tmp/rj-warnings.txt) || true
+  "/tmp/$USER/plume-scripts/ci-lint-diff" /tmp/rj-warnings.txt
 fi
