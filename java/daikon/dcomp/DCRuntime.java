@@ -2773,6 +2773,7 @@ public final class DCRuntime {
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
+  /** Handles a dup2 opcode on a primitive. */
   public static void dup2() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
     debug_primitive.log("dup2%n");
@@ -2787,6 +2788,7 @@ public final class DCRuntime {
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
+  /** Handles a dup2_x1 opcode on a primitive. */
   public static void dup2_x1() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
     debug_primitive.log("dup2_x1%n");
@@ -2804,6 +2806,7 @@ public final class DCRuntime {
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
+  /** Handles a dup2_x2 opcode on a primitive. */
   public static void dup2_x2() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
     debug_primitive.log("dup2_x2%n");

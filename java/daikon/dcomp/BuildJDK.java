@@ -31,19 +31,34 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 
 /**
- * Converts each file in the JDK. Each method is doubled. The new methods are distinguished by a
- * final parameter of type DCompMarker and are instrumented to track comparability. User code will
- * call the new methods, but instrumentation code is unchanged and calls the original methods.
+ * BuildJDK uses daikon.dcomp.DCInstrument to add comparability instrumentation to a set of Java
+ * class files and then stores the modified files into a directory identified by a (required)
+ * command line argument. By default, BuildJDK will locate the appropriate Java runtime library and
+ * instrument each of its member class files. If the optional --classfiles argument is present, then
+ * the class files to be instrumented are given on the command line and the Java runtime library is
+ * not used. This usage is primarily for debugging purposes.
+ *
+ * <p>DCInstrument duplicates each method of a class file. The new methods are distinguished by the
+ * addition of a final parameter of type DCompMarker and are instrumented to track comparability.
+ * Based on it's invocation arguments, DynComp will decide whether to call the instrumented or
+ * uninstrumented version of a method.
  */
 public class BuildJDK {
 
   /** The "java.home" system property. */
   public static final String java_home = System.getProperty("java.home");
 
-  @Option("Instrument the classfiles given on the command line")
+  /**
+   * Instrument the class files given on the command line instead of the ones in the Java runtime
+   * library.
+   */
+  @Option("Instrument the class files given on the command line")
   public static boolean classfiles = false;
 
-  // Used for debugging; tested in DCInstrument.
+  /**
+   * Used when debugging to terminate processing if an error occurs. This flag is tested in
+   * DCInstrument.
+   */
   @Option("Halt if an instrumentation error occurs")
   public static boolean quit_if_error = false;
 
@@ -57,14 +72,22 @@ public class BuildJDK {
 
   private static List<String> skipped_methods = new ArrayList<>();
 
+  /**
+   * A list of methods known to cause DCInstrument to fail. This is used to remove known problems
+   * from the list of failures displayed at the end of BuildJDK's execution.
+   */
   public static List<String> known_uninstrumentable_methods =
       Arrays.asList(
           // None at present
           );
 
-  // We want to share code to read members of a jar file (JDK 8) or members of a
-  // module file (JDK 9+). We accomplish this by saving an InputStream for
-  // each member class we find.
+  /**
+   * We want to share code to read and instrument the Java class file members of a jar file (JDK 8)
+   * or a module file (JDK 9+). However, jar files and module files are located in two completely
+   * different file systems. So we open an InputStream for each class file we wish to instrument and
+   * save it the the class_stream_map. From that point the code to instrument a class file can be
+   * shared.
+   */
   private Map<String, InputStream> class_stream_map = new HashMap<>();
 
   /** Instruments each class file in Java runtime and puts the result in dest. */

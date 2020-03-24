@@ -25,20 +25,28 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 
+/**
+ * This class is the entry point for the DynComp instrumentation agent. It is the only code in
+ * dcomp_premain.jar.
+ */
 public class Premain {
 
   // These command-line options cannot be accessed from DynComp.  These are internal debugging
   // options that may be used when Premain is invoked directly from the command line.
 
+  /** Experimental no instrumentation if no track option. */
   @Option("Experimental no instrumentation if no track option")
   public static boolean notrack_instrumentation = false;
 
+  /** Turn on basic DCInstrument debugging options. */
   @Option("Turn on basic DCInstrument debugging options")
   public static boolean debug_dcinstrument = false;
 
+  /** Turn on basic DCRuntime debugging options. */
   @Option("Turn on basic DCRuntime debugging options")
   public static boolean debug_dcruntime = false;
 
+  /** Turn on most DCRuntime debugging options. */
   @Option("Turn on most DCRuntime debugging options")
   public static boolean debug_dcruntime_all = false;
 
@@ -95,26 +103,36 @@ public class Premain {
               "java.lang.StringBuffer.append",
               "java.lang.StringBuffer.toString"));
 
-  // One of the last phases for DynComp is to write out the comparability values
-  // after the user program completes execution.  One of the steps is to assign
-  // values to the arguments of methods that have not been executed.  We use
-  // reflection to get type information about these arguments, which causes the
-  // method to be loaded; which causes the main part of DynComp to try to
-  // instrument the method.  As the user program has completed execution, doing
-  // instrumentation at this point can lead to problems.  The correct fix for
-  // this problem is to use BCEL to get the type information instead of reflection,
-  // thus avoiding loading the method into the JVM.  This will be a large change,
-  // so a temporary fix is to indicate if the program is in shutdown mode and
-  // not instrument any methods when this flag is true.
-  // TODO: Couldn't we just call removeTransformer at the start of shutdown?
+  /**
+   * One of the last phases for DynComp is to write out the comparability values after the user
+   * program completes execution. One of the steps is to assign values to the arguments of methods
+   * that have not been executed. We use reflection to get type information about these arguments,
+   * which causes the method to be loaded; which causes the main part of DynComp to try to
+   * instrument the method. As the user program has completed execution, doing instrumentation at
+   * this point can lead to problems. The correct fix for this problem is to use BCEL to get the
+   * type information instead of reflection, thus avoiding loading the method into the JVM. This
+   * will be a large change, so a temporary fix is to indicate if the program is in shutdown mode
+   * and not instrument any methods when this flag is true. TODO: Couldn't we just call
+   * removeTransformer at the start of shutdown?
+   */
   protected static boolean in_shutdown = false;
 
+  /** Flag to indicate if we are retransforming a previously loaded class. */
   protected static boolean retransform_preloads;
+
   private static Set<Class<?>> previously_processed_classes = new HashSet<>();
 
   // For debugging
   // protected static Instrumentation instr;
 
+  /**
+   * This method is the entry point of the java agent. Its main purpose is to set up the transformer
+   * so that when classes from the target app are loaded, they are first transformed in order to add
+   * comparability instrumentation.
+   *
+   * <p>If this code is running on Java 9+ and jdk_instrumented is true it also retransforms any JDK
+   * methods that were loaded prior to premain getting control.
+   */
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
     // For debugging
     // this.instr = inst;
