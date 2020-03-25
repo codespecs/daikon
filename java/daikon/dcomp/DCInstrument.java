@@ -42,8 +42,11 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings({"nullness"}) //
 class DCInstrument extends InstructionListUtils {
 
+  /** Unmodified version of input class. */
   protected JavaClass orig_class;
+  /** ClassGen for the current class. */
   protected ClassGen gen;
+  /** MethodGen for the current method. */
   protected MethodGen mgen;
   /** Is the current class a member of the JDK? */
   protected boolean in_jdk;
@@ -58,8 +61,11 @@ class DCInstrument extends InstructionListUtils {
    */
   protected static boolean retransforming = false;
 
+  /** The BCEL InstructionFactory for generating byte code instructions. */
   protected InstructionFactory ifact;
+  /** The loader that loaded DCInstrument.class. */
   protected @Nullable ClassLoader loader;
+  /** Has an <init> method completed initialization? */
   protected boolean constructor_is_initialized;
 
   /** Local that stores the tag frame for the current method. */
@@ -105,8 +111,9 @@ class DCInstrument extends InstructionListUtils {
    */
   protected static boolean jdk_instrumented = true;
 
-  protected static boolean exclude_object = true;
+  /** Either java.lang.DCompInstrumented or daikon.dcomp.DCompInstrumented */
   protected static String instrumentation_interface;
+  /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
   protected static @DotSeparatedIdentifiers String dcomp_prefix;
   /**
    * We add a dummy local variable to JDK methods during the initial jdk instrumentation (via
@@ -122,7 +129,9 @@ class DCInstrument extends InstructionListUtils {
    */
   protected static boolean ignore_toString = true;
 
+  /** Name prefix for tag setter methods. */
   protected static final String SET_TAG = "set_tag";
+  /** Name prefix for tag getter methods. */
   protected static final String GET_TAG = "get_tag";
 
   /**
@@ -2519,7 +2528,7 @@ class DCInstrument extends InstructionListUtils {
     }
 
     // If the JDK is instrumented, then everthing but object is instrumented
-    if (jdk_instrumented && (exclude_object && !classname.equals("java.lang.Object"))) {
+    if (jdk_instrumented && !classname.equals("java.lang.Object")) {
       return true;
     }
 
@@ -4512,6 +4521,7 @@ class DCInstrument extends InstructionListUtils {
     return fname + "_" + classname.replace('.', '_') + "__$" + typ;
   }
 
+  /** Add a dcomp marker argument to indicate this is the instrumented version of the method. */
   void add_dcomp_arg(MethodGen mg) {
 
     // Don't modify main or the JVM won't be able to find it.

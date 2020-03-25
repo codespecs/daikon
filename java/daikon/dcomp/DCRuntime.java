@@ -99,13 +99,15 @@ public final class DCRuntime {
   /** If true, merge arrays and their indices. */
   private static boolean merge_arrays_and_indices = true;
 
-  /** Class to hold per-thread data. */
+  /** Class to hold per-thread comparability data. */
   private static class ThreadData {
     /** Tag stack. */
     Deque<Object> tag_stack;
 
+    /** Number of methods currently on tag_stack */
     int tag_stack_call_depth;
 
+    /** class initializer */
     ThreadData() {
       tag_stack = new ArrayDeque<Object>();
       tag_stack_call_depth = 0;
@@ -172,6 +174,7 @@ public final class DCRuntime {
   /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
   private static Class<?> dcomp_marker_class;
 
+  /** java.lang.Object */
   private static Class<Object> java_lang_Object_class;
 
   /** Perform any initialization required before instrumentation begins. */
@@ -850,6 +853,10 @@ public final class DCRuntime {
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
+  /**
+   * Manipulate the tags for an array store instruction. The tag at the top of stack is stored into
+   * the tag storage for the array. Mark the array and the index as comparable.
+   */
   private static void primitive_array_store(Object arr_ref, int length, int index) {
     if (debug) System.out.printf("In primitive_array_store%n");
 

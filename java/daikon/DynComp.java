@@ -22,81 +22,86 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class DynComp {
 
+  /** Print information about the classes being transformed. */
   @Option("-v Print information about the classes being transformed")
   public static boolean verbose = false;
 
+  /** Dump the instrumented classes to disk. */
   @Option("-d Dump the instrumented classes to disk")
   public static boolean debug = false;
 
-  @Option("Print detailed information on which classes are transformed")
-  public static boolean debug_transform = false;
-
-  @Option("Print detailed information on variables being observed")
-  public static boolean debug_decl_print = false;
-
+  /** The directory in which to dump instrumented class files. */
   @Option("Directory in which to create debug files")
   public static File debug_dir = new File("debug");
 
+  /** The directory in which to create output files. */
   @Option("Directory in which to create output files")
   public static File output_dir = new File(".");
 
+  /** Output filename for .decls file suitable for input to Daikon. */
   @Option("-f Output filename for Daikon decl file")
   public static @Nullable String decl_file = null;
 
-  /**
-   * Output filename for a more easily human-readable file summarizing comparability sets. The file
-   * is intended primarily for debugging.
-   */
+  /** Output filename for a more easily human-readable file summarizing comparability sets. */
   @Option("Output file for comparability sets")
   // If null, do no output
   public static @MonotonicNonNull File comparability_file = null;
 
+  /** If specified, write a human-readable file showing some of the interactions that occurred. */
+  @Option("Trace output file")
+  // Null if shouldn't do output
+  public static @MonotonicNonNull File trace_file = null;
+
+  /** Controls size of the stack displayed in tracing the interactions that occurred. */
+  @Option("Depth of call hierarchy for line tracing")
+  public static int trace_line_depth = 1;
+
+  /** Causes DynComp to abridge the variable names printed. */
+  @Option("Display abridged variable names")
+  public static boolean abridged_vars = false;
+
+  /** Only emit program points that match regex. */
   @Option("Only process program points matching the regex")
   public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
+  /** Suppress program points that match regex. */
   @Option("Ignore program points matching the regex")
   public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
+  /** Don’t track Java primitive values (of type boolean, int, long, etc.). */
   @Option("Don't track primitives")
   public static boolean no_primitives = false;
+
+  /** Specifies the location of the instrumented JDK. */
+  @Option("jar file containing an instrumented JDK")
+  public static @Nullable File rt_file = null;
+
+  /** Causes DynComp to traverse exactly those fields visible from a given program point. */
+  @Option("use standard visibility")
+  public static boolean std_visibility = false;
+
+  /** Depth to which to examine structure components. */
+  @Option("variable nesting depth")
+  public static int nesting_depth = 2;
 
   // Option("Don't use an instrumented JDK")
   // Flag is still used, but no longer exposed as an option.
   public static boolean no_jdk = false;
 
-  @Option("jar file containing an instrumented JDK")
-  public static @Nullable File rt_file = null;
+  // The following are internal debugging options primarily for use by the DynComp maintainers.
+  // They are not documented in the Daikon User Manual.
 
-  @Option("use standard visibility")
-  public static boolean std_visibility = false;
+  /** Print detailed information on which classes are transformed. */
+  @Option("Print detailed information on which classes are transformed")
+  public static boolean debug_transform = false;
 
-  @Option("variable nesting depth")
-  public static int nesting_depth = 2;
-
-  @Option("Display abridged variable names")
-  public static boolean abridged_vars = false;
+  /** Print detailed information on variables being observed. */
+  @Option("Print detailed information on variables being observed")
+  public static boolean debug_decl_print = false;
 
   /** Use faster but less precise algorithm on omitted ppts. */
   @Option("Use faster but less precise algorithm on omitted ppts")
   public static boolean approximate_omitted_ppts = false;
-
-  /**
-   * If specified, write a human-readable file showing some of the interactions that occurred. The
-   * file is intended primarily for debugging.
-   */
-  @Option("Trace output file")
-  // Null if shouldn't do output
-  public static @MonotonicNonNull File trace_file = null;
-
-  @Option("Depth of call hierarchy for line tracing")
-  public static int trace_line_depth = 1;
-
-  @Option("Output file for DataFlow information")
-  // Null if shouldn't do output
-  public static @Nullable File dataflow_out = null;
-
-  //  @Option("Enable tracing");
-  //  public static boolean tracing_enabled = true;
 
   public static String usage_synopsis = "java daikon.DynComp [options]";
 

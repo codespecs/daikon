@@ -120,6 +120,7 @@ public class Premain {
   /** Flag to indicate if we are retransforming a previously loaded class. */
   protected static boolean retransform_preloads;
 
+  /** Keep track of classes that have already been retransformed. */
   private static Set<Class<?>> previously_processed_classes = new HashSet<>();
 
   // For debugging
@@ -132,6 +133,11 @@ public class Premain {
    *
    * <p>If this code is running on Java 9+ and jdk_instrumented is true it also retransforms any JDK
    * methods that were loaded prior to premain getting control.
+   *
+   * @param agentArgs string containing the arguments passed to this agent.
+   * @param inst Instrumentation instance to be used to transform classes.
+   * @throws IOException if jdk_classes.txt cannot be read or if the correct version of BCEL cannot
+   *     be found or loaded.
    */
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
     // For debugging
@@ -300,7 +306,12 @@ public class Premain {
     }
   }
 
-  /** Get an array of already loaded classes that need to be retransformed. */
+  /**
+   * Get an array of already loaded classes that need to be retransformed.
+   *
+   * @param inst Instrumentation instance to be used to transform classes.
+   * @return an array containing the classes to be retransformed.
+   */
   private static Class<?>[] get_retransform_list(Instrumentation inst) {
     if (DynComp.verbose) {
       System.out.println("get retransformation list");
@@ -410,6 +421,12 @@ public class Premain {
     }
   }
 
+  /**
+   * Helper method to create a PrintWriter from a File.
+   *
+   * @param filename the File to be opened
+   * @return a new PrintWriter from filename
+   */
   public static PrintWriter open(File filename) {
     try {
       return new PrintWriter(Files.newBufferedWriter(filename.toPath(), UTF_8));
