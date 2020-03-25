@@ -831,7 +831,7 @@ public final class DCRuntime {
   /**
    * Pushes an array reference on the tag stack.
    *
-   * @param array_ref array being accessed
+   * @param arr_ref array being accessed
    */
   public static void push_array_tag(Object arr_ref) {
 
