@@ -84,8 +84,7 @@ public class DynComp {
   @Option("variable nesting depth")
   public static int nesting_depth = 2;
 
-  // Option("Don't use an instrumented JDK")
-  // Flag is still used, but no longer exposed as an option.
+  /** Do not use the instrumented JDK. No longer an option, now derived from rt_file option. */
   public static boolean no_jdk = false;
 
   // The following are internal debugging options primarily for use by the DynComp maintainers.
@@ -103,8 +102,6 @@ public class DynComp {
   @Option("Use faster but less precise algorithm on omitted ppts")
   public static boolean approximate_omitted_ppts = false;
 
-  public static String usage_synopsis = "java daikon.DynComp [options]";
-
   /**
    * Path to java agent jar file that performs the transformation. The "main" procedure is
    * Premain.premain().
@@ -118,9 +115,10 @@ public class DynComp {
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
+  /** Log file if debugging is enabled. */
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the dcomp command line. */
+  /** Synopsis for the DynComp command line. */
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
 
   /**
@@ -162,6 +160,9 @@ public class DynComp {
   /**
    * Check the command-line arguments for legality. Prints a message and exits if there was an
    * error.
+   *
+   * @param options set of legal options to DynComp
+   * @param target_args arguments being passed to the target program
    */
   public static void check_args(Options options, String[] target_args) {
     if (nesting_depth < 0) {

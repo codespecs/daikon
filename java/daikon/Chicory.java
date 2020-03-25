@@ -206,8 +206,8 @@ public class Chicory {
    * Check the command-line arguments for legality. If not legal, prints a message and exits the
    * JVM.
    *
-   * @param options set of legal options
-   * @param target_args array of arguments passed to CHicory
+   * @param options set of legal options to Chicory
+   * @param target_args arguments being passed to the target program
    */
   public static void check_args(Options options, String[] target_args) {
     if (nesting_depth < 0) {

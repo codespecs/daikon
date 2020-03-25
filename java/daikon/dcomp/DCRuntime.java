@@ -478,6 +478,10 @@ public final class DCRuntime {
   /**
    * Returns true if c or any of its superclasses has an instrumented version of method_name.
    * method_name should be an Object method with no arguments.
+   *
+   * @param c object to be searched
+   * @param method_name method to be searched for
+   * @return if the method was found
    */
   public static boolean has_instrumented(Class<?> c, String method_name) {
 
@@ -504,6 +508,10 @@ public final class DCRuntime {
   /**
    * Handle an uninstrumented clone call by making the two objects comparable. Really should make
    * all of their fields comparable instead. Returns the cloned object.
+   *
+   * @param orig_obj object being cloned
+   * @param clone_obj result of the clone
+   * @return the result of the clone
    */
   public static Object uninstrumented_clone(Object orig_obj, Object clone_obj) {
     TagEntry.union(orig_obj, clone_obj);
@@ -514,6 +522,10 @@ public final class DCRuntime {
   /**
    * Handle an uninstrumented toString call. Since comparability doesn't seem to be related to
    * toString, this does nothing.
+   *
+   * @param orig_obj object toString has been called on
+   * @param result result of the toString
+   * @return the result of the toString
    */
   public static String uninstrumented_toString(Object orig_obj, String result) {
     if (debug) System.out.printf("In uninstrumented_toString%n");
@@ -739,6 +751,8 @@ public final class DCRuntime {
   /**
    * Clean up the tag stack on an exception exit from a method. Pops items off of the tag stack
    * until the method marker is found.
+   *
+   * @param throwable cause of the exception
    */
   public static void exception_exit(Object throwable) {
     if (debug) {
@@ -814,7 +828,11 @@ public final class DCRuntime {
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
-  /** Pushes an array reference on the tag stack. */
+  /**
+   * Pushes an array reference on the tag stack.
+   *
+   * @param array_ref array being accessed
+   */
   public static void push_array_tag(Object arr_ref) {
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
@@ -825,7 +843,11 @@ public final class DCRuntime {
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
-  /** Pops the top of the tag stack into the tag storage for static_num. */
+  /**
+   * Pops the top of the tag stack into the tag storage for static_num.
+   *
+   * @param static_num identifies the static variable being accessed
+   */
   public static void pop_static_tag(int static_num) {
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
@@ -839,6 +861,8 @@ public final class DCRuntime {
   /**
    * Discard the tag on the top of the tag stack. Called when primitives are pushed but not used in
    * expressions (such as when allocating arrays). (No longer used?)
+   *
+   * @param cnt number of tags to discard
    */
   public static void discard_tag(int cnt) {
     if (debug) System.out.printf("In discard_tag%n");
@@ -856,6 +880,10 @@ public final class DCRuntime {
   /**
    * Manipulate the tags for an array store instruction. The tag at the top of stack is stored into
    * the tag storage for the array. Mark the array and the index as comparable.
+   *
+   * @param array_ref array being accessed
+   * @param length size of the array
+   * @param index index of the array element being accessed
    */
   private static void primitive_array_store(Object arr_ref, int length, int index) {
     if (debug) System.out.printf("In primitive_array_store%n");
@@ -1022,6 +1050,10 @@ public final class DCRuntime {
    * Make the count arguments to multianewarray comparable to the corresponding array indices.
    * count1 is made comparable to the index of the given array (arr), and count2 is made comparable
    * to the index of each array that is an element of arr.
+   *
+   * @param count1 number items in 1st dimension (unused, associated tag value is on tag stack)
+   * @param count2 number items in 2nd dimension (unused, associated tag value is on tag stack)
+   * @param arr the new array
    */
   public static void multianewarray2(int count1, int count2, Object[] arr) {
     if (debug) System.out.printf("In multianewarray2%n");
@@ -1441,7 +1473,13 @@ public final class DCRuntime {
     return fi.field_tag.get_tag(parent, obj);
   }
 
-  /** Gets the object in field f in object obj. Exceptions are turned into Errors. */
+  /**
+   * Gets the object in field f in object obj. Exceptions are turned into Errors.
+   *
+   * @param f which field to return
+   * @param obj the object that contains the field
+   * @return the specified object
+   */
   public static Object get_object_field(Field f, Object obj) {
     if (debug) System.out.printf("In get_object_field%n");
     try {
@@ -2604,6 +2642,9 @@ public final class DCRuntime {
   /**
    * Pushes the tag associated with field_num in obj on the tag stack. A tag value must have been
    * previously stored for this field.
+   *
+   * @param obj where to store tag
+   * @param field_num which field within obj to store into
    */
   public static void push_field_tag(Object obj, int field_num) {
     if (debug) System.out.printf("In push_field_tag%n");
@@ -2617,6 +2658,9 @@ public final class DCRuntime {
    * object has not been previously allocated it is allocated now and a tag is allocated for this
    * field. This should only be called for objects whose fields can be read without having been
    * previously written (in Java).
+   *
+   * @param obj where to store tag
+   * @param field_num which field within obj to store into
    */
   public static void push_field_tag_null_ok(Object obj, int field_num) {
     if (debug) System.out.printf("In push_field_tag_null_ok%n");
@@ -2660,6 +2704,9 @@ public final class DCRuntime {
    * Pops the tag from the top of the tag stack and stores it in the tag storage for the specified
    * field of the specified object. If tag storage was not previously allocated, it is allocated
    * now.
+   *
+   * @param obj where to store tag
+   * @param field_num which field within obj to store into
    */
   public static void pop_field_tag(Object obj, int field_num) {
     if (debug) System.out.printf("In pop_field_tag%n");
@@ -2851,6 +2898,9 @@ public final class DCRuntime {
    * Handles the various primitive (int, double, etc) array load instructions. The array and its
    * index are made comparable. The tag for the index is removed from the tag stack and the tag for
    * the array element is pushed on the stack.
+   *
+   * @param arr_ref array reference
+   * @param index index into array
    */
   public static void primitive_array_load(Object arr_ref, int index) {
     debug_primitive.log("primitive_array_load%n");
@@ -2865,6 +2915,9 @@ public final class DCRuntime {
    * the array element is pushed on the stack. Unlike primitive_array_load(), this method handles
    * array elements whose tags have not previously been set. This can happen when the JVM sets an
    * array element directly and there is no corresponding java code that can set the tag.
+   *
+   * @param arr_ref array reference
+   * @param index index into array
    */
   public static void primitive_array_load_null_ok(Object arr_ref, int index) {
     ThreadData td = thread_to_data.get(Thread.currentThread());
@@ -2908,6 +2961,9 @@ public final class DCRuntime {
   /**
    * Handles the aaload instruction. The arry and its index are made comparable. The tag for the
    * index is removed from the tag stack.
+   *
+   * @param arr_ref array reference
+   * @param index index into array
    */
   public static void ref_array_load(Object arr_ref, int index) {
     ThreadData td = thread_to_data.get(Thread.currentThread());
@@ -2944,13 +3000,19 @@ public final class DCRuntime {
   /**
    * Marks the specified class as initialized. We don't look at static variables in classes until
    * they are initialized.
+   *
+   * @param classname class to mark initialized
    */
   public static void class_init(String classname) {
     debug_primitive.log("class_init: %s%n", classname);
     init_classes.add(classname);
   }
 
-  /** Returns whether or not the specified class is initialized. */
+  /**
+   * Returns whether or not the specified class is initialized.
+   *
+   * @param clazz class to check
+   */
   @Pure
   public static boolean is_class_init(Class<?> clazz) {
     debug_primitive.log("is_class_init%n");
@@ -2971,6 +3033,9 @@ public final class DCRuntime {
    * result of its toString() function - if it differs from the default implementation. Note that
    * the call to toString() may have unintended side effects. Hence, all calls to obj_str are
    * protected by debug flag checks or debug logging enabled() checks.
+   *
+   * @param obj object to be described
+   * @return object description
    */
   private static String obj_str(Object obj) {
 
@@ -3011,7 +3076,12 @@ public final class DCRuntime {
     return list;
   }
 
-  /** Returns the name of the tag field that corresponds to the specified field. */
+  /**
+   * Returns the name of the tag field that corresponds to the specified field.
+   *
+   * @param field_name field name
+   * @return tag field name
+   */
   public static String tag_field_name(String field_name) {
     debug_primitive.log("tag_field_name: %s%n", field_name);
     return (field_name + "__$tag");

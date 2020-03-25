@@ -65,14 +65,19 @@ public class BuildJDK {
   @Option("Halt if an instrumentation error occurs")
   public static boolean quit_if_error = false;
 
+  /** Print information about the classes being instrumented. */
   private static boolean verbose = false;
 
+  /** Number of class files processed; used for progress display. */
   private int _numFilesProcessed = 0;
 
+  /** Name of entry in output jar containing the statics map. */
   private static String static_map_fname = "dcomp_jdk_static_map";
 
+  /** Names of all the classes processed. */
   private static List<String> all_classes = new ArrayList<>();
 
+  /** Names of all methods that DCInstrument could not process. Should be empty. */
   private static List<String> skipped_methods = new ArrayList<>();
 
   /**
@@ -96,6 +101,10 @@ public class BuildJDK {
   /**
    * Instruments each class file in the Java runtime and puts the result in the first non-option
    * command-line argument.
+   *
+   * @param args arguments being passed to BuildJDK
+   * @throws IOException if unable to read or write dcomp_jdk_static_map or if unable to write
+   *     jdk_classes.txt.
    */
   public static void main(String[] args) throws IOException {
 
@@ -128,37 +137,40 @@ public class BuildJDK {
 
       // Read in each specified classfile
       for (File class_file : class_files) {
-        String className = class_file.toString();
-        if (className.endsWith("java/lang/Object.class")) {
-          System.out.printf("Skipping %s%n", className);
+        String classFileName = class_file.toString();
+        if (classFileName.endsWith("java/lang/Object.class")) {
+          System.out.printf("Skipping %s%n", classFileName);
           continue;
         }
 
         // Convert the class file to internal BCEL form.
         JavaClass jc;
         try {
-          ClassParser parser = new ClassParser(className);
+          ClassParser parser = new ClassParser(classFileName);
           jc = parser.parse();
         } catch (Throwable e) {
-          throw new Error("Failed to parse classfile " + className, e);
+          throw new Error("Failed to parse classfile " + classFileName, e);
         }
 
         // Instrument the class file.
         try {
-          build.processClassFile(jc, dest_dir, className);
+          build.instrumentClassFile(jc, dest_dir, classFileName);
         } catch (Throwable e) {
-          throw new Error("Couldn't instrument " + className, e);
+          throw new Error("Couldn't instrument " + classFileName, e);
         }
       }
 
-    } else { // translate from jar file or modules file
+    } else {
 
+      // Collect the Java runtime classes we want to instrument in class_stream_map.
       if (BcelUtil.javaVersion > 8) {
-        build.translate_modules();
+        build.gather_runtime_from_modules();
       } else {
-        build.translate_jar();
+        build.gather_runtime_from_jar();
       }
-      build.translate_classes(dest_dir);
+
+      // Instrument the Java runtime classes we have stored in class_stream_map.
+      build.instrument_classes(dest_dir);
 
       // Write out the static map
       System.out.printf("Found %d statics.%n", DCInstrument.static_map.size());
@@ -184,6 +196,9 @@ public class BuildJDK {
   /**
    * Check the arguments for legality. Verify java.home and JAVA_HOME match. Prints a message and
    * returns false if there is an error.
+   *
+   * @param options set of legal options to BuildJDK
+   * @param target_args arguments being passed to BuildJDK
    */
   public static void check_args(Options options, String[] target_args) {
 
@@ -200,7 +215,7 @@ public class BuildJDK {
       }
     } else {
       if (target_args.length < 1) {
-        System.out.println("must specify source jar and destination dir");
+        System.out.println("must specify destination dir");
         options.printUsage();
         System.exit(1);
       }
@@ -241,7 +256,12 @@ public class BuildJDK {
     }
   }
 
-  void translate_jar() throws java.io.IOException {
+  /**
+   * For Java 8 the Java runtime is located in rt.jar. This method enumerates through the jar file,
+   * selects the classes we want to instrument, creates an InputStream for each of these classes and
+   * saves this information in the class_stream_map.
+   */
+  void gather_runtime_from_jar() {
 
     String jar_name = java_home + "/lib/rt.jar";
     System.out.printf("using jar file %s%n", jar_name);
@@ -266,26 +286,37 @@ public class BuildJDK {
     }
   }
 
-  void translate_modules() throws java.io.IOException {
+  /**
+   * For Java 9+ the Java runtime is located in a series of modules. At this time, we are only
+   * pre-instrumenting the java.base module. This method initializes the DirectoryStream used to
+   * explore java.base. It calls gather_runtime_from_modules_directory to process the directory
+   * structure.
+   */
+  void gather_runtime_from_modules() {
 
     FileSystem fs = FileSystems.getFileSystem(URI.create("jrt:/"));
     Path modules = fs.getPath("/modules");
     System.out.printf("using modules file %s%n", java_home + "/lib/modules");
     try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modules, "java.base*")) {
       for (Path module : directoryStream) {
-        translate_modules_directory(module, module.toString().length());
+        gather_runtime_from_modules_directory(module, module.toString().length());
       }
     } catch (IOException e) {
       throw new Error(e);
     }
   }
 
-  void translate_modules_directory(Path path, int modulePrefixLength) {
+  /**
+   * This is a helper method for gather_runtime_from_modules. It recurses down the module directory
+   * tree, selects the classes we want to instrument, creates an InputStream for each of these
+   * classes and saves this information in the class_stream_map.
+   */
+  void gather_runtime_from_modules_directory(Path path, int modulePrefixLength) {
 
     if (Files.isDirectory(path)) {
       try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
         for (Path subpath : directoryStream) {
-          translate_modules_directory(subpath, modulePrefixLength);
+          gather_runtime_from_modules_directory(subpath, modulePrefixLength);
         }
       } catch (IOException e) {
         throw new Error(e);
@@ -303,7 +334,7 @@ public class BuildJDK {
     }
   }
 
-  void translate_classes(File dest_dir) throws java.io.IOException {
+  void instrument_classes(File dest_dir) {
 
     try {
       // Create the destination directory
@@ -311,7 +342,7 @@ public class BuildJDK {
 
       // Process each file.
       for (String className : class_stream_map.keySet()) {
-        if (verbose) System.out.println("translate_classes: " + className);
+        if (verbose) System.out.println("instrument_classes: " + className);
 
         if (className.equals("module-info.class")) {
           System.out.printf("Skipping file %s%n", className);
@@ -351,7 +382,7 @@ public class BuildJDK {
 
         // Instrument the class file.
         try {
-          processClassFile(jc, dest_dir, className);
+          instrumentClassFile(jc, dest_dir, className);
         } catch (Throwable e) {
           throw new Error("Couldn't instrument " + className, e);
         }
@@ -362,8 +393,8 @@ public class BuildJDK {
       int java_class_version = BcelUtil.javaVersion + 44;
       String dest_dir_name = dest_dir.getName();
 
-      // Create the DcompMarker class (used to identify instrumented calls)
-      // Needed for all JDK versions.
+      // We've finished instrumenting all the class files. Now we create and
+      // the DcompMarker class which is used to identify instrumented calls.
       ClassGen dcomp_marker =
           new ClassGen(
               "java.lang.DCompMarker",
@@ -455,8 +486,13 @@ public class BuildJDK {
   /**
    * Instruments the JavaClass jc (whose name is classname). Writes the resulting class to its
    * corresponding location in the directory dfile.
+   *
+   * @param jc JavaClass to be instrumented
+   * @param dfile output directory for instrumented class
+   * @param classname name of class to be instrumented
+   * @throws IOException if unable to write out instrumented class
    */
-  private void processClassFile(JavaClass jc, File dfile, String classname)
+  private void instrumentClassFile(JavaClass jc, File dfile, String classname)
       throws java.io.IOException {
     if (verbose) System.out.printf("processing target %s%n", classname);
     DCInstrument dci = new DCInstrument(jc, true, null);
