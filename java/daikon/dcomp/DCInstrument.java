@@ -111,9 +111,9 @@ class DCInstrument extends InstructionListUtils {
    */
   protected static boolean jdk_instrumented = true;
 
-  /** Either java.lang.DCompInstrumented or daikon.dcomp.DCompInstrumented */
-  protected static String instrumentation_interface;
-  /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
+  /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
+  protected static @DotSeparatedIdentifiers String instrumentation_interface;
+  /** Either "java.lang.DCompMarker" or "daikon.dcomp.DCompMarker". */
   protected static @DotSeparatedIdentifiers String dcomp_prefix;
   /**
    * We add a dummy local variable to JDK methods during the initial jdk instrumentation (via
@@ -1164,7 +1164,10 @@ class DCInstrument extends InstructionListUtils {
     }
   }
 
-  /** Adds the method name and containing class name to the list of uninstrumented methods. */
+  /**
+   * Adds the method name and containing class name to {@code skip_methods}, the list of
+   * uninstrumented methods.
+   */
   void skip_method(MethodGen mg) {
     skipped_methods.add(mg.getClassName() + "." + mg.getName());
   }
