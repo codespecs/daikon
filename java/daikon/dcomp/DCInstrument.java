@@ -112,7 +112,7 @@ class DCInstrument extends InstructionListUtils {
   protected static boolean jdk_instrumented = true;
 
   /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
-  protected static @DotSeparatedIdentifiers String instrumentation_interface;
+  protected static String instrumentation_interface;
   /** Either "java.lang.DCompMarker" or "daikon.dcomp.DCompMarker". */
   protected static @DotSeparatedIdentifiers String dcomp_prefix;
   /**
