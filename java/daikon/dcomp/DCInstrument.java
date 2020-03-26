@@ -3202,6 +3202,8 @@ class DCInstrument extends InstructionListUtils {
    * load instructions. First the arrayref and its index are duplicated on the stack. Then the
    * appropriate array load method is called to mark them as comparable and update the tag stack.
    * Finally the original load instruction is performed.
+   *
+   * @param inst an array load instruction
    */
   InstructionList array_load(Instruction inst) {
 
@@ -3232,6 +3234,8 @@ class DCInstrument extends InstructionListUtils {
    * store instruction. This is accomplished by calling the specified method and passing it the
    * array reference, index, and value (of base_type). The method will mark the array and index as
    * comparable and perform the array store.
+   *
+   * @param inst an array store instruction
    */
   InstructionList array_store(Instruction inst, String method, Type base_type) {
 
