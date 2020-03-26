@@ -31,16 +31,13 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 
 /**
- * BuildJDK uses daikon.dcomp.DCInstrument to add comparability instrumentation to a set of Java
- * class files and then stores the modified files into a directory identified by a (required)
- * command line argument. By default, BuildJDK will locate the appropriate Java runtime library and
- * instrument each of its member class files. If the optional --classfiles argument is present, then
- * the class files to be instrumented are given on the command line and the Java runtime library is
- * not used. This usage is primarily for debugging purposes.
+ * BuildJDK uses {@link DCInstrument} to add comparability instrumentation to a set of Java class
+ * files and then stores the modified files into a directory identified by a (required) command line
+ * argument.
  *
  * <p>DCInstrument duplicates each method of a class file. The new methods are distinguished by the
  * addition of a final parameter of type DCompMarker and are instrumented to track comparability.
- * Based on it's invocation arguments, DynComp will decide whether to call the instrumented or
+ * Based on its invocation arguments, DynComp will decide whether to call the instrumented or
  * uninstrumented version of a method.
  */
 public class BuildJDK {
@@ -55,7 +52,7 @@ public class BuildJDK {
    * Instrument the class files given on the command line instead of the ones in the Java runtime
    * library.
    */
-  @Option("Instrument the class files given on the command line")
+  @Option("Instrument only the class files given on the command line")
   public static boolean classfiles = false;
 
   /**
@@ -72,7 +69,7 @@ public class BuildJDK {
   private int _numFilesProcessed = 0;
 
   /** Name of entry in output jar containing the statics map. */
-  private static String static_map_fname = "dcomp_jdk_static_map";
+  private static String static_field_id_fname = "dcomp_jdk_static_field_id";
 
   /** Names of all the classes processed. */
   private static List<String> all_classes = new ArrayList<>();
@@ -102,9 +99,14 @@ public class BuildJDK {
    * Instruments each class file in the Java runtime and puts the result in the first non-option
    * command-line argument.
    *
+   * <p>By default, BuildJDK will locate the appropriate Java runtime library and instrument each of
+   * its member class files. If the optional --classfiles argument is present, then the class files
+   * to be instrumented are given on the command line and the Java runtime library is not used. This
+   * usage is primarily for debugging purposes.
+   *
    * @param args arguments being passed to BuildJDK
-   * @throws IOException if unable to read or write dcomp_jdk_static_map or if unable to write
-   *     jdk_classes.txt.
+   * @throws IOException if unable to read or write dcomp_jdk_static_field_id or if unable to write
+   *     jdk_classes.txt
    */
   public static void main(String[] args) throws IOException {
 
@@ -112,7 +114,7 @@ public class BuildJDK {
 
     Options options =
         new Options(
-            "daikon.BuildJDK [options] dest [classfiles...]", BuildJDK.class, DynComp.class);
+            "daikon.BuildJDK [options] dest_dir [classfiles...]", BuildJDK.class, DynComp.class);
     String[] cl_args = options.parse(true, args);
     check_args(options, cl_args);
     verbose = DynComp.verbose;
@@ -132,8 +134,9 @@ public class BuildJDK {
       // But if we're using it to fix a broken classfile, then we need
       // to restore the static map from when our runtime jar was originally
       // built.  We assume it is in the destination directory.
-      DCInstrument.restore_static_map(new File(dest_dir, static_map_fname));
-      System.out.printf("Restored %d entries in static map.%n", DCInstrument.static_map.size());
+      DCInstrument.restore_static_field_id(new File(dest_dir, static_field_id_fname));
+      System.out.printf(
+          "Restored %d entries in static map.%n", DCInstrument.static_field_id.size());
 
       // Read in each specified classfile
       for (File class_file : class_files) {
@@ -173,8 +176,8 @@ public class BuildJDK {
       build.instrument_classes(dest_dir);
 
       // Write out the static map
-      System.out.printf("Found %d statics.%n", DCInstrument.static_map.size());
-      DCInstrument.save_static_map(new File(dest_dir, static_map_fname));
+      System.out.printf("Found %d statics.%n", DCInstrument.static_field_id.size());
+      DCInstrument.save_static_field_id(new File(dest_dir, static_field_id_fname));
 
       // Write out the list of all classes in the jar file
       File jdk_classes_dir = new File(dest_dir, "java/lang");
@@ -194,11 +197,11 @@ public class BuildJDK {
   }
 
   /**
-   * Check the arguments for legality. Verify java.home and JAVA_HOME match. Prints a message and
-   * returns false if there is an error.
+   * Check the non-option command-line arguments for legality. Verify java.home and JAVA_HOME match.
+   * Exits the JVM if there is an error.
    *
-   * @param options set of legal options to BuildJDK
-   * @param target_args arguments being passed to BuildJDK
+   * @param options describes the legal command-line options to BuildJDK
+   * @param target_args command-line arguments, after all options have been removed
    */
   public static void check_args(Options options, String[] target_args) {
 
@@ -257,9 +260,8 @@ public class BuildJDK {
   }
 
   /**
-   * For Java 8 the Java runtime is located in rt.jar. This method enumerates through the jar file,
-   * selects the classes we want to instrument, creates an InputStream for each of these classes and
-   * saves this information in the class_stream_map.
+   * For Java 8 the Java runtime is located in rt.jar. This method creates an InputStream for each
+   * class in rt.jar and saves this information in {@link #class_stream_map}.
    */
   void gather_runtime_from_jar() {
 
@@ -484,15 +486,15 @@ public class BuildJDK {
   }
 
   /**
-   * Instruments the JavaClass jc (whose name is classname). Writes the resulting class to its
-   * corresponding location in the directory dfile.
+   * Instruments the JavaClass {@code jc} (whose name is {@code classname}). Writes the resulting
+   * class to its corresponding location in the directory outputDir.
    *
    * @param jc JavaClass to be instrumented
-   * @param dfile output directory for instrumented class
+   * @param outputDir output directory for instrumented class
    * @param classname name of class to be instrumented
    * @throws IOException if unable to write out instrumented class
    */
-  private void instrumentClassFile(JavaClass jc, File dfile, String classname)
+  private void instrumentClassFile(JavaClass jc, File outputDir, String classname)
       throws java.io.IOException {
     if (verbose) System.out.printf("processing target %s%n", classname);
     DCInstrument dci = new DCInstrument(jc, true, null);
@@ -507,9 +509,9 @@ public class BuildJDK {
     File classfile = new File(classname);
     File dir;
     if (classfile.getParent() == null) {
-      dir = dfile;
+      dir = outputDir;
     } else {
-      dir = new File(dfile, classfile.getParent());
+      dir = new File(outputDir, classfile.getParent());
     }
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
@@ -524,14 +526,13 @@ public class BuildJDK {
   }
 
   /**
-   * Print out information about any methods that were not instrumented. This happens when a method
-   * fails BCEL's verifier (which is more strict than Java's). Any failures which have not been
-   * previously seen are noted.
+   * Print information about methods that were not instrumented. This happens when a method fails
+   * BCEL's verifier (which is more strict than Java's).
    */
   private static void print_skipped_methods() {
 
     if (skipped_methods.isEmpty()) {
-      System.out.printf("No methods were skipped.%n");
+      // System.out.printf("No methods were skipped.%n");
       return;
     }
 

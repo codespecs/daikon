@@ -135,13 +135,13 @@ class DCInstrument extends InstructionListUtils {
   protected static final String GET_TAG = "get_tag";
 
   /**
-   * Map from each static field name to its unique integer id Note that while its intuitive to think
-   * that each static should show up exactly once, that is not the case. A static defined in a
+   * Map from each static field name to its unique integer id. Note that while it's intuitive to
+   * think that each static should show up exactly once, that is not the case. A static defined in a
    * superclass can be accessed through each of its subclasses. Tag accessor methods must be added
    * in each subclass and each should return the same id. We thus will lookup the same name multiple
    * times.
    */
-  static Map<String, Integer> static_map = new LinkedHashMap<>();
+  static Map<String, Integer> static_field_id = new LinkedHashMap<>();
 
   /**
    * Array of classes whose fields are not initialized from java. Since the fields are not
@@ -2908,10 +2908,10 @@ class DCInstrument extends InstructionListUtils {
 
     // Get the index of this static in the list of all statics and allocate
     // a tag for it.
-    Integer index = null; // DCRuntime.static_map.get (name);
+    Integer index = null; // DCRuntime.static_field_id.get (name);
     if (index == null) {
-      // index = DCRuntime.static_map.size();
-      // DCRuntime.static_map.put (name, index);
+      // index = DCRuntime.static_field_id.size();
+      // DCRuntime.static_field_id.put (name, index);
       DCRuntime.static_tags.add(new Object());
     }
 
@@ -4103,8 +4103,8 @@ class DCInstrument extends InstructionListUtils {
       MethodGen set_method;
       if (f.isStatic()) {
         String full_name = full_name(orig_class, f);
-        get_method = create_get_tag(gen, f, static_map.get(full_name));
-        set_method = create_set_tag(gen, f, static_map.get(full_name));
+        get_method = create_get_tag(gen, f, static_field_id.get(full_name));
+        set_method = create_set_tag(gen, f, static_field_id.get(full_name));
       } else {
         get_method = create_get_tag(gen, f, field_map.get(f));
         set_method = create_set_tag(gen, f, field_map.get(f));
@@ -4146,8 +4146,8 @@ class DCInstrument extends InstructionListUtils {
         MethodGen set_method;
         if (f.isStatic()) {
           String full_name = full_name(super_class, f);
-          get_method = create_get_tag(gen, f, static_map.get(full_name));
-          set_method = create_set_tag(gen, f, static_map.get(full_name));
+          get_method = create_get_tag(gen, f, static_field_id.get(full_name));
+          set_method = create_set_tag(gen, f, static_field_id.get(full_name));
         } else {
           get_method = create_get_tag(gen, f, field_map.get(f));
           set_method = create_set_tag(gen, f, field_map.get(f));
@@ -4197,18 +4197,18 @@ class DCInstrument extends InstructionListUtils {
       }
       if (f.isStatic()) {
         if (!in_jdk) {
-          int min_size = static_map.size() + DCRuntime.max_jdk_static;
+          int min_size = static_field_id.size() + DCRuntime.max_jdk_static;
           while (DCRuntime.static_tags.size() <= min_size) DCRuntime.static_tags.add(null);
-          static_map.put(full_name(jc, f), min_size);
+          static_field_id.put(full_name(jc, f), min_size);
         } else { // building jdk
           String full_name = full_name(jc, f);
-          if (static_map.containsKey(full_name)) {
+          if (static_field_id.containsKey(full_name)) {
             // System.out.printf("Reusing static field %s value %d%n",
-            //                    full_name, static_map.get(full_name));
+            //                    full_name, static_field_id.get(full_name));
           } else {
             // System.out.printf("Allocating new static field %s%n",
             //                    full_name);
-            static_map.put(full_name, static_map.size() + 1);
+            static_field_id.put(full_name, static_field_id.size() + 1);
           }
         }
       } else {
@@ -4624,13 +4624,13 @@ class DCInstrument extends InstructionListUtils {
 
   /**
    * Writes the static map from field names to their integer ids to the specified file. Can be read
-   * with restore_static_map. Each line contains a key/value combination with a blank separating
-   * them.
+   * with restore_static_field_id. Each line contains a key/value combination with a blank
+   * separating them.
    */
-  static void save_static_map(File file) throws IOException {
+  static void save_static_field_id(File file) throws IOException {
 
     PrintStream ps = new PrintStream(file);
-    for (Map.Entry<@KeyFor("static_map") String, Integer> entry : static_map.entrySet()) {
+    for (Map.Entry<@KeyFor("static_field_id") String, Integer> entry : static_field_id.entrySet()) {
       ps.printf("%s  %d%n", entry.getKey(), entry.getValue());
     }
     ps.close();
@@ -4639,13 +4639,13 @@ class DCInstrument extends InstructionListUtils {
   /**
    * Restores the static map from the specified file.
    *
-   * @see #save_static_map(File)
+   * @see #save_static_field_id(File)
    */
-  static void restore_static_map(File file) throws IOException {
+  static void restore_static_field_id(File file) throws IOException {
     for (String line : new EntryReader(file, "UTF-8")) {
       String[] key_val = line.split("  *");
-      assert !static_map.containsKey(key_val[0]) : key_val[0] + " " + key_val[1];
-      static_map.put(key_val[0], Integer.valueOf(key_val[1]));
+      assert !static_field_id.containsKey(key_val[0]) : key_val[0] + " " + key_val[1];
+      static_field_id.put(key_val[0], Integer.valueOf(key_val[1]));
       // System.out.printf("Adding %s %s to static map%n", key_val[0],
       //                   key_val[1]);
     }
