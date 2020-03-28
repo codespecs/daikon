@@ -98,10 +98,6 @@ public class DynComp {
   @Option("Print detailed information on variables being observed")
   public static boolean debug_decl_print = false;
 
-  /** Use faster but less precise algorithm on omitted ppts. */
-  @Option("Use faster but less precise algorithm on omitted ppts")
-  public static boolean approximate_omitted_ppts = false;
-
   /**
    * Path to java agent jar file that performs the transformation. The "main" procedure is
    * Premain.premain().

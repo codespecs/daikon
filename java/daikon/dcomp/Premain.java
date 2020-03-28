@@ -34,10 +34,6 @@ public class Premain {
   // These command-line options cannot be accessed from DynComp.  These are internal debugging
   // options that may be used when Premain is invoked directly from the command line.
 
-  /** Experimental no instrumentation if no track option. */
-  @Option("Experimental no instrumentation if no track option")
-  public static boolean notrack_instrumentation = false;
-
   /** Turn on basic DCInstrument debugging options. */
   @Option("Turn on basic DCInstrument debugging options")
   public static boolean debug_dcinstrument = false;
