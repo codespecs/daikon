@@ -312,6 +312,10 @@ public class BuildJDK {
    * This is a helper method for gather_runtime_from_modules. It recurses down the module directory
    * tree, selects the classes we want to instrument, creates an InputStream for each of these
    * classes and saves this information in the class_stream_map.
+   *
+   * @param path path to module file, which might be subdirectory
+   * @param modulePrefixLength length of "/module/..." path prefix before start of actual member
+   *     path
    */
   void gather_runtime_from_modules_directory(Path path, int modulePrefixLength) {
 

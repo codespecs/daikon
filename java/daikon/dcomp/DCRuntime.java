@@ -881,7 +881,7 @@ public final class DCRuntime {
    * Manipulate the tags for an array store instruction. The tag at the top of stack is stored into
    * the tag storage for the array. Mark the array and the index as comparable.
    *
-   * @param array_ref array being accessed
+   * @param arr_ref array being accessed
    * @param length size of the array
    * @param index index of the array element being accessed
    */
@@ -3012,6 +3012,7 @@ public final class DCRuntime {
    * Returns whether or not the specified class is initialized.
    *
    * @param clazz class to check
+   * @return if clazz has been initialized
    */
   @Pure
   public static boolean is_class_init(Class<?> clazz) {
