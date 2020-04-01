@@ -481,7 +481,7 @@ public final class DCRuntime {
    *
    * @param c object to be searched
    * @param method_name method to be searched for
-   * @return if the method was found
+   * @return true if the method was found
    */
   public static boolean has_instrumented(Class<?> c, String method_name) {
 
@@ -3012,7 +3012,7 @@ public final class DCRuntime {
    * Returns whether or not the specified class is initialized.
    *
    * @param clazz class to check
-   * @return if clazz has been initialized
+   * @return true if clazz has been initialized
    */
   @Pure
   public static boolean is_class_init(Class<?> clazz) {

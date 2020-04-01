@@ -369,8 +369,7 @@ class DCInstrument extends InstructionListUtils {
         // If the method is native
         if (mg.isNative()) {
 
-          // Create java code that cleans up the tag stack and calls the
-          // real native method
+          // Create Java code that cleans up the tag stack and calls the real native method.
           fix_native(gen, mg);
           has_code = true;
           set_current_stack_map_table(mg, gen.getMajor());
@@ -581,8 +580,7 @@ class DCInstrument extends InstructionListUtils {
         // If the method is native
         if (mg.isNative()) {
 
-          // Create java code that cleans up the tag stack and calls the
-          // real native method
+          // Create Java code that cleans up the tag stack and calls the real native method.
           fix_native_refs_only(gen, mg);
           has_code = true;
           set_current_stack_map_table(mg, gen.getMajor());
@@ -782,8 +780,7 @@ class DCInstrument extends InstructionListUtils {
         // If the method is native
         if (mg.isNative()) {
 
-          // Create java code that cleans up the tag stack and calls the
-          // real native method
+          // Create Java code that cleans up the tag stack and calls the real native method.
           fix_native(gen, mg);
           has_code = true;
           set_current_stack_map_table(mg, gen.getMajor());
@@ -938,8 +935,7 @@ class DCInstrument extends InstructionListUtils {
         // If the method is native
         if (mg.isNative()) {
 
-          // Create java code that cleans up the tag stack and calls the
-          // real native method
+          // Create Java code that cleans up the tag stack and calls the real native method.
           fix_native_refs_only(gen, mg);
           has_code = true;
           set_current_stack_map_table(mg, gen.getMajor());
@@ -3185,7 +3181,7 @@ class DCInstrument extends InstructionListUtils {
    * @param method_id classname:method to check
    * @param classname class to check for
    * @param m method to check for
-   * @return if they match
+   * @return true if they match
    */
   boolean has_specified_method(String method_id, String classname, Method m) {
 
@@ -3213,7 +3209,7 @@ class DCInstrument extends InstructionListUtils {
    *
    * @param classname class to test
    * @param pptname ppt to look for
-   * @return if this ppt should be included
+   * @return true if this ppt should be included
    */
   boolean should_track(@ClassGetName String classname, String pptname) {
 
@@ -3601,7 +3597,7 @@ class DCInstrument extends InstructionListUtils {
    * Returns whether or not the specified type is a primitive (int, float, double, etc).
    *
    * @param type type to check
-   * @return if type is primitive
+   * @return true if type is primitive
    */
   @Pure
   boolean is_primitive(Type type) {
@@ -3612,7 +3608,7 @@ class DCInstrument extends InstructionListUtils {
    * Returns whether or not the specified type is a category 2 (8 byte) type.
    *
    * @param type type to check
-   * @return if type requires 8 bytes
+   * @return true if type requires 8 bytes
    */
   @Pure
   boolean is_category2(Type type) {
@@ -3645,7 +3641,7 @@ class DCInstrument extends InstructionListUtils {
    * class that contains the method to be loaded.
    *
    * @param invoke instruction to check
-   * @return if the invoke calls a native method
+   * @return true if the invoke calls a native method
    */
   @Pure
   boolean is_native(InvokeInstruction invoke) {
@@ -3924,7 +3920,7 @@ class DCInstrument extends InstructionListUtils {
    *
    * @param mg method to check
    * @param classname class to check
-   * @return if tag fields may be used in class for method
+   * @return true if tag fields may be used in class for method
    */
   boolean tag_fields_ok(MethodGen mg, @ClassGetName String classname) {
 
@@ -4507,7 +4503,7 @@ class DCInstrument extends InstructionListUtils {
    *
    * @param method_name method to check
    * @param arg_types array of argument types to method
-   * @return if method is member of Object
+   * @return true if method is member of Object
    */
   @Pure
   boolean is_object_method(String method_name, Type[] arg_types) {
@@ -4524,7 +4520,7 @@ class DCInstrument extends InstructionListUtils {
    * native methods.
    *
    * @param classname class to check
-   * @return if classname has members that are uninitialized
+   * @return true if classname has members that are uninitialized
    */
   @Pure
   boolean is_uninit_class(String classname) {
