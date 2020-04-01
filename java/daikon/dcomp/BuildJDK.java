@@ -52,11 +52,10 @@ public class BuildJDK {
    * Instrument the class files given on the command line instead of the ones in the Java runtime
    * library.
    */
-  @Option("Instrument only the class files given on the command line")
-  public static boolean classfiles = false;
+  private static boolean classfiles = false;
 
   /**
-   * Used when debugging to terminate processing if an error occurs. This flag is tested in
+   * Used when testing to terminate processing if an error occurs. This flag is tested in
    * DCInstrument.
    */
   @Option("Halt if an instrumentation error occurs")
@@ -68,18 +67,22 @@ public class BuildJDK {
   /** Number of class files processed; used for progress display. */
   private int _numFilesProcessed = 0;
 
-  /** Name of entry in output jar containing the statics map. */
-  private static String static_field_id_fname = "dcomp_jdk_static_field_id";
+  /** Name of file in output jar containing the statics map. */
+  private static String static_field_id_filename = "dcomp_jdk_static_field_id";
 
-  /** Names of all the classes processed. */
+  /** Names in internal form of all the classes processed. */
   private static List<String> all_classes = new ArrayList<>();
 
-  /** Names of all methods that DCInstrument could not process. Should be empty. */
+  /**
+   * Names of all methods that DCInstrument could not process. Should be empty. Format is &lt;fully
+   * qualified class name&gt;.&lt;method name&gt;
+   */
   private static List<String> skipped_methods = new ArrayList<>();
 
   /**
    * A list of methods known to cause DCInstrument to fail. This is used to remove known problems
-   * from the list of failures displayed at the end of BuildJDK's execution.
+   * from the list of failures displayed at the end of BuildJDK's execution. Format is &lt;fully
+   * qualified class name&gt;.&lt;method name&gt;
    */
   public static List<String> known_uninstrumentable_methods =
       Arrays.asList(
@@ -87,22 +90,13 @@ public class BuildJDK {
           );
 
   /**
-   * We want to share code to read and instrument the Java class file members of a jar file (JDK 8)
-   * or a module file (JDK 9+). However, jar files and module files are located in two completely
-   * different file systems. So we open an InputStream for each class file we wish to instrument and
-   * save it the the class_stream_map. From that point the code to instrument a class file can be
-   * shared.
-   */
-  private Map<String, InputStream> class_stream_map = new HashMap<>();
-
-  /**
    * Instruments each class file in the Java runtime and puts the result in the first non-option
    * command-line argument.
    *
    * <p>By default, BuildJDK will locate the appropriate Java runtime library and instrument each of
-   * its member class files. If the optional --classfiles argument is present, then the class files
-   * to be instrumented are given on the command line and the Java runtime library is not used. This
-   * usage is primarily for debugging purposes.
+   * its member class files. However, if there are additional arguments on the command line after
+   * the destination directory, then we assume these are class files to be instrumented and the Java
+   * runtime library is not used. This usage is primarily for testing purposes.
    *
    * @param args arguments being passed to BuildJDK
    * @throws IOException if unable to read or write dcomp_jdk_static_field_id or if unable to write
@@ -130,11 +124,11 @@ public class BuildJDK {
         class_files[i - 1] = new File(cl_args[i]);
       }
 
-      // The classfiles argument is usually used for testing.
+      // Instrumenting a specific list of class files is usually used for testing.
       // But if we're using it to fix a broken classfile, then we need
       // to restore the static map from when our runtime jar was originally
       // built.  We assume it is in the destination directory.
-      DCInstrument.restore_static_field_id(new File(dest_dir, static_field_id_fname));
+      DCInstrument.restore_static_field_id(new File(dest_dir, static_field_id_filename));
       System.out.printf(
           "Restored %d entries in static map.%n", DCInstrument.static_field_id.size());
 
@@ -157,7 +151,7 @@ public class BuildJDK {
 
         // Instrument the class file.
         try {
-          build.instrumentClassFile(jc, dest_dir, classFileName);
+          build.instrumentClassFile(jc, dest_dir, classFileName, class_files.length);
         } catch (Throwable e) {
           throw new Error("Couldn't instrument " + classFileName, e);
         }
@@ -165,24 +159,33 @@ public class BuildJDK {
 
     } else {
 
-      // Collect the Java runtime classes we want to instrument in class_stream_map.
+      /**
+       * We want to share code to read and instrument the Java class file members of a jar file (JDK
+       * 8) or a module file (JDK 9+). However, jar files and module files are located in two
+       * completely different file systems. So we open an InputStream for each class file we wish to
+       * instrument and save it in the class_stream_map with the file name as the key. From that
+       * point the code to instrument a class file can be shared.
+       */
+      Map<String, InputStream> class_stream_map;
+
       if (BcelUtil.javaVersion > 8) {
-        build.gather_runtime_from_modules();
+        class_stream_map = build.gather_runtime_from_modules();
       } else {
-        build.gather_runtime_from_jar();
+        class_stream_map = build.gather_runtime_from_jar();
       }
 
-      // Instrument the Java runtime classes we have stored in class_stream_map.
-      build.instrument_classes(dest_dir);
+      // Instrument the Java runtime classes identified in class_stream_map.
+      build.instrument_classes(dest_dir, class_stream_map);
 
-      // Write out the static map
+      // Write out the file containing the static map.
       System.out.printf("Found %d statics.%n", DCInstrument.static_field_id.size());
-      DCInstrument.save_static_field_id(new File(dest_dir, static_field_id_fname));
+      DCInstrument.save_static_field_id(new File(dest_dir, static_field_id_filename));
 
       // Write out the list of all classes in the jar file
       File jdk_classes_dir = new File(dest_dir, "java/lang");
       File jdk_classes_file = new File(jdk_classes_dir, "jdk_classes.txt");
-      System.out.printf("Writing all classes to %s%n", jdk_classes_file);
+      System.out.printf("Writing a list of class names to %s%n", jdk_classes_file);
+      // Class names are written in internal form.
       try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
         pw.println("no_primitives: " + DynComp.no_primitives);
         for (String classname : all_classes) {
@@ -205,66 +208,59 @@ public class BuildJDK {
    */
   public static void check_args(Options options, String[] target_args) {
 
-    if (classfiles) {
-      if (target_args.length < 1) {
-        System.out.println("must specify destination dir");
-        options.printUsage();
-        System.exit(1);
-      }
-      if (target_args.length < 2) {
-        System.out.println("must specify classfiles to instrument");
-        options.printUsage();
-        System.exit(1);
-      }
+    if (target_args.length < 1) {
+      System.out.println("must specify destination dir");
+      options.printUsage();
+      System.exit(1);
+    }
+
+    if (target_args.length > 1) {
+      // we assume the extra arguments are a list of class files to instrument
+      classfiles = true;
     } else {
-      if (target_args.length < 1) {
-        System.out.println("must specify destination dir");
-        options.printUsage();
+      // We are going to instrument the default Java runtime library.
+      // We need to verify where we should look for it.
+
+      String JAVA_HOME = System.getenv("JAVA_HOME");
+      if (JAVA_HOME == null) {
+        if (verbose) {
+          System.out.println("JAVA_HOME not defined; using java.home: " + java_home);
+        }
+        JAVA_HOME = java_home;
+      }
+
+      File jrt = new File(JAVA_HOME);
+      if (!jrt.exists()) {
+        System.out.printf("Java home directory %s does not exist.%n", jrt);
         System.exit(1);
       }
-      if (target_args.length > 1) {
-        System.out.println("too many arguments: found " + target_args.length + ", expected 1");
-        options.printUsage();
+
+      try {
+        jrt = jrt.getCanonicalFile();
+      } catch (Exception e) {
+        System.out.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
         System.exit(1);
       }
-    }
 
-    String JAVA_HOME = System.getenv("JAVA_HOME");
-    if (JAVA_HOME == null) {
-      if (verbose) {
-        System.out.println("JAVA_HOME not defined; using java.home: " + java_home);
+      JAVA_HOME = jrt.getAbsolutePath();
+      if (!java_home.startsWith(JAVA_HOME)) {
+        System.out.printf(
+            "JAVA_HOME (%s) does not agree with java.home (%s).%n", JAVA_HOME, java_home);
+        System.out.printf("Please correct your Java environment.%n");
+        System.exit(1);
       }
-      JAVA_HOME = java_home;
-    }
-
-    File jrt = new File(JAVA_HOME);
-    if (!jrt.exists()) {
-      System.out.printf("Java home directory %s does not exist.%n", jrt);
-      System.exit(1);
-    }
-
-    try {
-      jrt = jrt.getCanonicalFile();
-    } catch (Exception e) {
-      System.out.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
-      System.exit(1);
-    }
-
-    JAVA_HOME = jrt.getAbsolutePath();
-    if (!java_home.startsWith(JAVA_HOME)) {
-      System.out.printf(
-          "JAVA_HOME (%s) does not agree with java.home (%s).%n", JAVA_HOME, java_home);
-      System.out.printf("Please correct your Java environment.%n");
-      System.exit(1);
     }
   }
 
   /**
    * For Java 8 the Java runtime is located in rt.jar. This method creates an InputStream for each
-   * class in rt.jar and saves this information in {@link #class_stream_map}.
+   * class in rt.jar and returns this information in a map from class file name to InputStream.
+   *
+   * @return a map from class file name to the associated InputStream
    */
-  void gather_runtime_from_jar() {
+  Map<String, InputStream> gather_runtime_from_jar() {
 
+    Map<String, InputStream> class_stream_map = new HashMap<>();
     String jar_name = java_home + "/lib/rt.jar";
     System.out.printf("using jar file %s%n", jar_name);
     try {
@@ -286,6 +282,7 @@ public class BuildJDK {
     } catch (Exception e) {
       throw new Error("Problem while reading " + jar_name, e);
     }
+    return class_stream_map;
   }
 
   /**
@@ -293,36 +290,43 @@ public class BuildJDK {
    * pre-instrumenting the java.base module. This method initializes the DirectoryStream used to
    * explore java.base. It calls gather_runtime_from_modules_directory to process the directory
    * structure.
+   *
+   * @return a map from class file name to the associated InputStream
    */
-  void gather_runtime_from_modules() {
+  Map<String, InputStream> gather_runtime_from_modules() {
 
+    Map<String, InputStream> class_stream_map = new HashMap<>();
     FileSystem fs = FileSystems.getFileSystem(URI.create("jrt:/"));
     Path modules = fs.getPath("/modules");
-    System.out.printf("using modules file %s%n", java_home + "/lib/modules");
+    System.out.printf("using modules directory %s%n", java_home + "/lib/modules");
     try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modules, "java.base*")) {
-      for (Path module : directoryStream) {
-        gather_runtime_from_modules_directory(module, module.toString().length());
+      for (Path moduleDir : directoryStream) {
+        gather_runtime_from_modules_directory(
+            moduleDir, moduleDir.toString().length(), class_stream_map);
       }
     } catch (IOException e) {
       throw new Error(e);
     }
+    return class_stream_map;
   }
 
   /**
    * This is a helper method for gather_runtime_from_modules. It recurses down the module directory
    * tree, selects the classes we want to instrument, creates an InputStream for each of these
-   * classes and saves this information in the class_stream_map.
+   * classes and adds this information to the class_stream_map.
    *
    * @param path path to module file, which might be subdirectory
    * @param modulePrefixLength length of "/module/..." path prefix before start of actual member
    *     path
+   * @param class_stream_map is used to collect a map from class file name to InputStream.
    */
-  void gather_runtime_from_modules_directory(Path path, int modulePrefixLength) {
+  void gather_runtime_from_modules_directory(
+      Path path, int modulePrefixLength, Map<String, InputStream> class_stream_map) {
 
     if (Files.isDirectory(path)) {
       try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
         for (Path subpath : directoryStream) {
-          gather_runtime_from_modules_directory(subpath, modulePrefixLength);
+          gather_runtime_from_modules_directory(subpath, modulePrefixLength, class_stream_map);
         }
       } catch (IOException e) {
         throw new Error(e);
@@ -340,28 +344,34 @@ public class BuildJDK {
     }
   }
 
-  void instrument_classes(File dest_dir) {
+  /**
+   * Instrument each of the classes indentified by the class_stream_map argument.
+   *
+   * @param dest_dir where to store the instrumented classes
+   * @param class_stream_map identifies the classes to be instrumented
+   */
+  void instrument_classes(File dest_dir, Map<String, InputStream> class_stream_map) {
 
     try {
       // Create the destination directory
       dest_dir.mkdirs();
 
       // Process each file.
-      for (String className : class_stream_map.keySet()) {
-        if (verbose) System.out.println("instrument_classes: " + className);
+      for (String classFileName : class_stream_map.keySet()) {
+        if (verbose) System.out.println("instrument_classes: " + classFileName);
 
-        if (className.equals("module-info.class")) {
-          System.out.printf("Skipping file %s%n", className);
+        if (classFileName.equals("module-info.class")) {
+          System.out.printf("Skipping file %s%n", classFileName);
           continue;
         }
 
-        if (className.endsWith(".class")) {
-          all_classes.add(className.replace(".class", ""));
+        if (classFileName.endsWith(".class")) {
+          all_classes.add(classFileName.replace(".class", ""));
         }
-        if (!className.endsWith(".class") || className.equals("java/lang/Object.class")) {
+        if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
           // Copy non-.class files (and Object.class) unchanged (JDK 8).
           // For JDK 9+ we do not copy as these items will be loaded from the original module file.
-          File destfile = new File(className);
+          File destfile = new File(classFileName);
           if (destfile.getParent() == null || BcelUtil.javaVersion > 8) {
             if (verbose) System.out.printf("Skipping file %s%n", destfile);
             continue;
@@ -370,27 +380,27 @@ public class BuildJDK {
           dir.mkdirs();
           File destpath = new File(dir, destfile.getName());
           if (verbose) System.out.println("Copying Object or non-classfile: " + destpath);
-          try (InputStream in = class_stream_map.get(className)) {
+          try (InputStream in = class_stream_map.get(classFileName)) {
             Files.copy(in, destpath.toPath());
           }
           continue;
         }
 
         // Get the binary for this class
-        InputStream is = class_stream_map.get(className);
+        InputStream is = class_stream_map.get(classFileName);
         JavaClass jc;
         try {
-          ClassParser parser = new ClassParser(is, className);
+          ClassParser parser = new ClassParser(is, classFileName);
           jc = parser.parse();
         } catch (Throwable e) {
-          throw new Error("Failed to parse classfile " + className, e);
+          throw new Error("Failed to parse classfile " + classFileName, e);
         }
 
         // Instrument the class file.
         try {
-          instrumentClassFile(jc, dest_dir, className);
+          instrumentClassFile(jc, dest_dir, classFileName, class_stream_map.size());
         } catch (Throwable e) {
-          throw new Error("Couldn't instrument " + className, e);
+          throw new Error("Couldn't instrument " + classFileName, e);
         }
       }
 
@@ -490,17 +500,19 @@ public class BuildJDK {
   }
 
   /**
-   * Instruments the JavaClass {@code jc} (whose name is {@code classname}). Writes the resulting
-   * class to its corresponding location in the directory outputDir.
+   * Instruments the JavaClass {@code jc} (whose name is {@code classFileName}). Writes the
+   * resulting class to its corresponding location in the directory outputDir.
    *
    * @param jc JavaClass to be instrumented
    * @param outputDir output directory for instrumented class
-   * @param classname name of class to be instrumented
+   * @param classFileName name of class to be instrumented
+   * @param classTotal total number of classes to be processed; used for progress display
    * @throws IOException if unable to write out instrumented class
    */
-  private void instrumentClassFile(JavaClass jc, File outputDir, String classname)
+  private void instrumentClassFile(
+      JavaClass jc, File outputDir, String classFileName, int classTotal)
       throws java.io.IOException {
-    if (verbose) System.out.printf("processing target %s%n", classname);
+    if (verbose) System.out.printf("processing target %s%n", classFileName);
     DCInstrument dci = new DCInstrument(jc, true, null);
     JavaClass inst_jc;
     if (DynComp.no_primitives) {
@@ -509,8 +521,7 @@ public class BuildJDK {
       inst_jc = dci.instrument_jdk();
     }
     skipped_methods.addAll(dci.get_skipped_methods());
-    // File classfile = new File(classname.replace('.', '/') + ".class");
-    File classfile = new File(classname);
+    File classfile = new File(classFileName);
     File dir;
     if (classfile.getParent() == null) {
       dir = outputDir;
@@ -524,8 +535,7 @@ public class BuildJDK {
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
-          "Processed %d/%d classes at %tc%n",
-          _numFilesProcessed, class_stream_map.size(), new Date());
+          "Processed %d/%d classes at %tc%n", _numFilesProcessed, classTotal, new Date());
     }
   }
 

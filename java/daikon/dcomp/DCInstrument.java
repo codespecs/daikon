@@ -284,6 +284,8 @@ class DCInstrument extends InstructionListUtils {
   /**
    * Instruments the original class to perform dynamic comparabilty and returns the new class
    * definition.
+   *
+   * @return the modified JavaClass
    */
   public JavaClass instrument() {
 
@@ -397,7 +399,7 @@ class DCInstrument extends InstructionListUtils {
             // Create the local to store the tag frame for this method
             tag_frame_local = create_tag_frame_local(mg);
             build_exception_handler(mg);
-            instrument_method(m, mg);
+            instrument_method(mg);
             if (track) {
               add_enter(mg, mi, DCRuntime.methods.size() - 1);
               add_exit(mg, mi, DCRuntime.methods.size() - 1);
@@ -494,6 +496,8 @@ class DCInstrument extends InstructionListUtils {
   /**
    * Instruments the original class to perform dynamic comparabilty and returns the new class
    * definition. Only tracks references; ignores primitive comparability.
+   *
+   * @return the modified JavaClass
    */
   public JavaClass instrument_refs_only() {
 
@@ -707,6 +711,8 @@ class DCInstrument extends InstructionListUtils {
    * Instruments a JDK class to perform dynamic comparability and returns the new class definition.
    * A second version of each method in the class is created which is instrumented for
    * comparability.
+   *
+   * @return the modified JavaClass
    */
   public JavaClass instrument_jdk() {
 
@@ -802,7 +808,7 @@ class DCInstrument extends InstructionListUtils {
               // Create the local to store the tag frame for this method
               tag_frame_local = create_tag_frame_local(mg);
               build_exception_handler(mg);
-              instrument_method(m, mg);
+              instrument_method(mg);
               install_exception_handler(mg);
             }
           }
@@ -861,6 +867,8 @@ class DCInstrument extends InstructionListUtils {
    * Instruments a JDK class to perform dynamic comparabilty and returns the new class definition. A
    * second version of each method in the class is created which is instrumented for comparability
    * (Reference comparability only).
+   *
+   * @return the modified JavaClass
    */
   public JavaClass instrument_jdk_refs_only() {
 
@@ -1010,8 +1018,12 @@ class DCInstrument extends InstructionListUtils {
     return (gen.getJavaClass().copy());
   }
 
-  /** Instrument the specified method for dynamic comparability. */
-  public void instrument_method(Method m, MethodGen mg) {
+  /**
+   * Instrument the specified method for dynamic comparability.
+   *
+   * @param mg MethodGen for the method to be instrumented
+   */
+  public void instrument_method(MethodGen mg) {
 
     // Because the tag_frame_local is active for the entire method
     // and its creation will change the state of the locals layout,
@@ -1085,7 +1097,11 @@ class DCInstrument extends InstructionListUtils {
     }
   }
 
-  /** Instrument the specified method for dynamic comparability (reference comparability only). */
+  /**
+   * Instrument the specified method for dynamic comparability (reference comparability only).
+   *
+   * @param mg MethodGen for the method to be instrumented
+   */
   public void instrument_method_refs_only(MethodGen mg) {
 
     // Get Stack information
