@@ -54,7 +54,7 @@ ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-plumelib.jar)" "${DAIKONDIR}/java/
   # Add jar files that only exist for the development version, not the
   # distributed version, of Daikon.  The if clause avoids a (harmless but
   # annoying) javac error message that they don't exist.
-  DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
+  DAIKON_CLASSPATH := ${CHECKERFRAMEWORK_JAR}:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
 else
   DAIKON_CLASSPATH := ${DAIKONDIR}/java
 endif
