@@ -22,6 +22,8 @@ Further documentation can be found in:
 
 5.7.4 (??)
 
+Daikon runs under both Java 8 and Java 11.
+
 Running Daikon is no longer supported on Windows or Cygwin.  Use Windows
 Subsystem for Linux (WSL) instead.  You can still run a front end on
 Windows to generate a trace file, but you should run Daikon on a Unix-like
