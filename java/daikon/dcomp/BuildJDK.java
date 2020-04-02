@@ -102,7 +102,8 @@ public class BuildJDK {
     BuildJDK build = new BuildJDK();
 
     Options options =
-        new Options("daikon.BuildJDK [options] dest_dir [classfiles...]", build, DynComp.class);
+        new Options(
+            "daikon.BuildJDK [options] dest_dir [classfiles...]", BuildJDK.class, DynComp.class);
     String[] cl_args = options.parse(true, args);
     if (cl_args.length < 1) {
       System.out.println("must specify destination dir");
