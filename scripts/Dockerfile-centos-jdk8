@@ -8,8 +8,7 @@ MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
 #  * Put "apt-get update" and "apt-get install" in the same RUN command.
 #  * Do not run "apt-get upgrade"; instead get upstream to update.
-# CentOS 8 will use dnf instead of yum.
-RUN yum -q -y upgrade && yum -q -y install \
+RUN dnf -q -y upgrade && dnf -q -y install \
   autoconf \
   automake \
   bc \
@@ -21,15 +20,17 @@ RUN yum -q -y upgrade && yum -q -y install \
   redhat-lsb \
   tar \
   unzip \
-  which \
+  which
+
+RUN dnf -q -y install \
   java-1.8.0-openjdk \
-  java-1.8.0-openjdk-devel \
+  java-1.8.0-openjdk-devel
 
 # This enables the repository that contains jq
-RUN yum -q -y install \
-  epel-release \
+RUN dnf -q -y install \
+  epel-release
 
-RUN yum -q -y install \
-  jq \
+RUN dnf -q -y install \
+  jq
 
-RUN yum -q clean all
+RUN dnf -q clean all

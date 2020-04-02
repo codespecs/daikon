@@ -1,7 +1,5 @@
-# Create a Docker image that is ready to run the full Daikon tests,
-# including building the manual and Javadoc.
-# But it's used primarily for running miscellaneous tests such as the manual
-# and Javadoc.
+# Create a Docker image that is ready to run the Daikon tests,
+# using JDK 8.
 
 FROM fedora
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
@@ -26,8 +24,8 @@ RUN dnf -qy upgrade && dnf -qy install \
   which
 
 RUN dnf -q -y install \
-  java-1.8.0-openjdk \
-  java-1.8.0-openjdk-devel
+  java-11-openjdk \
+  java-11-openjdk-devel
 
 # This enables the repository that contains jq
 RUN dnf -q -y install \
@@ -35,18 +33,5 @@ RUN dnf -q -y install \
 
 RUN dnf -q -y install \
   jq
-
-RUN dnf -qy install \
-  curl \
-  ctags \
-  gcc-c++ \
-  graphviz \
-  netpbm \
-  python \
-  texi2html \
-  texinfo \
-  texinfo-tex \
-  texlive \
-  wget
 
 RUN dnf -q clean all

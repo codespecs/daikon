@@ -3,14 +3,14 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM fedora
+FROM centos
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
 #  * Put "apt-get update" and "apt-get install" in the same RUN command.
 #  * Do not run "apt-get upgrade"; instead get upstream to update.
-RUN dnf -qy upgrade && dnf -qy install \
+RUN dnf -q -y upgrade && dnf -q -y install \
   autoconf \
   automake \
   bc \
@@ -20,14 +20,13 @@ RUN dnf -qy upgrade && dnf -qy install \
   m4 \
   make \
   redhat-lsb \
-  rsync \
   tar \
   unzip \
   which
 
 RUN dnf -q -y install \
-  java-1.8.0-openjdk \
-  java-1.8.0-openjdk-devel
+  java-11-openjdk \
+  java-11-openjdk-devel
 
 # This enables the repository that contains jq
 RUN dnf -q -y install \
@@ -36,7 +35,8 @@ RUN dnf -q -y install \
 RUN dnf -q -y install \
   jq
 
-RUN dnf -qy install \
+RUN dnf -q -y install \
+  ctags \
   curl \
   ctags \
   gcc-c++ \

@@ -1,5 +1,7 @@
-# Create a Docker image that is ready to run the Daikon tests,
-# using JDK 8.
+# Create a Docker image that is ready to run the full Daikon tests,
+# including building the manual and Javadoc.
+# But it's used primarily for running miscellaneous tests such as the manual
+# and Javadoc.
 
 FROM ubuntu
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
@@ -30,8 +32,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
-  openjdk-8-jdk \
-&& update-java-alternatives --set java-1.8.0-openjdk-amd64
+  openjdk-11-jdk
 
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -40,6 +41,21 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   ant \
   maven \
   python
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  curl \
+  g++ \
+  graphviz \
+  libc6-dbg \
+  lsb-release \
+  texi2html \
+  texinfo \
+  texlive \
+  texlive-latex-extra \
+  wget \
+  zlib1g-dev
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get clean \
