@@ -31,9 +31,8 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 
 /**
- * BuildJDK uses {@link DCInstrument} to add comparability instrumentation to a set of Java class
- * files and then stores the modified files into a directory identified by a (required) command line
- * argument.
+ * BuildJDK uses {@link DCInstrument} to add comparability instrumentation to Java class files, then
+ * stores the modified files into a directory identified by a (required) command line argument.
  *
  * <p>DCInstrument duplicates each method of a class file. The new methods are distinguished by the
  * addition of a final parameter of type DCompMarker and are instrumented to track comparability.
@@ -49,12 +48,6 @@ public class BuildJDK {
   public static final String java_home = System.getProperty("java.home");
 
   /**
-   * Instrument the class files given on the command line instead of the ones in the Java runtime
-   * library.
-   */
-  private static boolean classfiles = false;
-
-  /**
    * Used when testing to terminate processing if an error occurs. This flag is tested in
    * DCInstrument.
    */
@@ -67,15 +60,15 @@ public class BuildJDK {
   /** Number of class files processed; used for progress display. */
   private int _numFilesProcessed = 0;
 
-  /** Name of file in output jar containing the statics map. */
+  /** Name of file in output jar containing the static-fields map. */
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
 
-  /** Names in internal form of all the classes processed. */
+  /** Names of all the classes processed, in internal form. */
   private static List<String> all_classes = new ArrayList<>();
 
   /**
-   * Names of all methods that DCInstrument could not process. Should be empty. Format is &lt;fully
-   * qualified class name&gt;.&lt;method name&gt;
+   * Collects names of all methods that DCInstrument could not process. Should be empty. Format is
+   * &lt;fully qualified class name&gt;.&lt;method name&gt;
    */
   private static List<String> skipped_methods = new ArrayList<>();
 
@@ -99,24 +92,28 @@ public class BuildJDK {
    * runtime library is not used. This usage is primarily for testing purposes.
    *
    * @param args arguments being passed to BuildJDK
-   * @throws IOException if unable to read or write dcomp_jdk_static_field_id or if unable to write
-   *     jdk_classes.txt
+   * @throws IOException if unable to read or write file {@code dcomp_jdk_static_field_id} or if
+   *     unable to write {@code jdk_classes.txt}
    */
   public static void main(String[] args) throws IOException {
 
     System.out.println("BuildJDK starting at " + new Date());
 
+    BuildJDK build = new BuildJDK();
+
     Options options =
-        new Options(
-            "daikon.BuildJDK [options] dest_dir [classfiles...]", BuildJDK.class, DynComp.class);
+        new Options("daikon.BuildJDK [options] dest_dir [classfiles...]", build, DynComp.class);
     String[] cl_args = options.parse(true, args);
-    check_args(options, cl_args);
+    if (target_args.length < 1) {
+      System.out.println("must specify destination dir");
+      options.printUsage();
+      System.exit(1);
+    }
     verbose = DynComp.verbose;
 
-    BuildJDK build = new BuildJDK();
     File dest_dir = new File(cl_args[0]);
 
-    if (classfiles) {
+    if (cl_args.length > 1) {
 
       // Arguments are <destdir> <classfiles>...
       File[] class_files = new File[cl_args.length - 1];
@@ -126,13 +123,12 @@ public class BuildJDK {
 
       // Instrumenting a specific list of class files is usually used for testing.
       // But if we're using it to fix a broken classfile, then we need
-      // to restore the static map from when our runtime jar was originally
+      // to restore the static-fields map from when our runtime jar was originally
       // built.  We assume it is in the destination directory.
       DCInstrument.restore_static_field_id(new File(dest_dir, static_field_id_filename));
       System.out.printf(
           "Restored %d entries in static map.%n", DCInstrument.static_field_id.size());
 
-      // Read in each specified classfile
       for (File class_file : class_files) {
         String classFileName = class_file.toString();
         if (classFileName.endsWith("java/lang/Object.class")) {
@@ -159,6 +155,8 @@ public class BuildJDK {
 
     } else {
 
+      check_java_home();
+
       /**
        * We want to share code to read and instrument the Java class file members of a jar file (JDK
        * 8) or a module file (JDK 9+). However, jar files and module files are located in two
@@ -177,13 +175,12 @@ public class BuildJDK {
       // Instrument the Java runtime classes identified in class_stream_map.
       build.instrument_classes(dest_dir, class_stream_map);
 
-      // Write out the file containing the static map.
-      System.out.printf("Found %d statics.%n", DCInstrument.static_field_id.size());
+      // Write out the file containing the static-fields map.
+      System.out.printf("Found %d static fields.%n", DCInstrument.static_field_id.size());
       DCInstrument.save_static_field_id(new File(dest_dir, static_field_id_filename));
 
       // Write out the list of all classes in the jar file
-      File jdk_classes_dir = new File(dest_dir, "java/lang");
-      File jdk_classes_file = new File(jdk_classes_dir, "jdk_classes.txt");
+      File jdk_classes_file = new File(dest_dir, "java/lang/jdk_classes.txt");
       System.out.printf("Writing a list of class names to %s%n", jdk_classes_file);
       // Class names are written in internal form.
       try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
@@ -199,56 +196,39 @@ public class BuildJDK {
     System.out.println("BuildJDK done at " + new Date());
   }
 
-  /**
-   * Check the non-option command-line arguments for legality. Verify java.home and JAVA_HOME match.
-   * Exits the JVM if there is an error.
-   *
-   * @param options describes the legal command-line options to BuildJDK
-   * @param target_args command-line arguments, after all options have been removed
-   */
-  public static void check_args(Options options, String[] target_args) {
+  /** Verify that java.home and JAVA_HOME match. Exits the JVM if there is an error. */
+  public static void check_java_home(Options options, String[] target_args) {
 
-    if (target_args.length < 1) {
-      System.out.println("must specify destination dir");
-      options.printUsage();
+    // We are going to instrument the default Java runtime library.
+    // We need to verify where we should look for it.
+
+    String JAVA_HOME = System.getenv("JAVA_HOME");
+    if (JAVA_HOME == null) {
+      if (verbose) {
+        System.out.println("JAVA_HOME not defined; using java.home: " + java_home);
+      }
+      JAVA_HOME = java_home;
+    }
+
+    File jrt = new File(JAVA_HOME);
+    if (!jrt.exists()) {
+      System.out.printf("Java home directory %s does not exist.%n", jrt);
       System.exit(1);
     }
 
-    if (target_args.length > 1) {
-      // we assume the extra arguments are a list of class files to instrument
-      classfiles = true;
-    } else {
-      // We are going to instrument the default Java runtime library.
-      // We need to verify where we should look for it.
+    try {
+      jrt = jrt.getCanonicalFile();
+    } catch (Exception e) {
+      System.out.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
+      System.exit(1);
+    }
 
-      String JAVA_HOME = System.getenv("JAVA_HOME");
-      if (JAVA_HOME == null) {
-        if (verbose) {
-          System.out.println("JAVA_HOME not defined; using java.home: " + java_home);
-        }
-        JAVA_HOME = java_home;
-      }
-
-      File jrt = new File(JAVA_HOME);
-      if (!jrt.exists()) {
-        System.out.printf("Java home directory %s does not exist.%n", jrt);
-        System.exit(1);
-      }
-
-      try {
-        jrt = jrt.getCanonicalFile();
-      } catch (Exception e) {
-        System.out.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
-        System.exit(1);
-      }
-
-      JAVA_HOME = jrt.getAbsolutePath();
-      if (!java_home.startsWith(JAVA_HOME)) {
-        System.out.printf(
-            "JAVA_HOME (%s) does not agree with java.home (%s).%n", JAVA_HOME, java_home);
-        System.out.printf("Please correct your Java environment.%n");
-        System.exit(1);
-      }
+    JAVA_HOME = jrt.getAbsolutePath();
+    if (!java_home.startsWith(JAVA_HOME)) {
+      System.out.printf(
+          "JAVA_HOME (%s) does not agree with java.home (%s).%n", JAVA_HOME, java_home);
+      System.out.printf("Please correct your Java environment.%n");
+      System.exit(1);
     }
   }
 
@@ -313,9 +293,9 @@ public class BuildJDK {
   /**
    * This is a helper method for gather_runtime_from_modules. It recurses down the module directory
    * tree, selects the classes we want to instrument, creates an InputStream for each of these
-   * classes and adds this information to the class_stream_map.
+   * classes, and adds this information to the class_stream_map.
    *
-   * @param path path to module file, which might be subdirectory
+   * @param path module file, which might be subdirectory
    * @param modulePrefixLength length of "/module/..." path prefix before start of actual member
    *     path
    * @param class_stream_map is used to collect a map from class file name to InputStream.
