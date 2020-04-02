@@ -159,8 +159,10 @@ public class BuildJDK {
       check_java_home();
 
       /**
-       * We want to share code to read and instrument the Java class file members of a jar file (JDK
-       * 8) or a module file (JDK 9+). However, jar files and module files are located in two
+       * Key is a class file name, value is a stream that opens that file name.
+       *
+       * <p>We want to share code to read and instrument the Java class file members of a jar file
+       * (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
        * completely different file systems. So we open an InputStream for each class file we wish to
        * instrument and save it in the class_stream_map with the file name as the key. From that
        * point the code to instrument a class file can be shared.
@@ -329,7 +331,7 @@ public class BuildJDK {
    * Instrument each of the classes indentified by the class_stream_map argument.
    *
    * @param dest_dir where to store the instrumented classes
-   * @param class_stream_map identifies the classes to be instrumented
+   * @param class_stream_map maps from class file name to an input stream on that file
    */
   void instrument_classes(File dest_dir, Map<String, InputStream> class_stream_map) {
 
