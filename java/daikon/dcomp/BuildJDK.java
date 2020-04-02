@@ -104,7 +104,7 @@ public class BuildJDK {
     Options options =
         new Options("daikon.BuildJDK [options] dest_dir [classfiles...]", build, DynComp.class);
     String[] cl_args = options.parse(true, args);
-    if (target_args.length < 1) {
+    if (cl_args.length < 1) {
       System.out.println("must specify destination dir");
       options.printUsage();
       System.exit(1);
@@ -197,7 +197,7 @@ public class BuildJDK {
   }
 
   /** Verify that java.home and JAVA_HOME match. Exits the JVM if there is an error. */
-  public static void check_java_home(Options options, String[] target_args) {
+  public static void check_java_home() {
 
     // We are going to instrument the default Java runtime library.
     // We need to verify where we should look for it.
