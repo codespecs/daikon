@@ -309,7 +309,7 @@ public final class Configuration implements Serializable {
     }
 
     try {
-      field.set(null, value);
+      setStaticField(field, value);
     } catch (IllegalAccessException e) {
       throw new ConfigException("Inaccessible configuration option " + field.toString());
     }
@@ -326,5 +326,17 @@ public final class Configuration implements Serializable {
     assert !fieldname.startsWith(PREFIX); // must not have prefix
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);
+  }
+
+  /**
+   * Set a static field to the given value.
+   *
+   * @param field a field; must be static
+   * @param value the value to set the field to
+   */
+  // This method exists to reduce the scope of the warning suppression.
+  @SuppressWarnings("nullness:argument.type.incompatible") // field is static, so object may be null
+  private static void setStaticField(Field field, Object value) throws IllegalAccessException {
+    field.set(null, value);
   }
 }
