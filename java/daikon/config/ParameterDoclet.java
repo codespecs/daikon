@@ -4,6 +4,7 @@ import com.sun.javadoc.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -226,6 +227,10 @@ public class ParameterDoclet {
       String fieldname = field.substring(i + 1);
       Class<?> c = ReflectionPlume.classForName(classname);
       Field f = c.getField(Configuration.PREFIX + fieldname);
+      if (!Modifier.isStatic(f.getModifiers())) {
+        throw new Error("Field " + Configuration.PREFIX + fieldname + " should be static");
+      }
+      @SuppressWarnings("nullness") // the field is static
       Object value = f.get(null);
       return "The default value is `" + value + "'.";
     } catch (Exception e) {
