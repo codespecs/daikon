@@ -1166,7 +1166,7 @@ public final class Daikon {
                             + field.getType()
                             + " instead of boolean");
                   } else {
-                    field.set(null, false);
+                    setStaticField(field, false);
                     // System.out.println(
                     //     "Set field "
                     //         + invType
@@ -1409,6 +1409,18 @@ public final class Daikon {
     PrintInvariants.validateGuardNulls();
 
     return new FileOptions(decl_files, dtrace_files, spinfo_files, map_files);
+  }
+
+  /**
+   * Set a static field to the given value.
+   *
+   * @param field a field; must be static
+   * @param value the value to set the field to
+   */
+  // This method exists to reduce the scope of the warning suppression.
+  @SuppressWarnings("nullness:argument.type.incompatible") // field is static, so object may be null
+  private static void setStaticField(Field field, Object value) throws IllegalAccessException {
+    field.set(null, value);
   }
 
   /**
