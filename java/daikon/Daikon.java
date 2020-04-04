@@ -1141,10 +1141,17 @@ public final class Daikon {
             }
             f.setAccessible(true);
             Object classesAsObject;
-            try {
-              classesAsObject = f.get(Thread.currentThread().getContextClassLoader());
-            } catch (IllegalAccessException e) {
-              throw new Daikon.BugInDaikon("Field ClassLoader.classes was not made accessible");
+            {
+              ClassLoader cl = Thread.currentThread().getContextClassLoader();
+              if (cl == null) {
+                throw new Daikon.BugInDaikon(
+                    "Need to handle when getContextClassLoader returns null");
+              }
+              try {
+                classesAsObject = f.get(cl);
+              } catch (IllegalAccessException e) {
+                throw new Daikon.BugInDaikon("Field ClassLoader.classes was not made accessible");
+              }
             }
             @SuppressWarnings({
               "unchecked", // type of ClassLoader.classes field is known
