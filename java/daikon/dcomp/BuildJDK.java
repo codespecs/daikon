@@ -4,9 +4,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.plumelib.bcelutil.BcelUtil;
-import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -47,13 +47,6 @@ public class BuildJDK {
    */
   public static final String java_home = System.getProperty("java.home");
 
-  /**
-   * Used when testing to terminate processing if an error occurs. This flag is tested in
-   * DCInstrument.
-   */
-  @Option("Halt if an instrumentation error occurs")
-  public static boolean quit_if_error = false;
-
   /** Print information about the classes being instrumented. */
   private static boolean verbose = false;
 
@@ -62,9 +55,6 @@ public class BuildJDK {
 
   /** Name of file in output jar containing the static-fields map. */
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
-
-  /** Names of all the classes processed, in internal form. */
-  private static List<String> all_classes = new ArrayList<>();
 
   /**
    * Collects names of all methods that DCInstrument could not process. Should be empty. Format is
@@ -103,7 +93,9 @@ public class BuildJDK {
 
     Options options =
         new Options(
-            "daikon.BuildJDK [options] dest_dir [classfiles...]", BuildJDK.class, DynComp.class);
+            "daikon.BuildJDK [options] dest_dir [classfiles...]",
+            DynComp.class,
+            DCInstrument.class);
     String[] cl_args = options.parse(true, args);
     if (cl_args.length < 1) {
       System.out.println("must specify destination dir");
@@ -114,13 +106,21 @@ public class BuildJDK {
 
     File dest_dir = new File(cl_args[0]);
 
+    /**
+     * Key is a class file name, value is a stream that opens that file name.
+     *
+     * <p>We want to share code to read and instrument the Java class file members of a jar file
+     * (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
+     * completely different file systems. So we open an InputStream for each class file we wish to
+     * instrument and save it in the class_stream_map with the file name as the key. From that point
+     * the code to instrument a class file can be shared.
+     */
+    Map<String, InputStream> class_stream_map;
+
     if (cl_args.length > 1) {
 
       // Arguments are <destdir> <classfiles>...
-      File[] class_files = new File[cl_args.length - 1];
-      for (int i = 1; i < cl_args.length; i++) {
-        class_files[i - 1] = new File(cl_args[i]);
-      }
+      String[] class_files = Arrays.copyOfRange(cl_args, 1, cl_args.length);
 
       // Instrumenting a specific list of class files is usually used for testing.
       // But if we're using it to fix a broken classfile, then we need
@@ -130,44 +130,24 @@ public class BuildJDK {
       System.out.printf(
           "Restored %d entries in static map.%n", DCInstrument.static_field_id.size());
 
-      for (File class_file : class_files) {
-        String classFileName = class_file.toString();
-        if (classFileName.endsWith("java/lang/Object.class")) {
-          System.out.printf("Skipping %s%n", classFileName);
-          continue;
+      class_stream_map = new HashMap<>();
+      String classFileName = null;
+      try {
+        // Can't use enhanced for statement as need classFileName for catch clause.
+        for (int i = 0; i < class_files.length; i++) {
+          classFileName = class_files[i];
+          class_stream_map.put(classFileName, new FileInputStream(classFileName));
         }
-
-        // Convert the class file to internal BCEL form.
-        JavaClass jc;
-        try {
-          ClassParser parser = new ClassParser(classFileName);
-          jc = parser.parse();
-        } catch (Throwable e) {
-          throw new Error("Failed to parse classfile " + classFileName, e);
-        }
-
-        // Instrument the class file.
-        try {
-          build.instrumentClassFile(jc, dest_dir, classFileName, class_files.length);
-        } catch (Throwable e) {
-          throw new Error("Couldn't instrument " + classFileName, e);
-        }
+      } catch (Exception e) {
+        throw new Error("Problem trying to open " + classFileName, e);
       }
+
+      // Instrument the classes identified in class_stream_map.
+      build.instrument_classes(dest_dir, class_stream_map);
 
     } else {
 
       check_java_home();
-
-      /**
-       * Key is a class file name, value is a stream that opens that file name.
-       *
-       * <p>We want to share code to read and instrument the Java class file members of a jar file
-       * (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
-       * completely different file systems. So we open an InputStream for each class file we wish to
-       * instrument and save it in the class_stream_map with the file name as the key. From that
-       * point the code to instrument a class file can be shared.
-       */
-      Map<String, InputStream> class_stream_map;
 
       if (BcelUtil.javaVersion > 8) {
         class_stream_map = build.gather_runtime_from_modules();
@@ -177,6 +157,10 @@ public class BuildJDK {
 
       // Instrument the Java runtime classes identified in class_stream_map.
       build.instrument_classes(dest_dir, class_stream_map);
+
+      // We've finished instrumenting all the class files. Now we create some
+      // abstract interface classes for use by the DynComp runtime.
+      build.addInterfaceClasses(dest_dir.getName());
 
       // Write out the file containing the static-fields map.
       System.out.printf("Found %d static fields.%n", DCInstrument.static_field_id.size());
@@ -188,14 +172,14 @@ public class BuildJDK {
       // Class names are written in internal form.
       try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
         pw.println("no_primitives: " + DynComp.no_primitives);
-        for (String classname : all_classes) {
-          pw.println(classname);
+        for (String classFileName : class_stream_map.keySet()) {
+          pw.println(classFileName.replace(".class", ""));
         }
       }
-
-      // Print out any methods that could not be instrumented
-      print_skipped_methods();
     }
+    // Print out any methods that could not be instrumented
+    print_skipped_methods();
+
     System.out.println("BuildJDK done at " + new Date());
   }
 
@@ -281,6 +265,8 @@ public class BuildJDK {
     Map<String, InputStream> class_stream_map = new HashMap<>();
     FileSystem fs = FileSystems.getFileSystem(URI.create("jrt:/"));
     Path modules = fs.getPath("/modules");
+    // The path java_home+/lib/modules is the file in the host file system that
+    // corresponds to the modules file in the jrt: file system.
     System.out.printf("using modules directory %s%n", java_home + "/lib/modules");
     try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modules, "java.base*")) {
       for (Path moduleDir : directoryStream) {
@@ -348,9 +334,6 @@ public class BuildJDK {
           continue;
         }
 
-        if (classFileName.endsWith(".class")) {
-          all_classes.add(classFileName.replace(".class", ""));
-        }
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
           // Copy non-.class files (and Object.class) unchanged (JDK 8).
           // For JDK 9+ we do not copy as these items will be loaded from the original module file.
@@ -386,42 +369,56 @@ public class BuildJDK {
           throw new Error("Couldn't instrument " + classFileName, e);
         }
       }
+    } catch (Exception e) {
+      throw new Error(e);
+    }
+  }
 
-      // Convert from JDK version number to ClassFile major_version.
-      // A bit of a hack, but seems OK.
-      int java_class_version = BcelUtil.javaVersion + 44;
-      String dest_dir_name = dest_dir.getName();
+  /**
+   * Add abstract interface classes needed by DynComp runtime.
+   *
+   * @param destDir where to store the interface classes
+   */
+  private void addInterfaceClasses(String destDir) {
+    // Create the DcompMarker class which is used to identify instrumented calls.
+    createDCompClass(destDir, "DCompMarker", false);
 
-      // We've finished instrumenting all the class files. Now we create and
-      // the DcompMarker class which is used to identify instrumented calls.
-      ClassGen dcomp_marker =
+    // The remainer of the generated classes are needed for JDK 9+ only.
+    if (BcelUtil.javaVersion > 8) {
+
+      // Create the DcompInstrumented interface
+      createDCompClass(destDir, "DCompInstrumented", true);
+
+      // Create the DCompClone interface
+      createDCompClass(destDir, "DCompClone", false);
+
+      // Create the DCompToString interface
+      createDCompClass(destDir, "DCompToString", false);
+    }
+  }
+
+  /**
+   * Create an abstract interface class for use by the DynComp runtime.
+   *
+   * @param destDir where to store the new class
+   * @param className name of class
+   * @param dcompInstrumented c$if true, add equals_dcomp_instrumented method to class.
+   */
+  private void createDCompClass(String destDir, String className, boolean dcompInstrumented) {
+    try {
+      ClassGen dcomp_class =
           new ClassGen(
-              "java.lang.DCompMarker",
+              "java.lang." + className,
               "java.lang.Object",
               "daikon.dcomp.BuildJDK tool",
               Const.ACC_INTERFACE | Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
               new String[0]);
-      dcomp_marker.setMinor(0);
-      dcomp_marker.setMajor(java_class_version);
-      dcomp_marker
-          .getJavaClass()
-          .dump(
-              new File(
-                  dest_dir_name,
-                  "java" + File.separator + "lang" + File.separator + "DCompMarker.class"));
+      dcomp_class.setMinor(0);
+      // Convert from JDK version number to ClassFile major_version.
+      // A bit of a hack, but seems OK.
+      dcomp_class.setMajor(BcelUtil.javaVersion + 44);
 
-      // The remainer of the generated classes are needed for JDK 9+ only.
-      if (BcelUtil.javaVersion > 8) {
-        // Create the DcompInstrumented interface
-        ClassGen dcomp_instrumented =
-            new ClassGen(
-                "java.lang.DCompInstrumented",
-                "java.lang.Object",
-                "daikon.dcomp.BuildJDK tool",
-                Const.ACC_INTERFACE | Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
-                new String[0]);
-        dcomp_instrumented.setMinor(0);
-        dcomp_instrumented.setMajor(java_class_version);
+      if (dcompInstrumented) {
         @SuppressWarnings(
             "nullness:argument.type.incompatible") // null instruction list is ok for abstract
         MethodGen mg =
@@ -431,52 +428,18 @@ public class BuildJDK {
                 new Type[] {Type.OBJECT},
                 new String[] {"o"},
                 "equals_dcomp_instrumented",
-                dcomp_instrumented.getClassName(),
+                dcomp_class.getClassName(),
                 null,
-                dcomp_instrumented.getConstantPool());
-        dcomp_instrumented.addMethod(mg.getMethod());
-        dcomp_instrumented
-            .getJavaClass()
-            .dump(
-                new File(
-                    dest_dir_name,
-                    "java" + File.separator + "lang" + File.separator + "DCompInstrumented.class"));
-
-        // Create the DCompClone interface
-        ClassGen dcomp_clone =
-            new ClassGen(
-                "java.lang.DCompClone",
-                "java.lang.Object",
-                "daikon.dcomp.BuildJDK tool",
-                Const.ACC_INTERFACE | Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
-                new String[0]);
-        dcomp_clone.setMinor(0);
-        dcomp_clone.setMajor(java_class_version);
-        dcomp_clone
-            .getJavaClass()
-            .dump(
-                new File(
-                    dest_dir_name,
-                    "java" + File.separator + "lang" + File.separator + "DCompClone.class"));
-
-        // Create the DCompToString interface
-        ClassGen dcomp_tostring =
-            new ClassGen(
-                "java.lang.DCompToString",
-                "java.lang.Object",
-                "daikon.dcomp.BuildJDK tool",
-                Const.ACC_INTERFACE | Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
-                new String[0]);
-        dcomp_tostring.setMinor(0);
-        dcomp_tostring.setMajor(java_class_version);
-        dcomp_tostring
-            .getJavaClass()
-            .dump(
-                new File(
-                    dest_dir_name,
-                    "java" + File.separator + "lang" + File.separator + "DCompToString.class"));
+                dcomp_class.getConstantPool());
+        dcomp_class.addMethod(mg.getMethod());
       }
 
+      dcomp_class
+          .getJavaClass()
+          .dump(
+              new File(
+                  destDir,
+                  "java" + File.separator + "lang" + File.separator + className + ".class"));
     } catch (Exception e) {
       throw new Error(e);
     }

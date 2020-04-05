@@ -8,6 +8,7 @@ import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.bcelutil.StackTypes;
+import daikon.plumelib.options.Option;
 import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.EntryReader;
 import java.io.File;
@@ -40,7 +41,14 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Instruments a class file to perform Dynamic Comparability. */
 @SuppressWarnings({"nullness"}) //
-class DCInstrument extends InstructionListUtils {
+public class DCInstrument extends InstructionListUtils {
+
+  /**
+   * Used when testing to terminate processing if an error occurs. Currently, This flag is only used
+   * by BuildJDK.
+   */
+  @Option("Halt if an instrumentation error occurs")
+  public static boolean quit_if_error = false;
 
   /** Unmodified version of input class. */
   protected JavaClass orig_class;
@@ -840,11 +848,11 @@ class DCInstrument extends InstructionListUtils {
       } catch (Throwable t) {
         if (debug_instrument.enabled) t.printStackTrace();
         skip_method(mgen);
-        if (!BuildJDK.quit_if_error) {
-          System.out.printf("Unexpected error processing %s.%s: %s%n", classname, m.getName(), t);
-          System.out.printf("Method is NOT instrumented%n");
-        } else {
+        if (quit_if_error) {
           throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
+        } else {
+          System.out.printf("Unexpected error processing %s.%s: %s%n", classname, m.getName(), t);
+          System.out.printf("Method is NOT instrumented.%n");
         }
       }
     }
@@ -995,7 +1003,7 @@ class DCInstrument extends InstructionListUtils {
       } catch (Throwable t) {
         if (debug_instrument.enabled) t.printStackTrace();
         skip_method(mgen);
-        if (BuildJDK.quit_if_error) {
+        if (quit_if_error) {
           throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
         } else {
           System.out.printf("Unexpected error processing %s.%s: %s%n", classname, m.getName(), t);
