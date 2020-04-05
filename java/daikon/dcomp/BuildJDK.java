@@ -29,6 +29,7 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * BuildJDK uses {@link DCInstrument} to add comparability instrumentation to Java class files, then
@@ -120,7 +121,8 @@ public class BuildJDK {
     if (cl_args.length > 1) {
 
       // Arguments are <destdir> <classfiles>...
-      String[] class_files = Arrays.copyOfRange(cl_args, 1, cl_args.length);
+      @SuppressWarnings("nullness:assignment.type.incompatible") // no nulls due to call args
+      @NonNull String[] class_files = Arrays.copyOfRange(cl_args, 1, cl_args.length);
 
       // Instrumenting a specific list of class files is usually used for testing.
       // But if we're using it to fix a broken classfile, then we need
