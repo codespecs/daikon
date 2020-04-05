@@ -5,6 +5,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import daikon.DynComp;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.options.Options;
+import daikon.plumelib.reflection.Signatures;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.signature.qual.BinaryName;
 
 /**
  * BuildJDK uses {@link DCInstrument} to add comparability instrumentation to Java class files, then
@@ -406,11 +408,12 @@ public class BuildJDK {
    * @param className name of class
    * @param dcompInstrumented c$if true, add equals_dcomp_instrumented method to class.
    */
-  private void createDCompClass(String destDir, String className, boolean dcompInstrumented) {
+  private void createDCompClass(
+      String destDir, @BinaryName String className, boolean dcompInstrumented) {
     try {
       ClassGen dcomp_class =
           new ClassGen(
-              "java.lang." + className,
+              Signatures.addPackage("java.lang", className),
               "java.lang.Object",
               "daikon.dcomp.BuildJDK tool",
               Const.ACC_INTERFACE | Const.ACC_PUBLIC | Const.ACC_ABSTRACT,

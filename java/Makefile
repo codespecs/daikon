@@ -575,6 +575,7 @@ plume-import-check :
 	echo " (identical) daikon.plumelib package, which will not be instrumented."; \
 	echo "The following files import from plume:"; \
 	grep -n '^import org.plumelib.*' $(INSTRUMENTATION_JAVA_FILES); \
+	false; \
 	else \
 	echo "done"; \
 	fi
