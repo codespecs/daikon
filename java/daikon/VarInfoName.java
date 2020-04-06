@@ -946,6 +946,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    *
    * @param function the name of the function
    * @param vars the arguments to the function, of type VarInfoName
+   * @return a name for a function applied to multiple arguments
    */
   public static VarInfoName applyFunctionOfN(String function, List<VarInfoName> vars) {
     return new FunctionOfN(function, vars).intern();
