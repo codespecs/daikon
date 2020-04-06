@@ -50,7 +50,7 @@ public class BuildJDK {
    */
   public static final String java_home = System.getProperty("java.home");
 
-  /** Print information about the classes being instrumented. */
+  /** Whether to print information about the classes being instrumented. */
   private static boolean verbose = false;
 
   /** Number of class files processed; used for progress display. */
@@ -61,14 +61,14 @@ public class BuildJDK {
 
   /**
    * Collects names of all methods that DCInstrument could not process. Should be empty. Format is
-   * &lt;fully qualified class name&gt;.&lt;method name&gt;
+   * &lt;fully-qualified class name&gt;.&lt;method name&gt;
    */
   private static List<String> skipped_methods = new ArrayList<>();
 
   /**
    * A list of methods known to cause DCInstrument to fail. This is used to remove known problems
-   * from the list of failures displayed at the end of BuildJDK's execution. Format is &lt;fully
-   * qualified class name&gt;.&lt;method name&gt;
+   * from the list of failures displayed at the end of BuildJDK's execution. Format is
+   * &lt;fully-qualified class name&gt;.&lt;method name&gt;
    */
   public static List<String> known_uninstrumentable_methods =
       Arrays.asList(
@@ -122,8 +122,8 @@ public class BuildJDK {
 
     if (cl_args.length > 1) {
 
-      // Arguments are <destdir> <classfiles>...
-      @SuppressWarnings("nullness:assignment.type.incompatible") // no nulls due to call args
+      // Arguments are <destdir> [<classfiles>...]
+      @SuppressWarnings("nullness:assignment.type.incompatible") // https://tinyurl.com/cfissue/3224
       @NonNull String[] class_files = Arrays.copyOfRange(cl_args, 1, cl_args.length);
 
       // Instrumenting a specific list of class files is usually used for testing.
@@ -181,6 +181,7 @@ public class BuildJDK {
         }
       }
     }
+
     // Print out any methods that could not be instrumented
     print_skipped_methods();
 
@@ -284,14 +285,14 @@ public class BuildJDK {
   }
 
   /**
-   * This is a helper method for gather_runtime_from_modules. It recurses down the module directory
-   * tree, selects the classes we want to instrument, creates an InputStream for each of these
-   * classes, and adds this information to the class_stream_map.
+   * This is a helper method for {@link #gather_runtime_from_modules}. It recurses down the module
+   * directory tree, selects the classes we want to instrument, creates an InputStream for each of
+   * these classes, and adds this information to the {@code class_stream_map} argument.
    *
    * @param path module file, which might be subdirectory
    * @param modulePrefixLength length of "/module/..." path prefix before start of actual member
    *     path
-   * @param class_stream_map is used to collect a map from class file name to InputStream.
+   * @param class_stream_map a map from class file name to InputStream that collects the results
    */
   void gather_runtime_from_modules_directory(
       Path path, int modulePrefixLength, Map<String, InputStream> class_stream_map) {
@@ -305,9 +306,8 @@ public class BuildJDK {
         throw new Error(e);
       }
     } else {
+      String entryName = path.toString().substring(modulePrefixLength + 1);
       try {
-        String pathString = path.toString();
-        final String entryName = pathString.substring(modulePrefixLength + 1);
         // Get the InputStream for this file
         InputStream is = Files.newInputStream(path);
         class_stream_map.put(entryName, is);
@@ -331,7 +331,9 @@ public class BuildJDK {
 
       // Process each file.
       for (String classFileName : class_stream_map.keySet()) {
-        if (verbose) System.out.println("instrument_classes: " + classFileName);
+        if (verbose) {
+          System.out.println("instrument_classes: " + classFileName);
+        }
 
         if (classFileName.equals("module-info.class")) {
           System.out.printf("Skipping file %s%n", classFileName);
@@ -339,16 +341,16 @@ public class BuildJDK {
         }
 
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
+          File destfile = new File(classFileName);
           // Copy non-.class files (and Object.class) unchanged (JDK 8).
           // For JDK 9+ we do not copy as these items will be loaded from the original module file.
-          File destfile = new File(classFileName);
           if (destfile.getParent() == null || BcelUtil.javaVersion > 8) {
-            if (verbose) System.out.printf("Skipping file %s%n", destfile);
+            if (verbose) System.out.printf("Skipping file %s%n", classFileName);
             continue;
           }
-          File dir = new File(dest_dir, destfile.getParent());
-          dir.mkdirs();
-          File destpath = new File(dir, destfile.getName());
+          File destParent = new File(dest_dir, destfile.getParent());
+          destParent.mkdirs();
+          File destpath = new File(destParent, destfile.getName());
           if (verbose) System.out.println("Copying Object or non-classfile: " + destpath);
           try (InputStream in = class_stream_map.get(classFileName)) {
             Files.copy(in, destpath.toPath());
@@ -389,14 +391,8 @@ public class BuildJDK {
 
     // The remainer of the generated classes are needed for JDK 9+ only.
     if (BcelUtil.javaVersion > 8) {
-
-      // Create the DcompInstrumented interface
       createDCompClass(destDir, "DCompInstrumented", true);
-
-      // Create the DCompClone interface
       createDCompClass(destDir, "DCompClone", false);
-
-      // Create the DCompToString interface
       createDCompClass(destDir, "DCompToString", false);
     }
   }
