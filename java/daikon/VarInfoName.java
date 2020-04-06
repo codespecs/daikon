@@ -733,6 +733,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for the size of this (this object should be a sequence). Form is like
    * "size(a[])" or "a.length".
+   *
+   * @return a name for the size of this
    */
   public VarInfoName applySize(@Interned VarInfoName this) {
     // The simple approach:

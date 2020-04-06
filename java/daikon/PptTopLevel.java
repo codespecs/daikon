@@ -1238,6 +1238,11 @@ public class PptTopLevel extends Ppt {
    * Adds a sample to each invariant in the list. Returns the list of weakened invariants. This
    * should only be called when the sample has already been added to the slice containing each
    * invariant. Otherwise the statistics kept in the slice will be incorrect.
+   *
+   * @param inv_list the invariants to add the sample to
+   * @param vt the sample
+   * @param count how many instances of the sample to add
+   * @return the invariants that were weakened
    */
   public List<Invariant> inv_add(List<Invariant> inv_list, ValueTuple vt, int count) {
 
@@ -2894,6 +2899,8 @@ public class PptTopLevel extends Ppt {
   /**
    * Use the Simplify theorem prover to flag invariants that are logically implied by others. Uses
    * the provided test interface to determine if an invariant is within the domain of inspection.
+   *
+   * @param test the predicate about whether an invariant is relevant
    */
   @RequiresNonNull("proverStack")
   private void markImpliedViaSimplify_int(SimplifyInclusionTester test) throws SimplifyError {
