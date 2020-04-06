@@ -396,7 +396,8 @@ public final class ValueTuple implements Cloneable {
   public int size() {
     assert vals.length == mods.length
         : String.format(
-            "vals (len %d) = %s  mods (len %d = %s", vals.length, Arrays.toString(vals), mods.length, Arrays.toString(mods));
+            "vals (len %d) = %s  mods (len %d = %s",
+            vals.length, Arrays.toString(vals), mods.length, Arrays.toString(mods));
     return vals.length;
   }
 
