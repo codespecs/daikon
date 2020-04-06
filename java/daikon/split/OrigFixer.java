@@ -91,9 +91,10 @@ class OrigFixer extends DepthFirstVisitor {
   }
 
   /**
-   * Returns in n if an instance of the method "orig".
+   * Returns true if n is an instance of the method "orig".
    *
-   * @return true iff n is a instance of the method "orig"
+   * @param n an expression that might or might not be a call to "orig"
+   * @return true iff n is an instance of the method "orig"
    */
   @Pure
   private boolean isOrig(PrimaryExpression n) {

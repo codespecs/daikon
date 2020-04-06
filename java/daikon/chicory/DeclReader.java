@@ -102,6 +102,11 @@ public class DeclReader {
       return rep_type.replaceFirst(" .*", "");
     }
 
+    /**
+     * Return true if this variable has floating-point type (float or double).
+     *
+     * @return ture if this variable has floating-point type
+     */
     @Pure
     public boolean is_double() {
       return (rep_type.equals("double") || rep_type.equals("float"));

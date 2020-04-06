@@ -282,6 +282,7 @@ class Test {
       u1 = new Uncloneable();
     }
 
+    /** A method for comparability testing. */
     public void compare() {
       try {
         obj2 = (Obj) obj1.clone();

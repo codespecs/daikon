@@ -684,11 +684,22 @@ public final @Interned class ProglangType implements Serializable {
     return ((dimensions == 0) && baseIsFloat());
   }
 
+  /**
+   * Return true if this is java.lang.Object.
+   *
+   * @return true if this is java.lang.Object
+   */
   @Pure
   public boolean isObject() {
     return ((dimensions == 0) && baseIsObject());
   }
 
+  /**
+   * Return true if the base (the final element type) is a reference type rather than integer,
+   * float, or boolean.
+   *
+   * @return true if the base is Object
+   */
   public boolean baseIsObject() {
     return (!baseIsIntegral() && !baseIsFloat() && !(base == BASE_BOOLEAN));
   }

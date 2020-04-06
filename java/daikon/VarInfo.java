@@ -2146,6 +2146,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /**
    * Without using comparability info, check that this is comparable to var2. This is a reflexive
    * and transitive relationship. Does not check comparabilities.
+   *
+   * @param var2 the variable to test comparability with
+   * @return true if this is comparable to var2
    */
   public boolean comparableNWay(VarInfo var2) {
     VarInfo var1 = this;
