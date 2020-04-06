@@ -8,6 +8,7 @@ import daikon.plumelib.options.Options;
 import daikon.plumelib.reflection.Signatures;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -135,15 +136,12 @@ public class BuildJDK {
           "Restored %d entries in static map.%n", DCInstrument.static_field_id.size());
 
       class_stream_map = new HashMap<>();
-      String classFileName = null;
-      try {
-        // Can't use enhanced for statement as need classFileName for catch clause.
-        for (int i = 0; i < class_files.length; i++) {
-          classFileName = class_files[i];
+      for (String classFileName : class_files) {
+        try {
           class_stream_map.put(classFileName, new FileInputStream(classFileName));
+        } catch (FileNotFoundException e) {
+          throw new Error("File not found: " + classFileName, e);
         }
-      } catch (Exception e) {
-        throw new Error("Problem trying to open " + classFileName, e);
       }
 
       // Instrument the classes identified in class_stream_map.
