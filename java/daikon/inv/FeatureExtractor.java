@@ -126,7 +126,7 @@ public final class FeatureExtractor {
         }
         output_words = args[i + 1];
       } else if (args[i].equals("-t")) {
-        if ((output_type == null) || (output_type.equals(args[i + 1]))) {
+        if ((output_type == null) || output_type.equals(args[i + 1])) {
           output_type = args[i + 1];
         } else {
           throw new IOException("Invalid Argument List, repeated output type");
@@ -172,7 +172,7 @@ public final class FeatureExtractor {
     // Also, if output_words is non-null, output the invariant
     // descriptions.
 
-    if ((!positives) || (usefulFeatures.size() > 0)) {
+    if (!positives || (usefulFeatures.size() > 0)) {
 
       if (output_type.equals("SVMfu")) {
         File output = new File(output_file);
@@ -658,9 +658,9 @@ public final class FeatureExtractor {
       try {
         @SuppressWarnings("signature")
         Class<? extends Invariant> current = asInvClass(Class.forName(name));
-        if ((Invariant.class.isAssignableFrom(current))
-            || (Ppt.class.isAssignableFrom(current))
-            || (VarInfo.class.isAssignableFrom(current))) {
+        if (Invariant.class.isAssignableFrom(current)
+            || Ppt.class.isAssignableFrom(current)
+            || VarInfo.class.isAssignableFrom(current)) {
           //          System.out.println("Class " + name + " loaded");
           answer.add(current);
         }
@@ -745,7 +745,7 @@ public final class FeatureExtractor {
     HashSet<Integer> index = new HashSet<>();
     for (IntDoublePair current : answer) {
       Integer current_number = current.number;
-      if (!(index.contains(current_number))) {
+      if (!index.contains(current_number)) {
         final_answer.add(current);
       }
       index.add(current_number);
@@ -897,7 +897,7 @@ public final class FeatureExtractor {
       ArrayList<String> negvectors = new ArrayList<>();
 
       for (String vector : neg) {
-        if (!(pos.contains(vector))) {
+        if (!pos.contains(vector)) {
           if (type.equals("C5")) {
             negvectors.add(vector + "bad");
           } else if (type.equals("SVMfu")) {
@@ -1070,7 +1070,7 @@ public final class FeatureExtractor {
     for (String first : one) {
       for (String second : two) {
         String answer = first.substring(first.indexOf(" ") + 1) + shift(second);
-        answer = (new StringTokenizer(answer)).countTokens() + " " + answer;
+        answer = new StringTokenizer(answer).countTokens() + " " + answer;
         ps.println(answer + label);
       }
     }

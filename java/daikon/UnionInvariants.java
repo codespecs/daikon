@@ -128,7 +128,7 @@ public final class UnionInvariants {
       }
       long end = System.currentTimeMillis();
       double elapsed = (end - start) / 1000.0;
-      System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
+      System.out.println(new java.text.DecimalFormat("#.#").format(elapsed) + "s");
     }
 
     // Write serialized output

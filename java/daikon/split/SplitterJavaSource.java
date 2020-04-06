@@ -380,7 +380,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    */
   @Pure
   private static boolean isNormalVar(VarInfo varInfo) {
-    return ((!isTypeOfVar(varInfo)) && (!isSizeVar(varInfo)) && (!isThisVar(varInfo)));
+    return (!isTypeOfVar(varInfo) && !isSizeVar(varInfo) && !isThisVar(varInfo));
   }
 
   /**

@@ -267,6 +267,6 @@ public final class FileCompiler {
    * @return true iff the file exists
    */
   private static boolean fileExists(String pathName) {
-    return (new File(pathName)).exists();
+    return new File(pathName).exists();
   }
 }

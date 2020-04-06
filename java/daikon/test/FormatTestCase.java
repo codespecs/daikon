@@ -917,7 +917,7 @@ class FormatTestCase {
         } else if (currentClass.isArray()) {
           // Intern arrays
           if (currentClass.getComponentType().equals(String.class)) {
-            for (int k = 0; k < ((String[]) (currentSample[j])).length; k++) {
+            for (int k = 0; k < ((String[]) currentSample[j]).length; k++) {
               // Intern Strings that are inside arrays
               ((String[]) currentSample[j])[k] = Intern.intern(((String[]) currentSample[j])[k]);
             }

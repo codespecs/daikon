@@ -352,14 +352,14 @@ public final class Diff {
             invPairComparatorClassname,
             defaultComparator);
 
-    if ((!(diff.invSortComparator1
+    if (!diff.invSortComparator1
             .getClass()
             .toString()
-            .equals(diff.invSortComparator2.getClass().toString())))
-        || (!(diff.invSortComparator1
+            .equals(diff.invSortComparator2.getClass().toString())
+        || !diff.invSortComparator1
             .getClass()
             .toString()
-            .equals(diff.invPairComparator.getClass().toString())))) {
+            .equals(diff.invPairComparator.getClass().toString())) {
       System.out.println("You are using different comparators to sort or pair up invariants.");
       System.out.println("This may cause misalignment of invariants and may cause Diff to");
       System.out.println("work incorectly.  Make sure you know what you are doing!");
@@ -778,10 +778,10 @@ public final class Diff {
       Invariant inv1 = invariants.a;
       Invariant inv2 = invariants.b;
       if (!includeUnjustified) {
-        if ((inv1 != null) && !(inv1.justified())) {
+        if ((inv1 != null) && !inv1.justified()) {
           inv1 = null;
         }
-        if ((inv2 != null) && !(inv2.justified())) {
+        if ((inv2 != null) && !inv2.justified()) {
           inv2 = null;
         }
       }

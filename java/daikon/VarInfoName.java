@@ -102,7 +102,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     if (name.startsWith("\"") && name.endsWith("\"")) {
       String content = name.substring(1, name.length() - 1);
       if (content.equals(UtilPlume.escapeJava(UtilPlume.unescapeJava(content)))) {
-        return (new Simple(name)).intern();
+        return new Simple(name).intern();
       }
     }
 
@@ -120,7 +120,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         String field = name.substring(arrow + 2);
         return parse(first).applyField(field);
       } else {
-        return (new Simple(name)).intern();
+        return new Simple(name).intern();
       }
     }
 
@@ -177,7 +177,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     // New decl format permits arbitrary uninterpreted strings as names
     if (FileIO.new_decl_format) {
-      return (new Simple(name)).intern();
+      return new Simple(name).intern();
     } else {
       throw new UnsupportedOperationException("parse error: '" + name + "'");
     }
@@ -502,11 +502,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
-   * @return true if the given node is in a prestate context within this tree; the node must be a
-   *     member of this tree
+   * @param node a member of this tree
+   * @return true if the given node is in a prestate context within this tree
    */
   public boolean inPrestateContext(@Interned VarInfoName this, VarInfoName node) {
-    return (new NodeFinder(this, node)).inPre();
+    return new NodeFinder(this, node).inPre();
   }
 
   /** @return true if every variable in the name is an orig(...) variable. */
@@ -567,7 +567,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   public boolean equalsVarInfoName(
       @GuardSatisfied @Interned VarInfoName this, @GuardSatisfied VarInfoName other) {
     return ((other == this) // "interned": equality optimization pattern
-        || ((other != null) && (this.repr().equals(other.repr()))));
+        || ((other != null) && this.repr().equals(other.repr())));
   }
 
   // This should be safe even in the absence of caching, because "repr()"
@@ -731,7 +731,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    */
   @Pure
   public boolean isApplySizeSafe() {
-    return (new ElementsFinder(this)).elems() != null;
+    return new ElementsFinder(this).elems() != null;
   }
 
   /**
@@ -745,7 +745,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     if (dkconfig_direct_orig) {
       return new SizeOf(this).intern();
     } else {
-      Elements elems = (new ElementsFinder(this)).elems();
+      Elements elems = new ElementsFinder(this).elems();
       if (elems == null) {
         throw new Error(
             "applySize should have elements to use in "
@@ -769,12 +769,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       // for variables such as a[].b.c (returns size(a[])) or
       // a[].getClass().getName() (returns size(a[]))
       if (this instanceof Prestate) {
-        VarInfoName size = (new SizeOf(elems)).intern();
-        return (new Prestate(size)).intern();
+        VarInfoName size = new SizeOf(elems).intern();
+        return new Prestate(size).intern();
         // Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
         // return r.replace(this).intern();
       } else {
-        return (new SizeOf(elems)).intern();
+        return new SizeOf(elems).intern();
       }
     }
   }
@@ -930,9 +930,14 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
   }
 
-  /** Returns a name for a unary function applied to this object. The result is like "sum(this)". */
+  /**
+   * Returns a name for a unary function applied to this object. The result is like "sum(this)".
+   *
+   * @param function the function to apply
+   * @return a name for the function applied to this
+   */
   public VarInfoName applyFunction(@Interned VarInfoName this, String function) {
-    return (new FunctionOf(function, this)).intern();
+    return new FunctionOf(function, this).intern();
   }
 
   /**
@@ -941,9 +946,10 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    *
    * @param function the name of the function
    * @param vars the arguments to the function, of type VarInfoName
+   * @return a name for a function applied to multiple arguments
    */
   public static VarInfoName applyFunctionOfN(String function, List<VarInfoName> vars) {
-    return (new FunctionOfN(function, vars)).intern();
+    return new FunctionOfN(function, vars).intern();
   }
 
   /**
@@ -1168,10 +1174,15 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
   }
 
-  /** Returns a name for the intersection of with another sequence, like "intersect(a[], b[])". */
+  /**
+   * Returns a name for the intersection of with another sequence, like "intersect(a[], b[])".
+   *
+   * @param seq2 the variable to intersect with
+   * @return the name for the intersection of this and seq2
+   */
   public VarInfoName applyIntersection(@Interned VarInfoName this, VarInfoName seq2) {
     assert seq2 != null;
-    return (new Intersection(this, seq2)).intern();
+    return new Intersection(this, seq2).intern();
   }
 
   /**
@@ -1189,10 +1200,15 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
   }
 
-  /** Returns a name for the union of this with another sequence, like "union(a[], b[])". */
+  /**
+   * Returns a name for the union of this with another sequence, like "union(a[], b[])".
+   *
+   * @param seq2 the variable to union with
+   * @return the name for the intersection of this and seq2
+   */
   public VarInfoName applyUnion(@Interned VarInfoName this, VarInfoName seq2) {
     assert seq2 != null;
-    return (new Union(this, seq2)).intern();
+    return new Union(this, seq2).intern();
   }
 
   /**
@@ -1210,9 +1226,14 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
   }
 
-  /** Returns a 'getter' operation for some field of this name, like a.foo if this is a. */
+  /**
+   * Returns a 'getter' operation for some field of this name, like a.foo if this is a.
+   *
+   * @param field the field
+   * @return the name for the given field of this
+   */
   public VarInfoName applyField(@Interned VarInfoName this, String field) {
-    return (new Field(this, field)).intern();
+    return new Field(this, field).intern();
   }
 
   /** A 'getter' operation for some field, like a.foo. */
@@ -1441,9 +1462,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for the type of this object; form is like "this.getClass().getName()" or
    * "\typeof(this)".
+   *
+   * @return the name for the type of this object
    */
   public VarInfoName applyTypeOf(@Interned VarInfoName this) {
-    return (new TypeOf(this)).intern();
+    return new TypeOf(this).intern();
   }
 
   /** The type of the term, like "term.getClass().getName()" or "\typeof(term)". */
@@ -1536,7 +1559,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       Poststate p = (Poststate) a.term;
       return p.term.applyAdd(a.amount);
     } else {
-      return (new Prestate(this)).intern();
+      return new Prestate(this).intern();
     }
   }
 
@@ -1601,8 +1624,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       if ((term instanceof Slice)
           // Slices are obtained by calling daikon.Quant.slice(...)
           // which returns things of type java.lang.Object
-          && (v.type.dimensions()) > 0
-          && (v.type.base().equals("java.lang.Object"))) {
+          && v.type.dimensions() > 0
+          && v.type.base().equals("java.lang.Object")) {
         preType = "java.lang.Object";
       }
       for (int i = 0; i < v.type.dimensions(); i++) {
@@ -1640,9 +1663,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for a the poststate value of this object; form is like "new(this)" or
    * "\new(this)".
+   *
+   * @return the name for the poststate value of this object
    */
   public VarInfoName applyPoststate(@Interned VarInfoName this) {
-    return (new Poststate(this)).intern();
+    return new Poststate(this).intern();
   }
 
   /**
@@ -1715,7 +1740,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     if (amount == 0) {
       return this;
     } else {
-      return (new Add(this, amount)).intern();
+      return new Add(this, amount).intern();
     }
   }
 
@@ -1757,7 +1782,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     @Override
     protected String simplify_name_impl(boolean prestate) {
       return (amount < 0)
-          ? "(- " + term.simplify_name(prestate) + " " + (-amount) + ")"
+          ? "(- " + term.simplify_name(prestate) + " " + -amount + ")"
           : "(+ " + term.simplify_name(prestate) + " " + amount + ")";
     }
 
@@ -1781,7 +1806,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       if (amount >= 0) {
         return term.identifier_name() + "_plus" + amount;
       } else {
-        return term.identifier_name() + "_minus" + (-amount);
+        return term.identifier_name() + "_minus" + -amount;
       }
     }
 
@@ -1810,9 +1835,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for the elements of a container (as opposed to the identity of the container)
    * like "this[]" or "(elements this)".
+   *
+   * @return the name for the elements of this container
    */
   public VarInfoName applyElements(@Interned VarInfoName this) {
-    return (new Elements(this)).intern();
+    return new Elements(this).intern();
   }
 
   /** The elements of a container, like "term[]". */
@@ -1973,7 +2000,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     if (finder.inPre()) {
       index = indexToPrestate(index);
     }
-    Replacer r = new Replacer(elems, (new Subscript(elems, index)).intern());
+    Replacer r = new Replacer(elems, new Subscript(elems, index).intern());
     return r.replace(this).intern();
   }
 
@@ -2103,7 +2130,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         j = indexToPrestate(j);
       }
     }
-    Replacer r = new Replacer(finder.elems(), (new Slice(elems, i, j)).intern());
+    Replacer r = new Replacer(finder.elems(), new Slice(elems, i, j).intern());
     return r.replace(this).intern();
   }
 
@@ -2532,17 +2559,17 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     // visitor methods that get the job done
     @Override
     public VarInfoName visitSimple(Simple o) {
-      return (goals.contains(o)) ? o : null;
+      return goals.contains(o) ? o : null;
     }
 
     @Override
     public VarInfoName visitSizeOf(SizeOf o) {
-      return (goals.contains(o)) ? o : o.sequence.intern().accept(this);
+      return goals.contains(o) ? o : o.sequence.intern().accept(this);
     }
 
     @Override
     public VarInfoName visitFunctionOf(FunctionOf o) {
-      return (goals.contains(o)) ? o : super.visitFunctionOf(o);
+      return goals.contains(o) ? o : super.visitFunctionOf(o);
     }
 
     @Override
@@ -2562,12 +2589,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     @Override
     public VarInfoName visitField(Field o) {
-      return (goals.contains(o)) ? o : super.visitField(o);
+      return goals.contains(o) ? o : super.visitField(o);
     }
 
     @Override
     public VarInfoName visitTypeOf(TypeOf o) {
-      return (goals.contains(o)) ? o : super.visitTypeOf(o);
+      return goals.contains(o) ? o : super.visitTypeOf(o);
     }
 
     @Override
@@ -2588,12 +2615,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     @Override
     public VarInfoName visitAdd(Add o) {
-      return (goals.contains(o)) ? o : super.visitAdd(o);
+      return goals.contains(o) ? o : super.visitAdd(o);
     }
 
     @Override
     public VarInfoName visitElements(Elements o) {
-      return (goals.contains(o)) ? o : super.visitElements(o);
+      return goals.contains(o) ? o : super.visitElements(o);
     }
 
     @Override
@@ -2711,7 +2738,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     @Override
     public Boolean visitPrestate(Prestate o) {
       // orig(...) is all prestate unless it contains post(...)
-      return (new IsAllNonPoststateVisitor(o).result()) ? Boolean.TRUE : null;
+      return new IsAllNonPoststateVisitor(o).result() ? Boolean.TRUE : null;
     }
   }
 
@@ -3286,7 +3313,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       }
 
       // replace needy
-      VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
+      VarInfoName root_prime = new Replacer(needy, replace_with).replace(root).intern();
 
       assert root_prime != null;
       assert lower != null;
@@ -3443,7 +3470,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
             idx_name = String.valueOf(tmp++);
           } while (simples.contains(idx_name));
           assert tmp <= 'z' : "Ran out of letters in quantification";
-          VarInfoName idx = (new FreeVar(idx_name)).intern();
+          VarInfoName idx = new FreeVar(idx_name).intern();
 
           if (QuantHelper.debug.isLoggable(Level.FINE)) {
             QuantHelper.debug.fine("idx: " + idx);

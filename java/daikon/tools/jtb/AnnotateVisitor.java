@@ -419,9 +419,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // We are going to move back up the parse tree so we can look
     // at the Modifiers for this method (or constructor).
 
-    NodeChoice nc = (NodeChoice) (n.getParent());
-    NodeSequence ns = (NodeSequence) (nc.getParent());
-    Modifiers m = (Modifiers) (ns.elementAt(0));
+    NodeChoice nc = (NodeChoice) n.getParent();
+    NodeSequence ns = (NodeSequence) nc.getParent();
+    Modifiers m = (Modifiers) ns.elementAt(0);
     if (Annotate.debug.isLoggable(Level.FINE)) {
       System.out.println(Ast.formatEntireTree(m));
     }
@@ -755,7 +755,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
             ConstructorDeclaration cd =
                 (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
             MethodDeclaration md = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
-            if ((cd != null) || ((md != null) && (!Ast.contains(md.f0, "static")))) {
+            if ((cd != null) || ((md != null) && !Ast.contains(md.f0, "static"))) {
               @SuppressWarnings("nullness")
               @NonNull Node parent = Ast.getParent(Statement.class, n);
               // If parent isn't in a block (eg, if parent

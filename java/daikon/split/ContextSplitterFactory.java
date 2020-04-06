@@ -182,7 +182,7 @@ public class ContextSplitterFactory {
         result.add(entry);
       }
     } catch (NumberFormatException e) {
-      throw (IOException) (new IOException("Malformed number").initCause(e));
+      throw (IOException) new IOException("Malformed number").initCause(e);
     }
 
     return result.toArray(new MapfileEntry[result.size()]);

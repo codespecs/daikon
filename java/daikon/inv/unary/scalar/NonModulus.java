@@ -171,7 +171,7 @@ public class NonModulus extends SingleScalar {
   public InvariantStatus add_modified(long value, int count) {
     if (elements.add(Intern.internedLong(value))
         && results_accurate
-        && (!no_result_yet)
+        && !no_result_yet
         && (MathPlume.modNonnegative(value, modulus) == remainder)) results_accurate = false;
     return InvariantStatus.NO_CHANGE;
   }

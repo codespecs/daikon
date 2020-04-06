@@ -108,7 +108,7 @@ class ArrayFixer extends DepthFirstVisitor {
    */
   @Override
   public void visit(NodeToken n) {
-    if (lastTokenMayBeIdentity && (!(Visitors.isLBracket(n) || Visitors.isDot(n)))) {
+    if (lastTokenMayBeIdentity && !(Visitors.isLBracket(n) || Visitors.isDot(n))) {
       assert lastToken != null
           : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeIdentity == true";
       lastToken.tokenImage = lastToken.tokenImage + "_identity";

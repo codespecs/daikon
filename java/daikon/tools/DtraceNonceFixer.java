@@ -49,7 +49,7 @@ public class DtraceNonceFixer {
     }
 
     String outputFilename =
-        (args[0].endsWith(".gz")) ? (args[0] + "_fixed.gz") : (args[0] + "_fixed");
+        args[0].endsWith(".gz") ? (args[0] + "_fixed.gz") : (args[0] + "_fixed");
 
     try {
       BufferedReader br1 = UtilPlume.bufferedFileReader(args[0]);
@@ -86,7 +86,7 @@ public class DtraceNonceFixer {
 
       // now go back and add the OBJECT and CLASS invocations
       String allFixedFilename =
-          (outputFilename.endsWith(".gz")) ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
+          outputFilename.endsWith(".gz") ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
 
       BufferedReader br2 = UtilPlume.bufferedFileReader(outputFilename);
       out = new PrintWriter(UtilPlume.bufferedFileWriter(allFixedFilename));

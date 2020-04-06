@@ -822,10 +822,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /** A "\type(...)" construct where the "..." contains a "$". */
   private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
 
-  /** @return true if this Invariant can be properly formatted for the given output */
+  /**
+   * @param format the expected output format
+   * @return true if this Invariant can be properly formatted for the given output format
+   */
   @Pure
   public boolean isValidExpression(@NonPrototype Invariant this, OutputFormat format) {
-    if ((format == OutputFormat.ESCJAVA) && (!isValidEscExpression())) {
+    if ((format == OutputFormat.ESCJAVA) && !isValidEscExpression()) {
       return false;
     }
 
@@ -840,7 +843,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
           || (s.indexOf('~') != -1)
           || (s.indexOf("\\new") != -1)
           || (s.indexOf(".toString ") != -1)
-          || (s.endsWith(".toString"))
+          || s.endsWith(".toString")
           || (s.indexOf(".typeArray") != -1)
           || (s.indexOf("warning: method") != -1)
           || (s.indexOf("inexpressible") != -1)
@@ -1036,10 +1039,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       if (inv2 instanceof GuardingImplication) inv2 = ((GuardingImplication) inv2).right;
 
       // Put equality invariants first
-      if ((inv1 instanceof EqualityComparison) && (!(inv2 instanceof EqualityComparison))) {
+      if ((inv1 instanceof EqualityComparison) && !(inv2 instanceof EqualityComparison)) {
         return -1;
       }
-      if ((!(inv1 instanceof EqualityComparison)) && (inv2 instanceof EqualityComparison)) {
+      if (!(inv1 instanceof EqualityComparison) && (inv2 instanceof EqualityComparison)) {
         return 1;
       }
 
@@ -1086,10 +1089,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       }
 
       // Sort OneOf invariants earlier than others
-      if ((inv1 instanceof OneOf) && (!(inv2 instanceof OneOf))) {
+      if ((inv1 instanceof OneOf) && !(inv2 instanceof OneOf)) {
         return -1;
       }
-      if ((!(inv1 instanceof OneOf)) && (inv2 instanceof OneOf)) {
+      if (!(inv1 instanceof OneOf) && (inv2 instanceof OneOf)) {
         return 1;
       }
 
@@ -1899,7 +1902,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       }
     }
     assert valid_types(slice.var_infos)
-        : String.format("valid_types(%s) = false for %s", slice.var_infos, this);
+        : String.format("valid_types(%s) = false for %s", Arrays.toString(slice.var_infos), this);
     if (!enabled() || !instantiate_ok(slice.var_infos)) {
       return null;
     }

@@ -463,7 +463,7 @@ public class PptTopLevel extends Ppt {
       }
     }
     for (VarInfo vi : var_infos) {
-      assert (vi.value_index == -1) || (!vi.is_static_constant);
+      assert (vi.value_index == -1) || !vi.is_static_constant;
     }
 
     views = new LinkedHashMap<>();
@@ -4185,7 +4185,7 @@ public class PptTopLevel extends Ppt {
 
     for (int j = 0; j < vis1.length; j++) {
       for (int k = 0; k < vis2.length; k++) {
-        if ((vis1[j] == vis2[k]) && (!matched[k])) {
+        if ((vis1[j] == vis2[k]) && !matched[k]) {
           permute[j] = k;
           matched[k] = true; // don't match the same one twice
           break;
