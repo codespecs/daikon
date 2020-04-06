@@ -816,7 +816,7 @@ public class PptSplitter implements Serializable {
    * ppt_split.parent.
    *
    * @param rel the relation to add
-   * @praam ppt_split the target of the relation; that is, the relation goes from {@code this} to
+   * @param ppt_split the target of the relation; that is, the relation goes from {@code this} to
    *     {@code ppt_split}
    */
   public void add_relation(PptRelation rel, PptSplitter ppt_split) {
