@@ -10,8 +10,15 @@ export SHELLOPTS
 
 make compile daikon.jar
 
+if [ -d "/tmp/$USER/plume-scripts" ] ; then
+  (cd "/tmp/$USER/plume-scripts" && git pull -q) > /dev/null 2>&1
+else
+  mkdir -p "/tmp/$USER" && git -C "/tmp/$USER" clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
+fi
+
 # Code style & quality
-make -C java error-prone
+(make -C java error-prone > "/tmp/$USER/ep-warnings.txt")
+"/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ep-warnings.txt"
 
 # Code formatting
 make -C java check-format
@@ -30,19 +37,13 @@ if [ -n "${SKIP_JAVADOC+x}" ]; then
 else
   make javadoc doc-all
 
-  if [ -d "/tmp/$USER/plume-scripts" ] ; then
-    (cd "/tmp/$USER/plume-scripts" && git pull -q) > /dev/null 2>&1
-  else
-    mkdir -p "/tmp/$USER" && git -C "/tmp/$USER" clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git
-  fi
-
   # The `api-private` and `requireJavadocPrivate` commands are
   # separate (and thus the first might mask failure of the second) to
   # avoid assuming that they both produce absolute filenames or both
   # produce filenames relative to the same directory.
   # The `grep -v` prevents the make target failure from throwing off prefix guessing.
-  (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > /tmp/ap-warnings.txt ) || true
-  "/tmp/$USER/plume-scripts/ci-lint-diff" /tmp/ap-warnings.txt
-  (make -C java requireJavadocPrivate 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadocPrivate' failed" > /tmp/rj-warnings.txt) || true
-  "/tmp/$USER/plume-scripts/ci-lint-diff" /tmp/rj-warnings.txt
+  (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
+  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"
+  (make -C java requireJavadocPrivate 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadocPrivate' failed" > "/tmp/$USER/rj-warnings.txt") || true
+  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"
 fi

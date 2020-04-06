@@ -463,7 +463,7 @@ public class PptTopLevel extends Ppt {
       }
     }
     for (VarInfo vi : var_infos) {
-      assert (vi.value_index == -1) || (!vi.is_static_constant);
+      assert (vi.value_index == -1) || !vi.is_static_constant;
     }
 
     views = new LinkedHashMap<>();
@@ -1241,8 +1241,8 @@ public class PptTopLevel extends Ppt {
    */
   public List<Invariant> inv_add(List<Invariant> inv_list, ValueTuple vt, int count) {
 
-    // Slices containing these invariants
-    Set<PptSlice> slices = new LinkedHashSet<>();
+    // // Slices containing these invariants
+    // Set<PptSlice> slices = new LinkedHashSet<>();
 
     // List of invariants weakened by this sample
     List<Invariant> weakened_invs = new ArrayList<>();
@@ -1262,8 +1262,8 @@ public class PptTopLevel extends Ppt {
         if (inv.ppt.var_infos[j].isMissing(vt)) continue inv_loop;
       }
 
-      // Add the slice containing this invariant to the set of slices
-      slices.add(inv.ppt);
+      // // Add the slice containing this invariant to the set of slices
+      // slices.add(inv.ppt);
 
       // Get the values and add them to the invariant.
       InvariantStatus result = inv.add_sample(vt, count);
@@ -1479,7 +1479,6 @@ public class PptTopLevel extends Ppt {
   public void create_derived_variables() {
     if (debug.isLoggable(Level.FINE)) debug.fine("create_derived_variables for " + name());
 
-    int first_new = var_infos.length;
     // Make ALL of the derived variables.  The loop terminates
     // because derive() stops creating derived variables after some
     // depth.  Within the loop, [lower..upper) need deriving from.
@@ -1964,12 +1963,13 @@ public class PptTopLevel extends Ppt {
     }
 
     // Debug print the other invariants in this slice.
-    if (false && !slice.is_inv_true(inv)) {
-      System.out.printf("%d invariants for variable %s in ppt %s%n", slice.invs.size(), v, name());
-      for (Invariant other_inv : slice.invs) {
-        System.out.printf("Invariant %s in ppt %s%n", other_inv.format(), name());
-      }
-    }
+    // if (!slice.is_inv_true(inv)) {
+    //   System.out.printf("%d invariants for variable %s in ppt %s%n", slice.invs.size(), v,
+    // name());
+    //   for (Invariant other_inv : slice.invs) {
+    //     System.out.printf("Invariant %s in ppt %s%n", other_inv.format(), name());
+    //   }
+    // }
 
     return slice.is_inv_true(inv);
   }
@@ -2870,7 +2870,6 @@ public class PptTopLevel extends Ppt {
     try {
       if (proverStack == null) proverStack = new LemmaStack();
       markImpliedViaSimplify_int(
-          all_ppts,
           new SimplifyInclusionTester() {
             @Override
             public boolean include(Invariant inv) {
@@ -2897,8 +2896,7 @@ public class PptTopLevel extends Ppt {
    * the provided test interface to determine if an invariant is within the domain of inspection.
    */
   @RequiresNonNull("proverStack")
-  private void markImpliedViaSimplify_int(PptMap all_ppts, SimplifyInclusionTester test)
-      throws SimplifyError {
+  private void markImpliedViaSimplify_int(SimplifyInclusionTester test) throws SimplifyError {
     SessionManager.debugln("Simplify checking " + ppt_name);
 
     // Create the list of invariants from this ppt which are
@@ -3022,7 +3020,6 @@ public class PptTopLevel extends Ppt {
     boolean[] present = new boolean[lemmas.length];
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length - 1; checking >= 0; checking--) {
-      Invariant inv = invs[checking];
       StringBuilder bg = new StringBuilder("(AND ");
       for (int i = 0; i < present.length; i++) {
         if (present[i] && (i != checking)) {
@@ -4185,7 +4182,7 @@ public class PptTopLevel extends Ppt {
 
     for (int j = 0; j < vis1.length; j++) {
       for (int k = 0; k < vis2.length; k++) {
-        if ((vis1[j] == vis2[k]) && (!matched[k])) {
+        if ((vis1[j] == vis2[k]) && !matched[k]) {
           permute[j] = k;
           matched[k] = true; // don't match the same one twice
           break;
@@ -4425,9 +4422,9 @@ public class PptTopLevel extends Ppt {
 
     NumberFormat dfmt = NumberFormat.getInstance();
     dfmt.setMaximumFractionDigits(2);
-    double equality_set_cnt = 0;
-    double vars_cnt = 0;
-    double total_sample_cnt = 0;
+    // double equality_set_cnt = 0;
+    // double vars_cnt = 0;
+    // double total_sample_cnt = 0;
     Map<PptTopLevel, List<Stats>> stats_map = Global.stats_map;
 
     Stats.dump_header(debug);
@@ -4436,7 +4433,7 @@ public class PptTopLevel extends Ppt {
       if (slist == null) {
         continue;
       }
-      int sample_cnt = 0;
+      int sample_cnt;
       int time = 0;
       double avg_equality_cnt = 0;
       double avg_var_cnt = 0;
@@ -4447,12 +4444,12 @@ public class PptTopLevel extends Ppt {
       int instantiated_slice_cnt = 0;
       long memory = 0;
       sample_cnt = slist.size();
-      total_sample_cnt += sample_cnt;
+      // total_sample_cnt += sample_cnt;
       for (Stats stats : slist) {
         avg_equality_cnt += stats.set_cnt;
         avg_var_cnt += stats.var_cnt;
-        equality_set_cnt += stats.set_cnt;
-        vars_cnt += stats.var_cnt;
+        // equality_set_cnt += stats.set_cnt;
+        // vars_cnt += stats.var_cnt;
         time += stats.time;
         avg_inv_cnt += stats.inv_cnt;
         slice_cnt += stats.slice_cnt;

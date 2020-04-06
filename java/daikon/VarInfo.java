@@ -1082,7 +1082,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         param_names.add(vi.var_info_name); // vin ok
       }
 
-      String param = "";
       VarInfoName.Finder finder = new VarInfoName.Finder(param_names);
       Object baseMaybe = finder.getPart(var_info_name); // vin ok
       if (baseMaybe != null) {
@@ -1093,7 +1092,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
           Global.debugSuppressParam.fine("derived from " + base.name());
           Global.debugSuppressParam.fine(paramVars.toString());
         }
-        param = "derived from " + base.name();
         result = true;
       }
     } else { // new format
@@ -1244,7 +1242,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
         // The size of a parameter can't change in the caller.  We shouldn't
         // have the shift==0 test, but need it to match the old code
-        if (is_size() && (enclosing_var.get_base_array_hashcode().isParam())) {
+        if (is_size() && enclosing_var.get_base_array_hashcode().isParam()) {
           if (((SequenceLength) derived).shift == 0) {
             return true;
           }
@@ -1959,7 +1957,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // find a ...post(...)... expression to simplify
     VarInfoName.Poststate postexpr = null;
-    for (VarInfoName node : (new VarInfoName.InorderFlattener(var_info_name)).nodes()) { // vin ok
+    for (VarInfoName node : new VarInfoName.InorderFlattener(var_info_name).nodes()) { // vin ok
       if (node instanceof VarInfoName.Poststate) {
         // Remove temporary var when bug is fixed.
         VarInfoName.Poststate tempNode = (VarInfoName.Poststate) node;
@@ -1981,7 +1979,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       VarInfoName.Add add = (VarInfoName.Add) postexpr.term;
       VarInfoName swapped = add.term.applyPoststate().applyAdd(add.amount);
       var_info_name =
-          (new VarInfoName.Replacer(postexpr, swapped))
+          new VarInfoName.Replacer(postexpr, swapped)
               .replace(var_info_name)
               .intern(); // vin ok  // interning bugfix
       // start over
@@ -2022,7 +2020,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         }
       }
       var_info_name =
-          (new VarInfoName.Replacer(postexpr, pre_expr))
+          new VarInfoName.Replacer(postexpr, pre_expr)
               .replace(var_info_name)
               .intern(); // vin ok  // interning bugfix
       if (debugSimplifyExpression.isLoggable(Level.FINE)) {
@@ -2053,7 +2051,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       return false;
     }
 
-    if ((!Daikon.ignore_comparability) && (!VarComparability.comparable(var1, var2))) {
+    if (!Daikon.ignore_comparability && !VarComparability.comparable(var1, var2)) {
       return false;
     }
 
@@ -2133,7 +2131,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       return true;
     }
 
-    if (Daikon.check_program_types && (!var1.type.comparableOrSuperclassEitherWay(var2.type))) {
+    if (Daikon.check_program_types && !var1.type.comparableOrSuperclassEitherWay(var2.type)) {
       // debug_print_once ("types %s and %s are not comparable",
       //                     var1.type, var2.type);
       return false;
@@ -2151,10 +2149,10 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public boolean comparableNWay(VarInfo var2) {
     VarInfo var1 = this;
-    if (Daikon.check_program_types && (!var1.type.comparableOrSuperclassOf(var2.type))) {
+    if (Daikon.check_program_types && !var1.type.comparableOrSuperclassOf(var2.type)) {
       return false;
     }
-    if (Daikon.check_program_types && (!var2.type.comparableOrSuperclassOf(var1.type))) {
+    if (Daikon.check_program_types && !var2.type.comparableOrSuperclassOf(var1.type)) {
       return false;
     }
     if (Daikon.check_program_types && (var1.file_rep_type != var2.file_rep_type)) {
@@ -2232,18 +2230,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // For now associating with the variable's PptSlice
     PptSlice slice = ppt.get_or_instantiate_slice(this);
 
-    Invariant result;
-    Class<NonZero> NonZero_class;
-    try {
-      @SuppressWarnings("unchecked")
-      Class<NonZero> NonZero_class_tmp =
-          (Class<NonZero>) Class.forName("daikon.inv.unary.scalar.NonZero");
-      NonZero_class = NonZero_class_tmp;
-    } catch (ClassNotFoundException e) {
-      throw new Error("Could not locate class object for daikon.inv.unary.scalar.NonZero");
-    }
-    // result = Invariant.find(NonZero_class, slice);
-    result = Invariant.find(NonZero.class, slice);
+    Invariant result = Invariant.find(NonZero.class, slice);
 
     // Check whether the predicate already exists
     if (result == null) {
@@ -2542,19 +2529,19 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         // "Class" is not a varible, even though for variable "a.b.c",
         // typically "a" and "a.b" are also variables.
         if (vi == null) {
-          String message =
-              String.format(
-                  "getGuardingList(%s, %s): did not find variable %s [inpre=%s]",
-                  name(), ppt.name(), vin.name(), inPre);
-          // Only print the error message at most once per variable.
-          if (addVarMessages.add(vin.name())) {
-            // For now, don't print at all:  it's generally innocuous
-            // (class prefix of a static variable).
-            // System.err.println(message);
-          }
-          // System.out.println("vars: " + ppt.varNames());
-          // System.out.flush();
-          // throw new Error(String.format(message));
+          // String message =
+          //     String.format(
+          //         "getGuardingList(%s, %s): did not find variable %s [inpre=%s]",
+          //         name(), ppt.name(), vin.name(), inPre);
+          // // Only print the error message at most once per variable.
+          // if (addVarMessages.add(vin.name())) {
+          //   // For now, don't print at all:  it's generally innocuous
+          //   // (class prefix of a static variable).
+          //   // System.err.println(message);
+          // }
+          // // System.out.println("vars: " + ppt.varNames());
+          // // System.out.flush();
+          // // throw new Error(String.format(message));
           return result;
         } else {
           return addVarInfo(result, vi);
@@ -2569,7 +2556,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       // (Then what is the type of the visitor; what does everything return?)
       private List<VarInfo> addVarInfo(List<VarInfo> result, VarInfo vi) {
         assert vi != null;
-        assert ((!vi.isDerived()) || vi.isDerived()) : "addVar on derived variable: " + vi;
+        assert (!vi.isDerived() || vi.isDerived()) : "addVar on derived variable: " + vi;
         // Don't guard primitives
         if ( // TODO: ***** make changes here *****
         // vi.file_rep_type.isScalar() &&
@@ -2616,10 +2603,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       // Create a list of variables to be guarded from the list of all
       // enclosing variables.
       for (VarInfo vi : get_all_enclosing_vars()) {
-        if (false && var_flags.contains(VarFlags.CLASSNAME)) {
-          System.err.printf(
-              "%s file_rep_type = %s, canbemissing = %b\n", vi, vi.file_rep_type, vi.canBeMissing);
-        }
+        // if (var_flags.contains(VarFlags.CLASSNAME)) {
+        //   System.err.printf(
+        //       "%s file_rep_type = %s, canbemissing = %b\n", vi, vi.file_rep_type,
+        // vi.canBeMissing);
+        // }
         if (!vi.file_rep_type.isHashcode()) {
           continue;
         }
@@ -2912,7 +2900,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       }
       return var;
     } else {
-      Elements elems = (new ElementsFinder(var_info_name)).elems(); // vin ok
+      Elements elems = new ElementsFinder(var_info_name).elems(); // vin ok
       return ppt.find_var_by_name(elems.name());
     }
   }
@@ -2926,7 +2914,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (FileIO.new_decl_format) {
       return get_base_array().enclosing_var;
     } else {
-      Elements elems = (new ElementsFinder(var_info_name)).elems(); // vin ok
+      Elements elems = new ElementsFinder(var_info_name).elems(); // vin ok
       // System.out.printf("term.name() = %s%n", elems.term.name());
       return ppt.find_var_by_name(elems.term.name());
     }
@@ -3279,9 +3267,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // If this is a derived variable, the derivations builds the name
     if (derived != null) {
-      if (derived.getClass().toString().contains("ternary")) {
-        String x = "10";
-      }
       return derived.jml_name(index);
     }
 
@@ -3378,11 +3363,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         if (index == null) {
           return String.format("(select elems %s)", enclosing_var.simplify_name());
         }
-        if (false && index.equals("|0|")) {
-          System.err.printf("index = %s%n", index);
-          Throwable t = new Throwable();
-          t.printStackTrace();
-        }
+        // if (index.equals("|0|")) {
+        //   System.err.printf("index = %s%n", index);
+        //   Throwable t = new Throwable();
+        //   t.printStackTrace();
+        // }
         return String.format("(select (select elems %s) %s)", enclosing_var.simplify_name(), index);
       case VARIABLE:
         if (dkconfig_constant_fields_simplify && str_name.contains(".")) {
@@ -3918,7 +3903,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // If $Field or $Type appears before $Elements, false.
     // System.out.printf("%s flatten %s%n", name(), name);
-    for (VarInfoName node : (new VarInfoName.InorderFlattener(var_info_name)).nodes()) {
+    for (VarInfoName node : new VarInfoName.InorderFlattener(var_info_name).nodes()) {
       if (node instanceof VarInfoName.Field) {
         return false;
       }

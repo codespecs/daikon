@@ -241,7 +241,7 @@ public class BuildJDK {
         JarEntry entry = entries.nextElement();
         // System.out.printf("processing entry %s%n", entry);
         final String entryName = entry.getName();
-        if ((entryName.endsWith("/")) || (entryName.endsWith("~"))) {
+        if (entryName.endsWith("/") || entryName.endsWith("~")) {
           continue;
         }
 

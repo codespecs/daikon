@@ -686,11 +686,11 @@ public final @Interned class ProglangType implements Serializable {
 
   @Pure
   public boolean isObject() {
-    return ((dimensions == 0) && (baseIsObject()));
+    return ((dimensions == 0) && baseIsObject());
   }
 
   public boolean baseIsObject() {
-    return ((!baseIsIntegral()) && (!baseIsFloat()) && (!(base == BASE_BOOLEAN)));
+    return (!baseIsIntegral() && !baseIsFloat() && !(base == BASE_BOOLEAN));
   }
 
   public boolean baseIsString() {

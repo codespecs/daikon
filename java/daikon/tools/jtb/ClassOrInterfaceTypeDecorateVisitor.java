@@ -213,14 +213,14 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
     // Drop all type arguments.
     n.f1 = new NodeOptional(); // This removes optional node, if present.
-    List<Node> nodeSequenceList = (n.f2).nodes;
+    List<Node> nodeSequenceList = n.f2.nodes;
     for (int i = 0; i < nodeSequenceList.size(); i++) {
       NodeSequence oldSequence = (NodeSequence) nodeSequenceList.get(i);
       NodeSequence newSequence = new NodeSequence(3);
       newSequence.addNode(oldSequence.elementAt(0)); // "."
       newSequence.addNode(oldSequence.elementAt(1)); // <IDENTIFIER>
       newSequence.addNode(new NodeOptional()); // get rid of type arguments
-      (n.f2).nodes.set(i, newSequence);
+      n.f2.nodes.set(i, newSequence);
     }
 
     // 2. Only the first <IDENTIFIER> may possibly be associated

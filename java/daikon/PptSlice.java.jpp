@@ -362,8 +362,8 @@ public final class PPTSLICE1 extends PptSlice {
     for (Invariant invariant : invs) {
       UnaryInvariant inv = (UnaryInvariant) invariant;
       if (inv.is_false()) {
-  continue;
-}
+        continue;
+      }
       InvariantStatus status = inv.add(val1, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
         inv.falsify();

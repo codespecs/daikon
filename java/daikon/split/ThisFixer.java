@@ -73,10 +73,9 @@ class ThisFixer extends DepthFirstVisitor {
       columnshiftline = -1;
     }
 
-    if ((Visitors.isDot(n)) && ((lastToken == null) || (Visitors.isThis(lastToken)))) {
+    if (Visitors.isDot(n) && ((lastToken == null) || Visitors.isThis(lastToken))) {
       n.tokenImage = "_";
-    } else if ((Visitors.isIdentifier(n))
-        && ((lastToken == null) || (!Visitors.isDot(lastToken)))) {
+    } else if (Visitors.isIdentifier(n) && ((lastToken == null) || !Visitors.isDot(lastToken))) {
 
       for (VarInfo varInfo : varInfos) {
         if (varInfo.isParam()) {

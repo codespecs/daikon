@@ -455,6 +455,7 @@ public class PptRelation implements Serializable {
         continue;
       }
       if (vp.isStaticConstant()) {
+        @SuppressWarnings("UnusedVariable") // see comment below
         boolean found = rel.relate(vp, vp.name());
         // Static constants are not always placed at each level in hierarchy
         // (due to mutually recursive constants that contain one another as

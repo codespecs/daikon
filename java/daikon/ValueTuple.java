@@ -320,7 +320,7 @@ public final class ValueTuple implements Cloneable {
     assert vals.length == mods.length;
     for (int i = 0; i < vals.length; i++) {
       assert 0 <= mods[i] && mods[i] < MODBIT_VALUES
-          : String.format("mods: %s i:%d mods[i]: %s%n", mods, i, mods[i]);
+          : String.format("mods: %s i:%d mods[i]: %s%n", Arrays.toString(mods), i, mods[i]);
       assert (isMissing(i) ? vals[i] == null : true);
     }
   }
@@ -335,8 +335,8 @@ public final class ValueTuple implements Cloneable {
   // Private constructor that doesn't perform interning.
   @SuppressWarnings("interning") // interning constructor
   private ValueTuple(@Nullable Object[] vals, int[] mods, boolean check) {
-    assert (!check) || Intern.isInterned(vals);
-    assert (!check) || Intern.isInterned(mods);
+    assert !check || Intern.isInterned(vals);
+    assert !check || Intern.isInterned(mods);
     this.vals = vals;
     this.mods = mods;
     checkRep();
@@ -396,7 +396,8 @@ public final class ValueTuple implements Cloneable {
   public int size() {
     assert vals.length == mods.length
         : String.format(
-            "vals (len %d) = %s  mods (len %d = %s", vals.length, vals, mods.length, mods);
+            "vals (len %d) = %s  mods (len %d = %s",
+            vals.length, Arrays.toString(vals), mods.length, Arrays.toString(mods));
     return vals.length;
   }
 

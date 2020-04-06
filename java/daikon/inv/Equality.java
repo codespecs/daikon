@@ -424,7 +424,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
           && !leaderOutOfBounds
           && !vi.missingOutOfBounds()
           // If the values are NaN, treat them as different.
-          && (!((leaderValue instanceof Double) && ((Double) leaderValue).isNaN()))) {
+          && !((leaderValue instanceof Double) && ((Double) leaderValue).isNaN())) {
         // The values are the same.
         continue;
       }

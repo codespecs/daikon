@@ -11,6 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Helper classes for quantification for various output formats. */
+@SuppressWarnings("UnusedVariable") // messy code, need to investigate later
 public class Quantify {
 
   /** Flags describing how quantifications are to be built. */
@@ -394,7 +395,7 @@ public class Quantify {
       String arr_var1_index = arr_var1.esc_name(index1.esc_name());
 
       // If there is a second array variable, get quant for it
-      if ((vars.length > 1) && (vars[1].file_rep_type.isArray())) {
+      if ((vars.length > 1) && vars[1].file_rep_type.isArray()) {
         Term index2 = new FreeVar("j");
         String quant2 = bld_quant(vars[1], index2);
         indices = new Term[] {index1, index2};

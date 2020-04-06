@@ -181,7 +181,7 @@ public class PptSplitter implements Serializable {
               + " with "
               + vt.size()
               + " vars"
-              + ((!related_vars.equals("")) ? (" including " + related_vars) : ""));
+              + (!related_vars.equals("") ? (" including " + related_vars) : ""));
     }
   }
 
@@ -817,6 +817,7 @@ public class PptSplitter implements Serializable {
    */
   public void add_relation(PptRelation rel, PptSplitter ppt_split) {
     for (int ii = 0; ii < ppts.length; ii++) {
+      @SuppressWarnings("UnusedVariable")
       PptRelation cond_rel = rel.copy(ppts[ii], ppt_split.ppts[ii]);
       // System.out.println ("Added relation: " + cond_rel);
       // System.out.println ("with relations: "

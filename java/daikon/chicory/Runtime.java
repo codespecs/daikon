@@ -619,7 +619,7 @@ public class Runtime {
   public static void setDtraceMaybe(String default_filename) {
     // Copied from daikon.Runtime
     // System.out.println ("Setting dtrace maybe: " + default_filename);
-    if ((dtrace == null) && (!no_dtrace)) {
+    if ((dtrace == null) && !no_dtrace) {
       String filename = System.getProperty("DTRACEFILE", default_filename);
       boolean append = System.getProperty("DTRACEAPPEND") != null;
       setDtrace(filename, append);
@@ -672,7 +672,7 @@ public class Runtime {
                   // Warning messages have already been printed.
                 } else if (SharedData.all_classes.size() == 0) {
                   System.out.println("Chicory warning: No methods were instrumented.");
-                  if ((!ppt_select_pattern.isEmpty()) || (!ppt_omit_pattern.isEmpty())) {
+                  if (!ppt_select_pattern.isEmpty() || !ppt_omit_pattern.isEmpty()) {
                     System.out.println(
                         "Check the --ppt-select-pattern and --ppt-omit-pattern options");
                   }

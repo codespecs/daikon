@@ -104,7 +104,7 @@ public class Violation implements Serializable {
    */
   public static Violation get(String vioString) {
 
-    if (!(vioString.matches(".*(<INVINFO>.*</INVINFO>).*"))) {
+    if (!vioString.matches(".*(<INVINFO>.*</INVINFO>).*")) {
       throw new IllegalArgumentException(vioString);
     }
 

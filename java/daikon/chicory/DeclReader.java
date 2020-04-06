@@ -104,7 +104,7 @@ public class DeclReader {
 
     @Pure
     public boolean is_double() {
-      return (rep_type.equals("double") || (rep_type.equals("float")));
+      return (rep_type.equals("double") || rep_type.equals("float"));
     }
 
     @Pure

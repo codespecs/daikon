@@ -281,8 +281,8 @@ public class Annotation {
     }
     Annotation anno = (Annotation) o;
     return (this.daikonRep().equals(anno.daikonRep())
-        && (this.method().equals(anno.method()))
-        && (this.kind().equals(anno.kind())));
+        && this.method().equals(anno.method())
+        && this.kind().equals(anno.kind()));
   }
 
   @Pure
