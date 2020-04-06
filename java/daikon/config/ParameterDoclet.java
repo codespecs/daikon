@@ -261,11 +261,11 @@ public class ParameterDoclet {
       for (
       @KeyFor("categories[c].fields") String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
-        String defstr = getDefaultString(field);
+        String defaultString = getDefaultString(field);
 
         // Simpler format for debugging
         if (false) {
-          String value = defstr.replaceFirst(".*`", "");
+          String value = defaultString.replaceFirst(".*`", "");
           value = value.replaceFirst("'.*", "");
           out.printf("@item %s %s%n%n", value, field);
           continue;
@@ -277,7 +277,7 @@ public class ParameterDoclet {
         desc = HtmlToTexinfo.javadocHtmlToTexinfo(desc);
         out.println(desc);
         if (!desc.contains("The default value is")) {
-          out.println(defstr);
+          out.println(defaultString);
         }
         out.println();
       }
@@ -297,14 +297,14 @@ public class ParameterDoclet {
       for (
       @KeyFor("categories[c].fields") String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
-        String defstr = getDefaultString(field);
+        String defaultString = getDefaultString(field);
 
         // [field]
         //   [desc]
         out.println("  " + field);
         out.println("    " + desc);
         if (!desc.contains("The default value is")) {
-          out.println("    " + defstr);
+          out.println("    " + defaultString);
         }
         out.println();
       }
