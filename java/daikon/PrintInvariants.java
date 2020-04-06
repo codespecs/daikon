@@ -662,7 +662,7 @@ public final class PrintInvariants {
       discClass = splitArg.nextToken();
       if ((arg.indexOf('<') != -1)
           && (arg.indexOf('@') != -1)
-          && (arg.indexOf('@') < (arg.indexOf('<'))))
+          && (arg.indexOf('@') < arg.indexOf('<')))
         temp = arg.substring(arg.indexOf('@')); // in case the pptname has a < in it
       else if (arg.indexOf('<') != -1) temp = arg.substring(arg.indexOf('<'));
       else if (arg.indexOf('@') != -1) temp = arg.substring(arg.indexOf('@'));
@@ -993,7 +993,7 @@ public final class PrintInvariants {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
         for (VarInfo vi : modified_vars) {
-          out.print(" " + (vi.old_var_name()));
+          out.print(" " + vi.old_var_name());
         }
         out.println();
       }
@@ -1071,7 +1071,7 @@ public final class PrintInvariants {
     String inv_rep = inv.format_using(Daikon.output_format);
     assert inv_rep != null : String.format("Null format (%s): %s", inv.getClass(), inv);
 
-    if ((Daikon.output_format == OutputFormat.ESCJAVA) && !(inv.isValidEscExpression())) {
+    if ((Daikon.output_format == OutputFormat.ESCJAVA) && !inv.isValidEscExpression()) {
       String class_name = ((inv instanceof Equality) ? "'equality'" : inv.getClass().getName());
       inv_rep =
           "warning: method "

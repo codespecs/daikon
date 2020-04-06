@@ -102,7 +102,7 @@ public class Ast {
     StringWriter w = new StringWriter();
     n.accept(new TreeDumper(w, true));
     // delete empty lines, but otherwise leave text alone
-    return (w.toString()).replaceAll("(?m)^[ \t]*\r?\n", "");
+    return w.toString().replaceAll("(?m)^[ \t]*\r?\n", "");
   }
 
   // This translates a line that looks like this:
@@ -294,7 +294,7 @@ public class Ast {
     }
 
     String className = "";
-    className = (n).f1.tokenImage + "."; // f1 -> <IDENTIFIER>
+    className = n.f1.tokenImage + "."; // f1 -> <IDENTIFIER>
 
     Node currentNode = n;
     while (true) {

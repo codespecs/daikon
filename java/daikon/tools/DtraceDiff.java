@@ -306,10 +306,10 @@ public class DtraceDiff {
               }
               for (int i = 0; (i < ppt1.num_tracevars) && (i < ppt2.num_tracevars); i++) {
                 // *** what about comparability and aux info?
-                if ((!vis1[i].name().equals(vis2[i].name()))
+                if (!vis1[i].name().equals(vis2[i].name())
                     || (vis1[i].is_static_constant != vis2[i].is_static_constant)
-                    || ((vis1[i].isStaticConstant())
-                        && (vis2[i].isStaticConstant())
+                    || (vis1[i].isStaticConstant()
+                        && vis2[i].isStaticConstant()
                         && !values_are_equal(
                             vis1[i], vis1[i].constantValue(), vis2[i].constantValue()))
                     || ((vis1[i].type != vis2[i].type)
@@ -336,13 +336,11 @@ public class DtraceDiff {
               // Require that missing1 == missing2.  Also require that if
               // the values are present, they are the same.
               if (!((missing1 == missing2)
-                  && ((missing1
+                  && (missing1
                       // At this point, missing1 == false, missing2 == false,
                       // val1 != null, val2 != null.
                       || values_are_equal(
-                          vis1[i],
-                          castNonNull(val1),
-                          castNonNull(val2)))))) // application invariant
+                          vis1[i], castNonNull(val1), castNonNull(val2))))) // application invariant
               ppt_var_value_error(
                     vis1[i], val1, state1, dtracefile1, vis2[i], val2, state2, dtracefile2);
             }

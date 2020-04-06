@@ -81,7 +81,7 @@ class StatementReplacer extends DepthFirstVisitor {
         // ParseException does not accept optional "cause" argument
         throw new ParseException(message);
       }
-    } while ((replacements < MAXREPLACEMENTS) && (!replacedExpression.equals(expression)));
+    } while ((replacements < MAXREPLACEMENTS) && !replacedExpression.equals(expression));
     if (replacements >= MAXREPLACEMENTS) {
       return originalExpression;
     } else {

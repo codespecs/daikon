@@ -297,7 +297,7 @@ public class BuildJDK {
         if (!entryName.startsWith(prefixOfFilesToInclude) && !entryName.startsWith("META-INF")) {
           continue;
         }
-        if ((entryName.endsWith("/")) || (entryName.endsWith("~"))) {
+        if (entryName.endsWith("/") || entryName.endsWith("~")) {
           continue;
         }
         if (entryName.endsWith(".class")) all_classes.add(entryName.replace(".class", ""));

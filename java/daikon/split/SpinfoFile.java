@@ -210,7 +210,7 @@ public class SpinfoFile {
     List<String> pptSection = new ArrayList<>();
     pptSection.add(pptName);
     String line = spinfoFile.readLine();
-    while ((line != null) && (!line.trim().equals(""))) {
+    while ((line != null) && !line.trim().equals("")) {
       pptSection.add(line);
       line = spinfoFile.readLine();
     }

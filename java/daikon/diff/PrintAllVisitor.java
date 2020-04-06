@@ -114,7 +114,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
     //    bufPrint("  <");
 
-    if (inv1 != null && inv2 != null && (inv1.format().equals(inv2.format()))) {
+    if (inv1 != null && inv2 != null && inv1.format().equals(inv2.format())) {
       return;
     }
 
