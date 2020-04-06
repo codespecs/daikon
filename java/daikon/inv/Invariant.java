@@ -1899,7 +1899,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       }
     }
     assert valid_types(slice.var_infos)
-        : String.format("valid_types(%s) = false for %s", slice.var_infos, this);
+        : String.format("valid_types(%s) = false for %s", Arrays.toString(slice.var_infos), this);
     if (!enabled() || !instantiate_ok(slice.var_infos)) {
       return null;
     }
