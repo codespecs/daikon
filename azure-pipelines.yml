@@ -333,7 +333,8 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: kvasir_centos_jdk8
+# Remove "_nondeterministic" from the name once it is deterministic.
+- job: kvasir_centos_jdk8_nondeterministic
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-centos-jdk8-plus:latest

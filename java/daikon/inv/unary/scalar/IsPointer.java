@@ -118,7 +118,7 @@ public class IsPointer extends SingleScalar {
 
     ValueSet.ValueSetScalar vs = (ValueSet.ValueSetScalar) ppt.var_infos[0].get_value_set();
 
-    if ((!isWithinPointerRange(vs.max())) || (!isWithinPointerRange(vs.min()))) {
+    if (!isWithinPointerRange(vs.max()) || !isWithinPointerRange(vs.min())) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
     }
 

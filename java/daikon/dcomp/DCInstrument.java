@@ -447,8 +447,8 @@ public class DCInstrument extends InstructionListUtils {
           } catch (Exception e) {
             String s = e.getMessage();
             if (s == null) throw e;
-            if ((s.startsWith("Branch target offset too large"))
-                || (s.startsWith("Code array too big"))) {
+            if (s.startsWith("Branch target offset too large")
+                || s.startsWith("Code array too big")) {
               System.out.printf(
                   "DynComp warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
                   classname, mg.getName());
@@ -1038,7 +1038,7 @@ public class DCInstrument extends InstructionListUtils {
     // we need to insert the code to initialize it now so that the
     // stack anaylsis we are about to do is correct for potential
     // code replacements we might make later.
-    InstructionHandle orig_start = (mg.getInstructionList()).getStart();
+    InstructionHandle orig_start = mg.getInstructionList().getStart();
     add_create_tag_frame(mg);
     // Calculate the operand stack value(s) for revised code.
     mg.setMaxStack();
@@ -2236,7 +2236,7 @@ public class DCInstrument extends InstructionListUtils {
           // call at runtime.
           // This is just a hack to get through PASCALI corpus.
           String super_class = gen.getSuperclassName();
-          if ((!super_class.equals("java.lang.Object")) && (BcelUtil.inJdk(super_class))) {
+          if (!super_class.equals("java.lang.Object") && BcelUtil.inJdk(super_class)) {
             callee_instrumented = false;
           }
         }

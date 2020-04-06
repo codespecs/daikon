@@ -76,7 +76,7 @@ public class DeclWriter extends DaikonWriter {
    */
   public void printHeaderInfo(String className) {
     outFile.println("// Declarations for " + className);
-    outFile.println("// Declarations written " + (new Date()));
+    outFile.println("// Declarations written " + new Date());
     outFile.println();
 
     // Determine comparability string

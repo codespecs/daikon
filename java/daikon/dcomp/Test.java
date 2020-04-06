@@ -282,9 +282,10 @@ class Test {
       u1 = new Uncloneable();
     }
 
+    /** A method for comparability testing. */
     public void compare() {
       try {
-        obj2 = (Obj) (obj1.clone());
+        obj2 = (Obj) obj1.clone();
         assert obj1.x == obj2.x : "Corresponding fields should be equal";
         assert obj1.y == obj2.y : "Corresponding fields should be equal";
       } catch (CloneNotSupportedException e) {
@@ -293,7 +294,7 @@ class Test {
 
       // Ensure the clone() method still works when not overridden
       try {
-        u2 = (Uncloneable) (u1.clone());
+        u2 = (Uncloneable) u1.clone();
       } catch (CloneNotSupportedException e) {
         return;
       }

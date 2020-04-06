@@ -95,16 +95,14 @@ public class Violation implements Serializable {
   /**
    * Creates the violation represented by {@code vioString}.
    *
-   * <p>Precondition: the string is of the form:
-   *
-   * <p>{@code <INVINFO> property time</INVINFO>}
-   *
-   * <p>Where {@code property} is valid XML representation of a {@code Property}, and time is {@code
-   * <ON_ENTRY>} or {@code <ON_EXIT>}.
+   * @param vioString: a the string is of the form: {@code <INVINFO> property time</INVINFO>} where
+   *     {@code property} is valid XML representation of a {@code Property}, and time is {@code
+   *     <ON_ENTRY>} or {@code <ON_EXIT>}.
+   * @return the violation represented by {@code vioString}
    */
   public static Violation get(String vioString) {
 
-    if (!(vioString.matches(".*(<INVINFO>.*</INVINFO>).*"))) {
+    if (!vioString.matches(".*(<INVINFO>.*</INVINFO>).*")) {
       throw new IllegalArgumentException(vioString);
     }
 

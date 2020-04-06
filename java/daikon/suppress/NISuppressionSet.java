@@ -116,7 +116,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
         // Make sure the slice is interesting and has valid types over the
         // suppressee invariant
-        if (!v1.missingOutOfBounds() && (ppt.is_slice_ok(v1))) {
+        if (!v1.missingOutOfBounds() && ppt.is_slice_ok(v1)) {
           if (suppression_set[0].suppressee.sample_inv.valid_types(vis)) {
             check_falsified(ppt, vis, inv, new_invs);
           }

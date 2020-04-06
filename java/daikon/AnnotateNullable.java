@@ -369,7 +369,7 @@ public class AnnotateNullable {
       // Skip any variable that is enclosed by a variable other than 'this'.
       // These are fields and can only be annotated where they are declared.
       VarInfo evar = vi.get_enclosing_var();
-      if ((evar != null) && (!evar.name().equals("this"))) {
+      if ((evar != null) && !evar.name().equals("this")) {
         // System.out.printf("  enclosed %s %s%n", vi.type, vi.name());
         continue;
       }

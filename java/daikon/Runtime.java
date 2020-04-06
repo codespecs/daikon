@@ -268,10 +268,13 @@ public final class Runtime {
    * If the current data trace file is not yet set (and no_dtrace is not true), then set it. The
    * value of the DTRACEFILE environment variable is used; if that environment variable is not set,
    * then the argument to this method is used instead.
+   *
+   * @param default_filename the filename for the trace file; used only if the DTRACEFILE
+   *     environment variable is not set
    */
   public static void setDtraceMaybe(String default_filename) {
     // System.out.println("setDtraceMaybe(" + default_filename + "); old = " + dtrace);
-    if ((dtrace == null) && (!no_dtrace)) {
+    if ((dtrace == null) && !no_dtrace) {
       // Jeremy used "daikon.dtrace.filename".
       String filename = System.getProperty("DTRACEFILE", default_filename);
       boolean append = System.getProperty("DTRACEAPPEND") != null;
@@ -833,10 +836,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -901,10 +904,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1040,10 +1043,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1108,10 +1111,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1176,10 +1179,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1244,10 +1247,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1312,10 +1315,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1380,10 +1383,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');

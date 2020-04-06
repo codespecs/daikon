@@ -89,7 +89,7 @@ public class RootInfo extends DaikonVariableInfo {
     // Print return type information for methods only and not constructors
     if (mi.member instanceof Method) {
       Class<?> returnType = ((Method) mi.member).getReturnType();
-      if (!(returnType.equals(Void.TYPE))) {
+      if (!returnType.equals(Void.TYPE)) {
         // add a new ReturnInfo object to the traversal tree
         DaikonVariableInfo retInfo = new ReturnInfo(returnType);
 
