@@ -41,7 +41,7 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    if (DynComp.verbose) System.out.printf("transform on %s%n", className);
+    if (DynComp.verbose) System.out.printf("%ntransform on %s, loader: %s%n", className, loader);
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) {
@@ -49,11 +49,28 @@ public class Instrument implements ClassFileTransformer {
       return null;
     }
 
-    // If already instrumented, nothing to do
-    // (This set will be empty if DynComp.no_jdk is true)
-    if (Premain.pre_instrumented.contains(className)) {
-      if (DynComp.verbose) System.out.printf("Skipping pre_instrumented JDK class %s%n", className);
-      return null;
+    if (BcelUtil.javaVersion > 8) {
+      // If this class was pre-instrumented (via BuildJDK)
+      // let DCInstrument know we need to correct the instrumentation.
+      if (Premain.pre_instrumented.contains(className)) {
+        DCInstrument.retransforming = true;
+      } else {
+        if (Premain.retransform_preloads) {
+          // Nothing we can do about classes loaded before we got control
+          // that were not pre-instrumented.
+          if (DynComp.verbose) System.out.printf("Skipping pre-loaded class %s%n", className);
+          return null;
+        }
+        DCInstrument.retransforming = false;
+      }
+    } else {
+      // If already instrumented, nothing to do
+      // (This set will be empty if DCInstrument.jdk_instrumented is false)
+      if (Premain.pre_instrumented.contains(className)) {
+        if (DynComp.verbose)
+          System.out.printf("Skipping pre_instrumented JDK class %s%n", className);
+        return null;
+      }
     }
 
     boolean in_jdk = false;
@@ -61,9 +78,25 @@ public class Instrument implements ClassFileTransformer {
     // Check if class is in JDK
     if (BcelUtil.inJdkInternalform(className)) {
       // If we are not using an instrumented JDK, then skip this class.
-      if (DynComp.no_jdk) {
-        if (DynComp.verbose) System.out.printf("Skipping no_jdk JDK class %s%n", className);
+      if (!DCInstrument.jdk_instrumented) {
+        if (DynComp.verbose) System.out.printf("Skipping JDK class %s%n", className);
         return null;
+      }
+
+      if (BcelUtil.javaVersion > 8) {
+        int lastSlashPos = className.lastIndexOf('/');
+        if (lastSlashPos > 0) {
+          String packageName = className.substring(0, lastSlashPos).replace('/', '.');
+          if (Premain.problem_packages.contains(packageName)) {
+            if (DynComp.verbose) System.out.printf("Skipping problem package %s%n", packageName);
+            return null;
+          }
+        }
+
+        if (Premain.problem_classes.contains(className.replace('/', '.'))) {
+          if (DynComp.verbose) System.out.printf("Skipping problem class %s%n", className);
+          return null;
+        }
       }
 
       in_jdk = true;

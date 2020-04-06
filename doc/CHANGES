@@ -20,7 +20,9 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.7.4 (??)
+5.8.0 (??)
+
+Daikon runs under both Java 8 and Java 11.
 
 Running Daikon is no longer supported on Windows or Cygwin.  Use Windows
 Subsystem for Linux (WSL) instead.  You can still run a front end on

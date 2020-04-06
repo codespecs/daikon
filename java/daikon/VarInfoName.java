@@ -1075,6 +1075,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return elts;
     }
 
+    /**
+     * Return a comma-separated list of element names.
+     *
+     * @return comma-separated list of element names
+     */
     private String elts_repr_commas(@GuardSatisfied FunctionOfN this) {
       return String.join(", ", elts_repr());
     }
