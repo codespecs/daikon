@@ -6790,13 +6790,15 @@ the Daikon developers.
 @cindex type inference, Nullable
 @cindex inference, of Nullable type
 
-@command{AnnotateNullable} determines which variables in a Java program were ever
-null during execution.  @command{AnnotateNullable} makes it easier to use the
+By using the @command{AnnotateNullable} program, you can insert
+@code{@@Nullable} annotations into your source code.
+
+The purpose of @command{AnnotateNullable} is to make it easier to annotate
+programs for the
 @uref{https://checkerframework.org/manual/#nullness-checker, Nullness Checker}
 that is part of the
 @uref{https://checkerframework.org/, Checker Framework}.
-
-The @samp{Nullness} Checker
+As background, the Nullness Checker
 warns the programmer about possible null dereference errors.
 This is useful, but it requires the programmer to write a @code{@@Nullable}
 annotation anywhere that a variable might contain null.
@@ -6808,6 +6810,7 @@ proper @code{@@Nullable} annotations, reducing the programmer's burden.
 Each annotation that @command{AnnotateNullable} infers is
 correct.  The programmer may need to write some additional
 @code{@@Nullable} annotations, but that is much easier than writing them all.
+
 
 To insert @code{@@Nullable} annotations in your program,
 follow these steps:
