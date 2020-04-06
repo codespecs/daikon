@@ -100,7 +100,7 @@ public class ModBitTrackerTest extends TestCase {
     }
     // Add duplicate BitSets.
     for (int var = numvars; var < totalvars; var++) {
-      result[var] = (BitSet) (result[r.nextInt(numvars)].clone());
+      result[var] = (BitSet) result[r.nextInt(numvars)].clone();
     }
     return result;
   }

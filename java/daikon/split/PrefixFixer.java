@@ -76,7 +76,7 @@ class PrefixFixer extends DepthFirstVisitor {
         Visitors.isIdentifier(lastToken)
         && Visitors.isDot(twoTokensAgo)
         && Visitors.isIdentifier(threeTokensAgo)
-        && (!lastToken.tokenImage.equals("length"))) {
+        && !lastToken.tokenImage.equals("length")) {
       twoTokensAgo.tokenImage = "";
       lastToken.tokenImage = threeTokensAgo.tokenImage + "_" + lastToken.tokenImage;
       threeTokensAgo.tokenImage = "";
@@ -86,19 +86,23 @@ class PrefixFixer extends DepthFirstVisitor {
   /**
    * Return whether n is at the end of a set of node tokens that form a prefixed name needing
    * fixing.
+   *
+   * @param n a node token
+   * @return true iff n is at the end of a set of node tokens that form a prefixed name needing
+   *     fixing
    */
   @EnsuresNonNullIf(
       result = true,
       expression = {"lastToken", "twoTokensAgo", "threeTokensAgo"})
   @Pure
   private boolean isMatch(NodeToken n) {
-    return ((!Visitors.isLParen(n))
+    return (!Visitors.isLParen(n)
         && lastToken != null
         && Visitors.isIdentifier(lastToken)
         && twoTokensAgo != null
         && Visitors.isDot(twoTokensAgo)
         && threeTokensAgo != null
         && Visitors.isIdentifier(threeTokensAgo)
-        && (!lastToken.tokenImage.equals("length")));
+        && !lastToken.tokenImage.equals("length"));
   }
 }

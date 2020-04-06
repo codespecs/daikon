@@ -87,7 +87,7 @@ class NameFixer extends DepthFirstVisitor {
   public void visit(NodeToken n) {
     boolean found = false;
 
-    if (lastTokenMayBeMemberVar && (!(Visitors.isLParen(n) || Visitors.isDot(n)))) {
+    if (lastTokenMayBeMemberVar && !(Visitors.isLParen(n) || Visitors.isDot(n))) {
       assert lastToken != null
           : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeMemberVar == true";
       int len = className.length() + 1;
@@ -98,7 +98,7 @@ class NameFixer extends DepthFirstVisitor {
     }
 
     lastTokenMayBeMemberVar = false;
-    if ((Visitors.isIdentifier(n)) && ((lastToken == null) || (!Visitors.isDot(lastToken)))) {
+    if (Visitors.isIdentifier(n) && ((lastToken == null) || !Visitors.isDot(lastToken))) {
 
       for (VarInfo varInfo : varInfos) {
         if (varInfo.name().equals(n.tokenImage)) {

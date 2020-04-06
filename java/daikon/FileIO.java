@@ -602,7 +602,7 @@ public final class FileIO {
     String filename = state.filename;
 
     String line = file.readLine();
-    if ((line == null) || (line.equals(""))) {
+    if ((line == null) || line.equals("")) {
       return null;
     }
     String varname = line;
@@ -1068,7 +1068,7 @@ public final class FileIO {
     // if some of the program points do not correspond to a
     // points from a programming language, and the dataflow
     // hierarchy is being used, suggest using the --nohierarchy flag.
-    if (Daikon.use_dataflow_hierarchy && (!all_program_points) && some_program_points) {
+    if (Daikon.use_dataflow_hierarchy && !all_program_points && some_program_points) {
       System.out.println(
           "Warning: Daikon is using a dataflow"
               + " hierarchy analysis on a data trace"
@@ -1293,7 +1293,7 @@ public final class FileIO {
         count_lines = false;
       } else if (Daikon.dkconfig_progress_delay == -1) {
         count_lines = false;
-      } else if ((new File(raw_filename)).length() == 0) {
+      } else if (new File(raw_filename).length() == 0) {
         // Either it's actually empty, or it's something like a pipe.
         count_lines = false;
       }
@@ -1601,7 +1601,7 @@ public final class FileIO {
       // System.out.printf("Not skipping ppt  %s%n", line);
 
       if (state.is_decl_file) {
-        if ((!new_decl_format) && line.startsWith("ppt ")) {
+        if (!new_decl_format && line.startsWith("ppt ")) {
           throw new Daikon.UserError(
               String.format(
                   "Declaration file %s is not version 2.0, but line %d looks like a version 2.0 declaration: %s%nPerhaps the file is missing a \"decl-version 2.0\" record at the beginning",
@@ -1827,7 +1827,7 @@ public final class FileIO {
 
     int unmatched_count = call_stack.size() + call_hashmap.size();
 
-    if ((!call_stack.isEmpty()) || (!call_hashmap.isEmpty())) {
+    if (!call_stack.isEmpty() || !call_hashmap.isEmpty()) {
       System.out.println();
       System.out.print(
           "No return from procedure observed " + UtilPlume.nplural(unmatched_count, "time") + ".");
@@ -1944,7 +1944,7 @@ public final class FileIO {
               + num_tracevars
               + " values";
       VarInfo vi = vis[vi_index];
-      assert (!vi.is_static_constant) || (vi.value_index == -1)
+      assert !vi.is_static_constant || (vi.value_index == -1)
       // : "Bad value_index " + vi.value_index + " when static_constant_value = " +
       // vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
       ;
@@ -1980,7 +1980,7 @@ public final class FileIO {
       while ((line != null) && !line.equals("") && !var_included(line)) {
         line = reader.readLine(); // value (discard it)
         line = reader.readLine(); // modbit
-        if (line == null || !((line.equals("0") || line.equals("1") || line.equals("2")))) {
+        if (line == null || !(line.equals("0") || line.equals("1") || line.equals("2"))) {
           throw new Daikon.UserError("Bad modbit '" + line + "'", data_trace_state);
         }
         line = reader.readLine(); // next variable name
@@ -2038,7 +2038,7 @@ public final class FileIO {
                 + " for program point "
                 + ppt.name());
       }
-      if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
+      if (!(line.equals("0") || line.equals("1") || line.equals("2"))) {
         throw new Daikon.UserError("Bad modbit `" + line + "'", data_trace_state);
       }
       int mod = ValueTuple.parseModified(line);
@@ -2170,7 +2170,7 @@ public final class FileIO {
       line = reader.readLine(); // modbit
       line = reader.readLine(); // next variable name
     }
-    assert (line == null) || (line.equals(""))
+    assert (line == null) || line.equals("")
         : "Expected blank line in "
             + data_trace_state.filename
             + " at line "
@@ -2393,7 +2393,7 @@ public final class FileIO {
         throw new IOException("Unexpected serialized file type: " + obj.getClass());
       }
     } catch (ClassNotFoundException e) {
-      throw (IOException) (new IOException("Error while loading inv file").initCause(e));
+      throw (IOException) new IOException("Error while loading inv file").initCause(e);
     } catch (InvalidClassException e) {
       throw new IOException(
           "It is likely that the .inv file format has changed, because a Daikon data structure has been modified, so your old .inv file is no longer readable by Daikon.  Please regenerate your .inv file."
