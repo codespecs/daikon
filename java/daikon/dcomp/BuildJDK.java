@@ -338,20 +338,19 @@ public class BuildJDK {
           continue;
         }
 
+        // Handle non-.class files and Object.class.  In JDK 8, copy them unchanged.
+        // For JDK 9+ we do not copy as these items will be loaded from the original module file.
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
-          File destfile = new File(classFileName);
-          // Copy non-.class files (and Object.class) unchanged (JDK 8).
-          // For JDK 9+ we do not copy as these items will be loaded from the original module file.
-          if (destfile.getParent() == null || BcelUtil.javaVersion > 8) {
+          if (BcelUtil.javaVersion > 8) {
             if (verbose) System.out.printf("Skipping file %s%n", classFileName);
             continue;
           }
-          File destParent = new File(dest_dir, destfile.getParent());
-          destParent.mkdirs();
-          File destpath = new File(destParent, destfile.getName());
-          if (verbose) System.out.println("Copying Object or non-classfile: " + destpath);
+          // This File constructor ignores dest_dir if classFileName is absolute.
+          File classFile = new File(dest_dir, classFileName);
+          classFile.getParentFile().mkdirs();
+          if (verbose) System.out.println("Copying Object.class or non-classfile: " + classFile);
           try (InputStream in = class_stream_map.get(classFileName)) {
-            Files.copy(in, destpath.toPath());
+            Files.copy(in, classFile.toPath());
           }
           continue;
         }
