@@ -312,13 +312,13 @@ public final class DCRuntime {
       if (instrumented) {
         // call the instrumented version
         Method m = o1super.getMethod("equals", new Class<?>[] {javalangobject, dcompmarker});
-        return_val = ((Boolean) (m.invoke(o1, o2, null)));
+        return_val = ((Boolean) m.invoke(o1, o2, null));
       } else {
         // Push tag for return value, and call the uninstrumented version
         ThreadData td = thread_to_data.get(Thread.currentThread());
         td.tag_stack.push(new Constant());
         Method m = o1super.getMethod("equals", new Class<?>[] {javalangobject});
-        return_val = ((Boolean) (m.invoke(o1, o2)));
+        return_val = ((Boolean) m.invoke(o1, o2));
       }
     } catch (NoSuchMethodException e) {
       System.err.printf("dcomp_super_equals(%s, %s)%n", o1, o2);
@@ -652,7 +652,7 @@ public final class DCRuntime {
       while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
     }
 
-    int orig_tag_stack_depth = ((Integer) (tag_frame[tag_frame.length - 1])).intValue();
+    int orig_tag_stack_depth = ((Integer) tag_frame[tag_frame.length - 1]).intValue();
     if (td.tag_stack_depth != orig_tag_stack_depth) {
       // Something has gone wrong.  It's almost certainly an exception that
       // was handled by an exception handler other than one added by
@@ -704,7 +704,7 @@ public final class DCRuntime {
       while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
     }
 
-    int orig_tag_stack_depth = ((Integer) (tag_frame[tag_frame.length - 1])).intValue();
+    int orig_tag_stack_depth = ((Integer) tag_frame[tag_frame.length - 1]).intValue();
     if (td.tag_stack_depth != orig_tag_stack_depth) {
       // Something has gone wrong.  It's almost certainly an exception that
       // was handled by an exception handler other than one added by
@@ -2233,10 +2233,10 @@ public final class DCRuntime {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) (set.get(0))).isPrimitive()) {
+        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) set.get(0)).isPrimitive()) {
           continue;
         }
-        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) (set.get(0))).isPrimitive()) {
+        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) set.get(0)).isPrimitive()) {
           continue;
         }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
@@ -2254,10 +2254,10 @@ public final class DCRuntime {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) (set.get(0))).isPrimitive()) {
+        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) set.get(0)).isPrimitive()) {
           continue;
         }
-        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) (set.get(0))).isPrimitive()) {
+        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) set.get(0)).isPrimitive()) {
           continue;
         }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);

@@ -297,11 +297,11 @@ public abstract class DaikonVariableInfo
 
     Class<?> type = theValue.getClass();
 
-    assert !(type.isPrimitive()) : "Objects cannot be primitive";
+    assert !type.isPrimitive() : "Objects cannot be primitive";
 
     if (theValue instanceof Runtime.PrimitiveWrapper) {
       return getPrimitiveValueString(theValue);
-    } else if (!hashArray && (type.isArray())) {
+    } else if (!hashArray && type.isArray()) {
       // show the full array
       return getValueStringOfArray(theValue);
     } else if (theValue instanceof NonsensicalObject) {
@@ -349,9 +349,9 @@ public abstract class DaikonVariableInfo
     String retString = getValueStringOfList(theValues) + DaikonWriter.lineSep;
 
     if (theValues instanceof NonsensicalList) {
-      retString += ("2");
+      retString += "2";
     } else {
-      retString += ("1");
+      retString += "1";
     }
 
     return retString;
@@ -403,8 +403,8 @@ public abstract class DaikonVariableInfo
     for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++) {
       Class<?> type = arguments[i];
       String name = argnamesiter.next();
-      if ((type.getName().equals("daikon.dcomp.DCompMarker"))
-          || (type.getName().equals("java.lang.DCompMarker"))) {
+      if (type.getName().equals("daikon.dcomp.DCompMarker")
+          || type.getName().equals("java.lang.DCompMarker")) {
         continue;
       }
       debug_vars.log("processing parameter '%s'%n", name);
@@ -898,7 +898,7 @@ public abstract class DaikonVariableInfo
     if (type.isArray()) {
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
-      return !(eltType.isPrimitive());
+      return !eltType.isPrimitive();
     }
 
     if (type.getName().equals("java.lang.Object")) {
@@ -918,7 +918,7 @@ public abstract class DaikonVariableInfo
       // System.out.println ("type is array " + type);
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
-      return !(eltType.isPrimitive());
+      return !eltType.isPrimitive();
     } else {
       return false;
     }

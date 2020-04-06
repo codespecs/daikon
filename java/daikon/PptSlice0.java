@@ -217,7 +217,7 @@ public class PptSlice0 extends PptSlice {
       // guarded invariant.
       if (false) {
         boolean fmt_eq = format().equals(other.format());
-        if (!((!same_eq) || fmt_eq)) {
+        if (!(!same_eq || fmt_eq)) {
           System.out.println("imp1 = " + theImp.format());
           System.out.println("imp2 = " + other.theImp.format());
           System.out.println("fmt_eq = " + fmt_eq + " same_eq = " + same_eq);
@@ -227,7 +227,7 @@ public class PptSlice0 extends PptSlice {
               "right class = " + theImp.right.getClass() + "/" + other.theImp.right.getClass());
           // throw new Error();
         }
-        assert (!same_eq) || fmt_eq;
+        assert !same_eq || fmt_eq;
       }
       return same_eq;
     }

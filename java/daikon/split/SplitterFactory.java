@@ -199,8 +199,8 @@ public class SplitterFactory {
       try {
         BufferedWriter writer = UtilPlume.bufferedFileWriter(fileAddress + ".java");
         if (dkconfig_delete_splitters_on_exit) {
-          (new File(fileAddress + ".java")).deleteOnExit();
-          (new File(fileAddress + ".class")).deleteOnExit();
+          new File(fileAddress + ".java").deleteOnExit();
+          new File(fileAddress + ".class").deleteOnExit();
         }
         writer.write(fileContents.toString());
         writer.flush();
@@ -221,7 +221,7 @@ public class SplitterFactory {
       debug.fine(ioe.toString());
     }
     boolean errorOutputExists = errorOutput != null && !errorOutput.equals("");
-    if (errorOutputExists && (!PptSplitter.dkconfig_suppressSplitterErrors)) {
+    if (errorOutputExists && !PptSplitter.dkconfig_suppressSplitterErrors) {
       System.out.println(
           "\nErrors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);

@@ -64,7 +64,7 @@ class OrigFixer extends DepthFirstVisitor {
       // handle lastToken
       if (lastToken != null
           && Visitors.isIdentifier(lastToken)
-          && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))) {
+          && (twoTokensAgo == null || !Visitors.isDot(twoTokensAgo))) {
         lastToken.tokenImage = "orig_" + lastToken.tokenImage;
       }
       foundOrig = false;
@@ -98,7 +98,7 @@ class OrigFixer extends DepthFirstVisitor {
   @Pure
   private boolean isOrig(PrimaryExpression n) {
     return ((n.f0.f0.choice instanceof Name)
-        && (((Name) n.f0.f0.choice).f0.tokenImage.equals("orig"))
+        && ((Name) n.f0.f0.choice).f0.tokenImage.equals("orig")
         && (n.f1.size() > 0)
         && (n.f1.elementAt(0) instanceof PrimarySuffix)
         && (((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments));
@@ -126,7 +126,7 @@ class OrigFixer extends DepthFirstVisitor {
   private boolean isLastTokenVar(NodeToken n) {
     return (lastToken != null
         && Visitors.isIdentifier(lastToken)
-        && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))
-        && (!Visitors.isLParen(n)));
+        && (twoTokensAgo == null || !Visitors.isDot(twoTokensAgo))
+        && !Visitors.isLParen(n));
   }
 }

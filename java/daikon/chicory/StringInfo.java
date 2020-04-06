@@ -103,9 +103,9 @@ public class StringInfo extends DaikonVariableInfo {
     retString += DaikonWriter.lineSep;
 
     if (val instanceof NonsensicalObject) {
-      retString += ("2");
+      retString += "2";
     } else {
-      retString += ("1");
+      retString += "1";
     }
 
     return retString;

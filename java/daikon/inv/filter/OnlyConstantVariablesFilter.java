@@ -63,7 +63,7 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     OneOfScalar oos = (view == null) ? null : OneOfScalar.find(view);
     OneOfFloat oof = (view == null) ? null : OneOfFloat.find(view);
     boolean isOneOfConstant =
-        (((oos != null) && (oos.num_elts() == 1) && (!oos.is_hashcode()))
+        (((oos != null) && (oos.num_elts() == 1) && !oos.is_hashcode())
             || ((oof != null) && (oof.num_elts() == 1)
             // no hashcode test for floats
             // && (! oof.is_hashcode())

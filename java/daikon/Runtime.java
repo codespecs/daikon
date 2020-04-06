@@ -271,7 +271,7 @@ public final class Runtime {
    */
   public static void setDtraceMaybe(String default_filename) {
     // System.out.println("setDtraceMaybe(" + default_filename + "); old = " + dtrace);
-    if ((dtrace == null) && (!no_dtrace)) {
+    if ((dtrace == null) && !no_dtrace) {
       // Jeremy used "daikon.dtrace.filename".
       String filename = System.getProperty("DTRACEFILE", default_filename);
       boolean append = System.getProperty("DTRACEAPPEND") != null;
@@ -833,10 +833,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -901,10 +901,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1040,10 +1040,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1108,10 +1108,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1176,10 +1176,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1244,10 +1244,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1312,10 +1312,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');
@@ -1380,10 +1380,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0].length);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i].length);
       }
     }
     ps.println(']');

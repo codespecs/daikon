@@ -181,7 +181,7 @@ public class PptSplitter implements Serializable {
               + " with "
               + vt.size()
               + " vars"
-              + ((!related_vars.equals("")) ? (" including " + related_vars) : ""));
+              + (!related_vars.equals("") ? (" including " + related_vars) : ""));
     }
   }
 

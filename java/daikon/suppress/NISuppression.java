@@ -110,7 +110,7 @@ public class NISuppression {
         if (st == NIS.SuppressState.NONSENSICAL) {
           status = NIS.SuppressState.NONSENSICAL;
         } else if (st != NIS.SuppressState.VALID) {
-          status = (NIS.SuppressState.INVALID);
+          status = NIS.SuppressState.INVALID;
           if (st == NIS.SuppressState.INVALID) {
             return status;
           }

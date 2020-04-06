@@ -335,8 +335,8 @@ public final class ValueTuple implements Cloneable {
   // Private constructor that doesn't perform interning.
   @SuppressWarnings("interning") // interning constructor
   private ValueTuple(@Nullable Object[] vals, int[] mods, boolean check) {
-    assert (!check) || Intern.isInterned(vals);
-    assert (!check) || Intern.isInterned(mods);
+    assert !check || Intern.isInterned(vals);
+    assert !check || Intern.isInterned(mods);
     this.vals = vals;
     this.mods = mods;
     checkRep();
