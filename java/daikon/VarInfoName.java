@@ -502,8 +502,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
-   * @return true if the given node is in a prestate context within this tree; the node must be a
-   *     member of this tree
+   * @param node a member of this tree
+   * @return true if the given node is in a prestate context within this tree
    */
   public boolean inPrestateContext(@Interned VarInfoName this, VarInfoName node) {
     return new NodeFinder(this, node).inPre();
@@ -930,7 +930,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
   }
 
-  /** Returns a name for a unary function applied to this object. The result is like "sum(this)". */
+  /**
+   * Returns a name for a unary function applied to this object. The result is like "sum(this)".
+   *
+   * @param function the function to apply
+   * @return a name for the function applied to this
+   */
   public VarInfoName applyFunction(@Interned VarInfoName this, String function) {
     return new FunctionOf(function, this).intern();
   }
@@ -1168,7 +1173,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
   }
 
-  /** Returns a name for the intersection of with another sequence, like "intersect(a[], b[])". */
+  /**
+   * Returns a name for the intersection of with another sequence, like "intersect(a[], b[])".
+   *
+   * @param seq2 the variable to intersect with
+   * @return the name for the intersection of this and seq2
+   */
   public VarInfoName applyIntersection(@Interned VarInfoName this, VarInfoName seq2) {
     assert seq2 != null;
     return new Intersection(this, seq2).intern();
@@ -1189,7 +1199,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
   }
 
-  /** Returns a name for the union of this with another sequence, like "union(a[], b[])". */
+  /**
+   * Returns a name for the union of this with another sequence, like "union(a[], b[])".
+   *
+   * @param seq2 the variable to union with
+   * @return the name for the intersection of this and seq2
+   */
   public VarInfoName applyUnion(@Interned VarInfoName this, VarInfoName seq2) {
     assert seq2 != null;
     return new Union(this, seq2).intern();
@@ -1210,7 +1225,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
   }
 
-  /** Returns a 'getter' operation for some field of this name, like a.foo if this is a. */
+  /**
+   * Returns a 'getter' operation for some field of this name, like a.foo if this is a.
+   *
+   * @param field the field
+   * @return the name for the given field of this
+   */
   public VarInfoName applyField(@Interned VarInfoName this, String field) {
     return new Field(this, field).intern();
   }
@@ -1441,6 +1461,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for the type of this object; form is like "this.getClass().getName()" or
    * "\typeof(this)".
+   *
+   * @return the name for the type of this object
    */
   public VarInfoName applyTypeOf(@Interned VarInfoName this) {
     return new TypeOf(this).intern();
@@ -1640,6 +1662,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for a the poststate value of this object; form is like "new(this)" or
    * "\new(this)".
+   *
+   * @return the name for the poststate value of this object
    */
   public VarInfoName applyPoststate(@Interned VarInfoName this) {
     return new Poststate(this).intern();
@@ -1810,6 +1834,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for the elements of a container (as opposed to the identity of the container)
    * like "this[]" or "(elements this)".
+   *
+   * @return the name for the elements of this container
    */
   public VarInfoName applyElements(@Interned VarInfoName this) {
     return new Elements(this).intern();

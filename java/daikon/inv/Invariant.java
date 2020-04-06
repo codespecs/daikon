@@ -822,7 +822,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /** A "\type(...)" construct where the "..." contains a "$". */
   private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
 
-  /** @return true if this Invariant can be properly formatted for the given output */
+  /**
+   * @param format the expected output format
+   * @return true if this Invariant can be properly formatted for the given output format
+   */
   @Pure
   public boolean isValidExpression(@NonPrototype Invariant this, OutputFormat format) {
     if ((format == OutputFormat.ESCJAVA) && !isValidEscExpression()) {
