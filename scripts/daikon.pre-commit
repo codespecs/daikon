@@ -25,6 +25,7 @@ if [ -n "$CHANGED_FILES" ]; then
     fi
 fi
 
+## A downside of this is that I cannot run from Emacs: (shell-command "git amend")
 # circleci tool incorrectly assumes a tty is always available.
 exec < /dev/tty
 
