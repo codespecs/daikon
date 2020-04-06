@@ -345,12 +345,12 @@ public class BuildJDK {
             if (verbose) System.out.printf("Skipping file %s%n", classFileName);
             continue;
           }
-          // This File constructor ignores dest_dir if destFileName is absolute.
-          File destfile = new File(dest_dir, destFileName);
-          destfile.getParentFile().mkdirs();
-          if (verbose) System.out.println("Copying Object.class or non-classfile: " + destfile);
+          // This File constructor ignores dest_dir if classFileName is absolute.
+          File classFile = new File(dest_dir, classFileName);
+          classFile.getParentFile().mkdirs();
+          if (verbose) System.out.println("Copying Object.class or non-classfile: " + classFile);
           try (InputStream in = class_stream_map.get(classFileName)) {
-            Files.copy(in, destfile.toPath());
+            Files.copy(in, classFile.toPath());
           }
           continue;
         }
