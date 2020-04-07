@@ -170,6 +170,11 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     } else if (fullClassName.startsWith("sun.reflect")) {
       debug_transform.log("ignoring system class %s, in sun.reflect package%n", fullClassName);
       return null;
+    } else if (fullClassName.startsWith("jdk.internal.reflect")) {
+      // Starting with Java 9 sun.reflect => jdk.internal.reflect.
+      debug_transform.log(
+          "ignoring system class %s, in jdk.internal.reflect package", fullClassName);
+      return null;
     } else if (fullClassName.startsWith("com.sun")) {
       debug_transform.log("Class from com.sun package %s with nonnull loaders%n", fullClassName);
     }
@@ -458,9 +463,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
             debug_instrument.log("arg_names(%d): %s%n", arg_names.length, names);
             debug_instrument.log("localvars(%d): %s%n", local_vars.length, locals);
             debug_instrument.log("Original code: %s%n", mg.getMethod().getCode());
-            debug_instrument.log("ClassInfo: %s%n", class_info);
-            debug_instrument.log("MethodGen: %s%n", mg);
-            dump_code_attributes(mg);
+            debug_instrument.log("%n");
           }
 
           // Get existing StackMapTable (if present)

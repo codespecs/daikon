@@ -48,6 +48,7 @@ public class DaikonSimple {
   // // inv file for storing the invariants in serialized form
   // public static File inv_file = null;
 
+  /** Usage message to be displayed for help. */
   private static String usage =
       String.join(
           lineSep,

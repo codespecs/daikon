@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -127,7 +127,7 @@ public abstract class DaikonVariableInfo
    * Set of fully qualified static variable names for this ppt. Used to ensure that each static is
    * only included once (regardless of how many other variables may include its declaring class).
    */
-  protected static Set<String> ppt_statics = new LinkedHashSet<>();
+  protected static Set<String> ppt_statics = new HashSet<>();
 
   /**
    * Constructs a non-array type DaikonVariableInfo object.
@@ -984,8 +984,8 @@ public abstract class DaikonVariableInfo
 
     StringBuilder ret = new StringBuilder();
 
-    // String staticString = (Modifier.isStatic(modifiers)) ? "true" : "false";
-    if (pkgName != null) {
+    // In Java 9+ package name is empty string for the unnamed package.
+    if (pkgName != null && !pkgName.isEmpty()) {
       ret.append(" # declaringClassPackageName=" + pkgName);
     }
 

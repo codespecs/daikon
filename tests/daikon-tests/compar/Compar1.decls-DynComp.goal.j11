@@ -1,0 +1,173 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+misc.Compar1:::CLASS
+
+DECLARE
+misc.Compar1:::OBJECT
+this
+misc.Compar1 # isNonNull=true, isParam=true
+hashcode
+2
+
+
+DECLARE
+misc.Compar1.Compar1():::ENTER
+
+DECLARE
+misc.Compar1.Compar1():::EXIT4
+this
+misc.Compar1 # isNonNull=true, isParam=true
+hashcode
+2
+
+
+DECLARE
+misc.Compar1.main(java.lang.String[]):::ENTER
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3[5]
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4[6]
+
+DECLARE
+misc.Compar1.main(java.lang.String[]):::EXIT19
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3[5]
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4[6]
+
+
+DECLARE
+misc.Compar1.bar(int, int, int, int):::ENTER
+i
+int # isParam=true
+int
+2
+j
+int # isParam=true
+int
+2
+k
+int # isParam=true
+int
+3
+l
+int # isParam=true
+int
+3
+
+DECLARE
+misc.Compar1.bar(int, int, int, int):::EXIT29
+i
+int # isParam=true
+int
+2
+j
+int # isParam=true
+int
+2
+k
+int # isParam=true
+int
+3
+l
+int # isParam=true
+int
+3
+
+
+DECLARE
+misc.Compar1.equals(java.lang.Object):::ENTER
+this
+misc.Compar1 # isNonNull=true, isParam=true
+hashcode
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Compar1.equals(java.lang.Object):::EXIT1
+this
+misc.Compar1 # isNonNull=true, isParam=true
+hashcode
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+misc.Compar1.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+misc.Compar1 # isNonNull=true, isParam=true
+hashcode
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Compar1.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+misc.Compar1 # isNonNull=true, isParam=true
+hashcode
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
