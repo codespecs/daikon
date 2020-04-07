@@ -11,6 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Helper classes for quantification for various output formats. */
+@SuppressWarnings("UnusedVariable") // messy code, need to investigate later
 public class Quantify {
 
   /** Flags describing how quantifications are to be built. */

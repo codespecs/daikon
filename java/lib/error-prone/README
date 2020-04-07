@@ -1,0 +1,6 @@
+This directory is populated using the `wget` commands at
+https://errorprone.info/docs/installation#command-line .
+
+Plus:
+wget -N https://repo1.maven.org/maven2/com/github/ben-manes/caffeine/caffeine/2.8.1/caffeine-2.8.1.jar
+wget -N https://repo1.maven.org/maven2/com/googlecode/java-diff-utils/diffutils/1.3.0/diffutils-1.3.0.jar

@@ -1,7 +1,6 @@
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -34,7 +33,6 @@ public final class SplitDtrace {
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
     }
     BufferedReader reader = getStream(filename);
-    String line;
     int declNum = 1;
     int recNum = 0;
     ArrayList<String> rec = new ArrayList<>();
@@ -60,7 +58,7 @@ public final class SplitDtrace {
     System.out.println(
         "Number of DECLARE statements: " + declNum + " and number of records is: " + recNum);
 
-    DecimalFormat formatter = new DecimalFormat("000");
+    // DecimalFormat formatter = new DecimalFormat("000");
     // for (int i = 1; i<=100; i++) writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
     writeDtrace(filename, "second-half", recNum / 2, 2 + recNum);
   }

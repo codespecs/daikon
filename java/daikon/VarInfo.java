@@ -1082,7 +1082,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         param_names.add(vi.var_info_name); // vin ok
       }
 
-      String param = "";
       VarInfoName.Finder finder = new VarInfoName.Finder(param_names);
       Object baseMaybe = finder.getPart(var_info_name); // vin ok
       if (baseMaybe != null) {
@@ -1093,7 +1092,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
           Global.debugSuppressParam.fine("derived from " + base.name());
           Global.debugSuppressParam.fine(paramVars.toString());
         }
-        param = "derived from " + base.name();
         result = true;
       }
     } else { // new format
@@ -2235,18 +2233,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // For now associating with the variable's PptSlice
     PptSlice slice = ppt.get_or_instantiate_slice(this);
 
-    Invariant result;
-    Class<NonZero> NonZero_class;
-    try {
-      @SuppressWarnings("unchecked")
-      Class<NonZero> NonZero_class_tmp =
-          (Class<NonZero>) Class.forName("daikon.inv.unary.scalar.NonZero");
-      NonZero_class = NonZero_class_tmp;
-    } catch (ClassNotFoundException e) {
-      throw new Error("Could not locate class object for daikon.inv.unary.scalar.NonZero");
-    }
-    // result = Invariant.find(NonZero_class, slice);
-    result = Invariant.find(NonZero.class, slice);
+    Invariant result = Invariant.find(NonZero.class, slice);
 
     // Check whether the predicate already exists
     if (result == null) {
@@ -2545,19 +2532,19 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         // "Class" is not a varible, even though for variable "a.b.c",
         // typically "a" and "a.b" are also variables.
         if (vi == null) {
-          String message =
-              String.format(
-                  "getGuardingList(%s, %s): did not find variable %s [inpre=%s]",
-                  name(), ppt.name(), vin.name(), inPre);
-          // Only print the error message at most once per variable.
-          if (addVarMessages.add(vin.name())) {
-            // For now, don't print at all:  it's generally innocuous
-            // (class prefix of a static variable).
-            // System.err.println(message);
-          }
-          // System.out.println("vars: " + ppt.varNames());
-          // System.out.flush();
-          // throw new Error(String.format(message));
+          // String message =
+          //     String.format(
+          //         "getGuardingList(%s, %s): did not find variable %s [inpre=%s]",
+          //         name(), ppt.name(), vin.name(), inPre);
+          // // Only print the error message at most once per variable.
+          // if (addVarMessages.add(vin.name())) {
+          //   // For now, don't print at all:  it's generally innocuous
+          //   // (class prefix of a static variable).
+          //   // System.err.println(message);
+          // }
+          // // System.out.println("vars: " + ppt.varNames());
+          // // System.out.flush();
+          // // throw new Error(String.format(message));
           return result;
         } else {
           return addVarInfo(result, vi);
@@ -2619,10 +2606,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       // Create a list of variables to be guarded from the list of all
       // enclosing variables.
       for (VarInfo vi : get_all_enclosing_vars()) {
-        if (false && var_flags.contains(VarFlags.CLASSNAME)) {
-          System.err.printf(
-              "%s file_rep_type = %s, canbemissing = %b\n", vi, vi.file_rep_type, vi.canBeMissing);
-        }
+        // if (var_flags.contains(VarFlags.CLASSNAME)) {
+        //   System.err.printf(
+        //       "%s file_rep_type = %s, canbemissing = %b\n", vi, vi.file_rep_type,
+        // vi.canBeMissing);
+        // }
         if (!vi.file_rep_type.isHashcode()) {
           continue;
         }
@@ -3282,9 +3270,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // If this is a derived variable, the derivations builds the name
     if (derived != null) {
-      if (derived.getClass().toString().contains("ternary")) {
-        String x = "10";
-      }
       return derived.jml_name(index);
     }
 
@@ -3381,11 +3366,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         if (index == null) {
           return String.format("(select elems %s)", enclosing_var.simplify_name());
         }
-        if (false && index.equals("|0|")) {
-          System.err.printf("index = %s%n", index);
-          Throwable t = new Throwable();
-          t.printStackTrace();
-        }
+        // if (index.equals("|0|")) {
+        //   System.err.printf("index = %s%n", index);
+        //   Throwable t = new Throwable();
+        //   t.printStackTrace();
+        // }
         return String.format("(select (select elems %s) %s)", enclosing_var.simplify_name(), index);
       case VARIABLE:
         if (dkconfig_constant_fields_simplify && str_name.contains(".")) {
