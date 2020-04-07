@@ -17,6 +17,7 @@ RUN dnf -qy upgrade && dnf -qy install \
   binutils-devel \
   gcc \
   git \
+  jq \
   m4 \
   make \
   redhat-lsb \
@@ -32,9 +33,6 @@ RUN dnf -q -y install \
 # This enables the repository that contains jq
 RUN dnf -q -y install \
   epel-release
-
-RUN dnf -q -y install \
-  jq
 
 RUN dnf -qy install \
   curl \

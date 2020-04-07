@@ -17,6 +17,7 @@ RUN dnf -qy upgrade && dnf -qy install \
   binutils-devel \
   gcc \
   git \
+  jq \
   m4 \
   make \
   redhat-lsb \
@@ -28,9 +29,6 @@ RUN dnf -qy upgrade && dnf -qy install \
 RUN dnf -q -y install \
   java-11-openjdk \
   java-11-openjdk-devel
-
-RUN dnf -q -y install \
-  jq
 
 RUN dnf -qy install \
   curl \

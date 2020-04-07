@@ -48,6 +48,9 @@ RUN dnf -q -y install \
   texlive \
   wget
 
+# Make default be Python 2, for backward compatibility just in case.
+RUN alternatives --set python /usr/bin/python2
+
 ## Texinfo has been removed from the main repositories as of CentOS 8.
 RUN dnf -y install --skip-broken \
   http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/texi2html-5.0-8.el8.noarch.rpm \
