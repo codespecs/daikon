@@ -347,6 +347,9 @@ public class BuildJDK {
           }
           // This File constructor ignores dest_dir if classFileName is absolute.
           File classFile = new File(dest_dir, classFileName);
+          if (classFile.getParentFile() == null) {
+            throw new Error("This can't happen: " + classFile);
+          }
           classFile.getParentFile().mkdirs();
           if (verbose) System.out.println("Copying Object.class or non-classfile: " + classFile);
           try (InputStream in = class_stream_map.get(classFileName)) {
