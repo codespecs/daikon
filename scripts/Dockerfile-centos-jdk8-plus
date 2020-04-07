@@ -42,12 +42,16 @@ RUN dnf -q -y install \
   gcc-c++ \
   graphviz \
   netpbm \
-  python \
+  python2 \
   python3 \
-  texi2html \
-  texinfo \
-  texinfo-tex \
+  rsync \
   texlive \
   wget
+
+## Texinfo has been removed from the main repositories as of CentOS 8.
+RUN dnf -y install --skip-broken \
+  http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/texi2html-5.0-8.el8.noarch.rpm \
+  http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/texinfo-6.5-4.el8.x86_64.rpm \
+  http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/texinfo-tex-6.5-4.el8.x86_64.rpm
 
 RUN dnf -q clean all

@@ -29,10 +29,6 @@ RUN dnf -q -y install \
   java-11-openjdk \
   java-11-openjdk-devel
 
-# This enables the repository that contains jq
-RUN dnf -q -y install \
-  epel-release
-
 RUN dnf -q -y install \
   jq
 
