@@ -40,7 +40,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy install \
   ant \
   maven \
-  python
+  python \
+  python3
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
