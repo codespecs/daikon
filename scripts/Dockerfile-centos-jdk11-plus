@@ -54,10 +54,10 @@ RUN dnf -q -y install \
 # Make default be Python 2, for backward compatibility just in case.
 RUN alternatives --set python /usr/bin/python2
 
-## Texinfo has been removed from the main repositories as of CentOS 8.
-RUN dnf -y install --skip-broken \
-  http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/texi2html-5.0-8.el8.noarch.rpm \
-  http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/texinfo-6.5-4.el8.x86_64.rpm \
-  http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/texinfo-tex-6.5-4.el8.x86_64.rpm
+# Texinfo is in the PowerTools repository, as of CentOS 8.
+# Alternately, run: dnf --enablerepo=PowerTools install PACKAGENAME
+RUN dnf -y install dnf-plugins-core \
+&& dnf config-manager --set-enabled PowerTools \
+&& dnf -y install texi2html texinfo texinfo-tex
 
 RUN dnf -q clean all
