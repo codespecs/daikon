@@ -1142,6 +1142,10 @@ public final class Daikon {
             f.setAccessible(true);
             Object classesAsObject;
             try {
+              Object classLoader = Thread.currentThread().getContextClassLoader();
+              if (classLoader == null) {
+                throw new BugInDaikon("Need to handle null classloader");
+              }
               classesAsObject = f.get(Thread.currentThread().getContextClassLoader());
             } catch (IllegalAccessException e) {
               throw new Daikon.BugInDaikon("Field ClassLoader.classes was not made accessible");
