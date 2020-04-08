@@ -840,7 +840,7 @@ public abstract class DaikonVariableInfo
    * @return the value of the static field
    */
   // @SuppressWarnings("nullness:argument.type.incompatible") // null object OK for static field
-  Object getStaticField(Field f) {
+  private @Nullable Object getStaticField(Field f) {
     try {
       return f.get(null);
     } catch (IllegalAccessException e) {
