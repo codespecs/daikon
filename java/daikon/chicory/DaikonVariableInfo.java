@@ -788,7 +788,9 @@ public abstract class DaikonVariableInfo
             // If the class has already been statically initialized, get its hash
             if (Runtime.isInitialized(className)) {
               try {
-                value = Integer.toString(System.identityHashCode(getStaticField(field)));
+                @SuppressWarnings("nullness") // the field is static, so null is OK as argument
+                Object fieldValue = field.get(null);
+                value = Integer.toString(System.identityHashCode(fieldValue));
               } catch (Exception e) {
                 throw new BugInDaikon("Problem with field " + field);
               }
@@ -831,21 +833,6 @@ public abstract class DaikonVariableInfo
 
     debug_vars.log("exit addDeclVar(field)%n");
     return newField;
-  }
-
-  /**
-   * Returns the value of a static field.
-   *
-   * @param f a static field
-   * @return the value of the static field
-   */
-  // @SuppressWarnings("nullness:argument.type.incompatible") // null object OK for static field
-  private @Nullable Object getStaticField(Field f) {
-    try {
-      return f.get(null);
-    } catch (IllegalAccessException e) {
-      throw new BugInDaikon(e);
-    }
   }
 
   /**

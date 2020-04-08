@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.EntryReader;
@@ -309,7 +310,7 @@ public final class Configuration implements Serializable {
     }
 
     try {
-      field.set(null, value);
+      setStaticField(field, value);
     } catch (IllegalAccessException e) {
       throw new ConfigException("Inaccessible configuration option " + field.toString());
     }
@@ -326,5 +327,23 @@ public final class Configuration implements Serializable {
     assert !fieldname.startsWith(PREFIX); // must not have prefix
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);
+  }
+
+  /**
+   * Set a static field to the given value.
+   *
+   * @param field a field; must be static
+   * @param value the value to set the field to
+   * @throws IllegalAccessException if {@code field} is enforcing Java language access control and
+   *     the underlying field is either inaccessible or final.
+   */
+  // This method exists to reduce the scope of the warning suppression.
+  @SuppressWarnings({
+    "nullness:argument.type.incompatible", // field is static, so object may be null
+    "interning:argument.type.incompatible" // interning is not necessary for how this method is used
+  })
+  private static void setStaticField(Field field, @Nullable Object value)
+      throws IllegalAccessException {
+    field.set(null, value);
   }
 }
