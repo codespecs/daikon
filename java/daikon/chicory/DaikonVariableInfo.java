@@ -787,7 +787,9 @@ public abstract class DaikonVariableInfo
             // If the class has already been statically initialized, get its hash
             if (Runtime.isInitialized(className)) {
               try {
-                value = Integer.toString(System.identityHashCode(field.get(null)));
+                @SuppressWarnings("nullness") // the field is static
+                Object fieldValue = field.get(null);
+                value = Integer.toString(System.identityHashCode(fieldValue));
               } catch (Exception e) {
               }
             }

@@ -1141,10 +1141,17 @@ public final class Daikon {
             }
             f.setAccessible(true);
             Object classesAsObject;
-            try {
-              classesAsObject = f.get(Thread.currentThread().getContextClassLoader());
-            } catch (IllegalAccessException e) {
-              throw new Daikon.BugInDaikon("Field ClassLoader.classes was not made accessible");
+            {
+              ClassLoader cl = Thread.currentThread().getContextClassLoader();
+              if (cl == null) {
+                throw new Daikon.BugInDaikon(
+                    "Need to handle when getContextClassLoader returns null");
+              }
+              try {
+                classesAsObject = f.get(cl);
+              } catch (IllegalAccessException e) {
+                throw new Daikon.BugInDaikon("Field ClassLoader.classes was not made accessible");
+              }
             }
             @SuppressWarnings({
               "unchecked", // type of ClassLoader.classes field is known
@@ -1166,7 +1173,7 @@ public final class Daikon {
                             + field.getType()
                             + " instead of boolean");
                   } else {
-                    field.set(null, false);
+                    setStaticField(field, false);
                     // System.out.println(
                     //     "Set field "
                     //         + invType
@@ -1409,6 +1416,23 @@ public final class Daikon {
     PrintInvariants.validateGuardNulls();
 
     return new FileOptions(decl_files, dtrace_files, spinfo_files, map_files);
+  }
+
+  /**
+   * Set a static field to the given value.
+   *
+   * @param field a field; must be static
+   * @param value the value to set the field to
+   * @throws IllegalAccessException if {@code field} is enforcing Java language access control and
+   *     the underlying field is either inaccessible or final.
+   */
+  // This method exists to reduce the scope of the warning suppression.
+  @SuppressWarnings({
+    "nullness:argument.type.incompatible", // field is static, so object may be null
+    "interning:argument.type.incompatible" // interning is not necessary for how this method is used
+  })
+  private static void setStaticField(Field field, Object value) throws IllegalAccessException {
+    field.set(null, value);
   }
 
   /**
