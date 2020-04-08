@@ -172,13 +172,13 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-# Remove "_nondeterministic" from the name once it is deterministic.
-- job: kvasir_centos_jdk8_nondeterministic
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk8-plus:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-kvasir.sh
-    displayName: test-kvasir.sh
+# Reinstate once it passes deterministically.
+# - job: kvasir_centos_jdk8
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   container: mdernst/daikon-centos-jdk8-plus:latest
+#   steps:
+#   - checkout: self
+#     fetchDepth: 25
+#   - bash: ./scripts/test-kvasir.sh
+#     displayName: test-kvasir.sh
