@@ -814,9 +814,14 @@ public class PptSplitter implements Serializable {
    * Adds the specified relation from each conditional ppt in this to the corresponding conditional
    * ppt in ppt_split. The relation specified should be a relation from this.parent to
    * ppt_split.parent.
+   *
+   * @param rel the relation to add
+   * @param ppt_split the target of the relation; that is, the relation goes from {@code this} to
+   *     {@code ppt_split}
    */
   public void add_relation(PptRelation rel, PptSplitter ppt_split) {
     for (int ii = 0; ii < ppts.length; ii++) {
+      @SuppressWarnings("UnusedVariable")
       PptRelation cond_rel = rel.copy(ppts[ii], ppt_split.ppts[ii]);
       // System.out.println ("Added relation: " + cond_rel);
       // System.out.println ("with relations: "

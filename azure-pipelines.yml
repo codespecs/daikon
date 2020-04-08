@@ -110,7 +110,7 @@ jobs:
 - job: misc_fedora_jdk8
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk8:latest
+  container: mdernst/daikon-fedora-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -163,7 +163,7 @@ jobs:
 - job: misc_centos_jdk8
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk8:latest
+  container: mdernst/daikon-centos-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25

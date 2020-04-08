@@ -1639,12 +1639,9 @@ public final class FileIO {
             "No declaration was provided for program point " + ppt_name, state);
       }
 
-      VarInfo[] vis = ppt.var_infos;
-
       // not vis.length, as that includes constants, derived variables, etc.
       // Actually, we do want to leave space for _orig vars.
       // And for the time being (and possibly forever), for derived variables.
-      int num_tracevars = ppt.num_tracevars;
       int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
 
       // Read an invocation nonce if one exists
@@ -1789,7 +1786,10 @@ public final class FileIO {
       return;
     }
 
-    @SuppressWarnings("nullness:flowexpr.parse.error") // https://tinyurl.com/cfissue/862
+    @SuppressWarnings({
+      "UnusedVariable",
+      "nullness:flowexpr.parse.error"
+    }) // https://tinyurl.com/cfissue/862
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {

@@ -664,7 +664,7 @@ this.topOfStack <= size(this.theArray[])-1
 @end example
 
 These four annotations describe the representation invariant.  The
-array is never null, and its runtime type is @code{Object[]}.  The
+array is never null, and its run-time type is @code{Object[]}.  The
 @code{topOfStack} index is at least -1 and is less than the length
 of the array.
 
@@ -1708,7 +1708,7 @@ Produces output in JVM (Java Modeling Language,
 @uref{http://www.jmlspecs.org}); for details, see the
 @uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,
-including runtime assertion checking and the
+including run-time assertion checking and the
 @uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}
 tool.
 
@@ -1919,7 +1919,7 @@ two-dimensional array.
 
 @item
 @cindex @code{.getClass()} variable
-As in Java, @code{x.getClass()} is the runtime type of @code{x}, which may
+As in Java, @code{x.getClass()} is the run-time type of @code{x}, which may
 differ from its declared type.
 
 @item
@@ -4085,7 +4085,7 @@ in Chicory output}.
 @item --nesting-depth=@var{n}
 Depth to which to examine structure components (default 2).  This
 parameter determines which variables the front end causes to be output
-at runtime.  For an example, see @ref{Variables in Chicory output}.
+at run time.  For an example, see @ref{Variables in Chicory output}.
 
 @end table
 
@@ -6908,7 +6908,7 @@ java -cp $DAIKONDIR/daikon.jar daikon.tools.runtimechecker.Main help
 @noindent
 The @code{instrument} command to runtimechecker creates a new directory
 @file{instrumented-@/classes} containing a new version of the
-user-specified Java files, instrumented to check invariants at runtime
+user-specified Java files, instrumented to check invariants at run time
 and to record a list of invariant violations in a Java data structure.
 You can compile and run the instrumented version of your program.
 
@@ -7252,7 +7252,7 @@ considered interesting.
 
 @item o
 Discard @samp{one-of} invariants (which signify that a variable always
-had one of a small set of values at runtime), when the values that the
+had one of a small set of values at run time), when the values that the
 variable took are considered uninteresting by Daikon.
 
 @item O
@@ -9107,4 +9107,5 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  untyped splitter filename substring boolean splitters CVC
 @c  LocalWords:  dimensionality consequents UNRETURNED getter globals
 @c  LocalWords:  typedefs celeriacArg Inserter comparator roundoff bitwise
-@c  LocalWords:  Kellen Florian Laure Raytheon
+@c  LocalWords:  Kellen Florian Laure Raytheon pathname customizable
+@c  LocalWords:  myclasspath

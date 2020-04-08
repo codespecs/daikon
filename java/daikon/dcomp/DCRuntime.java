@@ -240,7 +240,7 @@ public final class DCRuntime {
     Method m;
     try {
       m =
-          (o1.getClass())
+          o1.getClass()
               .getMethod("equals_dcomp_instrumented", new Class<?>[] {java_lang_Object_class});
     } catch (NoSuchMethodException e) {
       m = null;

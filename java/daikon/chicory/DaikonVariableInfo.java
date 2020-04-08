@@ -1364,9 +1364,9 @@ public abstract class DaikonVariableInfo
 
     if (ppt_statics.contains(name)) {
       debug_vars.log("ignoring already included variable %s [%s]", name, getClass());
-      if (false && !isStatic()) {
-        System.out.printf("ignoring already included variable %s [%s]", name, getClass());
-      }
+      // if (!isStatic()) {
+      //   System.out.printf("ignoring already included variable %s [%s]", name, getClass());
+      // }
       declShouldPrint = false;
       dtraceShouldPrint = false;
       return true;
