@@ -1,9 +1,5 @@
 package daikon;
 
-// import daikon.derive.*; // see dbc_name_impl(VarInfo v)
-// import daikon.derive.binary.*; // see dbc_name_impl(VarInfo v)
-// import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
-// import daikon.derive.unary.*; // see dbc_name_impl(VarInfo v)
 import daikon.chicory.DaikonVariableInfo;
 import daikon.derive.Derivation;
 import daikon.derive.binary.BinaryDerivation;
@@ -737,10 +733,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for the size of this (this object should be a sequence). Form is like
    * "size(a[])" or "a.length".
+   *
+   * @return a name for the size of this
    */
   public VarInfoName applySize(@Interned VarInfoName this) {
     // The simple approach:
-    //   return (new SizeOf((Elements) this)).intern();
+    //   return new SizeOf((Elements) this).intern();
     // is wrong because this might be "orig(a[])".
     if (dkconfig_direct_orig) {
       return new SizeOf(this).intern();
@@ -771,7 +769,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       if (this instanceof Prestate) {
         VarInfoName size = new SizeOf(elems).intern();
         return new Prestate(size).intern();
-        // Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
+        // Replacer r = new Replacer(elems, new SizeOf(elems).intern());
         // return r.replace(this).intern();
       } else {
         return new SizeOf(elems).intern();
@@ -1375,17 +1373,13 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
       String term_name_no_brackets = term.name().replaceAll("\\[\\]", "") + "." + field;
 
-      String object = null;
-
       @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
       String packageName = v.aux.getValue(VarInfoAux.PACKAGE_NAME);
       if (packageName.equals(VarInfoAux.NO_PACKAGE_NAME)) {
         packageName = "";
       }
 
-      String fields = null;
-
-      String[] splits = null;
+      String[] splits;
       boolean isStatic = false;
       String packageNamePrefix = null;
       // if (isStatic) {
@@ -1403,7 +1397,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         splits = term_name_no_brackets.split("\\.");
       }
 
-      object = splits[0];
+      String object = splits[0];
       if (isStatic) {
         object += DaikonVariableInfo.class_suffix;
       }
@@ -1415,7 +1409,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         }
       }
 
-      fields = "";
+      String fields = "";
       for (int j = 1; j < splits.length; j++) {
         if (j != 1) {
           fields += ".";
@@ -2230,9 +2224,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
               + ")";
         } else {
           VarInfo seqVarInfo = ((SequenceSubsequence) derived).seqvar();
-          String lastIdxString = null;
           String prefix = sequence.name_using(format, seqVarInfo);
-          lastIdxString = "daikon.Quant.size(" + prefix + ")";
+          String lastIdxString = "daikon.Quant.size(" + prefix + ")";
           //           if (seqVarInfo.type.pseudoDimensions() > seqVarInfo.type.dimensions()) {
           //             if (prefix.startsWith("daikon.Quant.collect")) {
           //               // Quant collect methods returns an array
@@ -3000,7 +2993,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       result.add(o);
       for (VarInfoName vin : o.args) {
-        NoReturnValue retval = vin.accept(this);
+        vin.accept(this);
       }
       return null;
     }

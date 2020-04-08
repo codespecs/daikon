@@ -692,44 +692,36 @@ endif
 ### Code quality (static checks of the code)
 ###
 
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
+  JAVA8 := 1
+else
+  JAVA8 := 0
+endif
+
 # See version numbers at https://github.com/google/error-prone/releases
-# I'm having trouble upgrading past 2.3.1.
-ERRORPRONE_VERSION := 2.3.1
-ERRORPRONE_JAR_FILE := error_prone_ant-${ERRORPRONE_VERSION}.jar
-# For 2.3.2 and later (but I can't make the command work):
-# ERRORPRONE_JAR_FILE := error_prone_core-${ERRORPRONE_VERSION}-with-dependencies.jar
-ERRORPRONE_JAR_PATH := ${DAIKONDIR}/java/lib/tmp/${ERRORPRONE_JAR_FILE}
+ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.3.4-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-2.5.7.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-2.5.7.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.1.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar
 
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
+# Some of the -Xep are temporary
 errorprone-nocompile:
-	${MAKE} lib/tmp/${ERRORPRONE_JAR_FILE}
-	java -cp ${DAIKON_CLASSPATH} -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Werror -Xmaxwarns 100000 -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF ${JAVA_FILES_FOR_STYLE}
-## For 2.3.2 and later (but it isn't working for me):
-# 	javac \
-# 	  -J-Xbootclasspath/p:javac-9+181-r4173-1.jar \
-# 	  -XDcompilePolicy=simple \
-# 	  -processorpath ${DAIKONDIR}/java/lib/tmp/${ERRORPRONE_JAR_FILE}:${DAIKONDIR}/java/lib/tmp/dataflow-2.5.7.jar:${DAIKONDIR}/java/lib/tmp/javacutil-2.5.7.jar:${DAIKONDIR}/java/lib/tmp/jFormatString-3.0.0.jar \
-# 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF' \
-# 	  -Xmaxwarns 100000  \
-# 	  ${JAVA_FILES_FOR_STYLE}
-# To create a patch file to apply changes:
-#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:MissingOverride,DefaultCharset,DeadException -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
-# This didn't create the file though its output claimed it did:
-#	\rm -f ${DAIKONDIR}/java/error-prone.patch && java -Xbootclasspath/p:${ERRORPRONE_JAR_PATH} com.google.errorprone.ErrorProneCompiler -Xmaxwarns 100000 -XepPatchChecks:BoxedPrimitiveConstructor -XepPatchLocation:${DAIKONDIR}/java ${JAVA_FILES_FOR_STYLE}
-# To apply the patch, see instructions in the Error Prone output.
+ifeq ($(JAVA8), 1)
+	echo "Error Prone is not run under Java 8"
+else
+	javac -cp ${DAIKON_CLASSPATH} \
+	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
+	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF' \
+	  -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
+# TODO: add after everything passes: -Werror
+endif
 
-lib/tmp/${ERRORPRONE_JAR_FILE}:
-	(mkdir -p lib/tmp && cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/error_prone_ant/${ERRORPRONE_VERSION}/${ERRORPRONE_JAR_FILE})
-
-# For 2.3.2 and later:
-# lib/tmp/${ERRORPRONE_JAR_FILE}:
-# 	mkdir -p lib/tmp
-# 	cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/error_prone_core/${ERRORPRONE_VERSION}/${ERRORPRONE_JAR_FILE}
-# 	cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/org/checkerframework/dataflow/2.5.7/dataflow-2.5.7.jar
-# 	cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/org/checkerframework/javacutil/2.5.7/javacutil-2.5.7.jar
-# 	cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/code/findbugs/jFormatString/3.0.0/jFormatString-3.0.0.jar
-# 	cd lib/tmp && curl -s -O --retry 3 https://repo1.maven.org/maven2/com/google/errorprone/javac/9+181-r4173-1/javac-9+181-r4173-1.jar
+# Create an `error-prone.patch` file.
+errorprone-replacements:
+	javac -cp ${DAIKON_CLASSPATH} \
+	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
+	  '-Xplugin:ErrorProne -XepPatchChecks:UnnecessaryParentheses,ArrayToString -XepPatchLocation:${DAIKONDIR}/java' \
+	  -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
 
 findbugs: .findbugs-output
 .PHONY: findbugs
