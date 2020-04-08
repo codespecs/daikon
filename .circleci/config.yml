@@ -132,7 +132,7 @@ jobs:
 
   misc-fedora-jdk8:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-fedora-jdk8-plus
     steps:
       - restore_cache:
           keys:
@@ -213,7 +213,7 @@ jobs:
 
   misc-centos-jdk8:
     docker:
-      - image: mdernst/daikon-centos-jdk8
+      - image: mdernst/daikon-centos-jdk8-plus
     steps:
       - restore_cache:
           keys:
