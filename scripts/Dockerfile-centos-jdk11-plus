@@ -45,6 +45,7 @@ RUN dnf -q -y install \
   gcc-c++ \
   graphviz \
   netpbm \
+  netpbm-progs \
   python2 \
   python3 \
   texlive \
