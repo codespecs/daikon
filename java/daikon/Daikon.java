@@ -1427,7 +1427,10 @@ public final class Daikon {
    *     the underlying field is either inaccessible or final.
    */
   // This method exists to reduce the scope of the warning suppression.
-  @SuppressWarnings("nullness:argument.type.incompatible") // field is static, so object may be null
+  @SuppressWarnings({
+    "nullness:argument.type.incompatible", // field is static, so object may be null
+    "interning:argument.type.incompatible" // interning is not necessary for how this method is used
+  })
   private static void setStaticField(Field field, Object value) throws IllegalAccessException {
     field.set(null, value);
   }
