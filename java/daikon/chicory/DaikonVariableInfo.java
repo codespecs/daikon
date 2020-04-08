@@ -836,7 +836,7 @@ public abstract class DaikonVariableInfo
   /**
    * Returns the value of a static field.
    *
-   * @param a static field
+   * @param f a static field
    * @return the value of the static field
    */
   @SuppressWarnings("nullness:argument.type.incompatible") // null object OK for static field
