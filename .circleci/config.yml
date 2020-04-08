@@ -20,7 +20,7 @@ jobs:
 
   quick-txt-diff-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk8
+      - image: mdernst/daikon-ubuntu-jdk11
     steps:
       - restore_cache:
           keys:
@@ -52,7 +52,7 @@ jobs:
 
   nonquick-txt-diff-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk8
+      - image: mdernst/daikon-ubuntu-jdk11
     steps:
       - restore_cache:
           keys:
@@ -84,7 +84,7 @@ jobs:
 
   non-txt-diff-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk8
+      - image: mdernst/daikon-ubuntu-jdk11
     steps:
       - restore_cache:
           keys:
@@ -116,7 +116,7 @@ jobs:
 
   misc-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk8-plus
+      - image: mdernst/daikon-ubuntu-jdk11-plus
     steps:
       - restore_cache:
           keys:
@@ -148,7 +148,7 @@ jobs:
 
   kvasir-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk8-plus
+      - image: mdernst/daikon-ubuntu-jdk11-plus
     steps:
       - restore_cache:
           keys:
@@ -180,7 +180,7 @@ jobs:
 
   quick-txt-diff-fedora-jdk11:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-fedora-jdk11
     steps:
       - restore_cache:
           keys:
@@ -212,7 +212,7 @@ jobs:
 
   nonquick-txt-diff-fedora-jdk11:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-fedora-jdk11
     steps:
       - restore_cache:
           keys:
@@ -244,7 +244,7 @@ jobs:
 
   non-txt-diff-fedora-jdk11:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-fedora-jdk11
     steps:
       - restore_cache:
           keys:
@@ -260,7 +260,7 @@ jobs:
 
   misc-fedora-jdk8:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-fedora-jdk8-plus
     steps:
       - restore_cache:
           keys:
@@ -276,7 +276,7 @@ jobs:
 
   misc-fedora-jdk11:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-fedora-jdk11-plus
     steps:
       - restore_cache:
           keys:
@@ -310,7 +310,7 @@ jobs:
   ## Flaky; needs to be fixed.
   # kvasir-fedora-jdk11:
   #   docker:
-  #     - image: mdernst/daikon-fedora-jdk8-plus
+  #     - image: mdernst/daikon-fedora-jdk11-plus
   #   steps:
   #     - restore_cache:
   #         keys:
@@ -342,7 +342,7 @@ jobs:
 
   quick-txt-diff-centos-jdk11:
     docker:
-      - image: mdernst/daikon-centos-jdk8
+      - image: mdernst/daikon-centos-jdk11
     steps:
       - restore_cache:
           keys:
@@ -374,7 +374,7 @@ jobs:
 
   nonquick-txt-diff-centos-jdk11:
     docker:
-      - image: mdernst/daikon-centos-jdk8
+      - image: mdernst/daikon-centos-jdk11
     steps:
       - restore_cache:
           keys:
@@ -406,7 +406,7 @@ jobs:
 
   non-txt-diff-centos-jdk11:
     docker:
-      - image: mdernst/daikon-centos-jdk8
+      - image: mdernst/daikon-centos-jdk11
     steps:
       - restore_cache:
           keys:
@@ -422,7 +422,7 @@ jobs:
 
   misc-centos-jdk8:
     docker:
-      - image: mdernst/daikon-centos-jdk8
+      - image: mdernst/daikon-centos-jdk8-plus
     steps:
       - restore_cache:
           keys:
@@ -441,7 +441,7 @@ jobs:
 
   misc-centos-jdk11:
     docker:
-      - image: mdernst/daikon-centos-jdk8
+      - image: mdernst/daikon-centos-jdk11-plus
     steps:
       - restore_cache:
           keys:
@@ -476,7 +476,7 @@ jobs:
 
   kvasir-centos-jdk11:
     docker:
-      - image: mdernst/daikon-centos-jdk8-plus
+      - image: mdernst/daikon-centos-jdk11-plus
     steps:
       - restore_cache:
           keys:
@@ -532,7 +532,7 @@ jobs:
 
   typecheck-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk8
+      - image: mdernst/daikon-ubuntu-jdk11
     steps:
       - restore_cache:
           keys:
