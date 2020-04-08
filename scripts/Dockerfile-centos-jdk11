@@ -23,6 +23,9 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 RUN dnf -q -y install \
+  rsync
+
+RUN dnf -q -y install \
   java-11-openjdk \
   java-11-openjdk-devel
 
