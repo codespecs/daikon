@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.Daikon.BugInDaikon;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.reflection.ReflectionPlume;
 import daikon.plumelib.reflection.Signatures;
