@@ -219,35 +219,53 @@ default: help
 # is 1.n.n_n. For Java 9 or later it is n.n.n.n.
 # Currently, we only look for the release number, which is
 # the first 'n' in either case.
+# Note that version 11 (or 21 or ...) requires the 'start' anchor below
+# to make the old vs. new test work properly.
 
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
-ifneq (,$(findstring 1.,$(JAVA_VERSION_STRING)))
-  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/1\.\(.\).*/\1/')
+startJVS := $(shell echo start$(JAVA_VERSION_STRING))
+ifneq (,$(findstring start1.8,$(startJVS)))
+  JAVA_RELEASE_NUMBER := 8
+  JAVA11_OR_NEWER := 0
 else
+  # Old Java releases (e.g. 7) will set JAVA_RELEASE_NUMBER to 1.
+  # This will cause the JAVA8_OR_NEWER test to fail as desired.
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
+    JAVA11_OR_NEWER := 1
+  else
+    JAVA11_OR_NEWER := 0
+  endif
 endif
-JAVA8_OR_NEWER := $(shell echo $(JAVA_RELEASE_NUMBER)\>7 | bc)
+
+ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 8),1)
+  JAVA8_OR_NEWER := 1
+else
+  JAVA8_OR_NEWER := 0
+endif
 
 ifneq ($(JAVA8_OR_NEWER), 1)
     $(error Must use Java version 8 or later)
 endif
 
 # Function to compute goal filename extension.  Java 8 is now the default.
-# If we are running Java 9 and if filename.test.goal.j9 exists, use it;
+# If we are running Java 11 and if filename.test.goal.j11 exists, use it;
 # otherwise, use filename.test.goal
-# Reasons for different behavior between Java 8 and Java 9 include:
-# (Unkown at this point.)
-# (There are no .goal.j9 files at present.)
+# Reasons for different behavior between Java 8 and Java 11 include:
+# - javac versions 8 & 9 sometimes generate dummy field accessor methods
+#   that javac 11 does not
+# - string concatenation of variables sometimes caused the varaibles to be
+#   associated in Java 8 but not in Java 11. (This is an improvement.)
 #
 # The argument ($(1)) is '<filename>.<test>'
 #
 # This goal_name does not apply to kvasir-tests which
 # have their own goal_name calculation.
 
-goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
+goal_name = $(if $(findstring 0, $(JAVA11_OR_NEWER)), \
 				$(1).goal, \
-				$(if $(shell if [ -f $(1).goal.j9 ] ; then echo true; fi), \
-					$(1).goal.j9, \
+				$(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
+					$(1).goal.j11, \
 					$(1).goal) \
 			)
 

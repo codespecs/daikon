@@ -34,13 +34,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 
+/**
+ * This class is the entry point for the Chicory instrumentation agent. It is the only code in
+ * ChicoryPremain.jar.
+ */
 public class ChicoryPremain {
 
-  /**
-   * Any command line options declared here are 'hidden' as they cannot be accessed from Chicory.
-   * These are internal debugging options that may be used when ChicoryPremain is invoked directly
-   * from the command line.
-   */
+  // These command-line options cannot be accessed from Chicory.  These are internal debugging
+  // options that may be used when ChicoryPremain is invoked directly from the command line.
+
+  /** Socket port to communicate with Daikon. */
   @Option("socket port to communicate with Daikon")
   public static int daikon_port = -1;
 
@@ -312,7 +315,7 @@ public class ChicoryPremain {
 
   /**
    * Classloader for the BCEL code. Using this classloader guarantees that we get the correct
-   * version of BCEL and not a possible incompatible version from elsewhere on the users classpath.
+   * version of BCEL and not a possible incompatible version from elsewhere on the user's classpath.
    * We also load daikon.chicory.Instrument via this (since that class is the user of all of the
    * BCEL classes). All references to BCEL must be within that class (so that all references to BCEL
    * will get resolved by this classloader).
@@ -326,13 +329,21 @@ public class ChicoryPremain {
    *   <li>the offical 6.1 release version
    *   <li>the PLSE 6.1 release version (includes LocalVariableGen fix)
    *   <li>the offical 6.2 release version (includes LocalVariableGen fix)
+   *   <li>the offical 6.3 release version
+   *   <li>the offical 6.3.1 release version
+   *   <li>the offical 6.4.1 release version
+   *   <li>the PLSE 6.4.1.1 release version (includes JDK 11 support)
    * </ul>
    *
-   * Currently, only DynComp cares about the LocalVariableGen fix, so we are looking for the offical
-   * 6.1 release version (or newer) and DynComp will check for the fixed version later. There are
-   * two classes present in 6.1 and subsequent releases that are not in previous versions. Thus, we
-   * can identify the correct version of BCEL by the presence of the class:
-   * org.apache.bcel.classfile.ConstantModule.class
+   * <p>Note that both Chicory and DynComp use the ChicoryLoader to load BCEL and to verify that the
+   * version loaded is acceptable. However, the official 6.1 release version is sufficient for
+   * Chicory while DynComp requires the latest PLSE 6.4.1.1 version. Hence, this loader only checks
+   * for the official 6.1 release version (or newer). After loading BCEL, DynComp will make an
+   * additional check to verify that the 6.4.1.1 version has been loaded.
+   *
+   * <p>There are two classes present in 6.1 and subsequent releases that are not in previous
+   * versions. Thus, we can identify version 6.1 (and later) of BCEL by the presence of the class:
+   * org.apache.bcel.classfile.ConstantModule.class.
    *
    * <p>Earlier versions of Chicory inspected all version of BCEL found on the path and selected the
    * correct one, if present. We now (9/15/16) simplify this to say the first BCEL found must be the

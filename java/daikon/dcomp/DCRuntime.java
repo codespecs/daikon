@@ -69,10 +69,6 @@ public final class DCRuntime {
   /** If the application exits with an exception, it should be placed here. */
   public static @Nullable Throwable exit_exception = null;
 
-  /** Map from each primitive static name to the offset in static_tags. */
-  // public static Map<String,Integer> static_map
-  //   = new LinkedHashMap<>();
-
   /** Storage for each static tag. */
   public static List<@Nullable Object> static_tags = new ArrayList<>();
 
@@ -103,16 +99,18 @@ public final class DCRuntime {
   /** If true, merge arrays and their indices. */
   private static boolean merge_arrays_and_indices = true;
 
-  /** Class to hold per-thread data. */
+  /** Class to hold per-thread comparability data. */
   private static class ThreadData {
     /** Tag stack. */
     Deque<Object> tag_stack;
 
-    int tag_stack_depth;
+    /** Number of methods currently on tag_stack */
+    int tag_stack_call_depth;
 
+    /** class initializer */
     ThreadData() {
       tag_stack = new ArrayDeque<Object>();
-      tag_stack_depth = 0;
+      tag_stack_call_depth = 0;
     }
   }
 
@@ -174,7 +172,10 @@ public final class DCRuntime {
   private static class PrimStore {}
 
   /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
-  public static Class<?> dcompmarker = null;
+  private static Class<?> dcomp_marker_class;
+
+  /** java.lang.Object */
+  private static Class<Object> java_lang_Object_class;
 
   /** Perform any initialization required before instrumentation begins. */
   public static void init() {
@@ -194,6 +195,19 @@ public final class DCRuntime {
       debug_primitive.enabled = true;
       debug_merge_comp.enabled = true;
       debug_decl_print.enabled = true;
+    }
+
+    try {
+      if (!DCInstrument.jdk_instrumented) {
+        dcomp_marker_class = Class.forName("daikon.dcomp.DCompMarker");
+      } else {
+        dcomp_marker_class = Class.forName("java.lang.DCompMarker");
+      }
+      @SuppressWarnings("unchecked")
+      Class<Object> tmp = (Class<Object>) Class.forName("java.lang.Object");
+      java_lang_Object_class = tmp;
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error initializing DCRuntime:", e);
     }
 
     // Initialize the array of static tags
@@ -221,15 +235,32 @@ public final class DCRuntime {
     // Make obj1 and obj2 comparable
     if ((o1 != null) && (o2 != null)) TagEntry.union(o1, o2);
 
-    if (o1 instanceof DCompInstrumented) {
-      // Call the instrumented version
-      return ((DCompInstrumented) o1).equals_dcomp_instrumented(o2);
-    } else {
-      // Push tag for return value, and call the uninstrumented version
-      ThreadData td = thread_to_data.get(Thread.currentThread());
-      td.tag_stack.push(new Constant());
-      return o1.equals(o2);
+    if (debug) System.out.printf("In dcomp_equals%n");
+
+    Method m;
+    try {
+      m =
+          (o1.getClass())
+              .getMethod("equals_dcomp_instrumented", new Class<?>[] {java_lang_Object_class});
+    } catch (NoSuchMethodException e) {
+      m = null;
+    } catch (Exception e) {
+      throw new RuntimeException("unexpected error locating equal_dcomp_instrumented", e);
     }
+
+    if (m != null) {
+      try {
+        return (Boolean) m.invoke(o1, o2);
+      } catch (Exception e) {
+        throw new RuntimeException("unexpected error invoking equal_dcomp_instrumented", e);
+      }
+    }
+
+    // Push tag for return value, and call the uninstrumented version
+    ThreadData td = thread_to_data.get(Thread.currentThread());
+    td.tag_stack.push(new Constant());
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
+    return o1.equals(o2);
   }
 
   /**
@@ -262,6 +293,8 @@ public final class DCRuntime {
     // Make obj1 and obj2 comparable
     if ((o1 != null) && (o2 != null)) TagEntry.union(o1, o2);
 
+    if (debug) System.out.printf("In dcomp_super_equals%n");
+
     Class<?> o1c = o1.getClass();
     Class<?> o1super;
 
@@ -282,46 +315,31 @@ public final class DCRuntime {
 
     boolean instrumented = false;
     for (Class<?> c : o1superifaces) {
-      if (c.getName().equals("daikon.dcomp.DCompInstrumented")) {
+      if (c.getName().equals(DCInstrument.instrumentation_interface)) {
         instrumented = true;
         break;
       }
     }
 
     boolean return_val;
-    Class<Object> javalangobject;
-    /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
-    Class<?> dcompmarker;
-
-    try {
-      @SuppressWarnings("unchecked")
-      Class<Object> javalangobject_tmp = (Class<Object>) Class.forName("java.lang.Object");
-      javalangobject = javalangobject_tmp;
-
-      if (DCInstrument.jdk_instrumented) {
-        dcompmarker = Class.forName("java.lang.DCompMarker");
-      } else {
-        dcompmarker = Class.forName("daikon.dcomp.DCompMarker");
-      }
-    } catch (ClassNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-
     try {
       // if the superclass whose method we are calling is instrumented...
       if (instrumented) {
         // call the instrumented version
-        Method m = o1super.getMethod("equals", new Class<?>[] {javalangobject, dcompmarker});
+        Method m =
+            o1super.getMethod(
+                "equals", new Class<?>[] {java_lang_Object_class, dcomp_marker_class});
         return_val = ((Boolean) m.invoke(o1, o2, null));
       } else {
         // Push tag for return value, and call the uninstrumented version
         ThreadData td = thread_to_data.get(Thread.currentThread());
         td.tag_stack.push(new Constant());
-        Method m = o1super.getMethod("equals", new Class<?>[] {javalangobject});
+        Method m = o1super.getMethod("equals", new Class<?>[] {java_lang_Object_class});
         return_val = ((Boolean) m.invoke(o1, o2));
+        if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
       }
     } catch (NoSuchMethodException e) {
-      System.err.printf("dcomp_super_equals(%s, %s)%n", o1, o2);
+      System.err.printf("dcomp_super_equals(%s, %s)%n", obj_str(o1), obj_str(o2));
       System.err.printf("o1super %s%n", o1super);
       for (Class<?> c : o1superifaces) {
         System.err.printf("  o1super interface %s%n", c);
@@ -333,13 +351,15 @@ public final class DCRuntime {
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     } catch (InvocationTargetException e) {
+      e.printStackTrace();
       throw new RuntimeException(e);
+    } catch (Exception e) {
+      throw new RuntimeException("unexpected error locating equals method", e);
     }
 
     // We are now done with the call, so remove the entry for this
     // call from the active_equals_calls map
     active_equals_calls.remove(o1);
-
     return return_val;
   }
 
@@ -354,16 +374,7 @@ public final class DCRuntime {
   public static Object dcomp_clone(Object o) throws Throwable {
     Class<?> target_class = o.getClass();
 
-    Class<?> dcomp_marker;
-    try {
-      if (DCInstrument.jdk_instrumented) {
-        dcomp_marker = Class.forName("java.lang.DCompMarker");
-      } else {
-        dcomp_marker = Class.forName("daikon.dcomp.DCompMarker");
-      }
-    } catch (ClassNotFoundException e) {
-      throw new RuntimeException(e);
-    }
+    if (debug) System.out.printf("In dcomp_clone%n");
 
     Object return_val;
     Method m;
@@ -380,7 +391,7 @@ public final class DCRuntime {
         return_val = m.invoke(o);
       } else {
         // every other class has an instrumented version
-        m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker});
+        m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker_class});
 
         // Use length-1 array containing null to distinguish from just
         // null, which indicates 0 arguments
@@ -410,26 +421,14 @@ public final class DCRuntime {
   public static Object dcomp_super_clone(Object o) throws Throwable {
     Class<?> oc = o.getClass(); // "Don't call it that."
 
+    if (debug) System.out.printf("In dcomp_super_clone%n");
+
     Class<?> target_class; // The class whose method we will invoke
     if (null == active_clone_calls.get(o)) target_class = oc;
     else {
       target_class = active_clone_calls.get(o).getSuperclass();
     }
     active_clone_calls.put(o, target_class);
-
-    Class<?> dcomp_marker;
-    try {
-      if (DCInstrument.jdk_instrumented) {
-        dcomp_marker = Class.forName("java.lang.DCompMarker");
-      } else {
-        dcomp_marker = Class.forName("daikon.dcomp.DCompMarker");
-      }
-    } catch (ClassNotFoundException e) {
-      // The method call terminates here -- we must remember to remove
-      // this from the active calls map
-      active_clone_calls.remove(o);
-      throw new RuntimeException(e);
-    }
 
     Object return_val;
     Method m;
@@ -447,7 +446,7 @@ public final class DCRuntime {
         return_val = m.invoke(o);
       } else {
         // every other class has an instrumented version
-        m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker});
+        m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker_class});
 
         // Use length-1 array containing null to distinguish from just
         // null, which indicates 0 arguments
@@ -479,28 +478,18 @@ public final class DCRuntime {
   /**
    * Returns true if c or any of its superclasses has an instrumented version of method_name.
    * method_name should be an Object method with no arguments.
+   *
+   * @param c object to be searched
+   * @param method_name method to be searched for
+   * @return true if the method was found
    */
   public static boolean has_instrumented(Class<?> c, String method_name) {
 
-    // initialize the Class for DCompMarker if it is not already initialized.
-    // This needs to be done here rather than in the initializer to avoid some
-    // order dependencies in loading
-    if (dcompmarker == null) {
-      try {
-        if (DCInstrument.jdk_instrumented) {
-          dcompmarker = Class.forName("java.lang.DCompMarker");
-        } else {
-          dcompmarker = Class.forName("daikon.dcomp.DCompMarker");
-        }
-      } catch (Exception e) {
-        throw new RuntimeException("unexpected error finding DCompMarker", e);
-      }
-    }
+    if (debug) System.out.printf("In has_instrumented%n");
 
-    // System.out.printf("has_instrumented: %s %s %s%n", c, method_name,
-    //                   dcompmarker);
+    // System.out.printf("has_instrumented: %s %s %s%n", c, method_name, dcomp_marker_class);
 
-    Class<?>[] args = new Class<?>[] {dcompmarker};
+    Class<?>[] args = new Class<?>[] {dcomp_marker_class};
     while (!c.getName().equals("java.lang.Object")) {
       java.lang.reflect.Method m = null;
       try {
@@ -519,17 +508,27 @@ public final class DCRuntime {
   /**
    * Handle an uninstrumented clone call by making the two objects comparable. Really should make
    * all of their fields comparable instead. Returns the cloned object.
+   *
+   * @param orig_obj object being cloned
+   * @param clone_obj result of the clone
+   * @return the result of the clone
    */
   public static Object uninstrumented_clone(Object orig_obj, Object clone_obj) {
     TagEntry.union(orig_obj, clone_obj);
+    if (debug) System.out.printf("In uninstrumented_clone%n");
     return clone_obj;
   }
 
   /**
    * Handle an uninstrumented toString call. Since comparability doesn't seem to be related to
    * toString, this does nothing.
+   *
+   * @param orig_obj object toString has been called on
+   * @param result result of the toString
+   * @return the result of the toString
    */
   public static String uninstrumented_toString(Object orig_obj, String result) {
+    if (debug) System.out.printf("In uninstrumented_toString%n");
     return result;
   }
 
@@ -623,11 +622,12 @@ public final class DCRuntime {
     // Push the method marker on the tag stack (now that we have removed
     // the parameters
     td.tag_stack.push(method_marker);
-    // save the tag stack depth for debugging
-    tag_frame[frame_size - 1] = ++td.tag_stack_depth;
+    // save the tag stack call_depth for debugging
+    tag_frame[frame_size - 1] = ++td.tag_stack_call_depth;
     if (debug_tag_frame) {
       System.out.printf("push method marker tag: %s%n", method_marker);
-      System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);
+      System.out.printf("tag stack call_depth: %d%n", td.tag_stack_call_depth);
+      System.out.printf("tag stack size: %d%n", td.tag_stack.size());
     }
 
     // debug_print_call_stack();
@@ -652,30 +652,31 @@ public final class DCRuntime {
       while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
     }
 
-    int orig_tag_stack_depth = ((Integer) tag_frame[tag_frame.length - 1]).intValue();
-    if (td.tag_stack_depth != orig_tag_stack_depth) {
+    int orig_tag_stack_call_depth = ((Integer) tag_frame[tag_frame.length - 1]).intValue();
+    if (td.tag_stack_call_depth != orig_tag_stack_call_depth) {
       // Something has gone wrong.  It's almost certainly an exception that
       // was handled by an exception handler other than one added by
       // DCInstrument. From an <init> method or native code, for example.
       if (debug_tag_frame) {
         System.out.printf(
-            "tag stack depth mismatch! at %d expected %d%n",
-            td.tag_stack_depth, orig_tag_stack_depth);
+            "tag stack call_depth mismatch! at %d expected %d%n",
+            td.tag_stack_call_depth, orig_tag_stack_call_depth);
         Thread.dumpStack();
       }
     }
-    while (td.tag_stack_depth > orig_tag_stack_depth) {
+    while (td.tag_stack_call_depth > orig_tag_stack_call_depth) {
       td.tag_stack.pop(); // discard marker
-      td.tag_stack_depth--;
+      td.tag_stack_call_depth--;
       // discard tags until we get to a method marker
       while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
     }
 
     // now do normal exit process
     td.tag_stack.pop(); // discard marker
-    td.tag_stack_depth--;
+    td.tag_stack_call_depth--;
     if (debug_tag_frame) {
-      System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);
+      System.out.printf("tag stack call_depth: %d%n", td.tag_stack_call_depth);
+      System.out.printf("tag stack size: %d%n", td.tag_stack.size());
     }
     if (debug) System.out.printf("Normal exit from %s%n%n", caller_name());
   }
@@ -704,38 +705,39 @@ public final class DCRuntime {
       while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
     }
 
-    int orig_tag_stack_depth = ((Integer) tag_frame[tag_frame.length - 1]).intValue();
-    if (td.tag_stack_depth != orig_tag_stack_depth) {
+    int orig_tag_stack_call_depth = ((Integer) tag_frame[tag_frame.length - 1]).intValue();
+    if (td.tag_stack_call_depth != orig_tag_stack_call_depth) {
       // Something has gone wrong.  It's almost certainly an exception that
       // was handled by an exception handler other than one added by
       // DCInstrument. From an <init> method or native code, for example.
       if (debug_tag_frame) {
         System.out.printf(
-            "tag stack depth mismatch! at %d expected %d%n",
-            td.tag_stack_depth, orig_tag_stack_depth);
+            "tag stack call_depth mismatch! at %d expected %d%n",
+            td.tag_stack_call_depth, orig_tag_stack_call_depth);
         Thread.dumpStack();
       }
     }
-    while (td.tag_stack_depth > orig_tag_stack_depth) {
+    while (td.tag_stack_call_depth > orig_tag_stack_call_depth) {
       td.tag_stack.pop(); // discard marker
-      td.tag_stack_depth--;
+      td.tag_stack_call_depth--;
       // discard tags until we get to a method marker
       while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
     }
 
     // now do normal exit process
     td.tag_stack.pop(); // discard marker
-    td.tag_stack_depth--;
+    td.tag_stack_call_depth--;
     if (debug_tag_frame) {
-      System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);
+      System.out.printf("tag stack call_depth: %d%n", td.tag_stack_call_depth);
     }
     if (debug) {
       System.out.printf("Normal exit primitive from %s%n%n", caller_name());
     }
+    td.tag_stack.push(ret_tag);
     if (debug_tag_frame) {
       System.out.printf("push return value tag: %s%n", ret_tag);
+      System.out.printf("tag stack size: %d%n", td.tag_stack.size());
     }
-    td.tag_stack.push(ret_tag);
   }
 
   /**
@@ -743,25 +745,30 @@ public final class DCRuntime {
    * be done here. (Reference comparability only.)
    */
   public static void normal_exit_refs_only() {
-    if (debug) System.out.printf("Normal exit ok%n");
+    if (debug) System.out.printf("Normal exit refs_only%n");
   }
 
   /**
    * Clean up the tag stack on an exception exit from a method. Pops items off of the tag stack
    * until the method marker is found.
+   *
+   * @param throwable cause of the exception
    */
-  public static void exception_exit() {
-    if (debug) System.out.printf("Begin exception exit from %s%n", caller_name());
+  public static void exception_exit(Object throwable) {
+    if (debug) {
+      System.out.printf("Begin exception exit from %s%n", caller_name());
+      ((Throwable) throwable).printStackTrace();
+    }
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
-    td.tag_stack_depth--;
+    td.tag_stack_call_depth--;
     if (debug_tag_frame) {
-      System.out.printf("tag stack depth: %d%n", td.tag_stack_depth);
+      System.out.printf("tag stack call_depth: %d%n", td.tag_stack_call_depth);
     }
     if (debug) System.out.printf("Exception exit from %s%n", caller_name());
     while (!td.tag_stack.isEmpty()) {
       if (td.tag_stack.pop() == method_marker) {
-        if (debug_tag_frame) System.out.printf("%n");
+        if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
         return;
       }
     }
@@ -774,24 +781,26 @@ public final class DCRuntime {
    * until the method marker is found. (Reference comparability only.)
    */
   public static void exception_exit_refs_only() {
-    if (debug) System.out.printf("Exception exit from %s%n", caller_name());
+    if (debug) System.out.printf("Exception exit refs_only from %s%n", caller_name());
   }
 
   /** Cleans up the tag stack when an exception is thrown. */
   public static void throw_op() {
+    if (debug) System.out.printf("In throw_op%n");
+
     ThreadData td = thread_to_data.get(Thread.currentThread());
     while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /** Pushes the tag at tag_frame[index] on the tag stack. */
   public static void push_local_tag(Object[] tag_frame, int index) {
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
-    if (debug_primitive.enabled()) {
-      debug_primitive.log("push_local_tag[%d] %s%n", index, tag_frame[index]);
-    }
+    debug_primitive.log("push_local_tag[%d] %s%n", index, tag_frame[index]);
     assert tag_frame[index] != null : "index " + index;
     td.tag_stack.push(tag_frame[index]);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /** Pops the top of the tag stack into tag_frame[index] */
@@ -801,9 +810,8 @@ public final class DCRuntime {
     assert td.tag_stack.peek() != method_marker;
     tag_frame[index] = td.tag_stack.pop();
     assert tag_frame[index] != null : "index " + index;
-    if (debug_primitive.enabled()) {
-      debug_primitive.log("pop_local_tag[%d] %s%n", index, tag_frame[index]);
-    }
+    debug_primitive.log("pop_local_tag[%d] %s%n", index, tag_frame[index]);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /** Pushes the tag associated with the static static_num on the tag stack. */
@@ -817,16 +825,29 @@ public final class DCRuntime {
     }
     td.tag_stack.push(static_tag);
     debug_primitive.log("push_static_tag[%d] %s%n", static_num, static_tag);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
-  /** Pushes an array reference on the tag stack. */
+  /**
+   * Pushes an array reference on the tag stack.
+   *
+   * @param arr_ref array being accessed
+   */
   public static void push_array_tag(Object arr_ref) {
+
     ThreadData td = thread_to_data.get(Thread.currentThread());
     td.tag_stack.push(arr_ref);
-    debug_arr_index.log("push_array_tag %s%n", arr_ref);
+    if (debug_arr_index.enabled()) {
+      debug_arr_index.log("push_array_tag %s%n", obj_str(arr_ref));
+    }
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
-  /** Pops the top of the tag stack into the tag storage for static_num. */
+  /**
+   * Pops the top of the tag stack into the tag storage for static_num.
+   *
+   * @param static_num identifies the static variable being accessed
+   */
   public static void pop_static_tag(int static_num) {
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
@@ -834,22 +855,38 @@ public final class DCRuntime {
     static_tags.set(static_num, td.tag_stack.pop());
     assert static_tags.get(static_num) != null;
     debug_primitive.log("pop_static_tag[%d] %s%n", static_num, static_tags.get(static_num));
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /**
    * Discard the tag on the top of the tag stack. Called when primitives are pushed but not used in
    * expressions (such as when allocating arrays). (No longer used?)
+   *
+   * @param cnt number of tags to discard
    */
   public static void discard_tag(int cnt) {
+    if (debug) System.out.printf("In discard_tag%n");
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    // debug_print_call_stack();
     while (--cnt >= 0) {
       assert td.tag_stack.peek() != method_marker;
+      if (debug) System.out.printf("   discard a tag%n");
       td.tag_stack.pop();
     }
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
+  /**
+   * Manipulate the tags for an array store instruction. The tag at the top of stack is stored into
+   * the tag storage for the array. Mark the array and the index as comparable.
+   *
+   * @param arr_ref array being accessed
+   * @param length size of the array
+   * @param index index of the array element being accessed
+   */
   private static void primitive_array_store(Object arr_ref, int length, int index) {
+    if (debug) System.out.printf("In primitive_array_store%n");
 
     // This is a helper routine always called as the first step
     // so we can set the per-thread data here.
@@ -869,13 +906,18 @@ public final class DCRuntime {
     // this index
     assert td.tag_stack.peek() != method_marker;
     obj_tags[index] = td.tag_stack.pop();
-    debug_primitive.log("array store %s[%d] = %s%n", arr_ref, index, obj_tags[index]);
+    if (debug_primitive.enabled()) {
+      debug_primitive.log("array store %s[%d] = %s%n", obj_str(arr_ref), index, obj_tags[index]);
+    }
 
     // Mark the arry and its index as comparable
     assert td.tag_stack.peek() != method_marker;
     Object index_tag = td.tag_stack.pop();
-    debug_arr_index.log("Merging array '%s' and index '%s'", arr_ref, index_tag);
+    if (debug_arr_index.enabled()) {
+      debug_arr_index.log("Merging array '%s' and index '%s'", obj_str(arr_ref), index_tag);
+    }
     if (merge_arrays_and_indices) TagEntry.union(arr_ref, index_tag);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /** Execute an aastore instruction and mark the array and its index as comparable. */
@@ -890,6 +932,7 @@ public final class DCRuntime {
 
     // Store the value
     arr[index] = val;
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /**
@@ -1007,8 +1050,13 @@ public final class DCRuntime {
    * Make the count arguments to multianewarray comparable to the corresponding array indices.
    * count1 is made comparable to the index of the given array (arr), and count2 is made comparable
    * to the index of each array that is an element of arr.
+   *
+   * @param count1 number items in 1st dimension (unused, associated tag value is on tag stack)
+   * @param count2 number items in 2nd dimension (unused, associated tag value is on tag stack)
+   * @param arr the new array
    */
   public static void multianewarray2(int count1, int count2, Object[] arr) {
+    if (debug) System.out.printf("In multianewarray2%n");
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
     assert td.tag_stack.peek() != method_marker;
@@ -1021,6 +1069,7 @@ public final class DCRuntime {
     for (Object subarr : arr) {
       TagEntry.union(count2tag, subarr);
     }
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /**
@@ -1042,7 +1091,6 @@ public final class DCRuntime {
 
     if (debug) {
       Throwable stack = new Throwable("enter");
-      stack.fillInStackTrace();
       StackTraceElement[] ste_arr = stack.getStackTrace();
       StackTraceElement ste = ste_arr[1];
       if (ignore_toString && ste.getMethodName().equals("toString")) {
@@ -1101,7 +1149,6 @@ public final class DCRuntime {
 
     if (debug) {
       Throwable stack = new Throwable("enter_refs_only");
-      stack.fillInStackTrace();
       StackTraceElement[] ste_arr = stack.getStackTrace();
       StackTraceElement ste = ste_arr[1];
       if (ignore_toString && ste.getMethodName().equals("toString")) {
@@ -1170,7 +1217,6 @@ public final class DCRuntime {
 
     if (debug) {
       Throwable stack = new Throwable("exit");
-      stack.fillInStackTrace();
       StackTraceElement[] ste_arr = stack.getStackTrace();
       StackTraceElement ste = ste_arr[1];
       if (ignore_toString && ste.getMethodName().equals("toString")) {
@@ -1219,7 +1265,6 @@ public final class DCRuntime {
 
     if (debug) {
       Throwable stack = new Throwable("exit_refs_only");
-      stack.fillInStackTrace();
       StackTraceElement[] ste_arr = stack.getStackTrace();
       StackTraceElement ste = ste_arr[1];
       if (ignore_toString && ste.getMethodName().equals("toString")) {
@@ -1257,12 +1302,10 @@ public final class DCRuntime {
 
     debug_timing.log("process_all_vars for %s%n", mi);
 
-    if (merge_dv.enabled()) {
-      merge_dv.log("this: %s%n", obj);
-      // For some reason the following line causes DynComp to behave incorrectly.
-      // I have not take the time to investigate.
-      // merge_dv.log("arguments: %s%n", Arrays.toString(args));
-    }
+    merge_dv.log("this: %s%n", obj);
+    // For some reason the following line causes DynComp to behave incorrectly.
+    // I have not take the time to investigate.
+    // merge_dv.log("arguments: %s%n", Arrays.toString(args));
 
     // Map from an Object to the Daikon variable that currently holds
     // that object.
@@ -1316,10 +1359,8 @@ public final class DCRuntime {
 
     debug_timing.log("process_all_vars_refs_only for %s%n", mi);
 
-    if (merge_dv.enabled()) {
-      merge_dv.log("this: %s%n", obj);
-      merge_dv.log("arguments: %s%n", Arrays.toString(args));
-    }
+    merge_dv.log("this: %s%n", obj);
+    merge_dv.log("arguments: %s%n", Arrays.toString(args));
 
     // Map from an Object to the Daikon variable that currently holds
     // that object.
@@ -1432,8 +1473,15 @@ public final class DCRuntime {
     return fi.field_tag.get_tag(parent, obj);
   }
 
-  /** Gets the object in field f in object obj. Exceptions are turned into Errors. */
+  /**
+   * Gets the object in field f in object obj. Exceptions are turned into Errors.
+   *
+   * @param f which field to return
+   * @param obj the object that contains the field
+   * @return the specified object
+   */
   public static Object get_object_field(Field f, Object obj) {
+    if (debug) System.out.printf("In get_object_field%n");
     try {
       return f.get(obj);
     } catch (Exception e) {
@@ -1462,7 +1510,6 @@ public final class DCRuntime {
 
     long start_millis = 0;
     if (debug_timing.enabled()) start_millis = System.currentTimeMillis();
-
     if (merge_dv.enabled()) {
       merge_dv.log("merge_comparability: checking var %s = '%s' %n", dv, obj_str(obj));
     }
@@ -1470,10 +1517,7 @@ public final class DCRuntime {
     // Ignore ClassInfo and StringInfo variables.  These are not real
     // variables in the program
     if ((dv instanceof DaikonClassInfo) || (dv instanceof StringInfo)) {
-      if (debug_timing.enabled()) {
-        debug_timing.log(
-            "  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-      }
+      debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
       return;
     }
 
@@ -1557,10 +1601,8 @@ public final class DCRuntime {
       // Ignore null and nonsensical tags.  There is no reason to process
       // their children, because they can't have any with reasonable values
       if ((tag == null) || (tag == nonsensical) || (tag == nonsensical_list)) {
-        if (debug_timing.enabled()) {
-          debug_timing.log(
-              "  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-        }
+        debug_timing.log(
+            "  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
         return;
       }
 
@@ -1582,9 +1624,7 @@ public final class DCRuntime {
       }
     }
 
-    if (debug_timing.enabled()) {
-      debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-    }
+    debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
 
     // Process all of the children
     for (DaikonVariableInfo child : dv) {
@@ -1624,7 +1664,6 @@ public final class DCRuntime {
 
     long start_millis = 0;
     if (debug_timing.enabled()) start_millis = System.currentTimeMillis();
-
     if (merge_dv.enabled()) {
       merge_dv.log("merge_comparability: checking var %s = '%s' %n", dv, obj_str(obj));
     }
@@ -1632,10 +1671,7 @@ public final class DCRuntime {
     // Ignore ClassInfo and StringInfo variables.  These are not real
     // variables in the program
     if ((dv instanceof DaikonClassInfo) || (dv instanceof StringInfo)) {
-      if (debug_timing.enabled()) {
-        debug_timing.log(
-            "  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-      }
+      debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
       return;
     }
 
@@ -1676,11 +1712,9 @@ public final class DCRuntime {
       }
     } else if (dv.isArray()) {
       if (tag == null) {
-        if (debug_timing.enabled()) {
-          debug_timing.log(
-              "  no array tags for Variable %s : %d msecs%n",
-              dv, System.currentTimeMillis() - start_millis);
-        }
+        debug_timing.log(
+            "  no array tags for Variable %s : %d msecs%n",
+            dv, System.currentTimeMillis() - start_millis);
         return;
       }
       Object[] elements = (Object[]) tag;
@@ -1719,10 +1753,8 @@ public final class DCRuntime {
       // Ignore null and nonsensical tags.  There is no reason to process
       // their children, because they can't have any with reasonable values
       if ((tag == null) || (tag == nonsensical) || (tag == nonsensical_list)) {
-        if (debug_timing.enabled()) {
-          debug_timing.log(
-              "  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-        }
+        debug_timing.log(
+            "  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
         return;
       }
 
@@ -1744,9 +1776,7 @@ public final class DCRuntime {
       }
     }
 
-    if (debug_timing.enabled()) {
-      debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-    }
+    debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
 
     // Process all of the children
     for (DaikonVariableInfo child : dv) {
@@ -2612,9 +2642,12 @@ public final class DCRuntime {
   /**
    * Pushes the tag associated with field_num in obj on the tag stack. A tag value must have been
    * previously stored for this field.
+   *
+   * @param obj where to store tag
+   * @param field_num which field within obj to store into
    */
   public static void push_field_tag(Object obj, int field_num) {
-
+    if (debug) System.out.printf("In push_field_tag%n");
     // Since instance variables by default initialize to zero, any field
     // can possibly be read before it is set.
     push_field_tag_null_ok(obj, field_num);
@@ -2625,8 +2658,12 @@ public final class DCRuntime {
    * object has not been previously allocated it is allocated now and a tag is allocated for this
    * field. This should only be called for objects whose fields can be read without having been
    * previously written (in Java).
+   *
+   * @param obj where to store tag
+   * @param field_num which field within obj to store into
    */
   public static void push_field_tag_null_ok(Object obj, int field_num) {
+    if (debug) System.out.printf("In push_field_tag_null_ok%n");
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
     Object[] obj_tags = field_map.get(obj);
@@ -2634,7 +2671,6 @@ public final class DCRuntime {
       Object tag = obj_tags[field_num];
       if (tag == null) {
         Throwable stack_trace = new Throwable();
-        if (debug) stack_trace.fillInStackTrace();
         obj_tags[field_num] =
             tag =
                 new UninitFieldTag(
@@ -2643,8 +2679,7 @@ public final class DCRuntime {
       td.tag_stack.push(tag);
       if (debug_primitive.enabled()) {
         debug_primitive.log(
-            "push_field_tag %s [%s] %d = %s%n",
-            obj, obj.getClass().getName(), field_num, obj_tags[field_num]);
+            "push_field_tag %s %d = %s%n", obj_str(obj), field_num, obj_tags[field_num]);
       }
     } else {
       Class<?> obj_class = obj.getClass();
@@ -2652,26 +2687,29 @@ public final class DCRuntime {
       assert field_num < fcnt : obj.getClass() + " " + field_num + " " + fcnt;
       obj_tags = new Object[fcnt];
       field_map.put(obj, obj_tags);
-      if (debug_primitive.enabled()) debug_primitive.log("push_field_tag: Created tag storage%n");
+      debug_primitive.log("push_field_tag: Created tag storage%n");
       Throwable stack_trace = new Throwable();
-      if (debug) stack_trace.fillInStackTrace();
       Object tag =
           new UninitFieldTag(obj.getClass().getName() + ":uninit-field" + field_num, stack_trace);
       obj_tags[field_num] = tag;
       td.tag_stack.push(tag);
       if (debug_primitive.enabled()) {
-        debug_primitive.log(
-            "push_field_tag %s [%s] %d = %s%n", obj, obj.getClass().getName(), field_num, tag);
+        debug_primitive.log("push_field_tag %s %d = %s%n", obj_str(obj), field_num, tag);
       }
     }
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /**
    * Pops the tag from the top of the tag stack and stores it in the tag storage for the specified
    * field of the specified object. If tag storage was not previously allocated, it is allocated
    * now.
+   *
+   * @param obj where to store tag
+   * @param field_num which field within obj to store into
    */
   public static void pop_field_tag(Object obj, int field_num) {
+    if (debug) System.out.printf("In pop_field_tag%n");
 
     ThreadData td = thread_to_data.get(Thread.currentThread());
     // Look for the tag storage for this object
@@ -2695,9 +2733,11 @@ public final class DCRuntime {
     Object tag = td.tag_stack.pop();
     assert tag != null : "Object " + obj.getClass() + " '" + obj + "' field_num " + field_num;
     obj_tags[field_num] = tag;
-    debug_primitive.log(
-        "pop_field_tag (%s [%s] %d = %s%n",
-        obj.getClass(), obj.getClass().getName(), field_num, obj_tags[field_num]);
+    if (debug_primitive.enabled()) {
+      debug_primitive.log(
+          "pop_field_tag (%s %d = %s%n", obj_str(obj), field_num, obj_tags[field_num]);
+    }
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /** Return the number of primitive fields in clazz and all of its superclasses. */
@@ -2726,6 +2766,7 @@ public final class DCRuntime {
     Object tag1 = td.tag_stack.pop();
     assert td.tag_stack.peek() != method_marker;
     TagEntry.union(tag1, td.tag_stack.peek());
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /**
@@ -2740,18 +2781,23 @@ public final class DCRuntime {
     Object tag1 = td.tag_stack.pop();
     assert td.tag_stack.peek() != method_marker;
     TagEntry.union(tag1, td.tag_stack.pop());
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
+    // debug_print_call_stack();
   }
 
   /** Handles a dup opcode on a primitive. */
   public static void dup() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("dup%n");
     assert td.tag_stack.peek() != method_marker;
     td.tag_stack.push(td.tag_stack.peek());
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /** Handles a dup_x1 opcode on a primitive. */
   public static void dup_x1() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("dup_x1%n");
     assert td.tag_stack.peek() != method_marker;
     Object top = td.tag_stack.pop();
     assert td.tag_stack.peek() != method_marker;
@@ -2759,6 +2805,7 @@ public final class DCRuntime {
     td.tag_stack.push(top);
     td.tag_stack.push(nxt);
     td.tag_stack.push(top);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /**
@@ -2766,6 +2813,7 @@ public final class DCRuntime {
    */
   public static void dup_x2() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("dup_x2%n");
     assert td.tag_stack.peek() != method_marker;
     Object top = td.tag_stack.pop();
     assert td.tag_stack.peek() != method_marker;
@@ -2776,10 +2824,13 @@ public final class DCRuntime {
     td.tag_stack.push(tag2);
     td.tag_stack.push(tag1);
     td.tag_stack.push(top);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
+  /** Handles a dup2 opcode on a primitive. */
   public static void dup2() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("dup2%n");
     assert td.tag_stack.peek() != method_marker;
     Object top = td.tag_stack.pop();
     assert td.tag_stack.peek() != method_marker;
@@ -2788,10 +2839,13 @@ public final class DCRuntime {
     td.tag_stack.push(top);
     td.tag_stack.push(tag1);
     td.tag_stack.push(top);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
+  /** Handles a dup2_x1 opcode on a primitive. */
   public static void dup2_x1() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("dup2_x1%n");
     assert td.tag_stack.peek() != method_marker;
     Object top = td.tag_stack.pop();
     assert td.tag_stack.peek() != method_marker;
@@ -2803,10 +2857,13 @@ public final class DCRuntime {
     td.tag_stack.push(tag2);
     td.tag_stack.push(tag1);
     td.tag_stack.push(top);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
+  /** Handles a dup2_x2 opcode on a primitive. */
   public static void dup2_x2() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("dup2_x2%n");
     assert td.tag_stack.peek() != method_marker;
     Object top = td.tag_stack.pop();
     assert td.tag_stack.peek() != method_marker;
@@ -2821,26 +2878,32 @@ public final class DCRuntime {
     td.tag_stack.push(tag2);
     td.tag_stack.push(tag1);
     td.tag_stack.push(top);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /** swaps the two elements on the top of the tag stack */
   public static void swap() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("swap%n");
     assert td.tag_stack.peek() != method_marker;
     Object top = td.tag_stack.pop();
     assert td.tag_stack.peek() != method_marker;
     Object tag1 = td.tag_stack.pop();
     td.tag_stack.push(top);
     td.tag_stack.push(tag1);
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /**
    * Handles the various primitive (int, double, etc) array load instructions. The array and its
    * index are made comparable. The tag for the index is removed from the tag stack and the tag for
    * the array element is pushed on the stack.
+   *
+   * @param arr_ref array reference
+   * @param index index into array
    */
   public static void primitive_array_load(Object arr_ref, int index) {
-
+    debug_primitive.log("primitive_array_load%n");
     // Since instance variables by default initialize to zero, any field
     // can possibly be read before it is set.
     primitive_array_load_null_ok(arr_ref, index);
@@ -2852,17 +2915,23 @@ public final class DCRuntime {
    * the array element is pushed on the stack. Unlike primitive_array_load(), this method handles
    * array elements whose tags have not previously been set. This can happen when the JVM sets an
    * array element directly and there is no corresponding java code that can set the tag.
+   *
+   * @param arr_ref array reference
+   * @param index index into array
    */
   public static void primitive_array_load_null_ok(Object arr_ref, int index) {
-
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("primitive_array_load_null_ok%n");
     // Get the tag for the index and mark it as comparable with the array
     assert td.tag_stack.peek() != method_marker;
     Object index_tag = td.tag_stack.pop();
     if (arr_ref == null) {
+      if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
       return;
     }
-    debug_arr_index.log("Merging array '%s' and index '%s'", arr_ref, index_tag);
+    if (debug_arr_index.enabled()) {
+      debug_arr_index.log("Merging array '%s' and index '%s'", obj_str(arr_ref), index_tag);
+    }
     if (merge_arrays_and_indices) TagEntry.union(arr_ref, index_tag);
 
     // Push the tag for the element on the tag stack.
@@ -2873,7 +2942,7 @@ public final class DCRuntime {
       td.tag_stack.push(tag);
       if (debug_primitive.enabled()) {
         debug_primitive.log(
-            "arrayload null-ok %s[%d] = %s%n", arr_ref, index, obj_str(obj_tags[index]));
+            "arrayload null-ok %s[%d] = %s%n", obj_str(arr_ref), index, obj_str(obj_tags[index]));
       }
     } else {
       int length = Array.getLength(arr_ref);
@@ -2883,25 +2952,32 @@ public final class DCRuntime {
       obj_tags[index] = tag;
       td.tag_stack.push(tag);
       if (debug_primitive.enabled()) {
-        debug_primitive.log("arrayload null-ok %s[%d] = null%n", arr_ref, index);
+        debug_primitive.log("arrayload null-ok %s[%d] = null%n", obj_str(arr_ref), index);
       }
     }
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
   /**
    * Handles the aaload instruction. The arry and its index are made comparable. The tag for the
    * index is removed from the tag stack.
+   *
+   * @param arr_ref array reference
+   * @param index index into array
    */
   public static void ref_array_load(Object arr_ref, int index) {
-
     ThreadData td = thread_to_data.get(Thread.currentThread());
+    debug_primitive.log("ref_array_load%n");
     // Get the tag for the index and mark it as comparable with the array
     assert td.tag_stack.peek() != method_marker;
     Object index_tag = td.tag_stack.pop();
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
     if (arr_ref == null) {
       return;
     }
-    debug_arr_index.log("Merging array '%s' and index '%s'", arr_ref, index_tag);
+    if (debug_arr_index.enabled()) {
+      debug_arr_index.log("Merging array '%s' and index '%s'", obj_str(arr_ref), index_tag);
+    }
     if (merge_arrays_and_indices) TagEntry.union(arr_ref, index_tag);
   }
 
@@ -2916,7 +2992,7 @@ public final class DCRuntime {
     Object tag = new Constant();
     debug_primitive.log("push literal constant tag: %s%n", tag);
     td.tag_stack.push(tag);
-    // System.out.printf("tag_stack size: %d%n", td.tag_stack.size());
+    if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
 
     // debug_print_call_stack();
   }
@@ -2924,14 +3000,23 @@ public final class DCRuntime {
   /**
    * Marks the specified class as initialized. We don't look at static variables in classes until
    * they are initialized.
+   *
+   * @param classname class to mark initialized
    */
   public static void class_init(String classname) {
+    debug_primitive.log("class_init: %s%n", classname);
     init_classes.add(classname);
   }
 
-  /** Returns whether or not the specified class is initialized. */
+  /**
+   * Returns whether or not the specified class is initialized.
+   *
+   * @param clazz class to check
+   * @return true if clazz has been initialized
+   */
   @Pure
   public static boolean is_class_init(Class<?> clazz) {
+    debug_primitive.log("is_class_init%n");
     return (init_classes.contains(clazz.getName()));
   }
 
@@ -2939,7 +3024,6 @@ public final class DCRuntime {
   private static String caller_name() {
 
     Throwable stack = new Throwable("caller");
-    stack.fillInStackTrace();
     StackTraceElement[] ste_arr = stack.getStackTrace();
     StackTraceElement ste = ste_arr[2];
     return (ste.getClassName() + "." + ste.getMethodName());
@@ -2947,24 +3031,31 @@ public final class DCRuntime {
 
   /**
    * Returns a string description of the object that includes its class, identity hash code, and the
-   * result of its toString() function (if it overrides the default implementation.
+   * result of its toString() function - if it differs from the default implementation. Note that
+   * the call to toString() may have unintended side effects. Hence, all calls to obj_str are
+   * protected by debug flag checks or debug logging enabled() checks.
+   *
+   * @param obj object to be described
+   * @return object description
    */
   private static String obj_str(Object obj) {
 
     if (obj == null) {
-      return "null";
+      return "<null>";
     } else {
       String tostring;
       try {
         tostring = obj.toString();
       } catch (Exception e) {
+        // We use System.identityHashCode(obj) as obj.hashCode() can fail.
         tostring =
             "toString of "
                 + obj.getClass().getName()
                 + "@"
-                + Integer.toHexString(obj.hashCode())
+                + Integer.toHexString(System.identityHashCode(obj))
                 + " failed";
       }
+      // TODO: truncate tostring if too long?
       String default_tostring =
           String.format("%s@%x", obj.getClass().getName(), System.identityHashCode(obj));
       if (tostring.equals(default_tostring)) {
@@ -2986,8 +3077,14 @@ public final class DCRuntime {
     return list;
   }
 
-  /** Returns the name of the tag field that corresponds to the specified field. */
+  /**
+   * Returns the name of the tag field that corresponds to the specified field.
+   *
+   * @param field_name field name
+   * @return tag field name
+   */
   public static String tag_field_name(String field_name) {
+    debug_primitive.log("tag_field_name: %s%n", field_name);
     return (field_name + "__$tag");
   }
 
@@ -3061,6 +3158,7 @@ public final class DCRuntime {
         assert td.tag_stack.peek() != method_marker;
         tag = td.tag_stack.pop();
         assert tag != null;
+        if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
       } catch (Exception e) {
         throw new Error("can't execute tag method " + get_tag, e);
       }

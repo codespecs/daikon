@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.chicory.StreamRedirectThread;
+import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -21,77 +22,81 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class DynComp {
 
+  /** Print information about the classes being transformed. */
   @Option("-v Print information about the classes being transformed")
   public static boolean verbose = false;
 
+  /** Dump the instrumented classes to disk. */
   @Option("-d Dump the instrumented classes to disk")
   public static boolean debug = false;
 
-  @Option("Print detailed information on which classes are transformed")
-  public static boolean debug_transform = false;
-
-  @Option("Print detailed information on variables being observed")
-  public static boolean debug_decl_print = false;
-
+  /** The directory in which to dump instrumented class files. */
   @Option("Directory in which to create debug files")
   public static File debug_dir = new File("debug");
 
+  /** The directory in which to create output files. */
   @Option("Directory in which to create output files")
   public static File output_dir = new File(".");
 
+  /** Output filename for .decls file suitable for input to Daikon. */
   @Option("-f Output filename for Daikon decl file")
   public static @Nullable String decl_file = null;
 
+  /** Output filename for a more easily human-readable file summarizing comparability sets. */
   @Option("Output file for comparability sets")
   // If null, do no output
-  public static @Nullable File comparability_file = null;
+  public static @MonotonicNonNull File comparability_file = null;
 
-  @Option("Only process program points matching the regex")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
-
-  @Option("Ignore program points matching the regex")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
-
-  @Option("Don't track primitives")
-  public static boolean no_primitives = false;
-
-  // Option("Don't use an instrumented JDK")
-  // Flag is still used, but no longer exposed as an option.
-  public static boolean no_jdk = false;
-
-  @Option("jar file containing an instrumented JDK")
-  public static @Nullable File rt_file = null;
-
-  @Option("use standard visibility")
-  public static boolean std_visibility = false;
-
-  @Option("variable nesting depth")
-  public static int nesting_depth = 2;
-
-  @Option("Display abridged variable names")
-  public static boolean abridged_vars = false;
-
-  @Option("Use faster but less precise algorithm on omitted ppts")
-  public static boolean approximate_omitted_ppts = false;
-
-  @Option("Don't continue after instrumentation error")
-  public static boolean quit_if_error = false;
-
+  /** If specified, write a human-readable file showing some of the interactions that occurred. */
   @Option("Trace output file")
   // Null if shouldn't do output
-  public static @Nullable File trace_file = null;
+  public static @MonotonicNonNull File trace_file = null;
 
+  /** Controls size of the stack displayed in tracing the interactions that occurred. */
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;
 
-  @Option("Output file for DataFlow information")
-  // Null if shouldn't do output
-  public static @Nullable File dataflow_out = null;
+  /** Causes DynComp to abridge the variable names printed. */
+  @Option("Display abridged variable names")
+  public static boolean abridged_vars = false;
 
-  //  @Option("Enable tracing");
-  //  public static boolean tracing_enabled = true;
+  /** Only emit program points that match regex. */
+  @Option("Only process program points matching the regex")
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
-  public static String usage_synopsis = "java daikon.DynComp [options]";
+  /** Suppress program points that match regex. */
+  @Option("Ignore program points matching the regex")
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
+
+  /** Do not track Java primitive values (of type boolean, int, long, etc.). */
+  @Option("Don't track primitives")
+  public static boolean no_primitives = false;
+
+  /** Specifies the location of the instrumented JDK. */
+  @Option("jar file containing an instrumented JDK")
+  public static @Nullable File rt_file = null;
+
+  /** Causes DynComp to traverse exactly those fields visible from a given program point. */
+  @Option("use standard visibility")
+  public static boolean std_visibility = false;
+
+  /** Depth to which to examine structure components. */
+  @Option("variable nesting depth")
+  public static int nesting_depth = 2;
+
+  /** Do not use the instrumented JDK. No longer an option, now derived from rt_file option. */
+  public static boolean no_jdk = false;
+
+  // The following are internal debugging options primarily for use by the DynComp maintainers.
+  // They are not documented in the Daikon User Manual.
+
+  /** Print detailed information on which classes are transformed. */
+  @Option("Print detailed information on which classes are transformed")
+  public static boolean debug_transform = false;
+
+  /** Print detailed information on variables being observed. */
+  @Option("Print detailed information on variables being observed")
+  public static boolean debug_decl_print = false;
 
   /**
    * Path to java agent jar file that performs the transformation. The "main" procedure is
@@ -103,18 +108,13 @@ public class DynComp {
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
   public static @MonotonicNonNull File premain = null;
 
-  // /** Thread that copies output from target to our output */
-  // public static StreamRedirectThread out_thread;
-
-  // /** Thread that copies stderr from target to our stderr */
-  // public static StreamRedirectThread err_thread;
-
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
+  /** Log file if debugging is enabled. */
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the dcomp command line. */
+  /** Synopsis for the DynComp command line. */
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
 
   /**
@@ -128,8 +128,7 @@ public class DynComp {
     Options options = new Options(synopsis, DynComp.class);
     // options.ignore_options_after_arg (true);
     String[] target_args = options.parse(true, args);
-    boolean ok = check_args(options, target_args);
-    if (!ok) System.exit(1);
+    check_args(options, target_args);
 
     // Turn on basic logging if the debug was selected
     basic.enabled = debug;
@@ -155,21 +154,22 @@ public class DynComp {
   }
 
   /**
-   * Check the resulting arguments for legality. Prints a message and returns false if there was an
+   * Check the command-line arguments for legality. Prints a message and exits if there was an
    * error.
+   *
+   * @param options set of legal options to DynComp
+   * @param target_args arguments being passed to the target program
    */
-  public static boolean check_args(Options options, String[] target_args) {
-
-    // Make sure arguments have legal values
+  public static void check_args(Options options, String[] target_args) {
     if (nesting_depth < 0) {
       System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
       options.printUsage();
-      return false;
+      System.exit(1);
     }
     if (target_args.length == 0) {
       System.out.println("target program must be specified");
       options.printUsage();
-      return false;
+      System.exit(1);
     }
     if (rt_file != null && rt_file.getName().equalsIgnoreCase("NONE")) {
       no_jdk = true;
@@ -179,10 +179,8 @@ public class DynComp {
       // if --rt-file was given, but doesn't exist
       System.out.printf("rt-file %s does not exist%n", rt_file);
       options.printUsage();
-      return false;
+      System.exit(1);
     }
-
-    return true;
   }
 
   /**
@@ -316,9 +314,24 @@ public class DynComp {
     // rounded up to nearest G(igabyte)
     cmdlist.add(
         "-Xmx" + (int) Math.ceil(java.lang.Runtime.getRuntime().maxMemory() / 1073741824.0) + "G");
-    if (!no_jdk) {
-      // prepend to rather than replace bootclasspath
-      cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
+
+    if (BcelUtil.javaVersion <= 8) {
+      if (!no_jdk) {
+        // prepend to rather than replace bootclasspath
+        cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
+      }
+    } else {
+      if (!no_jdk) {
+        // If we are processing JDK classes, then we need our code on the bootclasspath as well.
+        // Otherwise, references to DCRuntime from the JDK would fail.
+        cmdlist.add("-Xbootclasspath/a:" + rt_file + path_separator + cp);
+        // allow java.base to access daikon.jar (for instrumentation runtime)
+        cmdlist.add("--add-reads");
+        cmdlist.add("java.base=ALL-UNNAMED");
+        // replace default java.base with our instrumented version
+        cmdlist.add("--patch-module");
+        cmdlist.add("java.base=" + rt_file);
+      }
     }
 
     cmdlist.add(String.format("-javaagent:%s=%s", premain, premain_args));
