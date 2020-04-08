@@ -226,7 +226,7 @@ public class ParameterDoclet {
       String fieldname = field.substring(i + 1);
       Class<?> c = ReflectionPlume.classForName(classname);
       Field f = c.getField(Configuration.PREFIX + fieldname);
-      @SuppressWarnings("nullness:argument.type.incompatible") // null object OK for static field
+      // @SuppressWarnings("nullness:argument.type.incompatible") // null object OK for static field
       Object value = f.get(null);
       return "The default value is `" + value + "'.";
     } catch (Exception e) {
