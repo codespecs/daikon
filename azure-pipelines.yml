@@ -118,7 +118,7 @@ jobs:
 - job: typecheck_jdk8
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8:latest
+  container: mdernst/daikon-ubuntu-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -132,7 +132,7 @@ jobs:
 - job: typecheck_jdk11
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -218,7 +218,7 @@ jobs:
 - job: misc_fedora_jdk11
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk11:latest
+  container: mdernst/daikon-fedora-jdk11-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -324,7 +324,7 @@ jobs:
 - job: misc_centos_jdk11
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk11:latest
+  container: mdernst/daikon-centos-jdk11-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
