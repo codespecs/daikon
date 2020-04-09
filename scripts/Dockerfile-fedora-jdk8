@@ -21,15 +21,17 @@ RUN dnf -qy upgrade && dnf -qy install \
   rsync \
   tar \
   unzip \
-  which \
+  which
+
+RUN dnf -q -y install \
   java-1.8.0-openjdk \
-  java-1.8.0-openjdk-devel \
+  java-1.8.0-openjdk-devel
 
 # This enables the repository that contains jq
 RUN dnf -q -y install \
-  epel-release \
+  epel-release
 
 RUN dnf -q -y install \
-  jq \
+  jq
 
 RUN dnf -q clean all

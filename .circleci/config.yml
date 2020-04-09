@@ -18,9 +18,41 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
+  quick-txt-diff-ubuntu-jdk11:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk11
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
   nonquick-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
+  nonquick-txt-diff-ubuntu-jdk11:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk11
     steps:
       - restore_cache:
           keys:
@@ -50,9 +82,41 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
+  non-txt-diff-ubuntu-jdk11:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk11
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+
   misc-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8-plus
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-misc.sh
+
+  misc-ubuntu-jdk11:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk11-plus
     steps:
       - restore_cache:
           keys:
@@ -82,9 +146,41 @@ jobs:
             - ".git"
       - run: ./scripts/test-kvasir.sh
 
+  kvasir-ubuntu-jdk11:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk11-plus
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-kvasir.sh
+
   quick-txt-diff-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
+  quick-txt-diff-fedora-jdk11:
+    docker:
+      - image: mdernst/daikon-fedora-jdk11
     steps:
       - restore_cache:
           keys:
@@ -114,6 +210,22 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
+  nonquick-txt-diff-fedora-jdk11:
+    docker:
+      - image: mdernst/daikon-fedora-jdk11
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
   non-txt-diff-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8
@@ -130,9 +242,41 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
+  non-txt-diff-fedora-jdk11:
+    docker:
+      - image: mdernst/daikon-fedora-jdk11
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+
   misc-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8-plus
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-misc.sh
+
+  misc-fedora-jdk11:
+    docker:
+      - image: mdernst/daikon-fedora-jdk11-plus
     steps:
       - restore_cache:
           keys:
@@ -163,9 +307,42 @@ jobs:
   #           - ".git"
   #     - run: ./scripts/test-kvasir.sh
 
+  ## Flaky; needs to be fixed.
+  # kvasir-fedora-jdk11:
+  #   docker:
+  #     - image: mdernst/daikon-fedora-jdk11-plus
+  #   steps:
+  #     - restore_cache:
+  #         keys:
+  #           - source-v1-{{ .Branch }}-{{ .Revision }}
+  #           - source-v1-{{ .Branch }}-
+  #           - source-v1-
+  #     - checkout
+  #     - save_cache:
+  #         key: source-v1-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - ".git"
+  #     - run: ./scripts/test-kvasir.sh
+
   quick-txt-diff-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
+  quick-txt-diff-centos-jdk11:
+    docker:
+      - image: mdernst/daikon-centos-jdk11
     steps:
       - restore_cache:
           keys:
@@ -195,9 +372,41 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
+  nonquick-txt-diff-centos-jdk11:
+    docker:
+      - image: mdernst/daikon-centos-jdk11
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
   non-txt-diff-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+
+  non-txt-diff-centos-jdk11:
+    docker:
+      - image: mdernst/daikon-centos-jdk11
     steps:
       - restore_cache:
           keys:
@@ -230,9 +439,44 @@ jobs:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
+  misc-centos-jdk11:
+    docker:
+      - image: mdernst/daikon-centos-jdk11-plus
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
+
   kvasir-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8-plus
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-kvasir.sh
+
+  kvasir-centos-jdk11:
+    docker:
+      - image: mdernst/daikon-centos-jdk11-plus
     steps:
       - restore_cache:
           keys:
@@ -286,42 +530,104 @@ jobs:
           command: scripts/test-typecheck.sh
           no_output_timeout: 30m
 
+  typecheck-jdk11:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk11
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: env
+      - run:
+          command: scripts/test-typecheck.sh
+          no_output_timeout: 30m
+
 
 workflows:
   version: 2
   build:
     jobs:
       - quick-txt-diff-ubuntu-jdk8
+      - quick-txt-diff-ubuntu-jdk11:
+          requires:
+            - quick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-ubuntu-jdk8
+      - nonquick-txt-diff-ubuntu-jdk11:
+          requires:
+            - nonquick-txt-diff-ubuntu-jdk8
       - non-txt-diff-ubuntu-jdk8
+      - non-txt-diff-ubuntu-jdk11:
+          requires:
+            - non-txt-diff-ubuntu-jdk8
       - misc-ubuntu-jdk8
+      - misc-ubuntu-jdk11:
+          requires:
+            - misc-ubuntu-jdk8
       - kvasir-ubuntu-jdk8
+      - kvasir-ubuntu-jdk11:
+          requires:
+            - kvasir-ubuntu-jdk8
       - quick-txt-diff-fedora-jdk8:
           requires:
             - quick-txt-diff-ubuntu-jdk8
+      - quick-txt-diff-fedora-jdk11:
+          requires:
+            - quick-txt-diff-fedora-jdk8
       - nonquick-txt-diff-fedora-jdk8:
           requires:
             - nonquick-txt-diff-ubuntu-jdk8
+      - nonquick-txt-diff-fedora-jdk11:
+          requires:
+            - nonquick-txt-diff-fedora-jdk8
       - non-txt-diff-fedora-jdk8:
           requires:
             - non-txt-diff-ubuntu-jdk8
+      - non-txt-diff-fedora-jdk11:
+          requires:
+            - non-txt-diff-fedora-jdk8
       - misc-fedora-jdk8:
           requires:
             - misc-ubuntu-jdk8
+      - misc-fedora-jdk11:
+          requires:
+            - misc-fedora-jdk8
       # - kvasir-fedora-jdk8:
       #     requires:
       #       - kvasir-ubuntu-jdk8
+      # - kvasir-fedora-jdk811
+      #     requires:
+      #       - kvasir-fedora-jdk8
       - quick-txt-diff-centos-jdk8:
           requires:
             - quick-txt-diff-ubuntu-jdk8
+      - quick-txt-diff-centos-jdk11:
+          requires:
+            - quick-txt-diff-centos-jdk8
       - nonquick-txt-diff-centos-jdk8:
           requires:
             - nonquick-txt-diff-ubuntu-jdk8
+      - nonquick-txt-diff-centos-jdk11:
+          requires:
+            - nonquick-txt-diff-centos-jdk8
       - non-txt-diff-centos-jdk8:
           requires:
             - non-txt-diff-ubuntu-jdk8
+      - non-txt-diff-centos-jdk11:
+          requires:
+            - non-txt-diff-centos-jdk8
       - misc-centos-jdk8:
           requires:
             - misc-ubuntu-jdk8
+      - misc-centos-jdk11:
+          requires:
+            - misc-centos-jdk8
 #      - typecheck-with-included-CF-jdk8
       - typecheck-with-locally-built-CF-jdk8
+      - typecheck-jdk11
