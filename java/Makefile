@@ -1132,7 +1132,7 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 ## Test that Javadoc exists.
 ## You should regenerate api/ after running this.
 requireJavadoc: $(JAVA_FILES)
-	${JAVA} -cp $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) org.plumelib.javadoc.RequireJavadoc ${DAIKONDIR}/java
+	${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) ${DAIKONDIR}/java
 
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
