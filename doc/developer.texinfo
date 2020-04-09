@@ -2320,7 +2320,7 @@ Set the version number to an even number.
 You may:
 @itemize
 @item
-Manually editfile @file{$DAIKONDIR/doc/VERSION}, or
+Manually edit file @file{$DAIKONDIR/doc/VERSION}, or
 @item
 If the revision number just needs to be incremented
 by 1 (to go from odd to even) you may use:
@@ -2369,7 +2369,7 @@ build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
 (http://plse.cs.washington.edu/staging-daikon/).
 
-@c can't use 'daikon' as will conflicit with jar build if no '/scratch' on system.
+@c can't use 'daikon' as will conflict with jar build if no '/scratch' on system.
 
 @example
 mkdir -p /tmp/$USER
@@ -4367,7 +4367,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  lt IntLessThan makeEmpty LessThan GreaterThan orig theArray TR
 @c  LocalWords:  FloatLessThan DisjSets SequenceScalarSubscriptFactory pxref co
 @c  LocalWords:  Javadoc Varinfo logOn getClass foo vars isLoggable logDetail
-@c  LocalWords:  msg showTrackback args webserver addInvariant href
+@c  LocalWords:  msg showTrackback args webserver addInvariant href tex m4
 @c  LocalWords:  inv PptTopLevel FileIO php isObviousStatically LCS Nimmer's cp
 @c  LocalWords:  isObviousDynamically Toh Win's nohierarchy noequality diffs pl
 @c  LocalWords:  diff InvariantFormatTest classpath ioa jml aString valueOf val
@@ -4378,7 +4378,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx vis su
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
-@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname rt
+@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname rt toc
 @c  LocalWords:  VarComparability instrumenter struct Hatcliff Sinha Vibha xref
 @c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
 @c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger
@@ -4388,4 +4388,15 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  boolean deallocations suppressions substring traceback Emacs
 @c  LocalWords:  filename tracebacks inferencing ExistingProjectIntoWorkspace
 @c  LocalWords:  screenshot popup junit jakarta getopt breakpoint TODO url Baz
-@c  LocalWords:  daikonuser mangold
+@c  LocalWords:  daikonuser mangold hsize normaloffset nospellcheck ifset
+@c  LocalWords:  paragraphindent firstparagraphindent codequotebacktick v1
+@c  LocalWords:  ifclear evenheading thispage thischaptername oddheading
+@c  LocalWords:  thischapternum thissectionnum thissectionname sudo jdk v2
+@c  LocalWords:  everyfooting exampleindent openjdk ctags graphviz netpbm
+@c  LocalWords:  texlive Makefile automake autoconf binutils dev dfn AMD64
+@c  LocalWords:  UnaryInvariant BinaryInvariant TernaryInvariant EM64T www
+@c  LocalWords:  runtime var1 PptSlice1 over1 config EXIT99 var2 var3 val1
+@c  LocalWords:  EXITNN val2 arg1 arg2 EXIT35 plse fjalar myfjalar ln nsf
+@c  LocalWords:  travis chmod og rwx BIBDIR CHECKERFRAMEWORK pipefail wget
+@c  LocalWords:  readelf DAIKONVERSION xargs codespecs kvasir repo
+@c  LocalWords:  untracked

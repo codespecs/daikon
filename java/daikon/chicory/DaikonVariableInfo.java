@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.Daikon.BugInDaikon;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.reflection.ReflectionPlume;
 import daikon.plumelib.reflection.Signatures;
@@ -787,10 +788,11 @@ public abstract class DaikonVariableInfo
             // If the class has already been statically initialized, get its hash
             if (Runtime.isInitialized(className)) {
               try {
-                @SuppressWarnings("nullness") // the field is static
+                @SuppressWarnings("nullness") // the field is static, so null is OK as argument
                 Object fieldValue = field.get(null);
                 value = Integer.toString(System.identityHashCode(fieldValue));
               } catch (Exception e) {
+                throw new BugInDaikon("Problem with field " + field);
               }
             }
           }
