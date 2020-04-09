@@ -51,8 +51,8 @@ reflection-util-0.2.2.jar : https://repo.maven.apache.org/maven2/org/plumelib/re
   wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/0.2.2/reflection-util-0.2.2.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
-require-javadoc-0.1.2.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/
-  wget https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.1.2/require-javadoc-0.1.2.jar
+require-javadoc-0.2.0-all.jar : https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/require-javadoc/0.2.0/require-javadoc-0.2.0.jar
 
 ---------------------------------------------------------------------------
 
