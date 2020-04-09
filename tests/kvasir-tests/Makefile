@@ -15,9 +15,9 @@
 
 ifeq (4.0,$(firstword $(sort $(MAKE_VERSION) 4.0)))
   # Version 4.0 or higher
-  MPARG := -Orecurse
+  MPARG ?= -Orecurse
 else
-  MPARG :=
+  MPARG ?=
 endif
 
 default: summary-w-daikon
