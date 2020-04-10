@@ -73,7 +73,7 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
 endif
 
 # -docletpath doesn't seem to respect path wildcards as -cp does
-DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*.jar):${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
+DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -1131,15 +1131,8 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 
 ## Test that Javadoc exists.
 ## You should regenerate api/ after running this.
-requireJavadocPrivate: jar $(JAVA_FILES)
-	mkdir -p $(JAVADOC_DEST)
-	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS_COMMON) \
-		-private \
-		-doclet org.plumelib.javadoc.RequireJavadoc \
-                -docletpath "${DOCLETPATH}" \
-		@javadoc-files.txt
-	@rm -f javadoc-files.txt
+requireJavadoc: $(JAVA_FILES)
+	${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) ${DAIKONDIR}/java
 
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
