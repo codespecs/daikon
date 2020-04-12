@@ -2243,20 +2243,22 @@ in the process.
 @item
 Verify that Daikon passes its tests.
 
-All of the following jobs should be green:
+All of the jobs at @url{https://dev.azure.com/mernstdaikon/daikon/_build} should
+pass (they should be green).  Here is a list of them:
+
 @exampleindent 0
 @example
-@* @url{https://dev.azure.com/codespecs/daikon/_build/latest?definitionId=1&branchName=master}
+@* @url{https://dev.azure.com/mernstdaikon/daikon/_build/latest?definitionId=1&branchName=master}
 @html
 <img
-src="https://dev.azure.com/codespecs/daikon/_apis/build/status/codespecs.daikon?branchName=master"
-alt="Azure Pipelines codespecs/daikon status"/>
+src="https://dev.azure.com/mernstdaikon/daikon/_apis/build/status/codespecs.daikon?branchName=master"
+alt="Azure Pipelines mernstdaikon/daikon status"/>
 @end html
-@* @url{https://dev.azure.com/codespecs/fjalar/_build/latest?definitionId=1&branchName=master}
+@* @url{https://dev.azure.com/mernstdaikon/fjalar/_build/latest?definitionId=1&branchName=master}
 @html
 <img
-src="https://dev.azure.com/codespecs/fjalar/_apis/build/status/codespecs.fjalar?branchName=master"
-alt="Azure Pipelines codespecs/fjalar status"/>
+src="https://dev.azure.com/mernstdaikon/fjalar/_apis/build/status/codespecs.fjalar?branchName=master"
+alt="Azure Pipelines mernstdaikon/fjalar status"/>
 @end html
 @end example
 @exampleindent 1
