@@ -8854,10 +8854,11 @@ its users.
 The following individuals have contributed to Daikon:
 @nospellcheck{
 @c You can approximate this by running the following command:
-@c   git-authors --texinfo --punctuation
-@c but it's incomplete because it needs to look at other repositories such
-@c as Fjalar and Celeriac.
-Adam Czeisler,
+@c   git-authors --texinfo --punctuation > contributors-daikon.txt
+@c   (cd ../../daikon-dot-net-front-end && git-authors --texinfo --punctuation) > contributors-daikon-dot-net-front-end.txt
+@c   (cd ../../fjalar && git-authors --texinfo --punctuation) > contributors-fjalar.txt
+@c   cat contributors-*.txt | sort | uniq
+@c but it still lacks some names in this list.
 Alan Donovan,
 Alan Dunn,
 Alexandru Salcianu,
@@ -8904,6 +8905,7 @@ Konstantin Weitz,
 Laure Thompson,
 Lee Lin,
 Mark Roberts,
+Massimiliano Menarini,
 Matthew Tschantz,
 Melissa Hao,
 Michael Ernst,
@@ -8923,6 +8925,8 @@ Tatyana Nikolova,
 Todd Schiller,
 Toh Ne Win,
 Vikash Mansinghka,
+Vincent Hellendoorn,
+Weitian Xing,
 Werner Dietl,
 William Griswold,
 Yoav Zibin,
