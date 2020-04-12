@@ -3,7 +3,7 @@ This directory contains dependences that are put in daikon.jar.
 All .jar files in this directory should contain Java 8 bytecodes,
 so that Daikon will run under Java 8.
 
-bcel-6.4.1.1.jar
+bcel-6.4.1.1.jar : https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel
   wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel/6.4.1.1/bcel-6.4.1.1.jar
 
 bcel-util-1.1.8.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
@@ -11,7 +11,7 @@ bcel-util-1.1.8.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-uti
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
-  VER=3.2.0
+  VER=3.3.0
   wget https://github.com/typetools/checker-framework/releases/download/checker-framework-$VER/checker-framework-$VER.zip
   unzip checker-framework-$VER.zip
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework-$VER/checker/dist/jdk8.jar checker-framework/
