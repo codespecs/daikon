@@ -1099,7 +1099,7 @@ endif
 # Build javadoc using the daikon package and all subpackages of daikon.
 .PHONY: api
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
-ifdef SKIP_JAVADOC
+ifeq ($(SKIP_JAVADOC),1)
 	@echo Skipping javadoc on JDK 1.8 because of https://bugs.openjdk.java.net/browse/JDK-8215542
 else
 	mkdir -p $(JAVADOC_DEST)
