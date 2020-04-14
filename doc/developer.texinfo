@@ -2048,7 +2048,7 @@ A clone of
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
 [TODO: Is this really necessary?]
-@c Example:  export JAVA_HOME=/usr/lib/jvm/java
+@c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 
 @item
 File @file{~/private/.travis-access-token} must contain the text after
