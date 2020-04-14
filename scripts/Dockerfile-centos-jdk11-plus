@@ -24,6 +24,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   unzip \
   which
 
+# Needed for JDK 11, I guess.
 RUN dnf -q -y install \
   rsync
 
@@ -48,6 +49,7 @@ RUN dnf -q -y install \
   netpbm-progs \
   python2 \
   python3 \
+  rsync \
   texlive \
   wget
 
