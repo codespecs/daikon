@@ -440,7 +440,7 @@ staging:
 	@echo "]2;Building Javadoc"
 	mkdir $(STAGING_DIR)/download/api
 	# Javadoc is skipped on Java 8.  Hard-coded path is a hack.
-	(export JAVA_HOME=/usr/lib/jvm/java-11; export PATH=$JAVA_HOME/bin:$PATH; cd java; $(MAKE) 'JAVADOC_DEST=$(STAGING_DIR)/download/api' javadoc)
+	(export JAVA_HOME=/usr/lib/jvm/java-11; export PATH=${JAVA_HOME}/bin:${PATH}; cd java; $(MAKE) 'JAVADOC_DEST=$(STAGING_DIR)/download/api' javadoc)
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	mkdir $(STAGING_DIR)/download/doc
