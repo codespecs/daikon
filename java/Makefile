@@ -512,16 +512,15 @@ dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
 	$(JAVA_COMMAND) -Xmx1500m daikon.dcomp.BuildJDK $(DCOMP_RT)
+# "then" clause is Java 8, "else" clause is Java 9+.
+# For Java 9+, there appears to be a bug in the Java reflection invoke code that it
+# does not check that the arg list matches.  Hence, it tries to invoke
+# our instrumented version from non instrumented code.  This causes a
+# failure during java initialization of boot layer.  Thus we must remove
+# the problem classes from dcomp_rt.jar.
 	@if test -f $(DCOMP_RT)/META-INF/MANIFEST.MF; then \
-	  # Java 8 \
 	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
 	else \
-	  # Java 9+ \
-	  # There appears to be a bug in the Java reflection invoke code that it \
-	  # does not check that the arg list matches.  Hence, it tries to invoke \
-	  # our instrumented version from non instrumented code.  This causes a \
-	  # failure during java initialization of boot layer.  Thus we must remove \
-	  # the problem classes from dcomp_rt.jar. \
 	  rm $(DCOMP_RT)/java/lang/invoke/VarHandleInts?Field*.class; \
 	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
 	fi
