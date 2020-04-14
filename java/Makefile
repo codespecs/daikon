@@ -1100,6 +1100,8 @@ endif
 .PHONY: api
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 ifeq ($(SKIP_JAVADOC),1)
+	java -version
+	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
 	@echo Skipping javadoc on JDK 1.8 because of https://bugs.openjdk.java.net/browse/JDK-8215542
 else
 	mkdir -p $(JAVADOC_DEST)
