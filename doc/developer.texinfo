@@ -2254,10 +2254,10 @@ pass (they should be green).  Here is a list of them:
 src="https://dev.azure.com/mernstdaikon/daikon/_apis/build/status/codespecs.daikon?branchName=master"
 alt="Azure Pipelines mernstdaikon/daikon status"/>
 @end html
-@* @url{https://dev.azure.com/mernstdaikon/fjalar/_build/latest?definitionId=1&branchName=master}
+@* @url{https://dev.azure.com/mernstdaikon/daikon/_build/latest?definitionId=2&branchName=master}
 @html
 <img
-src="https://dev.azure.com/mernstdaikon/fjalar/_apis/build/status/codespecs.fjalar?branchName=master"
+src="https://dev.azure.com/mernstdaikon/daikon/_apis/build/status/codespecs.fjalar?branchName=master"
 alt="Azure Pipelines mernstdaikon/fjalar status"/>
 @end html
 @end example
@@ -2349,6 +2349,7 @@ Now, update the appropriate files with the date and version number
 of the release and commit these changes back to the repository:
 
 @example
+make update-run-google-java-format
 make update-and-commit-version
 @end example
 
@@ -2374,6 +2375,8 @@ build everything to be distributed and copy it to the temporary staging area
 @c can't use 'daikon' as will conflict with jar build if no '/scratch' on system.
 
 @example
+# First, start a separate, new Bash command shell.  Don't kill your old one.
+
 mkdir -p /tmp/$USER
 cd /tmp/$USER
 rm -rf stage-daikon
@@ -2420,7 +2423,7 @@ the incorrect link.
 Here is a workflow that may be used to deal with broken links:
 @itemize
 @item
-Use the @samp{Wayback Machine}, http://archive.org/web/, to see what the old content was.
+Use the @samp{Wayback Machine}, @url{http://archive.org/web/}, to see what the old content was.
 @item
 Do a web search on the content to see if the page has relocated elsewhere.
 @item
