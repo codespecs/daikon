@@ -364,7 +364,7 @@ test-staged-dist: $(STAGING_DIR)
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 ../utils/plume-scripts/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
-	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make all_javac)
+	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; $(MAKE) all_javac)
 	## Test that these new .class files work properly.
 	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) junit)
 	## Test the main target of the makefile.
@@ -388,7 +388,7 @@ repository-test:
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
 #	source ${DAIKONDIR}/scripts/daikon.bashrc
-	cd daikon && make
+	cd daikon && $(MAKE)
 
 
 validate:
@@ -440,7 +440,7 @@ staging:
 	@echo "]2;Building Javadoc"
 	mkdir $(STAGING_DIR)/download/api
 	# Javadoc is skipped on Java 8.  Hard-coded path is a hack.
-	(export JAVA_HOME=/usr/lib/jvm/java-11; export PATH=$JAVA_HOME/bin:$PATH; cd java; make 'JAVADOC_DEST=$(STAGING_DIR)/download/api' javadoc)
+	(export JAVA_HOME=/usr/lib/jvm/java-11; export PATH=$JAVA_HOME/bin:$PATH; cd java; $(MAKE) 'JAVADOC_DEST=$(STAGING_DIR)/download/api' javadoc)
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	mkdir $(STAGING_DIR)/download/doc
@@ -451,7 +451,7 @@ staging:
 	cd doc/www && ${RSYNC_AR} $(WWW_DAIKON_FILES) $(STAGING_DIR)
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
-	cd doc/www && make pubs
+	cd doc/www && $(MAKE) pubs
 	mkdir $(STAGING_DIR)/pubs
 	cp -pR doc/www/pubs/* $(STAGING_DIR)/pubs
 	cp -p doc/daikon-favicon.png $(STAGING_DIR)
