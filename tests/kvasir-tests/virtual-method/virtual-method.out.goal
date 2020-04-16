@@ -14,4 +14,5 @@ Shape 7 has 3 sides
 Shape 8 has 4 sides
 Shape 9 has 3 sides
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

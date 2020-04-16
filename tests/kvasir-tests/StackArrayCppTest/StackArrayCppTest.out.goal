@@ -22,4 +22,5 @@ My second stack: MAX_ELTS: 5, NUM_STACKS_CREATED: 2
 
 !PRIVATE!1001
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

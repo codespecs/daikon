@@ -68,4 +68,5 @@ IDUM      REXA     REYA     REZA     THEA     PHEA     PSEA
 
 ** End writing output file: gr2712.dat 
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

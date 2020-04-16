@@ -20,4 +20,5 @@ pointPtr + 3 = <HEAP_ADDR>
 pointPtr + 4 = <HEAP_ADDR>
 parc________________parc__________________________parc______________________________________________
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
