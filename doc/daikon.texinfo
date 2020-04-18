@@ -8484,7 +8484,8 @@ able to assist you.
 Your bug report should include:
 @itemize @bullet
 @item
-the version of Daikon, which appears in the file @file{daikon/README.txt}
+how you obtained Daikon (did you download its distribution or build it from source?),
+and the version of Daikon, which appears in the file @file{daikon/README.txt}
 and is also printed when you run Daikon.
 @c ; also, whether you are running
 @c from the @file{.class} files or from the @file{.jar} file.

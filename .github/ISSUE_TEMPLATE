@@ -1,9 +1,9 @@
 Thanks for submitting an issue.
 As noted in the instructions for submitting an issue at https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Reporting-problems, please include at least the following with your report:
 
-The version of Daikon, the output of `java -version`, and the operating system version.
+The output of `java -version`, and the operating system version.
 
-The commands you ran, so that we can paste them into a command terminal.  Please don't omit any steps, including installing software or setting environment varibales.
+The commands you ran, so that we can paste them into a command terminal.  Please don't omit any steps, including installing software (including Daikon, so that we can see whether you downloaded its distribution or cloned it from its version control repository) and setting environment variables.
 
 A transcript of all the output (as text, not a screenshot).
 
