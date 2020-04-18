@@ -37,12 +37,12 @@ BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
 ifeq (i386, $(shell uname -i))
-DAIKON := java -Xmx960m -XX:MaxPermSize=480M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx960m -XX:MaxPermSize=480M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
+DAIKON := java -Xmx960m -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV := java -Xmx960m -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 else
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -ea -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
+DAIKON := java -ea -Xmx2500M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV := java -Xmx2500M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 endif
 
 default: summary-w-daikon
@@ -61,6 +61,9 @@ else
 # Standard version of CentOS
        GOAL := goal-CentOS1908
 endif
+endif
+ifeq ($(OS_REL),8.1.1911)
+       GOAL := goal-CentOS1911
 endif
 ifeq ($(OS_REL),7.6.1810)
        GOAL := goal-CentOS1810

@@ -201,7 +201,7 @@ CHICORY_EXEC := ${DAIKONDIR}/java/daikon/Chicory.class
 
 # As of JDK 1.3 (and 1.4, I think), don't use "-server" here.
 # It causes incorrect optimizations that are evidenced by ">>" right shifts.
-RUN_JAVA?=$(JAVA) -ea -Xmx1500m -cp "$(DAIKON_TESTS_CLASSPATH)"  # -XX:MaxPermSize=256M
+RUN_JAVA?=$(JAVA) -ea -Xmx1500m -cp "$(DAIKON_TESTS_CLASSPATH)"
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DAIKON = $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.Daikon
 PRINT_INVARIANTS_CLASS?=${DAIKONDIR}/java/daikon/PrintInvariants.class
