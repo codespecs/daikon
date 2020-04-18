@@ -199,7 +199,7 @@ need to have on your path.
 To install all these dependencies under Ubuntu, run the command:
 @exampleindent 2
 @example
-sudo apt-get install openjdk-8-jdk gcc ctags graphviz netpbm texlive texinfo
+sudo apt-get install -y openjdk-8-jdk gcc ctags graphviz netpbm texlive texlive-generic-recommended texinfo
 @end example
 @exampleindent 5
 Similar commands would be used with other package management systems
@@ -216,7 +216,7 @@ To override the default Java compiler (@samp{javac}), create a
 @file{Makefile.user} file in the @file{daikon} (@env{$DAIKONDIR}) directory and add a line
 like the following.
 @example
-JAVAC ?= jikes -g +E +F
+JAVAC ?= eclipsec -g
 @end example
 
 @cindex .jpp files

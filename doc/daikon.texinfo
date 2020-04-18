@@ -241,7 +241,7 @@ Place three commands in your shell initialization file.
 Optionally, customize your installation.
 
 @item
-Compile Daikon and build other tools.
+Optionally, compile Daikon and build other tools.
 
 @end enumerate
 
@@ -311,12 +311,12 @@ Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
 export DAIKONDIR=@var{daikonparent}/daikon-5.8.1
-# Either JAVA_HOME must be set, or javac must be on the execution path.
-# source $DAIKONDIR/scripts/daikon.bashrc
+source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
 After editing your shell initialization file, either execute the commands
-you placed in it, or else log out and log back in to achieve the same
+you placed in it (e.g., run @command{source ~/.bashrc}),
+or else log out and log back in to achieve the same
 effect.
 
 @item
