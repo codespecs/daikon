@@ -178,10 +178,20 @@ so you do not need to compile them yourself unless you make changes.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
-When you compile Daikon, either environment variable
-@env{JAVA_HOME} must be set, or @code{javac} must be on the execution path.
-See the installation instructions
-(@ref{Installing Daikon,,,daikon,Daikon User Manual}) for more details.
+The requirements for compiling Daikon are explained in
+more detail below.
+To install all needed dependencies under Ubuntu, run these commands:
+@exampleindent 2
+@example
+sudo apt-get install -y openjdk-11-jdk gcc ctags git graphviz make netpbm \
+  texlive texlive-generic-recommended texinfo \
+  autoconf automake binutils-dev m4 zlib1g-dev
+@end example
+@exampleindent 5
+(You may use openjdk-8-jdk in place of openjdk-11-jdk.)
+
+Similar commands would be used with other package management systems
+on other operating systems.
 
 
 @menu
@@ -193,19 +203,9 @@ See the installation instructions
 @node    Requirements for compiling Daikon
 @subsection Requirements for compiling Daikon
 
-The list at the end of this section identifies the software you will
-need to have on your path.
-
-To install all these dependencies under Ubuntu, run the command:
-@exampleindent 2
-@example
-sudo apt-get install -y openjdk-8-jdk gcc ctags graphviz netpbm texlive texlive-generic-recommended texinfo
-@end example
-@exampleindent 5
-Similar commands would be used with other package management systems
-on other operating systems.
-
 @itemize @bullet
+
+Here is an explanation of some of the software you will need.
 
 @item
 a Java compiler such as @samp{javac}.  This is needed because Daikon is
@@ -218,6 +218,11 @@ like the following.
 @example
 JAVAC ?= eclipsec -g
 @end example
+
+Either environment variable
+@env{JAVA_HOME} must be set, or @code{javac} must be on the execution path.
+See the installation instructions
+(@ref{Installing Daikon,,,daikon,Daikon User Manual}) for more details.
 
 @cindex .jpp files
 @cindex jpp files
@@ -250,17 +255,9 @@ This is needed to make the documentation (via @command{make -C $DAIKONDIR/doc}).
 In order to compile Kvasir, the Daikon front end for the C language
 (@pxref{Kvasir,,,daikon,Daikon User Manual}), you will need some
 additional tools beyond those required to compile Daikon.
+The commands to install them under Ubuntu appear above.
 
 Note that Kvasir does not work on Mac OS.
-
-To install these dependencies under Ubuntu, run the command:
-@exampleindent 2
-@example
-sudo apt-get install m4 automake autoconf binutils-dev
-@end example
-@exampleindent 5
-Similar commands would be used with other package management systems
-on other operating systems.
 
 
 @node    Version control repository
