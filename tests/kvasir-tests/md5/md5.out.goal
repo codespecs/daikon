@@ -8,4 +8,5 @@ Begin processing disambiguation file "./md5.disambig" ...
 Done processing disambiguation file "./md5.disambig"
 350548D43B688570A64C8FDBD6156679
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

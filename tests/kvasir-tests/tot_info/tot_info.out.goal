@@ -48,6 +48,7 @@ table all zeros
 2info =  0.00	df =  2	q =  1.0000
 * table too large *
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
 ==PID== COPYRIGHT
@@ -99,4 +100,5 @@ table all zeros
 2info =  0.00	df =  2	q =  1.0000
 * table too large *
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

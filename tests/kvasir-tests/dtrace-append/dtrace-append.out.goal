@@ -10,4 +10,5 @@ double globalDouble: <STATIC_ADDR>
 unsigned long long int globalLong: <STATIC_ADDR>
 static const int globalWkdayA: <STATIC_ADDR>
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

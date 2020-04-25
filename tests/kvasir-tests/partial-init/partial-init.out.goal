@@ -29,4 +29,5 @@ Stack:
 ==PID== 
 0000 00000000 00000000 00000000 
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 56 errors from 2 contexts (suppressed: 0 from 0)

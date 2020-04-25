@@ -8,6 +8,7 @@
     final combined CRC = 0x4b010ac1
     0.607:1, 13.176 bits/byte, -64.71% saved, 51 in, 84 out.
 ==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 0000000 42 5a 68 39 31 41 59 26 53 59 4b 01 0a c1 00 00
 0000020 0b 59 80 10 12 40 11 90 00 36 a7 dc 10 20 00 22
