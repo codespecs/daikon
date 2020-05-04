@@ -2462,9 +2462,12 @@ indirect references through stub files.  Two @command{suppress-fragment} entries
 are required.  For the example above, these
 would be:
 @smallexample
---suppress-fragment http://plse.cs.washington.edu/daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir
---suppress-fragment http://plse.cs.washington.edu/staging-daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir
+--suppress-fragment http://plse.cs.washington.edu/daikon/download/doc/developer/\
+Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir
+--suppress-fragment http://plse.cs.washington.edu/staging-daikon/download/doc/developer/\
+Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir
 @end smallexample
+but on two long lines without any @code{\} line continuation characters.
 
 [Time: 8 min]
 
