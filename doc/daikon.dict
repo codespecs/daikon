@@ -25,6 +25,7 @@ changeset
 checkin
 checkins
 checklink
+classfile
 classpath
 codebase
 codespecs
@@ -40,8 +41,8 @@ CVS
 Cygwin
 daikon
 Daikon
-Daikon's
 DAIKONDIR
+Daikon's
 dataflow
 deallocated
 deallocations
@@ -61,14 +62,14 @@ edu
 EM64T
 executables
 fcntl
-filename
 FileIOProgress
+filename
 fjalar
 Fjalar
 Fjalar's
 gcc
-getters
 gdb
+getters
 GitHub
 globals
 hashcode
@@ -77,18 +78,20 @@ html
 Hynger
 IDE
 inferencing
+initializer
+initializers
 inline
 instantiation
 instrumenter
 instrumenters
-initializer
-initializers
 invariant
 invariants
 invariant's
 IOA
 Itanium
+javac
 Javadoc
+jdk
 JDK
 JRE
 JTB
@@ -102,6 +105,7 @@ Kvasir
 Kvasir's
 lexicographically
 LLVM
+lst
 macOS
 Makefile
 Makefiles
@@ -114,6 +118,7 @@ mkdir
 namespace
 namespaces
 nullness
+openjdk
 optimizations
 outliers
 overfitting
@@ -173,6 +178,7 @@ Texinfo
 throwable
 TODO
 toolset
+treenode
 tuple
 tuples
 Udon
@@ -183,6 +189,7 @@ uninstrumented
 unselected
 unsplit
 untyped
+util
 UW
 valgrind
 valgrind's
@@ -196,3 +203,4 @@ workspace
 WSL
 x86
 xmeans
+xml
