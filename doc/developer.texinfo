@@ -2048,15 +2048,6 @@ Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installa
 @c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 
 @item
-File @file{~/private/.travis-access-token} must contain the text after
-``Your access token is@w{ }'' in the output of
-@command{travis login && travis token}.  You might need to install the
-@command{travis} program first by running either @command{gem install travis}
-or @command{sudo apt-get install ruby-dev && sudo gem install travis}.
-Make sure this file is not readable by others, for example by running
-@command{chmod og-rwx ~/private}.
-
-@item
 Optionally, set environment variable @env{BIBDIR} to a clone of
 @uref{https://github.com/mernst/plume-bib}.
 
@@ -2308,7 +2299,7 @@ nothing to commit (use -u to show untracked files)
 If the command output lists any files, they need to be
 committed to the repository and pushed now.
 In that case, you will need to return to step 1 and wait for the
-Travis jobs to complete.
+CI jobs to complete.
 
 [Time: moments]
 
@@ -2489,49 +2480,19 @@ make test-staged-dist
 
 @need 1000
 @item
-Test the distribution on Ubuntu and Mac OS machines, on Travis CI.
-Run the following commands:
+Test the distribution on Ubuntu and Mac OS machines.
 
-@smallexample
-NEW_VERSION=`cat doc/VERSION`
-(cd /tmp && curl -LO --retry 3 https://raw.github.com/plume-lib/trigger-travis/master/trigger-travis.sh)
-sh /tmp/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
-  "Test staging distribution for release $@{NEW_VERSION@}"
-sh /tmp/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
-  "Test staging distribution for release $@{NEW_VERSION@}"
-@end smallexample
-
-and then wait until the following
-two URLs indicate success:
-@* @url{https://travis-ci.org/codespecs/test-daikon-staging/builds}
-@* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx/builds}
+To use Azure Pipelines,
+navigate to
+@url{https://dev.azure.com/mernstdaikon/daikon/_build?definitionId=3&_a=summary}
+and click ``Run pipeline''.
 
 It may take a while for the new jobs to complete,
-if Travis is busy running other jobs for the codespecs organization.
+if the CI service is busy running other jobs for the codespecs organization.
 
 If there is a problem, fix it and start over.
 
 [Time: 15 min]
-
-Note that sometimes Travis has trouble starting Mac OS jobs.  You may wish to log on to a
-Mac OS machine (with the development tools installed) and run the tests manually.
-The example below shows the commands required to do this.  The output
-should show a number of lines beginning with
-"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
-Kvasir was not built because this is not a Linux platform.  Then execution will
-continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
-Success is indicated by invariant output being written to the screen.
-
-@smallexample
-export JAVA_HOME=$(/usr/libexec/java_home)
-mkdir -p ~/tmp
-cd ~/tmp
-curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
-export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
-sh test-distribution.sh
-@end smallexample
-
-[Time: 4 min]
 
 
 @need 1000
@@ -4402,6 +4363,6 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  UnaryInvariant BinaryInvariant TernaryInvariant EM64T www
 @c  LocalWords:  runtime var1 PptSlice1 over1 config EXIT99 var2 var3 val1
 @c  LocalWords:  EXITNN val2 arg1 arg2 EXIT35 plse fjalar myfjalar ln nsf
-@c  LocalWords:  travis chmod og rwx BIBDIR CHECKERFRAMEWORK pipefail wget
+@c  LocalWords:  chmod og rwx BIBDIR CHECKERFRAMEWORK pipefail wget
 @c  LocalWords:  readelf DAIKONVERSION xargs codespecs kvasir repo
 @c  LocalWords:  untracked
