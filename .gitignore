@@ -42,10 +42,9 @@ daikon*.tar
 daikon*.zip
 
 # DynComp
-java/dcomp-rt/dcomp_jdk_static_map
-java/dcomp-rt/dcomp_jdk_static_map
-java/dcomp-rt/META-INF/MANIFEST.MF
-java/dcomp-rt/java/lang/jdk_classes.txt
+# The java/dcomp-rt directory is not deleted after creating dcomp_rt.jar
+# because the directory is useful for debugging.
+java/dcomp-rt
 java/dcomp_rt.jar
 dcomp-rt.jar
 # DynComp testing
