@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.8.? (June ?, 2020)
+
+Fjalar/Kvasir:
+- We updated the underlying Binutils infrastructure to version 2.34.
+
+===========================================================================
+
 5.8.2 (May 4, 2020)
 
 Improved installation instructions.

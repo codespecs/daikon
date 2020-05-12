@@ -1,4 +1,0 @@
-This test is currently disabled in ../Makefile.  This is due to nondeterministic
-behavior on Ubuntu 16.04, which is one of the environments used on Travis. If
-we take the time to figure out the problem or use a different version of Ubuntu
-on Travis, then we could enable the test.

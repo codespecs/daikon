@@ -28,12 +28,6 @@ regression-tests:
 	$(MAKE) nightly-summary-only-w-daikon
 	@$(MAKE) --no-print-directory results
 
-.PHONY: TEMP-regression-tests
-TEMP-regression-tests:
-	$(MAKE) --jobs=4 $(MPARG) TEMP-nightly-tests__diffs-w-daikon-if-working
-	$(MAKE) TEMP-nightly-summary-only-w-daikon
-	@$(MAKE) --no-print-directory results
-
 summary: default-projects__diffs
 	$(MAKE) summary-only
 
@@ -65,21 +59,14 @@ nightly-summary: nightly-tests__diffs-if-working
 nightly-summary-w-daikon: nightly-tests__diffs-w-daikon-if-working
 	$(MAKE) nightly-summary-only-w-daikon
 
-TEMP-nightly-summary-w-daikon: TEMP-nightly-tests__diffs-w-daikon-if-working
-	$(MAKE) TEMP-nightly-summary-only-w-daikon
-
 nightly-summary-only: nightly-tests__summary-if-working__quietly
 
 nightly-summary-only-w-daikon: nightly-tests__summary-w-daikon-if-working__quietly
-
-TEMP-nightly-summary-only-w-daikon: TEMP-nightly-tests__summary-w-daikon-if-working__quietly
 
 clean diffs invs update-goals:
 	$(MAKE) default-projects__$@
 
 nightly-tests__%: default-projects__% medium-tests__%
-	@
-TEMP-nightly-tests__%: default-projects__% TEMP-medium-easy-tests__%
 	@
 
 update-all:
@@ -101,14 +88,7 @@ cpp-tests__%: do-CppFunctionTest__% do-SimpleClassesTest__% \
 	@
 
 medium-tests__%: rothermel-tests__% medium-real-tests__% medium-crypto-tests__% \
-                 missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
-	@
-
-# Omits povray and perl
-# Omits flex-pristine and bzip2
-# Omits flex-rothermel, md5 and space
-TEMP-medium-easy-tests__%: TEMP-medium-real-easy-tests__% \
-                 missing-tests__%
+                 missing-tests__% small-crypto-tests__% do-space__% do-gtest__% do-Dstr__% do-partial-init__%
 	@
 
 pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
@@ -125,39 +105,6 @@ pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
 		   do-NestedStructVarList__%
 	@
 
-ifeq (x86_64,$(shell uname -m))
-ifeq (tern,$(findstring tern,$(shell uname -n)))
-# gtest won't run on tern do to old software
-test-gtest__%:
-	@
-else
-test-gtest__%: do-gtest__%
-	@
-endif
-else
-# gtest is too big to run on 32 bits
-test-gtest__%:
-	@
-endif
-
-ifeq (tern,$(findstring tern,$(shell uname -n)))
-# bc won't run on tern do to old software
-test-bc__%:
-	@
-else
-test-bc__%: do-bc__%
-	@
-endif
-
-ifeq (tern,$(findstring tern,$(shell uname -n)))
-# gzip won't run on tern do to old software
-test-gzip__%:
-	@
-else
-test-gzip__%: do-gzip__%
-	@
-endif
-
 missing-tests__%: do-ConstantTest__% do-ConstMergeTest__% do-ExceptionTest__% \
 		   do-pthread-test__% do-rdtsc__% do-setjmp-test__% \
 		   do-shared-lib__%  do-UnionComp__% do-virtual-method__%
@@ -168,34 +115,19 @@ tws-tests__%: do-SelectGlobalsTest__%
 
 smcc-tests__%: do-function-pointer__% do-two-statics__% do-pointer-levels__% \
                do-string-arrays__% do-static-struct__% do-inline-func__% \
-	       do-printf-interact__% do-iostream-interact__% do-local-ptr__% \
-               do-dtrace-append__%
+		       do-printf-interact__% do-iostream-interact__% do-local-ptr__% \
+		       do-dtrace-append__%
 	@
-
-decls-2-compile: pgbovine-tests__decls-2-compile smcc-tests__decls-2-compile medium-tests__decls-2-compile
-	$(MAKE) decls-2-compile
-
-decls-2-large:
-	$(MAKE) decls-2-large
 
 rothermel-tests__%: do-flex-rothermel__%
 	@
 
-tiny-real-tests__%: do-wordplay__% test-bc__%
-	@
-
-small-real-tests__%:
+tiny-real-tests__%: do-wordplay__% do-bc__%
 	@
 
 # omit povray test; see povray/README for details
-# omit flex_pristine test; see flex_pristine/README for details
-#medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__%  do-tcas__%
-medium-real-tests__%: test-gzip__% do-bzip2__% do-perl__%   do-tcas__%
-	@
-
-# Omits povray and perl
-# Omits flex-pristine and bzip2
-TEMP-medium-real-easy-tests__%: test-gzip__% do-tcas__%
+#medium-real-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__%  do-tcas__%
+medium-real-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%   do-tcas__%
 	@
 
 small-crypto-tests__%: do-md5__%
