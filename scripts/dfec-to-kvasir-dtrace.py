@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Usage: ./dfec-to-kvasir-dtrace.py <kvasir .decls file> <dfec .dtrace file>
 
@@ -145,7 +145,7 @@ def StripKvasirPptName(ppt):
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
 class DeclsState:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = range(6)
+    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
 
 curVarMap = 0 # The current variable map
 curVarName = ""
@@ -207,7 +207,7 @@ def processPpt(pptName, varInfo):
     stripped = StripDfecPptName(pptName)
 
     if stripped in KvasirPptMap:
-        print KvasirPptMap[stripped][0]
+        print(KvasirPptMap[stripped][0])
 
         # Iterate thru all variables in .decls file (to preserve
         # order) and print ut the corresponding entries in the .dtrace
@@ -232,24 +232,24 @@ def processPpt(pptName, varInfo):
 
             if varToLookup in varInfo:
                 stuff = varInfo[varToLookup]
-                print varName
+                print(varName)
 
                 if repType[-2:] == '[]' and stuff[0][0] != '[' and stuff[0] != "uninit" and stuff[0] != "nonsensical":
-                    print '[', stuff[0], ']'
+                    print('[', stuff[0], ']')
                 else:
-                    print stuff[0]
+                    print(stuff[0])
 
-                print stuff[1]
+                print(stuff[1])
             # Total cop out ... print blank
             else:
-                print varName
+                print(varName)
 
-                print "uninit"
+                print("uninit")
 
-                print "2"
+                print("2")
 
         # Blank line ends this ppt
-        print
+        print()
 
 # .dtrace States:
 # About to read in ...
@@ -259,7 +259,7 @@ def processPpt(pptName, varInfo):
 # 3 = modbit
 # 4 = Ignore nonce
 class DtraceState:
-    Uninit, VarName, Value, Modbit, IgnoreNonce = range(5)
+    Uninit, VarName, Value, Modbit, IgnoreNonce = list(range(5))
 
 dState = DtraceState.Uninit
 

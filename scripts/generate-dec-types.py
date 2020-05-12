@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Usage: ./generate-dec-types.py <decls-file>
 
@@ -38,7 +38,7 @@ def StripComments(comp_num):
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
 class State:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = range(6)
+    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
 
 myState = State.Uninit
 
@@ -129,22 +129,22 @@ for ppt in KvasirPptMap:
 # (Read these names from KvasirPptNames to preserve ordering)
 for ppt in KvasirPptNames:
 
-    print "DECLARE"
-    print ppt
+    print("DECLARE")
+    print(ppt)
 
     for varEntry in KvasirPptMap[ppt]:
 
         # Variable name
-        print varEntry[0]
+        print(varEntry[0])
 
         # Declared type
-        print varEntry[1]
+        print(varEntry[1])
 
         # Representation type
-        print varEntry[2]
+        print(varEntry[2])
 
         # Comp. num (based on declared types only):
-        print str(varEntry[4])
+        print(str(varEntry[4]))
 
     # Newline separating neighboring program points
-    print
+    print()
