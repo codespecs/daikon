@@ -1,13 +1,13 @@
 ..main():::ENTER
 
 ..main():::EXIT0
-return 
+return
 
 ..totalCost():::ENTER
-base tax 
-d 
+base tax
+d
 
 ..totalCost():::EXIT0
-base return tax 
-d 
+base return tax
+d
 

@@ -1,175 +1,175 @@
 ..add():::ENTER
-a b 
+a b
 
 ..add():::EXIT0
-a b 
+a b
 
 ..add16():::ENTER
-a b 
+a b
 
 ..add16():::EXIT0
-a b 
+a b
 
 ..bitAnd():::ENTER
-a b 
+a b
 
 ..bitAnd():::EXIT0
-a b 
+a b
 
 ..bitOr():::ENTER
-a b 
+a b
 
 ..bitOr():::EXIT0
-a b 
+a b
 
 ..bitXor():::ENTER
-a b 
+a b
 
 ..bitXor():::EXIT0
-a b 
+a b
 
 ..div():::ENTER
-a b 
+a b
 
 ..div():::EXIT0
-a b 
+a b
 
 ..div16():::ENTER
-a b 
+a b
 
 ..div16():::EXIT0
-a b 
+a b
 
 ..greaterThan():::ENTER
-a b 
-res 
+a b
+res
 
 ..greaterThan():::EXIT0
-a b 
-res 
+a b
+res
 
 ..greaterThanOrEqualTo():::ENTER
-a b 
-res 
+a b
+res
 
 ..greaterThanOrEqualTo():::EXIT0
-a b 
-res 
+a b
+res
 
 ..lShift():::ENTER
-a c 
-b 
+a c
+b
 
 ..lShift():::EXIT0
-a c 
-b 
+a c
+b
 
 ..lessThan():::ENTER
-a b 
-res 
+a b
+res
 
 ..lessThan():::EXIT0
-a b 
-res 
+a b
+res
 
 ..lessThanFloat():::ENTER
-a b 
-res 
+a b
+res
 
 ..lessThanFloat():::EXIT0
-a b 
-res 
+a b
+res
 
 ..lessThanOrEqualTo():::ENTER
-a b 
-res 
+a b
+res
 
 ..lessThanOrEqualTo():::EXIT0
-a b 
-res 
+a b
+res
 
 ..logicalAnd():::ENTER
-a 
-b 
+a
+b
 
 ..logicalAnd():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalOr():::ENTER
-a 
-b 
+a
+b
 
 ..logicalOr():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalTernaryF():::ENTER
-a 
-b 
-blah c 
+a
+b
+blah c
 
 ..logicalTernaryF():::EXIT0
-a 
-b 
-blah c 
+a
+b
+blah c
 
 ..logicalTernaryT():::ENTER
-a 
-b blah 
-c 
+a
+b blah
+c
 
 ..logicalTernaryT():::EXIT0
-a 
-b blah 
-c 
+a
+b blah
+c
 
 ..main():::ENTER
 
 ..main():::EXIT0
-return 
+return
 
 ..mod():::ENTER
-a b 
+a b
 
 ..mod():::EXIT0
-a b 
+a b
 
 ..mod16():::ENTER
-a b 
+a b
 
 ..mod16():::EXIT0
-a b 
+a b
 
 ..mult():::ENTER
-a b 
+a b
 
 ..mult():::EXIT0
-a b 
+a b
 
 ..mult16():::ENTER
-a b 
+a b
 
 ..mult16():::EXIT0
-a b 
+a b
 
 ..rShift():::ENTER
-a c 
-b 
+a c
+b
 
 ..rShift():::EXIT0
-a c 
-b 
+a c
+b
 
 ..sub():::ENTER
-a b 
+a b
 
 ..sub():::EXIT0
-a b 
+a b
 
 ..sub16():::ENTER
-a b 
+a b
 
 ..sub16():::EXIT0
-a b 
+a b
 

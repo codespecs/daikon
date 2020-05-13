@@ -1,69 +1,69 @@
 ..logicalAnd16():::ENTER
-a 
-b 
+a
+b
 
 ..logicalAnd16():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalAnd32():::ENTER
-a 
-b 
+a
+b
 
 ..logicalAnd32():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalAnd64():::ENTER
-a 
-b 
+a
+b
 
 ..logicalAnd64():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalAnd8():::ENTER
-a 
-b 
+a
+b
 
 ..logicalAnd8():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalOr16():::ENTER
-a 
-b 
+a
+b
 
 ..logicalOr16():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalOr32():::ENTER
-a 
-b 
+a
+b
 
 ..logicalOr32():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalOr64():::ENTER
-a 
-b 
+a
+b
 
 ..logicalOr64():::EXIT0
-a 
-b 
+a
+b
 
 ..logicalOr8():::ENTER
-a 
-b 
+a
+b
 
 ..logicalOr8():::EXIT0
-a 
-b 
+a
+b
 
 ..main():::ENTER
 
 ..main():::EXIT0
-return 
+return
 

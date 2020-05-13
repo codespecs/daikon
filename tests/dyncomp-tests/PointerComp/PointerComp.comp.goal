@@ -1,45 +1,45 @@
 ..inc():::ENTER
-a 
-a[..] b[..] 
-b 
+a
+a[..] b[..]
+b
 
 ..inc():::EXIT0
-a 
-a[..] b[..] 
-b 
+a
+a[..] b[..]
+b
 
 ..interactAfter():::ENTER
-x 
-x[..] z[..] 
-y 
-y[..] 
-z 
+x
+x[..] z[..]
+y
+y[..]
+z
 
 ..interactAfter():::EXIT0
-x 
-x[..] z[..] 
-y 
-y[..] 
-z 
+x
+x[..] z[..]
+y
+y[..]
+z
 
 ..internalInteraction():::ENTER
-oranges 
-oranges[..] 
-x 
-x[..] y[..] z[..] 
-y 
-z 
+oranges
+oranges[..]
+x
+x[..] y[..] z[..]
+y
+z
 
 ..internalInteraction():::EXIT0
-oranges 
-oranges[..] 
-x 
-x[..] y[..] z[..] 
-y 
-z 
+oranges
+oranges[..]
+x
+x[..] y[..] z[..]
+y
+z
 
 ..main():::ENTER
 
 ..main():::EXIT0
-return 
+return
 

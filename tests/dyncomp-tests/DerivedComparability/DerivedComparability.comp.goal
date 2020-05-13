@@ -1,19 +1,19 @@
 ..m():::ENTER
-x y 
+x y
 
 ..m():::EXIT0
-x y 
+x y
 
 ..main():::ENTER
 
 ..main():::EXIT0
-return 
+return
 
 ..n():::ENTER
-x 
-y 
+x
+y
 
 ..n():::EXIT0
-x 
-y 
+x
+y
 

@@ -1,79 +1,79 @@
 ..assignPtrAwayBeforeFieldsInteract():::ENTER
-aPtr 
-aPtr[..] 
-aPtr[..].a aPtr[..].b 
-aPtr[..].cPtr 
-aPtr[..].cPtr[0] 
-bPtr 
-bPtr[..] 
-bPtr[..].a bPtr[..].cPtr[0] 
-bPtr[..].b 
-bPtr[..].cPtr 
+aPtr
+aPtr[..]
+aPtr[..].a aPtr[..].b
+aPtr[..].cPtr
+aPtr[..].cPtr[0]
+bPtr
+bPtr[..]
+bPtr[..].a bPtr[..].cPtr[0]
+bPtr[..].b
+bPtr[..].cPtr
 
 ..assignPtrAwayBeforeFieldsInteract():::EXIT0
-aPtr 
-aPtr[..] 
-aPtr[..].a aPtr[..].b 
-aPtr[..].cPtr 
-aPtr[..].cPtr[0] 
-bPtr 
-bPtr[..] 
-bPtr[..].a bPtr[..].cPtr[0] 
-bPtr[..].b 
-bPtr[..].cPtr 
+aPtr
+aPtr[..]
+aPtr[..].a aPtr[..].b
+aPtr[..].cPtr
+aPtr[..].cPtr[0]
+bPtr
+bPtr[..]
+bPtr[..].a bPtr[..].cPtr[0]
+bPtr[..].b
+bPtr[..].cPtr
 
 ..assignPtrThenFieldsInteract():::ENTER
-aPtr bPtr 
-aPtr[..] 
-aPtr[..].a aPtr[..].b bPtr[..].a bPtr[..].b c 
-aPtr[..].cPtr 
-aPtr[..].cPtr[0] 
-bPtr[..] 
-bPtr[..].cPtr 
-bPtr[..].cPtr[0] 
+aPtr bPtr
+aPtr[..]
+aPtr[..].a aPtr[..].b bPtr[..].a bPtr[..].b c
+aPtr[..].cPtr
+aPtr[..].cPtr[0]
+bPtr[..]
+bPtr[..].cPtr
+bPtr[..].cPtr[0]
 
 ..assignPtrThenFieldsInteract():::EXIT0
-aPtr bPtr 
-aPtr[..] 
-aPtr[..].a aPtr[..].b bPtr[..].a bPtr[..].b c 
-aPtr[..].cPtr 
-aPtr[..].cPtr[0] 
-bPtr[..] 
-bPtr[..].cPtr 
-bPtr[..].cPtr[0] 
+aPtr bPtr
+aPtr[..]
+aPtr[..].a aPtr[..].b bPtr[..].a bPtr[..].b c
+aPtr[..].cPtr
+aPtr[..].cPtr[0]
+bPtr[..]
+bPtr[..].cPtr
+bPtr[..].cPtr[0]
 
 ..main():::ENTER
 
 ..main():::EXIT0
-return 
+return
 
 ..structByPtr():::ENTER
-dPtr 
-dPtr[..] xPtr[..].b yPtr[..].b 
-xPtr 
-xPtr[..] 
-xPtr[..].a xPtr[..].cPtr[0] yPtr[..].a yPtr[..].cPtr[0] 
-xPtr[..].cPtr yPtr[..].cPtr 
-yPtr 
-yPtr[..] 
+dPtr
+dPtr[..] xPtr[..].b yPtr[..].b
+xPtr
+xPtr[..]
+xPtr[..].a xPtr[..].cPtr[0] yPtr[..].a yPtr[..].cPtr[0]
+xPtr[..].cPtr yPtr[..].cPtr
+yPtr
+yPtr[..]
 
 ..structByPtr():::EXIT0
-dPtr 
-dPtr[..] xPtr[..].b yPtr[..].b 
-xPtr 
-xPtr[..] 
-xPtr[..].a xPtr[..].cPtr[0] yPtr[..].a yPtr[..].cPtr[0] 
-xPtr[..].cPtr yPtr[..].cPtr 
-yPtr 
-yPtr[..] 
+dPtr
+dPtr[..] xPtr[..].b yPtr[..].b
+xPtr
+xPtr[..]
+xPtr[..].a xPtr[..].cPtr[0] yPtr[..].a yPtr[..].cPtr[0]
+xPtr[..].cPtr yPtr[..].cPtr
+yPtr
+yPtr[..]
 
 ..structByValue():::ENTER
-d x.b y.b 
-x x.a x.cPtr[..] y y.a y.cPtr[..] 
-x.cPtr y.cPtr 
+d x.b y.b
+x x.a x.cPtr[..] y y.a y.cPtr[..]
+x.cPtr y.cPtr
 
 ..structByValue():::EXIT0
-d x.b y.b 
-x x.a x.cPtr[..] y y.a y.cPtr[..] 
-x.cPtr y.cPtr 
+d x.b y.b
+x x.a x.cPtr[..] y y.a y.cPtr[..]
+x.cPtr y.cPtr
 
