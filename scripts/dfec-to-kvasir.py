@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # The point of this script is to convert Dfec-generated .decls data
 # with Lackwit comparability info. into a form that Kvasir can
@@ -182,7 +182,7 @@ def StripKvasirPptName(ppt):
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
 class State:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = range(6)
+    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
 
 myState = State.Uninit
 
@@ -390,7 +390,7 @@ for ppt in KvasirPptMap:
                                           kvasirCompNum,
                                           decTypeCompNum)))
                 if DfecVarMap[varToLookup] == "":
-                    print "EMPTY COMP. NUMBER!", var, varToLookup
+                    print("EMPTY COMP. NUMBER!", var, varToLookup)
 
                 # Only for debugging
 #                DfecVarMap.pop(varToLookup)
