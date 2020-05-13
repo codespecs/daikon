@@ -194,13 +194,18 @@ for pptName in sortedPptKeys:
 
     print(pptName)
 
+    startOfLine = 1
     while len(sortedVars) > 0:
         varName = sortedVars[0]
 
 #        if var2comp[varName] == '-1': # Remember that everything is a string
 #            print '-1:', varName,
 #        else:
-        print(varName, end=' ')
+        if startOfLine == 1:
+            print(varName, end='')
+            StartOfLine = 0
+        else:
+            print('', varName, end='')
 
         compNum = var2comp[varName]
 
@@ -211,7 +216,7 @@ for pptName in sortedPptKeys:
 
             for otherVar in sortedVars:
                 if var2comp[otherVar] == compNum:
-                    print(otherVar, end=' ')
+                    print('', otherVar, end='')
                     del var2comp[otherVar]
         print()
 
