@@ -1,117 +1,117 @@
 ..main():::ENTER
-::g_p
-::g_q
-::g_x
-::g_y
+::g_p 
+::g_q 
+::g_x 
+::g_y 
 
 ..main():::EXIT0
-::g_p
-::g_q
-::g_x
-::g_y
-return
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+return 
 
 ..simple_strcpy():::ENTER
-::g_p
-::g_q
-::g_x ::g_y dst src
+::g_p 
+::g_q 
+::g_x ::g_y dst src 
 
 ..simple_strcpy():::EXIT0
-::g_p
-::g_q
-::g_x ::g_y dst return src
+::g_p 
+::g_q 
+::g_x ::g_y dst return src 
 
 ..testCalloc():::ENTER
-::g_p
-::g_q
-::g_x
-::g_y
-a
-a[..]
-b
-b[..]
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+a 
+a[..] 
+b 
+b[..] 
 
 ..testCalloc():::EXIT0
-::g_p
-::g_q
-::g_x
-::g_y
-a
-a[..]
-b
-b[..]
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+a 
+a[..] 
+b 
+b[..] 
 
 ..testDynamicSimpleStrcpy():::ENTER
-::g_p
-::g_q
-::g_x
-::g_y
-x
-y
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+x 
+y 
 
 ..testDynamicSimpleStrcpy():::EXIT0
-::g_p
-::g_q
-::g_x
-::g_y
-x
-y
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+x 
+y 
 
 ..testGlobalSimpleStrcpy():::ENTER
-::g_p
-::g_q
-::g_x x
-::g_y y
+::g_p 
+::g_q 
+::g_x x 
+::g_y y 
 
 ..testGlobalSimpleStrcpy():::EXIT0
-::g_p
-::g_q
-::g_x x
-::g_y y
+::g_p 
+::g_q 
+::g_x x 
+::g_y y 
 
 ..testMalloc():::ENTER
-::g_p
-::g_q
-::g_x
-::g_y
-a
-a[..]
-b
-b[..]
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+a 
+a[..] 
+b 
+b[..] 
 
 ..testMalloc():::EXIT0
-::g_p
-::g_q
-::g_x
-::g_y
-a
-a[..]
-b
-b[..]
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+a 
+a[..] 
+b 
+b[..] 
 
 ..testStrCalloc():::ENTER
-::g_p
-::g_q
-::g_x
-::g_y
-a
-b
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+a 
+b 
 
 ..testStrCalloc():::EXIT0
-::g_p
-::g_q
-::g_x
-::g_y
-a
-b
+::g_p 
+::g_q 
+::g_x 
+::g_y 
+a 
+b 
 
 ..testTrivial():::ENTER
-::g_p ::g_q a b
-::g_x
-::g_y
+::g_p ::g_q a b 
+::g_x 
+::g_y 
 
 ..testTrivial():::EXIT0
-::g_p ::g_q a b return
-::g_x
-::g_y
+::g_p ::g_q a b return 
+::g_x 
+::g_y 
 

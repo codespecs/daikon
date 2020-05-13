@@ -1,25 +1,25 @@
 ..add():::ENTER
-a b
+a b 
 
 ..add():::EXIT0
-a b return
+a b return 
 
 ..bar():::ENTER
-a c
-b
+a c 
+b 
 
 ..bar():::EXIT0
-a c
-b
+a c 
+b 
 
 ..foo():::ENTER
-a b c
+a b c 
 
 ..foo():::EXIT0
-a b c
+a b c 
 
 ..main():::ENTER
 
 ..main():::EXIT0
-return
+return 
 

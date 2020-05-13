@@ -1,35 +1,35 @@
 ..main():::ENTER
 
 ..main():::EXIT0
-return
+return 
 
 ..returnDoubleSum():::ENTER
-a b
+a b 
 
 ..returnDoubleSum():::EXIT0
-a b return
+a b return 
 
 ..returnIntSum():::ENTER
-a b
+a b 
 
 ..returnIntSum():::EXIT0
-a b return
+a b return 
 
 ..returnInvalidDouble():::ENTER
-a
-b
+a 
+b 
 
 ..returnInvalidDouble():::EXIT0
-a
-b
-return
+a 
+b 
+return 
 
 ..returnInvalidInt():::ENTER
-a
-b
+a 
+b 
 
 ..returnInvalidInt():::EXIT0
-a
-b
-return
+a 
+b 
+return 
 

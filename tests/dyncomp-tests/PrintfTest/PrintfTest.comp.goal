@@ -1,43 +1,43 @@
 ..main():::ENTER
 
 ..main():::EXIT0
-return
+return 
 
 ..printfIntFloat():::ENTER
-a
-b
+a 
+b 
 
 ..printfIntFloat():::EXIT0
-a
-b
+a 
+b 
 
 ..printfIntFloatUInt():::ENTER
-a
-b
-c
+a 
+b 
+c 
 
 ..printfIntFloatUInt():::EXIT0
-a
-b
-c
+a 
+b 
+c 
 
 ..printfIntFloatUIntInt():::ENTER
-a
-b
-c
-d
+a 
+b 
+c 
+d 
 
 ..printfIntFloatUIntInt():::EXIT0
-a
-b
-c
-d
+a 
+b 
+c 
+d 
 
 ..printfIntInt():::ENTER
-a
-b
+a 
+b 
 
 ..printfIntInt():::EXIT0
-a
-b
+a 
+b 
 

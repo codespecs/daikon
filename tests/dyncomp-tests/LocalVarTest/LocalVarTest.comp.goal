@@ -1,43 +1,43 @@
 ..foo():::ENTER
-::globalD d[..]
-::globalE
-::globalE[..] e[..]
-a
-a[..]
-b
-b[..]
-c
-c[..]
-d
-e
+::globalD d[..] 
+::globalE 
+::globalE[..] e[..] 
+a 
+a[..] 
+b 
+b[..] 
+c 
+c[..] 
+d 
+e 
 
 ..foo():::EXIT0
-::globalD d[..]
-::globalE
-::globalE[..] e[..]
-a
-a[..]
-b
-b[..]
-c
-c[..]
-d
-e
+::globalD d[..] 
+::globalE 
+::globalE[..] e[..] 
+a 
+a[..] 
+b 
+b[..] 
+c 
+c[..] 
+d 
+e 
 
 ..main():::ENTER
-::globalD
-::globalE
-::globalE[..]
-argc
-argv
-argv[..]
+::globalD 
+::globalE 
+::globalE[..] 
+argc 
+argv 
+argv[..] 
 
 ..main():::EXIT0
-::globalD
-::globalE
-::globalE[..]
-argc
-argv
-argv[..]
-return
+::globalD 
+::globalE 
+::globalE[..] 
+argc 
+argv 
+argv[..] 
+return 
 
