@@ -26,8 +26,9 @@ alias create_upload_docker_image=' \
   \cp -pf ../Dockerfile-$OS-$JDKVER Dockerfile && \
   docker build -t mdernst/$PROJECT-$OS-$JDKVER . && \
   docker push mdernst/$PROJECT-$OS-$JDKVER) && \
-  rm -rf dockerdir') ||
-  (echo "*****"; echo "*****"; echo "FAILURE in $PROJECT-$OS-$JDKVER"; echo "*****"; echo "*****"; false)
+  rm -rf dockerdir) || \
+  (echo "*****"; echo "*****"; echo "FAILURE in $PROJECT-$OS-$JDKVER"; echo "*****"; echo "*****"; false) \
+'
 
 export OS=ubuntu
 export JDKVER=jdk8
