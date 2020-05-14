@@ -15,6 +15,7 @@ RUN dnf -qy upgrade && dnf -qy install \
   binutils-devel \
   gcc \
   git \
+  jq \
   m4 \
   make \
   redhat-lsb \
@@ -26,12 +27,5 @@ RUN dnf -qy upgrade && dnf -qy install \
 RUN dnf -q -y install \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel
-
-# This enables the repository that contains jq
-RUN dnf -q -y install \
-  epel-release
-
-RUN dnf -q -y install \
-  jq
 
 RUN dnf -q clean all
