@@ -511,7 +511,7 @@ jobs:
           command: make -C java typecheck
           no_output_timeout: 30m
 
-  typecheck-with-locally-built-CF-jdk8:
+  typecheck-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
     steps:
@@ -629,6 +629,6 @@ workflows:
           requires:
             - misc-centos-jdk8
 #      - typecheck-with-included-CF-jdk8
-      - typecheck-with-locally-built-CF-jdk8
 # Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
+#      - typecheck-jdk8
 #      - typecheck-jdk11
