@@ -148,7 +148,8 @@ public class ParameterDoclet {
      *
      * @param fullConfigName the fully-qualified name of a Daikon configuration variable (no
      *     "dkconfig_")
-     * @praam simpleFieldName the simple name of the variable (starts with "dkconfig_")
+     * @param simpleFieldName the simple name of the variable (starts with "dkconfig_")
+     * @return true if the given field should be included in this section of the manual
      */
     public boolean matches(String fullConfigName, String simpleFieldName) {
       System.out.printf("matches(%s, %s)%n", fullConfigName, simpleFieldName);
