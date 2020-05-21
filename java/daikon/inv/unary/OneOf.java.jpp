@@ -234,26 +234,28 @@ import typequals.prototype.qual.Prototype;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-#if defined (SCALAR)
-  /**
-   * Represents long scalars that take on only a few distinct values. Prints as either
-   * {@code x == c} (when there is only one value), {@code x one of {c1, c2, c3}} (when
-   * there are multiple values), or {@code x has only one value} (when {@code x} is a
-   * hashcode (pointer) -- this is because the numerical value of the hashcode (pointer) is
-   * uninteresting).
-   */
-#elif defined (IS_SCALAR) || defined (IS_SEQUENCE)
+#if defined (IS_SCALAR) || defined (IS_SEQUENCE)
   /**
    * Represents INT_PRINTED variables that take on only a few distinct values. Prints as either
    * {@code x == c} (when there is only one value) or as {@code x one of {c1, c2, c3}}
    * (when there are multiple values).
+#if defined (SCALAR)
+   * May print as {@code x has only one value} when {@code x} is a hashcode (pointer) -- this is
+   * because the numerical value of the hashcode (pointer) is uninteresting.
+#endif
    */
-#else
+#elif defined (IS_ELT)
   /**
    * Represents sequences of INT_PRINTED values where the elements of the sequence take on only a
-   * few distinct values. Prints as either {@code x[] == c} (when there is only one value), or
-   * as {@code x[] one of {c1, c2, c3}} (when there are multiple values).
+   * few distinct values. Prints as either {@code x[] elements == c} (when there is only one value),
+   * or as {@code x[] elements one of {c1, c2, c3}} (when there are multiple values).
+#if defined (ELT)
+   * May print as {@code x[] elements has only one value} when {@code x} is an array of hashcodes
+   * (pointers) -- this is because the numerical value of the hashcode (pointer) is uninteresting.
+#endif
    */
+#else
+#error "Impossible fallthrough."
 #endif
 
 public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
