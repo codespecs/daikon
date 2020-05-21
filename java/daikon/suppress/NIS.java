@@ -103,8 +103,8 @@ public class NIS {
   public static boolean dkconfig_suppressor_list = true;
 
   /**
-   * Boolean. If true, skip variables of file rep type hashcode when creating invariants over
-   * constants in the antecedent method.
+   * Boolean. If true, skip variables of file rep type {@code hashcode} when creating invariants
+   * over constants in the antecedent method.
    */
   public static boolean dkconfig_skip_hashcode_type = true;
 
