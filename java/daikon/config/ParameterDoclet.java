@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -80,28 +83,79 @@ public class ParameterDoclet {
 
   // ============================== NON-STATIC METHODS ==============================
 
+  /**
+   * A document category, or a subsection of the "List of configuration options" section in the
+   * manual.
+   */
   static class DocCategory {
-    public @Nullable String prefixPattern;
-    public @Nullable String fieldName;
-    public String description;
-    public String longBlurb;
-    public Map<String, String> fields; // field -> description
 
-    public DocCategory(@Nullable String prefix, @Nullable String name, String desc, String blurb) {
-      prefixPattern = prefix;
-      if (name == null) {
+    /**
+     * If non-null, then include only variables whose fully-qualified name starts with this prefix.
+     */
+    public @Nullable String prefix;
+    /**
+     * If non-null, then include only variables with this simple name. Note that this is a field
+     * name that starts with "dkconfig_", not a configuration option name.
+     */
+    public @Nullable String fieldName;
+    /** Include all configuration options whose fully-qualified name is in the list. */
+    public List<String> fqNames;
+
+    /** The subsection name. */
+    public String description;
+    /** Text that appears in the subsection before the list of configuration options. */
+    public String blurb;
+    /** A map from a field name to its description. */
+    public Map<String, String> fields;
+
+    /**
+     * Create a new DocCategory.
+     *
+     * @param prefix if non-null, include only variables whose fully-qualified name starts with this
+     *     prefix
+     * @param simpleName if non-null, include only configuration options with this simple name
+     * @param fqConfigNames if non-null, include only configuration options whose fully-qualified
+     *     name is in this list
+     * @param description the subsection name
+     * @param blurb text that appears in the subsection before the list of configuration options
+     */
+    public DocCategory(
+        @Nullable String prefix,
+        @Nullable String simpleName,
+        @Nullable List<String> fqConfigNames,
+        String description,
+        String blurb) {
+      this.prefix = prefix;
+      if (simpleName == null) {
         fieldName = null;
       } else {
-        fieldName = Configuration.PREFIX + name;
+        fieldName = Configuration.PREFIX + simpleName;
       }
-      description = desc;
-      longBlurb = blurb;
+      if (fqConfigNames == null) {
+        this.fqNames = Collections.emptyList();
+      } else {
+        this.fqNames = fqConfigNames;
+      }
+      System.out.println("fqNames = " + this.fqNames);
+      this.description = description;
+      this.blurb = blurb;
       fields = new HashMap<>();
     }
 
-    public boolean matches(String fullname, String name) {
-      return (((prefixPattern == null) || fullname.startsWith(prefixPattern))
-          && ((fieldName == null) || name.equals(fieldName)));
+    /**
+     * Return true if the given variable (that represents a configuration option) should be included
+     * in this section.
+     *
+     * @param fullConfigName the fully-qualified name of a Daikon configuration variable (no
+     *     "dkconfig_")
+     * @praam simpleFieldName the simple name of the variable (starts with "dkconfig_")
+     */
+    public boolean matches(String fullConfigName, String simpleFieldName) {
+      System.out.printf("matches(%s, %s)%n", fullConfigName, simpleFieldName);
+      System.out.printf("  contains: %s    for %s%n", fqNames.contains(fullConfigName), fqNames);
+      return ((prefix == null || fullConfigName.startsWith(prefix))
+              && (fieldName == null || fieldName.equals(simpleFieldName)))
+          || fqNames.contains(fullConfigName);
     }
   }
 
@@ -117,17 +171,23 @@ public class ParameterDoclet {
           new DocCategory(
               "daikon.inv.filter.",
               "enabled",
+              null,
               "Options to enable/disable filters",
               "@cindex filters, enabling/disabling\n"
-                  + "These configuration options enable or disable filters that suppress printing of certain invariants.  Invariants are filtered if they are redundant.  See @ref{Invariant filters}, for more information."),
+                  + "These configuration options enable or disable filters that suppress printing\n"
+                  + "of certain invariants.  Invariants are filtered if they are redundant.\n"
+                  + "See @ref{Invariant filters}, for more information.\n"
+                  + "Also see configuration option @code{daikon.PrintInvariants.print_all}."),
           new DocCategory(
               "daikon.inv.",
               "enabled",
+              null,
               "Options to enable/disable specific invariants",
               "@cindex invariants, enabling/disabling\n"
                   + "These options control whether Daikon looks for specific kinds of invariants.  See @ref{Invariant list}, for more information about the corresponding invariants."),
           new DocCategory(
               "daikon.inv.",
+              null,
               null,
               "Other invariant configuration parameters",
               "@cindex invariants, configuring\n"
@@ -135,11 +195,13 @@ public class ParameterDoclet {
           new DocCategory(
               "daikon.derive.",
               null,
+              null,
               "Options to enable/disable derived variables",
               "@cindex derived variables, enabling/disabling\n"
                   + "These options control whether Daikon looks for invariants involving certain forms of derived variables.  Also see @ref{Variable names}."),
           new DocCategory(
               "daikon.simplify.",
+              null,
               null,
               "Simplify interface configuration options",
               "@cindex Simplify theorem prover, configuring\n"
@@ -147,16 +209,42 @@ public class ParameterDoclet {
           new DocCategory(
               "daikon.split.",
               null,
+              null,
               "Splitter options",
               "@cindex Splitters, configuring\n"
                   + "The configuration options in this section are used to customize the the behavior of splitters, which yield conditional invariants and implications (@pxref{Conditional invariants})."),
           new DocCategory(
               "daikon.Debug.",
               null,
+              null,
               "Debugging options",
               "@cindex Splitters, configuring\n"
-                  + "The configuration options in this section are used to cause extra output that is useful for debugging."),
+                  + "The configuration options in this section are used to cause extra output that is useful for debugging.  Also see section \"Daikon debugging options\" (@pxref{Daikon debugging options})."),
           new DocCategory(
+              "dummy prefix that won't match anything",
+              "dummy simple name that won't match anything",
+              Arrays.asList(
+                  "daikon.Daikon.quiet",
+                  "daikon.PrintInvariants.print_all",
+                  // Progress output
+                  "daikon.Daikon.progress_delay",
+                  "daikon.Daikon.progress_display_width",
+                  "daikon.FileIO.count_lines",
+                  "daikon.FileIO.dtrace_line_count",
+                  // Statistics
+                  "daikon.PrintInvariants.true_inv_cnt",
+                  "daikon.Daikon.print_sample_totals",
+                  // Other
+                  "daikon.PrintInvariants.print_inv_class",
+                  "daikon.Daikon.output_conditionals",
+                  "daikon.Daikon.guardNulls",
+                  "daikon.FileIO.unmatched_procedure_entries_quiet",
+                  "daikon.FileIO.verbose_unmatched_procedure_entries"),
+              "Quantity of output",
+              "@cindex Output, quantity of\n"
+                  + "The configuration options in this section make Daikon print more or less output.  They do not affect which invariants Daikon computes, only how it ouputs them.  Also see the following section."),
+          new DocCategory(
+              null,
               null,
               null,
               "General configuration options",
@@ -258,7 +346,7 @@ public class ParameterDoclet {
       out.println("@node " + node + ", " + next + ", " + prev + ", " + up);
       out.println("@subsubsection " + node);
       out.println();
-      out.println(categories[c].longBlurb);
+      out.println(categories[c].blurb);
       out.println();
       out.println("@table @option");
       out.println();

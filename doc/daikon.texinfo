@@ -1559,6 +1559,8 @@ Specify a single configuration setting.
 @node    Daikon debugging options
 @section Daikon debugging options
 
+Also see configuration options related to debugging (@pxref{Debugging options}).
+
 @table @option
 @item --dbg @var{category}
 @itemx --debug
