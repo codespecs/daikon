@@ -14,6 +14,9 @@ CFLAGS += -gdwarf-2
 # Ubuntu sets -fstack-protector-strong on by default
 # we turn if back off to get baseline results to match Fedora.
 CFLAGS += -fno-stack-protector
+# With gcc version 10 -fno-common is the default.
+# Many of our tests won't compile with this option.
+CFLAGS += -fcommon
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
@@ -96,6 +99,9 @@ ifeq ($(OS_REL),28)
 endif
 ifeq ($(OS_REL),30)
 	GOAL := goal-Fedora30
+endif
+ifeq ($(OS_REL),32)
+	GOAL := goal-Fedora32
 endif
 # other versions of Fedora will use goal-Fedora if it exists
 # otherwise the default goal file
