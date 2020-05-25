@@ -511,6 +511,8 @@ jobs:
           command: make -C java typecheck
           no_output_timeout: 30m
 
+  # If this task fails but task `typecheck-with-locally-built-CF-jdk8`
+  # succeeds, then update the Checker Framework jar files in java/lib/ .
   typecheck-with-locally-built-CF-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
