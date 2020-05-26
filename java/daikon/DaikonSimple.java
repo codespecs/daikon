@@ -28,7 +28,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * invariants and variables.
  *
  * <p>DaikonSimple was written to check the implementation of the optimizations in Daikon.
- * DaikonSimple does not use an optimizations, and its processing will produce a complete set of
+ * DaikonSimple does not use any optimizations, and its processing will produce a complete set of
  * true invariants. Daikon does have flags to "turn off" some of its optimizations but there are
  * some optimizations are built into the way Daikon processes the samples (e.g. variable hierarchy
  * and bottom up processing). In addition, we want to check the optimizations, so we don't want to
