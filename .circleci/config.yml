@@ -490,6 +490,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-kvasir.sh
 
+  # If this task fails but task `typecheck-with-locally-built-CF-jdk8` succeeds, then update the
+  # Checker Framework jar files in java/lib/ .  If it still fails, that's OK.  It will pass once the
+  # next Checker Framework is released and java/lib/ is updated.
   typecheck-with-included-CF-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
@@ -511,7 +514,7 @@ jobs:
           command: make -C java typecheck
           no_output_timeout: 30m
 
-  typecheck-jdk8:
+  typecheck-with-locally-built-CF-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
     steps:
@@ -530,7 +533,7 @@ jobs:
           command: scripts/test-typecheck.sh
           no_output_timeout: 30m
 
-  typecheck-jdk11:
+  typecheck-with-locally-built-CF-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
     steps:
