@@ -25,6 +25,7 @@ changeset
 checkin
 checkins
 checklink
+CircleCI
 classfile
 classpath
 codebase
@@ -199,6 +200,7 @@ washington
 whitespace
 wildcard
 workflow
+workflows
 workspace
 WSL
 x86

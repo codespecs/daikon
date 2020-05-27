@@ -227,27 +227,25 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-## Flaky; needs to be fixed.
-# - job: kvasir_fedora_jdk8
-#   pool:
-#     vmImage: 'ubuntu-latest'
-#   container: mdernst/daikon-fedora-jdk8-plus:latest
-#   steps:
-#   - checkout: self
-#     fetchDepth: 25
-#   - bash: ./scripts/test-kvasir.sh
-#     displayName: test-kvasir.sh
+- job: kvasir_fedora_jdk8
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-fedora-jdk8-plus:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-kvasir.sh
+    displayName: test-kvasir.sh
 
-## Flaky; needs to be fixed.
-# - job: kvasir_fedora_jdk11
-#   pool:
-#     vmImage: 'ubuntu-latest'
-#   container: mdernst/daikon-fedora-jdk11-plus:latest
-#   steps:
-#   - checkout: self
-#     fetchDepth: 25
-#   - bash: ./scripts/test-kvasir.sh
-#     displayName: test-kvasir.sh
+- job: kvasir_fedora_jdk11
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-fedora-jdk11-plus:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-kvasir.sh
+    displayName: test-kvasir.sh
 
 - job: quick_txt_diff_centos_jdk8
   pool:
@@ -333,23 +331,22 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-# Reinstate once they pass deterministically.
-# - job: kvasir_centos_jdk8
-#   pool:
-#     vmImage: 'ubuntu-latest'
-#   container: mdernst/daikon-centos-jdk8-plus:latest
-#   steps:
-#   - checkout: self
-#     fetchDepth: 25
-#   - bash: ./scripts/test-kvasir.sh
-#     displayName: test-kvasir.sh
+- job: kvasir_centos_jdk8
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-centos-jdk8-plus:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-kvasir.sh
+    displayName: test-kvasir.sh
 
-# - job: kvasir_centos_jdk11
-#   pool:
-#     vmImage: 'ubuntu-latest'
-#   container: mdernst/daikon-centos-jdk11-plus:latest
-#   steps:
-#   - checkout: self
-#     fetchDepth: 25
-#   - bash: ./scripts/test-kvasir.sh
-#     displayName: test-kvasir.sh
+- job: kvasir_centos_jdk11
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-centos-jdk11-plus:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-kvasir.sh
+    displayName: test-kvasir.sh

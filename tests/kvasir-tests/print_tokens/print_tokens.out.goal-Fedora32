@@ -1,0 +1,40 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./print_tokens
+==PID== 
+keyword,	"and".
+identifier,	"qaTNDC4".
+quote.
+lsquare.
+numeric,	0.
+keyword,	"lambda".
+comma.
+keyword,	"lambda".
+keyword,	"or".
+string,	"su".
+identifier,	"EzqiZq3".
+identifier,	"hbT".
+identifier,	"G3JV".
+keyword,	"xor".
+keyword,	"lambda".
+keyword,	"=>".
+keyword,	"or".
+keyword,	"or".
+rsquare.
+identifier,	"R0wrx".
+keyword,	"if".
+keyword,	"lambda".
+identifier,	"nVD3".
+identifier,	"vsm9".
+lparen.
+keyword,	"if".
+identifier,	"pd".
+lparen.
+identifier,	"K0ph".
+rsquare.
+keyword,	"xor".
+eof.
+==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

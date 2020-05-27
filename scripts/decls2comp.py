@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Converts a .decls file with comparability numbers to a file which is
 # organized by variable comparability sets at each program point.
@@ -106,7 +106,7 @@ LWArrayRExp = re.compile('\[.\]')
 ignoreHashcodes = False
 
 if (len(sys.argv) < 2):
-    print "Usage: decls2compy decls-file [no-hashcodes]"
+    print("Usage: decls2compy decls-file [no-hashcodes]")
     sys.exit()
 
 
@@ -161,8 +161,7 @@ for pptList in tempAllPpts:
     allPpts[pptName] = pptList[1:]
 
 # Alphabetically sort the program points
-sortedPptKeys = allPpts.keys()
-sortedPptKeys.sort()
+sortedPptKeys = sorted(list(allPpts.keys()))
 
 # Process each PPT
 for pptName in sortedPptKeys:
@@ -191,36 +190,38 @@ for pptName in sortedPptKeys:
 
     # Now we can do the real work of grouping variables together
     # in comparability sets based on their numbers
-    sortedVars = var2comp.keys()
-    sortedVars.sort()
+    sortedVars = sorted(list(var2comp.keys()))
 
-    print pptName
+    print(pptName)
 
+    startOfLine = 1
     while len(sortedVars) > 0:
         varName = sortedVars[0]
 
 #        if var2comp[varName] == '-1': # Remember that everything is a string
 #            print '-1:', varName,
 #        else:
-        print varName,
+        if startOfLine == 1:
+            print(varName, end='')
+            StartOfLine = 0
+        else:
+            print('', varName, end='')
 
         compNum = var2comp[varName]
 
         if compNum:
             del var2comp[varName]
 
-            sortedVars = var2comp.keys()
-            sortedVars.sort()
+            sortedVars = sorted(list(var2comp.keys()))
 
             for otherVar in sortedVars:
                 if var2comp[otherVar] == compNum:
-                    print otherVar,
+                    print('', otherVar, end='')
                     del var2comp[otherVar]
-        print
+        print()
 
         # Update sortedVars after deleting the appropriate entries
         # from var2comp
-        sortedVars = var2comp.keys()
-        sortedVars.sort()
+        sortedVars = sorted(list(var2comp.keys()))
 
-    print
+    print()

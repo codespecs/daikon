@@ -14,6 +14,9 @@ CFLAGS += -gdwarf-2
 # Ubuntu sets -fstack-protector-strong on by default
 # we turn if back off to get baseline results to match Fedora.
 CFLAGS += -fno-stack-protector
+# With gcc version 10 -fno-common is the default.
+# Many of our tests won't compile with this option.
+CFLAGS += -fcommon
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
@@ -68,34 +71,19 @@ endif
 ifeq ($(OS_REL),7.6.1810)
        GOAL := goal-CentOS1810
 endif
-ifeq ($(OS_REL),7.5.1804)
-       GOAL := goal-CentOS1804
-endif
-ifeq ($(OS_REL),7.4.1708)
-       GOAL := goal-CentOS1708
-endif
-ifeq ($(OS_REL),7.3.1611)
-       GOAL := goal-CentOS1611
-endif
 # other versions of CentOS will use goal-CentOS if it exists
 # otherwise the default goal file
 endif
 
 ifeq ($(OS_ID),Fedora)
-ifeq ($(OS_REL),24)
-	GOAL := goal-Fedora24
-endif
-ifeq ($(OS_REL),25)
-	GOAL := goal-Fedora25
-endif
-ifeq ($(OS_REL),26)
-	GOAL := goal-Fedora26
-endif
 ifeq ($(OS_REL),28)
 	GOAL := goal-Fedora28
 endif
 ifeq ($(OS_REL),30)
 	GOAL := goal-Fedora30
+endif
+ifeq ($(OS_REL),32)
+	GOAL := goal-Fedora32
 endif
 # other versions of Fedora will use goal-Fedora if it exists
 # otherwise the default goal file
@@ -104,9 +92,6 @@ endif
 ifeq ($(OS_ID),Ubuntu)
 ifeq ($(OS_REL),18.04)
 	GOAL := goal-Ubuntu1804
-endif
-ifeq ($(OS_REL),17.10)
-	GOAL := goal-Ubuntu1710
 endif
 ifeq ($(OS_REL),16.04)
 	GOAL := goal-Ubuntu1604
