@@ -178,86 +178,37 @@ so you do not need to compile them yourself unless you make changes.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
-The requirements for compiling Daikon are explained in
-more detail below.
-To install all needed dependencies under Ubuntu, run these commands:
-@exampleindent 2
-@example
-sudo apt-get install -y openjdk-11-jdk gcc ctags git graphviz make netpbm \
-  texlive texlive-generic-recommended texinfo \
-  autoconf automake binutils-dev m4 zlib1g-dev
-@end example
-@exampleindent 5
-(You may use openjdk-8-jdk in place of openjdk-11-jdk.)
-
-Similar commands would be used with other package management systems
-on other operating systems.
-
-
 @menu
 * Requirements for compiling Daikon::
-* Requirements for compiling Kvasir::
 @end menu
 
 
 @node    Requirements for compiling Daikon
 @subsection Requirements for compiling Daikon
 
-@itemize @bullet
+Before compiling Daikon, you need to install some dependencies (that is,
+software used to build Daikon).  For
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-centos-jdk11-plus,
+,CentOS},
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-fedora-jdk11-plus,
+, Fedora}, and
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk11-plus,
+, Ubuntu}, you can
+find the commands to install these dependencies in file
+@file{$DAIKONDIR/scripts/Dockerfile-@emph{OSNAME}-jdk@emph{N}-plus}.
+For other operating systems, use similar commands.  (Feel free to share
+them with the Daikon developers so that we can include them for other users.)
 
-Here is an explanation of some of the software you will need.
-
-@item
-a Java compiler such as @samp{javac}.  This is needed because Daikon is
-written in Java.
-@cindex @samp{javac} compiler, overriding
-@cindex Java compiler, specifying
-To override the default Java compiler (@samp{javac}), create a
-@file{Makefile.user} file in the @file{daikon} (@env{$DAIKONDIR}) directory and add a line
-like the following.
-@example
-JAVAC ?= eclipsec -g
-@end example
-
-Either environment variable
-@env{JAVA_HOME} must be set, or @code{javac} must be on the execution path.
-See the installation instructions
-(@ref{Installing Daikon,,,daikon,Daikon User Manual}) for more details.
+Note that Kvasir, the Daikon front end for the C language
+(@pxref{Kvasir,,,daikon,Daikon User Manual}), does not work on Mac OS.
 
 @cindex .jpp files
 @cindex jpp files
 
-@item
-the C preprocessor
-@command{cpp}.  This is needed to convert each @file{.jpp} file in the
+The Daikon build process uses the C preprocessor
+@command{cpp} to convert each @file{.jpp} file in the
 distribution into multiple @file{.java} files, which are then compiled.
 If you have a C compiler, you almost certainly have @command{cpp}.
-If you do not have @command{cpp} (or @command{gcc}, which can emulate
-@command{cpp} via @command{gcc -E}), you may run
-@command{make -C $DAIKONDIR/java avoid-jpp}, in
-which case changes to @code{.jpp} files will not be reflected in the
-@file{.java} files or the compiled @file{.class} files.  (The purpose
-of the @file{.jpp} files is to avoid code duplication by placing
-common code in a single file, then generating other files that need to
-include that common code.)
-
-@item
-@c needs version 4.7 or newer; version 4.7 was released in April 2004
-@command{makeinfo}.
-This is needed to make the documentation (via @command{make -C $DAIKONDIR/doc}).
-
-@end itemize
-
-
-@node    Requirements for compiling Kvasir
-@subsection Requirements for compiling Kvasir
-
-In order to compile Kvasir, the Daikon front end for the C language
-(@pxref{Kvasir,,,daikon,Daikon User Manual}), you will need some
-additional tools beyond those required to compile Daikon.
-The commands to install them under Ubuntu appear above.
-
-Note that Kvasir does not work on Mac OS.
 
 
 @node    Version control repository
