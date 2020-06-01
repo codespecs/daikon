@@ -8015,8 +8015,9 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 If Daikon runs slowly, there are three general possible reasons:
 @itemize
 @item
-You did not use the DynComp tool to generate comparability sets.
-Without DynComp, Daikon typically runs more than an order of magnitude slower.
+You did not use the DynComp tool (@pxref{Dynamic abstract type inference
+(DynComp)}) to generate comparability sets.  Without DynComp, Daikon
+typically runs more than an order of magnitude slower.
 
 @item
 The front end, such as DynComp or Chicory, took a long time to collect, then output,
@@ -8051,7 +8052,8 @@ print the values of many variables.  Reducing the number of program points
 or variables can speed up both creation and analysis of trace files.  For
 instance, you might configure your front end to skip certain procedures
 (helper procedures, libraries) or not to output certain variables (large
-arrays or static variables).
+arrays or static variables), or you might split a trace file into multiple
+parts and process them separately.
 For details, see @ref{Large dtrace files}.
 
 
@@ -8093,6 +8095,10 @@ The @option{daikon.derive.Derivation.disable_derived_variables} and individual
 (@pxref{Options to enable/disable derived variables}) may be used
 to disable derived variables altogether or selectively, at the cost of
 detecting fewer invariants, especially over sequences.
+
+As noted earlier, using a comparability analysis (@pxref{Dynamic abstract
+type inference (DynComp)}) also reduces the number of invariants that
+Daikon checks, and thereby speeds up Daikon.
 
 
 @node       Bigger traces cause invariants to appear
@@ -8185,7 +8191,8 @@ process your entire program over its full test suite.  First, use the
 techniques below (@pxref{Reducing program points}) to split your
 @file{.dtrace} file into parts.  Next, run Daikon on each resulting
 @file{.dtrace} file.  Finally, use the @command{MergeInvariants} tool
-to combine the resulting @file{.inv} files into one.
+(@pxref{MergeInvariants}) to combine the resulting @file{.inv} files into
+one.
 
 
 @node       Less information per file
