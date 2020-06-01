@@ -136,7 +136,6 @@ public class ParameterDoclet {
       } else {
         this.fqNames = fqConfigNames;
       }
-      System.out.println("fqNames = " + this.fqNames);
       this.description = description;
       this.blurb = blurb;
       fields = new HashMap<>();
@@ -152,8 +151,6 @@ public class ParameterDoclet {
      * @return true if the given field should be included in this section of the manual
      */
     public boolean matches(String fullConfigName, String simpleFieldName) {
-      System.out.printf("matches(%s, %s)%n", fullConfigName, simpleFieldName);
-      System.out.printf("  contains: %s    for %s%n", fqNames.contains(fullConfigName), fqNames);
       return ((prefix == null || fullConfigName.startsWith(prefix))
               && (fieldName == null || fieldName.equals(simpleFieldName)))
           || fqNames.contains(fullConfigName);
