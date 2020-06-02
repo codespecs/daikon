@@ -104,7 +104,7 @@ public final class DCRuntime {
     /** Tag stack. */
     Deque<Object> tag_stack;
 
-    /** Number of methods currently on tag_stack */
+    /** Number of methods currently on tag_stack. */
     int tag_stack_call_depth;
 
     /** class initializer */

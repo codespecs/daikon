@@ -59,9 +59,12 @@ public class InvariantInfo {
   }
 
   /**
-   * @return a list of Strings of all permutations of the vars, or null if vars == null <br>
-   *     e.g., if vars is "var1,var2,var3", this method will return ["var1,var2,var3",
-   *     "var1,var3,var2", "var2,var1,var3"... etc.]
+   * Returns a list of Strings of all permutations of the vars, or null if vars == null.
+   *
+   * <p>e.g., if vars is "var1,var2,var3", this method will return ["var1,var2,var3",
+   * "var1,var3,var2", "var2,var1,var3"... etc.]
+   *
+   * @return a list of Strings of all permutations of the vars, or null if vars == null
    */
   public @Nullable List<String> var_permutations() {
     if (vars == null) {

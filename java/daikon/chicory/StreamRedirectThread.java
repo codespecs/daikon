@@ -119,9 +119,6 @@ public class StreamRedirectThread extends Thread {
       if (line_by_line) {
         BufferedReader br = new BufferedReader(in, BUFFER_SIZE);
 
-        char[] cbuf = new char[BUFFER_SIZE];
-        int count;
-
         String line;
         while ((line = br.readLine()) != null) {
           outWriter.println(line);

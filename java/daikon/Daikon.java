@@ -513,19 +513,19 @@ public final class Daikon {
   public abstract static class DaikonTerminationException extends RuntimeException {
     static final long serialVersionUID = 20180729L;
 
-    public DaikonTerminationException() {
+    protected DaikonTerminationException() {
       super();
     }
 
-    public DaikonTerminationException(String message) {
+    protected DaikonTerminationException(String message) {
       super(message);
     }
 
-    public DaikonTerminationException(Throwable e) {
+    protected DaikonTerminationException(Throwable e) {
       super(e);
     }
 
-    public DaikonTerminationException(String message, Throwable e) {
+    protected DaikonTerminationException(String message, Throwable e) {
       super(message, e);
     }
   }
@@ -912,6 +912,7 @@ public final class Daikon {
       try {
         fileio_progress.join(2000);
       } catch (InterruptedException e) {
+        // It's OK for a wait operation to be interrupted.
       }
       if (fileio_progress.getState() != Thread.State.TERMINATED) {
         throw new BugInDaikon("Can't stop fileio_progress thead");
@@ -961,7 +962,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read in the command line options
   // Return {decls, dtrace, spinfo, map} files.
-  protected static FileOptions read_options(String[] args, String usage) {
+  static FileOptions read_options(String[] args, String usage) {
     if (args.length == 0) {
       System.out.println("Error: no files supplied on command line.");
       System.out.println(usage);
@@ -1822,7 +1823,6 @@ public final class Daikon {
       }
 
       PptTopLevel exitnn_ppt = ppt;
-      PptName exitnn_name = exitnn_ppt.ppt_name;
       PptName exit_name = ppt.ppt_name.makeExit();
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 

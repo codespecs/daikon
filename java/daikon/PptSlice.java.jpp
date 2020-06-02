@@ -423,7 +423,6 @@ public final class PPTSLICE1 extends PptSlice {
         if (inv.is_false()) {
           continue;
         }
-        Invariant clone = inv.clone();
         InvariantStatus status = inv.add(val1, val2, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
           inv.falsify();
@@ -432,9 +431,11 @@ public final class PPTSLICE1 extends PptSlice {
           result.add(inv);
         }
         if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
-          if (array1 && array2 && (!( (inv instanceof SeqSeqIntEqual)
-              || (inv instanceof SeqSeqFloatEqual)
-              || (inv instanceof SeqSeqStringEqual) ))
+          if (array1
+              && array2
+              && !( (inv instanceof SeqSeqIntEqual)
+                    || (inv instanceof SeqSeqFloatEqual)
+                    || (inv instanceof SeqSeqStringEqual) )
               && ArraysPlume.length(val1) != ArraysPlume.length(val2)) {
             // No need to print out two potentially huge arrays if the
             // reason for discard was because of different array lengths
@@ -469,7 +470,6 @@ public final class PPTSLICE1 extends PptSlice {
       if (inv.is_false()) {
         continue;
       }
-      Invariant clone = inv.clone();
       InvariantStatus status = inv.add(val1, val2, val3, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
         inv.falsify();

@@ -303,7 +303,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public @Nullable VarInfo postState;
 
-  /** @exception RuntimeException if representation invariant on this is broken */
+  /**
+   * Throws an exception if this object is malformed.
+   *
+   * @exception RuntimeException if representation invariant on this is broken
+   */
   public void checkRep() {
     assert ppt != null;
     assert var_info_name != null; // vin ok
@@ -1639,8 +1643,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
+   * Returns false if this variable expression is not legal ESC syntax, except for any necessary
+   * quantifications (subscripting). We err on the side of returning true, for now.
+   *
    * @return false if this variable expression is not legal ESC syntax, except for any necessary
-   *     quantifications (subscripting). We err on the side of returning true, for now.
+   *     quantifications (subscripting)
    */
   @Pure
   public boolean isValidEscExpression() {
@@ -2292,20 +2299,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     class GuardingVisitor implements Visitor<List<VarInfo>> {
       boolean inPre = false;
 
-      private boolean shouldBeGuarded(VarInfo vi) {
-        assert vi != null;
-        boolean result =
-            (vi != null
-                && (Daikon.dkconfig_guardNulls == "always" // interned
-                    || (Daikon.dkconfig_guardNulls == "missing" // interned
-                        && vi.canBeMissing)));
-        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
-          Invariant.debugGuarding.fine(
-              String.format("shouldBeGuarded(%s) %b %b", vi, result, vi.canBeMissing));
-        }
-        return result;
-      }
-
       private boolean shouldBeGuarded(VarInfoName viname) {
         // Not "shouldBeGuarded(ppt.findVar(viname))" because that
         // unnecessarily computes ppt.findVar(viname), if
@@ -2507,22 +2500,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         } else {
           return vin;
         }
-      }
-
-      private VarInfo convertToPre(VarInfo vi) {
-        //   1. "ppt.findVar("orig(" + vi.name() + ")")" does not work:
-        //       "Error: orig() variables shouldn't appear in .decls files"
-
-        VarInfoName viPreName = vi.var_info_name.applyPrestate(); // vin ok
-        VarInfo viPre = ppt.find_var_by_name(vi.prestate_name());
-        if (viPre == null) {
-          System.out.printf("Can't find pre var %s (%s) at %s%n", viPreName.name(), viPreName, ppt);
-          for (VarInfo v : ppt.var_infos) {
-            System.out.printf("  %s%n", v);
-          }
-          throw new Error();
-        }
-        return viPre;
       }
 
       private List<VarInfo> addVar(List<VarInfo> result, VarInfoName vin) {
@@ -3757,7 +3734,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** @see #simplify_quantify(EnumSet, VarInfo[]) */
+  /**
+   * See {@link #simplify_quantify(EnumSet, VarInfo[])}.
+   *
+   * @see #simplify_quantify(EnumSet, VarInfo[])
+   */
   public static String[] simplify_quantify(VarInfo... vars) {
     return simplify_quantify(EnumSet.noneOf(QuantFlags.class), vars);
   }

@@ -53,6 +53,7 @@ public class SessionManager {
       try {
         this.wait();
       } catch (InterruptedException e) {
+        // It's OK for a wait() to be interrupted.
       }
     }
     debugln("SessionManager created");
@@ -79,6 +80,7 @@ public class SessionManager {
       try {
         this.wait();
       } catch (InterruptedException e) {
+        // It's OK for a wait() to be interrupted.
       }
       // command finished iff the command was nulled out
       if (pending != null) {
@@ -188,6 +190,7 @@ public class SessionManager {
           try {
             mgr.wait(0);
           } catch (InterruptedException e) {
+            // It's OK for a wait() to be interrupted.
           }
           assert mgr.pending != null
               : "@AssumeAssertion(nullness): bug? might not be true if interrupted?";

@@ -767,7 +767,7 @@ public final class Debug {
 
     for (VarInfo v : vis) {
       Object val = v.getValue(vt);
-      int mod = vt.getModified(v);
+      // int mod = vt.getModified(v);
       out.append(v.name());
       out.append("=");
       out.append(toString(val));

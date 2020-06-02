@@ -40,7 +40,7 @@ public abstract class SingleStringSequence extends UnaryInvariant {
 
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
-  // just implement @link{add_modified(Object,int)}.
+  // just implement {@link #add_modified(Object,int)}.
   @Override
   public InvariantStatus add(@Interned Object val, int mod_index, int count) {
     assert !falsified;

@@ -78,6 +78,8 @@ public class PptMap implements Serializable {
   }
 
   /**
+   * Returns unstably-ordered collection of PptTopLevels.
+   *
    * @return unstably-ordered collection of PptTopLevels
    * @see #pptIterator()
    */
@@ -85,16 +87,23 @@ public class PptMap implements Serializable {
     return Collections.unmodifiableCollection(nameToPpt.values());
   }
 
-  /** @return an unmodifiable version of the keySet */
+  /**
+   * Returns an unmodifiable version of the keySet.
+   *
+   * @return an unmodifiable version of the keySet
+   */
   public Collection<@KeyFor("nameToPpt") String> nameStringSet() {
     return Collections.unmodifiableSet(nameToPpt.keySet());
   }
 
   /**
+   * Returns an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   * The sorting makes the iterator deterministic.
+   *
+   * <p>If you wish to merely iterate over the result in a foreach loop, use {@link #pptIterable()}
+   * instead.
+   *
    * @return an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
-   *     This is good for consistency.
-   *     <p>If you wish to merely iterate over the result in a Java new-style for loop ("foreach
-   *     loop"), use {@link #pptIterable()} instead.
    * @see #pptIterable()
    */
   // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
@@ -129,10 +138,12 @@ public class PptMap implements Serializable {
   }
 
   /**
+   * Returns an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   * The sorting makes the iterator deterministic.
+   *
+   * <p>It is a wrapper around {@link #pptIterator()} that can be used in a foreach loop.
+   *
    * @return an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
-   *     This is good for consistency.
-   *     <p>It is a wrapper around {@link #pptIterator()} that can be used in a Java new-style for
-   *     loop ("foreach loop").
    * @see #pptIterator()
    */
   public Iterable<PptTopLevel> pptIterable() {
@@ -140,10 +151,13 @@ public class PptMap implements Serializable {
   }
 
   /**
+   * Returns an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   * This differs from pptIterator() in that it includes all ppts (including conditional ppts).
+   *
+   * <p>If you wish to merely iterate over the result in a Java new-style for loop ("foreach loop"),
+   * use {@link #ppt_all_iterable()} instead.
+   *
    * @return an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
-   *     This differs from pptIterator() in that it includes all ppts (including conditional ppts).
-   *     <p>If you wish to merely iterate over the result in a Java new-style for loop ("foreach
-   *     loop"), use {@link #ppt_all_iterable()} instead.
    * @see #ppt_all_iterable()
    */
   // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
@@ -188,10 +202,13 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * @return an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
-   *     This differs from pptIterable() in that it includes all ppts (including conditional ppts).
-   *     <p>It is a wrapper around {@link #ppt_all_iterator()} that can be used in a Java new-style
-   *     for loop ("foreach loop").
+   * Returns an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   * This differs from pptIterable() in that it includes all ppts (including conditional ppts).
+   *
+   * <p>It is a wrapper around {@link #ppt_all_iterator()} that can be used in a Java new-style for
+   * loop ("foreach loop").
+   *
+   * @return an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names
    * @see #ppt_all_iterator()
    */
   public Iterable<PptTopLevel> ppt_all_iterable() {

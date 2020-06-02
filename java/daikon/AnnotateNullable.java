@@ -177,19 +177,6 @@ public class AnnotateNullable {
     return object_ppt.parents.get(0).parent;
   }
 
-  // Returns null if no corresponding object ppt exists
-  private static @Nullable PptTopLevel object_for_class(PptTopLevel class_ppt) {
-    PptTopLevel object_ppt = null;
-    for (PptRelation child_relation : class_ppt.children) {
-      PptTopLevel child = child_relation.child;
-      if (child.is_object()) {
-        assert object_ppt == null; // shouldn't have two children that are both is_object() ?
-        object_ppt = child;
-      }
-    }
-    return object_ppt;
-  }
-
   // Process a class, including all its methods.
   // Takes the object program point as its argument.
   public static void process_class(PptTopLevel object_ppt) {

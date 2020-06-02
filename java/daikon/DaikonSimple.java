@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -202,8 +201,6 @@ public class DaikonSimple {
 
     // used only for debugging
     int old_num_vars = ppt.var_infos.length;
-    int old_num_views = ppt.numViews();
-    boolean debug_on = debug.isLoggable(Level.FINE);
 
     // / 1. all unary views
 
@@ -374,7 +371,7 @@ public class DaikonSimple {
   public static class SimpleProcessor extends FileIO.Processor {
     PptMap all_ppts;
 
-    /** nonce -> List<Call,Call> * */
+    /** {@code nonce -> List<Call,Call>} */
     // The first Call is the enter entry and the second is the object entry
     Map<Integer, List<Call>> call_map = new LinkedHashMap<>();
 
@@ -621,7 +618,7 @@ public class DaikonSimple {
           // If any variables are out of bounds, remove the invariants
           if (v.missingOutOfBounds()) {
             while (k.hasNext()) {
-              Invariant inv = k.next();
+              k.next();
               k.remove();
             }
             missing = true;
@@ -640,7 +637,6 @@ public class DaikonSimple {
           while (k.hasNext()) {
 
             Invariant inv = k.next();
-            Invariant pre_inv = inv.clone();
             for (VarInfo vi : inv.ppt.var_infos) {
               assert vt.getValue(vi) != null : vi;
             }

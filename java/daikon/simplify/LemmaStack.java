@@ -4,9 +4,8 @@ import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -77,7 +76,7 @@ public class LemmaStack {
    * things you most recently assumed, but we aren't smart enough to check that.
    */
   private void unAssumeAll(List<Lemma> invs) {
-    for (Lemma lem : invs) {
+    for (@SuppressWarnings("UnusedVariable") Lemma lem : invs) {
       unAssume();
     }
   }
@@ -342,15 +341,6 @@ public class LemmaStack {
     return found;
   }
 
-  private static void shuffle(Object[] ary, Random rand) {
-    for (int i = 0; i < ary.length - 1; i++) {
-      int j = i + rand.nextInt(ary.length - i);
-      Object temp = ary[i];
-      ary[i] = ary[j];
-      ary[j] = temp;
-    }
-  }
-
   /** Return a minimal set of assumptions from the stack that imply a given string. */
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {
     assert checkString(str) == 'T';
@@ -469,7 +459,7 @@ public class LemmaStack {
     }
   }
 
-  private static SortedSet<Long> ints_seen = new TreeSet<>();
+  private static NavigableSet<Long> ints_seen = new TreeSet<>();
 
   /** Keep track that we've seen this number in formulas, for the sake of pushOrdering. */
   public static void noticeInt(long i) {

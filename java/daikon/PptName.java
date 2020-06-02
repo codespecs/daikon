@@ -127,6 +127,8 @@ public class PptName implements Serializable {
   // ==================== OBSERVERS ====================
 
   /**
+   * Returns getName() [convenience accessor].
+   *
    * @return getName() [convenience accessor]
    * @see #getName()
    */
@@ -136,8 +138,10 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return the complete program point name e.g.
-   *     "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84"
+   * Returns the complete program point name, e.g.,
+   * "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84".
+   *
+   * @return the complete program point name
    */
   @Pure
   public String getName() {
@@ -145,16 +149,20 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return the fully-qualified class name, which uniquely identifies a given class. May be null.
-   *     e.g. "DataStructures.StackAr"
+   * Returns the fully-qualified class name, which uniquely identifies a given class. May be null.
+   * e.g. "DataStructures.StackAr".
+   *
+   * @return the fully-qualified class name
    */
   public @Nullable String getFullClassName() {
     return cls;
   }
 
   /**
-   * @return the short name of the class, not including any additional context, such as the package
-   *     it is in. May be null. e.g. "StackAr"
+   * Returns the short name of the class, not including any additional context, such as the package
+   * it is in. May be null. e.g. "StackAr".
+   *
+   * @return the short name of the class, or null
    */
   public @Nullable String getShortClassName() {
     if (cls == null) {
@@ -168,7 +176,11 @@ public class PptName implements Serializable {
     }
   }
 
-  /** @return a guess at the package name. May be null. */
+  /**
+   * Returns a guess at the package name. May be null.
+   *
+   * @return a guess at the package name. May be null
+   */
   public @Nullable String getPackageName() {
     if (cls == null) {
       return null;
@@ -182,16 +194,20 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return the full name which can uniquely identify a method within a class. The name includes
-   *     symbols for the argument types and return type. May be null. e.g. "pop()Ljava/lang/Object;"
+   * Returns the full name which can uniquely identify a method within a class. The name includes
+   * symbols for the argument types and return type. May be null. e.g. "pop()Ljava/lang/Object;".
+   *
+   * @return the full name which can uniquely identify a method within a class
    */
   public @Nullable String getSignature() {
     return method;
   }
 
   /**
-   * @return the name (identifier) of the method, not taking into account any arguments, return
-   *     values, etc. May be null. e.g. "pop"
+   * Returns the name (identifier) of the method, not taking into account any arguments, return
+   * values, etc. May be null. e.g. "pop".
+   *
+   * @return the name (identifier) of the method, or null
    */
   public @Nullable String getMethodName() {
     if (method == null) {
@@ -203,9 +219,11 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return the fully-qualified class and method name (and signature). Does not include any point
-   *     information (such as ENTER or EXIT). May be null. e.g.
-   *     "DataStructures.StackAr.pop()Ljava/lang/Object;"
+   * Returns the fully-qualified class and method name (and signature). Does not include any point
+   * information (such as ENTER or EXIT). May be null. e.g.
+   * "DataStructures.StackAr.pop()Ljava/lang/Object;"
+   *
+   * @return the fully-qualified class and method name (and signature)
    */
   public @Nullable @Interned String getNameWithoutPoint() {
     return fn_name;
@@ -218,17 +236,21 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return something interesting and descriptive about the point in question, along the lines of
-   *     "ENTER" or "EXIT" or some such. The semantics of this method are not yet decided, so don't
-   *     try to do anything useful with this result. May be null. e.g. "EXIT84".
+   * Returns something interesting and descriptive about this point, along the lines of "ENTER" or
+   * "EXIT" or some such. The semantics of this method are not yet decided, so don't try to do
+   * anything useful with this result. May be null. e.g. "EXIT84".
+   *
+   * @return something interesting and descriptive about this
    */
   public @Nullable String getPoint() {
     return point;
   }
 
   /**
-   * @return a numerical subscript of the given point, or Integer.MIN_VALUE if none exists. e.g.
-   *     "84"
+   * Returns a numerical subscript of the given point, or Integer.MIN_VALUE if none exists. e.g.
+   * "84".
+   *
+   * @return a numerical subscript of the given point, or Integer.MIN_VALUE if none exists.
    * @see #exitLine()
    */
   public int getPointSubscript() {
@@ -242,6 +264,7 @@ public class PptName implements Serializable {
             result = Integer.parseInt(point.substring(i));
             break;
           } catch (NumberFormatException e) {
+            continue;
           }
         }
       }
@@ -249,39 +272,63 @@ public class PptName implements Serializable {
     return result;
   }
 
-  /** @return true iff this name refers to a synthetic object instance program point */
+  /**
+   * Returns true iff this name refers to a synthetic object instance program point.
+   *
+   * @return true iff this name refers to a synthetic object instance program point
+   */
   @Pure
   public boolean isObjectInstanceSynthetic() {
     return FileIO.object_suffix.equals(point);
   }
 
-  /** @return true iff this name refers to a synthetic class instance program point */
+  /**
+   * Returns true iff this name refers to a synthetic class instance program point.
+   *
+   * @return true iff this name refers to a synthetic class instance program point
+   */
   @Pure
   public boolean isClassStaticSynthetic() {
     return FileIO.class_static_suffix.equals(point);
   }
 
-  /** @return true iff this name refers to program globals */
+  /**
+   * Returns true iff this name refers to program globals.
+   *
+   * @return true iff this name refers to program globals
+   */
   @Pure
   public boolean isGlobalPoint() {
     return FileIO.global_suffix.equals(point);
   }
 
-  /** @return true iff this name refers to a procedure exit point */
+  /**
+   * Returns true iff this name refers to a procedure exit point.
+   *
+   * @return true iff this name refers to a procedure exit point
+   */
   @EnsuresNonNullIf(result = true, expression = "point")
   @Pure
   public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
 
-  /** @return true iff this name refers to an abrupt completion point */
+  /**
+   * Returns true iff this name refers to an abrupt completion point.
+   *
+   * @return true iff this name refers to an abrupt completion point
+   */
   @EnsuresNonNullIf(result = true, expression = "point")
   @Pure
   public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
   }
 
-  /** @return true iff this name refers to a combined (synthetic) procedure exit point */
+  /**
+   * Returns true iff this name refers to a combined (synthetic) procedure exit point.
+   *
+   * @return true iff this name refers to a combined (synthetic) procedure exit point
+   */
   @EnsuresNonNullIf(result = true, expression = "point")
   @Pure
   public boolean isCombinedExitPoint() {
@@ -289,7 +336,10 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return true iff this name refers to an actual (not combined) procedure exit point (eg, EXIT22)
+   * Returns true iff this name refers to an actual (not combined) procedure exit point (eg,
+   * EXIT22).
+   *
+   * @return true iff this name refers to an actual (not combined) procedure exit point
    */
   @EnsuresNonNullIf(result = true, expression = "point")
   @Pure
@@ -297,7 +347,11 @@ public class PptName implements Serializable {
     return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
   }
 
-  /** @return true iff this name refers to a procedure exit point */
+  /**
+   * Returns true iff this name refers to a procedure exit point.
+   *
+   * @return true iff this name refers to a procedure exit point
+   */
   @EnsuresNonNullIf(result = true, expression = "point")
   @Pure
   public boolean isEnterPoint() {
@@ -305,6 +359,9 @@ public class PptName implements Serializable {
   }
 
   /**
+   * Returns a string containing the line number, if this is an exit point; otherwise, returns an
+   * empty string.
+   *
    * @return a string containing the line number, if this is an exit point; otherwise, return an
    *     empty string
    * @see #getPointSubscript()
@@ -323,10 +380,12 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return true iff this program point is a constructor entry or exit. There are two ways in which
-   *     this works. With the older declaration format, the method name starts with {@code <init>}.
-   *     The newer declaration format does not have {@code <init>} but their method name includes
-   *     the class name. For compatibility both mechanisms are checked.
+   * Returns true iff this program point is a constructor entry or exit. There are two ways in which
+   * this works. With the older declaration format, the method name starts with {@code <init>}. The
+   * newer declaration format does not have {@code <init>} but their method name includes the class
+   * name. For compatibility both mechanisms are checked.
+   *
+   * @return true iff this program point is a constructor entry or exit.
    */
   @Pure
   public boolean isConstructor() {

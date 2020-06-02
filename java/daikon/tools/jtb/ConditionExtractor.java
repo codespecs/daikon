@@ -175,6 +175,9 @@ class ConditionExtractor extends DepthFirstVisitor {
   }
 
   /**
+   * Returns a String[] that contains the different Integer values which the case expression is
+   * tested against.
+   *
    * @return a String[] that contains the different Integer values which the case expression is
    *     tested against
    */

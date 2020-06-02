@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -288,9 +288,6 @@ public class PptSplitter implements Serializable {
     // Maps permuted invariants to their original invariants
     Map<Invariant, Invariant> orig_invs = new LinkedHashMap<>();
 
-    List<@KeyFor("orig_invs") Invariant> same_invs_vec =
-        new ArrayList<@KeyFor("orig_invs") Invariant>();
-
     List<@KeyFor("orig_invs") Invariant[]> exclusive_invs_vec =
         new ArrayList<@KeyFor("orig_invs") Invariant[]>();
 
@@ -333,7 +330,7 @@ public class PptSplitter implements Serializable {
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis = new VarInfo[vis.length];
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_sorted = new VarInfo[vis.length];
         for (int kk = 0; kk < vis.length; kk++) {
-          cvis_non_canonical[kk] = matching_var(child_ppt, parent, vis[kk]);
+          cvis_non_canonical[kk] = matching_var(child_ppt, vis[kk]);
           cvis[kk] = cvis_non_canonical[kk].canonicalRep();
           cvis_sorted[kk] = cvis[kk];
         }
@@ -444,11 +441,6 @@ public class PptSplitter implements Serializable {
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
       List<@KeyFor("orig_invs") Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
       exclusive_invs_vec.addAll(ec);
-
-      // Add any invariants that are the same to the list
-      @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      List<@KeyFor("orig_invs") Invariant> si = same_invariants(invs[0], invs[1]);
-      same_invs_vec.addAll(si);
 
       // Add any invariants that are different to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
@@ -637,6 +629,7 @@ public class PptSplitter implements Serializable {
   }
 
   // Could be used in assertion that all invariants are at same point.
+  @SuppressWarnings("UnusedMethod")
   private boolean at_same_ppt(List<Invariant> invs1, List<Invariant> invs2) {
     PptSlice ppt = null;
     Iterator<Invariant> itor =
@@ -658,7 +651,8 @@ public class PptSplitter implements Serializable {
   // everywhere?
   /**
    * Determine which elements of invs1 are mutually exclusive with elements of invs2. Result
-   * elements are pairs of List<Invariant>. All the arguments should be over the same program point.
+   * elements are pairs of {@code List<Invariant>}. All the arguments should be over the same
+   * program point.
    */
   List<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
 
@@ -685,13 +679,13 @@ public class PptSplitter implements Serializable {
 
   /**
    * Determine which elements of invs1 differ from elements of invs2. Result elements are pairs of
-   * List<Invariant> (with one or the other always null). All the arguments should be over the same
-   * program point.
+   * {@code List<Invariant>} (with one or the other always null). All the arguments should be over
+   * the same program point.
    */
   List<@Nullable Invariant[]> different_invariants(List<Invariant> invs1, List<Invariant> invs2) {
-    SortedSet<Invariant> ss1 = new TreeSet<>(icfp);
+    NavigableSet<Invariant> ss1 = new TreeSet<>(icfp);
     ss1.addAll(invs1);
-    SortedSet<Invariant> ss2 = new TreeSet<>(icfp);
+    NavigableSet<Invariant> ss2 = new TreeSet<>(icfp);
     ss2.addAll(invs2);
     List<@Nullable Invariant[]> result = new ArrayList<>();
     for (OrderedPairIterator<Invariant> opi =
@@ -708,14 +702,15 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Determine which elements of invs1 are the same as elements of invs2. Result elements are
-   * List<Invariant> (from the invs1 list). All the arguments should be over the same program point.
+   * Determine which elements of invs1 are the same as elements of invs2. Result elements are {@code
+   * List<Invariant>} (from the invs1 list). All the arguments should be over the same program
+   * point.
    */
   List<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
 
-    SortedSet<Invariant> ss1 = new TreeSet<>(icfp);
+    NavigableSet<Invariant> ss1 = new TreeSet<>(icfp);
     ss1.addAll(invs1);
-    SortedSet<Invariant> ss2 = new TreeSet<>(icfp);
+    NavigableSet<Invariant> ss2 = new TreeSet<>(icfp);
     ss2.addAll(invs2);
 
     ss1.retainAll(ss2);
@@ -830,11 +825,11 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Returns the VarInfo in ppt1 that matches the specified VarInfo in ppt2. The variables at each
-   * point must match exactly. This is a reasonable assumption for the ppts in PptSplitter and their
+   * Returns the VarInfo in ppt1 that matches the specified VarInfo. The variables at each point
+   * must match exactly. This is a reasonable assumption for the ppts in PptSplitter and their
    * parent.
    */
-  private VarInfo matching_var(PptTopLevel ppt1, PptTopLevel ppt2, VarInfo ppt2_var) {
+  private VarInfo matching_var(PptTopLevel ppt1, VarInfo ppt2_var) {
     VarInfo v = ppt1.var_infos[ppt2_var.varinfo_index];
     assert v.name().equals(ppt2_var.name());
     return v;

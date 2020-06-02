@@ -126,6 +126,8 @@ public final class FileCompiler {
   }
 
   /**
+   * Returns the error output from compiling the files.
+   *
    * @param filenames the paths of the Java source to be compiled as Strings
    * @return the error output from compiling the files
    * @throws Error if an empty list of filenames is provided

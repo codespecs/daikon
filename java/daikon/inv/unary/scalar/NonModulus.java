@@ -5,7 +5,7 @@ import daikon.VarInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
-import java.util.SortedSet;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
@@ -32,7 +32,7 @@ public class NonModulus extends SingleScalar {
   public static boolean dkconfig_enabled = false;
 
   // Set elements = new HashSet();
-  SortedSet<Long> elements = new TreeSet<>();
+  NavigableSet<Long> elements = new TreeSet<>();
 
   private long modulus = 0;
   private long remainder = 0;

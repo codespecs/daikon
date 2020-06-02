@@ -36,7 +36,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  public ValueSet(int max_values) {
+  protected ValueSet(int max_values) {
     super(max_values);
   }
 

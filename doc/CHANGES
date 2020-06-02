@@ -25,6 +25,8 @@ Further documentation can be found in:
 Fjalar/Kvasir:
 - We updated the underlying Binutils infrastructure to version 2.34.
 
+Maved the SplitDtrace class from the ununabed package to the daikon/ package.
+
 ===========================================================================
 
 5.8.2 (May 4, 2020)

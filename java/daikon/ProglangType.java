@@ -174,10 +174,6 @@ public final @Interned class ProglangType implements Serializable {
   //   return this == o;
   // }
 
-  private boolean internal_equals(ProglangType other) {
-    return ((base == other.base) && (dimensions == other.dimensions));
-  }
-
   // THIS CODE IS A HOT SPOT (~33% of runtime) [as of January 2002].
   /** @param t_base must be interned */
   private static @Nullable ProglangType find(@Interned String t_base, int t_dims) {
@@ -350,7 +346,7 @@ public final @Interned class ProglangType implements Serializable {
       // presume that 32 bit values are signed
       if (dkconfig_convert_to_signed
           && (((val & 0x80000000L) == 0x80000000L) && ((val & 0xFFFFFFFF00000000L) == 0))) {
-        long orig = val;
+        // long orig = val;
         val |= 0xFFFFFFFF00000000L;
         // System.out.printf("Warning: converted %d to %d%n", orig, val);
       }

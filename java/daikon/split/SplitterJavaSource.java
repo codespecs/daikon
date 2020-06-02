@@ -615,32 +615,56 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       type = makeIndexIfNeeded(getVarType(varInfo), compilableName, varInfo, condition);
     }
 
-    /** @return the VarInfo of the variable */
+    /**
+     * Returns the VarInfo of the variable.
+     *
+     * @return the VarInfo of the variable
+     */
     private VarInfo getVarInfo() {
       return varInfo;
     }
 
-    /** @return the name of the variable */
+    /**
+     * Returns the name of the variable.
+     *
+     * @return the name of the variable
+     */
     private String getNormalName() {
       return name;
     }
 
-    /** @return the compilable name of the variable */
+    /**
+     * Returns the compilable name of the variable.
+     *
+     * @return the compilable name of the variable
+     */
     private String getCompilableName() {
       return compilableName;
     }
 
-    /** @return the field name of the variable */
+    /**
+     * Returns the field name of the variable.
+     *
+     * @return the field name of the variable
+     */
     private String getFieldName() {
       return fieldName;
     }
 
-    /** @return the VarInfo name of the variable */
+    /**
+     * Returns the VarInfo name of the variable.
+     *
+     * @return the VarInfo name of the variable
+     */
     private String getVarName() {
       return varName;
     }
 
-    /** @return the type of the variable */
+    /**
+     * Returns the type of the variable.
+     *
+     * @return the type of the variable
+     */
     private String getType() {
       return type;
     }

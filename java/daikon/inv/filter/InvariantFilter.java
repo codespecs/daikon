@@ -7,13 +7,13 @@ import daikon.inv.Invariant;
 public abstract class InvariantFilter {
   boolean isOn;
 
-  public InvariantFilter(boolean isOn) {
+  protected InvariantFilter(boolean isOn) {
     this.isOn = isOn;
   }
 
   // TODO:  This is a hack.  Should add constructors that take a boolean
   // for every subclass.
-  public InvariantFilter() {
+  protected InvariantFilter() {
     this(true);
   }
 

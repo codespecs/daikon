@@ -22,7 +22,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -591,7 +591,7 @@ public final class Diff {
 
     // Created sorted set of top level ppts, possibly including
     // conditional ppts
-    SortedSet<PptTopLevel> ppts = new TreeSet<>(PPT_COMPARATOR);
+    NavigableSet<PptTopLevel> ppts = new TreeSet<>(PPT_COMPARATOR);
     ppts.addAll(pptMap.asCollection());
 
     for (PptTopLevel ppt : ppts) {

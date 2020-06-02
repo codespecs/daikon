@@ -28,7 +28,7 @@ public abstract class Joiner extends Invariant {
     this.right = right;
   }
 
-  public Joiner(PptTopLevel ppt, Invariant left, Invariant right) {
+  protected Joiner(PptTopLevel ppt, Invariant left, Invariant right) {
     // Need a duplicate check
 
     this(ppt.joiner_view, left, right);

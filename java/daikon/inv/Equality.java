@@ -158,13 +158,6 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   ////////////////////////
-  // Functions called during actual checking
-
-  private void flow(Invariant flowed) {
-    throw new UnsupportedOperationException("Equality invariants don't flow");
-  }
-
-  ////////////////////////
   // Printing
 
   // The format methods aren't called, because for output, we
@@ -387,11 +380,14 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   /// Processing of data
 
   /**
+   * Return a List of VarInfos that do not fit into this set anymore.
+   *
+   * <p>Originally (8/14/2003), this did not check for the modified bits. It seems however, quite
+   * wrong to leave variables in the same equality set when one is missing and the other is not.
+   * It's possible we should go farther and break out of the equality set any variable that is
+   * missingOutOfBounds (JHP).
+   *
    * @return a List of VarInfos that do not fit into this set anymore
-   *     <p>Originally (8/14/2003), this did not check for the modified bits. It seems however,
-   *     quite wrong to leave variables in the same equality set when one is missing and the other
-   *     is not. Its possible we should go farther and break out of the equality set any variable
-   *     that is missingOutOfBounds (JHP).
    */
   public List<VarInfo> add(ValueTuple vt, int count) {
     // Need to handle specially if leader is missing.

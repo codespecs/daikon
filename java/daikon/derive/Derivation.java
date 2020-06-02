@@ -46,11 +46,17 @@ public abstract class Derivation implements Serializable, Cloneable {
   // This is essentially a clone() method that also switches the variables.
   public abstract Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars);
 
-  /** @return array of the VarInfos this was derived from */
+  /**
+   * Returns array of the VarInfos this was derived from.
+   *
+   * @return array of the VarInfos this was derived from
+   */
   @SideEffectFree
   public abstract VarInfo[] getBases();
 
   /**
+   * Returns the {@code i}th VarInfo this was derived from.
+   *
    * @param i index into the array of Varinfos this was derived from
    * @return the {@code i}th VarInfo this was derived from
    */
@@ -58,6 +64,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   public abstract VarInfo getBase(int i);
 
   /**
+   * Returns a pair of: the derived value and whether the variable counts as modified.
+   *
    * @return a pair of: the derived value and whether the variable counts as modified
    * @param full_vt the set of values in a program point that will be used to derive the value
    */
@@ -137,14 +145,20 @@ public abstract class Derivation implements Serializable, Cloneable {
   public abstract int derivedDepth();
 
   /**
-   * @return true iff other and this represent the same derivation (modulo the variable they are
-   *     applied to). Default implentation will just checks runtime type, but subclasses with state
-   *     (e.g. SequenceInitial index) should match that, too.
+   * Returns true iff other and this represent the same derivation (modulo the variable they are
+   * applied to). Default implentation will just checks runtime type, but subclasses with state
+   * (e.g. SequenceInitial index) should match that, too.
+   *
+   * @return true iff other and this represent the same derivation
    */
   @Pure
   public abstract boolean isSameFormula(Derivation other);
 
-  /** @see VarInfo#canBeMissing */
+  /**
+   * See {@link VarInfo#canBeMissing}.
+   *
+   * @see VarInfo#canBeMissing
+   */
   public abstract boolean canBeMissing();
 
   /**

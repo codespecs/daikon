@@ -21,7 +21,11 @@ public abstract class UnaryInvariant extends Invariant {
     super();
   }
 
-  /** @return this */
+  /**
+   * Returns this.
+   *
+   * @return this
+   */
   @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 1;

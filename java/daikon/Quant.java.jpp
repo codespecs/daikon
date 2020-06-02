@@ -169,7 +169,10 @@ public final class Quant {
   // Collections.  They convert any Collection to an array, then invoke the
   // Object[] version of the method.
 
-  /** @see #noDups(Object[]) */
+  /**
+   * See {@link #noDups(Object[])}.
+   * @see #noDups(Object[])
+   */
   @SuppressWarnings("interning") // cast from Object
   @EnsuresNonNullIf(result=true, expression="#1")
   @Pure
@@ -180,7 +183,10 @@ public final class Quant {
     return noDups(toObjArray(seq));
   }
 
-  /** @see #typeArray(Object[]) */
+  /**
+   * See {@link #typeArray(Object[])}.
+   * @see #typeArray(Object[])
+   */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1"})*/
   /* pure */ public static String @PolyNull [] typeArray(@PolyNull Object seq) {
@@ -190,7 +196,10 @@ public final class Quant {
     return typeArray(toObjArray(seq));
   }
 
-  /** @see #eltwiseEqual(Object[]) */
+  /**
+   * See {@link #eltwiseEqual(Object[])}.
+   * @see #eltwiseEqual(Object[])
+   */
   @SuppressWarnings("interning") // cast from Object
   @EnsuresNonNullIf(result=true, expression="#1")
   @Pure
@@ -201,7 +210,10 @@ public final class Quant {
     return eltwiseEqual(toObjArray(seq));
   }
 
-  /** @see #eltwiseNotEqual(Object[]) */
+  /**
+   * See {@link #eltwiseNotEqual(Object[])}.
+   * @see #eltwiseNotEqual(Object[])
+   */
   @SuppressWarnings("interning") // cast from Object
   @EnsuresNonNullIf(result=true, expression="#1")
   @Pure
@@ -212,7 +224,10 @@ public final class Quant {
     return eltwiseNotEqual(toObjArray(seq));
   }
 
-  /** @see #concat(Object[], Object[]) */
+  /**
+   * See {@link #concat(Object[], Object[])}.
+   * @see #concat(Object[], Object[])
+   */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1","#2"})*/
   @SideEffectFree
@@ -226,7 +241,10 @@ public final class Quant {
     return concat(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #union(Object[], Object[]) */
+  /**
+   * See {@link #union(Object[], Object[])}.
+   * @see #union(Object[], Object[])
+   */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1","#2"})*/
   @SideEffectFree
@@ -240,7 +258,10 @@ public final class Quant {
     return union(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #intersection(Object[], Object[]) */
+  /**
+   * See {@link #intersection(Object[], Object[])}.
+   * @see #intersection(Object[], Object[])
+   */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1","#2"})*/
   @SideEffectFree
@@ -254,7 +275,10 @@ public final class Quant {
     return intersection(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #setDiff(Object[], Object[]) */
+  /**
+   * See {@link #setDiff(Object[], Object[])}.
+   * @see #setDiff(Object[], Object[])
+   */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#1","#2"})*/
   @SideEffectFree
@@ -268,7 +292,10 @@ public final class Quant {
     return setDiff(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #setEqual(Object[], Object[]) */
+  /**
+   * See {@link #setEqual(Object[], Object[])}.
+   * @see #setEqual(Object[], Object[])
+   */
   @SuppressWarnings("interning")  // cast from Object
   @EnsuresNonNullIf(result=true, expression={"#1","#2"})
   @Pure
@@ -282,7 +309,10 @@ public final class Quant {
     return setEqual(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #isReverse(Object[], Object[]) */
+  /**
+   * See {@link #isReverse(Object[], Object[])}.
+   * @see #isReverse(Object[], Object[])
+   */
   @EnsuresNonNullIf(result=true, expression={"#1","#2"})
   @SuppressWarnings("interning")  // cast from Object
   @Pure
@@ -296,7 +326,10 @@ public final class Quant {
     return isReverse(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #pairwiseEqual(Object[], Object[]) */
+  /**
+   * See {@link #pairwiseEqual(Object[], Object[])}.
+   * @see #pairwiseEqual(Object[], Object[])
+   */
   @SuppressWarnings("interning")  // cast from Object
   @EnsuresNonNullIf(result=true, expression={"#1","#2"})
   @Pure
@@ -310,7 +343,10 @@ public final class Quant {
     return pairwiseEqual(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #pairwiseNotEqual(Object[], Object[]) */
+  /**
+   * See {@link #pairwiseNotEqual(Object[], Object[])}.
+   * @see #pairwiseNotEqual(Object[], Object[])
+   */
   @SuppressWarnings("interning")  // cast from Object
   @EnsuresNonNullIf(result=true, expression={"#1","#2"})
   @Pure
@@ -324,7 +360,10 @@ public final class Quant {
     return pairwiseNotEqual(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #lexEqual(Object[], Object[]) */
+  /**
+   * See {@link #lexEqual(Object[], Object[])}.
+   * @see #lexEqual(Object[], Object[])
+   */
   @SuppressWarnings("interning")  // cast from Object
   @EnsuresNonNullIf(result=true, expression={"#1","#2"})
   @Pure
@@ -338,7 +377,10 @@ public final class Quant {
     return lexEqual(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #lexNotEqual(Object[], Object[]) */
+  /**
+   * See {@link #lexNotEqual(Object[], Object[])}.
+   * @see #lexNotEqual(Object[], Object[])
+   */
   @SuppressWarnings("interning")  // cast from Object
   @EnsuresNonNullIf(result=true, expression={"#1","#2"})
   @Pure
@@ -352,7 +394,10 @@ public final class Quant {
     return lexNotEqual(toObjArray(seq1), toObjArray(seq2));
   }
 
-  /** @see #memberOf(Object, Object[]) */
+  /**
+   * See {@link #memberOf(Object, Object[])}.
+   * @see #memberOf(Object, Object[])
+   */
   @SuppressWarnings("interning")  // cast from Object
   @EnsuresNonNullIf(result=true, expression="#2")
   @Pure
@@ -363,7 +408,10 @@ public final class Quant {
     return memberOf(elt, toObjArray(arr));
   }
 
-  /** @see #slice(Object[], int, int) */
+  /**
+   * See {@link #slice(Object[], int, int)}.
+   * @see #slice(Object[], int, int)
+   */
   @SuppressWarnings("interning")  // cast from Object
   /*TODO: @AssertNonNullIfNonNull("#1")*/
   @SideEffectFree
@@ -374,7 +422,10 @@ public final class Quant {
     return slice(toObjArray(seq), start, end);
   }
 
-  /** @see #eltsEqual(Object[], Object) */
+  /**
+   * See {@link #eltsEqual(Object[], Object)}.
+   * @see #eltsEqual(Object[], Object)
+   */
   @SuppressWarnings("interning")  // cast from Object
   @EnsuresNonNullIf(result=true, expression="#1")
   @Pure
@@ -385,7 +436,10 @@ public final class Quant {
     return eltsEqual(toObjArray(arr), elt);
   }
 
-  /** @see #eltsNotEqual(Object[], Object) */
+  /**
+   * See {@link #eltsNotEqual(Object[], Object)}.
+   * @see #eltsNotEqual(Object[], Object)
+   */
   @SuppressWarnings("interning")  // cast from Object
   @EnsuresNonNullIf(result=true, expression="#1")
   @Pure

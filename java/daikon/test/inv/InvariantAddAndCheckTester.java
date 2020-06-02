@@ -426,6 +426,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns a String containing the proper add and check commands for this input lines of this
+     * test case.
+     *
      * @return a String containing the proper add and check commands for this input lines of this
      *     test case
      */
@@ -590,6 +593,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns an array of the arguments to be passed into check_modified or add_modified produced
+     * from tokens.
+     *
      * @return an array of the arguments to be passed into check_modified or add_modified produced
      *     from tokens
      */
@@ -604,6 +610,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns the InvariantStatus produced by invoking invariantToTest's add_modified method on the
+     * arguments represented by params.
+     *
      * @return the InvariantStatus produced by invoking invariantToTest's add_modified method on the
      *     arguments represented by params
      */
@@ -616,6 +625,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns the InvariantStatus produced by invoking invariantToTest's check_modified method on
+     * the arguments represented by params.
+     *
      * @return the InvariantStatus produced by invoking invariantToTest's check_modified method on
      *     the arguments represented by params
      */
@@ -628,8 +640,10 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return a String representation of the invariantToTest. This String is produced by invoking
-     *     the invariant's format_using with method with the argument {@code OutputFormat.Daikon}.
+     * Returns a String representation of the invariantToTest. This String is produced by invoking
+     * the invariant's format_using with method with the argument {@code OutputFormat.Daikon}.
+     *
+     * @return a String representation of the invariantToTest
      */
     private static String getInvariantFormat() {
       try {
@@ -639,7 +653,11 @@ public class InvariantAddAndCheckTester extends TestCase {
       }
     }
 
-    /** @return an InvariantStatus that the string status parses to */
+    /**
+     * Returns an InvariantStatus that the string status parses to.
+     *
+     * @return an InvariantStatus that the string status parses to
+     */
     private static InvariantStatus parseStatus(String status) {
       status = status.trim();
       if (status.equals("no_change")) {
@@ -695,6 +713,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns the method of invariant named by theClass that produces a String representation of
+     * the invariant.
+     *
      * @return the method of invariant named by theClass that produces a String representation of
      *     the invariant
      */
