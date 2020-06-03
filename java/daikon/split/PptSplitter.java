@@ -653,6 +653,9 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 are mutually exclusive with elements of invs2. Result
    * elements are pairs of {@code List<Invariant>}. All the arguments should be over the same
    * program point.
+   *
+   * @param invs1 a set of invariants
+   * @param invs2 a set of invariants
    */
   List<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
 
@@ -681,6 +684,10 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 differ from elements of invs2. Result elements are pairs of
    * {@code List<Invariant>} (with one or the other always null). All the arguments should be over
    * the same program point.
+   *
+   * @param invs1 a set of invariants
+   * @param invs2 a set of invariants
+   * @return invariants in the exclusive-or of {@code invs1} and {@code invs2}
    */
   List<@Nullable Invariant[]> different_invariants(List<Invariant> invs1, List<Invariant> invs2) {
     NavigableSet<Invariant> ss1 = new TreeSet<>(icfp);
@@ -705,6 +712,10 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 are the same as elements of invs2. Result elements are {@code
    * List<Invariant>} (from the invs1 list). All the arguments should be over the same program
    * point.
+   *
+   * @param invs1 a set of invariants
+   * @param invs2 a set of invariants
+   * @param the intersection of {@code invs1} and {@code invs2}
    */
   List<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
 
@@ -828,6 +839,9 @@ public class PptSplitter implements Serializable {
    * Returns the VarInfo in ppt1 that matches the specified VarInfo. The variables at each point
    * must match exactly. This is a reasonable assumption for the ppts in PptSplitter and their
    * parent.
+   *
+   * @param ppt1 a program point
+   * @param ppt2_var a variable from a different program point
    */
   private VarInfo matching_var(PptTopLevel ppt1, VarInfo ppt2_var) {
     VarInfo v = ppt1.var_infos[ppt2_var.varinfo_index];

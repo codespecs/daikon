@@ -656,6 +656,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     /**
      * Returns an InvariantStatus that the string status parses to.
      *
+     * @param status the string representation of an InvariantStatus
      * @return an InvariantStatus that the string status parses to
      */
     private static InvariantStatus parseStatus(String status) {

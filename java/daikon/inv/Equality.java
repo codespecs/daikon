@@ -387,6 +387,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * It's possible we should go farther and break out of the equality set any variable that is
    * missingOutOfBounds (JHP).
    *
+   * @param vt the newly-observed sample
+   * @param count the number of times the sample is seen
    * @return a List of VarInfos that do not fit into this set anymore
    */
   public List<VarInfo> add(ValueTuple vt, int count) {

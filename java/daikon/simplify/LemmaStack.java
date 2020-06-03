@@ -74,6 +74,8 @@ public class LemmaStack {
   /**
    * Pop a bunch of lemmas off Simplify's stack. Since it's a stack, it only works to unassume the
    * things you most recently assumed, but we aren't smart enough to check that.
+   *
+   * @param invs the lemmas to pop off Simplify's stack
    */
   private void unAssumeAll(List<Lemma> invs) {
     for (@SuppressWarnings("UnusedVariable") Lemma lem : invs) {
@@ -341,7 +343,11 @@ public class LemmaStack {
     return found;
   }
 
-  /** Return a minimal set of assumptions from the stack that imply a given string. */
+  /**
+   * Return a minimal set of assumptions from the stack that imply a given string.
+   *
+   * @param str the expression to make true
+   */
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {
     assert checkString(str) == 'T';
     unAssumeAll(lemmas);

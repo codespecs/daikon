@@ -22,7 +22,12 @@ public abstract class BinaryDerivation extends Derivation {
   /** Original variable 2. */
   public VarInfo base2;
 
-  /** Create a new BinaryDerivation from two varinfos. */
+  /**
+   * Create a new BinaryDerivation from two varinfos.
+   *
+   * @param vi1 original variable 1
+   * @param vi2 original variable 2
+   */
   protected BinaryDerivation(VarInfo vi1, VarInfo vi2) {
     base1 = vi1;
     base2 = vi2;

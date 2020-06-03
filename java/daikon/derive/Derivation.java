@@ -149,6 +149,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * applied to). Default implentation will just checks runtime type, but subclasses with state
    * (e.g. SequenceInitial index) should match that, too.
    *
+   * @param other the Derivation to compare to
    * @return true iff other and this represent the same derivation
    */
   @Pure

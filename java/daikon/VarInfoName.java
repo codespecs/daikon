@@ -247,6 +247,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * Returns the string representation (interned) of this name, in the Simplify tool output format,
    * in the given pre/post-state context.
    *
+   * @param prestate if true, return the variable in a prestate context; if false, return the
+   *     variable in a poststate context
    * @return the string representation (interned) of this name, in the Simplify tool output format,
    *     in the given pre/post-state context
    */
@@ -379,12 +381,16 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns the name using only letters, numbers, and underscores. Cached and interned by {@link
    * #identifier_name()}.
+   *
+   * @return the name using only letters, numbers, and underscores
    */
   protected abstract String identifier_name_impl();
 
   /**
    * Returns name of this in the specified format.
    *
+   * @param format the format in which to return this variable name
+   * @param vi the VarInfo for this variable name
    * @return name of this in the specified format
    */
   public String name_using(OutputFormat format, VarInfo vi) {
@@ -483,6 +489,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * Returns true iff the given node can be found in this. If the node has children, the whole
    * subtree must match.
    *
+   * @param node a variable name
    * @return true iff the given node can be found in this. If the node has children, the whole
    *     subtree must match
    */
@@ -493,6 +500,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns true iff a node of the given type exists in this.
    *
+   * @param type the type to search for
    * @return true iff a node of the given type exists in this
    */
   public boolean hasNodeOfType(Class<?> type) {
@@ -553,6 +561,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns true if this VarInfoName contains a simple variable whose name is NAME.
    *
+   * @param name the name to search for in this VarInfoName
    * @return true if this VarInfoName contains a simple variable whose name is NAME
    */
   public boolean includesSimpleName(@Interned VarInfoName this, String name) {
