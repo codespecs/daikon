@@ -168,11 +168,11 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -2132,7 +2132,6 @@ public final class Daikon {
   public static class FileIOProgress extends Thread {
     public FileIOProgress() {
       setDaemon(true);
-      df = DateFormat.getTimeInstance(/*DateFormat.LONG*/ );
     }
     /**
      * Clients should set this variable instead of calling Thread.stop(), which is deprecated.
@@ -2140,8 +2139,6 @@ public final class Daikon {
      * calls clear() anyway.
      */
     public boolean shouldStop = false;
-
-    private final DateFormat df;
 
     @Override
     public void run() {
@@ -2201,7 +2198,8 @@ public final class Daikon {
       }
       String status =
           UtilPlume.rpad(
-              "[" + df.format(new Date()) + "]: " + message, dkconfig_progress_display_width - 1);
+              "[" + LocalDateTime.now(ZoneId.systemDefault()) + "]: " + message,
+              dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.flush();
       // System.out.println (status); // for debugging

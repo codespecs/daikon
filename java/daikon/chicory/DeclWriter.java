@@ -6,8 +6,9 @@ import daikon.PptTopLevel.PptType;
 import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.PrintStream;
 import java.lang.reflect.Member;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -76,7 +77,7 @@ public class DeclWriter extends DaikonWriter {
    */
   public void printHeaderInfo(String className) {
     outFile.println("// Declarations for " + className);
-    outFile.println("// Declarations written " + new Date());
+    outFile.println("// Declarations written " + LocalDateTime.now(ZoneId.systemDefault()));
     outFile.println();
 
     // Determine comparability string

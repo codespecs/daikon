@@ -18,9 +18,10 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +92,7 @@ public class BuildJDK {
    */
   public static void main(String[] args) throws IOException {
 
-    System.out.println("BuildJDK starting at " + new Date());
+    System.out.println("BuildJDK starting at " + LocalDateTime.now(ZoneId.systemDefault()));
 
     BuildJDK build = new BuildJDK();
 
@@ -183,7 +184,7 @@ public class BuildJDK {
     // Print out any methods that could not be instrumented
     print_skipped_methods();
 
-    System.out.println("BuildJDK done at " + new Date());
+    System.out.println("BuildJDK done at " + LocalDateTime.now(ZoneId.systemDefault()));
   }
 
   /** Verify that java.home and JAVA_HOME match. Exits the JVM if there is an error. */
@@ -228,6 +229,7 @@ public class BuildJDK {
    *
    * @return a map from class file name to the associated InputStream
    */
+  @SuppressWarnings("JdkObsolete") // JarEntry.entries() returns Enumeration
   Map<String, InputStream> gather_runtime_from_jar() {
 
     Map<String, InputStream> class_stream_map = new HashMap<>();
@@ -482,7 +484,8 @@ public class BuildJDK {
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
-          "Processed %d/%d classes at %tc%n", _numFilesProcessed, classTotal, new Date());
+          "Processed %d/%d classes at %s%n",
+          _numFilesProcessed, classTotal, LocalDateTime.now(ZoneId.systemDefault()));
     }
   }
 

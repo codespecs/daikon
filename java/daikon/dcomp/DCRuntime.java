@@ -159,18 +159,6 @@ public final class DCRuntime {
    */
   private static class UninitArrayElem {}
 
-  /**
-   * Class uses as a tag for the results of a binary operation. Only different from Object for
-   * debugging purposes.
-   */
-  private static class BinOp {}
-
-  /**
-   * Class used as a tag when a value is stored in a local in the test sequence. Only different from
-   * object for debugging purposes.
-   */
-  private static class PrimStore {}
-
   /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
   private static Class<?> dcomp_marker_class;
 
@@ -491,10 +479,11 @@ public final class DCRuntime {
 
     Class<?>[] args = new Class<?>[] {dcomp_marker_class};
     while (!c.getName().equals("java.lang.Object")) {
-      java.lang.reflect.Method m = null;
+      java.lang.reflect.Method m;
       try {
         m = c.getDeclaredMethod(method_name, args);
       } catch (Exception e) {
+        m = null;
       }
       // System.out.printf("Class %s instrumented %s = %s%n", c, method_name, m);
       if (m != null) {

@@ -381,27 +381,6 @@ public class Runtime {
   }
 
   /**
-   * Checks the in_dtrace flag by looking back up the stack trace. Throws an exception if there is a
-   * discrepancy.
-   */
-  private static void check_in_dtrace() {
-
-    Throwable st = new Throwable();
-    st.fillInStackTrace();
-    List<StackTraceElement> enter_exit_list = new ArrayList<>();
-    for (StackTraceElement ste : st.getStackTrace()) {
-      if (ste.getClassName().endsWith("chicory.Runtime")
-          && (ste.getMethodName().equals("enter") || ste.getMethodName().equals("exit")))
-        enter_exit_list.add(ste);
-    }
-    if (in_dtrace && (enter_exit_list.size() <= 1)) {
-      throw new RuntimeException("in dtrace and stack contains " + enter_exit_list);
-    } else if (!in_dtrace && (enter_exit_list.size() > 1)) {
-      throw new RuntimeException("not in dtrace and stack contains " + enter_exit_list);
-    }
-  }
-
-  /**
    * Called by classes when they have finished initialization (i.e., their static initializer has
    * completed).
    *

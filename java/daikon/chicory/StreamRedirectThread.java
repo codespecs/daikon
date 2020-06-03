@@ -83,6 +83,7 @@ public class StreamRedirectThread extends Thread {
    * @param line_by_line whether to copy one line at a time
    * @param debug whether to enable debugging
    */
+  @SuppressWarnings("ThreadPriorityCheck")
   public StreamRedirectThread(
       String name, InputStream in, OutputStream out, boolean line_by_line, boolean debug) {
     super(name);

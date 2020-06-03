@@ -421,12 +421,6 @@ public class DTraceWriter extends DaikonWriter {
     return arrList;
   }
 
-  // prints nonsensical and corresponding "modified" integer
-  private void printNonsensical() {
-    outFile.println("nonsensical");
-    outFile.println("2");
-  }
-
   /**
    * Returns a list of Strings which are the names of the runtime types in the theVals param.
    *

@@ -105,7 +105,7 @@ public abstract class DaikonVariableInfo
   /** Value of static constants. Access via {@link #get_const_val} method. */
   @Nullable String const_val = null;
 
-  /** Arguments used to create a function. Access via {@link #get_func_args()} method. */
+  /** Arguments used to create a function. Access via {@link #get_function_args()} method. */
   @Nullable String function_args = null;
 
   /** True iff the DeclWriter should print this variable. */
@@ -135,7 +135,7 @@ public abstract class DaikonVariableInfo
    *
    * @param theName the name of the variable
    */
-  public DaikonVariableInfo(String theName, String typeName, String repTypeName) {
+  protected DaikonVariableInfo(String theName, String typeName, String repTypeName) {
     this(theName, typeName, repTypeName, false);
   }
 
@@ -145,7 +145,7 @@ public abstract class DaikonVariableInfo
    * @param theName the variable's name
    * @param arr true iff the variable is an array
    */
-  public DaikonVariableInfo(String theName, String typeName, String repTypeName, boolean arr) {
+  protected DaikonVariableInfo(String theName, String typeName, String repTypeName, boolean arr) {
     // Intern the names because there will be many of the
     // same variable names at different program points within
     // the same class.
