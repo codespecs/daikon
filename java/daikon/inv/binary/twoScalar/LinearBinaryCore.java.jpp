@@ -17,7 +17,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME LinearBinaryCoreFloat
   #define PRIMITIVE double
   #define CLASSSTRING "LinearBinaryCoreFloat"
-  #define EQUAL(a,b) (Global.fuzzy.eq((a), (b)))
+  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
 #else
   #error "One of TYPELONG or TYPEDOUBLE must be defined"
 #endif

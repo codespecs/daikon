@@ -405,12 +405,12 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   public static boolean dkconfig_integral_only = true;
 #endif
 
-  protected INTEQUAL(PptSlice ppt) {
-   super(ppt);
+  INTEQUAL(PptSlice ppt) {
+    super(ppt);
   }
 
-  protected @Prototype INTEQUAL() {
-   super();
+  @Prototype INTEQUAL() {
+    super();
   }
 
   private static @Prototype INTEQUAL proto = new @Prototype INTEQUAL();
@@ -757,7 +757,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   @Override
   public InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
-    if (!(EQUALS(v1, v2))) {
+    if (!EQUALS(v1, v2)) {
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
@@ -1181,7 +1181,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     }
 
     // The b coefficient determines less than or greater than
-    if (EQUALS(-lb.core.c / lb.core.b, 0)) {
+    if EQUALS(-lb.core.c / lb.core.b, 0) {
       return null;
     }
 

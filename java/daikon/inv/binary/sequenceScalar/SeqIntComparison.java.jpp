@@ -170,11 +170,11 @@ public final class SEQINTEQUAL extends SUPERCLASS {
 
   static boolean debugSeqIntComparison = false;
 
-  protected SEQINTEQUAL(PptSlice ppt) {
+  SEQINTEQUAL(PptSlice ppt) {
     super(ppt);
   }
 
-  protected @Prototype SEQINTEQUAL() {
+  @Prototype SEQINTEQUAL() {
     super();
   }
 

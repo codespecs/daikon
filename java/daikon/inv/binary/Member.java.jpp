@@ -101,11 +101,11 @@ public final class CLASSNAME extends SEQUENCESCALAR {
   /** Boolean. True iff Member invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-  protected CLASSNAME(PptSlice ppt) {
+  CLASSNAME(PptSlice ppt) {
     super(ppt);
   }
 
-  protected @Prototype CLASSNAME() {
+  @Prototype CLASSNAME() {
     super();
   }
 

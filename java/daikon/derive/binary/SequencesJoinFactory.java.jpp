@@ -44,7 +44,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
       return null;
     }
 
-    if (!(var1.rep_type.isArray()) || !(var2.rep_type.isArray())) {
+    if (!var1.rep_type.isArray() || !var2.rep_type.isArray()) {
       return null;
     }
 

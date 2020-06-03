@@ -306,11 +306,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   @Unused(when=Prototype.class)
   private int num_elts;
 
-  public @Prototype ONEOFSCALAR() {
+  @Prototype ONEOFSCALAR() {
     super();
   }
 
-  public ONEOFSCALAR(PptSlice slice) {
+  ONEOFSCALAR(PptSlice slice) {
     super(slice);
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==

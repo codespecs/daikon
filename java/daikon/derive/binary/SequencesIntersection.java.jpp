@@ -59,7 +59,7 @@ public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
   /** Boolean. True iff SCALARSEQUENCESINTERSECTION derived variables should be generated. */
   public static boolean dkconfig_enabled = false;
 
-  public SCALARSEQUENCESINTERSECTION(VarInfo vi1, VarInfo vi2) {
+  SCALARSEQUENCESINTERSECTION(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 

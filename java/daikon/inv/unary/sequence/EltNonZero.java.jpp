@@ -89,11 +89,11 @@ public final class CLASSNAME extends SUPERCLASS {
   /** Boolean. True iff EltNonZero invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-  public CLASSNAME(PptSlice ppt) {
+  CLASSNAME(PptSlice ppt) {
     super(ppt);
   }
 
-  public @Prototype CLASSNAME() {
+  @Prototype CLASSNAME() {
     super();
   }
 

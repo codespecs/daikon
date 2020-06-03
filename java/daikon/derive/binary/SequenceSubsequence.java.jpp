@@ -78,7 +78,7 @@ public final class SEQUENCESCALARSUBSEQUENCE extends SequenceSubsequence {
    * @param off_by_one true means we should exclude the scalar from the range; false means we should
    *     include it
    */
-  public SEQUENCESCALARSUBSEQUENCE(
+  SEQUENCESCALARSUBSEQUENCE(
       VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
     super(vi1, vi2, from_start, off_by_one);
   }

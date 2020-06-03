@@ -53,7 +53,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(EQUALFLOAT)
   #define PAIRWISEINTEQUAL PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatEqual"
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define EQUALShtml ==
   #define EQUALScode ==
   #define EQUALSstring "=="
@@ -82,7 +82,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEINTEQUAL PairwiseFloatLessThan
   #define PAIRWISEINTEQUAL_SWAP PairwiseFloatGreaterThan
   #define PAIRWISEINTEQUALstring "PairwiseFloatLessThan"
-  #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lt(a, b)
   #define EQUALShtml &lt;
   #define EQUALScode <
   #define EQUALSstring "<"
@@ -116,7 +116,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISELT_SUPP PairwiseFloatLessThan
   #define PAIRWISEEQ_SUPP PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatLessEqual"
-  #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lte(a, b)
   #define EQUALShtml &le;
   #define EQUALScode <=
   #define EQUALSstring "<="
@@ -148,7 +148,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
   #define PAIRWISEINTEQUAL_SWAP PairwiseFloatLessThan
   #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterThan"
-  #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gt(a, b)
   #define EQUALShtml &gt;
   #define EQUALScode >
   #define EQUALSstring ">"
@@ -182,7 +182,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISELT_SUPP PairwiseFloatGreaterThan
   #define PAIRWISEEQ_SUPP PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterEqual"
-  #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gte(a, b)
   #define EQUALShtml &ge;
   #define EQUALScode >=
   #define EQUALSstring ">="

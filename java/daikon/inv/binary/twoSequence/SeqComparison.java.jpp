@@ -405,7 +405,7 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
       if (var1().aux.hasOrder()) {
-        String dbc = "L" + (EQUALSstringDBC).substring(1);
+        String dbc = "L" + EQUALSstringDBC.substring(1);
         return name1 + "." + dbc + "(" + name2 + ")";
       } else {
         return "\"SeqComparison.java.jpp: sequence comparison does not apply to unordered collections unimplemented\" != null)"; // interned
