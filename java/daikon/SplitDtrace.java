@@ -179,6 +179,7 @@ public final class SplitDtrace {
       ZipEntry entry = e.nextElement();
       if (e.hasMoreElements()) throw new RuntimeException("More than one entry in the gz");
       stream = zipfile.getInputStream(entry);
+      assert stream != null : "@AssumeAssertion(nullness): just tested that one entry exists";
     } else if (filename.endsWith(".dtrace.gz")) {
       stream = new GZIPInputStream(new FileInputStream(filename));
     } else {
