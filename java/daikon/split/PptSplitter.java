@@ -715,7 +715,7 @@ public class PptSplitter implements Serializable {
    *
    * @param invs1 a set of invariants
    * @param invs2 a set of invariants
-   * @param the intersection of {@code invs1} and {@code invs2}
+   * @return the intersection of {@code invs1} and {@code invs2}
    */
   List<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
 
