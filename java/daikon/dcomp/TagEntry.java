@@ -170,10 +170,23 @@ class TagEntry extends WeakReference<Object> {
   /// Tracers
   ///
 
+  /**
+   * Return information about where the given object interacted with some other object in its set.
+   *
+   * @param obj an object in the union-find data structure
+   * @returns information about where the given object interacted with some other object in its set
+   */
   public static String get_line_trace(Object obj) {
     return get_entry(obj).tracer_loc;
   }
 
+  /**
+   * Return the canonical member of this object's set, based on tracers. Returns null if this
+   * object's interactions were not recorded.
+   *
+   * @param obj an object that might be in the union-find data structure
+   * @returns the canonical member of this object's set (based on tracers), or possibly null
+   */
   public static @Nullable Object tracer_find(Object obj) {
     TagEntry entry = object_map.get(obj);
     if (entry == null) {
@@ -184,7 +197,9 @@ class TagEntry extends WeakReference<Object> {
       return null;
     }
     Object tr_ref = tracer.get();
-    if (tr_ref == null) tr_ref = tracer;
+    if (tr_ref == null) {
+      tr_ref = tracer;
+    }
     return tr_ref;
   }
 
@@ -195,7 +210,9 @@ class TagEntry extends WeakReference<Object> {
     }
     TagEntry troot = entry.getTraceRoot();
     Object tr_ref = troot.get();
-    if (tr_ref == null) tr_ref = troot;
+    if (tr_ref == null) {
+      tr_ref = troot;
+    }
     return tr_ref;
   }
 
@@ -223,6 +240,11 @@ class TagEntry extends WeakReference<Object> {
     return tracer;
   }
 
+  /**
+   * Follow tracer pointers as far as possible.
+   *
+   * @returns the last element in the path created by {@link #tracer} fields
+   */
   public TagEntry getTraceRoot() {
     if (tracer == null) {
       return this;
