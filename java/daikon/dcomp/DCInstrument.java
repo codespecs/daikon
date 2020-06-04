@@ -429,9 +429,16 @@ public class DCInstrument extends InstructionListUtils {
         }
 
         remove_local_variable_type_table(mg);
-        // Remove all RuntimeAnnotations (if any), as they do not apply
-        // to the instrumented version of the method.
-        mg.removeAnnotationEntries();
+
+        // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
+        // the normal methods to our instrumented methods.  It doesn't cause an
+        // execution problem but will produce a massive number of warnings.
+        // Unfortunately, BCEL does not have the methods necessary to do this,
+        // so we hit it with a huge hammer and remove all the annotations.
+        // This annotation was added post Java 8.
+        if (BcelUtil.javaVersion > 8) {
+          mg.removeAnnotationEntries();
+        }
 
         if (!BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg)) {
           // doubling
@@ -640,9 +647,11 @@ public class DCInstrument extends InstructionListUtils {
         }
 
         remove_local_variable_type_table(mg);
-        // Remove all RuntimeAnnotations (if any), as they do not apply
-        // to the instrumented version of the method.
-        mg.removeAnnotationEntries();
+
+        if (BcelUtil.javaVersion > 8) {
+          // see comments in instrument();
+          mg.removeAnnotationEntries();
+        }
 
         if (!BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg)) {
           // doubling
@@ -836,9 +845,10 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mg);
 
-        // Remove all RuntimeAnnotations (if any), as they do not apply
-        // to the instrumented version of the method.
-        mg.removeAnnotationEntries();
+        if (BcelUtil.javaVersion > 8) {
+          // see comments in instrument();
+          mg.removeAnnotationEntries();
+        }
 
         if (initial_jdk_instrument && has_code) {
           // mark this method as needing to be reinstrumented at runtime
@@ -991,9 +1001,10 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mg);
 
-        // Remove all RuntimeAnnotations (if any), as they do not apply
-        // to the instrumented version of the method.
-        mg.removeAnnotationEntries();
+        if (BcelUtil.javaVersion > 8) {
+          // see comments in instrument();
+          mg.removeAnnotationEntries();
+        }
 
         if (initial_jdk_instrument && has_code) {
           // mark this method as needing to be reinstrumented at runtime

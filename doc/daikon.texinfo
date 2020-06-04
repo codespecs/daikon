@@ -7925,7 +7925,7 @@ Either place the appropriate binary on your path, named @command{Simplify},
 or set set the @code{simplify.path} property to its absolute pathname.
 
 Note:  Older versions of the @command{Z3} theorem
-prover (@uref{https://archive.codeplex.com/?p=z3})
+prover (@uref{https://github.com/Z3Prover/z3})
 can replace Simplify, but more recent versions do not support the Simplify
 syntax.  In the future, it would be nice to rewrite Daikon's theorem-prover
 interface to use the @nospellcheck{SMT-LIB2} language, so that a compatible
