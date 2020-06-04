@@ -170,6 +170,7 @@ public final class SplitDtrace {
     }
   }
 
+  @SuppressWarnings("JdkObsolete") // ZipFile uses Enumeration
   static BufferedReader getStream(String filename) throws IOException {
     InputStream stream;
     if (filename.endsWith(".dtrace.zip")) {

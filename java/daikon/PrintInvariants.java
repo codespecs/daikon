@@ -950,7 +950,6 @@ public final class PrintInvariants {
     List<VarInfo> modified_vars = new ArrayList<>();
     List<VarInfo> reassigned_parameters = new ArrayList<>();
     List<VarInfo> unmodified_vars = new ArrayList<>();
-    List<VarInfo> unmodified_orig_vars = new ArrayList<>();
 
     // Loop through each variable at this ppt
     for (VarInfo vi : ppt.var_infos) {
@@ -1453,9 +1452,9 @@ public final class PrintInvariants {
       }
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);
-    if (false && ppt.constants != null) {
-      ppt.constants.print_missing(out);
-    }
+    // if (ppt.constants != null) {
+    //   ppt.constants.print_missing(out);
+    // }
   }
 
   /** Does the actual printing of the invariants. */

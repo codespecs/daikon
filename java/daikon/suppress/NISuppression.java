@@ -228,7 +228,8 @@ public class NISuppression {
    * Recursively finds suppressed invariants. The cross product of antecedents for each suppressor
    * are examined and each valid combination will yield an entry in suppressed_invs.
    *
-   * @param suppressed_invs this set is updated with any invariants that are suppressed,
+   * @param unsuppressed_invs this set is updated with any invariants that used to be suppressed,
+   *     but no longer are
    * @param antecedents array of antecedents per suppressor
    * @param vis current variables for the suppressed invariant As antecedents are chosen, their
    *     variables are placed into vis

@@ -3,7 +3,6 @@ package daikon;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -1432,24 +1431,5 @@ public final class Runtime {
       value >>>= 8;
     }
     return result;
-  }
-
-  // More efficient version that doesn't allocate a lot of arrays.
-  static final byte[] toBytesStaticResult = new byte[4];
-
-  private static final void toBytesStatic(int value) {
-    for (int i = 3; i >= 0; i--) {
-      toBytesStaticResult[i] = (byte) ((0xFFl & value) + Byte.MIN_VALUE);
-      value >>>= 8;
-    }
-  }
-
-  private static final void printIntBytes(PrintStream ps, int value) {
-    toBytesStatic(value);
-    try {
-      ps.write(toBytesStaticResult);
-    } catch (IOException e) {
-      throw new Error(e);
-    }
   }
 }

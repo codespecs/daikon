@@ -16,6 +16,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
  * is necessary if we're to be able to restart Simplify from where we left off after it hangs, but
  * it's also a convenient place to hang routines that any Simplify client can use.
  */
+@SuppressWarnings("JdkObsolete") // Stack has methods that ArrayDeque lacks, such as elementAt()
 public class LemmaStack {
   /**
    * Boolean. Controls Daikon's response when inconsistent invariants are discovered while running
@@ -105,7 +106,6 @@ public class LemmaStack {
     }
   }
 
-  @SuppressWarnings("JdkObsolete")
   public LemmaStack() throws SimplifyError {
     startProver();
     lemmas = new Stack<Lemma>();
