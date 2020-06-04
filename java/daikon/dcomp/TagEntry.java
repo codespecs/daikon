@@ -235,7 +235,7 @@ class TagEntry extends WeakReference<Object> {
    * Recursively traces from this object to the root of its tracer tree, and reverses the direction
    * of every pointer on the path, such that this object is now the root of its tracer tree.
    *
-   * @param the new {@code tracer} value for this
+   * @param newTracer the new {@code tracer} value for this
    * @param tloc the new {@code tracer_loc} value for this
    */
   public void reroute(@Nullable TagEntry newTracer, String tloc) {
@@ -252,7 +252,11 @@ class TagEntry extends WeakReference<Object> {
     this.reroute(null, "");
   }
 
-  /** Returns the tracer of this node. */
+  /**
+   * Returns the tracer of this node.
+   *
+   * @return the tracer of this node
+   */
   public @Nullable TagEntry getTracer() {
     return tracer;
   }
@@ -260,7 +264,7 @@ class TagEntry extends WeakReference<Object> {
   /**
    * Follow tracer pointers as far as possible.
    *
-   * @returns the last element in the path created by {@link #tracer} fields
+   * @return the last element in the path created by {@link #tracer} fields
    */
   public TagEntry getTraceRoot() {
     if (tracer == null) {
@@ -273,6 +277,8 @@ class TagEntry extends WeakReference<Object> {
   /**
    * Return a description of where an interaction occurred. Is essentially a stack trace of depth
    * {@link DynComp#trace_line_depth}.
+   *
+   * @return a description of where an interaction occurred
    */
   public static String generateTraceString() {
     ArrayList<StackTraceElement> stackTrace =
@@ -321,7 +327,11 @@ class TagEntry extends WeakReference<Object> {
   /// Debugging output
   ///
 
-  /** Returns each of the sets with elements in each set on a separate line. */
+  /**
+   * Returns each of the sets with elements in each set on a separate line.
+   *
+   * @return a verbose printed representation of this
+   */
   public static String dump() {
 
     LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<>();
