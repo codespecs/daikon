@@ -264,6 +264,7 @@ public final class CLASSNAME extends SUPERCLASS {
     }
   }
 
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
   private double confidence_one_elt_nonzero() {
     double range;
     if (is_pointer()) {
@@ -285,7 +286,7 @@ public final class CLASSNAME extends SUPERCLASS {
       // constraints) for the value to be zero; otherwise, the modulus
       // constraint implies non-zero.
       VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
-      range = (DOUBLE_CAST(vs.max()) - vs.min() + 1) / modulus;
+      range = (vs.max() - vs.min() + 1) / DOUBLE_CAST(modulus);
     }
     return 1.0/range;
   }

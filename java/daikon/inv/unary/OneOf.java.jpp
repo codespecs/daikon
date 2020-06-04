@@ -258,6 +258,7 @@ import typequals.prototype.qual.Prototype;
 #error "Impossible fallthrough."
 #endif
 
+@SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
 public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -920,8 +921,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
 public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
-    @NonNull @Initialized // UNDONE: don't understand why needed (markro)
-    String result;
+    @NonNull @Initialized String result;
 
 #if defined(IS_ELT)
 

@@ -17,8 +17,6 @@ import org.plumelib.util.UtilPlume;
 
 public class TraceSelect {
 
-  private static final int DEFAULT_NUM = 10;
-
   public static boolean CLEAN = true;
   public static boolean INCLUDE_UNRETURNED = false;
   public static boolean DO_DIFFS = false;
@@ -269,21 +267,6 @@ public class TraceSelect {
 
   private static void reinitializeDaikon() {
     daikon.Daikon.inv_file = null;
-  }
-
-  /** Used when I used to select by probability, not absolute number. */
-  private static boolean myRand(String[] args) {
-    if (args.length >= 2) {
-      try {
-        double prob = Double.parseDouble(args[3]);
-        return Math.random() > prob;
-      } catch (Exception e) {
-
-        return (Math.random() > 0.900);
-      }
-    }
-    // Defaults to 10% chance of keeping
-    return (Math.random() > 0.900);
   }
 
   private static String calcOut(String strFileName) {

@@ -130,15 +130,16 @@ public class NONZERO extends SINGLESCALAR {
     return new NONZERO(slice);
   }
 
-  private String zero(@GuardSatisfied @Prototype NONZERO this, OutputFormat format) {
+  private String zero(@GuardSatisfied @Prototype NONZERO this, @SuppressWarnings("UnusedVariable") OutputFormat format) {
 #ifdef SCALAR
     if (is_pointer()) {
       return "null";
-    } else
-#endif
-    {
+    } else {
       return "0";
     }
+#else
+    return "0";
+#endif
   }
 
   @SideEffectFree

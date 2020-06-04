@@ -293,8 +293,7 @@ public class Ast {
       packageName = "";
     }
 
-    String className = "";
-    className = n.f1.tokenImage + "."; // f1 -> <IDENTIFIER>
+    String className = n.f1.tokenImage + "."; // f1 -> <IDENTIFIER>
 
     Node currentNode = n;
     while (true) {
@@ -813,7 +812,6 @@ public class Ast {
       return false;
     }
     // Now check whether args match.
-    boolean unmatched = false;
     int j = 0;
     for (Iterator<FormalParameter> itor = ast_params.iterator(); itor.hasNext(); j++) {
       String ast_param = getType(itor.next());
@@ -922,6 +920,7 @@ public class Ast {
   }
 
   // The "access" argument should be one of "public", "protected", or "private".
+  @SuppressWarnings("JdkObsolete") // JTB uses Enumeration
   public static void setAccess(MethodDeclaration m, String access) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
@@ -949,6 +948,7 @@ public class Ast {
     options.addNode(c);
   }
 
+  @SuppressWarnings("JdkObsolete") // JTB uses Enumeration
   public static void removeMethodDeclAnnotations(MethodDeclaration method) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
@@ -1118,6 +1118,7 @@ public class Ast {
   // Returns a list of Strings, the names of all the variables in the node.
   // The node is an expression, conditional expression, or primary
   // expression.
+  @SuppressWarnings("JdkObsolete") // JTB uses Enumeration
   public static Set<String> getVariableNames(Node expr) {
 
     class GetSymbolNamesVisitor extends DepthFirstVisitor {
@@ -1195,8 +1196,6 @@ public class Ast {
     // make names easier to read before printing
     ppt.simplify_variable_names();
 
-    int invCounter = 0; // Count printed invariants for this program point
-
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
@@ -1226,7 +1225,6 @@ public class Ast {
       // Never print the guarding predicates themselves, they should only
       // print as part of GuardingImplications
       if (fi_accepted && !inv.isGuardingPredicate) {
-        invCounter++;
         Global.reported_invariants++;
         accepted_invariants.add(inv);
       }

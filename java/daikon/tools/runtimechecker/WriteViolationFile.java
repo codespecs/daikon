@@ -67,7 +67,10 @@ class WriteViolationFile {
       // Permit access to method in default-access classes inside a package.
       main_method.setAccessible(true);
 
-      @SuppressWarnings("nullness") // static method, so null first arg is OK: main()
+      @SuppressWarnings({
+        "nullness", // static method, so null first arg is OK: main()
+        "UnusedVariable" // exists to give a place to write @SuppressWarnings("nullness")
+      })
       Object dummy = main_method.invoke(null, new Object[] {main_args});
     } catch (IllegalAccessException e) {
       // This can't happen

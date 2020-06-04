@@ -180,7 +180,6 @@ public class ExtractConsequent {
           pptname_to_conditions.get(pptname);
       for (Map.Entry<@KeyFor("cluster_to_conditions") String, Map<String, HashedConsequent>> entry :
           cluster_to_conditions.entrySet()) {
-        String predicate = entry.getKey();
         Map<String, HashedConsequent> conditions = entry.getValue();
         StringBuilder conjunctionJava = new StringBuilder();
         StringBuilder conjunctionDaikon = new StringBuilder();

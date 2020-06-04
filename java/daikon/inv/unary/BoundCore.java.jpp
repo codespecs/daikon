@@ -216,7 +216,6 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
    * flowing before this would be changed.
    */
   public boolean wouldChange(PRIMITIVE value) {
-    PRIMITIVE v = value;
     return (value LT MIN1);
   }
 

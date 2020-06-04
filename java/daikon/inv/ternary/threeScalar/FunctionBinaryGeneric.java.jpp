@@ -255,7 +255,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
       new NISuppressor(arg2_index, EQUAL_ONE.class);
 
   private static NISuppressor result_eq_0 =
-      new NISuppressor(result_index,EQUAL_ZERO.class);
+      new NISuppressor(result_index, EQUAL_ZERO.class);
   private static NISuppressor arg1_eq_0 =
       new NISuppressor(arg1_index, EQUAL_ZERO.class);
   private static NISuppressor arg2_eq_0 =
@@ -284,7 +284,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
 #if defined (TYPELONG)
   private static NISuppressor result_boolean =
-      new NISuppressor(result_index,BOOLEAN.class);
+      new NISuppressor(result_index, BOOLEAN.class);
   private static NISuppressor arg1_boolean =
       new NISuppressor(arg1_index, BOOLEAN.class);
   private static NISuppressor arg2_boolean =
@@ -298,7 +298,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
       new NISuppressor(arg2_index, EVEN.class);
 
   private static NISuppressor result_power2 =
-      new NISuppressor(result_index,POWER2.class);
+      new NISuppressor(result_index, POWER2.class);
   private static NISuppressor arg1_power2 =
       new NISuppressor(arg1_index, POWER2.class);
   private static NISuppressor arg2_power2 =
@@ -503,8 +503,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
             new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
 
             // (r == 0) && (arg1 == 0) && (arg2 valid shift) ==> r = arg1 >>> arg2
-            // new NISuppression (result_eq_0, arg1_eq_0, arg2_valid_shift
-            //                   ,suppressee),
+            // new NISuppression (result_eq_0, arg1_eq_0, arg2_valid_shift, suppressee),
 
             // (r == 0) && ((arg1 >> arg2) == 0)
             new NISuppression(result_eq_0, arg1_shift0_arg2, suppressee),
@@ -526,8 +525,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
             new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
 
             // (r == 0) && (arg1 == 0) && (0 <= arg2 <= 63)   ==> r = arg1 >>> arg2
-            // new NISuppression (result_eq_0, arg1_eq_0, arg2_valid_shift
-            //                   ,suppressee),
+            // new NISuppression (result_eq_0, arg1_eq_0, arg2_valid_shift, suppressee),
 
             // (r == 0) && ((arg1 >> arg2) == 0)
             new NISuppression(result_eq_0, arg1_shift0_arg2, suppressee),
@@ -598,17 +596,17 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
             // new NISuppression (result_eq_0, arg2_eq_0, suppressee),
 
             // (r == 0) && (arg1 boolean) && (arg2 is even)
-            // new NISuppression (result_eq_0, arg1_boolean, arg2_even,suppressee),
+            // new NISuppression (result_eq_0, arg1_boolean, arg2_even, suppressee),
 
             // (r == 0) && (arg2 boolean) && (arg1 is even)
-            // new NISuppression (result_eq_0, arg2_boolean, arg1_even,suppressee),
+            // new NISuppression (result_eq_0, arg2_boolean, arg1_even, suppressee),
 
             // (r == 0) && (arg2 > arg1) && (arg2 power2) && (arg1 >= 0)
-            // new NISuppression (result_eq_0, arg1_lt_arg2, arg2_power2,arg1_ge_0,
+            // new NISuppression (result_eq_0, arg1_lt_arg2, arg2_power2, arg1_ge_0,
             //                   suppressee),
 
             // (r == 0) && (arg1 > arg2) && (arg1 power2) && (arg2 >= 0)
-            // new NISuppression (result_eq_0, arg2_lt_arg1, arg1_power2,arg2_ge_0,
+            // new NISuppression (result_eq_0, arg2_lt_arg1, arg1_power2, arg2_ge_0,
             //                   suppressee),
 
             // (r == arg1) && (r boolean) && (arg2 == 1)
@@ -666,10 +664,10 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
             new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
                                result_ge_0, suppressee),
 
-            // (r == arg1) && (arg2 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
+            // (r == arg1) && (arg2 == 0) && (r >= 0) ==> r = gcd (arg1, arg2)
             new NISuppression(result_eq_arg1, result_ge_0, arg2_eq_0, suppressee),
 
-            // (r == arg2) && (arg1 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
+            // (r == arg2) && (arg1 == 0) && (r >= 0) ==> r = gcd (arg1, arg2)
             new NISuppression(result_eq_arg2, result_ge_0, arg1_eq_0, suppressee),
 
             // (r == 1) && (arg2 == 1)        ==> r = gcd (arg1, art2)

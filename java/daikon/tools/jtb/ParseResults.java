@@ -136,13 +136,14 @@ public class ParseResults {
 
       TypeDeclaration typeDeclaration = (TypeDeclaration) typeDeclarationMaybe.elementAt(j);
 
-      NodeSequence sequence = (NodeSequence) typeDeclaration.f0.choice;
-      NodeChoice nodeChoice = (NodeChoice) sequence.elementAt(1);
-      ClassOrInterfaceDeclaration decl = (ClassOrInterfaceDeclaration) nodeChoice.choice;
-
-      //         assert !Ast.isInterface(decl)
-      //                           : "Do not give .java files that declare interfaces "
-      //                           + "to the instrumenter: " + javaFileName;
+      // {
+      // NodeSequence sequence = (NodeSequence) typeDeclaration.f0.choice;
+      // NodeChoice nodeChoice = (NodeChoice) sequence.elementAt(1);
+      // ClassOrInterfaceDeclaration decl = (ClassOrInterfaceDeclaration) nodeChoice.choice;
+      // assert !Ast.isInterface(decl)
+      //                   : "Do not give .java files that declare interfaces "
+      //                   + "to the instrumenter: " + javaFileName;
+      // }
 
       results.roots.add(typeDeclaration);
     }

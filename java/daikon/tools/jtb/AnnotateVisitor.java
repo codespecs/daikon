@@ -165,16 +165,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   @Pure
-  private boolean isFinal(String fieldname) {
-    for (ClassFieldInfo cfi : cfis) {
-      if (cfi.finalFieldNames.contains(fieldname)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  @Pure
   private boolean isNotContainsNull(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.notContainsNullFieldNames.contains(fieldname)) {
@@ -325,7 +315,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     for (PptTopLevel ppt : matching_ppts) {
-      String prefix;
       if (ppt.ppt_name.isEnterPoint()) {
         requires_invs = invariants_for(ppt, ppts);
       } else if (ppt.ppt_name.isExitPoint()) {
@@ -389,6 +378,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
 
       @Override
+      @SuppressWarnings("JdkObsolete") // JTB uses Vector and Enumeration
       public void visit(NodeListOptional nlo) {
         Annotate.debug.fine("InsertBehavior visitor visiting a NodeListOptional");
         Annotate.debug.fine("With " + nlo.nodes.size() + " nodes");
@@ -667,7 +657,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     boolean invariantInserted = false;
-    boolean assignableInserted = false;
 
     int maxIndex = invs.invariants.size();
     if (maxInvariantsPP > 0) {

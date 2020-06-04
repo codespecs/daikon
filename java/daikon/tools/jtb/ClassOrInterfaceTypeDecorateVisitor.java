@@ -19,6 +19,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   HashMap<String, Deque<ClassOrInterfaceType>> shadowingMap = new HashMap<>();
 
   // For debugging purposes.
+  @SuppressWarnings("UnusedMethod") // debugging code is currently commented out
   private void printShadowingMap() {
     System.out.println("Shadowing map:");
     for (Map.Entry<@KeyFor("shadowingMap") String, Deque<ClassOrInterfaceType>> e :
@@ -209,6 +210,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   // f0 -> <IDENTIFIER>
   // f1 -> [ TypeArguments() ]
   // f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
+  @SuppressWarnings("JdkObsolete") // JTB uses Vector
   private void ungenerify(ClassOrInterfaceType n) {
 
     // Drop all type arguments.
@@ -233,9 +235,9 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
         // System.out.println("c:" + Ast.format(c));
         List<Node> cSequence = c.f2.nodes;
         // System.out.print("cSequence:");
-        for (Node n2 : cSequence) {
-          // System.out.print(Ast.format(n2) + " ");
-        }
+        // for (Node n2 : cSequence) {
+        //   System.out.print(Ast.format(n2) + " ");
+        // }
         // Prepend all-but-first identifiers to the list of identifiers in f2.
         // Prepending in reverse order ensures the right prepending order.
         for (int i = cSequence.size() - 1; i >= 0; i--) {
