@@ -72,15 +72,36 @@ public class Premain {
   protected static Set<String> problem_methods =
       new HashSet<>(
           Arrays.asList(
-              // The following methods call Reflection.getCallerClass().
+              // The following methods call sun.reflect.Reflection.getCallerClass().
               // These methods are annotated with @CallerSensitive to
               // indicate 'skip me when looking at call stack'.
               // When we create the instrumented version of these methods we
               // should include this annotation.  However, BCEL does not support
               // this at this time.  So for now, we do not instrument these methods.
-              // (There are many more in the JDK sources, but so far no problems.)
+              // Initially, we just had a couple methods listed, but it turns out
+              // that the junit tool references a large number of these methods.
               "java.lang.Class.forName",
               "java.lang.Class.newInstance",
+              "java.lang.Class.getClassLoader",
+              "java.lang.Class.getEnclosingMethod",
+              "java.lang.Class.getDeclaringClass",
+              "java.lang.Class.getEnclosingClass",
+              "java.lang.Class.getClasses",
+              "java.lang.Class.getField",
+              "java.lang.Class.getFields",
+              "java.lang.Class.getMethod",
+              "java.lang.Class.getMethods",
+              "java.lang.Class.getConstructor",
+              "java.lang.Class.getConstructors",
+              "java.lang.Class.getDeclaredClasses",
+              "java.lang.Class.getDeclaredField",
+              "java.lang.Class.getDeclaredFields",
+              "java.lang.Class.getDeclaredMethod",
+              "java.lang.Class.getDeclaredMethods",
+              "java.lang.Class.getDeclaredConstructor",
+              "java.lang.Class.getDeclaredConstructors",
+              "java.util.ResourceBundle.getBundle",
+              "java.util.ResourceBundle.clearCache",
 
               // The below entries are temporary, until the bugs are fixed.
 
