@@ -62,7 +62,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(EQUALSTRING)
   #define PAIRWISEINTEQUAL PairwiseStringEqual
   #define PAIRWISEINTEQUALstring "PairwiseStringEqual"
-  #define EQUALS(a,b) (a != null && b!= null && a.equals(b))
+  #define EQUALS(a,b) (a != null && b != null && a.equals(b))
   #define EQUALShtml ==
   #define EQUALScode ==
   #define EQUALSstring "=="

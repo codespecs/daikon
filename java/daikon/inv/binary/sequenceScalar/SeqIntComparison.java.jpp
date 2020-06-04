@@ -329,6 +329,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   @Override
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code; parens are sometimes necessary
   public InvariantStatus check_modified(PRIMITIVE @Interned [] a, PRIMITIVE x, int count) {
     /*if (logDetail() || debug.isLoggable(Level.FINE))
       log(debug,"(" + EQUALSstring + " " + Arrays.toString(a)

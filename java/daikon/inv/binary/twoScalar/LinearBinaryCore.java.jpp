@@ -152,6 +152,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // it can calculate different a/b and change whether or not it even
   // finds a line with a different order.  Current code always guarantees
   // that the points arrive in the same order (I think).
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code; parens are sometimes necessary
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     if (values_seen < MINPAIRS) {
       if (debug.isLoggable(Level.FINE)) {

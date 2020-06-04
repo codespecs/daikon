@@ -122,27 +122,6 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     return s.substring(cut + 12, s.lastIndexOf('"'));
   }
 
-  /**
-   * Find the point in the string just after the EXIT107, where s is a program point name that looks
-   * like "blah blah:::EXIT107(arg1, arg2)".
-   */
-  private int findCutoff(String s) {
-    String lastPart = "";
-    int cut = 0;
-    if (s.indexOf("EXIT") > -1) {
-      cut = s.indexOf("EXIT");
-      lastPart = s.substring(cut);
-
-    } else if (s.indexOf("ENTER") > -1) {
-      cut = s.indexOf("ENTER");
-      lastPart = s.substring(cut);
-    } else {
-      System.out.println("Should not get here, PPT name not ENTER/EXIT");
-    }
-
-    return cut + lastPart.indexOf("(");
-  }
-
   // Cannot be static because it uses instance variable "targSet"
   /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
@@ -227,33 +206,34 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     return (double) correctSet.size() / targSet.size();
   }
 
-  /**
-   * Returns true iff numLiteral represents a numeric literal string of integer or float that we
-   * believe will be useful for a splitting condition. Usually that includes -1, 0, 1, and any other
-   * numeric literal found in the source code.
-   */
-  private static boolean acceptableNumber(String numLiteral) {
-
-    // need to make sure that it is an integer vs. floating
-    // point number
-
-    // could be float, look for "."
-    if (numLiteral.indexOf(".") > -1) {
-      float fnum = Float.parseFloat(numLiteral);
-      if (fnum == 1.0 || fnum == 0.0 || fnum == -1.0) {
-        return true;
-      }
-
-      return false;
-    }
-    // not float, must be int
-    else {
-      int num = Integer.parseInt(numLiteral);
-
-      // accept -1, 0, 1
-      return (num == -1 || num == 0 || num == 1);
-    }
-  }
+  // /**
+  //  * Returns true iff numLiteral represents a numeric literal string of integer or float that we
+  //  * believe will be useful for a splitting condition. Usually that includes -1, 0, 1, and any
+  // other
+  //  * numeric literal found in the source code.
+  //  */
+  // private static boolean acceptableNumber(String numLiteral) {
+  //
+  //   // need to make sure that it is an integer vs. floating
+  //   // point number
+  //
+  //   // could be float, look for "."
+  //   if (numLiteral.indexOf(".") > -1) {
+  //     float fnum = Float.parseFloat(numLiteral);
+  //     if (fnum == 1.0 || fnum == 0.0 || fnum == -1.0) {
+  //       return true;
+  //     }
+  //
+  //     return false;
+  //   }
+  //   // not float, must be int
+  //   else {
+  //     int num = Integer.parseInt(numLiteral);
+  //
+  //     // accept -1, 0, 1
+  //     return (num == -1 || num == 0 || num == 1);
+  //   }
+  // }
 
   private void finish() {
     correctSet.clear();

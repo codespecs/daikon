@@ -18,11 +18,11 @@ public abstract class Node<CONTENT extends @Nullable Object, CHILD> {
   // Nonsensical for RootNode
   private Pair<CONTENT, CONTENT> userObject;
 
-  public Node(Pair<CONTENT, CONTENT> userObject) {
+  protected Node(Pair<CONTENT, CONTENT> userObject) {
     this.userObject = userObject;
   }
 
-  public Node(CONTENT left, CONTENT right) {
+  protected Node(CONTENT left, CONTENT right) {
     this.userObject = Pair.of(left, right);
   }
 

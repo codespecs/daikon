@@ -99,27 +99,6 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return s.substring(cut + 12, s.lastIndexOf('"'));
   }
 
-  /**
-   * s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)" find the point just
-   * after the EXIT107
-   */
-  private int findCutoff(String s) {
-    String lastPart = "";
-    int cut = 0;
-    if (s.indexOf("EXIT") > -1) {
-      cut = s.indexOf("EXIT");
-      lastPart = s.substring(cut);
-
-    } else if (s.indexOf("ENTER") > -1) {
-      cut = s.indexOf("ENTER");
-      lastPart = s.substring(cut);
-    } else {
-      System.out.println("Should not get here, PPT name not ENTER/EXIT");
-    }
-
-    return cut + lastPart.indexOf("(");
-  }
-
   /** Returns true if the pair of invariants should be printed. */
   @EnsuresNonNullIf(
       result = true,
