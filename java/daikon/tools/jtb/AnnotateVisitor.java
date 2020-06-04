@@ -921,8 +921,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       if (et_vi == null) {
         debug_field_problem(et_varname, ppt);
         throw new Daikon.UserError(
-            "Annotate: Daikon knows nothing about variable %s at %s%n  with allFieldNames = %s",
-            et_varname, ppt, allFieldNames);
+            String.format(
+                "Annotate: Daikon knows nothing about variable %s at %s%n  with allFieldNames = %s",
+                et_varname, ppt, allFieldNames));
       }
 
       // et_vi != null

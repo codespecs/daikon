@@ -117,6 +117,32 @@ public class ParameterDoclet {
      * @param fqConfigNames if non-null, include only configuration options whose fully-qualified
      *     name is in this list
      * @param description the subsection name
+     * @param blurbLines text that appears in the subsection before the list of configuration
+     *     options
+     */
+    public DocCategory(
+        @Nullable String prefix,
+        @Nullable String simpleName,
+        @Nullable List<String> fqConfigNames,
+        String description,
+        String[] blurbLines) {
+      this(
+          prefix,
+          simpleName,
+          fqConfigNames,
+          description,
+          String.join(System.lineSeparator(), blurbLines));
+    }
+
+    /**
+     * Create a new DocCategory.
+     *
+     * @param prefix if non-null, include only variables whose fully-qualified name starts with this
+     *     prefix
+     * @param simpleName if non-null, include only configuration options with this simple name
+     * @param fqConfigNames if non-null, include only configuration options whose fully-qualified
+     *     name is in this list
+     * @param description the subsection name
      * @param blurb text that appears in the subsection before the list of configuration options
      */
     public DocCategory(

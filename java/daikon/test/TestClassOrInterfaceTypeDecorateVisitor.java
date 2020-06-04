@@ -242,6 +242,5 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
         // "  V  -->  Map.Entry",
         // "Method: voidfoo2(U.Entry x)",
         // "  U.Entry  -->  Map.Entry",
-        ""
       };
 }
