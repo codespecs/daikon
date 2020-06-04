@@ -135,6 +135,7 @@ class TagEntry extends WeakReference<Object> {
           blarg2.add(cname + ":" + fname + "(), " + lnum);
         }
       } catch (IndexOutOfBoundsException e) {
+        throw new Error(e);
       }
       String result = "";
       for (String s : blarg2) {
