@@ -234,9 +234,10 @@ class TagEntry extends WeakReference<Object> {
   /**
    * Recursively traces from this object to the root of its tracer tree, and reverses the direction
    * of every pointer on the path, such that this object is now the root of its tracer tree.
-   * (Imprecise wording, I know.)
+   *
+   * @param the new {@code tracer} value for this
+   * @param tloc the new {@code tracer_loc} value for this
    */
-  @SuppressWarnings("nullness") // catches NullPointerException
   public void reroute(@Nullable TagEntry newTracer, String tloc) {
     TagEntry thisTracer = this.tracer;
     if (thisTracer != null) {
