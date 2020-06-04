@@ -34,7 +34,7 @@ public class DeclWriter extends DaikonWriter {
   /** Header string before each new method entry or exit point. */
   public static final String declareHeader = "DECLARE";
 
-  public static boolean debug = false;
+  boolean debug = false;
 
   // If the --comparability-file option is active, there might be
   // variables for which DynComp saw no interactions and did not
