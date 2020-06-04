@@ -3506,14 +3506,14 @@ public class PptTopLevel extends Ppt {
    */
   public void mergeInvs() {
 
-    Daikon.debugProgress.fine(
-        String.format(
-            // Version that outputs the hash code too.
-            // "Merging ppt %s[%08X] with %d children, %d parents, %d variables",
-            // name, System.identityHashCode(this), children.size(), parents.size(),
-            // var_infos.length));
-            "Merging ppt %s with %d children, %d parents, %d variables",
-            name, children.size(), parents.size(), var_infos.length));
+    if (Daikon.debugProgress.isLoggable(Level.FINE)) {
+      // String hashCode = String.format(" [%08X]", System.identityHashCode(this));
+      String hashCode = "";
+      Daikon.debugProgress.fine(
+          String.format(
+              "Merging ppt %s%s with %d children, %d parents, %d variables",
+              name, hashCode, children.size(), parents.size(), var_infos.length));
+    }
 
     // If we don't have any children, there is nothing to do.
     if (children.size() == 0) {
@@ -3532,13 +3532,17 @@ public class PptTopLevel extends Ppt {
 
     // First do this for any children.
     for (PptRelation rel : children) {
-      // System.out.printf("merging child %s[%08X], in_merge = %b%n",
+      // System.out.printf("merging child %s[%08X], its in_merge = %b%n",
       //                   rel.child, System.identityHashCode(rel.child),
       //                   rel.child.in_merge);
-      if (!rel.child.in_merge) rel.child.mergeInvs();
+      if (!rel.child.in_merge) {
+        rel.child.mergeInvs();
+      }
     }
 
-    if (debugMerge.isLoggable(Level.FINE)) debugMerge.fine("Processing ppt " + name());
+    if (debugMerge.isLoggable(Level.FINE)) {
+      debugMerge.fine("Processing ppt " + name());
+    }
 
     long startTime = System.nanoTime();
     if (debugTimeMerge.isLoggable(Level.FINE)) {
@@ -3553,9 +3557,11 @@ public class PptTopLevel extends Ppt {
     // Number of samples here is the sum of all of the child samples, presuming
     // there are some variable relationships with the child (note that
     // some ppt relationships such as constructor ENTER ppts to their
-    // object ppts do not have any variable relationships)
+    // object ppts do not have any variable relationships).
     for (PptRelation rel : children) {
-      if (rel.size() > 0) values_num_samples += rel.child.values_num_samples;
+      if (rel.size() > 0) {
+        values_num_samples += rel.child.values_num_samples;
+      }
     }
 
     // Merge any always missing variables from the children
@@ -3652,22 +3658,22 @@ public class PptTopLevel extends Ppt {
 
     // Get all of the binary relationships from the first child's
     // equality sets.
-    Map<VarInfo.Pair, VarInfo.Pair> emap = null;
-    int first_child = 0;
+    Map<VarInfo.Pair, VarInfo.Pair> equalityPairs = null; // a set of pairs, represented as a map
+    int first_child = 0; // the index of the first child with num_samples() > 0
     for (first_child = 0; first_child < children.size(); first_child++) {
       PptRelation c1 = children.get(first_child);
       debugMerge.fine("looking at " + c1.child.name() + " " + c1.child.num_samples());
       if (c1.child.num_samples() > 0) {
         // System.out.printf("First child equality set: %s%n",
         //                     c1.child.equality_view);
-        emap = c1.get_child_equalities_as_parent();
-        if (debugMerge.isLoggable(Level.FINE)) { // check before stringifying emap
-          debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
+        equalityPairs = c1.get_child_equalities_as_parent();
+        if (debugMerge.isLoggable(Level.FINE)) { // check before stringifying equalityPairs
+          debugMerge.fine("child " + c1.child.name() + " equality = " + equalityPairs);
         }
         break;
       }
     }
-    if (emap == null) {
+    if (equalityPairs == null) {
       equality_view.instantiate_invariants();
       invariants_merged = true;
       in_merge = false;
@@ -3675,19 +3681,20 @@ public class PptTopLevel extends Ppt {
     }
 
     // Loop through the remaining children, intersecting the equal
-    // variables and incrementing the sample count as we go
+    // variables and incrementing the sample count as we go.
     for (int i = first_child + 1; i < children.size(); i++) {
       PptRelation rel = children.get(i);
       if (rel.child.num_samples() == 0) {
         continue;
       }
       Map<VarInfo.Pair, VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
-      // Cannot use foreach loop, due to desire to remove from emap.
-      for (Iterator<VarInfo.@KeyFor("emap") Pair> j = emap.keySet().iterator(); j.hasNext(); ) {
+      // Cannot use foreach loop, due to desire to remove from equalityPairs.
+      for (Iterator<VarInfo.@KeyFor("equalityPairs") Pair> j = equalityPairs.keySet().iterator();
+          j.hasNext(); ) {
         VarInfo.Pair curpair = j.next();
         VarInfo.Pair newpair = eq_new.get(curpair);
         if (newpair == null) {
-          // Equivalent to emap.remove(...), but that could throw a
+          // Equivalent to equalityPairs.remove(...), but that could throw a
           // ConcurrentModificationException, so must remove via the iterator.
           j.remove();
         } else {
@@ -3697,14 +3704,14 @@ public class PptTopLevel extends Ppt {
     }
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("Found equality pairs ");
-      for (VarInfo.Pair vp : emap.keySet()) {
+      for (VarInfo.Pair vp : equalityPairs.keySet()) {
         debugMerge.fine("-- " + vp);
       }
     }
 
     // Build actual equality sets that match the pairs we found
-    Set<VarInfo.Pair> emap_keySet = emap.keySet();
-    equality_view.instantiate_from_pairs(emap_keySet);
+    Set<VarInfo.Pair> equalityPairs_keySet = equalityPairs.keySet();
+    equality_view.instantiate_from_pairs(equalityPairs_keySet);
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("Built equality sets ");
       for (Invariant inv : equality_view.invs) {
@@ -3718,7 +3725,7 @@ public class PptTopLevel extends Ppt {
     if (debugTimeMerge.isLoggable(Level.FINE)) {
       long duration = System.nanoTime() - startTime;
       debugTimeMerge.fine(
-          "    equality sets etc = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
+          "    equality sets etc time = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
       startTime = System.nanoTime();
     }
 
@@ -3732,7 +3739,7 @@ public class PptTopLevel extends Ppt {
     if (debugTimeMerge.isLoggable(Level.FINE)) {
       long duration = System.nanoTime() - startTime;
       debugTimeMerge.fine(
-          "    merge invariants = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
+          "    merge invariants time = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
       startTime = System.nanoTime();
     }
 
@@ -3740,7 +3747,8 @@ public class PptTopLevel extends Ppt {
     merge_conditionals();
     if (debugTimeMerge.isLoggable(Level.FINE)) {
       long duration = System.nanoTime() - startTime;
-      debugTimeMerge.fine("    conditionals = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
+      debugTimeMerge.fine(
+          "    conditionals time = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
     }
 
     // Mark this ppt as merged, so we don't process it multiple times
@@ -3756,7 +3764,7 @@ public class PptTopLevel extends Ppt {
     if (debugTimeMerge.isLoggable(Level.FINE)) {
       long duration = System.nanoTime() - startTime;
       debugTimeMerge.fine(
-          "    removing child invs = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
+          "    removing child invs time = " + TimeUnit.NANOSECONDS.toSeconds(duration) + "s");
     }
 
     // Remove the relations since we don't need it anymore
@@ -3913,7 +3921,7 @@ public class PptTopLevel extends Ppt {
       // System.out.printf("Processing slice %s%n", cslice);
 
       // Matching parent variable info.  Skip this slice if there isn't a
-      // match for each variable (such as with an enter-exit relation)
+      // match for each variable (such as with an enter-exit relation).
       VarInfo[] pvis = parent_vis(rel, cslice);
       if (pvis == null) {
         continue;
@@ -3940,7 +3948,9 @@ public class PptTopLevel extends Ppt {
         Invariant parent_inv = child_inv.clone_and_permute(permute);
         parent_inv.ppt = pslice;
         pslice.invs.add(parent_inv);
-        if (Debug.logOn()) parent_inv.log("Added %s to %s", parent_inv.format(), pslice);
+        if (Debug.logOn()) {
+          parent_inv.log("Added %s to %s", parent_inv.format(), pslice);
+        }
       }
     }
   }
@@ -3952,9 +3962,9 @@ public class PptTopLevel extends Ppt {
    * <p>The corresponding parent variable can match ANY of the members of an equality set. For
    * example, suppose that the child is EXIT with variable A, with equality set members {A,
    * orig(A)}; and suppose that this child is matched against ENTER. A does not have a relation
-   * (since it is a post value), but orig(a) does have a relation.
+   * (since it is a post value), but orig(A) does have a relation.
    *
-   * <p>Note that there are cases where this is not exactly correct. if you wanted to get all of the
+   * <p>Note that there are cases where this is not exactly correct. If you wanted to get all of the
    * invariants over A where A is an equality set with B, and A and B were in different equality
    * sets at the parent, the invariants true at A in the child are the union of those true at A and
    * B at the parent.
@@ -3963,9 +3973,10 @@ public class PptTopLevel extends Ppt {
 
     /*NNC:@MonotonicNonNull*/ VarInfo[] pvis = new VarInfo[slice.var_infos.length];
     for (int j = 0; j < slice.var_infos.length; j++) {
-      VarInfo cv = slice.var_infos[j]; // child variable
-      VarInfo pv = null; // parent variable
-      for (Iterator<VarInfo> k = cv.equalitySet.getVars().iterator(); k.hasNext(); ) {
+      VarInfo sliceVar = slice.var_infos[j];
+      VarInfo cv = null; // child variable: a variable equal to sliceVar that has a parent
+      VarInfo pv = null; // parent variable: cv's parent
+      for (Iterator<VarInfo> k = sliceVar.equalitySet.getVars().iterator(); k.hasNext(); ) {
         cv = k.next();
         pv = rel.parentVar(cv);
         if (pv != null) {
@@ -3976,8 +3987,7 @@ public class PptTopLevel extends Ppt {
         return null;
       }
 
-      // Make sure that the parent equality set is a subset of the child
-      // equality set
+      // Make sure that the parent equality set is a subset of the child equality set.
       boolean assert_enabled = false;
       assert (assert_enabled = true);
       if (assert_enabled) {
@@ -3997,7 +4007,9 @@ public class PptTopLevel extends Ppt {
           }
         }
       }
-      if (!pv.isCanonical()) pv = pv.canonicalRep();
+      if (!pv.isCanonical()) {
+        pv = pv.canonicalRep();
+      }
       pvis[j] = pv;
 
       // assert !pv.missingOutOfBounds();
@@ -4069,8 +4081,8 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Remove the equality invariants added during equality post processing. These are not over
-   * leaders and can causes in some uses of the ppt. In particular, they cause problems during
-   * merging.
+   * leaders and can cause problems in some uses of the ppt. In particular, they cause problems
+   * during merging.
    */
   public void remove_equality_invariants() {
 
@@ -4101,9 +4113,9 @@ public class PptTopLevel extends Ppt {
   /**
    * Removes any invariant in this ppt which has a matching invariant in the parent (as specified in
    * the relation). Done to save space. Only safe when all processing of this child is complete
-   * (i.e., all of the parents of this child must have been merged)
+   * (i.e., all of the parents of this child must have been merged).
    *
-   * <p>Another interesting problem arises with this code. As currently setup, it won't process
+   * <p>Another interesting problem arises with this code. As currently set up, it won't process
    * combined exit points (which often have two parents), but it will process enter points. Once the
    * enter point is removed, it can no longer parent filter the combined exit point.
    *
