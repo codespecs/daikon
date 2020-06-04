@@ -756,6 +756,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   }
 
   @Override
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code; parens are sometimes necessary
   public InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     if (!EQUALS(v1, v2)) {
       return InvariantStatus.FALSIFIED;
