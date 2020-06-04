@@ -1918,7 +1918,8 @@ public final class Daikon {
           try {
             vi.checkRep();
           } catch (Throwable e) {
-            System.err.println("\nError with variable " + vi + " at ppt " + exit_ppt);
+            System.err.println();
+            System.err.println("Error with variable " + vi + " at ppt " + exit_ppt);
             throw e;
           }
         }
@@ -1999,7 +2000,8 @@ public final class Daikon {
         try {
           vi.checkRep();
         } catch (Throwable e) {
-          System.err.println("\nError with variable " + vi + " at ppt " + exit_ppt);
+          System.err.println();
+          System.err.println("Error with variable " + vi + " at ppt " + exit_ppt);
           throw e;
         }
       }

@@ -55,16 +55,14 @@ public final class TestAnnotate extends TestCase {
         if (untabbedChar != ' ') {
           char tabbedChar = tabbedString.charAt(AnnotateVisitor.getTabbedIndex(j, tabbedString));
           assert untabbedChar == tabbedChar
-              : "\ntabbedString:"
-                  + tabbedString
-                  + "\nuntabbedString:"
-                  + untabbedString
-                  + "\nj:"
-                  + j
-                  + "\ntabbedchar:"
-                  + tabbedChar
-                  + "\nuntabbedchar:"
-                  + untabbedChar;
+              : String.join(
+                  System.lineSeparator(),
+                  "",
+                  "tabbedString:" + tabbedString,
+                  "untabbedString:" + untabbedString,
+                  "j:" + j,
+                  "tabbedchar:" + tabbedChar,
+                  "untabbedchar:" + untabbedChar);
         }
       }
     }

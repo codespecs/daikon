@@ -65,11 +65,13 @@ public final class TestAst extends TestCase {
       decl.accept(new TreeFormatter());
       String declString = Ast.format(decl);
       throw new Error(
-          "pptName: "
-              + pptName
-              + "\ndoesn't match method declaration:\n----------\n"
-              + declString
-              + "\n----------");
+          String.join(
+              System.lineSeparator(),
+              "pptName: " + pptName,
+              "doesn't match method declaration:",
+              "----------",
+              declString,
+              "----------"));
     }
   }
 
@@ -102,13 +104,13 @@ public final class TestAst extends TestCase {
     {
       String expected = "daikon.test.GenericTestClass";
       assert Ast.getClassName(classDecls.get(0)).equals(expected)
-          : "Got: " + classDecls.get(0) + "\nExpected: " + expected;
+          : "Got: " + classDecls.get(0) + System.lineSeparator() + "Expected: " + expected;
     }
     // Illegal in Java 6
     // {
     //   String expected = "daikon.test.GenericTestClass.Simple";
     //   assert Ast.getClassName(classDecls.get(1)).equals(expected))
-    //     : "Got: " + classDecls.get(1) + "\nExpected: " + expected;
+    //     : "Got: " + classDecls.get(1) + System.lineSeparator() + "Expected: " + expected;
     // }
 
     // Test method declarations

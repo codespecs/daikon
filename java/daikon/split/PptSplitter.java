@@ -403,13 +403,12 @@ public class PptSplitter implements Serializable {
 
             // found slice on non-canonical, but didn't find it here
             throw new RuntimeException(
-                "found eq_inv "
-                    + "\n  "
-                    + eq_inv
-                    + "\n  @"
-                    + eq_inv_ppt
-                    + "\n  but can't find slice for "
-                    + Arrays.toString(cvis_sorted));
+                String.join(
+                    System.lineSeparator(),
+                    "found eq_inv",
+                    "  " + eq_inv,
+                    "  @" + eq_inv_ppt,
+                    "  but can't find slice for " + Arrays.toString(cvis_sorted)));
           }
           // If no slice, just give up?
           continue;

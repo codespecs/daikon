@@ -75,13 +75,12 @@ public class SplitterObject implements Comparable<SplitterObject> {
       return null;
     } catch (UnsupportedClassVersionError ucve) { // should be more general?
       throw new Daikon.UserError(
-          "Wrong Java version while reading file "
-              + fileName
-              + ": "
-              + ucve.getMessage()
-              + "\n"
-              + "This indicates a possible problem with configuration option\ndaikon.split.SplitterFactory.compiler whose value is: "
-              + SplitterFactory.dkconfig_compiler);
+          String.join(
+              System.lineSeparator(),
+              "Wrong Java version while reading file " + fileName + ": " + ucve.getMessage(),
+              "This indicates a possible problem with configuration option",
+              "daikon.split.SplitterFactory.compiler whose value is: "
+                  + SplitterFactory.dkconfig_compiler));
     }
   }
 
@@ -115,7 +114,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       exists = true;
     } else {
       errorMessage =
-          "\nNo class data for "
+          "No class data for "
               + this.toString()
               + ", to be loaded from "
               + directory

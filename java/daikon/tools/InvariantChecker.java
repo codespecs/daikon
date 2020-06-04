@@ -338,7 +338,7 @@ public class InvariantChecker {
     progress.shouldStop = true;
     System.out.println();
     System.out.printf(
-        "%s: %,d errors found in %,d samples (%s)\n",
+        "%s: %,d errors found in %,d samples (%s)%n",
         inv_file, error_cnt, sample_cnt, toPercentage(error_cnt, sample_cnt));
     int failedCount = failedInvariants.size();
     int testedCount = testedInvariants.size();
