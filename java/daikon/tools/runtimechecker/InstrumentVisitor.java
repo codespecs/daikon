@@ -653,6 +653,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             code.toString());
   }
 
+  /**
+   * Returns an AST for initializng the {@code daikonProperties} variable.
+   *
+   * @return an AST for initializng the {@code daikonProperties} variable
+   */
   private ClassOrInterfaceBodyDeclaration staticPropertyInit() {
     StringJoiner code = new StringJoiner(System.lineSeparator());
 

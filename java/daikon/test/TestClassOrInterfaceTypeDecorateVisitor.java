@@ -31,6 +31,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
       ungenerifieds.add(n.unGenerifiedVersionOfThis);
     }
 
+    /** A printed representation of the results. */
     public String collectionResults() {
       StringBuilder b = new StringBuilder();
       b.append("Collection results:");
@@ -114,6 +115,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
       */
   }
 
+  /** The expected results, as a collection of lines. */
   private static String[] expectedAnswerLines =
       new String[] {
         "Collection results:",
