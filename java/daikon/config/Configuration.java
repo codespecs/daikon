@@ -28,7 +28,7 @@ public final class Configuration implements Serializable {
 
   // ============================== STATIC COMPONENT ==============================
 
-  protected static final String PREFIX = "dkconfig_";
+  static final String PREFIX = "dkconfig_";
 
   private static final Class<String> STRING_CLASS;
 
