@@ -2494,6 +2494,7 @@ public final class DCRuntime {
       }
       set.add(dv);
     } catch (NullPointerException e) {
+      throw new Error(e);
     }
 
     for (DaikonVariableInfo child : dv) {
