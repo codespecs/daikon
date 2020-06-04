@@ -100,7 +100,7 @@ public class DCInstrument extends InstructionListUtils {
   protected static Type object_arr = new ArrayType(Type.OBJECT, 1);
   // private Type int_arr = new ArrayType (Type.INT, 1);
   protected static ObjectType throwable = new ObjectType("java.lang.Throwable");
-  protected static ObjectType dcomp_marker = null;
+  protected ObjectType dcomp_marker;
   protected static ObjectType javalangObject = new ObjectType("java.lang.Object");
 
   // Debug loggers
@@ -120,9 +120,10 @@ public class DCInstrument extends InstructionListUtils {
   protected static boolean jdk_instrumented = true;
 
   /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
+  // Static because used in DCRuntime
   protected static String instrumentation_interface;
-  /** Either "java.lang.DCompMarker" or "daikon.dcomp.DCompMarker". */
-  protected static @DotSeparatedIdentifiers String dcomp_prefix;
+  /** Either "java.lang" or "daikon.dcomp". */
+  protected @DotSeparatedIdentifiers String dcomp_prefix;
   /**
    * We add a dummy local variable to JDK methods during the initial jdk instrumentation (via
    * BuildJDK) as a flag to indicate that the method needs to be re-instrumented at runtime. This is
