@@ -26,7 +26,7 @@ The correct way to build the system is to run 'make'.
   #define SEQUENCESPREDICATE SequencesPredicate
   #define SEQUENCESJOIN SequencesJoinFloat
   #define SUBSEQUENCE SubSequenceFloat
-  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUAL(a,b) Global.fuzzy.eq(a, b)
   #define VALUE_SET ValueSet.ValueSetFloatArray
 #endif
 
@@ -147,6 +147,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
   public InvariantStatus check_modified(PRIMITIVE @Interned [] a, int count) {
     // if (logDetail())
     //   log ("sample " + Arrays.toString (a));

@@ -18,7 +18,7 @@ The correct way to build the system is to run 'make'.
   #if 0
   // #define EQUAL(a,b) ((a) == (b))
   #endif
-  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUAL(a,b) Global.fuzzy.eq(a, b)
   #define GET_VAL(a) ((Long)a).longValue()
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME LinearTernaryCoreFloat
@@ -27,7 +27,7 @@ The correct way to build the system is to run 'make'.
   #define LINEAR_BINARY LinearBinaryFloat
   #define ONEOF OneOfFloat
   #define CLASSSTRING "LinearTernaryCoreFloat"
-  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUAL(a,b) Global.fuzzy.eq(a, b)
   #define GET_VAL(a) ((Double)a).doubleValue()
 #else
   #error "Either TYPELONG or TYPEDOUBLE must be defined"

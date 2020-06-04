@@ -27,7 +27,7 @@ The correct way to build the system is to run 'make'.
   #define EQUAL_MINUS_ONE EltRangeInt.EqualMinusOne
   #define VALUE_SET ValueSet.ValueSetScalarArray
 #elif defined(TYPEDOUBLE)
-  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUAL(a,b) Global.fuzzy.eq(a, b)
   #define CLASSNAME EltNonZeroFloat
   #define CLASSSTRING "EltNonZeroFloat"
   #define SUPERCLASS SingleFloatSequence
@@ -218,6 +218,7 @@ public final class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
   public InvariantStatus check_modified(PRIMITIVE @Interned [] a, int count) {
     for (int ai = 0; ai < a.length; ai++) {
       PRIMITIVE v = a[ai];

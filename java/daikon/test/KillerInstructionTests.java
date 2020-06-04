@@ -1,6 +1,5 @@
 package daikon.test;
 
-import daikon.asm.IInstruction;
 import daikon.asm.KillerInstruction;
 import daikon.asm.X86Instruction;
 import java.util.ArrayList;
@@ -58,10 +57,5 @@ public class KillerInstructionTests extends TestCase {
     for (String v : vars) {
       assert !i.kills(v);
     }
-  }
-
-  private static void addX86Instruction(List<IInstruction> path, String string) {
-    X86Instruction i = X86Instruction.parseInstruction(string);
-    path.add(i);
   }
 }

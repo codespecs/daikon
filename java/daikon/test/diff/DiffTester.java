@@ -441,8 +441,6 @@ public class DiffTester extends TestCase {
     PptSlice slice = new PptSlice1(ppt, vars);
     Invariant inv = NonModulus.get_proto().instantiate(slice);
     slice.addInvariant(inv);
-    List<PptSlice> v = new ArrayList<>();
-    v.add(slice);
     map.add(ppt);
 
     diffSome.diffPptMap(map, map);

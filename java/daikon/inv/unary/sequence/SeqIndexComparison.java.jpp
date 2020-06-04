@@ -45,7 +45,7 @@
   #define EQUALSQUANTstring "Equal"
 #elif defined(EQUALFLOAT)
   #define CLASSNAME SeqIndexFloatEqual
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define SYMMETRIC_OP
   #define EQUALShtml ==
   #define EQUALScode ==
@@ -63,7 +63,7 @@
   #define EQUALSQUANTstring "NotEqual"
 #elif defined(NONEQUALFLOAT)
   #define CLASSNAME SeqIndexFloatNonEqual
-  #define EQUALS(a,b) (Global.fuzzy.ne(a, b))
+  #define EQUALS(a,b) Global.fuzzy.ne(a, b)
   #define SYMMETRIC_OP
   #define EQUALShtml !=
   #define EQUALScode !=
@@ -82,7 +82,7 @@
 #elif defined(LESSTHANFLOAT)
   #define CLASSNAME SeqIndexFloatLessThan
   #define CLASS_SWAP SeqIndexFloatGreaterThan
-  #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lt(a, b)
   #define EQUALShtml &lt;
   #define EQUALScode <
   #define EQUALSstring "<"
@@ -100,7 +100,7 @@
 #elif defined(LESSEQUALFLOAT)
   #define CLASSNAME SeqIndexFloatLessEqual
   #define CLASS_SWAP SeqIndexFloatGreaterEqual
-  #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lte(a, b)
   #define EQUALShtml &le;
   #define EQUALScode <=
   #define EQUALSstring "<="
@@ -118,7 +118,7 @@
 #elif defined(GREATERTHANFLOAT)
   #define CLASSNAME SeqIndexFloatGreaterThan
   #define CLASS_SWAP SeqIndexFloatLessThan
-  #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gt(a, b)
   #define EQUALShtml &gt;
   #define EQUALScode >
   #define EQUALSstring ">"
@@ -136,7 +136,7 @@
 #elif defined(GREATEREQUALFLOAT)
   #define CLASSNAME SeqIndexFloatGreaterEqual
   #define CLASS_SWAP SeqIndexFloatLessEqual
-  #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gte(a, b)
   #define EQUALShtml &ge;
   #define EQUALScode >=
   #define EQUALSstring ">="
@@ -389,6 +389,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
   protected double computeConfidence() {
 
     // Make sure there have been some elements in the sequence

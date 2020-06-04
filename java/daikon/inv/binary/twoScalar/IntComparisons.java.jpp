@@ -90,7 +90,7 @@
 #elif defined(EQUALFLOAT)
   #define INTEQUAL FloatEqual
   #define INTEQUALstring "FloatEqual"
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define EQUALShtml ==
   #define EQUALScode ==
   #define EQUALSstring "=="
@@ -125,7 +125,7 @@
 #elif defined(NONEQUALFLOAT)
   #define INTEQUAL FloatNonEqual
   #define INTEQUALstring "FloatNonEqual"
-  #define EQUALS(a,b) (Global.fuzzy.ne(a, b))
+  #define EQUALS(a,b) Global.fuzzy.ne(a, b)
   #define EQUALShtml !=
   #define EQUALScode !=
   #define EQUALSstring "!="
@@ -159,7 +159,7 @@
   #define INTEQUAL FloatLessThan
   #define INTEQUAL_SWAP FloatGreaterThan
   #define INTEQUALstring "FloatLessThan"
-  #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lt(a, b)
   #define EQUALShtml &lt;
   #define EQUALScode <
   #define EQUALSstring "<"
@@ -198,7 +198,7 @@
   #define INTEQUAL FloatLessEqual
   #define INTEQUAL_SWAP FloatGreaterEqual
   #define INTEQUALstring "FloatLessEqual"
-  #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lte(a, b)
   #define EQUALShtml &le;
   #define EQUALScode <=
   #define EQUALSstring "<="
@@ -237,7 +237,7 @@
   #define INTEQUAL FloatGreaterThan
   #define INTEQUAL_SWAP FloatLessThan
   #define INTEQUALstring "FloatGreaterThan"
-  #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gt(a, b)
   #define EQUALShtml &gt;
   #define EQUALScode >
   #define EQUALSstring ">"
@@ -276,7 +276,7 @@
   #define INTEQUAL FloatGreaterEqual
   #define INTEQUAL_SWAP FloatLessEqual
   #define INTEQUALstring "FloatGreaterEqual"
-  #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gte(a, b)
   #define EQUALShtml &ge;
   #define EQUALScode >=
   #define EQUALSstring ">="
@@ -1182,7 +1182,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     }
 
     // The b coefficient determines less than or greater than
-    if EQUALS(-lb.core.c / lb.core.b, 0) {
+    if (EQUALS(-lb.core.c / lb.core.b, 0)) {
       return null;
     }
 

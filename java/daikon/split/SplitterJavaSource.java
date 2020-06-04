@@ -437,31 +437,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Return str with the char at index removed.
-   *
-   * <p>This method requires: {@code 0 <= index < str.length}
-   *
-   * @param str the String from which the char at index should be removed
-   * @param index the index of the char that should be removed from str
-   * @return str with the char at index removed
-   */
-  private static String removeCharAt(String str, int index) {
-    return str.substring(0, index) + str.substring(index + 1);
-  }
-
-  /**
-   * Returns str with chr inserted at index. This method requires: {@code 0 <= index <= str.length}
-   *
-   * @param str the String in which chr should be inserted
-   * @param chr the char that should be inserted into str
-   * @param index the index of the position where chr should be inserted in to str
-   * @return str with chr inserted at index
-   */
-  private static String insertCharAt(String str, char chr, int index) {
-    return str.substring(0, index) + chr + str.substring(index);
-  }
-
-  /**
    * Calculates the name of the variable represented by varInfo in a compilable form. Names are the
    * same as base names (see getBaseName) except that the names of arrays are suffixed with
    * "_identity" if it is a variable representing the array for equality tests or "_array" if it is
@@ -525,22 +500,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       baseNames[i] = getBaseName(varInfos[i], className);
     }
     return baseNames;
-  }
-
-  /**
-   * Returns st with all instances of ch removed.
-   *
-   * @param st the string from which ch should be removed
-   * @param ch the character that should be removed from st
-   * @return st with all instances of ch removed
-   */
-  private static String remove(String st, char ch) {
-    int index = st.indexOf(ch);
-    while (index != -1) {
-      st = st.substring(0, index) + st.substring(index + 1, st.length());
-      index = st.indexOf(ch);
-    }
-    return st;
   }
 
   /**
@@ -613,15 +572,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       fieldName = fieldName(varInfo, className);
       varName = varName(varInfo, className);
       type = makeIndexIfNeeded(getVarType(varInfo), compilableName, varInfo, condition);
-    }
-
-    /**
-     * Returns the VarInfo of the variable.
-     *
-     * @return the VarInfo of the variable
-     */
-    private VarInfo getVarInfo() {
-      return varInfo;
     }
 
     /**

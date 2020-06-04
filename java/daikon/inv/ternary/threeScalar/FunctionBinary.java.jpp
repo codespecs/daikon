@@ -40,7 +40,7 @@
   #define SUPERCLASS ThreeFloat
   #define PRIMITIVE double
   #define PRIMITIVE_CNAME Double
-  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUAL(a,b) Global.fuzzy.eq(a, b)
   #define IS_INTEGRAL isFloat()
   #define POW Math.pow
   #define EQUALITY FloatEqual

@@ -1,7 +1,6 @@
 package daikon.split;
 
 import daikon.Global;
-import daikon.PptMap;
 import daikon.PptTopLevel;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -151,13 +150,6 @@ public class SplitterFactory {
       tempdir = createTempDir();
     }
     return tempdir;
-  }
-
-  private static void printAll(PptMap map) {
-    System.out.println("start");
-    for (PptTopLevel ppt : map.pptIterable()) {
-      System.out.println("PPT: " + ppt.name());
-    }
   }
 
   /**

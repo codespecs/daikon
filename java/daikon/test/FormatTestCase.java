@@ -1030,29 +1030,6 @@ class FormatTestCase {
   }
 
   /**
-   * This function instantiates an invariant class by using the <type>(PptSlice) constructor.
-   *
-   * @param theClass the invariant class to be instantiated
-   * @param sl the PptSlice representing the variables about which an invariant is determined
-   * @return an instance of the class in theClass if one can be constructed, else throw a
-   *     RuntimeException
-   */
-  private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
-    try {
-      Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
-      @Prototype Invariant proto = (@Prototype Invariant) get_proto.invoke(null, new Object[] {});
-      Invariant inv = proto.instantiate(sl);
-
-      if (inv == null) throw new RuntimeException("null inv for " + theClass.getName());
-      return inv;
-    } catch (Exception e) {
-      e.printStackTrace(System.out);
-      throw new RuntimeException(
-          "Error while instantiating invariant " + theClass.getName() + ": " + e.toString());
-    }
-  }
-
-  /**
    * This function instantiates an invariant class by using the static instantiate method with the
    * specified arguments.
    *

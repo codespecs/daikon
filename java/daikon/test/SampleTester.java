@@ -314,15 +314,6 @@ public class SampleTester extends TestCase {
     ppt.add_bottom_up(vt, 1);
   }
 
-  /** Processes a string of possibly multiple assertions. If any are false, throws an error. */
-  private void proc_assertions(String assertions) throws IOException {
-
-    String[] aa = assertions.split("\\) *");
-    for (int i = 0; i < aa.length; i++) {
-      proc_assert(aa[i]);
-    }
-  }
-
   /** Requires that the StreamTokenizer has just read a word. Returns that word. */
   private String readString(StreamTokenizer stok) {
     int ttype;

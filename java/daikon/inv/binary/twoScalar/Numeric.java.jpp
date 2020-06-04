@@ -31,7 +31,7 @@
   #define CLASSNAME NumericFloat
   #define SUPERCLASS TwoFloat
   #define PRIMITIVE double
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define VALUE_SET ValueSet.ValueSetFloatArray
   #define ONEOF OneOfFloat
   #define ONEOF_ZERO InvDef.elts_zero_float
@@ -101,7 +101,7 @@
   #define CLASSNAME PairwiseNumericFloat
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define VALUE_SET ValueSet.ValueSetFloatArray
   #define ONEOF EltOneOfFloat
   #define ONEOF_ZERO InvDef.elts_zero_float

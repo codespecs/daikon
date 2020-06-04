@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -300,7 +299,7 @@ public class InvariantChecker {
     // Yoav: make sure we have unique invariants
     InvariantFilters fi = InvariantFilters.defaultFilters();
     // Set<String> allInvariantsStr = new HashSet<>();
-    Set<Invariant> allInvariants = new HashSet<>();
+    // Set<Invariant> allInvariants = new HashSet<>();
     for (PptTopLevel ppt : ppts.all_ppts()) {
       for (PptSlice slice : ppt.views_iterable()) {
         for (Invariant inv : slice.invs) {
@@ -322,7 +321,7 @@ public class InvariantChecker {
           //   throw new
           //     Daikon.UserError("Two invariants have the same ppt.name+inv.rep:"+n);
           // }
-          allInvariants.add(inv);
+          // allInvariants.add(inv);
           // allInvariantsStr.add(n);
         }
       }

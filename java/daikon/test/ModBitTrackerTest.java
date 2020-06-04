@@ -62,10 +62,6 @@ public class ModBitTrackerTest extends TestCase {
     return (b ? ValueTuple.MODIFIED : ValueTuple.MISSING_NONSENSICAL);
   }
 
-  private boolean modBitToBoolean(int mb) {
-    return (mb == ValueTuple.MODIFIED) || (mb == ValueTuple.UNMODIFIED);
-  }
-
   private boolean randomModBoolean(int varno, int sampleno) {
     boolean unusual = (r.nextInt(100) == 0);
     boolean result;

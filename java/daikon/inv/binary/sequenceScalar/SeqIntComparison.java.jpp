@@ -46,7 +46,7 @@
 #elif defined(EQUALFLOAT)
   #define SEQINTEQUAL SeqFloatEqual
   #define SEQINTEQUALstring "SeqFloatEqual"
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define EQUALShtml
   #define EQUALScode ==
   #define EQUALSstring "=="
@@ -64,7 +64,7 @@
 #elif defined(LESSTHANFLOAT)
   #define SEQINTEQUAL SeqFloatLessThan
   #define SEQINTEQUALstring "SeqFloatLessThan"
-  #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lt(a, b)
   #define EQUALShtml &lt;
   #define EQUALScode <
   #define EQUALSstring "<"
@@ -82,7 +82,7 @@
 #elif defined(LESSEQUALFLOAT)
   #define SEQINTEQUAL SeqFloatLessEqual
   #define SEQINTEQUALstring "SeqFloatLessEqual"
-  #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lte(a, b)
   #define EQUALShtml &le;
   #define EQUALScode <=
   #define EQUALSstring "<="
@@ -100,7 +100,7 @@
 #elif defined(GREATERTHANFLOAT)
   #define SEQINTEQUAL SeqFloatGreaterThan
   #define SEQINTEQUALstring "SeqFloatGreaterThan"
-  #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gt(a, b)
   #define EQUALShtml &gt;
   #define EQUALScode >
   #define EQUALSstring ">"
@@ -118,7 +118,7 @@
 #elif defined(GREATEREQUALFLOAT)
   #define SEQINTEQUAL SeqFloatGreaterEqual
   #define SEQINTEQUALstring "SeqFloatGreaterEqual"
-  #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gte(a, b)
   #define EQUALShtml &ge;
   #define EQUALScode >=
   #define EQUALSstring ">="
