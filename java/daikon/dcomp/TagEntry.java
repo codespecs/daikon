@@ -51,7 +51,11 @@ class TagEntry extends WeakReference<Object> {
    */
   protected String tracer_loc = "";
 
-  /** Create an entry as a separate set. Does not put {@code obj} in {@link object_map}. */
+  /**
+   * Create an entry as a separate set. Does not put {@code obj} in {@link object_map}.
+   *
+   * @param obj the object to put in a new set
+   */
   public TagEntry(Object obj) {
     super(obj);
     this.parent = null;
@@ -61,6 +65,9 @@ class TagEntry extends WeakReference<Object> {
 
   /**
    * Create an entry and add it to an existing set. Does not put {@code obj} in {@link object_map}.
+   *
+   * @param obj the object to put in a new set
+   * @param parent the parent of the new set
    */
   public TagEntry(Object obj, TagEntry parent) {
     super(obj);
@@ -69,7 +76,12 @@ class TagEntry extends WeakReference<Object> {
     // System.out.printf("Made %s with parent p%s%n", this, this.parent);
   }
 
-  /** Creates a set that only contains obj. Puts {@code obj} in {@link object_map}. */
+  /**
+   * Creates a set that only contains obj. Puts {@code obj} in {@link object_map}.
+   *
+   * @param obj the object to create a new set for
+   * @return a new set containing {@code obj}
+   */
   public static TagEntry create(Object obj) {
     assert !object_map.containsKey(obj);
     TagEntry entry = new TagEntry(obj);
@@ -142,6 +154,9 @@ class TagEntry extends WeakReference<Object> {
   /**
    * Given an Object, returns the Object that is the representative for its set. If there is no
    * entry for Object in the map, it must be in a set by itself.
+   *
+   * @param obj the object to find the representative for
+   * @return the representative of the set containing {@code obj}
    */
   public static Object find(Object obj) {
     assert obj != null;
@@ -174,7 +189,7 @@ class TagEntry extends WeakReference<Object> {
    * Return information about where the given object interacted with some other object in its set.
    *
    * @param obj an object in the union-find data structure
-   * @returns information about where the given object interacted with some other object in its set
+   * @return information about where the given object interacted with some other object in its set
    */
   public static String get_line_trace(Object obj) {
     return get_entry(obj).tracer_loc;
@@ -185,7 +200,7 @@ class TagEntry extends WeakReference<Object> {
    * object's interactions were not recorded.
    *
    * @param obj an object that might be in the union-find data structure
-   * @returns the canonical member of this object's set (based on tracers), or possibly null
+   * @return the canonical member of this object's set (based on tracers), or possibly null
    */
   public static @Nullable Object tracer_find(Object obj) {
     TagEntry entry = object_map.get(obj);
@@ -219,6 +234,7 @@ class TagEntry extends WeakReference<Object> {
   /**
    * Recursively traces from this object to the root of its tracer tree, and reverses the direction
    * of every pointer on the path, such that this object is now the root of its tracer tree.
+   * (Imprecise wording, I know.)
    */
   @SuppressWarnings("nullness") // catches NullPointerException
   public void reroute(@Nullable TagEntry newTracer, String tloc) {
