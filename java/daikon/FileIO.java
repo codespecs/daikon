@@ -2240,7 +2240,7 @@ public final class FileIO {
           if (!call_hashmap.containsKey(nonce)) {
             if (dkconfig_ignore_missing_enter) {
               // System.out.printf("Didn't find call with nonce %d to match %s" +
-              //                   " ending at %s line %d\n", nonce, ppt.name(),
+              //                   " ending at %s line %d%n", nonce, ppt.name(),
               //                   data_trace_state.filename,
               //                   data_trace_state.reader.getLineNumber());
               return true;
@@ -2544,9 +2544,15 @@ public final class FileIO {
   /**
    * Converts a name into its declaration record version. In the declaration record, blanks are
    * encoded as \_ and backslashes as \\.
+   *
+   * @param orig the name of a declaration
+   * @return the representation of the name in a declaration file
    */
   private static String escape_decl(String orig) {
-    return orig.replace("\\", "\\\\").replace(" ", "\\_").replace("\n", "\\n").replace("\r", "\\r");
+    return orig.replace("\\", "\\\\")
+        .replace(" ", "\\_")
+        .replace("\n", "\\n") // not lineSep
+        .replace("\r", "\\r");
   }
 
   /**

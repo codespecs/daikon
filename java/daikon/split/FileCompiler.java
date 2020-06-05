@@ -163,7 +163,7 @@ public final class FileCompiler {
     streamHandler = new PumpStreamHandler(outStream, errStream);
     executor.setStreamHandler(streamHandler);
 
-    // System.out.println ("\nexecuting compile command: " + cmdLine);
+    // System.out.println(); System.out.println("executing compile command: " + cmdLine);
     try {
       executor.execute(cmdLine, resultHandler);
     } catch (IOException e) {

@@ -1550,7 +1550,7 @@ public final class DCRuntime {
         DaikonVariableInfo current = varmap.get(leader);
         merge_dv.log("Daikon variable for leader = %s%n", current);
         if (current != null) {
-          merge_dv.log("**Merging %s and %s\n", current, dv);
+          merge_dv.log("**Merging %s and %s%n", current, dv);
           TagEntry.union(current, dv);
         } else {
           varmap.put(leader, dv);
@@ -1591,7 +1591,7 @@ public final class DCRuntime {
         DaikonVariableInfo current = varmap.get(leader);
         merge_dv.log("Daikon variable for leader = %s%n", current);
         if (current != null) {
-          merge_dv.log("**Merging %s and %s\n", current, dv);
+          merge_dv.log("**Merging %s and %s%n", current, dv);
           TagEntry.union(current, dv);
         } else {
           varmap.put(leader, dv);
@@ -1704,7 +1704,7 @@ public final class DCRuntime {
         DaikonVariableInfo current = varmap.get(leader);
         merge_dv.log("Daikon variable for leader = %s%n", current);
         if (current != null) {
-          merge_dv.log("**Merging %s and %s\n", current, dv);
+          merge_dv.log("**Merging %s and %s%n", current, dv);
           TagEntry.union(current, dv);
         } else {
           varmap.put(leader, dv);
@@ -1743,7 +1743,7 @@ public final class DCRuntime {
         DaikonVariableInfo current = varmap.get(leader);
         merge_dv.log("Daikon variable for leader = %s%n", current);
         if (current != null) {
-          merge_dv.log("**Merging %s and %s\n", current, dv);
+          merge_dv.log("**Merging %s and %s%n", current, dv);
           TagEntry.union(current, dv);
         } else {
           varmap.put(leader, dv);

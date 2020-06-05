@@ -3574,7 +3574,7 @@ public class PptTopLevel extends Ppt {
       System.out.printf("  mbtracker.num_vars() = %d%n", mbtracker.num_vars());
       for (int ii = 0; ii < var_infos.length; ii++) {
         System.out.printf(
-            "    Variable %s, index = %d\n", var_infos[ii], var_infos[ii].value_index);
+            "    Variable %s, index = %d%n", var_infos[ii], var_infos[ii].value_index);
       }
     }
     int num_tracevars = mbtracker.num_vars();
