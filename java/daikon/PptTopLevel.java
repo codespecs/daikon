@@ -3986,7 +3986,7 @@ public class PptTopLevel extends Ppt {
       if (pv == null) {
         return null;
       }
-      assert cv != null : "@AssumeAssertion(nullness): if pv is non-null, cv must have been";
+      assert cv != null : "@AssumeAssertion(nullness): if pv is non-null, cv must be non-null";
 
       // Make sure that the parent equality set is a subset of the child equality set.
       boolean assert_enabled = false;
