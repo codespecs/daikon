@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -187,19 +186,7 @@ public class Chicory {
     // were passed here.
 
     Chicory chicory = new Chicory();
-    chicory.start_target(getOptionsString(options), target_args);
-  }
-
-  // Gross hack, undo when Options package makes the `getOptionsString` method public.
-  @SuppressWarnings("nullness")
-  private static String getOptionsString(Options options) {
-    try {
-      Method method = options.getClass().getDeclaredMethod("getOptionsString");
-      method.setAccessible(true);
-      return (String) method.invoke(options);
-    } catch (Throwable e) {
-      throw new Error(e);
-    }
+    chicory.start_target(options.getOptionsString(), target_args);
   }
 
   /**
