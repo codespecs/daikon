@@ -2544,6 +2544,9 @@ public final class FileIO {
   /**
    * Converts a name into its declaration record version. In the declaration record, blanks are
    * encoded as \_ and backslashes as \\.
+   *
+   * @param orig the name of a declaration
+   * @return the representation of the name in a declaration file
    */
   private static String escape_decl(String orig) {
     return orig.replace("\\", "\\\\")

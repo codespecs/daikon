@@ -31,7 +31,11 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
       ungenerifieds.add(n.unGenerifiedVersionOfThis);
     }
 
-    /** A printed representation of the results. */
+    /**
+     * A printed representation of the results.
+     *
+     * @return a printed representation of the results
+     */
     public String collectionResults() {
       StringBuilder b = new StringBuilder();
       b.append("Collection results:");
