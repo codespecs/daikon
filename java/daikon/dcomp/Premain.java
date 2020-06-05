@@ -154,7 +154,7 @@ public class Premain {
    * @param agentArgs string containing the arguments passed to this agent.
    * @param inst Instrumentation instance to be used to transform classes.
    * @throws IOException if jdk_classes.txt cannot be read or if the correct version of BCEL cannot
-   *     be found or loaded.
+   *     be found or loaded
    */
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
     // For debugging

@@ -16,9 +16,9 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * This is the main class for DynComp. It uses the javaagent switch to java (which allows classes to
- * be instrumented as they are loaded). This class parses the command line arguments and starts java
- * with the javaagent switch on the target program. Code based largely on daikon.Chicory.
+ * This is the main class for DynComp. It uses the -javaagent switch to Java (which allows classes
+ * to be instrumented as they are loaded). This class parses the command line arguments and starts
+ * Java with the -javaagent switch on the target program. Code based largely on daikon.Chicory.
  */
 public class DynComp {
 

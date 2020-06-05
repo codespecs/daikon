@@ -7,12 +7,12 @@ DynComp Todo
     to change DCRuntime so that it doesn't have many external dependencies
     and only it needs to be placed in the boot classpath.
 
-  - Properly handle object methods.  Just ignoring them is not so good!
-    The problem here is that we cannot add methods to object (we should
+  - Properly handle Object methods.  Just ignoring them is not so good!
+    The problem here is that we cannot add methods to Object.class (we should
     test this again, but I'm pretty sure that is the case).  We will thus
     need to replace these calls somehow (or perhaps provide a synopsis for
-    their comparability).  We could argue that, for example, hashcode and
-    toString shouldn't change comparability.
+    their comparability).  We could argue that, for example, hashCode() and
+    toString() shouldn't change comparability.
 
   - Support reflection.  Because of the additional argument, reflection
     finds the original code and not our code.  This means we don't

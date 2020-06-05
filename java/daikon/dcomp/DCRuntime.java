@@ -2434,7 +2434,7 @@ public final class DCRuntime {
   }
 
   /**
-   * Gets a list of sets of comparable daikon variables. For simplicity the sets are represented as
+   * Gets a list of sets of comparable Daikon variables. For simplicity the sets are represented as
    * a list as well. If the method has never been executed returns null (it would probably be better
    * to return each variable in a separate set, but I wanted to differentiate this case for now).
    *
@@ -2515,7 +2515,7 @@ public final class DCRuntime {
   /**
    * Merges comparability so that the same variable has the same comparability at all points in the
    * program point hierarchy. The comparability at the class/object points is calculated by merging
-   * the comparability at each exit point (i.e., if two variables are in the same set it any exit
+   * the comparability at each exit point (i.e., if two variables are in the same set at any exit
    * point, they are in the same set at the class point). That comparability is then applied back to
    * the exit points so that if two class variables are comparable at any exit point they are
    * comparable at each exit point. Finally exit point comparability is merged to the enter point so
