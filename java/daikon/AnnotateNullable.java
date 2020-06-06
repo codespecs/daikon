@@ -266,10 +266,10 @@ public class AnnotateNullable {
     }
 
     if (stub_format) {
-      System.out.printf("}%n%n");
-    } else {
-      System.out.printf("%n%n");
+      System.out.printf("}");
     }
+    System.out.println();
+    System.out.println();
   }
 
   /**
