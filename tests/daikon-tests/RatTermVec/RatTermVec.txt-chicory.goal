@@ -99974,26 +99974,3 @@ this.wrapped[..].getClass().getName()
 index
 1
 1
-
-PolyCalc.RatTermVec.get(int):::EXIT39
-this_invocation_nonce
-2679
-this
-1467224784
-1
-this.wrapped
-1709815422
-1
-this.wrapped[..]
-[1658543772 1812549697]
-1
-this.wrapped[..].getClass().getName()
-["PolyCalc.RatTerm" "PolyCalc.RatTerm"]
-1
-index
-1
-1
-return
-1812549697
-1
-
