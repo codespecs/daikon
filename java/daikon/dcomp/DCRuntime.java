@@ -1103,7 +1103,7 @@ public final class DCRuntime {
       for (Object arg : args) {
         System.out.printf("%s ", obj_str(arg));
       }
-      System.out.printf("%n");
+      System.out.println();
     }
 
     MethodInfo mi = methods.get(mi_index);
@@ -1162,8 +1162,8 @@ public final class DCRuntime {
       for (Object arg : args) {
         System.out.printf("%s ", obj_str(arg));
       }
-      System.out.printf("%n");
-      System.out.printf("%n");
+      System.out.println();
+      System.out.println();
     }
 
     MethodInfo mi = methods.get(mi_index);
@@ -1229,7 +1229,7 @@ public final class DCRuntime {
       for (Object arg : args) {
         System.out.printf("%s ", obj_str(arg));
       }
-      System.out.printf("%n");
+      System.out.println();
       System.out.printf("ret_val = %s%nexit_line_number= %d%n%n", ret_val, exit_line_number);
     }
 
@@ -1278,7 +1278,7 @@ public final class DCRuntime {
       for (Object arg : args) {
         System.out.printf("%s ", obj_str(arg));
       }
-      System.out.printf("%n");
+      System.out.println();
       System.out.printf("ret_val = %s, exit_line_number= %d%n", ret_val, exit_line_number);
     }
 
@@ -1808,7 +1808,7 @@ public final class DCRuntime {
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
           continue;
         }
-        ps.printf("%n");
+        ps.println();
         print_comparable(ps, mi);
       }
     }
@@ -1830,7 +1830,7 @@ public final class DCRuntime {
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
           continue;
         }
-        ps.printf("%n");
+        ps.println();
         print_comparable_refs_only(ps, mi);
       }
     }
@@ -1847,7 +1847,7 @@ public final class DCRuntime {
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
           continue;
         }
-        ps.printf("%n");
+        ps.println();
         print_comparable_traced(ps, mi);
       }
     }
@@ -1916,7 +1916,7 @@ public final class DCRuntime {
     for (String key : methodCountMap.keySet()) {
       System.out.printf("  method %s [%d calls]%n", key, methodCountMap.get(key));
     }
-    System.out.printf("%n");
+    System.out.println();
 
     System.out.printf("Classes             = %,d%n", class_cnt);
     System.out.printf("Methods             = %,d%n", method_cnt);
@@ -2015,7 +2015,7 @@ public final class DCRuntime {
         continue;
       }
       debug_decl_print.log("  method %s%n", mi.method_name);
-      ps.printf("%n");
+      ps.println();
       print_decl(ps, mi);
     }
 
@@ -2323,10 +2323,10 @@ public final class DCRuntime {
           continue;
         }
         print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
-        ps.printf("%n");
+        ps.println();
       }
     }
-    ps.printf("%n");
+    ps.println();
 
     l = get_comparable(mi.traversalExit);
     t = get_comparable_traced(mi.traversalExit);
@@ -2339,10 +2339,10 @@ public final class DCRuntime {
           continue;
         }
         print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
-        ps.printf("%n");
+        ps.println();
       }
     }
-    ps.printf("%n");
+    ps.println();
   }
 
   /**

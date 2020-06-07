@@ -138,7 +138,7 @@ public class ClassInfo {
       for (Integer exit_loc : mi.exit_locations) {
         ps.printf("%s ", exit_loc);
       }
-      ps.printf("%n");
+      ps.println();
     }
   }
 
