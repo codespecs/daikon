@@ -709,7 +709,6 @@ ifeq ($(JAVA8), 1)
 	echo "Error Prone is not run under Java 8"
 else
 ## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
-## TODO:  Remove as many -Xep arguments as possible, starting at the end.
 	javac -cp ${DAIKON_CLASSPATH} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:UseCorrectAssertInTests:OFF -Xep:UnusedVariable:OFF' \
