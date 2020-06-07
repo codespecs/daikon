@@ -252,12 +252,12 @@ public class Chicory {
 
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
-    basic.log("classpath = '%s'\n", cp);
+    basic.log("classpath = '%s'%n", cp);
     if (cp == null) cp = ".";
 
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
-    basic.log("path_separator = %s\n", path_separator);
+    basic.log("path_separator = %s%n", path_separator);
     if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.UserError(
           "Bad regexp "
@@ -426,7 +426,7 @@ public class Chicory {
       // Terminate if target didn't end properly
       if (targetResult != 0) {
         System.out.printf(
-            "Warning: Did not run Daikon because target exited with %d status\n", targetResult);
+            "Warning: Did not run Daikon because target exited with %d status%n", targetResult);
         System.exit(targetResult);
       }
 

@@ -921,12 +921,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       if (et_vi == null) {
         debug_field_problem(et_varname, ppt);
         throw new Daikon.UserError(
-            "Annotate: Daikon knows nothing about variable "
-                + et_varname
-                + " at "
-                + ppt
-                + "\n  with allFieldNames = "
-                + allFieldNames);
+            String.format(
+                "Annotate: Daikon knows nothing about variable %s at %s%n  with allFieldNames = %s",
+                et_varname, ppt, allFieldNames));
       }
 
       // et_vi != null
@@ -1034,7 +1031,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
       if (expanded > untabbedIndex) {
         throw new RuntimeException(
-            "expanded:" + expanded + "untabbedIndex:" + untabbedIndex + "\nL1:" + L1);
+            String.join(
+                System.lineSeparator(),
+                "expanded:" + expanded,
+                "untabbedIndex:" + untabbedIndex,
+                " L1:" + L1));
       } else if (expanded == untabbedIndex) {
         index = i;
         break;
@@ -1049,7 +1050,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     assert expanded == untabbedIndex
-        : "\nexpanded:" + expanded + "\nuntabbedIndex:" + untabbedIndex + "\nL1: " + L1;
+        : String.join(
+            System.lineSeparator(),
+            "expanded:" + expanded,
+            "untabbedIndex:" + untabbedIndex,
+            "L1: " + L1);
     return index;
   }
 
