@@ -731,6 +731,7 @@ public class Ast {
           assert c != null;
           return c;
         } catch (ClassNotFoundException ex) {
+          throw new Error("This can't happen");
         }
       }
       // throw new Error("Control cannot reach here");

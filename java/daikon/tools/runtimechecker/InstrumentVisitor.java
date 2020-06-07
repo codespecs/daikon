@@ -250,10 +250,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         "checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time.onEntry);");
 
     String name = Ast.getName(ctor);
-    List<String> parameters = new ArrayList<>();
     List<String> typesAndParameters = new ArrayList<>();
     for (FormalParameter param : Ast.getParametersNoImplicit(ctor)) {
-      parameters.add(Ast.getName(param));
       typesAndParameters.add(Ast.format(param));
     }
 

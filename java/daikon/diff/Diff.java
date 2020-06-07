@@ -743,23 +743,24 @@ public final class Diff {
       invs2 = map2.get(ppt2);
       Collections.sort(invs2, invSortComparator2);
     } else {
-      if (false && treeManip && isCond(ppt1)) {
-        assert ppt1 != null : "@AssumeAssertion(nullness): dead code";
-        assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
-        assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
-
-        // remember, only want to mess with the second list
-        invs2 = findCondPpt(manip1, ppt1);
-        List<Invariant> tmpList = findCondPpt(manip2, ppt1);
-
-        invs2.addAll(tmpList);
-
-        // This uses set difference model instead of XOR
-        //        invs2 = tmpList;
-
-        // must call sort or it won't work!
-        Collections.sort(invs2, invSortComparator2);
-      } else if (treeManip && ppt2 != null && !isCond(ppt2)) {
+      // if (false && treeManip && isCond(ppt1)) {
+      //   assert ppt1 != null : "@AssumeAssertion(nullness): dead code";
+      //   assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
+      //   assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
+      //
+      //   // remember, only want to mess with the second list
+      //   invs2 = findCondPpt(manip1, ppt1);
+      //   List<Invariant> tmpList = findCondPpt(manip2, ppt1);
+      //
+      //   invs2.addAll(tmpList);
+      //
+      //   // This uses set difference model instead of XOR
+      //   //        invs2 = tmpList;
+      //
+      //   // must call sort or it won't work!
+      //   Collections.sort(invs2, invSortComparator2);
+      // } else
+      if (treeManip && ppt2 != null && !isCond(ppt2)) {
         assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
         assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
 
@@ -799,25 +800,25 @@ public final class Diff {
     return (ppt instanceof PptConditional);
   }
 
-  private List<Invariant> findCondPpt(PptMap manip, PptTopLevel ppt) {
-    // targetName should look like this below
-    // Contest.smallestRoom(II)I:::EXIT9;condition="max < num
-    String targetName = ppt.name();
-
-    String targ = targetName.substring(0, targetName.lastIndexOf(";condition"));
-
-    for (String somePptName : manip.nameStringSet()) {
-      // A conditional Ppt always contains the normal Ppt
-      if (targ.equals(somePptName)) {
-        @SuppressWarnings("nullness") // map: iterating over keySet
-        @NonNull PptTopLevel repl = manip.get(somePptName);
-        return repl.getInvariants();
-      }
-    }
-    //    System.out.println ("Could not find the left hand side of implication!!!");
-    System.out.println("LHS Missing: " + targ);
-    return new ArrayList<Invariant>();
-  }
+  // private List<Invariant> findCondPpt(PptMap manip, PptTopLevel ppt) {
+  //   // targetName should look like this below
+  //   // Contest.smallestRoom(II)I:::EXIT9;condition="max < num
+  //   String targetName = ppt.name();
+  //
+  //   String targ = targetName.substring(0, targetName.lastIndexOf(";condition"));
+  //
+  //   for (String somePptName : manip.nameStringSet()) {
+  //     // A conditional Ppt always contains the normal Ppt
+  //     if (targ.equals(somePptName)) {
+  //       @SuppressWarnings("nullness") // map: iterating over keySet
+  //       @NonNull PptTopLevel repl = manip.get(somePptName);
+  //       return repl.getInvariants();
+  //     }
+  //   }
+  //   //    System.out.println ("Could not find the left hand side of implication!!!");
+  //   System.out.println("LHS Missing: " + targ);
+  //   return new ArrayList<Invariant>();
+  // }
 
   private List<Invariant> findNormalPpt(PptMap manip, PptTopLevel ppt) {
     // targetName should look like this below

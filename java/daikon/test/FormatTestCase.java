@@ -307,9 +307,8 @@ class FormatTestCase {
       return partialGoalString.substring(
           partialGoalString.indexOf('(') + 1, partialGoalString.indexOf(')'));
     } catch (IndexOutOfBoundsException e) {
+      return null;
     }
-
-    return null;
   }
 
   static @Nullable String getGoalOutput(String partialGoalString) {
@@ -317,9 +316,8 @@ class FormatTestCase {
       return partialGoalString.substring(
           partialGoalString.indexOf(':') + 2, partialGoalString.length());
     } catch (IndexOutOfBoundsException e) {
+      return null;
     }
-
-    return null;
   }
 
   /**

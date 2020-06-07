@@ -399,9 +399,11 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static final String argDivider = ";";
 
     /**
-     * @return string containing error messages for any failed cases. In the case that there are no
-     *     failed cases, the empty string is returned. In the case where commands is empty (there
-     *     are no more test cases and the end of the file has been reached), null is returned.
+     * Returns a string containing error messages for any failed cases. Returns the empty string if
+     * there are no failed cases. Returns null if commands is empty (there are no more test cases
+     * and the end of the file has been reached).
+     *
+     * @return a string containing error messages for any failed cases
      */
     public static @Nullable String runTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, false);
