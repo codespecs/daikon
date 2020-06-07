@@ -180,6 +180,7 @@ public class Premain {
     DaikonVariableInfo.std_visibility = DynComp.std_visibility;
     DCRuntime.depth = DynComp.nesting_depth;
     DCInstrument.jdk_instrumented = !DynComp.no_jdk;
+    @SuppressWarnings("UnusedVariable") // loads BcelUtil class; without this, Premain fails
     int junk = BcelUtil.javaVersion;
 
     // Another 'trick' to force needed classes to be loaded prior to retransformation.

@@ -133,9 +133,8 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     }
     //    bufPrint(">");
 
-    int arity = DetailedStatisticsVisitor.determineArity(inv1, inv2);
-    int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
-
+    // int arity = DetailedStatisticsVisitor.determineArity(inv1, inv2);
+    // int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     // String arityLabel = DetailedStatisticsVisitor.ARITY_LABELS[arity];
     // String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
     //    bufPrint(" (" + arityLabel + "," + relLabel + ")");

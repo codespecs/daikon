@@ -86,9 +86,6 @@ public abstract class DaikonVariableInfo
 
   public static final String class_suffix_relative_name = class_suffix.substring(1);
 
-  /** Determines whether or not synthetic variables should be ignored. */
-  private static boolean skip_synthetic = true;
-
   /**
    * The printed type that will appear in the .decls declaration. May include aux information at the
    * end, such as isParamString.

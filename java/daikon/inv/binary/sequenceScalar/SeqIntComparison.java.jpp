@@ -519,16 +519,15 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     return suppressions;
   }
 
+#if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
   /** definition of this invariant (the suppressee) */
   private static NISuppressee suppressee = new NISuppressee(SEQINTEQUAL.class, 2);
 
   // suppressor definitions (used in suppressions below)
   private static NISuppressor v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class);
   private static NISuppressor v1_gt_v2 = new NISuppressor(0, 1, GREATER_THAN_CLASS.class);
-  private static NISuppressor v1_lt_v2 = new NISuppressor(0, 1, LESS_THAN_CLASS.class);
 
-  // NI Suppressions for each type of comparison
-#if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
+  /** NI Suppressions for each type of comparison. */
   private static NISuppressionSet suppressions =
     new NISuppressionSet(
         new NISuppression[] {
@@ -540,6 +539,14 @@ public final class SEQINTEQUAL extends SUPERCLASS {
             new NISuppression(v1_gt_v2, suppressee),
         });
 #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
+  /** definition of this invariant (the suppressee) */
+  private static NISuppressee suppressee = new NISuppressee(SEQINTEQUAL.class, 2);
+
+  // suppressor definitions (used in suppressions below)
+  private static NISuppressor v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class);
+  private static NISuppressor v1_lt_v2 = new NISuppressor(0, 1, LESS_THAN_CLASS.class);
+
+  /** NI Suppressions for each type of comparison. */
   private static NISuppressionSet suppressions =
     new NISuppressionSet(
         new NISuppression[] {
@@ -551,6 +558,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
             new NISuppression(v1_lt_v2, suppressee),
         });
 #else
+  /** NI Suppressions for each type of comparison. */
   private static @Nullable NISuppressionSet suppressions = null;
 #endif
 }

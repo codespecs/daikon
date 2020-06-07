@@ -245,10 +245,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
                              get_format_str(format)));
     }
     String fmt_str = get_format_str(format);
-    String v1 = null;
-    String v2 = null;
 
     #if defined(SEQ)
+    String v1;
+    String v2;
         if (format.isJavaFamily()) {
           #if defined(STRING)
             return format_unimplemented(format);
@@ -269,9 +269,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
               return format_unimplemented(format);
             }
           #endif
-        }
-
-        if (format == OutputFormat.CSHARPCONTRACT) {
+        } else if (format == OutputFormat.CSHARPCONTRACT) {
           #if defined(STRING)
             fmt_str = UtilPlume.replaceString(fmt_str, "%var1%", var1().csharp_name());
             fmt_str = UtilPlume.replaceString(fmt_str, "%var2%", var2().csharp_name());
@@ -308,18 +306,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
         fmt_str = form[0] + " " + fmt_str + " " + form[3];
         v1 = form[1];
         v2 = form[2];
-      } else if (format == OutputFormat.DAIKON) {
-        fmt_str += " (elementwise)";
-      }
-      if (v1 == null) {
+      } else {
         v1 = var1().name_using(format);
-      }
-      if (v2 == null) {
         v2 = var2().name_using(format);
+        if (format == OutputFormat.DAIKON) {
+          fmt_str += " (elementwise)";
+        }
       }
     #else
-      v1 = var1().name_using(format);
-      v2 = var2().name_using(format);
+    String v1 = var1().name_using(format);
+    String v2 = var2().name_using(format);
     #endif
 
     // Note that we do not use String.replaceAll here, because that's

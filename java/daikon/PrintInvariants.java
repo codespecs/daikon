@@ -564,7 +564,7 @@ public final class PrintInvariants {
   }
 
   /** Add discard reasons for invariants that are filtered out. */
-  private static void add_filter_reasons(PptTopLevel ppt, PptMap ppts) {
+  private static void add_filter_reasons(PptTopLevel ppt) {
     InvariantFilters fi = InvariantFilters.defaultFilters();
     for (Iterator<Invariant> fullInvItor = ppt.invariants_iterator(); fullInvItor.hasNext(); ) {
       Invariant nextInv = fullInvItor.next();
@@ -600,7 +600,7 @@ public final class PrintInvariants {
 
   private static String print_reasons_from_ppt(PptTopLevel ppt, PptMap ppts) {
     // Add all the reasons that would come from filtering to the DiscReasonMap
-    add_filter_reasons(ppt, ppts);
+    add_filter_reasons(ppt);
 
     String toPrint = "";
     String dashes =
@@ -1059,10 +1059,6 @@ public final class PrintInvariants {
     }
   }
 
-  // This is just a temporary thing to provide more info about the
-  // reason invariants are rejected.
-  private static String reason = "";
-
   /** Prints the specified invariant to out. */
   @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariant(
@@ -1353,8 +1349,8 @@ public final class PrintInvariants {
       debugPrint.fine("Variables for ppt " + ppt.name());
       for (int i = 0; i < ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
-        PptTopLevel ppt_tl = vi.ppt;
-        PptSlice slice1 = ppt_tl.findSlice(vi);
+        // PptTopLevel ppt_tl = vi.ppt;
+        // PptSlice slice1 = ppt_tl.findSlice(vi);
         debugPrint.fine("      " + vi.name());
       }
       debugPrint.fine("Equality set: ");
@@ -1448,7 +1444,8 @@ public final class PrintInvariants {
 
     if (debugFiltering.isLoggable(Level.FINE)) {
       for (int i = 0; i < ppt.var_infos.length; i++) {
-        VarInfo vi = ppt.var_infos[i];
+        // VarInfo vi = ppt.var_infos[i];
+        // ... print it
       }
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);

@@ -29,8 +29,6 @@ import org.plumelib.util.UtilPlume;
 })
 public class ParameterDoclet {
 
-  private static final String lineSep = System.lineSeparator();
-
   /** Entry point for this doclet (invoked by javadoc). */
   public static boolean start(RootDoc doc) throws IOException {
     ParameterDoclet pd = new ParameterDoclet(doc);

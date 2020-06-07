@@ -131,8 +131,8 @@ public class ChicoryPremain {
     try {
       transformer =
           loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
-      @SuppressWarnings("unchecked")
-      Class<Instrument> c = (Class<Instrument>) transformer.getClass();
+      // @SuppressWarnings("unchecked")
+      // Class<Instrument> c = (Class<Instrument>) transformer.getClass();
       // System.out.printf("Classloader of tranformer = %s%n",
       //                    c.getClassLoader());
     } catch (Exception e) {

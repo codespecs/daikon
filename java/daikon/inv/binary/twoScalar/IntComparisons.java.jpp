@@ -1055,7 +1055,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       }
     #endif
 
-    DiscardInfo di = null;
+    DiscardInfo di;
 
     #if defined(PAIRWISE_COMPARE)
       // Check for the same invariant over enclosing arrays

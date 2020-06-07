@@ -185,7 +185,7 @@ public final class Diff {
 
     LongOpt[] longOpts =
         new LongOpt[] {
-          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(HELP_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(INV_SORT_COMPARATOR1_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(INV_SORT_COMPARATOR2_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(INV_PAIR_COMPARATOR_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -486,7 +486,7 @@ public final class Diff {
 
       // now take the final result for the MultiDiffVisitor
       // and use it along side a null empty map
-      PptMap map1 = v1.currMap;
+      // PptMap map1 = v1.currMap;
 
       v1.printAll();
       return;

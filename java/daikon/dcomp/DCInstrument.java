@@ -2786,7 +2786,7 @@ public class DCInstrument extends InstructionListUtils {
     if (field_type instanceof ReferenceType) {
       return null;
     }
-    String name = f.getClassName(pool) + "." + f.getFieldName(pool);
+    // String name = f.getClassName(pool) + "." + f.getFieldName(pool);
     // System.out.printf("static field name for %s = %s%n", f, name);
 
     // Get the index of this static in the list of all statics and allocate

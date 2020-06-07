@@ -762,7 +762,7 @@ public final class Daikon {
     // Load declarations and splitters
     load_spinfo_files(spinfo_files);
     all_ppts = load_decls_files(decls_files);
-    load_map_files(all_ppts, map_files);
+    load_map_files(map_files);
 
     all_ppts.trimToSize();
 
@@ -2065,7 +2065,12 @@ public final class Daikon {
     }
   }
 
-  private static void load_map_files(PptMap all_ppts, Set<File> map_files) {
+  /**
+   * A wrapper around {@link ContextSplitterFactory#load_mapfiles_into_splitterlist}.
+   *
+   * @param map_files the map files to read into SplitterList
+   */
+  private static void load_map_files(Set<File> map_files) {
     long startTime = System.nanoTime();
     if (!PptSplitter.dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");

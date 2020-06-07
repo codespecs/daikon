@@ -573,15 +573,12 @@ public final class Runtime {
       println_modbit_missing(ps);
       return;
     }
-    boolean any_null = false;
     ps.print('[');
     if (a.length > 0) {
       print_class(ps, a[0]);
-      any_null = (a[0] == null);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
         print_class(ps, a[i]);
-        any_null |= (a[i] == null);
       }
     }
     ps.println(']');
@@ -616,16 +613,13 @@ public final class Runtime {
       println_modbit_missing(ps);
       return;
     }
-    boolean any_null = false;
     ps.print('[');
     int size = v.size();
     if (size > 0) {
       print_class(ps, v.get(0));
-      any_null = (v.get(0) == null);
       for (int i = 1; i < size; i++) {
         ps.print(' ');
         print_class(ps, v.get(i));
-        any_null |= (v.get(i) == null);
       }
     }
     ps.println(']');
