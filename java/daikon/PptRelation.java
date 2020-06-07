@@ -517,20 +517,26 @@ public class PptRelation implements Serializable {
         continue;
       }
       if (!rel.parent_to_child_map.containsKey(vp)) {
-        System.out.println(
-            "No match for "
-                + vp.name()
-                + " from parent "
-                + parent.name()
-                + " in child "
-                + child.name());
-        all_found = false;
+        if (all_found) {
+          System.out.printf(
+              "missing variables in newEnterExitRel:%n  parent = %s%n  child = %s%nparent varinfos missing from parent_to_child_map:%n",
+              parent.name(), child.name());
+          all_found = false;
+        }
+        System.out.printf("   %s%n", vp.name());
       }
     }
     if (!all_found) {
+      System.out.printf("rel.parent_to_child_map:%n");
+      for (Map.Entry<VarInfo, VarInfo> entry : rel.parent_to_child_map.entrySet()) {
+        System.out.printf("    %s => %s%n", entry.getKey(), entry.getValue());
+      }
+      System.out.printf("child.var_infos:%n");
       for (VarInfo vc : child.var_infos) {
         System.out.println("    " + vc.name());
       }
+      System.out.printf(
+          "End of diagnostics for newEnterExitRel(%s, %s)%n", parent.name(), child.name());
       // throw new Error("Missing orig variable in EXIT");
     }
     return rel;
