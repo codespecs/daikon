@@ -11,11 +11,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class StaticObjInfo extends DaikonVariableInfo {
   public Class<?> type;
 
-  //     public StaticObjInfo(String typeName, String repTypeName)
-  //     {
-  //         super("this", typeName, repTypeName);
-  //     }
-
   public StaticObjInfo(Class<?> type) {
     super("this", type.getName(), getRepName(type, false));
     this.type = type;

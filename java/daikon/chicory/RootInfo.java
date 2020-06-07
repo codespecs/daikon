@@ -49,8 +49,7 @@ public class RootInfo extends DaikonVariableInfo {
     }
 
     // Print each parameter
-    root.addParameters(
-        mi.class_info, mi.member, Arrays.<String>asList(mi.arg_names), /*offset = */ "", depth);
+    root.addParameters(mi.class_info, mi.member, Arrays.<String>asList(mi.arg_names), depth);
 
     // debug_vars.log("exit enter_process%n");
 
@@ -83,8 +82,7 @@ public class RootInfo extends DaikonVariableInfo {
         depth);
 
     // Print arguments
-    root.addParameters(
-        mi.class_info, mi.member, Arrays.<String>asList(mi.arg_names), /*offset = */ "", depth);
+    root.addParameters(mi.class_info, mi.member, Arrays.<String>asList(mi.arg_names), depth);
 
     // Print return type information for methods only and not constructors
     if (mi.member instanceof Method) {
@@ -107,8 +105,8 @@ public class RootInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Creates a RootInfo object for an object program point. This will include the class' fields and
-   * the "this" object.
+   * Creates a new RootInfo object for an object program point. This will include the class' fields
+   * and the "this" object.
    */
   public static RootInfo getObjectPpt(ClassInfo cinfo, int depth) {
     // debug_vars.clear("enter getObjectPpt: %s%n", cinfo);
@@ -126,7 +124,9 @@ public class RootInfo extends DaikonVariableInfo {
     return root;
   }
 
-  /** Creates a RootInfo object for a class program point. This will just include static fields. */
+  /**
+   * Creates a new RootInfo object for a class program point. This will just include static fields.
+   */
   public static RootInfo getClassPpt(ClassInfo cinfo, int depth) {
     // debug_vars.clear("enter getClassPpt: %s%n", cinfo);
 

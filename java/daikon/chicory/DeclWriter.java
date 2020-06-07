@@ -84,18 +84,14 @@ public class DeclWriter extends DaikonWriter {
     if (Runtime.comp_info != null) comparability = "implicit";
 
     if (Chicory.new_decl_format) {
-      outFile.printf("decl-version 2.0%n");
+      outFile.printf("decl-version 2.0%n%n");
       outFile.printf("var-comparability %s%n%n", comparability);
     } else {
-      outFile.println("VarComparability");
-      if (Runtime.comp_info != null) {
-        outFile.println("implicit");
-      } else {
-        outFile.println("none" + DaikonWriter.lineSep);
-      }
+      outFile.printf("VarComparability%n%s%n%n", Runtime.comp_info != null ? "implicit" : "none");
 
       outFile.println("ListImplementors");
-      outFile.println("java.util.List" + DaikonWriter.lineSep + DaikonWriter.lineSep);
+      outFile.println("java.util.List");
+      outFile.println();
     }
   }
 
@@ -206,7 +202,7 @@ public class DeclWriter extends DaikonWriter {
     }
   }
 
-  /** Prints the object program point. This contains the "this" object and the class' fields. */
+  /** Prints the object program point. This contains the "this" object and the class's fields. */
   private void printObjectPpt(ClassInfo cinfo, String name, DeclReader comp_info) {
     outFile.println(declareHeader);
     outFile.println(name);

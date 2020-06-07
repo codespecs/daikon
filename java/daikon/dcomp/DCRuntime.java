@@ -1857,7 +1857,7 @@ public final class DCRuntime {
 
     // Write the file header
     ps.printf("// Declaration file written by daikon.dcomp%n%n");
-    ps.printf("VarComparability%nimplicit%n");
+    ps.printf("VarComparability%nimplicit%n%n");
 
     // Write the information for each class
     for (ClassInfo ci : all_classes) {
@@ -1994,17 +1994,19 @@ public final class DCRuntime {
     merge_class_comparability(ci);
 
     // Write the class ppt
+    String classPptName = String.format("%s:::CLASS", ci.class_name);
     ps.printf("DECLARE%n");
-    ps.printf("%s:::CLASS%n", ci.class_name);
-    print_decl_vars(ps, get_comparable(ci.traversalClass), ci.traversalClass);
-    ps.printf("%n");
+    ps.println(classPptName);
+    print_decl_vars(ps, get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
+    ps.println();
     time_decl.log("printed class ppt");
 
     // Write the object ppt
+    String objectPptName = String.format("%s:::OBJECT%n", ci.class_name);
     ps.printf("DECLARE%n");
-    ps.printf("%s:::OBJECT%n", ci.class_name);
-    print_decl_vars(ps, get_comparable(ci.traversalObject), ci.traversalObject);
-    ps.printf("%n");
+    ps.println(objectPptName);
+    print_decl_vars(ps, get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
+    ps.println();
     time_decl.log("printed object ppt");
 
     // Print the information for each enter/exit point
@@ -2046,10 +2048,11 @@ public final class DCRuntime {
     time_decl.log("got %d comparable sets", l.size());
 
     // Print the enter point
+    String enterPptName = clean_decl_name(DaikonWriter.methodEntryName(mi.member));
     ps.println("DECLARE");
-    ps.println(clean_decl_name(DaikonWriter.methodEntryName(mi.member)));
+    ps.println(enterPptName);
     // ppt_name_ms += watch.snapshot();  watch.reset();
-    print_decl_vars(ps, l, mi.traversalEnter);
+    print_decl_vars(ps, l, mi.traversalEnter, enterPptName);
     // decl_vars_ms += watch.snapshot();  watch.reset();
     ps.println();
     time_decl.log("after enter");
@@ -2060,12 +2063,13 @@ public final class DCRuntime {
 
     time_decl.log("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
+      String exitPptName = clean_decl_name(DaikonWriter.methodExitName(mi.member, ii));
       ps.println("DECLARE");
-      ps.println(clean_decl_name(DaikonWriter.methodExitName(mi.member, ii)));
+      ps.println(exitPptName);
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log("after exit clean_decl_name");
-      print_decl_vars(ps, l, mi.traversalExit);
+      print_decl_vars(ps, l, mi.traversalExit, exitPptName);
       ps.println();
       // decl_vars_ms += watch.snapshot();  watch.reset();
 
@@ -2081,11 +2085,16 @@ public final class DCRuntime {
    * Print the variables in sets to ps in DECL file format. Each variable in the same set is given
    * the same comparability. Constructed classname variables are made comparable to other classname
    * variables only.
+   *
+   * @param pptName used only for debugging output
    */
-  private static void print_decl_vars(PrintWriter ps, List<DVSet> sets, RootInfo dv_tree) {
+  private static void print_decl_vars(
+      PrintWriter ps, List<DVSet> sets, RootInfo dv_tree, String pptName) {
 
     time_decl.indent();
     time_decl.log("print_decl_vars start");
+
+    debug_decl_print.log("print_decl_vars(%s)%n", pptName);
 
     // Map from array name to comparability for its indices (if any)
     Map<String, Integer> arr_index_map = new LinkedHashMap<>();
@@ -2153,7 +2162,9 @@ public final class DCRuntime {
 
       // Increment the comparability number to the next valid number
       base_comp++;
-      if (hashcode_vars && non_hashcode_vars) base_comp++;
+      if (hashcode_vars && non_hashcode_vars) {
+        base_comp++;
+      }
     }
 
     time_decl.log("finished filling maps%n");
@@ -2424,7 +2435,7 @@ public final class DCRuntime {
       } else if (size() == 0) {
         return -1;
       } else {
-        return get(0).compareTo(s1.get(0));
+        return this.get(0).compareTo(s1.get(0));
       }
     }
 
@@ -2434,9 +2445,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Gets a list of sets of comparable Daikon variables. For simplicity the sets are represented as
-   * a list as well. If the method has never been executed returns null (it would probably be better
-   * to return each variable in a separate set, but I wanted to differentiate this case for now).
+   * Gets a list of comparability sets of Daikon variables. If the method has never been executed
+   * returns null (it would probably be better to return each variable in a separate set, but I
+   * wanted to differentiate this case for now).
    *
    * <p>The sets are calculated by processing each daikon variable and adding it to a list
    * associated with the leader of that set.
@@ -2448,7 +2459,7 @@ public final class DCRuntime {
     }
 
     // List of all of the sets of comparable daikon variables
-    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
+    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>();
 
     for (DaikonVariableInfo dv : root) {
       add_variable(sets, dv);
@@ -2457,7 +2468,7 @@ public final class DCRuntime {
 
     // Get each set, sort it, and add it to the list of all sets.  Then sort
     // the list of all sets.  The sorting is not critical except to create
-    // a reproducible order
+    // a reproducible order.
     List<DVSet> set_list = new ArrayList<>(sets.size());
     for (DVSet dvs : sets.values()) {
       dvs.sort();
@@ -2549,10 +2560,9 @@ public final class DCRuntime {
       if (mi.is_class_init()) {
         continue;
       }
-      debug_merge_comp.log("Merging %s exit to object%n", mi);
-      merge_dv_comparability(mi.traversalExit, mi.traversalEnter);
-      merge_dv_comparability(mi.traversalExit, ci.traversalObject);
-      merge_dv_comparability(mi.traversalEnter, ci.traversalObject);
+      merge_dv_comparability(mi.traversalExit, mi.traversalEnter, "Merging exit to enter: " + mi);
+      merge_dv_comparability(mi.traversalExit, ci.traversalObject, "Merging exit to object: " + mi);
+      merge_dv_comparability(mi.traversalEnter, ci.traversalObject, "Merging enter to object" + mi);
     }
 
     // Merge the comparability from the object point back to each exit point
@@ -2560,8 +2570,7 @@ public final class DCRuntime {
       if (mi.is_class_init()) {
         continue;
       }
-      debug_merge_comp.log("merging object to %s exit%n", mi);
-      merge_dv_comparability(ci.traversalObject, mi.traversalExit);
+      merge_dv_comparability(ci.traversalObject, mi.traversalExit, "Merging object to exit: " + mi);
     }
 
     // Merge the comparability for each exit point back to the enter
@@ -2569,47 +2578,49 @@ public final class DCRuntime {
       if (mi.is_class_init()) {
         continue;
       }
-      debug_merge_comp.log("merging %s exit to its enter%n", mi);
-      merge_dv_comparability(mi.traversalExit, mi.traversalEnter);
+      merge_dv_comparability(mi.traversalExit, mi.traversalEnter, "Merging exit to enter: " + mi);
     }
 
     // Merge the object comparability to the class
-    debug_merge_comp.log("merging %s object to class%n", ci);
-    merge_dv_comparability(ci.traversalObject, ci.traversalClass);
+    merge_dv_comparability(ci.traversalObject, ci.traversalClass, "Merging object to class: " + ci);
   }
 
   /**
    * Merges any variables in the dest tree that are in the same set in the source tree. The source
    * tree's comparability is unchanged. Variables are identified by name.
+   *
+   * @param debuginfo information about this method call, for debugging
    */
-  static void merge_dv_comparability(RootInfo src, RootInfo dest) {
+  static void merge_dv_comparability(RootInfo src, RootInfo dest, String debuginfo) {
+
+    debug_merge_comp.log("merge_dv_comparability: %s%n", debuginfo);
 
     debug_merge_comp.indent();
 
     // Create a map relating destination names to their variables
     Map<String, DaikonVariableInfo> dest_map = new LinkedHashMap<>();
-    for (DaikonVariableInfo dvi : varlist(dest)) {
-      dest_map.put(dvi.getName(), dvi);
+    for (DaikonVariableInfo dest_var : varlist(dest)) {
+      dest_map.put(dest_var.getName(), dest_var);
     }
 
     // Get the variable sets for the source
     List<DVSet> src_sets = get_comparable(src);
 
     // Merge any destination variables that are in the same source set
-    for (DVSet set : src_sets) {
-      if (set.size() == 1) {
+    for (DVSet src_set : src_sets) {
+      if (src_set.size() == 1) {
         continue;
       }
-      DaikonVariableInfo first_match = null;
-      for (DaikonVariableInfo dvi : set) {
-        if (first_match == null) {
-          first_match = dest_map.get(dvi.getName());
+      DaikonVariableInfo dest_canonical = null;
+      for (DaikonVariableInfo src_var : src_set) {
+        if (dest_canonical == null) {
+          dest_canonical = dest_map.get(src_var.getName());
           continue;
         }
-        DaikonVariableInfo second_match = dest_map.get(dvi.getName());
-        if (second_match != null) {
-          TagEntry.union(first_match, second_match);
-          debug_merge_comp.log("merged '%s' and '%s'%n", first_match, second_match);
+        DaikonVariableInfo dest_var = dest_map.get(src_var.getName());
+        if (dest_var != null) {
+          TagEntry.union(dest_canonical, dest_var);
+          debug_merge_comp.log("merged '%s' and '%s'%n", dest_canonical, dest_var);
         }
       }
     }
@@ -3057,7 +3068,7 @@ public final class DCRuntime {
       }
       // TODO: truncate tostring if too long?
       String default_tostring =
-          String.format("%s@%x", obj.getClass().getName(), System.identityHashCode(obj));
+          String.format("%s@%s", obj.getClass().getName(), System.identityHashCode(obj));
       if (tostring.equals(default_tostring)) {
         return tostring;
       } else {
@@ -3066,7 +3077,7 @@ public final class DCRuntime {
     }
   }
 
-  /** Returns all of the daikonvariables in the tree rooted at dvi in a list. */
+  /** Returns all of the daikonvariables in the tree rooted at dvi. */
   private static List<DaikonVariableInfo> varlist(DaikonVariableInfo dvi) {
 
     List<DaikonVariableInfo> list = new ArrayList<>();

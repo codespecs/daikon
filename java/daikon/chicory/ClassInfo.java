@@ -35,10 +35,10 @@ public class ClassInfo {
   private ClassLoader loader;
 
   // traversalClass and traversalObject are set by init_traversal().
-  /** DaikonVariables for the object (instance and static) */
+  /** DaikonVariables for the object program point (instance and static variables). */
   public @MonotonicNonNull RootInfo traversalObject;
 
-  /** DaikonVariables for the class (static vars only) */
+  /** DaikonVariables for the class program point (static variables only). */
   public @MonotonicNonNull RootInfo traversalClass;
 
   /** Whether or not any methods in this class were instrumented. */
@@ -144,8 +144,12 @@ public class ClassInfo {
 
   /** Initializes the daikon variables for the object and class ppts. */
   public void init_traversal(int depth) {
-    if (traversalObject == null) traversalObject = RootInfo.getObjectPpt(this, depth);
-    if (traversalClass == null) traversalClass = RootInfo.getClassPpt(this, depth);
+    if (traversalObject == null) {
+      traversalObject = RootInfo.getObjectPpt(this, depth);
+    }
+    if (traversalClass == null) {
+      traversalClass = RootInfo.getClassPpt(this, depth);
+    }
     assert traversalObject != null : class_name;
     assert traversalClass != null : class_name;
   }
@@ -154,6 +158,6 @@ public class ClassInfo {
   @Override
   public String toString(@GuardSatisfied ClassInfo this) {
     return (String.format(
-        "ClassInfo %08X [%s] %s", System.identityHashCode(this), class_name, clazz));
+        "ClassInfo %s [%s] %s", System.identityHashCode(this), class_name, clazz));
   }
 }
