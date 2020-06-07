@@ -233,13 +233,12 @@ public class TraceSelect {
   private static void invokeDaikon(String dtraceName) throws IOException {
 
     System.out.println("Created file: " + dtraceName);
-    String[] daikonArgs = {dtraceName, "-o", dtraceName + ".inv"};
 
     // this part adds on the rest of the decls files
-    ArrayList<String> al = new ArrayList<>();
-    al.add(dtraceName);
-    al.add("-o");
-    al.add(dtraceName + ".inv");
+    ArrayList<String> daikonArgsList = new ArrayList<>();
+    daikonArgsList.add(dtraceName);
+    daikonArgsList.add("-o");
+    daikonArgsList.add(dtraceName + ".inv");
 
     // find all the Daikon args except for the original
     // single dtrace file.
@@ -247,14 +246,11 @@ public class TraceSelect {
       if (argles[i].endsWith(".dtrace")) {
         continue;
       }
-      al.add(argles[i]);
+      daikonArgsList.add(argles[i]);
     }
 
-    // create an array to store the Strings in al
-    daikonArgs = new String[al.size()];
-    for (int i = 0; i < daikonArgs.length; i++) {
-      daikonArgs[i] = al.get(i);
-    }
+    // create an array to store the Strings in daikonArgsList
+    String[] daikonArgs = daikonArgsList.toArray(new String[daikonArgsList.size()]);
 
     // initializes daikon again or else an exception is thrown
     reinitializeDaikon();

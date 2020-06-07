@@ -1055,6 +1055,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       }
     #endif
 
+    @SuppressWarnings("UnusedVariable") // generated code, variable is sometimes used
     DiscardInfo di;
 
     #if defined(PAIRWISE_COMPARE)

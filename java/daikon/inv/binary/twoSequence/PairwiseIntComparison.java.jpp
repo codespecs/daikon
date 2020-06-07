@@ -569,39 +569,44 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return suppressions;
   }
 
+  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT) || defined (GREATEREQUALSTRING)
   /** Definition of this invariant (the suppressee) */
   private static NISuppressee suppressee = new NISuppressee(PAIRWISEINTEQUAL.class, 2);
 
   // Suppressor definitions (used in suppressions below)
-  private static NISuppressor
-    v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class),
-    v1_gt_v2 = new NISuppressor(0, 1, GREATER_THAN_CLASS.class),
-    v1_lt_v2 = new NISuppressor(0, 1, LESS_THAN_CLASS.class);
+  private static NISuppressor v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class);
+  private static NISuppressor v1_gt_v2 = new NISuppressor(0, 1, GREATER_THAN_CLASS.class);
 
-  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT) || defined (GREATEREQUALSTRING)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet(
-          new NISuppression[] {
+  private static NISuppressionSet suppressions =
+    new NISuppressionSet(
+        new NISuppression[] {
 
-            // v1 == v2 => v1 >= v2
-            new NISuppression(v1_eq_v2, suppressee),
+          // v1 == v2 => v1 >= v2
+          new NISuppression(v1_eq_v2, suppressee),
 
-            // v1 > v2 => v1 >= v2
-            new NISuppression(v1_gt_v2, suppressee),
+          // v1 > v2 => v1 >= v2
+          new NISuppression(v1_gt_v2, suppressee),
 
-          });
+        });
   #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(LESSEQUALSTRING)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet(
-          new NISuppression[] {
+  /** Definition of this invariant (the suppressee) */
+  private static NISuppressee suppressee = new NISuppressee(PAIRWISEINTEQUAL.class, 2);
 
-            // v1 == v2 => v1 <= v2
-            new NISuppression(v1_eq_v2, suppressee),
+  // Suppressor definitions (used in suppressions below)
+  private static NISuppressor v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class);
+  private static NISuppressor v1_lt_v2 = new NISuppressor(0, 1, LESS_THAN_CLASS.class);
 
-            // v1 < v2 => v1 <= v2
-            new NISuppression(v1_lt_v2, suppressee),
+  private static NISuppressionSet suppressions =
+    new NISuppressionSet(
+        new NISuppression[] {
 
-          });
+          // v1 == v2 => v1 <= v2
+          new NISuppression(v1_eq_v2, suppressee),
+
+          // v1 < v2 => v1 <= v2
+          new NISuppression(v1_lt_v2, suppressee),
+
+        });
   #else
     private static @Nullable NISuppressionSet suppressions = null;
   #endif

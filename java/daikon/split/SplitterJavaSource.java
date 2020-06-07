@@ -76,7 +76,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = this.statementReplacer.makeReplacements(condition);
     condition = convertVariableNames(condition, className, varInfos);
     Global.debugSplit.fine("modified condition = " + condition);
-    vars = makeVariableManagerArray(varInfos, condition, className);
+    vars = makeVariableManagerArray(varInfos, condition);
 
     // extra white space at the end of lines used only to increase readability.
     add("import daikon.*;");
@@ -353,7 +353,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = PrefixFixer.fixPrefix(condition);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
-    String[] baseNames = getBaseNames(varInfos, className);
+    String[] baseNames = getBaseNames(varInfos);
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
     return condition;
   }
@@ -445,8 +445,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable whose compilable name is desired
    * @return the name of the variable represented by varInfo in a compilable form
    */
-  private static String compilableName(VarInfo varInfo, String className) {
-    String name = getBaseName(varInfo, className);
+  private static String compilableName(VarInfo varInfo) {
+    String name = getBaseName(varInfo);
     if (varInfo.type.isArray()) {
       if (varInfo.file_rep_type == ProglangType.HASHCODE) {
         name += "_identity";
@@ -466,7 +466,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo for the variable whose base name is desired
    * @return the base name of the variable represented by varInfo
    */
-  private static String getBaseName(VarInfo varInfo, String className) {
+  private static String getBaseName(VarInfo varInfo) {
     String name = varInfo.name();
     name = replaceReservedWords(name);
     if (name.length() > 5 && name.substring(0, 5).equals("orig(") && name.endsWith(")")) {
@@ -494,10 +494,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Returns an array of the base names of the variable in varInfos. The returned array is in the
    * same order as varInfos.
    */
-  private static String[] getBaseNames(VarInfo[] varInfos, String className) {
+  private static String[] getBaseNames(VarInfo[] varInfos) {
     String[] baseNames = new String[varInfos.length];
     for (int i = 0; i < varInfos.length; i++) {
-      baseNames[i] = getBaseName(varInfos[i], className);
+      baseNames[i] = getBaseName(varInfos[i]);
     }
     return baseNames;
   }
@@ -510,8 +510,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return the name of the variable represented by varInfo as it would appear in the field
    *     declaration of a java splitter file
    */
-  private static String fieldName(VarInfo varInfo, String className) throws ParseException {
-    return compilableName(varInfo, className) + "_varinfo";
+  private static String fieldName(VarInfo varInfo) throws ParseException {
+    return compilableName(varInfo) + "_varinfo";
   }
 
   /**
@@ -520,8 +520,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo for which the name of the variable is desired
    * @return the name of the variable used to hold this varInfo in a java splitter file
    */
-  private static String varName(VarInfo varInfo, String className) throws ParseException {
-    return compilableName(varInfo, className) + "_vi";
+  private static String varName(VarInfo varInfo) throws ParseException {
+    return compilableName(varInfo) + "_vi";
   }
 
   /**
@@ -546,8 +546,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /** VariableManager is a data structure for containing information about a variable. */
   private static class VariableManager {
 
-    /** VarInfo for the variable. */
-    private VarInfo varInfo;
+    // /** VarInfo for the variable. */
+    // private VarInfo varInfo;
 
     /** Name of variable as how it appears in the original file. */
     private String name;
@@ -564,13 +564,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     /** The type of the variable. */
     private String type;
 
-    private VariableManager(VarInfo varInfo, String condition, String className)
-        throws ParseException {
-      this.varInfo = varInfo;
+    private VariableManager(VarInfo varInfo, String condition) throws ParseException {
+      // this.varInfo = varInfo;
       name = varInfo.name();
-      compilableName = compilableName(varInfo, className);
-      fieldName = fieldName(varInfo, className);
-      varName = varName(varInfo, className);
+      compilableName = compilableName(varInfo);
+      fieldName = fieldName(varInfo);
+      varName = varName(varInfo);
       type = makeIndexIfNeeded(getVarType(varInfo), compilableName, varInfo, condition);
     }
 
@@ -626,8 +625,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfos the varInfos for the variables to be managed
    * @param condition the condition in which the variables are used
    */
-  private static VariableManager[] makeVariableManagerArray(
-      VarInfo[] varInfos, String condition, String className) throws ParseException {
+  private static VariableManager[] makeVariableManagerArray(VarInfo[] varInfos, String condition)
+      throws ParseException {
 
     Global.debugSplit.fine("<<enter>> makeVariableManagerArray");
 
@@ -635,7 +634,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     List<String> classVars = findPossibleClassVariables(condition);
     for (VarInfo varInfo : varInfos) {
       try {
-        String compilableName = compilableName(varInfo, className);
+        String compilableName = compilableName(varInfo);
         Global.debugSplit.fine(
             "varInfo "
                 + varInfo.name()
@@ -646,7 +645,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
                 + ")="
                 + isNeeded(compilableName, classVars));
         if (isNeeded(compilableName, classVars)) {
-          variableManagerList.add(new VariableManager(varInfo, condition, className));
+          variableManagerList.add(new VariableManager(varInfo, condition));
         }
       } catch (ParseException e) {
         System.out.println("ParseException: " + e.toString());

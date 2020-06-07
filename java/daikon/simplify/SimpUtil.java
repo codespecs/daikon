@@ -27,6 +27,7 @@ public class SimpUtil {
     if (s.charAt(0) != '(') throw new Error("starts with lparen, '" + s + "'");
     if (s.charAt(s.length() - 1) != ')') throw new Error("ends with rparen, '" + s + "'");
 
+    @SuppressWarnings("UnusedVariable")
     int paren = 0;
     char[] cs = s.toCharArray();
     for (int i = 0; i < cs.length; i++) {

@@ -662,18 +662,6 @@ public class Runtime {
             });
   }
 
-  private static Process chicory_proc;
-
-  private static StreamRedirectThread err_thread;
-
-  private static StreamRedirectThread out_thread;
-
-  static void setDaikonInfo(StreamRedirectThread err, StreamRedirectThread out, Process proc) {
-    chicory_proc = proc;
-    err_thread = err;
-    out_thread = out;
-  }
-
   /**
    * Gets the ClassInfo structure corresponding to type. Returns null if the class was not
    * instrumented.

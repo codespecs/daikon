@@ -3,6 +3,7 @@ package daikon.test;
 import daikon.*;
 import junit.framework.*;
 
+@SuppressWarnings("UnusedVariable") // test code
 public class VarComparabilityTest extends TestCase {
 
   // for convenience

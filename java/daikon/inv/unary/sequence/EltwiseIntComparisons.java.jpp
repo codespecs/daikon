@@ -279,7 +279,6 @@ public class CLASSNAME extends SUPERCLASS {
 
   public String format_csharp_contract(@GuardSatisfied CLASSNAME this) {
     String[] split = var().csharp_array_split();
-    String name = var().csharp_name();
     return "Contract.ForAll(0, " + split[0] + ".Count()-1, i => " + split[0] + "[i]" + split[1] + " " + COMPARATORSTRING + " " + split[0] + "[i+1]" + split[1] + ")";
   }
 
@@ -431,6 +430,7 @@ public class CLASSNAME extends SUPERCLASS {
       return new DiscardInfo(this, DiscardCode.obvious, "The sequence contains all equal values.");
     }
 
+#if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
     {
       // some relations imply others as follows: < -> <=, > -> >=
       // == -> <=, >=
@@ -468,6 +468,7 @@ public class CLASSNAME extends SUPERCLASS {
       }
 
     }
+#endif
 
     // sorted by (any operation) for an entire sequence -> sorted by that same
     // operation for a subsequence

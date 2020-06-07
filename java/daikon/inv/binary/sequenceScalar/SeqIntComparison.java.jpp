@@ -426,6 +426,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     }
 
     VarInfo seqvar = seqvar(vis);
+    @SuppressWarnings("UnusedVariable")  // generated code, sometimes is necessary
     VarInfo sclvar = sclvar(vis);
     // Debug.log(getClass(), ppt, vis, "Considering  over" + seqvar.name()
     //           + " and " + sclvar.name());
@@ -471,6 +472,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
       return null;
     }
 
+    #if (defined(LESSTHAN) || defined(LESSTHANFLOAT) || defined(GREATERTHAN) || defined(GREATERTHANFLOAT))
     // JHP: these presume that this invariant is true and should thus be
     // moved to uninteresting or removed.
     if (sclvar.isDerived() && (sclvar.derived instanceof SequenceLength)) {
@@ -496,6 +498,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
       }
       #endif
     }
+    #endif
 
     // JHP: this presumes that this invariant is true and should thus be
     // moved to uninteresting or removed.

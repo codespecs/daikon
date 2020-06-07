@@ -4,7 +4,7 @@ import daikon.*;
 import java.util.Arrays;
 import junit.framework.*;
 
-@SuppressWarnings("nullness") // testing code
+@SuppressWarnings({"nullness", "UnusedVariable"}) // testing code
 public final class TestQuant extends TestCase {
 
   public static void main(String[] args) {

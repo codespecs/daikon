@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import junit.framework.*;
 
-@SuppressWarnings("nullness") // testing code
+@SuppressWarnings({"nullness", "UnusedVariable"}) // testing code
 public class DiffTester extends TestCase {
 
   private Diff diffSome;

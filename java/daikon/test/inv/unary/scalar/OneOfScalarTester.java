@@ -18,7 +18,7 @@ public class OneOfScalarTester extends TestCase {
   private VarInfo[] vars = {Common.makeHashcodeVarInfo("x"), Common.newIntVarInfo("y")};
   private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
   private PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
-  private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
+  // private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
 
   private static final int DOESNT_MATTER = 0;
 

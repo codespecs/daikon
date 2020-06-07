@@ -142,6 +142,7 @@ public final class FileCompiler {
     ByteArrayOutputStream errStream;
     PumpStreamHandler streamHandler;
     String compile_errors;
+    @SuppressWarnings("UnusedVariable") // for debugging
     String compile_output;
 
     if (filenames.size() == 0) {
@@ -228,14 +229,12 @@ public final class FileCompiler {
       }
       // Collect all the files that were not compiled into retry
       List<String> retry = new ArrayList<>();
-      String filenames = "";
       for (String sourceFileName : fileNames) {
         sourceFileName = sourceFileName.trim();
         String classFilePath = getClassFilePath(sourceFileName);
         if (!fileExists(classFilePath)) {
           if (!errorClasses.contains(sourceFileName)) {
             retry.add(sourceFileName);
-            filenames += " " + sourceFileName;
           }
         }
       }

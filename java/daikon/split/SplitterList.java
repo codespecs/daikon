@@ -209,7 +209,6 @@ public abstract class SplitterList {
     for (Splitter[] splitter_array : ppt_splitters.values()) {
       for (int i = 0; i < splitter_array.length; i++) {
         Splitter tempsplitter = splitter_array[i];
-        int j = 0;
         boolean duplicate = false;
         // Weed out splitters with the same condition.
         if (!splitters.isEmpty()) {

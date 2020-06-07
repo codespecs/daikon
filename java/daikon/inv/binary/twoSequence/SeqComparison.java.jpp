@@ -62,11 +62,13 @@ The correct way to build the system is to run 'make'.
   #define BASE_IS_TYPE baseIsString()
   #define BASE_IS_SCALAR baseIsString()
   #define SEQ_SUBSEQUENCE SequenceStringSubsequence
+  #if 0
   // #define PAIRWISECOMP_EQ PairwiseStringEqual
   // #define PAIRWISECOMP_LT PairwiseStringLessThan
   // #define PAIRWISECOMP_GT PairwiseStringGreaterThan
   // #define PAIRWISECOMP_LE PairwiseStringLessEqual
   // #define PAIRWISECOMP_GE PairwiseStringGreaterEqual
+  #endif
   #define SEQCOMPAR_EQ SeqSeqStringEqual
   #define SEQCOMPAR_LT SeqSeqStringLessThan
   #define SEQCOMPAR_GT SeqSeqStringGreaterThan
@@ -330,12 +332,12 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
       return false;
     }
 
-    VarInfo var1 = vis[0];
-    VarInfo var2 = vis[1];
-    ProglangType type1 = var1.type;
-    ProglangType type2 = var2.type;
-
     #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+      VarInfo var1 = vis[0];
+      VarInfo var2 = vis[1];
+      ProglangType type1 = var1.type;
+      ProglangType type2 = var2.type;
+
       // This intentonally checks dimensions(), not pseudoDimensions.
       boolean only_eq =
         (!((type1.dimensions() == 1)
@@ -400,11 +402,10 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     }
 
     if (format == OutputFormat.CSHARPCONTRACT) {
-      String name1 = var1().csharp_collection_string();
-      String name2 = var2().csharp_collection_string();
-
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
       if (var1().aux.hasOrder()) {
+        String name1 = var1().csharp_collection_string();
+        String name2 = var2().csharp_collection_string();
         String dbc = "L" + EQUALSstringDBC.substring(1);
         return name1 + "." + dbc + "(" + name2 + ")";
       } else {
@@ -768,10 +769,10 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     return suppressions;
   }
 
-  /** Definition of this invariant (the suppressee) */
-  private static NISuppressee suppressee = new NISuppressee(SEQSEQINTEQUAL.class, 2);
-
   #if defined(PAIRWISEINTEQUAL)
+    /** Definition of this invariant (the suppressee) */
+    private static NISuppressee suppressee = new NISuppressee(SEQSEQINTEQUAL.class, 2);
+
     // Suppressor definitions (used in suppressions below)
     private static NISuppressor v1_pw_v2 = new NISuppressor(0, 1, PAIRWISEINTEQUAL.class);
 

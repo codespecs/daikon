@@ -83,12 +83,6 @@ import typequals.prototype.qual.Prototype;
 @SuppressWarnings("nullness") // test code
 public class InvariantAddAndCheckTester extends TestCase {
 
-  /**
-   * Maximum file size that can currently be examined by the program. It is arbitrary, but a length
-   * must be supplied to LineNumberReader.mark().
-   */
-  private static final int MAX_FILE_SIZE = 262144;
-
   /** Indicates a string that when it starts a line signifies that the line is a comment. */
   public static final String COMMENT_STARTER_STRING = "#";
 

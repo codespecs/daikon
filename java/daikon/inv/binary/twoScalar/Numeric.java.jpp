@@ -1332,10 +1332,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return suppressions;
     }
 
+    #if !defined(SEQ)
     /** definition of this invariant (the suppressee) (unswapped) */
     private static NISuppressee suppressee = new NISuppressee(BitwiseAndZero.class, 2);
 
-    #if !defined(SEQ)
     private static NISuppressionSet suppressions =
       new NISuppressionSet(
           new NISuppression[] {

@@ -51,6 +51,7 @@ public class CreateSpinfoC {
         throw new Error("unreachable");
       }
       try {
+        @SuppressWarnings("UnusedVariable") // sets static variables for TranslationUnit()
         CParser parser = new CParser(new FileInputStream(temp));
         TranslationUnit root = CParser.TranslationUnit();
         StringFinder finder = new StringFinder();

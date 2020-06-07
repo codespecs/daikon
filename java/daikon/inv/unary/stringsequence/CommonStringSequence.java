@@ -118,7 +118,6 @@ public class CommonStringSequence extends SingleStringSequence {
       }
     }
     exp += "}";
-    String[] split = var().csharp_array_split();
     return "Contract.ForAll(new[] " + exp + " , x => " + var().csharp_name() + ".Contains(x))";
   }
 

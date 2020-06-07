@@ -354,10 +354,8 @@ public class SampleTester extends TestCase {
     assert ttype == TT_WORD;
     String name = stok.sval;
 
-    String delimiter = "";
-
     // Get the arguments (enclosed in parens, separated by commas)
-    delimiter = readString(stok);
+    String delimiter = readString(stok);
     assert delimiter.equals("(") : "delimiter = " + delimiter;
 
     List<String> args = new ArrayList<>(10);
@@ -457,9 +455,6 @@ public class SampleTester extends TestCase {
     if ((args.size() < 1) || (args.size() > 3)) {
       parse_error("bad argument count (" + args.size() + ") for show_invs");
     }
-
-    Class<?> cls = null;
-    String format = null;
 
     // Build a vis to match the specified variables
     VarInfo[] vis = new VarInfo[args.size()];

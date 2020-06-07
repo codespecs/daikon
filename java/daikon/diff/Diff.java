@@ -6,9 +6,7 @@ import daikon.Ppt;
 import daikon.PptConditional;
 import daikon.PptMap;
 import daikon.PptTopLevel;
-import daikon.inv.Implication;
 import daikon.inv.Invariant;
-import daikon.inv.OutputFormat;
 import gnu.getopt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NavigableSet;
@@ -28,11 +25,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.Pair;
@@ -67,13 +61,6 @@ public final class Diff {
           "  If file2 is not specified, file1 is compared with the empty set.",
           "  For a list of flags, see the Daikon manual, which appears in the ",
           "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
-
-  // added to disrupt the tree when bug hunting -LL
-  private static boolean treeManip = false;
-
-  // this is set only when the manip flag is set "-z", that is when treeManip != null
-  private static @MonotonicNonNull PptMap manip1 = null;
-  private static @MonotonicNonNull PptMap manip2 = null;
 
   /** The long command line options. */
   private static final String HELP_SWITCH = "help";
@@ -298,11 +285,6 @@ public final class Diff {
         case 'j':
           continuousJustification = true;
           break;
-        case 'z':
-          treeManip = true;
-          // Only makes sense if -p is also on.
-          examineAllPpts = true;
-          break;
         case 'p':
           examineAllPpts = true;
           break;
@@ -384,84 +366,6 @@ public final class Diff {
       String filename2 = args[firstFileIndex + 1];
       invMap1 = diff.readInvMap(new File(filename1));
       invMap2 = diff.readInvMap(new File(filename2));
-    } else if (treeManip) {
-      System.out.println("Warning, the preSplit file must be second");
-      if (numFiles < 3) {
-        System.out.println("Sorry, no manip file [postSplit] [preSplit] [manip]");
-      }
-      String filename1 = args[firstFileIndex];
-      String filename2 = args[firstFileIndex + 1];
-      String filename3 = args[firstFileIndex + 2];
-      String filename4 = args[firstFileIndex + 3];
-      PptMap map1 =
-          FileIO.read_serialized_pptmap(
-              new File(filename1), false // use saved config
-              );
-      PptMap map2 =
-          FileIO.read_serialized_pptmap(
-              new File(filename2), false // use saved config
-              );
-      manip1 =
-          FileIO.read_serialized_pptmap(
-              new File(filename3), false // use saved config
-              );
-      manip2 =
-          FileIO.read_serialized_pptmap(
-              new File(filename4), false // use saved config
-              );
-
-      // get the xor from these two manips
-      treeManip = false;
-
-      // RootNode pass_and_both = diff.diffPptMap (manip1, map2, includeUnjustified);
-      // RootNode fail_and_both = diff.diffPptMap (manip2, map2, includeUnjustified);
-
-      // get rid of the "both" invariants
-      // MinusVisitor2 aMinusB = new MinusVisitor2();
-      //      pass_and_both.accept (aMinusB);
-      // fail_and_both.accept (aMinusB);
-
-      RootNode pass_and_fail = diff.diffPptMap(manip1, manip2, includeUnjustified);
-
-      XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out, false, false);
-      pass_and_fail.accept(xiv);
-
-      // remove for the latest version
-      treeManip = true;
-
-      // form the root with tree manips
-      RootNode root = diff.diffPptMap(map1, map2, includeUnjustified);
-
-      // now run the stats visitor for checking matches
-      //      MatchCountVisitor2 mcv = new MatchCountVisitor2
-      //  (System.out, verbose, false);
-      /*
-      PptCountVisitor mcv = new PptCountVisitor
-        (System.out, verbose, false);
-
-      root.accept (mcv);
-      mcv.printFinal();
-      System.out.println ("Precison: " + mcv.calcPrecision());
-      System.out.println ("Recall: " + mcv.calcRecall());
-      System.out.println ("Success");
-      //      System.exit(0);
-      */
-
-      MatchCountVisitor2 mcv2 = new MatchCountVisitor2(System.out, verbose, false);
-
-      root.accept(mcv2);
-      // print final is simply for debugging, remove
-      // when experiments are over.
-      mcv2.printFinal();
-
-      // Most of the bug-experiments expect the final output
-      // of the Diff to be these three lines.  It is best
-      // not to change it.
-      System.out.println("Precison: " + mcv2.calcPrecision());
-      System.out.println("Recall: " + mcv2.calcRecall());
-      System.out.println("Success");
-      throw new Daikon.NormalTermination();
-
     } else if (numFiles > 2) {
 
       // The new stuff that allows multiple files -LL
@@ -703,73 +607,19 @@ public final class Diff {
         : "Program points do not correspond";
 
     List<Invariant> invs1;
-    if (ppt1 != null && !treeManip) {
+    if (ppt1 != null) {
       invs1 = map1.get(ppt1);
-      Collections.sort(invs1, invSortComparator1);
-    } else if (ppt1 != null && treeManip && !isCond(ppt1)) {
-      HashSet<String> repeatFilter = new HashSet<>();
-      ArrayList<Invariant> ret = new ArrayList<>();
-      invs1 = map1.get(ppt1);
-      for (Invariant inv : invs1) {
-        if (
-        /*inv.justified() && */ inv instanceof Implication) {
-          Implication imp = (Implication) inv;
-          if (!repeatFilter.contains(imp.consequent().format_using(OutputFormat.JAVA))) {
-            repeatFilter.add(imp.consequent().format_using(OutputFormat.JAVA));
-            ret.add(imp.consequent());
-          }
-          // add both sides of a biimplication
-          if (imp.iff == true) {
-            if (!repeatFilter.contains(imp.predicate().format())) {
-              repeatFilter.add(imp.predicate().format());
-              ret.add(imp.predicate());
-            }
-          }
-        }
-        // Report invariants that are not part of implications
-        // "as is".
-        else {
-          ret.add(inv);
-        }
-      }
-      invs1 = ret;
       Collections.sort(invs1, invSortComparator1);
     } else {
       invs1 = new ArrayList<Invariant>();
     }
 
     List<Invariant> invs2;
-    if (ppt2 != null && !treeManip) {
+    if (ppt2 != null) {
       invs2 = map2.get(ppt2);
       Collections.sort(invs2, invSortComparator2);
     } else {
-      // if (false && treeManip && isCond(ppt1)) {
-      //   assert ppt1 != null : "@AssumeAssertion(nullness): dead code";
-      //   assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
-      //   assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
-      //
-      //   // remember, only want to mess with the second list
-      //   invs2 = findCondPpt(manip1, ppt1);
-      //   List<Invariant> tmpList = findCondPpt(manip2, ppt1);
-      //
-      //   invs2.addAll(tmpList);
-      //
-      //   // This uses set difference model instead of XOR
-      //   //        invs2 = tmpList;
-      //
-      //   // must call sort or it won't work!
-      //   Collections.sort(invs2, invSortComparator2);
-      // } else
-      if (treeManip && ppt2 != null && !isCond(ppt2)) {
-        assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
-        assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
-
-        invs2 = findNormalPpt(manip1, ppt2);
-        invs2.addAll(findNormalPpt(manip2, ppt2));
-        Collections.sort(invs2, invSortComparator2);
-      } else {
-        invs2 = new ArrayList<Invariant>();
-      }
+      invs2 = new ArrayList<Invariant>();
     }
 
     Iterator<Pair<@Nullable Invariant, @Nullable Invariant>> opi =
@@ -793,51 +643,6 @@ public final class Diff {
     }
 
     return pptNode;
-  }
-
-  @Pure
-  private boolean isCond(@Nullable PptTopLevel ppt) {
-    return (ppt instanceof PptConditional);
-  }
-
-  // private List<Invariant> findCondPpt(PptMap manip, PptTopLevel ppt) {
-  //   // targetName should look like this below
-  //   // Contest.smallestRoom(II)I:::EXIT9;condition="max < num
-  //   String targetName = ppt.name();
-  //
-  //   String targ = targetName.substring(0, targetName.lastIndexOf(";condition"));
-  //
-  //   for (String somePptName : manip.nameStringSet()) {
-  //     // A conditional Ppt always contains the normal Ppt
-  //     if (targ.equals(somePptName)) {
-  //       @SuppressWarnings("nullness") // map: iterating over keySet
-  //       @NonNull PptTopLevel repl = manip.get(somePptName);
-  //       return repl.getInvariants();
-  //     }
-  //   }
-  //   //    System.out.println ("Could not find the left hand side of implication!!!");
-  //   System.out.println("LHS Missing: " + targ);
-  //   return new ArrayList<Invariant>();
-  // }
-
-  private List<Invariant> findNormalPpt(PptMap manip, PptTopLevel ppt) {
-    // targetName should look like this below
-    // Contest.smallestRoom(II)I:::EXIT9
-    String targetName = ppt.name();
-
-    //    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
-
-    for (String somePptName : manip.nameStringSet()) {
-      // A conditional Ppt always contains the normal Ppt
-      if (targetName.equals(somePptName)) {
-        @SuppressWarnings("nullness") // map: iterating over keySet
-        @NonNull PptTopLevel repl = manip.get(somePptName);
-        return CollectionsPlume.sortList(repl.getInvariants(), PptTopLevel.icfp);
-      }
-    }
-    //    System.out.println ("Could not find the left hand side of implication!!!");
-    System.out.println("LHS Missing: " + targetName);
-    return new ArrayList<Invariant>();
   }
 
   /** Use the comparator for sorting both sets and creating the pair tree. */

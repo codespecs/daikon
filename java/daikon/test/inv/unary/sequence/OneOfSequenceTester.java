@@ -19,7 +19,7 @@ public class OneOfSequenceTester extends TestCase {
   private VarInfo[] vars = {Common.makeHashcodeArrayVarInfo("x"), Common.makeIntArrayVarInfo("y")};
   private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
   private PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
-  private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
+  // private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
 
   private static final int DOESNT_MATTER = 0;
 
