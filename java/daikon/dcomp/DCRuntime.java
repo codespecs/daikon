@@ -2086,6 +2086,9 @@ public final class DCRuntime {
    * the same comparability. Constructed classname variables are made comparable to other classname
    * variables only.
    *
+   * @param ps where to print the variables
+   * @param sets the comparability sets
+   * @param dv_tree the tree of variables
    * @param pptName used only for debugging output
    */
   private static void print_decl_vars(
@@ -2140,7 +2143,7 @@ public final class DCRuntime {
       // to the array will also be comparable to the non-array object, but
       // that comparability isn't interesting (and it can't be expressed)
       for (DaikonVariableInfo dv : set) {
-        debug_decl_print.log("          dv %s%n", dv);
+        debug_decl_print.log("          dv %s [%s]%n", dv, System.identityHashCode(dv));
         if (dv instanceof DaikonClassInfo) {
           dv_comp_map.put(dv, class_comp);
           assert set.size() == 1 : "odd set " + set;
@@ -2589,6 +2592,8 @@ public final class DCRuntime {
    * Merges any variables in the dest tree that are in the same set in the source tree. The source
    * tree's comparability is unchanged. Variables are identified by name.
    *
+   * @param src the comparability to read
+   * @param dest the comparability to modify
    * @param debuginfo information about this method call, for debugging
    */
   static void merge_dv_comparability(RootInfo src, RootInfo dest, String debuginfo) {
@@ -2620,7 +2625,12 @@ public final class DCRuntime {
         DaikonVariableInfo dest_var = dest_map.get(src_var.getName());
         if (dest_var != null) {
           TagEntry.union(dest_canonical, dest_var);
-          debug_merge_comp.log("merged '%s' and '%s'%n", dest_canonical, dest_var);
+          debug_merge_comp.log(
+              "merged '%s' [%s] and '%s' [%s]%n",
+              dest_canonical,
+              System.identityHashCode(dest_canonical),
+              dest_var,
+              System.identityHashCode(dest_var));
         }
       }
     }
@@ -3077,7 +3087,12 @@ public final class DCRuntime {
     }
   }
 
-  /** Returns all of the daikonvariables in the tree rooted at dvi. */
+  /**
+   * Returns all of the daikonvariables in the tree rooted at dvi.
+   *
+   * @param dvi the tree of variables
+   * @return all the daikonvarables in the tree
+   */
   private static List<DaikonVariableInfo> varlist(DaikonVariableInfo dvi) {
 
     List<DaikonVariableInfo> list = new ArrayList<>();

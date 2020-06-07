@@ -202,7 +202,13 @@ public class DeclWriter extends DaikonWriter {
     }
   }
 
-  /** Prints the object program point. This contains the "this" object and the class's fields. */
+  /**
+   * Prints the object program point. This contains the "this" object and the class's fields.
+   *
+   * @param cinfo information about the class whose program point to print
+   * @param name the program point name
+   * @param comp_info a declaration file
+   */
   private void printObjectPpt(ClassInfo cinfo, String name, DeclReader comp_info) {
     outFile.println(declareHeader);
     outFile.println(name);

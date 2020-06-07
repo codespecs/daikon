@@ -142,7 +142,11 @@ public class ClassInfo {
     }
   }
 
-  /** Initializes the daikon variables for the object and class ppts. */
+  /**
+   * Initializes the daikon variables for the object and class ppts.
+   *
+   * @param depth how deeply to nest variables, as in "a.b.field"
+   */
   public void init_traversal(int depth) {
     if (traversalObject == null) {
       traversalObject = RootInfo.getObjectPpt(this, depth);

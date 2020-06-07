@@ -108,7 +108,7 @@ public abstract class DaikonVariableInfo
   /** Value of static constants. Access via {@link #get_const_val()} method. */
   @Nullable String const_val = null;
 
-  /** Arguments used to create a function. Access via {@link #get_func_args()} method. */
+  /** Arguments used to create a function. Access via {@link #get_function_args()} method. */
   @Nullable String function_args = null;
 
   // It seems that declShouldPrint and dtraceShouldPrint always have the same value.
@@ -224,7 +224,8 @@ public abstract class DaikonVariableInfo
   private StringBuilder getStringBuilder(StringBuilder offset) {
     StringBuilder theBuf = new StringBuilder();
 
-    theBuf.append(offset + name + DaikonWriter.lineSep);
+    theBuf.append(
+        offset + name + " [" + System.identityHashCode(this) + "]" + DaikonWriter.lineSep);
 
     StringBuilder childOffset = new StringBuilder(offset);
     childOffset.append("--");
@@ -408,6 +409,7 @@ public abstract class DaikonVariableInfo
   /**
    * Add the parameters of the given method to this node.
    *
+   * @param cinfo the method's class
    * @param method the method
    * @param argnames the method's arguments
    * @param depth the remaining depth to print variables to

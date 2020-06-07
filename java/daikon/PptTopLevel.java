@@ -3433,7 +3433,7 @@ public class PptTopLevel extends Ppt {
     l.fine(
         String.format(
             // Version that outputs the hash code too:
-            // "%s %s[%08X]: %s: %d: %s",
+            // "%s %s [%s]: %s: %d: %s",
             // indent_str, ppt_name, System.identityHashCode(this), rel_type, num_samples(),
             // var_rel));
             "%s %s: %s: %d: %s", indent_str, ppt_name, rel_type, num_samples(), var_rel));
@@ -3507,7 +3507,7 @@ public class PptTopLevel extends Ppt {
   public void mergeInvs() {
 
     if (Daikon.debugProgress.isLoggable(Level.FINE)) {
-      // String hashCode = String.format(" [%08X]", System.identityHashCode(this));
+      // String hashCode = String.format(" [%s]", System.identityHashCode(this));
       String hashCode = "";
       Daikon.debugProgress.fine(
           String.format(
@@ -3532,7 +3532,7 @@ public class PptTopLevel extends Ppt {
 
     // First do this for any children.
     for (PptRelation rel : children) {
-      // System.out.printf("merging child %s[%08X], its in_merge = %b%n",
+      // System.out.printf("merging child %s[%s], its in_merge = %b%n",
       //                   rel.child, System.identityHashCode(rel.child),
       //                   rel.child.in_merge);
       if (!rel.child.in_merge) {
@@ -3667,8 +3667,11 @@ public class PptTopLevel extends Ppt {
         // System.out.printf("First child equality set: %s%n",
         //                     c1.child.equality_view);
         equalityPairs = c1.get_child_equalities_as_parent();
-        if (debugMerge.isLoggable(Level.FINE)) { // check before stringifying equalityPairs
-          debugMerge.fine("child " + c1.child.name() + " equality = " + equalityPairs);
+        if (debugMerge.isLoggable(Level.FINE)) {
+          debugMerge.fine("Found equality pairs via " + c1);
+          for (VarInfo.Pair vp : equalityPairs.keySet()) {
+            debugMerge.fine("-- " + vp);
+          }
         }
         break;
       }
@@ -3700,12 +3703,6 @@ public class PptTopLevel extends Ppt {
         } else {
           curpair.samples += newpair.samples;
         }
-      }
-    }
-    if (debugMerge.isLoggable(Level.FINE)) {
-      debugMerge.fine("Found equality pairs ");
-      for (VarInfo.Pair vp : equalityPairs.keySet()) {
-        debugMerge.fine("-- " + vp);
       }
     }
 
