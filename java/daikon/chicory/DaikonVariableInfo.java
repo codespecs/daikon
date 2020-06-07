@@ -263,7 +263,7 @@ public abstract class DaikonVariableInfo
    * will return the value of a.b .
    *
    * @param parentVal the parent object. Can be null for static fields.
-   * @return the value for this, computed frm {@code parentVal}
+   * @return the value for this, computed from {@code parentVal}
    */
   public abstract @Nullable Object getMyValFromParentVal(@Nullable Object parentVal);
 
