@@ -133,6 +133,7 @@ public class RootInfo extends DaikonVariableInfo {
    *
    * @param cinfo information about the class
    * @param depth the depth to which to nest variables, as in "a.b.field"
+   * @return a new RootInfo object for a class program point
    */
   public static RootInfo getClassPpt(ClassInfo cinfo, int depth) {
     // debug_vars.clear("enter getClassPpt: %s%n", cinfo);
