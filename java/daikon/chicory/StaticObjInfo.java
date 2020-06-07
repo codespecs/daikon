@@ -9,8 +9,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * class can be nested within it and not directly under the root.
  */
 public class StaticObjInfo extends DaikonVariableInfo {
+  /** The type of this variable. */
   public Class<?> type;
 
+  /**
+   * Create a new StaticObjInfo.
+   *
+   * @param type the variable's type
+   */
   public StaticObjInfo(Class<?> type) {
     super("this", type.getName(), getRepName(type, false));
     this.type = type;
