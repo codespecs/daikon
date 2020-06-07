@@ -221,7 +221,7 @@ public class InvariantDoclet {
       // setup the comment for info
       String comment = dc.commentText();
 
-      // System.err.println("COMMENT: " + comment + "\n");
+      // System.err.println("COMMENT: " + comment);
       comment = HtmlToTexinfo.javadocHtmlToTexinfo(comment);
 
       if (dc.name().startsWith("FunctionBinary")) {

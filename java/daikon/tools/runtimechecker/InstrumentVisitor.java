@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.Vector;
 import jtb.syntaxtree.*;
 import jtb.visitor.DepthFirstVisitor;
@@ -659,31 +660,31 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             code.toString());
   }
 
+  /**
+   * Returns an AST for initializng the {@code daikonProperties} variable.
+   *
+   * @return an AST for initializng the {@code daikonProperties} variable
+   */
   private ClassOrInterfaceBodyDeclaration staticPropertyInit() {
-    StringBuilder code = new StringBuilder();
+    StringJoiner code = new StringJoiner(System.lineSeparator());
 
-    code.append("static {\n");
-    code.append("try {\n");
-    code.append(
-        "daikonProperties = new daikon.tools.runtimechecker.Property[" + varNumCounter + "];\n");
+    code.add("static {");
+    code.add("try {");
+    code.add("daikonProperties = new daikon.tools.runtimechecker.Property[" + varNumCounter + "];");
 
     for (Map.Entry<@KeyFor("xmlStringToIndex") String, String> e : xmlStringToIndex.entrySet()) {
-      code.append("daikonProperties[" + e.getValue() + "] = ");
-      code.append("daikon.tools.runtimechecker.Property.get(");
-      code.append("\"");
-      code.append(e.getKey());
-      code.append("\"");
-      code.append(");\n");
+      code.add("daikonProperties[" + e.getValue() + "] = ");
+      code.add("    daikon.tools.runtimechecker.Property.get(\"" + e.getKey() + "\");");
     }
 
-    code.append("} catch (Exception e) {");
-    code.append(
+    code.add("} catch (Exception e) {");
+    code.add(
         " System.err.println(\"malformed invariant. This is probably a bug in the daikon.tools.runtimechecker tool; please submit a bug report.\");");
-    code.append(" e.printStackTrace();");
-    code.append(" System.exit(1);\n");
-    code.append("}");
+    code.add(" e.printStackTrace();");
+    code.add(" System.exit(1);");
+    code.add("}");
 
-    code.append("} // end static");
+    code.add("} // end static");
 
     return (ClassOrInterfaceBodyDeclaration)
         Ast.create(

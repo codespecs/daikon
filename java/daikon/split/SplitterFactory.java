@@ -214,8 +214,9 @@ public class SplitterFactory {
     }
     boolean errorOutputExists = errorOutput != null && !errorOutput.equals("");
     if (errorOutputExists && !PptSplitter.dkconfig_suppressSplitterErrors) {
+      System.out.println();
       System.out.println(
-          "\nErrors while compiling Splitter files (Daikon will use non-erroneous splitters):");
+          "Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
     for (int i = 0; i < splitterObjects.length; i++) {

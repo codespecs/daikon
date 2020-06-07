@@ -200,12 +200,12 @@ public class DynComp {
 
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
-    basic.log("classpath = '%s'\n", cp);
+    basic.log("classpath = '%s'%n", cp);
     if (cp == null) cp = ".";
 
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
-    basic.log("path_separator = %s\n", path_separator);
+    basic.log("path_separator = %s%n", path_separator);
     if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.BugInDaikon(
           "Bad regexp "
@@ -296,8 +296,7 @@ public class DynComp {
         }
         System.err.printf("Probably you forgot to build it.%n");
         System.err.printf(
-            "See the Daikon manual, section \"Instrumenting the "
-                + "JDK with DynComp\" for help.\n");
+            "See the Daikon manual, section \"Instrumenting the JDK with DynComp\" for help.%n");
         System.exit(1);
       }
     }

@@ -117,6 +117,32 @@ public class ParameterDoclet {
      * @param fqConfigNames if non-null, include only configuration options whose fully-qualified
      *     name is in this list
      * @param description the subsection name
+     * @param blurbLines text that appears in the subsection before the list of configuration
+     *     options
+     */
+    public DocCategory(
+        @Nullable String prefix,
+        @Nullable String simpleName,
+        @Nullable List<String> fqConfigNames,
+        String description,
+        String[] blurbLines) {
+      this(
+          prefix,
+          simpleName,
+          fqConfigNames,
+          description,
+          String.join(System.lineSeparator(), blurbLines));
+    }
+
+    /**
+     * Create a new DocCategory.
+     *
+     * @param prefix if non-null, include only variables whose fully-qualified name starts with this
+     *     prefix
+     * @param simpleName if non-null, include only configuration options with this simple name
+     * @param fqConfigNames if non-null, include only configuration options whose fully-qualified
+     *     name is in this list
+     * @param description the subsection name
      * @param blurb text that appears in the subsection before the list of configuration options
      */
     public DocCategory(
@@ -171,53 +197,73 @@ public class ParameterDoclet {
               "enabled",
               null,
               "Options to enable/disable filters",
-              "@cindex filters, enabling/disabling\n"
-                  + "These configuration options enable or disable filters that suppress printing\n"
-                  + "of certain invariants.  Invariants are filtered if they are redundant.\n"
-                  + "See @ref{Invariant filters}, for more information.\n"
-                  + "Also see configuration option @code{daikon.PrintInvariants.print_all}."),
+              new String[] {
+                "@cindex filters, enabling/disabling",
+                "These configuration options enable or disable filters that suppress printing",
+                "of certain invariants.  Invariants are filtered if they are redundant.",
+                "See @ref{Invariant filters}, for more information.",
+                "Also see configuration option @code{daikon.PrintInvariants.print_all}."
+              }),
           new DocCategory(
               "daikon.inv.",
               "enabled",
               null,
               "Options to enable/disable specific invariants",
-              "@cindex invariants, enabling/disabling\n"
-                  + "These options control whether Daikon looks for specific kinds of invariants.  See @ref{Invariant list}, for more information about the corresponding invariants."),
+              new String[] {
+                "@cindex invariants, enabling/disabling",
+                "These options control whether Daikon looks for specific kinds of invariants.",
+                "See @ref{Invariant list}, for more information about the corresponding invariants."
+              }),
           new DocCategory(
               "daikon.inv.",
               null,
               null,
               "Other invariant configuration parameters",
-              "@cindex invariants, configuring\n"
-                  + "The configuration options listed in this section parameterize the behavior of certain invariants.  See @ref{Invariant list}, for more information about the invariants."),
+              new String[] {
+                "@cindex invariants, configuring",
+                "The configuration options listed in this section parameterize the behavior of certain invariants.",
+                "See @ref{Invariant list}, for more information about the invariants."
+              }),
           new DocCategory(
               "daikon.derive.",
               null,
               null,
               "Options to enable/disable derived variables",
-              "@cindex derived variables, enabling/disabling\n"
-                  + "These options control whether Daikon looks for invariants involving certain forms of derived variables.  Also see @ref{Variable names}."),
+              new String[] {
+                "@cindex derived variables, enabling/disabling",
+                "These options control whether Daikon looks for invariants involving certain forms of derived variables.",
+                "Also see @ref{Variable names}."
+              }),
           new DocCategory(
               "daikon.simplify.",
               null,
               null,
               "Simplify interface configuration options",
-              "@cindex Simplify theorem prover, configuring\n"
-                  + "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."),
+              new String[] {
+                "@cindex Simplify theorem prover, configuring",
+                "The configuration options in this section are used to customize the interface to the Simplify theorem prover.",
+                "See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."
+              }),
           new DocCategory(
               "daikon.split.",
               null,
               null,
               "Splitter options",
-              "@cindex Splitters, configuring\n"
-                  + "The configuration options in this section are used to customize the the behavior of splitters, which yield conditional invariants and implications (@pxref{Conditional invariants})."),
+              new String[] {
+                "@cindex Splitters, configuring",
+                "The configuration options in this section are used to customize the the behavior of splitters,",
+                "which yield conditional invariants and implications (@pxref{Conditional invariants})."
+              }),
           new DocCategory(
               "daikon.Debug.",
               null,
               null,
               "Debugging options",
-              "@cindex Splitters, configuring\n"
-                  + "The configuration options in this section are used to cause extra output that is useful for debugging.  Also see section \"Daikon debugging options\" (@pxref{Daikon debugging options})."),
+              new String[] {
+                "@cindex Splitters, configuring",
+                "The configuration options in this section are used to cause extra output that is useful for debugging.",
+                "Also see section \"Daikon debugging options\" (@pxref{Daikon debugging options})."
+              }),
           new DocCategory(
               "dummy prefix that won't match anything",
               "dummy simple name that won't match anything",
@@ -239,14 +285,18 @@ public class ParameterDoclet {
                   "daikon.FileIO.unmatched_procedure_entries_quiet",
                   "daikon.FileIO.verbose_unmatched_procedure_entries"),
               "Quantity of output",
-              "@cindex Output, quantity of\n"
-                  + "The configuration options in this section make Daikon print more or less output.  They do not affect which invariants Daikon computes, only how it ouputs them.  Also see the following section."),
+              new String[] {
+                "@cindex Output, quantity of",
+                "The configuration options in this section make Daikon print more or less output.",
+                "They do not affect which invariants Daikon computes, only how it ouputs them.",
+                "Also see the following section."
+              }),
           new DocCategory(
               null,
               null,
               null,
               "General configuration options",
-              "This section lists miscellaneous configuration options for Daikon.")
+              new String[] {"This section lists miscellaneous configuration options for Daikon."})
         };
   }
 
