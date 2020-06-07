@@ -66,9 +66,6 @@ public class MasterUnitTester extends TestCase {
               daikon.test.TestQuant.class,
               daikon.test.TestAnnotate.class,
               daikon.test.DtraceDiffTester.class,
-              daikon.test.InstructionUtilsTest.class,
-              daikon.test.KillerInstructionTests.class,
-              daikon.test.DSForestTest.class,
 
               //       ,
               //       // I'm having trouble with this; need to fix, reinstate, and not call
