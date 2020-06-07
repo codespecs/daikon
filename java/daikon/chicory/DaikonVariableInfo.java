@@ -1209,9 +1209,7 @@ public abstract class DaikonVariableInfo
 
         addChild(newChild);
 
-        // Print out the class of each element in the array.  For
-        // some reason dfej doesn't include this on returned arrays
-        // or parameters.
+        // Print out the class of each element in the array.
         // The offset will only be equal to ""
         // if we are examining a local variable (parameter).
         if (!ignore) {
