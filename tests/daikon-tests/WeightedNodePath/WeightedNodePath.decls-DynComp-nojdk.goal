@@ -2,6 +2,7 @@
 
 VarComparability
 implicit
+
 DECLARE
 MapQuick.WeightedNodePath:::CLASS
 

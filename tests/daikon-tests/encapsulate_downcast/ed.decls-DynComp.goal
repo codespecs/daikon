@@ -2,6 +2,7 @@
 
 VarComparability
 implicit
+
 DECLARE
 misc.EncapsulateDowncast:::CLASS
 misc.EncapsulateDowncast.CASES

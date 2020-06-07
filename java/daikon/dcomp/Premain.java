@@ -154,7 +154,7 @@ public class Premain {
    * @param agentArgs string containing the arguments passed to this agent.
    * @param inst Instrumentation instance to be used to transform classes.
    * @throws IOException if jdk_classes.txt cannot be read or if the correct version of BCEL cannot
-   *     be found or loaded.
+   *     be found or loaded
    */
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
     // For debugging
@@ -180,6 +180,7 @@ public class Premain {
     DaikonVariableInfo.std_visibility = DynComp.std_visibility;
     DCRuntime.depth = DynComp.nesting_depth;
     DCInstrument.jdk_instrumented = !DynComp.no_jdk;
+    @SuppressWarnings("UnusedVariable") // loads the BcelUtil class; otherwise, Premain gives errors
     int junk = BcelUtil.javaVersion;
 
     // Another 'trick' to force needed classes to be loaded prior to retransformation.
