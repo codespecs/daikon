@@ -2,6 +2,7 @@
 
 VarComparability
 implicit
+
 DECLARE
 DataStructures.StackAr:::CLASS
 

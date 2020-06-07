@@ -2002,7 +2002,7 @@ public final class DCRuntime {
     time_decl.log("printed class ppt");
 
     // Write the object ppt
-    String objectPptName = String.format("%s:::OBJECT%n", ci.class_name);
+    String objectPptName = String.format("%s:::OBJECT", ci.class_name);
     ps.printf("DECLARE%n");
     ps.println(objectPptName);
     print_decl_vars(ps, get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
