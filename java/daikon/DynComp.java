@@ -7,7 +7,6 @@ import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
 import daikon.plumelib.util.RegexUtil;
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -138,19 +137,7 @@ public class DynComp {
     // were passed here.
 
     DynComp dcomp = new DynComp();
-    dcomp.start_target(getOptionsString(options), target_args);
-  }
-
-  // Gross hack, undo when Options package makes the `getOptionsString` method public.
-  @SuppressWarnings("nullness")
-  private static String getOptionsString(Options options) {
-    try {
-      Method method = options.getClass().getDeclaredMethod("getOptionsString");
-      method.setAccessible(true);
-      return (String) method.invoke(options);
-    } catch (Throwable e) {
-      throw new Error(e);
-    }
+    dcomp.start_target(options.getOptionsString(), target_args);
   }
 
   /**
