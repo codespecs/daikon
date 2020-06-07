@@ -4335,9 +4335,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       if (derived instanceof SequenceSubsequence) {
         if (name().contains("-1")) {
           SequenceSubsequence ss = (SequenceSubsequence) derived;
-          // System.out.printf("checking %s[%08X] with derived %s[%08X]%n",
-          //                   this, System.identityHashCode (this), derived,
-          //                   System.identityHashCode (derived));
+          // System.out.printf("checking %s [%s] with derived %s[%s]%n",
+          //                   this, System.identityHashCode(this), derived,
+          //                   System.identityHashCode(derived));
           assert ss.index_shift == -1
               : "bad var "
                   + this

@@ -618,13 +618,9 @@ Use the Annotate program to insert the invariants as comments
 into the Java source program.
 
 @example
-cd ..
-java -cp $DAIKONDIR/daikon.jar daikon.tools.jtb.Annotate StackArTester.inv.gz \
+java -cp .:$DAIKONDIR/daikon.jar daikon.tools.jtb.Annotate StackArTester.inv.gz \
      DataStructures/StackAr.java
 @end example
-
-(Here and elsewhere in the manual, the continuation character @samp{\} is
-used to split a long command across lines.)
 
 Now examine file @file{DataStructures/StackAr.java-escannotated}.
 For more information about the Annotate program, see @ref{Annotate}.

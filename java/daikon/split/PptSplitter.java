@@ -273,7 +273,7 @@ public class PptSplitter implements Serializable {
       // System.out.printf("splitter child = %s%n", pchild.name());
       if (pchild.equality_view == null) {
         System.out.printf("this: %s%n", this);
-        System.out.printf("pchild: %s[%08X]%n", pchild, System.identityHashCode(pchild));
+        System.out.printf("pchild: %s[%s]%n", pchild, System.identityHashCode(pchild));
         System.out.printf("pchild.children: %s%n", pchild.children);
         for (PptRelation rel : pchild.children) {
           System.out.printf("  relation = %s%n", rel);

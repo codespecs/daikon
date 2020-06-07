@@ -2,6 +2,7 @@
 
 VarComparability
 implicit
+
 DECLARE
 DataStructures.BinaryHeap:::CLASS
 DataStructures.BinaryHeap.DEFAULT_CAPACITY

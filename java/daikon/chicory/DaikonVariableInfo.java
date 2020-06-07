@@ -30,16 +30,19 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Each DaikonVariableInfo object is a node in the tree structure of the variables in the target
- * application. The tree structure is built in the DeclWriter and traversed in the DTraceWriter.
- * There is such a tree structure associated with every program point. This architecture makes it
- * possible to avoid the issue of "traversal pattern duplication" in which both the DeclWriter and
- * DTraceWriter must traverse the target application's variables identically. In general, the
- * variable a will be the parent of the variables a.b and a.c in the tree, where b and c are fields
- * in a's class.
+ * application. In general, the variable a will be the parent of the variables a.b and a.c in the
+ * tree, where b and c are fields in a's class. There is such a tree structure associated with every
+ * program point.
  *
  * <p>Each node can have any non-negative number of child nodes. DaikonVariableInfo is an abstract
  * class. Its subtypes are designed to represent specific types of variables, such as arguments,
  * arrays, etc.
+ *
+ * <p>The tree structure is built in the DeclWriter and traversed in the DTraceWriter.
+ *
+ * <p>This architecture makes it possible to avoid the issue of "traversal pattern duplication" in
+ * which both the DeclWriter and DTraceWriter must traverse the target application's variables
+ * identically.
  */
 public abstract class DaikonVariableInfo
     implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo> {
@@ -99,12 +102,13 @@ public abstract class DaikonVariableInfo
   /** The printed comparability information that will appear in the .decls declaration. */
   protected String compareInfoString = compareInfoDefaultString;
 
-  /** Value of static constants. Access via {@link #get_const_val} method. */
+  /** Value of static constants. Access via {@link #get_const_val()} method. */
   @Nullable String const_val = null;
 
   /** Arguments used to create a function. Access via {@link #get_function_args()} method. */
   @Nullable String function_args = null;
 
+  // It seems that declShouldPrint and dtraceShouldPrint always have the same value.
   /** True iff the DeclWriter should print this variable. */
   protected boolean declShouldPrint = true;
 
@@ -115,9 +119,8 @@ public abstract class DaikonVariableInfo
   protected boolean dtraceShouldPrintChildren = true;
 
   /**
-   * If false, use standard dfej behavior (any field in an instrumented class is visible). If true,
-   * use standard Java behavior (if the field is in a class in a different package, it is only
-   * visible if public, etc.).
+   * If false, every field in an instrumented class is visible. If true, use standard Java behavior
+   * (if the field is in a class in a different package, it is only visible if public, etc.).
    */
   public static boolean std_visibility = false;
 
@@ -128,7 +131,7 @@ public abstract class DaikonVariableInfo
   protected static Set<String> ppt_statics = new HashSet<>();
 
   /**
-   * Constructs a non-array type DaikonVariableInfo object.
+   * Constructs a non-array-type DaikonVariableInfo object.
    *
    * @param theName the name of the variable
    */
@@ -169,7 +172,7 @@ public abstract class DaikonVariableInfo
     }
 
     if (Chicory.new_decl_format) {
-      return name.replaceFirst("\\[]", "[..]");
+      return name.replaceFirst("\\[\\]", "[..]");
     } else {
       return name;
     }
@@ -199,14 +202,18 @@ public abstract class DaikonVariableInfo
     return getClass().getName() + ":" + getName();
   }
 
-  /** Returns a string representative of this node and its children. */
+  /**
+   * Returns a string representation of this node and its descandants.
+   *
+   * @return a string representation of this node and its descandants
+   */
   public String treeString() {
     return getStringBuilder(new StringBuilder("--")).toString();
   }
 
   /**
    * Return a StringBuilder that contains the name of this node and all ancestors of this node.
-   * Longer indentations correspond to further distance in the tree.
+   * Longer indentations correspond to deeper levels in the tree.
    *
    * @param offset the offset to begin each line with
    * @return StringBuilder that contains all children of this node
@@ -214,7 +221,8 @@ public abstract class DaikonVariableInfo
   private StringBuilder getStringBuilder(StringBuilder offset) {
     StringBuilder theBuf = new StringBuilder();
 
-    theBuf.append(offset + name + DaikonWriter.lineSep);
+    theBuf.append(
+        offset + name + " [" + System.identityHashCode(this) + "]" + DaikonWriter.lineSep);
 
     StringBuilder childOffset = new StringBuilder(offset);
     childOffset.append("--");
@@ -226,8 +234,10 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Return an iterator over all the node's children. Don't modify the list of children through the
+   * Returns an iterator over all the node's children. Don't modify the list of children through the
    * iterator, as an unmodifiable list is used to generate the iterator.
+   *
+   * @return an iterator over all the node's children
    */
   @Override
   public Iterator<DaikonVariableInfo> iterator() {
@@ -245,20 +255,22 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Given an object value corresponding to the parent of this DaikonVariableInfo variable, return
-   * the value (of the corresponding value in the target application) of this DaikonVariableInfo
-   * variable.
+   * Given a value corresponding to the parent of this, return the value of this.
    *
    * <p>For instance, if the variable a has a field b, then calling getMyValFromParentVal(val_of_a)
-   * will return the value of a.b
+   * will return the value of a.b .
    *
-   * @param parentVal the parent object. Can be null for static fields. (Are there any other
-   *     circumstances where it can be null?)
+   * @param parentVal the parent object. Can be null for static fields.
+   * @return the value for this, computed from {@code parentVal}
    */
   public abstract @Nullable Object getMyValFromParentVal(Object parentVal);
 
+  ///
+  /// Printing
+  ///
+
   /**
-   * Returns a String representation of this object suitable for a {@code .dtrace} file
+   * Returns a String representation of this object suitable for a {@code .dtrace} file.
    *
    * @param val the object whose value to print
    */
@@ -387,20 +399,31 @@ public abstract class DaikonVariableInfo
     return buf.toString();
   }
 
-  /** Add the parameters of the given method to this node. */
-  protected void addParameters(
-      ClassInfo cinfo, Member method, List<String> argnames, String offset, int depth) {
-    Class<?>[] arguments =
+  ///
+  /// Building the tre
+  ///
+
+  /**
+   * Add the parameters of the given method to this node.
+   *
+   * @param cinfo the method's class
+   * @param method the method
+   * @param argnames the method's arguments
+   * @param depth the remaining depth to print variables to
+   */
+  protected void addParameters(ClassInfo cinfo, Member method, List<String> argnames, int depth) {
+    debug_vars.log("enter addParameters%n");
+
+    Class<?>[] parameterTypes =
         (method instanceof Constructor<?>)
             ? ((Constructor<?>) method).getParameterTypes()
             : ((Method) method).getParameterTypes();
+    assert argnames.size() == parameterTypes.length;
 
-    debug_vars.log("enter addParameters%n");
-    Iterator<String> argnamesiter = argnames.iterator();
     int param_offset = 0;
-    for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++) {
-      Class<?> type = arguments[i];
-      String name = argnamesiter.next();
+    for (int i = 0; i < parameterTypes.length; i++) {
+      Class<?> type = parameterTypes[i];
+      String name = argnames.get(i);
       if (type.getName().equals("daikon.dcomp.DCompMarker")
           || type.getName().equals("java.lang.DCompMarker")) {
         continue;
@@ -408,11 +431,13 @@ public abstract class DaikonVariableInfo
       debug_vars.log("processing parameter '%s'%n", name);
       debug_vars.indent();
       DaikonVariableInfo theChild =
-          addParamDeclVar(cinfo, type, name, offset, depth, i, param_offset);
+          addParamDeclVar(cinfo, type, name, /*offset=*/ "", depth, i, param_offset);
       param_offset++;
-      if ((type == Double.TYPE) || (type == Long.TYPE)) param_offset++;
+      if ((type == Double.TYPE) || (type == Long.TYPE)) {
+        param_offset++;
+      }
       assert cinfo.clazz != null : "@AssumeAssertion(nullness): need to check justification";
-      theChild.addChildNodes(cinfo, type, name, offset, depth);
+      theChild.addChildNodes(cinfo, type, name, /*offset=*/ "", depth);
       debug_vars.exdent();
     }
     debug_vars.log("exit addParameters%n");
@@ -423,19 +448,21 @@ public abstract class DaikonVariableInfo
    * this node.
    *
    * @param type the class whose fields should all be added to this node
+   * @param offset the prefix for variables -- that is, the expression whose fields are being
+   *     printed
+   * @param depth the remaining depth to print variables to
    */
   @RequiresNonNull("#1.clazz")
   protected void addClassVars(
       ClassInfo cinfo, boolean dontPrintInstanceVars, Class<?> type, String offset, int depth) {
 
-    // DaikonVariableInfo corresponding to the "this" object
-    DaikonVariableInfo thisInfo;
-
     debug_vars.log("addClassVars: %s : %s : %s: [%s]%n", this, cinfo, type, offset);
 
-    // must be at the first level of recursion (not lower) to print "this" field
-    if (!dontPrintInstanceVars && offset.equals("")) {
-      // "this" variable
+    boolean topLevelCall = offset.equals(""); // true if at first level of recursion
+
+    DaikonVariableInfo thisInfo; // DaikonVariableInfo corresponding to the "this" object
+    if (!dontPrintInstanceVars && topLevelCall) {
+      // "this" variable; must must be at the first level of recursion (not lower) to print it
       thisInfo = new ThisObjInfo(type);
       addChild(thisInfo);
 
@@ -446,7 +473,7 @@ public abstract class DaikonVariableInfo
                 "this" + class_suffix, classClassName, stringClassName, "this", false);
         thisInfo.addChild(thisClass);
       }
-    } else if (offset.equals("")) {
+    } else if (topLevelCall) {
       // Create a non-printing root for static variables.
       thisInfo = new StaticObjInfo(type);
       addChild(thisInfo);
@@ -486,7 +513,7 @@ public abstract class DaikonVariableInfo
       // expose the outer class fields of an inner class to Daikon.
 
       if (!is_static && dontPrintInstanceVars) {
-        debug_vars.log("--field !static and instance var %b%n", dontPrintInstanceVars);
+        debug_vars.log("--field (!static && dontPrintInstanceVars) %s%n", classField);
         continue;
       }
 
@@ -540,11 +567,11 @@ public abstract class DaikonVariableInfo
     }
 
     // If appropriate, print out decls information for pure methods
-    // and add to the tree
+    // and add to the tree.
     // Check dontPrintInstanceVars is basically checking if the program point method
     // (not the pure method) is static.  If it is, don't continue because we can't
     // call instance methods (all pure methods we consider are instance methods)
-    // from static methods
+    // from static methods.
     if (ChicoryPremain.shouldDoPurity() && !dontPrintInstanceVars) {
       ClassInfo typeInfo;
 
@@ -644,7 +671,9 @@ public abstract class DaikonVariableInfo
     addChild(newChild);
 
     boolean ignore = newChild.check_for_dup_names();
-    if (!ignore) newChild.checkForDerivedVariables(type, name, offset);
+    if (!ignore) {
+      newChild.checkForDerivedVariables(type, name, offset);
+    }
 
     debug_vars.log("exit addParamDeclVar%n");
     return newChild;
@@ -1177,9 +1206,7 @@ public abstract class DaikonVariableInfo
 
         addChild(newChild);
 
-        // Print out the class of each element in the array.  For
-        // some reason dfej doesn't include this on returned arrays
-        // or parameters.
+        // Print out the class of each element in the array.
         // The offset will only be equal to ""
         // if we are examining a local variable (parameter).
         if (!ignore) {
@@ -1356,8 +1383,10 @@ public abstract class DaikonVariableInfo
 
   /**
    * If the variable name has been seen before (which can happen with statics and children of
-   * statics, set the flags so that the variable is not considered for decl or dtrace and return
+   * statics), set the flags so that the variable is not considered for decl or dtrace and return
    * true. Otherwise, do nothing and return false.
+   *
+   * @return true if this DaikonVariableInfo should be ignored (should not be printed)
    */
   private boolean check_for_dup_names() {
 

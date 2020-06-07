@@ -280,10 +280,11 @@ public class Annotate {
         String message = e.getMessage();
         if (message != null && message.startsWith("Didn't find class ")) {
           throw new Daikon.UserError(
-              message
-                  + "."
-                  + Global.lineSep
-                  + "Be sure to compile Java classes before calling Annotate.");
+              String.join(
+                  System.lineSeparator(),
+                  message + ".",
+                  "Be sure to put .class files on the classpath when calling Annotate.",
+                  "The classpath is: " + System.getProperty("java.class.path")));
         }
         throw e;
       }

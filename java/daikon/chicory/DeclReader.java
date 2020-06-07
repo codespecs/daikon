@@ -606,7 +606,7 @@ public class DeclReader {
     }
 
     decl_file.printf("// Declaration file written by DeclReader%n%n");
-    decl_file.printf("VarComparability%n%s%n", comparability);
+    decl_file.printf("VarComparability%n%s%n%n", comparability);
 
     // Loop through each program point
     for (DeclPpt ppt : ppts.values()) {
