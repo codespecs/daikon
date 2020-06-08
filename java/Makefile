@@ -712,8 +712,8 @@ else
 	javac -cp ${DAIKON_CLASSPATH} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF' \
-	  -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
-# TODO: add after everything passes: -Werror
+	  -Xmaxwarns 100000 -Werror \
+	  ${JAVA_FILES_FOR_STYLE}
 endif
 
 # Create an `error-prone.patch` file.

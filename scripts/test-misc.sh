@@ -17,8 +17,7 @@ else
 fi
 
 # Code style & quality
-(make -C java error-prone > "/tmp/$USER/ep-warnings.txt")
-"/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ep-warnings.txt"
+make -C java error-prone
 
 # Code formatting
 make -C java check-format
