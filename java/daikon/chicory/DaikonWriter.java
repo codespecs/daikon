@@ -153,7 +153,7 @@ public abstract class DaikonWriter {
   /**
    * Constructs the program point name (which includes the point string at the end)
    *
-   * @param method reflection object for the method/constructor
+   * @param member reflection object for the method/constructor
    * @param point usually "ENTER" or "EXIT"
    */
   private static String methodName(Member member, String point) {
@@ -180,90 +180,6 @@ public abstract class DaikonWriter {
     }
     String ppt_name = String.format("%s(%s):::%s", fullname, arg_str, point);
     return ppt_name;
-  }
-
-  /**
-   * Constructs the program point name (which includes the point string at the end)
-   *
-   * @param method reflection object for the method/constructor
-   * @param point usually "ENTER" or "EXIT"
-   */
-  private static String old_methodName(Member method, String point) {
-    String name = method.toString();
-    if (Chicory.debug_ppt_names) System.out.printf("methodName2: '%s' '%s'%n", name, point);
-
-    if (method instanceof Constructor<?>) {
-      name = fixDuplicateConstructorName(name, method.getName());
-
-      if (Chicory.debug_ppt_names) System.out.printf("  constructor '%s'%n", name);
-    }
-
-    // Remove the modifiers and the type
-    if (no_modifiers_ppt) {
-      // At this point, name might look something like:
-      // public boolean DataStructures.StackAr.push(java.lang.Object) \
-      //          throws Exception
-      // Get ride of throws and everything after it
-      // (and the space right before it)
-      int index = name.indexOf(" throws");
-      if (index > 0) name = name.substring(0, index);
-      if (Chicory.debug_ppt_names) System.out.printf("  throws '%s'%n", name);
-
-      // Get rid of modifiers before the method name
-      // (public boolean in above example)
-      index = name.lastIndexOf(' ');
-      if (index > 0) name = name.substring(index + 1);
-      if (Chicory.debug_ppt_names) System.out.printf("  modifiers '%s'%n", name);
-    }
-    name = name.replace(",", ", ");
-    if (Chicory.debug_ppt_names) System.out.printf("  spaces '%s'%n", name);
-
-    // System.out.printf("'%s' to '%s'%n", method.toString(), name);
-    return (name + ":::" + point);
-  }
-
-  /**
-   * Dfej repeats the name of the class for constructors (eg, DataStructures.StackAr() becomes
-   * DataStructures.StackAr.StackAr(). This makes it clear that SomePackage.ClassName.ClassName and
-   * SomePackage.ClassName.OtherMethod are in the same class. Mimic that behavior.
-   */
-  private static String fixDuplicateConstructorName(String name, String short_name) {
-    // assert short_name.lastIndexOf(".") == -1 : "short_name: " + short_name
-    //       + " should not contain a period ('.') character. ";
-
-    int lastPeriod = short_name.lastIndexOf(".");
-    if (Chicory.debug_ppt_names) {
-      System.out.printf("  fixdup; '%s' '%s' [%d]%n", name, short_name, lastPeriod);
-    }
-
-    if (lastPeriod == -1) {
-      if (Chicory.debug_ppt_names) {
-        System.out.printf(
-            "  -1: replace '%s' with '%s'%n",
-            short_name + "(", short_name + "." + short_name + "(");
-      }
-      return name.replace(short_name + "(", short_name + "." + short_name + "(");
-    } else {
-      // This case could occur for constructor names given as PackageName.ClassName
-
-      short_name = short_name.substring(lastPeriod + 1);
-
-      if (Chicory.debug_ppt_names) {
-        System.out.printf(
-            "  >0: replace '%s' with '%s'%n",
-            "." + short_name + "(", "." + short_name + "." + short_name + "(");
-      }
-      String result =
-          name.replace("." + short_name + "(", "." + short_name + "." + short_name + "(");
-      if (Chicory.debug_ppt_names) {
-        System.out.printf("  result '%s'%n", result);
-        String search = "." + short_name + "(";
-        String replace = "." + short_name + "." + short_name + "(";
-        System.out.printf(
-            "  alt '%s' '%s' '%s' '%s'%n", search, name, replace, name.replace(search, replace));
-      }
-      return result;
-    }
   }
 
   /** Determines if the given method should be instrumented. */

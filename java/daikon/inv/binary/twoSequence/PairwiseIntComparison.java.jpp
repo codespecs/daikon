@@ -53,7 +53,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(EQUALFLOAT)
   #define PAIRWISEINTEQUAL PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatEqual"
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define EQUALShtml ==
   #define EQUALScode ==
   #define EQUALSstring "=="
@@ -62,7 +62,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(EQUALSTRING)
   #define PAIRWISEINTEQUAL PairwiseStringEqual
   #define PAIRWISEINTEQUALstring "PairwiseStringEqual"
-  #define EQUALS(a,b) (a != null && b!= null && a.equals(b))
+  #define EQUALS(a,b) (a != null && b != null && a.equals(b))
   #define EQUALShtml ==
   #define EQUALScode ==
   #define EQUALSstring "=="
@@ -82,7 +82,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEINTEQUAL PairwiseFloatLessThan
   #define PAIRWISEINTEQUAL_SWAP PairwiseFloatGreaterThan
   #define PAIRWISEINTEQUALstring "PairwiseFloatLessThan"
-  #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lt(a, b)
   #define EQUALShtml &lt;
   #define EQUALScode <
   #define EQUALSstring "<"
@@ -116,7 +116,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISELT_SUPP PairwiseFloatLessThan
   #define PAIRWISEEQ_SUPP PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatLessEqual"
-  #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.lte(a, b)
   #define EQUALShtml &le;
   #define EQUALScode <=
   #define EQUALSstring "<="
@@ -148,7 +148,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
   #define PAIRWISEINTEQUAL_SWAP PairwiseFloatLessThan
   #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterThan"
-  #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gt(a, b)
   #define EQUALShtml &gt;
   #define EQUALScode >
   #define EQUALSstring ">"
@@ -182,7 +182,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISELT_SUPP PairwiseFloatGreaterThan
   #define PAIRWISEEQ_SUPP PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterEqual"
-  #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
+  #define EQUALS(a,b) Global.fuzzy.gte(a, b)
   #define EQUALShtml &ge;
   #define EQUALScode >=
   #define EQUALSstring ">="
@@ -569,39 +569,44 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     return suppressions;
   }
 
+  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT) || defined (GREATEREQUALSTRING)
   /** Definition of this invariant (the suppressee) */
   private static NISuppressee suppressee = new NISuppressee(PAIRWISEINTEQUAL.class, 2);
 
   // Suppressor definitions (used in suppressions below)
-  private static NISuppressor
-    v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class),
-    v1_gt_v2 = new NISuppressor(0, 1, GREATER_THAN_CLASS.class),
-    v1_lt_v2 = new NISuppressor(0, 1, LESS_THAN_CLASS.class);
+  private static NISuppressor v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class);
+  private static NISuppressor v1_gt_v2 = new NISuppressor(0, 1, GREATER_THAN_CLASS.class);
 
-  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT) || defined (GREATEREQUALSTRING)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet(
-          new NISuppression[] {
+  private static NISuppressionSet suppressions =
+    new NISuppressionSet(
+        new NISuppression[] {
 
-            // v1 == v2 => v1 >= v2
-            new NISuppression(v1_eq_v2, suppressee),
+          // v1 == v2 => v1 >= v2
+          new NISuppression(v1_eq_v2, suppressee),
 
-            // v1 > v2 => v1 >= v2
-            new NISuppression(v1_gt_v2, suppressee),
+          // v1 > v2 => v1 >= v2
+          new NISuppression(v1_gt_v2, suppressee),
 
-          });
+        });
   #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(LESSEQUALSTRING)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet(
-          new NISuppression[] {
+  /** Definition of this invariant (the suppressee) */
+  private static NISuppressee suppressee = new NISuppressee(PAIRWISEINTEQUAL.class, 2);
 
-            // v1 == v2 => v1 <= v2
-            new NISuppression(v1_eq_v2, suppressee),
+  // Suppressor definitions (used in suppressions below)
+  private static NISuppressor v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class);
+  private static NISuppressor v1_lt_v2 = new NISuppressor(0, 1, LESS_THAN_CLASS.class);
 
-            // v1 < v2 => v1 <= v2
-            new NISuppression(v1_lt_v2, suppressee),
+  private static NISuppressionSet suppressions =
+    new NISuppressionSet(
+        new NISuppression[] {
 
-          });
+          // v1 == v2 => v1 <= v2
+          new NISuppression(v1_eq_v2, suppressee),
+
+          // v1 < v2 => v1 <= v2
+          new NISuppression(v1_lt_v2, suppressee),
+
+        });
   #else
     private static @Nullable NISuppressionSet suppressions = null;
   #endif

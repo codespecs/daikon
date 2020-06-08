@@ -27,7 +27,7 @@ The correct way to build the system is to run 'make'.
   #define EQUAL_MINUS_ONE EltRangeInt.EqualMinusOne
   #define VALUE_SET ValueSet.ValueSetScalarArray
 #elif defined(TYPEDOUBLE)
-  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUAL(a,b) Global.fuzzy.eq(a, b)
   #define CLASSNAME EltNonZeroFloat
   #define CLASSSTRING "EltNonZeroFloat"
   #define SUPERCLASS SingleFloatSequence
@@ -89,11 +89,11 @@ public final class CLASSNAME extends SUPERCLASS {
   /** Boolean. True iff EltNonZero invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-  public CLASSNAME(PptSlice ppt) {
+  CLASSNAME(PptSlice ppt) {
     super(ppt);
   }
 
-  public @Prototype CLASSNAME() {
+  @Prototype CLASSNAME() {
     super();
   }
 
@@ -218,6 +218,7 @@ public final class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
   public InvariantStatus check_modified(PRIMITIVE @Interned [] a, int count) {
     for (int ai = 0; ai < a.length; ai++) {
       PRIMITIVE v = a[ai];
@@ -264,6 +265,7 @@ public final class CLASSNAME extends SUPERCLASS {
     }
   }
 
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
   private double confidence_one_elt_nonzero() {
     double range;
     if (is_pointer()) {
@@ -285,7 +287,7 @@ public final class CLASSNAME extends SUPERCLASS {
       // constraints) for the value to be zero; otherwise, the modulus
       // constraint implies non-zero.
       VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
-      range = (DOUBLE_CAST(vs.max()) - vs.min() + 1) / modulus;
+      range = (vs.max() - vs.min() + 1) / DOUBLE_CAST(modulus);
     }
     return 1.0/range;
   }

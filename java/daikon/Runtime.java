@@ -3,7 +3,6 @@ package daikon;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -574,15 +573,12 @@ public final class Runtime {
       println_modbit_missing(ps);
       return;
     }
-    boolean any_null = false;
     ps.print('[');
     if (a.length > 0) {
       print_class(ps, a[0]);
-      any_null = (a[0] == null);
       for (int i = 1; i < a.length; i++) {
         ps.print(' ');
         print_class(ps, a[i]);
-        any_null |= (a[i] == null);
       }
     }
     ps.println(']');
@@ -617,16 +613,13 @@ public final class Runtime {
       println_modbit_missing(ps);
       return;
     }
-    boolean any_null = false;
     ps.print('[');
     int size = v.size();
     if (size > 0) {
       print_class(ps, v.get(0));
-      any_null = (v.get(0) == null);
       for (int i = 1; i < size; i++) {
         ps.print(' ');
         print_class(ps, v.get(i));
-        any_null |= (v.get(i) == null);
       }
     }
     ps.println(']');
@@ -1432,24 +1425,5 @@ public final class Runtime {
       value >>>= 8;
     }
     return result;
-  }
-
-  // More efficient version that doesn't allocate a lot of arrays.
-  static final byte[] toBytesStaticResult = new byte[4];
-
-  private static final void toBytesStatic(int value) {
-    for (int i = 3; i >= 0; i--) {
-      toBytesStaticResult[i] = (byte) ((0xFFl & value) + Byte.MIN_VALUE);
-      value >>>= 8;
-    }
-  }
-
-  private static final void printIntBytes(PrintStream ps, int value) {
-    toBytesStatic(value);
-    try {
-      ps.write(toBytesStaticResult);
-    } catch (IOException e) {
-      throw new Error(e);
-    }
   }
 }

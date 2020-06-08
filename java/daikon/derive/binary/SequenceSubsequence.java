@@ -40,7 +40,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
    * @param off_by_one true means we should exclude the scalar from the range; false means we should
    *     include it
    */
-  public SequenceSubsequence(VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
+  protected SequenceSubsequence(VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
     super(vi1, vi2);
     this.from_start = from_start;
     if (off_by_one) {

@@ -32,7 +32,11 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
  */
 public class ReadTrace {
 
-  /** @param args data trace file names */
+  /**
+   * The entry point for ReadTrace.
+   *
+   * @param args data trace file names
+   */
   public static void main(String[] args) {
     CollectDataProcessor processor = new CollectDataProcessor();
     PptMap ppts = new PptMap();

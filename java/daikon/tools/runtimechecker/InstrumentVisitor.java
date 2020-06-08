@@ -183,8 +183,6 @@ public class InstrumentVisitor extends DepthFirstVisitor {
           checkObjectInvariants_instrumentDeclaration_checker(
               classname, true /* check major properties */));
 
-      boolean isNested = false;
-      boolean isStatic = false;
       if (!Ast.isInner(ucd) || Ast.isStatic(ucd)) {
         ClassOrInterfaceBodyDeclaration classInvDecl =
             checkClassInvariantsInstrumentDeclaration(classname);
@@ -230,7 +228,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     super.visit(ctor);
 
     // Find declared throwables.
-    List<String> declaredThrowables = getDeclaredThrowables(ctor.f3);
+    // List<String> declaredThrowables = getDeclaredThrowables(ctor.f3);
 
     // System.out.println(Ast.formatEntireTree(ctor));
 
@@ -252,10 +250,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         "checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time.onEntry);");
 
     String name = Ast.getName(ctor);
-    List<String> parameters = new ArrayList<>();
     List<String> typesAndParameters = new ArrayList<>();
     for (FormalParameter param : Ast.getParametersNoImplicit(ctor)) {
-      parameters.add(Ast.getName(param));
       typesAndParameters.add(Ast.format(param));
     }
 
@@ -297,7 +293,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     // Handle any exceptions, check postconditions, object and class
     // invariants.
-    exitChecks(code, matching_ppts, pptmap, declaredThrowables, false);
+    exitChecks(
+        code,
+        matching_ppts,
+        pptmap,
+        // declaredThrowables,
+        false);
 
     code.append("}");
 
@@ -356,13 +357,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     boolean isStatic = Ast.isStatic(method);
 
     // Find declared throwables.
-    List<String> declaredThrowables = getDeclaredThrowables(method.f3);
+    // List<String> declaredThrowables = getDeclaredThrowables(method.f3);
 
     List<PptTopLevel> matching_ppts = pptMatcher.getMatches(pptmap, method);
 
     String name = Ast.getName(method);
     String returnType = Ast.getReturnType(method);
-    String maybeReturn = (returnType.equals("void") ? "" : "return");
     List<String> typesAndParameters = new ArrayList<>();
     List<String> parameters = new ArrayList<>();
     for (FormalParameter param : Ast.getParameters(method)) {
@@ -454,7 +454,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     code.append("internal$" + name + "(" + String.join(", ", parameters) + ");");
 
-    exitChecks(code, matching_ppts, pptmap, declaredThrowables, isStatic);
+    exitChecks(
+        code,
+        matching_ppts,
+        pptmap,
+        // declaredThrowables,
+        isStatic);
 
     // Return value.
     if (!returnType.equals("void")) {
@@ -806,29 +811,29 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     return survivors;
   }
 
-  private static List<String> getDeclaredThrowables(NodeOptional nodeOpt) {
-    List<String> declaredThrowables = new ArrayList<>();
-    if (nodeOpt.present()) {
-      NodeSequence seq = (NodeSequence) nodeOpt.node;
-      // There should only be two elements: "throws" and NameList
-      assert seq.size() == 2;
-      NameList nameList = (NameList) seq.elementAt(1);
-
-      StringWriter stringWriter = new StringWriter();
-      TreeDumper dumper = new TreeDumper(stringWriter);
-      dumper.visit(nameList);
-
-      String[] declaredThrowablesArray = stringWriter.toString().trim().split(",");
-      for (int i = 0; i < declaredThrowablesArray.length; i++) {
-        declaredThrowables.add(declaredThrowablesArray[i].trim());
-      }
-      //       System.out.println("@@@");
-      //       for (int i = 0 ; i < declaredThrowables.size() ; i++) {
-      //         System.out.println("xxx" + declaredThrowables.get(i) + "xxx");
-      //       }
-    }
-    return declaredThrowables;
-  }
+  // private static List<String> getDeclaredThrowables(NodeOptional nodeOpt) {
+  //   List<String> declaredThrowables = new ArrayList<>();
+  //   if (nodeOpt.present()) {
+  //     NodeSequence seq = (NodeSequence) nodeOpt.node;
+  //     // There should only be two elements: "throws" and NameList
+  //     assert seq.size() == 2;
+  //     NameList nameList = (NameList) seq.elementAt(1);
+  //
+  //     StringWriter stringWriter = new StringWriter();
+  //     TreeDumper dumper = new TreeDumper(stringWriter);
+  //     dumper.visit(nameList);
+  //
+  //     String[] declaredThrowablesArray = stringWriter.toString().trim().split(",");
+  //     for (int i = 0; i < declaredThrowablesArray.length; i++) {
+  //       declaredThrowables.add(declaredThrowablesArray[i].trim());
+  //     }
+  //     //       System.out.println("@@@");
+  //     //       for (int i = 0 ; i < declaredThrowables.size() ; i++) {
+  //     //         System.out.println("xxx" + declaredThrowables.get(i) + "xxx");
+  //     //       }
+  //   }
+  //   return declaredThrowables;
+  // }
 
   // [[ TODO: This method can return the wrong sequence of catch clauses,
   //    because it has no concept of throwable subclasses, and it just
@@ -838,7 +843,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       StringBuilder code,
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
-      List<String> declaredThrowables,
+      // List<String> declaredThrowables,
       boolean isStatic) {
 
     //      List<String> declaredThrowablesLocal = new ArrayList<>(declaredThrowables);

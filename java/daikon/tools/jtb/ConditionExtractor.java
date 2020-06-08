@@ -175,9 +175,13 @@ class ConditionExtractor extends DepthFirstVisitor {
   }
 
   /**
+   * Returns a String[] that contains the different Integer values which the case expression is
+   * tested against.
+   *
    * @return a String[] that contains the different Integer values which the case expression is
    *     tested against
    */
+  @SuppressWarnings("JdkObsolete") // JTB uses Enumeration
   public Collection<String> getCaseValues(NodeListOptional n) {
     ArrayList<String> values = new ArrayList<>();
     Enumeration<Node> e = n.elements();

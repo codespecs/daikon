@@ -311,7 +311,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format.isJavaFamily())
+        || format.isJavaFamily()
         || (format == OutputFormat.CSHARPCONTRACT)) {
 
       if (PrintInvariants.dkconfig_static_const_infer) {
@@ -446,7 +446,6 @@ public class LOWERBOUND extends SINGLESCALAR {
 
   public String format_csharp_contract(@GuardSatisfied LOWERBOUND this) {
     PptTopLevel pptt = ppt.parent;
-    String name = var().csharp_name();
 
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {

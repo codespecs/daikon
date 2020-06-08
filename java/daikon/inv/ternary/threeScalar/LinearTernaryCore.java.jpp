@@ -18,8 +18,8 @@ The correct way to build the system is to run 'make'.
   #if 0
   // #define EQUAL(a,b) ((a) == (b))
   #endif
-  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
-  #define GET_VAL(a) (((Long)a).longValue())
+  #define EQUAL(a,b) Global.fuzzy.eq(a, b)
+  #define GET_VAL(a) ((Long)a).longValue()
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME LinearTernaryCoreFloat
   #define PRIMITIVE double
@@ -27,8 +27,8 @@ The correct way to build the system is to run 'make'.
   #define LINEAR_BINARY LinearBinaryFloat
   #define ONEOF OneOfFloat
   #define CLASSSTRING "LinearTernaryCoreFloat"
-  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
-  #define GET_VAL(a) (((Double)a).doubleValue())
+  #define EQUAL(a,b) Global.fuzzy.eq(a, b)
+  #define GET_VAL(a) ((Double)a).doubleValue()
 #else
   #error "Either TYPELONG or TYPEDOUBLE must be defined"
 #endif
@@ -74,7 +74,9 @@ import typequals.prototype.qual.Prototype;
 // linearintervention method deals with the degenerate form and the
 // planarintervention focuses on the full ternary invariant.
 
-@SuppressWarnings("nullness") // ***** TEMPORARY:  def_points is confused (is packed initially with non-nulls at beginning, but is not all non-nulls; and later may not be packed); needs review/refactoring/rewriting
+@SuppressWarnings({"nullness", // ***** TEMPORARY:  def_points is confused (is packed initially with non-nulls at beginning, but is not all non-nulls; and later may not be packed); needs review/refactoring/rewriting
+    "UnnecessaryParentheses"  // generated code, parens are sometimes necessary
+    })
 public final class CLASSNAME implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -672,7 +674,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   /**
    * Returns the two points that have the maximum separation in pa.
    *
-   * @param ps array of points. Must have at least 2 elements. Can be any length and can contain
+   * @param pa array of points. Must have at least 2 elements. Can be any length and can contain
    *      nulls (which will be ignored).
    * @return a 2-element array containing the most-separated elements. Returns null if no pair of
    *      elements is NaN-free.
@@ -716,7 +718,8 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * Calculates the coefficients for the line in 3D
    * and sets the coefficients[] by side effect.
    *
-   * @param points 2 points to use to calculate the coefficents
+   * @param p0 first point on the line
+   * @param p1 second point on the line
    */
   //
   //  the line can fall under 3 categories

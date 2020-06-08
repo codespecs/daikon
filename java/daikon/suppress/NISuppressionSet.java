@@ -2,12 +2,9 @@ package daikon.suppress;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
-import daikon.Daikon;
 import daikon.Debug;
 import daikon.PptSlice;
-import daikon.PptSlice3;
 import daikon.PptTopLevel;
-import daikon.PrintInvariants;
 import daikon.VarInfo;
 import daikon.inv.Invariant;
 import java.util.ArrayList;
@@ -465,83 +462,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
               + Arrays.toString(var_infos));
     }
     return true;
-  }
-
-  /**
-   * Instantiates the suppressee over the specified variables in the specified ppt. The invariant is
-   * added to the new_invs list, but not to the slice. The invariant is added to the slice later
-   * when the sample is applied to it. That guarantees that it is only applied the sample once.
-   *
-   * @deprecated
-   */
-  @Deprecated
-  private void instantiate(PptTopLevel ppt, VarInfo[] vis, List<Invariant> new_invs) {
-
-    NIS.new_invs_cnt++;
-
-    // If the suppressee will be falsified by the sample, don't bother
-    // to create it.
-    NISuppressee suppressee = suppression_set[0].suppressee;
-    // if (suppressee.check (NIS.vt, vis) == InvariantStatus.FALSIFIED) {
-    //  NIS.false_invs_cnt++;
-    //  return;
-    // }
-
-    for (int i = 0; i < vis.length; i++) {
-      assert !vis[i].missingOutOfBounds();
-    }
-
-    // Find the slice and create it if it is not already there.
-    // Note that we must make a copy of vis.  vis is used to create each
-    // slice and will change after we create the slice which leads to
-    // very interesting results.
-    PptSlice slice = ppt.findSlice(vis);
-    if (slice == null) {
-      VarInfo[] newvis = vis.clone();
-      slice = new PptSlice3(ppt, newvis);
-      ppt.addSlice(slice);
-    }
-
-    // Create the new invariant
-    Invariant inv = suppressee.instantiate(slice);
-
-    if (inv != null) {
-
-      if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE)) {
-        inv.log(NIS.debug, "Adding " + inv.format() + " from nis suppression set " + this);
-      }
-
-      // Make sure the invariant isn't already in the new_invs list
-      if (Debug.dkconfig_internal_check) {
-        for (Invariant new_inv : new_invs) {
-          if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice)) {
-            throw new Error(
-                String.format(
-                    "inv %s:%s already in new_invs (slice %s)",
-                    inv.getClass(), inv.format(), slice));
-          }
-        }
-      }
-
-      // Add the invariant to the new invariant list
-      new_invs.add(inv);
-
-      if (Debug.dkconfig_internal_check) {
-        if (slice.contains_inv_exact(inv)) {
-          // We are in trouble.
-          // Print all unary and binary invariants over the same variables
-          for (int i = 0; i < vis.length; i++) {
-            PrintInvariants.print_all_invs(ppt, vis[i], "  ");
-          }
-          PrintInvariants.print_all_invs(ppt, vis[0], vis[1], "  ");
-          PrintInvariants.print_all_invs(ppt, vis[1], vis[2], "  ");
-          PrintInvariants.print_all_invs(ppt, vis[0], vis[2], "  ");
-          Debug.check(Daikon.all_ppts, "assert failure");
-          throw new Error(
-              String.format("inv %s:%s already in slice %s", inv.getClass(), inv.format(), slice));
-        }
-      }
-    }
   }
 
   /**

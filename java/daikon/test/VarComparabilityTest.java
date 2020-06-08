@@ -3,6 +3,7 @@ package daikon.test;
 import daikon.*;
 import junit.framework.*;
 
+@SuppressWarnings("UnusedVariable") // test code
 public class VarComparabilityTest extends TestCase {
 
   // for convenience
@@ -46,33 +47,33 @@ public class VarComparabilityTest extends TestCase {
     VarComparability v_2 = parsei("-2");
     VarComparability v_3 = parsei("-3");
 
-    assert comp(v1, v1);
-    assert comp(v1, v1a);
-    assert comp(v1a, v1);
-    assert !comp(v1, v2);
-    assert !comp(v2, v1);
-    assert comp(v2, v2);
+    assertTrue(comp(v1, v1));
+    assertTrue(comp(v1, v1a));
+    assertTrue(comp(v1a, v1));
+    assertFalse(comp(v1, v2));
+    assertFalse(comp(v2, v1));
+    assertTrue(comp(v2, v2));
 
-    assert comp(v1, v_1);
-    assert comp(v1a, v_1);
-    assert comp(v2, v_1);
-    assert comp(v_1, v_1);
-    assert comp(v_2, v_1);
-    assert comp(v_3, v_1);
+    assertTrue(comp(v1, v_1));
+    assertTrue(comp(v1a, v_1));
+    assertTrue(comp(v2, v_1));
+    assertTrue(comp(v_1, v_1));
+    assertTrue(comp(v_2, v_1));
+    assertTrue(comp(v_3, v_1));
 
-    assert comp(v1, v_2);
-    assert comp(v1a, v_2);
-    assert comp(v2, v_2);
-    assert comp(v_1, v_2);
-    assert comp(v_2, v_2);
-    assert comp(v_3, v_2);
+    assertTrue(comp(v1, v_2));
+    assertTrue(comp(v1a, v_2));
+    assertTrue(comp(v2, v_2));
+    assertTrue(comp(v_1, v_2));
+    assertTrue(comp(v_2, v_2));
+    assertTrue(comp(v_3, v_2));
 
-    assert comp(v1, v_3);
-    assert comp(v1a, v_3);
-    assert comp(v2, v_3);
-    assert comp(v_1, v_3);
-    assert comp(v_2, v_3);
-    assert comp(v_3, v_3);
+    assertTrue(comp(v1, v_3));
+    assertTrue(comp(v1a, v_3));
+    assertTrue(comp(v2, v_3));
+    assertTrue(comp(v_1, v_3));
+    assertTrue(comp(v_2, v_3));
+    assertTrue(comp(v_3, v_3));
   }
 
   public void test_VarComparabilityImplicit_1Darray_parts() {
@@ -95,27 +96,27 @@ public class VarComparabilityTest extends TestCase {
     VarComparability v_12 = parsei("-1[2]");
     VarComparability v_1_1 = parsei("-1[-1]");
 
-    assert comp(v1, v12.elementType());
-    assert comp(v1, v13.elementType());
-    assert !comp(v1, v23.elementType());
-    assert comp(v1, v1_1.elementType());
-    assert comp(v1, v_1_1.elementType());
-    assert !comp(v1, v12.indexType(0));
-    assert !comp(v1, v13.indexType(0));
-    assert !comp(v1, v23.indexType(0));
-    assert comp(v1, v1_1.indexType(0));
-    assert comp(v1, v_1_1.indexType(0));
+    assertTrue(comp(v1, v12.elementType()));
+    assertTrue(comp(v1, v13.elementType()));
+    assertFalse(comp(v1, v23.elementType()));
+    assertTrue(comp(v1, v1_1.elementType()));
+    assertTrue(comp(v1, v_1_1.elementType()));
+    assertFalse(comp(v1, v12.indexType(0)));
+    assertFalse(comp(v1, v13.indexType(0)));
+    assertFalse(comp(v1, v23.indexType(0)));
+    assertTrue(comp(v1, v1_1.indexType(0)));
+    assertTrue(comp(v1, v_1_1.indexType(0)));
 
-    assert !comp(v2, v12.elementType());
-    assert !comp(v2, v13.elementType());
-    assert comp(v2, v23.elementType());
-    assert !comp(v2, v1_1.elementType());
-    assert comp(v2, v_1_1.elementType());
-    assert comp(v2, v12.indexType(0));
-    assert !comp(v2, v13.indexType(0));
-    assert !comp(v2, v23.indexType(0));
-    assert comp(v2, v1_1.indexType(0));
-    assert comp(v2, v_1_1.indexType(0));
+    assertFalse(comp(v2, v12.elementType()));
+    assertFalse(comp(v2, v13.elementType()));
+    assertTrue(comp(v2, v23.elementType()));
+    assertFalse(comp(v2, v1_1.elementType()));
+    assertTrue(comp(v2, v_1_1.elementType()));
+    assertTrue(comp(v2, v12.indexType(0)));
+    assertFalse(comp(v2, v13.indexType(0)));
+    assertFalse(comp(v2, v23.indexType(0)));
+    assertTrue(comp(v2, v1_1.indexType(0)));
+    assertTrue(comp(v2, v_1_1.indexType(0)));
   }
 
   public void test_VarComparabilityImplicit_1Darray_whole() {
@@ -129,39 +130,39 @@ public class VarComparabilityTest extends TestCase {
     VarComparability v_12 = parsei("-1[2]");
     VarComparability v_1_1 = parsei("-1[-1]");
 
-    assert comp(v12, v12);
-    assert comp(v12, v12a);
-    assert !comp(v12, v13);
-    assert !comp(v12, v23);
-    assert !comp(v13, v12);
-    assert comp(v13, v13);
-    assert comp(v13, v13a);
-    assert !comp(v13, v23);
-    assert !comp(v23, v12);
-    assert !comp(v23, v13);
-    assert comp(v23, v23);
-    assert comp(v23, v23a);
+    assertTrue(comp(v12, v12));
+    assertTrue(comp(v12, v12a));
+    assertFalse(comp(v12, v13));
+    assertFalse(comp(v12, v23));
+    assertFalse(comp(v13, v12));
+    assertTrue(comp(v13, v13));
+    assertTrue(comp(v13, v13a));
+    assertFalse(comp(v13, v23));
+    assertFalse(comp(v23, v12));
+    assertFalse(comp(v23, v13));
+    assertTrue(comp(v23, v23));
+    assertTrue(comp(v23, v23a));
 
-    assert comp(v1_1, v12);
-    assert comp(v1_1, v13);
-    assert !comp(v1_1, v23);
-    assert comp(v1_1, v1_1);
-    assert comp(v1_1, v_12);
-    assert comp(v1_1, v_1_1);
+    assertTrue(comp(v1_1, v12));
+    assertTrue(comp(v1_1, v13));
+    assertFalse(comp(v1_1, v23));
+    assertTrue(comp(v1_1, v1_1));
+    assertTrue(comp(v1_1, v_12));
+    assertTrue(comp(v1_1, v_1_1));
 
-    assert comp(v_12, v12);
-    assert !comp(v_12, v13);
-    assert !comp(v_12, v23);
-    assert comp(v_12, v1_1);
-    assert comp(v_12, v_12);
-    assert comp(v_12, v_1_1);
+    assertTrue(comp(v_12, v12));
+    assertFalse(comp(v_12, v13));
+    assertFalse(comp(v_12, v23));
+    assertTrue(comp(v_12, v1_1));
+    assertTrue(comp(v_12, v_12));
+    assertTrue(comp(v_12, v_1_1));
 
-    assert comp(v_1_1, v12);
-    assert comp(v_1_1, v13);
-    assert comp(v_1_1, v23);
-    assert comp(v_1_1, v1_1);
-    assert comp(v_1_1, v_12);
-    assert comp(v_1_1, v_1_1);
+    assertTrue(comp(v_1_1, v12));
+    assertTrue(comp(v_1_1, v13));
+    assertTrue(comp(v_1_1, v23));
+    assertTrue(comp(v_1_1, v1_1));
+    assertTrue(comp(v_1_1, v_12));
+    assertTrue(comp(v_1_1, v_1_1));
   }
 
   public void test_VarComparabilityImplicit_nDarray_whole() {
@@ -176,36 +177,36 @@ public class VarComparabilityTest extends TestCase {
     VarComparability v_1234 = parsei("-1[2][3][4]");
     VarComparability v_1 = parsei("-1");
 
-    assert comp(v12, v12);
-    assert comp(v123, v123);
-    assert comp(v1234, v1234);
-    assert comp(v12a, v12);
-    assert !comp(v12a, v123);
-    assert !comp(v12a, v1234);
-    assert !comp(v123a, v12);
-    assert comp(v123a, v123);
-    assert !comp(v123a, v1234);
-    assert !comp(v1234a, v12);
-    assert !comp(v1234a, v123);
-    assert comp(v1234a, v1234);
+    assertTrue(comp(v12, v12));
+    assertTrue(comp(v123, v123));
+    assertTrue(comp(v1234, v1234));
+    assertTrue(comp(v12a, v12));
+    assertFalse(comp(v12a, v123));
+    assertFalse(comp(v12a, v1234));
+    assertFalse(comp(v123a, v12));
+    assertTrue(comp(v123a, v123));
+    assertFalse(comp(v123a, v1234));
+    assertFalse(comp(v1234a, v12));
+    assertFalse(comp(v1234a, v123));
+    assertTrue(comp(v1234a, v1234));
 
-    assert comp(v12, v123.elementType());
-    assert comp(v123, v1234.elementType());
+    assertTrue(comp(v12, v123.elementType()));
+    assertTrue(comp(v123, v1234.elementType()));
 
-    assert comp(v_1, v12);
-    assert comp(v_1, v123);
-    assert comp(v_1, v1234);
+    assertTrue(comp(v_1, v12));
+    assertTrue(comp(v_1, v123));
+    assertTrue(comp(v_1, v1234));
 
-    assert !comp(v_1234, v12);
-    assert !comp(v_1234, v123);
-    assert comp(v_1234, v1234);
+    assertFalse(comp(v_1234, v12));
+    assertFalse(comp(v_1234, v123));
+    assertTrue(comp(v_1234, v1234));
 
-    assert !comp(v_234, v12);
-    assert !comp(v_234, v123);
-    assert comp(v_234, v1234);
+    assertFalse(comp(v_234, v12));
+    assertFalse(comp(v_234, v123));
+    assertTrue(comp(v_234, v1234));
 
-    assert !comp(v_34, v12);
-    assert !comp(v_34, v123);
-    assert comp(v_34, v1234);
+    assertFalse(comp(v_34, v12));
+    assertFalse(comp(v_34, v123));
+    assertTrue(comp(v_34, v1234));
   }
 }

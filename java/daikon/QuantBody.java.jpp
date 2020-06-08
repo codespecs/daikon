@@ -2230,7 +2230,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
         // last field is the collection
         @SuppressWarnings("unchecked")
         java.util.AbstractCollection<_TYPE> ac = (java.util.AbstractCollection<_TYPE>)fieldObj;
-        return (ac).toArray(new _TYPE[]{});
+        return ac.toArray(new _TYPE[]{});
       } else
 #endif
       if (fieldObj.getClass().isArray()) {

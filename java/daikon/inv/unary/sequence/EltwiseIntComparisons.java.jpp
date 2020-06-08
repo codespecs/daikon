@@ -86,7 +86,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(EQUALFLOAT)
   #define CLASSNAME EQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatEqual"
-  #define COMPARATOR(a,b) (Global.fuzzy.eq(a,b))
+  #define COMPARATOR(a,b) Global.fuzzy.eq(a,b)
   #define COMPARATORhtml ==
   #define COMPARATORstring ==
   #define COMPARATORSTRING "=="
@@ -95,7 +95,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(LESSTHANFLOAT)
   #define CLASSNAME LESSTHANFLOATCLASS
   #define CLASSSTRING "EltwiseFloatLessThan"
-  #define COMPARATOR(a,b) (Global.fuzzy.lt(a,b))
+  #define COMPARATOR(a,b) Global.fuzzy.lt(a,b)
   #define COMPARATORhtml &lt;
   #define COMPARATORstring <
   #define COMPARATORSTRING "<"
@@ -104,7 +104,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(LESSEQUALFLOAT)
   #define CLASSNAME LESSEQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatLessEqual"
-  #define COMPARATOR(a,b) (Global.fuzzy.lte(a,b))
+  #define COMPARATOR(a,b) Global.fuzzy.lte(a,b)
   #define COMPARATORhtml &le;
   #define COMPARATORstring <=
   #define COMPARATORSTRING "<="
@@ -113,7 +113,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(GREATERTHANFLOAT)
   #define CLASSNAME GREATERTHANFLOATCLASS
   #define CLASSSTRING "EltwiseFloatGreaterThan"
-  #define COMPARATOR(a,b) (Global.fuzzy.gt(a,b))
+  #define COMPARATOR(a,b) Global.fuzzy.gt(a,b)
   #define COMPARATORhtml &gt;
   #define COMPARATORstring >
   #define COMPARATORSTRING ">"
@@ -122,7 +122,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(GREATEREQUALFLOAT)
   #define CLASSNAME GREATEREQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatGreaterEqual"
-  #define COMPARATOR(a,b) (Global.fuzzy.gte(a,b))
+  #define COMPARATOR(a,b) Global.fuzzy.gte(a,b)
   #define COMPARATORhtml &ge;
   #define COMPARATORstring >=
   #define COMPARATORSTRING ">="
@@ -279,7 +279,6 @@ public class CLASSNAME extends SUPERCLASS {
 
   public String format_csharp_contract(@GuardSatisfied CLASSNAME this) {
     String[] split = var().csharp_array_split();
-    String name = var().csharp_name();
     return "Contract.ForAll(0, " + split[0] + ".Count()-1, i => " + split[0] + "[i]" + split[1] + " " + COMPARATORSTRING + " " + split[0] + "[i+1]" + split[1] + ")";
   }
 
@@ -296,6 +295,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
+  @SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
   public InvariantStatus check_modified(PRIMITIVE @Interned [] a, int count) {
     for (int i = 1; i < a.length; i++) {
       if (!COMPARATOR(a[i - 1], a[i])) {
@@ -430,6 +430,7 @@ public class CLASSNAME extends SUPERCLASS {
       return new DiscardInfo(this, DiscardCode.obvious, "The sequence contains all equal values.");
     }
 
+#if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
     {
       // some relations imply others as follows: < -> <=, > -> >=
       // == -> <=, >=
@@ -467,6 +468,7 @@ public class CLASSNAME extends SUPERCLASS {
       }
 
     }
+#endif
 
     // sorted by (any operation) for an entire sequence -> sorted by that same
     // operation for a subsequence

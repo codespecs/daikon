@@ -438,6 +438,7 @@ class Test {
     g.compare();
   }
 
+  @SuppressWarnings("ReturnValueIgnored") // test code
   public static void list_check(A a10, A a11) {
 
     List<A> list = new ArrayList<>();

@@ -168,11 +168,11 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -513,19 +513,19 @@ public final class Daikon {
   public abstract static class DaikonTerminationException extends RuntimeException {
     static final long serialVersionUID = 20180729L;
 
-    public DaikonTerminationException() {
+    protected DaikonTerminationException() {
       super();
     }
 
-    public DaikonTerminationException(String message) {
+    protected DaikonTerminationException(String message) {
       super(message);
     }
 
-    public DaikonTerminationException(Throwable e) {
+    protected DaikonTerminationException(Throwable e) {
       super(e);
     }
 
-    public DaikonTerminationException(String message, Throwable e) {
+    protected DaikonTerminationException(String message, Throwable e) {
       super(message, e);
     }
   }
@@ -762,7 +762,7 @@ public final class Daikon {
     // Load declarations and splitters
     load_spinfo_files(spinfo_files);
     all_ppts = load_decls_files(decls_files);
-    load_map_files(all_ppts, map_files);
+    load_map_files(map_files);
 
     all_ppts.trimToSize();
 
@@ -912,6 +912,7 @@ public final class Daikon {
       try {
         fileio_progress.join(2000);
       } catch (InterruptedException e) {
+        // It's OK for a wait operation to be interrupted.
       }
       if (fileio_progress.getState() != Thread.State.TERMINATED) {
         throw new BugInDaikon("Can't stop fileio_progress thead");
@@ -961,7 +962,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read in the command line options
   // Return {decls, dtrace, spinfo, map} files.
-  protected static FileOptions read_options(String[] args, String usage) {
+  static FileOptions read_options(String[] args, String usage) {
     if (args.length == 0) {
       System.out.println("Error: no files supplied on command line.");
       System.out.println(usage);
@@ -1822,7 +1823,6 @@ public final class Daikon {
       }
 
       PptTopLevel exitnn_ppt = ppt;
-      PptName exitnn_name = exitnn_ppt.ppt_name;
       PptName exit_name = ppt.ppt_name.makeExit();
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
@@ -2065,7 +2065,12 @@ public final class Daikon {
     }
   }
 
-  private static void load_map_files(PptMap all_ppts, Set<File> map_files) {
+  /**
+   * A wrapper around {@link ContextSplitterFactory#load_mapfiles_into_splitterlist}.
+   *
+   * @param map_files the map files to read into SplitterList
+   */
+  private static void load_map_files(Set<File> map_files) {
     long startTime = System.nanoTime();
     if (!PptSplitter.dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");
@@ -2134,7 +2139,6 @@ public final class Daikon {
   public static class FileIOProgress extends Thread {
     public FileIOProgress() {
       setDaemon(true);
-      df = DateFormat.getTimeInstance(/*DateFormat.LONG*/ );
     }
     /**
      * Clients should set this variable instead of calling Thread.stop(), which is deprecated.
@@ -2142,8 +2146,6 @@ public final class Daikon {
      * calls clear() anyway.
      */
     public boolean shouldStop = false;
-
-    private final DateFormat df;
 
     @Override
     public void run() {
@@ -2203,7 +2205,8 @@ public final class Daikon {
       }
       String status =
           UtilPlume.rpad(
-              "[" + df.format(new Date()) + "]: " + message, dkconfig_progress_display_width - 1);
+              "[" + LocalDateTime.now(ZoneId.systemDefault()) + "]: " + message,
+              dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.flush();
       // System.out.println (status); // for debugging

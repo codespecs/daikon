@@ -104,7 +104,7 @@ public final class DCRuntime {
     /** Tag stack. */
     Deque<Object> tag_stack;
 
-    /** Number of methods currently on tag_stack */
+    /** Number of methods currently on tag_stack. */
     int tag_stack_call_depth;
 
     /** class initializer */
@@ -158,18 +158,6 @@ public final class DCRuntime {
    * purposes.
    */
   private static class UninitArrayElem {}
-
-  /**
-   * Class uses as a tag for the results of a binary operation. Only different from Object for
-   * debugging purposes.
-   */
-  private static class BinOp {}
-
-  /**
-   * Class used as a tag when a value is stored in a local in the test sequence. Only different from
-   * object for debugging purposes.
-   */
-  private static class PrimStore {}
 
   /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
   private static Class<?> dcomp_marker_class;
@@ -491,10 +479,11 @@ public final class DCRuntime {
 
     Class<?>[] args = new Class<?>[] {dcomp_marker_class};
     while (!c.getName().equals("java.lang.Object")) {
-      java.lang.reflect.Method m = null;
+      java.lang.reflect.Method m;
       try {
         m = c.getDeclaredMethod(method_name, args);
       } catch (Exception e) {
+        m = null;
       }
       // System.out.printf("Class %s instrumented %s = %s%n", c, method_name, m);
       if (m != null) {
@@ -1323,7 +1312,6 @@ public final class DCRuntime {
         if (pi.isPrimitive()) p = tag_frame[pi.get_param_offset() + ((obj == null) ? 0 : 1)];
         merge_comparability(varmap, null, p, pi);
       } else if (dv instanceof ReturnInfo) {
-        ReturnInfo ri = (ReturnInfo) dv;
         if (mi.return_type().isPrimitive()) {
           ThreadData td = thread_to_data.get(Thread.currentThread());
           ret_val = td.tag_stack.peek();
@@ -1377,7 +1365,7 @@ public final class DCRuntime {
         // If variable is primitive, ignore it
         if (!pi.isPrimitive()) merge_comparability_refs_only(varmap, null, p, pi);
       } else if (dv instanceof ReturnInfo) {
-        ReturnInfo ri = (ReturnInfo) dv;
+        // ReturnInfo ri = (ReturnInfo) dv;
 
         // If variable is primitive, ignore it
         if (!mi.return_type().isPrimitive()) {
@@ -1630,7 +1618,6 @@ public final class DCRuntime {
     for (DaikonVariableInfo child : dv) {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
-        ArrayInfo ai = (ArrayInfo) child;
         // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
         // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
@@ -1782,7 +1769,6 @@ public final class DCRuntime {
     for (DaikonVariableInfo child : dv) {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
-        ArrayInfo ai = (ArrayInfo) child;
         // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
         // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
@@ -2519,6 +2505,7 @@ public final class DCRuntime {
       }
       set.add(dv);
     } catch (NullPointerException e) {
+      throw new Error(e);
     }
 
     for (DaikonVariableInfo child : dv) {
@@ -2703,7 +2690,6 @@ public final class DCRuntime {
             "push_field_tag %s %d = %s%n", obj_str(obj), field_num, obj_tags[field_num]);
       }
     } else {
-      Class<?> obj_class = obj.getClass();
       int fcnt = num_prim_fields(obj.getClass());
       assert field_num < fcnt : obj.getClass() + " " + field_num + " " + fcnt;
       obj_tags = new Object[fcnt];
@@ -2740,7 +2726,6 @@ public final class DCRuntime {
     // required (the number of primitive fields), allocate the space,
     // and associate it with the object.
     if (obj_tags == null) {
-      Class<?> obj_class = obj.getClass();
       int fcnt = num_prim_fields(obj.getClass());
       assert field_num < fcnt : obj.getClass() + " " + field_num + " " + fcnt;
       obj_tags = new Object[fcnt];

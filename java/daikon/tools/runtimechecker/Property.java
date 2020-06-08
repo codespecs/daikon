@@ -187,7 +187,6 @@ public class Property implements Serializable {
   public static Property get(String annoString) throws MalformedPropertyException {
 
     // check well-formedness
-    boolean wellformed = true;
     if (!(annoString.matches(".*<INVINFO>.*</INVINFO>.*")
         && annoString.matches(".*<DAIKON>(.*)</DAIKON>.*")
         && annoString.matches(".*<METHOD>(.*)</METHOD>.*"))) {

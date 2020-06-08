@@ -88,7 +88,7 @@ public class NISuppression {
   /**
    * Checks this suppression. Each suppressor is checked to see if it matches inv and if not,
    * whether or not it is valid (true). The results are saved in each suppressor. The suppressor
-   * results are used later by @link{#invalidated()}.
+   * results are used later by {@link #invalidated()}.
    *
    * @param ppt program point in which to check suppression
    * @param vis variables over which to check suppression
@@ -127,10 +127,10 @@ public class NISuppression {
   }
 
   /**
-   * Determines whether or not the falsified invariant previously passed
-   * to @link{#check(PptTopLevel,VarInfo[],Invariant)} was the first suppressor to be falsified in
-   * this suppression. If the falsified invariant is not involved in this suppression, then it can't
-   * have been invalidated.
+   * Determines whether or not the falsified invariant previously passed to {@link
+   * #check(PptTopLevel,VarInfo[],Invariant)} was the first suppressor to be falsified in this
+   * suppression. If the falsified invariant is not involved in this suppression, then it can't have
+   * been invalidated.
    */
   public boolean invalidated() {
 
@@ -228,7 +228,8 @@ public class NISuppression {
    * Recursively finds suppressed invariants. The cross product of antecedents for each suppressor
    * are examined and each valid combination will yield an entry in suppressed_invs.
    *
-   * @param suppressed_invs this set is updated with any invariants that are suppressed,
+   * @param unsuppressed_invs this set is updated with any invariants that used to be suppressed,
+   *     but no longer are
    * @param antecedents array of antecedents per suppressor
    * @param vis current variables for the suppressed invariant As antecedents are chosen, their
    *     variables are placed into vis

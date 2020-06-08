@@ -100,7 +100,7 @@ public class DCInstrument extends InstructionListUtils {
   protected static Type object_arr = new ArrayType(Type.OBJECT, 1);
   // private Type int_arr = new ArrayType (Type.INT, 1);
   protected static ObjectType throwable = new ObjectType("java.lang.Throwable");
-  protected static ObjectType dcomp_marker = null;
+  protected ObjectType dcomp_marker;
   protected static ObjectType javalangObject = new ObjectType("java.lang.Object");
 
   // Debug loggers
@@ -120,9 +120,10 @@ public class DCInstrument extends InstructionListUtils {
   protected static boolean jdk_instrumented = true;
 
   /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
+  // Static because used in DCRuntime
   protected static String instrumentation_interface;
-  /** Either "java.lang.DCompMarker" or "daikon.dcomp.DCompMarker". */
-  protected static @DotSeparatedIdentifiers String dcomp_prefix;
+  /** Either "java.lang" or "daikon.dcomp". */
+  protected @DotSeparatedIdentifiers String dcomp_prefix;
   /**
    * We add a dummy local variable to JDK methods during the initial jdk instrumentation (via
    * BuildJDK) as a flag to indicate that the method needs to be re-instrumented at runtime. This is
@@ -260,6 +261,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /** Initialize with the original class and whether or not the class is part of the JDK. */
+  @SuppressWarnings("StaticAssignmentInConstructor") // instrumentation_interface
   public DCInstrument(JavaClass orig_class, boolean in_jdk, @Nullable ClassLoader loader) {
     super();
     this.orig_class = orig_class;
@@ -2784,7 +2786,7 @@ public class DCInstrument extends InstructionListUtils {
     if (field_type instanceof ReferenceType) {
       return null;
     }
-    String name = f.getClassName(pool) + "." + f.getFieldName(pool);
+    // String name = f.getClassName(pool) + "." + f.getFieldName(pool);
     // System.out.printf("static field name for %s = %s%n", f, name);
 
     // Get the index of this static in the list of all statics and allocate

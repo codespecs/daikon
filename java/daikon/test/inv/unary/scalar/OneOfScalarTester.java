@@ -18,7 +18,7 @@ public class OneOfScalarTester extends TestCase {
   private VarInfo[] vars = {Common.makeHashcodeVarInfo("x"), Common.newIntVarInfo("y")};
   private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
   private PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
-  private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
+  // private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
 
   private static final int DOESNT_MATTER = 0;
 
@@ -62,7 +62,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
 
-    assert !inv1.isSameFormula(inv2);
+    assertFalse(inv1.isSameFormula(inv2));
   }
 
   public void testNullNull() {
@@ -72,7 +72,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
 
-    assert inv1.isSameFormula(inv2);
+    assertTrue(inv1.isSameFormula(inv2));
   }
 
   public void testNonNon() {
@@ -82,7 +82,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
 
-    assert inv1.isSameFormula(inv2);
+    assertTrue(inv1.isSameFormula(inv2));
   }
 
   /* NEED TO DEFINE SEMANTICS WITH MIKE E
@@ -93,7 +93,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
 
-    assert ! inv1.isSameFormula(inv2);
+    assertFalse( inv1.isSameFormula(inv2));
   }
 
   public void testNullNullHashcodeInt() {
@@ -103,7 +103,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
 
-    assert inv1.isSameFormula(inv2);
+    assertTrue(inv1.isSameFormula(inv2));
   }
 
   public void testNonNonHashcodeInt() {
@@ -113,7 +113,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
 
-    assert inv1.isSameFormula(inv2);
+    assertTrue(inv1.isSameFormula(inv2));
   }
   */
 }

@@ -4,9 +4,8 @@ import daikon.inv.Invariant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -17,6 +16,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
  * is necessary if we're to be able to restart Simplify from where we left off after it hangs, but
  * it's also a convenient place to hang routines that any Simplify client can use.
  */
+@SuppressWarnings("JdkObsolete") // Stack has methods that ArrayDeque lacks, such as elementAt()
 public class LemmaStack {
   /**
    * Boolean. Controls Daikon's response when inconsistent invariants are discovered while running
@@ -75,9 +75,11 @@ public class LemmaStack {
   /**
    * Pop a bunch of lemmas off Simplify's stack. Since it's a stack, it only works to unassume the
    * things you most recently assumed, but we aren't smart enough to check that.
+   *
+   * @param invs the lemmas to pop off Simplify's stack
    */
   private void unAssumeAll(List<Lemma> invs) {
-    for (Lemma lem : invs) {
+    for (@SuppressWarnings("UnusedVariable") Lemma lem : invs) {
       unAssume();
     }
   }
@@ -104,7 +106,6 @@ public class LemmaStack {
     }
   }
 
-  @SuppressWarnings("JdkObsolete")
   public LemmaStack() throws SimplifyError {
     startProver();
     lemmas = new Stack<Lemma>();
@@ -342,16 +343,11 @@ public class LemmaStack {
     return found;
   }
 
-  private static void shuffle(Object[] ary, Random rand) {
-    for (int i = 0; i < ary.length - 1; i++) {
-      int j = i + rand.nextInt(ary.length - i);
-      Object temp = ary[i];
-      ary[i] = ary[j];
-      ary[j] = temp;
-    }
-  }
-
-  /** Return a minimal set of assumptions from the stack that imply a given string. */
+  /**
+   * Return a minimal set of assumptions from the stack that imply a given string.
+   *
+   * @param str the expression to make true
+   */
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {
     assert checkString(str) == 'T';
     unAssumeAll(lemmas);
@@ -469,7 +465,7 @@ public class LemmaStack {
     }
   }
 
-  private static SortedSet<Long> ints_seen = new TreeSet<>();
+  private static NavigableSet<Long> ints_seen = new TreeSet<>();
 
   /** Keep track that we've seen this number in formulas, for the sake of pushOrdering. */
   public static void noticeInt(long i) {

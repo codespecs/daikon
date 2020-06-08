@@ -169,7 +169,6 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
     // keeps track of suppressed invariants due to appearing in
     // every sample of the MultiDiff
-    int kill = 0;
     ArrayList<String> bigList = new ArrayList<>();
 
     // This gets all of the output in the format:

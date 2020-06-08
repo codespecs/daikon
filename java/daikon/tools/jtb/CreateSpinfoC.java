@@ -17,7 +17,6 @@ import jtb.cparser.syntaxtree.*;
 public class CreateSpinfoC {
 
   public static void main(String[] args) {
-    CParser parser;
     if (args.length == 1) {
       System.out.println("Create spinfo file from file " + args[0] + " . . .");
     } else {
@@ -52,7 +51,8 @@ public class CreateSpinfoC {
         throw new Error("unreachable");
       }
       try {
-        parser = new CParser(new FileInputStream(temp));
+        @SuppressWarnings("UnusedVariable") // sets static variables for TranslationUnit()
+        CParser parser = new CParser(new FileInputStream(temp));
         TranslationUnit root = CParser.TranslationUnit();
         StringFinder finder = new StringFinder();
         temp.delete();

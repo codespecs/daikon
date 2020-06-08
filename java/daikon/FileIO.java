@@ -279,9 +279,11 @@ public final class FileIO {
   ///
 
   /**
+   * Returns a new PptMap containing declarations read from the files listed in the argument;
+   * connection information (controlling variables and entry ppts) is set correctly upon return.
+   *
    * @param files files to be read (java.io.File)
-   * @return a new PptMap containing declarations read from the files listed in the argument;
-   *     connection information (controlling variables and entry ppts) is set correctly upon return
+   * @return a new PptMap containing declarations read from the files listed in the argument
    */
   public static PptMap read_declaration_files(Collection<File> files) throws IOException {
     PptMap all_ppts = new PptMap();
@@ -1019,6 +1021,7 @@ public final class FileIO {
         try {
           Thread.sleep(1000);
         } catch (java.lang.InterruptedException e) {
+          // It's not a problem if the sleep is interrupted.
         }
       }
     }
@@ -1260,6 +1263,7 @@ public final class FileIO {
     public @Nullable Object payload; // used when status=COMMENT
 
     /** Start parsing the given file. */
+    @SuppressWarnings("StaticAssignmentInConstructor") // for progress output
     public ParseState(
         String raw_filename, boolean decl_file_p, boolean ppts_may_be_new, PptMap ppts)
         throws IOException {
@@ -2474,16 +2478,6 @@ public final class FileIO {
     }
   }
 
-  /** Skips over a decl. Essentially reads in everything up to and including the next blank line. */
-  private static void skip_decl(LineNumberReader reader) throws IOException {
-    String line = reader.readLine();
-    // This fails if some lines of a declaration (e.g., the comparability
-    // field) are empty.
-    while ((line != null) && !line.equals("")) {
-      line = reader.readLine();
-    }
-  }
-
   /**
    * Converts the declaration record version of a name into its correct version. In the declaration
    * record, blanks are encoded as \_ and backslashes as \\.
@@ -2548,6 +2542,7 @@ public final class FileIO {
    * @param orig the name of a declaration
    * @return the representation of the name in a declaration file
    */
+  @SuppressWarnings("UnusedMethod")
   private static String escape_decl(String orig) {
     return orig.replace("\\", "\\\\")
         .replace(" ", "\\_")
@@ -2949,14 +2944,6 @@ public final class FileIO {
     @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(msg);
-  }
-
-  /** Call this to indicate a malformed declaration. */
-  private static void decl_error(
-      ParseState state, Throwable cause, String format, @Nullable Object... args) {
-    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
-    String msg = String.format(format, args) + state.line_file_message();
-    throw new Daikon.UserError(cause, msg);
   }
 
   /** Call this to indicate a malformed declaration. */

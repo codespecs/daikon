@@ -38,7 +38,7 @@ public abstract class Splitter implements Serializable {
    * splitting itself.) There is no need for subclasses to override this (but most will have to,
    * since they will add their own constructors as well).
    */
-  public Splitter() {}
+  protected Splitter() {}
 
   /**
    * Creates a valid splitter than can be used for testing the condition via test(ValueTuple). The

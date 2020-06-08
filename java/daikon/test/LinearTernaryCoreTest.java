@@ -21,11 +21,11 @@ public class LinearTernaryCoreTest extends TestCase {
   }
 
   void one_test_set_tri_linear(
-      int[][] triples, long goal_a, long goal_b, long goal_c, long goal_d) {
+      int[][] triples, double goal_a, double goal_b, double goal_c, double goal_d) {
     @SuppressWarnings("nullness") // testing code: wrapper will never be used
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     for (int i = 0; i < triples.length; i++) {
-      assert triples[i].length == 3;
+      assertEquals(3, triples[i].length);
       set_cache(ltc, i, triples[i][0], triples[i][1], triples[i][2]);
     }
     double[] coef;
@@ -42,7 +42,10 @@ public class LinearTernaryCoreTest extends TestCase {
     //  System.out.println("actual: " + coef[0] + " " + coef[1] + " " + coef[2] + " " + coef[3]);
     // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c
     // - ltc.c));
-    assert coef[0] == goal_a && coef[1] == goal_b && coef[2] == goal_c && coef[3] == goal_d;
+    assertEquals(goal_a, coef[0], 0);
+    assertEquals(goal_b, coef[1], 0);
+    assertEquals(goal_c, coef[2], 0);
+    assertEquals(goal_d, coef[3], 0);
   }
 
   public void test_set_tri_linear() {
@@ -93,7 +96,7 @@ public class LinearTernaryCoreTest extends TestCase {
     String actual_result = ltc.format_using(OutputFormat.DAIKON, "x", "y", "z");
     //    System.out.println("Expecting: " + goal_result);
     //    System.out.println("Actual:    " + actual_result);
-    assert actual_result.equals(goal_result);
+    assertEquals(goal_result, actual_result);
   }
 
   public void test_format() {

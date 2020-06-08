@@ -316,7 +316,8 @@ public class CLASSNAME extends SUPERCLASS {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-  /** @return a DiscardInfo, or null if the Invariant is not an obvious subsequence */
+  /** Returns a DiscardInfo, or null if the Invariant is not an obvious subsequence.
+@return a DiscardInfo, or null if the Invariant is not an obvious subsequence  */
   @Pure
   public static @Nullable DiscardInfo isObviousSubSequence(Invariant inv, VarInfo subvar, VarInfo supervar) {
     Pair<DiscardCode,String> pcds = isObviousSubSequence(subvar, supervar);
@@ -328,8 +329,10 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /**
+   * Returns a Pair of a DiscardCode and a discardReason string, or null if the Invariant is not an
+   * obvious subsequence.
    * @return a Pair of a DiscardCode and a discardReason string, or null if the Invariant is not an
-   * obvious subsequence
+   *   obvious subsequence
    */
   @Pure
   public static @Nullable Pair<DiscardCode,String> isObviousSubSequence(VarInfo subvar, VarInfo supervar) {

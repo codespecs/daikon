@@ -196,8 +196,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @param x the greater value
    * @param goal the lesser value
-   * @return Invariant.PROBABILITY_JUSTIFIED if x&ge;goal, Invariant.PROBABILITY_UNJUSTIFIED if
-   *     x&le;1, other values otherwise
+   * @return if x&ge;goal: invariant.PROBABILITY_JUSTIFIED; if x&le;1:
+   *     Invariant.PROBABILITY_UNJUSTIFIED; otherwise: other values
    */
   public static final double prob_is_ge(double x, double goal) {
     if (x >= goal) {
@@ -326,8 +326,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public static final int min_mod_non_missing_samples = 5;
 
   /**
-   * @return true if the invariant has enough samples to have its computed constants well-formed. Is
-   *     overridden in classes like LinearBinary/Ternary and Upper/LowerBound.
+   * Returns true if the invariant has enough samples to have its computed constants well-formed. Is
+   * overridden in classes like LinearBinary/Ternary and Upper/LowerBound.
+   *
+   * @return true if the invariant has enough samples to have its computed constants well-formed
    */
   public boolean enoughSamples(@GuardSatisfied @NonPrototype Invariant this) {
     return true;
@@ -804,9 +806,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       @GuardSatisfied @NonPrototype Invariant this, OutputFormat format);
 
   /**
-   * @return conjuction of mapping the same function of our expresssions's VarInfos, in general.
-   *     Subclasses may override if they are able to handle generally-inexpressible properties in
-   *     special-case ways.
+   * Returns a conjuction of mapping the same function of our expresssions's VarInfos, in general.
+   * Subclasses may override if they are able to handle generally-inexpressible properties in
+   * special-case ways.
+   *
+   * @return conjuction of mapping the same function of our expresssions's VarInfos
    * @see VarInfo#isValidEscExpression
    */
   @Pure
@@ -823,6 +827,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
 
   /**
+   * Returns true if this Invariant can be properly formatted for the given output format.
+   *
    * @param format the expected output format
    * @return true if this Invariant can be properly formatted for the given output format
    */
@@ -857,9 +863,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
+   * Returns standard "format needs to be implemented" for the given requested format. Made public
+   * so cores can call it.
+   *
    * @param format the requested output format
-   * @return standard "format needs to be implemented" for the given requested format. Made public
-   *     so cores can call it.
+   * @return standard "format needs to be implemented" for the given requested format
    */
   public String format_unimplemented(
       @GuardSatisfied @NonPrototype Invariant this, OutputFormat format) {
@@ -874,11 +882,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
+   * Returns standard "too few samples for to have interesting invariant" for the requested format.
+   * For machine-readable formats, this is just "true". An optional string argument, if supplied, is
+   * a human-readable description of the invariant in its uninformative state, which will be added
+   * to the message.
+   *
    * @param format the requested output format
-   * @return standard "too few samples for to have interesting invariant" for the requested format.
-   *     For machine-readable formats, this is just "true". An optional string argument, if
-   *     supplied, is a human-readable description of the invariant in its uninformative state,
-   *     which will be added to the message.
+   * @return standard "too few samples for to have interesting invariant" for the requested format
    */
   public String format_too_few_samples(
       @GuardSatisfied @NonPrototype Invariant this, OutputFormat format, @Nullable String attempt) {
@@ -1111,13 +1121,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
+   * Returns true iff the two invariants represent the same mathematical formula. Does not consider
+   * the context such as variable names, confidences, sample counts, value counts, or related
+   * quantities. As a rule of thumb, if two invariants format the same, this method returns true.
+   * Furthermore, in many cases, if an invariant does not involve computed constants (as "x&gt;c"
+   * and "y=ax+b" do for constants a, b, and c), then this method vacuously returns true.
+   *
    * @param other the invariant to compare to this one
    * @return true iff the two invariants represent the same mathematical formula. Does not consider
-   *     the context such as variable names, confidences, sample counts, value counts, or related
-   *     quantities. As a rule of thumb, if two invariants format the same, this method returns
-   *     true. Furthermore, in many cases, if an invariant does not involve computed constants (as
-   *     "x&gt;c" and "y=ax+b" do for constants a, b, and c), then this method vacuously returns
-   *     true.
    * @exception RuntimeException if other.getClass() != this.getClass()
    */
   public abstract boolean isSameFormula(@Prototype Invariant this, Invariant other);
@@ -1136,9 +1147,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
+   * Returns true iff the argument is the "same" invariant as this. Same, in this case, means a
+   * matching type, formula, and variable names.
+   *
    * @param inv2 the other invariant to compare to this one
-   * @return true iff the argument is the "same" invariant as this. Same, in this case, means a
-   *     matching type, formula, and variable names.
+   * @return true iff the argument is the "same" invariant as this
    */
   @Pure
   public boolean isSameInvariant(@NonPrototype Invariant this, Invariant inv2) {
@@ -1175,11 +1188,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
+   * Returns true iff the two invariants represent mutually exclusive mathematical formulas -- that
+   * is, if one of them is true, then the other must be false. This method does not consider the
+   * context such as variable names, confidences, sample counts, value counts, or related
+   * quantities.
+   *
    * @param other the other invariant to compare to this one
-   * @return true iff the two invariants represent mutually exclusive mathematical formulas -- that
-   *     is, if one of them is true, then the other must be false. This method does not consider the
-   *     context such as variable names, confidences, sample counts, value counts, or related
-   *     quantities.
+   * @return true iff the two invariants represent mutually exclusive mathematical formulas
    */
   @Pure
   public boolean isExclusiveFormula(@NonPrototype Invariant this, Invariant other) {
@@ -1501,7 +1516,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     }
   }
 
-  /** @return true if this invariant is only over prestate variables */
+  /**
+   * Returns true if this invariant is only over prestate variables.
+   *
+   * @return true if this invariant is only over prestate variables
+   */
   @Pure
   public boolean isAllPrestate(@NonPrototype Invariant this) {
     return ppt.allPrestate();
@@ -2115,7 +2134,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return chance_conf > Invariant.dkconfig_confidence_limit;
   }
 
-  /** @exception RuntimeException if representation invariant on this is broken */
+  /**
+   * Throws an exception if this object is invalid.
+   *
+   * @exception RuntimeException if representation invariant on this is broken
+   */
   public void checkRep() {
     // very partial initial implementation
     for (VarInfo vi : ppt.var_infos) {

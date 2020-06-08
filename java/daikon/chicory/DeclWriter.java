@@ -6,8 +6,9 @@ import daikon.PptTopLevel.PptType;
 import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.PrintStream;
 import java.lang.reflect.Member;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +34,7 @@ public class DeclWriter extends DaikonWriter {
   /** Header string before each new method entry or exit point. */
   public static final String declareHeader = "DECLARE";
 
-  public static boolean debug = false;
+  boolean debug = false;
 
   // If the --comparability-file option is active, there might be
   // variables for which DynComp saw no interactions and did not
@@ -76,7 +77,7 @@ public class DeclWriter extends DaikonWriter {
    */
   public void printHeaderInfo(String className) {
     outFile.println("// Declarations for " + className);
-    outFile.println("// Declarations written " + new Date());
+    outFile.println("// Declarations written " + LocalDateTime.now(ZoneId.systemDefault()));
     outFile.println();
 
     // Determine comparability string

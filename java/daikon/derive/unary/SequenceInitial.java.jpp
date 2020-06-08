@@ -60,7 +60,7 @@ public final class CLASSNAME extends UnaryDerivation {
   /** Array length required for the subscript to be meaningful:  (i.e., 1 or 2) */
   final int minLength;
 
-  public CLASSNAME(VarInfo vi, int index) {
+  CLASSNAME(VarInfo vi, int index) {
     super(vi);
     this.index = index;
     if (index < 0) {

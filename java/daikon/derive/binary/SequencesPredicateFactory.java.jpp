@@ -47,7 +47,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
       debug.fine("Trying to instantiate " + var1.name() + " and " + var2.name());
     }
 
-    if (!(var1.rep_type.isArray()) || !(var2.rep_type.isArray())) {
+    if (!var1.rep_type.isArray() || !var2.rep_type.isArray()) {
       return null;
     }
 
@@ -57,7 +57,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
     }
 
     if (SEQUENCESPREDICATE.dkconfig_boolOnly) {
-      if (!(var2.file_rep_type == ProglangType.BOOLEAN_ARRAY)) {
+      if (var2.file_rep_type != ProglangType.BOOLEAN_ARRAY) {
         return null;
       }
     }

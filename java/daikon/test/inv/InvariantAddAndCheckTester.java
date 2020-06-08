@@ -2,6 +2,7 @@ package daikon.test.inv;
 
 import static daikon.inv.Invariant.asInvClass;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertNotNull;
 
 import daikon.*;
 import daikon.config.Configuration;
@@ -82,12 +83,6 @@ import typequals.prototype.qual.Prototype;
  */
 @SuppressWarnings("nullness") // test code
 public class InvariantAddAndCheckTester extends TestCase {
-
-  /**
-   * Maximum file size that can currently be examined by the program. It is arbitrary, but a length
-   * must be supplied to LineNumberReader.mark().
-   */
-  private static final int MAX_FILE_SIZE = 262144;
 
   /** Indicates a string that when it starts a line signifies that the line is a comment. */
   public static final String COMMENT_STARTER_STRING = "#";
@@ -399,9 +394,11 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static final String argDivider = ";";
 
     /**
-     * @return string containing error messages for any failed cases. In the case that there are no
-     *     failed cases, the empty string is returned. In the case where commands is empty (there
-     *     are no more test cases and the end of the file has been reached), null is returned.
+     * Returns a string containing error messages for any failed cases. Returns the empty string if
+     * there are no failed cases. Returns null if commands is empty (there are no more test cases
+     * and the end of the file has been reached).
+     *
+     * @return a string containing error messages for any failed cases
      */
     public static @Nullable String runTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, false);
@@ -426,6 +423,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns a String containing the proper add and check commands for this input lines of this
+     * test case.
+     *
      * @return a String containing the proper add and check commands for this input lines of this
      *     test case
      */
@@ -501,7 +501,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       checkModified = getCheckModified(invariantToTest.getClass());
       outputProducer = getOutputProducer(invariantToTest.getClass());
 
-      assert getArity(invariantToTest.getClass()) == types.length;
+      assertEquals(types.length, getArity(invariantToTest.getClass()));
 
       if (generatingCommands) {
         results.append(typeString + lineSep);
@@ -532,7 +532,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Object[] params = getParams(tokens);
       InvariantStatus goalStatus = parseStatus(tokens.nextToken().trim());
       tokens.nextToken(); // executed for side effect
-      assert !tokens.hasMoreTokens();
+      assertFalse(tokens.hasMoreTokens());
       InvariantStatus resultStatus;
       if (isCheckCommand(command)) {
         resultStatus = getCheckStatus(params);
@@ -570,7 +570,7 @@ public class InvariantAddAndCheckTester extends TestCase {
                 + types.length);
       }
       Object[] params = getParams(tokens);
-      assert !tokens.hasMoreTokens();
+      assertFalse(tokens.hasMoreTokens());
       InvariantStatus goalStatus;
       if (isCheckCommand(command)) {
         goalStatus = getCheckStatus(params);
@@ -590,6 +590,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns an array of the arguments to be passed into check_modified or add_modified produced
+     * from tokens.
+     *
      * @return an array of the arguments to be passed into check_modified or add_modified produced
      *     from tokens
      */
@@ -604,6 +607,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns the InvariantStatus produced by invoking invariantToTest's add_modified method on the
+     * arguments represented by params.
+     *
      * @return the InvariantStatus produced by invoking invariantToTest's add_modified method on the
      *     arguments represented by params
      */
@@ -616,6 +622,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns the InvariantStatus produced by invoking invariantToTest's check_modified method on
+     * the arguments represented by params.
+     *
      * @return the InvariantStatus produced by invoking invariantToTest's check_modified method on
      *     the arguments represented by params
      */
@@ -628,8 +637,10 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return a String representation of the invariantToTest. This String is produced by invoking
-     *     the invariant's format_using with method with the argument {@code OutputFormat.Daikon}.
+     * Returns a String representation of the invariantToTest. This String is produced by invoking
+     * the invariant's format_using with method with the argument {@code OutputFormat.Daikon}.
+     *
+     * @return a String representation of the invariantToTest
      */
     private static String getInvariantFormat() {
       try {
@@ -639,7 +650,12 @@ public class InvariantAddAndCheckTester extends TestCase {
       }
     }
 
-    /** @return an InvariantStatus that the string status parses to */
+    /**
+     * Returns an InvariantStatus that the string status parses to.
+     *
+     * @param status the string representation of an InvariantStatus
+     * @return an InvariantStatus that the string status parses to
+     */
     private static InvariantStatus parseStatus(String status) {
       status = status.trim();
       if (status.equals("no_change")) {
@@ -695,6 +711,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
+     * Returns the method of invariant named by theClass that produces a String representation of
+     * the invariant.
+     *
      * @return the method of invariant named by theClass that produces a String representation of
      *     the invariant
      */
@@ -790,7 +809,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a VarInfo object that described the type
      */
     private static VarInfo getVarInfo(ProglangType type, int i) {
-      assert type != null : "Unexpected null variable type passed to getVarInfo";
+      assertNotNull(type);
 
       String arrayModifier = "";
 
@@ -872,7 +891,7 @@ public class InvariantAddAndCheckTester extends TestCase {
           return null;
         }
 
-        assert result[i] != null : "ProglangType unexpectedly parsed to null in getTypes(String)";
+        assertNotNull(result[i]);
       }
 
       return result;
@@ -888,16 +907,16 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static PptSlice createSlice(VarInfo[] vars, PptTopLevel ppt) {
       if (vars.length == 1) {
-        assert vars[0] != null;
+        assertNotNull(vars[0]);
         return new PptSlice1(ppt, vars);
       } else if (vars.length == 2) {
-        assert vars[0] != null;
-        assert vars[1] != null;
+        assertNotNull(vars[0]);
+        assertNotNull(vars[1]);
         return new PptSlice2(ppt, vars);
       } else if (vars.length == 3) {
-        assert vars[0] != null;
-        assert vars[1] != null;
-        assert vars[2] != null;
+        assertNotNull(vars[0]);
+        assertNotNull(vars[1]);
+        assertNotNull(vars[2]);
         return new PptSlice3(ppt, vars);
       } else {
         throw new RuntimeException(

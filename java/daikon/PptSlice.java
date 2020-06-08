@@ -102,6 +102,8 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
+   * Returns true if any of our variables is named NAME, or is derived from a variable named NAME.
+   *
    * @return true if any of our variables is named NAME, or is derived from a variable named NAME
    */
   // Only called right now from tools/ExtractConsequent
@@ -114,7 +116,11 @@ public abstract class PptSlice extends Ppt {
     return false;
   }
 
-  /** @return true if all of this slice's variables are orig() variables. */
+  /**
+   * Returns true if all of this slice's variables are orig() variables.
+   *
+   * @return true if all of this slice's variables are orig() variables
+   */
   public boolean allPrestate() {
     for (VarInfo vi : var_infos) {
       if (!vi.isPrestateDerived()) {
@@ -181,24 +187,6 @@ public abstract class PptSlice extends Ppt {
         NIS.falsified(inv);
       }
     }
-  }
-
-  /**
-   * Remove repeated entries in a permutation. The repeats are a consequence of equality
-   * optimization: a VarInfo may be a destination more than once due to equality splitting. The fix
-   * is to, for each repeat, increment the value. So 0, 0, 2 becomes 0, 1, 2.
-   */
-  private void fixPermutation(int[] permutation) {
-    for (int i = 0; i < permutation.length; i++) {
-      int count = 0;
-      for (int j = 0; j < permutation.length; j++) {
-        if (permutation[i] == permutation[j]) {
-          permutation[j] += count;
-          count++;
-        }
-      }
-    }
-    assert ArraysPlume.fnIsPermutation(permutation);
   }
 
   /** Return an approximation of the number of samples seen on this slice. */

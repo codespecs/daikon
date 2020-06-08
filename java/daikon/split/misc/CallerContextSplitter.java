@@ -36,8 +36,7 @@ public final class CallerContextSplitter extends Splitter {
   private final String condition;
 
   /** Create a new instantiated CallerContextSplitter. */
-  protected CallerContextSplitter(
-      @UnknownInitialization(Ppt.class) Ppt ppt, long[] ids, String condition) {
+  CallerContextSplitter(@UnknownInitialization(Ppt.class) Ppt ppt, long[] ids, String condition) {
     caller_varinfo = ppt.find_var_by_name(CALLER_INDICATOR_NAME_STRING);
     this.ids = ids;
     this.condition = condition;

@@ -28,9 +28,6 @@ public class DTraceWriter extends DaikonWriter {
   //          - checkForVarRecursion: recursive check on on argument
   //        - traceClassVars: prints fields in a class
 
-  /** turns off multi-dimensional array printing */
-  private static final boolean NoMultiDim = true;
-
   /** instance of a nonsensical value */
   private static NonsensicalObject nonsenseValue = NonsensicalObject.getInstance();
   /** instance of a nonsensical list */
@@ -419,12 +416,6 @@ public class DTraceWriter extends DaikonWriter {
     }
 
     return arrList;
-  }
-
-  // prints nonsensical and corresponding "modified" integer
-  private void printNonsensical() {
-    outFile.println("nonsensical");
-    outFile.println("2");
   }
 
   /**

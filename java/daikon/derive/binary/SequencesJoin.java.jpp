@@ -70,7 +70,7 @@ public final class CLASSNAME extends BinaryDerivation {
    * @param vi1 the first of the two variables this is based on
    * @param vi2 the second of the two variables this is based on
    */
-  public CLASSNAME(VarInfo vi1, VarInfo vi2) {
+  CLASSNAME(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 

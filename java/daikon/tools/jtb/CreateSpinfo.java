@@ -192,12 +192,12 @@ public class CreateSpinfo {
 
   /** Remove redundant and trivial conditions from conditionMap. Side-effects conditionMap. */
   private static void filterConditions(Map<String, List<String>> conditionMap) {
-    for (String key : conditionMap.keySet()) {
-      List<String> conditions = conditionMap.get(key);
+    for (Map.Entry<String, List<String>> entry : conditionMap.entrySet()) {
+      List<String> conditions = entry.getValue();
       conditions = CollectionsPlume.removeDuplicates(conditions);
       conditions.remove("true");
       conditions.remove("false");
-      conditionMap.put(key, conditions);
+      entry.setValue(conditions);
     }
   }
 

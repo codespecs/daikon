@@ -25,8 +25,14 @@ public abstract class TernaryDerivation extends Derivation {
   /** Original variable 3. */
   VarInfo base3;
 
-  /** Create a new TernaryDerivation from three varinfos. */
-  public TernaryDerivation(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
+  /**
+   * Create a new TernaryDerivation from three varinfos.
+   *
+   * @param vi1 original variable 1
+   * @param vi2 original variable 2
+   * @param vi3 original variable 3
+   */
+  protected TernaryDerivation(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
     base1 = vi1;
     base2 = vi2;
     base3 = vi3;

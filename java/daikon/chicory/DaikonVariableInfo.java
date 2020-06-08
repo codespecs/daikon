@@ -89,9 +89,6 @@ public abstract class DaikonVariableInfo
 
   public static final String class_suffix_relative_name = class_suffix.substring(1);
 
-  /** Determines whether or not synthetic variables should be ignored. */
-  private static boolean skip_synthetic = true;
-
   /**
    * The printed type that will appear in the .decls declaration. May include aux information at the
    * end, such as isParamString.
@@ -138,7 +135,7 @@ public abstract class DaikonVariableInfo
    *
    * @param theName the name of the variable
    */
-  public DaikonVariableInfo(String theName, String typeName, String repTypeName) {
+  protected DaikonVariableInfo(String theName, String typeName, String repTypeName) {
     this(theName, typeName, repTypeName, false);
   }
 
@@ -148,7 +145,7 @@ public abstract class DaikonVariableInfo
    * @param theName the variable's name
    * @param arr true iff the variable is an array
    */
-  public DaikonVariableInfo(String theName, String typeName, String repTypeName, boolean arr) {
+  protected DaikonVariableInfo(String theName, String typeName, String repTypeName, boolean arr) {
     // Intern the names because there will be many of the
     // same variable names at different program points within
     // the same class.

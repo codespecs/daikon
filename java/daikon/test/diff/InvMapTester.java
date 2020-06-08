@@ -10,7 +10,6 @@ import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
-@SuppressWarnings("interning") // use of == in test code
 public class InvMapTester extends TestCase {
 
   private @MonotonicNonNull InvMap map; // initialized by setUp()
@@ -45,15 +44,15 @@ public class InvMapTester extends TestCase {
 
     // Test the keys
     Iterator<PptTopLevel> i = map.pptIterator();
-    assert pptA == i.next();
-    assert pptB == i.next();
-    assert pptC == i.next();
-    assert !i.hasNext();
+    assertSame(i.next(), pptA);
+    assertSame(i.next(), pptB);
+    assertSame(i.next(), pptC);
+    assertFalse(i.hasNext());
 
     // Test the values
-    assert invsA == map.get(pptA);
-    assert invsB == map.get(pptB);
-    assert invsC == map.get(pptC);
+    assertSame(map.get(pptA), invsA);
+    assertSame(map.get(pptB), invsB);
+    assertSame(map.get(pptC), invsC);
   }
 
   @RequiresNonNull("map")
@@ -65,14 +64,14 @@ public class InvMapTester extends TestCase {
 
     // Test the keys
     Iterator<PptTopLevel> i = map.pptIterator();
-    assert pptC == i.next();
-    assert pptA == i.next();
-    assert pptB == i.next();
-    assert !i.hasNext();
+    assertSame(i.next(), pptC);
+    assertSame(i.next(), pptA);
+    assertSame(i.next(), pptB);
+    assertFalse(i.hasNext());
 
     // Test the values
-    assert invsA == map.get(pptA);
-    assert invsB == map.get(pptB);
-    assert invsC == map.get(pptC);
+    assertSame(map.get(pptA), invsA);
+    assertSame(map.get(pptB), invsB);
+    assertSame(map.get(pptC), invsC);
   }
 }

@@ -24,19 +24,18 @@ public class ProglangTypeTest extends TestCase {
       new ArraysPlume.ComparableArrayComparatorLexical<String>();
 
   // Runtime type of first argument is long[]
-  boolean longarrcomp(Object a, long[] b) {
-    return longarrcomparator.compare((long[]) a, b) == 0;
+  void longarrEquals(Object a, long[] b) {
+    assertEquals(0, longarrcomparator.compare((long[]) a, b));
   }
 
   // Runtime type of first (and second) argument is Comparable[]
-  boolean comparrcomp(Object a, Object[] b) {
+  void comparrEquals(Object a, Object[] b) {
     String[] a1 = (String[]) a;
     String[] b1 = (String[]) b;
-    boolean result = comparrcomparator.compare(a1, b1) == 0;
-    if (!result) {
-      System.out.println("Arrays differ: " + Arrays.toString(a1) + ", " + Arrays.toString(b));
-    }
-    return result;
+    assertEquals(
+        "Arrays differ: " + Arrays.toString(a1) + ", " + Arrays.toString(b),
+        0,
+        comparrcomparator.compare(a1, b1));
   }
 
   // a helper for parse_value
@@ -47,8 +46,10 @@ public class ProglangTypeTest extends TestCase {
   // a helper for test_parse_value
   private void test_parse_value_helper(ProglangType pt, String s, Object value) {
     Object result = parse_value_helper(pt, s);
-    assert (result == null ? value == null : result.equals(value))
-        : String.format("test_parse_value_helper(%s, %s, %s)", pt, s, value);
+    assertEquals(
+        String.format("test_parse_value_helper(%s, %s, %s) => %s", pt, s, value, result),
+        value,
+        result);
   }
 
   public void test_parse_value() {
@@ -65,21 +66,20 @@ public class ProglangTypeTest extends TestCase {
     test_parse_value_helper(pstring, "null", null);
 
     ProglangType pinta = ProglangType.INT_ARRAY;
-    assert longarrcomp(parse_value_helper(pinta, "[]"), new long[] {});
-    assert longarrcomp(parse_value_helper(pinta, "[1]"), new long[] {1});
-    assert longarrcomp(parse_value_helper(pinta, "[-2]"), new long[] {-2});
-    assert longarrcomp(parse_value_helper(pinta, "[1 2 3]"), new long[] {1, 2, 3});
+    longarrEquals(parse_value_helper(pinta, "[]"), new long[] {});
+    longarrEquals(parse_value_helper(pinta, "[1]"), new long[] {1});
+    longarrEquals(parse_value_helper(pinta, "[-2]"), new long[] {-2});
+    longarrEquals(parse_value_helper(pinta, "[1 2 3]"), new long[] {1, 2, 3});
 
     ProglangType pstringa = ProglangType.STRING_ARRAY;
-    assert comparrcomp(parse_value_helper(pstringa, "[]"), new String[] {});
-    assert comparrcomp(parse_value_helper(pstringa, "[\"foo\"]"), new String[] {"foo"});
-    assert comparrcomp(parse_value_helper(pstringa, "[\"f\\\"oo\"]"), new String[] {"f\"oo"});
-    assert comparrcomp(parse_value_helper(pstringa, "[\"f\\noo\"]"), new String[] {"f\noo"});
-    assert comparrcomp(
-        parse_value_helper(pstringa, "[\"foo\" \"bar\"]"), new String[] {"foo", "bar"});
-    assert comparrcomp(
+    comparrEquals(parse_value_helper(pstringa, "[]"), new String[] {});
+    comparrEquals(parse_value_helper(pstringa, "[\"foo\"]"), new String[] {"foo"});
+    comparrEquals(parse_value_helper(pstringa, "[\"f\\\"oo\"]"), new String[] {"f\"oo"});
+    comparrEquals(parse_value_helper(pstringa, "[\"f\\noo\"]"), new String[] {"f\noo"});
+    comparrEquals(parse_value_helper(pstringa, "[\"foo\" \"bar\"]"), new String[] {"foo", "bar"});
+    comparrEquals(
         parse_value_helper(pstringa, "[\"foo bar\" \"baz\"]"), new String[] {"foo bar", "baz"});
-    assert comparrcomp(
+    comparrEquals(
         parse_value_helper(pstringa, "[\"foo\" null \"baz\"]"), new String[] {"foo", null, "baz"});
   }
 }

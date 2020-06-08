@@ -107,7 +107,7 @@
 
     public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY1((FACTORY_INVCLASS) arg, supTemplate, this));
+      return FACTORY1((FACTORY_INVCLASS) arg, supTemplate, this);
     }
   }
 
@@ -133,7 +133,7 @@
 
     public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY2((FACTORY_INVCLASS) arg, supTemplate, this));
+      return FACTORY2((FACTORY_INVCLASS) arg, supTemplate, this);
     }
   }
 #endif
@@ -160,7 +160,7 @@
 
     public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY3((FACTORY_INVCLASS) arg, supTemplate, this));
+      return FACTORY3((FACTORY_INVCLASS) arg, supTemplate, this);
     }
   }
 #endif
@@ -187,7 +187,7 @@
 
     public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY4((FACTORY_INVCLASS) arg, supTemplate, this));
+      return FACTORY4((FACTORY_INVCLASS) arg, supTemplate, this);
     }
   }
 #endif
@@ -214,7 +214,7 @@
 
     public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY5((FACTORY_INVCLASS) arg, supTemplate, this));
+      return FACTORY5((FACTORY_INVCLASS) arg, supTemplate, this);
     }
   }
 #endif

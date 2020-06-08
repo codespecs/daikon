@@ -31,7 +31,7 @@
   #define CLASSNAME NumericFloat
   #define SUPERCLASS TwoFloat
   #define PRIMITIVE double
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define VALUE_SET ValueSet.ValueSetFloatArray
   #define ONEOF OneOfFloat
   #define ONEOF_ZERO InvDef.elts_zero_float
@@ -101,7 +101,7 @@
   #define CLASSNAME PairwiseNumericFloat
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
-  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
+  #define EQUALS(a,b) Global.fuzzy.eq(a, b)
   #define VALUE_SET ValueSet.ValueSetFloatArray
   #define ONEOF EltOneOfFloat
   #define ONEOF_ZERO InvDef.elts_zero_float
@@ -245,10 +245,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
                              get_format_str(format)));
     }
     String fmt_str = get_format_str(format);
-    String v1 = null;
-    String v2 = null;
 
     #if defined(SEQ)
+    String v1;
+    String v2;
         if (format.isJavaFamily()) {
           #if defined(STRING)
             return format_unimplemented(format);
@@ -269,9 +269,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
               return format_unimplemented(format);
             }
           #endif
-        }
-
-        if (format == OutputFormat.CSHARPCONTRACT) {
+        } else if (format == OutputFormat.CSHARPCONTRACT) {
           #if defined(STRING)
             fmt_str = UtilPlume.replaceString(fmt_str, "%var1%", var1().csharp_name());
             fmt_str = UtilPlume.replaceString(fmt_str, "%var2%", var2().csharp_name());
@@ -308,18 +306,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
         fmt_str = form[0] + " " + fmt_str + " " + form[3];
         v1 = form[1];
         v2 = form[2];
-      } else if (format == OutputFormat.DAIKON) {
-        fmt_str += " (elementwise)";
-      }
-      if (v1 == null) {
+      } else {
         v1 = var1().name_using(format);
-      }
-      if (v2 == null) {
         v2 = var2().name_using(format);
+        if (format == OutputFormat.DAIKON) {
+          fmt_str += " (elementwise)";
+        }
       }
     #else
-      v1 = var1().name_using(format);
-      v2 = var2().name_using(format);
+    String v1 = var1().name_using(format);
+    String v2 = var2().name_using(format);
     #endif
 
     // Note that we do not use String.replaceAll here, because that's
@@ -329,10 +325,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
     fmt_str = UtilPlume.replaceString(fmt_str, "%var1%", v1);
     fmt_str = UtilPlume.replaceString(fmt_str, "%var2%", v2);
 
-    if (false && (format == OutputFormat.DAIKON)) {
-      fmt_str = "[" + getClass() + "]" + fmt_str + " ("
-             + var1().get_value_info() + ", " + var2().get_value_info() +  ")";
-    }
+    // if (false && (format == OutputFormat.DAIKON)) {
+    //   fmt_str = "[" + getClass() + "]" + fmt_str + " ("
+    //          + var1().get_value_info() + ", " + var2().get_value_info() +  ")";
+    // }
     return fmt_str;
   }
 
@@ -757,7 +753,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
-      return (EQUALS(0, (x % y)));
+      return EQUALS(0, (x % y));
     }
 
     #if defined(SEQ)
@@ -879,11 +875,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
           //     While this means that both x % y == 0 and y % x == 0,
           //     only one of these invariants will still be true at this
           //     time, and only that one will be falsified by this test.
-          if ((!linv.is_false())
-             && Global.fuzzy.eq(linv.core.c, 0)
-             && linv.core.b * linv.core.a < 0
-             && (Global.fuzzy.eq(linv.core.a * linv.core.a, 1)
-              || Global.fuzzy.eq(linv.core.b * linv.core.b, 1))) {
+          if (!linv.is_false()
+              && Global.fuzzy.eq(linv.core.c, 0)
+              && linv.core.b * linv.core.a < 0
+              && (Global.fuzzy.eq(linv.core.a * linv.core.a, 1)
+                  || Global.fuzzy.eq(linv.core.b * linv.core.b, 1))) {
             return new DiscardInfo(this, DiscardCode.obvious,
                                    "Linear binary invariant implies divides");
           }
@@ -960,7 +956,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Check to see if x == y squared. */
     @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
-      return (EQUALS(x, y*y));
+      return EQUALS(x, y*y);
     }
 
     // Note there are no NI Suppressions for Square.  Two obvious
@@ -1336,10 +1332,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return suppressions;
     }
 
+    #if !defined(SEQ)
     /** definition of this invariant (the suppressee) (unswapped) */
     private static NISuppressee suppressee = new NISuppressee(BitwiseAndZero.class, 2);
 
-    #if !defined(SEQ)
     private static NISuppressionSet suppressions =
       new NISuppressionSet(
           new NISuppression[] {

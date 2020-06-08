@@ -286,8 +286,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         Instruction inst = ih.getInstruction();
 
         // Get the translation for this instruction (if any)
-        InstructionList new_il =
-            xform_clinit(cg, cg.getConstantPool(), fullClassName, inst, context);
+        InstructionList new_il = xform_clinit(cg.getConstantPool(), fullClassName, inst, context);
 
         // Remember the next instruction to process
         InstructionHandle next_ih = ih.getNext();
@@ -316,11 +315,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   // called by addInvokeToClinit to add in a hook at return opcodes
   private @Nullable InstructionList xform_clinit(
-      ClassGen cg,
-      ConstantPoolGen cp,
-      String fullClassName,
-      Instruction inst,
-      MethodContext context) {
+      ConstantPoolGen cp, String fullClassName, Instruction inst, MethodContext context) {
 
     switch (inst.getOpcode()) {
       case Const.ARETURN:
@@ -329,7 +324,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
       case Const.IRETURN:
       case Const.LRETURN:
       case Const.RETURN:
-        return call_initNotify(cg, cp, fullClassName, context.ifact);
+        return call_initNotify(cp, fullClassName, context.ifact);
 
       default:
         return null;
@@ -341,7 +336,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     InstructionFactory factory = new InstructionFactory(cg);
 
     InstructionList il = new InstructionList();
-    il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName, factory));
+    il.append(call_initNotify(cg.getConstantPool(), fullClassName, factory));
     il.append(InstructionFactory.createReturn(Type.VOID)); // need to return!
 
     MethodGen newMethGen =
@@ -366,7 +361,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   // created the InstructionList to insert for adding the <clinit> hook
   private InstructionList call_initNotify(
-      ClassGen cg, ConstantPoolGen cp, String fullClassName, InstructionFactory factory) {
+      ConstantPoolGen cp, String fullClassName, InstructionFactory factory) {
 
     InstructionList invokeList = new InstructionList();
 
@@ -527,8 +522,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
             // If this is a return instruction, insert method exit instrumentation
             InstructionList new_il =
-                generate_return_instrumentation(
-                    fullClassName, inst, context, shouldIncIter, exitIter);
+                generate_return_instrumentation(inst, context, shouldIncIter, exitIter);
 
             // Remember the next instruction to process
             InstructionHandle next_ih = ih.getNext();
@@ -616,7 +610,6 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
    * immediately before the return.
    */
   private @Nullable InstructionList generate_return_instrumentation(
-      String fullClassName,
       Instruction inst,
       MethodContext c,
       Iterator<Boolean> shouldIncIter,

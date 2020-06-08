@@ -28,25 +28,25 @@ public final class Configuration implements Serializable {
 
   // ============================== STATIC COMPONENT ==============================
 
-  protected static final String PREFIX = "dkconfig_";
+  static final String PREFIX = "dkconfig_";
 
   private static final Class<String> STRING_CLASS;
-  private static final Class<Object> OBJECT_CLASS;
 
   static {
     try {
       @SuppressWarnings("unchecked")
       Class<String> STRING_CLASS_tmp = (Class<String>) Class.forName("java.lang.String");
       STRING_CLASS = STRING_CLASS_tmp;
-      @SuppressWarnings("unchecked")
-      Class<Object> OBJECT_CLASS_tmp = (Class<Object>) Class.forName("java.lang.Object");
-      OBJECT_CLASS = OBJECT_CLASS_tmp;
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  /** @return singleton instance of this class */
+  /**
+   * Returns singleton instance of this class.
+   *
+   * @return singleton instance of this class
+   */
   public static Configuration getInstance() {
     return instance;
   }

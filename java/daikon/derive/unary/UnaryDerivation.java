@@ -17,7 +17,7 @@ public abstract class UnaryDerivation extends Derivation {
 
   public VarInfo base;
 
-  public UnaryDerivation(VarInfo vi) {
+  protected UnaryDerivation(VarInfo vi) {
     base = vi;
   }
 

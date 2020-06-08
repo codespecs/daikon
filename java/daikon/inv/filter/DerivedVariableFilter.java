@@ -28,6 +28,7 @@ public class DerivedVariableFilter extends InvariantFilter {
 
   public static @Nullable Pattern class_re = null;
 
+  @SuppressWarnings("StaticAssignmentInConstructor")
   public DerivedVariableFilter() {
     isOn = dkconfig_class_re != null;
     if (isOn) {

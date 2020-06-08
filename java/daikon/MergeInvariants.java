@@ -329,7 +329,7 @@ public final class MergeInvariants {
           assert ppt.splitters != null; // because ppt.has_splitters() = true
           setup_conditional_merge(ppt, child);
         } else {
-          PptRelation rel = PptRelation.newMergeChildRel(ppt, child);
+          PptRelation.newMergeChildRel(ppt, child);
         }
       }
 

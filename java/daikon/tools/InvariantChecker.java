@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -300,7 +299,7 @@ public class InvariantChecker {
     // Yoav: make sure we have unique invariants
     InvariantFilters fi = InvariantFilters.defaultFilters();
     // Set<String> allInvariantsStr = new HashSet<>();
-    Set<Invariant> allInvariants = new HashSet<>();
+    // Set<Invariant> allInvariants = new HashSet<>();
     for (PptTopLevel ppt : ppts.all_ppts()) {
       for (PptSlice slice : ppt.views_iterable()) {
         for (Invariant inv : slice.invs) {
@@ -322,7 +321,7 @@ public class InvariantChecker {
           //   throw new
           //     Daikon.UserError("Two invariants have the same ppt.name+inv.rep:"+n);
           // }
-          allInvariants.add(inv);
+          // allInvariants.add(inv);
           // allInvariantsStr.add(n);
         }
       }
@@ -459,13 +458,12 @@ public class InvariantChecker {
         return;
       }
 
-      // We should have received sample here before, or there is nothing
-      // to check.
+      // We should have received sample here before, or there is nothing to check.
       // Yoav added: It can be that the different dtrace and inv files have different program points
-      if (false && ppt.num_samples() <= 0) {
-        assert ppt.num_samples() > 0
-            : "ppt " + ppt.name + " has 0 samples and " + ppt.var_infos.length + " variables";
-      }
+      // if (false && ppt.num_samples() <= 0) {
+      //   assert ppt.num_samples() > 0
+      //       : "ppt " + ppt.name + " has 0 samples and " + ppt.var_infos.length + " variables";
+      // }
 
       // Loop through each slice
       slice_loop:
@@ -478,7 +476,6 @@ public class InvariantChecker {
         // If any variables are missing, skip this slice
         for (int j = 0; j < slice.var_infos.length; j++) {
           VarInfo v = slice.var_infos[j];
-          int mod = vt.getModified(v);
           if (v.isMissing(vt)) {
             if (debug_detail.isLoggable(Level.FINE)) {
               debug_detail.fine(": : Skipping slice, " + v.name() + " missing");
@@ -543,6 +540,7 @@ public class InvariantChecker {
     }
   }
 
+  @SuppressWarnings("UnusedMethod") // for debugging (which is currently commented out)
   private static String invariant2str(PptTopLevel ppt, Invariant inv) {
     return ppt.name + " == " + inv.repr() + inv.getClass() + inv.varNames() + ": " + inv.format();
   }

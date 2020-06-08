@@ -125,14 +125,20 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
+   * Returns true if the Splitter object exists for this SplitterObject, i.e. whether it
+   * successfully loaded.
+   *
    * @return true if the Splitter object exists for this SplitterObject, i.e. whether it
-   *     successfully loaded.
+   *     successfully loaded
    */
   public boolean splitterExists() {
     return exists;
   }
 
   /**
+   * Returns true if the {@code .class} file exists for the Splitter represented by this
+   * SplitterObject, false otherwise.
+   *
    * @return true if the {@code .class} file exists for the Splitter represented by this
    *     SplitterObject, false otherwise
    */
@@ -145,7 +151,9 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * @return the Splitter that this SplitterObject represents. Null if splitterExists() == false.
+   * Returns the Splitter that this SplitterObject represents, or null if splitterExists() == false.
+   *
+   * @return the Splitter that this SplitterObject represents, or null if splitterExists() == false
    */
   public @Nullable Splitter getSplitter() {
     return this.splitter;
@@ -173,12 +181,20 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.guid;
   }
 
-  /** @return the full source of the Splitter */
+  /**
+   * Returns the full source of the Splitter.
+   *
+   * @return the full source of the Splitter
+   */
   public String getFullSourcePath() {
     return (directory + className + ".java");
   }
 
-  /** @return the program point represented by this Splitter */
+  /**
+   * Returns the program point represented by this Splitter.
+   *
+   * @return the program point represented by this Splitter
+   */
   public String getPptName() {
     return this.pptName;
   }
@@ -189,7 +205,11 @@ public class SplitterObject implements Comparable<SplitterObject> {
     classFile = new File(directory + className + ".class");
   }
 
-  /** @return the className of the Splitter */
+  /**
+   * Returns the className of the Splitter.
+   *
+   * @return the className of the Splitter
+   */
   public @BinaryName String getClassName() {
     return this.className;
   }
@@ -202,7 +222,11 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.directory;
   }
 
-  /** @return the condition represented by the Splitter */
+  /**
+   * Returns the condition represented by the Splitter.
+   *
+   * @return the condition represented by the Splitter
+   */
   public String condition() {
     return this.condition;
   }

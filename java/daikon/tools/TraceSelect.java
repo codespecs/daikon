@@ -17,8 +17,6 @@ import org.plumelib.util.UtilPlume;
 
 public class TraceSelect {
 
-  private static final int DEFAULT_NUM = 10;
-
   public static boolean CLEAN = true;
   public static boolean INCLUDE_UNRETURNED = false;
   public static boolean DO_DIFFS = false;
@@ -235,13 +233,12 @@ public class TraceSelect {
   private static void invokeDaikon(String dtraceName) throws IOException {
 
     System.out.println("Created file: " + dtraceName);
-    String[] daikonArgs = {dtraceName, "-o", dtraceName + ".inv"};
 
     // this part adds on the rest of the decls files
-    ArrayList<String> al = new ArrayList<>();
-    al.add(dtraceName);
-    al.add("-o");
-    al.add(dtraceName + ".inv");
+    ArrayList<String> daikonArgsList = new ArrayList<>();
+    daikonArgsList.add(dtraceName);
+    daikonArgsList.add("-o");
+    daikonArgsList.add(dtraceName + ".inv");
 
     // find all the Daikon args except for the original
     // single dtrace file.
@@ -249,14 +246,11 @@ public class TraceSelect {
       if (argles[i].endsWith(".dtrace")) {
         continue;
       }
-      al.add(argles[i]);
+      daikonArgsList.add(argles[i]);
     }
 
-    // create an array to store the Strings in al
-    daikonArgs = new String[al.size()];
-    for (int i = 0; i < daikonArgs.length; i++) {
-      daikonArgs[i] = al.get(i);
-    }
+    // create an array to store the Strings in daikonArgsList
+    String[] daikonArgs = daikonArgsList.toArray(new String[daikonArgsList.size()]);
 
     // initializes daikon again or else an exception is thrown
     reinitializeDaikon();
@@ -269,21 +263,6 @@ public class TraceSelect {
 
   private static void reinitializeDaikon() {
     daikon.Daikon.inv_file = null;
-  }
-
-  /** Used when I used to select by probability, not absolute number. */
-  private static boolean myRand(String[] args) {
-    if (args.length >= 2) {
-      try {
-        double prob = Double.parseDouble(args[3]);
-        return Math.random() > prob;
-      } catch (Exception e) {
-
-        return (Math.random() > 0.900);
-      }
-    }
-    // Defaults to 10% chance of keeping
-    return (Math.random() > 0.900);
   }
 
   private static String calcOut(String strFileName) {

@@ -96,7 +96,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation 
    * @param left_closed true means the range starts at i; false means it starts at i+1
    * @param right_closed true means the range ends at j; false means it ends at j-1
    */
-  public SEQUENCESCALARARBITRARYSUBSEQUENCE(
+  SEQUENCESCALARARBITRARYSUBSEQUENCE(
       VarInfo vi1, VarInfo vi2, VarInfo vi3, boolean left_closed, boolean right_closed) {
     super(vi1, vi2, vi3);
     this.left_closed = left_closed;

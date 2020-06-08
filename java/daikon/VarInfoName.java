@@ -233,6 +233,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   protected abstract String esc_name_impl();
 
   /**
+   * Returns the string representation (interned) of this name, in the Simplify tool output format
+   * in the pre-state context.
+   *
    * @return the string representation (interned) of this name, in the Simplify tool output format
    *     in the pre-state context
    */
@@ -241,8 +244,13 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
+   * Returns the string representation (interned) of this name, in the Simplify tool output format,
+   * in the given pre/post-state context.
+   *
+   * @param prestate if true, return the variable in a prestate context; if false, return the
+   *     variable in a poststate context
    * @return the string representation (interned) of this name, in the Simplify tool output format,
-   *     in the given pre/post-state context.
+   *     in the given pre/post-state context
    */
   protected @Interned String simplify_name(boolean prestate) {
     int which = prestate ? 0 : 1;
@@ -373,10 +381,18 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns the name using only letters, numbers, and underscores. Cached and interned by {@link
    * #identifier_name()}.
+   *
+   * @return the name using only letters, numbers, and underscores
    */
   protected abstract String identifier_name_impl();
 
-  /** @return name of this in the specified format */
+  /**
+   * Returns name of this in the specified format.
+   *
+   * @param format the format in which to return this variable name
+   * @param vi the VarInfo for this variable name
+   * @return name of this in the specified format
+   */
   public String name_using(OutputFormat format, VarInfo vi) {
 
     if (format == OutputFormat.DAIKON) {
@@ -400,7 +416,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     throw new UnsupportedOperationException("Unknown format requested: " + format);
   }
 
-  /** @return the name, in a debugging format */
+  /**
+   * Returns the name, in a debugging format.
+   *
+   * @return the name, in a debugging format
+   */
   public String repr(@GuardSatisfied VarInfoName this) {
     // AAD: Used to be interned for space reasons, but removed during
     // profiling when it was determined that the interns are unique
@@ -446,26 +466,43 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   // ============================================================
   // Observers
 
-  /** @return true when this is "0", "-1", "1", etc. */
+  /**
+   * Returns true when this is "0", "-1", "1", etc.
+   *
+   * @return true when this is "0", "-1", "1", etc
+   */
   @Pure
   public boolean isLiteralConstant() {
     return false;
   }
 
-  /** @return the nodes of this, as given by an inorder traversal */
+  /**
+   * Returns the nodes of this, as given by an inorder traversal.
+   *
+   * @return the nodes of this, as given by an inorder traversal
+   */
   public Collection<VarInfoName> inOrderTraversal(@Interned VarInfoName this) {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
 
   /**
+   * Returns true iff the given node can be found in this. If the node has children, the whole
+   * subtree must match.
+   *
+   * @param node a variable name
    * @return true iff the given node can be found in this. If the node has children, the whole
-   *     subtree must match.
+   *     subtree must match
    */
   public boolean hasNode(VarInfoName node) {
     return inOrderTraversal().contains(node);
   }
 
-  /** @return true iff a node of the given type exists in this */
+  /**
+   * Returns true iff a node of the given type exists in this.
+   *
+   * @param type the type to search for
+   * @return true iff a node of the given type exists in this
+   */
   public boolean hasNodeOfType(Class<?> type) {
     for (VarInfoName vin : inOrderTraversal()) {
       if (type.equals(vin.getClass())) {
@@ -475,7 +512,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     return false;
   }
 
-  /** @return true iff a TypeOf node exists in this */
+  /**
+   * Returns true iff a TypeOf node exists in this.
+   *
+   * @return true iff a TypeOf node exists in this
+   */
   public boolean hasTypeOf() {
     return hasNodeOfType(VarInfoName.TypeOf.class);
   }
@@ -498,6 +539,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
+   * Returns true if the given node is in a prestate context within this tree.
+   *
    * @param node a member of this tree
    * @return true if the given node is in a prestate context within this tree
    */
@@ -505,13 +548,22 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     return new NodeFinder(this, node).inPre();
   }
 
-  /** @return true if every variable in the name is an orig(...) variable. */
+  /**
+   * Returns true if every variable in the name is an orig(...) variable.
+   *
+   * @return true if every variable in the name is an orig(...) variable
+   */
   @Pure
   public boolean isAllPrestate(@Interned VarInfoName this) {
     return new IsAllPrestateVisitor(this).result();
   }
 
-  /** @return true if this VarInfoName contains a simple variable whose name is NAME */
+  /**
+   * Returns true if this VarInfoName contains a simple variable whose name is NAME.
+   *
+   * @param name the name to search for in this VarInfoName
+   * @return true if this VarInfoName contains a simple variable whose name is NAME
+   */
   public boolean includesSimpleName(@Interned VarInfoName this, String name) {
     return new SimpleNamesVisitor(this).simples().contains(name);
   }
@@ -722,6 +774,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
+   * Returns true iff applySize will not throw an exception.
+   *
    * @return true iff applySize will not throw an exception
    * @see #applySize
    */
@@ -2668,7 +2722,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   public abstract static class BooleanAndVisitor extends AbstractVisitor<Boolean> {
     private boolean result;
 
-    public BooleanAndVisitor(VarInfoName name) {
+    protected BooleanAndVisitor(VarInfoName name) {
       result = (name.accept(this) != null);
     }
 
@@ -3062,12 +3116,18 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       root.accept(this);
     }
 
-    /** @see #simples() */
+    /**
+     * See {@link #simples()}.
+     *
+     * @see #simples()
+     */
     private Set<String> simples;
 
     /**
-     * @return collection of simple identifiers used in this expression, as Strings. (Used, for
-     *     instance, to check for conflict with a quantifier variable name).
+     * Returns collection of simple identifiers used in this expression, as Strings. (Used, for
+     * instance, to check for conflict with a quantifier variable name.)
+     *
+     * @return collection of simple identifiers used in this expression, as Strings
      */
     public Set<String> simples() {
       return Collections.unmodifiableSet(simples);
@@ -3127,12 +3187,18 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     // state and accessors
-    /** @see #unquants() */
+    /**
+     * See {@link #unquants()}.
+     *
+     * @see #unquants()
+     */
     private Set<VarInfoName> /*actually <Elements || Slice>*/ unquant;
 
     /**
-     * @return collection of the nodes under the root that need quantification. Each node represents
-     *     an array; in particular, the values are either of type Elements or Slice.
+     * Returns a collection of the nodes under the root that need quantification. Each node
+     * represents an array; in particular, the values are either of type Elements or Slice.
+     *
+     * @return the nodes under the root that need quantification
      */
     // Here are some inputs and the corresponding output sets:
     //  terms[index].elts[num]   ==> { }

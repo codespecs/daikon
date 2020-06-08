@@ -50,20 +50,16 @@ public class ModBitTrackerTest extends TestCase {
     int numvars = bitsets.length;
     int numsamples = bitsets[0].size();
 
-    assert mbt.num_vars() == numvars;
-    assert mbt.num_samples() == numsamples;
+    assertEquals(numvars, mbt.num_vars());
+    assertEquals(numsamples, mbt.num_samples());
 
     for (int i = 0; i < numvars; i++) {
-      assert bitsets[i].equals(mbt.get(i));
+      assertEquals(mbt.get(i), bitsets[i]);
     }
   }
 
   private int booleanToModBit(boolean b) {
     return (b ? ValueTuple.MODIFIED : ValueTuple.MISSING_NONSENSICAL);
-  }
-
-  private boolean modBitToBoolean(int mb) {
-    return (mb == ValueTuple.MODIFIED) || (mb == ValueTuple.UNMODIFIED);
   }
 
   private boolean randomModBoolean(int varno, int sampleno) {
@@ -109,7 +105,7 @@ public class ModBitTrackerTest extends TestCase {
     BitSet[] bitsets = makeBitSets(vars, samples, duplicate_factor);
     ModBitTracker mbt = makeModBitTracker(bitsets);
     checkModBitTracker(mbt, bitsets);
-    assert mbt.num_sets() == vars;
+    assertEquals(vars, mbt.num_sets());
   }
 
   public void testModBitTracker() {

@@ -42,39 +42,39 @@ public class ConsequentCVFSortComparatorTester extends TestCase {
 
     Comparator<Invariant> c = new ConsequentCVFSortComparator();
 
-    assert c.compare(A, A) == 0;
-    assert c.compare(A, B) < 0;
-    assert c.compare(A, C) < 0;
-    assert c.compare(A, D) < 0;
-    assert c.compare(A, A_B) < 0;
-    assert c.compare(A, A_C) < 0;
-    assert c.compare(A, B_C) < 0;
+    assertEquals(0, c.compare(A, A));
+    assertTrue(c.compare(A, B) < 0);
+    assertTrue(c.compare(A, C) < 0);
+    assertTrue(c.compare(A, D) < 0);
+    assertTrue(c.compare(A, A_B) < 0);
+    assertTrue(c.compare(A, A_C) < 0);
+    assertTrue(c.compare(A, B_C) < 0);
 
-    assert c.compare(B, B) == 0;
-    assert c.compare(B, C) < 0;
-    assert c.compare(B, D) < 0;
-    assert c.compare(B, A_B) == 0;
-    assert c.compare(B, A_C) < 0;
-    assert c.compare(B, B_C) < 0;
+    assertEquals(0, c.compare(B, B));
+    assertTrue(c.compare(B, C) < 0);
+    assertTrue(c.compare(B, D) < 0);
+    assertEquals(0, c.compare(B, A_B));
+    assertTrue(c.compare(B, A_C) < 0);
+    assertTrue(c.compare(B, B_C) < 0);
 
-    assert c.compare(C, C) == 0;
-    assert c.compare(C, D) < 0;
-    assert c.compare(C, A_B) > 0;
-    assert c.compare(C, A_C) == 0;
-    assert c.compare(C, B_C) == 0;
+    assertEquals(0, c.compare(C, C));
+    assertTrue(c.compare(C, D) < 0);
+    assertTrue(c.compare(C, A_B) > 0);
+    assertEquals(0, c.compare(C, A_C));
+    assertEquals(0, c.compare(C, B_C));
 
-    assert c.compare(D, D) == 0;
-    assert c.compare(D, A_B) > 0;
-    assert c.compare(D, A_C) > 0;
-    assert c.compare(D, B_C) > 0;
+    assertEquals(0, c.compare(D, D));
+    assertTrue(c.compare(D, A_B) > 0);
+    assertTrue(c.compare(D, A_C) > 0);
+    assertTrue(c.compare(D, B_C) > 0);
 
-    assert c.compare(A_B, A_B) == 0;
-    assert c.compare(A_B, A_C) < 0;
-    assert c.compare(A_B, B_C) < 0;
+    assertEquals(0, c.compare(A_B, A_B));
+    assertTrue(c.compare(A_B, A_C) < 0);
+    assertTrue(c.compare(A_B, B_C) < 0);
 
-    assert c.compare(A_C, A_C) == 0;
-    assert c.compare(A_C, B_C) < 0;
+    assertEquals(0, c.compare(A_C, A_C));
+    assertTrue(c.compare(A_C, B_C) < 0);
 
-    assert c.compare(B_C, B_C) == 0;
+    assertEquals(0, c.compare(B_C, B_C));
   }
 }

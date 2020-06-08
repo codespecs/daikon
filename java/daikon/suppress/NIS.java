@@ -579,11 +579,11 @@ public class NIS {
 
     // If there are no falsified invariants that are suppressors, there is nothing to do
     int false_cnt = 0;
-    int inv_cnt = 0;
     for (Iterator<Invariant> i = ppt.invariants_iterator(); i.hasNext(); ) {
       Invariant inv = i.next();
-      if (inv.is_false() && suppressor_map.containsKey(inv.getClass())) false_cnt++;
-      inv_cnt++;
+      if (inv.is_false() && suppressor_map.containsKey(inv.getClass())) {
+        false_cnt++;
+      }
     }
 
     // System.out.printf("Invariants for ppt %s: %d%n", ppt, inv_cnt);

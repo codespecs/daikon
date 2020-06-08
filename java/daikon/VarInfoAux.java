@@ -445,63 +445,99 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return setValue(key, Integer.toString(value));
   }
 
-  /** @see #NULL_TERMINATING */
+  /**
+   * See {@link #NULL_TERMINATING}.
+   *
+   * @see #NULL_TERMINATING
+   */
   @SuppressWarnings("keyfor") // NULL_TERMINATING is always a key
   @Pure
   public boolean nullTerminating() {
     return getFlag(NULL_TERMINATING);
   }
 
-  /** @see #IS_PARAM */
+  /**
+   * See {@link #IS_PARAM}.
+   *
+   * @see #IS_PARAM
+   */
   @SuppressWarnings("keyfor") // IS_PARAM is always a key
   @Pure
   public boolean isParam() {
     return getFlag(IS_PARAM);
   }
 
-  /** @see #PACKAGE_NAME */
+  /**
+   * See {@link #PACKAGE_NAME}.
+   *
+   * @see #PACKAGE_NAME
+   */
   @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
   @Pure
   public boolean packageName() {
     return getFlag(PACKAGE_NAME);
   }
 
-  /** @see #HAS_DUPLICATES */
+  /**
+   * See {@link #HAS_DUPLICATES}.
+   *
+   * @see #HAS_DUPLICATES
+   */
   @SuppressWarnings("keyfor") // HAS_DUPLICATES is always a key
   @Pure
   public boolean hasDuplicates() {
     return getFlag(HAS_DUPLICATES);
   }
 
-  /** @see #HAS_ORDER */
+  /**
+   * See {@link #HAS_ORDER}.
+   *
+   * @see #HAS_ORDER
+   */
   @SuppressWarnings("keyfor") // HAS_ORDER is always a key
   @Pure
   public boolean hasOrder() {
     return getFlag(HAS_ORDER);
   }
 
-  /** @see #HAS_SIZE */
+  /**
+   * See {@link #HAS_SIZE}.
+   *
+   * @see #HAS_SIZE
+   */
   @SuppressWarnings("keyfor") // HAS_SIZE is always a key
   @Pure
   public boolean hasSize() {
     return getFlag(HAS_SIZE);
   }
 
-  /** @see #HAS_NULL */
+  /**
+   * See {@link #HAS_NULL}.
+   *
+   * @see #HAS_NULL
+   */
   @SuppressWarnings("keyfor") // HAS_NULL is always a key
   @Pure
   public boolean hasNull() {
     return getFlag(HAS_NULL);
   }
 
-  /** @see #IS_STRUCT */
+  /**
+   * See {@link #IS_STRUCT}.
+   *
+   * @see #IS_STRUCT
+   */
   @SuppressWarnings("keyfor") // IS_STRUCT is always a key
   @Pure
   public boolean isStruct() {
     return getFlag(IS_STRUCT);
   }
 
-  /** @see #IS_NON_NULL */
+  /**
+   * See {@link #IS_NON_NULL}.
+   *
+   * @see #IS_NON_NULL
+   */
   @SuppressWarnings("keyfor") // IS_NON_NULL is always a key
   @Pure
   public boolean isNonNull() {

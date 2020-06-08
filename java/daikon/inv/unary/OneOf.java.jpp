@@ -258,6 +258,7 @@ import typequals.prototype.qual.Prototype;
 #error "Impossible fallthrough."
 #endif
 
+@SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
 public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -306,11 +307,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   @Unused(when=Prototype.class)
   private int num_elts;
 
-  public @Prototype ONEOFSCALAR() {
+  @Prototype ONEOFSCALAR() {
     super();
   }
 
-  public ONEOFSCALAR(PptSlice slice) {
+  ONEOFSCALAR(PptSlice slice) {
     super(slice);
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==
@@ -542,7 +543,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       + ", elts=" + subarray_rep();
   }
 
-#if defined(IS_SEQUENCE_NUMERIC)
+#if defined(SEQUENCE)
   private boolean all_nulls(@GuardSatisfied ONEOFSCALAR this, int value_no) {
     INT seq = elts[value_no];
     for (int i = 0; i < seq.length; i++) {
@@ -920,8 +921,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
 public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
-    @NonNull @Initialized // UNDONE: don't understand why needed (markro)
-    String result;
+    @NonNull @Initialized String result;
 
 #if defined(IS_ELT)
 
@@ -973,7 +973,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
 #elif defined(IS_SCALAR)
 
-  String[] split = var().csharp_array_split();
   String varname = var().csharp_name();
   #if defined(IS_NUMERIC)
 
@@ -1014,7 +1013,8 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
         String exp = String.join(", ", e);
 
         if (var().is_array() && !var().isDerived()) {
-            result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf(" + exp + "))";
+          String[] split = var().csharp_array_split();
+          result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf(" + exp + "))";
         } else {
           result = varname + ".OneOf(" + exp + ")";
         }
@@ -2139,7 +2139,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     return true;
   }
 
-#ifdef BASE_INT
+#if defined(SCALAR) || defined(ELT)
   /**
    * Map that holds dummy hashcode values for hashcodes. Each hashcode seen is assigned a small
    * integer in the order they are seen. These values will be consistent as long as new hashcodes do

@@ -103,19 +103,12 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     // UtilPlume.writeFile(new File("expected.txt"), expected);
     // UtilPlume.writeFile(new File("result.txt"), result);
 
-    assert expectedAnswerLines.length == result_arr.length
-        : String.format(
-            "diff in buffer lengths: expected %d, result %d",
-            expectedAnswerLines.length, result_arr.length);
+    assertEquals(expectedAnswerLines.length, result_arr.length);
     for (int ii = 0; ii < expectedAnswerLines.length; ii++) {
-      assert expectedAnswerLines[ii].equals(result_arr[ii]) : "diff at line " + ii;
+      assertEquals(expectedAnswerLines[ii], result_arr[ii]);
     }
     /*
-    assert ungenerifiedCollector.collectionResults().trim().equals(expectedAnswerBuffer.toString().trim())
-                      : ungenerifiedCollector.collectionResults()
-                      + "\n\n\nExpected answer:\n\n\n"
-                      + expectedAnswerBuffer.toString()
-                      ;
+    assertEquals(expectedAnswerBuffer.toString().trim(), ungenerifiedCollector.collectionResults().trim());
       */
   }
 

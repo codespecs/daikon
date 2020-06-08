@@ -29,9 +29,7 @@ public final class PptConditional extends PptTopLevel {
 
   public PptConditional(PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
 
-    super(
-        ctor_name_helper(parent, splitter, splitter_inverse),
-        ctor_vis_helper(parent, splitter, splitter_inverse));
+    super(ctor_name_helper(parent, splitter, splitter_inverse), ctor_vis_helper(parent));
     // assert splitter.instantiated() == false;
     this.parent = parent;
     @SuppressWarnings({"nullness"}) // won't be used until it's fully initialized
@@ -53,8 +51,7 @@ public final class PptConditional extends PptTopLevel {
     }
   }
 
-  private static VarInfo[] ctor_vis_helper(
-      PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
+  private static VarInfo[] ctor_vis_helper(PptTopLevel parent) {
     return (VarInfo.arrayclone_simple(parent.var_infos));
   }
 

@@ -340,9 +340,8 @@ public class DynComp {
       System.exit(1);
       throw new Error("Unreachable control flow");
     }
+    @SuppressWarnings("UnusedVariable") // TODO check result!
     int result = redirect_wait(dcomp_proc);
-
-    // XXX check result!
   }
 
   /** Wait for stream redirect threads to complete. */

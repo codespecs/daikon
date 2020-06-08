@@ -3,7 +3,6 @@ package daikon.chicory;
 // import harpoon.ClassFile.HMethod;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Chicory;
 import daikon.plumelib.bcelutil.SimpleLog;
@@ -11,7 +10,6 @@ import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
 import daikon.plumelib.util.UtilPlume;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,7 +17,6 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Member;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -120,11 +117,6 @@ public class ChicoryPremain {
     if (Chicory.doPurity()) {
       System.err.println("Executing a purity analysis is currently disabled");
       System.exit(1);
-
-      // runPurityAnalysis(Chicory.target_program);
-      // writePurityFile(Chicory.target_program + ".pure",
-      //                Chicory.config_dir);
-      // doPurity = true;
     } else if (Chicory.get_purity_file() != null) {
       readPurityFile(Chicory.get_purity_file(), Chicory.config_dir);
       doPurity = true;
@@ -139,8 +131,8 @@ public class ChicoryPremain {
     try {
       transformer =
           loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
-      @SuppressWarnings("unchecked")
-      Class<Instrument> c = (Class<Instrument>) transformer.getClass();
+      // @SuppressWarnings("unchecked")
+      // Class<Instrument> c = (Class<Instrument>) transformer.getClass();
       // System.out.printf("Classloader of tranformer = %s%n",
       //                    c.getClassLoader());
     } catch (Exception e) {
@@ -229,53 +221,13 @@ public class ChicoryPremain {
     try {
       reader.close();
     } catch (IOException e) {
+      System.err.println("Error while closing " + purityFileName + " after reading.");
+      System.exit(1);
     }
 
     // System.out.printf("leaving purify file%n");
 
   }
-
-  /**
-   * Write a {@code *.pure} file to the given location.
-   *
-   * @param fileName where to write the file to (full path)
-   */
-  // not handled: @RequiresNonNull("ChicoryPremain.pureMethods")
-  @RequiresNonNull("pureMethods")
-  private static void writePurityFile(String fileName, String parentDir) {
-    File absFile = new File(parentDir, fileName);
-    System.out.printf("Writing pure methods to %s%n", absFile);
-    try (BufferedWriter pureFileWriter = Files.newBufferedWriter(absFile.toPath(), UTF_8)) {
-      for (String methodName : pureMethods) {
-        pureFileWriter.write(methodName);
-        pureFileWriter.newLine();
-      }
-    } catch (FileNotFoundException e) {
-      throw new Error("Could not open " + absFile, e);
-    } catch (IOException e) {
-      throw new Error("Problem writing to " + absFile, e);
-    }
-  }
-
-  /**
-   * Invokes Alexandru Salcianu's purity analysis on given application. Populates the pureMethods
-   * Set with pure (non side-effecting) methods.
-   *
-   * @param targetApp name of the class whose main method is the entry point of the application
-   */
-  //  private static void runPurityAnalysis(String targetApp)
-  //  {
-  //      // Example args: --pa:assignable -q  -c DataStructures.StackAr
-  //      String[] args = new String[] {"--pa:assignable", "-c", targetApp};
-  //
-  //      Set<HMethod> pureHMethods = harpoon.Main.SAMain.getPureMethods(args);
-  //
-  //      pureMethods = new HashSet<String> ();
-  //      for (HMethod meth: pureHMethods)
-  //      {
-  //          pureMethods.add(meth.toString());
-  //      }
-  //  }
 
   /** Return true iff Chicory has run a purity analysis or read a {@code *.pure} file. */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
@@ -353,6 +305,7 @@ public class ChicoryPremain {
 
     public static final SimpleLog debug = new SimpleLog(Chicory.verbose);
 
+    @SuppressWarnings("StaticAssignmentInConstructor") // sets static variable only if aborting
     public ChicoryLoader() throws IOException {
 
       String bcel_classname = "org.apache.bcel.Constants";
@@ -444,6 +397,7 @@ public class ChicoryPremain {
      * normal classname format (eg, org.apache.bcel.Const). An empty list is returned if no names
      * match.
      */
+    @SuppressWarnings("JdkObsolete") // ClassLoader.getSystemResources returns an Enumeration
     static List<URL> get_resource_list(String classname) throws IOException {
 
       String name = classname_to_resource_name(classname);

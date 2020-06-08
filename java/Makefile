@@ -699,7 +699,7 @@ else
 endif
 
 # See version numbers at https://github.com/google/error-prone/releases
-ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.3.4-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-2.5.7.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-2.5.7.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.1.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar
+ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.4.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-shaded-3.1.2.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
 
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
@@ -708,11 +708,12 @@ errorprone-nocompile:
 ifeq ($(JAVA8), 1)
 	echo "Error Prone is not run under Java 8"
 else
+## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
 	javac -cp ${DAIKON_CLASSPATH} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
-	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF' \
-	  -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
-# TODO: add after everything passes: -Werror
+	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF' \
+	  -Xmaxwarns 100000 -Werror \
+	  ${JAVA_FILES_FOR_STYLE}
 endif
 
 # Create an `error-prone.patch` file.

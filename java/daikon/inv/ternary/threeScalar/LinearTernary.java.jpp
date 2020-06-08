@@ -69,6 +69,7 @@ import typequals.prototype.qual.Prototype;
  * {@code a} is always positive.
  */
 
+@SuppressWarnings("UnnecessaryParentheses")  // generated code, parens are sometimes necessary
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

@@ -314,15 +314,6 @@ public class SampleTester extends TestCase {
     ppt.add_bottom_up(vt, 1);
   }
 
-  /** Processes a string of possibly multiple assertions. If any are false, throws an error. */
-  private void proc_assertions(String assertions) throws IOException {
-
-    String[] aa = assertions.split("\\) *");
-    for (int i = 0; i < aa.length; i++) {
-      proc_assert(aa[i]);
-    }
-  }
-
   /** Requires that the StreamTokenizer has just read a word. Returns that word. */
   private String readString(StreamTokenizer stok) {
     int ttype;
@@ -360,14 +351,12 @@ public class SampleTester extends TestCase {
 
     // Get the assertion name
     ttype = stok.nextToken();
-    assert ttype == TT_WORD;
+    assertEquals(TT_WORD, ttype);
     String name = stok.sval;
 
-    String delimiter = "";
-
     // Get the arguments (enclosed in parens, separated by commas)
-    delimiter = readString(stok);
-    assert delimiter.equals("(") : "delimiter = " + delimiter;
+    String delimiter = readString(stok);
+    assertEquals("(", delimiter);
 
     List<String> args = new ArrayList<>(10);
     do {
@@ -466,9 +455,6 @@ public class SampleTester extends TestCase {
     if ((args.size() < 1) || (args.size() > 3)) {
       parse_error("bad argument count (" + args.size() + ") for show_invs");
     }
-
-    Class<?> cls = null;
-    String format = null;
 
     // Build a vis to match the specified variables
     VarInfo[] vis = new VarInfo[args.size()];

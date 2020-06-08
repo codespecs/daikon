@@ -111,7 +111,6 @@ public class Annotation {
   public static Annotation get(String annoString) throws Annotation.MalformedAnnotationException {
 
     // check well-formedness
-    boolean wellformed = true;
     if (!(annoString.matches(".*<INVINFO>.*</INVINFO>.*")
         && annoString.matches(".*<DAIKON>(.*)</DAIKON>.*")
         && annoString.matches(".*<METHOD>(.*)</METHOD>.*"))) {
@@ -186,7 +185,7 @@ public class Annotation {
 
   /**
    * Find, parse and return all distinct annotations found in a list of strings. Each string in
-   * {@code annoString} may contain none, one, or several annotations. Malformed annotations are
+   * {@code annoStrings} may contain none, one, or several annotations. Malformed annotations are
    * ignored.
    */
   public static Annotation[] findAnnotations(List<String> annoStrings) {
