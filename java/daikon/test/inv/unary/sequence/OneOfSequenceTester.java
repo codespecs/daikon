@@ -63,7 +63,7 @@ public class OneOfSequenceTester extends TestCase {
     inv1.add_modified(Intern.intern(new long[] {19, 23}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {91, 0}), DOESNT_MATTER);
 
-    assert !inv1.isSameFormula(inv2);
+    assertFalse(inv1.isSameFormula(inv2));
   }
 
   public void testNonNonNonNon() {
@@ -73,7 +73,7 @@ public class OneOfSequenceTester extends TestCase {
     inv1.add_modified(Intern.intern(new long[] {19, 23}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {91, 32}), DOESNT_MATTER);
 
-    assert inv1.isSameFormula(inv2);
+    assertTrue(inv1.isSameFormula(inv2));
   }
 
   public void testNonNullNonNull() {
@@ -83,7 +83,7 @@ public class OneOfSequenceTester extends TestCase {
     inv1.add_modified(Intern.intern(new long[] {19, 0}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {91, 0}), DOESNT_MATTER);
 
-    assert inv1.isSameFormula(inv2);
+    assertTrue(inv1.isSameFormula(inv2));
   }
 
   public void testNullNullNullNull() {
@@ -93,7 +93,7 @@ public class OneOfSequenceTester extends TestCase {
     inv1.add_modified(Intern.intern(new long[] {0, 0}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {0, 0}), DOESNT_MATTER);
 
-    assert inv1.isSameFormula(inv2);
+    assertTrue(inv1.isSameFormula(inv2));
   }
 
   public void testDifferentLengths() {
@@ -103,6 +103,6 @@ public class OneOfSequenceTester extends TestCase {
     inv1.add_modified(Intern.intern(new long[] {0, 0, 0}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {0, 0}), DOESNT_MATTER);
 
-    assert !inv1.isSameFormula(inv2);
+    assertFalse(inv1.isSameFormula(inv2));
   }
 }

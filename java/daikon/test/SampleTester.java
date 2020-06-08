@@ -351,12 +351,12 @@ public class SampleTester extends TestCase {
 
     // Get the assertion name
     ttype = stok.nextToken();
-    assert ttype == TT_WORD;
+    assertEquals(TT_WORD, ttype);
     String name = stok.sval;
 
     // Get the arguments (enclosed in parens, separated by commas)
     String delimiter = readString(stok);
-    assert delimiter.equals("(") : "delimiter = " + delimiter;
+    assertEquals("(", delimiter);
 
     List<String> args = new ArrayList<>(10);
     do {

@@ -118,7 +118,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   public void testFreq() {
     for (int arity = 0; arity < DetailedStatisticsVisitor.NUM_ARITIES; arity++) {
       for (int rel = 0; rel < DetailedStatisticsVisitor.NUM_RELATIONSHIPS; rel++) {
-        assert 1 == (int) v.freq(arity, rel);
+        assertEquals(1, (int) v.freq(arity, rel));
       }
     }
   }
@@ -132,18 +132,18 @@ public class DetailedStatisticsVisitorTester extends TestCase {
 
     @SuppressWarnings("nullness") // static method, so null first arg is OK: shouldAddFrequency()
     @NonNull Boolean b1 = (Boolean) m.invoke(null, new Object[] {null_noprint, null_noprint});
-    assert !b1.booleanValue();
+    assertFalse(b1.booleanValue());
 
     @SuppressWarnings("nullness") // static method, so null first arg is OK: shouldAddFrequency()
     @NonNull Boolean b2 = (Boolean) m.invoke(null, new Object[] {null_1_just, null_1_just});
-    assert b2.booleanValue();
+    assertTrue(b2.booleanValue());
 
     @SuppressWarnings("nullness") // static method, so null first arg is OK: shouldAddFrequency()
     @NonNull Boolean b3 = (Boolean) m.invoke(null, new @Nullable Object[] {null, null_noprint});
-    assert !b3.booleanValue();
+    assertFalse(b3.booleanValue());
 
     @SuppressWarnings("nullness") // static method, so null first arg is OK: shouldAddFrequency()
     @NonNull Boolean b4 = (Boolean) m.invoke(null, new @Nullable Object[] {null, null_1_just});
-    assert b4.booleanValue();
+    assertTrue(b4.booleanValue());
   }
 }

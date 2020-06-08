@@ -1,6 +1,8 @@
 package daikon.test;
 
 import static daikon.inv.Invariant.asInvClass;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import daikon.*;
 import daikon.inv.Invariant;
@@ -398,11 +400,11 @@ class FormatTestCase {
     ProglangType[] types = getTypes(typeString);
     VarInfo[] vars = getVarInfos(classToTest, types);
     PptSlice sl = createSlice(vars, Common.makePptTopLevel("Test:::OBJECT", vars));
-    assert sl != null;
+    assertNotNull(sl);
 
     // Create an actual instance of the class
     Invariant invariantToTest = instantiateClass(classToTest, sl, arg_types, arg_vals);
-    assert invariantToTest != null : "class " + className;
+    assertNotNull(invariantToTest);
 
     String goalOutput = "";
     String currentLine = null;
@@ -579,7 +581,7 @@ class FormatTestCase {
    */
   @SuppressWarnings("interning")
   private static VarInfo getVarInfo(ProglangType type, int i) {
-    assert type != null : "Unexpected null variable type passed to getVarInfo";
+    assertNotNull(type);
 
     String arrayModifier = "";
 
@@ -609,13 +611,13 @@ class FormatTestCase {
         vardef.enclosing_var_name = base_name;
         result = new VarInfo(vardef);
         result.enclosing_var = hashcode;
-        assert result.enclosing_var.enclosing_var == null;
+        assertNull(result.enclosing_var.enclosing_var);
         // System.out.printf("Created %s [%s]%n", result, hashcode);
       } else {
         FileIO.VarDefinition vardef =
             new FileIO.VarDefinition(name, VarInfo.VarKind.VARIABLE, type);
         result = new VarInfo(vardef);
-        assert result.enclosing_var == null;
+        assertNull(result.enclosing_var);
         // System.out.printf("Created %s%n", result);
       }
     } else {
@@ -658,7 +660,7 @@ class FormatTestCase {
         return null;
       }
 
-      assert result[i] != null : "ProglangType unexpectedly parsed to null in getTypes(String)";
+      assertNotNull(result[i]);
     }
 
     return result;
@@ -887,7 +889,7 @@ class FormatTestCase {
       return;
     }
 
-    assert inv != null;
+    assertNotNull(inv);
 
     // System.out.println(inv.getClass().getName());
     // System.out.println(samples.size());

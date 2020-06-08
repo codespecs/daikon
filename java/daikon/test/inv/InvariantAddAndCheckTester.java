@@ -2,6 +2,7 @@ package daikon.test.inv;
 
 import static daikon.inv.Invariant.asInvClass;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertNotNull;
 
 import daikon.*;
 import daikon.config.Configuration;
@@ -500,7 +501,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       checkModified = getCheckModified(invariantToTest.getClass());
       outputProducer = getOutputProducer(invariantToTest.getClass());
 
-      assert getArity(invariantToTest.getClass()) == types.length;
+      assertEquals(types.length, getArity(invariantToTest.getClass()));
 
       if (generatingCommands) {
         results.append(typeString + lineSep);
@@ -531,7 +532,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Object[] params = getParams(tokens);
       InvariantStatus goalStatus = parseStatus(tokens.nextToken().trim());
       tokens.nextToken(); // executed for side effect
-      assert !tokens.hasMoreTokens();
+      assertFalse(tokens.hasMoreTokens());
       InvariantStatus resultStatus;
       if (isCheckCommand(command)) {
         resultStatus = getCheckStatus(params);
@@ -569,7 +570,7 @@ public class InvariantAddAndCheckTester extends TestCase {
                 + types.length);
       }
       Object[] params = getParams(tokens);
-      assert !tokens.hasMoreTokens();
+      assertFalse(tokens.hasMoreTokens());
       InvariantStatus goalStatus;
       if (isCheckCommand(command)) {
         goalStatus = getCheckStatus(params);
@@ -808,7 +809,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a VarInfo object that described the type
      */
     private static VarInfo getVarInfo(ProglangType type, int i) {
-      assert type != null : "Unexpected null variable type passed to getVarInfo";
+      assertNotNull(type);
 
       String arrayModifier = "";
 
@@ -890,7 +891,7 @@ public class InvariantAddAndCheckTester extends TestCase {
           return null;
         }
 
-        assert result[i] != null : "ProglangType unexpectedly parsed to null in getTypes(String)";
+        assertNotNull(result[i]);
       }
 
       return result;
@@ -906,16 +907,16 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static PptSlice createSlice(VarInfo[] vars, PptTopLevel ppt) {
       if (vars.length == 1) {
-        assert vars[0] != null;
+        assertNotNull(vars[0]);
         return new PptSlice1(ppt, vars);
       } else if (vars.length == 2) {
-        assert vars[0] != null;
-        assert vars[1] != null;
+        assertNotNull(vars[0]);
+        assertNotNull(vars[1]);
         return new PptSlice2(ppt, vars);
       } else if (vars.length == 3) {
-        assert vars[0] != null;
-        assert vars[1] != null;
-        assert vars[2] != null;
+        assertNotNull(vars[0]);
+        assertNotNull(vars[1]);
+        assertNotNull(vars[2]);
         return new PptSlice3(ppt, vars);
       } else {
         throw new RuntimeException(

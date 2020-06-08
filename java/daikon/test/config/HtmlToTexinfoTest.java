@@ -26,7 +26,7 @@ public class HtmlToTexinfoTest extends TestCase {
 
   private void testHtmlToTexinfo(String in, String expected) {
     String actual = HtmlToTexinfo.htmlToTexinfo(in);
-    assert actual.equals(expected) : "Expected " + expected + ", got " + actual;
+    assertEquals(expected, actual);
   }
 
   public void testJavadocHtmlToTexinfo() {
@@ -50,6 +50,6 @@ public class HtmlToTexinfoTest extends TestCase {
 
   private void testJavadocHtmlToTexinfo(String in, String expected) {
     String actual = HtmlToTexinfo.javadocHtmlToTexinfo(in);
-    assert actual.equals(expected) : "Expected " + expected + ", got " + actual;
+    assertEquals(expected, actual);
   }
 }
