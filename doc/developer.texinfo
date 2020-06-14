@@ -2324,6 +2324,7 @@ cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 unset CHECKERFRAMEWORK
+make compile
 make staging
 @end example
 
