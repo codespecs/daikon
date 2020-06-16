@@ -5854,14 +5854,13 @@ between Kvasir and the debugging information produced by older @command{gcc}
 versions can lead to incorrect output and, in some cases, can cause Kvasir to crash.
 
 @item
-Kvasir with DynComp might produce different results for x86-64 hosts then
-previous versions running on x86 hosts.
-This is due to a DynComp limitation with regards to
-handling the AMD64 ABI. The AMD64 ABI allows structs that are
+The AMD64 ABI allows structs that are
 less than 8-bytes to be passed to a function via register.
 DynComp categorizes this as an interaction between all
 fields of the struct and will mark all fields of the struct as
 comparable to each other.
+This is due to a DynComp limitation with regards to
+handling the AMD64 ABI.
 
 @item
 Kvasir is incompatible with some compiler optimizations.  It is
