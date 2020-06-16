@@ -4240,8 +4240,14 @@ You can also run Daikon without creating an intermediate data trace
 file; see @ref{Online execution}.
 
 For information about installing Kvasir, see @ref{Installing Kvasir}.
-Kvasir only works under Linux running on an x86 or x86-64 processor; for full
+Kvasir only works under Linux running on an x86-64 processor (also known
+as an amd64 processor); for full
 details, see @ref{Kvasir limitations}.
+When you run Kvasir, if you get a message of the form:
+@example
+valgrind: failed to start tool 'fjalar' for platform 'x86-linux': No such file or directory
+@end example
+it indicates that your program is not an x86-64 binary.
 For information about how to create an instrumenter for C that works on
 non-Linux or non-x86 platforms, see @ref{Instrumenting C
 programs,,,developer,Daikon Developer Manual}.
@@ -4691,7 +4697,7 @@ report.
 
 This pauses the program's execution in an infinite loop during
 initialization.  You can attach a debugger such as @command{gdb} to the
-running process by running @command{gdb} on @file{inst/lib/valgrind/x86-linux/fjalar} under
+running process by running @command{gdb} on @file{inst/lib/valgrind/fjalar-amd64-linux} under
 the Kvasir directory and using the @command{attach} command.
 
 @item --kvasir-debug
@@ -5708,7 +5714,7 @@ previous run.
 @cindex installing Kvasir
 @cindex Kvasir installation
 
-@c Kvasir is the recommended C/C++ front end for use on Linux/x86.
+@c Kvasir is the recommended C/C++ front end for use on Linux/x86-64.
 There are two scenarios for building the Kvasir
 tool:
 
@@ -5848,8 +5854,9 @@ between Kvasir and the debugging information produced by older @command{gcc}
 versions can lead to incorrect output and, in some cases, can cause Kvasir to crash.
 
 @item
-Kvasir with DynComp will produce different results for x86 and
-x86-64 hosts. This is due to a DynComp limitation with regards to
+Kvasir with DynComp might produce different results for x86-64 hosts then
+previous versions running on x86 hosts.
+This is due to a DynComp limitation with regards to
 handling the AMD64 ABI. The AMD64 ABI allows structs that are
 less than 8-bytes to be passed to a function via register.
 DynComp categorizes this as an interaction between all
@@ -6426,7 +6433,7 @@ named @command{dfej}.  It has been superseded by Chicory (@pxref{Chicory}).
 
 An earlier version of Daikon provided a source-based front end for C
 named @command{dfec}.  It has been superseded by Kvasir (binary-based, for
-Linux/x86; @pxref{Kvasir}).
+Linux/x86-64; @pxref{Kvasir}).
 
 
 @node    Tools
