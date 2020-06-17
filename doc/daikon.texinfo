@@ -773,6 +773,8 @@ information, such as by giving the @option{-gdwarf-2} flag to @command{gcc} when
 compiling.  Some versions of @command{gcc} now output position independent
 code by default.  Kvasir cannot properly process these binaries.
 You must add the @option{-no-pie} option to disable this feature.
+Note that if your build system separates the compile and link steps, the
+@option{-no-pie} option needs to be on the link step.
 Then, run your program as usual, but prepend
 @command{kvasir-dtrace} to the command line.
 
@@ -4218,7 +4220,10 @@ To use Kvasir, first compile your program using the DWARF-2 debugging
 format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}) and
 without optimizations (e.g., supply the @option{-O0} option to @command{gcc}).
 Also, some versions of @command{gcc} now output position independent code by default.
+Kvasir cannot properly process these binaries.
 You must add the @option{-no-pie} option to disable this feature.
+Note that if your build system separates the compile and link steps, the
+@option{-no-pie} option needs to be on the link step.
 Then, prefix your command line by @command{kvasir-dtrace}.  For example,
 if you normally run your program with the command
 @example
