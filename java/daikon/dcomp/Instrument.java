@@ -158,7 +158,7 @@ public class Instrument implements ClassFileTransformer {
   @Pure
   private static boolean is_dcomp(String classname) {
 
-    if ((classname.startsWith("daikon/dcomp/") && !classname.startsWith("daikon/dcomp/Test"))
+    if ((classname.startsWith("daikon/dcomp/") && !classname.startsWith("daikon/dcomp/DcompTest"))
         || classname.startsWith("daikon/chicory/")) {
       return true;
     }
