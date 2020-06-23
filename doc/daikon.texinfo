@@ -8376,12 +8376,7 @@ miscellaneous options}).
 @node    Chicory problems
 @section Problems with Chicory
 
-If Chicory fails with ``couldn't find or load main class'' and the class
-that cannot be found is in Chicory itself, then you have failed to put
-@file{daikon.jar} on the classpath when running Chicory.
-
-Otherwise,
-before reporting or investigating a problem with Chicory, always check
+Before reporting or investigating a problem with Chicory, always check
 that the program executes properly when not being run under Chicory's
 control.
 
@@ -8403,7 +8398,7 @@ If the latter command also fails, the problem is not with Chicory.
 First solve your Java problem,
 then once again attempt to use Chicory.
 @item
-If the latter command does not fail, then you have found a bug in
+If the latter command does not fail, then you have likely found a bug in
 Chicory; please report it if it is not already explained in this manual.
 
 @end itemize
@@ -8419,9 +8414,11 @@ Chicory; please report it if it is not already explained in this manual.
 @subsection BCEL must be in the classpath
 @cindex BCEL error, when running Chicory
 
-If Chicory throws an error such as the following:
+If Chicory throws one of the following errors:
 @smallexample
 BCEL must be in the classpath.  Normally it is found in daikon.jar.
+
+couldn't find or load main class
 @end smallexample
 
 @noindent
