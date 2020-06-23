@@ -291,7 +291,7 @@ public class Chicory {
 
     // If we didn't find a premain, give up
     if (premain == null) {
-      System.err.printf("Can't find ChicoryPremain.jar on the classpath");
+      System.err.printf("Can't find ChicoryPremain.jar or daikon.jar on the classpath");
       if (daikon_dir == null) {
         System.err.printf(" and $DAIKONDIR is not set.%n");
       } else {
