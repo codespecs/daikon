@@ -8411,7 +8411,7 @@ Chicory; please report it if it is not already explained in this manual.
 @end menu
 
 @node       BCEL must be in the classpath
-@subsection BCEL must be in the classpath
+@subsection BCEL must be in the classpath, or couldn't find or load main class
 @cindex BCEL error, when running Chicory
 
 If Chicory throws one of the following errors:
