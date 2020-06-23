@@ -14,7 +14,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
   "nullness", // uninitialized fields default to null
   "interning"
 })
-class Test {
+class DcompTest {
 
   A at;
   static int i;
