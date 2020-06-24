@@ -445,14 +445,14 @@ ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 .PHONY: chicory-test
 chicory-test : daikon/chicory/inv_out.diff
 daikon/chicory/inv_out.diff : ChicoryPremain.jar
-	cd daikon/chicory && rm -f Test.log Test.dtrace.gz Test.inv.gz Test.inv.out
-	cd daikon/chicory && $(JAVA_COMMAND) daikon.Chicory --verbose --debug daikon.chicory.Test > Test.log
-	cd daikon/chicory && $(JAVA_COMMAND) daikon.Daikon --no_text_output --no_show_progress Test.dtrace.gz
-	cd daikon/chicory && $(JAVA_COMMAND) daikon.PrintInvariants Test.inv.gz > Test.inv.out
-	-diff -uw daikon/chicory/Test.inv.out.goal daikon/chicory/Test.inv.out \
-	  > daikon/chicory/Test.inv.out.diff
-	@if test ! -s daikon/chicory/Test.inv.out.diff ; then echo No Errors; \
-	else echo Errors: more daikon/chicory/Test.inv.out.diff for details; fi
+	cd daikon/chicory && rm -f ChicoryTest.log ChicoryTest.dtrace.gz ChicoryTest.inv.gz ChicoryTest.inv.out
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.Chicory --verbose --debug daikon.chicory.ChicoryTest > ChicoryTest.log
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.Daikon --no_text_output --no_show_progress ChicoryTest.dtrace.gz
+	cd daikon/chicory && $(JAVA_COMMAND) daikon.PrintInvariants ChicoryTest.inv.gz > ChicoryTest.inv.out
+	-diff -uw daikon/chicory/ChicoryTest.inv.out.goal daikon/chicory/ChicoryTest.inv.out \
+	  > daikon/chicory/ChicoryTest.inv.out.diff
+	@if test ! -s daikon/chicory/ChicoryTest.inv.out.diff ; then echo No Errors; \
+	else echo Errors: more daikon/chicory/ChicoryTest.inv.out.diff for details; fi
 
 #
 # Dynamic Comparability (DynComp/Java; also Chicory)
@@ -472,7 +472,7 @@ dcomp_premain.jar : $(wildcard $(INSTRUMENTATION_JAVA_FILES)) daikon/dcomp/manif
 	$(MAKE) dcomp-test
 
 # Runs a simple sanity test on DynComp/Java without an instrumented JDK
-# Also creates file ./Test.decls-DynComp
+# Also creates file ./DcompTest.decls-DynComp
 .PHONY: dcomp-test
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
@@ -633,7 +633,7 @@ clean_class_files:
 clean:
 	${MAKE} clean_class_files
 	-rm -f ChicoryPremain.jar
-	-rm -f daikon/chicory/Test.log
+	-rm -f daikon/chicory/ChicoryTest.log
 
 clean-generated-files:
 	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}

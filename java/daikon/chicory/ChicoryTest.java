@@ -4,16 +4,13 @@ import static java.lang.System.out;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-class Test {
+class ChicoryTest {
 
   int t1 = 55;
 
-  // public Test() {
-  // }
-
   public static void main(String[] args) {
 
-    Test t = new Test();
+    ChicoryTest t = new ChicoryTest();
     t.t1 = 5;
     int i = t.sample(0);
     out.format("sample return [35]   = %d%n", i);
@@ -27,7 +24,7 @@ class Test {
     t.test_d(1.0, 5.0);
   }
 
-  public Test @Nullable [] test_array() {
+  public ChicoryTest @Nullable [] test_array() {
     return null;
   }
 
@@ -46,9 +43,9 @@ class Test {
     }
   }
 
-  public Test sample1() {
+  public ChicoryTest sample1() {
 
-    Test test1 = new Test();
+    ChicoryTest test1 = new ChicoryTest();
     test1.t1 = 32;
     return test1;
   }
