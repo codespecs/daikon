@@ -1547,7 +1547,7 @@ Daikon
 
   Bug fixes
 
-    The JUNIT tests can now be run directly from the jar file.  All
+    The JUnit tests can now be run directly from the jar file.  All
     necessary input files are resources in the jar file and the unit test
     code handles them as resources.
 
@@ -4138,7 +4138,7 @@ Added linear ternary invariants, of the form z = ax + by + c.
  LocalWords:  decl varname dataflow comp Mangel Wurzel gzip stdout NoDuplicates
  LocalWords:  FunctionBinary ZeroTrack BitwiseAndZero BitwiseSubset ShiftZero
  LocalWords:  CommonSequence toArray IOA classpath stderr NoSuchMethodException
- LocalWords:  AnnotateNullable JSR dcomp EltNonZero NonZero IsPointer JUNIT AMD
+ LocalWords:  AnnotateNullable JSR dcomp EltNonZero NonZero IsPointer JUnit AMD
  LocalWords:  Cygwin mainHelper MergeInvariants glibc decls structs Nullness un
  LocalWords:  auxprogs argc argv Radu Vanciu OneOfSequence fstack chk bashrc
  LocalWords:  cshrc config disambig Christoph Csallner std configs dfec Xlint
