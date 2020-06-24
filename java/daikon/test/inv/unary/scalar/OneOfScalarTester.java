@@ -1,5 +1,8 @@
 package daikon.test.inv.unary.scalar;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptTopLevel;
@@ -11,9 +14,10 @@ import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.junit.Test;
 
 @SuppressWarnings("nullness") // testing code
-public class OneOfScalarTester extends TestCase {
+public class OneOfScalarTester {
 
   private VarInfo[] vars = {Common.makeHashcodeVarInfo("x"), Common.newIntVarInfo("y")};
   private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
@@ -21,11 +25,6 @@ public class OneOfScalarTester extends TestCase {
   // private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
 
   private static final int DOESNT_MATTER = 0;
-
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(OneOfScalarTester.class));
-  }
 
   @SuppressWarnings("interning")
   public static VarInfo newIntVarInfo(String name) {
@@ -51,10 +50,7 @@ public class OneOfScalarTester extends TestCase {
     return result;
   }
 
-  public OneOfScalarTester(String name) {
-    super(name);
-  }
-
+  @Test
   public void testNullNon() {
     @NonNull OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
     @NonNull OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
@@ -65,6 +61,7 @@ public class OneOfScalarTester extends TestCase {
     assertFalse(inv1.isSameFormula(inv2));
   }
 
+  @Test
   public void testNullNull() {
     @NonNull OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
     @NonNull OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
@@ -75,6 +72,7 @@ public class OneOfScalarTester extends TestCase {
     assertTrue(inv1.isSameFormula(inv2));
   }
 
+  @Test
   public void testNonNon() {
     @NonNull OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
     @NonNull OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
@@ -86,6 +84,7 @@ public class OneOfScalarTester extends TestCase {
   }
 
   /* NEED TO DEFINE SEMANTICS WITH MIKE E
+  @Test
   public void testNullNonHashcodeInt() {
     OneOfScalar inv1 = OneOfScalar.get_proto().instantiate(slicex);
     OneOfScalar inv2 = OneOfScalar.get_proto().instantiate(slicey);
@@ -96,6 +95,7 @@ public class OneOfScalarTester extends TestCase {
     assertFalse( inv1.isSameFormula(inv2));
   }
 
+  @Test
   public void testNullNullHashcodeInt() {
     OneOfScalar inv1 = OneOfScalar.get_proto().instantiate(slicex);
     OneOfScalar inv2 = OneOfScalar.get_proto().instantiate(slicey);
@@ -106,6 +106,7 @@ public class OneOfScalarTester extends TestCase {
     assertTrue(inv1.isSameFormula(inv2));
   }
 
+  @Test
   public void testNonNonHashcodeInt() {
     OneOfScalar inv1 = OneOfScalar.get_proto().instantiate(slicex);
     OneOfScalar inv2 = OneOfScalar.get_proto().instantiate(slicey);

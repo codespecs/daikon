@@ -2,19 +2,12 @@ package daikon.test.config;
 
 import daikon.config.*;
 import junit.framework.*;
+import org.junit.Test;
 
-public class ConfigurationTest extends TestCase {
-
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(ConfigurationTest.class));
-  }
-
-  public ConfigurationTest(String name) {
-    super(name);
-  }
+public class ConfigurationTest {
 
   // Mostly useful to check that our resource files are bound correctly
+  @Test
   public void testGetInstance() {
     // Executed for side effect.
     Configuration.getInstance();

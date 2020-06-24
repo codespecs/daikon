@@ -1,5 +1,8 @@
 package daikon.test.diff;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.Invariant;
@@ -9,8 +12,9 @@ import java.util.List;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.junit.Test;
 
-public class InvMapTester extends TestCase {
+public class InvMapTester {
 
   private @MonotonicNonNull InvMap map; // initialized by setUp()
   private PptTopLevel pptA = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
@@ -20,23 +24,13 @@ public class InvMapTester extends TestCase {
   private List<Invariant> invsB = new ArrayList<>();
   private List<Invariant> invsC = new ArrayList<>();
 
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(InvMapTester.class));
-  }
-
-  public InvMapTester(String name) {
-    super(name);
-  }
-
-  @Override
   public void setUp() throws Exception {
-    super.setUp();
     map = new InvMap();
   }
 
   @RequiresNonNull("map")
   // implicit flow: setUp was called by JUnit";
+  @Test
   public void testABC() {
     map.put(pptA, invsA);
     map.put(pptB, invsB);
@@ -57,6 +51,7 @@ public class InvMapTester extends TestCase {
 
   @RequiresNonNull("map")
   // implicit flow: setUp was called by JUnit";
+  @Test
   public void testCAB() {
     map.put(pptC, invsC);
     map.put(pptA, invsA);

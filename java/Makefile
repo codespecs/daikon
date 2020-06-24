@@ -1026,8 +1026,9 @@ check-serialize:
 .PHONY: junit
 junit:
 	@echo "Running unit (not system) tests..."
-	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} daikon.test.MasterUnitTester
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
 
+## TODO:  This target is never used!!!
 junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
 	@# but I'm having trouble with that, apparently due to hard-coded

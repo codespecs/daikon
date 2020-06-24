@@ -1,18 +1,12 @@
 package daikon.test;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.tools.jtb.*;
 import junit.framework.*;
 
 /** Tests that Annotate respects tabs. */
-public final class TestAnnotate extends TestCase {
-
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(TestAnnotate.class));
-  }
-
-  public TestAnnotate(String name) {
-    super(name);
-  }
+public final class TestAnnotate {
 
   public static void testGetTabbedIndex() {
 

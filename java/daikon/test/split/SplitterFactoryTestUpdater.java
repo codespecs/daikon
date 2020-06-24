@@ -190,7 +190,10 @@ public class SplitterFactoryTestUpdater {
     ps.println("import java.io.*;");
     ps.println("import java.util.*;");
     ps.println("import junit.framework.*;");
+    ps.println("import org.junit.Test;");
     ps.println("import org.plumelib.util.UtilPlume;");
+    ps.println("import static org.junit.Assert.fail;");
+
     ps.println();
     ps.println("import org.checkerframework.checker.nullness.qual.*;");
     ps.println();
@@ -204,7 +207,7 @@ public class SplitterFactoryTestUpdater {
     ps.println(
         " * <p>This class contains regression tests for the SplitterFactory class. The tests directly test");
     ps.println(
-        " * the java files produced by the load_splitters method by comparing them against goal files. Note");
+        " * the Java files produced by the load_splitters method by comparing them against goal files. Note");
     ps.println(" * that it is normal for some classes not to compile during this test.");
     ps.println(" *");
     ps.println(" * <p>These tests assume that the goal files are contained in the directory:");
@@ -212,7 +215,7 @@ public class SplitterFactoryTestUpdater {
     ps.println(" *");
     ps.println(" * <p>These tests ignore extra white spaces.");
     ps.println(" */");
-    ps.println("public class SplitterFactoryTest extends TestCase {");
+    ps.println("public class SplitterFactoryTest {");
     ps.println("  // Because the SplitterFactory sequentially numbers the");
     ps.println("  // java files it produces, changing the order that the setUpTests");
     ps.println("  // commands are run will cause the tests to fail.");
@@ -250,16 +253,11 @@ public class SplitterFactoryTestUpdater {
     ps.println("          break;");
     ps.println("      }");
     ps.println("    }");
-    ps.println("    junit.textui.TestRunner.run(suite());");
     ps.println("  }");
     ps.println();
 
     appendSetUpTest(ps);
 
-    ps.println();
-    ps.println("  public SplitterFactoryTest(String name) {");
-    ps.println("    super(name);");
-    ps.println("  }");
     ps.println();
     ps.println("  /** Sets up the test by generating the needed splitter java files. */");
     ps.println("  private static void createSplitterFiles(String spinfo, String decl) {");
@@ -297,14 +295,6 @@ public class SplitterFactoryTestUpdater {
 
     appendTests(ps);
 
-    ps.println("  public static Test suite() {");
-    ps.println("    setUpTests();");
-    ps.println("    TestSuite suite = new TestSuite();");
-
-    appendSuite(ps);
-
-    ps.println("    return suite;");
-    ps.println("  }");
     ps.println("}");
 
     ps.close();
@@ -345,17 +335,11 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     for (String className : classNames) {
+      ps.println("  @Test");
       ps.println("  public static void test" + className + "() {");
       ps.println("    assertEqualFiles(\"" + className + ".java\");");
       ps.println("  }");
       ps.println();
-    }
-  }
-
-  /** Appends the code that generates the test suite in SplitterFactoryTest to code. */
-  private static void appendSuite(PrintStream ps) {
-    for (String className : classNames) {
-      ps.println("    suite.addTest(new SplitterFactoryTest(\"test" + className + "\"));");
     }
   }
 }

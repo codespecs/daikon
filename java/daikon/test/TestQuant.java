@@ -1,19 +1,16 @@
 package daikon.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import daikon.*;
 import java.util.Arrays;
 import junit.framework.*;
 
 @SuppressWarnings({"nullness", "UnusedVariable"}) // testing code
-public final class TestQuant extends TestCase {
-
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(TestQuant.class));
-  }
-
-  public TestQuant(String name) {
-    super(name);
-  }
+public final class TestQuant {
 
   public static final void assert_arrays_equals(int[] a1, int[] a2) {
     boolean result = Arrays.equals(a1, a2);

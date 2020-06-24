@@ -1,20 +1,14 @@
 package daikon.test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import daikon.*;
 import junit.framework.*;
+import org.junit.Test;
 
 @SuppressWarnings("UnusedVariable") // test code
-public class VarComparabilityTest extends TestCase {
-
-  // for convenience
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(LinearTernaryCoreTest.class));
-  }
-
-  public VarComparabilityTest(String name) {
-    super(name);
-  }
+public class VarComparabilityTest {
 
   static final int NONE = VarComparability.NONE;
   static final int IMPLICIT = VarComparability.IMPLICIT;
@@ -38,6 +32,7 @@ public class VarComparabilityTest extends TestCase {
     return VarComparability.parse(IMPLICIT, rep, type);
   }
 
+  @Test
   public void test_VarComparabilityImplicit_scalar() {
     VarComparability v1 = parsei("1");
     VarComparability v1a = parsei("1");
@@ -76,6 +71,7 @@ public class VarComparabilityTest extends TestCase {
     assertTrue(comp(v_3, v_3));
   }
 
+  @Test
   public void test_VarComparabilityImplicit_1Darray_parts() {
 
     VarComparability v1 = parsei("1");
@@ -119,6 +115,7 @@ public class VarComparabilityTest extends TestCase {
     assertTrue(comp(v2, v_1_1.indexType(0)));
   }
 
+  @Test
   public void test_VarComparabilityImplicit_1Darray_whole() {
     VarComparability v12 = parsei("1[2]");
     VarComparability v12a = parsei("1[2]");
@@ -165,6 +162,7 @@ public class VarComparabilityTest extends TestCase {
     assertTrue(comp(v_1_1, v_1_1));
   }
 
+  @Test
   public void test_VarComparabilityImplicit_nDarray_whole() {
     VarComparability v12 = parsei("1[2]");
     VarComparability v12a = parsei("1[2]");

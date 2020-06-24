@@ -2,30 +2,32 @@ package PolyCalc;
 
 import java.util.*;
 
-import junit.framework.TestCase;
-
 public class RatNumTest2 extends RatNumTest {
 
-  public RatNumTest2(String name) { super(name); }
+  public RatNumTest2(String name) {
+    super(name);
+  }
 
   private ArrayList rs = new ArrayList();
 
   private static Random rnd = new Random(1978);
+
   private static int rnd() {
     return rnd.nextInt() % 19781978;
   }
 
+  @Test
   public void testLots() {
     rs.add(new RatNum(1));
     int n = 30;
-    for (int i=1; i < n; i++) {
-      for (int j=1; j < n; j++) {
-	RatNum r = new RatNum(rnd(), rnd());
-	observe(r);
-	rs.add(r);
-	RatNum z = new RatNum(rnd(), 0);
-	observe(r);
-	rs.add(z);
+    for (int i = 1; i < n; i++) {
+      for (int j = 1; j < n; j++) {
+        RatNum r = new RatNum(rnd(), rnd());
+        observe(r);
+        rs.add(r);
+        RatNum z = new RatNum(rnd(), 0);
+        observe(r);
+        rs.add(z);
       }
     }
   }
@@ -45,5 +47,4 @@ public class RatNumTest2 extends RatNumTest {
     r.mul(other);
     r.div(other);
   }
-
 }

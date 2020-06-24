@@ -1,20 +1,13 @@
 package daikon.test;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.LinearTernaryCore;
 import junit.framework.*;
+import org.junit.Test;
 
-public class LinearTernaryCoreTest extends TestCase {
-
-  // for convenience
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(LinearTernaryCoreTest.class));
-  }
-
-  public LinearTernaryCoreTest(String name) {
-    super(name);
-  }
+public class LinearTernaryCoreTest {
 
   void set_cache(LinearTernaryCore ltc, int index, long x, long y, long z) {
     ltc.def_points[index] = new LinearTernaryCore.Point(x, y, z);
@@ -48,6 +41,7 @@ public class LinearTernaryCoreTest extends TestCase {
     assertEquals(goal_d, coef[3], 0);
   }
 
+  @Test
   public void test_set_tri_linear() {
     one_test_set_tri_linear(new int[][] {{1, 2, 1}, {2, 1, 7}, {3, 3, 7}}, 4, -2, -1, 1);
     one_test_set_tri_linear(
@@ -99,6 +93,7 @@ public class LinearTernaryCoreTest extends TestCase {
     assertEquals(goal_result, actual_result);
   }
 
+  @Test
   public void test_format() {
     // Need tests with all combinations of: integer/noninteger, and values
     // -1,0,1,other.

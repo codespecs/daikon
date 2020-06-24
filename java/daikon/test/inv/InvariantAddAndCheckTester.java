@@ -2,7 +2,10 @@ package daikon.test.inv;
 
 import static daikon.inv.Invariant.asInvClass;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import daikon.*;
 import daikon.config.Configuration;
@@ -82,7 +85,7 @@ import typequals.prototype.qual.Prototype;
  * with in a command line.
  */
 @SuppressWarnings("nullness") // test code
-public class InvariantAddAndCheckTester extends TestCase {
+public class InvariantAddAndCheckTester {
 
   /** Indicates a string that when it starts a line signifies that the line is a comment. */
   public static final String COMMENT_STARTER_STRING = "#";
@@ -98,35 +101,6 @@ public class InvariantAddAndCheckTester extends TestCase {
   private static final String diffFileName = "daikon/test/inv/InvariantTest.diffs";
 
   private static final String lineSep = Global.lineSep;
-
-  /**
-   * This function allows this test to be run from the command line instead of its usual method,
-   * which is through the Daikon MasterTester.
-   *
-   * @param args arguments to the main function, which control options to the program. As of now
-   *     there is only one option, {@code --generate_goals}, which will generate goal information
-   *     for the selected tests assuming the output that the tests provide is the correct output.
-   */
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    if (args.length == 1 && args[0].equalsIgnoreCase("--generate_goals")) {
-      writeCommandFile();
-    } else if (args.length > 0) {
-      throw new Daikon.UserError(
-          "Usage: java daikon.test.InvariantAddAndCheckTester [--generate_goals]");
-    } else {
-      junit.textui.TestRunner.run(new TestSuite(InvariantAddAndCheckTester.class));
-    }
-  }
-
-  /**
-   * This constructor allows the test to be created from the MasterTester class.
-   *
-   * @param name the desired name of the test case
-   */
-  public InvariantAddAndCheckTester(String name) {
-    super(name);
-  }
 
   /**
    * This function produces the format list for intialization of the static format list variable.

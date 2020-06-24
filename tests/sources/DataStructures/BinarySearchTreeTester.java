@@ -1,11 +1,12 @@
 package DataStructures;
 
-
 public class BinarySearchTreeTester {
 
+  @Test
   public void testMain() {
-	main(null);
+    main(null);
   }
+
   private static BinarySearchTree t = new BinarySearchTree();
   private static java.util.Random rnd = new java.util.Random(1000);
 
@@ -31,7 +32,7 @@ public class BinarySearchTreeTester {
   }
 
   public static void remove(Comparable c) {
-     t.remove(c);
+    t.remove(c);
     observe();
   }
 
@@ -40,7 +41,7 @@ public class BinarySearchTreeTester {
     observe();
     MyInteger[] ints = new MyInteger[n];
     t.find(new MyInteger(rnd.nextInt()));
-    remove (new MyInteger(rnd.nextInt()));
+    remove(new MyInteger(rnd.nextInt()));
 
     for (int i = 0; i < n; i++) {
       ints[i] = new MyInteger(rnd.nextInt());
@@ -65,18 +66,19 @@ public class BinarySearchTreeTester {
     remove(new MyInteger(rnd.nextInt()));
 
     for (int i = 0; i < n; i++) {
-      if (rnd.nextInt(n) < n/2) {
-	insert(new MyInteger(rnd.nextInt()));
-	insert(new MyInteger(rnd.nextInt()));
-	int j = rnd.nextInt();
-	insert(new MyInteger(j));
-	t.find(new MyInteger(j));
-	try {
-	  insert(t.find(new MyInteger(rnd.nextInt())));
-	} catch (NullPointerException e) { }
-	observe();
+      if (rnd.nextInt(n) < n / 2) {
+        insert(new MyInteger(rnd.nextInt()));
+        insert(new MyInteger(rnd.nextInt()));
+        int j = rnd.nextInt();
+        insert(new MyInteger(j));
+        t.find(new MyInteger(j));
+        try {
+          insert(t.find(new MyInteger(rnd.nextInt())));
+        } catch (NullPointerException e) {
+        }
+        observe();
       } else {
-	remove(new MyInteger(rnd.nextInt()));
+        remove(new MyInteger(rnd.nextInt()));
       }
     }
 

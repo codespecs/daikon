@@ -1,5 +1,8 @@
 package daikon.test.inv;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import daikon.*;
 import daikon.config.*;
 import daikon.inv.*;
@@ -8,18 +11,10 @@ import daikon.test.*;
 import java.util.Comparator;
 import java.util.Random;
 import junit.framework.*;
+import org.junit.Test;
 
 @SuppressWarnings("nullness") // testing code
-public class InvariantTester extends TestCase {
-
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(InvariantTester.class));
-  }
-
-  public InvariantTester(String name) {
-    super(name);
-  }
+public class InvariantTester {
 
   @SuppressWarnings("interning")
   public VarInfo newIntVarInfo(String name) {
@@ -27,6 +22,7 @@ public class InvariantTester extends TestCase {
         name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
   }
 
+  @Test
   public void testClassVarnameComparator() {
     Comparator<Invariant> c = new Invariant.ClassVarnameComparator();
 
@@ -95,6 +91,7 @@ public class InvariantTester extends TestCase {
     assertTrue(c.compare(inv1, inv2) > 0);
   }
 
+  @Test
   public void test_prob_is_ge() {
     assertEquals(1.0, Invariant.prob_is_ge(0, 11), 0);
     assertEquals(1.0, Invariant.prob_is_ge(1, 11), 0);
@@ -106,6 +103,7 @@ public class InvariantTester extends TestCase {
     assertEquals(0.0, Invariant.prob_is_ge(20, 11), 0);
   }
 
+  @Test
   public void test_prob_and() {
 
     assertEquals(0.0, Invariant.prob_and(0, 0), 0);
@@ -138,6 +136,7 @@ public class InvariantTester extends TestCase {
     }
   }
 
+  @Test
   public void test_prob_or() {
     assertEquals(0.0, Invariant.prob_or(0, 0), 0);
     assertEquals(0.0, Invariant.prob_or(0, 1), 0);

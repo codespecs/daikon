@@ -2,6 +2,8 @@ package daikon.test;
 
 import static java.io.StreamTokenizer.TT_WORD;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import daikon.*;
 import daikon.VarInfo;
@@ -25,6 +27,7 @@ import java.util.logging.Logger;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.junit.Test;
 import org.plumelib.util.UtilPlume;
 
 /**
@@ -35,7 +38,7 @@ import org.plumelib.util.UtilPlume;
  * <p>The input file format is documented in the developer manual.
  */
 @SuppressWarnings("nullness") // test code
-public class SampleTester extends TestCase {
+public class SampleTester {
 
   public static final Logger debug = Logger.getLogger("daikon.test.SampleTester");
   public static final Logger debug_progress = Logger.getLogger("daikon.test.SampleTester.progress");
@@ -143,6 +146,7 @@ public class SampleTester extends TestCase {
   }
 
   /** This function is the actual function performed when this class is run through JUnit. */
+  @Test
   public void test_samples() throws IOException {
 
     FileIO.new_decl_format = null;

@@ -1,19 +1,14 @@
 package daikon.test.config;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.config.*;
 import junit.framework.*;
+import org.junit.Test;
 
-public class HtmlToTexinfoTest extends TestCase {
+public class HtmlToTexinfoTest {
 
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(HtmlToTexinfoTest.class));
-  }
-
-  public HtmlToTexinfoTest(String name) {
-    super(name);
-  }
-
+  @Test
   public void testHtmlToTexinfo() {
     testHtmlToTexinfo("some &lt;text&gt; &amp; I like {it}", "some <text> & I like @{it@}");
     testHtmlToTexinfo(
@@ -29,6 +24,7 @@ public class HtmlToTexinfoTest extends TestCase {
     assertEquals(expected, actual);
   }
 
+  @Test
   public void testJavadocHtmlToTexinfo() {
     // Same as for testHtmlToTexinfo
     testJavadocHtmlToTexinfo("some &lt;text&gt; &amp; I like {it}", "some <text> & I like @{it@}");
