@@ -1187,7 +1187,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   @Pure
   private static boolean is_chicory(String classname) {
 
-    if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test")) {
+    if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/ChicoryTest")) {
       return true;
     }
     if (classname.equals("daikon/PptTopLevel$PptType")) {

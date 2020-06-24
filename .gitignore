@@ -55,11 +55,11 @@ java/daikon/dcomp/std_dcomp_out.txt
 java/debug
 java/Test.decls-DynComp
 # Chicory testing
-java/daikon/chicory/Test.dtrace.gz
-java/daikon/chicory/Test.inv.gz
-java/daikon/chicory/Test.inv.out
-java/daikon/chicory/Test.inv.out.diff
-java/daikon/chicory/Test.log
+java/daikon/chicory/ChicoryTest.dtrace.gz
+java/daikon/chicory/ChicoryTest.inv.gz
+java/daikon/chicory/ChicoryTest.inv.out
+java/daikon/chicory/ChicoryTest.inv.out.diff
+java/daikon/chicory/ChicoryTest.log
 
 # Obtained via Git
 utils
