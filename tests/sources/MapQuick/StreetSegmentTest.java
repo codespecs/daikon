@@ -2,6 +2,7 @@ package MapQuick;
 
 import MapQuick2.*;
 import junit.framework.*;
+import org.junit.Test;
 
 public class StreetSegmentTest extends TestCase {
 

@@ -3,6 +3,7 @@ package MapQuick;
 import MapQuick2.*;
 import junit.framework.*;
 import org.junit.Before;
+import org.junit.Test;
 
 public class GeoSegmentTest extends TestCase {
 

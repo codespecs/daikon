@@ -1,6 +1,7 @@
 package MapQuick;
 
 import java.util.*;
+import org.junit.Test;
 
 class DFADTTestCase extends DFAnyTestCase {
   public DFADTTestCase(String name, TestRecord test) {

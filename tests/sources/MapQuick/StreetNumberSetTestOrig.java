@@ -4,6 +4,7 @@ package MapQuick;
 
 import MapQuick1.*;
 import junit.framework.*;
+import org.junit.Test;
 
 public class StreetNumberSetTestOrig extends TestCase {
 

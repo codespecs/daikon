@@ -13,6 +13,7 @@ package DataStructures;
  */
 import java.lang.reflect.*;
 import java.util.*;
+import org.junit.Test;
 
 public class DisjSetsTestMethodSequences {
 

@@ -1,6 +1,7 @@
 package javautil;
 
 import junit.framework.*;
+import org.junit.Test;
 
 public class VectorTest13 extends TestCase {
 

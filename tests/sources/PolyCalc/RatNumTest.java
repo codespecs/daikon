@@ -1,6 +1,7 @@
 package PolyCalc;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
 public class RatNumTest extends TestCase {
 

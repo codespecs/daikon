@@ -3,6 +3,7 @@ package MapQuick3;
 import static MapQuick3.TestValues.TOLERANCE;
 
 import junit.framework.*;
+import org.junit.Test;
 
 /** Unit tests for the GeoSegment class. */
 public class GeoSegmentTest extends TestCase {

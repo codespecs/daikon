@@ -4,6 +4,7 @@ import MapQuick2.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import junit.framework.*;
+import org.junit.Test;
 
 public class PS6TestCase extends TestCase {
   /** indicates that the getDirections(Address x 2) interface should be tested */

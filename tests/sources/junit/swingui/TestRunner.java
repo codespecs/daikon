@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import junit.framework.*;
 import junit.runner.*;
+import org.junit.Test;
 
 /**
  * A Swing based user interface to run tests. Enter the name of a class which either provides a

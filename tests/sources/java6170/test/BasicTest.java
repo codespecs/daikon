@@ -1,6 +1,7 @@
 package java6170.test;
 
 import junit.framework.*;
+import org.junit.Test;
 
 public class BasicTest extends TestCase {
   public BasicTest(String name) {

@@ -145,7 +145,11 @@ public class SampleTester {
     }
   }
 
-  /** This function is the actual function performed when this class is run through JUnit. */
+  /**
+   * This function is the actual function performed when this class is run through JUnit.
+   *
+   * @throws IOException if there in a problem with I/O
+   */
   @Test
   public void test_samples() throws IOException {
 

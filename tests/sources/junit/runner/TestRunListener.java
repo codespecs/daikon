@@ -1,4 +1,7 @@
 package junit.runner;
+
+import org.junit.Test;
+
 /**
  * A listener interface for observing the execution of a test run. Unlike TestListener, this
  * interface using only primitive objects, making it suitable for remote test execution.

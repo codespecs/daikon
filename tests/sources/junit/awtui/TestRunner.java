@@ -6,6 +6,7 @@ import java.awt.image.ImageProducer;
 import java.util.Vector;
 import junit.framework.*;
 import junit.runner.*;
+import org.junit.Test;
 
 /**
  * An AWT based user interface to run tests. Enter the name of a class which either provides a

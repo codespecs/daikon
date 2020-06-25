@@ -3,6 +3,7 @@ package MapQuick;
 import MapQuick2.*;
 import junit.framework.*;
 import org.junit.Before;
+import org.junit.Test;
 
 // TODO: check to see what happens if you have a path that loops back
 // upon itself; either immediately or if it ever reaches the same

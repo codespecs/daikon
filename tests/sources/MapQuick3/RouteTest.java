@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 /** Unit tests for the Route class */
 public class RouteTest extends TestCase {

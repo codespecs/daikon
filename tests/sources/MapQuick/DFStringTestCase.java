@@ -1,5 +1,7 @@
 package MapQuick;
 
+import org.junit.Test;
+
 class DFStringTestCase extends DFAnyTestCase {
   public DFStringTestCase(String name, TestRecord test) {
     super(name, test);

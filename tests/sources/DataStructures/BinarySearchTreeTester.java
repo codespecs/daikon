@@ -1,5 +1,7 @@
 package DataStructures;
 
+import org.junit.Test;
+
 public class BinarySearchTreeTester {
 
   @Test

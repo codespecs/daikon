@@ -3,6 +3,7 @@ package MapQuick3;
 import java.io.IOException;
 import junit.framework.TestCase;
 import org.junit.Before;
+import org.junit.Test;
 
 /** Unit tests for the DrivingRouteFormatter class. */
 public class DrivingRouteFormatterTest extends TestCase {
