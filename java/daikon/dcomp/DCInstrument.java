@@ -73,7 +73,7 @@ public class DCInstrument extends InstructionListUtils {
   protected InstructionFactory ifact;
   /** The loader that loaded DCInstrument.class. */
   protected @Nullable ClassLoader loader;
-  /** Has an &lt;init&gt; method completed initialization? */
+  /** Has an {@code <init>} method completed initialization? */
   protected boolean constructor_is_initialized;
 
   /** Local that stores the tag frame for the current method. */
