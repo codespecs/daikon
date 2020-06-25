@@ -3,6 +3,8 @@ package daikon.test.inv.unary.sequence;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import daikon.FileIO;
+import daikon.LogHelper;
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptTopLevel;
@@ -14,6 +16,7 @@ import daikon.inv.unary.sequence.OneOfSequence;
 import daikon.test.Common;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.plumelib.util.Intern;
 
@@ -26,6 +29,12 @@ public class OneOfSequenceTester {
   // private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
 
   private static final int DOESNT_MATTER = 0;
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   @SuppressWarnings("interning")
   public static VarInfo newIntArrayVarInfo(String name) {

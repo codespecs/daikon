@@ -2,6 +2,7 @@ package MapQuick;
 
 import MapQuick2.*;
 import junit.framework.*;
+import org.junit.Before;
 
 // TODO: check to see what happens if you have a path that loops back
 // upon itself; either immediately or if it ever reaches the same
@@ -27,6 +28,7 @@ public class ElementaryRouteTest extends TestCase {
     super(name);
   }
 
+  @Before
   protected void setUp() {
     // +1 mile                   14488      19579
     gpDowntown = new GeoPoint(42358333, -71060278);

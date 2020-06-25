@@ -8,11 +8,18 @@ import daikon.inv.*;
 import daikon.test.*;
 import java.util.Arrays;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class XorVisitorTester {
 
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   // X1 and X2 have the same class and vars, but different formula
   // map1: A->{W, X1, Y}, B->{Y}, D->{M, N_unjusitifed, O_unjustified}

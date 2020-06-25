@@ -4,11 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import daikon.tools.jtb.*;
 import junit.framework.*;
+import org.junit.Test;
 
 /** Tests that Annotate respects tabs. */
 public final class TestAnnotate {
 
-  public static void testGetTabbedIndex() {
+  @Test
+  public void testGetTabbedIndex() {
 
     String[] tabbed =
         new String[] {

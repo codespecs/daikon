@@ -2,6 +2,7 @@ package MapQuick3;
 
 import java.io.IOException;
 import junit.framework.TestCase;
+import org.junit.Before;
 
 /** Unit tests for the DrivingRouteFormatter class. */
 public class DrivingRouteFormatterTest extends TestCase {
@@ -13,7 +14,7 @@ public class DrivingRouteFormatterTest extends TestCase {
   private String mName = "Penny Lane";
   private int oneUnit = 100000;
 
-  // JUnit calls setUp() before each test__ method is run
+  @Before
   protected void setUp() {
     mDirections = new DrivingRouteFormatter();
     mShortRoute = new Route(new GeoSegment(mName, new GeoPoint(0, 0), new GeoPoint(0, 100000)));

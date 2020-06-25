@@ -6,6 +6,7 @@ import daikon.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.plumelib.util.ArraysPlume;
 
@@ -16,6 +17,12 @@ public class ProglangTypeTest {
 
   static Comparator<String[]> comparrcomparator =
       new ArraysPlume.ComparableArrayComparatorLexical<String>();
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   // Runtime type of first argument is long[]
   void longarrEquals(Object a, long[] b) {

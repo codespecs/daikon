@@ -10,10 +10,17 @@ import daikon.inv.unary.scalar.*;
 import daikon.test.*;
 import java.util.Comparator;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 @SuppressWarnings("nullness") // testing code
 public class ConsequentCVFPairComparatorTester {
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   @Test
   public void testCompare() {

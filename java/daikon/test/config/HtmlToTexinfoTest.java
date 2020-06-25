@@ -10,16 +10,16 @@ public class HtmlToTexinfoTest {
 
   @Test
   public void testHtmlToTexinfo() {
-    testHtmlToTexinfo("some &lt;text&gt; &amp; I like {it}", "some <text> & I like @{it@}");
-    testHtmlToTexinfo(
+    testHtmlToTexinfoHelper("some &lt;text&gt; &amp; I like {it}", "some <text> & I like @{it@}");
+    testHtmlToTexinfoHelper(
         "The <tt>--conf_limit</tt> command-line option to Daikon",
         "The @code{--conf_limit} command-line option to Daikon");
-    testHtmlToTexinfo(
+    testHtmlToTexinfoHelper(
         "The <code>--conf_limit</code> command-line option to Daikon",
         "The @code{--conf_limit} command-line option to Daikon");
   }
 
-  private void testHtmlToTexinfo(String in, String expected) {
+  private void testHtmlToTexinfoHelper(String in, String expected) {
     String actual = HtmlToTexinfo.htmlToTexinfo(in);
     assertEquals(expected, actual);
   }
@@ -27,24 +27,25 @@ public class HtmlToTexinfoTest {
   @Test
   public void testJavadocHtmlToTexinfo() {
     // Same as for testHtmlToTexinfo
-    testJavadocHtmlToTexinfo("some &lt;text&gt; &amp; I like {it}", "some <text> & I like @{it@}");
-    testJavadocHtmlToTexinfo(
+    testJavadocHtmlToTexinfoHelper(
+        "some &lt;text&gt; &amp; I like {it}", "some <text> & I like @{it@}");
+    testJavadocHtmlToTexinfoHelper(
         "The <tt>--conf_limit</tt> command-line option to Daikon",
         "The @code{--conf_limit} command-line option to Daikon");
-    testJavadocHtmlToTexinfo(
+    testJavadocHtmlToTexinfoHelper(
         "The <code>--conf_limit</code> command-line option to Daikon",
         "The @code{--conf_limit} command-line option to Daikon");
 
     // Additional test casess
-    testJavadocHtmlToTexinfo(
+    testJavadocHtmlToTexinfoHelper(
         "Split bi-implications {@code a <==> b} into two separate implications {@code a ==> b} and {@code b ==> a})",
         "Split bi-implications @code{a <==> b} into two separate implications @code{a ==> b} and @code{b ==> a})");
-    testJavadocHtmlToTexinfo(
+    testJavadocHtmlToTexinfoHelper(
         "     * {@code {e1, e2, e3, ...} subset of x[]}.",
         "     * @code{@{e1, e2, e3, ...@} subset of x[]}.");
   }
 
-  private void testJavadocHtmlToTexinfo(String in, String expected) {
+  private void testJavadocHtmlToTexinfoHelper(String in, String expected) {
     String actual = HtmlToTexinfo.javadocHtmlToTexinfo(in);
     assertEquals(expected, actual);
   }

@@ -32,6 +32,7 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
+import org.junit.Test;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -120,7 +121,8 @@ public class InvariantAddAndCheckTester {
   }
 
   /** This function is the actual function performed when this class is run through JUnit. */
-  public static void testFormats() {
+  @Test
+  public void testFormats() {
 
     // Don't care about comparability info because we are only
     // creating variables for the purpose of being compared (thus they

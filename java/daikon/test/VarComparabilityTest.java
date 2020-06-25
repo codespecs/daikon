@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import daikon.*;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 @SuppressWarnings("UnusedVariable") // test code
@@ -12,6 +13,12 @@ public class VarComparabilityTest {
 
   static final int NONE = VarComparability.NONE;
   static final int IMPLICIT = VarComparability.IMPLICIT;
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   boolean comp(VarComparability v1, VarComparability v2) {
     return VarComparability.comparable(v1, v2);

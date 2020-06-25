@@ -3,6 +3,8 @@ package daikon.test;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.fail;
 
+import daikon.FileIO;
+import daikon.LogHelper;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,6 +34,12 @@ import org.junit.Test;
 public class VarInfoNameTest {
 
   private static final String lineSep = daikon.Global.lineSep;
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   @Test
   public void testParse() {

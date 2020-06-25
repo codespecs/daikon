@@ -12,6 +12,8 @@ import java.util.List;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class InvMapTester {
@@ -24,7 +26,14 @@ public class InvMapTester {
   private List<Invariant> invsB = new ArrayList<>();
   private List<Invariant> invsC = new ArrayList<>();
 
-  public void setUp() throws Exception {
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
+
+  @Before
+  public void setUp() {
     map = new InvMap();
   }
 

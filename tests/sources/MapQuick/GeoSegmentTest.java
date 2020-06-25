@@ -2,6 +2,7 @@ package MapQuick;
 
 import MapQuick2.*;
 import junit.framework.*;
+import org.junit.Before;
 
 public class GeoSegmentTest extends TestCase {
 
@@ -24,7 +25,7 @@ public class GeoSegmentTest extends TestCase {
     super(name);
   }
 
-  // JUnit calls setUp() before each test__ method is run
+  @Before
   protected void setUp() {
     //                         north       east
     // +1 mile                   14488      19579

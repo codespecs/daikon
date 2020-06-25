@@ -8,6 +8,7 @@ import daikon.diff.*;
 import daikon.inv.*;
 import java.lang.reflect.Method;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 @SuppressWarnings("nullness") // testing code
@@ -25,6 +26,12 @@ public class PrintDifferingInvariantsVisitorTester {
   Invariant null_1_just = new DiffDummyInvariant(slice0, "1", true);
   /** An invariant that is justified but not worth printing. */
   Invariant null_noprint = new DiffDummyInvariant(slice0, "0", true, false);
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   @Test
   public void testShouldPrint() throws Exception {

@@ -2,12 +2,21 @@ package daikon.test;
 
 import static org.junit.Assert.assertEquals;
 
+import daikon.FileIO;
+import daikon.LogHelper;
 import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.LinearTernaryCore;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class LinearTernaryCoreTest {
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   void set_cache(LinearTernaryCore ltc, int index, long x, long y, long z) {
     ltc.def_points[index] = new LinearTernaryCore.Point(x, y, z);

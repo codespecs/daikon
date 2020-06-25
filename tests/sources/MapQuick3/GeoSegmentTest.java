@@ -198,9 +198,6 @@ public class GeoSegmentTest extends TestCase {
     }
   }
 
-  // JUnit calls setUp() before each test__ method is run
-  protected void setUp() {}
-
   // Test method for GeoSegment(String, GeoPoint, GeoPoint)
   @Test
   public void testGeoSegment() {

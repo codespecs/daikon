@@ -146,9 +146,6 @@ public class GeoPointTest extends TestCase {
     }
   }
 
-  /** JUnit calls this before each testXXX method is run */
-  protected void setUp() {}
-
   ////////////////////////////////////////////////////
   // TEST LEGAL/ILLEGAL VALUES IN GeoPoint CREATION //
   ////////////////////////////////////////////////////

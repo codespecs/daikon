@@ -12,6 +12,8 @@ import java.lang.reflect.Method;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class DetailedStatisticsVisitorTester {
@@ -50,8 +52,14 @@ public class DetailedStatisticsVisitorTester {
   Invariant ternary_2_just = new DiffDummyInvariant(slice3, "2", true);
   Invariant ternary_2_unjust = new DiffDummyInvariant(slice3, "2", false);
 
-  public DetailedStatisticsVisitorTester(String name) {
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
+  @Before
+  public void setUp() {
     PptNode pptNode = new PptNode(ppt, ppt);
 
     pptNode.add(new InvNode(null_1_just, null_1_just));

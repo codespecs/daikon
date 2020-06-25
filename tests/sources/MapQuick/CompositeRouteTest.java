@@ -3,6 +3,7 @@ package MapQuick;
 import MapQuick2.*;
 import java.util.*;
 import junit.framework.*;
+import org.junit.Before;
 
 // TODO: check to see what happens if you have a path that loops back
 // upon itself; either immediately or if it ever reaches the same
@@ -33,6 +34,7 @@ public class CompositeRouteTest extends TestCase {
     super(name);
   }
 
+  @Before
   protected void setUp() {
 
     gpDowntown = new GeoPoint(42358333, -71060278);

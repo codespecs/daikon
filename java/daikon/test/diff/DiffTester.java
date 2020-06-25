@@ -12,10 +12,13 @@ import daikon.split.misc.*;
 import daikon.test.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 @SuppressWarnings({"nullness", "UnusedVariable"}) // testing code
@@ -40,13 +43,15 @@ public class DiffTester {
   private PptMap imps1;
   private PptMap imps2;
 
-  @SuppressWarnings("interning")
-  public static VarInfo newIntVarInfo(String name) {
-    return new VarInfo(
-        name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
   }
 
-  public DiffTester(String name) throws Exception {
+  @Before
+  public void setUp()
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     diffSome = new Diff();
     diffAll = new Diff(true);
 
@@ -193,6 +198,12 @@ public class DiffTester {
       Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false, inv1, inv2);
       imps2.add(ppt);
     }
+  }
+
+  @SuppressWarnings("interning")
+  public static VarInfo newIntVarInfo(String name) {
+    return new VarInfo(
+        name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
   }
 
   @Test
@@ -533,7 +544,7 @@ public class DiffTester {
   /// Helper functions
   ///
 
-  PptTopLevel newPptTopLevel(String pptname, VarInfo[] vars) {
+  static PptTopLevel newPptTopLevel(String pptname, VarInfo[] vars) {
     return Common.makePptTopLevel(pptname, vars);
   }
 }

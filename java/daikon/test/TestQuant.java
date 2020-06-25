@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import daikon.*;
 import java.util.Arrays;
 import junit.framework.*;
+import org.junit.Test;
 
 @SuppressWarnings({"nullness", "UnusedVariable"}) // testing code
 public final class TestQuant {
@@ -54,7 +55,8 @@ public final class TestQuant {
   //     assertEquals(3, Quant.max(new int[] { 3 }));
   //   }
 
-  public static void test_concat() {
+  @Test
+  public void test_concat() {
     assert_arrays_equals(Quant.concat(new int[] {}, new int[] {}), new int[] {});
     assert_arrays_equals(Quant.concat(new int[] {1}, new int[] {}), new int[] {1});
     assert_arrays_equals(Quant.concat(new int[] {}, new int[] {1}), new int[] {1});
@@ -72,7 +74,8 @@ public final class TestQuant {
         Quant.concat(new int[] {-1, 2, 3, 4}, new int[] {5}), new int[] {-1, 2, 3, 4, 5});
   }
 
-  public static void test_union() {
+  @Test
+  public void test_union() {
     {
       int[] u = Quant.union(new int[] {}, new int[] {});
       Arrays.sort(u);
@@ -115,7 +118,8 @@ public final class TestQuant {
     }
   }
 
-  public static void test_intersection() {
+  @Test
+  public void test_intersection() {
     {
       int[] u = Quant.intersection(new int[] {}, new int[] {});
       Arrays.sort(u);
@@ -158,7 +162,8 @@ public final class TestQuant {
     }
   }
 
-  public static void test_setDiff() {
+  @Test
+  public void test_setDiff() {
     assert_arrays_equals(Quant.setDiff(new int[] {}, new int[] {}), new int[] {});
     assert_arrays_equals(Quant.setDiff(new int[] {1}, new int[] {}), new int[] {1});
     assert_arrays_equals(Quant.setDiff(new int[] {}, new int[] {1}), new int[] {});
@@ -176,7 +181,8 @@ public final class TestQuant {
         Quant.setDiff(new int[] {-1, 2, 3, 4}, new int[] {5}), new int[] {-1, 2, 3, 4});
   }
 
-  public static void test_setEqual() {
+  @Test
+  public void test_setEqual() {
     assertTrue(Quant.setEqual(new int[] {}, new int[] {}));
     assertFalse(Quant.setEqual(new int[] {1}, new int[] {}));
     assertFalse(Quant.setEqual(new int[] {}, new int[] {1}));
@@ -194,7 +200,8 @@ public final class TestQuant {
     assertFalse(Quant.setEqual(new int[] {-1, 2, 3, 4}, new int[] {5}));
   }
 
-  public static void test_subsetOf() {
+  @Test
+  public void test_subsetOf() {
     assertTrue(Quant.subsetOf(new int[] {-1}, new int[] {-1, 1}));
     assertFalse(Quant.subsetOf(new int[] {-1, 0, 1}, new int[] {-1, 1}));
     assertTrue(Quant.subsetOf(new int[] {-1, 1}, new int[] {-1, 1}));
@@ -228,7 +235,8 @@ public final class TestQuant {
     assertTrue(Quant.subsetOf(new int[] {}, new int[] {}));
   }
 
-  public static void test_subsetOf_different_types() {
+  @Test
+  public void test_subsetOf_different_types() {
     assertTrue(Quant.subsetOf(new byte[] {}, new int[] {}));
     assertTrue(Quant.subsetOf(new long[] {}, new long[] {}));
     assertFalse(Quant.subsetOf(new byte[] {1}, new long[] {}));
@@ -245,7 +253,8 @@ public final class TestQuant {
     assertTrue(Quant.subsetOf(new long[] {}, new short[] {2, 3, 1}));
   }
 
-  public static void test_isReverse() {
+  @Test
+  public void test_isReverse() {
     assertTrue(Quant.isReverse(new int[] {}, new int[] {}));
     assertFalse(Quant.isReverse(new int[] {1}, new int[] {}));
     assertFalse(Quant.isReverse(new int[] {}, new int[] {1}));
@@ -263,7 +272,8 @@ public final class TestQuant {
     assertFalse(Quant.isReverse(new int[] {-1, 2, 3, 4}, new int[] {5}));
   }
 
-  public static void test_noDups() {
+  @Test
+  public void test_noDups() {
     assertTrue(Quant.noDups(new int[] {}));
     assertTrue(Quant.noDups(new int[] {1}));
     assertTrue(Quant.noDups(new int[] {-1}));
@@ -278,7 +288,8 @@ public final class TestQuant {
     assertTrue(Quant.noDups(new int[] {-1, 1, 2, 3, 4, 5, 6}));
   }
 
-  public static void test_memberOf() {
+  @Test
+  public void test_memberOf() {
     assertFalse(Quant.memberOf(1, new int[] {}));
     assertTrue(Quant.memberOf(1, new int[] {1}));
     assertFalse(Quant.memberOf(-1, new int[] {1}));
@@ -302,7 +313,8 @@ public final class TestQuant {
     assertTrue(Quant.memberOf(6, new int[] {-1, 1, 2, 3, 4, 5, 6}));
   }
 
-  public static void test_slice() {
+  @Test
+  public void test_slice() {
     assert_arrays_equals(Quant.slice(new int[] {}, 0, 0), new int[] {});
     assert_arrays_equals(Quant.slice(new int[] {1}, 0, 0), new int[] {1});
     assert_arrays_equals(Quant.slice(new int[] {1}, 0, 1), new int[] {});
@@ -315,7 +327,8 @@ public final class TestQuant {
     assert_arrays_equals(Quant.slice(new int[] {1, 2, 3}, 2, 2), new int[] {3});
   }
 
-  public static void test_eltsEqual() {
+  @Test
+  public void test_eltsEqual() {
     assertTrue(Quant.eltsEqual(new int[] {}, 0));
     assertFalse(Quant.eltsEqual(new int[] {1}, -1));
     assertTrue(Quant.eltsEqual(new int[] {1}, 1));
@@ -333,7 +346,8 @@ public final class TestQuant {
     assertTrue(Quant.eltsEqual(new int[] {1, 1, 1, 1}, 1));
   }
 
-  public static void test_eltsNotEqual() {
+  @Test
+  public void test_eltsNotEqual() {
     assertTrue(Quant.eltsNotEqual(new int[] {}, 0));
     assertTrue(Quant.eltsNotEqual(new int[] {1}, -1));
     assertFalse(Quant.eltsNotEqual(new int[] {1}, 1));
@@ -352,7 +366,8 @@ public final class TestQuant {
     assertFalse(Quant.eltsNotEqual(new int[] {1, 1, 1, 1}, 1));
   }
 
-  public static void test_eltsGT() {
+  @Test
+  public void test_eltsGT() {
     assertTrue(Quant.eltsGT(new int[] {}, 0));
     assertTrue(Quant.eltsGT(new int[] {1}, -1));
     assertFalse(Quant.eltsGT(new int[] {1}, 1));
@@ -372,7 +387,8 @@ public final class TestQuant {
     assertFalse(Quant.eltsGT(new int[] {3, 3, 3, 3}, 3));
   }
 
-  public static void test_eltsGTE() {
+  @Test
+  public void test_eltsGTE() {
     assertTrue(Quant.eltsGTE(new int[] {}, 0));
     assertTrue(Quant.eltsGTE(new int[] {1}, -1));
     assertTrue(Quant.eltsGTE(new int[] {1}, 1));
@@ -392,7 +408,8 @@ public final class TestQuant {
     assertTrue(Quant.eltsGTE(new int[] {3, 3, 3, 3}, 3));
   }
 
-  public static void test_eltsLT() {
+  @Test
+  public void test_eltsLT() {
     assertTrue(Quant.eltsLT(new int[] {}, 0));
     assertFalse(Quant.eltsLT(new int[] {1}, -1));
     assertFalse(Quant.eltsLT(new int[] {1}, 1));
@@ -412,7 +429,8 @@ public final class TestQuant {
     assertFalse(Quant.eltsLT(new int[] {3, 3, 3, 3}, 3));
   }
 
-  public static void test_eltsLTE() {
+  @Test
+  public void test_eltsLTE() {
     assertTrue(Quant.eltsLTE(new int[] {}, 0));
     assertFalse(Quant.eltsLTE(new int[] {1}, -1));
     assertTrue(Quant.eltsLTE(new int[] {1}, 1));
@@ -432,7 +450,8 @@ public final class TestQuant {
     assertTrue(Quant.eltsLTE(new int[] {3, 3, 3, 3}, 3));
   }
 
-  public static void test_pairwiseEqual() {
+  @Test
+  public void test_pairwiseEqual() {
     assertTrue(Quant.pairwiseEqual(new int[] {}, new int[] {}));
     assertFalse(Quant.pairwiseEqual(new int[] {1}, new int[] {}));
     assertFalse(Quant.pairwiseEqual(new int[] {}, new int[] {1}));
@@ -444,7 +463,8 @@ public final class TestQuant {
     assertFalse(Quant.pairwiseEqual(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_pairwiseNotEqual() {
+  @Test
+  public void test_pairwiseNotEqual() {
     assertTrue(Quant.pairwiseNotEqual(new int[] {}, new int[] {}));
     assertFalse(Quant.pairwiseNotEqual(new int[] {1}, new int[] {}));
     assertFalse(Quant.pairwiseNotEqual(new int[] {}, new int[] {1}));
@@ -456,7 +476,8 @@ public final class TestQuant {
     assertFalse(Quant.pairwiseNotEqual(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_pairwiseLT() {
+  @Test
+  public void test_pairwiseLT() {
     assertTrue(Quant.pairwiseLT(new int[] {}, new int[] {}));
     assertFalse(Quant.pairwiseLT(new int[] {1}, new int[] {}));
     assertFalse(Quant.pairwiseLT(new int[] {}, new int[] {1}));
@@ -469,7 +490,8 @@ public final class TestQuant {
     assertFalse(Quant.pairwiseLT(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_pairwiseLTE() {
+  @Test
+  public void test_pairwiseLTE() {
     assertTrue(Quant.pairwiseLTE(new int[] {}, new int[] {}));
     assertFalse(Quant.pairwiseLTE(new int[] {1}, new int[] {}));
     assertFalse(Quant.pairwiseLTE(new int[] {}, new int[] {1}));
@@ -482,7 +504,8 @@ public final class TestQuant {
     assertFalse(Quant.pairwiseLTE(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_pairwiseGT() {
+  @Test
+  public void test_pairwiseGT() {
     assertTrue(Quant.pairwiseGT(new int[] {}, new int[] {}));
     assertFalse(Quant.pairwiseGT(new int[] {1}, new int[] {}));
     assertFalse(Quant.pairwiseGT(new int[] {}, new int[] {1}));
@@ -496,7 +519,8 @@ public final class TestQuant {
     assertFalse(Quant.pairwiseGT(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_pairwiseGTE() {
+  @Test
+  public void test_pairwiseGTE() {
     assertTrue(Quant.pairwiseGTE(new int[] {}, new int[] {}));
     assertFalse(Quant.pairwiseGTE(new int[] {1}, new int[] {}));
     assertFalse(Quant.pairwiseGTE(new int[] {}, new int[] {1}));
@@ -509,7 +533,8 @@ public final class TestQuant {
     assertFalse(Quant.pairwiseGTE(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_eltwiseEqual() {
+  @Test
+  public void test_eltwiseEqual() {
     assertTrue(Quant.eltwiseEqual(new int[] {}));
     assertTrue(Quant.eltwiseEqual(new int[] {1}));
     assertTrue(Quant.eltwiseEqual(new int[] {-1}));
@@ -527,7 +552,8 @@ public final class TestQuant {
     assertFalse(Quant.eltwiseEqual(new int[] {-1, 1, 2, 3, 4, 5, 6}));
   }
 
-  public static void test_eltwiseNotEqual() {
+  @Test
+  public void test_eltwiseNotEqual() {
     assertTrue(Quant.eltwiseNotEqual(new int[] {}));
     assertTrue(Quant.eltwiseNotEqual(new int[] {1}));
     assertTrue(Quant.eltwiseNotEqual(new int[] {-1}));
@@ -545,7 +571,8 @@ public final class TestQuant {
     assertTrue(Quant.eltwiseNotEqual(new int[] {-1, 1, 2, 3, 4, 5, 6}));
   }
 
-  public static void test_eltwiseLT() {
+  @Test
+  public void test_eltwiseLT() {
     assertTrue(Quant.eltwiseLT(new int[] {}));
     assertTrue(Quant.eltwiseLT(new int[] {1}));
     assertTrue(Quant.eltwiseLT(new int[] {-1}));
@@ -563,7 +590,8 @@ public final class TestQuant {
     assertTrue(Quant.eltwiseLT(new int[] {-1, 1, 2, 3, 4, 5, 6}));
   }
 
-  public static void test_eltwiseLTE() {
+  @Test
+  public void test_eltwiseLTE() {
     assertTrue(Quant.eltwiseLTE(new int[] {}));
     assertTrue(Quant.eltwiseLTE(new int[] {1}));
     assertTrue(Quant.eltwiseLTE(new int[] {-1}));
@@ -581,7 +609,8 @@ public final class TestQuant {
     assertTrue(Quant.eltwiseLTE(new int[] {-1, 1, 2, 3, 4, 5, 6}));
   }
 
-  public static void test_eltwiseGT() {
+  @Test
+  public void test_eltwiseGT() {
     assertTrue(Quant.eltwiseGT(new int[] {}));
     assertTrue(Quant.eltwiseGT(new int[] {1}));
     assertTrue(Quant.eltwiseGT(new int[] {-1}));
@@ -599,7 +628,8 @@ public final class TestQuant {
     assertFalse(Quant.eltwiseGT(new int[] {-1, 1, 2, 3, 4, 5, 6}));
   }
 
-  public static void test_eltwiseGTE() {
+  @Test
+  public void test_eltwiseGTE() {
     assertTrue(Quant.eltwiseGTE(new int[] {}));
     assertTrue(Quant.eltwiseGTE(new int[] {1}));
     assertTrue(Quant.eltwiseGTE(new int[] {-1}));
@@ -617,7 +647,8 @@ public final class TestQuant {
     assertFalse(Quant.eltwiseGTE(new int[] {-1, 1, 2, 3, 4, 5, 6}));
   }
 
-  public static void test_eltsEqualIndex() {
+  @Test
+  public void test_eltsEqualIndex() {
     assertTrue(Quant.eltsEqualIndex(new int[] {}));
     assertTrue(Quant.eltsEqualIndex(new int[] {0}));
     assertFalse(Quant.eltsEqualIndex(new int[] {1}));
@@ -633,7 +664,8 @@ public final class TestQuant {
     assertFalse(Quant.eltsEqualIndex(new int[] {1, 3, 3}));
   }
 
-  public static void test_eltsNotEqualIndex() {
+  @Test
+  public void test_eltsNotEqualIndex() {
     assertTrue(Quant.eltsNotEqualIndex(new int[] {}));
     assertFalse(Quant.eltsNotEqualIndex(new int[] {0}));
     assertTrue(Quant.eltsNotEqualIndex(new int[] {1}));
@@ -649,7 +681,8 @@ public final class TestQuant {
     assertTrue(Quant.eltsNotEqualIndex(new int[] {1, 3, 3}));
   }
 
-  public static void test_eltsGteIndex() {
+  @Test
+  public void test_eltsGteIndex() {
     assertTrue(Quant.eltsGteIndex(new int[] {}));
     assertTrue(Quant.eltsGteIndex(new int[] {0}));
     assertTrue(Quant.eltsGteIndex(new int[] {1}));
@@ -665,7 +698,8 @@ public final class TestQuant {
     assertTrue(Quant.eltsGteIndex(new int[] {1, 3, 3}));
   }
 
-  public static void test_eltsGtIndex() {
+  @Test
+  public void test_eltsGtIndex() {
     assertTrue(Quant.eltsGtIndex(new int[] {}));
     assertFalse(Quant.eltsGtIndex(new int[] {0}));
     assertTrue(Quant.eltsGtIndex(new int[] {1}));
@@ -681,7 +715,8 @@ public final class TestQuant {
     assertTrue(Quant.eltsGtIndex(new int[] {1, 3, 3}));
   }
 
-  public static void test_eltsLteIndex() {
+  @Test
+  public void test_eltsLteIndex() {
     assertTrue(Quant.eltsLteIndex(new int[] {}));
     assertTrue(Quant.eltsLteIndex(new int[] {0}));
     assertFalse(Quant.eltsLteIndex(new int[] {1}));
@@ -697,7 +732,8 @@ public final class TestQuant {
     assertFalse(Quant.eltsLteIndex(new int[] {1, 3, 3}));
   }
 
-  public static void test_eltsLtIndex() {
+  @Test
+  public void test_eltsLtIndex() {
     assertTrue(Quant.eltsLtIndex(new int[] {}));
     assertFalse(Quant.eltsLtIndex(new int[] {0}));
     assertFalse(Quant.eltsLtIndex(new int[] {1}));
@@ -713,7 +749,8 @@ public final class TestQuant {
     assertFalse(Quant.eltsLtIndex(new int[] {1, 3, 3}));
   }
 
-  public static void test_lexEqual() {
+  @Test
+  public void test_lexEqual() {
     assertTrue(Quant.lexEqual(new int[] {}, new int[] {}));
     assertFalse(Quant.lexEqual(new int[] {1}, new int[] {}));
     assertFalse(Quant.lexEqual(new int[] {}, new int[] {1}));
@@ -726,7 +763,8 @@ public final class TestQuant {
     assertFalse(Quant.lexEqual(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_lexNotEqual() {
+  @Test
+  public void test_lexNotEqual() {
     assertFalse(Quant.lexNotEqual(new int[] {}, new int[] {}));
     assertTrue(Quant.lexNotEqual(new int[] {1}, new int[] {}));
     assertTrue(Quant.lexNotEqual(new int[] {}, new int[] {1}));
@@ -739,7 +777,8 @@ public final class TestQuant {
     assertTrue(Quant.lexNotEqual(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_lexLT() {
+  @Test
+  public void test_lexLT() {
     assertFalse(Quant.lexLT(new int[] {}, new int[] {}));
     assertFalse(Quant.lexLT(new int[] {1}, new int[] {}));
     assertTrue(Quant.lexLT(new int[] {}, new int[] {1}));
@@ -752,7 +791,8 @@ public final class TestQuant {
     assertTrue(Quant.lexLT(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_lexLTE() {
+  @Test
+  public void test_lexLTE() {
     assertTrue(Quant.lexLTE(new int[] {}, new int[] {}));
     assertFalse(Quant.lexLTE(new int[] {1}, new int[] {}));
     assertTrue(Quant.lexLTE(new int[] {}, new int[] {1}));
@@ -765,7 +805,8 @@ public final class TestQuant {
     assertTrue(Quant.lexLTE(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_lexGT() {
+  @Test
+  public void test_lexGT() {
     assertFalse(Quant.lexGT(new int[] {}, new int[] {}));
     assertTrue(Quant.lexGT(new int[] {1}, new int[] {}));
     assertFalse(Quant.lexGT(new int[] {}, new int[] {1}));
@@ -778,7 +819,8 @@ public final class TestQuant {
     assertFalse(Quant.lexGT(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_lexGTE() {
+  @Test
+  public void test_lexGTE() {
     assertTrue(Quant.lexGTE(new int[] {}, new int[] {}));
     assertTrue(Quant.lexGTE(new int[] {1}, new int[] {}));
     assertFalse(Quant.lexGTE(new int[] {}, new int[] {1}));
@@ -791,7 +833,8 @@ public final class TestQuant {
     assertFalse(Quant.lexGTE(new int[] {1, 2, 3}, new int[] {3, 2, 1}));
   }
 
-  public static void test_pairwiseDivides() {
+  @Test
+  public void test_pairwiseDivides() {
     assertTrue(Quant.pairwiseDivides(new int[] {}, new int[] {}));
     assertFalse(Quant.pairwiseDivides(new int[] {}, new int[] {1}));
     assertFalse(Quant.pairwiseDivides(new int[] {1}, new int[] {}));
@@ -804,7 +847,8 @@ public final class TestQuant {
     assertFalse(Quant.pairwiseDivides(new int[] {1, 6, 7}, new int[] {1, 2, 3}));
   }
 
-  public static void test_pairwiseSquare() {
+  @Test
+  public void test_pairwiseSquare() {
     assertTrue(Quant.pairwiseSquare(new int[] {}, new int[] {}));
     assertFalse(Quant.pairwiseSquare(new int[] {}, new int[] {1}));
     assertFalse(Quant.pairwiseSquare(new int[] {1}, new int[] {}));
@@ -817,14 +861,16 @@ public final class TestQuant {
     assertFalse(Quant.pairwiseSquare(new int[] {1, 4, 10}, new int[] {1, 2, 3}));
   }
 
-  public static void test_pairwiseBitwiseComplement() {
+  @Test
+  public void test_pairwiseBitwiseComplement() {
     assertTrue(Quant.pairwiseBitwiseComplement(new int[] {}, new int[] {}));
     assertTrue(Quant.pairwiseBitwiseComplement(new int[] {3, 3}, new int[] {-4, -4}));
     assertFalse(Quant.pairwiseBitwiseComplement(new int[] {3, 3}, new int[] {3, -4}));
     assertTrue(Quant.pairwiseBitwiseComplement(new int[] {3, 21, 0}, new int[] {-4, -22, -1}));
   }
 
-  public static void test_pairwiseBitwiseSubset() {
+  @Test
+  public void test_pairwiseBitwiseSubset() {
     assertTrue(Quant.pairwiseBitwiseSubset(new int[] {}, new int[] {}));
     assertTrue(Quant.pairwiseBitwiseSubset(new int[] {5, 5}, new int[] {4, 1}));
     assertFalse(Quant.pairwiseBitwiseSubset(new int[] {5, 5}, new int[] {4, 3}));
@@ -930,7 +976,8 @@ public final class TestQuant {
     public String z;
   }
 
-  public static void testCollect() {
+  @Test
+  public void testCollect() {
 
     Foo1 f1 = new Foo1();
     f1.x = new Bar1();
@@ -987,7 +1034,8 @@ public final class TestQuant {
     assertEquals(a4[1], a3[1]);
   }
 
-  public static void testCollect_field() {
+  @Test
+  public void testCollect_field() {
 
     Foo1 f1 = new Foo1();
     f1.x = new Bar1();

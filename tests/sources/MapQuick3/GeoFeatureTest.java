@@ -95,9 +95,6 @@ public class GeoFeatureTest extends TestCase {
     return gf.addSegment(new GeoSegment(name, p1, p2));
   }
 
-  // JUnit calls setUp() before each test__ method is run
-  protected void setUp() {}
-
   // Test for the Constructor
 
   @Test

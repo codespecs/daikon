@@ -9,8 +9,6 @@ public class PriorityQueueTest extends TestCase {
     super(name);
   }
 
-  // public void setUp() { }
-
   @Test
   public void testSize() {
     PriorityQueue q = new PriorityQueue();

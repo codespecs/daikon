@@ -2,6 +2,7 @@ package MapQuick;
 
 import MapQuick2.*;
 import junit.framework.*;
+import org.junit.Before;
 
 public class GeoPointTest extends TestCase {
 
@@ -19,6 +20,7 @@ public class GeoPointTest extends TestCase {
     super(name);
   }
 
+  @Before
   protected void setUp() {
 
     gpDowntown = new GeoPoint(42358333, -71060278);

@@ -11,10 +11,17 @@ import daikon.test.*;
 import java.util.Comparator;
 import java.util.Random;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 @SuppressWarnings("nullness") // testing code
 public class InvariantTester {
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   @SuppressWarnings("interning")
   public VarInfo newIntVarInfo(String name) {

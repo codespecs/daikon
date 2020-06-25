@@ -6,6 +6,7 @@ import daikon.*;
 import java.util.BitSet;
 import java.util.Random;
 import junit.framework.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ModBitTrackerTest {
@@ -20,6 +21,12 @@ public class ModBitTrackerTest {
   // the "count" argument to ModBitTracker.add().
 
   private Random r = new Random(20031014L);
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   private ModBitTracker makeModBitTracker(BitSet[] bitsets) {
     int numvars = bitsets.length;
