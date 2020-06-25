@@ -3065,7 +3065,12 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return csharp_name(null);
   }
 
-  /** Returns the name of this variable as a valid C# Code Contract. */
+  /**
+   * Returns the name of this variable as a valid C# Code Contract.
+   *
+   * @param index an an array index. Must be null for a non-array variable.
+   * @retun the name of this variable as a valid C# Code Contract
+   */
   @SideEffectFree
   public String csharp_name(@Nullable String index) {
     if (index != null) {
@@ -3237,8 +3242,10 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name of this variable in JML format. If an index is specified, it is used as an
-   * array index. It is an error to specify an index on a non-array variable.
+   * Returns the name of this variable in JML format.
+   *
+   * @param an array index. Must be null for a non-array variable.
+   * @return the name of this variable in JML format
    */
   public String jml_name(@Nullable String index) {
 

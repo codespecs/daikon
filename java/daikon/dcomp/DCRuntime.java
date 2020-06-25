@@ -218,7 +218,14 @@ public final class DCRuntime {
     System.out.println();
   }
 
-  /** Handles calls to instrumented equals() methods. */
+  /**
+   * Handles calls to instrumented equals() methods. Makes the arguments comparable, and returns
+   * true if they are equals() to one another.
+   *
+   * @param o1 the first argument to equals()
+   * @param o2 the second argument to equals()
+   * @return whether the two values are equal
+   */
   public static boolean dcomp_equals(Object o1, Object o2) {
     // Make obj1 and obj2 comparable
     if ((o1 != null) && (o2 != null)) {
@@ -277,8 +284,12 @@ public final class DCRuntime {
   static Map<Object, Class<?>> active_clone_calls = new HashMap<>();
 
   /**
-   * Handles {@code super.equals(Object)} calls.
+   * Handles {@code super.equals(Object)} calls. Makes the arguments comparable, and returns true if
+   * super.equals() returns true for them
    *
+   * @param o1 the first argument to super.equals()
+   * @param o2 the second argument to super.equals()
+   * @return whether the two values are equal, according to super.equals()
    * @see #active_equals_calls
    */
   public static boolean dcomp_super_equals(Object o1, Object o2) {
@@ -644,7 +655,11 @@ public final class DCRuntime {
     return tag_frame;
   }
 
-  /** Make sure the tag stack for this method is empty before exit. */
+  /**
+   * Make sure the tag stack for this method is empty before exit.
+   *
+   * @param tag_frame the tag frame
+   */
   public static void normal_exit(Object[] tag_frame) {
     if (debug) {
       System.out.printf("Begin normal exit from %s%n", caller_name());
@@ -696,6 +711,8 @@ public final class DCRuntime {
    * Called for exits from methods with a primitive return type. Pop the return type off of the tag
    * stack, make sure the tags stack is empty for this method and then put the return value back on
    * the tag stack.
+   *
+   * @param tag_frame the tag frame
    */
   public static void normal_exit_primitive(Object[] tag_frame) {
     if (debug) {

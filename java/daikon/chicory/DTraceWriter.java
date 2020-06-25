@@ -312,7 +312,12 @@ public class DTraceWriter extends DaikonWriter {
     }
   }
 
-  /** Similar to {@link DTraceWriter#getValue}, but used for static fields. */
+  /**
+   * Similar to {@link DTraceWriter#getValue}, but used for static fields.
+   *
+   * @param classField the field whose static value to return
+   * @return the static value of the field
+   */
   @SuppressWarnings("deprecation") // in Java 9+, use canAccess instead of isAccessible
   public static Object getStaticValue(Field classField) {
     if (!classField.isAccessible()) {

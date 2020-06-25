@@ -242,7 +242,9 @@ public class SampleTester extends TestCase {
 
   /**
    * Processes a variable list. Sets up the vars[] array to point to the matching variables in the
-   * ppt. The ppt must have been previously specified. Variables are separated by spaces.
+   * ppt. The ppt must have been previously specified.
+   *
+   * @param var_names the variable names, separated by spaces
    */
   private void proc_vars(String var_names) {
 
@@ -486,8 +488,10 @@ public class SampleTester extends TestCase {
   }
 
   /**
-   * The constant assertion returns true if all of its arguments are constants Each argument is
-   * variable name and at least one variable number must be specified.
+   * The constant assertion returns true if all of its arguments are constants.
+   *
+   * @param args variables; must be non-empty
+   * @return true if all of the given variables are constants
    */
   private boolean proc_constant_assert(List<String> args) {
 

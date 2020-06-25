@@ -258,6 +258,7 @@ public class DeclWriter extends DaikonWriter {
    * Runtime to print decls info for a class.
    *
    * @param cinfo class whose declarations should be printed
+   * @param comp_info comparability information
    */
   public void print_decl_class(ClassInfo cinfo, @Nullable DeclReader comp_info) {
 
@@ -364,6 +365,10 @@ public class DeclWriter extends DaikonWriter {
   /**
    * Prints the class program point. This contains only the static variables. If there are no static
    * variables to print, this method does nothing.
+   *
+   * @param cinfo class whose static declarations should be printed
+   * @param name the program point name
+   * @param comp_info comparability information
    */
   private void print_class_ppt(ClassInfo cinfo, String name, DeclReader comp_info) {
 
@@ -398,7 +403,13 @@ public class DeclWriter extends DaikonWriter {
     if (debug) System.out.println("Exit print_class_ppt");
   }
 
-  /** Prints the object program point. This contains the "this" object and the class' fields. */
+  /**
+   * Prints the object program point. This contains the "this" object and the class' fields.
+   *
+   * @param cinfo class whose object program point should be printed
+   * @param name the program point name
+   * @param comp_info comparability information
+   */
   private void print_object_ppt(ClassInfo cinfo, String name, DeclReader comp_info) {
 
     if (debug) {
