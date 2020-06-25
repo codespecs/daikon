@@ -1,21 +1,27 @@
 package MapQuick;
 
 import java.util.*;
-import org.junit.Test;
 
-class DFADTTestCase extends DFAnyTestCase {
-  public DFADTTestCase(String name, TestRecord test) {
+class DFADTTestCase extends DFAnyTestCase
+{
+  public DFADTTestCase(String name, TestRecord test)
+  {
     super(name, test);
   }
 
-  /** Runs all of the tests in this. */
-  public void runTest() {
+  /**
+   * Runs all of the tests in this.
+   */
+  public void runTest()
+  {
     testProgADT();
   }
-
-  /** Runs the test against getDirections(Address x 2) */
-  @Test
-  public void testProgADT() {
+  
+  /**
+   * Runs the test against getDirections(Address x 2)
+   */
+  public void testProgADT()
+  {
     loadDatabase();
     String useful_name = "query from '" + test.start + "' to '" + test.end + "'";
     if (test.directions != null) {
@@ -29,7 +35,8 @@ class DFADTTestCase extends DFAnyTestCase {
     }
   }
 
-  private void runProgADT_bad_address(String useful_name) {
+  private void runProgADT_bad_address(String useful_name)
+  {
     try {
       Directions result = df.getDirections(test.start, test.end);
       fail("Expected InvalidAddressException on " + useful_name);
@@ -41,7 +48,8 @@ class DFADTTestCase extends DFAnyTestCase {
     }
   }
 
-  private void runProgADT_no_path(String useful_name) {
+  private void runProgADT_no_path(String useful_name)
+  {
     try {
       Directions result = df.getDirections(test.start, test.end);
       fail("Expected NoPathException on " + useful_name);
@@ -53,34 +61,29 @@ class DFADTTestCase extends DFAnyTestCase {
     }
   }
 
-  private void runProgADT_directions(String useful_name) {
+  private void runProgADT_directions(String useful_name)
+  {
     try {
       Directions result = df.getDirections(test.start, test.end);
 
-      assertEquals(
-          "The start given by getStart() should match the starting point given in the query ("
-              + useful_name
-              + ")",
-          test.start,
-          result.getStart());
+      assertEquals("The start given by getStart() should match the starting point given in the query (" + useful_name + ")",
+		   test.start,
+		   result.getStart());
 
-      assertEquals(
-          "The end given by getEnd() should match the ending point given in the query ("
-              + useful_name
-              + ")",
-          test.end,
-          result.getEnd());
+      assertEquals("The end given by getEnd() should match the ending point given in the query (" + useful_name + ")",
+		   test.end,
+		   result.getEnd());
 
-      assertEquals(
-          "The length given by getLength() should match the expected length for " + useful_name,
-          test.length,
-          result.getLength(),
-          0.001);
+      assertEquals("The length given by getLength() should match the expected length for " + useful_name,
+		   test.length,
+		   result.getLength(),
+		   0.001);
 
       Iterator query_dirs = Arrays.asList(test.directions).iterator();
       Iterator result_dirs = result.getDirections();
-      assertEquals("getDirections(Address x 2) " + useful_name, query_dirs, result_dirs);
-
+      assertEquals("getDirections(Address x 2) " + useful_name,
+		   query_dirs, result_dirs);
+      
     } catch (InvalidAddressException e) {
       fail("Unexpected exception on " + useful_name + ": " + e.toString());
     } catch (NoPathException e) {

@@ -1,12 +1,21 @@
 package MapQuick;
 
 import MapQuick2.*;
+
+
+import java.util.Arrays;
 import java.util.Iterator;
+
 import junit.framework.*;
 
-public class DFAnyTestCase extends TestCase {
-  /** @effects creates a new test which runs the given test in the given mode */
-  public DFAnyTestCase(String name, TestRecord test) {
+public class DFAnyTestCase
+  extends TestCase
+{
+  /**
+   * @effects creates a new test which runs the given test in the given mode
+   */
+  public DFAnyTestCase(String name, TestRecord test)
+  {
     super(name);
     this.test = test;
   }
@@ -15,7 +24,8 @@ public class DFAnyTestCase extends TestCase {
    * @requires name = "testLoadDatabase"
    * @effects creates a new test which attemps to load the database
    */
-  public DFAnyTestCase(String name) {
+  public DFAnyTestCase(String name)
+  {
     super(name);
     this.test = null;
   }
@@ -27,12 +37,13 @@ public class DFAnyTestCase extends TestCase {
   // instantiate.  Initialize via thunk so that if the database cannot
   // be loaded, we fail on the first test, instead of on class-loading
   // of the test suite.
-  protected static DirectionsFinder df = null; // (df != null) ==> !df_load_failed
+  protected static DirectionsFinder df = null;     // (df != null) ==> !df_load_failed
   protected static boolean df_load_failed = false; // df_load_failed ==> (df == null)
 
   // Upon normal return:      (df != null) && (df_load_failed == false)
   // Upon exceptional return: (df == null) && (df_load_failed == true)
-  protected static void loadDatabase() {
+  protected static void loadDatabase()
+  {
     // might be done already...
     if (df != null) {
       return;
@@ -54,14 +65,17 @@ public class DFAnyTestCase extends TestCase {
     }
   }
 
-  /** Attempts to load the database */
-  @Test
-  public void testLoadDatabase() {
+  /**
+   * Attempts to load the database
+   */
+  public void testLoadDatabase()
+  {
     loadDatabase();
   }
 
   // (destructively) checks that two iterators return equal elements
-  protected static void assertEquals(String message, Iterator expected, Iterator actual) {
+  protected static void assertEquals(String message, Iterator expected, Iterator actual)
+  {
     boolean expected_hasnext = expected.hasNext();
     boolean actual_hasnext = actual.hasNext();
 
@@ -75,7 +89,7 @@ public class DFAnyTestCase extends TestCase {
       Object expected_next = expected.next();
       fail(message + ": expected had '" + expected_next + "' but actual had no more elements");
     }
-
+    
     // if just one is exhausted, we fail
     if (!expected_hasnext && actual_hasnext) {
       Object actual_next = actual.next();
@@ -85,9 +99,20 @@ public class DFAnyTestCase extends TestCase {
     // assert that the current element pairing is equal
     Object expected_next = expected.next();
     Object actual_next = actual.next();
-    assertEquals(message, expected_next, actual_next);
+    assertEquals(message,
+		 expected_next, actual_next);
 
     // check the rest recursively
     assertEquals(message, expected, actual);
   }
 }
+
+
+
+
+
+
+
+
+
+
