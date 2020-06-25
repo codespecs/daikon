@@ -628,7 +628,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         return null;
     }
 
-    if (!shouldIncIter.hasNext()) throw new RuntimeException("Not enough entries in shouldIncIter");
+    if (!shouldIncIter.hasNext()) {
+      throw new RuntimeException("Not enough entries in shouldIncIter");
+    }
 
     boolean shouldInclude = shouldIncIter.next();
 
@@ -849,7 +851,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     // Determine the offset of the first parameter
     int param_offset = 1;
-    if (mg.isStatic()) param_offset = 0;
+    if (mg.isStatic()) {
+      param_offset = 0;
+    }
 
     // iload
     // Push the nonce

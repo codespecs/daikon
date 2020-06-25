@@ -166,7 +166,9 @@ public class PptNameMatcher {
       }
     }
 
-    if (debug_getMatches) System.out.println("getMatch goal = " + classname + " " + methodname);
+    if (debug_getMatches) {
+      System.out.println("getMatch goal = " + classname + " " + methodname);
+    }
 
     return matches(pptName, classname, methodname, params);
   }
@@ -270,7 +272,9 @@ public class PptNameMatcher {
 
   public boolean typeMatch(String pptTypeString, FormalParameter astFormalParameter) {
 
-    if (debug_getMatches) System.out.println(Ast.formatEntireTree(astFormalParameter));
+    if (debug_getMatches) {
+      System.out.println(Ast.formatEntireTree(astFormalParameter));
+    }
 
     String astTypeString = getUngenerifiedType(astFormalParameter);
 

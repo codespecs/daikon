@@ -163,7 +163,9 @@ public class NISuppression {
   public void find_suppressed_invs(Set<NIS.SupInv> suppressed_invs, NIS.Antecedents ants) {
 
     // debug = suppressee.sup_class.getName().indexOf("NonZero") != -1;
-    if (debug) System.out.println("In find_suppressed_invs for " + this);
+    if (debug) {
+      System.out.println("In find_suppressed_invs for " + this);
+    }
 
     // Get the antecedents that match our suppressors.  Return if there are
     // no antecedents for a particular suppressor.

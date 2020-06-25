@@ -3068,7 +3068,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /** Returns the name of this variable as a valid C# Code Contract. */
   @SideEffectFree
   public String csharp_name(@Nullable String index) {
-    if (index != null) assert file_rep_type.isArray();
+    if (index != null) {
+      assert file_rep_type.isArray();
+    }
 
     if (postState != null) {
       return "Contract.OldValue(" + postState.csharp_name(index) + ")";
@@ -3175,7 +3177,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     //                  + " poststate %s index %s rname %s ppt %s%n", str_name,
     //                    var_flags, enclosing_var, postState, index,
     //                    relative_name, ppt.name());
-    if (index != null) assert file_rep_type.isArray();
+    if (index != null) {
+      assert file_rep_type.isArray();
+    }
 
     // If this is an orig variable, use the post version to generate the name
     if (postState != null) {
@@ -3238,7 +3242,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public String jml_name(@Nullable String index) {
 
-    if (index != null) assert file_rep_type.isArray();
+    if (index != null) {
+      assert file_rep_type.isArray();
+    }
 
     // If this is an orig variable, use the post version to generate the name
     if (postState != null) {
@@ -4057,7 +4063,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
 
     String shift_str = "";
-    if (shift != 0) shift_str = String.format("%+d", shift);
+    if (shift != 0) {
+      shift_str = String.format("%+d", shift);
+    }
 
     if (in_orig) {
       if (vi.isPrestate()) {
@@ -4196,7 +4204,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // Calculate the string to add for the shift.
     String shift_str = "";
-    if (shift != 0) shift_str = String.format("%+d", shift);
+    if (shift != 0) {
+      shift_str = String.format("%+d", shift);
+    }
 
     // Determine whether orig should be swapped with the function.
     // The original VarInfoName code did this only for the size

@@ -1033,7 +1033,9 @@ public class DynamicConstants implements Serializable {
     // Turn off track logging so that we don't get voluminous messages
     // each time this is called
     boolean debug_on = Logger.getLogger("daikon.Debug").isLoggable(Level.FINE);
-    if (debug_on) LogHelper.setLevel("daikon.Debug", Level.OFF);
+    if (debug_on) {
+      LogHelper.setLevel("daikon.Debug", Level.OFF);
+    }
 
     // Get constant leaders
     List<Constant> leaders = new ArrayList<>(100);
@@ -1110,7 +1112,9 @@ public class DynamicConstants implements Serializable {
       }
     }
 
-    if (debug_on) LogHelper.setLevel("daikon.Debug", Level.FINE);
+    if (debug_on) {
+      LogHelper.setLevel("daikon.Debug", Level.FINE);
+    }
 
     return new_views;
   }

@@ -798,7 +798,9 @@ public class PptSplitter implements Serializable {
           Implication.makeImplication(ppt, predicate, consequent, false, orig_pred, orig_cons);
       if (imp != null) ppt.joiner_view.addInvariant(imp);
       imp = Implication.makeImplication(ppt, consequent, predicate, false, orig_cons, orig_pred);
-      if (imp != null) ppt.joiner_view.addInvariant(imp);
+      if (imp != null) {
+        ppt.joiner_view.addInvariant(imp);
+      }
 
       return;
     }

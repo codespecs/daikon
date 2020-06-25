@@ -411,7 +411,9 @@ public class NIS {
         assert inv.ppt.parent.findSlice(inv.ppt.var_infos) == inv.ppt;
       }
       inv.ppt.addInvariant(inv);
-      if (Debug.logOn()) inv.log("%s added to slice", inv.format());
+      if (Debug.logOn()) {
+        inv.log("%s added to slice", inv.format());
+      }
 
       if (NIS.antecedent_method) created_invs_cnt++;
     }
@@ -596,7 +598,9 @@ public class NIS {
     }
     // false_invs = false_cnt;
 
-    if (debugAnt.isLoggable(Level.FINE)) ppt.debug_invs(debugAnt);
+    if (debugAnt.isLoggable(Level.FINE)) {
+      ppt.debug_invs(debugAnt);
+    }
 
     // Find all antecedents and organize them by their variables comparability
     Map<VarComparability, Antecedents> comp_ants = new LinkedHashMap<>();
@@ -824,7 +828,9 @@ public class NIS {
           continue;
         }
 
-        if (inv.is_false()) false_invs++;
+        if (inv.is_false()) {
+          false_invs++;
+        }
 
         VarComparability vc = inv.get_comparability();
         Antecedents ants = comp_ants.get(vc);
@@ -1092,7 +1098,9 @@ public class NIS {
         }
       }
 
-      if (inv.is_false()) false_cnt++;
+      if (inv.is_false()) {
+        false_cnt++;
+      }
 
       // Add the invariant to the map for its class
       List<Invariant> antecedents = get(inv.getClass());

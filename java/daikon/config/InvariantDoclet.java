@@ -389,7 +389,9 @@ public class InvariantDoclet {
     List<FieldDoc> list = new ArrayList<>();
 
     for (FieldDoc f : cd.fields()) {
-      if (f.name().startsWith(prefix)) list.add(f);
+      if (f.name().startsWith(prefix)) {
+        list.add(f);
+      }
     }
 
     return list;

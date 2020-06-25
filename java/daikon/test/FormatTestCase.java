@@ -540,7 +540,9 @@ class FormatTestCase {
       Class<? extends Invariant> classToTest, ProglangType[] types) {
     int numInfos = getArity(classToTest);
 
-    if (numInfos == -1) throw new RuntimeException("Class arity cannot be determined.");
+    if (numInfos == -1) {
+      throw new RuntimeException("Class arity cannot be determined.");
+    }
 
     VarInfo[] result = new VarInfo[numInfos];
 

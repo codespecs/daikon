@@ -482,8 +482,9 @@ public final class FileIO {
   private static void parse_ppt_flags(ParseState state, Scanner scanner, EnumSet<PptFlags> flags) {
 
     flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
-    while (scanner.hasNext())
+    while (scanner.hasNext()) {
       flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
+    }
   }
 
   /** Parses a ppt-type record and returns the type. */
@@ -873,7 +874,9 @@ public final class FileIO {
       // assert ppt.var_infos.length == vals.length;
 
       for (int j = 0; j < vals.length; j++) {
-        if (j != 0) pw.print(", ");
+        if (j != 0) {
+          pw.print(", ");
+        }
 
         pw.print(ppt.var_infos[j].name() + "=");
 
@@ -2078,7 +2081,9 @@ public final class FileIO {
         Global.dtraceWriter.println(mod);
       }
       Debug dbg = Debug.newDebug(FileIO.class, ppt, Debug.vis(vi));
-      if (dbg != null) dbg.log("Var " + vi.name() + " has value " + value_rep + " mod " + mod);
+      if (dbg != null) {
+        dbg.log("Var " + vi.name() + " has value " + value_rep + " mod " + mod);
+      }
 
       // Both uninit and nonsensical mean missing modbit 2, because
       // it doesn't make sense to look at x.y when x is uninitialized.
@@ -2277,7 +2282,9 @@ public final class FileIO {
         assert (!vi.is_static_constant) : "orig constant " + vi;
 
         // Skip over constants in the entry point
-        while (invoc.ppt.var_infos[vi_index].is_static_constant) vi_index++;
+        while (invoc.ppt.var_infos[vi_index].is_static_constant) {
+          vi_index++;
+        }
 
         // Copy the vals and mod bits from entry to exit
         vals[ppt.num_tracevars + val_index] = invoc.vals[val_index];
@@ -2784,8 +2791,9 @@ public final class FileIO {
     public void parse_lang_flags(Scanner scanner) {
 
       lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
-      while (scanner.hasNext())
+      while (scanner.hasNext()) {
         lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
+      }
     }
 
     /** Parses a comparability record. */

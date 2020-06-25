@@ -349,7 +349,9 @@ public class DCInstrument extends InstructionListUtils {
         // Note whether we want to track the daikon variables in this method
         boolean track = should_track(classname, methodEntryName(classname, m));
         // If any one method is tracked, then the class is tracked.
-        if (track) track_class = true;
+        if (track) {
+          track_class = true;
+        }
 
         // If we are tracking variables, make sure the class is public
         if (track && !gen.isPublic()) {
@@ -1410,7 +1412,9 @@ public class DCInstrument extends InstructionListUtils {
 
     // Determine the offset of the first argument in the frame
     int offset = 1;
-    if (mg.isStatic()) offset = 0;
+    if (mg.isStatic()) {
+      offset = 0;
+    }
 
     // allocate an extra slot to save the tag frame depth for debugging
     int frame_size = mg.getMaxLocals() + 1;
@@ -1471,7 +1475,9 @@ public class DCInstrument extends InstructionListUtils {
 
     // Determine the offset of the first parameter
     int param_offset = 1;
-    if (mg.isStatic()) param_offset = 0;
+    if (mg.isStatic()) {
+      param_offset = 0;
+    }
 
     // Push the MethodInfo index
     il.append(ifact.createConstant(method_info_index));
@@ -1557,7 +1563,9 @@ public class DCInstrument extends InstructionListUtils {
 
     // Determine the offset of the first parameter
     int param_offset = 1;
-    if (mg.isStatic()) param_offset = 0;
+    if (mg.isStatic()) {
+      param_offset = 0;
+    }
 
     // Push the MethodInfo index
     il.append(ifact.createConstant(method_info_index));
@@ -2205,10 +2213,11 @@ public class DCInstrument extends InstructionListUtils {
 
       if (BcelUtil.javaVersion > 8) {
         if (Premain.problem_methods.contains(classname + "." + method_name)) {
-          if (DynComp.verbose)
+          if (DynComp.verbose) {
             System.out.printf(
                 "Don't call instrumented version of problem method %s%n",
                 classname + "." + method_name);
+          }
           callee_instrumented = false;
         }
       }
@@ -2262,7 +2271,9 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    if (is_object_method(method_name, invoke.getArgumentTypes(pool))) callee_instrumented = false;
+    if (is_object_method(method_name, invoke.getArgumentTypes(pool))) {
+      callee_instrumented = false;
+    }
 
     // System.out.printf("handle invoke %s, method = %s, ignore_toString = %b%n",
     //                     invoke, method_name, ignore_toString);
@@ -2370,17 +2381,19 @@ public class DCInstrument extends InstructionListUtils {
       int i = classname.lastIndexOf('.');
       if (i > 0) {
         if (Premain.problem_packages.contains(classname.substring(0, i))) {
-          if (DynComp.verbose)
+          if (DynComp.verbose) {
             System.out.printf(
                 "Don't call instrumented member of problem package %s%n",
                 classname.substring(0, i));
+          }
           return false;
         }
       }
 
       if (Premain.problem_classes.contains(classname)) {
-        if (DynComp.verbose)
+        if (DynComp.verbose) {
           System.out.printf("Don't call instrumented member of problem class %s%n", classname);
+        }
         return false;
       }
     }
@@ -2579,7 +2592,9 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     // We don't instrument any of the Object methods
-    if (is_object_method(method_name, invoke.getArgumentTypes(pool))) callee_instrumented = false;
+    if (is_object_method(method_name, invoke.getArgumentTypes(pool))) {
+      callee_instrumented = false;
+    }
 
     // Replace calls to Object's equals method with calls to our
     // replacement, a static method in DCRuntime
@@ -3413,7 +3428,9 @@ public class DCInstrument extends InstructionListUtils {
         op = null;
       }
     }
-    if (debug_dup.enabled) debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    if (debug_dup.enabled) {
+      debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    }
 
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
@@ -3748,7 +3765,9 @@ public class DCInstrument extends InstructionListUtils {
    */
   static Class<?> type_to_class(Type t, ClassLoader loader) {
 
-    if (loader == null) loader = DCInstrument.class.getClassLoader();
+    if (loader == null) {
+      loader = DCInstrument.class.getClassLoader();
+    }
 
     if (t == Type.BOOLEAN) {
       return Boolean.TYPE;
@@ -3810,7 +3829,9 @@ public class DCInstrument extends InstructionListUtils {
       for (Type arg_type : arg_types) {
         if (arg_type instanceof BasicType) primitive_cnt++;
       }
-      if (primitive_cnt > 0) il.append(discard_tag_code(new NOP(), primitive_cnt));
+      if (primitive_cnt > 0) {
+        il.append(discard_tag_code(new NOP(), primitive_cnt));
+      }
 
       // push a tag if there is a primitive return value
       Type ret_type = mg.getReturnType();
@@ -4424,7 +4445,9 @@ public class DCInstrument extends InstructionListUtils {
    */
   void handle_object(ClassGen gen) {
     Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
-    if (cl != null) gen.addInterface(Signatures.addPackage(dcomp_prefix, "DCompClone"));
+    if (cl != null) {
+      gen.addInterface(Signatures.addPackage(dcomp_prefix, "DCompClone"));
+    }
 
     Method ts = gen.containsMethod("toString", "()Ljava/lang/String;");
     if (ts != null) gen.addInterface(Signatures.addPackage(dcomp_prefix, "DCompToString"));

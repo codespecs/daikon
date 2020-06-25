@@ -63,7 +63,9 @@ public final class SequencesConcat extends BinaryDerivation {
     if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
     if (mod1 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
     if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (mod2 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL) {
+      mod = ValueTuple.MISSING_NONSENSICAL;
+    }
 
     if (val1 == null && val2 == null) {
       return new ValueAndModified(null, mod);

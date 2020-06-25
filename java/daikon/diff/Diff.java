@@ -312,9 +312,13 @@ public final class Diff {
       printDiff = true;
     }
 
-    if (logging) System.err.println("Invariant Diff: Starting Log");
+    if (logging) {
+      System.err.println("Invariant Diff: Starting Log");
+    }
 
-    if (logging) System.err.println("Invariant Diff: Creating Diff Object");
+    if (logging) {
+      System.err.println("Invariant Diff: Creating Diff Object");
+    }
 
     Comparator<Invariant> defaultComparator;
     if (minus || xor || union) {
@@ -355,7 +359,9 @@ public final class Diff {
     InvMap invMap1 = null;
     InvMap invMap2 = null;
 
-    if (logging) System.err.println("Invariant Diff: Reading Files");
+    if (logging) {
+      System.err.println("Invariant Diff: Reading Files");
+    }
 
     if (numFiles == 1) {
       String filename1 = args[firstFileIndex];
@@ -399,9 +405,13 @@ public final class Diff {
       throw new Daikon.NormalTermination();
     }
 
-    if (logging) System.err.println("Invariant Diff: Creating Tree");
+    if (logging) {
+      System.err.println("Invariant Diff: Creating Tree");
+    }
 
-    if (logging) System.err.println("Invariant Diff: Visiting Tree");
+    if (logging) {
+      System.err.println("Invariant Diff: Visiting Tree");
+    }
 
     RootNode root = diff.diffInvMap(invMap1, invMap2, includeUnjustified);
 
@@ -466,7 +476,9 @@ public final class Diff {
       }
     }
 
-    if (logging) System.err.println("Invariant Diff: Ending Log");
+    if (logging) {
+      System.err.println("Invariant Diff: Ending Log");
+    }
 
     // finished; return (and end program)
   }

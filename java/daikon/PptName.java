@@ -405,7 +405,9 @@ public class PptName implements Serializable {
       assert method != null; // for nullness checker
       int arg_start = method.indexOf('(');
       String method_name = method;
-      if (arg_start != -1) method_name = method.substring(0, arg_start);
+      if (arg_start != -1) {
+        method_name = method.substring(0, arg_start);
+      }
 
       // System.out.println ("fullname = " + fullname);
       // System.out.println ("fn_name = " + fn_name);

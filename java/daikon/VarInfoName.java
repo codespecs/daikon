@@ -3805,7 +3805,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         boolean includeIndex) {
       assert roots != null;
 
-      if (adjacent || distinct) assert roots.length == 2;
+      if (adjacent || distinct) {
+        assert roots.length == 2;
+      }
 
       QuantifyReturn qret = quantify(roots);
 

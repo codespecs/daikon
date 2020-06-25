@@ -281,7 +281,9 @@ public class DTraceWriter extends DaikonWriter {
 
     Class<?> fieldType = classField.getType();
 
-    if (!classField.isAccessible()) classField.setAccessible(true);
+    if (!classField.isAccessible()) {
+      classField.setAccessible(true);
+    }
 
     try {
       if (fieldType.equals(int.class)) {
@@ -313,7 +315,9 @@ public class DTraceWriter extends DaikonWriter {
   /** Similar to {@link DTraceWriter#getValue}, but used for static fields. */
   @SuppressWarnings("deprecation") // in Java 9+, use canAccess instead of isAccessible
   public static Object getStaticValue(Field classField) {
-    if (!classField.isAccessible()) classField.setAccessible(true);
+    if (!classField.isAccessible()) {
+      classField.setAccessible(true);
+    }
 
     Class<?> fieldType = classField.getType();
 
