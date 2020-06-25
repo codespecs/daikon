@@ -3,6 +3,7 @@ package daikon.test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+/** All Daikon's unit tests. Does not include system tests. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,

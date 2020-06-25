@@ -1633,12 +1633,17 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   @Pure
   public boolean isIndex() {
-    return ((file_rep_type == ProglangType.INT) && type.isIndex());
+    return (file_rep_type == ProglangType.INT) && type.isIndex();
   }
 
+  /**
+   * Returns true if this variable is an array.
+   *
+   * @return true if this variable is an array
+   */
   @Pure
   public boolean is_array() {
-    return (arr_dims > 0);
+    return arr_dims > 0;
   }
 
   /**
