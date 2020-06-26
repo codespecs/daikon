@@ -187,20 +187,6 @@ public class InvariantAddAndCheckTester {
     }
   }
 
-  private static void writeCommandFile() {
-    LineNumberReader inputReader = getInputReader();
-
-    String output = generateCommands(inputReader);
-    BufferedWriter commandOutput = getCommandWriter();
-    try {
-      commandOutput.write(output, 0, output.length());
-      commandOutput.close();
-    } catch (IOException e) {
-      throw new RuntimeException("Could not output generated commands");
-    }
-    System.out.println("Goals generated");
-  }
-
   /**
    * This function performs an individual formatting test after the input and output streams have
    * been created.
