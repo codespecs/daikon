@@ -159,7 +159,9 @@ public class CLASSNAME extends SUPERCLASS {
     VarInfo z_summand = null;
     if (x.derived instanceof SequenceSum) x_summand = ((SequenceSum) x.derived).base;
     if (y.derived instanceof SequenceSum) y_summand = ((SequenceSum) y.derived).base;
-    if (z.derived instanceof SequenceSum) z_summand = ((SequenceSum) z.derived).base;
+    if (z.derived instanceof SequenceSum) {
+    z_summand = ((SequenceSum) z.derived).base;
+    }
 
     if ((x_summand != null) && (y_summand != null) && (z_summand != null)) {
       // all 3 of x, y, and z are "sum(...)"

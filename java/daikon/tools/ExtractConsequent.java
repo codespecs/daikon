@@ -301,7 +301,9 @@ public class ExtractConsequent {
         // (consequent) uses the variable "cluster".  Ignore if they
         // both depend on "cluster"
         if (consequent.usesVarDerived("cluster")) cons_uses_cluster = true;
-        if (predicate.usesVarDerived("cluster")) pred_uses_cluster = true;
+        if (predicate.usesVarDerived("cluster")) {
+          pred_uses_cluster = true;
+        }
 
         if (!(pred_uses_cluster ^ cons_uses_cluster)) {
           continue;
@@ -416,7 +418,9 @@ public class ExtractConsequent {
       pptname = pptname.substring(0, index);
     }
 
-    if (pptname.endsWith(".")) pptname = pptname.substring(0, pptname.length() - 2);
+    if (pptname.endsWith(".")) {
+      pptname = pptname.substring(0, pptname.length() - 2);
+    }
 
     Matcher m = non_word_pattern.matcher(pptname);
     return m.replaceAll(".");

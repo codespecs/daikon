@@ -772,7 +772,9 @@ public final class Daikon {
     // Infer invariants
     process_data(all_ppts, dtrace_files);
     isInferencing = false;
-    if (Debug.logOn()) Debug.check(all_ppts, "After process data");
+    if (Debug.logOn()) {
+      Debug.check(all_ppts, "After process data");
+    }
 
     // If requested, just calculate the total number of invariants possible
     if (dkconfig_calc_possible_invs) {
@@ -2506,7 +2508,9 @@ public final class Daikon {
     // Skip points that are not leaves.
     if (use_dataflow_hierarchy) {
       PptTopLevel p = ppt;
-      if (ppt instanceof PptConditional) p = ((PptConditional) ppt).parent;
+      if (ppt instanceof PptConditional) {
+        p = ((PptConditional) ppt).parent;
+      }
 
       // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
       // exit), we define them as everything except

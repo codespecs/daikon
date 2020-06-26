@@ -262,8 +262,12 @@ public final class Debug {
     cache_class = c;
     cache_ppt = ppt;
     cache_vis = vis;
-    if (c == null) System.out.println("Class = null");
-    if (ppt == null) System.out.println("ppt = null");
+    if (c == null) {
+      System.out.println("Class = null");
+    }
+    if (ppt == null) {
+      System.out.println("ppt = null");
+    }
     if (vis == null) {
       System.out.println("vis = null");
     } else {
@@ -421,7 +425,9 @@ public final class Debug {
     String line = " line=" + FileIO.get_linenum();
 
     String name = "ppt is null";
-    if (ppt != null) name = ppt.name();
+    if (ppt != null) {
+      name = ppt.name();
+    }
 
     debug.fine(class_str + ": " + name + samp_str + line + ": " + vars + msg);
     if (dkconfig_showTraceback) {

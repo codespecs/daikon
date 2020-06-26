@@ -761,7 +761,9 @@ public abstract class DaikonVariableInfo
     debug_vars.log("enter addDeclVar(field):%n");
     debug_vars.log("  field: %s, offset: %s%n", field, offset);
     String arr_str = "";
-    if (isArray) arr_str = "[]";
+    if (isArray) {
+      arr_str = "[]";
+    }
 
     // Temporarily make the field accessible.
     boolean changedAccess = false;
@@ -1080,7 +1082,9 @@ public abstract class DaikonVariableInfo
 
     String postString = ""; // either array braces or an empty string
 
-    if (theName.contains("[]") || offset.contains("[]")) postString = "[]";
+    if (theName.contains("[]") || offset.contains("[]")) {
+      postString = "[]";
+    }
 
     // add daikoninfo type
     DaikonVariableInfo classInfo =
@@ -1103,7 +1107,9 @@ public abstract class DaikonVariableInfo
     }
 
     String postString = ""; // either array braces or an empty string
-    if (isArray) postString = "[]";
+    if (isArray) {
+      postString = "[]";
+    }
 
     // add DaikonVariableInfo type
     DaikonVariableInfo stringInfo =

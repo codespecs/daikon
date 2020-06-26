@@ -55,7 +55,9 @@ public class ParentFilter extends InvariantFilter {
     outer:
     for (PptRelation rel : inv.ppt.parent.parents) {
 
-      if (Debug.logDetail()) inv.log("  considering parent %s [%s]", rel, rel.parent.name());
+      if (Debug.logDetail()) {
+        inv.log("  considering parent %s [%s]", rel, rel.parent.name());
+      }
 
       // Look up each variable in the parent, skip this parent if any
       // variables don't exist in the parent.
@@ -87,18 +89,24 @@ public class ParentFilter extends InvariantFilter {
       @SuppressWarnings("nullness") // at this point, pvis contains only non-null elements
       VarInfo[] pvis = pvis_raw;
 
-      if (Debug.logDetail()) inv.log("  got variables");
+      if (Debug.logDetail()) {
+        inv.log("  got variables");
+      }
 
       // Sort the parent variables in index order
       Arrays.sort(pvis, VarInfo.IndexComparator.getInstance());
-      if (Debug.logDetail()) inv.log("Found parent vars: %s", Arrays.toString(pvis));
+      if (Debug.logDetail()) {
+        inv.log("Found parent vars: %s", Arrays.toString(pvis));
+      }
 
       // Lookup the slice, skip if not found
       PptSlice pslice = rel.parent.findSlice(pvis);
       if (pslice == null) {
         continue;
       }
-      if (Debug.logDetail()) inv.log("Found parent slice: %s", pslice.name());
+      if (Debug.logDetail()) {
+        inv.log("Found parent slice: %s", pslice.name());
+      }
 
       // System.out.printf("  found parent slice (%d invs): %s%n", pslice.invs.size(),
       // pslice.name());

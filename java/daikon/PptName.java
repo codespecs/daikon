@@ -250,7 +250,7 @@ public class PptName implements Serializable {
    * Returns a numerical subscript of the given point, or Integer.MIN_VALUE if none exists. e.g.
    * "84".
    *
-   * @return a numerical subscript of the given point, or Integer.MIN_VALUE if none exists.
+   * @return a numerical subscript of the given point, or Integer.MIN_VALUE if none exists
    * @see #exitLine()
    */
   public int getPointSubscript() {
@@ -385,7 +385,7 @@ public class PptName implements Serializable {
    * newer declaration format does not have {@code <init>} but their method name includes the class
    * name. For compatibility both mechanisms are checked.
    *
-   * @return true iff this program point is a constructor entry or exit.
+   * @return true iff this program point is a constructor entry or exit
    */
   @Pure
   public boolean isConstructor() {
@@ -405,7 +405,9 @@ public class PptName implements Serializable {
       assert method != null; // for nullness checker
       int arg_start = method.indexOf('(');
       String method_name = method;
-      if (arg_start != -1) method_name = method.substring(0, arg_start);
+      if (arg_start != -1) {
+        method_name = method.substring(0, arg_start);
+      }
 
       // System.out.println ("fullname = " + fullname);
       // System.out.println ("fn_name = " + fn_name);

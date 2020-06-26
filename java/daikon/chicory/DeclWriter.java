@@ -82,7 +82,9 @@ public class DeclWriter extends DaikonWriter {
 
     // Determine comparability string
     String comparability = "none";
-    if (Runtime.comp_info != null) comparability = "implicit";
+    if (Runtime.comp_info != null) {
+      comparability = "implicit";
+    }
 
     if (Chicory.new_decl_format) {
       outFile.printf("decl-version 2.0%n%n");
@@ -164,7 +166,9 @@ public class DeclWriter extends DaikonWriter {
     outFile.println(declareHeader);
     outFile.println(name);
 
-    if (debug) System.out.println("printMethod " + name);
+    if (debug) {
+      System.out.println("printMethod " + name);
+    }
 
     for (DaikonVariableInfo childOfRoot : root) {
       traverseDecl(childOfRoot, ((comp_info == null) ? null : comp_info.find_ppt(name)));
@@ -254,10 +258,13 @@ public class DeclWriter extends DaikonWriter {
    * Runtime to print decls info for a class.
    *
    * @param cinfo class whose declarations should be printed
+   * @param comp_info comparability information
    */
   public void print_decl_class(ClassInfo cinfo, @Nullable DeclReader comp_info) {
 
-    if (debug) System.out.println("Enter print_decl_class: " + cinfo);
+    if (debug) {
+      System.out.println("Enter print_decl_class: " + cinfo);
+    }
 
     // Print all methods and constructors
     for (MethodInfo mi : cinfo.get_method_infos()) {
@@ -317,7 +324,9 @@ public class DeclWriter extends DaikonWriter {
   private void print_method(
       MethodInfo mi, RootInfo root, String name, PptType ppt_type, @Nullable DeclReader comp_info) {
 
-    if (debug) System.out.println("Enter print_method: " + name);
+    if (debug) {
+      System.out.println("Enter print_method: " + name);
+    }
 
     // reset dummy comparability value
     unique_compare_value = initial_compare_value;
@@ -356,10 +365,16 @@ public class DeclWriter extends DaikonWriter {
   /**
    * Prints the class program point. This contains only the static variables. If there are no static
    * variables to print, this method does nothing.
+   *
+   * @param cinfo class whose static declarations should be printed
+   * @param name the program point name
+   * @param comp_info comparability information
    */
   private void print_class_ppt(ClassInfo cinfo, String name, DeclReader comp_info) {
 
-    if (debug) System.out.println("Enter print_class_ppt: " + cinfo);
+    if (debug) {
+      System.out.println("Enter print_class_ppt: " + cinfo);
+    }
 
     // reset dummy comparability value
     unique_compare_value = initial_compare_value;
@@ -388,10 +403,18 @@ public class DeclWriter extends DaikonWriter {
     if (debug) System.out.println("Exit print_class_ppt");
   }
 
-  /** Prints the object program point. This contains the "this" object and the class' fields. */
+  /**
+   * Prints the object program point. This contains the "this" object and the class' fields.
+   *
+   * @param cinfo class whose object program point should be printed
+   * @param name the program point name
+   * @param comp_info comparability information
+   */
   private void print_object_ppt(ClassInfo cinfo, String name, DeclReader comp_info) {
 
-    if (debug) System.out.println("Enter print_object_ppt: " + cinfo);
+    if (debug) {
+      System.out.println("Enter print_object_ppt: " + cinfo);
+    }
 
     // reset dummy comparability value
     unique_compare_value = initial_compare_value;
@@ -548,7 +571,9 @@ public class DeclWriter extends DaikonWriter {
       List<VarRelation> relations,
       DeclReader.DeclPpt compare_ppt) {
 
-    if (debug) System.out.println("Enter traverse_decl: " + cinfo + ", " + var + ", " + parent);
+    if (debug) {
+      System.out.println("Enter traverse_decl: " + cinfo + ", " + var + ", " + parent);
+    }
 
     if (!var.declShouldPrint()) {
       // don't do anything
@@ -579,7 +604,9 @@ public class DeclWriter extends DaikonWriter {
       }
 
       // If this variable has multiple value, indicate it is an array
-      if (var.isArray()) outFile.println("  array 1");
+      if (var.isArray()) {
+        outFile.println("  array 1");
+      }
 
       // Write out the declared and representation types
       outFile.println("  dec-type " + escape(var.getTypeNameOnly()));
@@ -587,11 +614,15 @@ public class DeclWriter extends DaikonWriter {
 
       // Write out the constant value (if present)
       String const_val = var.get_const_val();
-      if (const_val != null) outFile.println("  constant " + const_val);
+      if (const_val != null) {
+        outFile.println("  constant " + const_val);
+      }
 
       // Write out the arguments used to create (if present) the variable if it is a function
       String function_args = var.get_function_args();
-      if (function_args != null) outFile.println("  function-args " + function_args);
+      if (function_args != null) {
+        outFile.println("  function-args " + function_args);
+      }
 
       // Write out the variable flags if any are set
       EnumSet<VarFlags> var_flags = var.get_var_flags();

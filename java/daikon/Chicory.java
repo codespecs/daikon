@@ -240,7 +240,9 @@ public class Chicory {
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
     basic.log("classpath = '%s'%n", cp);
-    if (cp == null) cp = ".";
+    if (cp == null) {
+      cp = ".";
+    }
 
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
@@ -375,7 +377,9 @@ public class Chicory {
     // cmdlist.add ("-verbose");
 
     if (dtraceLim != null) cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
-    if (terminate != null) cmdlist.add("-D" + traceLimTermString + "=" + terminate);
+    if (terminate != null) {
+      cmdlist.add("-D" + traceLimTermString + "=" + terminate);
+    }
 
     // Specify the port to use to talk to Daikon if in online mode
     if (daikon_online) {
@@ -471,7 +475,9 @@ public class Chicory {
 
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
-    if (cp == null) cp = ".";
+    if (cp == null) {
+      cp = ".";
+    }
 
     String cmdstr;
     if (daikon_online) {
@@ -487,7 +493,9 @@ public class Chicory {
     // System.out.println("daikon command is " + daikon_cmd);
     // System.out.println("daikon command cmdstr " + cmdstr);
 
-    if (verbose) System.out.printf("%nExecuting daikon: %s%n", cmdstr);
+    if (verbose) {
+      System.out.printf("%nExecuting daikon: %s%n", cmdstr);
+    }
 
     try {
       daikon_proc = rt.exec(cmdstr);

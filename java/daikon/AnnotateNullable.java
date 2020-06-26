@@ -271,7 +271,9 @@ public class AnnotateNullable {
     }
 
     String annotation = (nonnull_annotations ? "NonNull" : "");
-    if ((ppt.num_samples(vi) > 0) && !ppt.is_nonzero(vi)) annotation = "Nullable";
+    if ((ppt.num_samples(vi) > 0) && !ppt.is_nonzero(vi)) {
+      annotation = "Nullable";
+    }
     if (annotation != "") { // interned
       // if (! stub_format) {
       //   annotation = "org.checkerframework.checker.nullness.qual." + annotation;

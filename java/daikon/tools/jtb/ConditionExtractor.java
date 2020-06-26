@@ -165,7 +165,9 @@ class ConditionExtractor extends DepthFirstVisitor {
     for (String switchValue : caseValues) {
       switchValue = switchValue.trim();
       if (!switchValue.equals(":")) {
-        if (!(defaultString.length() == 0)) defaultString.append(" && ");
+        if (!(defaultString.length() == 0)) {
+          defaultString.append(" && ");
+        }
         defaultString.append(switchExpression + " != " + switchValue);
         addCondition(switchExpression + " == " + switchValue);
       }

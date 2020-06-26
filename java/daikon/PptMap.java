@@ -103,7 +103,7 @@ public class PptMap implements Serializable {
    * <p>If you wish to merely iterate over the result in a foreach loop, use {@link #pptIterable()}
    * instead.
    *
-   * @return an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   * @return an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names
    * @see #pptIterable()
    */
   // See https://bugs.openjdk.java.net/browse/JDK-8195645 and
@@ -143,7 +143,7 @@ public class PptMap implements Serializable {
    *
    * <p>It is a wrapper around {@link #pptIterator()} that can be used in a foreach loop.
    *
-   * @return an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   * @return an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names
    * @see #pptIterator()
    */
   public Iterable<PptTopLevel> pptIterable() {
@@ -157,7 +157,7 @@ public class PptMap implements Serializable {
    * <p>If you wish to merely iterate over the result in a Java new-style for loop ("foreach loop"),
    * use {@link #ppt_all_iterable()} instead.
    *
-   * @return an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   * @return an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names
    * @see #ppt_all_iterable()
    */
   // See https://bugs.openjdk.java.net/browse/JDK-8195645 and

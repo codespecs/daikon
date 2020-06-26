@@ -188,7 +188,9 @@ public class DynComp {
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
     basic.log("classpath = '%s'%n", cp);
-    if (cp == null) cp = ".";
+    if (cp == null) {
+      cp = ".";
+    }
 
     // The the separator for items in the class path
     String path_separator = System.getProperty("path.separator");
