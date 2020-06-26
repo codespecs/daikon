@@ -1,6 +1,7 @@
 package daikon.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.fail;
 
 import daikon.*;
 import java.io.BufferedReader;
@@ -17,6 +18,7 @@ import java.util.List;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
+import org.junit.Test;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
@@ -27,7 +29,7 @@ import org.plumelib.options.Options;
  * are written to the InvariantFormatTest.diffs file. More detail on the expected formats of these
  * files is in Daikon developer manual.
  */
-public class InvariantFormatTester extends TestCase {
+public class InvariantFormatTester {
 
   /**
    * Maximum file size that can currently be examined by the program. It is arbitrary, but a length
@@ -75,15 +77,6 @@ public class InvariantFormatTester extends TestCase {
   }
 
   /**
-   * This constructor allows the test to be created from the MasterTester class.
-   *
-   * @param name the desired name of the test case
-   */
-  public InvariantFormatTester(String name) {
-    super(name);
-  }
-
-  /**
    * This function produces the format list for intialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
@@ -102,6 +95,7 @@ public class InvariantFormatTester extends TestCase {
   }
 
   /** This function is the actual function performed when this class is run through JUnit. */
+  @Test
   public void testFormats() {
 
     // Don't care about comparability info because we are only

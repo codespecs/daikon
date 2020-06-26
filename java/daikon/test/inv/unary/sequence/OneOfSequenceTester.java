@@ -1,5 +1,10 @@
 package daikon.test.inv.unary.sequence;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import daikon.FileIO;
+import daikon.LogHelper;
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptTopLevel;
@@ -11,10 +16,12 @@ import daikon.inv.unary.sequence.OneOfSequence;
 import daikon.test.Common;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.plumelib.util.Intern;
 
 @SuppressWarnings("nullness") // testing code
-public class OneOfSequenceTester extends TestCase {
+public class OneOfSequenceTester {
 
   private VarInfo[] vars = {Common.makeHashcodeArrayVarInfo("x"), Common.makeIntArrayVarInfo("y")};
   private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
@@ -23,9 +30,10 @@ public class OneOfSequenceTester extends TestCase {
 
   private static final int DOESNT_MATTER = 0;
 
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(OneOfSequenceTester.class));
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
   }
 
   @SuppressWarnings("interning")
@@ -52,10 +60,7 @@ public class OneOfSequenceTester extends TestCase {
     return result;
   }
 
-  public OneOfSequenceTester(String name) {
-    super(name);
-  }
-
+  @Test
   public void testNonNonNonNull() {
     @NonNull OneOfSequence inv1 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
     @NonNull OneOfSequence inv2 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
@@ -66,6 +71,7 @@ public class OneOfSequenceTester extends TestCase {
     assertFalse(inv1.isSameFormula(inv2));
   }
 
+  @Test
   public void testNonNonNonNon() {
     @NonNull OneOfSequence inv1 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
     @NonNull OneOfSequence inv2 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
@@ -76,6 +82,7 @@ public class OneOfSequenceTester extends TestCase {
     assertTrue(inv1.isSameFormula(inv2));
   }
 
+  @Test
   public void testNonNullNonNull() {
     @NonNull OneOfSequence inv1 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
     @NonNull OneOfSequence inv2 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
@@ -86,6 +93,7 @@ public class OneOfSequenceTester extends TestCase {
     assertTrue(inv1.isSameFormula(inv2));
   }
 
+  @Test
   public void testNullNullNullNull() {
     @NonNull OneOfSequence inv1 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
     @NonNull OneOfSequence inv2 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
@@ -96,6 +104,7 @@ public class OneOfSequenceTester extends TestCase {
     assertTrue(inv1.isSameFormula(inv2));
   }
 
+  @Test
   public void testDifferentLengths() {
     @NonNull OneOfSequence inv1 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
     @NonNull OneOfSequence inv2 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);

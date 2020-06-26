@@ -2575,9 +2575,9 @@ public final class FileIO {
     static final long serialVersionUID = 20060524L;
     /** Current information about input file and previously parsed values. */
     transient ParseState state;
-    /** Name of the variable (required) */
+    /** Name of the variable (required). */
     public String name;
-    /** Type of the variable (required) */
+    /** Type of the variable (required). */
     public VarKind kind = null;
     /** Name of variable that contains this variable (optional) */
     // seems non-null for arrays/sequences
@@ -2586,7 +2586,7 @@ public final class FileIO {
     public @Nullable String relative_name = null;
     /** Type of reference for structure/class variables. */
     public RefType ref_type = RefType.POINTER;
-    /** Number of array dimensions (0 or 1) */
+    /** Number of array dimensions (0 or 1). */
     public int arr_dims = 0;
     /**
      * Non-null iff (vardef.kind == VarKind.FUNCTION). The arguments that were used to create this

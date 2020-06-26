@@ -1,5 +1,7 @@
 package daikon.test.diff;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
@@ -7,24 +9,24 @@ import daikon.test.*;
 import java.util.Arrays;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class MinusVisitorTester extends TestCase {
+public class MinusVisitorTester {
 
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
 
-  public static void main(String[] args) {
+  @BeforeClass
+  public static void setUpClass() {
     daikon.LogHelper.setupLogs(LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(MinusVisitorTester.class));
-  }
-
-  public MinusVisitorTester(String name) {
-    super(name);
+    FileIO.new_decl_format = true;
   }
 
   // X1 and X2 have the same class and vars, but different formula
   // map1: A->{W, X1, Y}, B->{Y}, D->{M, N_unjusitifed, O_unjustified}
   // map2: A->{W, X2, Z}, C->{Z}, D->{M_unjustified, N}
   // map1-map2: A->{X1, Y}, B->{Y}, D->{M}
+  @Test
   public void testMinus() {
     VarInfo[] vars = {
       DiffTester.newIntVarInfo("w"),

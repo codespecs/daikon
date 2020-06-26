@@ -1,7 +1,10 @@
 package daikon.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.fail;
 
+import daikon.FileIO;
+import daikon.LogHelper;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import junit.framework.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * This tests various aspects of VarInfoName's and transforming VarInfoName's. This calls
@@ -26,31 +31,30 @@ import junit.framework.*;
  * after one of the ones already present and add a static {} line after to add the handler to the
  * list of handlers.
  */
-public class VarInfoNameTest extends TestCase {
+public class VarInfoNameTest {
 
   private static final String lineSep = daikon.Global.lineSep;
 
-  // for convenience
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(VarInfoNameTest.class));
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
   }
 
-  public VarInfoNameTest(String name) {
-    super(name);
-  }
-
+  @Test
   public void testParse() {
     run("testParse");
   }
   // Fails mysteriously, only when run from a cron job.  The failure is in
   // obsolescent code (VarInfoNameTest), so comment it out rather than
   // debugging it.
-  // public void testEscForall() { run("testEscForall"); }
+  // @Test public void testEscForall() { run("testEscForall"); }
+  @Test
   public void testSubscript() {
     run("testSubscript");
   }
 
+  @Test
   public void testJML() {
     run("testJML");
   }

@@ -2,7 +2,10 @@ package daikon.test.inv;
 
 import static daikon.inv.Invariant.asInvClass;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import daikon.*;
 import daikon.config.Configuration;
@@ -20,7 +23,6 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -29,6 +31,7 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
+import org.junit.Test;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -82,7 +85,7 @@ import typequals.prototype.qual.Prototype;
  * with in a command line.
  */
 @SuppressWarnings("nullness") // test code
-public class InvariantAddAndCheckTester extends TestCase {
+public class InvariantAddAndCheckTester {
 
   /** Indicates a string that when it starts a line signifies that the line is a comment. */
   public static final String COMMENT_STARTER_STRING = "#";
@@ -93,40 +96,10 @@ public class InvariantAddAndCheckTester extends TestCase {
   /** Allows for the configuring of Daikon options. */
   static Configuration config = Configuration.getInstance();
 
-  private static final String inputFileName = "daikon/test/inv/InvariantTest.input";
   private static final String commandsFileName = "daikon/test/inv/InvariantTest.commands";
   private static final String diffFileName = "daikon/test/inv/InvariantTest.diffs";
 
   private static final String lineSep = Global.lineSep;
-
-  /**
-   * This function allows this test to be run from the command line instead of its usual method,
-   * which is through the Daikon MasterTester.
-   *
-   * @param args arguments to the main function, which control options to the program. As of now
-   *     there is only one option, {@code --generate_goals}, which will generate goal information
-   *     for the selected tests assuming the output that the tests provide is the correct output.
-   */
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    if (args.length == 1 && args[0].equalsIgnoreCase("--generate_goals")) {
-      writeCommandFile();
-    } else if (args.length > 0) {
-      throw new Daikon.UserError(
-          "Usage: java daikon.test.InvariantAddAndCheckTester [--generate_goals]");
-    } else {
-      junit.textui.TestRunner.run(new TestSuite(InvariantAddAndCheckTester.class));
-    }
-  }
-
-  /**
-   * This constructor allows the test to be created from the MasterTester class.
-   *
-   * @param name the desired name of the test case
-   */
-  public InvariantAddAndCheckTester(String name) {
-    super(name);
-  }
 
   /**
    * This function produces the format list for intialization of the static format list variable.
@@ -146,7 +119,8 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   /** This function is the actual function performed when this class is run through JUnit. */
-  public static void testFormats() {
+  @Test
+  public void testFormats() {
 
     // Don't care about comparability info because we are only
     // creating variables for the purpose of being compared (thus they
@@ -211,20 +185,6 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
   }
 
-  private static void writeCommandFile() {
-    LineNumberReader inputReader = getInputReader();
-
-    String output = generateCommands(inputReader);
-    BufferedWriter commandOutput = getCommandWriter();
-    try {
-      commandOutput.write(output, 0, output.length());
-      commandOutput.close();
-    } catch (IOException e) {
-      throw new RuntimeException("Could not output generated commands");
-    }
-    System.out.println("Goals generated");
-  }
-
   /**
    * This function performs an individual formatting test after the input and output streams have
    * been created.
@@ -263,50 +223,11 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
   }
 
-  private static String generateCommands(LineNumberReader input) {
-    StringBuilder output = new StringBuilder();
-
-    while (true) {
-      String commands = AddAndCheckTestCase.generateTest(input);
-      if (commands == null) {
-        break;
-      }
-      output.append(commands);
-    }
-    return output.toString();
-  }
-
-  private static LineNumberReader getInputReader() {
-
-    // Calculate input file locations
-    //     URL inputFileLocation =
-    //       ClassLoader.getSystemClassLoader().getSystemResource("InvariantTest.commands");
-    //     if (inputFileLocation == null)
-    //       fail("Input file for invariant format tests missing." +
-    //            " (Should be in InvariantTest.commands" +
-    //            " and it must be within the classpath)");
-
-    //  String inputFile = inputFileLocation.getFile();
-    LineNumberReader input;
-    try {
-      input =
-          new LineNumberReader(new InputStreamReader(new FileInputStream(inputFileName), UTF_8));
-    } catch (FileNotFoundException e) {
-      fail(
-          "Unexpected FileNotFoundException (very strange since the URL of the file was found earlier)");
-      throw new Error("Unreachable control flow");
-    }
-    return input;
-  }
-
-  private static BufferedWriter getCommandWriter() {
-    try {
-      return Files.newBufferedWriter(Paths.get(commandsFileName), UTF_8);
-    } catch (IOException e) {
-      throw new RuntimeException("Cannot write output into " + commandsFileName);
-    }
-  }
-
+  /**
+   * Returns a reader for the {@code InvariantTest.commands} resource.
+   *
+   * @return a reader for the {@code InvariantTest.commands} resource
+   */
   private static LineNumberReader getCommands() {
     // Calculate input file locations
     //   URL inputFileLocation =

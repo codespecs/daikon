@@ -1,23 +1,24 @@
 package daikon.test.diff;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
 import daikon.test.*;
 import java.util.Arrays;
 import junit.framework.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class UnionVisitorTester extends TestCase {
+public class UnionVisitorTester {
 
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
 
-  public static void main(String[] args) {
+  @BeforeClass
+  public static void setUpClass() {
     daikon.LogHelper.setupLogs(LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(UnionVisitorTester.class));
-  }
-
-  public UnionVisitorTester(String name) {
-    super(name);
+    FileIO.new_decl_format = true;
   }
 
   // X1 and X2 have the same class and vars, but different formula
@@ -27,6 +28,7 @@ public class UnionVisitorTester extends TestCase {
   // map2: A->{W, X2, Z}, C->{Z}, D->{M_1, N_0001}
   // map1 union map2: A->{W, X1, X2, Y, Z}, B->{Y}, C->{Z},
   //                  D->{M_001, N_0001, O_1}
+  @Test
   public void testXor() {
     VarInfo[] vars = {
       DiffTester.newIntVarInfo("w"),

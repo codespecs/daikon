@@ -1,5 +1,7 @@
 package daikon.test;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.PptName;
 import daikon.tools.jtb.*;
 import java.io.InputStream;
@@ -9,21 +11,14 @@ import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import junit.framework.*;
+import org.junit.Test;
 
 /**
  * Tests functionality of some methods in daikon.tools.jtb.Ast.
  *
  * <p>TODO implement and test handling of "..." construct.
  */
-public final class TestAst extends TestCase {
-
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(TestAst.class));
-  }
-
-  public TestAst(String name) {
-    super(name);
-  }
+public final class TestAst {
 
   public static class MethodDeclarationHarvester extends DepthFirstVisitor {
     List<MethodDeclaration> decls = new ArrayList<>();
@@ -75,6 +70,7 @@ public final class TestAst extends TestCase {
     }
   }
 
+  @Test
   public void test_Ast_Ppt_Match() {
 
     // Parse the file "GenericTestClass.java" (under same dir as this class)

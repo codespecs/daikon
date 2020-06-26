@@ -249,7 +249,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public @Nullable VarInfo enclosing_var;
 
-  public int arr_dims = 0;
+  /** Number of array dimensions (0 or 1). */
+  public int arr_dims;
+
   /**
    * The arguments that were used to create this function application. Null if this variable is not
    * a function application.
@@ -669,6 +671,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     this.type = type;
     this.file_rep_type = file_rep_type;
     this.rep_type = file_rep_type.fileTypeToRepType();
+    arr_dims = rep_type.isArray() ? 1 : 0;
     this.comparability = comparability;
     this.is_static_constant = is_static_constant;
     this.static_constant_value = static_constant_value;
@@ -1630,16 +1633,17 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   @Pure
   public boolean isIndex() {
-    return ((file_rep_type == ProglangType.INT) && type.isIndex());
+    return (file_rep_type == ProglangType.INT) && type.isIndex();
   }
 
+  /**
+   * Returns true if this variable is an array.
+   *
+   * @return true if this variable is an array
+   */
   @Pure
   public boolean is_array() {
-    if (FileIO.new_decl_format) {
-      return (arr_dims > 0);
-    } else {
-      return rep_type.isArray();
-    }
+    return arr_dims > 0;
   }
 
   /**

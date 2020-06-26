@@ -1,27 +1,28 @@
 package daikon.test;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import junit.framework.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.plumelib.util.ArraysPlume;
 
 @SuppressWarnings("nullness") // testing code
-public class ProglangTypeTest extends TestCase {
-
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(ProglangTypeTest.class));
-  }
-
-  public ProglangTypeTest(String name) {
-    super(name);
-  }
+public class ProglangTypeTest {
 
   static Comparator<long[]> longarrcomparator = new ArraysPlume.LongArrayComparatorLexical();
 
   static Comparator<String[]> comparrcomparator =
       new ArraysPlume.ComparableArrayComparatorLexical<String>();
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   // Runtime type of first argument is long[]
   void longarrEquals(Object a, long[] b) {
@@ -52,6 +53,7 @@ public class ProglangTypeTest extends TestCase {
         result);
   }
 
+  @Test
   public void test_parse_value() {
     ProglangType pint = ProglangType.INT;
     test_parse_value_helper(pint, "1", Long.valueOf(1));

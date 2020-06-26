@@ -1,5 +1,9 @@
 package daikon.test.diff;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
@@ -8,8 +12,11 @@ import java.lang.reflect.Method;
 import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class DetailedStatisticsVisitorTester extends TestCase {
+public class DetailedStatisticsVisitorTester {
 
   RootNode root = new RootNode();
   DetailedStatisticsVisitor v = new DetailedStatisticsVisitor(false);
@@ -45,14 +52,14 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   Invariant ternary_2_just = new DiffDummyInvariant(slice3, "2", true);
   Invariant ternary_2_unjust = new DiffDummyInvariant(slice3, "2", false);
 
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(DetailedStatisticsVisitorTester.class));
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
   }
 
-  public DetailedStatisticsVisitorTester(String name) {
-    super(name);
-
+  @Before
+  public void setUp() {
     PptNode pptNode = new PptNode(ppt, ppt);
 
     pptNode.add(new InvNode(null_1_just, null_1_just));
@@ -115,6 +122,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   }
 
   /** Validate that this class's constructor added exactly one of each arity and relationship. */
+  @Test
   public void testFreq() {
     for (int arity = 0; arity < DetailedStatisticsVisitor.NUM_ARITIES; arity++) {
       for (int rel = 0; rel < DetailedStatisticsVisitor.NUM_RELATIONSHIPS; rel++) {
@@ -123,6 +131,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     }
   }
 
+  @Test
   public void testShouldAddFrequency() throws Exception {
     // Invoke private method using reflection
     Method m =

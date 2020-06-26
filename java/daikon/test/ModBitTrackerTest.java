@@ -1,20 +1,15 @@
 package daikon.test;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.*;
 import java.util.BitSet;
 import java.util.Random;
 import junit.framework.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class ModBitTrackerTest extends TestCase {
-
-  public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    junit.textui.TestRunner.run(new TestSuite(ModBitTrackerTest.class));
-  }
-
-  public ModBitTrackerTest(String name) {
-    super(name);
-  }
+public class ModBitTrackerTest {
 
   // Plan:
   // Create many different variables.  Give them a skewed distribution of
@@ -26,6 +21,12 @@ public class ModBitTrackerTest extends TestCase {
   // the "count" argument to ModBitTracker.add().
 
   private Random r = new Random(20031014L);
+
+  @BeforeClass
+  public static void setUpClass() {
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    FileIO.new_decl_format = true;
+  }
 
   private ModBitTracker makeModBitTracker(BitSet[] bitsets) {
     int numvars = bitsets.length;
@@ -108,6 +109,7 @@ public class ModBitTrackerTest extends TestCase {
     assertEquals(vars, mbt.num_sets());
   }
 
+  @Test
   public void testModBitTracker() {
     oneModBitTrackerTest(1, 2, 0.0);
     oneModBitTrackerTest(2, 2, 0.0);

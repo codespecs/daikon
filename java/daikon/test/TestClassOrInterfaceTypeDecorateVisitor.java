@@ -1,5 +1,7 @@
 package daikon.test;
 
+import static org.junit.Assert.assertEquals;
+
 import daikon.tools.jtb.*;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -8,17 +10,10 @@ import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import junit.framework.*;
+import org.junit.Test;
 import org.plumelib.util.UtilPlume;
 
-public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
-
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(TestClassOrInterfaceTypeDecorateVisitor.class));
-  }
-
-  public TestClassOrInterfaceTypeDecorateVisitor(String name) {
-    super(name);
-  }
+public final class TestClassOrInterfaceTypeDecorateVisitor {
 
   public static class UngenerifiedTypeCollector extends DepthFirstVisitor {
     // These two lists have the same length.
@@ -64,6 +59,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     }
   }
 
+  @Test
   public void testTheVisitor() {
 
     // Parse the file "GenericTestClass.java" (under same dir as this class)
