@@ -326,7 +326,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       assert status != NIS.SuppressState.NONSENSICAL;
     }
 
-    if (NIS.debug.isLoggable(Level.FINE)) NIS.debug.fine("After check, suppression set: " + this);
+    if (NIS.debug.isLoggable(Level.FINE)) {
+      NIS.debug.fine("After check, suppression set: " + this);
+    }
 
     // There are no remaining valid (true) suppressions.  If inv is the
     // first suppressor to be removed from any suppressions, then this

@@ -628,7 +628,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
         return null;
     }
 
-    if (!shouldIncIter.hasNext()) throw new RuntimeException("Not enough entries in shouldIncIter");
+    if (!shouldIncIter.hasNext()) {
+      throw new RuntimeException("Not enough entries in shouldIncIter");
+    }
 
     boolean shouldInclude = shouldIncIter.next();
 
@@ -849,7 +851,9 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     // Determine the offset of the first parameter
     int param_offset = 1;
-    if (mg.isStatic()) param_offset = 0;
+    if (mg.isStatic()) {
+      param_offset = 0;
+    }
 
     // iload
     // Push the nonce
@@ -1181,11 +1185,14 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   }
 
   /**
-   * Returns whether or not the specified class is part of chicory itself (and thus should not be
+   * Returns whether or not the specified class is part of Chicory itself (and thus should not be
    * instrumented). Some Daikon classes that are used by Chicory are included here as well.
+   *
+   * @param classname the name of the class to test, in internal form
+   * @return true if the given class is part of Chicory itself
    */
   @Pure
-  private static boolean is_chicory(String classname) {
+  private static boolean is_chicory(@InternalForm String classname) {
 
     if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/ChicoryTest")) {
       return true;

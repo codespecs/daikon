@@ -510,7 +510,9 @@ public class NISuppressor {
       status = state.toString().toLowerCase();
     }
 
-    if (current_state_str != null) status = status + " [" + current_state_str + "]";
+    if (current_state_str != null) {
+      status = status + " [" + current_state_str + "]";
+    }
 
     if (v2_index == -1) {
       return (String.format("%s(%s) [%s]", cname, varname[v1_index], status));

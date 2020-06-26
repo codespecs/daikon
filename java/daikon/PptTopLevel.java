@@ -1060,7 +1060,9 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    if (debugNISStats.isLoggable(Level.FINE)) NIS.clear_stats();
+    if (debugNISStats.isLoggable(Level.FINE)) {
+      NIS.clear_stats();
+    }
 
     // Set of invariants weakened by this sample
     Set<Invariant> weakened_invs = new LinkedHashSet<>();
@@ -1213,7 +1215,9 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    if (debugNISStats.isLoggable(Level.FINE)) NIS.dump_stats(debugNISStats, this);
+    if (debugNISStats.isLoggable(Level.FINE)) {
+      NIS.dump_stats(debugNISStats, this);
+    }
 
     // At this point, no invariant should exist that is suppressed
     if (Debug.dkconfig_internal_check) {
@@ -1255,7 +1259,9 @@ public class PptTopLevel extends Ppt {
     // Loop through each invariant
     inv_loop:
     for (Invariant inv : inv_list) {
-      if (Debug.logDetail()) inv.log("Processing in inv_add");
+      if (Debug.logDetail()) {
+        inv.log("Processing in inv_add");
+      }
 
       // Skip falsified invariants (shouldn't happen)
       if (inv.is_false()) {
@@ -1482,7 +1488,9 @@ public class PptTopLevel extends Ppt {
 
   /** Create all the derived variables. */
   public void create_derived_variables() {
-    if (debug.isLoggable(Level.FINE)) debug.fine("create_derived_variables for " + name());
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine("create_derived_variables for " + name());
+    }
 
     // Make ALL of the derived variables.  The loop terminates
     // because derive() stops creating derived variables after some
@@ -1756,7 +1764,9 @@ public class PptTopLevel extends Ppt {
   public PptSlice get_temp_slice(VarInfo v) {
 
     PptSlice slice = findSlice(v);
-    if (slice == null) slice = new PptSlice1(this, v);
+    if (slice == null) {
+      slice = new PptSlice1(this, v);
+    }
 
     return slice;
   }
@@ -1825,7 +1835,9 @@ public class PptTopLevel extends Ppt {
 
     // Build a new discardString that includes the variable equality
     String reason = di.discardString();
-    if (leader != v) reason += " and (" + leader + "==" + v + ")";
+    if (leader != v) {
+      reason += " and (" + leader + "==" + v + ")";
+    }
 
     return new DiscardInfo(imp_inv, DiscardCode.obvious, reason);
   }
@@ -1850,7 +1862,9 @@ public class PptTopLevel extends Ppt {
     }
 
     // Permute the antecedent if necessary
-    if (v1.varinfo_index > v2.varinfo_index) antecedent_inv = antecedent_inv.permute(permute_swap);
+    if (v1.varinfo_index > v2.varinfo_index) {
+      antecedent_inv = antecedent_inv.permute(permute_swap);
+    }
 
     // Check to see if the antecedent is true
     if (slice.is_inv_true(antecedent_inv)) {
@@ -1894,7 +1908,9 @@ public class PptTopLevel extends Ppt {
     // Build a new discardString that includes the variable equality
     String reason = di.discardString();
     if (leader1 != v1) reason += " and (" + leader1 + "==" + v1 + ")";
-    if (leader2 != v2) reason += " and (" + leader2 + "==" + v2 + ")";
+    if (leader2 != v2) {
+      reason += " and (" + leader2 + "==" + v2 + ")";
+    }
 
     return new DiscardInfo(imp_inv, DiscardCode.obvious, reason);
   }
@@ -1936,7 +1952,9 @@ public class PptTopLevel extends Ppt {
     }
 
     // If the varinfos are out of order swap
-    if (v1.varinfo_index > v2.varinfo_index) inv = inv.permute(permute_swap);
+    if (v1.varinfo_index > v2.varinfo_index) {
+      inv = inv.permute(permute_swap);
+    }
 
     // Look for the invariant
     return (slice.is_inv_true(inv));
@@ -2185,7 +2203,9 @@ public class PptTopLevel extends Ppt {
 
   public void instantiate_views_and_invariants() {
 
-    if (debug.isLoggable(Level.FINE)) debug.fine("instantiate_views_and_invariants for " + name());
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine("instantiate_views_and_invariants for " + name());
+    }
 
     // used only for debugging
     int old_num_vars = var_infos.length;
@@ -2324,7 +2344,9 @@ public class PptTopLevel extends Ppt {
       debug.fine(views.size() - old_num_views + " new views for " + name());
     }
 
-    if (debug.isLoggable(Level.FINE)) debug.fine("Done with instantiate_views_and_invariants");
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine("Done with instantiate_views_and_invariants");
+    }
 
     // This method didn't add any new variables.
     assert old_num_vars == var_infos.length;
@@ -3390,7 +3412,9 @@ public class PptTopLevel extends Ppt {
     for (PptSlice slice : viewsAsCollection()) {
       slice.repCheck();
     }
-    if (equality_view != null) equality_view.repCheck();
+    if (equality_view != null) {
+      equality_view.repCheck();
+    }
 
     // This should only be true while processing the hierarchy.  Normally
     // repcheck isn't called there.
@@ -3423,11 +3447,15 @@ public class PptTopLevel extends Ppt {
 
     // Get the type of the parent relation
     String rel_type = "";
-    if (parent_rel != null) rel_type = parent_rel.getRelationType().toString();
+    if (parent_rel != null) {
+      rel_type = parent_rel.getRelationType().toString();
+    }
 
     // Calculate the variable relationships
     String var_rel = "[]";
-    if (parent_rel != null) var_rel = "[" + parent_rel.parent_to_child_var_string() + "]";
+    if (parent_rel != null) {
+      var_rel = "[" + parent_rel.parent_to_child_var_string() + "]";
+    }
 
     // Put out this item
     l.fine(
@@ -4361,7 +4389,9 @@ public class PptTopLevel extends Ppt {
       dfmt.setGroupingUsed(true);
 
       double vars_per_eq = 0;
-      if (set_cnt > 0) vars_per_eq = (double) var_cnt / set_cnt;
+      if (set_cnt > 0) {
+        vars_per_eq = (double) var_cnt / set_cnt;
+      }
 
       log.fine(
           ppt.name()

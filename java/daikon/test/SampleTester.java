@@ -194,7 +194,9 @@ public class SampleTester {
       if (sa.length != 2) parse_error("No line type specified");
       String ltype = sa[0].trim();
       String cmd = sa[1].trim();
-      if (cmd.length() == 0) parse_error("no command specified");
+      if (cmd.length() == 0) {
+        parse_error("no command specified");
+      }
 
       // Process the specified type of command
       if (ltype.equals("decl")) proc_decl(cmd);
@@ -216,7 +218,9 @@ public class SampleTester {
     // Read in the specified file
     Set<File> decl_files = new HashSet<>(1);
     String absolute_decl_file = find_file(decl_file);
-    if (absolute_decl_file == null) fail("Decl file " + decl_file + " not found.");
+    if (absolute_decl_file == null) {
+      fail("Decl file " + decl_file + " not found.");
+    }
 
     if (absolute_decl_file.startsWith("file:")) {
       absolute_decl_file = absolute_decl_file.substring(5);
@@ -246,11 +250,15 @@ public class SampleTester {
 
   /**
    * Processes a variable list. Sets up the vars[] array to point to the matching variables in the
-   * ppt. The ppt must have been previously specified. Variables are separated by spaces.
+   * ppt. The ppt must have been previously specified.
+   *
+   * @param var_names the variable names, separated by spaces
    */
   private void proc_vars(String var_names) {
 
-    if (ppt == null) parse_error("ppt must be specified first");
+    if (ppt == null) {
+      parse_error("ppt must be specified first");
+    }
 
     // Variable names are separated by blanks
     String[] var_arr = var_names.split("  *");
@@ -392,7 +400,9 @@ public class SampleTester {
       parse_error("unknown assertion: " + name);
     }
 
-    if (negate) result = !result;
+    if (negate) {
+      result = !result;
+    }
 
     if (!result) {
       fail(
@@ -486,12 +496,16 @@ public class SampleTester {
   }
 
   /**
-   * The constant assertion returns true if all of its arguments are constants Each argument is
-   * variable name and at least one variable number must be specified.
+   * The constant assertion returns true if all of its arguments are constants.
+   *
+   * @param args variables; must be non-empty
+   * @return true if all of the given variables are constants
    */
   private boolean proc_constant_assert(List<String> args) {
 
-    if (args.size() < 1) parse_error("Must be at least one argument for constant assertion");
+    if (args.size() < 1) {
+      parse_error("Must be at least one argument for constant assertion");
+    }
 
     for (String arg : args) {
       VarInfo v = ppt.find_var_by_name(arg);

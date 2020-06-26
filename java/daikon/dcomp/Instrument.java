@@ -41,7 +41,9 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    if (DynComp.verbose) System.out.printf("%ntransform on %s, loader: %s%n", className, loader);
+    if (DynComp.verbose) {
+      System.out.printf("%ntransform on %s, loader: %s%n", className, loader);
+    }
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) {
@@ -67,8 +69,9 @@ public class Instrument implements ClassFileTransformer {
       // If already instrumented, nothing to do
       // (This set will be empty if DCInstrument.jdk_instrumented is false)
       if (Premain.pre_instrumented.contains(className)) {
-        if (DynComp.verbose)
+        if (DynComp.verbose) {
           System.out.printf("Skipping pre_instrumented JDK class %s%n", className);
+        }
         return null;
       }
     }

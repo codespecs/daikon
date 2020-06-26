@@ -1046,7 +1046,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       // guarding predicate
 
       if (inv1 instanceof GuardingImplication) inv1 = ((GuardingImplication) inv1).right;
-      if (inv2 instanceof GuardingImplication) inv2 = ((GuardingImplication) inv2).right;
+      if (inv2 instanceof GuardingImplication) {
+        inv2 = ((GuardingImplication) inv2).right;
+      }
 
       // Put equality invariants first
       if ((inv1 instanceof EqualityComparison) && !(inv2 instanceof EqualityComparison)) {
@@ -1249,7 +1251,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     if (suppressed && Debug.logOn() && (Daikon.current_inv != null)) {
       Daikon.current_inv.log("inv %s suppressed: %s", format(), ss);
     }
-    if (Debug.logDetail()) log("suppressed = %s suppression set = %s", suppressed, ss);
+    if (Debug.logDetail()) {
+      log("suppressed = %s suppression set = %s", suppressed, ss);
+    }
 
     return suppressed;
   }

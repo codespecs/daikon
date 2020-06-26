@@ -164,7 +164,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
       if (token == "[") { // interned
         if (!seenEqual) throw new IOException("Aux option did not contain an '='");
         if (insideVector) throw new IOException("Vectors cannot be nested in an aux option");
-        if (value.length() > 0) throw new IOException("Cannot mix scalar and vector values");
+        if (value.length() > 0) {
+          throw new IOException("Cannot mix scalar and vector values");
+        }
 
         insideVector = true;
         value = "";

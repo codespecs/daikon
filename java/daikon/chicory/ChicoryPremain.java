@@ -200,7 +200,9 @@ public class ChicoryPremain {
           e);
     }
 
-    if (Chicory.verbose) System.out.printf("Reading '%s' for pure methods %n", purityFileName);
+    if (Chicory.verbose) {
+      System.out.printf("Reading '%s' for pure methods %n", purityFileName);
+    }
 
     String line = null;
     do {

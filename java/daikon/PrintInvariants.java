@@ -751,7 +751,9 @@ public final class PrintInvariants {
     for (int i = 0; i < ppts.length; i++) {
       PptTopLevel ppt = ppts[i];
 
-      if (debug.isLoggable(Level.FINE)) debug.fine("Looking at point " + ppt.name());
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine("Looking at point " + ppt.name());
+      }
 
       // If this point is not an exit point, print out any retained combined
       // exit point
@@ -1140,7 +1142,9 @@ public final class PrintInvariants {
       debugPrint.fine("Printing: [" + inv.repr_prob() + "]");
     }
 
-    if (dkconfig_old_array_names && FileIO.new_decl_format) inv_rep = inv_rep.replace("[..]", "[]");
+    if (dkconfig_old_array_names && FileIO.new_decl_format) {
+      inv_rep = inv_rep.replace("[..]", "[]");
+    }
 
     if (wrap_xml) {
       out.print("<INVINFO>");
@@ -1411,7 +1415,9 @@ public final class PrintInvariants {
         }
       }
 
-      if (Invariant.logOn()) inv.log("Filtering, accepted = %s", fi_accepted);
+      if (Invariant.logOn()) {
+        inv.log("Filtering, accepted = %s", fi_accepted);
+      }
 
       // Never print the guarding predicates themselves, they should only
       // print as part of GuardingImplications
@@ -1580,7 +1586,9 @@ public final class PrintInvariants {
           "%s%s = %s%n", indent, name, Debug.toString(ppt.constants.constant_value(vi)));
     } else {
       PptSlice slice = ppt.findSlice(vi);
-      if (slice != null) print_all_invs(slice, indent);
+      if (slice != null) {
+        print_all_invs(slice, indent);
+      }
 
       if (slice == null) {
         System.out.printf("%s%s has %d values%n", indent, name, ppt.num_values(vi));
@@ -1622,7 +1630,9 @@ public final class PrintInvariants {
                 @Nullable Class<? extends InvariantFilter>,
                 Map<Class<? extends Invariant>, Integer>>();
 
-    if (print_invs) debug.fine(ppt.name());
+    if (print_invs) {
+      debug.fine(ppt.name());
+    }
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
