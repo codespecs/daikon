@@ -41,9 +41,8 @@ else
   # avoid assuming that they both produce absolute filenames or both
   # produce filenames relative to the same directory.
   # The `grep -v` prevents the make target failure from throwing off prefix guessing.
-## TEMPORARY, for remove-testrunner branch.
-#   (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
-#   "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"
-#   (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
-#   "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"
+  (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
+  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"
+  (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
+  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"
 fi
