@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -97,7 +96,6 @@ public class InvariantAddAndCheckTester {
   /** Allows for the configuring of Daikon options. */
   static Configuration config = Configuration.getInstance();
 
-  private static final String inputFileName = "daikon/test/inv/InvariantTest.input";
   private static final String commandsFileName = "daikon/test/inv/InvariantTest.commands";
   private static final String diffFileName = "daikon/test/inv/InvariantTest.diffs";
 
@@ -225,50 +223,11 @@ public class InvariantAddAndCheckTester {
     }
   }
 
-  private static String generateCommands(LineNumberReader input) {
-    StringBuilder output = new StringBuilder();
-
-    while (true) {
-      String commands = AddAndCheckTestCase.generateTest(input);
-      if (commands == null) {
-        break;
-      }
-      output.append(commands);
-    }
-    return output.toString();
-  }
-
-  private static LineNumberReader getInputReader() {
-
-    // Calculate input file locations
-    //     URL inputFileLocation =
-    //       ClassLoader.getSystemClassLoader().getSystemResource("InvariantTest.commands");
-    //     if (inputFileLocation == null)
-    //       fail("Input file for invariant format tests missing." +
-    //            " (Should be in InvariantTest.commands" +
-    //            " and it must be within the classpath)");
-
-    //  String inputFile = inputFileLocation.getFile();
-    LineNumberReader input;
-    try {
-      input =
-          new LineNumberReader(new InputStreamReader(new FileInputStream(inputFileName), UTF_8));
-    } catch (FileNotFoundException e) {
-      fail(
-          "Unexpected FileNotFoundException (very strange since the URL of the file was found earlier)");
-      throw new Error("Unreachable control flow");
-    }
-    return input;
-  }
-
-  private static BufferedWriter getCommandWriter() {
-    try {
-      return Files.newBufferedWriter(Paths.get(commandsFileName), UTF_8);
-    } catch (IOException e) {
-      throw new RuntimeException("Cannot write output into " + commandsFileName);
-    }
-  }
-
+  /**
+   * Returns a reader for the {@code InvariantTest.commands} resource.
+   *
+   * @return a reader for the {@code InvariantTest.commands} resource
+   */
   private static LineNumberReader getCommands() {
     // Calculate input file locations
     //   URL inputFileLocation =
