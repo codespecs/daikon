@@ -34,15 +34,18 @@ if [ -n "${SKIP_JAVADOC+x}" ]; then
   echo Skipping javadoc because of https://bugs.openjdk.java.net/browse/JDK-8215542
   exit
 else
+
   make javadoc doc-all
 
-  # The `api-private` and `requireJavadoc` commands are
-  # separate (and thus the first might mask failure of the second) to
-  # avoid assuming that they both produce absolute filenames or both
-  # produce filenames relative to the same directory.
+  # The `api-private` and `requireJavadoc` commands are separate to avoid
+  # assuming that they both produce absolute filenames or both produce filenames
+  # relative to the same directory.  Always run both to avoid one masking
+  # failures in the other.
+  status=0
   # The `grep -v` prevents the make target failure from throwing off prefix guessing.
   (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
-  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"
+  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt" || status=1
   (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
-  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"
+  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt" || status=1
+  exit $status
 fi
