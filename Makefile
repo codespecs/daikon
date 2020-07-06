@@ -222,10 +222,6 @@ else
 	@echo "Not building Kvasir: it's only for Linux x86-64"
 	@echo "and this appears to be" `uname -sm`
 endif
-endif
-endif
-endif
-endif
 
 
 ### Rebuild everything; used for monthly releases, for example
