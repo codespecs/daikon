@@ -268,13 +268,11 @@ In order to run Daikon, you must have a Java 8 (or later) JDK, including a
 @uref{https://www.oracle.com/technetwork/java/javase/overview/index.html,,
 Java Virtual Machine} and a Java compiler.
 
-If you wish to analyze C or C++ programs, you need a C or C++
-compiler such as @command{gcc}.
-
-If you wish to edit the Daikon source code and re-compile Daikon,
+If you wish to analyze C or C++ programs, or
+if you wish to edit the Daikon source code and re-compile Daikon,
 @pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
-Daikon is supported on Unix-like environments, including Linux, Mac OS X, and
+Daikon is supported on Unix environments, including Linux, Mac OS X, and
 Windows Subsystem for Linux (WSL).  It is not supported on Windows or Cygwin.
 
 @c The explicit installation instructions, segregated by OS type, is
