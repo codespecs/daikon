@@ -196,8 +196,9 @@ software used to build Daikon).  For
 , Ubuntu}, you can
 find the commands to install these dependencies in file
 @file{$DAIKONDIR/scripts/Dockerfile-@emph{OSNAME}-jdk@emph{N}-plus}.
-For other operating systems, use similar commands.  (Feel free to share
-them with the Daikon developers so that we can include them for other users.)
+For other operating systems, use similar commands.  (If you determine
+commands for some other operating system, please share
+them with the Daikon developers so that we can share them with other users.)
 
 Note that Kvasir, the Daikon front end for the C language
 (@pxref{Kvasir,,,daikon,Daikon User Manual}), does not work on Mac OS.
