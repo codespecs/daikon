@@ -20,13 +20,6 @@ CFLAGS += -fno-stack-protector
 # Many of our tests won't compile with this option.
 CFLAGS += -fcommon
 
-# Recent versions of Ubuntu set -fstack-clash-protection on by default.
-# This breaks stack frame discovery in Kvasir.
-GCC_MAJOR_VERSION := $(shell gcc -dumpversion)
-ifeq ($(shell expr $(GCC_MAJOR_VERSION) \>= 7),1)
-CFLAGS += -fno-stack-clash-protection
-endif
-
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
@@ -104,6 +97,15 @@ endif
 
 ifeq ($(OS_ID),Ubuntu)
 ifeq ($(OS_REL),20.04)
+# Recent versions of Ubuntu set -fstack-clash-protection on by default.
+# This breaks stack frame discovery in Kvasir.
+# Some gcc version 7 compilers have this option and some don't.
+# Until more consistent, only check if Ubuntu 20.04.
+GCC_MAJOR_VERSION := $(shell gcc -dumpversion)
+ifeq ($(shell expr $(GCC_MAJOR_VERSION) \>= 7),1)
+CFLAGS += -fno-stack-clash-protection
+endif
+
 	GOAL := goal-Ubuntu2004
 endif
 ifeq ($(OS_REL),18.04)

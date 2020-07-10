@@ -773,6 +773,9 @@ code by default.  Kvasir cannot properly process these binaries.
 You must add the @option{-no-pie} option to disable this feature.
 Note that if your build system separates the compile and link steps, the
 @option{-no-pie} option needs to be on the link step.
+Some versions of @command{gcc} now set the @option{-fstack-clash-protection}
+option by default.  Kvasir cannot properly process these binaries.
+You must add the @option{-fno-stack-clash-protection} option to disable this feature.
 Then, run your program as usual, but prepend
 @command{kvasir-dtrace} to the command line.
 
