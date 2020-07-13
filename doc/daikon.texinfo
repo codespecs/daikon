@@ -770,8 +770,12 @@ involving unrelated variables (see @ref{DynComp for C/C++}).
 To use the C/C++ front end Kvasir with your program, first compile your
 program.
 (If you use @command{gcc} to compile your program, use the following
-command-line arguments: @option{-gdwarf-2 -no-pie
--fno-stack-clash-protection}.  Note that if your build system separates the
+command-line arguments: @option{-gdwarf-2 -no-pie}.
+@c Whether -fno-stack-clash-protection is supported depends on the
+@c build-time configuration, which varies between Linux distributions.
+Also use @option{-fno-stack-clash-protection} if your @command{gcc}
+supports it.
+Note that if your build system separates the
 compile and link steps, then @option{-no-pie} needs to be on the link
 step.)
 Then, run your program as usual, but prepend
