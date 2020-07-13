@@ -765,16 +765,15 @@ By default, Kvasir also runs the DynComp tool
 to improve Daikon's performance and Daikon's output by filtering out invariants
 involving unrelated variables (see @ref{DynComp for C/C++}).
 
-To use the C/C++ front end Kvasir with your program, first make sure that
-your program has been compiled with DWARF-2 format debugging
-information, such as by giving the @option{-gdwarf-2} flag to @command{gcc} when
-compiling.  Some versions of @command{gcc} now output position independent
-code by default.  Kvasir cannot properly process these binaries.
-You must add the @option{-no-pie} option to disable this feature.
-Note that if your build system separates the compile and link steps, the
-@option{-no-pie} option needs to be on the link step.
-Then, run your program as usual, but prepend
-@command{kvasir-dtrace} to the command line.
+To use the C/C++ front end Kvasir with your program, first compile your
+program.
+(If you use @command{gcc} to compile your program, use the following
+command-line arguments: @option{-gdwarf-2 -no-pie
+-fno-stack-clash-protection}.  Note that if your build system separates the
+compile and link steps, then @option{-no-pie} needs to be on the link
+step.)
+Then, run your program as usual, but prepend @command{kvasir-dtrace} to the
+command line.
 
 Kvasir will produce two output files:
 a @file{.dtrace} file containing a trace of a particular execution,
