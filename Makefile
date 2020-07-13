@@ -192,12 +192,6 @@ reformat:
 
 ### Kvasir (C/C++ front end)
 
-ifeq ($(shell uname -m),x86_64)
-VALGRIND_ARCH := amd64
-else
-VALGRIND_ARCH := x86
-endif
-
 ../fjalar:
 	(cd .. && git clone ${GIT_OPTIONS} https://github.com/codespecs/fjalar.git fjalar)
 
@@ -222,27 +216,11 @@ kvasir:
 	$(MAKE) -C fjalar/valgrind install >/dev/null
 
 build-kvasir:
-ifeq (Linux i686,$(shell uname -sm))
-	$(MAKE) kvasir
-else
-ifeq (Linux i586,$(shell uname -sm))
-	$(MAKE) kvasir
-else
-ifeq (Linux i486,$(shell uname -sm))
-	$(MAKE) kvasir
-else
-ifeq (Linux i386,$(shell uname -sm))
-	$(MAKE) kvasir
-else
 ifeq (Linux x86_64,$(shell uname -sm))
 	$(MAKE) kvasir
 else
-	@echo "Not building Kvasir: it's only for Linux x86 and x86-64"
+	@echo "Not building Kvasir: it's only for Linux x86-64"
 	@echo "and this appears to be" `uname -sm`
-endif
-endif
-endif
-endif
 endif
 
 

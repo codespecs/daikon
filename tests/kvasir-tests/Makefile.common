@@ -11,12 +11,15 @@ endif
 CC := gcc
 CXX := g++
 CFLAGS += -gdwarf-2
+
 # Ubuntu sets -fstack-protector-strong on by default
 # we turn if back off to get baseline results to match Fedora.
 CFLAGS += -fno-stack-protector
+
 # With gcc version 10 -fno-common is the default.
 # Many of our tests won't compile with this option.
 CFLAGS += -fcommon
+
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
@@ -93,6 +96,18 @@ endif
 endif
 
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),20.04)
+# Recent versions of Ubuntu set -fstack-clash-protection on by default.
+# This breaks stack frame discovery in Kvasir.
+# Some gcc version 7 compilers have this option and some don't.
+# Until more consistent, only check if Ubuntu 20.04.
+GCC_MAJOR_VERSION := $(shell gcc -dumpversion)
+ifeq ($(shell expr $(GCC_MAJOR_VERSION) \>= 7),1)
+CFLAGS += -fno-stack-clash-protection
+endif
+
+	GOAL := goal-Ubuntu2004
+endif
 ifeq ($(OS_REL),18.04)
 	GOAL := goal-Ubuntu1804
 endif
