@@ -244,6 +244,13 @@ public class Quantify {
         return arr_var;
       }
 
+      if (sequence.ppt == null) {
+        throw new Error(
+            String.format(
+                "sequence.ppt is null for get_check_array_var(this=%s, output_format=%s):%n  sequence=%s, sequence.name=%s%n  sequence=%s",
+                this, output_format, sequence, sequence.name(), sequence.repr()));
+      }
+
       throw new Daikon.UserError(
           String.format(
               "Error: Can't create %s expression for the size of an array: "

@@ -447,6 +447,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     } catch (Exception e) {
       throw new RuntimeException("unexpected aux error", e);
     }
+
+    checkRep();
   }
 
   /**
@@ -687,6 +689,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     varinfo_index = -1;
 
     canBeMissing = false;
+
+    checkRep();
   }
 
   /** Create the specified VarInfo. */
@@ -708,6 +712,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         aux);
     assert name != null;
     this.str_name = name.intern();
+
+    checkRep();
   }
 
   /** Create the specified non-static VarInfo. */
@@ -730,6 +736,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     this(name, type, file_rep_type, comparability, false, null, aux);
     assert name != null;
     this.str_name = name.intern();
+
+    checkRep();
   }
 
   /** Create a VarInfo with the same values as vi. */
@@ -760,6 +768,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
           new VarParent(parent.parent_ppt, parent.parent_relation_id, parent.parent_variable));
     }
     relative_name = vi.relative_name;
+
+    checkRep();
   }
 
   // /** Creates and returns a copy of this. */
@@ -828,6 +838,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // At an exit point, parameters are uninteresting, but orig(param) is not.
     // So don't call orig(param) a parameter.
     result.set_is_param(false);
+
+    result.checkRep();
+
     return result;
   }
 
@@ -896,8 +909,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         + ",derivees="
         + derivees()
         + ",ppt="
-        // This method is only called for debugging  - so let's
-        // protect ourselves from a mistake somewhere else.
+        // This method is only called for debugging, so let's
+        // protect ourselves from a mistake somewhere else, such as ppt being null.
         // + ppt.name()
         + ppt
         + ",canBeMissing="
@@ -4144,6 +4157,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         parent.parent_variable = apply_subscript(seq.parent_var_name(rid), subscript_parent);
       }
     }
+
+    vi.checkRep();
+
     return vi;
   }
 
@@ -4166,6 +4182,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
             vars[0].comparability,
             vars[0].aux);
     vi.setup_derived_function(function_name, vars);
+
+    vi.checkRep();
+
     return vi;
   }
 
@@ -4259,6 +4278,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         }
       }
     }
+
+    vi.checkRep();
+
     return vi;
   }
 
@@ -4296,6 +4318,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
             String.format("%s.%s()", str.get_parent(rid).parent_variable, func_name);
       }
     }
+
+    vi.checkRep();
+
     return vi;
   }
 
