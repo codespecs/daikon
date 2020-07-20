@@ -26,7 +26,7 @@ Chicory and DynComp:
 - Fixed issue #207 - improves support for older class files.
 
 Fjalar/Kvasir:
-- We added support systems with a secondary target of X86.
+- We added support for systems with a secondary target of X86.
 - We added support for clang compiler generated binaries.
 - We improved documentation on gcc compiler options.
 - We updated the underlying Binutils infrastructure to version 2.34.
