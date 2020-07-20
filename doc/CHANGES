@@ -20,9 +20,15 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.8.? (June ?, 2020)
+5.8.? (July ?, 2020)
+
+Chicory and DynComp:
+- Fixed issue #207 - improves support for older class files.
 
 Fjalar/Kvasir:
+- We added support systems with a secondary target of X86.
+- We added support for clang compiler generated binaries.
+- We improved documentation on gcc compiler options.
 - We updated the underlying Binutils infrastructure to version 2.34.
 
 Moved the SplitDtrace class from the ununamed package to the daikon/ package.
