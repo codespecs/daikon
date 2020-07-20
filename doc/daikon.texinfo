@@ -206,8 +206,10 @@ tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
 @uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
 @item daikon-developers@@googlegroups.com
-This list goes to the Daikon maintainers.  Use it for bug reports,
-suggestions, and the like.  If you are an active contributor to Daikon,
+This list goes to the Daikon maintainers.  Use it for questions about the
+Daikon and Kvasir source code.  Use the issue tracker
+(@uref{https://github.com/codespecs/daikon/issues}) for bug reports
+and feature requests.  If you are an active contributor to Daikon,
 you may send mail to the list asking to be added.
 @end table
 
@@ -765,17 +767,17 @@ By default, Kvasir also runs the DynComp tool
 to improve Daikon's performance and Daikon's output by filtering out invariants
 involving unrelated variables (see @ref{DynComp for C/C++}).
 
-To use the C/C++ front end Kvasir with your program, first make sure that
-your program has been compiled with DWARF-2 format debugging
-information, such as by giving the @option{-gdwarf-2} flag to @command{gcc} when
-compiling.  Some versions of @command{gcc} now output position independent
-code by default.  Kvasir cannot properly process these binaries.
-You must add the @option{-no-pie} option to disable this feature.
-Note that if your build system separates the compile and link steps, the
-@option{-no-pie} option needs to be on the link step.
-Some versions of @command{gcc} now set the @option{-fstack-clash-protection}
-option by default.  Kvasir cannot properly process these binaries.
-You must add the @option{-fno-stack-clash-protection} option to disable this feature.
+To use the C/C++ front end Kvasir with your program, first compile your
+program.
+(If you use @command{gcc} to compile your program, use the following
+command-line arguments: @option{-gdwarf-2 -no-pie}.
+@c Whether -fno-stack-clash-protection is supported depends on the
+@c build-time configuration, which varies between Linux distributions.
+Also use @option{-fno-stack-clash-protection} if your @command{gcc}
+supports it.
+Note that if your build system separates the
+compile and link steps, then @option{-no-pie} needs to be on the link
+step.)
 Then, run your program as usual, but prepend
 @command{kvasir-dtrace} to the command line.
 
@@ -8500,11 +8502,9 @@ option:
 @cindex reporting problems
 @cindex problems, reporting
 
-If you have any questions, can suggest ways to improve the
-documentation, find bugs in the system, or have suggestions for its
-improvement, please file a bug report at
-@uref{https://github.com/codespecs/daikon/issues} or send email to
-@email{daikon-developers@@googlegroups.com}.  (If you can't figure
+If you find a bug, want to request a new feature, or have a suggestion to
+improve Daikon or its documentation, open an issue at
+@uref{https://github.com/codespecs/daikon/issues}.  (If you can't figure
 out how to do something or do not understand why Daikon works the way it
 does, that is a bug, too --- in the Daikon documentation.  Please report
 those as well.)
@@ -8512,6 +8512,8 @@ We will try to assist you and to correct any
 problems, so please don't hesitate to ask for help or report
 difficulties.  Additionally, if you can contribute enhancements or bug
 fixes, those will be gratefully accepted.
+If you have a question about the source code of Daikon or Kvasir, send
+email to @email{daikon-developers@@googlegroups.com}.
 
 In order for us to assist you, please provide a complete and useful bug
 report.  Your bug report must provide all the information that is
