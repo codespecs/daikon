@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.3
+@center Daikon version 5.8.4
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.8.3 release date
-@center May 4, 2020
+@c Print out the Daikon version 5.8.4 release date
+@center July 21, 2020
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.3, released May 4, 2020.
+It describes Daikon version 5.8.4, released July 21, 2020.
 
 @menu
 * Introduction::
