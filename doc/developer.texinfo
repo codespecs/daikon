@@ -2012,16 +2012,15 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 @section Distribution setup instructions
 
 @need 1000
-The recommended setup for the distribution process:
-@itemize
-@item get a fresh copy of your Bash shell (e.g., log out and log back in)
-@item @code{unset CHECKERFRAMEWORK}
+Get a fresh copy of your Bash shell (e.g., log out and log back in), then
+run the following (adjust environment variables as necessary):
 @c DAIKONDIR is necessary only for the instructions in this file.
 @c Maybe use a different environment variable?
-@item set @env{DAIKONDIR} as you would normally:  @code{export DAIKONDIR=...}
-@item set @env{JAVA_HOME} to point to JDK 8; for example, @code{export JAVA_HOME=/usr/lib/jvm/java-1.8.0}
-@c @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
-@end itemize
+@example
+export DAIKONDIR=$inv/daikon
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+unset CHECKERFRAMEWORK
+@end example
 
 
 @need 1000
