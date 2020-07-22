@@ -2215,9 +2215,7 @@ overnight.
 Do a very clean rebuild of everything.
 
 @example
-cd $DAIKONDIR
-make very-clean clean-kvasir
-make rebuild-everything
+cd $DAIKONDIR && make very-clean clean-kvasir && make rebuild-everything
 @end example
 
 @c Time on buffalo as of 12/16/2015
@@ -2289,8 +2287,7 @@ Now, update the appropriate files with the date and version number
 of the release and commit these changes back to the repository:
 
 @example
-make update-run-google-java-format
-make update-and-commit-version
+make update-run-google-java-format && make update-and-commit-version
 @end example
 
 [Time: moments]
@@ -2325,8 +2322,7 @@ cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 unset CHECKERFRAMEWORK
-make compile
-make staging
+make compile && make staging
 @end example
 
 The final output of this command
