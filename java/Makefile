@@ -1087,6 +1087,7 @@ DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
 javadoc: api
 
 # Don't run Javadoc on files that require the Checker Framework.
+# .PHONY means regenerate even if the file exists.
 .PHONY: javadoc-files.txt
 javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
@@ -1139,7 +1140,8 @@ requireJavadoc: $(JAVA_FILES)
 	${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) ${DAIKONDIR}/java
 
 
-../doc/invariants-doc.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+	@make javadoc-files.txt
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		@javadoc-files.txt
@@ -1148,7 +1150,8 @@ requireJavadoc: $(JAVA_FILES)
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
 
-../doc/config-options.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+	@make javadoc-files.txt
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		@javadoc-files.txt
