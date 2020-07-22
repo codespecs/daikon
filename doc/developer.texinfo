@@ -2435,12 +2435,9 @@ navigate to
 @url{https://dev.azure.com/mernstdaikon/daikon/_build?definitionId=3&_a=summary}
 and click ``Run pipeline''.
 
-It may take a while for the new jobs to complete,
-if the CI service is busy running other jobs for the codespecs organization.
-
 If there is a problem, fix it and start over.
 
-[Time: 15 min]
+[Time: 15 min, or longer if the CI service is busy running other jobs for the codespecs organization.]
 
 
 @need 1000
