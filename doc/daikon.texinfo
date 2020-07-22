@@ -63,7 +63,7 @@
 @ifset final
 @c FINAL version
 @c Print out the Daikon version 5.8.4 release date
-@center July 21, 2020
+@center July 22, 2020
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.8.4, released July 21, 2020.
+It describes Daikon version 5.8.4, released July 22, 2020.
 
 @menu
 * Introduction::
@@ -8629,7 +8629,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.8.4, released July 21, 2020.
+This manual describes Daikon version 5.8.4, released July 22, 2020.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGES,,@file{doc/CHANGES}}
 in the distribution; this section gives a

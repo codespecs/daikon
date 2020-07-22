@@ -220,7 +220,7 @@ public final class Daikon {
   /** The current version of Daikon. */
   public static final String release_version = "5.8.4";
   /** The date for the current version of Daikon. */
-  public static final String release_date = "July 21, 2020";
+  public static final String release_date = "July 22, 2020";
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
       "Daikon version "
