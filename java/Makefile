@@ -847,97 +847,97 @@ show_nullness_java_files:
 	@echo DAIKON_JAVA_FILES:
 	@echo ${DAIKON_JAVA_FILES}
 
-## TODO: Reinstate these dependencies later:  check-prototype check-vindex
+## TODO: Reinstate these dependencies later:  typecheck-prototype typecheck-vindex
 # Check is in two parts because Travis won't run jobs longer than 50 minutes.
-check-part1: check-formatter check-index check-interning check-lock
-check-part2: check-nullness check-regex check-signature
-check-all: check-part1 check-part2
-typecheck: check-all
+typecheck-part1: typecheck-formatter typecheck-index typecheck-interning typecheck-lock
+typecheck-part2: typecheck-nullness typecheck-regex typecheck-signature
+typecheck-all: typecheck-part1 typecheck-part2
+typecheck: typecheck-all
 
-check-index: ${INDEX_JAVA_FILES} compile
+typecheck-index: ${INDEX_JAVA_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
 
 # Run the index checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
-check-index-all: ${ALL_GENERATED_FILES} compile
+typecheck-index-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 # This target runs the Index checker on just one file.
 # Typical command:
-# INDEX_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-index-onefile
+# INDEX_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-index-onefile
 INDEX_ONEFILE ?= daikon/PptTopLevel.java
-check-index-onefile: ${ALL_GENERATED_FILES} compile
+typecheck-index-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_ONEFILE}
 
-check-interning: ${INTERNING_JAVA_FILES} compile
+typecheck-interning: ${INTERNING_JAVA_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
-check-interning-all: ${ALL_GENERATED_FILES} compile
+typecheck-interning-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 # This target runs the Interning checker on just one file.
 # Typical command:
-# INTERNING_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-interning-onefile
+# INTERNING_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-interning-onefile
 INTERNING_ONEFILE ?= daikon/PptTopLevel.java
-check-interning-onefile: ${ALL_GENERATED_FILES} compile
+typecheck-interning-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_ONEFILE}
 
-check-signature: ${ALL_GENERATED_FILES} compile
+typecheck-signature: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 # This target runs the Signature checker on just one file.
 # Typical command:
-# SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-signature-onefile
+# SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-signature-onefile
 # SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
 SIGNATURE_ONEFILE ?= daikon/dcomp/TypeStack.java
-check-signature-onefile: ${ALL_GENERATED_FILES} compile
+typecheck-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
 
-check-nullness: compile compile-typequals
+typecheck-nullness: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 
 # These targets run the Nullness checker on just one file.
 # Typical command:
-# NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-onefile
+# NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-nullness-onefile
 # NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_ONEFILE ?= daikon/FileIO.java
 NULLNESS_ONEFILE ?= daikon/Daikon.java
-check-nullness-onefile: compile compile-typequals
-	${MAKE} check-nullness-onefile-norecompile
-check-nullness-onefile-norecompile:
+typecheck-nullness-onefile: compile compile-typequals
+	${MAKE} typecheck-nullness-onefile-norecompile
+typecheck-nullness-onefile-norecompile:
 	${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
 
-check-prototype: compile compile-typequals
+typecheck-prototype: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-vindex: compile compile-typequals
+typecheck-vindex: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-regex: ${ALL_GENERATED_FILES} compile
+typecheck-regex: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
-check-regex-qual: ${ALL_GENERATED_FILES} compile
+typecheck-regex-qual: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
-check-formatter: ${ALL_GENERATED_FILES} compile
+typecheck-formatter: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
-check-lock: ${ALL_GENERATED_FILES} compile
+typecheck-lock: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
@@ -950,9 +950,9 @@ ${TYPEQUALS_CLASSES}: ${TYPEQUALS_JAVA_FILES}
 
 # These targets run the Interning checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
-check-interning-varinfo:
+typecheck-interning-varinfo:
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} daikon/VarInfo.java
-check-interning-fileio:
+typecheck-interning-fileio:
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} daikon/FileIO.java
 
 # "tail -1" is required when wc is given multiple arguments
@@ -1087,6 +1087,7 @@ DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
 javadoc: api
 
 # Don't run Javadoc on files that require the Checker Framework.
+# .PHONY means regenerate even if the file exists.
 .PHONY: javadoc-files.txt
 javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
@@ -1139,7 +1140,8 @@ requireJavadoc: $(JAVA_FILES)
 	${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) ${DAIKONDIR}/java
 
 
-../doc/invariants-doc.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+	@make javadoc-files.txt
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		@javadoc-files.txt
@@ -1148,7 +1150,8 @@ requireJavadoc: $(JAVA_FILES)
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
 
-../doc/config-options.texinfo: ../utils/plume-scripts javadoc-files.txt daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+	@make javadoc-files.txt
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		@javadoc-files.txt

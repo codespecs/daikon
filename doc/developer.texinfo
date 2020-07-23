@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.3
+@center Daikon version 5.8.5
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.8.3 release date
-@center May 4, 2020
+@c Print out the Daikon version 5.8.5 release date
+@center July 22, 2020
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.3, released May 4, 2020.
+It describes Daikon version 5.8.5, released July 22, 2020.
 
 @menu
 * Introduction::
@@ -2012,16 +2012,15 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 @section Distribution setup instructions
 
 @need 1000
-The recommended setup for the distribution process:
-@itemize
-@item get a fresh copy of your Bash shell (e.g., log out and log back in)
-@item @code{unset CHECKERFRAMEWORK}
+Get a fresh copy of your Bash shell (e.g., log out and log back in), then
+run the following (adjust environment variables as necessary):
 @c DAIKONDIR is necessary only for the instructions in this file.
 @c Maybe use a different environment variable?
-@item set @env{DAIKONDIR} as you would normally:  @code{export DAIKONDIR=...}
-@item set @env{JAVA_HOME} to point to JDK 8; for example, @code{export JAVA_HOME=/usr/lib/jvm/java-1.8.0}
-@c @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
-@end itemize
+@example
+export DAIKONDIR=$inv/daikon
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+unset CHECKERFRAMEWORK
+@end example
 
 
 @need 1000
@@ -2215,9 +2214,7 @@ overnight.
 Do a very clean rebuild of everything.
 
 @example
-cd $DAIKONDIR
-make very-clean clean-kvasir
-make rebuild-everything
+cd $DAIKONDIR && make very-clean clean-kvasir && make rebuild-everything
 @end example
 
 @c Time on buffalo as of 12/16/2015
@@ -2289,8 +2286,7 @@ Now, update the appropriate files with the date and version number
 of the release and commit these changes back to the repository:
 
 @example
-make update-run-google-java-format
-make update-and-commit-version
+make update-run-google-java-format && make update-and-commit-version
 @end example
 
 [Time: moments]
@@ -2325,8 +2321,7 @@ cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 unset CHECKERFRAMEWORK
-make compile
-make staging
+make compile && make staging
 @end example
 
 The final output of this command
@@ -2440,12 +2435,9 @@ navigate to
 @url{https://dev.azure.com/mernstdaikon/daikon/_build?definitionId=3&_a=summary}
 and click ``Run pipeline''.
 
-It may take a while for the new jobs to complete,
-if the CI service is busy running other jobs for the codespecs organization.
-
 If there is a problem, fix it and start over.
 
-[Time: 15 min]
+[Time: 15 min, or longer if the CI service is busy running other jobs for the codespecs organization.]
 
 
 @need 1000
