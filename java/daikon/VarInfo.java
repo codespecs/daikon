@@ -659,9 +659,17 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return true;
   }
 
-  // The resulting VarInfo does not have its ppt field set.
-
-  /** Create the specified VarInfo. */
+  /**
+   * Create the specified VarInfo. The resulting VarInfo does not have its ppt field set.
+   *
+   * @param name the variable name
+   * @param type type as declared in the program point
+   * @param file_rep_type type as written in the data trace file
+   * @param comparability comparability info
+   * @param is_static_constant true if the variable always has the same, known value
+   * @param static_constant_value the static constant value, or null if not statically constant
+   * @param aux auxiliary info
+   */
   private VarInfo(
       VarInfoName name,
       ProglangType type,
