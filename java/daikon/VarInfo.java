@@ -477,8 +477,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     } catch (Exception e) {
       throw new RuntimeException("unexpected aux error", e);
     }
-
-    checkRepNoPpt();
   }
 
   /**
@@ -723,8 +721,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     varinfo_index = -1;
 
     canBeMissing = false;
-
-    checkRepNoPpt();
   }
 
   /** Create the specified VarInfo. */
@@ -746,8 +742,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         aux);
     assert name != null;
     this.str_name = name.intern();
-
-    checkRepNoPpt();
   }
 
   /** Create the specified non-static VarInfo. */
@@ -770,8 +764,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     this(name, type, file_rep_type, comparability, false, null, aux);
     assert name != null;
     this.str_name = name.intern();
-
-    checkRepNoPpt();
   }
 
   /** Create a VarInfo with the same values as vi. */
@@ -802,8 +794,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
           new VarParent(parent.parent_ppt, parent.parent_relation_id, parent.parent_variable));
     }
     relative_name = vi.relative_name;
-
-    checkRepNoPpt();
   }
 
   // /** Creates and returns a copy of this. */
@@ -872,8 +862,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // At an exit point, parameters are uninteresting, but orig(param) is not.
     // So don't call orig(param) a parameter.
     result.set_is_param(false);
-
-    result.checkRepNoPpt();
 
     return result;
   }
@@ -4191,7 +4179,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         parent.parent_variable = apply_subscript(seq.parent_var_name(rid), subscript_parent);
       }
     }
-
     return vi;
   }
 
@@ -4214,9 +4201,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
             vars[0].comparability,
             vars[0].aux);
     vi.setup_derived_function(function_name, vars);
-
-    vi.checkRepNoPpt();
-
     return vi;
   }
 
@@ -4310,9 +4294,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         }
       }
     }
-
-    vi.checkRepNoPpt();
-
     return vi;
   }
 
@@ -4350,9 +4331,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
             String.format("%s.%s()", str.get_parent(rid).parent_variable, func_name);
       }
     }
-
-    vi.checkRepNoPpt();
-
     return vi;
   }
 

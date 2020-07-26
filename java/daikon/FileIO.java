@@ -751,7 +751,6 @@ public final class FileIO {
             is_static_constant,
             static_constant_value,
             aux);
-    result.checkRepNoPpt();
     return result;
   }
 
