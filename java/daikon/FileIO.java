@@ -599,6 +599,10 @@ public final class FileIO {
    * the last variable in this program point declaration.
    *
    * <p>The resulting VarInfo does not have its ppt field set; the client should arrange to do so.
+   *
+   * @param state the parse state
+   * @param ppt_name the name of the variable's program point; used only for diagnostic messages
+   * @return a new VarInfo read from {@code state.reader}
    */
   private static @Nullable VarInfo read_VarInfo(ParseState state, String ppt_name)
       throws IOException {

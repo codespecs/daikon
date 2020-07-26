@@ -659,11 +659,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return true;
   }
 
-  /**
-   * Create the specified VarInfo.
-   *
-   * <p>The resulting VarInfo does not have its ppt field set.
-   */
+  // The resulting VarInfo does not have its ppt field set.
+  /** Create the specified VarInfo. */
   private VarInfo(
       VarInfoName name,
       ProglangType type,
@@ -862,7 +859,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // At an exit point, parameters are uninteresting, but orig(param) is not.
     // So don't call orig(param) a parameter.
     result.set_is_param(false);
-
     return result;
   }
 
@@ -4125,8 +4121,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Creates a VarInfo that is an index into a sequence. The type, file_rep_type, etc. are taken
-   * from the element type of the sequence.
+   * Creates a VarInfo that is an index into a sequence. The type, file_rep_type, etc are taken from
+   * the element type of the sequence.
    */
   public static VarInfo make_subscript(VarInfo seq, @Nullable VarInfo index, int index_shift) {
 
