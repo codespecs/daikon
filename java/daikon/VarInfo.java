@@ -105,7 +105,12 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /** Debug missing vals. */
   public static final Logger debugMissing = Logger.getLogger("daikon.VarInfo.missing");
 
-  /** The program point this variable is in. */
+  // Ppts read from version 1 files never have their ppt set.  We should stop supporting version 1
+  // files so that the invariants of this class are better maintained.
+  /**
+   * The program point this variable is in. Is null until set by {@link PptTopLevel#init_vars} and
+   * {@link PptTopLevel#addVarInfos}.
+   */
   public PptTopLevel ppt;
 
   /**
@@ -306,34 +311,59 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public @Nullable VarInfo postState;
 
   /**
-   * Throws an exception if this object is malformed.
+   * Throws an exception if this object is malformed. Requires that the VarInfo has been installed
+   * into a program point (the {@code ppt} field is set).
    *
    * @exception RuntimeException if representation invariant on this is broken
    */
   public void checkRep() {
+    checkRepNoPpt();
     assert ppt != null;
-    assert var_info_name != null; // vin ok
-    assert var_info_name == var_info_name.intern(); // vin ok
-    assert type != null;
-    assert file_rep_type != null;
-    assert rep_type != null;
-    assert comparability != null; // anything else ??
-    assert (comparability.alwaysComparable()
-            || (((VarComparabilityImplicit) comparability).dimensions
-                == file_rep_type.dimensions()))
-        : "Dimensions mismatch for "
-            + this
-            + ": "
-            + ((VarComparabilityImplicit) comparability).dimensions
-            + " "
-            + file_rep_type.dimensions();
     assert 0 <= varinfo_index && varinfo_index < ppt.var_infos.length;
     assert -1 <= value_index && value_index <= varinfo_index
         : "" + this + " value_index=" + value_index + ", varinfo_index=" + varinfo_index;
     assert is_static_constant == (value_index == -1);
     assert is_static_constant || (static_constant_value == null);
-    if ((var_kind == VarKind.FIELD || var_kind == VarKind.ARRAY) && enclosing_var == null) {
-      throw new AssertionError("enclosing-var not specified for variable " + var_info_name);
+  }
+
+  /**
+   * Throws an exception if this object is malformed.
+   *
+   * <p>Does not require the {@code ppt} field to be set; can be called on VarInfos that have not
+   * been installed into a program point.
+   *
+   * @exception RuntimeException if representation invariant on this is broken
+   */
+  public void checkRepNoPpt() {
+    try {
+      assert var_info_name != null; // vin ok
+      assert var_info_name == var_info_name.intern(); // vin ok
+      assert type != null;
+      assert file_rep_type != null;
+      assert rep_type != null;
+      assert var_kind != null;
+      assert comparability != null; // anything else ??
+      assert (comparability.alwaysComparable()
+              || (((VarComparabilityImplicit) comparability).dimensions
+                  == file_rep_type.dimensions()))
+          : "Dimensions mismatch for "
+              + this
+              + ": "
+              + ((VarComparabilityImplicit) comparability).dimensions
+              + " "
+              + file_rep_type.dimensions();
+      if ((var_kind == VarKind.FIELD || var_kind == VarKind.ARRAY) && enclosing_var == null) {
+        throw new AssertionError(
+            "enclosing-var not specified for variable " + var_info_name + " of kind " + var_kind);
+      }
+    } catch (Throwable e) {
+      throw new AssertionError(
+          "checkRepNoPpt failed for variable "
+              + var_info_name
+              + (ppt == null ? "" : (" in " + ppt))
+              + ": "
+              + repr(),
+          e);
     }
   }
 
@@ -448,7 +478,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       throw new RuntimeException("unexpected aux error", e);
     }
 
-    checkRep();
+    checkRepNoPpt();
   }
 
   /**
@@ -631,7 +661,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return true;
   }
 
-  /** Create the specified VarInfo. */
+  /**
+   * Create the specified VarInfo.
+   *
+   * <p>The resulting VarInfo does not have its ppt field set.
+   */
   private VarInfo(
       VarInfoName name,
       ProglangType type,
@@ -690,7 +724,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     canBeMissing = false;
 
-    checkRep();
+    checkRepNoPpt();
   }
 
   /** Create the specified VarInfo. */
@@ -713,7 +747,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     assert name != null;
     this.str_name = name.intern();
 
-    checkRep();
+    checkRepNoPpt();
   }
 
   /** Create the specified non-static VarInfo. */
@@ -737,7 +771,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     assert name != null;
     this.str_name = name.intern();
 
-    checkRep();
+    checkRepNoPpt();
   }
 
   /** Create a VarInfo with the same values as vi. */
@@ -769,7 +803,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
     relative_name = vi.relative_name;
 
-    checkRep();
+    checkRepNoPpt();
   }
 
   // /** Creates and returns a copy of this. */
@@ -839,7 +873,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // So don't call orig(param) a parameter.
     result.set_is_param(false);
 
-    result.checkRep();
+    result.checkRepNoPpt();
 
     return result;
   }
@@ -4103,8 +4137,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Creates a VarInfo that is an index into a sequence. The type, file_rep_type, etc are taken from
-   * the element type of the sequence.
+   * Creates a VarInfo that is an index into a sequence. The type, file_rep_type, etc. are taken
+   * from the element type of the sequence.
    */
   public static VarInfo make_subscript(VarInfo seq, @Nullable VarInfo index, int index_shift) {
 
@@ -4158,8 +4192,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       }
     }
 
-    vi.checkRep();
-
     return vi;
   }
 
@@ -4183,7 +4215,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
             vars[0].aux);
     vi.setup_derived_function(function_name, vars);
 
-    vi.checkRep();
+    vi.checkRepNoPpt();
 
     return vi;
   }
@@ -4279,7 +4311,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       }
     }
 
-    vi.checkRep();
+    vi.checkRepNoPpt();
 
     return vi;
   }
@@ -4319,7 +4351,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       }
     }
 
-    vi.checkRep();
+    vi.checkRepNoPpt();
 
     return vi;
   }

@@ -597,6 +597,8 @@ public final class FileIO {
   /**
    * Read a variable name, type, and comparability; construct a VarInfo. Return null after reading
    * the last variable in this program point declaration.
+   *
+   * <p>The resulting VarInfo does not have its ppt field set; the client should arrange to do so.
    */
   private static @Nullable VarInfo read_VarInfo(ParseState state, String ppt_name)
       throws IOException {
@@ -749,6 +751,7 @@ public final class FileIO {
             is_static_constant,
             static_constant_value,
             aux);
+    result.checkRepNoPpt();
     return result;
   }
 
