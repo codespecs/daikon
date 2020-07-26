@@ -660,6 +660,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   // The resulting VarInfo does not have its ppt field set.
+
   /** Create the specified VarInfo. */
   private VarInfo(
       VarInfoName name,
