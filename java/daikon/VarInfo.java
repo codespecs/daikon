@@ -105,7 +105,12 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /** Debug missing vals. */
   public static final Logger debugMissing = Logger.getLogger("daikon.VarInfo.missing");
 
-  /** The program point this variable is in. */
+  // Ppts read from version 1 files never have their ppt set.  We should stop supporting version 1
+  // files so that the invariants of this class are better maintained.
+  /**
+   * The program point this variable is in. Is null until set by {@link PptTopLevel#init_vars} and
+   * {@link PptTopLevel#addVarInfos}.
+   */
   public PptTopLevel ppt;
 
   /**
@@ -306,34 +311,59 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public @Nullable VarInfo postState;
 
   /**
-   * Throws an exception if this object is malformed.
+   * Throws an exception if this object is malformed. Requires that the VarInfo has been installed
+   * into a program point (the {@code ppt} field is set).
    *
    * @exception RuntimeException if representation invariant on this is broken
    */
   public void checkRep() {
+    checkRepNoPpt();
     assert ppt != null;
-    assert var_info_name != null; // vin ok
-    assert var_info_name == var_info_name.intern(); // vin ok
-    assert type != null;
-    assert file_rep_type != null;
-    assert rep_type != null;
-    assert comparability != null; // anything else ??
-    assert (comparability.alwaysComparable()
-            || (((VarComparabilityImplicit) comparability).dimensions
-                == file_rep_type.dimensions()))
-        : "Dimensions mismatch for "
-            + this
-            + ": "
-            + ((VarComparabilityImplicit) comparability).dimensions
-            + " "
-            + file_rep_type.dimensions();
     assert 0 <= varinfo_index && varinfo_index < ppt.var_infos.length;
     assert -1 <= value_index && value_index <= varinfo_index
         : "" + this + " value_index=" + value_index + ", varinfo_index=" + varinfo_index;
     assert is_static_constant == (value_index == -1);
     assert is_static_constant || (static_constant_value == null);
-    if ((var_kind == VarKind.FIELD || var_kind == VarKind.ARRAY) && enclosing_var == null) {
-      throw new AssertionError("enclosing-var not specified for variable " + var_info_name);
+  }
+
+  /**
+   * Throws an exception if this object is malformed.
+   *
+   * <p>Does not require the {@code ppt} field to be set; can be called on VarInfos that have not
+   * been installed into a program point.
+   *
+   * @exception RuntimeException if representation invariant on this is broken
+   */
+  public void checkRepNoPpt() {
+    try {
+      assert var_info_name != null; // vin ok
+      assert var_info_name == var_info_name.intern(); // vin ok
+      assert type != null;
+      assert file_rep_type != null;
+      assert rep_type != null;
+      assert var_kind != null;
+      assert comparability != null; // anything else ??
+      assert (comparability.alwaysComparable()
+              || (((VarComparabilityImplicit) comparability).dimensions
+                  == file_rep_type.dimensions()))
+          : "Dimensions mismatch for "
+              + this
+              + ": "
+              + ((VarComparabilityImplicit) comparability).dimensions
+              + " "
+              + file_rep_type.dimensions();
+      if ((var_kind == VarKind.FIELD || var_kind == VarKind.ARRAY) && enclosing_var == null) {
+        throw new AssertionError(
+            "enclosing-var not specified for variable " + var_info_name + " of kind " + var_kind);
+      }
+    } catch (Throwable e) {
+      throw new AssertionError(
+          "checkRepNoPpt failed for variable "
+              + var_info_name
+              + (ppt == null ? "" : (" in " + ppt))
+              + ": "
+              + repr(),
+          e);
     }
   }
 
@@ -629,7 +659,17 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return true;
   }
 
-  /** Create the specified VarInfo. */
+  /**
+   * Create the specified VarInfo. The resulting VarInfo does not have its ppt field set.
+   *
+   * @param name the variable name
+   * @param type type as declared in the program point
+   * @param file_rep_type type as written in the data trace file
+   * @param comparability comparability info
+   * @param is_static_constant true if the variable always has the same, known value
+   * @param static_constant_value the static constant value, or null if not statically constant
+   * @param aux auxiliary info
+   */
   private VarInfo(
       VarInfoName name,
       ProglangType type,
@@ -896,8 +936,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         + ",derivees="
         + derivees()
         + ",ppt="
-        // This method is only called for debugging  - so let's
-        // protect ourselves from a mistake somewhere else.
+        // This method is only called for debugging, so let's
+        // protect ourselves from a mistake somewhere else, such as ppt being null.
         // + ppt.name()
         + ppt
         + ",canBeMissing="

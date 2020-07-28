@@ -263,6 +263,7 @@ clean-kvasir:
 
 
 ### Testing the code
+# Note that these do NOT compile the code, even if compilation is necessary.
 
 test:
 	cd tests && $(MAKE) all
