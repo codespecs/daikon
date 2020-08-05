@@ -460,7 +460,6 @@ daikon/chicory/inv_out.diff : ChicoryPremain.jar
 INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.DcompTest
 DCOMP_DIR := daikon/dcomp
-JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(DAIKON_CLASSPATH)
 
 # Build DynComp/Java, check the DF summary info and run a sanity test
 .PHONY: dyncomp dcomp
@@ -489,14 +488,14 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 
 dyncomp-test-jdk dcomp-test-jdk : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA_DCOMP) \
+	$(JAVA_COMMAND) \
 	   daikon.DynComp $(DCOMP_ARGS) \
 	   --comparability-file=daikon/dcomp/jdk_dcomp_out.txt daikon/dcomp/DcompTest
 	-diff -u daikon/dcomp/jdk_dcomp_out.goal daikon/dcomp/jdk_dcomp_out.txt \
 	  > daikon/dcomp/jdk_dcomp_out.diff
-	@cat daikon/dcomp/jdk_dcomp_out.diff
-# TODO: This produces output in nondeterministic order
-	@find daikon/dcomp -name '*.diff' -printf "%8s    %p\n"
+	@if test ! -s daikon/dcomp/jdk_dcomp_out.diff ; then echo No Errors; \
+	else echo Errors: more daikon/dcomp/jdk_dcomp_out.diff for details; fi
+	@rm -f DcompTest.decls-DynComp
 
 dyncomp-update-goals dcomp-update-goals:
 	cp daikon/dcomp/std_dcomp_out.txt daikon/dcomp/std_dcomp_out.goal
