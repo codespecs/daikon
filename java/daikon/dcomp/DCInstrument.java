@@ -151,6 +151,7 @@ public class DCInstrument extends InstructionListUtils {
   /** Set of JUnit test classes. */
   protected static Set<String> junit_test_set = new HashSet<>();
 
+  /** Possible states of JUnit test discovery. */
   protected enum JUnitState {
     NOT_SEEN,
     STARTING,
@@ -158,7 +159,9 @@ public class DCInstrument extends InstructionListUtils {
     RUNNING
   };
 
+  /** Current state of JUnit test discovery. */
   protected static JUnitState junit_state = JUnitState.NOT_SEEN;
+  /** Have we seen 'JUnitCommandLineParseResult.parse'? */
   protected static boolean junit_parse_seen = false;
 
   /**
@@ -170,8 +173,15 @@ public class DCInstrument extends InstructionListUtils {
    */
   static Map<String, Integer> static_field_id = new LinkedHashMap<>();
 
+  /**
+   * Map from class name to its access_flags. Used to cache the results of the lookup done in
+   * handle_invoke. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
+   */
   static Map<String, Integer> class_access_map = new HashMap<>();
+  /** Integer constant of access_flag value of ACC_ANNOTATION. */
   static Integer Integer_ACC_ANNOTATION = Integer.valueOf(Const.ACC_ANNOTATION);
+  /** Buffer size used when reading a '.class' file. */
+  private static final int BUFSIZE = 8192;
 
   /**
    * Array of classes whose fields are not initialized from java. Since the fields are not
@@ -211,7 +221,6 @@ public class DCInstrument extends InstructionListUtils {
   protected static InstructionList global_catch_il;
   protected static CodeExceptionGen global_exception_handler;
   private InstructionHandle insertion_placeholder;
-  private static final int BUFSIZE = 8192;
 
   /** Class that defines a method (by its name and argument types) */
   static class MethodDef {
@@ -2372,7 +2381,8 @@ public class DCInstrument extends InstructionListUtils {
                 dataInputStream.readUnsignedShort(); // minor version number
                 dataInputStream.readUnsignedShort(); // major version number
                 // read and discard ConstantPool
-                ConstantPool constantPool = new ConstantPool(dataInputStream);
+                @SuppressWarnings("UnusedVariable") // side effect: skip constants in class file
+                ConstantPool discarded = new ConstantPool(dataInputStream);
                 // finally read what we are looking for
                 access = dataInputStream.readUnsignedShort();
                 class_access_map.put(classname, access);
@@ -2532,7 +2542,13 @@ public class DCInstrument extends InstructionListUtils {
     return il;
   }
 
-  /** Returns whether or not the specified classname is instrumented. */
+  /**
+   * Returns whether or not the specified classname is instrumented.
+   *
+   * @param classname class to be checked
+   * @param method_name method to be checked (currently unused)
+   * @return true classname if instrumented
+   */
   boolean callee_instrumented(@ClassGetName String classname, String method_name) {
 
     // System.out.printf("Checking callee instrumented on %s%n", classname);

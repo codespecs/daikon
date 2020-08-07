@@ -31,7 +31,7 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
-  // debug code
+  /** Debug code for printing the current runtime call stack. */
   public static void print_call_stack() {
     StackTraceElement[] stack_trace;
     stack_trace = Thread.currentThread().getStackTrace();
