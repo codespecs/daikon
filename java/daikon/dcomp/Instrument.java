@@ -31,6 +31,18 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+  // debug code
+  public static void print_call_stack() {
+    StackTraceElement[] stack_trace;
+    stack_trace = Thread.currentThread().getStackTrace();
+    // [0] is getStackTrace
+    // [1] is print_call_stack
+    for (int i = 2; i < stack_trace.length; i++) {
+      System.out.printf("call stack: %s%n", stack_trace[i]);
+    }
+    System.out.println();
+  }
+
   @Override
   @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
   public byte @Nullable [] transform(
@@ -43,6 +55,24 @@ public class Instrument implements ClassFileTransformer {
 
     if (DynComp.verbose) {
       System.out.printf("%ntransform on %s, loader: %s%n", className, loader);
+    }
+
+    if (className == null) {
+      /*
+      // debug code to display unnamed class
+      try {
+        // Parse the bytes of the classfile, die on any errors
+        ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
+        JavaClass c = parser.parse();
+        System.out.println(c.toString());
+      } catch (Throwable e) {
+        System.out.printf("Unexpected Error: %s%n", e);
+        e.printStackTrace();
+        throw new RuntimeException("Unexpected error", e);
+      }
+      */
+      // most likely a lambda related class
+      return null;
     }
 
     // See comments in Premain.java about meaning and use of in_shutdown.
@@ -86,16 +116,16 @@ public class Instrument implements ClassFileTransformer {
         return null;
       }
 
-      if (BcelUtil.javaVersion > 8) {
-        int lastSlashPos = className.lastIndexOf('/');
-        if (lastSlashPos > 0) {
-          String packageName = className.substring(0, lastSlashPos).replace('/', '.');
-          if (Premain.problem_packages.contains(packageName)) {
-            if (DynComp.verbose) System.out.printf("Skipping problem package %s%n", packageName);
-            return null;
-          }
+      int lastSlashPos = className.lastIndexOf('/');
+      if (lastSlashPos > 0) {
+        String packageName = className.substring(0, lastSlashPos).replace('/', '.');
+        if (Premain.problem_packages.contains(packageName)) {
+          if (DynComp.verbose) System.out.printf("Skipping problem package %s%n", packageName);
+          return null;
         }
+      }
 
+      if (BcelUtil.javaVersion > 8) {
         if (Premain.problem_classes.contains(className.replace('/', '.'))) {
           if (DynComp.verbose) System.out.printf("Skipping problem class %s%n", className);
           return null;
@@ -116,6 +146,8 @@ public class Instrument implements ClassFileTransformer {
 
     if (DynComp.verbose) {
       System.out.format("In dcomp.Instrument(): class = %s%n", className);
+      // debug code
+      // print_call_stack();
     }
 
     try {

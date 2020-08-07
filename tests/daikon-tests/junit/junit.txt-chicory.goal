@@ -1,0 +1,173 @@
+// Declarations for MyEvenOddTest
+// Declarations written 2020-08-06T14:44:24.024
+
+decl-version 2.0
+
+var-comparability none
+
+ppt MyEvenOddTest.MyEvenOddTest():::ENTER
+ppt-type enter
+
+ppt MyEvenOddTest.MyEvenOddTest():::EXIT5
+ppt-type subexit
+parent parent MyEvenOddTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 22
+  parent MyEvenOddTest:::OBJECT 1
+
+ppt MyEvenOddTest.testEvenOddNumber():::ENTER
+ppt-type enter
+parent parent MyEvenOddTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 22
+  parent MyEvenOddTest:::OBJECT 1
+
+ppt MyEvenOddTest.testEvenOddNumber():::EXIT11
+ppt-type subexit
+parent parent MyEvenOddTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 22
+  parent MyEvenOddTest:::OBJECT 1
+
+ppt MyEvenOddTest:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 22
+
+MyEvenOddTest.MyEvenOddTest():::ENTER
+this_invocation_nonce
+0
+
+MyEvenOddTest.MyEvenOddTest():::EXIT5
+this_invocation_nonce
+0
+this
+1835073088
+1
+
+MyEvenOddTest.testEvenOddNumber():::ENTER
+this_invocation_nonce
+1
+this
+1835073088
+1
+
+ppt MyEvenOdd.MyEvenOdd():::ENTER
+ppt-type enter
+
+ppt MyEvenOdd.MyEvenOdd():::EXIT1
+ppt-type subexit
+parent parent MyEvenOdd:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 22
+  parent MyEvenOdd:::OBJECT 1
+
+ppt MyEvenOdd.isEvenNumber(int):::ENTER
+ppt-type enter
+parent parent MyEvenOdd:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 22
+  parent MyEvenOdd:::OBJECT 1
+variable number
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt MyEvenOdd.isEvenNumber(int):::EXIT9
+ppt-type subexit
+parent parent MyEvenOdd:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 22
+  parent MyEvenOdd:::OBJECT 1
+variable number
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 22
+
+ppt MyEvenOdd:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 22
+
+MyEvenOdd.MyEvenOdd():::ENTER
+this_invocation_nonce
+2
+
+MyEvenOdd.MyEvenOdd():::EXIT1
+this_invocation_nonce
+2
+this
+79782883
+1
+
+MyEvenOdd.isEvenNumber(int):::ENTER
+this_invocation_nonce
+3
+this
+79782883
+1
+number
+10
+1
+
+MyEvenOdd.isEvenNumber(int):::EXIT9
+this_invocation_nonce
+3
+this
+79782883
+1
+number
+10
+1
+return
+true
+1
+
+MyEvenOddTest.testEvenOddNumber():::EXIT11
+this_invocation_nonce
+1
+this
+1835073088
+1
+

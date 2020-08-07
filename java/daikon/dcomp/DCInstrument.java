@@ -11,13 +11,18 @@ import daikon.plumelib.bcelutil.StackTypes;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.EntryReader;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -71,7 +76,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /** The BCEL InstructionFactory for generating byte code instructions. */
   protected InstructionFactory ifact;
-  /** The loader that loaded DCInstrument.class. */
+  /** The loader that loaded the Class to instrument. */
   protected @Nullable ClassLoader loader;
   /** Has an {@code <init>} method completed initialization? */
   protected boolean constructor_is_initialized;
@@ -143,6 +148,19 @@ public class DCInstrument extends InstructionListUtils {
   /** Name prefix for tag getter methods. */
   protected static final String GET_TAG = "get_tag";
 
+  /** Set of JUnit test classes. */
+  protected static Set<String> junit_test_set = new HashSet<>();
+
+  protected enum JUnitState {
+    NOT_SEEN,
+    STARTING,
+    TEST_DISCOVERY,
+    RUNNING
+  };
+
+  protected static JUnitState junit_state = JUnitState.NOT_SEEN;
+  protected static boolean junit_parse_seen = false;
+
   /**
    * Map from each static field name to its unique integer id. Note that while it's intuitive to
    * think that each static should show up exactly once, that is not the case. A static defined in a
@@ -151,6 +169,9 @@ public class DCInstrument extends InstructionListUtils {
    * times.
    */
   static Map<String, Integer> static_field_id = new LinkedHashMap<>();
+
+  static Map<String, Integer> class_access_map = new HashMap<>();
+  static Integer Integer_ACC_ANNOTATION = Integer.valueOf(Const.ACC_ANNOTATION);
 
   /**
    * Array of classes whose fields are not initialized from java. Since the fields are not
@@ -190,6 +211,7 @@ public class DCInstrument extends InstructionListUtils {
   protected static InstructionList global_catch_il;
   protected static CodeExceptionGen global_exception_handler;
   private InstructionHandle insertion_placeholder;
+  private static final int BUFSIZE = 8192;
 
   /** Class that defines a method (by its name and argument types) */
   static class MethodDef {
@@ -301,10 +323,13 @@ public class DCInstrument extends InstructionListUtils {
 
     String classname = gen.getClassName();
 
+    // Don't know where I got this idea.  They are executed.  Don't remember why
+    // adding dcomp marker causes problems.
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
       debug_transform.log("Not instrumenting annotation %s%n", classname);
+      // WHY NOT RETURN NULL?
       return gen.getJavaClass().copy();
     }
 
@@ -338,6 +363,90 @@ public class DCInstrument extends InstructionListUtils {
         // Add DCompInstrumented interface and the required
         // equals_dcomp_instrumented method.
         add_dcomp_interface(gen);
+      }
+    }
+
+    // A very tricky special case: If JUnit is running and the current
+    // class has been passed to JUnit on the command line, then this
+    // is a JUnit test class and our normal instrumentation will
+    // cause JUnit to complain about multiple constructors and
+    // methods that should have no arguments. To work around these
+    // restrictions, we replace rather than duplicate each method
+    // we instrument and we do not add the dcomp marker argument.
+    // We must also remember the class name so if we see a subsequent
+    // call to one of its methods we do not add the dcomp argument.
+
+    if (DynComp.verbose) {
+      System.out.println(junit_state);
+    }
+
+    StackTraceElement[] stack_trace;
+
+    switch (junit_state) {
+      case NOT_SEEN:
+        if (classname.startsWith("org.junit")) {
+          junit_state = JUnitState.STARTING;
+        }
+        break;
+
+      case STARTING:
+        // Now check to see if JUnit is looking for test class(es).
+        stack_trace = Thread.currentThread().getStackTrace();
+        // [0] is getStackTrace
+        for (int i = 1; i < stack_trace.length; i++) {
+          if (stack_trace[i].getClassName().contains("JUnitCommandLineParseResult")
+              && stack_trace[i].getMethodName().equals("parse")) {
+            junit_parse_seen = true;
+            junit_state = JUnitState.TEST_DISCOVERY;
+          } else if (stack_trace[i].getClassName().contains("JUnitCore")
+              && stack_trace[i].getMethodName().equals("runMain")) {
+            junit_state = JUnitState.TEST_DISCOVERY;
+          }
+        }
+        break;
+
+      case TEST_DISCOVERY:
+        // Now check to see if JUnit is done looking for test class(es).
+        boolean local_junit_parse_seen = false;
+        stack_trace = Thread.currentThread().getStackTrace();
+        // [0] is getStackTrace
+        for (int i = 1; i < stack_trace.length; i++) {
+          if (stack_trace[i].getClassName().contains("JUnitCommandLineParseResult")
+              && stack_trace[i].getMethodName().equals("parse")) {
+            local_junit_parse_seen = true;
+          } else if (stack_trace[i].getClassName().contains("JUnitCore")
+              && stack_trace[i].getMethodName().equals("run")) {
+            junit_state = JUnitState.RUNNING;
+          }
+        }
+        if (junit_parse_seen && !local_junit_parse_seen) {
+          junit_parse_seen = false;
+          junit_state = JUnitState.RUNNING;
+        } else if (!junit_parse_seen && local_junit_parse_seen) {
+          junit_parse_seen = true;
+        }
+        break;
+
+      case RUNNING:
+        // nothing to do
+        break;
+
+      default:
+        throw new Error("invalid junit_state");
+    }
+
+    if (DynComp.verbose) {
+      System.out.println(junit_state);
+    }
+
+    boolean junit_test_class = false;
+    if (junit_state == JUnitState.TEST_DISCOVERY) {
+      if (!classname.startsWith("org.junit") && !classname.startsWith("junit")) {
+        junit_test_class = true;
+        junit_test_set.add(classname);
+        if (DynComp.verbose) {
+          System.out.printf("JUnit test class: %s%n", classname);
+        }
       }
     }
 
@@ -393,8 +502,10 @@ public class DCInstrument extends InstructionListUtils {
 
         } else { // normal method
 
-          // Add the DCompMarker argument to distinguish our version
-          add_dcomp_arg(mg);
+          if (!junit_test_class) {
+            // Add the DCompMarker argument to distinguish our version
+            add_dcomp_arg(mg);
+          }
 
           // Create a MethodInfo that describes this method's arguments
           // and exit line numbers (information not available via reflection)
@@ -442,7 +553,7 @@ public class DCInstrument extends InstructionListUtils {
           mg.removeAnnotationEntries();
         }
 
-        if (!BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg)) {
+        if (!BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg) && !junit_test_class) {
           // doubling
           try {
             if (has_code) {
@@ -483,6 +594,8 @@ public class DCInstrument extends InstructionListUtils {
         }
         debug_transform.exdent();
       } catch (Throwable t) {
+        // debug code
+        // t.printStackTrace();
         if (debug_instrument.enabled) t.printStackTrace();
         throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
       }
@@ -526,6 +639,7 @@ public class DCInstrument extends InstructionListUtils {
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
       debug_transform.log("Not instrumenting annotation(refs_only) %s%n", classname);
+      // WHY NOT RETURN NULL?
       return gen.getJavaClass().copy();
     }
 
@@ -743,6 +857,7 @@ public class DCInstrument extends InstructionListUtils {
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
       debug_transform.log("Not instrumenting annotation %s%n", classname);
+      // MUST NOT RETURN NULL
       return gen.getJavaClass().copy();
     }
 
@@ -900,6 +1015,7 @@ public class DCInstrument extends InstructionListUtils {
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
       debug_transform.log("Not instrumenting annotation(refs_only) %s%n", classname);
+      // MUST NOT RETURN NULL
       return gen.getJavaClass().copy();
     }
 
@@ -2209,7 +2325,11 @@ public class DCInstrument extends InstructionListUtils {
       callee_instrumented = false;
     } else {
       classname = invoke.getClassName(pool);
-      callee_instrumented = callee_instrumented(classname);
+      callee_instrumented = callee_instrumented(classname, method_name);
+
+      // debug code
+      // System.out.printf("invoke host: %s%n", gen.getClassName() + "." + mgen.getName());
+      // System.out.printf("invoke targ: %s%n", classname + "." + method_name);
 
       if (BcelUtil.javaVersion > 8) {
         if (Premain.problem_methods.contains(classname + "." + method_name)) {
@@ -2222,19 +2342,74 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
 
-      // This is a bit of a hack.  An invokeinterface instruction with a
-      // a target of "java.util.stream.<something>" might be calling a
-      // Lambda method in which case we don't want to add the dcomp_marker.
-      // Might lose something in 'normal' cases, but no easy way to detect.
       if (invoke instanceof INVOKEINTERFACE) {
+        // debug code
         // System.out.printf("invoke interface host: %s%n", gen.getClassName()+"."+mgen.getName());
-        // System.out.printf("invoke interface targ: %s%n", classname+"."+method_name);
+        // System.out.printf("invoke interface targ: %s%n", classname + "." + method_name);
+
+        // Check to see if the target class is marked Annotation.
+        // Note we cannot use classForName to inspect class as might trigger
+        // recursive call to Instrument which would not work at this point.
+        Integer access = class_access_map.get(classname);
+        if (access == null) {
+          // We have not seen this class before.
+          URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
+          if (class_url != null) {
+            try {
+              InputStream inputStream = class_url.openStream();
+              if (inputStream != null) {
+                DataInputStream dataInputStream;
+                if (inputStream instanceof DataInputStream) {
+                  dataInputStream = (DataInputStream) inputStream;
+                } else {
+                  dataInputStream =
+                      new DataInputStream(new BufferedInputStream(inputStream, BUFSIZE));
+                }
+                if (dataInputStream.readInt() != Const.JVM_CLASSFILE_MAGIC) {
+                  throw new ClassFormatException(class_url + " is not a Java .class file");
+                }
+                // read and discard Version
+                dataInputStream.readUnsignedShort(); // minor version number
+                dataInputStream.readUnsignedShort(); // major version number
+                // read and discard ConstantPool
+                ConstantPool constantPool = new ConstantPool(dataInputStream);
+                // finally read what we are looking for
+                access = dataInputStream.readUnsignedShort();
+                class_access_map.put(classname, access);
+                // debug code
+                // System.out.printf("access flags: 0x%04X%n", access.intValue());
+              } else {
+                // debug code
+                // System.out.printf("Unable to open stream: %s%n", class_url);
+                // We cannot open the .class file, better pretend it is an Annotation.
+                access = Integer_ACC_ANNOTATION;
+              }
+            } catch (Throwable t) {
+              throw new Error("Unexpected error reading " + class_url, t);
+            }
+          } else {
+            // debug code
+            // System.out.printf("Unable to locate class: %s%n", classname);
+            // We cannot find the class, better pretend it is an Annotation.
+            access = Integer_ACC_ANNOTATION;
+          }
+        }
+
+        if ((access.intValue() & Const.ACC_ANNOTATION) != 0) {
+          callee_instrumented = false;
+        }
+
+        // This is a bit of a hack.  An invokeinterface instruction with a
+        // a target of "java.util.stream.<something>" might be calling a
+        // Lambda method in which case we don't want to add the dcomp_marker.
+        // Might lose something in 'normal' cases, but no easy way to detect.
         if (classname.startsWith("java.util.stream")) {
           callee_instrumented = false;
         }
+
         // In a similar fashion, when the Java runtime is processing annotations, there might
-        // be an invoke (via reflection) of java.lang.annotation.Annotations.annotationType
-        // that should not have the dcomp_marker added.
+        // be an invoke (via reflection) of a member of the java.lang.annotation package; this
+        // too should not have the dcomp_marker added.
         if (classname.startsWith("java.lang.annotation")) {
           callee_instrumented = false;
         }
@@ -2242,6 +2417,7 @@ public class DCInstrument extends InstructionListUtils {
 
       if (invoke instanceof INVOKEVIRTUAL) {
         if (!jdk_instrumented) {
+          // debug code
           // System.out.printf("invoke virtual: %s : %s%n", classname, method_name);
           // System.out.printf("super class: %s%n", gen.getSuperclassName());
           // Technically, we should verify the target class has super class
@@ -2357,7 +2533,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /** Returns whether or not the specified classname is instrumented. */
-  boolean callee_instrumented(@ClassGetName String classname) {
+  boolean callee_instrumented(@ClassGetName String classname, String method_name) {
 
     // System.out.printf("Checking callee instrumented on %s%n", classname);
 
@@ -2367,9 +2543,25 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
+    // Special case JUnit test classes.
+    if (junit_test_set.contains(classname)) {
+      return false;
+    }
+
     // Special case the execution trace tool.
     if (classname.startsWith("minst.Minst")) {
       return false;
+    }
+
+    // We should probably change the interface to include method name
+    // and use "classname.methodname" as arg to pattern matcher.
+    // If any of the omit patterns match, use the uninstrumented version of the method
+    for (Pattern p : DynComp.ppt_omit_pattern) {
+      if (p.matcher(classname).find()) {
+        // debug code
+        // System.out.printf("callee instrumented = false: %s.%s%n", classname, method_name);
+        return false;
+      }
     }
 
     // If its not a JDK class, presume its instrumented.
@@ -2377,19 +2569,18 @@ public class DCInstrument extends InstructionListUtils {
       return true;
     }
 
-    if (BcelUtil.javaVersion > 8) {
-      int i = classname.lastIndexOf('.');
-      if (i > 0) {
-        if (Premain.problem_packages.contains(classname.substring(0, i))) {
-          if (DynComp.verbose) {
-            System.out.printf(
-                "Don't call instrumented member of problem package %s%n",
-                classname.substring(0, i));
-          }
-          return false;
+    int i = classname.lastIndexOf('.');
+    if (i > 0) {
+      if (Premain.problem_packages.contains(classname.substring(0, i))) {
+        if (DynComp.verbose) {
+          System.out.printf(
+              "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
         }
+        return false;
       }
+    }
 
+    if (BcelUtil.javaVersion > 8) {
       if (Premain.problem_classes.contains(classname)) {
         if (DynComp.verbose) {
           System.out.printf("Don't call instrumented member of problem class %s%n", classname);
@@ -2407,19 +2598,6 @@ public class DCInstrument extends InstructionListUtils {
     // versions, we should consider making this a searchable list.
     if (classname.equals("java.util.Random")) {
       return false;
-    }
-
-    // We should probably change the interface to include method name
-    // and use "classname.methodname" as arg to pattern matcher.
-    // Also, perhaps check this for all methods not just jdk?
-
-    // If any of the omit patterns match, use the uninstrumented version
-    // of the JDK method
-    for (Pattern p : DynComp.ppt_omit_pattern) {
-      // System.out.printf("pattern: %s, classname: %s%n", p.pattern(), classname);
-      if (p.matcher(classname).find()) {
-        return false;
-      }
     }
 
     // If the JDK is instrumented, then everthing but object is instrumented
@@ -2579,7 +2757,7 @@ public class DCInstrument extends InstructionListUtils {
       callee_instrumented = false;
     } else {
       classname = invoke.getClassName(pool);
-      callee_instrumented = callee_instrumented(classname);
+      callee_instrumented = callee_instrumented(classname, method_name);
       if (invoke instanceof INVOKEVIRTUAL) {
         // Technically, we should verify the target class has super class
         // of java.lang.Enum. But that can be difficult if we haven't already
