@@ -2113,7 +2113,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
    * example if x = 1 and the state contains 1 and 2, true will be returned.
    */
   @Override
-  @SuppressWarnings("interning:operand.instanceof.subtype")
+  @SuppressWarnings("allcheckers:operand.instanceof.subtype")
   public boolean state_match(Object state) {
 
     if (num_elts == 0) {
