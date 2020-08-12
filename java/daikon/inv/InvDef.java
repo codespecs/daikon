@@ -67,7 +67,7 @@ public class InvDef {
    *
    * @param v1 the variable
    * @param cls the class of the invariant to be defined
-   * @param the state of the invariant
+   * @param state the state of the invariant
    */
   public InvDef(VarInfo v1, Class<? extends Invariant> cls, @Nullable Object state) {
     this.v1 = v1;
