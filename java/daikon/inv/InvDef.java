@@ -52,14 +52,27 @@ public class InvDef {
   public static final long[] elts_one = {1};
   public static final double[] elts_one_float = {1.0};
 
+  /**
+   * Create a new InvDef with one variable.
+   *
+   * @param v1 the variable
+   * @param cls the class of the invariant to be defined
+   */
   public InvDef(VarInfo v1, Class<? extends Invariant> cls) {
+    this(v1, cls, null);
+  }
+
+  /**
+   * Create a new InvDef with one variable and the given state
+   *
+   * @param v1 the variable
+   * @param cls the class of the invariant to be defined
+   * @param the state of the invariant
+   */
+  public InvDef(VarInfo v1, Class<? extends Invariant> cls, @Nullable Object state) {
     this.v1 = v1;
     this.v2 = null;
     inv_class = cls;
-  }
-
-  public InvDef(VarInfo v1, Class<? extends Invariant> cls, Object state) {
-    this(v1, cls);
     this.state = state;
   }
 
