@@ -2119,9 +2119,10 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       return false;
     }
 
-    if (!(state instanceof INT[])) {
-      System.out.println("state is of class '" + state.getClass().getName()
-                          + "'");
+    if (!(state instanceof INTARRAY)) {
+      // Daikon is about to crash.  Produce some debugging output.
+      System.out.printf("state = %s [%s]%n", state, state.getClass());
+      System.out.printf("problem with %s%n", this);
     }
     INTARRAY e = (INTARRAY) state;
     for (int i = 0; i < num_elts; i++) {
