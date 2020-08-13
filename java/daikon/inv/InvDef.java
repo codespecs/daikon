@@ -43,13 +43,21 @@ public class InvDef {
   /** True if invariant permutes by changing its class. */
   boolean swap_class = false;
 
+  /** The array {0}. */
   public static final long[] elts_zero = {0};
+  /** The array {0.0}. */
   public static final double[] elts_zero_float = {0.0};
+  /** The array {-1}. */
   public static final long[] elts_minus_one = {-1};
+  /** The array {-1.0}. */
   public static final double[] elts_minus_one_float = {-1.0};
+  /** The array {-1, 1}. */
   public static final long[] elts_plus_minus_one = {-1, 1};
+  /** The array {-1.0, 1.0}. */
   public static final double[] elts_plus_minus_one_float = {-1.0, 1.0};
+  /** The array {1}. */
   public static final long[] elts_one = {1};
+  /** The array {1.0}. */
   public static final double[] elts_one_float = {1.0};
 
   /**
