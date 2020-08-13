@@ -1221,7 +1221,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
           // suppress if var2 == 0
           new InvDef[] {new InvDef(var2(), ONEOF.class, ONEOF_ZERO)},
           // suppress if var1 == -1 (all of its bits are on)
-          new InvDef[] {new InvDef(var1(), ONEOF.class,ONEOF_MINUS_ONE)}
+          new InvDef[] {new InvDef(var1(), ONEOF.class, ONEOF_MINUS_ONE)}
         };
       }
     #endif

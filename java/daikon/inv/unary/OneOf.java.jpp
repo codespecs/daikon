@@ -2119,10 +2119,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       return false;
     }
     @SuppressWarnings("allcheckers:instanceof.unsafe") //  Only the data type of the state needs to be checked and the annotations must be ignored, hence, the qualifier is irrelevant
-    boolean stateIsNotArray = !(state instanceof INT[]);
+    boolean stateIsNotArray = !(state instanceof INTARRAY);
     if (stateIsNotArray) {
-      System.out.println("state is of class '" + state.getClass().getName()
-                          + "'");
+      // Daikon is about to crash.  Produce some debugging output.
+      System.out.printf("state = %s [%s]%n", state, state.getClass());
+      System.out.printf("problem with %s%n", this);
     }
     INTARRAY e = (INTARRAY) state;
     for (int i = 0; i < num_elts; i++) {
