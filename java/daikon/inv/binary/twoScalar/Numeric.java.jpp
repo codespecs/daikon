@@ -13,7 +13,7 @@
   #define VALUE_SET ValueSet.ValueSetScalarArray
   #define ONEOF OneOfScalar
   #define ONEOF_ZERO InvDef.elts_zero
-  #define ONEOF_PLUS_MINUS_ONE InvDef.elts_plus_minus_one
+  #define ONEOF_MINUS_ONE_AND_PLUS_ONE InvDef.elts_minus_one_and_plus_one
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one
   #define ONEOF_ONE InvDef.elts_one
   #define SEQ_SUBSCRIPT SequenceScalarSubscript
@@ -35,7 +35,7 @@
   #define VALUE_SET ValueSet.ValueSetFloatArray
   #define ONEOF OneOfFloat
   #define ONEOF_ZERO InvDef.elts_zero_float
-  #define ONEOF_PLUS_MINUS_ONE InvDef.elts_plus_minus_one_float
+  #define ONEOF_MINUS_ONE_AND_PLUS_ONE InvDef.elts_minus_one_and_plus_one_float
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one_float
   #define ONEOF_ONE InvDef.elts_one_float
   #define SEQ_SUBSCRIPT SequenceFloatSubscript
@@ -59,7 +59,7 @@
   #define VALUE_SET
   #define ONEOF
   #define ONEOF_ZERO
-  #define ONEOF_PLUS_MINUS_ONE
+  #define ONEOF_MINUS_ONE_AND_PLUS_ONE
   #define ONEOF_MINUS_ONE
   #define ONEOF_ONE
   #define SEQ_SUBSCRIPT SequenceStringSubscript
@@ -82,7 +82,7 @@
   #define VALUE_SET ValueSet.ValueSetScalarArray
   #define ONEOF EltOneOf
   #define ONEOF_ZERO InvDef.elts_zero
-  #define ONEOF_PLUS_MINUS_ONE InvDef.elts_plus_minus_one
+  #define ONEOF_MINUS_ONE_AND_PLUS_ONE InvDef.elts_minus_one_and_plus_one
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
   #define EQUAL_ONE  EltRangeInt.EqualOne
@@ -105,7 +105,7 @@
   #define VALUE_SET ValueSet.ValueSetFloatArray
   #define ONEOF EltOneOfFloat
   #define ONEOF_ZERO InvDef.elts_zero_float
-  #define ONEOF_PLUS_MINUS_ONE InvDef.elts_plus_minus_one_float
+  #define ONEOF_MINUS_ONE_AND_PLUS_ONE InvDef.elts_minus_one_and_plus_one_float
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one_float
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
   #define EQUAL_ONE  EltRangeFloat.EqualOne
@@ -128,7 +128,7 @@
   #define VALUE_SET ValueSet.ValueSetStringArray
   #define ONEOF EltOneOf
   #define ONEOF_ZERO
-  #define ONEOF_PLUS_MINUS_ONE
+  #define ONEOF_MINUS_ONE_AND_PLUS_ONE
   #define ONEOF_MINUS_ONE
   #define SEQ_SUBSEQUENCE SequenceStringSubsequence
   #define EQUAL_ONE
@@ -766,7 +766,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
         return new InvDef[][] {
           new InvDef[] {
-            new InvDef(var2(vis), ONEOF.class, ONEOF_PLUS_MINUS_ONE)
+            new InvDef(var2(vis), ONEOF.class, ONEOF_MINUS_ONE_AND_PLUS_ONE)
           },
           new InvDef[] {
             new InvDef(var1(), ONEOF.class, ONEOF_ZERO)
