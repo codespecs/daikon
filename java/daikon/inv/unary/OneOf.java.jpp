@@ -2118,9 +2118,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     if (num_elts == 0) {
       return false;
     }
-    @SuppressWarnings("allcheckers:operand.instanceof.subtype") //  Warnings are suppressed because only the data type of the state needs to be checked and not the annotations
-    boolean stateTypeMatch = !(state instanceof INT[]);
-    if (stateTypeMatch) {
+    @SuppressWarnings("allcheckers:instanceof.unsafe") //  Only the data type of the state needs to be checked and the annotations must be ignored, hence, the qualifier is irrelevant
+    boolean stateIsNotArray = !(state instanceof INT[]);
+    if (stateIsNotArray) {
       System.out.println("state is of class '" + state.getClass().getName()
                           + "'");
     }
