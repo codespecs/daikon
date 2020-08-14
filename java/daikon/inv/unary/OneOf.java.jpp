@@ -2118,7 +2118,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     if (num_elts == 0) {
       return false;
     }
-    @SuppressWarnings("allcheckers:instanceof.unsafe") //  Only the data type of the state needs to be checked and the annotations must be ignored, hence, the qualifier is irrelevant
     boolean stateIsNotArray = !(state instanceof INTARRAY);
     if (stateIsNotArray) {
       // Daikon is about to crash.  Produce some debugging output.
