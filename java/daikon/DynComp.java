@@ -316,6 +316,9 @@ public class DynComp {
         // allow java.base to access daikon.jar (for instrumentation runtime)
         cmdlist.add("--add-reads");
         cmdlist.add("java.base=ALL-UNNAMED");
+        // allow DCRuntime to make reflective access to sun.util.locale (equals_dcomp_instrumented)
+        cmdlist.add("--add-exports");
+        cmdlist.add("java.base/sun.util.locale=ALL-UNNAMED");
         // replace default java.base with our instrumented version
         cmdlist.add("--patch-module");
         cmdlist.add("java.base=" + rt_file);
