@@ -407,9 +407,7 @@ public class DCInstrument extends InstructionListUtils {
               && stack_trace[i].getMethodName().equals("parse")) {
             junit_parse_seen = true;
             junit_state = JUnitState.TEST_DISCOVERY;
-          } else if (stack_trace[i].getClassName().contains("JUnitCore")
-              && stack_trace[i].getMethodName().equals("runMain")) {
-            junit_state = JUnitState.TEST_DISCOVERY;
+            break;
           }
         }
         break;
@@ -423,9 +421,7 @@ public class DCInstrument extends InstructionListUtils {
           if (stack_trace[i].getClassName().contains("JUnitCommandLineParseResult")
               && stack_trace[i].getMethodName().equals("parse")) {
             local_junit_parse_seen = true;
-          } else if (stack_trace[i].getClassName().contains("JUnitCore")
-              && stack_trace[i].getMethodName().equals("run")) {
-            junit_state = JUnitState.RUNNING;
+            break;
           }
         }
         if (junit_parse_seen && !local_junit_parse_seen) {
@@ -553,13 +549,15 @@ public class DCInstrument extends InstructionListUtils {
         remove_local_variable_type_table(mg);
 
         // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
-        // the normal methods to our instrumented methods.  It doesn't cause an
-        // execution problem but will produce a massive number of warnings.
-        // Unfortunately, BCEL does not have the methods necessary to do this,
-        // so we hit it with a huge hammer and remove all the annotations.
-        // This annotation was added post Java 8.
-        if (BcelUtil.javaVersion > 8) {
-          mg.removeAnnotationEntries();
+        // the original method to our instrumented method as the signature will
+        // not match anything in the JVM's list.  This won't cause an execution
+        // problem but will produce a massive number of warnings.
+        AnnotationEntryGen[] aes = mg.getAnnotationEntries();
+        for (AnnotationEntryGen item : aes) {
+          String type = item.getTypeName();
+          if (type.endsWith("HotSpotIntrinsicCandidate;")) {
+            mg.removeAnnotationEntry(item);
+          }
         }
 
         if (!BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg) && !junit_test_class) {
