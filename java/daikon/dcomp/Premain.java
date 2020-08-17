@@ -58,6 +58,8 @@ public class Premain {
               // JDK8 and JDK11
               "java.lang.invoke",
               "java.lang.reflect",
+              "sun.reflect.annotation",
+              "sun.reflect.misc",
               // JDK8
               "sun.reflect",
               // JDK11
