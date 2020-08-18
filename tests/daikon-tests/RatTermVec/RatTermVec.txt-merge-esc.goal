@@ -24,10 +24,10 @@ public class RatTermVec {
 
     // RI(r) = r.wrapped != null && forall i=0 to r.wrapped.size()-1, T(r,i) is-a Term
 
-    /*@ spec_public */ private ArrayList wrapped;
+    /*@ spec_public */ private ArrayList<RatTerm> wrapped;
 
     /** @effects: constructs a new empty RatTermVec, []. */
-    public RatTermVec() { wrapped = new ArrayList(); }
+    public RatTermVec() { wrapped = new ArrayList<RatTerm>(); }
 
     /** @return the size of this RatTermVec. */
     public int size() { return wrapped.size(); }
@@ -41,7 +41,7 @@ public class RatTermVec {
 	e.g. Given a RatTermVec v = [t2, t3, t4], the expression
 	"v.get(1)" will return the RatTerm t3.
      */
-    public RatTerm get(int index) { return (RatTerm) wrapped.get(index); }
+    public RatTerm get(int index) { return wrapped.get(index); }
 
     /*@ requires t != null; */
     /*@ modifies this.wrapped[*]; */
@@ -111,9 +111,10 @@ public class RatTermVec {
 	will NOT be reflected in this vector, and vice versa.  (Also recall
 	that RatTerm objects are immutable.)
     */
+    @SuppressWarnings("unchecked")
     public RatTermVec copy() {
 	RatTermVec tv = new RatTermVec();
-	tv.wrapped = (ArrayList) this.wrapped.clone();
+	tv.wrapped = (ArrayList<RatTerm>) this.wrapped.clone();
 	return tv;
     }
 

@@ -8,7 +8,7 @@ public class RatNumTest2 extends RatNumTest {
 
   public RatNumTest2(String name) { super(name); }
 
-  private ArrayList rs = new ArrayList();
+  private ArrayList<RatNum> rs = new ArrayList<RatNum>();
 
   private static Random rnd = new Random(1978);
   private static int rnd() {
@@ -31,7 +31,7 @@ public class RatNumTest2 extends RatNumTest {
   }
 
   private void observe(RatNum r) {
-    RatNum other = (RatNum) rs.get(Math.abs(rnd()) % rs.size());
+    RatNum other = rs.get(Math.abs(rnd()) % rs.size());
 
     r.isNaN();
     r.isNegative();
