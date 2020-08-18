@@ -1,0 +1,41 @@
+
+Variable sets for MyEvenOddTest.<init>() enter
+Variable sets for MyEvenOddTest.<init>() exit
+  [1] [this]
+
+Variable sets for MyEvenOddTest.testEvenOddNumber() enter
+  [1] [this]
+Variable sets for MyEvenOddTest.testEvenOddNumber() exit
+  [1] [this]
+
+Variable sets for MyEvenOddTest.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+Variable sets for MyEvenOddTest.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+
+Variable sets for MyEvenOdd.<init>() enter
+Variable sets for MyEvenOdd.<init>() exit
+  [1] [this]
+
+Variable sets for MyEvenOdd.isEvenNumber(int number) enter
+  [1] [Parameter number]
+  [1] [this]
+Variable sets for MyEvenOdd.isEvenNumber(int number) exit
+  [1] [Parameter number]
+  [1] [return]
+  [1] [this]
+
+Variable sets for MyEvenOdd.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+Variable sets for MyEvenOdd.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]

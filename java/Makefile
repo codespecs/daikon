@@ -515,12 +515,13 @@ dcomp_rt.jar : dcomp_premain.jar
 # For Java 9+, there appears to be a bug in the Java reflection invoke code that it
 # does not check that the arg list matches.  Hence, it tries to invoke
 # our instrumented version from non instrumented code.  This causes a
-# failure during java initialization of boot layer.  Thus we must remove
+# failure during java initialization of boot layer.  It also causes additional
+# failures during some java class loading.  Thus we must remove
 # the problem classes from dcomp_rt.jar.
 	@if test -f $(DCOMP_RT)/META-INF/MANIFEST.MF; then \
 	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
 	else \
-	  rm $(DCOMP_RT)/java/lang/invoke/VarHandleInts?Field*.class; \
+	  rm $(DCOMP_RT)/java/lang/invoke/VarHandle*Field*.class; \
 	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
 	fi
 
@@ -531,7 +532,7 @@ dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
 	@if test -f $(DCOMP_RT)/META-INF/MANIFEST.MF; then \
 	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
 	else \
-	  rm $(DCOMP_RT)/java/lang/invoke/VarHandleInts?Field*.class; \
+	  rm $(DCOMP_RT)/java/lang/invoke/VarHandle*Field*.class; \
 	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
 	fi
 

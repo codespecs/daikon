@@ -55,7 +55,15 @@ public class Premain {
           Arrays.asList(
               // Packages to support reflection and Lambda expressions cause instrumentation
               // problems and probably don't affect user program comparability values.
-              "java.lang.invoke", "java.lang.reflect", "jdk.internal.reflect"));
+              // JDK8 and JDK11
+              "java.lang.invoke",
+              "java.lang.reflect",
+              "sun.reflect.annotation",
+              "sun.reflect.misc",
+              // JDK8
+              "sun.reflect",
+              // JDK11
+              "jdk.internal.reflect"));
 
   /** Set of classes known to cause problems when instrumented. */
   protected static Set<String> problem_classes =
@@ -247,8 +255,10 @@ public class Premain {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
     if (DynComp.verbose) {
+      // If DCInstrument.jdk_instrumented is true then the printf below will output
+      // 'null' to indicate we are using the bootstrap loader.
       System.out.printf(
-          "Classloader of tranformer = %s%n", transformer.getClass().getClassLoader());
+          "Classloader of transformer = %s%n", transformer.getClass().getClassLoader());
     }
 
     // Check that we got a newer version of BCEL that includes JDK 11 support. At present,
