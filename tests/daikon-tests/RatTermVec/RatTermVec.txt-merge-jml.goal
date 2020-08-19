@@ -91,7 +91,7 @@ public class RatTermVec {
 	@effects: Adds the specified RatTerm, 't', to the end of this
 	vector, increasing the vector's size by one.
 	<br>
-	e.g. Given a RatTermVec v = [t2, t3, t4], the statement 
+	e.g. Given a RatTermVec v = [t2, t3, t4], the statement
 	"v.addElement(t3);" will make v_post = [t2, t3, t4, t3].
     */
     public void addElement(RatTerm t) { wrapped.add(t); }
