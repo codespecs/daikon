@@ -13,16 +13,16 @@ import java.util.Enumeration;
  * @see Test
  */
 public class TestResult extends Object {
-	protected Vector fFailures;
-	protected Vector fErrors;
-	protected Vector fListeners;
+	protected Vector<TestFailure> fFailures;
+	protected Vector<TestFailure> fErrors;
+	protected Vector<TestListener> fListeners;
 	protected int fRunTests;
 	private boolean fStop;
 	
 	public TestResult() {
-		fFailures= new Vector();
-		fErrors= new Vector();
-		fListeners= new Vector();
+		fFailures= new Vector<TestFailure>();
+		fErrors= new Vector<TestFailure>();
+		fListeners= new Vector<TestListener>();
 		fRunTests= 0;
 		fStop= false;
 	}

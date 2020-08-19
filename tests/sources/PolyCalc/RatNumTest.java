@@ -157,28 +157,28 @@ public class RatNumTest extends TestCase {
 	// cannot test that one_I_zero.approx() approxEq Double.NaN,
 	// because it WON'T!!!  Instead, construct corresponding
 	// instance of Double and use .equals(..) method
-	assertTrue( (new Double(Double.NaN)).
+	assertTrue( (Double.valueOf(Double.NaN)).
                     equals
-                    (new Double(one_I_zero.approx())) );
-	assertTrue( (new Double(Double.NaN)).
+                    (Double.valueOf(one_I_zero.approx())) );
+	assertTrue( (Double.valueOf(Double.NaN)).
                     equals
-                    (new Double(negOne_I_zero.approx())) );
-	assertTrue( (new Double(Double.NaN)).
+                    (Double.valueOf(negOne_I_zero.approx())) );
+	assertTrue( (Double.valueOf(Double.NaN)).
                     equals
-                    (new Double(two_I_zero.approx())) );
-	assertTrue( (new Double(Double.NaN)).
+                    (Double.valueOf(two_I_zero.approx())) );
+	assertTrue( (Double.valueOf(Double.NaN)).
                     equals
-                    (new Double(negTwo_I_zero.approx())) );
-	assertTrue( (new Double(Double.NaN)).
+                    (Double.valueOf(negTwo_I_zero.approx())) );
+	assertTrue( (Double.valueOf(Double.NaN)).
                     equals
-                    (new Double(hundred_I_zero.approx())) );
-	assertTrue( (new Double(Double.NaN)).
+                    (Double.valueOf(hundred_I_zero.approx())) );
+	assertTrue( (Double.valueOf(Double.NaN)).
                     equals
-                    (new Double(negOne_I_zero.approx())) );
+                    (Double.valueOf(negOne_I_zero.approx())) );
 
-	assertTrue( (new Double(Double.NaN)).
+	assertTrue( (Double.valueOf(Double.NaN)).
                     equals
-                    (new Double(nine_I_zero.approx())) );
+                    (Double.valueOf(nine_I_zero.approx())) );
 
 	// use left-shift operator "<<" to create integer for 2^30
 	RatNum one_I_twoToThirty = new RatNum(1, (1<<30) );
