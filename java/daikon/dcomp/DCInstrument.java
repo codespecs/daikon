@@ -449,6 +449,16 @@ public class DCInstrument extends InstructionListUtils {
       if (!classname.startsWith("org.junit") && !classname.startsWith("junit")) {
         junit_test_class = true;
         junit_test_set.add(classname);
+        String super_class = gen.getSuperclassName();
+        // If a junit test case has a super class that is not junit.framework.TestCase
+        // then the super class must also be a test case.
+        // (Test below is overly strong to be safe.)
+        // TODO: do we need to recurse?
+        if (!super_class.startsWith("org.junit")
+            && !super_class.startsWith("junit")
+            && !super_class.equals("java.lang.Object")) {
+          junit_test_set.add(super_class);
+        }
         if (DynComp.verbose) {
           System.out.printf("JUnit test class: %s%n", classname);
         }
