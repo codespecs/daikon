@@ -25,6 +25,7 @@ public class Instrument implements ClassFileTransformer {
   /** Have we seen a class member of a known transformer? */
   static boolean transformer_seen = false;
 
+  /** Instrument class constructor. Setup debug directories, if needed. */
   public Instrument() {
     debug_dir = DynComp.debug_dir;
     debug_bin_dir = new File(debug_dir, "bin");
