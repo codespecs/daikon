@@ -2572,6 +2572,10 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
+    if (Instrument.is_transformer(classname.replace('.', '/'))) {
+      return false;
+    }
+
     // Special case the execution trace tool.
     if (classname.startsWith("minst.Minst")) {
       return false;

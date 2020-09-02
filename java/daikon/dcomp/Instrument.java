@@ -19,6 +19,7 @@ public class Instrument implements ClassFileTransformer {
   File debug_dir;
   File debug_bin_dir;
   File debug_orig_dir;
+  static boolean transformer_seen = false;
 
   public Instrument() {
     debug_dir = DynComp.debug_dir;
@@ -142,6 +143,19 @@ public class Instrument implements ClassFileTransformer {
         if (DynComp.verbose) System.out.printf("Skipping is_dcomp class %s%n", className);
         return null;
       }
+
+      // Don't instrument other byte code transformers
+      if (is_transformer(className)) {
+        if (DynComp.verbose) System.out.printf("Skipping is_transformer class %s%n", className);
+        if (!transformer_seen) {
+          transformer_seen = true;
+          System.out.printf(
+              "DynComp warning: This program uses a Java byte code transformer: %s%n", className);
+          System.out.printf(
+              "This may interfere with the DynComp transformer and cause DynComp to fail.%n");
+        }
+        return null;
+      }
     }
 
     if (DynComp.verbose) {
@@ -201,6 +215,25 @@ public class Instrument implements ClassFileTransformer {
       return true;
     }
     if (classname.startsWith("daikon/plumelib")) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns whether or not the specified class is part of a tool known to do Java byte code
+   * transformation. We need to warn user this may not work correctly.
+   */
+  @Pure
+  protected static boolean is_transformer(String classname) {
+
+    if (classname.startsWith("org/mockito")) {
+      return true;
+    }
+    if (classname.startsWith("org/objenesis")) {
+      return true;
+    }
+    if (classname.contains("ByMockito")) {
       return true;
     }
     return false;
