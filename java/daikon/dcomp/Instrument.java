@@ -16,9 +16,13 @@ import org.checkerframework.dataflow.qual.Pure;
 
 public class Instrument implements ClassFileTransformer {
 
+  /** Directory for debug output. */
   File debug_dir;
+  /** Directory for debug instrumented class output. */
   File debug_bin_dir;
+  /** Directory for debug original class output. */
   File debug_orig_dir;
+  /** Have we seen a class member of a known transformer? */
   static boolean transformer_seen = false;
 
   public Instrument() {
@@ -203,6 +207,9 @@ public class Instrument implements ClassFileTransformer {
   /**
    * Returns whether or not the specified class is part of dcomp itself (and thus should not be
    * instrumented). Some Daikon classes that are used by DynComp are included here as well.
+   *
+   * @param classname class to be checked
+   * @return true if classname is a part of DynComp
    */
   @Pure
   private static boolean is_dcomp(String classname) {
@@ -223,6 +230,9 @@ public class Instrument implements ClassFileTransformer {
   /**
    * Returns whether or not the specified class is part of a tool known to do Java byte code
    * transformation. We need to warn user this may not work correctly.
+   *
+   * @param classname class to be checked
+   * @return true if classname is a known transformer
    */
   @Pure
   protected static boolean is_transformer(String classname) {
