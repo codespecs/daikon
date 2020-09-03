@@ -1197,7 +1197,7 @@ You can obtain Citadel from
 @nospellcheck{Hynger (HYbrid iNvariant GEneratoR) instruments Simulink/Stateflow (SLSF)}
 block diagrams to generate Daikon input (@file{.dtrace} files).  Hynger was created
 by @nospellcheck{Taylor Johnson, Stanley Bak, and Steven Drager.}  You can obtain Hynger
-from @uref{https://bitbucket.org/verivital/hynger}.
+from @uref{https://github.com/verivital/hynger}.
 
 
 @node    Running Daikon
@@ -6416,7 +6416,7 @@ separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
 A front end for the @nospellcheck{Simulink/Stateflow (SLSF)} programming language, named
 Hynger, is distributed separately; see
-@uref{https://bitbucket.org/verivital/hynger}.
+@uref{https://github.com/verivital/hynger}.
 
 @cindex front end for IOA
 @cindex front end for Input/Output Automata
