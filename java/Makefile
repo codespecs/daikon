@@ -1142,9 +1142,11 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
+	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
-		--texinfo $@ \
+		--texinfo $tmpfile \
 		@javadoc-files.txt
+	mv -f $tmpfile $@
 	@rm -f javadoc-files.txt
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
@@ -1152,11 +1154,13 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
+	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
-		--texinfo $@ \
+		--texinfo $tmpfile \
 		@javadoc-files.txt
+	perl -pi -e 's/&#64;cindex/\@cindex/g' $tmpfile
+	mv -f $tmpfile $@
 	@rm -f javadoc-files.txt
-	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
 
 daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java
 	${MAKE} compile
