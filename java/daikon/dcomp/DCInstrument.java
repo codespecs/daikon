@@ -178,8 +178,6 @@ public class DCInstrument extends InstructionListUtils {
   static Map<String, Integer> class_access_map = new HashMap<>();
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
   static Integer Integer_ACC_ANNOTATION = Integer.valueOf(Const.ACC_ANNOTATION);
-  /** Buffer size used when reading a '.class' file. */
-  private static final int BUFSIZE = 8192;
 
   /**
    * Array of classes whose fields are not initialized from java. Since the fields are not
@@ -2366,7 +2364,7 @@ public class DCInstrument extends InstructionListUtils {
       // Annotation classes are never instrumented so we must set
       // the callee_instrumented flag false.
       //
-      // Functional interfaces are a bit more complicated. These are primary (only?)
+      // Functional interfaces are a bit more complicated. These are primarily (only?)
       // used by Lambda functions.  Lambda methods are generated dynamically at
       // runtime via the InvokeDynamic instruction.  They are not seen by our
       // ClassFileTransformer so are never instrumented.  Thus we must set the
