@@ -11,8 +11,6 @@ import daikon.plumelib.bcelutil.StackTypes;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.EntryReader;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -2339,6 +2337,8 @@ public class DCInstrument extends InstructionListUtils {
       // we don't instrument lambda methods
       // BUG: BCEL doesn't know how to get classname from an
       // INVOKEDYNAMIC instruction.
+      // debug code
+      // System.out.printf("invokedynamic NOT the classname: %s%n", invoke.getClassName(pool));
       callee_instrumented = false;
     } else {
       classname = invoke.getClassName(pool);
@@ -2359,43 +2359,67 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
 
-      if (invoke instanceof INVOKEINTERFACE) {
-        // debug code
-        // System.out.printf("invoke interface host: %s%n", gen.getClassName()+"."+mgen.getName());
-        // System.out.printf("invoke interface targ: %s%n", classname + "." + method_name);
-
-        // Check to see if the target class is marked Annotation.
-        // Note we cannot use classForName to inspect class as might trigger
-        // recursive call to Instrument which would not work at this point.
+      // There are two special cases we need to detect:
+      //   calls to annotations
+      //   calls to functional interfaces
+      //
+      // Annotation classes are never instrumented so we must set
+      // the callee_instrumented flag false.
+      //
+      // Functional interfaces are a bit more complicated. These are primary (only?)
+      // used by Lambda functions.  Lambda methods are generated dynamically at
+      // runtime via the InvokeDynamic instruction.  They are not seen by our
+      // ClassFileTransformer so are never instrumented.  Thus we must set the
+      // callee_instrumented flag false when we see a call to a Lambda method.
+      // The heuristic we use is to assume that any InvokeInterface or InvokeVirtual
+      // call to a functional interface is a call to a Lambda method.
+      //
+      // The java compiler detects functional interfaces automatically, but the
+      // user can declare their intent with the @FunctionInterface annotation.
+      // The Java runtime is annotated in this manner.  Hence, we look for this
+      // annotation to detect a call to a function interface.  In practice, we
+      // could detect functional interfaces in a manner similar to the Java
+      // compiler, but for now we will go with this simpler method.
+      //
+      // Note that to simplfy our code we set the access flags for a functional
+      // interface to ANNOTATION in our class_access_map.
+      //
+      if (invoke instanceof INVOKEINTERFACE || invoke instanceof INVOKEVIRTUAL) {
+        // Check to see if we have seen this class before.
         Integer access = class_access_map.get(classname);
         if (access == null) {
-          // We have not seen this class before.
+          // We have not seen this class before. Check to see if the target class is
+          // an Annotation or a FunctionalInterface. Note we cannot use classForName
+          // to inspect the class as this might trigger a recursive call to Instrument
+          // which would not work at this point.
           URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
           if (class_url != null) {
             try {
               InputStream inputStream = class_url.openStream();
               if (inputStream != null) {
-                DataInputStream dataInputStream;
-                if (inputStream instanceof DataInputStream) {
-                  dataInputStream = (DataInputStream) inputStream;
-                } else {
-                  dataInputStream =
-                      new DataInputStream(new BufferedInputStream(inputStream, BUFSIZE));
+                // Parse the bytes of the classfile, die on any errors
+                ClassParser parser = new ClassParser(inputStream, classname + "<internal>");
+                JavaClass c = parser.parse();
+                access = c.getAccessFlags();
+
+                // Now check for FunctionalInterface
+                for (final AnnotationEntry item : c.getAnnotationEntries()) {
+                  if (item.getAnnotationType().endsWith("FunctionalInterface;")) {
+                    access = Integer_ACC_ANNOTATION;
+                    // debug code
+                    // System.out.println(item.getAnnotationType());
+                    break;
+                  }
                 }
-                if (dataInputStream.readInt() != Const.JVM_CLASSFILE_MAGIC) {
-                  throw new ClassFormatException(class_url + " is not a Java .class file");
-                }
-                // read and discard Version
-                dataInputStream.readUnsignedShort(); // minor version number
-                dataInputStream.readUnsignedShort(); // major version number
-                // read and discard ConstantPool
-                @SuppressWarnings("UnusedVariable") // side effect: skip constants in class file
-                ConstantPool discarded = new ConstantPool(dataInputStream);
-                // finally read what we are looking for
-                access = dataInputStream.readUnsignedShort();
-                class_access_map.put(classname, access);
                 // debug code
-                // System.out.printf("access flags: 0x%04X%n", access.intValue());
+                // if ((access.intValue() & Const.ACC_ANNOTATION) != 0) {
+                //   System.out.printf(
+                //       "invoke interface host: %s%n", gen.getClassName() + "." + mgen.getName());
+                //   System.out.printf(
+                //       "invoke interface targ: %s%n", classname + "." + method_name);
+                //   System.out.printf("access flags: 0x%04X%n", access.intValue());
+                // }
+                class_access_map.put(classname, access);
               } else {
                 // debug code
                 // System.out.printf("Unable to open stream: %s%n", class_url);
@@ -2417,6 +2441,8 @@ public class DCInstrument extends InstructionListUtils {
           callee_instrumented = false;
         }
 
+        // UNDONE: New code added above should handle the case below.  Need to find a test
+        // case and verify this code is no longer needed.
         // This is a bit of a hack.  An invokeinterface instruction with a
         // a target of "java.util.stream.<something>" might be calling a
         // Lambda method in which case we don't want to add the dcomp_marker.
