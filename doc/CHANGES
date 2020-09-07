@@ -20,6 +20,12 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.8.6 (forthcoming)
+
+DynComp handles lambdas (Java anonymous functions).
+
+===========================================================================
+
 5.8.4 (July 22, 2020)
 
 Moved the SplitDtrace class from the unnamed package to the daikon/ package.
