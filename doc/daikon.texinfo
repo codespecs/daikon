@@ -4177,6 +4177,18 @@ java.lang.UnsatisfiedLinkError:
 @c @end example
 
 
+When running DynComp, an exception similar to the following:
+
+@example
+Exception in thread "main" java.lang.AbstractMethodError:
+    example1c$$Lambda$5/1722023916.sayHello(Ldaikon/dcomp/DCompMarker;)Ljava/lang/String;
+@end example
+
+@noindent
+probably means that @code{sayHello} is the method of an functional
+interface that has not been annotated with @code{@FunctionalInterface}.
+
+
 @node       DynComp for Java known bugs
 @subsection Known bugs and limitations
 
