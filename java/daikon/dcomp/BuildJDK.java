@@ -383,7 +383,7 @@ public class BuildJDK {
   }
 
   /**
-   * Add abstract interface classes needed by DynComp runtime.
+   * Add abstract interface classes needed by the DynComp runtime.
    *
    * @param destDir where to store the interface classes
    */

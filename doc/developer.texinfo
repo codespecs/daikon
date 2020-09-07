@@ -1046,7 +1046,7 @@ be enabled or disabled at the Daikon command line, as described in
 @cindex non-checking of invariants
 @cindex non-printing of invariants
 
-Daikon reduces runtime and memory by avoiding performing work for
+Daikon reduces run time and memory by avoiding performing work for
 redundant invariants that provide no useful information to the user.
 There are three basic types of optimization that can be performed for
 uninteresting invariants:  non-instantiation, suppression, and
@@ -1082,7 +1082,7 @@ See @ref{New suppressors} for more information.
 @dfn{Non-printing} is a post-pass that throws out any invariants that
 are implied by other true invariants.  It is similar to suppression, but
 has none of the limitations of suppression.  But since it is only run as
-a post pass, it cannot optimize runtime and memory use as suppression can.
+a post pass, it cannot optimize run time and memory use as suppression can.
 Non-printing should be used only in cases where suppression cannot.
 Non-printing is implemented by @code{ObviousFilter}, which calls the
 @code{isObviousDynamically} method on invariants.  The
@@ -2751,7 +2751,7 @@ declarations after the first one have no effect).
 
 A data trace record (also known as a @dfn{sample})
 represents one execution of a program point.  The
-record specifies the program point and gives the runtime values of each
+record specifies the program point and gives the run-time values of each
 variable.  The list of variables in the data trace record must be
 identical to that in the corresponding declaration.  For a given program point,
 the declaration must precede the first data trace record for the program

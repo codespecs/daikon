@@ -109,8 +109,8 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints declarations for all the methods in the indicated class. This method is called in
-   * Runtime to print decls info for a class.
+   * Prints declarations for all the methods in the indicated class. This method is called at run
+   * time to print decls info for a class.
    *
    * @param cinfo class whose declarations should be printed
    */
@@ -254,8 +254,8 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints declarations for all the methods in the indicated class. This method is called in
-   * Runtime to print decls info for a class.
+   * Prints declarations for all the methods in the indicated class. This method is called at run
+   * time to print decls info for a class.
    *
    * @param cinfo class whose declarations should be printed
    * @param comp_info comparability information

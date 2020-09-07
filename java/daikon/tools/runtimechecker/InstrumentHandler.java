@@ -23,7 +23,7 @@ import jtb.visitor.TreeFormatter;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 /**
- * Instruments a file to check invariant violations at runtime. Violated invariants are stored in a
+ * Instruments a file to check invariant violations at run time. Violated invariants are stored in a
  * list in daikon.tools.runtimechecker.Runtime. The control flow of the class remains unchanged from
  * the original.
  *

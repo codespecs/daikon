@@ -271,7 +271,7 @@ PPT hierarchy
       and users can specify additional ones manually.  Two key
       improvements should be made: new strategies for choosing
       predicates should be implemented, and the system should be made
-      capable of selecting new predicates at runtime rather than
+      capable of selecting new predicates at run time rather than
       selecting them a priori.  Another improvement would be
       finding ways to combine sets of predicates without suffering
       exponential blowup.

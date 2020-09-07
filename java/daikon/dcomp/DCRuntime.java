@@ -3197,7 +3197,7 @@ public final class DCRuntime {
 
   /**
    * Class that gets the tag for static primitive fields. We retrieve the static tag by using the
-   * same method as we use during runtime to push the tag on the tag stack.
+   * same method as we use during run time to push the tag on the tag stack.
    */
   public static class StaticPrimitiveTag extends FieldTag {
 

@@ -1190,7 +1190,7 @@ Chicory
         was resolved.
 
         In some circumstances, when classes are dynamically created at
-        runtime, Chicory would incorrectly determine that the class
+        run time, Chicory would incorrectly determine that the class
         was a user class (i.e., not part of the JDK).  This would
         result in classloader areas.  This has been resolved
 
@@ -2972,7 +2972,7 @@ Kvasir
   User Changes
 
     Kvasir now produces all of its output (both variable declarations and
-    runtime values) in one .dtrace file instead of as separate .decls and
+    run-time values) in one .dtrace file instead of as separate .decls and
     .dtrace files.  The --decls-file=<filename> command-line option forces
     Kvasir to generate separate .decls and .dtrace files, as before.
 

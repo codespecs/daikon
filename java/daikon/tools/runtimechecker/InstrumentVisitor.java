@@ -28,7 +28,7 @@ import org.plumelib.util.UtilPlume;
 
 /**
  * Visitor that instruments a Java source file (i.e. adds code at certain places) to check invariant
- * violations at runtime.
+ * violations at run time.
  */
 @SuppressWarnings("rawtypes")
 public class InstrumentVisitor extends DepthFirstVisitor {

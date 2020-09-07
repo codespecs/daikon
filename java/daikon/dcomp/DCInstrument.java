@@ -129,8 +129,8 @@ public class DCInstrument extends InstructionListUtils {
   protected @DotSeparatedIdentifiers String dcomp_prefix;
   /**
    * We add a dummy local variable to JDK methods during the initial jdk instrumentation (via
-   * BuildJDK) as a flag to indicate that the method needs to be re-instrumented at runtime. This is
-   * never done for Java 8.
+   * BuildJDK) as a flag to indicate that the method needs to be re-instrumented at run time. This
+   * is never done for Java 8.
    */
   protected static final String instrumentation_marker_variable = "DaIkOn_instrumented";
 
@@ -846,7 +846,7 @@ public class DCInstrument extends InstructionListUtils {
    * signatures. Hence, we have adopted the following strategy: We will pre-instrument java.base in
    * order to add the instrumented versions of the JDK methods. However, these instrumented methods
    * are dummies that are missing external references to DCRuntime and will never be executed. At
-   * DynComp runtime we reinstrument these methods, discarding the bodies of the dummy versions and
+   * DynComp run time we reinstrument these methods, discarding the bodies of the dummy versions and
    * replacing them with the correctly instrumented versions.
    *
    * <p>A simpler approach would be to just instrument JDK classes as they are loaded. However, a
@@ -981,7 +981,7 @@ public class DCInstrument extends InstructionListUtils {
         }
 
         if (initial_jdk_instrument && has_code) {
-          // mark this method as needing to be reinstrumented at runtime
+          // mark this method as needing to be reinstrumented at run time
           mg.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
         }
         gen.addMethod(mg.getMethod());
@@ -1138,7 +1138,7 @@ public class DCInstrument extends InstructionListUtils {
         }
 
         if (initial_jdk_instrument && has_code) {
-          // mark this method as needing to be reinstrumented at runtime
+          // mark this method as needing to be reinstrumented at run time
           mg.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
         }
         gen.addMethod(mg.getMethod());
@@ -1634,7 +1634,7 @@ public class DCInstrument extends InstructionListUtils {
     // If this is an exit, push the return value and line number.
     // The return value
     // is stored in the local "return__$trace2_val"  If the return
-    // value is a primitive, wrap it in the appropriate runtime wrapper
+    // value is a primitive, wrap it in the appropriate run-time wrapper
     if (method_name.equals("exit")) {
       Type ret_type = mg.getReturnType();
       if (ret_type == Type.VOID) {
@@ -1722,7 +1722,7 @@ public class DCInstrument extends InstructionListUtils {
     // If this is an exit, push the return value and line number.
     // The return value
     // is stored in the local "return__$trace2_val"  If the return
-    // value is a primitive, wrap it in the appropriate runtime wrapper
+    // value is a primitive, wrap it in the appropriate run-time wrapper
     if (method_name.equals("exit_refs_only")) {
       Type ret_type = mg.getReturnType();
       if (ret_type == Type.VOID) {
@@ -2366,7 +2366,7 @@ public class DCInstrument extends InstructionListUtils {
       //
       // Functional interfaces are a bit more complicated. These are primarily (only?)
       // used by Lambda functions.  Lambda methods are generated dynamically at
-      // runtime via the InvokeDynamic instruction.  They are not seen by our
+      // run time via the InvokeDynamic instruction.  They are not seen by our
       // ClassFileTransformer so are never instrumented.  Thus we must set the
       // callee_instrumented flag false when we see a call to a Lambda method.
       // The heuristic we use is to assume that any InvokeInterface or InvokeVirtual
@@ -2473,7 +2473,7 @@ public class DCInstrument extends InstructionListUtils {
           // TODO:
           // This is actually a general problem.  Correct solution would seem
           // to be a variation of "has_instrumented" to find target of virtual
-          // call at runtime.
+          // call at run time.
           // This is just a hack to get through PASCALI corpus.
           String super_class = gen.getSuperclassName();
           if (!super_class.equals("java.lang.Object") && BcelUtil.inJdk(super_class)) {
@@ -2716,9 +2716,9 @@ public class DCInstrument extends InstructionListUtils {
       // If the superclass has an instrumented method, call it
       // otherwise call the uninstrumented method.  This has to be
       // done inline, because the call to super can only take place
-      // in this class.  We check at runtime to see if the superclass
+      // in this class.  We check at run time to see if the superclass
       // has an instrumented version of the method.  This is safe because
-      // at runtime the superclass must already be loaded.
+      // at run time the superclass must already be loaded.
 
       // push the class of the superclass
       il.append(new LDC(pool.addClass(classname)));
@@ -4326,12 +4326,12 @@ public class DCInstrument extends InstructionListUtils {
         set_method = create_set_tag(gen, f, field_map.get(f));
       }
       if (initial_jdk_instrument) {
-        // mark this method as needing to be reinstrumented at runtime
+        // mark this method as needing to be reinstrumented at run time
         get_method.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
       }
       gen.addMethod(get_method.getMethod());
       if (initial_jdk_instrument) {
-        // mark this method as needing to be reinstrumented at runtime
+        // mark this method as needing to be reinstrumented at run time
         set_method.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
       }
       gen.addMethod(set_method.getMethod());
@@ -4369,12 +4369,12 @@ public class DCInstrument extends InstructionListUtils {
           set_method = create_set_tag(gen, f, field_map.get(f));
         }
         if (initial_jdk_instrument) {
-          // mark this method as needing to be reinstrumented at runtime
+          // mark this method as needing to be reinstrumented at run time
           get_method.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
         }
         gen.addMethod(get_method.getMethod());
         if (initial_jdk_instrument) {
-          // mark this method as needing to be reinstrumented at runtime
+          // mark this method as needing to be reinstrumented at run time
           set_method.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
         }
         gen.addMethod(set_method.getMethod());

@@ -2237,7 +2237,7 @@ public final class FileIO {
           invoc = call_stack.pop();
           while (invoc.ppt.ppt_name.getNameWithoutPoint() != fn_name) {
             // Should also mark as a function that made an exceptional exit
-            // at runtime.
+            // at run time.
             System.err.println(
                 "Exceptional exit from function "
                     + fn_name

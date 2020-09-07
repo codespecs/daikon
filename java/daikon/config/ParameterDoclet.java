@@ -19,7 +19,7 @@ import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
- * ParameterDoclet is a JavaDoc doclet that collects information about the runtime configuration
+ * ParameterDoclet is a JavaDoc doclet that collects information about the run-time configuration
  * options for the Daikon tools. Refer to the {@code --config} command-line option in the Daikon
  * manual for an introduction to the configuration system.
  */

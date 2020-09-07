@@ -173,7 +173,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
 
   /** Prints '+' if the invariant is worth printing, '-' otherwise. */
-  // XXX This routine takes up most of diff's runtime on large .inv
+  // XXX This routine takes up most of diff's run time on large .inv
   // files, and is not particularly interesting. There should perhaps
   // be an option to turn it off. -SMcC
   private void printPrintability(Invariant inv) {

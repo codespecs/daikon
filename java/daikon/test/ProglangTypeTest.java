@@ -24,12 +24,12 @@ public class ProglangTypeTest {
     FileIO.new_decl_format = true;
   }
 
-  // Runtime type of first argument is long[]
+  // Run-time type of first argument is long[]
   void longarrEquals(Object a, long[] b) {
     assertEquals(0, longarrcomparator.compare((long[]) a, b));
   }
 
-  // Runtime type of first (and second) argument is Comparable[]
+  // Run-time type of first (and second) argument is Comparable[]
   void comparrEquals(Object a, Object[] b) {
     String[] a1 = (String[]) a;
     String[] b1 = (String[]) b;

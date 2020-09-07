@@ -27,7 +27,7 @@ import org.plumelib.util.UtilPlume;
 //  * that ties this to a Java front end, as Class can't represent types of
 //    (say) C variables.  (not a compelling problem)
 //  * that loads the class, which requies that all classes available at
-//    runtime be available at inference time.  (not a compelling problem)
+//    run time be available at inference time.  (not a compelling problem)
 //  * Class does not represent inheritance (but I can do that myself);
 //    and see isAssignableFrom, which might do all I need.
 //  * Class has no "dimensions" field.  isArray() exists, however, as does
@@ -174,7 +174,7 @@ public final @Interned class ProglangType implements Serializable {
   //   return this == o;
   // }
 
-  // THIS CODE IS A HOT SPOT (~33% of runtime) [as of January 2002].
+  // THIS CODE IS A HOT SPOT (~33% of run time) [as of January 2002].
   /** @param t_base must be interned */
   private static @Nullable ProglangType find(@Interned String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:

@@ -536,7 +536,7 @@ public class Annotate {
 //    to ensure that no simultaneous calls to that method occur. For methods with
 //    this concurrency contract Jcontract will generate code to check if they are
 //    being executed by more than one thread at once. An error will be reported
-//    at runtime if the contract is violated.
+//    at run time if the contract is violated.
 //
 // - Point of execution: right before calling the method.
 //

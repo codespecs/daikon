@@ -1,6 +1,6 @@
 package daikon.simplify;
 
-/** Superclass of all runtime errors in this package. */
+/** Superclass of all RuntimeExceptions in this package. */
 public class SimplifyError extends RuntimeException {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
