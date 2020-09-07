@@ -2375,7 +2375,7 @@ public class DCInstrument extends InstructionListUtils {
       // The java compiler detects functional interfaces automatically, but the
       // user can declare their intent with the @FunctionInterface annotation.
       // The Java runtime is annotated in this manner.  Hence, we look for this
-      // annotation to detect a call to a function interface.  In practice, we
+      // annotation to detect a call to a functional interface.  In practice, we
       // could detect functional interfaces in a manner similar to the Java
       // compiler, but for now we will go with this simpler method.
       //
