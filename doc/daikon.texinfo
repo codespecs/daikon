@@ -4186,7 +4186,7 @@ Exception in thread "main" java.lang.AbstractMethodError:
 
 @noindent
 probably means that @code{sayHello} is the method of an functional
-interface that has not been annotated with @code{@FunctionalInterface}.
+interface that has not been annotated with @code{@@FunctionalInterface}.
 
 
 @node       DynComp for Java known bugs
