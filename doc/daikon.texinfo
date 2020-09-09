@@ -267,7 +267,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 @section    Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 8 (or later) JDK, including a
-@uref{https://www.oracle.com/technetwork/java/javase/overview/index.html,,
+@uref{https://www.oracle.com/java/technologies/java-se-glance.html,,
 Java Virtual Machine} and a Java compiler.
 
 If you wish to analyze C or C++ programs, or
@@ -334,9 +334,7 @@ Strictly speaking, this step is optional, but some parts of
 this are required in order to infer invariants in Java programs,
 and other parts are needed in order to infer invariants in C programs.
 First, make sure that you have satisfied the requirements in
-@ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}
-and
-@ref{Requirements for compiling Kvasir,,,developer,Daikon Developer Manual}.
+@ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}.
 Then, run:
 
 @c Note that this step is @emph{not} required if you only want to use Daikon
