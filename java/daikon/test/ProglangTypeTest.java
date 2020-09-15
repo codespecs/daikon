@@ -25,22 +25,20 @@ public class ProglangTypeTest {
   }
 
   /**
-   * Returns true if the two arrays are equal.
+   * Asserts that the two arrays are equal.
    *
    * @param a the first array; its run-time is long[]
    * @param b the second array
-   * @return true if the two arrays are equal
    */
   void longarrEquals(Object a, long[] b) {
     assertEquals(0, longarrcomparator.compare((long[]) a, b));
   }
 
   /**
-   * Returns true if the two arrays are equal.
+   * Asserts that the two arrays are equal.
    *
    * @param a the first array; its run-time is Comparable[]
    * @param b the second array; its run-time is Comparable[]
-   * @return true if the two arrays are equal
    */
   void comparrEquals(Object a, Object[] b) {
     String[] a1 = (String[]) a;
