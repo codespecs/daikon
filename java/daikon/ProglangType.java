@@ -175,7 +175,13 @@ public final @Interned class ProglangType implements Serializable {
   // }
 
   // THIS CODE IS A HOT SPOT (~33% of run time) [as of January 2002].
-  /** @param t_base must be interned */
+  /**
+   * Searches for an array type with the given base and number of dimensions.
+   *
+   * @param t_base the base type; must be interned
+   * @param t_dims the number of dimensions
+   * @return an array type with the given base and number of dimensions, or null
+   */
   private static @Nullable ProglangType find(@Interned String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
