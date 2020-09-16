@@ -24,12 +24,22 @@ public class ProglangTypeTest {
     FileIO.new_decl_format = true;
   }
 
-  // Run-time type of first argument is long[]
+  /**
+   * Asserts that the two arrays are equal.
+   *
+   * @param a the first array; its run-time is long[]
+   * @param b the second array
+   */
   void longarrEquals(Object a, long[] b) {
     assertEquals(0, longarrcomparator.compare((long[]) a, b));
   }
 
-  // Run-time type of first (and second) argument is Comparable[]
+  /**
+   * Asserts that the two arrays are equal.
+   *
+   * @param a the first array; its run-time is Comparable[]
+   * @param b the second array; its run-time is Comparable[]
+   */
   void comparrEquals(Object a, Object[] b) {
     String[] a1 = (String[]) a;
     String[] b1 = (String[]) b;

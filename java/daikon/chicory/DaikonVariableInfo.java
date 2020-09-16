@@ -134,6 +134,8 @@ public abstract class DaikonVariableInfo
    * Constructs a non-array-type DaikonVariableInfo object.
    *
    * @param theName the name of the variable
+   * @param typeName the name of the type
+   * @param repTypeName the name of the representation type
    */
   protected DaikonVariableInfo(String theName, String typeName, String repTypeName) {
     this(theName, typeName, repTypeName, false);
