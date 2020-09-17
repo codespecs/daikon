@@ -525,17 +525,6 @@ dcomp_rt.jar : dcomp_premain.jar
 	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
 	fi
 
-dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
-	/bin/rm -rf $(DCOMP_RT)
-	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA_COMMAND) -Xmx2600m daikon.dcomp.BuildJDK --no-primitives $(DCOMP_RT)
-	@if test -f $(DCOMP_RT)/META-INF/MANIFEST.MF; then \
-	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
-	else \
-	  rm $(DCOMP_RT)/java/lang/invoke/VarHandle*Field*.class; \
-	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
-	fi
-
 # Install the local version of the dyncomp specific rt.jar
 install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
 	cp dcomp_rt.jar $(pag)/software/arch/common/pkg/DynComp/
