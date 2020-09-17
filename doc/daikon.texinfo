@@ -4082,13 +4082,6 @@ This option can be specified multiple times, any may be used in
 conjunction with @option{--ppt-select-pattern}.  If a program point
 matches both a select pattern and an omit pattern, it is omitted.
 
-@item --no-primitives
-Don't track Java primitive values (of type @code{boolean}, @code{int},
-@code{long}, etc.).  When this switch is on, DynComp only tracks
-the comparability of object references; primitive values are
-ignored.  Using this switch can greatly improve DynComp's run time if
-you are not interested in primitive values.
-
 @item --rt-file=@var{jdk-jar-file}
 Specifies the location of the instrumented JDK (see @ref{Instrumenting
 the JDK with DynComp}).  This option is rarely necessary, because

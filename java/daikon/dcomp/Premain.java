@@ -210,25 +210,6 @@ public class Premain {
       }
       BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));
 
-      // Verify that the current no-primitives flag setting matches the setting used to
-      // generate dcomp_rt.jar (via the BuildJDK tool).
-      String noPrimitivesLine = reader.readLine();
-      if (noPrimitivesLine == null) {
-        System.err.println("jdk_classes.txt is an empty file.");
-        System.exit(1);
-      }
-      noPrimitivesLine = noPrimitivesLine.trim();
-      if (!noPrimitivesLine.startsWith("no_primitives: ")) {
-        System.err.println("First line of jdk_classes.txt does not contain no_primitives flag.");
-        System.exit(1);
-      }
-      if (DynComp.no_primitives != noPrimitivesLine.equalsIgnoreCase("no_primitives: true")) {
-        System.err.println(
-            "no-primitives flag does not match setting used to generate dcomp_rt.jar.");
-        System.exit(1);
-      }
-
-      // Read in the list of pre-instrumented classes
       while (true) {
         String line = reader.readLine();
         if (line == null) {
@@ -393,11 +374,7 @@ public class Premain {
         }
         PrintWriter compare_out = open(DynComp.comparability_file);
         long startTime = System.nanoTime();
-        if (DynComp.no_primitives) {
-          DCRuntime.print_all_comparable_refs_only(compare_out);
-        } else {
-          DCRuntime.print_all_comparable(compare_out);
-        }
+        DCRuntime.print_all_comparable(compare_out);
         compare_out.close();
         if (DynComp.verbose) {
           long duration = System.nanoTime() - startTime;

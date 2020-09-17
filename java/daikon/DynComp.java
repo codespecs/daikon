@@ -67,10 +67,6 @@ public class DynComp {
   @Option("Ignore program points matching the regex")
   public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
-  /** Do not track Java primitive values (of type boolean, int, long, etc.). */
-  @Option("Don't track primitives")
-  public static boolean no_primitives = false;
-
   /** Specifies the location of the instrumented JDK. */
   @Option("jar file containing an instrumented JDK")
   public static @Nullable File rt_file = null;

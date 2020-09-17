@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -771,14 +770,6 @@ public final class DCRuntime {
   }
 
   /**
-   * Used when we are only interested in references. We don't use the tag stack, so nothing needs to
-   * be done here. (Reference comparability only.)
-   */
-  public static void normal_exit_refs_only() {
-    if (debug) System.out.printf("Normal exit refs_only%n");
-  }
-
-  /**
    * Clean up the tag stack on an exception exit from a method. Pops items off of the tag stack
    * until the method marker is found.
    *
@@ -806,20 +797,11 @@ public final class DCRuntime {
     System.out.printf("Method marker not found in exception exit%n");
   }
 
-  /**
-   * Clean up the tag stack on an exception exit from a method. Pops items off of the tag stack
-   * until the method marker is found. (Reference comparability only.)
-   */
-  public static void exception_exit_refs_only() {
-    if (debug) System.out.printf("Exception exit refs_only from %s%n", caller_name());
-  }
-
   /** Cleans up the tag stack when an exception is thrown. */
   public static void throw_op() {
     if (debug) {
       System.out.printf("In throw_op%n");
     }
-
     ThreadData td = thread_to_data.get(Thread.currentThread());
     while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
@@ -1172,65 +1154,6 @@ public final class DCRuntime {
   }
 
   /**
-   * Called when a user method is entered. Any daikon variables whose current values are comparable
-   * are marked as comparable. (Reference comparability only.)
-   *
-   * @param obj value of 'this', or null if the method is static
-   * @param mi_index index into the list of all methods (methods)
-   * @param args array of the arguments to the method
-   */
-  public static void enter_refs_only(@Nullable Object obj, int mi_index, Object[] args) {
-
-    // Don't be recursive
-    if (in_enter_exit) {
-      return;
-    }
-    in_enter_exit = true;
-
-    if (debug) {
-      Throwable stack = new Throwable("enter_refs_only");
-      StackTraceElement[] ste_arr = stack.getStackTrace();
-      StackTraceElement ste = ste_arr[1];
-      if (ignore_toString && ste.getMethodName().equals("toString")) {
-        in_enter_exit = false;
-        return;
-      }
-      System.out.printf("%s.%s():::ENTER%n%n", ste.getClassName(), ste.getMethodName());
-
-      System.out.printf("this = '%s', mi = %s%n", obj_str(obj), methods.get(mi_index));
-      System.out.printf("args: ");
-      for (Object arg : args) {
-        System.out.printf("%s ", obj_str(arg));
-      }
-      System.out.println();
-      System.out.println();
-    }
-
-    MethodInfo mi = methods.get(mi_index);
-    mi.call_cnt++;
-    ClassInfo ci = mi.class_info;
-    if (ci.clazz == null) {
-      ci.initViaReflection();
-      all_classes.add(ci);
-      // Moved to DCInstrument.instrument()
-      // daikon.chicory.Runtime.all_classes.add (ci);
-      merge_dv.log("initializing traversal for %s%n", ci);
-      ci.init_traversal(depth);
-    }
-    if (mi.traversalEnter == null) {
-      mi.init_traversal(depth);
-    }
-
-    // Merge comparability information for the Daikon variables
-    merge_dv.log("processing method %s:::ENTER%n", mi);
-    merge_dv.indent();
-    process_all_vars_refs_only(mi, mi.traversalEnter, /*tag_frame, */ obj, args, null);
-    merge_dv.exdent();
-
-    in_enter_exit = false;
-  }
-
-  /**
    * Called when a user method exits. Any daikon variables whose current values are comparable are
    * marked as comparable.
    *
@@ -1279,55 +1202,6 @@ public final class DCRuntime {
     merge_dv.log("processing method %s:::EXIT%n", mi);
     merge_dv.indent();
     process_all_vars(mi, mi.traversalExit, tag_frame, obj, args, ret_val);
-    merge_dv.exdent();
-
-    in_enter_exit = false;
-  }
-
-  /**
-   * Called when a user method exits. Any daikon variables whose current values are comparable are
-   * marked as comparable. (Reference comparability only.)
-   *
-   * @param obj value of 'this', or null if the method is static
-   * @param mi_index index into the list of all methods (methods)
-   * @param args array of the arguments to the method
-   * @param ret_val value returned by the method, or null if the method is a constructor or void
-   * @param exit_line_number the source line number of this exit point
-   */
-  public static void exit_refs_only(
-      @Nullable Object obj, int mi_index, Object[] args, Object ret_val, int exit_line_number) {
-
-    // Don't be recursive
-    if (in_enter_exit) {
-      return;
-    }
-    in_enter_exit = true;
-
-    if (debug) {
-      Throwable stack = new Throwable("exit_refs_only");
-      StackTraceElement[] ste_arr = stack.getStackTrace();
-      StackTraceElement ste = ste_arr[1];
-      if (ignore_toString && ste.getMethodName().equals("toString")) {
-        in_enter_exit = false;
-        return;
-      }
-      System.out.printf("%s.%s():::EXIT%n%n", ste.getClassName(), ste.getMethodName());
-
-      System.out.printf("this = '%s', mi = %s%n", obj_str(obj), methods.get(mi_index));
-      System.out.printf("args: ");
-      for (Object arg : args) {
-        System.out.printf("%s ", obj_str(arg));
-      }
-      System.out.println();
-      System.out.printf("ret_val = %s, exit_line_number= %d%n", ret_val, exit_line_number);
-    }
-
-    MethodInfo mi = methods.get(mi_index);
-
-    // Merge comparability information for the Daikon variables
-    merge_dv.log("processing method %s:::EXIT%n", mi);
-    merge_dv.indent();
-    process_all_vars_refs_only(mi, mi.traversalExit, /*tag_frame,*/ obj, args, ret_val);
     merge_dv.exdent();
 
     in_enter_exit = false;
@@ -1385,65 +1259,6 @@ public final class DCRuntime {
   }
 
   /**
-   * Process all of the daikon variables in the tree starting at root. If the values referenced by
-   * those variables are comparable mark the variables as comparable. (Reference comparability
-   * only.)
-   */
-  public static void process_all_vars_refs_only(
-      MethodInfo mi,
-      RootInfo root,
-      /*Object[] tag_frame,*/ Object obj,
-      Object[] args,
-      Object ret_val) {
-
-    debug_timing.log("process_all_vars_refs_only for %s%n", mi);
-
-    merge_dv.log("this: %s%n", obj);
-    merge_dv.log("arguments: %s%n", Arrays.toString(args));
-
-    // Map from an Object to the Daikon variable that currently holds
-    // that object.
-    IdentityHashMap<Object, DaikonVariableInfo> varmap =
-        new IdentityHashMap<Object, DaikonVariableInfo>(2048);
-
-    for (DaikonVariableInfo dv : root.children) {
-      if (dv instanceof ThisObjInfo) {
-        merge_comparability_refs_only(varmap, null, obj, dv);
-      } else if (dv instanceof ParameterInfo) {
-        ParameterInfo pi = (ParameterInfo) dv;
-        Object p = args[pi.getArgNum()];
-
-        // If variable is primitive, ignore it
-        if (!pi.isPrimitive()) merge_comparability_refs_only(varmap, null, p, pi);
-      } else if (dv instanceof ReturnInfo) {
-        // ReturnInfo ri = (ReturnInfo) dv;
-
-        // If variable is primitive, ignore it
-        if (!mi.return_type().isPrimitive()) {
-          merge_comparability_refs_only(varmap, null, ret_val, dv);
-        }
-      } else if (dv instanceof FieldInfo) {
-        FieldInfo fi = (FieldInfo) dv;
-        assert fi.isStatic() : "non static field at root " + dv;
-
-        // If variable is primitive, ignore it
-        if (!fi.isPrimitive()) merge_comparability_refs_only(varmap, null, null, dv);
-      } else if (dv instanceof StaticObjInfo) {
-        for (DaikonVariableInfo static_dv : dv.children) {
-          FieldInfo fi = (FieldInfo) static_dv;
-          assert fi.isStatic() : "non static field at root " + dv;
-
-          // If variable is primitive, ignore it
-          if (!fi.isPrimitive()) merge_comparability_refs_only(varmap, null, null, static_dv);
-        }
-      } else {
-        throw new Error("unexpected node " + dv);
-      }
-    }
-    debug_timing.log("exit process_all_vars for %s%n%n", mi);
-  }
-
-  /**
    * Returns the tag for the specified field. If that field is an array, a list of tags will be
    * returned.
    */
@@ -1466,42 +1281,6 @@ public final class DCRuntime {
           fi.field_tag = new PrimitiveArrayTag(fi);
         } else if (fi.isPrimitive()) {
           fi.field_tag = new PrimitiveTag(fi);
-        } else {
-          fi.field_tag = new ReferenceTag(fi);
-        }
-      }
-    }
-
-    // get the tag
-    return fi.field_tag.get_tag(parent, obj);
-  }
-
-  /**
-   * Returns the tag for the specified field. If that field is an array, a list of tags will be
-   * returned. (Reference comparability only.)
-   */
-  static Object get_field_tag_refs_only(FieldInfo fi, Object parent, Object obj) {
-
-    // Initialize the code that gets the tag for various field types
-    if (fi.field_tag == null) {
-      if (fi.isStatic()) {
-        if (fi.isPrimitive()) {
-          // a static final primitive is a constant and there is no tag accessor
-          if (fi.isFinal()) {
-            return null;
-          }
-          //          fi.field_tag = new StaticPrimitiveTag (fi);
-          throw new RuntimeException("fi should not be primitive!");
-        } else {
-          fi.field_tag = new StaticReferenceTag(fi);
-        }
-      } else { // not static
-        if (fi.isPrimitive() && fi.isArray()) {
-          //          fi.field_tag = new PrimitiveArrayTag (fi);
-          throw new RuntimeException("fi should not be primitive!");
-        } else if (fi.isPrimitive()) {
-          //          fi.field_tag = new PrimitiveTag (fi);
-          throw new RuntimeException("fi should not be primitive!");
         } else {
           fi.field_tag = new ReferenceTag(fi);
         }
@@ -1683,159 +1462,6 @@ public final class DCRuntime {
     }
   }
 
-  /**
-   * Merges the comparability of the daikon variable dv and its children whose current values are
-   * comparable. (Reference comparability only.)
-   *
-   * @param varmap map from value set leaders to the first daikon variable encountered with that
-   *     leader. Whenever a second daikon variable is encountered whose value has the same leader,
-   *     that daikon variable is merged with the first daikon variable.
-   * @param parent value of dv's parent
-   * @param obj value of dv
-   * @param dv DaikonVariable to process
-   */
-  static void merge_comparability_refs_only(
-      IdentityHashMap<Object, DaikonVariableInfo> varmap,
-      Object parent,
-      Object obj,
-      DaikonVariableInfo dv) {
-
-    // merge_dv.enabled = dv.getName().contains ("mtfFreq");
-
-    long start_millis = 0;
-    if (debug_timing.enabled()) start_millis = System.currentTimeMillis();
-    if (merge_dv.enabled()) {
-      merge_dv.log("merge_comparability: checking var %s = '%s' %n", dv, obj_str(obj));
-    }
-
-    // Ignore ClassInfo and StringInfo variables.  These are not real
-    // variables in the program
-    if ((dv instanceof DaikonClassInfo) || (dv instanceof StringInfo)) {
-      debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-      return;
-    }
-
-    // Get the tag for this object.  For non-primitives this is normally the
-    // object itself.  For static fields, the object is not passed in, but is
-    // obtained via reflection.
-    Object tag = obj;
-    if (dv instanceof FieldInfo) {
-      tag = get_field_tag_refs_only((FieldInfo) dv, parent, obj);
-    }
-
-    if (!dv.declShouldPrint()) {
-      // do nothing
-    } else if (dv.isArray() && (tag instanceof List<?>)) {
-      @SuppressWarnings("unchecked")
-      List<Object> elements = (List<Object>) tag;
-      if (debug_timing.enabled()) debug_timing.log("  ArrayInfo %d elements", elements.size());
-      for (Object atag : elements) {
-        // Ignore null and nonsensical tags.  There is no reason to process
-        // their children, because they can't have any with reasonable values
-        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) {
-          continue;
-        }
-
-        // Look up this object.  If it already is associated with a
-        // DaikonVariable merge those variables.  Otherwise, add it to
-        // the map
-        Object leader = TagEntry.find(atag);
-        if (merge_dv.enabled()) {
-          merge_dv.log("Leader for atag '%s' is '%s'%n", obj_str(atag), obj_str(leader));
-        }
-        DaikonVariableInfo current = varmap.get(leader);
-        merge_dv.log("Daikon variable for leader = %s%n", current);
-        if (current != null) {
-          merge_dv.log("**Merging %s and %s%n", current, dv);
-          TagEntry.union(current, dv);
-        } else {
-          varmap.put(leader, dv);
-        }
-      }
-    } else if (dv.isArray()) {
-      if (tag == null) {
-        debug_timing.log(
-            "  no array tags for Variable %s : %d msecs%n",
-            dv, System.currentTimeMillis() - start_millis);
-        return;
-      }
-      Object[] elements = (Object[]) tag;
-      if (debug_timing.enabled()) debug_timing.log("  Prim ArrayInfo %d elements", elements.length);
-      Object prev_tag = null;
-      for (Object atag : elements) {
-        // Ignore null and nonsensical tags.  There is no reason to process
-        // their children, because they can't have any with reasonable values
-        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) {
-          continue;
-        }
-
-        // No need to handle the same tag twice
-        if (prev_tag == atag) {
-          continue;
-        }
-        prev_tag = atag;
-
-        // Look up this object.  If it already is associated with a
-        // DaikonVariable merge those variables.  Otherwise, add it to
-        // the map
-        Object leader = TagEntry.find(atag);
-        if (merge_dv.enabled()) {
-          merge_dv.log("Leader for atag '%s' is '%s'%n", obj_str(atag), obj_str(leader));
-        }
-        DaikonVariableInfo current = varmap.get(leader);
-        merge_dv.log("Daikon variable for leader = %s%n", current);
-        if (current != null) {
-          merge_dv.log("**Merging %s and %s%n", current, dv);
-          TagEntry.union(current, dv);
-        } else {
-          varmap.put(leader, dv);
-        }
-      }
-    } else {
-      // Ignore null and nonsensical tags.  There is no reason to process
-      // their children, because they can't have any with reasonable values
-      if ((tag == null) || (tag == nonsensical) || (tag == nonsensical_list)) {
-        debug_timing.log(
-            "  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-        return;
-      }
-
-      // Look up this object.  If it already is associated with a
-      // DaikonVariable merge those variables.  Otherwise, add it to
-      // the map
-      Object leader = TagEntry.find(tag);
-      if (merge_dv.enabled()) {
-        merge_dv.log("Leader for tag '%s' is '%s'%n", obj_str(tag), obj_str(leader));
-      }
-      DaikonVariableInfo current = varmap.get(leader);
-      assert leader != null : "null leader for " + obj_str(tag);
-      merge_dv.log("Daikon variable for leader = %s%n", current);
-      if (current != null) {
-        merge_dv.log("**Merging variable '%s' and '%s'%n", current, dv);
-        TagEntry.union(current, dv);
-      } else {
-        varmap.put(leader, dv);
-      }
-    }
-
-    debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-
-    // Process all of the children
-    for (DaikonVariableInfo child : dv) {
-      Object child_obj;
-      if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
-        // System.out.printf("child array type %s = %s%n", ai, ai.getType());
-        Object[] arr_tags = field_map.get(tag);
-        // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
-        // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
-        child_obj = arr_tags;
-      } else { // not a primitive array
-        child_obj = child.getMyValFromParentVal(tag);
-      }
-      merge_comparability(varmap, tag, child_obj, child);
-    }
-  }
-
   /** Dumps out comparability information for all classes that were processed. */
   public static void print_all_comparable(PrintWriter ps) {
 
@@ -1851,28 +1477,6 @@ public final class DCRuntime {
         }
         ps.println();
         print_comparable(ps, mi);
-      }
-    }
-  }
-
-  /**
-   * Dumps out comparability information for all classes that were processed. (Reference
-   * comparability only.)
-   */
-  public static void print_all_comparable_refs_only(PrintWriter ps) {
-
-    for (ClassInfo ci : all_classes) {
-      merge_class_comparability(ci);
-      for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) {
-          continue;
-        }
-        // skip our added method
-        if (mi.method_name.equals("equals_dcomp_instrumented")) {
-          continue;
-        }
-        ps.println();
-        print_comparable_refs_only(ps, mi);
       }
     }
   }
@@ -2291,58 +1895,6 @@ public final class DCRuntime {
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
-          continue;
-        }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
-        // To see "daikon.chicory.FooInfo:variable", change true to false
-        ps.printf("  [%d] %s%n", stuff.size(), stuff);
-      }
-    }
-  }
-
-  /**
-   * Prints comparability information for the enter and exit points of the specified method. By
-   * default, outputs to {@code foo.txt-cset}. (Reference comparability only.)
-   */
-  /* TO DO: Find a way to make this work correctly without using normal
-   * get_comparable.
-   */
-  public static void print_comparable_refs_only(PrintWriter ps, MethodInfo mi) {
-
-    List<DVSet> l = get_comparable(mi.traversalEnter);
-    ps.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
-    if (l == null) {
-      ps.printf("  not called%n");
-    } else {
-      for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
-          continue;
-        }
-        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) set.get(0)).isPrimitive()) {
-          continue;
-        }
-        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) set.get(0)).isPrimitive()) {
-          continue;
-        }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
-        // To see "daikon.chicory.FooInfo:variable", change true to false
-        ps.printf("  [%d] %s%n", stuff.size(), stuff);
-      }
-    }
-
-    l = get_comparable(mi.traversalExit);
-    ps.printf("Variable sets for %s exit%n", clean_decl_name(mi.toString()));
-    if (l == null) {
-      ps.printf("  not called%n");
-    } else {
-      for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
-          continue;
-        }
-        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) set.get(0)).isPrimitive()) {
-          continue;
-        }
-        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) set.get(0)).isPrimitive()) {
           continue;
         }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);

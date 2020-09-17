@@ -181,11 +181,7 @@ public class Instrument implements ClassFileTransformer {
       // Transform the file
       DCInstrument dci = new DCInstrument(c, in_jdk, loader);
       JavaClass njc;
-      if (DynComp.no_primitives) {
-        njc = dci.instrument_refs_only();
-      } else {
-        njc = dci.instrument();
-      }
+      njc = dci.instrument();
 
       if (njc == null) {
         if (DynComp.verbose) System.out.printf("Didn't instrument %s%n", c.getClassName());
