@@ -1462,7 +1462,11 @@ public final class DCRuntime {
     }
   }
 
-  /** Dumps out comparability information for all classes that were processed. */
+  /**
+   * Dumps out comparability information for all classes that were processed.
+   *
+   * @param ps PrintWriter to write on
+   */
   public static void print_all_comparable(PrintWriter ps) {
 
     for (ClassInfo ci : all_classes) {

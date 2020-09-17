@@ -1113,19 +1113,36 @@ public class DCInstrument extends InstructionListUtils {
     // print_stack_map_table ("add_create_tag_frame");
   }
 
-  /** Adds the call to DCRuntime.enter to the beginning of the method. */
+  /*
+   * Adds the call to DCRuntime.enter to the beginning of the method.
+   *
+   * @param mg method to modify
+   * @param mi MethodInfo for method
+   * @param method_info_index index for MethodInfo
+   */
   public void add_enter(MethodGen mg, MethodInfo mi, int method_info_index) {
     InstructionList il = mg.getInstructionList();
     replace_instructions(
         mg, il, insertion_placeholder, call_enter_exit(mg, method_info_index, "enter", -1));
   }
 
-  /** Creates the local used to store the tag frame and returns it. */
+  /**
+   * Creates the local used to store the tag frame and returns it.
+   *
+   * @param mg method to modify
+   * @return LocalVariableGen for the tag_frame local
+   */
   LocalVariableGen create_tag_frame_local(MethodGen mg) {
     return create_method_scope_local(mg, "dcomp_tag_frame$5a", object_arr);
   }
 
-  /** Creates code to create the tag frame for this method and store it in tag_frame_local. */
+  /**
+   * Creates code to create the tag frame for this method and store it in tag_frame_local.
+   *
+   * @param mg method to modify
+   * @return tag_frame_local LocalVariableGen for the tag_frame local
+   * @return InstructionList for tag_frame setup code
+   */
   InstructionList create_tag_frame(MethodGen mg, LocalVariableGen tag_frame_local) {
 
     Type arg_types[] = mg.getArgumentTypes();
@@ -1176,6 +1193,12 @@ public class DCInstrument extends InstructionListUtils {
    * Pushes the object, method info index, parameters, and return value on the stack and calls the
    * specified Method (normally enter or exit) in DCRuntime. The parameters are passed as an array
    * of objects.
+   *
+   * @param mg method to modify
+   * @param method_info_index index for MethodInfo
+   * @param method_name "enter" or "exit"
+   * @param line source line number if type is exit
+   * @return InstructionList for the enter or exit code
    */
   InstructionList call_enter_exit(
       MethodGen mg, int method_info_index, String method_name, int line) {
