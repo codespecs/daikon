@@ -1113,7 +1113,7 @@ public class DCInstrument extends InstructionListUtils {
     // print_stack_map_table ("add_create_tag_frame");
   }
 
-  /*
+  /**
    * Adds the call to DCRuntime.enter to the beginning of the method.
    *
    * @param mg method to modify
@@ -1140,7 +1140,7 @@ public class DCInstrument extends InstructionListUtils {
    * Creates code to create the tag frame for this method and store it in tag_frame_local.
    *
    * @param mg method to modify
-   * @return tag_frame_local LocalVariableGen for the tag_frame local
+   * @param tag_frame_local LocalVariableGen for the tag_frame local
    * @return InstructionList for tag_frame setup code
    */
   InstructionList create_tag_frame(MethodGen mg, LocalVariableGen tag_frame_local) {

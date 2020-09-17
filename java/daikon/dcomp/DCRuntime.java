@@ -1485,6 +1485,11 @@ public final class DCRuntime {
     }
   }
 
+  /**
+   * Dumps out comparability trace information for all classes that were processed.
+   *
+   * @param ps PrintWriter to write on
+   */
   public static void trace_all_comparable(PrintWriter ps) {
 
     for (ClassInfo ci : all_classes) {
@@ -1502,6 +1507,11 @@ public final class DCRuntime {
     }
   }
 
+  /**
+   * Dumps out .decl file information for all classes that were processed.
+   *
+   * @param ps PrintWriter to write on
+   */
   public static void print_decl_file(PrintWriter ps) {
 
     // Write the file header
@@ -1908,6 +1918,12 @@ public final class DCRuntime {
     }
   }
 
+  /**
+   * Dumps out comparability trace information for a single method.
+   *
+   * @param ps PrintWriter to write on
+   * @param mi MethodInfo for method to process
+   */
   public static void print_comparable_traced(PrintWriter ps, MethodInfo mi) {
     List<DVSet> l = get_comparable(mi.traversalEnter);
     Map<DaikonVariableInfo, DVSet> t = get_comparable_traced(mi.traversalEnter);
