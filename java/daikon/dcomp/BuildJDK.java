@@ -174,7 +174,6 @@ public class BuildJDK {
       System.out.printf("Writing a list of class names to %s%n", jdk_classes_file);
       // Class names are written in internal form.
       try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
-        pw.println("no_primitives: " + DynComp.no_primitives);
         for (String classFileName : class_stream_map.keySet()) {
           pw.println(classFileName.replace(".class", ""));
         }
@@ -464,11 +463,7 @@ public class BuildJDK {
     if (verbose) System.out.printf("processing target %s%n", classFileName);
     DCInstrument dci = new DCInstrument(jc, true, null);
     JavaClass inst_jc;
-    if (DynComp.no_primitives) {
-      inst_jc = dci.instrument_jdk_refs_only();
-    } else {
-      inst_jc = dci.instrument_jdk();
-    }
+    inst_jc = dci.instrument_jdk();
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classFileName);
     File dir;
