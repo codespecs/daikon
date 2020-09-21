@@ -60,16 +60,7 @@
 
 @sp 1
 
-@ifset final
-@c FINAL version
-@c Print out the Daikon version 5.8.5 release date
 @center July 22, 2020
-@end ifset
-
-@ifclear final
-@c DRAFT version
-@center DRAFT Version @today{}
-@end ifclear
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -90,11 +81,6 @@ Copyright @copyright{} 1998-2014
 @c @oddheading Section @thissectionnum @| @thissectionname @| @thispage
 @c @oddheading Chapter @thischapternum: @thischaptername @| @| @thispage
 @c @evenheading @thispage @| @| Section @thissectionnum: @thissectionname
-
-@ifclear final
-@c DRAFT version
-@everyfooting DRAFT @| @| @today{}
-@end ifclear
 
 @html
 @image{images/daikon-logo}
