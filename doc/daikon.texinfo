@@ -8117,22 +8117,31 @@ Daikon checks, and thereby speeds up Daikon.
 @node       Bigger traces cause invariants to appear
 @subsection Bigger traces cause invariants to appear
 
-Suppose that you run Daikon twice.  The first time, you supply Daikon
-with traces @i{T}.  The second time you supply Daikon with traces
-@i{T+T@quoteright{}}:  either more files, or file(s) that are supersets of the
-original one(s).  The second Daikon execution may report fewer
-invariants, more invariants, or a mix.
+Suppose that you run Daikon twice.  The first time, you supply Daikon with
+traces @i{T}.  The second time, you supply Daikon with more traces
+@i{T+T@quoteright{}} for the same program points.  The second Daikon
+execution may report the same invariants, fewer invariants, more
+invariants, or a mix.
+
+The second execution may report @strong{the same} invariants if the
+additional samples in @i{T@quoteright{}} do not add any more information than
+those in @i{T},
 
 The second execution may report @strong{fewer} invariants, because the
 additional data has eliminated overfitting (false positives).  There may
 have been some accidental property of the shorter executions that is not
 true in the longer ones.
 
-Even though fewer invariants are true on the second execution, Daikon may
-report invariants that it did not report on the first execution.
-The invariants were true on the first execution, but were not reported
-by Daikon.  @ref{True invariants are not reported due to output filters} describes why this
-might happen.
+The second execution may report @strong{more} invariants, because the first
+execution did not report some invariants that were true.  @ref{True
+invariants are not reported due to output filters} describes reasons that
+Daikon might not report this invariants that are true --- for example,
+because they were not statistically justified.
+
+Another reason that the second execution might report more invariants is
+if @i{T+T@quoteright{}} contains samples for program points that were not
+in @i{T}.  The first execution will not report any facts about program
+points that were not executed.
 
 
 @node    Large dtrace files
