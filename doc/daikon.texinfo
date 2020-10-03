@@ -70,7 +70,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2014
+Copyright @copyright{} 1998-2020
 @end titlepage
 
 @c set document heading/footing style
@@ -8697,9 +8697,13 @@ Groups.
 
 @cindex license
 
-Copyright @copyright{} 1998-2008 Massachusetts Institute of Technology
+@c Copyright @copyright{} 1998-2000 Michael Ernst
 
-Copyright @copyright{} 2008-2014 University of Washington
+@c Copyright @copyright{} 1998-2008 Massachusetts Institute of Technology
+
+@c Copyright @copyright{} 2008-2020 University of Washington
+
+Copyright @copyright{} 1998-2020
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the

@@ -498,9 +498,7 @@ public final class Daikon {
   static String usage =
       UtilPlume.joinLines(
           release_string,
-          "Daikon invariant detector, copyright 1998-2018",
-          // " by Michael Ernst <mernst@cs.washington.edu>",
-          "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
+          // "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
           // "For licensing information, see the License section of the manual.",
           "Usage:",
           "    java daikon.Daikon [flags...] files...",
