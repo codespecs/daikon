@@ -2116,7 +2116,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
    * @return superclass name of classname or null if there is an error
    */
-  String getSuperclassName(@ClassGetName String classname) {
+  String getSuperclassName(String classname) {
     JavaClass jc = findJavaClass(classname);
     if (jc != null) {
       return jc.getSuperclassName();
@@ -2136,7 +2136,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
    * @return JavaClass of the corresponding classname or null
    */
-  JavaClass findJavaClass(@ClassGetName String classname) {
+  JavaClass findJavaClass(String classname) {
     URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
     if (class_url != null) {
       try {
