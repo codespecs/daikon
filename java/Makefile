@@ -785,7 +785,7 @@ endif
 # JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
 CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -XDignore.symbol.file -Xlint:deprecation -proc:only -processorpath ${CHECKERFRAMEWORK_JAR} ${JAVACHECK_EXTRA_ARGS}
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
-  CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC} -Xbootclasspath/p:${CHECKERFRAMEWORK_JAR_DIR}/jdk8.jar
+  CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC}
 else
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
 endif
