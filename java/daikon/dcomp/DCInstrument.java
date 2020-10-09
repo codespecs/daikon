@@ -18,8 +18,10 @@ import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -442,21 +444,68 @@ public class DCInstrument extends InstructionListUtils {
 
     boolean junit_test_class = false;
     if (junit_state == JUnitState.TEST_DISCOVERY) {
-      if (!classname.startsWith("org.junit") && !classname.startsWith("junit")) {
-        junit_test_class = true;
-        junit_test_set.add(classname);
-        String super_class = gen.getSuperclassName();
-        // If a junit test case has a super class that is not junit.framework.TestCase
-        // then the super class must also be a test case.
-        // (Test below is overly strong to be safe.)
-        // TODO: do we need to recurse?
-        if (!super_class.startsWith("org.junit")
-            && !super_class.startsWith("junit")
-            && !super_class.equals("java.lang.Object")) {
-          junit_test_set.add(super_class);
+      // We have a possible JUnit test class.  We need to verify by
+      // one of two methods.  Either the class is a subclass of
+      // junit.framework.TestCase or one of its methods has a
+      // RuntimeVisibleAnnotation of org/junit/Test.
+      Deque<String> classnameStack = new ArrayDeque<>();
+      String super_class;
+      String this_class = classname;
+      while (true) {
+        super_class = getSuperclassName(this_class);
+        if (super_class == null) {
+          // something has gone wrong
+          break;
         }
-        if (DynComp.verbose) {
+        // debug code
+        // System.out.printf("this_class: %s%n", this_class);
+        // System.out.printf("super_class: %s%n", super_class);
+        if (super_class.equals("junit.framework.TestCase")) {
+          // This is a junit test class and so are the
+          // elements of classnameStack.
+          junit_test_class = true;
+          junit_test_set.add(this_class);
+          while (!classnameStack.isEmpty()) {
+            junit_test_set.add(classnameStack.pop());
+          }
+          break;
+        } else if (super_class.equals("java.lang.Object")) {
+          // We're done; not a junit test class.
+          // Ignore items on classnameStack.
+          break;
+        }
+        // Recurse and check the super_class.
+        classnameStack.push(this_class);
+        this_class = super_class;
+      }
+
+      if (!junit_test_class) {
+        // need to check for junit Test annotation on a method
+        searchloop:
+        for (Method m : gen.getMethods()) {
+          for (final Attribute attribute : m.getAttributes()) {
+            if (attribute instanceof RuntimeVisibleAnnotations) {
+              // debug code
+              // System.out.printf("attribute: %s%n", attribute.toString());
+              for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
+                // debug code
+                // System.out.printf("item: %s%n", item.toString());
+                if (item.toString().endsWith("org/junit/Test;")) {
+                  junit_test_class = true;
+                  junit_test_set.add(this_class);
+                  break searchloop;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (DynComp.verbose) {
+        if (junit_test_class) {
           System.out.printf("JUnit test class: %s%n", classname);
+        } else {
+          System.out.printf("Not a JUnit test class: %s%n", classname);
         }
       }
     }
@@ -1767,6 +1816,7 @@ public class DCInstrument extends InstructionListUtils {
       callee_instrumented = callee_instrumented(classname, method_name);
 
       // debug code
+      // System.out.printf("callee_instrumented: %s%n", callee_instrumented);
       // System.out.printf("invoke host: %s%n", gen.getClassName() + "." + mgen.getName());
       // System.out.printf("invoke targ: %s%n", classname + "." + method_name);
 
@@ -1811,50 +1861,25 @@ public class DCInstrument extends InstructionListUtils {
         Integer access = class_access_map.get(classname);
         if (access == null) {
           // We have not seen this class before. Check to see if the target class is
-          // an Annotation or a FunctionalInterface. Note we cannot use classForName
-          // to inspect the class as this might trigger a recursive call to Instrument
-          // which would not work at this point.
-          URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
-          if (class_url != null) {
-            try {
-              InputStream inputStream = class_url.openStream();
-              if (inputStream != null) {
-                // Parse the bytes of the classfile, die on any errors
-                ClassParser parser = new ClassParser(inputStream, classname + "<internal>");
-                JavaClass c = parser.parse();
-                access = c.getAccessFlags();
+          // an Annotation or a FunctionalInterface.
+          JavaClass c = findJavaClass(classname);
+          if (c != null) {
+            access = c.getAccessFlags();
 
-                // Now check for FunctionalInterface
-                for (final AnnotationEntry item : c.getAnnotationEntries()) {
-                  if (item.getAnnotationType().endsWith("FunctionalInterface;")) {
-                    access = Integer_ACC_ANNOTATION;
-                    // debug code
-                    // System.out.println(item.getAnnotationType());
-                    break;
-                  }
-                }
-                // debug code
-                // if ((access.intValue() & Const.ACC_ANNOTATION) != 0) {
-                //   System.out.printf(
-                //       "invoke interface host: %s%n", gen.getClassName() + "." + mgen.getName());
-                //   System.out.printf(
-                //       "invoke interface targ: %s%n", classname + "." + method_name);
-                //   System.out.printf("access flags: 0x%04X%n", access.intValue());
-                // }
-                class_access_map.put(classname, access);
-              } else {
-                // debug code
-                // System.out.printf("Unable to open stream: %s%n", class_url);
-                // We cannot open the .class file, better pretend it is an Annotation.
+            // Now check for FunctionalInterface
+            for (final AnnotationEntry item : c.getAnnotationEntries()) {
+              if (item.getAnnotationType().endsWith("FunctionalInterface;")) {
                 access = Integer_ACC_ANNOTATION;
+                // debug code
+                // System.out.println(item.getAnnotationType());
+                break;
               }
-            } catch (Throwable t) {
-              throw new Error("Unexpected error reading " + class_url, t);
             }
+            class_access_map.put(classname, access);
           } else {
+            // We cannot locate or read the .class file, better pretend it is an Annotation.
             // debug code
             // System.out.printf("Unable to locate class: %s%n", classname);
-            // We cannot find the class, better pretend it is an Annotation.
             access = Integer_ACC_ANNOTATION;
           }
         }
@@ -2006,6 +2031,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   boolean callee_instrumented(@ClassGetName String classname, String method_name) {
 
+    // debug code
     // System.out.printf("Checking callee instrumented on %s%n", classname);
 
     // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
@@ -2083,7 +2109,58 @@ public class DCInstrument extends InstructionListUtils {
     return false;
   }
 
-  /** Returns true if the specified method is Object.equals() */
+  /**
+   * Given a classname return it's superclass name. Note that BCEL reports that the superclass of
+   * 'java.lang.Object' is 'java.lang.Object' rather than saying there is no superclass.
+   *
+   * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
+   * @return superclass name of classname or null if there is an error
+   */
+  String getSuperclassName(String classname) {
+    JavaClass jc = findJavaClass(classname);
+    if (jc != null) {
+      return jc.getSuperclassName();
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * There are times when it is useful to inspect a class file other than the one we are currently
+   * instrumenting. Note we cannot use classForName to do this as it might trigger a recursive call
+   * to Instrument which would not work at this point.
+   *
+   * <p>Given a class name, we treat it as a system resource and try to open it as an input stream
+   * that we can pass to BCEL to read and convert to a JavaClass object.
+   *
+   * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
+   * @return JavaClass of the corresponding classname or null
+   */
+  JavaClass findJavaClass(String classname) {
+    URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
+    if (class_url != null) {
+      try {
+        InputStream inputStream = class_url.openStream();
+        if (inputStream != null) {
+          // Parse the bytes of the classfile, die on any errors
+          ClassParser parser = new ClassParser(inputStream, classname + "<internal>");
+          return parser.parse();
+        }
+      } catch (Throwable t) {
+        throw new Error("Unexpected error reading " + class_url, t);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Returns whether or not the method is Object.equals().
+   *
+   * @param method_name method to check
+   * @param ret_type return type of method
+   * @param args array of argument types to method
+   * @return true if method is Object.equals()
+   */
   @Pure
   boolean is_object_equals(String method_name, Type ret_type, Type[] args) {
     return (method_name.equals("equals")
