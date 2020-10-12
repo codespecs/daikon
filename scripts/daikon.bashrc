@@ -1,5 +1,5 @@
 ## daikon.bashrc
-## Daikon initialization file for Bourne shell (bash) users.
+## Daikon initialization file for bash users.
 
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
@@ -13,8 +13,7 @@ if [ "$(uname)" = "Darwin" ] ; then
 else
   export JAVA_HOME=${JAVA_HOME:-$(dirname $(dirname $(readlink -f $(which javac))))}
 fi
-INFERRED_JAVA_HOME=${JAVA_HOME:-$JAVA_HOME_FROM_JAVAC}
-if [ ! -d "$INFERRED_JAVA_HOME" ]; then
+if [ ! -d "$JAVA_HOME" ]; then
   echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
   return 2
 fi
@@ -52,8 +51,7 @@ if [ -z "$PLUMESCRIPTS" ]; then
   export PLUMESCRIPTS=${DAIKONDIR}/utils/plume-scripts
 fi
 
-JAVALIB_CLASSPATH=${INFERRED_JAVA_HOME}/jre/lib/rt.jar:${INFERRED_JAVA_HOME}/lib/tools.jar
-DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVALIB_CLASSPATH}
+DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${INFERRED_JAVA_HOME}/jre/lib/rt.jar:${INFERRED_JAVA_HOME}/lib/tools.jar
 # Avoid warnings about non-existent elements on classpath
 if [ -d ${DAIKONDIR}/java ]; then
   DAIKON_CLASSPATH=${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKON_CLASSPATH}
