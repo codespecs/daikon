@@ -320,13 +320,9 @@ public class Implication extends Joiner {
     String msg = (args.length == 0) ? format : String.format(format, args);
     @SuppressWarnings("nullness:method.invocation.invalid")
     String formatted = format();
-    return (right.log(
-        msg
-            + " [for implication "
-            + formatted
-            + " ("
-            + (orig_right == null ? "null" : orig_right.format())
-            + ")]"));
+    return right.log(
+        "%s [for implication %s (%s)]",
+        msg, formatted, (orig_right == null ? "null" : orig_right.format()));
   }
 
   @Override
