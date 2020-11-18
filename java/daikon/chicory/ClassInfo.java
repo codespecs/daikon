@@ -1,6 +1,5 @@
 package daikon.chicory;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,24 +121,6 @@ public class ClassInfo {
     // Match anything of the form: ____class_name.____(____
     // Where ____ corresponds to any sequence of characters
     return methodName.matches(".*" + Pattern.quote(class_name) + "\\..*\\(.*");
-  }
-
-  /** dumps all of the class info to the specified stream */
-  public void dump(PrintStream ps) {
-    ps.printf("ClassInfo for %s [%s]%n", class_name, clazz);
-    for (MethodInfo mi : method_infos) {
-      ps.printf("  method %s [%s]%n", mi.method_name, mi.member);
-      ps.printf("    arguments: ");
-      for (int ii = 0; ii < mi.arg_names.length; ii++) {
-        if (ii > 0) ps.printf(", ");
-        ps.printf("%s [%s] %s", mi.arg_type_strings[ii], mi.arg_types[ii], mi.arg_names[ii]);
-      }
-      ps.printf("%n    exits: ");
-      for (Integer exit_loc : mi.exit_locations) {
-        ps.printf("%s ", exit_loc);
-      }
-      ps.println();
-    }
   }
 
   /**

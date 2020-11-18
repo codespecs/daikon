@@ -4,6 +4,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
+import daikon.chicory.DeclWriter;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -411,6 +412,12 @@ public class Premain {
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
+      // Create DeclWriter so can share output code in Chicory.
+      DCRuntime.decl_writer = new DeclWriter(decl_fp);
+      DCRuntime.decl_writer.debug = DynComp.debug_decl_print;
+      // Create instance of DCRuntime to use for ICalcCompare callbacks.
+      DCRuntime.runtime_object = new DCRuntime();
+
       long startTime = System.nanoTime();
       DCRuntime.print_decl_file(decl_fp);
       decl_fp.close();
@@ -435,9 +442,6 @@ public class Premain {
   public static PrintWriter open(File filename) {
     try {
       return new PrintWriter(Files.newBufferedWriter(filename.toPath(), UTF_8));
-      // return new PrintWriter (filename);
-      // return new PrintStream (new BufferedWriter
-      //            (new Outpu32tStreamWriter (new FileOutputStream(filename))));
     } catch (Exception e) {
       throw new Error("Can't open " + filename, e);
     }

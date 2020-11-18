@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,9 +87,6 @@ public class Chicory {
 
   @Option("Print information about each ppt name as it is created")
   public static boolean debug_ppt_names = false;
-
-  @Option("Create the new declaration record format")
-  public static boolean new_decl_format = true;
 
   /**
    * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
@@ -545,28 +541,6 @@ public class Chicory {
     }
 
     return result;
-  }
-
-  public PrintWriter openFileInDirectory(String fileName, String dirName) {
-    PrintWriter outFile = null;
-    try {
-      if (dirName != null) {
-        File directory = new File(dirName);
-
-        // make the output directory if non-existent
-        if (!directory.exists()) directory.mkdir();
-      }
-
-      outFile = new PrintWriter(new File(dirName, fileName), UTF_8.name());
-    } catch (IOException e) {
-      if (outFile == null) {
-        throw new RuntimeException("This can't happen.");
-      }
-      outFile.close();
-
-      throw new Error("File creation of file " + fileName + " failed", e);
-    }
-    return outFile;
   }
 
   /** Returns elapsed time as a String since the start of the program. */
