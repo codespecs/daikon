@@ -16,6 +16,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  */
 public class DeclReader {
 
+  /** map from ppt name to corresponding DeclPpt. */
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
 
   /** Information about variables within a program point. */
@@ -34,12 +35,20 @@ public class DeclReader {
       this.index = index;
     }
 
-    /** Returns the variable's name. */
+    /**
+     * Returns the variable's name.
+     *
+     * @return string containing variable name
+     */
     public String get_name() {
       return name;
     }
 
-    /** Returns the comparability string from the decl file. */
+    /**
+     * Returns the comparability string from the decl file.
+     *
+     * @return string containing comparability value
+     */
     public String get_comparability() {
       return comparability;
     }
@@ -56,9 +65,12 @@ public class DeclReader {
    * ppt name and a list of the declared variables.
    */
   public static class DeclPpt {
+    /** program point name. */
     public String name;
+    /** map from variable name to corresponding DeclVarInfo. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
 
+    /** DeclPpt constructor. */
     public DeclPpt(String name) {
       this.name = name;
     }
@@ -153,6 +165,7 @@ public class DeclReader {
     }
   }
 
+  /** DeclReader constructor. */
   public DeclReader() {}
 
   /**

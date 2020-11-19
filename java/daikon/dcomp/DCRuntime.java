@@ -46,6 +46,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.dataflow.qual.Pure;
 
+/**
+ * Runtime support for DynComp, a comparability front end for Chicory. This class is a collection of
+ * methods; it should never be instantiated.
+ */
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
 public final class DCRuntime implements ICalcCompare {
 
@@ -1732,6 +1736,10 @@ public final class DCRuntime implements ICalcCompare {
   /**
    * Prints a decl ENTER/EXIT records with comparability. Returns the list of comparabile DVSets for
    * the exit.
+   *
+   * @param pw PrintWriter to write on
+   * @param mi MethodInfo for class
+   * @return the list of comparabile DVSets for the exit
    */
   public static List<DVSet> print_method(PrintWriter pw, MethodInfo mi) {
 
@@ -1781,8 +1789,11 @@ public final class DCRuntime implements ICalcCompare {
     return l;
   }
 
+  /** Map from array name to comparability for its indices (if any). */
   private static Map<String, Integer> arr_index_map;
+  /** Map from daikon variable to its comparability. */
   private static Map<DaikonVariableInfo, Integer> dv_comp_map;
+  /** Comparability value for a variable. */
   private static int base_comp;
 
   /**
@@ -1896,7 +1907,13 @@ public final class DCRuntime implements ICalcCompare {
     time_decl.exdent();
   }
 
-  // compare_ppt not used by DynComp
+  /**
+   * Callback method to calculate a comparability value.
+   *
+   * @param dv variable to calculate comparability for
+   * @param compare_ppt (not used)
+   * @return string containing comparability value
+   */
   public String calc_comparability(DaikonVariableInfo dv, DeclReader.DeclPpt compare_ppt) {
     int comp = dv_comp_map.get(dv);
     String comp_str = Integer.toString(comp);
@@ -1926,6 +1943,9 @@ public final class DCRuntime implements ICalcCompare {
   /**
    * Prints comparability information for the enter and exit points of the specified method. By
    * default, outputs to {@code foo.txt-cset}.
+   *
+   * @param pw PrintWriter to write on
+   * @param mi MethodInfo for class
    */
   /* TO DO: Find a way to make this work correctly without using normal
    * get_comparable.
@@ -2007,6 +2027,11 @@ public final class DCRuntime implements ICalcCompare {
    * Prints to [stream] the segment of the tree that starts at [node], interpreting [node] as
    * [depth] steps from the root. Requires a Map [tree] that represents a tree though key-value sets
    * of the form {@code <}parent, set of children{@code >}.
+   *
+   * @param pw PrintWriter to write on
+   * @param tree map parents to children
+   * @param node starting point of tree to print
+   * @param depth distance from node to root of tree
    */
   static void print_tree(
       PrintWriter pw, Map<DaikonVariableInfo, DVSet> tree, DaikonVariableInfo node, int depth) {

@@ -1,964 +1,1413 @@
-// Declaration file written by daikon.dcomp
+// Declarations for DataStructures.BinaryHeap
+// Declarations written 2020-11-18T07:35:20.649 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-DataStructures.BinaryHeap:::CLASS
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
+ppt DataStructures.BinaryHeap:::CLASS
+ppt-type class
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
 
-DECLARE
-DataStructures.BinaryHeap:::OBJECT
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
+ppt DataStructures.BinaryHeap:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
+ppt DataStructures.BinaryHeap.BinaryHeap():::ENTER
+ppt-type enter
 
-DECLARE
-DataStructures.BinaryHeap.BinaryHeap():::ENTER
+ppt DataStructures.BinaryHeap.BinaryHeap():::EXIT30
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
-DECLARE
-DataStructures.BinaryHeap.BinaryHeap():::EXIT30
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
+ppt DataStructures.BinaryHeap.BinaryHeap(int):::ENTER
+ppt-type enter
+variable capacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
 
+ppt DataStructures.BinaryHeap.BinaryHeap(int):::EXIT40
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 4
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[3]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable capacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
 
-DECLARE
-DataStructures.BinaryHeap.BinaryHeap(int):::ENTER
-capacity
-int # isParam=true
-int
-2
+ppt DataStructures.BinaryHeap.insert(DataStructures.Comparable):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinaryHeap.BinaryHeap(int):::EXIT40
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-5
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-3
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[3]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-capacity
-int # isParam=true
-int
-3
+ppt DataStructures.BinaryHeap.insert(DataStructures.Comparable):::EXIT58
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
+ppt DataStructures.BinaryHeap.findMin():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
-DECLARE
-DataStructures.BinaryHeap.insert(DataStructures.Comparable):::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-x
-DataStructures.Comparable # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinaryHeap.findMin():::EXIT67
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 6
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable return
+  var-kind return
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinaryHeap.insert(DataStructures.Comparable):::EXIT58
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-x
-DataStructures.Comparable # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinaryHeap.findMin():::EXIT68
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 6
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable return
+  var-kind return
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
+ppt DataStructures.BinaryHeap.deleteMin():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
-DECLARE
-DataStructures.BinaryHeap.findMin():::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
+ppt DataStructures.BinaryHeap.deleteMin():::EXIT78
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 6
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable return
+  var-kind return
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinaryHeap.findMin():::EXIT67
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-4
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-5
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-3[5]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-return
-DataStructures.Comparable
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinaryHeap.deleteMin():::EXIT84
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 6
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable return
+  var-kind return
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinaryHeap.findMin():::EXIT68
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-4
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-5
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-3[5]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-return
-DataStructures.Comparable
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinaryHeap.buildHeap():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
+ppt DataStructures.BinaryHeap.buildHeap():::EXIT95
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
-DECLARE
-DataStructures.BinaryHeap.deleteMin():::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
+ppt DataStructures.BinaryHeap.isEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
-DECLARE
-DataStructures.BinaryHeap.deleteMin():::EXIT78
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-4
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-5
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-3[5]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-return
-DataStructures.Comparable
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinaryHeap.isEmpty():::EXIT103
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 6
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 7[5]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-DataStructures.BinaryHeap.deleteMin():::EXIT84
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-4
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-5
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-3[5]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-return
-DataStructures.Comparable
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinaryHeap.isFull():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
+ppt DataStructures.BinaryHeap.isFull():::EXIT112
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 6
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 7[5]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-DataStructures.BinaryHeap.buildHeap():::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
+ppt DataStructures.BinaryHeap.makeEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
-DECLARE
-DataStructures.BinaryHeap.buildHeap():::EXIT95
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
+ppt DataStructures.BinaryHeap.makeEmpty():::EXIT121
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 5
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[4]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[4]
 
+ppt DataStructures.BinaryHeap.percolateDown(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 4
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[3]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable hole
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
 
-DECLARE
-DataStructures.BinaryHeap.isEmpty():::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
+ppt DataStructures.BinaryHeap.percolateDown(int):::EXIT149
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 4
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 6[3]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable hole
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
 
-DECLARE
-DataStructures.BinaryHeap.isEmpty():::EXIT103
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-4
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-5
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-7[5]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-return
-boolean
-boolean
-3
+ppt DataStructures.BinaryHeap.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 4[6]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 5[7]
 
+ppt DataStructures.BinaryHeap.main(java.lang.String[]):::EXIT178
+ppt-type subexit
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 4[6]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 5[7]
 
-DECLARE
-DataStructures.BinaryHeap.isFull():::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
+ppt DataStructures.BinaryHeap.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 6
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 7[5]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinaryHeap.isFull():::EXIT112
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-4
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-5
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-7[5]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-return
-boolean
-boolean
-3
+ppt DataStructures.BinaryHeap.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 7
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 8[6]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
+ppt DataStructures.BinaryHeap.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 6
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 7[5]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinaryHeap.makeEmpty():::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-
-DECLARE
-DataStructures.BinaryHeap.makeEmpty():::EXIT121
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-3
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-4
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[4]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-
-
-DECLARE
-DataStructures.BinaryHeap.percolateDown(int):::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-5
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-3
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[3]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-hole
-int # isParam=true
-int
-3
-
-DECLARE
-DataStructures.BinaryHeap.percolateDown(int):::EXIT149
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-5
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-3
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-6[3]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-hole
-int # isParam=true
-int
-3
-
-
-DECLARE
-DataStructures.BinaryHeap.main(java.lang.String[]):::ENTER
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-args
-java.lang.String[] # isParam=true
-hashcode
-3
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-4[6]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-5[7]
-
-DECLARE
-DataStructures.BinaryHeap.main(java.lang.String[]):::EXIT178
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-args
-java.lang.String[] # isParam=true
-hashcode
-3
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-4[6]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-5[7]
-
-
-DECLARE
-DataStructures.BinaryHeap.equals(java.lang.Object):::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-4
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-5
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-7[5]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.BinaryHeap.equals(java.lang.Object):::EXIT1
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-5
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-6
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-7
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-8[6]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[6]
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
-
-
-DECLARE
-DataStructures.BinaryHeap.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-4
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-5
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-7[5]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.BinaryHeap.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-DataStructures.BinaryHeap # isNonNull=true, isParam=true
-hashcode
-5
-DataStructures.BinaryHeap.DEFAULT_CAPACITY
-int # declaringClassPackageName=DataStructures
-int
-2
-this.currentSize
-int # declaringClassPackageName=DataStructures
-int
-6
-this.array
-DataStructures.Comparable[] # declaringClassPackageName=DataStructures
-hashcode
-7
-this.array.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.array[..]
-DataStructures.Comparable[]
-hashcode[]
-8[6]
-this.array[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[6]
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+ppt DataStructures.BinaryHeap.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinaryHeap
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable DataStructures.BinaryHeap.DEFAULT_CAPACITY
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable this.currentSize
+  var-kind field currentSize
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.array
+  var-kind field array
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode
+  comparability 7
+variable this.array.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.array
+  flags synthetic classname non_null
+  comparability 1
+variable this.array[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.Comparable[]
+  rep-type hashcode[]
+  comparability 8[6]
+variable this.array[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.array[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 

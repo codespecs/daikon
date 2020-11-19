@@ -1,719 +1,1050 @@
-// Declaration file written by daikon.dcomp
+// Declarations for DataStructures.StackAr
+// Declarations written 2020-11-18T07:08:47.581 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-DataStructures.StackAr:::CLASS
+ppt DataStructures.StackAr:::CLASS
+ppt-type class
 
-DECLARE
-DataStructures.StackAr:::OBJECT
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
+ppt DataStructures.StackAr:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt DataStructures.StackAr.StackAr(int):::ENTER
+ppt-type enter
+variable capacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
 
-DECLARE
-DataStructures.StackAr.StackAr(int):::ENTER
-capacity
-int # isParam=true
-int
-2
+ppt DataStructures.StackAr.StackAr(int):::EXIT33
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[2]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 2
+variable capacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
 
-DECLARE
-DataStructures.StackAr.StackAr(int):::EXIT33
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-4
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-3
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-4[2]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-2
-capacity
-int # isParam=true
-int
-2
+ppt DataStructures.StackAr.isEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt DataStructures.StackAr.isEmpty():::EXIT42
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[4]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
 
-DECLARE
-DataStructures.StackAr.isEmpty():::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
+ppt DataStructures.StackAr.isFull():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
-DECLARE
-DataStructures.StackAr.isEmpty():::EXIT42
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-3
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-3[4]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-4
-return
-boolean
-boolean
-2
+ppt DataStructures.StackAr.isFull():::EXIT52
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[4]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
 
+ppt DataStructures.StackAr.makeEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
-DECLARE
-DataStructures.StackAr.isFull():::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
+ppt DataStructures.StackAr.makeEmpty():::EXIT63
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
-DECLARE
-DataStructures.StackAr.isFull():::EXIT52
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-3
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-3[4]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-4
-return
-boolean
-boolean
-2
+ppt DataStructures.StackAr.top():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt DataStructures.StackAr.top():::EXIT74
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.StackAr.makeEmpty():::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
+ppt DataStructures.StackAr.top():::EXIT75
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.StackAr.makeEmpty():::EXIT63
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
+ppt DataStructures.StackAr.pop():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt DataStructures.StackAr.pop():::EXIT87
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
-DECLARE
-DataStructures.StackAr.top():::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
+ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.StackAr.top():::EXIT74
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
-return
-java.lang.Object
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.StackAr.push(java.lang.Object):::EXIT99
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.StackAr.top():::EXIT75
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
-return
-java.lang.Object
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.StackAr.topAndPop():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[3]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt DataStructures.StackAr.topAndPop():::EXIT108
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[4]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.StackAr.pop():::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
+ppt DataStructures.StackAr.topAndPop():::EXIT111
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[4]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.StackAr.pop():::EXIT87
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
+ppt DataStructures.StackAr.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[4]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
+ppt DataStructures.StackAr.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[5]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-DataStructures.StackAr.push(java.lang.Object):::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
-x
-java.lang.Object # isParam=true
-hashcode
-2
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.StackAr.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[4]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.StackAr.push(java.lang.Object):::EXIT99
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
-x
-java.lang.Object # isParam=true
-hashcode
-2
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-DataStructures.StackAr.topAndPop():::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-4
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-2[3]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-3
-
-DECLARE
-DataStructures.StackAr.topAndPop():::EXIT108
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-3
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-3[4]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-4
-return
-java.lang.Object
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.StackAr.topAndPop():::EXIT111
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-3
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-3[4]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-4
-return
-java.lang.Object
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-DataStructures.StackAr.equals(java.lang.Object):::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-3
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-3[4]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.StackAr.equals(java.lang.Object):::EXIT1
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-4
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-4[5]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-DataStructures.StackAr.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-3
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-5
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-3[4]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.StackAr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-DataStructures.StackAr # isNonNull=true, isParam=true
-hashcode
-4
-this.theArray
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode
-6
-this.theArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.theArray[..]
-java.lang.Object[]
-hashcode[]
-4[5]
-this.theArray[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-this.topOfStack
-int # declaringClassPackageName=DataStructures
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt DataStructures.StackAr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.theArray
+  var-kind field theArray
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags synthetic classname non_null
+  comparability 1
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[5]
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable this.topOfStack
+  var-kind field topOfStack
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

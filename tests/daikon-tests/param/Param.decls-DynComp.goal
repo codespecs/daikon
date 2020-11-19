@@ -1,688 +1,894 @@
-// Declaration file written by daikon.dcomp
+// Declarations for misc.Param
+// Declarations written 2020-11-18T07:24:56.134 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-misc.Param:::CLASS
+ppt misc.Param:::CLASS
+ppt-type class
 
-DECLARE
-misc.Param:::OBJECT
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-2
-this.gi1
-int # declaringClassPackageName=misc
-int
-3
-this.gi2
-int # declaringClassPackageName=misc
-int
-4
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-5
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-6
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-7
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-8
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-9
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-10
+ppt misc.Param:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 5
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 8
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 10
 
+ppt misc.Param.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
 
-DECLARE
-misc.Param.main(java.lang.String[]):::ENTER
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
+ppt misc.Param.main(java.lang.String[]):::EXIT19
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
 
-DECLARE
-misc.Param.main(java.lang.String[]):::EXIT19
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
+ppt misc.Param.main():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 5
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 8
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 10
 
+ppt misc.Param.main():::EXIT26
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 5
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 8
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 10
 
-DECLARE
-misc.Param.main():::ENTER
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-2
-this.gi1
-int # declaringClassPackageName=misc
-int
-3
-this.gi2
-int # declaringClassPackageName=misc
-int
-4
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-5
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-6
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-7
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-8
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-9
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-10
+ppt misc.Param.work(int, int, misc.ParamType, misc.ParamType):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 10
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 4
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 7
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 9
+variable pi1
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable pi2
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable ps1
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable ps1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 5
+variable ps1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 6
+variable ps2
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable ps2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 8
+variable ps2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 9
 
-DECLARE
-misc.Param.main():::EXIT26
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-2
-this.gi1
-int # declaringClassPackageName=misc
-int
-3
-this.gi2
-int # declaringClassPackageName=misc
-int
-4
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-5
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-6
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-7
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-8
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-9
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-10
+ppt misc.Param.work(int, int, misc.ParamType, misc.ParamType):::EXIT41
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 10
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 4
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 11
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 12
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 13
+variable pi1
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable pi2
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable ps1
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable ps1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 5
+variable ps1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 6
+variable ps2
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable ps2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 8
+variable ps2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 9
 
+ppt misc.Param.Param():::ENTER
+ppt-type enter
 
-DECLARE
-misc.Param.work(int, int, misc.ParamType, misc.ParamType):::ENTER
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-10
-this.gi1
-int # declaringClassPackageName=misc
-int
-2
-this.gi2
-int # declaringClassPackageName=misc
-int
-3
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-4
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-5
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-6
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-7
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-8
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-9
-pi1
-int # isParam=true
-int
-2
-pi2
-int # isParam=true
-int
-3
-ps1
-misc.ParamType # isParam=true
-hashcode
-4
-ps1.a
-int # declaringClassPackageName=misc
-int
-5
-ps1.b
-int # declaringClassPackageName=misc
-int
-6
-ps2
-misc.ParamType # isParam=true
-hashcode
-7
-ps2.a
-int # declaringClassPackageName=misc
-int
-8
-ps2.b
-int # declaringClassPackageName=misc
-int
-9
+ppt misc.Param.Param():::EXIT56
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 5
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 8
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 10
 
-DECLARE
-misc.Param.work(int, int, misc.ParamType, misc.ParamType):::EXIT41
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-10
-this.gi1
-int # declaringClassPackageName=misc
-int
-2
-this.gi2
-int # declaringClassPackageName=misc
-int
-3
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-4
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-5
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-6
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-11
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-12
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-13
-pi1
-int # isParam=true
-int
-2
-pi2
-int # isParam=true
-int
-3
-ps1
-misc.ParamType # isParam=true
-hashcode
-4
-ps1.a
-int # declaringClassPackageName=misc
-int
-5
-ps1.b
-int # declaringClassPackageName=misc
-int
-6
-ps2
-misc.ParamType # isParam=true
-hashcode
-7
-ps2.a
-int # declaringClassPackageName=misc
-int
-8
-ps2.b
-int # declaringClassPackageName=misc
-int
-9
+ppt misc.Param.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 6
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 9
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 10
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 11
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
+ppt misc.Param.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 7
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 10
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 11
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 12
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-misc.Param.Param():::ENTER
+ppt misc.Param.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 6
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 9
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 10
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 11
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.Param.Param():::EXIT56
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-2
-this.gi1
-int # declaringClassPackageName=misc
-int
-3
-this.gi2
-int # declaringClassPackageName=misc
-int
-4
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-5
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-6
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-7
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-8
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-9
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-10
+ppt misc.Param.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Param
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.gi1
+  var-kind field gi1
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.gi2
+  var-kind field gi2
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.gs1
+  var-kind field gs1
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 7
+variable this.gs1.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.gs1.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.gs2
+  var-kind field gs2
+  dec-type misc.ParamType
+  rep-type hashcode
+  comparability 10
+variable this.gs2.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 11
+variable this.gs2.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 12
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
+ppt misc.ParamType:::CLASS
+ppt-type class
 
-DECLARE
-misc.Param.equals(java.lang.Object):::ENTER
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-3
-this.gi1
-int # declaringClassPackageName=misc
-int
-4
-this.gi2
-int # declaringClassPackageName=misc
-int
-5
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-6
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-7
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-8
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-9
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-10
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-11
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt misc.ParamType:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 4
 
-DECLARE
-misc.Param.equals(java.lang.Object):::EXIT1
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-4
-this.gi1
-int # declaringClassPackageName=misc
-int
-5
-this.gi2
-int # declaringClassPackageName=misc
-int
-6
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-7
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-8
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-9
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-10
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-11
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-12
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt misc.ParamType.ParamType():::ENTER
+ppt-type enter
 
+ppt misc.ParamType.ParamType():::EXIT69
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 4
 
-DECLARE
-misc.Param.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-3
-this.gi1
-int # declaringClassPackageName=misc
-int
-4
-this.gi2
-int # declaringClassPackageName=misc
-int
-5
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-6
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-7
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-8
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-9
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-10
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-11
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt misc.ParamType.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.Param.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-misc.Param # isNonNull=true, isParam=true
-hashcode
-4
-this.gi1
-int # declaringClassPackageName=misc
-int
-5
-this.gi2
-int # declaringClassPackageName=misc
-int
-6
-this.gs1
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-7
-this.gs1.a
-int # declaringClassPackageName=misc
-int
-8
-this.gs1.b
-int # declaringClassPackageName=misc
-int
-9
-this.gs2
-misc.ParamType # declaringClassPackageName=misc
-hashcode
-10
-this.gs2.a
-int # declaringClassPackageName=misc
-int
-11
-this.gs2.b
-int # declaringClassPackageName=misc
-int
-12
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt misc.ParamType.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 6
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-misc.ParamType:::CLASS
+ppt misc.ParamType.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.ParamType:::OBJECT
-this
-misc.ParamType # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-4
-
-
-DECLARE
-misc.ParamType.ParamType():::ENTER
-
-DECLARE
-misc.ParamType.ParamType():::EXIT69
-this
-misc.ParamType # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-4
-
-
-DECLARE
-misc.ParamType.equals(java.lang.Object):::ENTER
-this
-misc.ParamType # isNonNull=true, isParam=true
-hashcode
-3
-this.a
-int # declaringClassPackageName=misc
-int
-4
-this.b
-int # declaringClassPackageName=misc
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.ParamType.equals(java.lang.Object):::EXIT1
-this
-misc.ParamType # isNonNull=true, isParam=true
-hashcode
-4
-this.a
-int # declaringClassPackageName=misc
-int
-5
-this.b
-int # declaringClassPackageName=misc
-int
-6
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-misc.ParamType.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-misc.ParamType # isNonNull=true, isParam=true
-hashcode
-3
-this.a
-int # declaringClassPackageName=misc
-int
-4
-this.b
-int # declaringClassPackageName=misc
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.ParamType.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-misc.ParamType # isNonNull=true, isParam=true
-hashcode
-4
-this.a
-int # declaringClassPackageName=misc
-int
-5
-this.b
-int # declaringClassPackageName=misc
-int
-6
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt misc.ParamType.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.ParamType
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 6
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

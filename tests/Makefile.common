@@ -960,6 +960,23 @@ txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 	-diff -u --strip-trailing-cr $^ > $@ 2>&1
 	cat $@
 
+# Special case for DynComp: we need to ignore date/time stamp
+# so just skip all comment lines
+%-DynComp.diff: $(call goal_name,%-DynComp) %-DynComp
+	@echo
+	@echo "### textual diff (${PROJECT_FILE})"
+	@echo
+	-rm -f $@
+	-diff -u --ignore-matching-lines '^//.*' $(call goal_name,$*-DynComp) $*-DynComp > $@ 2>&1
+	cat $@
+%-DynComp-nojdk.diff: $(call goal_name,%-DynComp-nojdk) %-DynComp-nojdk
+	@echo
+	@echo "### textual diff (${PROJECT_FILE})"
+	@echo
+	-rm -f $@
+	-diff -u --ignore-matching-lines '^//.*' $(call goal_name,$*-DynComp-nojdk) $*-DynComp-nojdk > $@ 2>&1
+	cat $@
+
 # If a prerequisite fails, none of the rules gets run.
 # So update the goal here before the -implementation rule does the real work.
 # (The old .diff file, now named .diff-implementation, doesn't get removed if

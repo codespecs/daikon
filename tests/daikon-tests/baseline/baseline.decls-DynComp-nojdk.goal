@@ -1,631 +1,832 @@
-// Declaration file written by daikon.dcomp
-
-VarComparability
-implicit
-
-DECLARE
-Main:::CLASS
-
-DECLARE
-Main:::OBJECT
-this
-Main # isNonNull=true, isParam=true
-hashcode
-2
-
-
-DECLARE
-Main.Main():::ENTER
-
-DECLARE
-Main.Main():::EXIT3
-this
-Main # isNonNull=true, isParam=true
-hashcode
-2
-
-
-DECLARE
-Main.main(java.lang.String[]):::ENTER
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
-
-DECLARE
-Main.main(java.lang.String[]):::EXIT10
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
-
-
-DECLARE
-Main.equals(java.lang.Object):::ENTER
-this
-Main # isNonNull=true, isParam=true
-hashcode
-3
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-Main.equals(java.lang.Object):::EXIT1
-this
-Main # isNonNull=true, isParam=true
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-Main.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-Main # isNonNull=true, isParam=true
-hashcode
-3
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-Main.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-Main # isNonNull=true, isParam=true
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-TestScores:::CLASS
-
-DECLARE
-TestScores:::OBJECT
-this
-TestScores # isNonNull=true, isParam=true
-hashcode
-2
-
-
-DECLARE
-TestScores.TestScores():::ENTER
-
-DECLARE
-TestScores.TestScores():::EXIT3
-this
-TestScores # isNonNull=true, isParam=true
-hashcode
-2
-
-
-DECLARE
-TestScores.main(java.lang.String[]):::ENTER
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
-
-DECLARE
-TestScores.main(java.lang.String[]):::EXIT9
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
-
-
-DECLARE
-TestScores.classAve(int[]):::ENTER
-scores
-int[] # isParam=true
-hashcode
-2
-scores[..]
-int[]
-int[]
-3[4]
-
-DECLARE
-TestScores.classAve(int[]):::EXIT17
-scores
-int[] # isParam=true
-hashcode
-3
-scores[..]
-int[]
-int[]
-2[4]
-return
-int
-int
-2
-
-
-DECLARE
-TestScores.six170():::ENTER
-
-DECLARE
-TestScores.six170():::EXIT32
-
-
-DECLARE
-TestScores.six821():::ENTER
-
-DECLARE
-TestScores.six821():::EXIT46
-
-
-DECLARE
-TestScores.six893():::ENTER
-
-DECLARE
-TestScores.six893():::EXIT70
-
-
-DECLARE
-TestScores.equals(java.lang.Object):::ENTER
-this
-TestScores # isNonNull=true, isParam=true
-hashcode
-3
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-TestScores.equals(java.lang.Object):::EXIT1
-this
-TestScores # isNonNull=true, isParam=true
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-TestScores.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-TestScores # isNonNull=true, isParam=true
-hashcode
-3
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-TestScores.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-TestScores # isNonNull=true, isParam=true
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-DataAvg:::CLASS
-
-DECLARE
-DataAvg:::OBJECT
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-2
-this.sum
-int
-int
-3
-this.count
-int
-int
-3
-
-
-DECLARE
-DataAvg.DataAvg():::ENTER
-
-DECLARE
-DataAvg.DataAvg():::EXIT13
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-2
-this.sum
-int
-int
-3
-this.count
-int
-int
-3
-
-
-DECLARE
-DataAvg.insert(int):::ENTER
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-3
-this.sum
-int
-int
-2
-this.count
-int
-int
-2
-element
-int # isParam=true
-int
-2
-
-DECLARE
-DataAvg.insert(int):::EXIT19
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-3
-this.sum
-int
-int
-2
-this.count
-int
-int
-2
-element
-int # isParam=true
-int
-2
-
-
-DECLARE
-DataAvg.average():::ENTER
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-2
-this.sum
-int
-int
-3
-this.count
-int
-int
-3
-
-DECLARE
-DataAvg.average():::EXIT24
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-3
-this.sum
-int
-int
-2
-this.count
-int
-int
-2
-return
-int
-int
-2
-
-
-DECLARE
-DataAvg.equals(java.lang.Object):::ENTER
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-3
-this.sum
-int
-int
-4
-this.count
-int
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataAvg.equals(java.lang.Object):::EXIT1
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-4
-this.sum
-int
-int
-5
-this.count
-int
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-DataAvg.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-3
-this.sum
-int
-int
-4
-this.count
-int
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataAvg.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-DataAvg # isNonNull=true, isParam=true
-hashcode
-4
-this.sum
-int
-int
-5
-this.count
-int
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-RandomMean:::CLASS
-
-DECLARE
-RandomMean:::OBJECT
-this
-RandomMean # isNonNull=true, isParam=true
-hashcode
-2
-
-
-DECLARE
-RandomMean.RandomMean():::ENTER
-
-DECLARE
-RandomMean.RandomMean():::EXIT3
-this
-RandomMean # isNonNull=true, isParam=true
-hashcode
-2
-
-
-DECLARE
-RandomMean.main():::ENTER
-
-DECLARE
-RandomMean.main():::EXIT7
-
-
-DECLARE
-RandomMean.compute():::ENTER
-
-DECLARE
-RandomMean.compute():::EXIT20
-
-
-DECLARE
-RandomMean.equals(java.lang.Object):::ENTER
-this
-RandomMean # isNonNull=true, isParam=true
-hashcode
-3
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-RandomMean.equals(java.lang.Object):::EXIT1
-this
-RandomMean # isNonNull=true, isParam=true
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-RandomMean.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-RandomMean # isNonNull=true, isParam=true
-hashcode
-3
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-RandomMean.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-RandomMean # isNonNull=true, isParam=true
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+// Declarations for Main
+// Declarations written 2020-11-18T07:48:21.464 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt Main:::CLASS
+ppt-type class
+
+ppt Main:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type Main
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt Main.Main():::ENTER
+ppt-type enter
+
+ppt Main.Main():::EXIT3
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type Main
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt Main.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt Main.main(java.lang.String[]):::EXIT10
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt Main.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type Main
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt Main.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type Main
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt Main.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type Main
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt Main.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type Main
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt TestScores:::CLASS
+ppt-type class
+
+ppt TestScores:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type TestScores
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt TestScores.TestScores():::ENTER
+ppt-type enter
+
+ppt TestScores.TestScores():::EXIT3
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type TestScores
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt TestScores.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt TestScores.main(java.lang.String[]):::EXIT9
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt TestScores.classAve(int[]):::ENTER
+ppt-type enter
+variable scores
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable scores[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[4]
+
+ppt TestScores.classAve(int[]):::EXIT17
+ppt-type subexit
+variable scores
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable scores[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 2[4]
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt TestScores.six170():::ENTER
+ppt-type enter
+
+ppt TestScores.six170():::EXIT32
+ppt-type subexit
+
+ppt TestScores.six821():::ENTER
+ppt-type enter
+
+ppt TestScores.six821():::EXIT46
+ppt-type subexit
+
+ppt TestScores.six893():::ENTER
+ppt-type enter
+
+ppt TestScores.six893():::EXIT70
+ppt-type subexit
+
+ppt TestScores.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type TestScores
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt TestScores.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type TestScores
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt TestScores.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type TestScores
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt TestScores.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type TestScores
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt DataAvg:::CLASS
+ppt-type class
+
+ppt DataAvg:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataAvg.DataAvg():::ENTER
+ppt-type enter
+
+ppt DataAvg.DataAvg():::EXIT13
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataAvg.insert(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 2
+variable element
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt DataAvg.insert(int):::EXIT19
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 2
+variable element
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt DataAvg.average():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataAvg.average():::EXIT24
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt DataAvg.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataAvg.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt DataAvg.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataAvg.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataAvg
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.sum
+  var-kind field sum
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.count
+  var-kind field count
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt RandomMean:::CLASS
+ppt-type class
+
+ppt RandomMean:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type RandomMean
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt RandomMean.RandomMean():::ENTER
+ppt-type enter
+
+ppt RandomMean.RandomMean():::EXIT3
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type RandomMean
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt RandomMean.main():::ENTER
+ppt-type enter
+
+ppt RandomMean.main():::EXIT7
+ppt-type subexit
+
+ppt RandomMean.compute():::ENTER
+ppt-type enter
+
+ppt RandomMean.compute():::EXIT20
+ppt-type subexit
+
+ppt RandomMean.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type RandomMean
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt RandomMean.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type RandomMean
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt RandomMean.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type RandomMean
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt RandomMean.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type RandomMean
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

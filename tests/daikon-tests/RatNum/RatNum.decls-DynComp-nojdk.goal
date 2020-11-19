@@ -1,1207 +1,1554 @@
-// Declaration file written by daikon.dcomp
-
-VarComparability
-implicit
-
-DECLARE
-PolyCalc.RatNum:::CLASS
-
-DECLARE
-PolyCalc.RatNum:::OBJECT
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-
-DECLARE
-PolyCalc.RatNum.RatNum(int):::ENTER
-n
-int # isParam=true
-int
-2
-
-DECLARE
-PolyCalc.RatNum.RatNum(int):::EXIT45
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-n
-int # isParam=true
-int
-2
-
-
-DECLARE
-PolyCalc.RatNum.RatNum(int, int):::ENTER
-n
-int # isParam=true
-int
-2
-d
-int # isParam=true
-int
-2
-
-DECLARE
-PolyCalc.RatNum.RatNum(int, int):::EXIT55
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-n
-int # isParam=true
-int
-2
-d
-int # isParam=true
-int
-2
-
-DECLARE
-PolyCalc.RatNum.RatNum(int, int):::EXIT67
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-n
-int # isParam=true
-int
-2
-d
-int # isParam=true
-int
-2
-
-
-DECLARE
-PolyCalc.RatNum.isNaN():::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.isNaN():::EXIT71
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-4
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-4
-return
-boolean
-boolean
-2
-
-
-DECLARE
-PolyCalc.RatNum.isNegative():::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.isNegative():::EXIT77
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-4
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-4
-return
-boolean
-boolean
-2
-
-
-DECLARE
-PolyCalc.RatNum.isPositive():::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.isPositive():::EXIT83
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-4
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-4
-return
-boolean
-boolean
-2
-
-
-DECLARE
-PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-rn
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-rn.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-rn.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT94
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-rn
-PolyCalc.RatNum # isParam=true
-hashcode
-3
-rn.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-rn.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-return
-int
-int
-2
-
-DECLARE
-PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-rn
-PolyCalc.RatNum # isParam=true
-hashcode
-3
-rn.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-rn.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-return
-int
-int
-2
-
-DECLARE
-PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-rn
-PolyCalc.RatNum # isParam=true
-hashcode
-3
-rn.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-rn.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-return
-int
-int
-2
-
-DECLARE
-PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT101
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-rn
-PolyCalc.RatNum # isParam=true
-hashcode
-3
-rn.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-rn.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-return
-int
-int
-2
-
-
-DECLARE
-PolyCalc.RatNum.approx():::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.approx():::EXIT117
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-return
-double
-double
-2
-
-DECLARE
-PolyCalc.RatNum.approx():::EXIT120
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-2
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-2
-return
-double
-double
-2
-
-
-DECLARE
-PolyCalc.RatNum.unparse():::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.unparse():::EXIT133
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-4
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-5
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-5
-return
-java.lang.String
-hashcode
-2
-return.toString
-java.lang.String
-java.lang.String
-3
-
-DECLARE
-PolyCalc.RatNum.unparse():::EXIT135
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-4
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-5
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-5
-return
-java.lang.String
-hashcode
-2
-return.toString
-java.lang.String
-java.lang.String
-3
-
-DECLARE
-PolyCalc.RatNum.unparse():::EXIT137
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-4
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-5
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-5
-return
-java.lang.String
-hashcode
-2
-return.toString
-java.lang.String
-java.lang.String
-3
-
-
-DECLARE
-PolyCalc.RatNum.negate():::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.negate():::EXIT147
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-4
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-return
-PolyCalc.RatNum
-hashcode
-2
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-
-DECLARE
-PolyCalc.RatNum.add(PolyCalc.RatNum):::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.add(PolyCalc.RatNum):::EXIT156
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-return
-PolyCalc.RatNum
-hashcode
-4
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-
-DECLARE
-PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.sub(PolyCalc.RatNum):::EXIT166
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-return
-PolyCalc.RatNum
-hashcode
-4
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-
-DECLARE
-PolyCalc.RatNum.mul(PolyCalc.RatNum):::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.mul(PolyCalc.RatNum):::EXIT175
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-return
-PolyCalc.RatNum
-hashcode
-4
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-
-DECLARE
-PolyCalc.RatNum.div(PolyCalc.RatNum):::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT187
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-return
-PolyCalc.RatNum
-hashcode
-2
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg
-PolyCalc.RatNum # isParam=true
-hashcode
-2
-arg.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-arg.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-return
-PolyCalc.RatNum
-hashcode
-2
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-
-DECLARE
-PolyCalc.RatNum.gcd(int, int):::ENTER
-_a
-int # isParam=true
-int
-2
-_b
-int # isParam=true
-int
-2
-
-DECLARE
-PolyCalc.RatNum.gcd(int, int):::EXIT203
-_a
-int # isParam=true
-int
-2
-_b
-int # isParam=true
-int
-2
-return
-int
-int
-2
-
-DECLARE
-PolyCalc.RatNum.gcd(int, int):::EXIT209
-_a
-int # isParam=true
-int
-2
-_b
-int # isParam=true
-int
-2
-return
-int
-int
-2
-
-
-DECLARE
-PolyCalc.RatNum.hashCode():::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.hashCode():::EXIT217
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-4
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-4
-return
-int
-int
-2
-
-
-DECLARE
-PolyCalc.RatNum.equals(java.lang.Object):::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-4
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-4
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-PolyCalc.RatNum.equals(java.lang.Object):::EXIT235
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-4
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-PolyCalc.RatNum.debugPrint():::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-2
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-3
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-3
-
-DECLARE
-PolyCalc.RatNum.debugPrint():::EXIT241
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-4
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-5
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-5
-return
-java.lang.String
-hashcode
-2
-return.toString
-java.lang.String
-java.lang.String
-3
-
-
-DECLARE
-PolyCalc.RatNum.parse(java.lang.String):::ENTER
-ratStr
-java.lang.String # isParam=true
-hashcode
-2
-ratStr.toString
-java.lang.String
-java.lang.String
-3
-
-DECLARE
-PolyCalc.RatNum.parse(java.lang.String):::EXIT264
-ratStr
-java.lang.String # isParam=true
-hashcode
-2
-ratStr.toString
-java.lang.String
-java.lang.String
-3
-return
-PolyCalc.RatNum
-hashcode
-4
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-5
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-5
-
-DECLARE
-PolyCalc.RatNum.parse(java.lang.String):::EXIT267
-ratStr
-java.lang.String # isParam=true
-hashcode
-2
-ratStr.toString
-java.lang.String
-java.lang.String
-3
-return
-PolyCalc.RatNum
-hashcode
-4
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-5
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-5
-
-DECLARE
-PolyCalc.RatNum.parse(java.lang.String):::EXIT273
-ratStr
-java.lang.String # isParam=true
-hashcode
-2
-ratStr.toString
-java.lang.String
-java.lang.String
-3
-return
-PolyCalc.RatNum
-hashcode
-4
-return.numer
-int # declaringClassPackageName=PolyCalc
-int
-5
-return.denom
-int # declaringClassPackageName=PolyCalc
-int
-5
-
-
-DECLARE
-PolyCalc.RatNum.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-3
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-4
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-PolyCalc.RatNum.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-PolyCalc.RatNum # isNonNull=true, isParam=true
-hashcode
-4
-this.numer
-int # declaringClassPackageName=PolyCalc
-int
-5
-this.denom
-int # declaringClassPackageName=PolyCalc
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+// Declarations for PolyCalc.RatNum
+// Declarations written 2020-11-18T09:07:09.076 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt PolyCalc.RatNum:::CLASS
+ppt-type class
+
+ppt PolyCalc.RatNum:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.RatNum(int):::ENTER
+ppt-type enter
+variable n
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt PolyCalc.RatNum.RatNum(int):::EXIT45
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable n
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt PolyCalc.RatNum.RatNum(int, int):::ENTER
+ppt-type enter
+variable n
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable d
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt PolyCalc.RatNum.RatNum(int, int):::EXIT55
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable n
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable d
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt PolyCalc.RatNum.RatNum(int, int):::EXIT67
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable n
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable d
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt PolyCalc.RatNum.isNaN():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.isNaN():::EXIT71
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
+
+ppt PolyCalc.RatNum.isNegative():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.isNegative():::EXIT77
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
+
+ppt PolyCalc.RatNum.isPositive():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.isPositive():::EXIT83
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
+
+ppt PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable rn
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable rn.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable rn.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT94
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable rn
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable rn.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable rn.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable rn
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable rn.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable rn.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable rn
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable rn.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable rn.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT101
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable rn
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable rn.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable rn.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt PolyCalc.RatNum.approx():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.approx():::EXIT117
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 2
+
+ppt PolyCalc.RatNum.approx():::EXIT120
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 2
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 2
+
+ppt PolyCalc.RatNum.unparse():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.unparse():::EXIT133
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 5
+variable return
+  var-kind return
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 2
+variable return.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return
+  flags synthetic to_string
+  comparability 3
+
+ppt PolyCalc.RatNum.unparse():::EXIT135
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 5
+variable return
+  var-kind return
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 2
+variable return.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return
+  flags synthetic to_string
+  comparability 3
+
+ppt PolyCalc.RatNum.unparse():::EXIT137
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 5
+variable return
+  var-kind return
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 2
+variable return.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return
+  flags synthetic to_string
+  comparability 3
+
+ppt PolyCalc.RatNum.negate():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.negate():::EXIT147
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 2
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.add(PolyCalc.RatNum):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.add(PolyCalc.RatNum):::EXIT156
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 4
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.sub(PolyCalc.RatNum):::EXIT166
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 4
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.mul(PolyCalc.RatNum):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.mul(PolyCalc.RatNum):::EXIT175
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 4
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.div(PolyCalc.RatNum):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT187
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 2
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable arg.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable arg.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 2
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.gcd(int, int):::ENTER
+ppt-type enter
+variable _a
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable _b
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt PolyCalc.RatNum.gcd(int, int):::EXIT203
+ppt-type subexit
+variable _a
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable _b
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt PolyCalc.RatNum.gcd(int, int):::EXIT209
+ppt-type subexit
+variable _a
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable _b
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt PolyCalc.RatNum.hashCode():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.hashCode():::EXIT217
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt PolyCalc.RatNum.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt PolyCalc.RatNum.equals(java.lang.Object):::EXIT235
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt PolyCalc.RatNum.debugPrint():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt PolyCalc.RatNum.debugPrint():::EXIT241
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 5
+variable return
+  var-kind return
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 2
+variable return.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return
+  flags synthetic to_string
+  comparability 3
+
+ppt PolyCalc.RatNum.parse(java.lang.String):::ENTER
+ppt-type enter
+variable ratStr
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable ratStr.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args ratStr
+  flags synthetic to_string
+  comparability 3
+
+ppt PolyCalc.RatNum.parse(java.lang.String):::EXIT264
+ppt-type subexit
+variable ratStr
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable ratStr.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args ratStr
+  flags synthetic to_string
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 4
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 5
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt PolyCalc.RatNum.parse(java.lang.String):::EXIT267
+ppt-type subexit
+variable ratStr
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable ratStr.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args ratStr
+  flags synthetic to_string
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 4
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 5
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt PolyCalc.RatNum.parse(java.lang.String):::EXIT273
+ppt-type subexit
+variable ratStr
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable ratStr.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args ratStr
+  flags synthetic to_string
+  comparability 3
+variable return
+  var-kind return
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  comparability 4
+variable return.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 5
+variable return.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt PolyCalc.RatNum.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt PolyCalc.RatNum.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type PolyCalc.RatNum
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.numer
+  var-kind field numer
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.denom
+  var-kind field denom
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

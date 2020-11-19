@@ -85,6 +85,7 @@ public class Chicory {
   @Option("Size of the heap for the target program, and for Daikon if it is run")
   public static String heap_size = "1000m";
 
+  /** option to print information about each ppt name as it is created. */
   @Option("Print information about each ppt name as it is created")
   public static boolean debug_ppt_names = false;
 
@@ -543,7 +544,11 @@ public class Chicory {
     return result;
   }
 
-  /** Returns elapsed time as a String since the start of the program. */
+  /**
+   * Returns elapsed time as a String since the start of the program.
+   *
+   * @return string containing elapsed time
+   */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }
