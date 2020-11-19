@@ -70,7 +70,11 @@ public class DeclReader {
     /** map from variable name to corresponding DeclVarInfo. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
 
-    /** DeclPpt constructor. */
+    /**
+     * DeclPpt constructor.
+     *
+     * @param name program point name
+     */
     public DeclPpt(String name) {
       this.name = name;
     }
@@ -85,13 +89,13 @@ public class DeclReader {
      */
     public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
 
-      String name = null;
+      String var_name = null;
       String type = null;
       String rep_type = null;
       String comparability = null;
       Scanner scanner = new Scanner(decl_file.readLine());
       scanner.next(); // skip the "variable "
-      name = scanner.next();
+      var_name = scanner.next();
 
       // read variable data records until next variable or blank line
       String record = decl_file.readLine();
@@ -112,7 +116,7 @@ public class DeclReader {
       // push back the variable or blank line record
       decl_file.putback(record);
 
-      if ((name == null) || (type == null) || (rep_type == null) || (comparability == null)) {
+      if ((var_name == null) || (type == null) || (rep_type == null) || (comparability == null)) {
         throw new Error("File " + decl_file.getFileName() + " is invalid");
       }
 
@@ -120,8 +124,12 @@ public class DeclReader {
       // advantage of it.  Is it just for space?  -MDE
       DeclVarInfo var =
           new DeclVarInfo(
-              name.intern(), type.intern(), rep_type.intern(), comparability.intern(), vars.size());
-      vars.put(name, var);
+              var_name.intern(),
+              type.intern(),
+              rep_type.intern(),
+              comparability.intern(),
+              vars.size());
+      vars.put(var_name, var);
       return var;
     }
 
