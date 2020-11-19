@@ -1,10 +1,14 @@
 package daikon.chicory;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -534,7 +538,9 @@ public class Runtime {
     }
 
     try {
-      dtrace = new PrintWriter(daikonSocket.getOutputStream());
+      dtrace =
+          new PrintWriter(
+              new BufferedWriter(new OutputStreamWriter(daikonSocket.getOutputStream(), UTF_8)));
     } catch (IOException e) {
       System.out.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
@@ -577,7 +583,7 @@ public class Runtime {
 
       // 8192 is the buffer size in BufferedReader
       BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
-      dtrace = new PrintWriter(bos);
+      dtrace = new PrintWriter(new BufferedWriter(new OutputStreamWriter(bos, UTF_8)));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error(e);

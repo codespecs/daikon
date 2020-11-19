@@ -82,6 +82,7 @@ public class Chicory {
 
   // Should perhaps permit specifying the heap for the target program and
   // for Daikon separately.
+  /** option to set heap size of target program. */
   @Option("Size of the heap for the target program, and for Daikon if it is run")
   public static String heap_size = "1000m";
 

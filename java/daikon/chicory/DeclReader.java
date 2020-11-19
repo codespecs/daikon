@@ -89,7 +89,7 @@ public class DeclReader {
      */
     public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
 
-      String var_name = null;
+      String var_name;
       String type = null;
       String rep_type = null;
       String comparability = null;

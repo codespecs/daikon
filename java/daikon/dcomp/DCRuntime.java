@@ -1702,7 +1702,7 @@ public final class DCRuntime implements ICalcCompare {
     String classPptName = ci.class_name + ":::CLASS";
     pw.println("ppt " + classPptName);
     pw.println("ppt-type class");
-    print_decl_vars(pw, get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
+    print_decl_vars(get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
     pw.println();
     time_decl.log("printed class ppt");
 
@@ -1710,7 +1710,7 @@ public final class DCRuntime implements ICalcCompare {
     String objectPptName = ci.class_name + ":::OBJECT";
     pw.println("ppt " + objectPptName);
     pw.println("ppt-type object");
-    print_decl_vars(pw, get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
+    print_decl_vars(get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
     pw.println();
     time_decl.log("printed object ppt");
 
@@ -1760,7 +1760,7 @@ public final class DCRuntime implements ICalcCompare {
     pw.println("ppt " + enterPptName);
     pw.println("ppt-type enter");
     // ppt_name_ms += watch.snapshot();  watch.reset();
-    print_decl_vars(pw, l, mi.traversalEnter, enterPptName);
+    print_decl_vars(l, mi.traversalEnter, enterPptName);
     // decl_vars_ms += watch.snapshot();  watch.reset();
     pw.println();
     time_decl.log("after enter");
@@ -1777,7 +1777,7 @@ public final class DCRuntime implements ICalcCompare {
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log("after exit clean_decl_name");
-      print_decl_vars(pw, l, mi.traversalExit, exitPptName);
+      print_decl_vars(l, mi.traversalExit, exitPptName);
       pw.println();
       // decl_vars_ms += watch.snapshot();  watch.reset();
 
@@ -1801,13 +1801,11 @@ public final class DCRuntime implements ICalcCompare {
    * the same comparability. Constructed classname variables are made comparable to other classname
    * variables only.
    *
-   * @param pw where to print the variables
    * @param sets the comparability sets
    * @param dv_tree the tree of variables
    * @param pptName used only for debugging output
    */
-  private static void print_decl_vars(
-      PrintWriter pw, List<DVSet> sets, RootInfo dv_tree, String pptName) {
+  private static void print_decl_vars(List<DVSet> sets, RootInfo dv_tree, String pptName) {
 
     time_decl.indent();
     time_decl.log("print_decl_vars start");
@@ -1914,6 +1912,7 @@ public final class DCRuntime implements ICalcCompare {
    * @param compare_ppt (not used)
    * @return string containing comparability value
    */
+  @Override
   public String calc_comparability(DaikonVariableInfo dv, DeclReader.DeclPpt compare_ppt) {
     int comp = dv_comp_map.get(dv);
     String comp_str = Integer.toString(comp);

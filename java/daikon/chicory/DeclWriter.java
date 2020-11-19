@@ -563,6 +563,7 @@ public class DeclWriter extends DaikonWriter implements ICalcCompare {
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
    * @return String containing the comparabitly value
    */
+  @Override
   public String calc_comparability(DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
     // Currently, the value returned by getCompareString() is always 22.
     String comp_str = var.getCompareString();
