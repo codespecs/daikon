@@ -76,9 +76,7 @@ public class DeclWriter extends DaikonWriter implements ICalcCompare {
   public void printHeaderInfo(String className) {
     outFile.println("// Declarations for " + className);
     outFile.println(
-        "// Declarations written "
-            + LocalDateTime.now(ZoneId.systemDefault())
-            + " by daikon.Chicory");
+        "// Declarations written by daikon.Chicory " + LocalDateTime.now(ZoneId.systemDefault()));
     outFile.println();
 
     // Determine comparability string

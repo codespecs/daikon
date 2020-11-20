@@ -16,7 +16,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  */
 public class DeclReader {
 
-  /** map from ppt name to corresponding DeclPpt. */
+  /** Map from ppt name to corresponding DeclPpt. */
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
 
   /** Information about variables within a program point. */
@@ -38,16 +38,16 @@ public class DeclReader {
     /**
      * Returns the variable's name.
      *
-     * @return string containing variable name
+     * @return the variable's name
      */
     public String get_name() {
       return name;
     }
 
     /**
-     * Returns the comparability string from the decl file.
+     * Returns the comparability value from the decl file.
      *
-     * @return string containing comparability value
+     * @return the comparability value
      */
     public String get_comparability() {
       return comparability;
@@ -65,9 +65,9 @@ public class DeclReader {
    * ppt name and a list of the declared variables.
    */
   public static class DeclPpt {
-    /** program point name. */
+    /** Program point name. */
     public String name;
-    /** map from variable name to corresponding DeclVarInfo. */
+    /** Map from variable name to corresponding DeclVarInfo. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
 
     /**
@@ -89,35 +89,56 @@ public class DeclReader {
      */
     public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
 
-      String var_name;
+      String firstLine = decl_file.readLine();
+      Scanner scanner = new Scanner(firstLine);
+      if (!(scanner.hasNext() && scanner.next().equals("variable") && scanner.hasNext())) {
+        reportFileError(decl_file, "Expected \"variable <VARNAME>\", found \"" + firstLine + "\"");
+      }
+      String var_name = scanner.next();
+
       String type = null;
       String rep_type = null;
       String comparability = null;
-      Scanner scanner = new Scanner(decl_file.readLine());
-      scanner.next(); // skip the "variable "
-      var_name = scanner.next();
 
       // read variable data records until next variable or blank line
       String record = decl_file.readLine();
       while ((record != null) && (record.length() != 0)) {
         scanner = new Scanner(record);
         String token = scanner.next();
-        if (token.equals("variable")) break;
-        if (token.equals("dec-type")) {
+        if (token.equals("variable")) {
+          break;
+        } else if (token.equals("dec-type")) {
+          if (!scanner.hasNext()) {
+            reportFileError(decl_file, "\"dec-type\" not followed by a type");
+          }
           type = scanner.next();
         } else if (token.equals("rep-type")) {
+          if (!scanner.hasNext()) {
+            reportFileError(decl_file, "\"rep-type\" not followed by a type");
+          }
           rep_type = scanner.next();
         } else if (token.equals("comparability")) {
+          if (!scanner.hasNext()) {
+            reportFileError(decl_file, "\"comparability\" not followed by a comparability-type");
+          }
           comparability = scanner.next();
         }
         // we ignore all other record types
         record = decl_file.readLine();
       }
       // push back the variable or blank line record
-      decl_file.putback(record);
+      if (record != null) {
+        decl_file.putback(record);
+      }
 
-      if ((var_name == null) || (type == null) || (rep_type == null) || (comparability == null)) {
-        throw new Error("File " + decl_file.getFileName() + " is invalid");
+      if (type == null) {
+        reportFileError(decl_file, "No type for variable " + var_name);
+      }
+      if (rep_type == null) {
+        reportFileError(decl_file, "No rep-type for variable " + var_name);
+      }
+      if (comparability == null) {
+        reportFileError(decl_file, "No comparability for variable " + var_name);
       }
 
       // I don't see the point of this interning.  No code seems to take
@@ -136,8 +157,8 @@ public class DeclReader {
     /**
      * Returns the DeclVarInfo named var_name or null if it doesn't exist.
      *
-     * @param var_name the variable name
-     * @return DeclVarInfo for the program point variable
+     * @param var_name a variable name
+     * @return DeclVarInfo for the given variable
      */
     public @Nullable DeclVarInfo find_var(String var_name) {
       return vars.get(var_name);
@@ -161,11 +182,6 @@ public class DeclReader {
       return name.replaceFirst(":::.*", "");
     }
 
-    /**
-     * Returns the ppt name.
-     *
-     * @return String containing the program point name
-     */
     @SideEffectFree
     @Override
     public String toString(@GuardSatisfied DeclPpt this) {
@@ -193,8 +209,9 @@ public class DeclReader {
         if (!line.startsWith("ppt ")) {
           continue;
         }
+        decl_file.putback(line);
         // Read the program point declaration.
-        read_decl(decl_file, line);
+        read_decl(decl_file);
       }
     } catch (Exception e) {
       throw new Error("Error reading comparability decl file", e);
@@ -205,28 +222,30 @@ public class DeclReader {
    * Reads a single program point declaration from decl_file.
    *
    * @param decl_file EntryReader for reading data
-   * @param record String containing the "ppt" record
    * @return DeclPpt for the program point
    * @throws IOException if there is trouble reading the file
    */
-  protected DeclPpt read_decl(EntryReader decl_file, String record) throws IOException {
+  protected DeclPpt read_decl(EntryReader decl_file) throws IOException {
 
+    String firstLine = decl_file.readLine();
     // Read the name of the program point
-    String pptname = record.substring(4); // skip "ppt "
+    String pptname = firstLine.substring(4); // skip "ppt "
     assert pptname.contains(":::");
     DeclPpt ppt = new DeclPpt(pptname);
     ppts.put(pptname, ppt);
 
     // Skip the ppt-type record.
-    decl_file.readLine();
+    String ppt_type = decl_file.readLine();
+    if (ppt_type == null) {
+      reportFileError(decl_file, "File terminated prematurely while reading decl for " + ppt);
+    }
 
     // Read each of the variables in this program point.  The variables
     // are terminated by a blank line.
     String line = decl_file.readLine();
-
     while ((line != null) && (line.length() != 0)) {
       if (!line.startsWith("variable ")) {
-        throw new Error("file " + decl_file.getFileName() + " is invalid");
+        reportFileError(decl_file, "Expected \"variable ...\", found \"" + line + "\"");
       }
       decl_file.putback(line);
       ppt.read_var(decl_file);
@@ -245,5 +264,9 @@ public class DeclReader {
   public @Nullable DeclPpt find_ppt(String ppt_name) {
     DeclPpt result = ppts.get(ppt_name);
     return result;
+  }
+
+  private static void reportFileError(EntryReader er, String message) {
+    throw new Error(message + " at " + er.getFileName() + " line " + er.getLineNumber());
   }
 }
