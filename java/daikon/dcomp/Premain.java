@@ -441,11 +441,7 @@ public class Premain {
           "Can't get canonical file for " + filename + " in " + System.getProperty("user.dir"));
     }
 
-    // This is not sufficient for circleci/openjdk:8-jdk.
-    // canonicalFile.getParentFile().mkdirs();
-
-    // This alone is sufficient for circleci/openjdk:8-jdk.
-    // But maybe it makes tests fail?
+    // I don't know why, but without this, the call to newBufferedWriter fails in some contexts.
     try {
       canonicalFile.createNewFile();
     } catch (IOException e) {
