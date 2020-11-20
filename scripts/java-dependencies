@@ -20,7 +20,7 @@ debug=
 
 # get the arguments
 if [ $# -ne 3 ]; then
-    echo $(basename $0)" takes 3 arguments, but $# were supplied"
+    echo "$(basename "$0") takes 3 arguments, but $# were supplied"
     exit 1
 fi
 sources="$1"
@@ -36,7 +36,8 @@ fi
 
 # compile the java files
 scratch=$(mktemp -d -t build_all_list_file.XXXXXX)
-if ! $javac -d $scratch -sourcepath $sources $main ; then
+# shellcheck disable=SC2086
+if ! $javac -d "$scratch" -sourcepath "$sources" $main ; then
   exit 1
 fi
 
@@ -44,11 +45,11 @@ fi
 # relative Java filenames.  If the corresponding Java file doesn't exist,
 # discard the file (this happens for inner classes, two classes in a file,
 # and perhaps some other cases).
-cd $scratch || exit
+cd "$scratch" || exit
 files=$(find . $find_args -name '*.class' | grep -v -F '$' | sed s/class/java/ | sed 's/\.\///' | sort)
 for file in $files; do
-  if [ -e $sources/$file ] ; then
-    echo $file
+  if [ -e "$sources/$file" ] ; then
+    echo "$file"
   fi
 done
 cd ..
@@ -57,5 +58,5 @@ if [ $debug ]; then
   echo "scratch = $scratch"
 else
   # remove the temporary directory
-  /bin/rm -rf $scratch
+  /bin/rm -rf "$scratch"
 fi
