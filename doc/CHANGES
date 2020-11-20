@@ -23,7 +23,8 @@ Further documentation can be found in:
 5.8.6 (forthcoming)
 
 DynComp handles lambdas (Java anonymous functions).
-Removed (unused) DynComp option --no-primitives.
+
+Removed DynComp option --no-primitives.
 
 ===========================================================================
 
