@@ -1531,7 +1531,7 @@ public final class DCRuntime implements IComparability {
    * Prints header information to the decls file. Should be called once before emitting any other
    * declarations.
    *
-   * @param pw PrintWriter to write on
+   * @param pw where to write output
    * @param className name of the top-level class (used only for printing comments)
    */
   public static void printHeaderInfo(PrintWriter pw, String className) {
@@ -1551,7 +1551,7 @@ public final class DCRuntime implements IComparability {
   /**
    * Dumps out .decl file information for all classes that were processed.
    *
-   * @param pw PrintWriter to write on
+   * @param pw where to write output
    */
   public static void print_decl_file(PrintWriter pw) {
 
@@ -1985,8 +1985,8 @@ public final class DCRuntime implements IComparability {
   /**
    * Dumps out comparability trace information for a single method.
    *
-   * @param pw PrintWriter to write on
-   * @param mi MethodInfo for method to process
+   * @param pw where to write output
+   * @param mi the method to process
    */
   public static void print_comparable_traced(PrintWriter pw, MethodInfo mi) {
     List<DVSet> l = get_comparable(mi.traversalEnter);
@@ -2027,7 +2027,7 @@ public final class DCRuntime implements IComparability {
    * [depth] steps from the root. Requires a Map [tree] that represents a tree though key-value sets
    * of the form {@code <}parent, set of children{@code >}.
    *
-   * @param pw PrintWriter to write on
+   * @param pw where to write output
    * @param tree map parents to children
    * @param node starting point of tree to print
    * @param depth distance from node to root of tree
