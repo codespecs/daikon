@@ -712,7 +712,7 @@ update-libs: update-checklink update-html-tools update-plume-scripts update-run-
 update-checklink:
 ifndef NONETWORK
 	if test -d utils/checklink/.git ; then \
-	  (cd utils/checklink && git pull -q) \
+	  (cd utils/checklink && (git pull -q || (echo "git pull failed" && true))) \
 	elif ! test -d utils/checklink ; then \
 	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink || git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink)) \
 	fi
@@ -721,7 +721,7 @@ endif
 update-html-tools:
 ifndef NONETWORK
 	if test -d utils/html-tools/.git ; then \
-	  (cd utils/html-tools && git pull -q) \
+	  (cd utils/html-tools && (git pull -q || (echo "git pull failed" && true))) \
 	elif ! test -d utils/html-tools ; then \
 	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools || git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools)) \
 	fi
@@ -730,7 +730,7 @@ endif
 update-plume-scripts:
 ifndef NONETWORK
 	if test -d utils/plume-scripts/.git ; then \
-	  (cd utils/plume-scripts && (git pull -q || echo "git pull failed")) \
+	  (cd utils/plume-scripts && (git pull -q || (echo "git pull failed" && true))) \
 	elif ! test -d utils/plume-scripts ; then \
 	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
 	fi
@@ -739,7 +739,7 @@ endif
 update-run-google-java-format:
 ifndef NONETWORK
 	if test -d utils/run-google-java-format/.git ; then \
-	  (cd utils/run-google-java-format && git pull -q) \
+	  (cd utils/run-google-java-format && (git pull -q || (echo "git pull failed" && true))) \
 	elif ! test -d utils/run-google-java-format ; then \
 	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format || git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format)) \
 	fi
