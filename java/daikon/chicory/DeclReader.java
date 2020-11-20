@@ -9,6 +9,7 @@ import java.util.Scanner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.TerminatesExecution;
 
 /**
  * Reads declaration files and provides methods to access the information within them. A declaration
@@ -90,6 +91,9 @@ public class DeclReader {
     public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
 
       String firstLine = decl_file.readLine();
+      if (firstLine == null) {
+        reportFileError(decl_file, "Expected \"variable <VARNAME>\", found end of file");
+      }
       Scanner scanner = new Scanner(firstLine);
       if (!(scanner.hasNext() && scanner.next().equals("variable") && scanner.hasNext())) {
         reportFileError(decl_file, "Expected \"variable <VARNAME>\", found \"" + firstLine + "\"");
@@ -279,6 +283,7 @@ public class DeclReader {
    * @param er an EntryReader, from which file name and line number are obtained
    * @param message the error message
    */
+  @TerminatesExecution
   private static void reportFileError(EntryReader er, String message) {
     throw new Error(message + " at " + er.getFileName() + " line " + er.getLineNumber());
   }
