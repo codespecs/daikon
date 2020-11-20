@@ -19,7 +19,7 @@ cd valgrind-3 || exit
 
 # - Remove all CVS/ directories:
 
-find . -type d -name CVS | xargs rm -rf
+find . -type d -name CVS -print0 | xargs -0 rm -rf
 
 # - Remove all DynComp-specific things from Valgrind and VEX files, in
 # addition to Memcheck files:
