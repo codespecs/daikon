@@ -445,7 +445,7 @@ public class Premain {
     try {
       canonicalFile.createNewFile();
     } catch (IOException e) {
-      throw new Error("Couldn't call createNewFile for " + canonicalFile);
+      throw new Error("createNewFile failed for " + canonicalFile, e);
     }
 
     try {
