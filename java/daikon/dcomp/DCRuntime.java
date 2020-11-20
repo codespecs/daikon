@@ -1921,8 +1921,8 @@ public final class DCRuntime {
   /**
    * Dumps out comparability trace information for a single method.
    *
-   * @param ps PrintWriter to write on
-   * @param mi MethodInfo for method to process
+   * @param pw where to write output
+   * @param mi the method to process
    */
   public static void print_comparable_traced(PrintWriter ps, MethodInfo mi) {
     List<DVSet> l = get_comparable(mi.traversalEnter);
