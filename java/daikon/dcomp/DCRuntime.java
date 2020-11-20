@@ -1699,6 +1699,7 @@ public final class DCRuntime {
    *
    * @param pw where to produce output
    * @param mi the class to output
+   * @return the list of comparabile DVSets for the exit
    */
   public static List<DVSet> print_decl(PrintWriter pw, MethodInfo mi) {
 
