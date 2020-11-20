@@ -1510,13 +1510,13 @@ public final class DCRuntime {
   /**
    * Dumps out .decl file information for all classes that were processed.
    *
-   * @param pw PrintWriter to write on
+   * @param pw where to write output
    */
-  public static void print_decl_file(PrintWriter ps) {
+  public static void print_decl_file(PrintWriter pw) {
 
     // Write the file header
-    ps.printf("// Declaration file written by daikon.dcomp%n%n");
-    ps.printf("VarComparability%nimplicit%n%n");
+    pw.printf("// Declaration file written by daikon.dcomp%n%n");
+    pw.printf("VarComparability%nimplicit%n%n");
 
     // Write the information for each class
     for (ClassInfo ci : all_classes) {
@@ -1659,18 +1659,18 @@ public final class DCRuntime {
 
     // Write the class ppt
     String classPptName = String.format("%s:::CLASS", ci.class_name);
-    ps.printf("DECLARE%n");
-    ps.println(classPptName);
-    print_decl_vars(ps, get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
-    ps.println();
+    pw.printf("DECLARE%n");
+    pw.println(classPptName);
+    print_decl_vars(pw, get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
+    pw.println();
     time_decl.log("printed class ppt");
 
     // Write the object ppt
     String objectPptName = String.format("%s:::OBJECT", ci.class_name);
-    ps.printf("DECLARE%n");
-    ps.println(objectPptName);
-    print_decl_vars(ps, get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
-    ps.println();
+    pw.printf("DECLARE%n");
+    pw.println(objectPptName);
+    print_decl_vars(pw, get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
+    pw.println();
     time_decl.log("printed object ppt");
 
     // Print the information for each enter/exit point
@@ -1679,8 +1679,8 @@ public final class DCRuntime {
         continue;
       }
       debug_decl_print.log("  method %s%n", mi.method_name);
-      ps.println();
-      print_decl(ps, mi);
+      pw.println();
+      print_decl(pw, mi);
     }
 
     time_decl.log("finished class %s%n", ci.class_name);
@@ -1719,7 +1719,7 @@ public final class DCRuntime {
     pw.println("DECLARE");
     pw.println(enterPptName);
     // ppt_name_ms += watch.snapshot();  watch.reset();
-    print_decl_vars(ps, l, mi.traversalEnter, enterPptName);
+    print_decl_vars(pw, l, mi.traversalEnter, enterPptName);
     // decl_vars_ms += watch.snapshot();  watch.reset();
     pw.println();
     time_decl.log("after enter");
@@ -1736,7 +1736,7 @@ public final class DCRuntime {
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log("after exit clean_decl_name");
-      print_decl_vars(ps, l, mi.traversalExit, exitPptName);
+      print_decl_vars(pw, l, mi.traversalExit, exitPptName);
       pw.println();
       // decl_vars_ms += watch.snapshot();  watch.reset();
 
@@ -1852,9 +1852,9 @@ public final class DCRuntime {
         continue;
       }
       // System.out.printf("Output dv: %s ", dv);
-      ps.println(dv.getName());
-      ps.println(dv.getTypeName());
-      ps.println(dv.getRepTypeName());
+      pw.println(dv.getName());
+      pw.println(dv.getTypeName());
+      pw.println(dv.getRepTypeName());
       int comp = dv_comp_map.get(dv);
       if (dv.isArray()) {
         String name = dv.getName();
@@ -1869,15 +1869,15 @@ public final class DCRuntime {
         // System.out.printf("compare: %d [ %s ] ", comp, index_comp);
         if (index_comp != null) {
           // System.out.println(comp + "[" + index_comp + "]");
-          ps.println(comp + "[" + index_comp + "]");
+          pw.println(comp + "[" + index_comp + "]");
         } else {
           // There is no index comparability, so just set it to a unique value.
           // System.out.println(comp + "[" + base_comp + "]");
-          ps.println(comp + "[" + base_comp++ + "]");
+          pw.println(comp + "[" + base_comp++ + "]");
         }
       } else {
         // System.out.println(comp);
-        ps.println(comp);
+        pw.println(comp);
       }
     }
 
@@ -1932,8 +1932,8 @@ public final class DCRuntime {
   /**
    * Dumps out comparability trace information for a single method.
    *
-   * @param pw PrintWriter to write on
-   * @param mi MethodInfo for method to process
+   * @param pw where to write output
+   * @param mi the method process
    */
   public static void print_comparable_traced(PrintWriter pw, MethodInfo mi) {
     List<DVSet> l = get_comparable(mi.traversalEnter);
