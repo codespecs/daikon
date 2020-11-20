@@ -76,7 +76,7 @@ public class DeclWriter extends DaikonWriter implements IComparability {
   public void printHeaderInfo(String className) {
     outFile.println("// Declarations for " + className);
     outFile.println(
-        "// Declarations written by daikon.Chicory " + LocalDateTime.now(ZoneId.systemDefault()));
+        "// Declarations written by Chicory " + LocalDateTime.now(ZoneId.systemDefault()));
     outFile.println();
 
     // Determine comparability string
