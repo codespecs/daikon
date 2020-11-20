@@ -173,7 +173,7 @@ public class BuildJDK {
       File jdk_classes_file = new File(dest_dir, "java/lang/jdk_classes.txt");
       System.out.printf("Writing a list of class names to %s%n", jdk_classes_file);
       // Class names are written in internal form.
-      try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8)) {
+      try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
         for (String classFileName : class_stream_map.keySet()) {
           pw.println(classFileName.replace(".class", ""));
         }
