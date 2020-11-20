@@ -642,7 +642,6 @@ public class DeclWriter extends DaikonWriter {
    * @param parent parent of var in the variable tree
    * @param var variable whose values are to be output
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
-   * @param callback object containing getComparability method
    */
   public void print_decl(
       DaikonVariableInfo parent, DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
