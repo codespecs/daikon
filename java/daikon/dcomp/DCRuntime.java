@@ -1685,8 +1685,8 @@ public final class DCRuntime implements IComparability {
   /**
    * Calculates and prints the declarations for the specified class.
    *
-   * @param pw PrintWriter to write on
-   * @param ci ClassInfo for class
+   * @param pw where to produce output
+   * @param ci the class to write
    */
   public static void print_class_decl(PrintWriter pw, ClassInfo ci) {
 
@@ -1737,8 +1737,8 @@ public final class DCRuntime implements IComparability {
    * Prints a decl ENTER/EXIT records with comparability. Returns the list of comparabile DVSets for
    * the exit.
    *
-   * @param pw PrintWriter to write on
-   * @param mi MethodInfo for class
+   * @param pw where to produce output
+   * @param mi the class to output
    * @return the list of comparabile DVSets for the exit
    */
   public static List<DVSet> print_method(PrintWriter pw, MethodInfo mi) {
@@ -1943,8 +1943,8 @@ public final class DCRuntime implements IComparability {
    * Prints comparability information for the enter and exit points of the specified method. By
    * default, outputs to {@code foo.txt-cset}.
    *
-   * @param pw PrintWriter to write on
-   * @param mi MethodInfo for class
+   * @param pw where to produce output
+   * @param mi the method whose comparability to output
    */
   /* TO DO: Find a way to make this work correctly without using normal
    * get_comparable.
