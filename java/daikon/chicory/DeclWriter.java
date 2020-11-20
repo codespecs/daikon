@@ -4,7 +4,7 @@ import daikon.Chicory;
 import daikon.FileIO;
 import daikon.PptTopLevel.PptType;
 import daikon.plumelib.bcelutil.SimpleLog;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -51,7 +51,7 @@ public class DeclWriter extends DaikonWriter {
   private static int unique_compare_value;
 
   /** Stream to write to. */
-  private PrintStream outFile;
+  private PrintWriter outFile;
 
   /**
    * Enable parent relations other than methods to their class objects. Turned off for now to match
@@ -64,7 +64,7 @@ public class DeclWriter extends DaikonWriter {
    *
    * @param writer stream to write to
    */
-  public DeclWriter(PrintStream writer) {
+  public DeclWriter(PrintWriter writer) {
     super();
     outFile = writer;
     debug = Chicory.debug_decl_print;
@@ -115,6 +115,7 @@ public class DeclWriter extends DaikonWriter {
    * time to print decls info for a class.
    *
    * @param cinfo class whose declarations should be printed
+   * @param comp_info comparability information
    */
   public void printDeclClass(ClassInfo cinfo, @Nullable DeclReader comp_info) {
     if (Chicory.new_decl_format) {
@@ -581,86 +582,7 @@ public class DeclWriter extends DaikonWriter {
       // don't do anything
     } else if (!(var instanceof StaticObjInfo)) {
 
-      // Write out the variable and its name
-      outFile.println("variable " + escape(var.getName()));
-
-      // Write out the kind of variable and its relative name
-      VarKind kind = var.get_var_kind();
-      String relative_name = var.get_relative_name();
-      outFile.print("  var-kind " + out_name(kind));
-      if (relative_name != null) {
-        outFile.print(" " + relative_name);
-      }
-      outFile.println();
-
-      // Write out the enclosing variable.
-      // If we are in an inner class, we need to special case the
-      // 'hidden' field that holds the outer class 'this' pointer.
-      // If the field name ends with ".this", it can only be this
-      // special case and we need to not output the enclosing-var.
-      if ((parent != null)
-          && !var.isStatic()
-          && !((relative_name != null) && relative_name.endsWith(".this"))) {
-        if (debug) System.out.println("traverse var parent: " + parent.getName());
-        outFile.println("  enclosing-var " + escape(parent.getName()));
-      }
-
-      // If this variable has multiple value, indicate it is an array
-      if (var.isArray()) {
-        outFile.println("  array 1");
-      }
-
-      // Write out the declared and representation types
-      outFile.println("  dec-type " + escape(var.getTypeNameOnly()));
-      outFile.println("  rep-type " + escape(var.getRepTypeNameOnly()));
-
-      // Write out the constant value (if present)
-      String const_val = var.get_const_val();
-      if (const_val != null) {
-        outFile.println("  constant " + const_val);
-      }
-
-      // Write out the arguments used to create (if present) the variable if it is a function
-      String function_args = var.get_function_args();
-      if (function_args != null) {
-        outFile.println("  function-args " + function_args);
-      }
-
-      // Write out the variable flags if any are set
-      EnumSet<VarFlags> var_flags = var.get_var_flags();
-      if (var_flags.size() > 0) {
-        outFile.print("  flags");
-        for (Enum<?> e : var_flags) {
-          outFile.print(" " + out_name(e));
-        }
-        outFile.println();
-      }
-
-      // Determine comparability and write it out
-      // Currently, the value returned by getCompareString() is always 22.
-      String comp_str = var.getCompareString();
-      if (compare_ppt != null) {
-        comp_str = "-1";
-        DeclReader.DeclVarInfo varinfo = compare_ppt.find_var(var.getName());
-        if (varinfo != null) comp_str = varinfo.get_comparability();
-      } else {
-        // Check to see if DynComp data is present.
-        if (Runtime.comp_info != null) {
-          // There is no comparability value for this variable as DynComp
-          // saw no interactions. In order to reduce the number of useless
-          // invariants, we will generate a unique, dummy comparability value.
-          comp_str = Integer.toString(unique_compare_value--);
-          if (var.isArray()) {
-            // Should output n index values to match number of dimensions.
-            // However, that value is hard to obtain at this point, so just
-            // always do one.  May cause some multi-dimension variables to
-            // be put into incorrect comparability set.  This is certainly
-            // no worse than previous algorithm. (markro)
-            comp_str = comp_str + "[" + Integer.toString(unique_compare_value--) + "]";
-          }
-        }
-      }
-      outFile.println("  comparability " + comp_str);
+      print_decl(parent, var, compare_ppt);
 
       // Determine if there is a ppt for variables of this type
       // If found this should match one of the previously found relations
@@ -714,6 +636,110 @@ public class DeclWriter extends DaikonWriter {
    */
   private String out_name(Enum<?> e) {
     return e.name().toLowerCase();
+  }
+
+  /**
+   * Output most of the decl file information for a single variable.
+   *
+   * @param parent parent of var in the variable tree
+   * @param var variable whose values are to be output
+   * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
+   */
+  public void print_decl(
+      DaikonVariableInfo parent, DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
+
+    // Write out the variable and its name
+    outFile.println("variable " + escape(var.getName()));
+
+    // Write out the kind of variable and its relative name
+    VarKind kind = var.get_var_kind();
+    String relative_name = var.get_relative_name();
+    outFile.print("  var-kind " + out_name(kind));
+    if (relative_name != null) {
+      outFile.print(" " + relative_name);
+    }
+    outFile.println();
+
+    // Write out the enclosing variable.
+    // If we are in an inner class, we need to special case the
+    // 'hidden' field that holds the outer class 'this' pointer.
+    // If the field name ends with ".this", it can only be this
+    // special case and we need to not output the enclosing-var.
+    if ((parent != null)
+        && !var.isStatic()
+        && !((relative_name != null) && relative_name.endsWith(".this"))) {
+      if (debug) System.out.println("traverse var parent: " + parent.getName());
+      outFile.println("  enclosing-var " + escape(parent.getName()));
+    }
+
+    // If this variable has multiple value, indicate it is an array
+    if (var.isArray()) {
+      outFile.println("  array 1");
+    }
+
+    // Write out the declared and representation types
+    outFile.println("  dec-type " + escape(var.getTypeNameOnly()));
+    outFile.println("  rep-type " + escape(var.getRepTypeNameOnly()));
+
+    // Write out the constant value (if present)
+    String const_val = var.get_const_val();
+    if (const_val != null) {
+      outFile.println("  constant " + const_val);
+    }
+
+    // Write out the arguments used to create (if present) the variable if it is a function
+    String function_args = var.get_function_args();
+    if (function_args != null) {
+      outFile.println("  function-args " + function_args);
+    }
+
+    // Write out the variable flags if any are set
+    EnumSet<VarFlags> var_flags = var.get_var_flags();
+    if (var_flags.size() > 0) {
+      outFile.print("  flags");
+      for (Enum<?> e : var_flags) {
+        outFile.print(" " + out_name(e));
+      }
+      outFile.println();
+    }
+
+    // Determine comparability and write it out
+    String comp_str = getComparability(var, compare_ppt);
+    outFile.println("  comparability " + comp_str);
+  }
+
+  /**
+   * Get the caparability value for a varaible.
+   *
+   * @param var variable whose value is desired
+   * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
+   * @return String containing the comparability value
+   */
+  public String getComparability(DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
+    // Currently, the value returned by getCompareString() is always 22.
+    String comp_str = var.getCompareString();
+    if (compare_ppt != null) {
+      comp_str = "-1";
+      DeclReader.DeclVarInfo varinfo = compare_ppt.find_var(var.getName());
+      if (varinfo != null) comp_str = varinfo.get_comparability();
+    } else {
+      // Check to see if DynComp data is present.
+      if (Runtime.comp_info != null) {
+        // There is no comparability value for this variable as DynComp
+        // saw no interactions. In order to reduce the number of useless
+        // invariants, we will generate a unique, dummy comparability value.
+        comp_str = Integer.toString(unique_compare_value--);
+        if (var.isArray()) {
+          // Should output n index values to match number of dimensions.
+          // However, that value is hard to obtain at this point, so just
+          // always do one.  May cause some multi-dimension variables to
+          // be put into incorrect comparability set.  This is certainly
+          // no worse than previous algorithm. (markro)
+          comp_str = comp_str + "[" + Integer.toString(unique_compare_value--) + "]";
+        }
+      }
+    }
+    return comp_str;
   }
 
   /**
