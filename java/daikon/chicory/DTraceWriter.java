@@ -1,7 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -38,7 +38,7 @@ public class DTraceWriter extends DaikonWriter {
   protected static final String stringClassName = "java.lang.String";
 
   /** Where to print output. */
-  private PrintStream outFile;
+  private PrintWriter outFile;
 
   /** debug information about daikon variables */
   private boolean debug_vars = false;
@@ -48,7 +48,7 @@ public class DTraceWriter extends DaikonWriter {
    *
    * @param writer stream to write to
    */
-  public DTraceWriter(PrintStream writer) {
+  public DTraceWriter(PrintWriter writer) {
     super();
     outFile = writer;
   }

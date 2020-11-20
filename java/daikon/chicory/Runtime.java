@@ -1,11 +1,15 @@
 package daikon.chicory;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -100,7 +104,7 @@ public class Runtime {
   /** Dtrace output stream. Null if no_dtrace is true. */
   // Not annotated *@MonotonicNonNull* because initialization and use happen in generated
   // instrumentation code that cannot be type-checked by a source code checker.
-  static @GuardedBy("<self>") PrintStream dtrace;
+  static @GuardedBy("<self>") PrintWriter dtrace;
 
   /** Set to true when the dtrace stream is closed. */
   static boolean dtrace_closed = false;
@@ -481,7 +485,7 @@ public class Runtime {
     // requirement that all variables used as locks be final or
     // effectively final.  If a bug exists whereby Runtime.dtrace
     // is not effectively final, this would unfortunately mask that error.
-    final @GuardedBy("<self>") PrintStream dtrace = Runtime.dtrace;
+    final @GuardedBy("<self>") PrintWriter dtrace = Runtime.dtrace;
 
     synchronized (dtrace) {
       // The shutdown hook is synchronized on this, so close it up
@@ -534,7 +538,9 @@ public class Runtime {
     }
 
     try {
-      dtrace = new PrintStream(daikonSocket.getOutputStream());
+      dtrace =
+          new PrintWriter(
+              new BufferedWriter(new OutputStreamWriter(daikonSocket.getOutputStream(), UTF_8)));
     } catch (IOException e) {
       System.out.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
@@ -577,7 +583,7 @@ public class Runtime {
 
       // 8192 is the buffer size in BufferedReader
       BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
-      dtrace = new PrintStream(bos);
+      dtrace = new PrintWriter(new BufferedWriter(new OutputStreamWriter(bos, UTF_8)));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error(e);
@@ -617,7 +623,7 @@ public class Runtime {
     }
   }
 
-  /** Add a shutdown hook to close the PrintStream when the program exits. */
+  /** Add a shutdown hook to close the PrintWriter when the program exits. */
   private static void addShutdownHook() {
     // Copied from daikon.Runtime, then modified
 
@@ -629,7 +635,7 @@ public class Runtime {
               public void run() {
                 if (!dtrace_closed) {
                   // When the program being instrumented exits, the buffers
-                  // of the "dtrace" (PrintStream) object are not flushed,
+                  // of the "dtrace" (PrintWriter) object are not flushed,
                   // so we miss the tail of the file.
 
                   synchronized (Runtime.dtrace) {

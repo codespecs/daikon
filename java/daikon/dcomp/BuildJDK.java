@@ -403,7 +403,7 @@ public class BuildJDK {
    *
    * @param destDir where to store the new class
    * @param className name of class
-   * @param dcompInstrumented c$if true, add equals_dcomp_instrumented method to class
+   * @param dcompInstrumented if true, add equals_dcomp_instrumented method to class
    */
   private void createDCompClass(
       String destDir, @BinaryName String className, boolean dcompInstrumented) {
