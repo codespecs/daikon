@@ -2980,7 +2980,7 @@ types are related to the program point hierarchy (see @ref{Dataflow hierarchy}).
 
 A @code{point} program point is one that is @emph{not} involved in a
 program point hierarchy.   This is normally used when the input is not
-from a programming language or when is no dataflow hierarchy.
+from a programming language or when there is no dataflow hierarchy.
 
 @item @code{flags <flags>}
 
