@@ -9,7 +9,7 @@ import daikon.chicory.DaikonWriter;
 import daikon.chicory.DeclReader;
 import daikon.chicory.DeclWriter;
 import daikon.chicory.FieldInfo;
-import daikon.chicory.ICalcCompare;
+import daikon.chicory.IComparability;
 import daikon.chicory.MethodInfo;
 import daikon.chicory.ParameterInfo;
 import daikon.chicory.ReturnInfo;
@@ -51,7 +51,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * methods; it should never be instantiated.
  */
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
-public final class DCRuntime implements ICalcCompare {
+public final class DCRuntime implements IComparability {
 
   /** List of all instrumented methods. */
   public static final List<MethodInfo> methods = new ArrayList<>();
@@ -111,7 +111,7 @@ public final class DCRuntime implements ICalcCompare {
   // Set in Premain.premain().
   static DeclWriter decl_writer;
 
-  /** Instance of DCRuntime to use for ICalcCompare callbacks. */
+  /** Instance of DCRuntime to use for IComparability callbacks. */
   // Set in Premain.premain().
   static DCRuntime runtime_object;
 
@@ -1913,7 +1913,7 @@ public final class DCRuntime implements ICalcCompare {
    * @return string containing comparability value
    */
   @Override
-  public String calc_comparability(DaikonVariableInfo dv, DeclReader.DeclPpt compare_ppt) {
+  public String getComparability(DaikonVariableInfo dv, DeclReader.DeclPpt compare_ppt) {
     int comp = dv_comp_map.get(dv);
     String comp_str = Integer.toString(comp);
     if (dv.isArray()) {

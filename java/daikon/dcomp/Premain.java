@@ -415,7 +415,7 @@ public class Premain {
       // Create DeclWriter so can share output code in Chicory.
       DCRuntime.decl_writer = new DeclWriter(decl_fp);
       DCRuntime.decl_writer.debug = DynComp.debug_decl_print;
-      // Create instance of DCRuntime to use for ICalcCompare callbacks.
+      // Create instance of DCRuntime to use for IComparability callbacks.
       DCRuntime.runtime_object = new DCRuntime();
 
       long startTime = System.nanoTime();

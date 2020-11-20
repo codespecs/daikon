@@ -167,7 +167,7 @@ public class DeclReader {
     /**
      * Returns the ppt name.
      *
-     * @return String containing the program point name
+     * @return the program point name
      */
     public String get_name() {
       return name;
@@ -176,7 +176,7 @@ public class DeclReader {
     /**
      * Returns the name without the :::EXIT, :::ENTER, etc.
      *
-     * @return String containing the program point name
+     * @return the program point name
      */
     public String get_short_name() {
       return name.replaceFirst(":::.*", "");
@@ -189,13 +189,13 @@ public class DeclReader {
     }
   }
 
-  /** DeclReader constructor. */
+  /** Create a new DeclReader. */
   public DeclReader() {}
 
   /**
    * Read declarations from the specified pathname.
    *
-   * @param pathname File for reading data
+   * @param pathname a File for reading data
    * @throws IOException if there is trouble reading the file
    */
   public void read(File pathname) throws IOException {
@@ -210,6 +210,7 @@ public class DeclReader {
           continue;
         }
         decl_file.putback(line);
+
         // Read the program point declaration.
         read_decl(decl_file);
       }
@@ -222,13 +223,19 @@ public class DeclReader {
    * Reads a single program point declaration from decl_file.
    *
    * @param decl_file EntryReader for reading data
-   * @return DeclPpt for the program point
+   * @return the program point declaration
    * @throws IOException if there is trouble reading the file
    */
   protected DeclPpt read_decl(EntryReader decl_file) throws IOException {
 
-    String firstLine = decl_file.readLine();
     // Read the name of the program point
+    String firstLine = decl_file.readLine();
+    if (firstLine == null) {
+      reportFileError(decl_file, "File ends prematurely, expected \"ppt ...\"");
+    }
+    if (!firstLine.startsWith("ppt ")) {
+      reportFileError(decl_file, "Expected \"ppt ...\", found \"" + firstLine + "\"");
+    }
     String pptname = firstLine.substring(4); // skip "ppt "
     assert pptname.contains(":::");
     DeclPpt ppt = new DeclPpt(pptname);
@@ -266,6 +273,12 @@ public class DeclReader {
     return result;
   }
 
+  /**
+   * Report an error while reading from an EntryReader, with file name and line number.
+   *
+   * @param er an EntryReader, from which file name and line number are obtained
+   * @param message the error message
+   */
   private static void reportFileError(EntryReader er, String message) {
     throw new Error(message + " at " + er.getFileName() + " line " + er.getLineNumber());
   }

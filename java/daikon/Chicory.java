@@ -82,7 +82,7 @@ public class Chicory {
 
   // Should perhaps permit specifying the heap for the target program and
   // for Daikon separately.
-  /** Heap size of the target program, and of Daikon if Daikon is run. */
+  /** Heap size for the target program, and for Daikon if Daikon is run. */
   @Option("Size of the heap for the target program, and for Daikon if it is run")
   public static String heap_size = "1000m";
 
@@ -546,9 +546,9 @@ public class Chicory {
   }
 
   /**
-   * Returns elapsed time as a String since the start of the program.
+   * Returns elapsed time since the start of the program.
    *
-   * @return string containing elapsed time since the start of the program
+   * @return elapsed time since the start of the program
    */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");

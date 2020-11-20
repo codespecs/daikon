@@ -26,7 +26,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * DTraceWriter}.
  */
 @SuppressWarnings("nullness") // to do
-public class DeclWriter extends DaikonWriter implements ICalcCompare {
+public class DeclWriter extends DaikonWriter implements IComparability {
   // Notes:
   //
   //  Class.getName() returns JVM names (eg, [Ljava.lang.String;)
@@ -486,13 +486,13 @@ public class DeclWriter extends DaikonWriter implements ICalcCompare {
    * @param parent parent of var in the variable tree
    * @param var variable whose values are to be output
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
-   * @param callback object containing calc_comparability method
+   * @param callback object containing getComparability method
    */
   public void print_decl(
       DaikonVariableInfo parent,
       DaikonVariableInfo var,
       DeclReader.DeclPpt compare_ppt,
-      ICalcCompare callback) {
+      IComparability callback) {
 
     // Write out the variable and its name
     outFile.println("variable " + escape(var.getName()));
@@ -550,7 +550,7 @@ public class DeclWriter extends DaikonWriter implements ICalcCompare {
     }
 
     // Determine comparability and write it out
-    String comp_str = callback.calc_comparability(var, compare_ppt);
+    String comp_str = callback.getComparability(var, compare_ppt);
     outFile.println("  comparability " + comp_str);
   }
 
@@ -559,10 +559,10 @@ public class DeclWriter extends DaikonWriter implements ICalcCompare {
    *
    * @param var variable whose value is desired
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
-   * @return String containing the comparabitly value
+   * @return String containing the comparability value
    */
   @Override
-  public String calc_comparability(DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
+  public String getComparability(DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
     // Currently, the value returned by getCompareString() is always 22.
     String comp_str = var.getCompareString();
     if (compare_ppt != null) {
