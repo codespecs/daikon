@@ -28,7 +28,9 @@ JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -sourc
 INSTALL ?= /usr/bin/install
 
 ifdef CHECKERFRAMEWORK
-  CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+  ifneq ("$(wildcard $(CHECKERFRAMEWORK))","")
+    CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+  endif
 endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
 CHECKERFRAMEWORK_JAR ?= ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar
