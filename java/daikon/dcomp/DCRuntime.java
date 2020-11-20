@@ -1465,9 +1465,9 @@ public final class DCRuntime {
   /**
    * Dumps out comparability information for all classes that were processed.
    *
-   * @param ps PrintWriter to write on
+   * @param pw PrintWriter to write on
    */
-  public static void print_all_comparable(PrintWriter ps) {
+  public static void print_all_comparable(PrintWriter pw) {
 
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
@@ -1479,8 +1479,8 @@ public final class DCRuntime {
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
           continue;
         }
-        ps.println();
-        print_comparable(ps, mi);
+        pw.println();
+        print_comparable(pw, mi);
       }
     }
   }
@@ -1488,9 +1488,9 @@ public final class DCRuntime {
   /**
    * Dumps out comparability trace information for all classes that were processed.
    *
-   * @param ps PrintWriter to write on
+   * @param pw PrintWriter to write on
    */
-  public static void trace_all_comparable(PrintWriter ps) {
+  public static void trace_all_comparable(PrintWriter pw) {
 
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
@@ -1501,8 +1501,8 @@ public final class DCRuntime {
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
           continue;
         }
-        ps.println();
-        print_comparable_traced(ps, mi);
+        pw.println();
+        print_comparable_traced(pw, mi);
       }
     }
   }
@@ -1510,7 +1510,7 @@ public final class DCRuntime {
   /**
    * Dumps out .decl file information for all classes that were processed.
    *
-   * @param ps PrintWriter to write on
+   * @param pw PrintWriter to write on
    */
   public static void print_decl_file(PrintWriter ps) {
 
@@ -1520,7 +1520,7 @@ public final class DCRuntime {
 
     // Write the information for each class
     for (ClassInfo ci : all_classes) {
-      print_class_decl(ps, ci);
+      print_class_decl(pw, ci);
     }
     debug_decl_print.log("finished %d classes%n", all_classes.size());
   }
@@ -1641,8 +1641,13 @@ public final class DCRuntime {
     }
   }
 
-  /** Calculates and prints the declarations for the specified class. */
-  public static void print_class_decl(PrintWriter ps, ClassInfo ci) {
+  /**
+   * Calculates and prints the declarations for the specified class.
+   *
+   * @param pw where to produce output
+   * @param ci the class to write
+   */
+  public static void print_class_decl(PrintWriter pw, ClassInfo ci) {
 
     time_decl.log("Printing decl file for class %s%n", ci.class_name);
     time_decl.indent();
@@ -1691,8 +1696,11 @@ public final class DCRuntime {
   /**
    * Prints a decl ENTER/EXIT records with comparability. Returns the list of comparabile DVSets for
    * the exit.
+   *
+   * @param pw where to produce output
+   * @param mi the class to output
    */
-  public static List<DVSet> print_decl(PrintWriter ps, MethodInfo mi) {
+  public static List<DVSet> print_decl(PrintWriter pw, MethodInfo mi) {
 
     // long start = System.currentTimeMillis();
     // watch.reset();
@@ -1708,12 +1716,12 @@ public final class DCRuntime {
 
     // Print the enter point
     String enterPptName = clean_decl_name(DaikonWriter.methodEntryName(mi.member));
-    ps.println("DECLARE");
-    ps.println(enterPptName);
+    pw.println("DECLARE");
+    pw.println(enterPptName);
     // ppt_name_ms += watch.snapshot();  watch.reset();
     print_decl_vars(ps, l, mi.traversalEnter, enterPptName);
     // decl_vars_ms += watch.snapshot();  watch.reset();
-    ps.println();
+    pw.println();
     time_decl.log("after enter");
 
     // Print the exit points
@@ -1723,13 +1731,13 @@ public final class DCRuntime {
     time_decl.log("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
       String exitPptName = clean_decl_name(DaikonWriter.methodExitName(mi.member, ii));
-      ps.println("DECLARE");
-      ps.println(exitPptName);
+      pw.println("DECLARE");
+      pw.println(exitPptName);
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log("after exit clean_decl_name");
       print_decl_vars(ps, l, mi.traversalExit, exitPptName);
-      ps.println();
+      pw.println();
       // decl_vars_ms += watch.snapshot();  watch.reset();
 
     }
@@ -1741,17 +1749,17 @@ public final class DCRuntime {
   }
 
   /**
-   * Print the variables in sets to ps in DECL file format. Each variable in the same set is given
+   * Print the variables in sets to pw in DECL file format. Each variable in the same set is given
    * the same comparability. Constructed classname variables are made comparable to other classname
    * variables only.
    *
-   * @param ps where to print the variables
+   * @param pw where to print the variables
    * @param sets the comparability sets
    * @param dv_tree the tree of variables
    * @param pptName used only for debugging output
    */
   private static void print_decl_vars(
-      PrintWriter ps, List<DVSet> sets, RootInfo dv_tree, String pptName) {
+      PrintWriter pw, List<DVSet> sets, RootInfo dv_tree, String pptName) {
 
     time_decl.indent();
     time_decl.log("print_decl_vars start");
@@ -1881,16 +1889,19 @@ public final class DCRuntime {
   /**
    * Prints comparability information for the enter and exit points of the specified method. By
    * default, outputs to {@code foo.txt-cset}.
+   *
+   * @param pw where to produce output
+   * @param mi the method whose comparability to output
    */
   /* TO DO: Find a way to make this work correctly without using normal
    * get_comparable.
    */
-  public static void print_comparable(PrintWriter ps, MethodInfo mi) {
+  public static void print_comparable(PrintWriter pw, MethodInfo mi) {
 
     List<DVSet> l = get_comparable(mi.traversalEnter);
-    ps.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
+    pw.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
     if (l == null) {
-      ps.printf("  not called%n");
+      pw.printf("  not called%n");
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
@@ -1898,14 +1909,14 @@ public final class DCRuntime {
         }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
-        ps.printf("  [%d] %s%n", stuff.size(), stuff);
+        pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
     }
 
     l = get_comparable(mi.traversalExit);
-    ps.printf("Variable sets for %s exit%n", clean_decl_name(mi.toString()));
+    pw.printf("Variable sets for %s exit%n", clean_decl_name(mi.toString()));
     if (l == null) {
-      ps.printf("  not called%n");
+      pw.printf("  not called%n");
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
@@ -1913,7 +1924,7 @@ public final class DCRuntime {
         }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
-        ps.printf("  [%d] %s%n", stuff.size(), stuff);
+        pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
     }
   }
@@ -1921,50 +1932,55 @@ public final class DCRuntime {
   /**
    * Dumps out comparability trace information for a single method.
    *
-   * @param ps PrintWriter to write on
+   * @param pw PrintWriter to write on
    * @param mi MethodInfo for method to process
    */
-  public static void print_comparable_traced(PrintWriter ps, MethodInfo mi) {
+  public static void print_comparable_traced(PrintWriter pw, MethodInfo mi) {
     List<DVSet> l = get_comparable(mi.traversalEnter);
     Map<DaikonVariableInfo, DVSet> t = get_comparable_traced(mi.traversalEnter);
-    ps.printf("DynComp Traced Tree for %s enter%n", clean_decl_name(mi.toString()));
+    pw.printf("DynComp Traced Tree for %s enter%n", clean_decl_name(mi.toString()));
     if (t == null) {
-      ps.printf("  not called%n");
+      pw.printf("  not called%n");
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
-        ps.println();
+        print_tree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        pw.println();
       }
     }
-    ps.println();
+    pw.println();
 
     l = get_comparable(mi.traversalExit);
     t = get_comparable_traced(mi.traversalExit);
-    ps.printf("DynComp Traced Tree for %s exit%n", clean_decl_name(mi.toString()));
+    pw.printf("DynComp Traced Tree for %s exit%n", clean_decl_name(mi.toString()));
     if (t == null) {
-      ps.printf("  not called%n");
+      pw.printf("  not called%n");
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
-        ps.println();
+        print_tree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        pw.println();
       }
     }
-    ps.println();
+    pw.println();
   }
 
   /**
    * Prints to [stream] the segment of the tree that starts at [node], interpreting [node] as
    * [depth] steps from the root. Requires a Map [tree] that represents a tree though key-value sets
    * of the form {@code <}parent, set of children{@code >}.
+   *
+   * @param pw PrintWriter to write on
+   * @param tree map parents to children
+   * @param node starting point of tree to print
+   * @param depth distance from node to root of tree
    */
   static void print_tree(
-      PrintWriter ps, Map<DaikonVariableInfo, DVSet> tree, DaikonVariableInfo node, int depth) {
+      PrintWriter pw, Map<DaikonVariableInfo, DVSet> tree, DaikonVariableInfo node, int depth) {
 
     /* This method, for some reason, triggers a segfault due to the way
      * DVSets are handled conceptually. A trace-tree of one element creates
@@ -1973,25 +1989,25 @@ public final class DCRuntime {
      */
 
     if (depth == 0) {
-      ps.printf("%s%n", skinyOutput(node, daikon.DynComp.abridged_vars));
+      pw.printf("%s%n", skinyOutput(node, daikon.DynComp.abridged_vars));
       if (tree.get(node) == null) {
         return;
       }
       for (DaikonVariableInfo child : tree.get(node)) {
-        if (child != node) print_tree(ps, tree, child, depth + 1);
+        if (child != node) print_tree(pw, tree, child, depth + 1);
       }
     } else {
       for (int i = 0; i < depth; i++) {
-        ps.printf("--");
+        pw.printf("--");
       }
-      ps.printf(
+      pw.printf(
           "%s (%s)%n",
           skinyOutput(node, daikon.DynComp.abridged_vars), TagEntry.get_line_trace(node));
       if (tree.get(node) == null) {
         return;
       }
       for (DaikonVariableInfo child : tree.get(node)) {
-        if (child != node) print_tree(ps, tree, child, depth + 1);
+        if (child != node) print_tree(pw, tree, child, depth + 1);
       }
     }
   }

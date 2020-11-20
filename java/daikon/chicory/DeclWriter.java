@@ -4,7 +4,7 @@ import daikon.Chicory;
 import daikon.FileIO;
 import daikon.PptTopLevel.PptType;
 import daikon.plumelib.bcelutil.SimpleLog;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -50,7 +50,7 @@ public class DeclWriter extends DaikonWriter {
   private static int unique_compare_value;
 
   /** Stream to write to. */
-  private PrintStream outFile;
+  private PrintWriter outFile;
 
   /**
    * Enable parent relations other than methods to their class objects. Turned off for now to match
@@ -63,7 +63,7 @@ public class DeclWriter extends DaikonWriter {
    *
    * @param writer stream to write to
    */
-  public DeclWriter(PrintStream writer) {
+  public DeclWriter(PrintWriter writer) {
     super();
     outFile = writer;
     debug = Chicory.debug_decl_print;
