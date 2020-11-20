@@ -1921,7 +1921,7 @@ public final class DCRuntime {
   /**
    * Dumps out comparability trace information for a single method.
    *
-   * @param pw where to write output
+   * @param ps where to write output
    * @param mi the method to process
    */
   public static void print_comparable_traced(PrintWriter ps, MethodInfo mi) {
