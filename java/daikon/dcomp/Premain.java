@@ -433,13 +433,28 @@ public class Premain {
    * @return a new PrintWriter from filename
    */
   public static PrintWriter open(File filename) {
+    File canonicalFile;
     try {
-      return new PrintWriter(Files.newBufferedWriter(filename.toPath(), UTF_8));
+      canonicalFile = filename.getCanonicalFile();
+    } catch (IOException e) {
+      throw new Error(
+          "Can't get canonical file for " + filename + " in " + System.getProperty("user.dir"));
+    }
+
+    // I don't know why, but without this, the call to newBufferedWriter fails in some contexts.
+    try {
+      canonicalFile.createNewFile();
+    } catch (IOException e) {
+      throw new Error("Couldn't call createNewFile for " + canonicalFile);
+    }
+
+    try {
+      return new PrintWriter(Files.newBufferedWriter(canonicalFile.toPath(), UTF_8));
       // return new PrintWriter (filename);
       // return new PrintStream (new BufferedWriter
       //            (new Outpu32tStreamWriter (new FileOutputStream(filename))));
     } catch (Exception e) {
-      throw new Error("Can't open " + filename, e);
+      throw new Error("Can't open " + filename + " = " + canonicalFile, e);
     }
   }
 }
