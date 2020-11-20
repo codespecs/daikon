@@ -9,7 +9,8 @@
 #
 #   sources     -- directory containing all of the possible sources
 #   main        -- main files to compile.  Multiple files can be specified
-#                  (in quotes).  Must be full pathname to file
+#                  (in quotes).  Must be full pathname to file.  Path names
+#                  must not contain spaces.
 #   javac       -- java compiler command to use.  Can just be 'javac'
 #
 #  The list of all files used by <main> is written to standard out.
@@ -36,6 +37,7 @@ fi
 
 # compile the java files
 scratch=$(mktemp -d -t build_all_list_file.XXXXXX)
+# $main may be multiple files
 # shellcheck disable=SC2086
 if ! $javac -d "$scratch" -sourcepath "$sources" $main ; then
   exit 1
