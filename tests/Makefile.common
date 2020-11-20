@@ -158,7 +158,7 @@ SOURCES?=$(COMMON_HERE)/sources
 # (e.g. esc-experiments/StackAr or daikon-tests/QueueAr)
 CWD:=$(shell pwd)
 # Why is this command echoed in the Travis job output?
-PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[678]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
+PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[678]-)?daikon[^/]*/(workspace/)?tests(\.ver[23])?/||;')
 PROJECT?=${PROJECT_VIA_COMMAND}
 
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
@@ -168,10 +168,8 @@ PROJECT_FILE?=$(notdir ${PROJECT})
 
 # if another scratch dir is desired (such as /var/autofs/net/manioc/scratch
 # or /tmp) define SCRATCH_BASE to that location.
-SCRATCH_BASE ?= /scratch
-# Test that the directory exists.  There must be a better way to do this.
-SCRATCH_BASE:=$(wildcard $(SCRATCH_BASE))
-ifndef SCRATCH_BASE
+SCRATCH_BASE?=/scratch
+ifeq ("$(wildcard $(SCRATCH_BASE))","")
   SCRATCH_BASE=/tmp
 endif
 SCRATCH_FOR_DAIKON_BASE?=${SCRATCH_BASE}/${USER}/tests
