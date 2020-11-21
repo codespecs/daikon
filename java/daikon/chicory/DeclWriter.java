@@ -34,6 +34,7 @@ public class DeclWriter extends DaikonWriter {
   /** Header string before each new method entry or exit point. */
   public static final String declareHeader = "DECLARE";
 
+  /** Debug flag set from Chicory.debug_decl_print. */
   boolean debug = false;
 
   // If the --comparability-file option is active, there might be
@@ -77,7 +78,8 @@ public class DeclWriter extends DaikonWriter {
    */
   public void printHeaderInfo(String className) {
     outFile.println("// Declarations for " + className);
-    outFile.println("// Declarations written " + LocalDateTime.now(ZoneId.systemDefault()));
+    outFile.println(
+        "// Declarations written by Chicory " + LocalDateTime.now(ZoneId.systemDefault()));
     outFile.println();
 
     // Determine comparability string

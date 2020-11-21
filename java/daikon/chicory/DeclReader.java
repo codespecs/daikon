@@ -77,7 +77,11 @@ public class DeclReader {
       this.index = index;
     }
 
-    /** Returns the variable's name. */
+    /**
+     * Returns the variable's name.
+     *
+     * @return the variable's name
+     */
     public String get_name() {
       return name;
     }
@@ -127,7 +131,11 @@ public class DeclReader {
       return (rep_type.equals("int"));
     }
 
-    /** Returns the comparability string from the decl file. */
+    /**
+     * Returns the comparability value from the decl file.
+     *
+     * @return the comparability value
+     */
     public String get_comparability() {
       return comparability;
     }
