@@ -31,7 +31,7 @@ public class DeclWriter extends DaikonWriter implements IComparability {
   //
   //  Class.getName() returns JVM names (eg, [Ljava.lang.String;)
 
-  /** debug flag set from Chicory.debug_decl_print. */
+  /** Debug flag set from Chicory.debug_decl_print. */
   public boolean debug = false;
 
   // If the --comparability-file option is active, there might be
