@@ -375,7 +375,7 @@ public class Premain {
         }
         PrintWriter compare_out = open(DynComp.comparability_file);
         long startTime = System.nanoTime();
-        DCRuntime.print_all_comparable(compare_out);
+        DCRuntime.printAllComparable(compare_out);
         compare_out.close();
         if (DynComp.verbose) {
           long duration = System.nanoTime() - startTime;
@@ -390,7 +390,7 @@ public class Premain {
         }
         PrintWriter trace_out = open(DynComp.trace_file);
         long startTime = System.nanoTime();
-        DCRuntime.trace_all_comparable(trace_out);
+        DCRuntime.traceAllComparable(trace_out);
         trace_out.close();
         if (DynComp.verbose) {
           long duration = System.nanoTime() - startTime;
@@ -419,7 +419,7 @@ public class Premain {
       DCRuntime.runtime_object = new DCRuntime();
 
       long startTime = System.nanoTime();
-      DCRuntime.print_decl_file(decl_fp);
+      DCRuntime.printDeclFile(decl_fp);
       decl_fp.close();
       if (DynComp.verbose) {
         long duration = System.nanoTime() - startTime;

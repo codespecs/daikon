@@ -127,7 +127,8 @@ public class DeclReader {
           }
           comparability = scanner.next();
         }
-        // we ignore all other record types
+        // We ignore all other record types (such as flags and enclosing-var) as they are not
+        // needed to calculate comparability values.
         record = decl_file.readLine();
       }
       // push back the variable or blank line record
@@ -245,7 +246,7 @@ public class DeclReader {
     DeclPpt ppt = new DeclPpt(pptname);
     ppts.put(pptname, ppt);
 
-    // Skip the ppt-type record.
+    // Skip the ppt-type record as it is not needed to calculate comparability values.
     String ppt_type = decl_file.readLine();
     if (ppt_type == null) {
       reportFileError(decl_file, "File terminated prematurely while reading decl for " + ppt);

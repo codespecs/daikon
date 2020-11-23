@@ -1487,7 +1487,7 @@ public final class DCRuntime implements IComparability {
    *
    * @param pw PrintWriter to write on
    */
-  public static void print_all_comparable(PrintWriter pw) {
+  public static void printAllComparable(PrintWriter pw) {
 
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
@@ -1500,7 +1500,7 @@ public final class DCRuntime implements IComparability {
           continue;
         }
         pw.println();
-        print_comparable(pw, mi);
+        printComparable(pw, mi);
       }
     }
   }
@@ -1510,7 +1510,7 @@ public final class DCRuntime implements IComparability {
    *
    * @param pw PrintWriter to write on
    */
-  public static void trace_all_comparable(PrintWriter pw) {
+  public static void traceAllComparable(PrintWriter pw) {
 
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
@@ -1522,7 +1522,7 @@ public final class DCRuntime implements IComparability {
           continue;
         }
         pw.println();
-        print_comparable_traced(pw, mi);
+        printComparableTraced(pw, mi);
       }
     }
   }
@@ -1553,7 +1553,7 @@ public final class DCRuntime implements IComparability {
    *
    * @param pw where to write output
    */
-  public static void print_decl_file(PrintWriter pw) {
+  public static void printDeclFile(PrintWriter pw) {
 
     // Write the information for each class
     for (ClassInfo ci : all_classes) {
@@ -1561,7 +1561,7 @@ public final class DCRuntime implements IComparability {
         printHeaderInfo(pw, ci.class_name);
         first_class = false;
       }
-      print_class_decl(pw, ci);
+      printClassDecl(pw, ci);
     }
     debug_decl_print.log("finished %d classes%n", all_classes.size());
   }
@@ -1688,7 +1688,7 @@ public final class DCRuntime implements IComparability {
    * @param pw where to produce output
    * @param ci the class to write
    */
-  public static void print_class_decl(PrintWriter pw, ClassInfo ci) {
+  public static void printClassDecl(PrintWriter pw, ClassInfo ci) {
 
     time_decl.log("Printing decl file for class %s%n", ci.class_name);
     time_decl.indent();
@@ -1702,7 +1702,7 @@ public final class DCRuntime implements IComparability {
     String classPptName = ci.class_name + ":::CLASS";
     pw.println("ppt " + classPptName);
     pw.println("ppt-type class");
-    print_decl_vars(get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
+    printDeclVars(get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
     pw.println();
     time_decl.log("printed class ppt");
 
@@ -1710,7 +1710,7 @@ public final class DCRuntime implements IComparability {
     String objectPptName = ci.class_name + ":::OBJECT";
     pw.println("ppt " + objectPptName);
     pw.println("ppt-type object");
-    print_decl_vars(get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
+    printDeclVars(get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
     pw.println();
     time_decl.log("printed object ppt");
 
@@ -1720,7 +1720,7 @@ public final class DCRuntime implements IComparability {
         continue;
       }
       debug_decl_print.log("  method %s%n", mi.method_name);
-      print_method(pw, mi);
+      printMethod(pw, mi);
     }
 
     time_decl.log("finished class %s%n", ci.class_name);
@@ -1741,7 +1741,7 @@ public final class DCRuntime implements IComparability {
    * @param mi the class to output
    * @return the list of comparabile DVSets for the exit
    */
-  public static List<DVSet> print_method(PrintWriter pw, MethodInfo mi) {
+  public static List<DVSet> printMethod(PrintWriter pw, MethodInfo mi) {
 
     // long start = System.currentTimeMillis();
     // watch.reset();
@@ -1760,7 +1760,7 @@ public final class DCRuntime implements IComparability {
     pw.println("ppt " + enterPptName);
     pw.println("ppt-type enter");
     // ppt_name_ms += watch.snapshot();  watch.reset();
-    print_decl_vars(l, mi.traversalEnter, enterPptName);
+    printDeclVars(l, mi.traversalEnter, enterPptName);
     // decl_vars_ms += watch.snapshot();  watch.reset();
     pw.println();
     time_decl.log("after enter");
@@ -1777,7 +1777,7 @@ public final class DCRuntime implements IComparability {
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log("after exit clean_decl_name");
-      print_decl_vars(l, mi.traversalExit, exitPptName);
+      printDeclVars(l, mi.traversalExit, exitPptName);
       pw.println();
       // decl_vars_ms += watch.snapshot();  watch.reset();
 
@@ -1805,12 +1805,12 @@ public final class DCRuntime implements IComparability {
    * @param dv_tree the tree of variables
    * @param pptName used only for debugging output
    */
-  private static void print_decl_vars(List<DVSet> sets, RootInfo dv_tree, String pptName) {
+  private static void printDeclVars(List<DVSet> sets, RootInfo dv_tree, String pptName) {
 
     time_decl.indent();
-    time_decl.log("print_decl_vars start");
+    time_decl.log("printDeclVars start");
 
-    debug_decl_print.log("print_decl_vars(%s)%n", pptName);
+    debug_decl_print.log("printDeclVars(%s)%n", pptName);
 
     // Map from array name to comparability for its indices (if any)
     arr_index_map = new LinkedHashMap<>();
@@ -1897,10 +1897,10 @@ public final class DCRuntime implements IComparability {
         continue;
       }
 
-      decl_writer.print_decl(null, dv, null, runtime_object);
+      decl_writer.printDecl(null, dv, null, runtime_object);
     }
 
-    time_decl.log("print_decl_vars end%n");
+    time_decl.log("printDeclVars end%n");
     map_info.log("dv_comp_map size: %d%n", dv_comp_map.size());
     time_decl.exdent();
   }
@@ -1949,7 +1949,7 @@ public final class DCRuntime implements IComparability {
   /* TO DO: Find a way to make this work correctly without using normal
    * get_comparable.
    */
-  public static void print_comparable(PrintWriter pw, MethodInfo mi) {
+  public static void printComparable(PrintWriter pw, MethodInfo mi) {
 
     List<DVSet> l = get_comparable(mi.traversalEnter);
     pw.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
@@ -1988,7 +1988,7 @@ public final class DCRuntime implements IComparability {
    * @param pw where to write output
    * @param mi the method to process
    */
-  public static void print_comparable_traced(PrintWriter pw, MethodInfo mi) {
+  public static void printComparableTraced(PrintWriter pw, MethodInfo mi) {
     List<DVSet> l = get_comparable(mi.traversalEnter);
     Map<DaikonVariableInfo, DVSet> t = get_comparable_traced(mi.traversalEnter);
     pw.printf("DynComp Traced Tree for %s enter%n", clean_decl_name(mi.toString()));
@@ -1999,7 +1999,7 @@ public final class DCRuntime implements IComparability {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        print_tree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        printTree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
         pw.println();
       }
     }
@@ -2015,7 +2015,7 @@ public final class DCRuntime implements IComparability {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        print_tree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        printTree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
         pw.println();
       }
     }
@@ -2032,7 +2032,7 @@ public final class DCRuntime implements IComparability {
    * @param node starting point of tree to print
    * @param depth distance from node to root of tree
    */
-  static void print_tree(
+  static void printTree(
       PrintWriter pw, Map<DaikonVariableInfo, DVSet> tree, DaikonVariableInfo node, int depth) {
 
     /* This method, for some reason, triggers a segfault due to the way
@@ -2047,7 +2047,7 @@ public final class DCRuntime implements IComparability {
         return;
       }
       for (DaikonVariableInfo child : tree.get(node)) {
-        if (child != node) print_tree(pw, tree, child, depth + 1);
+        if (child != node) printTree(pw, tree, child, depth + 1);
       }
     } else {
       for (int i = 0; i < depth; i++) {
@@ -2060,7 +2060,7 @@ public final class DCRuntime implements IComparability {
         return;
       }
       for (DaikonVariableInfo child : tree.get(node)) {
-        if (child != node) print_tree(pw, tree, child, depth + 1);
+        if (child != node) printTree(pw, tree, child, depth + 1);
       }
     }
   }

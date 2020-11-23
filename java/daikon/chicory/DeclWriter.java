@@ -108,7 +108,7 @@ public class DeclWriter extends DaikonWriter implements IComparability {
   public void printDeclClass(ClassInfo cinfo, @Nullable DeclReader comp_info) {
 
     if (debug) {
-      System.out.println("Enter print_decl_class: " + cinfo);
+      System.out.println("Enter printDeclClass: " + cinfo);
     }
 
     // Print all methods and constructors
@@ -151,7 +151,7 @@ public class DeclWriter extends DaikonWriter implements IComparability {
     print_class_ppt(cinfo, cinfo.class_name + ":::CLASS", comp_info);
     print_object_ppt(cinfo, classObjectName(cinfo.clazz), comp_info);
 
-    if (debug) System.out.println("Exit print_decl_class");
+    if (debug) System.out.println("Exit printDeclClass");
   }
 
   /**
@@ -424,7 +424,7 @@ public class DeclWriter extends DaikonWriter implements IComparability {
       // don't do anything
     } else if (!(var instanceof StaticObjInfo)) {
 
-      print_decl(parent, var, compare_ppt, Runtime.decl_writer);
+      printDecl(parent, var, compare_ppt, Runtime.decl_writer);
 
       // Determine if there is a ppt for variables of this type
       // If found this should match one of the previously found relations
@@ -481,14 +481,17 @@ public class DeclWriter extends DaikonWriter implements IComparability {
   }
 
   /**
-   * Output most of the decl file information for a single variable.
+   * Output most of the decl file information for a single variable. This includes the variable,
+   * var-kind, enclosing-var, array, dec-type, rep-type, constant, function-args, flags, and
+   * comparability records. Most notably, it does not output the parent record. The records are
+   * output via the PrinterWriter passed as an argument to the DeclWriter constructor.
    *
    * @param parent parent of var in the variable tree
    * @param var variable whose values are to be output
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
    * @param callback object containing getComparability method
    */
-  public void print_decl(
+  public void printDecl(
       DaikonVariableInfo parent,
       DaikonVariableInfo var,
       DeclReader.DeclPpt compare_ppt,
