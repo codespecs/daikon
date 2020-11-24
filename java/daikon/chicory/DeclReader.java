@@ -53,9 +53,11 @@ public class DeclReader {
   @Option("Output a decl file with representation type comparability")
   public static boolean rep_type_comparability = false;
 
+  /** If ture, read and dump one dtrace file. */
   @Option("Read and dump a dtrace file")
   public static boolean dump_dtrace = false;
 
+  /** The comparability type in the declaration files being read. */
   @Option("Specify the comparability type (implicit or none)")
   public static String comparability = "implicit";
 
