@@ -262,17 +262,16 @@ public class DeclReader {
       data_values.add(var_data_list);
     }
 
+    public List<List<@Interned Object>> get_var_data() {
+      return data_values;
+    }
+
     /**
      * Returns the DeclVarInfo named var_name or null if it doesn't exist.
      *
      * @param var_name a variable name
      * @return DeclVarInfo for the given variable
      */
-    public List<List<@Interned Object>> get_var_data() {
-      return data_values;
-    }
-
-    /** Returns the DeclVarInfo named var_name or null if it doesn't exist. */
     public @Nullable DeclVarInfo find_var(String var_name) {
       return vars.get(var_name);
     }
