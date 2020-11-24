@@ -41,6 +41,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.dataflow.qual.Pure;
 
+/**
+ * Runtime support for DynComp, a comparability front end for Chicory. This class is a collection of
+ * methods; it should never be instantiated.
+ */
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
 public final class DCRuntime {
 
@@ -1975,7 +1979,7 @@ public final class DCRuntime {
    * [depth] steps from the root. Requires a Map [tree] that represents a tree though key-value sets
    * of the form {@code <}parent, set of children{@code >}.
    *
-   * @param pw PrintWriter to write on
+   * @param pw where to write output
    * @param tree map parents to children
    * @param node starting point of tree to print
    * @param depth distance from node to root of tree
