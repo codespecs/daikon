@@ -50,6 +50,7 @@ RUN dnf -q -y install \
   netpbm-progs \
   python2 \
   python3 \
+  python3-distutils \
   rsync \
   texlive \
   wget
