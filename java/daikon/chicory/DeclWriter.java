@@ -582,7 +582,7 @@ public class DeclWriter extends DaikonWriter {
       // don't do anything
     } else if (!(var instanceof StaticObjInfo)) {
 
-      print_decl(parent, var, compare_ppt);
+      printDecl(parent, var, compare_ppt);
 
       // Determine if there is a ppt for variables of this type
       // If found this should match one of the previously found relations
@@ -645,7 +645,7 @@ public class DeclWriter extends DaikonWriter {
    * @param var variable whose values are to be output
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
    */
-  public void print_decl(
+  public void printDecl(
       DaikonVariableInfo parent, DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
 
     // Write out the variable and its name
