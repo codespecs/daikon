@@ -99,7 +99,7 @@ public class DeclReader {
       if (!(scanner.hasNext() && scanner.next().equals("variable") && scanner.hasNext())) {
         reportFileError(decl_file, "Expected \"variable <VARNAME>\", found \"" + firstLine + "\"");
       }
-      String var_name = scanner.next();
+      String varName = scanner.next();
 
       String type = null;
       String rep_type = null;
@@ -128,7 +128,7 @@ public class DeclReader {
           }
           comparability = scanner.next();
         }
-        // We ignore all other record types (such as flags and enclosing-var) as they are not
+        // Chicory ignores all other record types (such as flags and enclosing-var) as they are not
         // needed to calculate comparability values.
         record = decl_file.readLine();
       }
@@ -138,25 +138,25 @@ public class DeclReader {
       }
 
       if (type == null) {
-        reportFileError(decl_file, "No type for variable " + var_name);
+        reportFileError(decl_file, "No type for variable " + varName);
       }
       if (rep_type == null) {
-        reportFileError(decl_file, "No rep-type for variable " + var_name);
+        reportFileError(decl_file, "No rep-type for variable " + varName);
       }
       if (comparability == null) {
-        reportFileError(decl_file, "No comparability for variable " + var_name);
+        reportFileError(decl_file, "No comparability for variable " + varName);
       }
 
       // I don't see the point of this interning.  No code seems to take
       // advantage of it.  Is it just for space?  -MDE
       DeclVarInfo var =
           new DeclVarInfo(
-              var_name.intern(),
+              varName.intern(),
               type.intern(),
               rep_type.intern(),
               comparability.intern(),
               vars.size());
-      vars.put(var_name, var);
+      vars.put(varName, var);
       return var;
     }
 
@@ -247,7 +247,7 @@ public class DeclReader {
     DeclPpt ppt = new DeclPpt(pptname);
     ppts.put(pptname, ppt);
 
-    // Skip the ppt-type record as it is not needed to calculate comparability values.
+    // Chicory skips the ppt-type record as it is not needed to calculate comparability values.
     String ppt_type = decl_file.readLine();
     if (ppt_type == null) {
       reportFileError(decl_file, "File terminated prematurely while reading decl for " + ppt);
