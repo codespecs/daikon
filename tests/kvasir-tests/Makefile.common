@@ -68,6 +68,9 @@ else
        GOAL := goal-CentOS2003
 endif
 endif
+ifeq ($(OS_REL),8.2.2004)
+       GOAL := goal-CentOS2004
+endif
 ifeq ($(OS_REL),8.1.1911)
        GOAL := goal-CentOS1911
 endif
