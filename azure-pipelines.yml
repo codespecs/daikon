@@ -11,6 +11,7 @@ pr:
 
 jobs:
 
+# The remainder of jobs are run only if the jdk8_jobs pass.
 - job: jdk8_jobs
   dependsOn:
     - quick_txt_diff_ubuntu_jdk8

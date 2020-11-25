@@ -18,6 +18,7 @@ import org.checkerframework.dataflow.qual.TerminatesExecution;
 public class DeclReader {
 
   /** Map from ppt name to corresponding DeclPpt. */
+  /** Map from ppt name to corresponding DeclPpt. */
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
 
   /** Information about variables within a program point. */
@@ -84,7 +85,7 @@ public class DeclReader {
      * Read a single variable declaration from decl_file. The file must be positioned immediately
      * before the variable name.
      *
-     * @param decl_file EntryReader for reading data
+     * @param decl_file where to read data from
      * @return DeclVarInfo for the program point variable
      * @throws IOException if there is trouble reading the file
      */
