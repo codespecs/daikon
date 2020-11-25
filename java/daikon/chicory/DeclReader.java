@@ -53,12 +53,15 @@ public class DeclReader {
   @Option("Output a decl file with representation type comparability")
   public static boolean rep_type_comparability = false;
 
+  /** If true, read and dump one dtrace file. */
   @Option("Read and dump a dtrace file")
   public static boolean dump_dtrace = false;
 
+  /** The comparability type in the declaration files being read. */
   @Option("Specify the comparability type (implicit or none)")
   public static String comparability = "implicit";
 
+  /** Map from ppt name to corresponding DeclPpt. */
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
 
   /** Information about variables within a program point. */
@@ -109,7 +112,7 @@ public class DeclReader {
     /**
      * Return true if this variable has floating-point type (float or double).
      *
-     * @return ture if this variable has floating-point type
+     * @return true if this variable has floating-point type
      */
     @Pure
     public boolean is_double() {
@@ -204,7 +207,9 @@ public class DeclReader {
    * ppt name and a list of the declared variables.
    */
   public static class DeclPpt {
+    /** Program point name. */
     public String name;
+    /** Map from variable name to corresponding DeclVarInfo. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
 
     /**
@@ -214,6 +219,11 @@ public class DeclReader {
      */
     List<List<@Interned Object>> data_values = new ArrayList<>();
 
+    /**
+     * DeclPpt constructor.
+     *
+     * @param name program point name
+     */
     public DeclPpt(String name) {
       this.name = name;
     }
@@ -221,6 +231,10 @@ public class DeclReader {
     /**
      * Read a single variable declaration from decl_file. The file must be positioned immediately
      * before the variable name.
+     *
+     * @param decl_file where to read data from
+     * @return DeclVarInfo for the program point variable
+     * @throws IOException if there is trouble reading the file
      */
     public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
 
@@ -254,17 +268,30 @@ public class DeclReader {
       return data_values;
     }
 
-    /** Returns the DeclVarInfo named var_name or null if it doesn't exist. */
+    /**
+     * Returns the DeclVarInfo named var_name or null if it doesn't exist.
+     *
+     * @param var_name a variable name
+     * @return DeclVarInfo for the given variable
+     */
     public @Nullable DeclVarInfo find_var(String var_name) {
       return vars.get(var_name);
     }
 
-    /** Returns the ppt name. */
+    /**
+     * Returns the ppt name.
+     *
+     * @return the program point name
+     */
     public String get_name() {
       return name;
     }
 
-    /** Returns the name without the :::EXIT, :::ENTER, etc. */
+    /**
+     * Returns the name without the :::EXIT, :::ENTER, etc.
+     *
+     * @return the program point name
+     */
     public String get_short_name() {
       return name.replaceFirst(":::.*", "");
     }
@@ -281,9 +308,15 @@ public class DeclReader {
     }
   }
 
+  /** Create a new DeclReader. */
   public DeclReader() {}
 
-  /** Read declarations from the specified pathname. */
+  /**
+   * Read declarations from the specified pathname.
+   *
+   * @param pathname a File for reading data
+   * @throws IOException if there is trouble reading the file
+   */
   public void read(File pathname) throws IOException {
 
     // have caller deal with FileNotFound
@@ -291,6 +324,7 @@ public class DeclReader {
 
     try {
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
+        // Skip all input until we find a ppt.
         if (!line.equals("DECLARE")) {
           continue;
         }
