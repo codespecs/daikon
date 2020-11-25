@@ -115,8 +115,8 @@ public final class DCRuntime implements ComparabilityProvider {
   // Set in Premain.premain().
   static ComparabilityProvider comparabilityProvider;
 
-  /** Flag that indicates when the first class has been processed. */
-  private static boolean first_class = true;
+  /** Whether the header has been printed. */
+  private static boolean headerPrinted = false;
 
   /** Class to hold per-thread comparability data. */
   private static class ThreadData {
@@ -1557,9 +1557,9 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Write the information for each class
     for (ClassInfo ci : all_classes) {
-      if (first_class) {
+      if (!headerPrinted) {
         printHeaderInfo(pw, ci.class_name);
-        first_class = false;
+        headerPrinted = true;
       }
       printClassDecl(pw, ci);
     }
