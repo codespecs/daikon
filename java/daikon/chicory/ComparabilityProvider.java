@@ -3,9 +3,12 @@ package daikon.chicory;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Classes implementing this interface have a callback method to calculate a comparability value.
+ * The {@link #getComparability} method calculates a comparability value.
+ *
+ * <p>This interface permits both {@code DCRuntime} and {@code DeclWriter} to call {@code
+ * DeclWriter.printDecl}; otherwise, they would need to duplicate code.
  */
-public interface IComparability {
+public interface ComparabilityProvider {
   /**
    * Calculate a comparability value.
    *

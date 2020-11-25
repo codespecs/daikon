@@ -3,13 +3,13 @@ package daikon.dcomp;
 import daikon.DynComp;
 import daikon.chicory.ArrayInfo;
 import daikon.chicory.ClassInfo;
+import daikon.chicory.ComparabilityProvider;
 import daikon.chicory.DaikonClassInfo;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.chicory.DaikonWriter;
 import daikon.chicory.DeclReader;
 import daikon.chicory.DeclWriter;
 import daikon.chicory.FieldInfo;
-import daikon.chicory.IComparability;
 import daikon.chicory.MethodInfo;
 import daikon.chicory.ParameterInfo;
 import daikon.chicory.ReturnInfo;
@@ -51,7 +51,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * methods; it should never be instantiated.
  */
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
-public final class DCRuntime implements IComparability {
+public final class DCRuntime implements ComparabilityProvider {
 
   /** List of all instrumented methods. */
   public static final List<MethodInfo> methods = new ArrayList<>();
@@ -111,7 +111,7 @@ public final class DCRuntime implements IComparability {
   // Set in Premain.premain().
   static DeclWriter decl_writer;
 
-  /** Instance of DCRuntime to use for IComparability callbacks. */
+  /** Use for calling {@link ComparabilityProvider#getComparability}. */
   // Set in Premain.premain().
   static DCRuntime runtime_object;
 
@@ -1906,7 +1906,7 @@ public final class DCRuntime implements IComparability {
   }
 
   /**
-   * Callback method to calculate a comparability value.
+   * Calculates a comparability value.
    *
    * @param dv variable to calculate comparability for
    * @param compare_ppt (not used)

@@ -26,7 +26,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * DTraceWriter}.
  */
 @SuppressWarnings("nullness") // to do
-public class DeclWriter extends DaikonWriter implements IComparability {
+public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   // Notes:
   //
   //  Class.getName() returns JVM names (eg, [Ljava.lang.String;)
@@ -489,13 +489,14 @@ public class DeclWriter extends DaikonWriter implements IComparability {
    * @param parent parent of var in the variable tree
    * @param var variable whose values are to be output
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
-   * @param callback object containing getComparability method
+   * @param comparabilityProvider object on which {@link ComparabilityProvider#getComparability} is
+   *     called. It might be this DeclWriter itself.
    */
   public void printDecl(
       DaikonVariableInfo parent,
       DaikonVariableInfo var,
       DeclReader.DeclPpt compare_ppt,
-      IComparability callback) {
+      ComparabilityProvider comparabilityProvider) {
 
     // Write out the variable and its name
     outFile.println("variable " + escape(var.getName()));
@@ -553,7 +554,7 @@ public class DeclWriter extends DaikonWriter implements IComparability {
     }
 
     // Determine comparability and write it out
-    String comp_str = callback.getComparability(var, compare_ppt);
+    String comp_str = comparabilityProvider.getComparability(var, compare_ppt);
     outFile.println("  comparability " + comp_str);
   }
 
