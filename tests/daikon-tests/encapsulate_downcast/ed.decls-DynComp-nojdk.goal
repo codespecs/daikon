@@ -1,616 +1,854 @@
-// Declaration file written by daikon.dcomp
+// Declarations for misc.EncapsulateDowncast
+// Declarations written 2020-11-18T07:20:24.348 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-misc.EncapsulateDowncast:::CLASS
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-2
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-3
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-4
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
+ppt misc.EncapsulateDowncast:::CLASS
+ppt-type class
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 3
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 4
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 5
 
-DECLARE
-misc.EncapsulateDowncast:::OBJECT
-this
-misc.EncapsulateDowncast # isNonNull=true, isParam=true
-hashcode
-6
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-2
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-3
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-4
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
+ppt misc.EncapsulateDowncast:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.EncapsulateDowncast
+  rep-type hashcode
+  flags is_param non_null
+  comparability 6
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 3
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 4
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 5
 
+ppt misc.EncapsulateDowncast.EncapsulateDowncast():::ENTER
+ppt-type enter
 
-DECLARE
-misc.EncapsulateDowncast.EncapsulateDowncast():::ENTER
+ppt misc.EncapsulateDowncast.EncapsulateDowncast():::EXIT22
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.EncapsulateDowncast
+  rep-type hashcode
+  flags is_param non_null
+  comparability 6
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 3
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 4
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 5
 
-DECLARE
-misc.EncapsulateDowncast.EncapsulateDowncast():::EXIT22
-this
-misc.EncapsulateDowncast # isNonNull=true, isParam=true
-hashcode
-6
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-2
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-3
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-4
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
+ppt misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER
+ppt-type enter
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 4
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 5
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 6
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 7
+variable list
+  var-kind variable
+  dec-type java.util.Vector
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable list[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 3[8]
+variable list[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args list[]
+  flags synthetic classname non_null
+  comparability 1[9]
 
+ppt misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT34
+ppt-type subexit
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 4
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 5
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 6
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 7
+variable list
+  var-kind variable
+  dec-type java.util.Vector
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable list[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 3[8]
+variable list[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args list[]
+  flags synthetic classname non_null
+  comparability 1[9]
 
-DECLARE
-misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-4
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-5
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-6
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-7
-list
-java.util.Vector # isParam=true
-hashcode
-2
-list[..]
-java.util.Vector
-hashcode[]
-3[8]
-list[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
+ppt misc.EncapsulateDowncast.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 5
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 6
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 7
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 8
+variable argv
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable argv.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args argv
+  flags synthetic classname non_null
+  comparability 1
+variable argv[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[9]
+variable argv[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args argv[]
+  flags synthetic to_string
+  comparability 4[10]
 
-DECLARE
-misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT34
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-4
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-5
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-6
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-7
-list
-java.util.Vector # isParam=true
-hashcode
-2
-list[..]
-java.util.Vector
-hashcode[]
-3[8]
-list[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
+ppt misc.EncapsulateDowncast.main(java.lang.String[]):::EXIT52
+ppt-type subexit
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 5
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 6
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 7
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 8
+variable argv
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable argv.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args argv
+  flags synthetic classname non_null
+  comparability 1
+variable argv[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[9]
+variable argv[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args argv[]
+  flags synthetic to_string
+  comparability 4[10]
 
+ppt misc.EncapsulateDowncast.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.EncapsulateDowncast
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 3
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 4
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.EncapsulateDowncast.main(java.lang.String[]):::ENTER
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-5
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-6
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-7
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-8
-argv
-java.lang.String[] # isParam=true
-hashcode
-2
-argv.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-argv[..]
-java.lang.String[]
-hashcode[]
-3[9]
-argv[..].toString
-java.lang.String[]
-java.lang.String[]
-4[10]
+ppt misc.EncapsulateDowncast.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.EncapsulateDowncast
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 3
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 4
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 7
 
-DECLARE
-misc.EncapsulateDowncast.main(java.lang.String[]):::EXIT52
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-5
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-6
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-7
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-8
-argv
-java.lang.String[] # isParam=true
-hashcode
-2
-argv.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-argv[..]
-java.lang.String[]
-hashcode[]
-3[9]
-argv[..].toString
-java.lang.String[]
-java.lang.String[]
-4[10]
+ppt misc.EncapsulateDowncast.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.EncapsulateDowncast
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 3
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 4
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
+ppt misc.EncapsulateDowncast.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.EncapsulateDowncast
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable misc.EncapsulateDowncast.CASES
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable misc.EncapsulateDowncast.SEED
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 3
+variable misc.EncapsulateDowncast.random
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 4
+variable misc.EncapsulateDowncast.random2
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 7
 
-DECLARE
-misc.EncapsulateDowncast.equals(java.lang.Object):::ENTER
-this
-misc.EncapsulateDowncast # isNonNull=true, isParam=true
-hashcode
-7
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-2
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-3
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-4
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-6
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt misc.Person:::CLASS
+ppt-type class
 
-DECLARE
-misc.EncapsulateDowncast.equals(java.lang.Object):::EXIT1
-this
-misc.EncapsulateDowncast # isNonNull=true, isParam=true
-hashcode
-8
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-2
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-3
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-4
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-6
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-7
+ppt misc.Person:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.Person
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this._name
+  var-kind field _name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this._name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this._name
+  flags synthetic to_string
+  comparability 5
+variable this._height
+  var-kind field _height
+  dec-type int
+  rep-type int
+  comparability 3
+variable this._weight
+  var-kind field _weight
+  dec-type int
+  rep-type int
+  comparability 6
 
+ppt misc.Person.Person(java.lang.String, int, int):::ENTER
+ppt-type enter
+variable name
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args name
+  flags synthetic to_string
+  comparability 4
+variable height
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable weight
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 5
 
-DECLARE
-misc.EncapsulateDowncast.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-misc.EncapsulateDowncast # isNonNull=true, isParam=true
-hashcode
-7
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-2
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-3
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-4
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-6
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt misc.Person.Person(java.lang.String, int, int):::EXIT15
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Person
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this._name
+  var-kind field _name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 3
+variable this._name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this._name
+  flags synthetic to_string
+  comparability 6
+variable this._height
+  var-kind field _height
+  dec-type int
+  rep-type int
+  comparability 2
+variable this._weight
+  var-kind field _weight
+  dec-type int
+  rep-type int
+  comparability 7
+variable name
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args name
+  flags synthetic to_string
+  comparability 4
+variable height
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable weight
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 7
 
-DECLARE
-misc.EncapsulateDowncast.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-misc.EncapsulateDowncast # isNonNull=true, isParam=true
-hashcode
-8
-misc.EncapsulateDowncast.CASES
-int # declaringClassPackageName=misc
-int
-2
-misc.EncapsulateDowncast.SEED
-int # declaringClassPackageName=misc
-int
-3
-misc.EncapsulateDowncast.random
-java.util.Random # declaringClassPackageName=misc
-hashcode
-4
-misc.EncapsulateDowncast.random2
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-6
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-7
+ppt misc.Person.getName():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Person
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this._name
+  var-kind field _name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this._name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this._name
+  flags synthetic to_string
+  comparability 5
+variable this._height
+  var-kind field _height
+  dec-type int
+  rep-type int
+  comparability 3
+variable this._weight
+  var-kind field _weight
+  dec-type int
+  rep-type int
+  comparability 6
 
-DECLARE
-misc.Person:::CLASS
+ppt misc.Person.getName():::EXIT18
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Person
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this._name
+  var-kind field _name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this._name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this._name
+  flags synthetic to_string
+  comparability 7
+variable this._height
+  var-kind field _height
+  dec-type int
+  rep-type int
+  comparability 5
+variable this._weight
+  var-kind field _weight
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 2
+variable return.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return
+  flags synthetic to_string
+  comparability 3
 
-DECLARE
-misc.Person:::OBJECT
-this
-misc.Person # isNonNull=true, isParam=true
-hashcode
-2
-this._name
-java.lang.String # declaringClassPackageName=misc
-hashcode
-4
-this._name.toString
-java.lang.String
-java.lang.String
-5
-this._height
-int # declaringClassPackageName=misc
-int
-3
-this._weight
-int # declaringClassPackageName=misc
-int
-6
+ppt misc.Person.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Person
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this._name
+  var-kind field _name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this._name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this._name
+  flags synthetic to_string
+  comparability 6
+variable this._height
+  var-kind field _height
+  dec-type int
+  rep-type int
+  comparability 4
+variable this._weight
+  var-kind field _weight
+  dec-type int
+  rep-type int
+  comparability 7
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
+ppt misc.Person.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Person
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this._name
+  var-kind field _name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this._name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this._name
+  flags synthetic to_string
+  comparability 7
+variable this._height
+  var-kind field _height
+  dec-type int
+  rep-type int
+  comparability 5
+variable this._weight
+  var-kind field _weight
+  dec-type int
+  rep-type int
+  comparability 8
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-misc.Person.Person(java.lang.String, int, int):::ENTER
-name
-java.lang.String # isParam=true
-hashcode
-3
-name.toString
-java.lang.String
-java.lang.String
-4
-height
-int # isParam=true
-int
-2
-weight
-int # isParam=true
-int
-5
+ppt misc.Person.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Person
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this._name
+  var-kind field _name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this._name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this._name
+  flags synthetic to_string
+  comparability 6
+variable this._height
+  var-kind field _height
+  dec-type int
+  rep-type int
+  comparability 4
+variable this._weight
+  var-kind field _weight
+  dec-type int
+  rep-type int
+  comparability 7
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.Person.Person(java.lang.String, int, int):::EXIT15
-this
-misc.Person # isNonNull=true, isParam=true
-hashcode
-5
-this._name
-java.lang.String # declaringClassPackageName=misc
-hashcode
-3
-this._name.toString
-java.lang.String
-java.lang.String
-6
-this._height
-int # declaringClassPackageName=misc
-int
-2
-this._weight
-int # declaringClassPackageName=misc
-int
-7
-name
-java.lang.String # isParam=true
-hashcode
-3
-name.toString
-java.lang.String
-java.lang.String
-4
-height
-int # isParam=true
-int
-2
-weight
-int # isParam=true
-int
-7
-
-
-DECLARE
-misc.Person.getName():::ENTER
-this
-misc.Person # isNonNull=true, isParam=true
-hashcode
-2
-this._name
-java.lang.String # declaringClassPackageName=misc
-hashcode
-4
-this._name.toString
-java.lang.String
-java.lang.String
-5
-this._height
-int # declaringClassPackageName=misc
-int
-3
-this._weight
-int # declaringClassPackageName=misc
-int
-6
-
-DECLARE
-misc.Person.getName():::EXIT18
-this
-misc.Person # isNonNull=true, isParam=true
-hashcode
-4
-this._name
-java.lang.String # declaringClassPackageName=misc
-hashcode
-6
-this._name.toString
-java.lang.String
-java.lang.String
-7
-this._height
-int # declaringClassPackageName=misc
-int
-5
-this._weight
-int # declaringClassPackageName=misc
-int
-8
-return
-java.lang.String
-hashcode
-2
-return.toString
-java.lang.String
-java.lang.String
-3
-
-
-DECLARE
-misc.Person.equals(java.lang.Object):::ENTER
-this
-misc.Person # isNonNull=true, isParam=true
-hashcode
-3
-this._name
-java.lang.String # declaringClassPackageName=misc
-hashcode
-5
-this._name.toString
-java.lang.String
-java.lang.String
-6
-this._height
-int # declaringClassPackageName=misc
-int
-4
-this._weight
-int # declaringClassPackageName=misc
-int
-7
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.Person.equals(java.lang.Object):::EXIT1
-this
-misc.Person # isNonNull=true, isParam=true
-hashcode
-4
-this._name
-java.lang.String # declaringClassPackageName=misc
-hashcode
-6
-this._name.toString
-java.lang.String
-java.lang.String
-7
-this._height
-int # declaringClassPackageName=misc
-int
-5
-this._weight
-int # declaringClassPackageName=misc
-int
-8
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-misc.Person.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-misc.Person # isNonNull=true, isParam=true
-hashcode
-3
-this._name
-java.lang.String # declaringClassPackageName=misc
-hashcode
-5
-this._name.toString
-java.lang.String
-java.lang.String
-6
-this._height
-int # declaringClassPackageName=misc
-int
-4
-this._weight
-int # declaringClassPackageName=misc
-int
-7
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.Person.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-misc.Person # isNonNull=true, isParam=true
-hashcode
-4
-this._name
-java.lang.String # declaringClassPackageName=misc
-hashcode
-6
-this._name.toString
-java.lang.String
-java.lang.String
-7
-this._height
-int # declaringClassPackageName=misc
-int
-5
-this._weight
-int # declaringClassPackageName=misc
-int
-8
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt misc.Person.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Person
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this._name
+  var-kind field _name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this._name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this._name
+  flags synthetic to_string
+  comparability 7
+variable this._height
+  var-kind field _height
+  dec-type int
+  rep-type int
+  comparability 5
+variable this._weight
+  var-kind field _weight
+  dec-type int
+  rep-type int
+  comparability 8
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

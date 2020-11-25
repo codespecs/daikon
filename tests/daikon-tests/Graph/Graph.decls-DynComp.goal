@@ -1,405 +1,551 @@
-// Declaration file written by daikon.dcomp
+// Declarations for MapQuick1.Graph
+// Declarations written 2020-11-18T07:41:14.619 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-MapQuick1.Graph:::CLASS
+ppt MapQuick1.Graph:::CLASS
+ppt-type class
 
-DECLARE
-MapQuick1.Graph:::OBJECT
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-2
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-3
+ppt MapQuick1.Graph:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 3
 
+ppt MapQuick1.Graph.Graph():::ENTER
+ppt-type enter
 
-DECLARE
-MapQuick1.Graph.Graph():::ENTER
+ppt MapQuick1.Graph.Graph():::EXIT29
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 3
 
-DECLARE
-MapQuick1.Graph.Graph():::EXIT29
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-2
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-3
+ppt MapQuick1.Graph.checkRep():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 3
 
+ppt MapQuick1.Graph.checkRep():::EXIT49
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 3
 
-DECLARE
-MapQuick1.Graph.checkRep():::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-2
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-3
+ppt MapQuick1.Graph.addNode(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable node
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable node.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args node
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.checkRep():::EXIT49
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-2
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-3
+ppt MapQuick1.Graph.addNode(java.lang.Object):::EXIT68
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable node
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable node.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args node
+  flags synthetic classname non_null
+  comparability 1
 
+ppt MapQuick1.Graph.containsNode(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable node
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable node.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args node
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.addNode(java.lang.Object):::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-node
-java.lang.Object # isParam=true
-hashcode
-2
-node.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick1.Graph.containsNode(java.lang.Object):::EXIT76
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 5
+variable node
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable node.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args node
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-MapQuick1.Graph.addNode(java.lang.Object):::EXIT68
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-node
-java.lang.Object # isParam=true
-hashcode
-2
-node.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick1.Graph.nodeSet():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 3
 
+ppt MapQuick1.Graph.nodeSet():::EXIT87
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable return
+  var-kind return
+  dec-type java.util.Set
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.containsNode(java.lang.Object):::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-node
-java.lang.Object # isParam=true
-hashcode
-2
-node.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick1.Graph.adjTo(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable node
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable node.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args node
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.containsNode(java.lang.Object):::EXIT76
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-4
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-5
-node
-java.lang.Object # isParam=true
-hashcode
-2
-node.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt MapQuick1.Graph.adjTo(java.lang.Object):::EXIT102
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 5
+variable node
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable node.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args node
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type java.util.Set
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
+ppt MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable from
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable from.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args from
+  flags synthetic classname non_null
+  comparability 1
+variable to
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable to.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args to
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.nodeSet():::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-2
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-3
+ppt MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT128
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable from
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable from.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args from
+  flags synthetic classname non_null
+  comparability 1
+variable to
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable to.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args to
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.nodeSet():::EXIT87
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-return
-java.util.Set
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick1.Graph.childrenOf(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable node
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable node.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args node
+  flags synthetic classname non_null
+  comparability 1
 
+ppt MapQuick1.Graph.childrenOf(java.lang.Object):::EXIT146
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 5
+variable node
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable node.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args node
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type java.util.Collection
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.adjTo(java.lang.Object):::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-node
-java.lang.Object # isParam=true
-hashcode
-2
-node.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick1.Graph.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.adjTo(java.lang.Object):::EXIT102
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-4
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-5
-node
-java.lang.Object # isParam=true
-hashcode
-2
-node.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-java.util.Set
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick1.Graph.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
+ppt MapQuick1.Graph.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-from
-java.lang.Object # isParam=true
-hashcode
-2
-from.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-to
-java.lang.Object # isParam=true
-hashcode
-5
-to.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT128
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-from
-java.lang.Object # isParam=true
-hashcode
-2
-from.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-to
-java.lang.Object # isParam=true
-hashcode
-5
-to.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-MapQuick1.Graph.childrenOf(java.lang.Object):::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-node
-java.lang.Object # isParam=true
-hashcode
-2
-node.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-MapQuick1.Graph.childrenOf(java.lang.Object):::EXIT146
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-4
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-5
-node
-java.lang.Object # isParam=true
-hashcode
-2
-node.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-java.util.Collection
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-MapQuick1.Graph.equals(java.lang.Object):::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-MapQuick1.Graph.equals(java.lang.Object):::EXIT1
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-4
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-MapQuick1.Graph.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-3
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-MapQuick1.Graph.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-MapQuick1.Graph # isNonNull=true, isParam=true
-hashcode
-4
-this.adjMap
-java.util.LinkedHashMap # declaringClassPackageName=MapQuick1
-hashcode
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt MapQuick1.Graph.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.adjMap
+  var-kind field adjMap
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

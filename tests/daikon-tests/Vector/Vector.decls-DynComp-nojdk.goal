@@ -1,2539 +1,3682 @@
-// Declaration file written by daikon.dcomp
-
-VarComparability
-implicit
-
-DECLARE
-javautil.Vector13:::CLASS
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13:::OBJECT
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-
-DECLARE
-javautil.Vector13.Vector13(int, int):::ENTER
-initialCapacity
-int # isParam=true
-int
-2
-capacityIncrement
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.Vector13.Vector13(int, int):::EXIT85
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-initialCapacity
-int # isParam=true
-int
-2
-capacityIncrement
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.Vector13.Vector13(int):::ENTER
-initialCapacity
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.Vector13.Vector13(int):::EXIT95
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-initialCapacity
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.Vector13.Vector13():::ENTER
-
-DECLARE
-javautil.Vector13.Vector13():::EXIT104
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-
-DECLARE
-javautil.Vector13.copyInto(java.lang.Object[]):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-anArray
-java.lang.Object[] # isParam=true
-hashcode
-3
-anArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-anArray[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-
-DECLARE
-javautil.Vector13.copyInto(java.lang.Object[]):::EXIT118
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-anArray
-java.lang.Object[] # isParam=true
-hashcode
-3
-anArray.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-anArray[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-
-
-DECLARE
-javautil.Vector13.trimToSize():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.trimToSize():::EXIT134
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-
-DECLARE
-javautil.Vector13.ensureCapacity(int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-minCapacity
-int # isParam=true
-int
-3
-
-DECLARE
-javautil.Vector13.ensureCapacity(int):::EXIT148
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-minCapacity
-int # isParam=true
-int
-3
-
-
-DECLARE
-javautil.Vector13.ensureCapacityHelper(int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-minCapacity
-int # isParam=true
-int
-3
-
-DECLARE
-javautil.Vector13.ensureCapacityHelper(int):::EXIT168
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-minCapacity
-int # isParam=true
-int
-3
-
-
-DECLARE
-javautil.Vector13.setSize(int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-newSize
-int # isParam=true
-int
-3
-
-DECLARE
-javautil.Vector13.setSize(int):::EXIT188
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-newSize
-int # isParam=true
-int
-3
-
-
-DECLARE
-javautil.Vector13.capacity():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.capacity():::EXIT197
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-6
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[5]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-5
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-5
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-return
-int
-int
-3
-
-
-DECLARE
-javautil.Vector13.size():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.size():::EXIT207
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-return
-int
-int
-3
-
-
-DECLARE
-javautil.Vector13.isEmpty():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.isEmpty():::EXIT218
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-6
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[5]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-5
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-5
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-return
-boolean
-boolean
-3
-
-
-DECLARE
-javautil.Vector13.elements():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.elements():::EXIT229
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-6
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[5]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-5
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-5
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-return
-java.util.Enumeration
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.Vector13.contains(java.lang.Object):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.Vector13.contains(java.lang.Object):::EXIT241
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-6
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-5
-
-
-DECLARE
-javautil.Vector13.indexOf(java.lang.Object):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.Vector13.indexOf(java.lang.Object):::EXIT255
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-2
-
-
-DECLARE
-javautil.Vector13.indexOf(java.lang.Object, int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.Vector13.indexOf(java.lang.Object, int):::EXIT274
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-return
-int
-int
-2
-
-DECLARE
-javautil.Vector13.indexOf(java.lang.Object, int):::EXIT277
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-return
-int
-int
-2
-
-
-DECLARE
-javautil.Vector13.lastIndexOf(java.lang.Object):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.Vector13.lastIndexOf(java.lang.Object):::EXIT290
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-2
-
-
-DECLARE
-javautil.Vector13.lastIndexOf(java.lang.Object, int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT307
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-return
-int
-int
-2
-
-DECLARE
-javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT310
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-elem
-java.lang.Object # isParam=true
-hashcode
-3
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-return
-int
-int
-2
-
-
-DECLARE
-javautil.Vector13.elementAt(int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.Vector13.elementAt(int):::EXIT332
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-index
-int # isParam=true
-int
-2
-return
-java.lang.Object
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.Vector13.firstElement():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.firstElement():::EXIT349
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-return
-java.lang.Object
-hashcode
-4
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.Vector13.lastElement():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.lastElement():::EXIT364
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-return
-java.lang.Object
-hashcode
-4
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.Vector13.setElementAt(java.lang.Object, int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.Vector13.setElementAt(java.lang.Object, int):::EXIT387
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.Vector13.removeElementAt(int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.Vector13.removeElementAt(int):::EXIT417
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-index
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.Vector13.insertElementAt(java.lang.Object, int):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.Vector13.insertElementAt(java.lang.Object, int):::EXIT447
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-2[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-2
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-2
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-index
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.Vector13.addElement(java.lang.Object):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-4
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.Vector13.addElement(java.lang.Object):::EXIT463
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-4
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.Vector13.removeElement(java.lang.Object):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-4
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.Vector13.removeElement(java.lang.Object):::EXIT480
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-6
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-4
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-5
-
-DECLARE
-javautil.Vector13.removeElement(java.lang.Object):::EXIT482
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-6
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-3[3]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-3
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-3
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-4
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-5
-
-
-DECLARE
-javautil.Vector13.removeAllElements():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.removeAllElements():::EXIT495
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-
-DECLARE
-javautil.Vector13.clone():::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-
-DECLARE
-javautil.Vector13.clone():::EXIT508
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[4]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[4]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-4
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-4
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-return
-java.lang.Object
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.Vector13.equals(java.lang.Object):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-6
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[5]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-5
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-5
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.Vector13.equals(java.lang.Object):::EXIT1
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-7
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[6]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[6]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-6
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-6
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
-
-
-DECLARE
-javautil.Vector13.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-6
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[5]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[5]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-5
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-5
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.Vector13.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-javautil.Vector13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-7
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[6]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[6]
-this.elementCount
-int # declaringClassPackageName=javautil
-int
-6
-this.capacityIncrement
-int # declaringClassPackageName=javautil
-int
-6
-javautil.Vector13.serialVersionUID
-long # declaringClassPackageName=javautil
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+// Declarations for javautil.Vector13
+// Declarations written 2020-11-18T07:42:44.500 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt javautil.Vector13:::CLASS
+ppt-type class
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.Vector13(int, int):::ENTER
+ppt-type enter
+variable initialCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable capacityIncrement
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.Vector13(int, int):::EXIT85
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable initialCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable capacityIncrement
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.Vector13(int):::ENTER
+ppt-type enter
+variable initialCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.Vector13(int):::EXIT95
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable initialCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.Vector13():::ENTER
+ppt-type enter
+
+ppt javautil.Vector13.Vector13():::EXIT104
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.copyInto(java.lang.Object[]):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable anArray
+  var-kind variable
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable anArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args anArray
+  flags synthetic classname non_null
+  comparability 1
+variable anArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+
+ppt javautil.Vector13.copyInto(java.lang.Object[]):::EXIT118
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable anArray
+  var-kind variable
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable anArray.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args anArray
+  flags synthetic classname non_null
+  comparability 1
+variable anArray[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+
+ppt javautil.Vector13.trimToSize():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.trimToSize():::EXIT134
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.ensureCapacity(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable minCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt javautil.Vector13.ensureCapacity(int):::EXIT148
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable minCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt javautil.Vector13.ensureCapacityHelper(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable minCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt javautil.Vector13.ensureCapacityHelper(int):::EXIT168
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable minCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt javautil.Vector13.setSize(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable newSize
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt javautil.Vector13.setSize(int):::EXIT188
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable newSize
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt javautil.Vector13.capacity():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.capacity():::EXIT197
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[5]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 5
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.Vector13.size():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.size():::EXIT207
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.Vector13.isEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.isEmpty():::EXIT218
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[5]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 5
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.Vector13.elements():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.elements():::EXIT229
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[5]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 5
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type java.util.Enumeration
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.contains(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.contains(java.lang.Object):::EXIT241
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 6
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 5
+
+ppt javautil.Vector13.indexOf(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.indexOf(java.lang.Object):::EXIT255
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt javautil.Vector13.indexOf(java.lang.Object, int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.indexOf(java.lang.Object, int):::EXIT274
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt javautil.Vector13.indexOf(java.lang.Object, int):::EXIT277
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt javautil.Vector13.lastIndexOf(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.lastIndexOf(java.lang.Object):::EXIT290
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt javautil.Vector13.lastIndexOf(java.lang.Object, int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT307
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT310
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt javautil.Vector13.elementAt(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.elementAt(int):::EXIT332
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.firstElement():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.firstElement():::EXIT349
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 4
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.lastElement():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.lastElement():::EXIT364
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 4
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.setElementAt(java.lang.Object, int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.setElementAt(java.lang.Object, int):::EXIT387
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.removeElementAt(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.removeElementAt(int):::EXIT417
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.insertElementAt(java.lang.Object, int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.insertElementAt(java.lang.Object, int):::EXIT447
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 2[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 2
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.Vector13.addElement(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.addElement(java.lang.Object):::EXIT463
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.removeElement(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.removeElement(java.lang.Object):::EXIT480
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 6
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 5
+
+ppt javautil.Vector13.removeElement(java.lang.Object):::EXIT482
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 6
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[3]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 3
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 5
+
+ppt javautil.Vector13.removeAllElements():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.removeAllElements():::EXIT495
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.clone():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt javautil.Vector13.clone():::EXIT508
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[4]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[4]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 4
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[5]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 5
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 7
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[6]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 6
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+
+ppt javautil.Vector13.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[5]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[5]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 5
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.Vector13.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.Vector13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 7
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[6]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable this.elementCount
+  var-kind field elementCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.capacityIncrement
+  var-kind field capacityIncrement
+  dec-type int
+  rep-type int
+  comparability 6
+variable javautil.Vector13.serialVersionUID
+  var-kind variable
+  dec-type long
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 

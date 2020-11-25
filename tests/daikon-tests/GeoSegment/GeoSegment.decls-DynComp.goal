@@ -1,1515 +1,2009 @@
-// Declaration file written by daikon.dcomp
+// Declarations for MapQuick1.GeoPoint
+// Declarations written 2020-11-18T07:39:33.832 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-MapQuick1.GeoPoint:::CLASS
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
+ppt MapQuick1.GeoPoint:::CLASS
+ppt-type class
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
 
-DECLARE
-MapQuick1.GeoPoint:::OBJECT
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
+ppt MapQuick1.GeoPoint:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
 
+ppt MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
+ppt-type enter
+variable latitude
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable longitude
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
 
-DECLARE
-MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
-latitude
-int # isParam=true
-int
-2
-longitude
-int # isParam=true
-int
-2
+ppt MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT47
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 3
+variable latitude
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable longitude
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
 
-DECLARE
-MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT47
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-4
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-3
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-3
-latitude
-int # isParam=true
-int
-3
-longitude
-int # isParam=true
-int
-3
+ppt MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
 
+ppt MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT66
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
-DECLARE
-MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-o
-java.lang.Object # isParam=true
-hashcode
-3
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
-DECLARE
-MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT66
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-5
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-3
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+ppt MapQuick1.GeoPoint.hashCode():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
 
-DECLARE
-MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-5
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-3
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+ppt MapQuick1.GeoPoint.hashCode():::EXIT77
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable gp.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
 
-DECLARE
-MapQuick1.GeoPoint.hashCode():::ENTER
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
+ppt MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::EXIT91
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable gp.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 5
 
-DECLARE
-MapQuick1.GeoPoint.hashCode():::EXIT77
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-4
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-5
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-5
-return
-int
-int
-3
+ppt MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable gp.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
 
+ppt MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::EXIT113
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable gp.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 5
 
-DECLARE
-MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-gp
-MapQuick1.GeoPoint # isParam=true
-hashcode
-3
-gp.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-gp.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
+ppt MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::EXIT91
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-gp
-MapQuick1.GeoPoint # isParam=true
-hashcode
-3
-gp.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-gp.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-return
-double
-double
-5
+ppt MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
+ppt MapQuick1.GeoSegment:::CLASS
+ppt-type class
 
-DECLARE
-MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-gp
-MapQuick1.GeoPoint # isParam=true
-hashcode
-3
-gp.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-gp.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
+ppt MapQuick1.GeoSegment:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
 
-DECLARE
-MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::EXIT113
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-gp
-MapQuick1.GeoPoint # isParam=true
-hashcode
-3
-gp.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-gp.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-return
-double
-double
-5
+ppt MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::ENTER
+ppt-type enter
+variable name
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args name
+  flags synthetic to_string
+  comparability 4
+variable p1
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p2
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
 
+ppt MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT67
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 3
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 8
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 5
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 5
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable name
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args name
+  flags synthetic to_string
+  comparability 4
+variable p1
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p2
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
 
-DECLARE
-MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-4
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-5
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick1.GeoSegment.reverse():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
 
-DECLARE
-MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-MapQuick1.GeoPoint # isNonNull=true, isParam=true
-hashcode
-5
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.latitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-this.longitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+ppt MapQuick1.GeoSegment.reverse():::EXIT80
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 12
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 13
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 14
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 15
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 16
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 16
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 15
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 16
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 16
+variable return
+  var-kind return
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  comparability 3
+variable return.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable return.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return.name
+  flags synthetic to_string
+  comparability 5
+variable return.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable return.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable return.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 9
+variable return.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 10
+variable return.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 11
 
-DECLARE
-MapQuick1.GeoSegment:::CLASS
+ppt MapQuick1.GeoSegment.name():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
 
-DECLARE
-MapQuick1.GeoSegment:::OBJECT
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
+ppt MapQuick1.GeoSegment.name():::EXIT88
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 3
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 3
+variable return.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return
+  flags synthetic to_string
+  comparability 4
 
+ppt MapQuick1.GeoSegment.p1():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
 
-DECLARE
-MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::ENTER
-name
-java.lang.String # isParam=true
-hashcode
-3
-name.toString
-java.lang.String
-java.lang.String
-4
-p1
-MapQuick1.GeoPoint # isParam=true
-hashcode
-5
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-p2
-MapQuick1.GeoPoint # isParam=true
-hashcode
-5
-p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-6
+ppt MapQuick1.GeoSegment.p1():::EXIT94
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 7
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable return.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
 
-DECLARE
-MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT67
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-7
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-3
-this.name.toString
-java.lang.String
-java.lang.String
-8
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-5
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-5
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-name
-java.lang.String # isParam=true
-hashcode
-3
-name.toString
-java.lang.String
-java.lang.String
-4
-p1
-MapQuick1.GeoPoint # isParam=true
-hashcode
-5
-p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-p2
-MapQuick1.GeoPoint # isParam=true
-hashcode
-5
-p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-6
-p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-6
+ppt MapQuick1.GeoSegment.p2():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
 
+ppt MapQuick1.GeoSegment.p2():::EXIT100
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 7
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable return.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
 
-DECLARE
-MapQuick1.GeoSegment.reverse():::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
+ppt MapQuick1.GeoSegment.length():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
 
-DECLARE
-MapQuick1.GeoSegment.reverse():::EXIT80
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-12
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-13
-this.name.toString
-java.lang.String
-java.lang.String
-14
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-15
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-16
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-16
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-15
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-16
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-16
-return
-MapQuick1.GeoSegment
-hashcode
-3
-return.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-return.name.toString
-java.lang.String
-java.lang.String
-5
-return.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-return.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-return.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-return.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-9
-return.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-10
-return.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-11
+ppt MapQuick1.GeoSegment.length():::EXIT106
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 3
 
+ppt MapQuick1.GeoSegment.heading():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
 
-DECLARE
-MapQuick1.GeoSegment.name():::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
+ppt MapQuick1.GeoSegment.heading():::EXIT116
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 3
 
-DECLARE
-MapQuick1.GeoSegment.name():::EXIT88
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-5
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-3
-this.name.toString
-java.lang.String
-java.lang.String
-6
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-return
-java.lang.String
-hashcode
-3
-return.toString
-java.lang.String
-java.lang.String
-4
+ppt MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
 
+ppt MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT132
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
-DECLARE
-MapQuick1.GeoSegment.p1():::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
+ppt MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
-DECLARE
-MapQuick1.GeoSegment.p1():::EXIT94
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-5
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.name.toString
-java.lang.String
-java.lang.String
-7
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-3
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-return
-MapQuick1.GeoPoint
-hashcode
-3
-return.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-return.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
+ppt MapQuick1.GeoSegment.hashCode():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
 
+ppt MapQuick1.GeoSegment.hashCode():::EXIT141
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
 
-DECLARE
-MapQuick1.GeoSegment.p2():::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
+ppt MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick1.GeoSegment.p2():::EXIT100
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-5
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.name.toString
-java.lang.String
-java.lang.String
-7
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-3
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-3
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-return
-MapQuick1.GeoPoint
-hashcode
-3
-return.latitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-return.longitude
-int # declaringClassPackageName=MapQuick1
-int
-4
-
-
-DECLARE
-MapQuick1.GeoSegment.length():::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-
-DECLARE
-MapQuick1.GeoSegment.length():::EXIT106
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-4
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-5
-this.name.toString
-java.lang.String
-java.lang.String
-6
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-return
-double
-double
-3
-
-
-DECLARE
-MapQuick1.GeoSegment.heading():::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-
-DECLARE
-MapQuick1.GeoSegment.heading():::EXIT116
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-4
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-5
-this.name.toString
-java.lang.String
-java.lang.String
-6
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-return
-double
-double
-3
-
-
-DECLARE
-MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-o
-java.lang.Object # isParam=true
-hashcode
-3
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT132
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-5
-this.name.toString
-java.lang.String
-java.lang.String
-6
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-o
-java.lang.Object # isParam=true
-hashcode
-3
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
-
-DECLARE
-MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-5
-this.name.toString
-java.lang.String
-java.lang.String
-6
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-o
-java.lang.Object # isParam=true
-hashcode
-3
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
-
-
-DECLARE
-MapQuick1.GeoSegment.hashCode():::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-3
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-4
-this.name.toString
-java.lang.String
-java.lang.String
-5
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-7
-
-DECLARE
-MapQuick1.GeoSegment.hashCode():::EXIT141
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-4
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-5
-this.name.toString
-java.lang.String
-java.lang.String
-6
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-return
-int
-int
-3
-
-
-DECLARE
-MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-4
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-5
-this.name.toString
-java.lang.String
-java.lang.String
-6
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-7
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-8
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-MapQuick1.GeoSegment # isNonNull=true, isParam=true
-hashcode
-5
-this.name
-java.lang.String # declaringClassPackageName=MapQuick1
-hashcode
-6
-this.name.toString
-java.lang.String
-java.lang.String
-7
-this.p1
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-8
-MapQuick1.GeoPoint.REP_SCALE_FACTOR
-double # declaringClassPackageName=MapQuick1
-double
-2
-this.p1.latitude
-int # declaringClassPackageName=MapQuick1
-int
-9
-this.p1.longitude
-int # declaringClassPackageName=MapQuick1
-int
-9
-this.p2
-MapQuick1.GeoPoint # declaringClassPackageName=MapQuick1
-hashcode
-8
-this.p2.latitude
-int # declaringClassPackageName=MapQuick1
-int
-9
-this.p2.longitude
-int # declaringClassPackageName=MapQuick1
-int
-9
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+ppt MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 7
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 8
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 8
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 9
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 

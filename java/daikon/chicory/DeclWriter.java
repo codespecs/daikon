@@ -26,16 +26,13 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * DTraceWriter}.
  */
 @SuppressWarnings("nullness") // to do
-public class DeclWriter extends DaikonWriter {
+public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   // Notes:
   //
   //  Class.getName() returns JVM names (eg, [Ljava.lang.String;)
 
-  /** Header string before each new method entry or exit point. */
-  public static final String declareHeader = "DECLARE";
-
   /** Debug flag set from Chicory.debug_decl_print. */
-  boolean debug = false;
+  public boolean debug = false;
 
   // If the --comparability-file option is active, there might be
   // variables for which DynComp saw no interactions and did not
@@ -87,17 +84,8 @@ public class DeclWriter extends DaikonWriter {
     if (Runtime.comp_info != null) {
       comparability = "implicit";
     }
-
-    if (Chicory.new_decl_format) {
-      outFile.printf("decl-version 2.0%n%n");
-      outFile.printf("var-comparability %s%n%n", comparability);
-    } else {
-      outFile.printf("VarComparability%n%s%n%n", Runtime.comp_info != null ? "implicit" : "none");
-
-      outFile.println("ListImplementors");
-      outFile.println("java.util.List");
-      outFile.println();
-    }
+    outFile.printf("decl-version 2.0%n");
+    outFile.printf("var-comparability %s%n%n", comparability);
   }
 
   /**
@@ -118,155 +106,9 @@ public class DeclWriter extends DaikonWriter {
    * @param comp_info comparability information
    */
   public void printDeclClass(ClassInfo cinfo, @Nullable DeclReader comp_info) {
-    if (Chicory.new_decl_format) {
-      print_decl_class(cinfo, comp_info);
-      return;
-    }
-
-    // Print all methods and constructors
-    for (MethodInfo mi : cinfo.get_method_infos()) {
-      Member member = mi.member;
-
-      // Don't want to instrument these types of methods
-      if (!shouldInstrumentMethod(member)) {
-        continue;
-      }
-
-      // Gset the root of the method's traversal pattern
-      RootInfo enterRoot = mi.traversalEnter;
-      assert enterRoot != null : "Traversal pattern not initialized at method " + mi.method_name;
-
-      printMethod(enterRoot, methodEntryName(member), comp_info);
-
-      // Print exit program point for EACH exit location in the method
-      // (that was encountered during this execution of the program).
-      Set<Integer> theExits = new HashSet<>(mi.exit_locations);
-      assert theExits.size() > 0 : mi;
-      for (Integer exitLoc : theExits) {
-        // Get the root of the method's traversal pattern
-        RootInfo exitRoot = mi.traversalExit;
-        assert enterRoot != null : "Traversal pattern not initialized at method " + mi.method_name;
-
-        printMethod(exitRoot, methodExitName(member, exitLoc.intValue()), comp_info);
-      }
-    }
-
-    printClassPpt(cinfo, cinfo.class_name + ":::CLASS", comp_info);
-    printObjectPpt(cinfo, classObjectName(cinfo.clazz), comp_info);
-  }
-
-  /**
-   * Prints a method's program point. This includes the declare header ("DECLARE"), the program
-   * point name, and the variable information.
-   *
-   * <p>This method uses variable information from the traversal tree.
-   *
-   * @param root the root of the traversal tree
-   * @param name the program point name
-   * @param comp_info comparability information
-   */
-  private void printMethod(RootInfo root, String name, DeclReader comp_info) {
-    outFile.println(declareHeader);
-    outFile.println(name);
 
     if (debug) {
-      System.out.println("printMethod " + name);
-    }
-
-    for (DaikonVariableInfo childOfRoot : root) {
-      traverseDecl(childOfRoot, ((comp_info == null) ? null : comp_info.find_ppt(name)));
-    }
-
-    outFile.println();
-  }
-
-  /**
-   * Prints the .decls information for a single DaikonVariableInfo object, and recurses on its
-   * children. If the current variable has comparability defined in decl_ppt, that comparability is
-   * used. Otherwise -1 is used if there is comparability information available and the information
-   * in the variable is used if it is not.
-   */
-  private void traverseDecl(DaikonVariableInfo curInfo, DeclReader.@Nullable DeclPpt decl_ppt) {
-    if (curInfo.declShouldPrint()) {
-
-      if (!(curInfo instanceof StaticObjInfo)) {
-        outFile.println(curInfo.getName());
-        outFile.println(curInfo.getTypeName());
-        outFile.println(curInfo.getRepTypeName());
-        String comp_str = curInfo.getCompareString();
-        if (decl_ppt != null) {
-          comp_str = "-1";
-          DeclReader.DeclVarInfo varinfo = decl_ppt.find_var(curInfo.getName());
-          if (varinfo != null) comp_str = varinfo.get_comparability();
-        }
-        outFile.println(comp_str);
-      }
-    }
-
-    // Go through all of the current node's children
-    // and recurse
-    for (DaikonVariableInfo child : curInfo) {
-      traverseDecl(child, decl_ppt);
-    }
-  }
-
-  /**
-   * Prints the object program point. This contains the "this" object and the class's fields.
-   *
-   * @param cinfo information about the class whose program point to print
-   * @param name the program point name
-   * @param comp_info a declaration file
-   */
-  private void printObjectPpt(ClassInfo cinfo, String name, DeclReader comp_info) {
-    outFile.println(declareHeader);
-    outFile.println(name);
-
-    RootInfo root = RootInfo.getObjectPpt(cinfo, Runtime.nesting_depth);
-    for (DaikonVariableInfo childOfRoot : root) {
-      traverseDecl(childOfRoot, ((comp_info == null) ? null : comp_info.find_ppt(name)));
-    }
-
-    outFile.println();
-  }
-
-  /**
-   * Prints the class program point. This contains only the static variables. If there are no static
-   * variables to print, this method does nothing.
-   */
-  private void printClassPpt(ClassInfo cinfo, String name, DeclReader comp_info) {
-    if (num_class_vars(cinfo) == 0) {
-      return;
-    }
-
-    boolean printedHeader = false;
-    RootInfo root = RootInfo.getClassPpt(cinfo, Runtime.nesting_depth);
-
-    for (DaikonVariableInfo childOfRoot : root) {
-      // If we are here, there is at least 1 child
-      if (!printedHeader) {
-        outFile.println(declareHeader);
-        outFile.println(name);
-        printedHeader = true;
-      }
-
-      // Should just print out static fields
-      traverseDecl(childOfRoot, ((comp_info == null) ? null : comp_info.find_ppt(name)));
-    }
-
-    if (printedHeader) outFile.println();
-  }
-
-  /**
-   * Prints declarations for all the methods in the indicated class. This method is called at run
-   * time to print decls info for a class.
-   *
-   * @param cinfo class whose declarations should be printed
-   * @param comp_info comparability information
-   */
-  public void print_decl_class(ClassInfo cinfo, @Nullable DeclReader comp_info) {
-
-    if (debug) {
-      System.out.println("Enter print_decl_class: " + cinfo);
+      System.out.println("Enter printDeclClass: " + cinfo);
     }
 
     // Print all methods and constructors
@@ -309,7 +151,7 @@ public class DeclWriter extends DaikonWriter {
     print_class_ppt(cinfo, cinfo.class_name + ":::CLASS", comp_info);
     print_object_ppt(cinfo, classObjectName(cinfo.clazz), comp_info);
 
-    if (debug) System.out.println("Exit print_decl_class");
+    if (debug) System.out.println("Exit printDeclClass");
   }
 
   /**
@@ -582,7 +424,7 @@ public class DeclWriter extends DaikonWriter {
       // don't do anything
     } else if (!(var instanceof StaticObjInfo)) {
 
-      printDecl(parent, var, compare_ppt);
+      printDecl(parent, var, compare_ppt, Runtime.decl_writer);
 
       // Determine if there is a ppt for variables of this type
       // If found this should match one of the previously found relations
@@ -639,14 +481,22 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Output most of the decl file information for a single variable.
+   * Output most of the decl file information for a single variable. This includes the variable,
+   * var-kind, enclosing-var, array, dec-type, rep-type, constant, function-args, flags, and
+   * comparability records. Most notably, it does not output the parent record. The records are
+   * output via the PrinterWriter passed as an argument to the DeclWriter constructor.
    *
    * @param parent parent of var in the variable tree
    * @param var variable whose values are to be output
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
+   * @param comparabilityProvider object on which {@link ComparabilityProvider#getComparability} is
+   *     called. It might be this DeclWriter itself.
    */
   public void printDecl(
-      DaikonVariableInfo parent, DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
+      DaikonVariableInfo parent,
+      DaikonVariableInfo var,
+      DeclReader.DeclPpt compare_ppt,
+      ComparabilityProvider comparabilityProvider) {
 
     // Write out the variable and its name
     outFile.println("variable " + escape(var.getName()));
@@ -704,7 +554,7 @@ public class DeclWriter extends DaikonWriter {
     }
 
     // Determine comparability and write it out
-    String comp_str = getComparability(var, compare_ppt);
+    String comp_str = comparabilityProvider.getComparability(var, compare_ppt);
     outFile.println("  comparability " + comp_str);
   }
 
@@ -715,6 +565,7 @@ public class DeclWriter extends DaikonWriter {
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
    * @return String containing the comparability value
    */
+  @Override
   public String getComparability(DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {
     // Currently, the value returned by getCompareString() is always 22.
     String comp_str = var.getCompareString();

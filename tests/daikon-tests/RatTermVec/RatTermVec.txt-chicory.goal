@@ -99976,3 +99976,25 @@ index
 1
 1
 
+PolyCalc.RatTermVec.get(int):::EXIT39
+this_invocation_nonce
+2679
+this
+1574598287
+1
+this.wrapped
+606508809
+1
+this.wrapped[..]
+[645482568 484589713]
+1
+this.wrapped[..].getClass().getName()
+["PolyCalc.RatTerm" "PolyCalc.RatTerm"]
+1
+index
+1
+1
+return
+484589713
+1
+
