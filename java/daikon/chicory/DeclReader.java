@@ -53,7 +53,7 @@ public class DeclReader {
   @Option("Output a decl file with representation type comparability")
   public static boolean rep_type_comparability = false;
 
-  /** If ture, read and dump one dtrace file. */
+  /** If true, read and dump one dtrace file. */
   @Option("Read and dump a dtrace file")
   public static boolean dump_dtrace = false;
 
@@ -112,7 +112,7 @@ public class DeclReader {
     /**
      * Return true if this variable has floating-point type (float or double).
      *
-     * @return ture if this variable has floating-point type
+     * @return true if this variable has floating-point type
      */
     @Pure
     public boolean is_double() {
