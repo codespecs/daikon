@@ -413,10 +413,10 @@ public class Premain {
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
       // Create DeclWriter so can share output code in Chicory.
-      DCRuntime.decl_writer = new DeclWriter(decl_fp);
-      DCRuntime.decl_writer.debug = DynComp.debug_decl_print;
-      // Used for calling ComparabilityProvider.getComparability..
-      DCRuntime.runtime_object = new DCRuntime();
+      DCRuntime.declWriter = new DeclWriter(decl_fp);
+      DCRuntime.declWriter.debug = DynComp.debug_decl_print;
+      // Used for calling ComparabilityProvider.getComparability.
+      DCRuntime.comparabilityProvider = new DCRuntime();
 
       long startTime = System.nanoTime();
       DCRuntime.printDeclFile(decl_fp);

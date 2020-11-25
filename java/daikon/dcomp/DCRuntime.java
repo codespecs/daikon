@@ -109,11 +109,11 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /** Decl writer to share output code with Chicory. */
   // Set in Premain.premain().
-  static DeclWriter decl_writer;
+  static DeclWriter declWriter;
 
-  /** Use for calling {@link ComparabilityProvider#getComparability}. */
+  /** Used for calling {@link ComparabilityProvider#getComparability}. */
   // Set in Premain.premain().
-  static DCRuntime runtime_object;
+  static ComparabilityProvider comparabilityProvider;
 
   /** Flag that indicates when the first class has been processed. */
   private static boolean first_class = true;
@@ -1791,7 +1791,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /** Map from array name to comparability for its indices (if any). */
   private static Map<String, Integer> arr_index_map;
-  /** Map from daikon variable to its comparability. */
+  /** Map from variable to its comparability. */
   private static Map<DaikonVariableInfo, Integer> dv_comp_map;
   /** Comparability value for a variable. */
   private static int base_comp;
@@ -1897,7 +1897,7 @@ public final class DCRuntime implements ComparabilityProvider {
         continue;
       }
 
-      decl_writer.printDecl(null, dv, null, runtime_object);
+      declWriter.printDecl(null, dv, null, comparabilityProvider);
     }
 
     time_decl.log("printDeclVars end%n");

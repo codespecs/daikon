@@ -18,7 +18,6 @@ import org.checkerframework.dataflow.qual.TerminatesExecution;
 public class DeclReader {
 
   /** Map from ppt name to corresponding DeclPpt. */
-  /** Map from ppt name to corresponding DeclPpt. */
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
 
   /** Information about variables within a program point. */
