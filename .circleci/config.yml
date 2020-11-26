@@ -7,7 +7,7 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
-      - run: /usr/bin/true
+      - run: /bin/true
 
   quick-txt-diff-ubuntu-jdk8:
     docker:
