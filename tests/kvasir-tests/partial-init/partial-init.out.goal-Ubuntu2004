@@ -9,7 +9,7 @@ Global:
 Dynamic:
 01010000 00000000 00000000 00000000 0101 
 01010000 00000000 00000000 00000000 0101==PID== Syscall param write(buf) points to uninitialised byte(s)
-==PID==    at <HEAP_ADDR>: write (write.c:26)
+==PID==    at <HEAP_ADDR>: write (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
 ==PID==    by <STATIC_ADDR>: print_bits (partial-init.c:19)
 ==PID==    by <STATIC_ADDR>: test_bits (partial-init.c:35)
 ==PID==    by <STATIC_ADDR>: main (partial-init.c:46)
@@ -20,7 +20,7 @@ Dynamic:
 Stack:
 01010000 00000000 00000000 00000000 0101 
 01010000 00000000 00000000 00000000 0101==PID== Syscall param write(buf) points to uninitialised byte(s)
-==PID==    at <HEAP_ADDR>: write (write.c:26)
+==PID==    at <HEAP_ADDR>: write (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
 ==PID==    by <STATIC_ADDR>: print_bits (partial-init.c:19)
 ==PID==    by <STATIC_ADDR>: test_bits (partial-init.c:35)
 ==PID==    by <STATIC_ADDR>: main (partial-init.c:48)
