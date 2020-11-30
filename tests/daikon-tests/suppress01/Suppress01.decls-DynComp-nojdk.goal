@@ -1,310 +1,422 @@
-// Declaration file written by daikon.dcomp
+// Declarations for misc.Suppress01
+// Declarations written 2020-11-18T07:25:40.726 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-misc.Suppress01:::CLASS
+ppt misc.Suppress01:::CLASS
+ppt-type class
 
-DECLARE
-misc.Suppress01:::OBJECT
-this
-misc.Suppress01 # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.theArray[..]
-int[]
-int[]
-4[4]
-this.theArray2
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.theArray2[..]
-int[]
-int[]
-4[4]
-this.b
-int # declaringClassPackageName=misc
-int
-3
+ppt misc.Suppress01:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[4]
+variable this.theArray2
+  var-kind field theArray2
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray2[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[4]
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt misc.Suppress01.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
 
-DECLARE
-misc.Suppress01.main(java.lang.String[]):::ENTER
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
+ppt misc.Suppress01.main(java.lang.String[]):::EXIT24
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
 
-DECLARE
-misc.Suppress01.main(java.lang.String[]):::EXIT24
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
+ppt misc.Suppress01.f():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[4]
+variable this.theArray2
+  var-kind field theArray2
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray2[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[4]
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt misc.Suppress01.f():::EXIT35
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[4]
+variable this.theArray2
+  var-kind field theArray2
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray2[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[4]
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
 
-DECLARE
-misc.Suppress01.f():::ENTER
-this
-misc.Suppress01 # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.theArray[..]
-int[]
-int[]
-4[4]
-this.theArray2
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.theArray2[..]
-int[]
-int[]
-4[4]
-this.b
-int # declaringClassPackageName=misc
-int
-3
+ppt misc.Suppress01.Suppress01():::ENTER
+ppt-type enter
 
-DECLARE
-misc.Suppress01.f():::EXIT35
-this
-misc.Suppress01 # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.theArray[..]
-int[]
-int[]
-4[4]
-this.theArray2
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.theArray2[..]
-int[]
-int[]
-4[4]
-this.b
-int # declaringClassPackageName=misc
-int
-3
+ppt misc.Suppress01.Suppress01():::EXIT43
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.theArray
+  var-kind field theArray
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[4]
+variable this.theArray2
+  var-kind field theArray2
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.theArray2[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[4]
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt misc.Suppress01.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.theArray
+  var-kind field theArray
+  dec-type int[]
+  rep-type hashcode
+  comparability 6
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[5]
+variable this.theArray2
+  var-kind field theArray2
+  dec-type int[]
+  rep-type hashcode
+  comparability 6
+variable this.theArray2[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[5]
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.Suppress01.Suppress01():::ENTER
+ppt misc.Suppress01.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.theArray
+  var-kind field theArray
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.theArray2
+  var-kind field theArray2
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.theArray2[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-misc.Suppress01.Suppress01():::EXIT43
-this
-misc.Suppress01 # isNonNull=true, isParam=true
-hashcode
-2
-this.theArray
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.theArray[..]
-int[]
-int[]
-4[4]
-this.theArray2
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.theArray2[..]
-int[]
-int[]
-4[4]
-this.b
-int # declaringClassPackageName=misc
-int
-3
+ppt misc.Suppress01.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.theArray
+  var-kind field theArray
+  dec-type int[]
+  rep-type hashcode
+  comparability 6
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[5]
+variable this.theArray2
+  var-kind field theArray2
+  dec-type int[]
+  rep-type hashcode
+  comparability 6
+variable this.theArray2[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[5]
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-
-DECLARE
-misc.Suppress01.equals(java.lang.Object):::ENTER
-this
-misc.Suppress01 # isNonNull=true, isParam=true
-hashcode
-3
-this.theArray
-int[] # declaringClassPackageName=misc
-hashcode
-6
-this.theArray[..]
-int[]
-int[]
-5[5]
-this.theArray2
-int[] # declaringClassPackageName=misc
-hashcode
-6
-this.theArray2[..]
-int[]
-int[]
-5[5]
-this.b
-int # declaringClassPackageName=misc
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.Suppress01.equals(java.lang.Object):::EXIT1
-this
-misc.Suppress01 # isNonNull=true, isParam=true
-hashcode
-4
-this.theArray
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.theArray[..]
-int[]
-int[]
-6[6]
-this.theArray2
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.theArray2[..]
-int[]
-int[]
-6[6]
-this.b
-int # declaringClassPackageName=misc
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-misc.Suppress01.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-misc.Suppress01 # isNonNull=true, isParam=true
-hashcode
-3
-this.theArray
-int[] # declaringClassPackageName=misc
-hashcode
-6
-this.theArray[..]
-int[]
-int[]
-5[5]
-this.theArray2
-int[] # declaringClassPackageName=misc
-hashcode
-6
-this.theArray2[..]
-int[]
-int[]
-5[5]
-this.b
-int # declaringClassPackageName=misc
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.Suppress01.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-misc.Suppress01 # isNonNull=true, isParam=true
-hashcode
-4
-this.theArray
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.theArray[..]
-int[]
-int[]
-6[6]
-this.theArray2
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.theArray2[..]
-int[]
-int[]
-6[6]
-this.b
-int # declaringClassPackageName=misc
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt misc.Suppress01.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.theArray
+  var-kind field theArray
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.theArray[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.theArray2
+  var-kind field theArray2
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.theArray2[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

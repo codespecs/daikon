@@ -1,1827 +1,2700 @@
-// Declaration file written by daikon.dcomp
-
-VarComparability
-implicit
-
-DECLARE
-DataStructures.CursorList:::CLASS
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[7]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[9]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-DECLARE
-DataStructures.CursorList:::OBJECT
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-
-DECLARE
-DataStructures.CursorList.alloc():::ENTER
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[7]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[9]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-DECLARE
-DataStructures.CursorList.alloc():::EXIT37
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[7]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[9]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-return
-int
-int
-3
-
-
-DECLARE
-DataStructures.CursorList.free(int):::ENTER
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[7]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[9]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-p
-int # isParam=true
-int
-3
-
-DECLARE
-DataStructures.CursorList.free(int):::EXIT45
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[7]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[9]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-p
-int # isParam=true
-int
-3
-
-
-DECLARE
-DataStructures.CursorList.CursorList():::ENTER
-
-DECLARE
-DataStructures.CursorList.CursorList():::EXIT54
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-
-DECLARE
-DataStructures.CursorList.isEmpty():::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-DECLARE
-DataStructures.CursorList.isEmpty():::EXIT62
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-return
-boolean
-boolean
-7
-
-
-DECLARE
-DataStructures.CursorList.makeEmpty():::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-DECLARE
-DataStructures.CursorList.makeEmpty():::EXIT72
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-
-DECLARE
-DataStructures.CursorList.zeroth():::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-DECLARE
-DataStructures.CursorList.zeroth():::EXIT80
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-return
-DataStructures.CursorListItr
-hashcode
-7
-return.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-
-DECLARE
-DataStructures.CursorList.first():::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-
-DECLARE
-DataStructures.CursorList.first():::EXIT89
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-return
-DataStructures.CursorListItr
-hashcode
-7
-return.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-
-DECLARE
-DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-x
-java.lang.Object # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-p
-DataStructures.CursorListItr # isParam=true
-hashcode
-7
-p.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-DECLARE
-DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::EXIT108
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-x
-java.lang.Object # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-p
-DataStructures.CursorListItr # isParam=true
-hashcode
-7
-p.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-
-DECLARE
-DataStructures.CursorList.find(java.lang.Object):::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-x
-java.lang.Object # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorList.find(java.lang.Object):::EXIT122
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-x
-java.lang.Object # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-DataStructures.CursorListItr
-hashcode
-7
-return.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-
-DECLARE
-DataStructures.CursorList.findPrevious(java.lang.Object):::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-x
-java.lang.Object # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorList.findPrevious(java.lang.Object):::EXIT139
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-x
-java.lang.Object # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-DataStructures.CursorListItr
-hashcode
-7
-return.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-
-DECLARE
-DataStructures.CursorList.remove(java.lang.Object):::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-x
-java.lang.Object # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorList.remove(java.lang.Object):::EXIT157
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-7
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-x
-java.lang.Object # isParam=true
-hashcode
-6
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-DataStructures.CursorList.printList(DataStructures.CursorList):::ENTER
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-theList
-DataStructures.CursorList # isParam=true
-hashcode
-7
-theList.header
-int # declaringClassPackageName=DataStructures
-int
-3
-
-DECLARE
-DataStructures.CursorList.printList(DataStructures.CursorList):::EXIT172
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[8]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[10]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-theList
-DataStructures.CursorList # isParam=true
-hashcode
-7
-theList.header
-int # declaringClassPackageName=DataStructures
-int
-3
-
-
-DECLARE
-DataStructures.CursorList.equals(java.lang.Object):::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-7
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorList.equals(java.lang.Object):::EXIT1
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-9
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[10]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[11]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[12]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-7
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-8
-
-
-DECLARE
-DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-8
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[9]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[11]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-7
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-DataStructures.CursorList # isNonNull=true, isParam=true
-hashcode
-9
-this.header
-int # declaringClassPackageName=DataStructures
-int
-3
-DataStructures.CursorList.cursorSpace
-DataStructures.CursorNode[] # declaringClassPackageName=DataStructures
-hashcode
-4
-DataStructures.CursorList.cursorSpace.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-DataStructures.CursorList.cursorSpace[..]
-DataStructures.CursorNode[]
-hashcode[]
-5[3]
-DataStructures.CursorList.cursorSpace[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[3]
-DataStructures.CursorList.cursorSpace[..].element
-java.lang.Object[] # declaringClassPackageName=DataStructures
-hashcode[]
-6[10]
-DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[11]
-DataStructures.CursorList.cursorSpace[..].next
-int[] # declaringClassPackageName=DataStructures
-int[]
-3[12]
-DataStructures.CursorList.SPACE_SIZE
-int # declaringClassPackageName=DataStructures
-int
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-7
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-8
-
-DECLARE
-DataStructures.CursorNode:::CLASS
-
-DECLARE
-DataStructures.CursorNode:::OBJECT
-this
-DataStructures.CursorNode # isNonNull=true, isParam=true
-hashcode
-2
-this.element
-java.lang.Object # declaringClassPackageName=DataStructures
-hashcode
-3
-this.element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.next
-int # declaringClassPackageName=DataStructures
-int
-4
-
-
-DECLARE
-DataStructures.CursorNode.CursorNode(java.lang.Object):::ENTER
-theElement
-java.lang.Object # isParam=true
-hashcode
-2
-theElement.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorNode.CursorNode(java.lang.Object):::EXIT13
-this
-DataStructures.CursorNode # isNonNull=true, isParam=true
-hashcode
-3
-this.element
-java.lang.Object # declaringClassPackageName=DataStructures
-hashcode
-4
-this.element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.next
-int # declaringClassPackageName=DataStructures
-int
-5
-theElement
-java.lang.Object # isParam=true
-hashcode
-2
-theElement.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-DataStructures.CursorNode.CursorNode(java.lang.Object, int):::ENTER
-theElement
-java.lang.Object # isParam=true
-hashcode
-3
-theElement.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-n
-int # isParam=true
-int
-2
-
-DECLARE
-DataStructures.CursorNode.CursorNode(java.lang.Object, int):::EXIT19
-this
-DataStructures.CursorNode # isNonNull=true, isParam=true
-hashcode
-4
-this.element
-java.lang.Object # declaringClassPackageName=DataStructures
-hashcode
-5
-this.element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.next
-int # declaringClassPackageName=DataStructures
-int
-2
-theElement
-java.lang.Object # isParam=true
-hashcode
-3
-theElement.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-n
-int # isParam=true
-int
-2
-
-
-DECLARE
-DataStructures.CursorNode.equals(java.lang.Object):::ENTER
-this
-DataStructures.CursorNode # isNonNull=true, isParam=true
-hashcode
-3
-this.element
-java.lang.Object # declaringClassPackageName=DataStructures
-hashcode
-4
-this.element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.next
-int # declaringClassPackageName=DataStructures
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorNode.equals(java.lang.Object):::EXIT1
-this
-DataStructures.CursorNode # isNonNull=true, isParam=true
-hashcode
-4
-this.element
-java.lang.Object # declaringClassPackageName=DataStructures
-hashcode
-5
-this.element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.next
-int # declaringClassPackageName=DataStructures
-int
-6
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-DataStructures.CursorNode.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-DataStructures.CursorNode # isNonNull=true, isParam=true
-hashcode
-3
-this.element
-java.lang.Object # declaringClassPackageName=DataStructures
-hashcode
-4
-this.element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.next
-int # declaringClassPackageName=DataStructures
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorNode.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-DataStructures.CursorNode # isNonNull=true, isParam=true
-hashcode
-4
-this.element
-java.lang.Object # declaringClassPackageName=DataStructures
-hashcode
-5
-this.element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.next
-int # declaringClassPackageName=DataStructures
-int
-6
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-DataStructures.CursorListItr:::CLASS
-
-DECLARE
-DataStructures.CursorListItr:::OBJECT
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-2
-this.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-
-DECLARE
-DataStructures.CursorListItr.CursorListItr(int):::ENTER
-theNode
-int # isParam=true
-int
-2
-
-DECLARE
-DataStructures.CursorListItr.CursorListItr(int):::EXIT27
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-3
-this.current
-int # declaringClassPackageName=DataStructures
-int
-2
-theNode
-int # isParam=true
-int
-2
-
-
-DECLARE
-DataStructures.CursorListItr.isPastEnd():::ENTER
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-2
-this.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-DECLARE
-DataStructures.CursorListItr.isPastEnd():::EXIT35
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-3
-this.current
-int # declaringClassPackageName=DataStructures
-int
-4
-return
-boolean
-boolean
-2
-
-
-DECLARE
-DataStructures.CursorListItr.retrieve():::ENTER
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-2
-this.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-DECLARE
-DataStructures.CursorListItr.retrieve():::EXIT45
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-3
-this.current
-int # declaringClassPackageName=DataStructures
-int
-4
-return
-java.lang.Object
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-DataStructures.CursorListItr.advance():::ENTER
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-2
-this.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-DECLARE
-DataStructures.CursorListItr.advance():::EXIT56
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-2
-this.current
-int # declaringClassPackageName=DataStructures
-int
-3
-
-
-DECLARE
-DataStructures.CursorListItr.equals(java.lang.Object):::ENTER
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-3
-this.current
-int # declaringClassPackageName=DataStructures
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorListItr.equals(java.lang.Object):::EXIT1
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-4
-this.current
-int # declaringClassPackageName=DataStructures
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-DataStructures.CursorListItr.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-3
-this.current
-int # declaringClassPackageName=DataStructures
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.CursorListItr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-DataStructures.CursorListItr # isNonNull=true, isParam=true
-hashcode
-4
-this.current
-int # declaringClassPackageName=DataStructures
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+// Declarations for DataStructures.CursorList
+// Declarations written 2020-11-18T07:33:15.243 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt DataStructures.CursorList:::CLASS
+ppt-type class
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[7]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[8]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[9]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.alloc():::ENTER
+ppt-type enter
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[7]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[8]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[9]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.alloc():::EXIT37
+ppt-type subexit
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[7]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[8]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[9]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.free(int):::ENTER
+ppt-type enter
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[7]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[8]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[9]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable p
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt DataStructures.CursorList.free(int):::EXIT45
+ppt-type subexit
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[7]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[8]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[9]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable p
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt DataStructures.CursorList.CursorList():::ENTER
+ppt-type enter
+
+ppt DataStructures.CursorList.CursorList():::EXIT54
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.isEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.isEmpty():::EXIT62
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 7
+
+ppt DataStructures.CursorList.makeEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.makeEmpty():::EXIT72
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.zeroth():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.zeroth():::EXIT80
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  comparability 7
+variable return.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.first():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.first():::EXIT89
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  comparability 7
+variable return.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable p
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable p.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::EXIT108
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable p
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable p.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.find(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorList.find(java.lang.Object):::EXIT122
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  comparability 7
+variable return.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.findPrevious(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorList.findPrevious(java.lang.Object):::EXIT139
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  comparability 7
+variable return.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.remove(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorList.remove(java.lang.Object):::EXIT157
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 6
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorList.printList(DataStructures.CursorList):::ENTER
+ppt-type enter
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable theList
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable theList.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.printList(DataStructures.CursorList):::EXIT172
+ppt-type subexit
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[8]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[9]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[10]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable theList
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable theList.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorList.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 9
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[10]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[11]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[12]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 8
+
+ppt DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 9
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[10]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[11]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[12]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 7
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 8
+
+ppt DataStructures.CursorNode:::CLASS
+ppt-type class
+
+ppt DataStructures.CursorNode:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorNode
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.element
+  var-kind field element
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 3
+variable this.element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.element
+  flags synthetic classname non_null
+  comparability 1
+variable this.next
+  var-kind field next
+  dec-type int
+  rep-type int
+  comparability 4
+
+ppt DataStructures.CursorNode.CursorNode(java.lang.Object):::ENTER
+ppt-type enter
+variable theElement
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable theElement.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args theElement
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorNode.CursorNode(java.lang.Object):::EXIT13
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorNode
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.element
+  var-kind field element
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 4
+variable this.element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.element
+  flags synthetic classname non_null
+  comparability 1
+variable this.next
+  var-kind field next
+  dec-type int
+  rep-type int
+  comparability 5
+variable theElement
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable theElement.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args theElement
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorNode.CursorNode(java.lang.Object, int):::ENTER
+ppt-type enter
+variable theElement
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable theElement.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args theElement
+  flags synthetic classname non_null
+  comparability 1
+variable n
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt DataStructures.CursorNode.CursorNode(java.lang.Object, int):::EXIT19
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorNode
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.element
+  var-kind field element
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 5
+variable this.element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.element
+  flags synthetic classname non_null
+  comparability 1
+variable this.next
+  var-kind field next
+  dec-type int
+  rep-type int
+  comparability 2
+variable theElement
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable theElement.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args theElement
+  flags synthetic classname non_null
+  comparability 1
+variable n
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt DataStructures.CursorNode.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorNode
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.element
+  var-kind field element
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 4
+variable this.element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.element
+  flags synthetic classname non_null
+  comparability 1
+variable this.next
+  var-kind field next
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorNode.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorNode
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.element
+  var-kind field element
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 5
+variable this.element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.element
+  flags synthetic classname non_null
+  comparability 1
+variable this.next
+  var-kind field next
+  dec-type int
+  rep-type int
+  comparability 6
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt DataStructures.CursorNode.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorNode
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.element
+  var-kind field element
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 4
+variable this.element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.element
+  flags synthetic classname non_null
+  comparability 1
+variable this.next
+  var-kind field next
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorNode.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorNode
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.element
+  var-kind field element
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 5
+variable this.element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.element
+  flags synthetic classname non_null
+  comparability 1
+variable this.next
+  var-kind field next
+  dec-type int
+  rep-type int
+  comparability 6
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt DataStructures.CursorListItr:::CLASS
+ppt-type class
+
+ppt DataStructures.CursorListItr:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorListItr.CursorListItr(int):::ENTER
+ppt-type enter
+variable theNode
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt DataStructures.CursorListItr.CursorListItr(int):::EXIT27
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 2
+variable theNode
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt DataStructures.CursorListItr.isPastEnd():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorListItr.isPastEnd():::EXIT35
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
+
+ppt DataStructures.CursorListItr.retrieve():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorListItr.retrieve():::EXIT45
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorListItr.advance():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorListItr.advance():::EXIT56
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorListItr.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorListItr.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt DataStructures.CursorListItr.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt DataStructures.CursorListItr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

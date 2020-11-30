@@ -68,6 +68,9 @@ else
        GOAL := goal-CentOS2003
 endif
 endif
+ifeq ($(OS_REL),8.2.2004)
+       GOAL := goal-CentOS2004
+endif
 ifeq ($(OS_REL),8.1.1911)
        GOAL := goal-CentOS1911
 endif
@@ -314,13 +317,12 @@ endif
 
 counts: $(NAME).counts
 
+ifeq ($(SKIP_DECLS),)
 $(DIFF_NAME).decls.diff: daikon-output/$(NAME).decls $(call goal_name,$(NAME).decls)
-# gtest gets different results on azure and circleci than in does on native machines
-ifeq ($(NAME), gtest)
-		@echo skipping $(NAME) $(GOAL)
-		@touch $@
-else
 	-diff -u -F::: $(call goal_name,$(NAME).decls) daikon-output/$(NAME).decls >$@ 2>&1
+else
+$(DIFF_NAME).decls.diff: daikon-output/$(NAME).decls
+		@echo skipping $(NAME) .decls file check
 endif
 
 $(DIFF_NAME).counts.diff: $(NAME).counts $(call goal_name,$(NAME).counts)
@@ -334,6 +336,7 @@ $(DIFF_NAME).dtrace.diff: daikon-output/$(NAME)$(DTRACE_EXT) $(call goal_name,$(
 	-diff --text -u $(call goal_name,$(NAME).dtrace) daikon-output/$(NAME)$(DTRACE_EXT) >$@ 2>&1
 else
 $(DIFF_NAME).dtrace.diff: daikon-output/$(NAME)$(DTRACE_EXT)
+		@echo skipping $(NAME) .dtrace file check
 endif
 
 ifeq ($(SKIP_OUT_DIFF),)
@@ -341,6 +344,7 @@ $(DIFF_NAME).out.diff: $(NAME).out $(call goal_name,$(NAME).out)
 	-diff --text -u $(call goal_name,$(NAME).out) $(NAME).out  >$@ 2>&1
 else
 $(DIFF_NAME).out.diff: $(NAME).out
+		@echo skipping $(NAME) .out file check
 endif
 
 ifeq ($(SKIP_INVS_DIFF),)
@@ -348,6 +352,7 @@ $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt $(call goal_name,$(NAME).
 	-diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1
 else
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt
+		@echo skipping $(NAME) .invs file check
 endif
 
 $(DIFF_NAME).comp.diff: $(NAME).comp $(call goal_name,$(NAME).comp)

@@ -26,6 +26,8 @@ DynComp handles lambdas (Java anonymous functions).
 
 Removed DynComp option --no-primitives.
 
+Removed support for the obsolete Version 1 file format.
+
 ===========================================================================
 
 5.8.4 (July 22, 2020)

@@ -3,9 +3,12 @@ package daikon.dcomp;
 import daikon.DynComp;
 import daikon.chicory.ArrayInfo;
 import daikon.chicory.ClassInfo;
+import daikon.chicory.ComparabilityProvider;
 import daikon.chicory.DaikonClassInfo;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.chicory.DaikonWriter;
+import daikon.chicory.DeclReader;
+import daikon.chicory.DeclWriter;
 import daikon.chicory.FieldInfo;
 import daikon.chicory.MethodInfo;
 import daikon.chicory.ParameterInfo;
@@ -22,6 +25,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,8 +46,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.dataflow.qual.Pure;
 
+/**
+ * Runtime support for DynComp, a comparability front end for Chicory. This class is a collection of
+ * methods; it should never be instantiated.
+ */
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
-public final class DCRuntime {
+public final class DCRuntime implements ComparabilityProvider {
 
   /** List of all instrumented methods. */
   public static final List<MethodInfo> methods = new ArrayList<>();
@@ -97,6 +106,17 @@ public final class DCRuntime {
 
   /** If true, merge arrays and their indices. */
   private static boolean merge_arrays_and_indices = true;
+
+  /** Decl writer to share output code with Chicory. */
+  // Set in Premain.premain().
+  static DeclWriter declWriter;
+
+  /** Used for calling {@link ComparabilityProvider#getComparability}. */
+  // Set in Premain.premain().
+  static ComparabilityProvider comparabilityProvider;
+
+  /** Whether the header has been printed. */
+  private static boolean headerPrinted = false;
 
   /** Class to hold per-thread comparability data. */
   private static class ThreadData {
@@ -1467,7 +1487,7 @@ public final class DCRuntime {
    *
    * @param pw PrintWriter to write on
    */
-  public static void print_all_comparable(PrintWriter pw) {
+  public static void printAllComparable(PrintWriter pw) {
 
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
@@ -1480,7 +1500,7 @@ public final class DCRuntime {
           continue;
         }
         pw.println();
-        print_comparable(pw, mi);
+        printComparable(pw, mi);
       }
     }
   }
@@ -1490,7 +1510,7 @@ public final class DCRuntime {
    *
    * @param pw PrintWriter to write on
    */
-  public static void trace_all_comparable(PrintWriter pw) {
+  public static void traceAllComparable(PrintWriter pw) {
 
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
@@ -1502,9 +1522,30 @@ public final class DCRuntime {
           continue;
         }
         pw.println();
-        print_comparable_traced(pw, mi);
+        printComparableTraced(pw, mi);
       }
     }
+  }
+
+  /**
+   * Prints header information to the decls file. Should be called once before emitting any other
+   * declarations.
+   *
+   * @param pw where to write output
+   * @param className name of the top-level class (used only for printing comments)
+   */
+  public static void printHeaderInfo(PrintWriter pw, String className) {
+
+    // Write the file header
+    pw.println("// Declarations for " + className);
+    pw.println(
+        "// Declarations written "
+            + LocalDateTime.now(ZoneId.systemDefault())
+            + " by daikon.DynComp");
+    pw.println();
+    pw.println("decl-version 2.0");
+    pw.println("var-comparability implicit");
+    pw.println();
   }
 
   /**
@@ -1512,15 +1553,15 @@ public final class DCRuntime {
    *
    * @param pw where to write output
    */
-  public static void print_decl_file(PrintWriter pw) {
-
-    // Write the file header
-    pw.printf("// Declaration file written by daikon.dcomp%n%n");
-    pw.printf("VarComparability%nimplicit%n%n");
+  public static void printDeclFile(PrintWriter pw) {
 
     // Write the information for each class
     for (ClassInfo ci : all_classes) {
-      print_class_decl(pw, ci);
+      if (!headerPrinted) {
+        printHeaderInfo(pw, ci.class_name);
+        headerPrinted = true;
+      }
+      printClassDecl(pw, ci);
     }
     debug_decl_print.log("finished %d classes%n", all_classes.size());
   }
@@ -1647,7 +1688,7 @@ public final class DCRuntime {
    * @param pw where to produce output
    * @param ci the class to write
    */
-  public static void print_class_decl(PrintWriter pw, ClassInfo ci) {
+  public static void printClassDecl(PrintWriter pw, ClassInfo ci) {
 
     time_decl.log("Printing decl file for class %s%n", ci.class_name);
     time_decl.indent();
@@ -1658,18 +1699,18 @@ public final class DCRuntime {
     merge_class_comparability(ci);
 
     // Write the class ppt
-    String classPptName = String.format("%s:::CLASS", ci.class_name);
-    pw.printf("DECLARE%n");
-    pw.println(classPptName);
-    print_decl_vars(pw, get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
+    String classPptName = ci.class_name + ":::CLASS";
+    pw.println("ppt " + classPptName);
+    pw.println("ppt-type class");
+    printDeclVars(get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
     pw.println();
     time_decl.log("printed class ppt");
 
     // Write the object ppt
-    String objectPptName = String.format("%s:::OBJECT", ci.class_name);
-    pw.printf("DECLARE%n");
-    pw.println(objectPptName);
-    print_decl_vars(pw, get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
+    String objectPptName = ci.class_name + ":::OBJECT";
+    pw.println("ppt " + objectPptName);
+    pw.println("ppt-type object");
+    printDeclVars(get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
     pw.println();
     time_decl.log("printed object ppt");
 
@@ -1679,8 +1720,7 @@ public final class DCRuntime {
         continue;
       }
       debug_decl_print.log("  method %s%n", mi.method_name);
-      pw.println();
-      print_decl(pw, mi);
+      printMethod(pw, mi);
     }
 
     time_decl.log("finished class %s%n", ci.class_name);
@@ -1701,7 +1741,7 @@ public final class DCRuntime {
    * @param mi the class to output
    * @return the list of comparabile DVSets for the exit
    */
-  public static List<DVSet> print_decl(PrintWriter pw, MethodInfo mi) {
+  public static List<DVSet> printMethod(PrintWriter pw, MethodInfo mi) {
 
     // long start = System.currentTimeMillis();
     // watch.reset();
@@ -1717,10 +1757,10 @@ public final class DCRuntime {
 
     // Print the enter point
     String enterPptName = clean_decl_name(DaikonWriter.methodEntryName(mi.member));
-    pw.println("DECLARE");
-    pw.println(enterPptName);
+    pw.println("ppt " + enterPptName);
+    pw.println("ppt-type enter");
     // ppt_name_ms += watch.snapshot();  watch.reset();
-    print_decl_vars(pw, l, mi.traversalEnter, enterPptName);
+    printDeclVars(l, mi.traversalEnter, enterPptName);
     // decl_vars_ms += watch.snapshot();  watch.reset();
     pw.println();
     time_decl.log("after enter");
@@ -1732,12 +1772,12 @@ public final class DCRuntime {
     time_decl.log("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
       String exitPptName = clean_decl_name(DaikonWriter.methodExitName(mi.member, ii));
-      pw.println("DECLARE");
-      pw.println(exitPptName);
+      pw.println("ppt " + exitPptName);
+      pw.println("ppt-type subexit");
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log("after exit clean_decl_name");
-      print_decl_vars(pw, l, mi.traversalExit, exitPptName);
+      printDeclVars(l, mi.traversalExit, exitPptName);
       pw.println();
       // decl_vars_ms += watch.snapshot();  watch.reset();
 
@@ -1749,34 +1789,38 @@ public final class DCRuntime {
     return l;
   }
 
+  /** Map from array name to comparability for its indices (if any). */
+  private static Map<String, Integer> arr_index_map;
+  /** Map from variable to its comparability. */
+  private static Map<DaikonVariableInfo, Integer> dv_comp_map;
+  /** Comparability value for a variable. */
+  private static int base_comp;
+
   /**
    * Print the variables in sets to pw in DECL file format. Each variable in the same set is given
    * the same comparability. Constructed classname variables are made comparable to other classname
    * variables only.
    *
-   * @param pw where to print the variables
    * @param sets the comparability sets
    * @param dv_tree the tree of variables
    * @param pptName used only for debugging output
    */
-  private static void print_decl_vars(
-      PrintWriter pw, List<DVSet> sets, RootInfo dv_tree, String pptName) {
+  private static void printDeclVars(List<DVSet> sets, RootInfo dv_tree, String pptName) {
 
     time_decl.indent();
-    time_decl.log("print_decl_vars start");
+    time_decl.log("printDeclVars start");
 
-    debug_decl_print.log("print_decl_vars(%s)%n", pptName);
+    debug_decl_print.log("printDeclVars(%s)%n", pptName);
 
     // Map from array name to comparability for its indices (if any)
-    Map<String, Integer> arr_index_map = new LinkedHashMap<>();
+    arr_index_map = new LinkedHashMap<>();
 
     // Map from daikon variable to its comparability
-    Map<DaikonVariableInfo, Integer> dv_comp_map =
-        new IdentityHashMap<DaikonVariableInfo, Integer>(256);
+    dv_comp_map = new IdentityHashMap<DaikonVariableInfo, Integer>(256);
 
     // Initial comparability values
     int class_comp = 1;
-    int base_comp = 2;
+    base_comp = 2;
 
     // Loop through each set of comparable variables
     for (DVSet set : sets) {
@@ -1852,39 +1896,47 @@ public final class DCRuntime {
       if ((dv instanceof RootInfo) || (dv instanceof StaticObjInfo) || !dv.declShouldPrint()) {
         continue;
       }
-      // System.out.printf("Output dv: %s ", dv);
-      pw.println(dv.getName());
-      pw.println(dv.getTypeName());
-      pw.println(dv.getRepTypeName());
-      int comp = dv_comp_map.get(dv);
-      if (dv.isArray()) {
-        String name = dv.getName();
-        // If we an array of CLASSNAME or TO_STRING get the index
-        // comparability from the base array.
-        if (name.endsWith(DaikonVariableInfo.class_suffix)) {
-          name = name.substring(0, name.length() - DaikonVariableInfo.class_suffix.length());
-        } else if (name.endsWith(".toString")) {
-          name = name.substring(0, name.length() - ".toString".length());
-        }
-        Integer index_comp = arr_index_map.get(name);
-        // System.out.printf("compare: %d [ %s ] ", comp, index_comp);
-        if (index_comp != null) {
-          // System.out.println(comp + "[" + index_comp + "]");
-          pw.println(comp + "[" + index_comp + "]");
-        } else {
-          // There is no index comparability, so just set it to a unique value.
-          // System.out.println(comp + "[" + base_comp + "]");
-          pw.println(comp + "[" + base_comp++ + "]");
-        }
-      } else {
-        // System.out.println(comp);
-        pw.println(comp);
-      }
+
+      declWriter.printDecl(null, dv, null, comparabilityProvider);
     }
 
-    time_decl.log("print_decl_vars end%n");
+    time_decl.log("printDeclVars end%n");
     map_info.log("dv_comp_map size: %d%n", dv_comp_map.size());
     time_decl.exdent();
+  }
+
+  /**
+   * Calculates a comparability value.
+   *
+   * @param dv variable to calculate comparability for
+   * @param compare_ppt (not used)
+   * @return string containing comparability value
+   */
+  @Override
+  public String getComparability(DaikonVariableInfo dv, DeclReader.DeclPpt compare_ppt) {
+    int comp = dv_comp_map.get(dv);
+    String comp_str = Integer.toString(comp);
+    if (dv.isArray()) {
+      String name = dv.getName();
+      // If we an array of CLASSNAME or TO_STRING get the index
+      // comparability from the base array.
+      if (name.endsWith(DaikonVariableInfo.class_suffix)) {
+        name = name.substring(0, name.length() - DaikonVariableInfo.class_suffix.length());
+      } else if (name.endsWith(".toString")) {
+        name = name.substring(0, name.length() - ".toString".length());
+      }
+      Integer index_comp = arr_index_map.get(name);
+      // System.out.printf("compare: %d [ %s ] ", comp, index_comp);
+      if (index_comp != null) {
+        // System.out.println(comp + "[" + index_comp + "]");
+        comp_str = comp_str + "[" + index_comp + "]";
+      } else {
+        // There is no index comparability, so just set it to a unique value.
+        // System.out.println(comp + "[" + base_comp + "]");
+        comp_str = comp_str + "[" + base_comp++ + "]";
+      }
+    }
+    return comp_str;
   }
 
   /**
@@ -1897,7 +1949,7 @@ public final class DCRuntime {
   /* TO DO: Find a way to make this work correctly without using normal
    * get_comparable.
    */
-  public static void print_comparable(PrintWriter pw, MethodInfo mi) {
+  public static void printComparable(PrintWriter pw, MethodInfo mi) {
 
     List<DVSet> l = get_comparable(mi.traversalEnter);
     pw.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
@@ -1936,7 +1988,7 @@ public final class DCRuntime {
    * @param pw where to write output
    * @param mi the method to process
    */
-  public static void print_comparable_traced(PrintWriter pw, MethodInfo mi) {
+  public static void printComparableTraced(PrintWriter pw, MethodInfo mi) {
     List<DVSet> l = get_comparable(mi.traversalEnter);
     Map<DaikonVariableInfo, DVSet> t = get_comparable_traced(mi.traversalEnter);
     pw.printf("DynComp Traced Tree for %s enter%n", clean_decl_name(mi.toString()));
@@ -1947,7 +1999,7 @@ public final class DCRuntime {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        print_tree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        printTree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
         pw.println();
       }
     }
@@ -1963,7 +2015,7 @@ public final class DCRuntime {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        print_tree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        printTree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
         pw.println();
       }
     }
@@ -1975,12 +2027,12 @@ public final class DCRuntime {
    * [depth] steps from the root. Requires a Map [tree] that represents a tree though key-value sets
    * of the form {@code <}parent, set of children{@code >}.
    *
-   * @param pw PrintWriter to write on
+   * @param pw where to write output
    * @param tree map parents to children
    * @param node starting point of tree to print
    * @param depth distance from node to root of tree
    */
-  static void print_tree(
+  static void printTree(
       PrintWriter pw, Map<DaikonVariableInfo, DVSet> tree, DaikonVariableInfo node, int depth) {
 
     /* This method, for some reason, triggers a segfault due to the way
@@ -1995,7 +2047,7 @@ public final class DCRuntime {
         return;
       }
       for (DaikonVariableInfo child : tree.get(node)) {
-        if (child != node) print_tree(pw, tree, child, depth + 1);
+        if (child != node) printTree(pw, tree, child, depth + 1);
       }
     } else {
       for (int i = 0; i < depth; i++) {
@@ -2008,7 +2060,7 @@ public final class DCRuntime {
         return;
       }
       for (DaikonVariableInfo child : tree.get(node)) {
-        if (child != node) print_tree(pw, tree, child, depth + 1);
+        if (child != node) printTree(pw, tree, child, depth + 1);
       }
     }
   }

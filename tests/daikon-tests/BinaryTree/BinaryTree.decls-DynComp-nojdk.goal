@@ -1,819 +1,1098 @@
-// Declaration file written by daikon.dcomp
+// Declarations for DataStructures.BinarySearchTree
+// Declarations written 2020-11-18T07:31:50.523 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-DataStructures.BinarySearchTree:::CLASS
+ppt DataStructures.BinarySearchTree:::CLASS
+ppt-type class
 
-DECLARE
-DataStructures.BinarySearchTree:::OBJECT
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
+ppt DataStructures.BinarySearchTree.BinarySearchTree():::ENTER
+ppt-type enter
 
-DECLARE
-DataStructures.BinarySearchTree.BinarySearchTree():::ENTER
+ppt DataStructures.BinarySearchTree.BinarySearchTree():::EXIT30
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
-DECLARE
-DataStructures.BinarySearchTree.BinarySearchTree():::EXIT30
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
+ppt DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT39
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT39
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::EXIT48
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
+ppt DataStructures.BinarySearchTree.findMin():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
-DECLARE
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.findMin():::EXIT56
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 4
+variable return
+  var-kind return
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::EXIT48
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.findMax():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
+ppt DataStructures.BinarySearchTree.findMax():::EXIT65
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 4
+variable return
+  var-kind return
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinarySearchTree.findMin():::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinarySearchTree.findMin():::EXIT56
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-4
-return
-DataStructures.Comparable
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT75
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 4
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
+ppt DataStructures.BinarySearchTree.makeEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
-DECLARE
-DataStructures.BinarySearchTree.findMax():::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree.makeEmpty():::EXIT84
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
-DECLARE
-DataStructures.BinarySearchTree.findMax():::EXIT65
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-4
-return
-DataStructures.Comparable
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.isEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
+ppt DataStructures.BinarySearchTree.isEmpty():::EXIT92
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 4
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.find(DataStructures.Comparable):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.printTree():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
-DECLARE
-DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT75
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-4
-x
-DataStructures.Comparable # isParam=true
-hashcode
-2
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-DataStructures.Comparable
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.printTree():::EXIT104
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
 
+ppt DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.makeEmpty():::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT113
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 3
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable return
+  var-kind return
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinarySearchTree.makeEmpty():::EXIT84
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
+ppt DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT132
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.isEmpty():::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.isEmpty():::EXIT92
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-4
-return
-boolean
-boolean
-2
+ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
+ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.printTree():::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.printTree():::EXIT104
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-2
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
+ppt DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
+ppt DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
+ppt DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT113
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-4
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-3
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-3
-return
-DataStructures.Comparable
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
+ppt DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT184
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT132
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
+variable x
+  var-kind variable
+  dec-type DataStructures.Comparable
+  rep-type hashcode
+  flags is_param
+  comparability 4
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
+ppt DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 4
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
+ppt DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode):::EXIT217
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 4
+variable t
+  var-kind variable
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
-DECLARE
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
+ppt DataStructures.BinarySearchTree.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
+ppt DataStructures.BinarySearchTree.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
+ppt DataStructures.BinarySearchTree.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
-
-
-DECLARE
-DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-
-DECLARE
-DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT184
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
-
-
-DECLARE
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-
-DECLARE
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
-
-DECLARE
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
-
-DECLARE
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
-
-DECLARE
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-2
-x
-DataStructures.Comparable # isParam=true
-hashcode
-4
-x.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-return
-DataStructures.BinaryNode
-hashcode
-2
-
-
-DECLARE
-DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-4
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-
-DECLARE
-DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode):::EXIT217
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-4
-t
-DataStructures.BinaryNode # isParam=true
-hashcode
-2
-
-
-DECLARE
-DataStructures.BinarySearchTree.equals(java.lang.Object):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.BinarySearchTree.equals(java.lang.Object):::EXIT1
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-4
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-DataStructures.BinarySearchTree.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-3
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-DataStructures.BinarySearchTree.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-DataStructures.BinarySearchTree # isNonNull=true, isParam=true
-hashcode
-4
-this.root
-DataStructures.BinaryNode # declaringClassPackageName=DataStructures
-hashcode
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt DataStructures.BinarySearchTree.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type DataStructures.BinarySearchTree
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.root
+  var-kind field root
+  dec-type DataStructures.BinaryNode
+  rep-type hashcode
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

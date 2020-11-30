@@ -172,12 +172,7 @@ public abstract class DaikonVariableInfo
     if (name == null) {
       return null;
     }
-
-    if (Chicory.new_decl_format) {
-      return name.replaceFirst("\\[\\]", "[..]");
-    } else {
-      return name;
-    }
+    return name.replaceFirst("\\[\\]", "[..]");
   }
 
   /**

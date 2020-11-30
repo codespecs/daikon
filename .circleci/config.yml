@@ -2,6 +2,13 @@ version: 2.1
 
 jobs:
 
+  # Only proceed to other jobs if ubuntu-jdk8-jobs passes.
+  ubuntu-jdk8-jobs:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - run: /bin/true
+
   quick-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
@@ -557,76 +564,97 @@ workflows:
   version: 2
   build:
     jobs:
+      - ubuntu-jdk8-jobs:
+          requires:
+            - quick-txt-diff-ubuntu-jdk8
+            - nonquick-txt-diff-ubuntu-jdk8
+            - non-txt-diff-ubuntu-jdk8
+            - misc-ubuntu-jdk8
+            - kvasir-ubuntu-jdk8
       - quick-txt-diff-ubuntu-jdk8
       - quick-txt-diff-ubuntu-jdk11:
           requires:
+            - ubuntu-jdk8-jobs
             - quick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-ubuntu-jdk11:
           requires:
+            - ubuntu-jdk8-jobs
             - nonquick-txt-diff-ubuntu-jdk8
       - non-txt-diff-ubuntu-jdk8
       - non-txt-diff-ubuntu-jdk11:
           requires:
+            - ubuntu-jdk8-jobs
             - non-txt-diff-ubuntu-jdk8
       - misc-ubuntu-jdk8
       - misc-ubuntu-jdk11:
           requires:
+            - ubuntu-jdk8-jobs
             - misc-ubuntu-jdk8
       - kvasir-ubuntu-jdk8
       - kvasir-ubuntu-jdk11:
           requires:
+            - ubuntu-jdk8-jobs
             - kvasir-ubuntu-jdk8
       - quick-txt-diff-fedora-jdk8:
           requires:
+            - ubuntu-jdk8-jobs
             - quick-txt-diff-ubuntu-jdk8
       - quick-txt-diff-fedora-jdk11:
           requires:
             - quick-txt-diff-fedora-jdk8
       - nonquick-txt-diff-fedora-jdk8:
           requires:
+            - ubuntu-jdk8-jobs
             - nonquick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-fedora-jdk11:
           requires:
             - nonquick-txt-diff-fedora-jdk8
       - non-txt-diff-fedora-jdk8:
           requires:
+            - ubuntu-jdk8-jobs
             - non-txt-diff-ubuntu-jdk8
       - non-txt-diff-fedora-jdk11:
           requires:
             - non-txt-diff-fedora-jdk8
       - misc-fedora-jdk8:
           requires:
+            - ubuntu-jdk8-jobs
             - misc-ubuntu-jdk8
       - misc-fedora-jdk11:
           requires:
             - misc-fedora-jdk8
       # - kvasir-fedora-jdk8:
       #     requires:
+      #       - ubuntu-jdk8-jobs
       #       - kvasir-ubuntu-jdk8
-      # - kvasir-fedora-jdk811
+      # - kvasir-fedora-jdk11
       #     requires:
       #       - kvasir-fedora-jdk8
       - quick-txt-diff-centos-jdk8:
           requires:
+            - ubuntu-jdk8-jobs
             - quick-txt-diff-ubuntu-jdk8
       - quick-txt-diff-centos-jdk11:
           requires:
             - quick-txt-diff-centos-jdk8
       - nonquick-txt-diff-centos-jdk8:
           requires:
+            - ubuntu-jdk8-jobs
             - nonquick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-centos-jdk11:
           requires:
             - nonquick-txt-diff-centos-jdk8
       - non-txt-diff-centos-jdk8:
           requires:
+            - ubuntu-jdk8-jobs
             - non-txt-diff-ubuntu-jdk8
       - non-txt-diff-centos-jdk11:
           requires:
             - non-txt-diff-centos-jdk8
       - misc-centos-jdk8:
           requires:
+            - ubuntu-jdk8-jobs
             - misc-ubuntu-jdk8
       - misc-centos-jdk11:
           requires:

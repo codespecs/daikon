@@ -1,767 +1,1050 @@
-// Declaration file written by daikon.dcomp
+// Declarations for misc.StaticInteresting
+// Declarations written 2020-11-18T07:27:12.876 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-misc.StaticInteresting:::CLASS
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
+ppt misc.StaticInteresting:::CLASS
+ppt-type class
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
-DECLARE
-misc.StaticInteresting:::OBJECT
-this
-misc.StaticInteresting # isNonNull=true, isParam=true
-hashcode
-3
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.outer[..]
-int[]
-int[]
-6[6]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.inner[..]
-int[]
-int[]
-6[4]
-this.y
-int # declaringClassPackageName=misc
-int
-6
-this.x
-int # declaringClassPackageName=misc
-int
-4
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
+ppt misc.StaticInteresting:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[4]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 4
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
+ppt misc.StaticInteresting.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[6]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[7]
 
-DECLARE
-misc.StaticInteresting.main(java.lang.String[]):::ENTER
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[6]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[7]
+ppt misc.StaticInteresting.main(java.lang.String[]):::EXIT60
+ppt-type subexit
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[6]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[7]
 
-DECLARE
-misc.StaticInteresting.main(java.lang.String[]):::EXIT60
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[6]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[7]
+ppt misc.StaticInteresting.work():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[4]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 4
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
+ppt misc.StaticInteresting.work():::EXIT71
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[4]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 4
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
-DECLARE
-misc.StaticInteresting.work():::ENTER
-this
-misc.StaticInteresting # isNonNull=true, isParam=true
-hashcode
-3
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.outer[..]
-int[]
-int[]
-6[6]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.inner[..]
-int[]
-int[]
-6[4]
-this.y
-int # declaringClassPackageName=misc
-int
-6
-this.x
-int # declaringClassPackageName=misc
-int
-4
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
+ppt misc.StaticInteresting.StaticInteresting():::ENTER
+ppt-type enter
 
-DECLARE
-misc.StaticInteresting.work():::EXIT71
-this
-misc.StaticInteresting # isNonNull=true, isParam=true
-hashcode
-3
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.outer[..]
-int[]
-int[]
-6[6]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.inner[..]
-int[]
-int[]
-6[4]
-this.y
-int # declaringClassPackageName=misc
-int
-6
-this.x
-int # declaringClassPackageName=misc
-int
-4
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
+ppt misc.StaticInteresting.StaticInteresting():::EXIT78
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[4]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 4
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
+ppt misc.StaticInteresting.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 8
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[7]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 6
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[5]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 5
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.StaticInteresting.StaticInteresting():::ENTER
+ppt misc.StaticInteresting.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 9
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[8]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[6]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 6
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
-DECLARE
-misc.StaticInteresting.StaticInteresting():::EXIT78
-this
-misc.StaticInteresting # isNonNull=true, isParam=true
-hashcode
-3
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.outer[..]
-int[]
-int[]
-6[6]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.inner[..]
-int[]
-int[]
-6[4]
-this.y
-int # declaringClassPackageName=misc
-int
-6
-this.x
-int # declaringClassPackageName=misc
-int
-4
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
+ppt misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 8
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[7]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 6
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[5]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 5
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
+ppt misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 9
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[8]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[6]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 6
+variable misc.StaticInteresting.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
-DECLARE
-misc.StaticInteresting.equals(java.lang.Object):::ENTER
-this
-misc.StaticInteresting # isNonNull=true, isParam=true
-hashcode
-4
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-8
-this.outer[..]
-int[]
-int[]
-7[7]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-6
-this.inner[..]
-int[]
-int[]
-7[5]
-this.y
-int # declaringClassPackageName=misc
-int
-7
-this.x
-int # declaringClassPackageName=misc
-int
-5
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt misc.StaticInteresting2:::CLASS
+ppt-type class
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
-DECLARE
-misc.StaticInteresting.equals(java.lang.Object):::EXIT1
-this
-misc.StaticInteresting # isNonNull=true, isParam=true
-hashcode
-5
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-9
-this.outer[..]
-int[]
-int[]
-8[8]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.inner[..]
-int[]
-int[]
-8[6]
-this.y
-int # declaringClassPackageName=misc
-int
-8
-this.x
-int # declaringClassPackageName=misc
-int
-6
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+ppt misc.StaticInteresting2:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting2
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[4]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 4
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
+ppt misc.StaticInteresting2.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[6]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[7]
 
-DECLARE
-misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-misc.StaticInteresting # isNonNull=true, isParam=true
-hashcode
-4
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-8
-this.outer[..]
-int[]
-int[]
-7[7]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-6
-this.inner[..]
-int[]
-int[]
-7[5]
-this.y
-int # declaringClassPackageName=misc
-int
-7
-this.x
-int # declaringClassPackageName=misc
-int
-5
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt misc.StaticInteresting2.main(java.lang.String[]):::EXIT104
+ppt-type subexit
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[6]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[7]
 
-DECLARE
-misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-misc.StaticInteresting # isNonNull=true, isParam=true
-hashcode
-5
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-9
-this.outer[..]
-int[]
-int[]
-8[8]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.inner[..]
-int[]
-int[]
-8[6]
-this.y
-int # declaringClassPackageName=misc
-int
-8
-this.x
-int # declaringClassPackageName=misc
-int
-6
-misc.StaticInteresting.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+ppt misc.StaticInteresting2.work():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting2
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[4]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 4
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
-DECLARE
-misc.StaticInteresting2:::CLASS
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
+ppt misc.StaticInteresting2.work():::EXIT115
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting2
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[4]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 4
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
-DECLARE
-misc.StaticInteresting2:::OBJECT
-this
-misc.StaticInteresting2 # isNonNull=true, isParam=true
-hashcode
-3
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.outer[..]
-int[]
-int[]
-6[6]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.inner[..]
-int[]
-int[]
-6[4]
-this.y
-int # declaringClassPackageName=misc
-int
-6
-this.x
-int # declaringClassPackageName=misc
-int
-4
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
+ppt misc.StaticInteresting2.StaticInteresting2():::ENTER
+ppt-type enter
 
+ppt misc.StaticInteresting2.StaticInteresting2():::EXIT122
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting2
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[6]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 5
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[4]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 4
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
 
-DECLARE
-misc.StaticInteresting2.main(java.lang.String[]):::ENTER
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[6]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[7]
+ppt misc.StaticInteresting2.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting2
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 8
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[7]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 6
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[5]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 5
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.StaticInteresting2.main(java.lang.String[]):::EXIT104
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-5
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[6]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[7]
+ppt misc.StaticInteresting2.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting2
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 9
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[8]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[6]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 6
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 
+ppt misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting2
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 8
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[7]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 6
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[5]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 5
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.StaticInteresting2.work():::ENTER
-this
-misc.StaticInteresting2 # isNonNull=true, isParam=true
-hashcode
-3
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.outer[..]
-int[]
-int[]
-6[6]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.inner[..]
-int[]
-int[]
-6[4]
-this.y
-int # declaringClassPackageName=misc
-int
-6
-this.x
-int # declaringClassPackageName=misc
-int
-4
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-
-DECLARE
-misc.StaticInteresting2.work():::EXIT115
-this
-misc.StaticInteresting2 # isNonNull=true, isParam=true
-hashcode
-3
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.outer[..]
-int[]
-int[]
-6[6]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.inner[..]
-int[]
-int[]
-6[4]
-this.y
-int # declaringClassPackageName=misc
-int
-6
-this.x
-int # declaringClassPackageName=misc
-int
-4
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-
-
-DECLARE
-misc.StaticInteresting2.StaticInteresting2():::ENTER
-
-DECLARE
-misc.StaticInteresting2.StaticInteresting2():::EXIT122
-this
-misc.StaticInteresting2 # isNonNull=true, isParam=true
-hashcode
-3
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.outer[..]
-int[]
-int[]
-6[6]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-5
-this.inner[..]
-int[]
-int[]
-6[4]
-this.y
-int # declaringClassPackageName=misc
-int
-6
-this.x
-int # declaringClassPackageName=misc
-int
-4
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-
-
-DECLARE
-misc.StaticInteresting2.equals(java.lang.Object):::ENTER
-this
-misc.StaticInteresting2 # isNonNull=true, isParam=true
-hashcode
-4
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-8
-this.outer[..]
-int[]
-int[]
-7[7]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-6
-this.inner[..]
-int[]
-int[]
-7[5]
-this.y
-int # declaringClassPackageName=misc
-int
-7
-this.x
-int # declaringClassPackageName=misc
-int
-5
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.StaticInteresting2.equals(java.lang.Object):::EXIT1
-this
-misc.StaticInteresting2 # isNonNull=true, isParam=true
-hashcode
-5
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-9
-this.outer[..]
-int[]
-int[]
-8[8]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.inner[..]
-int[]
-int[]
-8[6]
-this.y
-int # declaringClassPackageName=misc
-int
-8
-this.x
-int # declaringClassPackageName=misc
-int
-6
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
-
-
-DECLARE
-misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-misc.StaticInteresting2 # isNonNull=true, isParam=true
-hashcode
-4
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-8
-this.outer[..]
-int[]
-int[]
-7[7]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-6
-this.inner[..]
-int[]
-int[]
-7[5]
-this.y
-int # declaringClassPackageName=misc
-int
-7
-this.x
-int # declaringClassPackageName=misc
-int
-5
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-misc.StaticInteresting2 # isNonNull=true, isParam=true
-hashcode
-5
-this.outer
-int[] # declaringClassPackageName=misc
-hashcode
-9
-this.outer[..]
-int[]
-int[]
-8[8]
-this.inner
-int[] # declaringClassPackageName=misc
-hashcode
-7
-this.inner[..]
-int[]
-int[]
-8[6]
-this.y
-int # declaringClassPackageName=misc
-int
-8
-this.x
-int # declaringClassPackageName=misc
-int
-6
-misc.StaticInteresting2.rand
-java.util.Random # declaringClassPackageName=misc
-hashcode
-2
-obj
-java.lang.Object # isParam=true
-hashcode
-3
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
+ppt misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.StaticInteresting2
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.outer
+  var-kind field outer
+  dec-type int[]
+  rep-type hashcode
+  comparability 9
+variable this.outer[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[8]
+variable this.inner
+  var-kind field inner
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.inner[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[6]
+variable this.y
+  var-kind field y
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.x
+  var-kind field x
+  dec-type int
+  rep-type int
+  comparability 6
+variable misc.StaticInteresting2.rand
+  var-kind variable
+  dec-type java.util.Random
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
 

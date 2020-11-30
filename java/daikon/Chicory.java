@@ -90,9 +90,6 @@ public class Chicory {
   @Option("Print information about each ppt name as it is created")
   public static boolean debug_ppt_names = false;
 
-  @Option("Create the new declaration record format")
-  public static boolean new_decl_format = true;
-
   /**
    * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
    * daikon.chicory.ChicoryPremain#premain}.

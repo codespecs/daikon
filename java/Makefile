@@ -28,7 +28,9 @@ JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -sourc
 INSTALL ?= /usr/bin/install
 
 ifdef CHECKERFRAMEWORK
-  CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+  ifneq ("$(wildcard $(CHECKERFRAMEWORK))","")
+    CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+  endif
 endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
 CHECKERFRAMEWORK_JAR ?= ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar
@@ -757,19 +759,13 @@ audit:
 
 .PHONY: reformat check-format
 
-# Requires Java 8
 reformat:
-ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
 	${MAKE} -C .. update-run-google-java-format
 	@../utils/run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
-endif
 
-# Requires Java 8
 check-format:
-ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
 	${MAKE} -C .. update-run-google-java-format
 	@../utils/run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
-endif
 
 
 ###########################################################################
