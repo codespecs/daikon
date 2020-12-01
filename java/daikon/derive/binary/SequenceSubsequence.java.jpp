@@ -92,7 +92,7 @@ public final class SEQUENCESCALARSUBSEQUENCE extends SequenceSubsequence {
     } else if (index_shift > 0) {
       shift = "+" + index_shift;
     }
-    String seqname = UtilPlume.replaceString(seqvar().name(), "[]", "");
+    String seqname = seqvar().name().replace("[]", "");
     if (from_start) {
       return (seqname + "[.." + sclvar().name() + shift + "]");
     } else {

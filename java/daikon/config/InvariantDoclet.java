@@ -17,7 +17,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.ReflectionPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * InvariantDoclet is a Javadoc doclet that collects information about the invariants defined within
@@ -178,7 +177,7 @@ public class InvariantDoclet {
     out.println(prefix + cd + is_abstract);
     String comment = cd.commentText();
     comment = "         " + comment;
-    comment = UtilPlume.replaceString(comment, lineSep, lineSep + "        ");
+    comment = comment.replace(lineSep, lineSep + "        ");
     out.println(comment);
 
     // put out each derived class
@@ -302,10 +301,7 @@ public class InvariantDoclet {
         out.println("    @itemize @bullet");
         for (FieldDoc f : config_vars) {
           out.print("    @item ");
-          out.println(
-              "@samp{"
-                  + UtilPlume.replaceString(f.qualifiedName(), Configuration.PREFIX, "")
-                  + "}");
+          out.println("@samp{" + f.qualifiedName().replace(Configuration.PREFIX, "") + "}");
         }
         out.println("    @end itemize");
       }
