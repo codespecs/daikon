@@ -271,8 +271,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
           #endif
         } else if (format == OutputFormat.CSHARPCONTRACT) {
           #if defined(STRING)
-            fmt_str.replace("%var1%", var1().csharp_name());
-            fmt_str.replace("%var2%", var2().csharp_name());
+            fmt_str = fmt_str.replace("%var1%", var1().csharp_name());
+            fmt_str = fmt_str.replace("%var2%", var2().csharp_name());
             return fmt_str;
           #else
             v1 = var1().csharp_name();
