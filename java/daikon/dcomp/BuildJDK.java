@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -447,6 +448,8 @@ public class BuildJDK {
     }
   }
 
+  private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
   /**
    * Instruments the JavaClass {@code jc} (whose name is {@code classFileName}). Writes the
    * resulting class to its corresponding location in the directory outputDir.
@@ -480,7 +483,9 @@ public class BuildJDK {
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
           "Processed %d/%d classes at %s%n",
-          _numFilesProcessed, classTotal, LocalDateTime.now(ZoneId.systemDefault()));
+          _numFilesProcessed,
+          classTotal,
+          LocalDateTime.now(ZoneId.systemDefault()).format(timeFormatter));
     }
   }
 
