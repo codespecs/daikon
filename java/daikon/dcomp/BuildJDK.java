@@ -448,6 +448,7 @@ public class BuildJDK {
     }
   }
 
+  /** Formats just the time part of a DateTime. */
   private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
   /**
