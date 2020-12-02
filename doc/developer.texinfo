@@ -2419,7 +2419,7 @@ Test the distribution on Ubuntu and Mac OS machines.
 To use Azure Pipelines,
 navigate to
 @url{https://dev.azure.com/mernstdaikon/daikon/_build?definitionId=3&_a=summary}
-and click ``Run pipeline''.
+and click ``Run pipeline'' then ``Run''.
 
 If there is a problem, fix it and start over.
 
