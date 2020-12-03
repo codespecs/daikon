@@ -2525,12 +2525,10 @@ the actual number of the release.
 <to:>  daikon-announce@@googlegroups.com
 <subject:>  Daikon version <version number> has been released
 
-Daikon version <version number> is now available.
+Daikon version <version number> is available at:
+http://plse.cs.washington.edu/daikon/download/
 
 Please see the entry from the doc/CHANGES file that appears below for more details.
-
-You can download the latest version of Daikon at:
-http://plse.cs.washington.edu/daikon/download/
 
   <your name>
 
