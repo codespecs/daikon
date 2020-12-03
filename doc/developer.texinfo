@@ -2299,11 +2299,11 @@ build everything to be distributed and copy it to the temporary staging area
 @example
 # First, start a separate, new Bash command shell.  Don't kill your old one.
 
-mkdir -p /tmp/$USER
-cd /tmp/$USER
-rm -rf stage-daikon
-git clone --depth 3 https://github.com/codespecs/daikon stage-daikon
+rm -rf /tmp/$USER/stage-daikon
+mkdir -p /tmp/$USER/stage-daikon
 cd /tmp/$USER/stage-daikon
+git clone --depth 3 https://github.com/codespecs/daikon
+cd daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 unset CHECKERFRAMEWORK
