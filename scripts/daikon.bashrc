@@ -51,14 +51,14 @@ if [ -z "$PLUMESCRIPTS" ]; then
   export PLUMESCRIPTS=${DAIKONDIR}/utils/plume-scripts
 fi
 
-DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${INFERRED_JAVA_HOME}/jre/lib/rt.jar:${INFERRED_JAVA_HOME}/lib/tools.jar
+DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 # Avoid warnings about non-existent elements on classpath
 if [ -d ${DAIKONDIR}/java ]; then
   DAIKON_CLASSPATH=${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKON_CLASSPATH}
 fi
 export DAIKON_CLASSPATH
 
-export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${INFERRED_JAVA_HOME}/bin:$PATH
+export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${JAVA_HOME}/bin:$PATH
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERL5LIB ]; then
