@@ -96,7 +96,7 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	mkdir daikon/images
 	cp images/*.png daikon/images
 	cp images/*.jpg daikon/images
-	${HTMLTOOLS}/html-add-favicon daikon ../daikon-favicon.png
+	${HTMLTOOLS}/html-add-favicon daikon daikon-favicon.png
 
 developer/index.html: developer.texinfo ../utils/html-tools
 	rm -rf developer/*
@@ -106,7 +106,7 @@ developer/index.html: developer.texinfo ../utils/html-tools
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
-	${HTMLTOOLS}/html-add-favicon developer ../daikon-favicon.png
+	${HTMLTOOLS}/html-add-favicon developer daikon-favicon.png
 
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
