@@ -10,7 +10,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.ArraysPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * Debug class used with the logger to create standardized output. It can be setup to track
@@ -397,7 +396,7 @@ public final class Debug {
     } else {
       @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
       @NonNull String packageName = inv_class.getPackage().getName() + ".";
-      class_str = UtilPlume.replaceString(inv_class.getName(), packageName, "");
+      class_str = inv_class.getName().replace(packageName, "");
     }
 
     String vars = "";
@@ -501,7 +500,7 @@ public final class Debug {
     if (inv_class != null) {
       @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
       @NonNull String packageName = inv_class.getPackage().getName() + ".";
-      class_str = UtilPlume.replaceString(inv_class.getName(), packageName, "");
+      class_str = inv_class.getName().replace(packageName, "");
     }
 
     // Get a string with all of the variable names.  Each is separated by ': '.

@@ -56,7 +56,7 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.8.5
+@center Daikon version 5.8.7
 
 @sp 1
 
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2020
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.8.5, released July 22, 2020.
+It describes Daikon version 5.8.7, released December 3, 2020.
 
 @menu
 * Introduction::
@@ -167,41 +167,6 @@ For instance, the @cite{Daikon Developer Manual} indicates how to
 extend Daikon with new invariants, new derived variables, and front
 ends for new languages.  It also contains information about the
 implementation and about debugging flags.
-
-@menu
-* Mailing lists::
-@end menu
-
-@node    Mailing lists
-@section Mailing lists
-@cindex mailing lists
-@cindex daikon-announce mailing list
-@cindex daikon-discuss mailing list
-@cindex daikon-developers mailing list
-
-The following mailing lists (and their archives) are available:
-@table @samp
-@item daikon-announce@@googlegroups.com
-A low-volume, announcement-only list.  For example,
-announcements of new releases are sent to this list.
-To subscribe, visit
-@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
-@item daikon-discuss@@googlegroups.com
-A moderated list for the community of Daikon users.  Use it to share
-tips and successes, and to get help with questions or problems (after
-checking the documentation).  To subscribe, visit
-@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
-@item daikon-developers@@googlegroups.com
-This list goes to the Daikon maintainers.  Use it for questions about the
-Daikon and Kvasir source code.  Use the issue tracker
-(@uref{https://github.com/codespecs/daikon/issues}) for bug reports
-and feature requests.  If you are an active contributor to Daikon,
-you may send mail to the list asking to be added.
-@end table
-
-Do @emph{not} send the same message to multiple mailing lists.  Doing so is
-antisocial:  it causes confusion and extra work.  If you do so, your
-question will not be answered.
 
 
 @node    Installing Daikon
@@ -279,12 +244,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.5.tar.gz
-tar zxf daikon-5.8.5.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.7.tar.gz
+tar zxf daikon-5.8.7.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.8.5/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.8.7/} subdirectory.
 
 @item
 Place two commands in your shell initialization file:
@@ -296,7 +261,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.8.5
+export DAIKONDIR=@var{daikonparent}/daikon-5.8.7
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -361,10 +326,10 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c
 @c apt-get install -y wget
 @c
-@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.5.tar.gz
-@c tar zxf daikon-5.8.5.tar.gz
+@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.7.tar.gz
+@c tar zxf daikon-5.8.7.tar.gz
 @c
-@c export DAIKONDIR=$(cd daikon-5.8.5 && pwd)
+@c export DAIKONDIR=$(cd daikon-5.8.7 && pwd)
 @c source $DAIKONDIR/scripts/daikon.bashrc
 @c
 @c apt-get install -y openjdk-11-jdk gcc ctags git graphviz make netpbm \
@@ -3614,7 +3579,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.8.5.jar
+--premain=C:\lib\daikon-5.8.7.jar
 @end example
 
 @item --heap-size=@var{max_heap}
@@ -8618,7 +8583,7 @@ and about debugging flags.
 @menu
 * History::
 * License::
-* Mailing lists reminder::
+* Mailing lists::
 * Credits::
 * Citing Daikon::
 @end menu
@@ -8627,7 +8592,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.8.5, released July 22, 2020.
+This manual describes Daikon version 5.8.7, released December 3, 2020.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGES,,@file{doc/CHANGES}}
 in the distribution; this section gives a
@@ -8642,7 +8607,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.8.5
+@cindex Daikon version 5.8.7
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
@@ -8876,19 +8841,36 @@ OTHER DEALINGS IN THE SOFTWARE.
 @exampleindent 4
 
 
-@node    Mailing lists reminder
-@section Mailing lists reminder
+@node    Mailing lists
+@section Mailing lists
+@cindex mailing lists
+@cindex daikon-announce mailing list
+@cindex daikon-discuss mailing list
+@cindex daikon-developers mailing list
 
-If you use Daikon, please subscribe to the @samp{daikon-announce} and
-@samp{daikon-discuss} mailing lists (@pxref{Mailing lists}).  The
-@samp{daikon-announce} list will inform you of new versions, enhancements,
-and bug fixes.  On the @samp{daikon-discuss} mailing list, you can obtain
-help from, and offer help to, other users.  We would also appreciate a
-brief description of how you are using Daikon, sent to
-@email{daikon-developers@@googlegroups.com}.  We are curious about how
-users exploit Daikon, and we are eager for anecdotes about its
-successes and failures, so that we can make Daikon more effective for
-its users.
+The following mailing lists (and their archives) are available:
+@table @samp
+@item daikon-announce@@googlegroups.com
+A low-volume, announcement-only list.  For example,
+announcements of new releases are sent to this list.
+To subscribe, visit
+@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
+@item daikon-discuss@@googlegroups.com
+A moderated list for the community of Daikon users.  Use it to share
+tips and successes, and to get help with questions or problems (after
+checking the documentation).  To subscribe, visit
+@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
+@item daikon-developers@@googlegroups.com
+This list goes to the Daikon maintainers.  Use it for questions about the
+Daikon and Kvasir source code.  Use the issue tracker
+(@uref{https://github.com/codespecs/daikon/issues}) for bug reports
+and feature requests.  If you are an active contributor to Daikon,
+you may send mail to the list asking to be added to the list.
+@end table
+
+Do @emph{not} send the same message to multiple mailing lists.  Doing so is
+antisocial:  it causes confusion and extra work.  If you do so, your
+question will not be answered.
 
 
 @node    Credits

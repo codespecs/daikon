@@ -152,7 +152,7 @@ public abstract class RANGE extends SUPERCLASS {
       v1 = var1.name_using(format);
     }
 
-    fmt_str = UtilPlume.replaceString(fmt_str, "%var1%", v1);
+    fmt_str = fmt_str.replace("%var1%", v1);
     return fmt_str;
   }
 
