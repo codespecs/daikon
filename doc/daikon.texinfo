@@ -168,41 +168,6 @@ extend Daikon with new invariants, new derived variables, and front
 ends for new languages.  It also contains information about the
 implementation and about debugging flags.
 
-@menu
-* Mailing lists::
-@end menu
-
-@node    Mailing lists
-@section Mailing lists
-@cindex mailing lists
-@cindex daikon-announce mailing list
-@cindex daikon-discuss mailing list
-@cindex daikon-developers mailing list
-
-The following mailing lists (and their archives) are available:
-@table @samp
-@item daikon-announce@@googlegroups.com
-A low-volume, announcement-only list.  For example,
-announcements of new releases are sent to this list.
-To subscribe, visit
-@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
-@item daikon-discuss@@googlegroups.com
-A moderated list for the community of Daikon users.  Use it to share
-tips and successes, and to get help with questions or problems (after
-checking the documentation).  To subscribe, visit
-@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
-@item daikon-developers@@googlegroups.com
-This list goes to the Daikon maintainers.  Use it for questions about the
-Daikon and Kvasir source code.  Use the issue tracker
-(@uref{https://github.com/codespecs/daikon/issues}) for bug reports
-and feature requests.  If you are an active contributor to Daikon,
-you may send mail to the list asking to be added.
-@end table
-
-Do @emph{not} send the same message to multiple mailing lists.  Doing so is
-antisocial:  it causes confusion and extra work.  If you do so, your
-question will not be answered.
-
 
 @node    Installing Daikon
 @chapter Installing Daikon
@@ -8618,7 +8583,7 @@ and about debugging flags.
 @menu
 * History::
 * License::
-* Mailing lists reminder::
+* Mailing lists::
 * Credits::
 * Citing Daikon::
 @end menu
@@ -8876,19 +8841,36 @@ OTHER DEALINGS IN THE SOFTWARE.
 @exampleindent 4
 
 
-@node    Mailing lists reminder
-@section Mailing lists reminder
+@node    Mailing lists
+@section Mailing lists
+@cindex mailing lists
+@cindex daikon-announce mailing list
+@cindex daikon-discuss mailing list
+@cindex daikon-developers mailing list
 
-If you use Daikon, please subscribe to the @samp{daikon-announce} and
-@samp{daikon-discuss} mailing lists (@pxref{Mailing lists}).  The
-@samp{daikon-announce} list will inform you of new versions, enhancements,
-and bug fixes.  On the @samp{daikon-discuss} mailing list, you can obtain
-help from, and offer help to, other users.  We would also appreciate a
-brief description of how you are using Daikon, sent to
-@email{daikon-developers@@googlegroups.com}.  We are curious about how
-users exploit Daikon, and we are eager for anecdotes about its
-successes and failures, so that we can make Daikon more effective for
-its users.
+The following mailing lists (and their archives) are available:
+@table @samp
+@item daikon-announce@@googlegroups.com
+A low-volume, announcement-only list.  For example,
+announcements of new releases are sent to this list.
+To subscribe, visit
+@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
+@item daikon-discuss@@googlegroups.com
+A moderated list for the community of Daikon users.  Use it to share
+tips and successes, and to get help with questions or problems (after
+checking the documentation).  To subscribe, visit
+@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
+@item daikon-developers@@googlegroups.com
+This list goes to the Daikon maintainers.  Use it for questions about the
+Daikon and Kvasir source code.  Use the issue tracker
+(@uref{https://github.com/codespecs/daikon/issues}) for bug reports
+and feature requests.  If you are an active contributor to Daikon,
+you may send mail to the list asking to be added to the list.
+@end table
+
+Do @emph{not} send the same message to multiple mailing lists.  Doing so is
+antisocial:  it causes confusion and extra work.  If you do so, your
+question will not be answered.
 
 
 @node    Credits
