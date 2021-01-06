@@ -89,6 +89,7 @@ public class LogicalCompare {
 
   private static @MonotonicNonNull LemmaStack lemmas;
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: java daikon.tools.compare.LogicalCompare [options ...]",

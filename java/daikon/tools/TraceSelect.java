@@ -45,6 +45,7 @@ public class TraceSelect {
   // Always set to non-null by mainHelper
   private static String @MonotonicNonNull [] sampleNames;
 
+  /** The usage message for this program. */
   private static final String usage =
       StringsPlume.joinLines(
           "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",

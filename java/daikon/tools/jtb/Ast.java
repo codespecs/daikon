@@ -1,5 +1,3 @@
-// Static methods for manipulating the AST.
-
 package daikon.tools.jtb;
 
 import daikon.*;
@@ -31,6 +29,7 @@ import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.Signatures;
 import org.plumelib.util.StringsPlume;
 
+/** Static methods for manipulating the AST. */
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
 
@@ -105,10 +104,22 @@ public class Ast {
     return w.toString().replaceAll("(?m)^[ \t]*\r?\n", "");
   }
 
-  // This translates a line that looks like this:
-  //  a statement; // a comment
-  // into
-  //  a statement; // a comment //
+  /**
+   * This method translates a line like
+   *
+   * <pre>{@code
+   * a statement; // a comment
+   * }</pre>
+   *
+   * into
+   *
+   * <pre>
+   * a statement; // a comment//
+   * </pre>
+   *
+   * @param s a Java code line that might contain a comment
+   * @return the line with its comment, if any, tweaked
+   */
   public static String quickFixForInternalComment(String s) {
     StringBuilder b = new StringBuilder();
     String[] split = StringsPlume.splitLines(s);
@@ -681,6 +692,12 @@ public class Ast {
   /// Whitespace
   ///
 
+  /**
+   * Removes whitespace around punctuation: ., (, ), [, ].
+   *
+   * @param arg a string
+   * @return the string with whitespace removed
+   */
   public static String removeWhitespace(String arg) {
     arg = arg.trim();
     arg = StringsPlume.removeWhitespaceAround(arg, ".");

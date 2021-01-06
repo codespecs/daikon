@@ -77,6 +77,7 @@ public class Annotate {
   public static final String max_invariants_pp_SWITCH = "max_invariants_pp";
   public static final String no_reflection_SWITCH = "no_reflection";
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",

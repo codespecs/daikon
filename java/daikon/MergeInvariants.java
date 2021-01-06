@@ -39,6 +39,7 @@ public final class MergeInvariants {
 
   public static @Nullable File output_inv_file;
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: java daikon.MergeInvariants [OPTION]... FILE",

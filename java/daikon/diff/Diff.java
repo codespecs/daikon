@@ -54,6 +54,7 @@ public final class Diff {
 
   public static final Logger debug = Logger.getLogger("daikon.diff.Diff");
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage:",

@@ -47,6 +47,7 @@ public class CreateSpinfo {
 
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",

@@ -265,6 +265,7 @@ public final class PrintInvariants {
     daikon.Runtime.no_dtrace = true;
   }
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",
@@ -480,11 +481,6 @@ public final class PrintInvariants {
       out_stream.flush();
       out_stream.close();
     }
-  }
-
-  // To avoid the leading "UtilPlume." on all calls.
-  private static String nplural(int n, String noun) {
-    return StringsPlume.nplural(n, noun);
   }
 
   /**
@@ -917,7 +913,7 @@ public final class PrintInvariants {
     if (Daikon.output_num_samples) {
       out.print("  ");
       if (!wrap_xml) {
-        out.print(nplural(ppt.num_samples(), "sample"));
+        out.print(StringsPlume.nplural(ppt.num_samples(), "sample"));
       } else {
         printXmlTagged(out, "SAMPLES", ppt.num_samples());
       }
@@ -1132,7 +1128,7 @@ public final class PrintInvariants {
 
     if (Daikon.output_num_samples) {
       int inv_num_samps = inv.ppt.num_samples();
-      String num_values_samples = "\t\t(" + nplural(inv_num_samps, "sample") + ")";
+      String num_values_samples = "\t\t(" + StringsPlume.nplural(inv_num_samps, "sample") + ")";
       inv_rep += num_values_samples;
     }
 

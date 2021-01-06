@@ -54,6 +54,7 @@ public class InvariantChecker {
   private static final String filter_SWITCH = "filter";
   private static final String verbose_SWITCH = "verbose";
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: java daikon.InvariantChecker [OPTION]... <inv_file> <dtrace_file>",

@@ -74,6 +74,7 @@ public class ExtractConsequent {
   private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
       new HashMap<>();
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: java daikon.ExtractConsequent [OPTION]... FILE",

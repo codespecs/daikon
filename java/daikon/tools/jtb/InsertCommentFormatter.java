@@ -38,6 +38,12 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
     this.comments = comments;
   }
 
+  /**
+   * Returns the number of lines that this token spans in the source code.
+   *
+   * @param n a NodeToken
+   * @return the number of lines that this token spans in the source code
+   */
   private static int numLines(NodeToken n) {
     String image = n.tokenImage;
     return StringsPlume.count(image, lineSep);

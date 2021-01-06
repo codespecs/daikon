@@ -50,6 +50,7 @@ public class SampleTester {
   PptTopLevel ppt;
   VarInfo[] vars;
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",

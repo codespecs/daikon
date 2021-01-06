@@ -23,6 +23,7 @@ public class DtraceNonceFixer {
 
   private static final String lineSep = System.lineSeparator();
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: DtraceNonceFixer FILENAME",
