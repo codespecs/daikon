@@ -407,9 +407,9 @@ public class CLASSNAME extends SUPERCLASS {
    * meaningless invariants from being printed.
    */
   @Override
-  public boolean hasSeenNonTrivialSample() {
+  public boolean hasSeenNonSingletonSample() {
     VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
-    return (vs.multi_arr_cnt() > 0);
+    return (vs.nonsingleton_arr_cnt() > 0);
   }
 
   @Pure
@@ -420,7 +420,7 @@ public class CLASSNAME extends SUPERCLASS {
       return super_result;
     }
 
-    if (!hasSeenNonTrivialSample()) {
+    if (!hasSeenNonSingletonSample()) {
       return new DiscardInfo(this, DiscardCode.obvious,
                              "No samples sequences of size >=2 were seen. Vacuously true.");
     }
