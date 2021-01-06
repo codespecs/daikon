@@ -14,7 +14,7 @@ import org.plumelib.util.LimitedSizeLongSet;
  * for efficiency its hash code is added rather than the value itself. If the set size exceeds a
  * specified limit, then its rep is nulled.
  *
- * <p>This class is used for efficient justification tests.
+ * <p>The size of this class is used for efficient justification tests.
  *
  * <p>Relevant subclasses are:
  *
@@ -28,6 +28,22 @@ import org.plumelib.util.LimitedSizeLongSet;
  * </ul>
  *
  * These subclasses store a hashcode.
+ *
+ * <p><b>Caveat:<b> The size is an approximation, because if two values happen to have the same hash
+ * value, then the sets size reflects only one of them. (As an example, the hash codes of 0L and -1L
+ * are the same. This implementation has a special case to avoid that problem for long values, but
+ * the hash codes of the arrays {0L} and {-1L} are also the same and this implementation does not
+ * work around that problem.)
+ *
+ * <p>An alternative approach would be to store actual values, rather than approximating. That would
+ * use more space than the current implementation does, but it would give a more accurate
+ * approximation of the size, Here are some possible implementation approaches:
+ *
+ * <ul>
+ *   <li>use a TreeSet with a special comparator
+ *   <li>use a HashSet that stores wrappers, where the wrappers redefine hashCode. (That is
+ *       necessary because arrays don't override {@code Object.hashCode}.
+ * </ul>
  */
 public abstract class ValueSet extends LimitedSizeLongSet implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
