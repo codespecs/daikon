@@ -24,7 +24,7 @@ import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Visitor that instruments a Java source file (i.e. adds code at certain places) to check invariant
@@ -1093,7 +1093,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     code.append("<INVINFO>");
     code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
     code.append("<DAIKON>" + daikonrep + "</DAIKON>");
-    code.append("<INV>" + UtilPlume.escapeJava(javarep) + "</INV>");
+    code.append("<INV>" + StringsPlume.escapeJava(javarep) + "</INV>");
     code.append("<DAIKONCLASS>" + inv.getClass().toString() + "</DAIKONCLASS>");
     code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature() + "</METHOD>");
     code.append("</INVINFO>");

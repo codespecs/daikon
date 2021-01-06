@@ -191,6 +191,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("import java.util.*;");
     ps.println("import junit.framework.*;");
     ps.println("import org.junit.Test;");
+    ps.println("import org.plumelib.util.StringsPlume;");
     ps.println("import org.plumelib.util.UtilPlume;");
     ps.println("import static org.junit.Assert.fail;");
 
@@ -227,7 +228,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("  private static boolean saveFiles = false;");
     ps.println();
     ps.println("  private static String usage =");
-    ps.println("    UtilPlume.joinLines(");
+    ps.println("    StringsPlume.joinLines(");
     ps.println("      \"Usage:  java daikon.tools.CreateSpinfo FILE.java ...\",");
     ps.println(
         "      \"  -s       Save (do not delete) the splitter java files in the temp directory\",");

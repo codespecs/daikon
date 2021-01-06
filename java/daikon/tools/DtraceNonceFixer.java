@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
@@ -23,7 +24,7 @@ public class DtraceNonceFixer {
   private static final String lineSep = System.lineSeparator();
 
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: DtraceNonceFixer FILENAME",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
           "The output file will be FILENAME_fixed and another output included",

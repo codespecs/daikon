@@ -27,7 +27,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.EntryReader;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 // For each class:  (UnmodifiedClassDeclaration)
 //  * insert object invariants
@@ -976,7 +976,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // PrintInvariants.print_modified_vars(ppt, pw) returns possibly
     // several lines. In such a case, we're only interested in the second
     // one, which contains the "modified" or "assignable" clause.
-    String[] splitModVars = UtilPlume.splitLines(retval.modifiedVars);
+    String[] splitModVars = StringsPlume.splitLines(retval.modifiedVars);
     if (splitModVars.length > 1) {
       for (int i = 0; i < splitModVars.length; i++) {
         if (splitModVars[i].startsWith("modifies ") || splitModVars[i].startsWith("assignable ")) {

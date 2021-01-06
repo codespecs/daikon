@@ -16,7 +16,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Class that defines a single non-instantiating suppression. A suppression consists of one or more
@@ -599,7 +599,7 @@ public class NISuppression {
     String suppressorsString =
         (suppressors.length == 1)
             ? suppressors[0].toString()
-            : "(" + UtilPlume.join(" && ", suppressors) + ")";
+            : "(" + StringsPlume.join(" && ", suppressors) + ")";
     return suppressorsString + " ==> " + suppressee;
   }
 

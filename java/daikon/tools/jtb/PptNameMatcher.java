@@ -9,7 +9,6 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.plumelib.util.UtilPlume;
 
 /**
  * Matches program point names with their corresponding MethodDeclaration's (or
@@ -310,7 +309,7 @@ public class PptNameMatcher {
     assert lparen > 0;
     assert rparen > lparen;
     String ppt_args_string = pptFullMethodName.substring(lparen + 1, rparen);
-    String[] ppt_args = UtilPlume.split(ppt_args_string, ", ");
+    String[] ppt_args = ppt_args_string.split(", ");
     if ((ppt_args.length == 1) && ppt_args[0].equals("")) {
       ppt_args = new String[0];
     }

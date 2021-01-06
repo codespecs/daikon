@@ -16,7 +16,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Represents the type of a variable, for its declared type, dtrace file representation, and
@@ -417,7 +417,7 @@ public final @Interned class ProglangType implements Serializable {
         System.out.printf(
             "Proceeding anyway.  Please report a bug in the tool that made the data trace file.");
       }
-      value = UtilPlume.unescapeJava(value);
+      value = StringsPlume.unescapeJava(value);
       return value.intern();
     } else if (base == BASE_CHAR) {
       // This will fail if the character is output as an integer
@@ -426,7 +426,7 @@ public final @Interned class ProglangType implements Serializable {
       if (value.length() == 1) {
         c = value.charAt(0);
       } else if ((value.length() == 2) && (value.charAt(0) == '\\')) {
-        c = UtilPlume.unescapeJava(value).charAt(0);
+        c = StringsPlume.unescapeJava(value).charAt(0);
       } else if ((value.length() == 4) && (value.charAt(0) == '\\')) {
         Byte b = Byte.decode("0" + value.substring(1));
         return Intern.internedLong(b.longValue());

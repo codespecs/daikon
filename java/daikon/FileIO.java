@@ -60,6 +60,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 
 public final class FileIO {
@@ -893,7 +894,7 @@ public final class FileIO {
           // little point.  val can be null, so it cannot be the receiver.
           pw.print("<hashcode>");
         else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
-        else if (val instanceof String) pw.print(UtilPlume.escapeNonASCII((String) val));
+        else if (val instanceof String) pw.print(StringsPlume.escapeNonASCII((String) val));
         else {
           pw.print(val);
         }
@@ -1844,7 +1845,9 @@ public final class FileIO {
     if (!call_stack.isEmpty() || !call_hashmap.isEmpty()) {
       System.out.println();
       System.out.print(
-          "No return from procedure observed " + UtilPlume.nplural(unmatched_count, "time") + ".");
+          "No return from procedure observed "
+              + StringsPlume.nplural(unmatched_count, "time")
+              + ".");
       if (Daikon.use_dataflow_hierarchy) {
         System.out.print("  Unmatched entries are ignored!");
       }
@@ -1869,7 +1872,7 @@ public final class FileIO {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           System.out.println(
               "Remaining "
-                  + UtilPlume.nplural(unmatched_count, "stack")
+                  + StringsPlume.nplural(unmatched_count, "stack")
                   + " call summarized below.");
           print_invocations_verbose(call_stack);
         } else {
@@ -1910,7 +1913,7 @@ public final class FileIO {
     // Print the invocations in sorted order.
     for (Map.Entry<@Interned String, Integer> invokEntry : counter.entrySet()) {
       System.out.println(
-          invokEntry.getKey() + " : " + UtilPlume.nplural(invokEntry.getValue(), "invocation"));
+          invokEntry.getKey() + " : " + StringsPlume.nplural(invokEntry.getValue(), "invocation"));
     }
   }
 
