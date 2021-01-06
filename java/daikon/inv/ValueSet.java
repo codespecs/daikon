@@ -29,11 +29,11 @@ import org.plumelib.util.LimitedSizeLongSet;
  *
  * These subclasses store a hashcode.
  *
- * <p><b>Caveat:<b> The size is an approximation, because if two values happen to have the same hash
- * value, then the sets size reflects only one of them. (As an example, the hash codes of 0L and -1L
- * are the same. This implementation has a special case to avoid that problem for long values, but
- * the hash codes of the arrays {0L} and {-1L} are also the same and this implementation does not
- * work around that problem.)
+ * <p><b>Caveat:</b> The size is an approximation, because if two values happen to have the same
+ * hash value, then the sets size reflects only one of them. (As an example, the hash codes of 0L
+ * and -1L are the same. This implementation has a special case to avoid that problem for long
+ * values, but the hash codes of the arrays {0L} and {-1L} are also the same and this implementation
+ * does not work around that problem.)
  *
  * <p>An alternative approach would be to store actual values, rather than approximating. That would
  * use more space than the current implementation does, but it would give a more accurate
