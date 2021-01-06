@@ -36,7 +36,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 // This class is deprecated.  It should be removed as soon as Daikon no
 // longer supports the old decl format.
@@ -97,7 +97,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     // a quoted string
     if (name.startsWith("\"") && name.endsWith("\"")) {
       String content = name.substring(1, name.length() - 1);
-      if (content.equals(UtilPlume.escapeJava(UtilPlume.unescapeJava(content)))) {
+      if (content.equals(StringsPlume.escapeJava(StringsPlume.unescapeJava(content)))) {
         return new Simple(name).intern();
       }
     }

@@ -30,6 +30,7 @@ import org.plumelib.util.UtilPlume;
  *
  * These subclasses store a hashcode.
  */
+@SuppressWarnings("deprecation") // TODO: change uses of UtilPlume.hash
 public abstract class ValueSet extends LimitedSizeIntSet implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

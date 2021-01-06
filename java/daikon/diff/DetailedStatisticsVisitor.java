@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Computes statistics about the differences between the sets of invariants. The statistics can be
@@ -235,30 +235,30 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     pw.println("STATISTICS");
     pw.print("       ");
     for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
-      pw.print(UtilPlume.rpad(RELATIONSHIP_LABELS[rel], FIELD_WIDTH));
+      pw.print(StringsPlume.rpad(RELATIONSHIP_LABELS[rel], FIELD_WIDTH));
     }
-    pw.println(UtilPlume.rpad("TOTAL", FIELD_WIDTH));
+    pw.println(StringsPlume.rpad("TOTAL", FIELD_WIDTH));
 
     for (int arity = 0; arity < NUM_ARITIES; arity++) {
-      pw.print(UtilPlume.rpad(ARITY_LABELS[arity], LABEL_WIDTH));
+      pw.print(StringsPlume.rpad(ARITY_LABELS[arity], LABEL_WIDTH));
       for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
         int f = (int) freq[arity][rel];
-        pw.print(UtilPlume.rpad(f, FIELD_WIDTH));
+        pw.print(StringsPlume.rpad(f, FIELD_WIDTH));
       }
       int s = (int) ArraysPlume.sum(freq[arity]);
-      pw.print(UtilPlume.rpad(s, FIELD_WIDTH));
+      pw.print(StringsPlume.rpad(s, FIELD_WIDTH));
       pw.println();
     }
 
-    pw.print(UtilPlume.rpad("TOTAL", LABEL_WIDTH));
+    pw.print(StringsPlume.rpad("TOTAL", LABEL_WIDTH));
     for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
       int sum = 0;
       for (int arity = 0; arity < NUM_ARITIES; arity++) {
         sum += freq[arity][rel];
       }
-      pw.print(UtilPlume.rpad(sum, FIELD_WIDTH));
+      pw.print(StringsPlume.rpad(sum, FIELD_WIDTH));
     }
-    pw.print(UtilPlume.rpad((int) ArraysPlume.sum(freq), FIELD_WIDTH));
+    pw.print(StringsPlume.rpad((int) ArraysPlume.sum(freq), FIELD_WIDTH));
 
     pw.println();
 

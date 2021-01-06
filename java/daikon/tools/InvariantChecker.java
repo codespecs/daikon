@@ -33,7 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * InvariantChecker reads an invariant file and trace file. It prints errors for any invariants that
@@ -54,8 +54,9 @@ public class InvariantChecker {
   private static final String filter_SWITCH = "filter";
   private static final String verbose_SWITCH = "verbose";
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.InvariantChecker [OPTION]... <inv_file> <dtrace_file>",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",

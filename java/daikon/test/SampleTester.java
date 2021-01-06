@@ -28,7 +28,7 @@ import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.junit.Test;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * This tests Daikon's state as samples are processed. A standard decl file specifies the ppts. A
@@ -50,8 +50,9 @@ public class SampleTester {
   PptTopLevel ppt;
   VarInfo[] vars;
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",

@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
@@ -32,14 +33,18 @@ public final class MergeInvariants {
     throw new Error("do not instantiate");
   }
 
+  /** Debug logger. */
   public static final Logger debug = Logger.getLogger("daikon.MergeInvariants");
 
+  /** Progress logger. */
   public static final Logger debugProgress = Logger.getLogger("daikon.MergeInvariants.progress");
 
+  /** The file in which to produce output; if null, the results are printed. */
   public static @Nullable File output_inv_file;
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.MergeInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -178,7 +183,7 @@ public final class MergeInvariants {
     if (inv_files.size() < 2) {
       throw new Daikon.UserError(
           "Must specify at least two inv files; only specified "
-              + UtilPlume.nplural(inv_files.size(), "file"));
+              + StringsPlume.nplural(inv_files.size(), "file"));
     }
 
     // Setup the default for guarding

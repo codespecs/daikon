@@ -52,6 +52,7 @@ import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
@@ -88,8 +89,9 @@ public class LogicalCompare {
 
   private static @MonotonicNonNull LemmaStack lemmas;
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
           "           WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]",
           "  -h, --" + Daikon.help_SWITCH,
