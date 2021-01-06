@@ -97,7 +97,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfString
   #define ONEOFSCALAR_STRING "OneOfString"
   #define SINGLESCALAR SingleString
-  #define TOSTRING(x) ((x == null) ? "null" : "\"" + UtilPlume.escapeNonASCII(x) + "\"")
+  #define TOSTRING(x) ((x == null) ? "null" : "\"" + StringsPlume.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name()
 #elif defined(SEQUENCE)
@@ -138,7 +138,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "OneOfStringSequence"
   #define SINGLESCALAR SingleStringSequence
   #define TOSTRING(x) Arrays.toString(x)
-  #define TOSTRINGELEMENT(x) ((x == null) ? "null" : "\"" + UtilPlume.escapeNonASCII(x) + "\"")
+  #define TOSTRINGELEMENT(x) ((x == null) ? "null" : "\"" + StringsPlume.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name()
@@ -185,7 +185,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR EltOneOfString
   #define ONEOFSCALAR_STRING "EltOneOfString"
   #define SINGLESCALAR SingleStringSequence
-  #define TOSTRING(x) ((x == null) ? "null" : "\"" + UtilPlume.escapeNonASCII(x) + "\"")
+  #define TOSTRING(x) ((x == null) ? "null" : "\"" + StringsPlume.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name() + " elements"
 #else
@@ -226,6 +226,7 @@ import org.checkerframework.framework.qual.Unused;
 import org.plumelib.reflection.Signatures;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
@@ -417,7 +418,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
 #if defined(STRING) || defined(ELTSTRING)
-  static Comparator<String> comparator = new UtilPlume.NullableStringComparator();
+  static Comparator<String> comparator = new StringsPlume.NullableStringComparator();
   #define COMPARATOR_ARG , comparator
 #elif defined(SEQUENCE)
   static Comparator<long[]> comparator = new ArraysPlume.LongArrayComparatorLexical();

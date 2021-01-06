@@ -56,7 +56,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.plumelib.util.RegexUtil;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * PrintInvariants prints a set of invariants from a {@code .inv} file. For documentation, see
@@ -266,7 +266,7 @@ public final class PrintInvariants {
   }
 
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -484,7 +484,7 @@ public final class PrintInvariants {
 
   // To avoid the leading "UtilPlume." on all calls.
   private static String nplural(int n, String noun) {
-    return UtilPlume.nplural(n, noun);
+    return StringsPlume.nplural(n, noun);
   }
 
   /**

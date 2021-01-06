@@ -11,7 +11,7 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import junit.framework.*;
 import org.junit.Test;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 public final class TestClassOrInterfaceTypeDecorateVisitor {
 
@@ -94,7 +94,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor {
     */
 
     String result = ungenerifiedCollector.collectionResults().trim();
-    String[] result_arr = UtilPlume.splitLines(result);
+    String[] result_arr = StringsPlume.splitLines(result);
 
     // UtilPlume.writeFile(new File("expected.txt"), expected);
     // UtilPlume.writeFile(new File("result.txt"), result);

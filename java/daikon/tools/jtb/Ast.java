@@ -29,7 +29,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.Signatures;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
@@ -111,7 +111,7 @@ public class Ast {
   //  a statement; // a comment //
   public static String quickFixForInternalComment(String s) {
     StringBuilder b = new StringBuilder();
-    String[] split = UtilPlume.splitLines(s);
+    String[] split = StringsPlume.splitLines(s);
     for (int i = 0; i < split.length; i++) {
       String line = split[i];
       b.append(line);
@@ -683,11 +683,11 @@ public class Ast {
 
   public static String removeWhitespace(String arg) {
     arg = arg.trim();
-    arg = UtilPlume.removeWhitespaceAround(arg, ".");
-    arg = UtilPlume.removeWhitespaceAround(arg, "(");
-    arg = UtilPlume.removeWhitespaceAround(arg, ")");
-    arg = UtilPlume.removeWhitespaceAround(arg, "[");
-    arg = UtilPlume.removeWhitespaceBefore(arg, "]");
+    arg = StringsPlume.removeWhitespaceAround(arg, ".");
+    arg = StringsPlume.removeWhitespaceAround(arg, "(");
+    arg = StringsPlume.removeWhitespaceAround(arg, ")");
+    arg = StringsPlume.removeWhitespaceAround(arg, "[");
+    arg = StringsPlume.removeWhitespaceBefore(arg, "]");
     return arg;
   }
 

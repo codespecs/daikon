@@ -113,6 +113,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
@@ -2720,7 +2721,7 @@ public class PptTopLevel extends Ppt {
 
     debugConditional.fine(
         "Applying "
-            + UtilPlume.nplural(((splits == null) ? 0 : splits.length), "split")
+            + StringsPlume.nplural(((splits == null) ? 0 : splits.length), "split")
             + " to "
             + name());
 

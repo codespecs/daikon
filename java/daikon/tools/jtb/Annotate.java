@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import java.util.logging.Logger;
 import jtb.*;
 import jtb.syntaxtree.*;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Merge Daikon-generated invariants into Java source code as ESC/JML/DBC annotations. All original
@@ -78,7 +78,7 @@ public class Annotate {
   public static final String no_reflection_SWITCH = "no_reflection";
 
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",
           "  -h   Display this usage message",
           "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",

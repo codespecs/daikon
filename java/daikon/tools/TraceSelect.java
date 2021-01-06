@@ -13,6 +13,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.MultiRandSelector;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 
 public class TraceSelect {
@@ -45,7 +46,7 @@ public class TraceSelect {
   private static String @MonotonicNonNull [] sampleNames;
 
   private static final String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
           "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
