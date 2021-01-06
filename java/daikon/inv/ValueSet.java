@@ -218,7 +218,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     long max_val = Long.MIN_VALUE;
     int max_length = 0;
     int elem_cnt = 0;
-    int multi_arr_cnt = 0; // number of arrays with 2 or more elements
+    int nonsingleton_arr_cnt = 0; // number of arrays with 2 or more elements
 
     public ValueSetScalarArray(int max_values) {
       super(max_values);
@@ -237,7 +237,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
         }
       }
       elem_cnt += val.length;
-      if (val.length > 1) multi_arr_cnt++;
+      if (val.length > 1) nonsingleton_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
       add(Arrays.hashCode((long[]) v1));
     }
@@ -248,7 +248,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       min_val = Math.min(min_val, vs.min_val);
       max_val = Math.max(max_val, vs.max_val);
       elem_cnt += vs.elem_cnt;
-      multi_arr_cnt += vs.multi_arr_cnt;
+      nonsingleton_arr_cnt += vs.nonsingleton_arr_cnt;
       max_length = Math.max(max_length, vs.max_length);
     }
 
@@ -264,8 +264,8 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       return elem_cnt;
     }
 
-    public int multi_arr_cnt() {
-      return multi_arr_cnt;
+    public int nonsingleton_arr_cnt() {
+      return nonsingleton_arr_cnt;
     }
 
     public int max_length() {
@@ -293,7 +293,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     boolean can_be_NaN = false;
     int max_length = 0;
     int elem_cnt = 0;
-    int multi_arr_cnt = 0; // number of arrays with 2 or more elements
+    int nonsingleton_arr_cnt = 0; // number of arrays with 2 or more elements
 
     public ValueSetFloatArray(int max_values) {
       super(max_values);
@@ -315,7 +315,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
         }
       }
       elem_cnt += val.length;
-      if (val.length > 1) multi_arr_cnt++;
+      if (val.length > 1) nonsingleton_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
       add(Arrays.hashCode(val));
     }
@@ -327,7 +327,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       max_val = Math.max(max_val, vs.max_val);
       can_be_NaN = can_be_NaN || vs.can_be_NaN;
       elem_cnt += vs.elem_cnt;
-      multi_arr_cnt += vs.multi_arr_cnt;
+      nonsingleton_arr_cnt += vs.nonsingleton_arr_cnt;
       max_length = Math.max(max_length, vs.max_length);
     }
 
@@ -347,8 +347,8 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       return elem_cnt;
     }
 
-    public int multi_arr_cnt() {
-      return multi_arr_cnt;
+    public int nonsingleton_arr_cnt() {
+      return nonsingleton_arr_cnt;
     }
 
     public int max_length() {
@@ -404,7 +404,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     static final long serialVersionUID = 20031017L;
 
     int elem_cnt = 0;
-    int multi_arr_cnt = 0; // number of arrays with 2 or more elements
+    int nonsingleton_arr_cnt = 0; // number of arrays with 2 or more elements
 
     public ValueSetStringArray(int max_values) {
       super(max_values);
@@ -415,7 +415,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       assert v1 != null;
       String[] val = (String[]) v1;
       elem_cnt += val.length;
-      if (val.length > 1) multi_arr_cnt++;
+      if (val.length > 1) nonsingleton_arr_cnt++;
       add(Arrays.deepHashCode(val));
     }
 
@@ -423,15 +423,15 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     protected void add_stats(ValueSet other) {
       ValueSetStringArray vs = (ValueSetStringArray) other;
       elem_cnt += vs.elem_cnt;
-      multi_arr_cnt += vs.multi_arr_cnt;
+      nonsingleton_arr_cnt += vs.nonsingleton_arr_cnt;
     }
 
     public int elem_cnt() {
       return elem_cnt;
     }
 
-    public int multi_arr_cnt() {
-      return multi_arr_cnt;
+    public int nonsingleton_arr_cnt() {
+      return nonsingleton_arr_cnt;
     }
 
     @Override
