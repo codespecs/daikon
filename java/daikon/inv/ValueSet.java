@@ -3,6 +3,7 @@ package daikon.inv;
 import daikon.ProglangType;
 import daikon.VarInfo;
 import java.io.Serializable;
+import java.util.Arrays;
 import org.plumelib.util.LimitedSizeIntSet;
 import org.plumelib.util.UtilPlume;
 
@@ -168,7 +169,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       if (Double.isNaN(val)) {
         can_be_NaN = true;
       }
-      add(UtilPlume.hash(val));
+      add(Double.hashCode(val));
     }
 
     @Override
@@ -239,7 +240,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       elem_cnt += val.length;
       if (val.length > 1) nonsingleton_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
-      add(UtilPlume.hash((long[]) v1));
+      add(Arrays.hashCode((long[]) v1));
     }
 
     @Override
@@ -317,7 +318,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       elem_cnt += val.length;
       if (val.length > 1) nonsingleton_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
-      add(UtilPlume.hash(val));
+      add(Arrays.hashCode(val));
     }
 
     @Override
@@ -385,7 +386,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     @Override
     public void add(Object v1) {
       assert v1 != null;
-      add(UtilPlume.hash((String) v1));
+      add(((String) v1).hashCode());
     }
 
     @Override
@@ -416,7 +417,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       String[] val = (String[]) v1;
       elem_cnt += val.length;
       if (val.length > 1) nonsingleton_arr_cnt++;
-      add(UtilPlume.hash(val));
+      add(Arrays.deepHashCode(val));
     }
 
     @Override
