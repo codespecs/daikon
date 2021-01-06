@@ -384,7 +384,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     @Override
     public void add(Object v1) {
       assert v1 != null;
-      add(UtilPlume.hash((String) v1));
+      add(((String) v1).hashCode());
     }
 
     @Override
