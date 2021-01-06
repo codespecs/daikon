@@ -167,7 +167,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       if (Double.isNaN(val)) {
         can_be_NaN = true;
       }
-      add(UtilPlume.hash(val));
+      add(Double.hashCode(val));
     }
 
     @Override
