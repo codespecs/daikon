@@ -3,11 +3,10 @@ package daikon.inv;
 import daikon.ProglangType;
 import daikon.VarInfo;
 import java.io.Serializable;
-import org.plumelib.util.LimitedSizeIntSet;
+import org.plumelib.util.LimitedSizeLongSet;
 import org.plumelib.util.UtilPlume;
 
-// This is the successor to ValueTracker1.
-// It is a thin wrapper around LimitedSizeIntSet.
+// It is a thin wrapper around LimitedSizeLongSet.
 // (Actually, maybe it will just subclass that.)
 
 /**
@@ -30,7 +29,7 @@ import org.plumelib.util.UtilPlume;
  *
  * These subclasses store a hashcode.
  */
-public abstract class ValueSet extends LimitedSizeIntSet implements Serializable, Cloneable {
+public abstract class ValueSet extends LimitedSizeLongSet implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -42,7 +41,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
 
   // There is one ValueSet per variable (not one per slice or invariant),
   // so pre-allocating an array with 44 slots should not be a problem.  If
-  // it is, then change LimitedSizeIntSet to optionally not pre-allocate
+  // it is, then change LimitedSizeLongSet to optionally not pre-allocate
   // the entire array.
   /**
    * The number 44 comes from the fact that .9^44 &lt; .01. So, if the confidence limit is .01 and
@@ -112,7 +111,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       if (val > max_val) {
         max_val = val;
       }
-      add(UtilPlume.hash(val));
+      add(val);
     }
 
     @Override
@@ -166,8 +165,10 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       }
       if (Double.isNaN(val)) {
         can_be_NaN = true;
+        // use the canonical NaN value
+        val = Double.NaN;
       }
-      add(UtilPlume.hash(val));
+      add(Double.doubleToLongBits(val));
     }
 
     @Override
