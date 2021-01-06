@@ -3,6 +3,7 @@ package daikon.inv;
 import daikon.ProglangType;
 import daikon.VarInfo;
 import java.io.Serializable;
+import java.util.Arrays;
 import org.plumelib.util.LimitedSizeIntSet;
 import org.plumelib.util.UtilPlume;
 
@@ -415,7 +416,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       String[] val = (String[]) v1;
       elem_cnt += val.length;
       if (val.length > 1) multi_arr_cnt++;
-      add(UtilPlume.hash(val));
+      add(Arrays.deepHashCode(val));
     }
 
     @Override
