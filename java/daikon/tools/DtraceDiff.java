@@ -34,6 +34,7 @@ import org.plumelib.util.StringsPlume;
  */
 public class DtraceDiff {
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: DtraceDiff [OPTION]... [DECLS1]... DTRACE1 [DECLS2]... DTRACE2",

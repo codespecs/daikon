@@ -496,6 +496,7 @@ public final class Daikon {
     daikon.Runtime.no_dtrace = true;
   }
 
+  /** The usage message for this program. */
   static String usage =
       StringsPlume.joinLines(
           release_string,

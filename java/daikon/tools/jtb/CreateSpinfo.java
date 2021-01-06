@@ -45,8 +45,10 @@ public class CreateSpinfo {
   //  The method printSpinfoFile prints out these expressions and
   //  replace statements in splitter info file format.
 
+  /** Debug logger. */
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",

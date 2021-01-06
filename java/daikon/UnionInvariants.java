@@ -22,6 +22,7 @@ public final class UnionInvariants {
     throw new Error("do not instantiate");
   }
 
+  /** The usage message for this program. */
   // Non-empty program points in the input files must be distinct.
   private static String usage =
       StringsPlume.joinLines(

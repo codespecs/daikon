@@ -33,12 +33,16 @@ public final class MergeInvariants {
     throw new Error("do not instantiate");
   }
 
+  /** Debug logger. */
   public static final Logger debug = Logger.getLogger("daikon.MergeInvariants");
 
+  /** Progress logger. */
   public static final Logger debugProgress = Logger.getLogger("daikon.MergeInvariants.progress");
 
+  /** The file in which to produce output; if null, the results are printed. */
   public static @Nullable File output_inv_file;
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: java daikon.MergeInvariants [OPTION]... FILE",

@@ -21,8 +21,10 @@ import org.plumelib.util.UtilPlume;
  */
 public class DtraceNonceFixer {
 
+  /** The system-specific line separator. */
   private static final String lineSep = System.lineSeparator();
 
+  /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
           "Usage: DtraceNonceFixer FILENAME",
