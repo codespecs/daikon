@@ -91,7 +91,7 @@ public class InvariantDoclet {
   public void process() throws IOException {
 
     @SuppressWarnings("keyfor") // the loop below makes all these keys to cmap
-    @KeyFor("cmap") ClassDoc[] clazzes = root.classes();
+    @KeyFor("this.cmap") ClassDoc[] clazzes = root.classes();
 
     // go through all of the classes and intialize the map
     for (ClassDoc cd : clazzes) {
