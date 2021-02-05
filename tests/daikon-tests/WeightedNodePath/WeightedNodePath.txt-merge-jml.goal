@@ -243,7 +243,6 @@ public class WeightedNodePath implements Path {
   @ ensures this.path == \old(this.path);
   @ ensures this.cost == \old(this.cost);
   @ ensures this.path == null;
-  @ ensures this.cost < \result;
   @*/
   // Specified by the Object superclass
   public int hashCode() {

@@ -17,8 +17,6 @@ public class Param
   /*@ invariant this.gs2 != null; */
   /*@ invariant this.gs2.a == 20; */
   /*@ invariant this.gs2.b == 25; */
-  /*@ invariant this.gi1 < this.gs1.a; */
-  /*@ invariant this.gi2 < this.gs1.a; */
   public int gi1;
   public int gi2;
   public ParamType gs1;
@@ -64,9 +62,10 @@ public class Param
   @ requires this.gs1 == ps1;
   @ requires this.gs1.a == ps1.a;
   @ requires this.gs1.b == ps1.b;
-  @ requires this.gs2 == ps2;
-  @ requires this.gs2.a == ps2.a;
-  @ requires this.gs2.b == ps2.b;
+  @ requires ps2 != null;
+  @ requires ps2 != null;
+  @ requires ps2.a == 20;
+  @ requires ps2.b == 25;
   @ ensures this.gi1 == \old(this.gi1);
   @ ensures this.gi1 == \old(pi1);
   @ ensures this.gi2 == \old(this.gi2);
@@ -76,18 +75,11 @@ public class Param
   @ ensures this.gs1.a == ps1.a;
   @ ensures this.gs1.b == ps1.b;
   @ ensures this.gs2 == \old(this.gs2);
-  @ ensures this.gs2 == \old(ps2);
   @ ensures this.gs2.a == \old(this.gs2.a);
-  @ ensures this.gs2.a == \old(ps2.a);
   @ ensures this.gs2.b == \old(this.gs2.b);
-  @ ensures this.gs2.b == \old(ps2.b);
   @ ensures ps1.b == \old(this.gs1.b);
   @ ensures ps1.b == \old(ps1.b);
   @ ensures ps1.b == 15;
-  @ ensures this.gi1 < ps1.a;
-  @ ensures this.gi1 < \old(ps1.a);
-  @ ensures this.gi2 < ps1.a;
-  @ ensures this.gi2 < \old(ps1.a);
   @ ensures ps1.a - \old(ps1.a) - 1 == 0;
   @*/
   /**
@@ -129,8 +121,8 @@ public class Param
 
 class ParamType {
 
-  /*@ invariant this.a == this.b; */
   /*@ invariant this.a == 0; */
+  /*@ invariant this.b == 0; */
   public int a;
   public int b;
 

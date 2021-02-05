@@ -7,11 +7,6 @@ this.elementData.getClass().getName() == java.lang.Object[].class
 this.elementCount >= 0
 this.capacityIncrement >= 0
 this.elementData[this.elementCount..] elements == null
-this.elementCount > javautil.Vector13.serialVersionUID
-(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
-this.elementCount <= size(this.elementData[])
-this.capacityIncrement > javautil.Vector13.serialVersionUID
-javautil.Vector13.serialVersionUID < size(this.elementData[])-1
 ===========================================================================
 javautil.Vector13.Vector13():::EXIT
 this.elementCount == this.capacityIncrement
@@ -37,8 +32,6 @@ this.elementData[].getClass().getName() elements == null
 this.elementCount == 0
 this.elementData[orig(initialCapacity)..] == []
 this.elementCount <= orig(initialCapacity)
-this.elementCount == (orig(initialCapacity) / javautil.Vector13.serialVersionUID)
-this.elementCount == (size(this.elementData[])-1 / javautil.Vector13.serialVersionUID)
 ===========================================================================
 javautil.Vector13.Vector13(int, int):::ENTER
 initialCapacity >= 0
@@ -53,32 +46,32 @@ this.elementCount == 0
 this.elementData[orig(initialCapacity)..] == []
 this.elementCount <= this.capacityIncrement
 this.elementCount <= orig(initialCapacity)
-this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID)
-this.elementCount == (orig(initialCapacity) / javautil.Vector13.serialVersionUID)
-this.elementCount == (size(this.elementData[])-1 / javautil.Vector13.serialVersionUID)
 ===========================================================================
 javautil.Vector13.addElement(java.lang.Object):::ENTER
 obj.getClass().getName() is printable
 this.elementData.getClass().getName() != obj.getClass().getName()
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.addElement(java.lang.Object):::EXIT
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
 this.capacityIncrement == orig(this.capacityIncrement)
-orig(obj) == this.elementData[this.elementCount-1]
-orig(obj) == this.elementData[orig(this.elementCount)]
+this.elementData[this.elementCount-1] == this.elementData[orig(this.elementCount)]
 this.elementData[0..orig(this.elementCount)-1] == orig(this.elementData[0..this.elementCount-1])
 this.elementCount >= 1
 size(this.elementData[]) >= 1
 this.elementData.getClass().getName() != orig(obj.getClass().getName())
 orig(obj.getClass().getName()) in this.elementData[].getClass().getName()
 this.elementCount - orig(this.elementCount) - 1 == 0
-javautil.Vector13.serialVersionUID < orig(this.elementCount)
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (orig(this.elementCount) == 0)
 orig(this.elementCount) <= size(this.elementData[])-1
 size(this.elementData[]) >= orig(size(this.elementData[]))
 size(this.elementData[])-1 >= orig(size(this.elementData[]))-1
 ===========================================================================
 javautil.Vector13.clone():::ENTER
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.clone():::EXIT
 this.elementData == orig(this.elementData)
@@ -89,11 +82,15 @@ this.capacityIncrement == orig(this.capacityIncrement)
 return != null
 return.getClass().getName() == javautil.Vector13.class
 this.elementData.getClass().getName() != return.getClass().getName()
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::ENTER
 elem != null
 elem.getClass().getName() is printable
 this.elementData.getClass().getName() != elem.getClass().getName()
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::EXIT
 this.elementData == orig(this.elementData)
@@ -101,18 +98,16 @@ this.elementData.getClass().getName() == orig(this.elementData.getClass().getNam
 this.elementData[] == orig(this.elementData[])
 this.elementCount == orig(this.elementCount)
 this.capacityIncrement == orig(this.capacityIncrement)
-(return == true)  ==>  (orig(elem) in this.elementData[0..this.elementCount-1])
-(return == true)  ==>  (orig(elem) in this.elementData[])
 (return == true)  ==>  (orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (return == true)  ==>  (this.elementCount >= 1)
 this.elementData.getClass().getName() != orig(elem.getClass().getName())
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::EXIT;condition="return == true"
 this.elementCount >= 1
 return == true
-orig(elem) in this.elementData[]
 orig(elem.getClass().getName()) in this.elementData[].getClass().getName()
-orig(elem) in this.elementData[0..this.elementCount-1]
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::EXIT;condition="not(return == true)"
 return == false
@@ -121,9 +116,10 @@ javautil.Vector13.copyInto(java.lang.Object[]):::ENTER
 this.elementData.getClass().getName() == anArray.getClass().getName()
 anArray != null
 anArray[this.elementCount..] elements are equal
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 (size(anArray[]) == 0) ==> (this.elementCount == 0)
 this.elementCount <= size(anArray[])
-javautil.Vector13.serialVersionUID < size(anArray[])-1
 ===========================================================================
 javautil.Vector13.copyInto(java.lang.Object[]):::EXIT
 this.elementData == orig(this.elementData)
@@ -139,14 +135,15 @@ anArray[this.elementCount..] == orig(anArray[this.elementCount..])
 anArray[0..this.elementCount-1] == orig(this.elementData[0..post(this.elementCount)-1])
 anArray[0..this.elementCount-1] == orig(this.elementData[0..this.elementCount-1])
 anArray[this.elementCount..] elements are equal
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 (orig(size(anArray[])) == 0) ==> (this.elementCount == 0)
 this.elementCount <= orig(size(anArray[]))
-javautil.Vector13.serialVersionUID < size(anArray[])-1
 ===========================================================================
 javautil.Vector13.elementAt(int):::ENTER
 index >= 0
 this.elementCount > index
-javautil.Vector13.serialVersionUID < index
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (index == 0)
 index <= size(this.elementData[])-1
 ===========================================================================
@@ -156,17 +153,17 @@ this.elementData.getClass().getName() == orig(this.elementData.getClass().getNam
 this.elementData[] == orig(this.elementData[])
 this.elementCount == orig(this.elementCount)
 this.capacityIncrement == orig(this.capacityIncrement)
-return == this.elementData[orig(index)]
-return == orig(this.elementData[post(index)])
-return == orig(this.elementData[index])
 return.getClass().getName() is printable
 this.elementData.getClass().getName() != return.getClass().getName()
 return.getClass().getName() in this.elementData[].getClass().getName()
 this.elementCount > orig(index)
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (orig(index) == 0)
 orig(index) <= size(this.elementData[])-1
 ===========================================================================
 javautil.Vector13.elements():::ENTER
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.elements():::EXIT
 this.elementData == orig(this.elementData)
@@ -177,10 +174,13 @@ this.capacityIncrement == orig(this.capacityIncrement)
 return != null
 return.getClass().getName() == javautil.VectorEnumerator13.class
 this.elementData.getClass().getName() != return.getClass().getName()
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.ensureCapacity(int):::ENTER
 minCapacity >= 0
-javautil.Vector13.serialVersionUID < minCapacity
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.ensureCapacity(int):::EXIT
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
@@ -190,6 +190,8 @@ this.elementData[0..this.elementCount-1] == orig(this.elementData[0..post(this.e
 this.elementData[0..this.elementCount-1] == orig(this.elementData[0..this.elementCount-1])
 orig(this.elementData[]) is a subsequence of this.elementData[]
 this.elementData[] is a superset of orig(this.elementData[])
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 (orig(size(this.elementData[])) == 0) ==> (this.elementCount == 0)
 this.elementCount <= orig(size(this.elementData[]))
 (size(this.elementData[]) == 0) ==> (orig(minCapacity) == 0)
@@ -202,7 +204,8 @@ orig(this.elementData[this.elementCount..]) is a subsequence of this.elementData
 javautil.Vector13.ensureCapacityHelper(int):::ENTER
 minCapacity >= 1
 this.elementCount < minCapacity
-javautil.Vector13.serialVersionUID < minCapacity
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 minCapacity > size(this.elementData[])
 ===========================================================================
 javautil.Vector13.ensureCapacityHelper(int):::EXIT
@@ -234,6 +237,7 @@ orig(this.elementData[this.elementCount..]) is a subsequence of this.elementData
 ===========================================================================
 javautil.Vector13.firstElement():::ENTER
 this.elementCount >= 1
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.firstElement():::EXIT
 this.elementData == orig(this.elementData)
@@ -244,14 +248,15 @@ this.capacityIncrement == orig(this.capacityIncrement)
 this.elementCount >= 1
 return.getClass().getName() is printable
 this.elementData.getClass().getName() != return.getClass().getName()
-return in this.elementData[]
 return.getClass().getName() in this.elementData[].getClass().getName()
-return in this.elementData[0..this.elementCount-1]
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.indexOf(java.lang.Object):::ENTER
 elem != null
 elem.getClass().getName() is printable
 this.elementData.getClass().getName() != elem.getClass().getName()
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.indexOf(java.lang.Object):::EXIT
 this.elementData == orig(this.elementData)
@@ -262,7 +267,8 @@ this.capacityIncrement == orig(this.capacityIncrement)
 return >= -1
 this.elementData.getClass().getName() != orig(elem.getClass().getName())
 this.elementCount > return
-javautil.Vector13.serialVersionUID < return
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 return <= size(this.elementData[])-1
 ===========================================================================
 javautil.Vector13.indexOf(java.lang.Object, int):::ENTER
@@ -270,13 +276,13 @@ elem != null
 elem.getClass().getName() is printable
 index >= 0
 this.elementData.getClass().getName() != elem.getClass().getName()
-javautil.Vector13.serialVersionUID < index
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.indexOf(java.lang.Object, int):::EXIT274
-orig(elem) == this.elementData[return]
-orig(elem) == orig(this.elementData[post(return)])
 this.elementCount >= 1
 return >= 0
+this.elementData[return] != null
 orig(elem.getClass().getName()) in this.elementData[].getClass().getName()
 this.elementCount > orig(index)
 return >= orig(index)
@@ -302,8 +308,6 @@ this.capacityIncrement == orig(this.capacityIncrement)
 (return >= 0)  <==>  (return >= orig(index))
 (return >= 0)  ==>  ((size(this.elementData[])-1 == 0) ==> (orig(index) == 0))
 (return >= 0)  ==>  ((size(this.elementData[])-1 == 0) ==> (return == 0))
-(return >= 0)  ==>  (orig(elem) == orig(this.elementData[post(return)]))
-(return >= 0)  ==>  (orig(elem) == this.elementData[return])
 (return >= 0)  ==>  (orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (return >= 0)  ==>  (orig(index) <= size(this.elementData[])-1)
 (return >= 0)  ==>  (orig(this.elementData[post(return)]) != null)
@@ -313,7 +317,8 @@ this.capacityIncrement == orig(this.capacityIncrement)
 return >= -1
 this.elementData.getClass().getName() != orig(elem.getClass().getName())
 this.elementCount > return
-javautil.Vector13.serialVersionUID < return
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 (return == 0) ==> (orig(index) == 0)
 return <= size(this.elementData[])-1
 ===========================================================================
@@ -323,14 +328,14 @@ index >= 0
 this.elementData.getClass().getName() != obj.getClass().getName()
 (this.elementCount == 0) ==> (index == 0)
 this.elementCount >= index
-javautil.Vector13.serialVersionUID < index
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[]) == 0) ==> (index == 0)
 index <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.insertElementAt(java.lang.Object, int):::EXIT
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
 this.capacityIncrement == orig(this.capacityIncrement)
-orig(obj) == this.elementData[orig(index)]
 this.elementData[this.elementCount-1] == this.elementData[orig(this.elementCount)]
 this.elementData[0..orig(index)-1] == orig(this.elementData[0..post(index)-1])
 this.elementData[0..orig(index)-1] == orig(this.elementData[0..index-1])
@@ -339,7 +344,7 @@ this.elementData.getClass().getName() != orig(obj.getClass().getName())
 orig(obj.getClass().getName()) in this.elementData[].getClass().getName()
 this.elementCount - orig(this.elementCount) - 1 == 0
 this.elementCount > orig(index)
-javautil.Vector13.serialVersionUID < orig(this.elementCount)
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (orig(this.elementCount) == 0)
 orig(this.elementCount) <= size(this.elementData[])-1
 (size(this.elementData[])-1 == 0) ==> (orig(index) == 0)
@@ -348,6 +353,8 @@ size(this.elementData[]) >= orig(size(this.elementData[]))
 size(this.elementData[])-1 >= orig(size(this.elementData[]))-1
 ===========================================================================
 javautil.Vector13.isEmpty():::ENTER
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.isEmpty():::EXIT
 this.elementData == orig(this.elementData)
@@ -357,13 +364,12 @@ this.elementCount == orig(this.elementCount)
 this.capacityIncrement == orig(this.capacityIncrement)
 (this.elementCount == 0)  <==>  (return == true)
 (this.elementCount == 0)  ==>  (this.elementCount <= this.capacityIncrement)
-(this.elementCount == 0)  ==>  (this.elementCount == (size(this.elementData[]) / javautil.Vector13.serialVersionUID))
-(this.elementCount == 0)  ==>  (this.elementCount == (size(this.elementData[])-1 / javautil.Vector13.serialVersionUID))
-(this.elementCount == 0)  ==>  (this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID))
 (this.elementCount == 0)  ==>  (this.elementCount is a pointer)
 (this.elementCount == 0)  ==>  (this.elementData[0..this.elementCount-1] == [])
 (this.elementCount == 0)  ==>  (this.elementData[] elements == null)
 (this.elementCount == 0)  ==>  (this.elementData[].getClass().getName() elements == null)
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.isEmpty():::EXIT;condition="return == true"
 this.elementData[] elements == null
@@ -372,9 +378,6 @@ this.elementCount == 0
 return == true
 this.elementData[0..this.elementCount-1] == []
 this.elementCount <= this.capacityIncrement
-this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID)
-this.elementCount == (size(this.elementData[]) / javautil.Vector13.serialVersionUID)
-this.elementCount == (size(this.elementData[])-1 / javautil.Vector13.serialVersionUID)
 ===========================================================================
 javautil.Vector13.isEmpty():::EXIT;condition="not(return == true)"
 this.elementCount >= 1
@@ -382,6 +385,7 @@ return == false
 ===========================================================================
 javautil.Vector13.lastElement():::ENTER
 this.elementCount >= 1
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.lastElement():::EXIT
 this.elementData == orig(this.elementData)
@@ -389,19 +393,18 @@ this.elementData.getClass().getName() == orig(this.elementData.getClass().getNam
 this.elementData[] == orig(this.elementData[])
 this.elementCount == orig(this.elementCount)
 this.capacityIncrement == orig(this.capacityIncrement)
-return == this.elementData[this.elementCount-1]
-return == this.elementData[orig(this.elementCount)-1]
-return == orig(this.elementData[post(this.elementCount)-1])
-return == orig(this.elementData[this.elementCount-1])
 this.elementCount >= 1
 return.getClass().getName() is printable
 this.elementData.getClass().getName() != return.getClass().getName()
 return.getClass().getName() in this.elementData[].getClass().getName()
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.lastIndexOf(java.lang.Object):::ENTER
 elem != null
 elem.getClass().getName() is printable
 this.elementData.getClass().getName() != elem.getClass().getName()
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.lastIndexOf(java.lang.Object):::EXIT
 this.elementData == orig(this.elementData)
@@ -412,7 +415,8 @@ this.capacityIncrement == orig(this.capacityIncrement)
 return >= -1
 this.elementData.getClass().getName() != orig(elem.getClass().getName())
 this.elementCount > return
-javautil.Vector13.serialVersionUID < return
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 return <= size(this.elementData[])-1
 ===========================================================================
 javautil.Vector13.lastIndexOf(java.lang.Object, int):::ENTER
@@ -421,15 +425,15 @@ elem.getClass().getName() is printable
 index >= -1
 this.elementData.getClass().getName() != elem.getClass().getName()
 this.elementCount > index
-javautil.Vector13.serialVersionUID < index
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 index <= size(this.elementData[])-1
 ===========================================================================
 javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT307
-orig(elem) == this.elementData[return]
-orig(elem) == orig(this.elementData[post(return)])
 this.elementCount >= 1
 return >= 0
 orig(index) >= 0
+this.elementData[return] != null
 orig(elem.getClass().getName()) in this.elementData[].getClass().getName()
 (orig(index) == 0) ==> (return == 0)
 (size(this.elementData[])-1 == 0) ==> (return == 0)
@@ -452,8 +456,6 @@ this.capacityIncrement == orig(this.capacityIncrement)
 (return >= 0)  ==>  ((orig(index) == 0) ==> (return == 0))
 (return >= 0)  ==>  ((size(this.elementData[])-1 == 0) ==> (orig(index) == 0))
 (return >= 0)  ==>  ((size(this.elementData[])-1 == 0) ==> (return == 0))
-(return >= 0)  ==>  (orig(elem) == orig(this.elementData[post(return)]))
-(return >= 0)  ==>  (orig(elem) == this.elementData[return])
 (return >= 0)  ==>  (orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (return >= 0)  ==>  (orig(index) >= 0)
 (return >= 0)  ==>  (orig(this.elementData[post(return)]) != null)
@@ -463,12 +465,15 @@ return >= -1
 this.elementData.getClass().getName() != orig(elem.getClass().getName())
 this.elementCount > return
 this.elementCount > orig(index)
-javautil.Vector13.serialVersionUID < return
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 return <= orig(index)
 return <= size(this.elementData[])-1
 orig(index) <= size(this.elementData[])-1
 ===========================================================================
 javautil.Vector13.removeAllElements():::ENTER
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.removeAllElements():::EXIT
 this.elementData == orig(this.elementData)
@@ -482,18 +487,16 @@ this.elementCount == 0
 this.elementData[0..this.elementCount-1] == []
 this.elementCount <= this.capacityIncrement
 this.elementCount <= orig(this.elementCount)
-javautil.Vector13.serialVersionUID < orig(this.elementCount)
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[]) == 0) ==> (orig(this.elementCount) == 0)
 orig(this.elementCount) <= size(this.elementData[])
-this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID)
-this.elementCount == (orig(this.elementCount) / javautil.Vector13.serialVersionUID)
-this.elementCount == (size(this.elementData[]) / javautil.Vector13.serialVersionUID)
-this.elementCount == (size(this.elementData[])-1 / javautil.Vector13.serialVersionUID)
 ===========================================================================
 javautil.Vector13.removeElement(java.lang.Object):::ENTER
 obj != null
 obj.getClass().getName() is printable
 this.elementData.getClass().getName() != obj.getClass().getName()
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.removeElement(java.lang.Object):::EXIT480
 this.elementData[this.elementCount] == this.elementData[orig(this.elementCount)-1]
@@ -505,9 +508,7 @@ orig(this.elementCount) >= 1
 this.elementCount - orig(this.elementCount) + 1 == 0
 (size(this.elementData[])-1 == 0) ==> (this.elementCount == 0)
 this.elementCount <= size(this.elementData[])-1
-orig(obj) in orig(this.elementData[])
 orig(obj.getClass().getName()) in orig(this.elementData[].getClass().getName())
-orig(obj) in orig(this.elementData[0..post(this.elementCount)])
 this.elementData[this.elementCount..] elements == this.elementData[this.elementCount]
 this.elementData[0..this.elementCount-1] is a subset of orig(this.elementData[0..post(this.elementCount)])
 ===========================================================================
@@ -531,9 +532,6 @@ this.elementData[orig(this.elementCount)..] == orig(this.elementData[this.elemen
 (return == false)  ==>  (this.elementData[] == orig(this.elementData[]))
 (return == true)  <==>  (this.elementCount - orig(this.elementCount) + 1 == 0)
 (return == true)  ==>  ((size(this.elementData[])-1 == 0) ==> (this.elementCount == 0))
-(return == true)  ==>  (orig(obj) in orig(this.elementData[0..post(this.elementCount)]))
-(return == true)  ==>  (orig(obj) in orig(this.elementData[0..this.elementCount-1]))
-(return == true)  ==>  (orig(obj) in orig(this.elementData[]))
 (return == true)  ==>  (orig(obj.getClass().getName()) in orig(this.elementData[].getClass().getName()))
 (return == true)  ==>  (orig(this.elementCount) >= 1)
 (return == true)  ==>  (orig(this.elementData[post(this.elementCount)]) == orig(this.elementData[this.elementCount-1]))
@@ -546,7 +544,8 @@ this.elementData[orig(this.elementCount)..] == orig(this.elementData[this.elemen
 this.elementData.getClass().getName() != orig(obj.getClass().getName())
 (orig(this.elementCount) == 0) ==> (this.elementCount == 0)
 this.elementCount <= orig(this.elementCount)
-javautil.Vector13.serialVersionUID < orig(this.elementCount)
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[]) == 0) ==> (orig(this.elementCount) == 0)
 orig(this.elementCount) <= size(this.elementData[])
 this.elementData[0..this.elementCount-1] is a subset of orig(this.elementData[0..this.elementCount-1])
@@ -561,9 +560,7 @@ orig(this.elementCount) >= 1
 this.elementCount - orig(this.elementCount) + 1 == 0
 (size(this.elementData[])-1 == 0) ==> (this.elementCount == 0)
 this.elementCount <= size(this.elementData[])-1
-orig(obj) in orig(this.elementData[])
 orig(obj.getClass().getName()) in orig(this.elementData[].getClass().getName())
-orig(obj) in orig(this.elementData[0..post(this.elementCount)])
 this.elementData[this.elementCount..] elements == this.elementData[this.elementCount]
 this.elementData[0..this.elementCount-1] is a subset of orig(this.elementData[0..post(this.elementCount)])
 ===========================================================================
@@ -576,7 +573,7 @@ javautil.Vector13.removeElementAt(int):::ENTER
 this.elementCount >= 1
 index >= 0
 this.elementCount > index
-javautil.Vector13.serialVersionUID < index
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (index == 0)
 index <= size(this.elementData[])-1
 ===========================================================================
@@ -596,7 +593,6 @@ this.elementCount - orig(this.elementCount) + 1 == 0
 this.elementCount >= orig(index)
 (size(this.elementData[])-1 == 0) ==> (this.elementCount == 0)
 this.elementCount <= size(this.elementData[])-1
-javautil.Vector13.serialVersionUID < orig(this.elementCount)
 orig(this.elementCount) <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (orig(index) == 0)
 orig(index) <= size(this.elementData[])-1
@@ -609,7 +605,7 @@ obj.getClass().getName() is printable
 index >= 0
 this.elementData.getClass().getName() != obj.getClass().getName()
 this.elementCount > index
-javautil.Vector13.serialVersionUID < index
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (index == 0)
 index <= size(this.elementData[])-1
 ===========================================================================
@@ -618,7 +614,6 @@ this.elementData == orig(this.elementData)
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
 this.elementCount == orig(this.elementCount)
 this.capacityIncrement == orig(this.capacityIncrement)
-orig(obj) == this.elementData[orig(index)]
 size(this.elementData[]) == orig(size(this.elementData[]))
 this.elementData[this.elementCount..] == orig(this.elementData[post(this.elementCount)..])
 this.elementData[this.elementCount..] == orig(this.elementData[this.elementCount..])
@@ -630,21 +625,24 @@ this.elementData.getClass().getName() != orig(obj.getClass().getName())
 orig(this.elementData[this.elementCount-1]) in this.elementData[]
 orig(obj.getClass().getName()) in this.elementData[].getClass().getName()
 this.elementCount > orig(index)
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (orig(index) == 0)
 orig(index) <= size(this.elementData[])-1
 orig(this.elementData[this.elementCount-1]) in this.elementData[0..this.elementCount-1]
 ===========================================================================
 javautil.Vector13.setSize(int):::ENTER
 newSize >= 0
-javautil.Vector13.serialVersionUID < newSize
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.setSize(int):::EXIT
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
 this.elementCount == orig(newSize)
 this.capacityIncrement == orig(this.capacityIncrement)
 this.elementData[orig(this.elementCount)..] elements == null
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 (size(this.elementData[]) == 0) ==> (this.capacityIncrement == 0)
-javautil.Vector13.serialVersionUID < orig(this.elementCount)
 (size(this.elementData[]) == 0) ==> (orig(this.elementCount) == 0)
 orig(this.elementCount) <= size(this.elementData[])
 (size(this.elementData[]) == 0) ==> (orig(size(this.elementData[])) == 0)
@@ -654,6 +652,8 @@ orig(this.elementData[this.elementCount..]) is a subsequence of this.elementData
 size(this.elementData[]) == (java.lang.Math.max(this.elementCount, orig(size(this.elementData[]))))
 ===========================================================================
 javautil.Vector13.size():::ENTER
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.size():::EXIT
 this.elementData == orig(this.elementData)
@@ -664,7 +664,6 @@ this.capacityIncrement == orig(this.capacityIncrement)
 return == orig(this.elementCount)
 return >= 0
 this.elementData[return..] elements == null
-javautil.Vector13.serialVersionUID < return
 (size(this.elementData[]) == 0) ==> (return == 0)
 return <= size(this.elementData[])
 ===========================================================================
@@ -680,6 +679,8 @@ return != null
 return.toString is printable
 ===========================================================================
 javautil.Vector13.trimToSize():::ENTER
+(size(this.elementData[]) == 0) ==> (this.elementCount == 0)
+this.elementCount <= size(this.elementData[])
 ===========================================================================
 javautil.Vector13.trimToSize():::EXIT
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())

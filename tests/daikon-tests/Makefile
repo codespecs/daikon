@@ -8,6 +8,11 @@ SCRIPTS=$(DAIKONDIR)/scripts
 # Help system
 default help: help-recurse
 
+.PHONY: regression-tests
+regression-tests:
+	$(MAKE) txt-diff
+	$(MAKE) summary
+
 # Targets that ascend to parent directories
 results summary summary2 summary3 help-recurse:
 	@$(MAKE) --no-print-directory BASE?=`pwd` -C .. $@

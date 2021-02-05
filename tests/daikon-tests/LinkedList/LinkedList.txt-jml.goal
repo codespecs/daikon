@@ -8,7 +8,6 @@ this.header.element == null
 ===========================================================================
 DataStructures.LinkedList.LinkedList():::EXIT
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next
-this.header.element == this.header.next
 this.header.next == null
 ===========================================================================
 DataStructures.LinkedList.find(java.lang.Object):::ENTER
@@ -109,7 +108,6 @@ this.header.next == \old(this.header.next)
 (this.header.next != null)  ==>  (this.header.next.element != null)
 (this.header.next != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this.header.next.element.getClass().getName() is printable)
 (this.header.next == null)  <==>  (\result == true)
-(this.header.next == null)  ==>  (this.header.element == this.header.next)
 ===========================================================================
 DataStructures.LinkedList.makeEmpty():::ENTER
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next
@@ -119,7 +117,6 @@ DataStructures.LinkedList.makeEmpty():::EXIT
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next orig(this) orig(this.header) orig(this.header.element) orig(this.header.element.getClass().getName()) orig(this.header.next) orig(this.header.next.element) orig(this.header.next.element.getClass().getName()) orig(this.header.next.next)
 assignable this.header.next, this.header.next.element, this.header.next.next
 this.header == \old(this.header)
-this.header.element == this.header.next
 this.header.element == \old(this.header.element)
 this.header.next == null
 ===========================================================================
@@ -163,7 +160,6 @@ DataStructures.LinkedList.zeroth():::EXIT
     Variables: this this.header this.header.element this.header.element.getClass().getName() this.header.next this.header.next.element this.header.next.element.getClass().getName() this.header.next.next return return.current return.current.element return.current.element.getClass().getName() return.current.next orig(this) orig(this.header) orig(this.header.element) orig(this.header.element.getClass().getName()) orig(this.header.next) orig(this.header.next.element) orig(this.header.next.element.getClass().getName()) orig(this.header.next.next)
 this.header == \result.current
 this.header == \old(this.header)
-this.header.element == \result.current.element
 this.header.element == \old(this.header.element)
 this.header.next == \result.current.next
 this.header.next == \old(this.header.next)
@@ -171,6 +167,7 @@ this.header.next == \old(this.header.next)
 ((this.header.next != null) && (this.header.next.element != null) && (\old(this.header.next) != null) && (\old(this.header.next.element) != null))  ==>  (this.header.next.element.getClass().getName() == \old(this.header.next.element.getClass().getName()))
 ((this.header.next != null) && (\old(this.header.next) != null))  ==>  (this.header.next.next == \old(this.header.next.next))
 \result != null
+\result.current.element == null
 ===========================================================================
 DataStructures.LinkedListItr:::OBJECT
     Variables: this this.current this.current.element this.current.element.getClass().getName() this.current.next this.current.next.element this.current.next.element.getClass().getName() this.current.next.next
@@ -213,10 +210,8 @@ this.current != null
 DataStructures.LinkedListItr.advance():::EXIT
     Variables: this this.current this.current.element this.current.element.getClass().getName() this.current.next this.current.next.element this.current.next.element.getClass().getName() this.current.next.next orig(this) orig(this.current) orig(this.current.element) orig(this.current.element.getClass().getName()) orig(this.current.next) orig(this.current.next.element) orig(this.current.next.element.getClass().getName()) orig(this.current.next.next)
 assignable this.current, this.current.element, this.current.next, this.current.next.element, this.current.next.next
-this.current == \old(this.current.next)
 ((this.current != null) && (\old(this.current.next) != null))  ==>  (this.current.element == \old(this.current.next.element))
 ((this.current != null) && (this.current.element != null) && (\old(this.current.next) != null) && (\old(this.current.next.element) != null))  ==>  (this.current.element.getClass().getName() == \old(this.current.next.element.getClass().getName()))
-((this.current != null) && (\old(this.current.next) != null))  ==>  (this.current.next == \old(this.current.next.next))
 (this.current != null)  ==>  (this.current.element != null)
 ===========================================================================
 DataStructures.LinkedListItr.isPastEnd():::ENTER
@@ -267,8 +262,6 @@ theElement == null
 ===========================================================================
 DataStructures.ListNode.ListNode(java.lang.Object):::EXIT
     Variables: this this.element this.element.getClass().getName() this.next this.next.element this.next.element.getClass().getName() this.next.next this.next.next.element this.next.next.element.getClass().getName() this.next.next.next theElement theElement.getClass().getName() orig(theElement) orig(theElement.getClass().getName())
-this.element == this.next
-this.element == \old(theElement)
 this.element == null
 this.next == null
 ===========================================================================

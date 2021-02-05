@@ -1,6 +1,6 @@
 ===========================================================================
 misc.Suppress02:::OBJECT
-    Variables: this this.theArray this.theArray[] this.i this.j size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1]
+    Variables: this this.theArray this.theArray[] this.i this.j size(this.theArray[]) size(this.theArray[])-1
 this != null
 this.theArray != null
 this.theArray != null
@@ -8,187 +8,31 @@ this.theArray != null
 this.i <= 49
 this.i >= 0
 this.theArray.length == 1000
-(\forall int i; (this.j+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != i))
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.j] contains no duplicates
-!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
 (this.j == 0) ==> (this.i == 0)
 this.i <= this.j
-this.i < this.theArray.length-1
-(this.i == 0) ==> (this.theArray[this.i] == 0)
-(this.theArray[this.i] == 0) ==> (this.i == 0)
-!(\forall int i; (this.i <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-!(\forall int i; (this.i+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-(this.theArray[this.j] == 0) ==> (this.i == 0)
-!(\forall int i; (this.j <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-!(\forall int i; (this.j+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-this.j < this.theArray.length-1
-(this.j == 0) ==> (this.theArray[this.i] == 0)
-!(\forall int i; (this.i <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-!(\forall int i; (this.i+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-(this.j == 0) ==> (this.theArray[this.j] == 0)
-(this.theArray[this.j] == 0) ==> (this.j == 0)
-!(\forall int i; (this.j <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-!(\forall int i; (this.j+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-this.theArray.length-1 > this.theArray[this.i]
-(\forall int i; (this.i <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (this.i+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= this.i) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= this.i-1) ==> (this.theArray[i] < this.theArray.length-1))
-this.theArray.length-1 > this.theArray[this.j]
-(\forall int i; (this.j <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (this.j+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= this.j) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= this.j-1) ==> (this.theArray[i] < this.theArray.length-1))
-(this.theArray[this.j] == 0) ==> (this.theArray[this.i] == 0)
 ===========================================================================
 misc.Suppress02.Suppress02():::EXIT
-    Variables: this this.theArray this.theArray[] this.i this.j size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1]
-this.i == this.theArray[this.i]
+    Variables: this this.theArray this.theArray[] this.i this.j size(this.theArray[]) size(this.theArray[])-1
 this.i == 0
 this.j == 5
-(\forall int i; (0 <= i && i <= this.i) ==> (this.theArray[i] == 0))
-(\forall int i; (0 <= i && i <= this.i) ==> (this.theArray[i] == i))
-this.theArray[this.j] == 153
-this.theArray[this.j-1] == 44
-(\forall int i; (0 <= i && i <= this.i) ==> (this.theArray[i] == this.i))
 ===========================================================================
 misc.Suppress02.f(int):::ENTER
-    Variables: this this.theArray this.theArray[] this.i this.j n size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1] this.theArray[n] this.theArray[n-1] this.theArray[n..] this.theArray[n+1..] this.theArray[0..n] this.theArray[0..n-1]
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..n] contains no duplicates
-!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != n))
+    Variables: this this.theArray this.theArray[] this.i this.j n size(this.theArray[]) size(this.theArray[])-1
 (n == 0) ==> (this.i == 0)
 this.i <= n
-(this.theArray[n] == 0) ==> (this.i == 0)
-!(\forall int i; (n <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-!(\forall int i; (n+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-!(\forall int i; (n <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-!(\forall int i; (n+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-n < this.theArray.length-1
-(n == 0) ==> (this.theArray[this.i] == 0)
-!(\forall int i; (this.i <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != n))
-!(\forall int i; (this.i+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != n))
-n != this.theArray[this.j]
-!(\forall int i; (this.j <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != n))
-!(\forall int i; (this.j+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != n))
-(n == 0) ==> (this.theArray[n] == 0)
-(this.theArray[n] == 0) ==> (n == 0)
-!(\forall int i; (n <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != n))
-!(\forall int i; (n+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != n))
-this.theArray.length-1 > this.theArray[n]
-(\forall int i; (n <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (n+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= n) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= n-1) ==> (this.theArray[i] < this.theArray.length-1))
-(this.theArray[n] == 0) ==> (this.theArray[this.i] == 0)
 ===========================================================================
 misc.Suppress02.f(int):::EXIT
-    Variables: this this.theArray this.theArray[] this.i this.j n orig(this) orig(this.theArray) orig(this.theArray[]) orig(this.i) orig(this.j) orig(n) size(this.theArray[]) size(this.theArray[])-1 orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1] this.theArray[n] this.theArray[n-1] this.theArray[n..] this.theArray[n+1..] this.theArray[0..n] this.theArray[0..n-1] this.theArray[orig(this.i)] this.theArray[orig(this.i)-1] this.theArray[orig(this.i)..] this.theArray[orig(this.i)+1..] this.theArray[0..orig(this.i)] this.theArray[0..orig(this.i)-1] this.theArray[orig(this.j)] this.theArray[orig(this.j)-1] this.theArray[orig(this.j)..] this.theArray[orig(this.j)+1..] this.theArray[0..orig(this.j)] this.theArray[0..orig(this.j)-1] this.theArray[orig(n)] this.theArray[orig(n)-1] this.theArray[orig(n)..] this.theArray[orig(n)+1..] this.theArray[0..orig(n)] this.theArray[0..orig(n)-1] orig(this.theArray[post(this.i)]) orig(this.theArray[post(this.i)-1]) orig(this.theArray[post(this.i)..]) orig(this.theArray[post(this.i)+1..]) orig(this.theArray[0..post(this.i)]) orig(this.theArray[0..post(this.i)-1]) orig(this.theArray[post(this.j)]) orig(this.theArray[post(this.j)-1]) orig(this.theArray[post(this.j)..]) orig(this.theArray[post(this.j)+1..]) orig(this.theArray[0..post(this.j)]) orig(this.theArray[0..post(this.j)-1]) orig(this.theArray[post(n)]) orig(this.theArray[post(n)-1]) orig(this.theArray[post(n)..]) orig(this.theArray[post(n)+1..]) orig(this.theArray[0..post(n)]) orig(this.theArray[0..post(n)-1]) orig(this.theArray[this.i]) orig(this.theArray[this.i-1]) orig(this.theArray[this.i..]) orig(this.theArray[this.i+1..]) orig(this.theArray[0..this.i]) orig(this.theArray[0..this.i-1]) orig(this.theArray[this.j]) orig(this.theArray[this.j-1]) orig(this.theArray[this.j..]) orig(this.theArray[this.j+1..]) orig(this.theArray[0..this.j]) orig(this.theArray[0..this.j-1]) orig(this.theArray[n]) orig(this.theArray[n-1]) orig(this.theArray[n..]) orig(this.theArray[n+1..]) orig(this.theArray[0..n]) orig(this.theArray[0..n-1])
-      Modified variables: this.i this.j this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1]
-      Modified primitive arguments: this.theArray[n-1]
-      Unmodified variables: this this.theArray this.theArray[] n size(this.theArray[]) this.theArray[n] this.theArray[n..] this.theArray[n+1..] this.theArray[0..n] this.theArray[0..n-1]
-modifies this.i, this.j, this.theArray[this.i], this.theArray[this.i-1], this.theArray[this.i..], this.theArray[this.i+1..], this.theArray[0..this.i], this.theArray[0..this.i-1], this.theArray[this.j], this.theArray[this.j-1], this.theArray[this.j..], this.theArray[this.j+1..], this.theArray[0..this.j], this.theArray[0..this.j-1]
-(\forall int i; (\old(this.j)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != i))
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..orig(this.j)] contains no duplicates
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..orig(n)] contains no duplicates
-!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
+    Variables: this this.theArray this.theArray[] this.i this.j n orig(this) orig(this.theArray) orig(this.theArray[]) orig(this.i) orig(this.j) orig(n) size(this.theArray[]) size(this.theArray[])-1 orig(size(this.theArray[])) orig(size(this.theArray[]))-1
+      Modified variables: this.i this.j
+      Unmodified variables: this this.theArray this.theArray[] n size(this.theArray[])
+modifies this.i, this.j
 (\old(n) == 0) ==> (this.i == 0)
 this.i <= \old(n)
-!(\forall int i; (\old(this.i) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-!(\forall int i; (\old(this.i)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-this.i != this.theArray[\old(this.j)]
-!(\forall int i; (\old(this.j) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-!(\forall int i; (\old(this.j)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-(this.theArray[\old(n)] == 0) ==> (this.i == 0)
-!(\forall int i; (\old(n) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
-!(\forall int i; (\old(n)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.i))
 (this.j == 0) ==> (\old(this.i) == 0)
 this.j != \old(this.j)
 (\old(n) == 0) ==> (this.j == 0)
 (this.j == 0) ==> (\old(n) == 0)
-(this.j == 0) ==> (this.theArray[\old(this.i)] == 0)
-!(\forall int i; (\old(this.i) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-!(\forall int i; (\old(this.i)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-!(\forall int i; (\old(this.j) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-!(\forall int i; (\old(this.j)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-(this.j == 0) ==> (this.theArray[\old(n)] == 0)
-(this.theArray[\old(n)] == 0) ==> (this.j == 0)
-!(\forall int i; (\old(n) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-!(\forall int i; (\old(n)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.j))
-\old(this.i) < this.theArray.length-1
-!(\forall int i; (this.i <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-!(\forall int i; (this.i+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-(this.theArray[this.j] == 0) ==> (\old(this.i) == 0)
-!(\forall int i; (this.j <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-!(\forall int i; (this.j+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-(\old(this.i) == 0) ==> (this.theArray[\old(this.i)] == 0)
-(this.theArray[\old(this.i)] == 0) ==> (\old(this.i) == 0)
-!(\forall int i; (\old(this.i) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-!(\forall int i; (\old(this.i)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-(this.theArray[\old(this.j)] == 0) ==> (\old(this.i) == 0)
-!(\forall int i; (\old(this.j) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-!(\forall int i; (\old(this.j)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-(this.theArray[\old(n)] == 0) ==> (\old(this.i) == 0)
-!(\forall int i; (\old(n) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-!(\forall int i; (\old(n)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.i)))
-\old(this.j) < this.theArray.length-1
-!(\forall int i; (this.i <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-!(\forall int i; (this.i+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-\old(this.j) != this.theArray[this.j]
-!(\forall int i; (this.j <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-!(\forall int i; (this.j+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-(\old(this.j) == 0) ==> (this.theArray[\old(this.i)] == 0)
-!(\forall int i; (\old(this.i) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-!(\forall int i; (\old(this.i)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-(\old(this.j) == 0) ==> (this.theArray[\old(this.j)] == 0)
-(this.theArray[\old(this.j)] == 0) ==> (\old(this.j) == 0)
-!(\forall int i; (\old(this.j) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-!(\forall int i; (\old(this.j)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-!(\forall int i; (\old(n) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-!(\forall int i; (\old(n)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(this.j)))
-\old(n) < this.theArray.length-1
-(\old(n) == 0) ==> (this.theArray[this.i] == 0)
-!(\forall int i; (this.i <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-!(\forall int i; (this.i+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-(\old(n) == 0) ==> (this.theArray[this.j] == 0)
-(this.theArray[this.j] == 0) ==> (\old(n) == 0)
-!(\forall int i; (this.j <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-!(\forall int i; (this.j+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-(\old(n) == 0) ==> (this.theArray[\old(this.i)] == 0)
-!(\forall int i; (\old(this.i) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-!(\forall int i; (\old(this.i)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-\old(n) != this.theArray[\old(this.j)]
-!(\forall int i; (\old(this.j) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-!(\forall int i; (\old(this.j)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-(\old(n) == 0) ==> (this.theArray[\old(n)] == 0)
-(this.theArray[\old(n)] == 0) ==> (\old(n) == 0)
-!(\forall int i; (\old(n) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-!(\forall int i; (\old(n)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != \old(n)))
-this.theArray.length-1 > this.theArray[\old(this.i)]
-(\forall int i; (\old(this.i) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (\old(this.i)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= \old(this.i)) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= \old(this.i)-1) ==> (this.theArray[i] < this.theArray.length-1))
-this.theArray.length-1 > this.theArray[\old(this.j)]
-(\forall int i; (\old(this.j) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (\old(this.j)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= \old(this.j)) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= \old(this.j)-1) ==> (this.theArray[i] < this.theArray.length-1))
-this.theArray.length-1 > this.theArray[\old(n)]
-(\forall int i; (\old(n) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (\old(n)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= \old(n)) ==> (this.theArray[i] < this.theArray.length-1))
-(\forall int i; (0 <= i && i <= \old(n)-1) ==> (this.theArray[i] < this.theArray.length-1))
-(this.theArray[\old(n)] == 0) ==> (this.theArray[this.i] == 0)
-(this.theArray[this.j] == 0) ==> (this.theArray[\old(this.i)] == 0)
-this.theArray[this.j] != this.theArray[\old(this.j)]
-(this.theArray[\old(n)] == 0) ==> (this.theArray[this.j] == 0)
-(this.theArray[this.j] == 0) ==> (this.theArray[\old(n)] == 0)
-(this.theArray[\old(this.j)] == 0) ==> (this.theArray[\old(this.i)] == 0)
-(this.theArray[\old(n)] == 0) ==> (this.theArray[\old(this.i)] == 0)
 ===========================================================================
 misc.Suppress02.main(java.lang.String[]):::ENTER
     Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1

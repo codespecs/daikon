@@ -45,34 +45,19 @@ public class StaticInteresting {
   /*@ invariant daikon.Quant.size(this.inner) == 1; */
   /*@ invariant daikon.Quant.getElement_int(this.outer, this.y) != 0; */
   /*@ invariant daikon.Quant.getElement_int(this.outer, this.y-1) != 0; */
-  /*@ invariant daikon.Quant.getElement_int(this.outer, this.x) != 0; */
   /*@ invariant daikon.Quant.getElement_int(this.inner, this.x) != 0; */
   /*@ invariant daikon.Quant.memberOf(daikon.Quant.getElement_int(this.inner, this.x) , this.outer ); */
   /*@ invariant daikon.Quant.eltsEqual(this.inner, daikon.Quant.getElement_int(this.inner, this.x)); */
   /*@ invariant this.y != daikon.Quant.getElement_int(this.outer, this.y); */
   /*@ invariant this.y != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant this.y != daikon.Quant.getElement_int(this.outer, this.x); */
   /*@ invariant this.y != daikon.Quant.getElement_int(this.inner, this.x); */
-  /*@ invariant this.x != daikon.Quant.getElement_int(this.outer, this.y); */
-  /*@ invariant this.x != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant this.x != daikon.Quant.getElement_int(this.outer, this.x); */
-  /*@ invariant this.x != daikon.Quant.getElement_int(this.inner, this.x); */
   /*@ invariant daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.y); */
   /*@ invariant daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.x); */
   /*@ invariant daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.inner, this.x); */
   /*@ invariant daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.y); */
   /*@ invariant daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.x); */
   /*@ invariant daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.inner, this.x); */
-  /*@ invariant daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.y); */
-  /*@ invariant daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.x); */
-  /*@ invariant daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.inner, this.x); */
   /*@ invariant daikon.Quant.getElement_int(this.outer, this.y) != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant daikon.Quant.getElement_int(this.outer, this.y) != daikon.Quant.getElement_int(this.outer, this.x); */
-  /*@ invariant daikon.Quant.getElement_int(this.outer, this.y-1) != daikon.Quant.getElement_int(this.outer, this.x); */
-  /*@ invariant daikon.Quant.getElement_int(this.outer, this.x) != daikon.Quant.getElement_int(this.inner, this.x); */
   public int[] outer = new int[100];
   public int[] inner = new int[1];
   public int y = 25;
@@ -122,40 +107,22 @@ public class StaticInteresting {
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.inner, this.x);
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.inner, \old(this.x));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) == daikon.Quant.getElement_int(this.outer, \old(this.y)-1);
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) == daikon.Quant.getElement_int(this.outer, \old(this.x));
   @ ensures daikon.Quant.eltsEqual(this.inner, daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures this.y != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures this.y != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures this.y != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures this.y != \old(daikon.Quant.getElement_int(this.inner, this.x));
-  @ ensures this.x != \old(daikon.Quant.getElement_int(this.outer, this.y));
-  @ ensures this.x != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures this.x != \old(daikon.Quant.getElement_int(this.outer, this.x));
-  @ ensures this.x != \old(daikon.Quant.getElement_int(this.inner, this.x));
   @ ensures daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.inner, this.x));
   @ ensures daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.inner, this.x));
-  @ ensures daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.y));
-  @ ensures daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.x));
-  @ ensures daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.inner, this.x));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.inner, this.x));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.inner, this.x));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.y));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.x));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.inner, this.x));
   @*/
   /**
    *
@@ -173,7 +140,6 @@ public class StaticInteresting {
   @ ensures daikon.Quant.eltsEqual(this.inner, -1339421172);
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) == -1339421172;
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) == 134578847;
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) == -1157793070;
   @ ensures daikon.Quant.eltsEqual(this.inner, daikon.Quant.getElement_int(this.outer, this.y));
   @*/
   public StaticInteresting() {
@@ -206,22 +172,11 @@ class StaticInteresting2 {
   /*@ invariant daikon.Quant.eltsEqual(this.inner, daikon.Quant.getElement_int(this.outer, this.y)); */
   /*@ invariant this.y != daikon.Quant.getElement_int(this.outer, this.y); */
   /*@ invariant this.y != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant this.y != daikon.Quant.getElement_int(this.outer, this.x); */
-  /*@ invariant this.x != daikon.Quant.getElement_int(this.outer, this.y); */
-  /*@ invariant this.x != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant this.x != daikon.Quant.getElement_int(this.outer, this.x); */
   /*@ invariant daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.y); */
   /*@ invariant daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.x); */
   /*@ invariant daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.y); */
   /*@ invariant daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.x); */
-  /*@ invariant daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.y); */
-  /*@ invariant daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.x); */
   /*@ invariant daikon.Quant.getElement_int(this.outer, this.y) != daikon.Quant.getElement_int(this.outer, this.y-1); */
-  /*@ invariant daikon.Quant.getElement_int(this.outer, this.y) != daikon.Quant.getElement_int(this.outer, this.x); */
-  /*@ invariant daikon.Quant.getElement_int(this.outer, this.y-1) != daikon.Quant.getElement_int(this.outer, this.x); */
   public int[] outer = new int[100];
   public int[] inner = new int[1];
   public int y = 25;
@@ -258,31 +213,16 @@ class StaticInteresting2 {
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.outer, \old(this.y));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.inner, \old(this.x));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) == daikon.Quant.getElement_int(this.outer, \old(this.y)-1);
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) == daikon.Quant.getElement_int(this.outer, \old(this.x));
   @ ensures this.y != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures this.y != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures this.y != \old(daikon.Quant.getElement_int(this.outer, this.x));
-  @ ensures this.x != \old(daikon.Quant.getElement_int(this.outer, this.y));
-  @ ensures this.x != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures this.x != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.x));
-  @ ensures daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.y));
-  @ ensures daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.y));
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.x));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.y));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.y-1));
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.x));
   @*/
   /**
    *
@@ -299,7 +239,6 @@ class StaticInteresting2 {
   @ ensures daikon.Quant.eltsEqual(this.inner, -1339421172);
   @ ensures daikon.Quant.getElement_int(this.outer, this.y) == -1339421172;
   @ ensures daikon.Quant.getElement_int(this.outer, this.y-1) == 134578847;
-  @ ensures daikon.Quant.getElement_int(this.outer, this.x) == -1157793070;
   @*/
   public StaticInteresting2() {
     for (int i = 0; i < outer.length; i++) {

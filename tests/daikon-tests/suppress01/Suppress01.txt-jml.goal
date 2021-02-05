@@ -1,8 +1,6 @@
 ===========================================================================
 misc.Suppress01:::OBJECT
-    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 this.theArray[this.b] this.theArray[this.b-1] this.theArray2[this.b] this.theArray2[this.b-1]
-this.b == daikon.Quant.getElement_int(this.theArray, this.b)
-this.b == daikon.Quant.getElement_int(this.theArray2, this.b)
+    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1
 this != null
 this.theArray != null
 daikon.Quant.eltsGTE(this.theArray, 0)
@@ -12,21 +10,16 @@ daikon.Quant.eltsGTE(this.theArray2, 0)
 daikon.Quant.eltsLteIndex(this.theArray2)
 this.b == 0
 daikon.Quant.subsetOf(this.theArray, this.theArray2)
-daikon.Quant.eltsGTE(this.theArray, this.b)
 daikon.Quant.eltsLTE(this.theArray, daikon.Quant.size(this.theArray)-1)
 daikon.Quant.eltsLT(this.theArray, daikon.Quant.size(this.theArray2)-1)
-daikon.Quant.eltsGTE(this.theArray2, this.b)
 daikon.Quant.eltsLTE(this.theArray2, daikon.Quant.size(this.theArray))
 daikon.Quant.memberOf(daikon.Quant.size(this.theArray)-1 , this.theArray2 )
 daikon.Quant.eltsLTE(this.theArray2, daikon.Quant.size(this.theArray2)-1)
-this.b <= daikon.Quant.size(this.theArray)-1
-this.b < daikon.Quant.size(this.theArray2)-1
 (daikon.Quant.size(this.theArray2)-1 >> daikon.Quant.size(this.theArray) == 0)
 daikon.Quant.size(this.theArray) <= daikon.Quant.size(this.theArray2)-1
 ===========================================================================
 misc.Suppress01.Suppress01():::EXIT
-    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 this.theArray[this.b] this.theArray[this.b-1] this.theArray2[this.b] this.theArray2[this.b-1]
-this.b == daikon.Quant.size(this.theArray)-1
+    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1
 daikon.Quant.size(this.theArray) == daikon.Quant.size(this.theArray2)-1
 this.theArray != null
 daikon.Quant.eltsEqual(this.theArray, 0)
@@ -34,22 +27,17 @@ daikon.Quant.eltsEqualIndex(this.theArray)
 this.theArray2 != null
 daikon.Quant.eltsEqualIndex(this.theArray2)
 daikon.Quant.size(this.theArray2) == 2
-daikon.Quant.eltsEqual(this.theArray, this.b)
+daikon.Quant.memberOf(daikon.Quant.size(this.theArray)-1 , this.theArray )
+daikon.Quant.eltsEqual(this.theArray, daikon.Quant.size(this.theArray)-1)
 daikon.Quant.memberOf(daikon.Quant.size(this.theArray) , this.theArray2 )
 ===========================================================================
 misc.Suppress01.f():::ENTER
-    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 this.theArray[this.b] this.theArray[this.b-1] this.theArray2[this.b] this.theArray2[this.b-1]
+    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1
 ===========================================================================
 misc.Suppress01.f():::EXIT
-    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b orig(this) orig(this.theArray) orig(this.theArray[]) orig(this.theArray2) orig(this.theArray2[]) orig(this.b) size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(size(this.theArray2[])) orig(size(this.theArray2[]))-1 this.theArray[this.b] this.theArray[this.b-1] this.theArray[orig(this.b)] this.theArray[orig(this.b)-1] this.theArray2[this.b] this.theArray2[this.b-1] this.theArray2[orig(this.b)] this.theArray2[orig(this.b)-1] orig(this.theArray[post(this.b)]) orig(this.theArray[post(this.b)-1]) orig(this.theArray2[post(this.b)]) orig(this.theArray2[post(this.b)-1]) orig(this.theArray[this.b]) orig(this.theArray[this.b-1]) orig(this.theArray2[this.b]) orig(this.theArray2[this.b-1])
-assignable this.theArray, this.theArray[*], this.theArray2, this.theArray2[*], this.theArray[this.b-1], this.theArray2[this.b-1]
+    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b orig(this) orig(this.theArray) orig(this.theArray[]) orig(this.theArray2) orig(this.theArray2[]) orig(this.b) size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(size(this.theArray2[])) orig(size(this.theArray2[]))-1
+assignable this.theArray, this.theArray[*], this.theArray2, this.theArray2[*]
 this.b == \old(this.b)
-this.b == daikon.Quant.getElement_int(this.theArray, \old(this.b))
-this.b == daikon.Quant.getElement_int(this.theArray2, \old(this.b))
-this.b == \old(daikon.Quant.getElement_int(this.theArray, \new(this.b)))
-this.b == \old(daikon.Quant.getElement_int(this.theArray2, \new(this.b)))
-this.b == \old(daikon.Quant.getElement_int(this.theArray, this.b))
-this.b == \old(daikon.Quant.getElement_int(this.theArray2, this.b))
 daikon.Quant.size(this.theArray)-1 == \old(daikon.Quant.size(this.theArray))
 daikon.Quant.subsetOf(\old(this.theArray), this.theArray)
 daikon.Quant.subsetOf(this.theArray, \old(this.theArray2))
@@ -62,10 +50,6 @@ daikon.Quant.eltsLTE(this.theArray2, daikon.Quant.size(this.theArray)-1)
 daikon.Quant.eltsLT(this.theArray2, daikon.Quant.size(this.theArray2)-1)
 daikon.Quant.memberOf(\old(daikon.Quant.size(this.theArray))-1 , this.theArray2 )
 daikon.Quant.eltsLTE(this.theArray2, \old(daikon.Quant.size(this.theArray2))-1)
-daikon.Quant.eltsGTE(\old(this.theArray), this.b)
-daikon.Quant.eltsGTE(\old(this.theArray2), this.b)
-this.b <= \old(daikon.Quant.size(this.theArray))-1
-this.b < \old(daikon.Quant.size(this.theArray2))-1
 daikon.Quant.eltsLT(\old(this.theArray), daikon.Quant.size(this.theArray2)-1)
 daikon.Quant.eltsLTE(\old(this.theArray2), daikon.Quant.size(this.theArray)-1)
 daikon.Quant.eltsLT(\old(this.theArray2), daikon.Quant.size(this.theArray2)-1)

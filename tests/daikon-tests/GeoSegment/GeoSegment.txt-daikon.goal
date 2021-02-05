@@ -30,7 +30,6 @@ gp.latitude == orig(gp.latitude)
 gp.longitude == orig(gp.longitude)
 gp.latitude is a pointer
 gp.longitude is a pointer
-MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.latitude > gp.longitude
 this.longitude < gp.latitude
 gp.latitude > gp.longitude
@@ -61,9 +60,6 @@ MapQuick1.GeoPoint.hashCode():::EXIT
 this.latitude == orig(this.latitude)
 this.longitude == orig(this.longitude)
 return is a pointer
-this.latitude < return
-this.longitude < return
-7 * this.latitude + 41 * this.longitude - return + 4.294967296E9 == 0
 ===========================================================================
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
 gp != null
@@ -82,7 +78,6 @@ gp.latitude == orig(gp.latitude)
 gp.longitude == orig(gp.longitude)
 gp.latitude is a pointer
 gp.longitude is a pointer
-MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.latitude != gp.latitude
 this.latitude > gp.longitude
 this.longitude < gp.latitude
@@ -119,7 +114,6 @@ p2.latitude > p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT
 this.name == orig(name)
-this.name.toString == name.toString
 this.p1 == orig(p1)
 this.p1.latitude == p1.latitude
 this.p1.longitude == p1.longitude
@@ -179,10 +173,6 @@ this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
 return != 0
 return is a pointer
-this.p1.latitude != return
-this.p1.longitude != return
-this.p2.latitude != return
-this.p2.longitude != return
 ===========================================================================
 MapQuick1.GeoSegment.heading():::ENTER
 this.p1.latitude != this.p2.latitude
@@ -197,7 +187,6 @@ this.p1.longitude == orig(this.p1.longitude)
 this.p2 == orig(this.p2)
 this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
-MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -213,7 +202,6 @@ this.p1.longitude == orig(this.p1.longitude)
 this.p2 == orig(this.p2)
 this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
-MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.name():::ENTER
@@ -222,7 +210,7 @@ this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.name():::EXIT
 this.name == return
-this.name.toString == return.toString
+this.name.toString == orig(this.name.toString)
 this.p1 == orig(this.p1)
 this.p1.latitude == orig(this.p1.latitude)
 this.p1.longitude == orig(this.p1.longitude)
@@ -230,7 +218,6 @@ this.p2 == orig(this.p2)
 this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
 return == orig(this.name)
-return.toString == orig(this.name.toString)
 return != null
 return.toString is printable
 this.p1.latitude != this.p2.latitude

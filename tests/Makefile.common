@@ -484,12 +484,11 @@ chicory: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
 									$(INST_LIST_FILE) $(CHICORY_EXEC)
 	@echo
-	@echo "### compile source and run Chicory (${PROJECT_FILE})"
+	@echo "### Run Chicory (${PROJECT_FILE})"
 	@echo
-	@echo inst_Files: '$(INST_FILES)'
-	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
+	  --comparability-file=$(CWD)/$(PROJECT_FILE).decls-DynComp \
 	  --ppt-select-pattern='$(INST_FILES)' ${JUNIT} ${MAIN_CLASS} ${MAIN_ARGS}
 	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp
 endif
@@ -537,8 +536,9 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
   $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk: $(DCOMP_PREMAIN) $(DCOMP_RT) \
 				$(SCRATCH_FOR_DAIKON)/.copy-timestamp $(INST_LIST_FILE)
 	@echo
-	@echo "### Run DynComp (${PROJECT_FILE})"
+	@echo "### Compile source and run DynComp (${PROJECT_FILE})"
 	@echo
+	@echo inst_Files: '$(INST_FILES)'
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
@@ -855,14 +855,14 @@ ifdef ESC_ON
 ifndef NO_MERGE
 ifndef NO_CSHARP
 # ESC  MERGE  CSHARP
-txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
-		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff txt-chicory-diff \
-		  dyncomp-diff txt-simplify-diff txt-csharpcontract-diff txt-jaif-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
+		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff \
+		  txt-simplify-diff txt-csharpcontract-diff txt-jaif-diff
 else
 # ESC  MERGE  !CSHARP
-txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
-		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff txt-chicory-diff \
-		  dyncomp-diff txt-simplify-diff txt-jaif-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
+		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff \
+		  txt-simplify-diff txt-jaif-diff
 endif
 
 # txt-daikon-suppress-diff;
@@ -877,12 +877,12 @@ txt-merge-diff:
 	@echo 'Nothing to do for merge'
 ifndef NO_CSHARP
 # ESC  !MERGE  CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
-		  txt-csharpcontract-diff txt-chicory-diff inv-checker-diff dyncomp-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
+		  txt-csharpcontract-diff txt-chicory-diff inv-checker-diff
 else
 # ESC  !MERGE  !CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
-		  txt-chicory-diff inv-checker-diff dyncomp-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
+		  txt-chicory-diff inv-checker-diff
 endif
 # txt-daikon-suppress-diff;
 endif # ifndef NO_MERGE
@@ -892,16 +892,16 @@ ifdef NO_JML
 # !ESC !JML
 txt-merge-diff:
 	@echo 'Nothing to do for merge'
-txt-diff: txt-daikon-diff txt-chicory-diff dyncomp-diff;
+txt-diff: dyncomp-diff txt-daikon-diff txt-chicory-diff
 else
 # !ESC JML
 ifndef NO_MERGE
 ifndef NO_CSHARP
 # !ESC JML MERGE CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff txt-csharpcontract-diff inv-checker-diff dyncomp-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff txt-csharpcontract-diff inv-checker-diff
 else
 # !ESC JML MERGE !CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff inv-checker-diff dyncomp-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff inv-checker-diff
 endif
 # !ESC JML MERGE
 # txt-daikon-suppress-diff;
@@ -950,12 +950,12 @@ endif
 txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 
 # Special case for merge: we want to keep track of whitespace
-%-merge-jml.diff: %-merge-jml.goal %-merge-jml
+%-merge-jml.diff: $(call goal_name, %-merge-jml) %-merge-jml
 	@echo
 	@echo "### textual diff (${PROJECT_FILE})"
 	@echo
 	-rm -f $@
-	-diff -u --strip-trailing-cr $^ > $@ 2>&1
+	-diff -u --strip-trailing-cr $(call goal_name, $*-merge-jml) $*-merge-jml > $@ 2>&1
 	cat $@
 
 # Special case for DynComp: we need to ignore date/time stamp

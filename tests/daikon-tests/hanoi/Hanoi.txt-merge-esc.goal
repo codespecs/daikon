@@ -81,14 +81,7 @@ public class Hanoi {
 
   /*@ requires pegA == 0 || pegA == 1 || pegA == 2; */
   /*@ requires pegB == 0 || pegB == 1 || pegB == 2; */
-  /*@ requires (pegA & pegB) == 0; */
-  /*@ requires pegA != pegB; */
   /*@ ensures \result == 0 || \result == 1 || \result == 2; */
-  /*@ ensures (\result & \old(pegA)) == 0; */
-  /*@ ensures \result != \old(pegA); */
-  /*@ ensures (\result & \old(pegB)) == 0; */
-  /*@ ensures \result != \old(pegB); */
-  /*@ ensures \result + \old(pegA) + \old(pegB) - 3 == 0; */
   /**
      @requires: pegA and pegB are each 0, 1, or 2. pegA != pegB.
      @modifies: nothing
@@ -115,7 +108,6 @@ public class Hanoi {
   /*@ requires towerHeight >= 1; */
   /*@ requires (\forall int i, j; (0 <= i && i <= towerHeight-1 && 0 <= j && j <= towerHeight-1) ==> (this.diskLocation[i] == this.diskLocation[j])); */
   /*@ requires this.height >= towerHeight; */
-  /*@ requires (\forall int i; (towerHeight <= i && i <= this.diskLocation.length-1) ==> (this.diskLocation[i] <= this.height)); */
   /*@ requires (fromPeg & toPeg) == 0; */
   /*@ requires fromPeg != toPeg; */
   /*@ requires (\forall int i; (0 <= i && i <= towerHeight-1) ==> (this.diskLocation[i] == fromPeg)); */
@@ -125,7 +117,6 @@ public class Hanoi {
   /*@ ensures this.noOutput == true; */
   /*@ ensures (\forall int i, j; (0 <= i && i <= \old(towerHeight)-1 && 0 <= j && j <= \old(towerHeight)-1) ==> (this.diskLocation[i] == this.diskLocation[j])); */
   /*@ ensures this.height >= \old(towerHeight); */
-  /*@ ensures (\forall int i; (\old(towerHeight) <= i && i <= this.diskLocation.length-1) ==> (this.diskLocation[i] <= this.height)); */
   /*@ ensures (\forall int i; (0 <= i && i <= \old(towerHeight)-1) ==> (this.diskLocation[i] == \old(toPeg))); */
   /**
      @requires: fromPeg and toPeg are each 0, 1, or 2.	 There is a

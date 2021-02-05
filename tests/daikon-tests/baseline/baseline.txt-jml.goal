@@ -62,11 +62,8 @@ TestScores.classAve(int[]):::ENTER
     Variables: scores scores[] size(scores[]) size(scores[])-1
 scores != null
 daikon.Quant.size(scores) >= 5
-daikon.Quant.eltsGTE(scores, daikon.Quant.size(scores)-1)
 ===========================================================================
 TestScores.classAve(int[]):::EXIT
-    Variables: scores scores[] return orig(scores) orig(scores[]) size(scores[]) size(scores[])-1 orig(size(scores[])) orig(size(scores[]))-1 scores[return] scores[return-1] orig(scores[post(return)]) orig(scores[post(return)-1])
+    Variables: scores scores[] return orig(scores) orig(scores[]) size(scores[]) size(scores[])-1 orig(size(scores[])) orig(size(scores[]))-1
 daikon.Quant.pairwiseEqual(scores, \old(scores))
 \result <= 100
-daikon.Quant.eltsGTE(scores, daikon.Quant.size(scores)-1)
-\result > \old(daikon.Quant.size(scores))

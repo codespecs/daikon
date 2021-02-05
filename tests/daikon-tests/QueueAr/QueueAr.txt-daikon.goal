@@ -37,7 +37,6 @@ DataStructures.QueueAr.dequeue():::EXIT
 this.theArray == orig(this.theArray)
 this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.back == orig(this.back)
-return == orig(this.theArray[this.front])
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[this.currentSize] == this.theArray[orig(this.currentSize)-1]
 this.theArray[orig(this.front)+1..] == orig(this.theArray[this.front+1..])

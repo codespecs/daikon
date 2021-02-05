@@ -85,13 +85,12 @@ public class FixedSizeSet {
     return bits[n];
   }
 
-  /*@ requires this.bits.length == other.bits.length; */
   /*@ requires other != null; */
   /*@ requires other.bits != null; */
+  /*@ requires other.bits.length == 8; */
   /*@ modifies this.bits[*]; */
-  /*@ ensures this.bits.length == other.bits.length; */
-  /*@ ensures this.bits.length == \old(other.bits.length); */
   /*@ ensures other.bits != null; */
+  /*@ ensures other.bits.length == 8; */
   /**
    * @requires other != null
    * @modifies this
@@ -104,13 +103,12 @@ public class FixedSizeSet {
     }
   }
 
-  /*@ requires this.bits.length == other.bits.length; */
   /*@ requires other != null; */
   /*@ requires other.bits != null; */
+  /*@ requires other.bits.length == 8; */
   /*@ modifies this.bits[*]; */
-  /*@ ensures this.bits.length == other.bits.length; */
-  /*@ ensures this.bits.length == \old(other.bits.length); */
   /*@ ensures other.bits != null; */
+  /*@ ensures other.bits.length == 8; */
   /**
    * @requires other != null
    * @modifies this

@@ -101,4 +101,3 @@ MapQuick.WeightedNodePath.hashCode():::EXIT
       Unmodified variables: this this.node this.path this.cost
 modifies this.path.node, this.path.path, this.path.path.node, this.path.path.path, this.path.path.cost, this.path.cost
 this.path == null
-this.cost < \result

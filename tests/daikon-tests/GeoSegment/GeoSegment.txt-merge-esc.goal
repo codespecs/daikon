@@ -174,7 +174,6 @@ public class GeoSegment  {
   }
 
   /*@ requires this.p1.longitude != this.p2.longitude; */
-  /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
   /*@ ensures this.p1.longitude != this.p2.longitude; */
   /** @return this.length */
   public double length()
@@ -184,7 +183,6 @@ public class GeoSegment  {
 
   /*@ requires this.p1.latitude != this.p2.latitude; */
   /*@ requires this.p1.longitude != this.p2.longitude; */
-  /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
   /*@ ensures this.p1.latitude != this.p2.latitude; */
   /*@ ensures this.p1.longitude != this.p2.longitude; */
   /**
@@ -222,10 +220,6 @@ public class GeoSegment  {
 
   /*@ also_ensures \result != 0; */
   /*@ also_ensures \result is a pointer; */
-  /*@ also_ensures this.p1.latitude != \result; */
-  /*@ also_ensures this.p1.longitude != \result; */
-  /*@ also_ensures this.p2.latitude != \result; */
-  /*@ also_ensures this.p2.longitude != \result; */
   // specified by superclass (Object)
   public int hashCode()
   {
@@ -316,9 +310,6 @@ public class GeoPoint {
   }
 
   /*@ also_ensures \result is a pointer; */
-  /*@ also_ensures this.latitude < \result; */
-  /*@ also_ensures this.longitude < \result; */
-  /*@ also_ensures 7 * this.latitude + 41 * this.longitude - \result + 4.294967296E9 == 0; */
   // specified by superclass (Object)
   public int hashCode()
   {
@@ -333,7 +324,6 @@ public class GeoPoint {
   /*@ requires gp.latitude > gp.longitude; */
   /*@ ensures gp.latitude is a pointer; */
   /*@ ensures gp.longitude is a pointer; */
-  /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
   /*@ ensures this.latitude > gp.longitude; */
   /*@ ensures this.longitude < gp.latitude; */
   /*@ ensures gp.latitude > gp.longitude; */
@@ -361,7 +351,6 @@ public class GeoPoint {
   /*@ requires gp.latitude > gp.longitude; */
   /*@ ensures gp.latitude is a pointer; */
   /*@ ensures gp.longitude is a pointer; */
-  /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
   /*@ ensures this.latitude != gp.latitude; */
   /*@ ensures this.latitude > gp.longitude; */
   /*@ ensures this.longitude < gp.latitude; */

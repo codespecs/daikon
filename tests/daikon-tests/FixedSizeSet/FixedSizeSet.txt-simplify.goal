@@ -44,24 +44,18 @@ six170.FixedSizeSet.contains(int):::EXIT
 (EQ (- (arrayLength (select |bits| |this|)) 1) (|java-bitwise-or| |__orig__n| (- (arrayLength (select |bits| |this|)) 1)))
 ===========================================================================
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
-(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |other|)))
 (NEQ (hash |other|) null)
 (NEQ (hash (select |bits| |other|)) null)
-(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
-(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |other|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |this|)) 1))(EQ (select (select elems (select |bits| |other|)) |i|) (select (select elems (select |bits| |this|)) |j|))))))
+(EQ (arrayLength (select |bits| |other|)) 8)
 ===========================================================================
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
 (EQ (hash (select |bits| |this|)) (hash (select |bits| |__orig__this|)))
 (EQ (hash (select |bits| |other|)) (hash (select |bits| |__orig__other|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |other|)) |i|) (select (select elems (select |bits| |__orig__other|)) |j|))))
-(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |other|)))
 (EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__this|)))
-(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__other|)))
 (NEQ (hash (select |bits| |other|)) null)
-(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
+(EQ (arrayLength (select |bits| |other|)) 8)
 SubSet.format_simplify_explicit(this.bits[] is a subset of orig(this.bits[])): sub_name=[(select |bits| |this|), 0, (- (arrayLength (select |bits| |this|)) 1)], super_name=null, for this.bits[] is a subset of orig(this.bits[])
-SubSet.format_simplify_explicit(other.bits[] is a subset of orig(this.bits[])): sub_name=[(select |bits| |other|), 0, (- (arrayLength (select |bits| |other|)) 1)], super_name=null, for other.bits[] is a subset of orig(this.bits[])
-SuperSet.format_simplify_explicit(other.bits[] is a superset of orig(this.bits[])): sub_name=null, super_name=[(select |bits| |other|), 0, (- (arrayLength (select |bits| |other|)) 1)], for other.bits[] is a superset of orig(this.bits[])
 ===========================================================================
 six170.FixedSizeSet.remove(int):::ENTER
 (EQ (hash |this|) (hashcode 1001))
@@ -85,21 +79,15 @@ six170.FixedSizeSet.remove(int):::EXIT
 (EQ (- (arrayLength (select |bits| |this|)) 1) (|java-bitwise-or| |__orig__n| (- (arrayLength (select |bits| |this|)) 1)))
 ===========================================================================
 six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
-(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |other|)))
 (NEQ (hash |other|) null)
 (NEQ (hash (select |bits| |other|)) null)
-(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
-(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |other|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |this|)) 1))(EQ (select (select elems (select |bits| |other|)) |i|) (select (select elems (select |bits| |this|)) |j|))))))
+(EQ (arrayLength (select |bits| |other|)) 8)
 ===========================================================================
 six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
 (EQ (hash (select |bits| |this|)) (hash (select |bits| |__orig__this|)))
 (EQ (hash (select |bits| |other|)) (hash (select |bits| |__orig__other|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |other|)) |i|) (select (select elems (select |bits| |__orig__other|)) |j|))))
-(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |other|)))
 (EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__this|)))
-(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__other|)))
 (NEQ (hash (select |bits| |other|)) null)
-(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
+(EQ (arrayLength (select |bits| |other|)) 8)
 SubSet.format_simplify_explicit(this.bits[] is a subset of orig(this.bits[])): sub_name=[(select |bits| |this|), 0, (- (arrayLength (select |bits| |this|)) 1)], super_name=null, for this.bits[] is a subset of orig(this.bits[])
-SubSet.format_simplify_explicit(other.bits[] is a subset of orig(this.bits[])): sub_name=[(select |bits| |other|), 0, (- (arrayLength (select |bits| |other|)) 1)], super_name=null, for other.bits[] is a subset of orig(this.bits[])
-SuperSet.format_simplify_explicit(other.bits[] is a superset of orig(this.bits[])): sub_name=null, super_name=[(select |bits| |other|), 0, (- (arrayLength (select |bits| |other|)) 1)], for other.bits[] is a superset of orig(this.bits[])

@@ -1,12 +1,6 @@
 ===========================================================================
 misc.Fib:::CLASS
 misc.Fib.a >= 0
-(misc.Fib.a >> misc.Fib.STEPS == 0)
-misc.Fib.STEPS != misc.Fib.a
-(misc.Fib.b >> misc.Fib.STEPS == 0)
-misc.Fib.STEPS != misc.Fib.b
-(misc.Fib.c >> misc.Fib.STEPS == 0)
-misc.Fib.STEPS != misc.Fib.c
 (misc.Fib.b == 0) ==> (misc.Fib.a == 0)
 misc.Fib.a <= misc.Fib.b
 (misc.Fib.c == 0) ==> (misc.Fib.a == 0)
@@ -34,7 +28,7 @@ misc.Fib.a - misc.Fib.b + orig(misc.Fib.a) == 0
 misc.Fib.main(java.lang.String[]):::ENTER
 misc.Fib.a == misc.Fib.b
 misc.Fib.a == misc.Fib.c
-misc.Fib.a == size(args[])
+misc.Fib.a == 0
 args has only one value
 args.getClass().getName() == java.lang.String[].class
 args[] == []
