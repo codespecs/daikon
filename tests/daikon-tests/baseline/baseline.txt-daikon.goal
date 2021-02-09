@@ -52,10 +52,7 @@ args[].toString == []
 TestScores.classAve(int[]):::ENTER
 scores != null
 size(scores[]) >= 5
-scores[] elements >= size(scores[])-1
 ===========================================================================
 TestScores.classAve(int[]):::EXIT
 scores[] == orig(scores[])
 return <= 100
-scores[] elements >= size(scores[])-1
-return > orig(size(scores[]))

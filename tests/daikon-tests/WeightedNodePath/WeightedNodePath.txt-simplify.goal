@@ -122,4 +122,3 @@ MapQuick.WeightedNodePath.hashCode():::EXIT
 (EQ (hash (select |path| |this|)) (hash (select |path| |__orig__this|)))
 (EQ (select |cost| |this|) (select |cost| |__orig__this|))
 (EQ (hash (select |path| |this|)) null)
-(< (select |cost| |this|) |return|)

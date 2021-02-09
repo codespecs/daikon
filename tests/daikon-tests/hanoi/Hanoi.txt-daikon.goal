@@ -47,7 +47,6 @@ toPeg one of { 0, 1, 2 }
 towerHeight >= 1
 this.diskLocation[0..towerHeight-1] elements are equal
 this.height >= towerHeight
-this.diskLocation[towerHeight..] elements <= this.height
 (fromPeg & toPeg) == 0
 fromPeg != toPeg
 this.diskLocation[0..towerHeight-1] elements == fromPeg
@@ -64,14 +63,11 @@ this.diskLocation[orig(towerHeight)..] == orig(this.diskLocation[towerHeight..])
 this.noOutput == true
 this.diskLocation[0..orig(towerHeight)-1] elements are equal
 this.height >= orig(towerHeight)
-this.diskLocation[orig(towerHeight)..] elements <= this.height
 this.diskLocation[0..orig(towerHeight)-1] elements == orig(toPeg)
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::ENTER
 pegA one of { 0, 1, 2 }
 pegB one of { 0, 1, 2 }
-(pegA & pegB) == 0
-pegA != pegB
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT65
 return == 2
@@ -105,11 +101,6 @@ orig(pegB) == 1
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT
 return one of { 0, 1, 2 }
-(return & orig(pegA)) == 0
-return != orig(pegA)
-(return & orig(pegB)) == 0
-return != orig(pegB)
-return + orig(pegA) + orig(pegB) - 3 == 0
 ===========================================================================
 six170.Hanoi.showTowers():::ENTER
 this.noOutput == true

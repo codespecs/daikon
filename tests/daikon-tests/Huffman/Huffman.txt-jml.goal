@@ -1,16 +1,16 @@
 ===========================================================================
 six170.HuffmanCodec:::OBJECT
     Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right
-this.decodingTree.symbol == this.decodingTree.left.symbol
-this.decodingTree.symbol == this.decodingTree.right.symbol
 this.encodingMap != null
 this.encodingMap.getClass().getName() == java.util.LinkedHashMap.class.getName()
 this.decodingTree != null
 this.decodingTree.symbol == null
 this.decodingTree.left != null
+this.decodingTree.left.symbol == null
 this.decodingTree.left.left != null
 this.decodingTree.left.right != null
 this.decodingTree.right != null
+this.decodingTree.right.symbol == null
 this.decodingTree.right.left != null
 this.decodingTree.right.right != null
 ===========================================================================
@@ -21,13 +21,13 @@ huffmanSymbols.getClass().getName() == java.util.ArrayList.class.getName()
 (daikon.Quant.size(huffmanSymbols) >> daikon.Quant.size(huffmanSymbols)-1 == 0)
 ===========================================================================
 six170.HuffmanCodec.HuffmanCodec(java.util.List):::EXIT
-    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right huffmanSymbols huffmanSymbols[] huffmanSymbols[].getClass().getName() huffmanSymbols.getClass().getName() orig(huffmanSymbols) orig(huffmanSymbols[]) orig(huffmanSymbols[].getClass().getName()) orig(huffmanSymbols.getClass().getName()) size(huffmanSymbols[]) size(huffmanSymbols[])-1 orig(size(huffmanSymbols[])) orig(size(huffmanSymbols[]))-1 huffmanSymbols[this.decodingTree.symbol.frequency] huffmanSymbols[this.decodingTree.symbol.frequency-1] huffmanSymbols[this.decodingTree.symbol.frequency..] huffmanSymbols[this.decodingTree.symbol.frequency+1..] huffmanSymbols[0..this.decodingTree.symbol.frequency] huffmanSymbols[0..this.decodingTree.symbol.frequency-1] orig(huffmanSymbols[post(this.decodingTree.symbol.frequency)]) orig(huffmanSymbols[post(this.decodingTree.symbol.frequency)-1]) orig(huffmanSymbols[post(this.decodingTree.symbol.frequency)..]) orig(huffmanSymbols[post(this.decodingTree.symbol.frequency)+1..]) orig(huffmanSymbols[0..post(this.decodingTree.symbol.frequency)]) orig(huffmanSymbols[0..post(this.decodingTree.symbol.frequency)-1])
+    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right huffmanSymbols huffmanSymbols[] huffmanSymbols[].getClass().getName() huffmanSymbols.getClass().getName() orig(huffmanSymbols) orig(huffmanSymbols[]) orig(huffmanSymbols[].getClass().getName()) orig(huffmanSymbols.getClass().getName()) size(huffmanSymbols[]) size(huffmanSymbols[])-1 orig(size(huffmanSymbols[])) orig(size(huffmanSymbols[]))-1
 daikon.Quant.pairwiseEqual(huffmanSymbols, \old(huffmanSymbols))
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(huffmanSymbols), "six170.HuffmanSymbol")
 (\old(daikon.Quant.size(huffmanSymbols)) >> daikon.Quant.size(huffmanSymbols)-1 == 0)
 ===========================================================================
 six170.HuffmanCodec.addToMap(java.util.Map, six170.HuffmanTree, java.util.List):::ENTER
-    Variables: encodingMap encodingMap.getClass().getName() subTree subTree.symbol subTree.symbol.symbol subTree.symbol.symbol.getClass().getName() subTree.symbol.frequency subTree.left subTree.left.symbol subTree.left.left subTree.left.right subTree.right subTree.right.symbol subTree.right.left subTree.right.right bitStack bitStack[] bitStack[].getClass().getName() bitStack.getClass().getName() size(bitStack[]) size(bitStack[])-1 bitStack[subTree.symbol.frequency] bitStack[subTree.symbol.frequency-1] bitStack[subTree.symbol.frequency..] bitStack[subTree.symbol.frequency+1..] bitStack[0..subTree.symbol.frequency] bitStack[0..subTree.symbol.frequency-1]
+    Variables: encodingMap encodingMap.getClass().getName() subTree subTree.symbol subTree.symbol.symbol subTree.symbol.symbol.getClass().getName() subTree.symbol.frequency subTree.left subTree.left.symbol subTree.left.left subTree.left.right subTree.right subTree.right.symbol subTree.right.left subTree.right.right bitStack bitStack[] bitStack[].getClass().getName() bitStack.getClass().getName() size(bitStack[]) size(bitStack[])-1
 encodingMap != null
 encodingMap.getClass().getName() == java.util.LinkedHashMap.class.getName()
 subTree != null
@@ -42,12 +42,9 @@ bitStack.getClass().getName() == java.util.ArrayList.class.getName()
 ((subTree.symbol != null) && (subTree.symbol.symbol != null))  ==>  (encodingMap.getClass().getName() != subTree.symbol.symbol.getClass().getName())
 encodingMap.getClass().getName() != bitStack.getClass().getName()
 ((subTree.symbol != null) && (subTree.symbol.symbol != null))  ==>  (subTree.symbol.symbol.getClass().getName() != bitStack.getClass().getName())
-(subTree.symbol != null)  ==>  ((!(daikon.Quant.size(bitStack) == 0)) || (subTree.symbol.frequency == 0))
-(subTree.symbol != null)  ==>  ((!(daikon.Quant.size(bitStack)-1 == 0)) || (subTree.symbol.frequency == 0))
 ===========================================================================
 six170.HuffmanCodec.addToMap(java.util.Map, six170.HuffmanTree, java.util.List):::EXIT
-    Variables: encodingMap encodingMap.getClass().getName() subTree subTree.symbol subTree.symbol.symbol subTree.symbol.symbol.getClass().getName() subTree.symbol.frequency subTree.left subTree.left.symbol subTree.left.left subTree.left.right subTree.right subTree.right.symbol subTree.right.left subTree.right.right bitStack bitStack[] bitStack[].getClass().getName() bitStack.getClass().getName() orig(encodingMap) orig(encodingMap.getClass().getName()) orig(subTree) orig(subTree.symbol) orig(subTree.symbol.symbol) orig(subTree.symbol.symbol.getClass().getName()) orig(subTree.symbol.frequency) orig(subTree.left) orig(subTree.left.symbol) orig(subTree.left.left) orig(subTree.left.right) orig(subTree.right) orig(subTree.right.symbol) orig(subTree.right.left) orig(subTree.right.right) orig(bitStack) orig(bitStack[]) orig(bitStack[].getClass().getName()) orig(bitStack.getClass().getName()) size(bitStack[]) size(bitStack[])-1 orig(size(bitStack[])) orig(size(bitStack[]))-1 bitStack[subTree.symbol.frequency] bitStack[subTree.symbol.frequency-1] bitStack[subTree.symbol.frequency..] bitStack[subTree.symbol.frequency+1..] bitStack[0..subTree.symbol.frequency] bitStack[0..subTree.symbol.frequency-1] orig(bitStack[post(subTree.symbol.frequency)]) orig(bitStack[post(subTree.symbol.frequency)-1]) orig(bitStack[post(subTree.symbol.frequency)..]) orig(bitStack[post(subTree.symbol.frequency)+1..]) orig(bitStack[0..post(subTree.symbol.frequency)]) orig(bitStack[0..post(subTree.symbol.frequency)-1]) bitStack[orig(subTree.symbol.frequency)] bitStack[orig(subTree.symbol.frequency)-1] bitStack[orig(subTree.symbol.frequency)..] bitStack[orig(subTree.symbol.frequency)+1..] bitStack[0..orig(subTree.symbol.frequency)] bitStack[0..orig(subTree.symbol.frequency)-1] orig(bitStack[subTree.symbol.frequency]) orig(bitStack[subTree.symbol.frequency-1]) orig(bitStack[subTree.symbol.frequency..]) orig(bitStack[subTree.symbol.frequency+1..]) orig(bitStack[0..subTree.symbol.frequency]) orig(bitStack[0..subTree.symbol.frequency-1])
-assignable bitStack[subTree.symbol.frequency], bitStack[subTree.symbol.frequency-1], bitStack[subTree.symbol.frequency..], bitStack[subTree.symbol.frequency+1..], bitStack[0..subTree.symbol.frequency], bitStack[0..subTree.symbol.frequency-1]
+    Variables: encodingMap encodingMap.getClass().getName() subTree subTree.symbol subTree.symbol.symbol subTree.symbol.symbol.getClass().getName() subTree.symbol.frequency subTree.left subTree.left.symbol subTree.left.left subTree.left.right subTree.right subTree.right.symbol subTree.right.left subTree.right.right bitStack bitStack[] bitStack[].getClass().getName() bitStack.getClass().getName() orig(encodingMap) orig(encodingMap.getClass().getName()) orig(subTree) orig(subTree.symbol) orig(subTree.symbol.symbol) orig(subTree.symbol.symbol.getClass().getName()) orig(subTree.symbol.frequency) orig(subTree.left) orig(subTree.left.symbol) orig(subTree.left.left) orig(subTree.left.right) orig(subTree.right) orig(subTree.right.symbol) orig(subTree.right.left) orig(subTree.right.right) orig(bitStack) orig(bitStack[]) orig(bitStack[].getClass().getName()) orig(bitStack.getClass().getName()) size(bitStack[]) size(bitStack[])-1 orig(size(bitStack[])) orig(size(bitStack[]))-1
 subTree.symbol == \old(subTree.symbol)
 ((subTree.symbol != null) && (\old(subTree.symbol) != null))  ==>  (subTree.symbol.symbol == \old(subTree.symbol.symbol))
 ((subTree.symbol != null) && (subTree.symbol.symbol != null) && (\old(subTree.symbol) != null) && (\old(subTree.symbol.symbol) != null))  ==>  (subTree.symbol.symbol.getClass().getName() == \old(subTree.symbol.symbol.getClass().getName()))
@@ -69,8 +66,6 @@ daikon.Quant.eltsNotEqual(bitStack, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(bitStack), "java.lang.Boolean")
 ((subTree.symbol != null) && (subTree.symbol.symbol != null))  ==>  (subTree.symbol.symbol.getClass().getName() != \old(encodingMap.getClass().getName()))
 ((subTree.symbol != null) && (subTree.symbol.symbol != null))  ==>  (subTree.symbol.symbol.getClass().getName() != \old(bitStack.getClass().getName()))
-(subTree.symbol != null)  ==>  ((!(daikon.Quant.size(bitStack)-1 == 0)) || (subTree.symbol.frequency == 0))
-(subTree.symbol != null)  ==>  ((!(\old(daikon.Quant.size(bitStack)) == 0)) || (subTree.symbol.frequency == 0))
 ===========================================================================
 six170.HuffmanCodec.buildDecodingTree(java.util.List):::ENTER
     Variables: huffmanSymbols huffmanSymbols[] huffmanSymbols[].getClass().getName() huffmanSymbols.getClass().getName() size(huffmanSymbols[]) size(huffmanSymbols[])-1
@@ -79,56 +74,56 @@ huffmanSymbols.getClass().getName() == java.util.ArrayList.class.getName()
 (daikon.Quant.size(huffmanSymbols) >> daikon.Quant.size(huffmanSymbols)-1 == 0)
 ===========================================================================
 six170.HuffmanCodec.buildDecodingTree(java.util.List):::EXIT
-    Variables: huffmanSymbols huffmanSymbols[] huffmanSymbols[].getClass().getName() huffmanSymbols.getClass().getName() return return.symbol return.symbol.symbol return.symbol.symbol.getClass().getName() return.symbol.frequency return.left return.left.symbol return.left.left return.left.right return.right return.right.symbol return.right.left return.right.right orig(huffmanSymbols) orig(huffmanSymbols[]) orig(huffmanSymbols[].getClass().getName()) orig(huffmanSymbols.getClass().getName()) size(huffmanSymbols[]) size(huffmanSymbols[])-1 orig(size(huffmanSymbols[])) orig(size(huffmanSymbols[]))-1 huffmanSymbols[return.symbol.frequency] huffmanSymbols[return.symbol.frequency-1] huffmanSymbols[return.symbol.frequency..] huffmanSymbols[return.symbol.frequency+1..] huffmanSymbols[0..return.symbol.frequency] huffmanSymbols[0..return.symbol.frequency-1] orig(huffmanSymbols[post(return.symbol.frequency)]) orig(huffmanSymbols[post(return.symbol.frequency)-1]) orig(huffmanSymbols[post(return.symbol.frequency)..]) orig(huffmanSymbols[post(return.symbol.frequency)+1..]) orig(huffmanSymbols[0..post(return.symbol.frequency)]) orig(huffmanSymbols[0..post(return.symbol.frequency)-1])
+    Variables: huffmanSymbols huffmanSymbols[] huffmanSymbols[].getClass().getName() huffmanSymbols.getClass().getName() return return.symbol return.symbol.symbol return.symbol.symbol.getClass().getName() return.symbol.frequency return.left return.left.symbol return.left.left return.left.right return.right return.right.symbol return.right.left return.right.right orig(huffmanSymbols) orig(huffmanSymbols[]) orig(huffmanSymbols[].getClass().getName()) orig(huffmanSymbols.getClass().getName()) size(huffmanSymbols[]) size(huffmanSymbols[])-1 orig(size(huffmanSymbols[])) orig(size(huffmanSymbols[]))-1
 daikon.Quant.pairwiseEqual(huffmanSymbols, \old(huffmanSymbols))
-\result.symbol == \result.left.symbol
-\result.symbol == \result.right.symbol
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(huffmanSymbols), "six170.HuffmanSymbol")
 \result.symbol == null
+\result.left.symbol == null
+\result.right.symbol == null
 (\old(daikon.Quant.size(huffmanSymbols)) >> daikon.Quant.size(huffmanSymbols)-1 == 0)
 ===========================================================================
 six170.HuffmanCodec.buildEncodingMap(six170.HuffmanTree):::ENTER
     Variables: decodingTree decodingTree.symbol decodingTree.symbol.symbol decodingTree.symbol.symbol.getClass().getName() decodingTree.symbol.frequency decodingTree.left decodingTree.left.symbol decodingTree.left.left decodingTree.left.right decodingTree.right decodingTree.right.symbol decodingTree.right.left decodingTree.right.right
-decodingTree.symbol == decodingTree.left.symbol
-decodingTree.symbol == decodingTree.right.symbol
 decodingTree.symbol == null
+decodingTree.left.symbol == null
+decodingTree.right.symbol == null
 ===========================================================================
 six170.HuffmanCodec.buildEncodingMap(six170.HuffmanTree):::EXIT
     Variables: decodingTree decodingTree.symbol decodingTree.symbol.symbol decodingTree.symbol.symbol.getClass().getName() decodingTree.symbol.frequency decodingTree.left decodingTree.left.symbol decodingTree.left.left decodingTree.left.right decodingTree.right decodingTree.right.symbol decodingTree.right.left decodingTree.right.right return return.getClass().getName() orig(decodingTree) orig(decodingTree.symbol) orig(decodingTree.symbol.symbol) orig(decodingTree.symbol.symbol.getClass().getName()) orig(decodingTree.symbol.frequency) orig(decodingTree.left) orig(decodingTree.left.symbol) orig(decodingTree.left.left) orig(decodingTree.left.right) orig(decodingTree.right) orig(decodingTree.right.symbol) orig(decodingTree.right.left) orig(decodingTree.right.right)
 assignable decodingTree.symbol.symbol, decodingTree.symbol.frequency
-decodingTree.symbol == decodingTree.left.symbol
-decodingTree.symbol == decodingTree.right.symbol
 decodingTree.symbol == \old(decodingTree.symbol)
-decodingTree.symbol == \old(decodingTree.left.symbol)
-decodingTree.symbol == \old(decodingTree.right.symbol)
 decodingTree.left == \old(decodingTree.left)
+decodingTree.left.symbol == \old(decodingTree.left.symbol)
 decodingTree.left.left == \old(decodingTree.left.left)
 decodingTree.left.right == \old(decodingTree.left.right)
 decodingTree.right == \old(decodingTree.right)
+decodingTree.right.symbol == \old(decodingTree.right.symbol)
 decodingTree.right.left == \old(decodingTree.right.left)
 decodingTree.right.right == \old(decodingTree.right.right)
 decodingTree.symbol == null
+decodingTree.left.symbol == null
+decodingTree.right.symbol == null
 \result.getClass().getName() == java.util.LinkedHashMap.class.getName()
 ===========================================================================
 six170.HuffmanCodec.decode(java.util.List):::ENTER
-    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputBitStream inputBitStream[] inputBitStream[].getClass().getName() inputBitStream.getClass().getName() size(inputBitStream[]) size(inputBitStream[])-1 inputBitStream[this.decodingTree.symbol.frequency] inputBitStream[this.decodingTree.symbol.frequency-1] inputBitStream[this.decodingTree.symbol.frequency..] inputBitStream[this.decodingTree.symbol.frequency+1..] inputBitStream[0..this.decodingTree.symbol.frequency] inputBitStream[0..this.decodingTree.symbol.frequency-1]
+    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputBitStream inputBitStream[] inputBitStream[].getClass().getName() inputBitStream.getClass().getName() size(inputBitStream[]) size(inputBitStream[])-1
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(inputBitStream), "java.lang.Boolean")
 inputBitStream.getClass().getName() == java.util.ArrayList.class.getName()
 daikon.Quant.size(inputBitStream) == (daikon.Quant.size(inputBitStream)-1 | daikon.Quant.size(inputBitStream))
 ===========================================================================
 six170.HuffmanCodec.decode(java.util.List):::EXIT
-    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputBitStream inputBitStream[] inputBitStream[].getClass().getName() inputBitStream.getClass().getName() return return[] return[].getClass().getName() return.getClass().getName() orig(this) orig(this.encodingMap) orig(this.encodingMap.getClass().getName()) orig(this.decodingTree) orig(this.decodingTree.symbol) orig(this.decodingTree.symbol.symbol) orig(this.decodingTree.symbol.symbol.getClass().getName()) orig(this.decodingTree.symbol.frequency) orig(this.decodingTree.left) orig(this.decodingTree.left.symbol) orig(this.decodingTree.left.left) orig(this.decodingTree.left.right) orig(this.decodingTree.right) orig(this.decodingTree.right.symbol) orig(this.decodingTree.right.left) orig(this.decodingTree.right.right) orig(inputBitStream) orig(inputBitStream[]) orig(inputBitStream[].getClass().getName()) orig(inputBitStream.getClass().getName()) size(inputBitStream[]) size(inputBitStream[])-1 size(return[]) size(return[])-1 orig(size(inputBitStream[])) orig(size(inputBitStream[]))-1 inputBitStream[this.decodingTree.symbol.frequency] inputBitStream[this.decodingTree.symbol.frequency-1] inputBitStream[this.decodingTree.symbol.frequency..] inputBitStream[this.decodingTree.symbol.frequency+1..] inputBitStream[0..this.decodingTree.symbol.frequency] inputBitStream[0..this.decodingTree.symbol.frequency-1] return[this.decodingTree.symbol.frequency] return[this.decodingTree.symbol.frequency-1] return[this.decodingTree.symbol.frequency..] return[this.decodingTree.symbol.frequency+1..] return[0..this.decodingTree.symbol.frequency] return[0..this.decodingTree.symbol.frequency-1] orig(inputBitStream[post(this.decodingTree.symbol.frequency)]) orig(inputBitStream[post(this.decodingTree.symbol.frequency)-1]) orig(inputBitStream[post(this.decodingTree.symbol.frequency)..]) orig(inputBitStream[post(this.decodingTree.symbol.frequency)+1..]) orig(inputBitStream[0..post(this.decodingTree.symbol.frequency)]) orig(inputBitStream[0..post(this.decodingTree.symbol.frequency)-1]) inputBitStream[orig(this.decodingTree.symbol.frequency)] inputBitStream[orig(this.decodingTree.symbol.frequency)-1] inputBitStream[orig(this.decodingTree.symbol.frequency)..] inputBitStream[orig(this.decodingTree.symbol.frequency)+1..] inputBitStream[0..orig(this.decodingTree.symbol.frequency)] inputBitStream[0..orig(this.decodingTree.symbol.frequency)-1] return[orig(this.decodingTree.symbol.frequency)] return[orig(this.decodingTree.symbol.frequency)-1] return[orig(this.decodingTree.symbol.frequency)..] return[orig(this.decodingTree.symbol.frequency)+1..] return[0..orig(this.decodingTree.symbol.frequency)] return[0..orig(this.decodingTree.symbol.frequency)-1] orig(inputBitStream[this.decodingTree.symbol.frequency]) orig(inputBitStream[this.decodingTree.symbol.frequency-1]) orig(inputBitStream[this.decodingTree.symbol.frequency..]) orig(inputBitStream[this.decodingTree.symbol.frequency+1..]) orig(inputBitStream[0..this.decodingTree.symbol.frequency]) orig(inputBitStream[0..this.decodingTree.symbol.frequency-1])
-assignable this.decodingTree.symbol.symbol, this.decodingTree.symbol.frequency, inputBitStream[this.decodingTree.symbol.frequency], inputBitStream[this.decodingTree.symbol.frequency-1], inputBitStream[this.decodingTree.symbol.frequency..], inputBitStream[this.decodingTree.symbol.frequency+1..], inputBitStream[0..this.decodingTree.symbol.frequency], inputBitStream[0..this.decodingTree.symbol.frequency-1]
+    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputBitStream inputBitStream[] inputBitStream[].getClass().getName() inputBitStream.getClass().getName() return return[] return[].getClass().getName() return.getClass().getName() orig(this) orig(this.encodingMap) orig(this.encodingMap.getClass().getName()) orig(this.decodingTree) orig(this.decodingTree.symbol) orig(this.decodingTree.symbol.symbol) orig(this.decodingTree.symbol.symbol.getClass().getName()) orig(this.decodingTree.symbol.frequency) orig(this.decodingTree.left) orig(this.decodingTree.left.symbol) orig(this.decodingTree.left.left) orig(this.decodingTree.left.right) orig(this.decodingTree.right) orig(this.decodingTree.right.symbol) orig(this.decodingTree.right.left) orig(this.decodingTree.right.right) orig(inputBitStream) orig(inputBitStream[]) orig(inputBitStream[].getClass().getName()) orig(inputBitStream.getClass().getName()) size(inputBitStream[]) size(inputBitStream[])-1 size(return[]) size(return[])-1 orig(size(inputBitStream[])) orig(size(inputBitStream[]))-1
+assignable this.decodingTree.symbol.symbol, this.decodingTree.symbol.frequency
 this.encodingMap == \old(this.encodingMap)
 this.encodingMap.getClass().getName() == \old(this.encodingMap.getClass().getName())
 this.decodingTree == \old(this.decodingTree)
 this.decodingTree.symbol == \old(this.decodingTree.symbol)
-this.decodingTree.symbol == \old(this.decodingTree.left.symbol)
-this.decodingTree.symbol == \old(this.decodingTree.right.symbol)
 this.decodingTree.left == \old(this.decodingTree.left)
+this.decodingTree.left.symbol == \old(this.decodingTree.left.symbol)
 this.decodingTree.left.left == \old(this.decodingTree.left.left)
 this.decodingTree.left.right == \old(this.decodingTree.left.right)
 this.decodingTree.right == \old(this.decodingTree.right)
+this.decodingTree.right.symbol == \old(this.decodingTree.right.symbol)
 this.decodingTree.right.left == \old(this.decodingTree.right.left)
 this.decodingTree.right.right == \old(this.decodingTree.right.right)
 daikon.Quant.pairwiseEqual(inputBitStream, \old(inputBitStream))
@@ -139,23 +134,23 @@ daikon.Quant.eltsEqual(daikon.Quant.typeArray(\result), "java.lang.Character")
 \old(daikon.Quant.size(inputBitStream)) == (daikon.Quant.size(inputBitStream)-1 | \old(daikon.Quant.size(inputBitStream)))
 ===========================================================================
 six170.HuffmanCodec.encode(java.util.List):::ENTER
-    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputStream inputStream[] inputStream[].getClass().getName() inputStream.getClass().getName() size(inputStream[]) size(inputStream[])-1 inputStream[this.decodingTree.symbol.frequency] inputStream[this.decodingTree.symbol.frequency-1] inputStream[this.decodingTree.symbol.frequency..] inputStream[this.decodingTree.symbol.frequency+1..] inputStream[0..this.decodingTree.symbol.frequency] inputStream[0..this.decodingTree.symbol.frequency-1]
+    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputStream inputStream[] inputStream[].getClass().getName() inputStream.getClass().getName() size(inputStream[]) size(inputStream[])-1
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(inputStream), "java.lang.Character")
 inputStream.getClass().getName() == java.util.ArrayList.class.getName()
 ===========================================================================
 six170.HuffmanCodec.encode(java.util.List):::EXIT
-    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputStream inputStream[] inputStream[].getClass().getName() inputStream.getClass().getName() return return[] return[].getClass().getName() return.getClass().getName() orig(this) orig(this.encodingMap) orig(this.encodingMap.getClass().getName()) orig(this.decodingTree) orig(this.decodingTree.symbol) orig(this.decodingTree.symbol.symbol) orig(this.decodingTree.symbol.symbol.getClass().getName()) orig(this.decodingTree.symbol.frequency) orig(this.decodingTree.left) orig(this.decodingTree.left.symbol) orig(this.decodingTree.left.left) orig(this.decodingTree.left.right) orig(this.decodingTree.right) orig(this.decodingTree.right.symbol) orig(this.decodingTree.right.left) orig(this.decodingTree.right.right) orig(inputStream) orig(inputStream[]) orig(inputStream[].getClass().getName()) orig(inputStream.getClass().getName()) size(inputStream[]) size(inputStream[])-1 size(return[]) size(return[])-1 orig(size(inputStream[])) orig(size(inputStream[]))-1 inputStream[this.decodingTree.symbol.frequency] inputStream[this.decodingTree.symbol.frequency-1] inputStream[this.decodingTree.symbol.frequency..] inputStream[this.decodingTree.symbol.frequency+1..] inputStream[0..this.decodingTree.symbol.frequency] inputStream[0..this.decodingTree.symbol.frequency-1] return[this.decodingTree.symbol.frequency] return[this.decodingTree.symbol.frequency-1] return[this.decodingTree.symbol.frequency..] return[this.decodingTree.symbol.frequency+1..] return[0..this.decodingTree.symbol.frequency] return[0..this.decodingTree.symbol.frequency-1] orig(inputStream[post(this.decodingTree.symbol.frequency)]) orig(inputStream[post(this.decodingTree.symbol.frequency)-1]) orig(inputStream[post(this.decodingTree.symbol.frequency)..]) orig(inputStream[post(this.decodingTree.symbol.frequency)+1..]) orig(inputStream[0..post(this.decodingTree.symbol.frequency)]) orig(inputStream[0..post(this.decodingTree.symbol.frequency)-1]) inputStream[orig(this.decodingTree.symbol.frequency)] inputStream[orig(this.decodingTree.symbol.frequency)-1] inputStream[orig(this.decodingTree.symbol.frequency)..] inputStream[orig(this.decodingTree.symbol.frequency)+1..] inputStream[0..orig(this.decodingTree.symbol.frequency)] inputStream[0..orig(this.decodingTree.symbol.frequency)-1] return[orig(this.decodingTree.symbol.frequency)] return[orig(this.decodingTree.symbol.frequency)-1] return[orig(this.decodingTree.symbol.frequency)..] return[orig(this.decodingTree.symbol.frequency)+1..] return[0..orig(this.decodingTree.symbol.frequency)] return[0..orig(this.decodingTree.symbol.frequency)-1] orig(inputStream[this.decodingTree.symbol.frequency]) orig(inputStream[this.decodingTree.symbol.frequency-1]) orig(inputStream[this.decodingTree.symbol.frequency..]) orig(inputStream[this.decodingTree.symbol.frequency+1..]) orig(inputStream[0..this.decodingTree.symbol.frequency]) orig(inputStream[0..this.decodingTree.symbol.frequency-1])
-assignable this.decodingTree.symbol.symbol, this.decodingTree.symbol.frequency, inputStream[this.decodingTree.symbol.frequency], inputStream[this.decodingTree.symbol.frequency-1], inputStream[this.decodingTree.symbol.frequency..], inputStream[this.decodingTree.symbol.frequency+1..], inputStream[0..this.decodingTree.symbol.frequency], inputStream[0..this.decodingTree.symbol.frequency-1]
+    Variables: this this.encodingMap this.encodingMap.getClass().getName() this.decodingTree this.decodingTree.symbol this.decodingTree.symbol.symbol this.decodingTree.symbol.symbol.getClass().getName() this.decodingTree.symbol.frequency this.decodingTree.left this.decodingTree.left.symbol this.decodingTree.left.left this.decodingTree.left.right this.decodingTree.right this.decodingTree.right.symbol this.decodingTree.right.left this.decodingTree.right.right inputStream inputStream[] inputStream[].getClass().getName() inputStream.getClass().getName() return return[] return[].getClass().getName() return.getClass().getName() orig(this) orig(this.encodingMap) orig(this.encodingMap.getClass().getName()) orig(this.decodingTree) orig(this.decodingTree.symbol) orig(this.decodingTree.symbol.symbol) orig(this.decodingTree.symbol.symbol.getClass().getName()) orig(this.decodingTree.symbol.frequency) orig(this.decodingTree.left) orig(this.decodingTree.left.symbol) orig(this.decodingTree.left.left) orig(this.decodingTree.left.right) orig(this.decodingTree.right) orig(this.decodingTree.right.symbol) orig(this.decodingTree.right.left) orig(this.decodingTree.right.right) orig(inputStream) orig(inputStream[]) orig(inputStream[].getClass().getName()) orig(inputStream.getClass().getName()) size(inputStream[]) size(inputStream[])-1 size(return[]) size(return[])-1 orig(size(inputStream[])) orig(size(inputStream[]))-1
+assignable this.decodingTree.symbol.symbol, this.decodingTree.symbol.frequency
 this.encodingMap == \old(this.encodingMap)
 this.encodingMap.getClass().getName() == \old(this.encodingMap.getClass().getName())
 this.decodingTree == \old(this.decodingTree)
 this.decodingTree.symbol == \old(this.decodingTree.symbol)
-this.decodingTree.symbol == \old(this.decodingTree.left.symbol)
-this.decodingTree.symbol == \old(this.decodingTree.right.symbol)
 this.decodingTree.left == \old(this.decodingTree.left)
+this.decodingTree.left.symbol == \old(this.decodingTree.left.symbol)
 this.decodingTree.left.left == \old(this.decodingTree.left.left)
 this.decodingTree.left.right == \old(this.decodingTree.left.right)
 this.decodingTree.right == \old(this.decodingTree.right)
+this.decodingTree.right.symbol == \old(this.decodingTree.right.symbol)
 this.decodingTree.right.left == \old(this.decodingTree.right.left)
 this.decodingTree.right.right == \old(this.decodingTree.right.right)
 daikon.Quant.pairwiseEqual(inputStream, \old(inputStream))
@@ -175,7 +170,7 @@ nodeList.getClass().getName() == java.util.ArrayList.class.getName()
 daikon.Quant.size(nodeList) >= 1
 ===========================================================================
 six170.HuffmanCodec.extractSmallest(java.util.List):::EXIT
-    Variables: nodeList nodeList[] nodeList[].getClass().getName() nodeList.getClass().getName() return return.symbol return.symbol.symbol return.symbol.symbol.getClass().getName() return.symbol.frequency return.left return.left.symbol return.left.left return.left.right return.right return.right.symbol return.right.left return.right.right orig(nodeList) orig(nodeList[]) orig(nodeList[].getClass().getName()) orig(nodeList.getClass().getName()) size(nodeList[]) size(nodeList[])-1 orig(size(nodeList[])) orig(size(nodeList[]))-1 nodeList[return.symbol.frequency] nodeList[return.symbol.frequency-1] nodeList[return.symbol.frequency..] nodeList[return.symbol.frequency+1..] nodeList[0..return.symbol.frequency] nodeList[0..return.symbol.frequency-1] orig(nodeList[post(return.symbol.frequency)]) orig(nodeList[post(return.symbol.frequency)-1]) orig(nodeList[post(return.symbol.frequency)..]) orig(nodeList[post(return.symbol.frequency)+1..]) orig(nodeList[0..post(return.symbol.frequency)]) orig(nodeList[0..post(return.symbol.frequency)-1])
+    Variables: nodeList nodeList[] nodeList[].getClass().getName() nodeList.getClass().getName() return return.symbol return.symbol.symbol return.symbol.symbol.getClass().getName() return.symbol.frequency return.left return.left.symbol return.left.left return.left.right return.right return.right.symbol return.right.left return.right.right orig(nodeList) orig(nodeList[]) orig(nodeList[].getClass().getName()) orig(nodeList.getClass().getName()) size(nodeList[]) size(nodeList[])-1 orig(size(nodeList[])) orig(size(nodeList[]))-1
 assignable nodeList[*]
 daikon.Quant.noDups(nodeList)
 daikon.Quant.eltsNotEqual(nodeList, null)
@@ -185,10 +180,7 @@ daikon.Quant.eltsEqual(daikon.Quant.typeArray(nodeList), "six170.HuffmanTree")
 ((\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (\result.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
 (\result.symbol != null)  ==>  (\result.symbol.frequency >= 1)
 daikon.Quant.subsetOf(nodeList, \old(nodeList))
-daikon.Quant.memberOf(\result , \old(nodeList) )
 ((\result.symbol != null) && (\result.symbol.symbol != null))  ==>  (\result.symbol.symbol.getClass().getName() != \old(nodeList.getClass().getName()))
-(\result.symbol != null)  ==>  ((!(daikon.Quant.size(nodeList)-1 == 0)) || (\result.symbol.frequency == 0))
-(\result.symbol != null)  ==>  ((!(\old(daikon.Quant.size(nodeList))-1 == 0)) || (\result.symbol.frequency == 0))
 ===========================================================================
 six170.HuffmanSymbol:::OBJECT
     Variables: this this.symbol this.symbol.getClass().getName() this.frequency
@@ -587,7 +579,6 @@ six170.HuffmanTree.symbol():::ENTER
 six170.HuffmanTree.symbol():::EXIT63
     Variables: this this.symbol this.symbol.symbol this.symbol.symbol.getClass().getName() this.symbol.frequency this.left this.left.symbol this.left.symbol.symbol this.left.symbol.symbol.getClass().getName() this.left.symbol.frequency this.left.left this.left.left.symbol this.left.left.left this.left.left.right this.left.right this.left.right.symbol this.left.right.left this.left.right.right this.right this.right.symbol this.right.symbol.symbol this.right.symbol.symbol.getClass().getName() this.right.symbol.frequency this.right.left this.right.left.symbol this.right.left.left this.right.left.right this.right.right this.right.right.symbol this.right.right.left this.right.right.right return return.getClass().getName() orig(this) orig(this.symbol) orig(this.symbol.symbol) orig(this.symbol.symbol.getClass().getName()) orig(this.symbol.frequency) orig(this.left) orig(this.left.symbol) orig(this.left.symbol.symbol) orig(this.left.symbol.symbol.getClass().getName()) orig(this.left.symbol.frequency) orig(this.left.left) orig(this.left.left.symbol) orig(this.left.left.left) orig(this.left.left.right) orig(this.left.right) orig(this.left.right.symbol) orig(this.left.right.left) orig(this.left.right.right) orig(this.right) orig(this.right.symbol) orig(this.right.symbol.symbol) orig(this.right.symbol.symbol.getClass().getName()) orig(this.right.symbol.frequency) orig(this.right.left) orig(this.right.left.symbol) orig(this.right.left.left) orig(this.right.left.right) orig(this.right.right) orig(this.right.right.symbol) orig(this.right.right.left) orig(this.right.right.right)
 assignable this.symbol.symbol, this.symbol.frequency
-this.symbol == \result
 this.left.symbol == \old(this.left.symbol)
 ((this.left.symbol != null) && (\old(this.left.symbol) != null))  ==>  (this.left.symbol.symbol == \old(this.left.symbol.symbol))
 ((this.left.symbol != null) && (this.left.symbol.symbol != null) && (this.right.symbol != null) && (this.right.symbol.symbol != null))  ==>  (this.left.symbol.symbol.getClass().getName() == this.right.symbol.symbol.getClass().getName())
@@ -696,5 +687,4 @@ this.right == \old(this.right)
 (this.symbol == null)  ==>  (this.right.symbol.frequency >= 1)
 (this.symbol == null)  ==>  (this.right.symbol.symbol != null)
 (this.symbol == null)  ==>  (this.right.symbol.symbol.getClass().getName() == java.lang.Character.class.getName())
-(this.symbol == null)  ==>  (this.symbol == \result)
 (\result != null)  ==>  (\result.getClass().getName() == java.lang.Character.class.getName())

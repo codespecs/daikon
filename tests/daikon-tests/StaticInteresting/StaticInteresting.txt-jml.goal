@@ -5,7 +5,7 @@ misc.StaticInteresting.rand != null
 misc.StaticInteresting.rand != null
 ===========================================================================
 misc.StaticInteresting:::OBJECT
-    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.outer[this.x] this.outer[this.x-1] this.inner[this.y] this.inner[this.y-1] this.inner[this.x] this.inner[this.x-1]
+    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.inner[this.x] this.inner[this.x-1]
 this.x == daikon.Quant.size(this.inner)-1
 this != null
 this.outer != null
@@ -18,35 +18,19 @@ daikon.Quant.size(this.outer) == 100
 daikon.Quant.size(this.inner) == 1
 daikon.Quant.getElement_int(this.outer, this.y) != 0
 daikon.Quant.getElement_int(this.outer, this.y-1) != 0
-daikon.Quant.getElement_int(this.outer, this.x) != 0
 daikon.Quant.getElement_int(this.inner, this.x) != 0
-warning: method daikon.inv.binary.twoSequence.SuperSequence.format(OutputFormat:JML) needs to be implemented: this.inner[] is a subsequence of this.outer[]
 daikon.Quant.memberOf(daikon.Quant.getElement_int(this.inner, this.x) , this.outer )
 daikon.Quant.eltsEqual(this.inner, daikon.Quant.getElement_int(this.inner, this.x))
 this.y != daikon.Quant.getElement_int(this.outer, this.y)
 this.y != daikon.Quant.getElement_int(this.outer, this.y-1)
-this.y != daikon.Quant.getElement_int(this.outer, this.x)
 this.y != daikon.Quant.getElement_int(this.inner, this.x)
-this.x != daikon.Quant.getElement_int(this.outer, this.y)
-this.x != daikon.Quant.getElement_int(this.outer, this.y-1)
-this.x != daikon.Quant.getElement_int(this.outer, this.x)
-this.x != daikon.Quant.getElement_int(this.inner, this.x)
 daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.y)
 daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.y-1)
-daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.x)
 daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.inner, this.x)
 daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.y)
 daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.y-1)
-daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.x)
 daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.inner, this.x)
-daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.y)
-daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.y-1)
-daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.x)
-daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.inner, this.x)
 daikon.Quant.getElement_int(this.outer, this.y) != daikon.Quant.getElement_int(this.outer, this.y-1)
-daikon.Quant.getElement_int(this.outer, this.y) != daikon.Quant.getElement_int(this.outer, this.x)
-daikon.Quant.getElement_int(this.outer, this.y-1) != daikon.Quant.getElement_int(this.outer, this.x)
-daikon.Quant.getElement_int(this.outer, this.x) != daikon.Quant.getElement_int(this.inner, this.x)
 ===========================================================================
 misc.StaticInteresting2:::CLASS
     Variables: misc.StaticInteresting2.rand
@@ -54,7 +38,7 @@ misc.StaticInteresting2.rand != null
 misc.StaticInteresting2.rand != null
 ===========================================================================
 misc.StaticInteresting2:::OBJECT
-    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting2.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.outer[this.x] this.outer[this.x-1] this.inner[this.y] this.inner[this.y-1] this.inner[this.x] this.inner[this.x-1]
+    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting2.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.inner[this.x] this.inner[this.x-1]
 this.x == daikon.Quant.size(this.inner)-1
 daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.inner, this.x)
 this != null
@@ -66,33 +50,20 @@ this.inner != null
 this.y == 25
 daikon.Quant.size(this.outer) == 100
 daikon.Quant.size(this.inner) == 1
-warning: method daikon.inv.binary.twoSequence.SuperSequence.format(OutputFormat:JML) needs to be implemented: this.inner[] is a subsequence of this.outer[]
 daikon.Quant.eltsEqual(this.inner, daikon.Quant.getElement_int(this.outer, this.y))
 this.y != daikon.Quant.getElement_int(this.outer, this.y)
 this.y != daikon.Quant.getElement_int(this.outer, this.y-1)
-this.y != daikon.Quant.getElement_int(this.outer, this.x)
-this.x != daikon.Quant.getElement_int(this.outer, this.y)
-this.x != daikon.Quant.getElement_int(this.outer, this.y-1)
-this.x != daikon.Quant.getElement_int(this.outer, this.x)
 daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.y)
 daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.y-1)
-daikon.Quant.size(this.outer) != daikon.Quant.getElement_int(this.outer, this.x)
 daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.y)
 daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.y-1)
-daikon.Quant.size(this.outer)-1 != daikon.Quant.getElement_int(this.outer, this.x)
-daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.y)
-daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.y-1)
-daikon.Quant.size(this.inner) != daikon.Quant.getElement_int(this.outer, this.x)
 daikon.Quant.getElement_int(this.outer, this.y) != daikon.Quant.getElement_int(this.outer, this.y-1)
-daikon.Quant.getElement_int(this.outer, this.y) != daikon.Quant.getElement_int(this.outer, this.x)
-daikon.Quant.getElement_int(this.outer, this.y-1) != daikon.Quant.getElement_int(this.outer, this.x)
 ===========================================================================
 misc.StaticInteresting2.StaticInteresting2():::EXIT
-    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting2.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.outer[this.x] this.outer[this.x-1] this.inner[this.y] this.inner[this.y-1] this.inner[this.x] this.inner[this.x-1]
+    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting2.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.inner[this.x] this.inner[this.x-1]
 daikon.Quant.eltsEqual(this.inner, -1339421172)
 daikon.Quant.getElement_int(this.outer, this.y) == -1339421172
 daikon.Quant.getElement_int(this.outer, this.y-1) == 134578847
-daikon.Quant.getElement_int(this.outer, this.x) == -1157793070
 ===========================================================================
 misc.StaticInteresting2.main(java.lang.String[]):::ENTER
     Variables: misc.StaticInteresting2.rand args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1
@@ -104,11 +75,11 @@ assignable args[*], args[].toString
 misc.StaticInteresting2.rand == \old(misc.StaticInteresting2.rand)
 ===========================================================================
 misc.StaticInteresting2.work():::ENTER
-    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting2.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.outer[this.x] this.outer[this.x-1] this.inner[this.y] this.inner[this.y-1] this.inner[this.x] this.inner[this.x-1]
+    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting2.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.inner[this.x] this.inner[this.x-1]
 ===========================================================================
 misc.StaticInteresting2.work():::EXIT
-    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting2.rand orig(this) orig(this.outer) orig(this.outer[]) orig(this.inner) orig(this.inner[]) orig(this.y) orig(this.x) orig(misc.StaticInteresting2.rand) size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 orig(size(this.outer[])) orig(size(this.outer[]))-1 orig(size(this.inner[])) orig(size(this.inner[]))-1 this.outer[this.y] this.outer[this.y-1] this.outer[this.x] this.outer[this.x-1] this.outer[orig(this.y)] this.outer[orig(this.y)-1] this.outer[orig(this.x)] this.outer[orig(this.x)-1] this.inner[this.y] this.inner[this.y-1] this.inner[this.x] this.inner[this.x-1] this.inner[orig(this.y)] this.inner[orig(this.y)-1] this.inner[orig(this.x)] this.inner[orig(this.x)-1] orig(this.outer[post(this.y)]) orig(this.outer[post(this.y)-1]) orig(this.inner[post(this.y)]) orig(this.inner[post(this.y)-1]) orig(this.outer[post(this.x)]) orig(this.outer[post(this.x)-1]) orig(this.inner[post(this.x)]) orig(this.inner[post(this.x)-1]) orig(this.outer[this.y]) orig(this.outer[this.y-1]) orig(this.outer[this.x]) orig(this.outer[this.x-1]) orig(this.inner[this.y]) orig(this.inner[this.y-1]) orig(this.inner[this.x]) orig(this.inner[this.x-1])
-assignable this.outer[*], this.inner[*], this.outer[this.y], this.outer[this.y-1], this.outer[this.x], this.outer[this.x-1], this.inner[this.y], this.inner[this.y-1], this.inner[this.x], this.inner[this.x-1]
+    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting2.rand orig(this) orig(this.outer) orig(this.outer[]) orig(this.inner) orig(this.inner[]) orig(this.y) orig(this.x) orig(misc.StaticInteresting2.rand) size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 orig(size(this.outer[])) orig(size(this.outer[]))-1 orig(size(this.inner[])) orig(size(this.inner[]))-1 this.outer[this.y] this.outer[this.y-1] this.outer[orig(this.y)] this.outer[orig(this.y)-1] this.inner[this.x] this.inner[this.x-1] this.inner[orig(this.x)] this.inner[orig(this.x)-1] orig(this.outer[post(this.y)]) orig(this.outer[post(this.y)-1]) orig(this.inner[post(this.x)]) orig(this.inner[post(this.x)-1]) orig(this.outer[this.y]) orig(this.outer[this.y-1]) orig(this.inner[this.x]) orig(this.inner[this.x-1])
+assignable this.outer[*], this.inner[*], this.outer[this.y], this.outer[this.y-1], this.inner[this.x], this.inner[this.x-1]
 this.outer == \old(this.outer)
 this.inner == \old(this.inner)
 this.y == \old(this.y)
@@ -120,43 +91,26 @@ daikon.Quant.size(this.inner) == \old(daikon.Quant.size(this.inner))
 daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.outer, \old(this.y))
 daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.inner, \old(this.x))
 daikon.Quant.getElement_int(this.outer, this.y-1) == daikon.Quant.getElement_int(this.outer, \old(this.y)-1)
-daikon.Quant.getElement_int(this.outer, this.x) == daikon.Quant.getElement_int(this.outer, \old(this.x))
 \old(daikon.Quant.getElement_int(this.outer, \new(this.y))) == \old(daikon.Quant.getElement_int(this.outer, this.y))
 \old(daikon.Quant.getElement_int(this.outer, \new(this.y)-1)) == \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-\old(daikon.Quant.getElement_int(this.outer, \new(this.x))) == \old(daikon.Quant.getElement_int(this.outer, this.x))
 \old(daikon.Quant.getElement_int(this.inner, \new(this.x))) == \old(daikon.Quant.getElement_int(this.outer, this.y))
 this.y != \old(daikon.Quant.getElement_int(this.outer, this.y))
 this.y != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-this.y != \old(daikon.Quant.getElement_int(this.outer, this.x))
-this.x != \old(daikon.Quant.getElement_int(this.outer, this.y))
-this.x != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-this.x != \old(daikon.Quant.getElement_int(this.outer, this.x))
 daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.y))
 daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.x))
 daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.y))
 daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.x))
-daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.y))
-daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.x))
 daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.y))
 daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.x))
 daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.y))
 daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.x))
-daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.y))
-daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.x))
 ===========================================================================
 misc.StaticInteresting.StaticInteresting():::EXIT
-    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.outer[this.x] this.outer[this.x-1] this.inner[this.y] this.inner[this.y-1] this.inner[this.x] this.inner[this.x-1]
+    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.inner[this.x] this.inner[this.x-1]
 daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.inner, this.x)
 daikon.Quant.eltsEqual(this.inner, -1339421172)
 daikon.Quant.getElement_int(this.outer, this.y) == -1339421172
 daikon.Quant.getElement_int(this.outer, this.y-1) == 134578847
-daikon.Quant.getElement_int(this.outer, this.x) == -1157793070
 daikon.Quant.eltsEqual(this.inner, daikon.Quant.getElement_int(this.outer, this.y))
 ===========================================================================
 misc.StaticInteresting.main(java.lang.String[]):::ENTER
@@ -172,11 +126,11 @@ misc.StaticInteresting.rand == \old(misc.StaticInteresting.rand)
 daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })
 ===========================================================================
 misc.StaticInteresting.work():::ENTER
-    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.outer[this.x] this.outer[this.x-1] this.inner[this.y] this.inner[this.y-1] this.inner[this.x] this.inner[this.x-1]
+    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting.rand size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 this.outer[this.y] this.outer[this.y-1] this.inner[this.x] this.inner[this.x-1]
 ===========================================================================
 misc.StaticInteresting.work():::EXIT
-    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting.rand orig(this) orig(this.outer) orig(this.outer[]) orig(this.inner) orig(this.inner[]) orig(this.y) orig(this.x) orig(misc.StaticInteresting.rand) size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 orig(size(this.outer[])) orig(size(this.outer[]))-1 orig(size(this.inner[])) orig(size(this.inner[]))-1 this.outer[this.y] this.outer[this.y-1] this.outer[this.x] this.outer[this.x-1] this.outer[orig(this.y)] this.outer[orig(this.y)-1] this.outer[orig(this.x)] this.outer[orig(this.x)-1] this.inner[this.y] this.inner[this.y-1] this.inner[this.x] this.inner[this.x-1] this.inner[orig(this.y)] this.inner[orig(this.y)-1] this.inner[orig(this.x)] this.inner[orig(this.x)-1] orig(this.outer[post(this.y)]) orig(this.outer[post(this.y)-1]) orig(this.inner[post(this.y)]) orig(this.inner[post(this.y)-1]) orig(this.outer[post(this.x)]) orig(this.outer[post(this.x)-1]) orig(this.inner[post(this.x)]) orig(this.inner[post(this.x)-1]) orig(this.outer[this.y]) orig(this.outer[this.y-1]) orig(this.outer[this.x]) orig(this.outer[this.x-1]) orig(this.inner[this.y]) orig(this.inner[this.y-1]) orig(this.inner[this.x]) orig(this.inner[this.x-1])
-assignable this.outer[*], this.inner[*], this.outer[this.y], this.outer[this.y-1], this.outer[this.x], this.outer[this.x-1], this.inner[this.y], this.inner[this.y-1], this.inner[this.x], this.inner[this.x-1]
+    Variables: this this.outer this.outer[] this.inner this.inner[] this.y this.x misc.StaticInteresting.rand orig(this) orig(this.outer) orig(this.outer[]) orig(this.inner) orig(this.inner[]) orig(this.y) orig(this.x) orig(misc.StaticInteresting.rand) size(this.outer[]) size(this.outer[])-1 size(this.inner[]) size(this.inner[])-1 orig(size(this.outer[])) orig(size(this.outer[]))-1 orig(size(this.inner[])) orig(size(this.inner[]))-1 this.outer[this.y] this.outer[this.y-1] this.outer[orig(this.y)] this.outer[orig(this.y)-1] this.inner[this.x] this.inner[this.x-1] this.inner[orig(this.x)] this.inner[orig(this.x)-1] orig(this.outer[post(this.y)]) orig(this.outer[post(this.y)-1]) orig(this.inner[post(this.x)]) orig(this.inner[post(this.x)-1]) orig(this.outer[this.y]) orig(this.outer[this.y-1]) orig(this.inner[this.x]) orig(this.inner[this.x-1])
+assignable this.outer[*], this.inner[*], this.outer[this.y], this.outer[this.y-1], this.inner[this.x], this.inner[this.x-1]
 this.outer == \old(this.outer)
 this.inner == \old(this.inner)
 this.y == \old(this.y)
@@ -189,41 +143,22 @@ daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(t
 daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.inner, this.x)
 daikon.Quant.getElement_int(this.outer, this.y) == daikon.Quant.getElement_int(this.inner, \old(this.x))
 daikon.Quant.getElement_int(this.outer, this.y-1) == daikon.Quant.getElement_int(this.outer, \old(this.y)-1)
-daikon.Quant.getElement_int(this.outer, this.x) == daikon.Quant.getElement_int(this.outer, \old(this.x))
 \old(daikon.Quant.getElement_int(this.outer, \new(this.y))) == \old(daikon.Quant.getElement_int(this.outer, this.y))
 \old(daikon.Quant.getElement_int(this.outer, \new(this.y)-1)) == \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-\old(daikon.Quant.getElement_int(this.outer, \new(this.x))) == \old(daikon.Quant.getElement_int(this.outer, this.x))
 \old(daikon.Quant.getElement_int(this.inner, \new(this.x))) == \old(daikon.Quant.getElement_int(this.inner, this.x))
 daikon.Quant.eltsEqual(this.inner, daikon.Quant.getElement_int(this.outer, this.y))
 this.y != \old(daikon.Quant.getElement_int(this.outer, this.y))
 this.y != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-this.y != \old(daikon.Quant.getElement_int(this.outer, this.x))
 this.y != \old(daikon.Quant.getElement_int(this.inner, this.x))
-this.x != \old(daikon.Quant.getElement_int(this.outer, this.y))
-this.x != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-this.x != \old(daikon.Quant.getElement_int(this.outer, this.x))
-this.x != \old(daikon.Quant.getElement_int(this.inner, this.x))
 daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.y))
 daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.outer, this.x))
 daikon.Quant.size(this.outer) != \old(daikon.Quant.getElement_int(this.inner, this.x))
 daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.y))
 daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.outer, this.x))
 daikon.Quant.size(this.outer)-1 != \old(daikon.Quant.getElement_int(this.inner, this.x))
-daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.y))
-daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.outer, this.x))
-daikon.Quant.size(this.inner) != \old(daikon.Quant.getElement_int(this.inner, this.x))
 daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.y))
 daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.outer, this.x))
 daikon.Quant.getElement_int(this.outer, this.y) != \old(daikon.Quant.getElement_int(this.inner, this.x))
 daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.y))
 daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.outer, this.x))
 daikon.Quant.getElement_int(this.outer, this.y-1) != \old(daikon.Quant.getElement_int(this.inner, this.x))
-daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.y))
-daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.y-1))
-daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.outer, this.x))
-daikon.Quant.getElement_int(this.outer, this.x) != \old(daikon.Quant.getElement_int(this.inner, this.x))

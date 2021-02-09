@@ -5,7 +5,6 @@ import java.util.Vector;
 // Daikon test by Jesse Smithnosky
 public class Smithnosky {
 
-  /*@ invariant this.size == daikon.Quant.size(this.s); */
   /*@ invariant this != null; */
   /*@ invariant this.b >= 0; */
   /*@ invariant this.c >= 0; */
@@ -14,30 +13,19 @@ public class Smithnosky {
   /*@ invariant this.s != null; */
   /*@ invariant daikon.Quant.eltsNotEqual(this.s, null); */
   /*@ invariant daikon.Quant.eltsNotEqual(this.s, null); */
+  /*@ invariant daikon.Quant.size(this.s) == 0 || daikon.Quant.size(this.s) == 1 || daikon.Quant.size(this.s) == 2; */
   /*@ invariant (!(this.a == 0)) || (this.b == 0); */
   /*@ invariant this.a >= this.b; */
   /*@ invariant (!(this.a == 0)) || (this.c == 0); */
   /*@ invariant this.a >= this.c; */
-  /*@ invariant (!(this.a == 0)) || (this.size == 0); */
-  /*@ invariant this.a >= this.size; */
-  /*@ invariant this.a == (this.size | this.a); */
   /*@ invariant (!(this.b == 0)) || (this.c == 0); */
   /*@ invariant this.b >= this.c; */
   /*@ invariant (!(this.aXb == 0)) || (this.b == 0); */
   /*@ invariant this.b <= this.aXb; */
-  /*@ invariant (!(this.b == 0)) || (this.size == 0); */
-  /*@ invariant this.b >= this.size; */
-  /*@ invariant this.b == (this.size | this.b); */
   /*@ invariant (!(this.aXb == 0)) || (this.c == 0); */
   /*@ invariant this.c <= this.aXb; */
   /*@ invariant this.c <= this.aXc; */
-  /*@ invariant (!(this.c == 0)) || (this.size == 0); */
-  /*@ invariant this.c >= this.size; */
-  /*@ invariant this.c == (this.size | this.c); */
-  /*@ invariant (!(this.aXb == 0)) || (this.size == 0); */
-  /*@ invariant this.aXb >= this.size; */
-  /*@ invariant this.aXc > this.size; */
-  /*@ invariant (this.size & daikon.Quant.size(this.s)-1) == 0; */
+  /*@ invariant (daikon.Quant.size(this.s) & daikon.Quant.size(this.s)-1) == 0; */
   /*@ spec_public */ private int a;
   /*@ spec_public */ private int b;
   /*@ spec_public */ private int c;
@@ -53,10 +41,10 @@ public class Smithnosky {
   @ requires c == 4;
   @ ensures this.a == this.b;
   @ ensures this.a == this.c;
-  @ ensures this.a == this.size;
-  @ ensures this.a == daikon.Quant.size(this.s);
+  @ ensures this.a == 0;
   @ ensures this.aXb == 6;
   @ ensures this.aXc == 8;
+  @ ensures this.size == 0;
   @*/
   public Smithnosky(int a, int b, int c) {
     a = a;
@@ -75,19 +63,20 @@ public class Smithnosky {
   @ requires this.a == 0 || this.a == 1 || this.a == 2;
   @ requires this.aXb == 1 || this.aXb == 4 || this.aXb == 6;
   @ requires this.aXc == 1 || this.aXc == 4 || this.aXc == 8;
+  @ requires this.size == 0;
   @ ensures this.b == this.c;
   @ ensures this.b == \old(this.a);
   @ ensures this.b == \old(this.b);
   @ ensures this.b == \old(this.c);
   @ ensures this.aXc == \old(this.aXc);
   @ ensures this.size == \old(this.size);
-  @ ensures this.size == \old(daikon.Quant.size(this.s));
   @ ensures this.s == \old(this.s);
   @ ensures daikon.Quant.pairwiseEqual(this.s, \old(this.s));
   @ ensures this.a == 1 || this.a == 2 || this.a == 3;
   @ ensures this.b == 0 || this.b == 1 || this.b == 2;
   @ ensures this.aXb == 0 || this.aXb == 2 || this.aXb == 6;
   @ ensures this.aXc == 1 || this.aXc == 4 || this.aXc == 8;
+  @ ensures this.size == 0;
   @*/
   public void incA() {
     a = a + 1;
@@ -101,19 +90,20 @@ public class Smithnosky {
   @ requires this.b == 0 || this.b == 1 || this.b == 2;
   @ requires this.aXb == 0 || this.aXb == 2 || this.aXb == 6;
   @ requires this.aXc == 1 || this.aXc == 4 || this.aXc == 8;
+  @ requires this.size == 0;
   @ ensures this.a == this.b;
   @ ensures this.a == \old(this.a);
   @ ensures this.c == \old(this.b);
   @ ensures this.c == \old(this.c);
   @ ensures this.aXc == \old(this.aXc);
   @ ensures this.size == \old(this.size);
-  @ ensures this.size == \old(daikon.Quant.size(this.s));
   @ ensures this.s == \old(this.s);
   @ ensures daikon.Quant.pairwiseEqual(this.s, \old(this.s));
   @ ensures this.a == 1 || this.a == 2 || this.a == 3;
   @ ensures this.c == 0 || this.c == 1 || this.c == 2;
   @ ensures this.aXb == 1 || this.aXb == 4 || this.aXb == 9;
   @ ensures this.aXc == 1 || this.aXc == 4 || this.aXc == 8;
+  @ ensures this.size == 0;
   @*/
   public void incB() {
     b++;
@@ -127,6 +117,7 @@ public class Smithnosky {
   @ requires this.c == 0 || this.c == 1 || this.c == 2;
   @ requires this.aXb == 1 || this.aXb == 4 || this.aXb == 9;
   @ requires this.aXc == 1 || this.aXc == 4 || this.aXc == 8;
+  @ requires this.size == 0;
   @ ensures this.a == this.b;
   @ ensures this.a == this.c;
   @ ensures this.a == \old(this.a);
@@ -134,11 +125,11 @@ public class Smithnosky {
   @ ensures this.aXb == this.aXc;
   @ ensures this.aXb == \old(this.aXb);
   @ ensures this.size == \old(this.size);
-  @ ensures this.size == \old(daikon.Quant.size(this.s));
   @ ensures this.s == \old(this.s);
   @ ensures daikon.Quant.pairwiseEqual(this.s, \old(this.s));
   @ ensures this.a == 1 || this.a == 2 || this.a == 3;
   @ ensures this.aXb == 1 || this.aXb == 4 || this.aXb == 9;
+  @ ensures this.size == 0;
   @*/
   public void incC() {
     c++;
@@ -155,7 +146,7 @@ public class Smithnosky {
   @ requires this.size == 0 || this.size == 1;
   @ requires o != null;
   @ requires o.getClass().getName() == java.lang.String.class.getName();
-  @ requires daikon.Quant.eltsEqual(this.s, o);
+  @ requires daikon.Quant.size(this.s) == 0 || daikon.Quant.size(this.s) == 1;
   @ ensures this.a == this.b;
   @ ensures this.a == this.c;
   @ ensures this.a == \old(this.a);
@@ -165,14 +156,12 @@ public class Smithnosky {
   @ ensures this.aXb == \old(this.aXb);
   @ ensures this.aXb == \old(this.aXc);
   @ ensures this.s == \old(this.s);
-  @ ensures \old(this.size) == daikon.Quant.size(this.s)-1;
-  @ ensures daikon.Quant.pairwiseEqual(\old(this.s), daikon.Quant.slice(this.s, 0, \old(this.size)-1));
-  @ ensures \old(o) == daikon.Quant.getElement_Object(this.s, this.size-1);
-  @ ensures \old(o) == daikon.Quant.getElement_Object(this.s, \old(this.size));
+  @ ensures daikon.Quant.size(this.s)-1 == \old(daikon.Quant.size(this.s));
   @ ensures this.a == 3;
   @ ensures this.aXb == 9;
   @ ensures this.size == 1 || this.size == 2;
-  @ ensures daikon.Quant.eltsEqual(this.s, \old(o));
+  @ ensures daikon.Quant.size(this.s) == 1 || daikon.Quant.size(this.s) == 2;
+  @ ensures daikon.Quant.subsetOf(\old(this.s), this.s);
   @*/
   public void add(Object o) {
     s.add(o);

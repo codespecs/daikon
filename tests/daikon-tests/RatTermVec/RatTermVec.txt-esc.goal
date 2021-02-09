@@ -25,7 +25,6 @@ warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/J
 warning: method daikon.inv.unary.scalar.LowerBound.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[]) >= 1
 warning: method daikon.inv.binary.twoSequence.SuperSequence.format(OutputFormat:ESC/Java) needs to be implemented: orig(this.wrapped[]) is a subsequence of this.wrapped[]
 warning: method daikon.inv.binary.twoSequence.SuperSet.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] is a superset of orig(this.wrapped[])
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) in this.wrapped[]
 ===========================================================================
 PolyCalc.RatTermVec.copy():::ENTER
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
@@ -34,62 +33,37 @@ warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/J
 PolyCalc.RatTermVec.copy():::EXIT
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() return return.wrapped return.wrapped[] return.wrapped[].getClass().getName() orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) size(this.wrapped[]) size(this.wrapped[])-1 size(return.wrapped[]) size(return.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
       Unmodified variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] == return.wrapped[]
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] contains no duplicates
 \result != null
 \result.wrapped != null
+warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: return.wrapped[] contains no duplicates
+\result.wrapped.containsNull == false
+\result.wrapped.elementType == \type(PolyCalc.RatTerm)
 ===========================================================================
 PolyCalc.RatTermVec.get(int):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index size(this.wrapped[]) size(this.wrapped[])-1
 index >= 0
 warning: method daikon.inv.unary.scalar.LowerBound.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[]) >= 1
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[index+1..] contains no duplicates
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..index] contains no duplicates
-warning: method daikon.inv.binary.twoScalar.NumericInt$ZeroTrack.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.wrapped[])-1 == 0) ==> (index == 0)
-warning: method daikon.inv.binary.twoScalar.IntLessEqual.format(OutputFormat:ESC/Java) needs to be implemented: index <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.get(int):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index return orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
-      Modified primitive arguments: this.wrapped[index-1]
-      Unmodified variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index size(this.wrapped[]) this.wrapped[index] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
-warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: return == this.wrapped[orig(index)]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index return orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
+      Unmodified variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index size(this.wrapped[])
 \result != null
 warning: method daikon.inv.unary.scalar.LowerBound.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[]) >= 1
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[orig(index)+1..] contains no duplicates
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..orig(index)] contains no duplicates
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: return in this.wrapped[]
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: return in this.wrapped[orig(index)..]
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: return in this.wrapped[0..orig(index)]
-warning: method daikon.inv.binary.twoScalar.NumericInt$ZeroTrack.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.wrapped[])-1 == 0) ==> (orig(index) == 0)
-warning: method daikon.inv.binary.twoScalar.IntLessEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(index) <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index size(this.wrapped[]) size(this.wrapped[])-1
 t != null
 index >= 0
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..index-1] contains no duplicates
-warning: method daikon.inv.binary.twoScalar.NumericInt$ZeroTrack.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.wrapped[]) == 0) ==> (index == 0)
-warning: method daikon.inv.binary.twoScalar.IntLessEqual.format(OutputFormat:ESC/Java) needs to be implemented: index <= size(this.wrapped[])
 ===========================================================================
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(t) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(t) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
       Modified variables: this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[])
-      Modified primitive arguments: this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index]
-      Unmodified variables: this this.wrapped t index this.wrapped[0..index-1]
+      Unmodified variables: this this.wrapped t index
 modifies this.wrapped[*]
-warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) == this.wrapped[orig(index)]
 warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[])-1 == orig(size(this.wrapped[]))
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[orig(index)+1..] == orig(this.wrapped[index..])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..post(index)-1])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..index-1])
 warning: method daikon.inv.unary.scalar.LowerBound.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[]) >= 1
-warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..orig(index)-1] contains no duplicates
 warning: method daikon.inv.binary.twoSequence.SuperSet.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] is a superset of orig(this.wrapped[])
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) in this.wrapped[]
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) in this.wrapped[orig(index)..]
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) in this.wrapped[0..orig(index)]
-warning: method daikon.inv.binary.twoScalar.NumericInt$ZeroTrack.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.wrapped[])-1 == 0) ==> (orig(index) == 0)
-warning: method daikon.inv.binary.twoScalar.IntLessEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(index) <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.printDebug():::ENTER
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
@@ -101,68 +75,44 @@ PolyCalc.RatTermVec.printDebug():::EXIT
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.toString is printable
 ===========================================================================
 PolyCalc.RatTermVec.remove(int):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index size(this.wrapped[]) size(this.wrapped[])-1
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] contains no duplicates
 index >= 0
 warning: method daikon.inv.unary.scalar.LowerBound.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[]) >= 1
-warning: method daikon.inv.binary.twoScalar.NumericInt$ZeroTrack.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.wrapped[])-1 == 0) ==> (index == 0)
-warning: method daikon.inv.binary.twoScalar.IntLessEqual.format(OutputFormat:ESC/Java) needs to be implemented: index <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.remove(int):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
       Modified variables: this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[])
-      Modified primitive arguments: this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index]
-      Unmodified variables: this this.wrapped index this.wrapped[0..index-1]
+      Unmodified variables: this this.wrapped index
 modifies this.wrapped[*]
 warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[]) == orig(size(this.wrapped[]))-1
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[orig(index)..] == orig(this.wrapped[post(index)+1..])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[orig(index)..] == orig(this.wrapped[index+1..])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..post(index)-1])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..index-1])
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] contains no duplicates
 warning: method daikon.inv.binary.twoSequence.SubSet.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] is a subset of orig(this.wrapped[])
-warning: method daikon.inv.binary.twoScalar.NumericInt$ZeroTrack.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.wrapped[]) == 0) ==> (orig(index) == 0)
-warning: method daikon.inv.binary.twoScalar.IntLessEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(index) <= size(this.wrapped[])
 ===========================================================================
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index size(this.wrapped[]) size(this.wrapped[])-1
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] contains no duplicates
 t != null
 index >= 0
 warning: method daikon.inv.unary.scalar.LowerBound.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[]) >= 1
-warning: method daikon.inv.binary.twoScalar.NumericInt$ZeroTrack.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.wrapped[])-1 == 0) ==> (index == 0)
-warning: method daikon.inv.binary.twoScalar.IntLessEqual.format(OutputFormat:ESC/Java) needs to be implemented: index <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(t) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(t) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
       Modified variables: this.wrapped[]
-      Modified primitive arguments: this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[0..index]
-      Unmodified variables: this this.wrapped this.wrapped[].getClass().getName() t index size(this.wrapped[]) this.wrapped[index+1..] this.wrapped[0..index-1]
+      Unmodified variables: this this.wrapped this.wrapped[].getClass().getName() t index size(this.wrapped[])
 modifies this.wrapped[*]
-warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) == this.wrapped[orig(index)]
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[orig(index)+1..] == orig(this.wrapped[post(index)+1..])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[orig(index)+1..] == orig(this.wrapped[index+1..])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..post(index)-1])
-warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..index-1])
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] contains no duplicates
 warning: method daikon.inv.unary.scalar.LowerBound.format(OutputFormat:ESC/Java) needs to be implemented: size(this.wrapped[]) >= 1
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) in this.wrapped[]
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) in this.wrapped[orig(index)..]
-warning: method daikon.inv.binary.sequenceScalar.Member.format(OutputFormat:ESC/Java) needs to be implemented: orig(t) in this.wrapped[0..orig(index)]
-warning: method daikon.inv.binary.twoScalar.NumericInt$ZeroTrack.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.wrapped[])-1 == 0) ==> (orig(index) == 0)
-warning: method daikon.inv.binary.twoScalar.IntLessEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(index) <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.size():::ENTER
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] contains no duplicates
 ===========================================================================
 PolyCalc.RatTermVec.size():::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() return orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[return] this.wrapped[return-1] this.wrapped[return..] this.wrapped[return+1..] this.wrapped[0..return] this.wrapped[0..return-1] orig(this.wrapped[post(return)]) orig(this.wrapped[post(return)-1]) orig(this.wrapped[post(return)..]) orig(this.wrapped[post(return)+1..]) orig(this.wrapped[0..post(return)]) orig(this.wrapped[0..post(return)-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() return orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
       Unmodified variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[])
-warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: return == size(this.wrapped[])
-warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: return == orig(size(this.wrapped[]))
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] contains no duplicates
-warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[return..] == []
+\result >= 0
 ===========================================================================
 PolyCalc.RatTermVec.toString():::ENTER
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1

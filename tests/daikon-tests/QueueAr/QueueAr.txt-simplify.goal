@@ -37,7 +37,6 @@ DataStructures.QueueAr.dequeue():::EXIT
 (EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
 (EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ (select |back| |this|) (select |back| |__orig__this|))
-(EQ (hash |return|) (hash (select (select elems (select |theArray| |__orig__this|)) (select |front| |__orig__this|))))
 (EQ (arrayLength (select |theArray| |this|)) (arrayLength (select |theArray| |__orig__this|)))
 (EQ (hash (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))) (hash (select (select elems (select |theArray| |this|)) (- (select |currentSize| |__orig__this|) 1))))
 (FORALL (|i| |j|) (IMPLIES (AND (<= (+ (select |front| |__orig__this|) 1) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= (+ (select |front| |__orig__this|) 1) |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))

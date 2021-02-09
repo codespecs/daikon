@@ -1,7 +1,6 @@
 ===========================================================================
 misc.Smithnosky:::OBJECT
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
-this.size == daikon.Quant.size(this.s)
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() size(this.s[]) size(this.s[])-1
 this != null
 this.b >= 0
 this.c >= 0
@@ -11,31 +10,19 @@ this.s != null
 daikon.Quant.eltsNotEqual(this.s, null)
 daikon.Quant.eltsNotEqual(this.s, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(this.s), "java.lang.String")
-("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.size(this.s) == 0 || daikon.Quant.size(this.s) == 1 || daikon.Quant.size(this.s) == 2
 (!(this.a == 0)) || (this.b == 0)
 this.a >= this.b
 (!(this.a == 0)) || (this.c == 0)
 this.a >= this.c
-(!(this.a == 0)) || (this.size == 0)
-this.a >= this.size
-this.a == (this.size | this.a)
 (!(this.b == 0)) || (this.c == 0)
 this.b >= this.c
 (!(this.aXb == 0)) || (this.b == 0)
 this.b <= this.aXb
-(!(this.b == 0)) || (this.size == 0)
-this.b >= this.size
-this.b == (this.size | this.b)
 (!(this.aXb == 0)) || (this.c == 0)
 this.c <= this.aXb
 this.c <= this.aXc
-(!(this.c == 0)) || (this.size == 0)
-this.c >= this.size
-this.c == (this.size | this.c)
-(!(this.aXb == 0)) || (this.size == 0)
-this.aXb >= this.size
-this.aXc > this.size
-(this.size & daikon.Quant.size(this.s)-1) == 0
+(daikon.Quant.size(this.s) & daikon.Quant.size(this.s)-1) == 0
 ===========================================================================
 misc.Smithnosky.Smithnosky(int, int, int):::ENTER
     Variables: a b c
@@ -44,18 +31,18 @@ b == 3
 c == 4
 ===========================================================================
 misc.Smithnosky.Smithnosky(int, int, int):::EXIT
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() a b c orig(a) orig(b) orig(c) size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] this.s[a] this.s[a-1] this.s[a..] this.s[a+1..] this.s[0..a] this.s[0..a-1] this.s[b] this.s[b-1] this.s[b..] this.s[b+1..] this.s[0..b] this.s[0..b-1] this.s[c] this.s[c-1] this.s[c..] this.s[c+1..] this.s[0..c] this.s[0..c-1] this.s[orig(a)] this.s[orig(a)-1] this.s[orig(a)..] this.s[orig(a)+1..] this.s[0..orig(a)] this.s[0..orig(a)-1] this.s[orig(b)] this.s[orig(b)-1] this.s[orig(b)..] this.s[orig(b)+1..] this.s[0..orig(b)] this.s[0..orig(b)-1] this.s[orig(c)] this.s[orig(c)-1] this.s[orig(c)..] this.s[orig(c)+1..] this.s[0..orig(c)] this.s[0..orig(c)-1]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() a b c orig(a) orig(b) orig(c) size(this.s[]) size(this.s[])-1
 this.a == this.b
 this.a == this.c
-this.a == this.size
-this.a == daikon.Quant.size(this.s)
+this.a == 0
 this.aXb == 6
 this.aXc == 8
+this.size == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] {  })
 ===========================================================================
 misc.Smithnosky.add(java.lang.Object):::ENTER
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() o o.getClass().getName() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() o o.getClass().getName() size(this.s[]) size(this.s[])-1
 this.a == this.b
 this.a == this.c
 this.aXb == this.aXc
@@ -65,11 +52,11 @@ this.size == 0 || this.size == 1
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] {  }) || daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] { "java.lang.String" })
 o != null
 o.getClass().getName() == java.lang.String.class.getName()
-daikon.Quant.eltsEqual(this.s, o)
+daikon.Quant.size(this.s) == 0 || daikon.Quant.size(this.s) == 1
 ===========================================================================
 misc.Smithnosky.add(java.lang.Object):::EXIT
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() o o.getClass().getName() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass().getName()) orig(o) orig(o.getClass().getName()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] orig(this.s[post(this.a)]) orig(this.s[post(this.a)-1]) orig(this.s[post(this.a)..]) orig(this.s[post(this.a)+1..]) orig(this.s[0..post(this.a)]) orig(this.s[0..post(this.a)-1]) this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] orig(this.s[post(this.b)]) orig(this.s[post(this.b)-1]) orig(this.s[post(this.b)..]) orig(this.s[post(this.b)+1..]) orig(this.s[0..post(this.b)]) orig(this.s[0..post(this.b)-1]) this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] orig(this.s[post(this.c)]) orig(this.s[post(this.c)-1]) orig(this.s[post(this.c)..]) orig(this.s[post(this.c)+1..]) orig(this.s[0..post(this.c)]) orig(this.s[0..post(this.c)-1]) this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] orig(this.s[post(this.aXb)]) orig(this.s[post(this.aXb)-1]) orig(this.s[post(this.aXb)..]) orig(this.s[post(this.aXb)+1..]) orig(this.s[0..post(this.aXb)]) orig(this.s[0..post(this.aXb)-1]) this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] orig(this.s[post(this.aXc)]) orig(this.s[post(this.aXc)-1]) orig(this.s[post(this.aXc)..]) orig(this.s[post(this.aXc)+1..]) orig(this.s[0..post(this.aXc)]) orig(this.s[0..post(this.aXc)-1]) this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] orig(this.s[post(this.size)]) orig(this.s[post(this.size)-1]) orig(this.s[post(this.size)..]) orig(this.s[post(this.size)+1..]) orig(this.s[0..post(this.size)]) orig(this.s[0..post(this.size)-1]) this.s[orig(this.a)] this.s[orig(this.a)-1] this.s[orig(this.a)..] this.s[orig(this.a)+1..] this.s[0..orig(this.a)] this.s[0..orig(this.a)-1] this.s[orig(this.b)] this.s[orig(this.b)-1] this.s[orig(this.b)..] this.s[orig(this.b)+1..] this.s[0..orig(this.b)] this.s[0..orig(this.b)-1] this.s[orig(this.c)] this.s[orig(this.c)-1] this.s[orig(this.c)..] this.s[orig(this.c)+1..] this.s[0..orig(this.c)] this.s[0..orig(this.c)-1] this.s[orig(this.aXb)] this.s[orig(this.aXb)-1] this.s[orig(this.aXb)..] this.s[orig(this.aXb)+1..] this.s[0..orig(this.aXb)] this.s[0..orig(this.aXb)-1] this.s[orig(this.aXc)] this.s[orig(this.aXc)-1] this.s[orig(this.aXc)..] this.s[orig(this.aXc)+1..] this.s[0..orig(this.aXc)] this.s[0..orig(this.aXc)-1] this.s[orig(this.size)] this.s[orig(this.size)-1] this.s[orig(this.size)..] this.s[orig(this.size)+1..] this.s[0..orig(this.size)] this.s[0..orig(this.size)-1] orig(this.s[this.a]) orig(this.s[this.a-1]) orig(this.s[this.a..]) orig(this.s[this.a+1..]) orig(this.s[0..this.a]) orig(this.s[0..this.a-1]) orig(this.s[this.b]) orig(this.s[this.b-1]) orig(this.s[this.b..]) orig(this.s[this.b+1..]) orig(this.s[0..this.b]) orig(this.s[0..this.b-1]) orig(this.s[this.c]) orig(this.s[this.c-1]) orig(this.s[this.c..]) orig(this.s[this.c+1..]) orig(this.s[0..this.c]) orig(this.s[0..this.c-1]) orig(this.s[this.aXb]) orig(this.s[this.aXb-1]) orig(this.s[this.aXb..]) orig(this.s[this.aXb+1..]) orig(this.s[0..this.aXb]) orig(this.s[0..this.aXb-1]) orig(this.s[this.aXc]) orig(this.s[this.aXc-1]) orig(this.s[this.aXc..]) orig(this.s[this.aXc+1..]) orig(this.s[0..this.aXc]) orig(this.s[0..this.aXc-1]) orig(this.s[this.size]) orig(this.s[this.size-1]) orig(this.s[this.size..]) orig(this.s[this.size+1..]) orig(this.s[0..this.size]) orig(this.s[0..this.size-1])
-assignable this.size, this.s[*], this.s[this.a], this.s[this.a-1], this.s[this.a..], this.s[this.a+1..], this.s[0..this.a], this.s[0..this.a-1], this.s[this.b], this.s[this.b-1], this.s[this.b..], this.s[this.b+1..], this.s[0..this.b], this.s[0..this.b-1], this.s[this.c], this.s[this.c-1], this.s[this.c..], this.s[this.c+1..], this.s[0..this.c], this.s[0..this.c-1], this.s[this.aXb], this.s[this.aXb-1], this.s[this.aXb..], this.s[this.aXb+1..], this.s[0..this.aXb], this.s[0..this.aXb-1], this.s[this.aXc], this.s[this.aXc-1], this.s[this.aXc..], this.s[this.aXc+1..], this.s[0..this.aXc], this.s[0..this.aXc-1], this.s[this.size], this.s[this.size-1], this.s[this.size+1..], this.s[0..this.size], this.s[0..this.size-1]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() o o.getClass().getName() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass().getName()) orig(o) orig(o.getClass().getName()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1
+assignable this.size, this.s[*]
 this.a == this.b
 this.a == this.c
 this.a == \old(this.a)
@@ -79,89 +66,90 @@ this.aXb == this.aXc
 this.aXb == \old(this.aXb)
 this.aXb == \old(this.aXc)
 this.s == \old(this.s)
-\old(this.size) == daikon.Quant.size(this.s)-1
-daikon.Quant.pairwiseEqual(\old(this.s), daikon.Quant.slice(this.s, 0, \old(this.size)-1))
-\old(o) == daikon.Quant.getElement_Object(this.s, this.size-1)
-\old(o) == daikon.Quant.getElement_Object(this.s, \old(this.size))
+daikon.Quant.size(this.s)-1 == \old(daikon.Quant.size(this.s))
 this.a == 3
 this.aXb == 9
 this.size == 1 || this.size == 2
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] { "java.lang.String" }) || daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] { "java.lang.String", "java.lang.String" })
-("oneOf.java.jpp: SEQUENCE unimplemented" != null)
-daikon.Quant.eltsEqual(this.s, \old(o))
+daikon.Quant.size(this.s) == 1 || daikon.Quant.size(this.s) == 2
+warning: method daikon.inv.binary.twoSequence.SuperSequence.format(OutputFormat:JML) needs to be implemented: orig(this.s[]) is a subsequence of this.s[]
+daikon.Quant.subsetOf(\old(this.s), this.s)
 daikon.Quant.memberOf(\old(o.getClass().getName()) , daikon.Quant.typeArray(this.s) )
 ===========================================================================
 misc.Smithnosky.incA():::ENTER
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() size(this.s[]) size(this.s[])-1
 this.a == this.b
 this.a == this.c
 this.a == 0 || this.a == 1 || this.a == 2
 this.aXb == 1 || this.aXb == 4 || this.aXb == 6
 this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+this.size == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] {  })
 ===========================================================================
 misc.Smithnosky.incA():::EXIT
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass().getName()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] orig(this.s[post(this.a)]) orig(this.s[post(this.a)-1]) orig(this.s[post(this.a)..]) orig(this.s[post(this.a)+1..]) orig(this.s[0..post(this.a)]) orig(this.s[0..post(this.a)-1]) this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] orig(this.s[post(this.b)]) orig(this.s[post(this.b)-1]) orig(this.s[post(this.b)..]) orig(this.s[post(this.b)+1..]) orig(this.s[0..post(this.b)]) orig(this.s[0..post(this.b)-1]) this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] orig(this.s[post(this.c)]) orig(this.s[post(this.c)-1]) orig(this.s[post(this.c)..]) orig(this.s[post(this.c)+1..]) orig(this.s[0..post(this.c)]) orig(this.s[0..post(this.c)-1]) this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] orig(this.s[post(this.aXb)]) orig(this.s[post(this.aXb)-1]) orig(this.s[post(this.aXb)..]) orig(this.s[post(this.aXb)+1..]) orig(this.s[0..post(this.aXb)]) orig(this.s[0..post(this.aXb)-1]) this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] orig(this.s[post(this.aXc)]) orig(this.s[post(this.aXc)-1]) orig(this.s[post(this.aXc)..]) orig(this.s[post(this.aXc)+1..]) orig(this.s[0..post(this.aXc)]) orig(this.s[0..post(this.aXc)-1]) this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] orig(this.s[post(this.size)]) orig(this.s[post(this.size)-1]) orig(this.s[post(this.size)..]) orig(this.s[post(this.size)+1..]) orig(this.s[0..post(this.size)]) orig(this.s[0..post(this.size)-1]) this.s[orig(this.a)] this.s[orig(this.a)-1] this.s[orig(this.a)..] this.s[orig(this.a)+1..] this.s[0..orig(this.a)] this.s[0..orig(this.a)-1] this.s[orig(this.b)] this.s[orig(this.b)-1] this.s[orig(this.b)..] this.s[orig(this.b)+1..] this.s[0..orig(this.b)] this.s[0..orig(this.b)-1] this.s[orig(this.c)] this.s[orig(this.c)-1] this.s[orig(this.c)..] this.s[orig(this.c)+1..] this.s[0..orig(this.c)] this.s[0..orig(this.c)-1] this.s[orig(this.aXb)] this.s[orig(this.aXb)-1] this.s[orig(this.aXb)..] this.s[orig(this.aXb)+1..] this.s[0..orig(this.aXb)] this.s[0..orig(this.aXb)-1] this.s[orig(this.aXc)] this.s[orig(this.aXc)-1] this.s[orig(this.aXc)..] this.s[orig(this.aXc)+1..] this.s[0..orig(this.aXc)] this.s[0..orig(this.aXc)-1] this.s[orig(this.size)] this.s[orig(this.size)-1] this.s[orig(this.size)..] this.s[orig(this.size)+1..] this.s[0..orig(this.size)] this.s[0..orig(this.size)-1] orig(this.s[this.a]) orig(this.s[this.a-1]) orig(this.s[this.a..]) orig(this.s[this.a+1..]) orig(this.s[0..this.a]) orig(this.s[0..this.a-1]) orig(this.s[this.b]) orig(this.s[this.b-1]) orig(this.s[this.b..]) orig(this.s[this.b+1..]) orig(this.s[0..this.b]) orig(this.s[0..this.b-1]) orig(this.s[this.c]) orig(this.s[this.c-1]) orig(this.s[this.c..]) orig(this.s[this.c+1..]) orig(this.s[0..this.c]) orig(this.s[0..this.c-1]) orig(this.s[this.aXb]) orig(this.s[this.aXb-1]) orig(this.s[this.aXb..]) orig(this.s[this.aXb+1..]) orig(this.s[0..this.aXb]) orig(this.s[0..this.aXb-1]) orig(this.s[this.aXc]) orig(this.s[this.aXc-1]) orig(this.s[this.aXc..]) orig(this.s[this.aXc+1..]) orig(this.s[0..this.aXc]) orig(this.s[0..this.aXc-1]) orig(this.s[this.size]) orig(this.s[this.size-1]) orig(this.s[this.size..]) orig(this.s[this.size+1..]) orig(this.s[0..this.size]) orig(this.s[0..this.size-1])
-assignable this.a, this.aXb, this.s[this.a], this.s[this.a-1], this.s[this.a..], this.s[this.a+1..], this.s[0..this.a], this.s[0..this.a-1], this.s[this.b], this.s[this.b-1], this.s[this.b..], this.s[this.b+1..], this.s[0..this.b], this.s[0..this.b-1], this.s[this.c], this.s[this.c-1], this.s[this.c..], this.s[this.c+1..], this.s[0..this.c], this.s[0..this.c-1], this.s[this.aXb], this.s[this.aXb-1], this.s[this.aXb..], this.s[this.aXb+1..], this.s[0..this.aXb], this.s[0..this.aXb-1], this.s[this.aXc], this.s[this.aXc-1], this.s[this.aXc..], this.s[this.aXc+1..], this.s[0..this.aXc], this.s[0..this.aXc-1], this.s[this.size], this.s[this.size-1], this.s[this.size+1..], this.s[0..this.size]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass().getName()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1
+assignable this.a, this.aXb
 this.b == this.c
 this.b == \old(this.a)
 this.b == \old(this.b)
 this.b == \old(this.c)
 this.aXc == \old(this.aXc)
 this.size == \old(this.size)
-this.size == \old(daikon.Quant.size(this.s))
 this.s == \old(this.s)
 daikon.Quant.pairwiseEqual(this.s, \old(this.s))
 this.a == 1 || this.a == 2 || this.a == 3
 this.b == 0 || this.b == 1 || this.b == 2
 this.aXb == 0 || this.aXb == 2 || this.aXb == 6
 this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+this.size == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] {  })
 ===========================================================================
 misc.Smithnosky.incB():::ENTER
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() size(this.s[]) size(this.s[])-1
 this.b == this.c
 this.a == 1 || this.a == 2 || this.a == 3
 this.b == 0 || this.b == 1 || this.b == 2
 this.aXb == 0 || this.aXb == 2 || this.aXb == 6
 this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+this.size == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] {  })
 ===========================================================================
 misc.Smithnosky.incB():::EXIT
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass().getName()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] orig(this.s[post(this.a)]) orig(this.s[post(this.a)-1]) orig(this.s[post(this.a)..]) orig(this.s[post(this.a)+1..]) orig(this.s[0..post(this.a)]) orig(this.s[0..post(this.a)-1]) this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] orig(this.s[post(this.b)]) orig(this.s[post(this.b)-1]) orig(this.s[post(this.b)..]) orig(this.s[post(this.b)+1..]) orig(this.s[0..post(this.b)]) orig(this.s[0..post(this.b)-1]) this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] orig(this.s[post(this.c)]) orig(this.s[post(this.c)-1]) orig(this.s[post(this.c)..]) orig(this.s[post(this.c)+1..]) orig(this.s[0..post(this.c)]) orig(this.s[0..post(this.c)-1]) this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] orig(this.s[post(this.aXb)]) orig(this.s[post(this.aXb)-1]) orig(this.s[post(this.aXb)..]) orig(this.s[post(this.aXb)+1..]) orig(this.s[0..post(this.aXb)]) orig(this.s[0..post(this.aXb)-1]) this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] orig(this.s[post(this.aXc)]) orig(this.s[post(this.aXc)-1]) orig(this.s[post(this.aXc)..]) orig(this.s[post(this.aXc)+1..]) orig(this.s[0..post(this.aXc)]) orig(this.s[0..post(this.aXc)-1]) this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] orig(this.s[post(this.size)]) orig(this.s[post(this.size)-1]) orig(this.s[post(this.size)..]) orig(this.s[post(this.size)+1..]) orig(this.s[0..post(this.size)]) orig(this.s[0..post(this.size)-1]) this.s[orig(this.a)] this.s[orig(this.a)-1] this.s[orig(this.a)..] this.s[orig(this.a)+1..] this.s[0..orig(this.a)] this.s[0..orig(this.a)-1] this.s[orig(this.b)] this.s[orig(this.b)-1] this.s[orig(this.b)..] this.s[orig(this.b)+1..] this.s[0..orig(this.b)] this.s[0..orig(this.b)-1] this.s[orig(this.c)] this.s[orig(this.c)-1] this.s[orig(this.c)..] this.s[orig(this.c)+1..] this.s[0..orig(this.c)] this.s[0..orig(this.c)-1] this.s[orig(this.aXb)] this.s[orig(this.aXb)-1] this.s[orig(this.aXb)..] this.s[orig(this.aXb)+1..] this.s[0..orig(this.aXb)] this.s[0..orig(this.aXb)-1] this.s[orig(this.aXc)] this.s[orig(this.aXc)-1] this.s[orig(this.aXc)..] this.s[orig(this.aXc)+1..] this.s[0..orig(this.aXc)] this.s[0..orig(this.aXc)-1] this.s[orig(this.size)] this.s[orig(this.size)-1] this.s[orig(this.size)..] this.s[orig(this.size)+1..] this.s[0..orig(this.size)] this.s[0..orig(this.size)-1] orig(this.s[this.a]) orig(this.s[this.a-1]) orig(this.s[this.a..]) orig(this.s[this.a+1..]) orig(this.s[0..this.a]) orig(this.s[0..this.a-1]) orig(this.s[this.b]) orig(this.s[this.b-1]) orig(this.s[this.b..]) orig(this.s[this.b+1..]) orig(this.s[0..this.b]) orig(this.s[0..this.b-1]) orig(this.s[this.c]) orig(this.s[this.c-1]) orig(this.s[this.c..]) orig(this.s[this.c+1..]) orig(this.s[0..this.c]) orig(this.s[0..this.c-1]) orig(this.s[this.aXb]) orig(this.s[this.aXb-1]) orig(this.s[this.aXb..]) orig(this.s[this.aXb+1..]) orig(this.s[0..this.aXb]) orig(this.s[0..this.aXb-1]) orig(this.s[this.aXc]) orig(this.s[this.aXc-1]) orig(this.s[this.aXc..]) orig(this.s[this.aXc+1..]) orig(this.s[0..this.aXc]) orig(this.s[0..this.aXc-1]) orig(this.s[this.size]) orig(this.s[this.size-1]) orig(this.s[this.size..]) orig(this.s[this.size+1..]) orig(this.s[0..this.size]) orig(this.s[0..this.size-1])
-assignable this.b, this.aXb, this.s[this.a], this.s[this.a-1], this.s[this.a..], this.s[this.a+1..], this.s[0..this.a], this.s[0..this.a-1], this.s[this.b], this.s[this.b-1], this.s[this.b..], this.s[this.b+1..], this.s[0..this.b], this.s[0..this.b-1], this.s[this.c], this.s[this.c-1], this.s[this.c..], this.s[this.c+1..], this.s[0..this.c], this.s[0..this.c-1], this.s[this.aXb], this.s[this.aXb-1], this.s[this.aXb..], this.s[this.aXb+1..], this.s[0..this.aXb], this.s[0..this.aXb-1], this.s[this.aXc], this.s[this.aXc-1], this.s[this.aXc..], this.s[this.aXc+1..], this.s[0..this.aXc], this.s[0..this.aXc-1], this.s[this.size], this.s[this.size-1], this.s[this.size+1..], this.s[0..this.size]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass().getName()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1
+assignable this.b, this.aXb
 this.a == this.b
 this.a == \old(this.a)
 this.c == \old(this.b)
 this.c == \old(this.c)
 this.aXc == \old(this.aXc)
 this.size == \old(this.size)
-this.size == \old(daikon.Quant.size(this.s))
 this.s == \old(this.s)
 daikon.Quant.pairwiseEqual(this.s, \old(this.s))
 this.a == 1 || this.a == 2 || this.a == 3
 this.c == 0 || this.c == 1 || this.c == 2
 this.aXb == 1 || this.aXb == 4 || this.aXb == 9
 this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+this.size == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] {  })
 ===========================================================================
 misc.Smithnosky.incC():::ENTER
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() size(this.s[]) size(this.s[])-1
 this.a == this.b
 this.a == 1 || this.a == 2 || this.a == 3
 this.c == 0 || this.c == 1 || this.c == 2
 this.aXb == 1 || this.aXb == 4 || this.aXb == 9
 this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+this.size == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] {  })
 ===========================================================================
 misc.Smithnosky.incC():::EXIT
-    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass().getName()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] orig(this.s[post(this.a)]) orig(this.s[post(this.a)-1]) orig(this.s[post(this.a)..]) orig(this.s[post(this.a)+1..]) orig(this.s[0..post(this.a)]) orig(this.s[0..post(this.a)-1]) this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] orig(this.s[post(this.b)]) orig(this.s[post(this.b)-1]) orig(this.s[post(this.b)..]) orig(this.s[post(this.b)+1..]) orig(this.s[0..post(this.b)]) orig(this.s[0..post(this.b)-1]) this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] orig(this.s[post(this.c)]) orig(this.s[post(this.c)-1]) orig(this.s[post(this.c)..]) orig(this.s[post(this.c)+1..]) orig(this.s[0..post(this.c)]) orig(this.s[0..post(this.c)-1]) this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] orig(this.s[post(this.aXb)]) orig(this.s[post(this.aXb)-1]) orig(this.s[post(this.aXb)..]) orig(this.s[post(this.aXb)+1..]) orig(this.s[0..post(this.aXb)]) orig(this.s[0..post(this.aXb)-1]) this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] orig(this.s[post(this.aXc)]) orig(this.s[post(this.aXc)-1]) orig(this.s[post(this.aXc)..]) orig(this.s[post(this.aXc)+1..]) orig(this.s[0..post(this.aXc)]) orig(this.s[0..post(this.aXc)-1]) this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] orig(this.s[post(this.size)]) orig(this.s[post(this.size)-1]) orig(this.s[post(this.size)..]) orig(this.s[post(this.size)+1..]) orig(this.s[0..post(this.size)]) orig(this.s[0..post(this.size)-1]) this.s[orig(this.a)] this.s[orig(this.a)-1] this.s[orig(this.a)..] this.s[orig(this.a)+1..] this.s[0..orig(this.a)] this.s[0..orig(this.a)-1] this.s[orig(this.b)] this.s[orig(this.b)-1] this.s[orig(this.b)..] this.s[orig(this.b)+1..] this.s[0..orig(this.b)] this.s[0..orig(this.b)-1] this.s[orig(this.c)] this.s[orig(this.c)-1] this.s[orig(this.c)..] this.s[orig(this.c)+1..] this.s[0..orig(this.c)] this.s[0..orig(this.c)-1] this.s[orig(this.aXb)] this.s[orig(this.aXb)-1] this.s[orig(this.aXb)..] this.s[orig(this.aXb)+1..] this.s[0..orig(this.aXb)] this.s[0..orig(this.aXb)-1] this.s[orig(this.aXc)] this.s[orig(this.aXc)-1] this.s[orig(this.aXc)..] this.s[orig(this.aXc)+1..] this.s[0..orig(this.aXc)] this.s[0..orig(this.aXc)-1] this.s[orig(this.size)] this.s[orig(this.size)-1] this.s[orig(this.size)..] this.s[orig(this.size)+1..] this.s[0..orig(this.size)] this.s[0..orig(this.size)-1] orig(this.s[this.a]) orig(this.s[this.a-1]) orig(this.s[this.a..]) orig(this.s[this.a+1..]) orig(this.s[0..this.a]) orig(this.s[0..this.a-1]) orig(this.s[this.b]) orig(this.s[this.b-1]) orig(this.s[this.b..]) orig(this.s[this.b+1..]) orig(this.s[0..this.b]) orig(this.s[0..this.b-1]) orig(this.s[this.c]) orig(this.s[this.c-1]) orig(this.s[this.c..]) orig(this.s[this.c+1..]) orig(this.s[0..this.c]) orig(this.s[0..this.c-1]) orig(this.s[this.aXb]) orig(this.s[this.aXb-1]) orig(this.s[this.aXb..]) orig(this.s[this.aXb+1..]) orig(this.s[0..this.aXb]) orig(this.s[0..this.aXb-1]) orig(this.s[this.aXc]) orig(this.s[this.aXc-1]) orig(this.s[this.aXc..]) orig(this.s[this.aXc+1..]) orig(this.s[0..this.aXc]) orig(this.s[0..this.aXc-1]) orig(this.s[this.size]) orig(this.s[this.size-1]) orig(this.s[this.size..]) orig(this.s[this.size+1..]) orig(this.s[0..this.size]) orig(this.s[0..this.size-1])
-assignable this.c, this.aXc, this.s[this.a], this.s[this.a-1], this.s[this.a..], this.s[this.a+1..], this.s[0..this.a], this.s[0..this.a-1], this.s[this.b], this.s[this.b-1], this.s[this.b..], this.s[this.b+1..], this.s[0..this.b], this.s[0..this.b-1], this.s[this.c], this.s[this.c-1], this.s[this.c..], this.s[this.c+1..], this.s[0..this.c], this.s[0..this.c-1], this.s[this.aXb], this.s[this.aXb-1], this.s[this.aXb..], this.s[this.aXb+1..], this.s[0..this.aXb], this.s[0..this.aXb-1], this.s[this.aXc], this.s[this.aXc-1], this.s[this.aXc..], this.s[this.aXc+1..], this.s[0..this.aXc], this.s[0..this.aXc-1], this.s[this.size], this.s[this.size-1], this.s[this.size+1..], this.s[0..this.size]
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass().getName() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass().getName()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1
+assignable this.c, this.aXc
 this.a == this.b
 this.a == this.c
 this.a == \old(this.a)
@@ -169,11 +157,11 @@ this.a == \old(this.b)
 this.aXb == this.aXc
 this.aXb == \old(this.aXb)
 this.size == \old(this.size)
-this.size == \old(daikon.Quant.size(this.s))
 this.s == \old(this.s)
 daikon.Quant.pairwiseEqual(this.s, \old(this.s))
 this.a == 1 || this.a == 2 || this.a == 3
 this.aXb == 1 || this.aXb == 4 || this.aXb == 9
+this.size == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.s), new String[] {  })
 ===========================================================================

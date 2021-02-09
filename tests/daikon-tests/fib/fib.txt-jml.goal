@@ -2,12 +2,6 @@
 misc.Fib:::CLASS
     Variables: misc.Fib.STEPS misc.Fib.a misc.Fib.b misc.Fib.c
 misc.Fib.a >= 0
-(misc.Fib.a >> misc.Fib.STEPS == 0)
-misc.Fib.STEPS != misc.Fib.a
-(misc.Fib.b >> misc.Fib.STEPS == 0)
-misc.Fib.STEPS != misc.Fib.b
-(misc.Fib.c >> misc.Fib.STEPS == 0)
-misc.Fib.STEPS != misc.Fib.c
 (!(misc.Fib.b == 0)) || (misc.Fib.a == 0)
 misc.Fib.a <= misc.Fib.b
 (!(misc.Fib.c == 0)) || (misc.Fib.a == 0)
@@ -36,18 +30,18 @@ misc.Fib.a - misc.Fib.b + \old(misc.Fib.a) == 0
 2 * misc.Fib.b - misc.Fib.c - \old(misc.Fib.a) == 0
 ===========================================================================
 misc.Fib.main(java.lang.String[]):::ENTER
-    Variables: misc.Fib.STEPS misc.Fib.a misc.Fib.b misc.Fib.c args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1 args[misc.Fib.STEPS] args[misc.Fib.STEPS-1] args[misc.Fib.STEPS..] args[misc.Fib.STEPS+1..] args[0..misc.Fib.STEPS] args[0..misc.Fib.STEPS-1] args[misc.Fib.a] args[misc.Fib.a-1] args[misc.Fib.a..] args[misc.Fib.a+1..] args[0..misc.Fib.a] args[0..misc.Fib.a-1] args[misc.Fib.b] args[misc.Fib.b-1] args[misc.Fib.b..] args[misc.Fib.b+1..] args[0..misc.Fib.b] args[0..misc.Fib.b-1] args[misc.Fib.c] args[misc.Fib.c-1] args[misc.Fib.c..] args[misc.Fib.c+1..] args[0..misc.Fib.c] args[0..misc.Fib.c-1]
+    Variables: misc.Fib.STEPS misc.Fib.a misc.Fib.b misc.Fib.c args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1
 misc.Fib.a == misc.Fib.b
 misc.Fib.a == misc.Fib.c
-misc.Fib.a == daikon.Quant.size(args)
+misc.Fib.a == 0
 args != null
 args.getClass().getName() == java.lang.String[].class.getName()
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })
 ===========================================================================
 misc.Fib.main(java.lang.String[]):::EXIT
-    Variables: misc.Fib.STEPS misc.Fib.a misc.Fib.b misc.Fib.c args args.getClass().getName() args[] args[].toString orig(misc.Fib.a) orig(misc.Fib.b) orig(misc.Fib.c) orig(args) orig(args.getClass().getName()) orig(args[]) orig(args[].toString) size(args[]) size(args[])-1 orig(size(args[])) orig(size(args[]))-1 args[misc.Fib.STEPS] args[misc.Fib.STEPS-1] args[misc.Fib.STEPS..] args[misc.Fib.STEPS+1..] args[0..misc.Fib.STEPS] args[0..misc.Fib.STEPS-1] orig(args[post(misc.Fib.STEPS)]) orig(args[post(misc.Fib.STEPS)-1]) orig(args[post(misc.Fib.STEPS)..]) orig(args[post(misc.Fib.STEPS)+1..]) orig(args[0..post(misc.Fib.STEPS)]) orig(args[0..post(misc.Fib.STEPS)-1]) args[misc.Fib.a] args[misc.Fib.a-1] args[misc.Fib.a..] args[misc.Fib.a+1..] args[0..misc.Fib.a] args[0..misc.Fib.a-1] orig(args[post(misc.Fib.a)]) orig(args[post(misc.Fib.a)-1]) orig(args[post(misc.Fib.a)..]) orig(args[post(misc.Fib.a)+1..]) orig(args[0..post(misc.Fib.a)]) orig(args[0..post(misc.Fib.a)-1]) args[misc.Fib.b] args[misc.Fib.b-1] args[misc.Fib.b..] args[misc.Fib.b+1..] args[0..misc.Fib.b] args[0..misc.Fib.b-1] orig(args[post(misc.Fib.b)]) orig(args[post(misc.Fib.b)-1]) orig(args[post(misc.Fib.b)..]) orig(args[post(misc.Fib.b)+1..]) orig(args[0..post(misc.Fib.b)]) orig(args[0..post(misc.Fib.b)-1]) args[misc.Fib.c] args[misc.Fib.c-1] args[misc.Fib.c..] args[misc.Fib.c+1..] args[0..misc.Fib.c] args[0..misc.Fib.c-1] orig(args[post(misc.Fib.c)]) orig(args[post(misc.Fib.c)-1]) orig(args[post(misc.Fib.c)..]) orig(args[post(misc.Fib.c)+1..]) orig(args[0..post(misc.Fib.c)]) orig(args[0..post(misc.Fib.c)-1]) args[orig(misc.Fib.a)] args[orig(misc.Fib.a)-1] args[orig(misc.Fib.a)..] args[orig(misc.Fib.a)+1..] args[0..orig(misc.Fib.a)] args[0..orig(misc.Fib.a)-1] args[orig(misc.Fib.b)] args[orig(misc.Fib.b)-1] args[orig(misc.Fib.b)..] args[orig(misc.Fib.b)+1..] args[0..orig(misc.Fib.b)] args[0..orig(misc.Fib.b)-1] args[orig(misc.Fib.c)] args[orig(misc.Fib.c)-1] args[orig(misc.Fib.c)..] args[orig(misc.Fib.c)+1..] args[0..orig(misc.Fib.c)] args[0..orig(misc.Fib.c)-1] orig(args[misc.Fib.a]) orig(args[misc.Fib.a-1]) orig(args[misc.Fib.a..]) orig(args[misc.Fib.a+1..]) orig(args[0..misc.Fib.a]) orig(args[0..misc.Fib.a-1]) orig(args[misc.Fib.b]) orig(args[misc.Fib.b-1]) orig(args[misc.Fib.b..]) orig(args[misc.Fib.b+1..]) orig(args[0..misc.Fib.b]) orig(args[0..misc.Fib.b-1]) orig(args[misc.Fib.c]) orig(args[misc.Fib.c-1]) orig(args[misc.Fib.c..]) orig(args[misc.Fib.c+1..]) orig(args[0..misc.Fib.c]) orig(args[0..misc.Fib.c-1])
-assignable misc.Fib.a, misc.Fib.b, misc.Fib.c, args[misc.Fib.a], args[misc.Fib.a-1], args[misc.Fib.a..], args[misc.Fib.a+1..], args[0..misc.Fib.a], args[0..misc.Fib.a-1], args[misc.Fib.b], args[misc.Fib.b-1], args[misc.Fib.b..], args[misc.Fib.b+1..], args[0..misc.Fib.b], args[0..misc.Fib.b-1], args[misc.Fib.c], args[misc.Fib.c-1], args[misc.Fib.c..], args[misc.Fib.c+1..], args[0..misc.Fib.c], args[0..misc.Fib.c-1]
+    Variables: misc.Fib.STEPS misc.Fib.a misc.Fib.b misc.Fib.c args args.getClass().getName() args[] args[].toString orig(misc.Fib.a) orig(misc.Fib.b) orig(misc.Fib.c) orig(args) orig(args.getClass().getName()) orig(args[]) orig(args[].toString) size(args[]) size(args[])-1 orig(size(args[])) orig(size(args[]))-1
+assignable misc.Fib.a, misc.Fib.b, misc.Fib.c
 daikon.Quant.pairwiseEqual(args, \old(args))
 misc.Fib.a == 6765
 misc.Fib.b == 10946

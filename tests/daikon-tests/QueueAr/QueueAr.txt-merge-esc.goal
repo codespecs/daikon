@@ -203,7 +203,6 @@ public class QueueAr
   /*@ requires this.theArray[this.front] != null; */
   /*@ requires this.theArray[this.back] != null; */
   /*@ modifies this.theArray[*], this.currentSize, this.front, this.theArray[this.currentSize], this.theArray[this.currentSize-1], this.theArray[this.currentSize..], this.theArray[this.currentSize+1..], this.theArray[0..this.currentSize], this.theArray[0..this.currentSize-1], this.theArray[this.front], this.theArray[this.front-1], this.theArray[this.front..], this.theArray[this.front+1..], this.theArray[0..this.front], this.theArray[0..this.front-1], this.theArray[this.back], this.theArray[this.back-1], this.theArray[this.back..], this.theArray[this.back+1..], this.theArray[0..this.back], this.theArray[0..this.back-1]; */
-  /*@ ensures \result == \old(this.theArray[this.front]); */
   /*@ ensures this.theArray[this.currentSize] == this.theArray[\old(this.currentSize)-1]; */
   /*@ ensures \result != null; */
   /*@ ensures this.theArray[\old(this.front)] == null; */

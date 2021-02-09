@@ -45,7 +45,6 @@ assignable this.theArray[*], this.currentSize, this.front, this.theArray[this.cu
 this.theArray == \old(this.theArray)
 this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
 this.back == \old(this.back)
-\result == \old(daikon.Quant.getElement_Object(this.theArray, this.front))
 daikon.Quant.size(this.theArray) == \old(daikon.Quant.size(this.theArray))
 daikon.Quant.getElement_Object(this.theArray, this.currentSize) == daikon.Quant.getElement_Object(this.theArray, \old(this.currentSize)-1)
 daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, \old(this.front)+1, daikon.Quant.size(this.theArray)), \old(daikon.Quant.slice(this.theArray, this.front+1, daikon.Quant.size(this.theArray))))

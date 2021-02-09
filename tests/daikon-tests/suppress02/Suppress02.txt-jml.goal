@@ -1,6 +1,6 @@
 ===========================================================================
 misc.Suppress02:::OBJECT
-    Variables: this this.theArray this.theArray[] this.i this.j size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1]
+    Variables: this this.theArray this.theArray[] this.i this.j size(this.theArray[]) size(this.theArray[])-1
 this != null
 this.theArray != null
 this.theArray != null
@@ -8,186 +8,31 @@ daikon.Quant.eltsGTE(this.theArray, 0)
 this.i <= 49
 this.i >= 0
 daikon.Quant.size(this.theArray) == 1000
-daikon.Quant.eltsNotEqualIndex(daikon.Quant.slice(this.theArray, this.j+1, daikon.Quant.size(this.theArray)))
-daikon.Quant.noDups(daikon.Quant.slice(this.theArray, 0, this.j))
-daikon.Quant.memberOf(this.i , this.theArray )
-daikon.Quant.memberOf(this.j , this.theArray )
 daikon.Quant.eltsLT(this.theArray, daikon.Quant.size(this.theArray)-1)
 (!(this.j == 0)) || (this.i == 0)
 this.i <= this.j
-this.i < daikon.Quant.size(this.theArray)-1
-(!(this.i == 0)) || (daikon.Quant.getElement_int(this.theArray, this.i) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, this.i) == 0)) || (this.i == 0)
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, this.i, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, this.i+1, daikon.Quant.size(this.theArray)) )
-(!(daikon.Quant.getElement_int(this.theArray, this.j) == 0)) || (this.i == 0)
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, this.j, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, this.j+1, daikon.Quant.size(this.theArray)) )
-this.j < daikon.Quant.size(this.theArray)-1
-(!(this.j == 0)) || (daikon.Quant.getElement_int(this.theArray, this.i) == 0)
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, this.i, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, this.i+1, daikon.Quant.size(this.theArray)) )
-(!(this.j == 0)) || (daikon.Quant.getElement_int(this.theArray, this.j) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, this.j) == 0)) || (this.j == 0)
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, this.j, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, this.j+1, daikon.Quant.size(this.theArray)) )
-daikon.Quant.size(this.theArray)-1 > daikon.Quant.getElement_int(this.theArray, this.i)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, this.i, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, this.i+1, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, this.i), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, this.i-1), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.size(this.theArray)-1 > daikon.Quant.getElement_int(this.theArray, this.j)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, this.j, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, this.j+1, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, this.j), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, this.j-1), daikon.Quant.size(this.theArray)-1)
-(!(daikon.Quant.getElement_int(this.theArray, this.j) == 0)) || (daikon.Quant.getElement_int(this.theArray, this.i) == 0)
 ===========================================================================
 misc.Suppress02.Suppress02():::EXIT
-    Variables: this this.theArray this.theArray[] this.i this.j size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1]
-this.i == daikon.Quant.getElement_int(this.theArray, this.i)
+    Variables: this this.theArray this.theArray[] this.i this.j size(this.theArray[]) size(this.theArray[])-1
 this.i == 0
 this.j == 5
-daikon.Quant.eltsEqual(daikon.Quant.slice(this.theArray, 0, this.i), 0)
-daikon.Quant.eltsEqualIndex(daikon.Quant.slice(this.theArray, 0, this.i))
-daikon.Quant.getElement_int(this.theArray, this.j) == 153
-daikon.Quant.getElement_int(this.theArray, this.j-1) == 44
-daikon.Quant.eltsEqual(daikon.Quant.slice(this.theArray, 0, this.i), this.i)
 ===========================================================================
 misc.Suppress02.f(int):::ENTER
-    Variables: this this.theArray this.theArray[] this.i this.j n size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1] this.theArray[n] this.theArray[n-1] this.theArray[n..] this.theArray[n+1..] this.theArray[0..n] this.theArray[0..n-1]
-daikon.Quant.noDups(daikon.Quant.slice(this.theArray, 0, n))
-daikon.Quant.memberOf(n , this.theArray )
+    Variables: this this.theArray this.theArray[] this.i this.j n size(this.theArray[]) size(this.theArray[])-1
 (!(n == 0)) || (this.i == 0)
 this.i <= n
-(!(daikon.Quant.getElement_int(this.theArray, n) == 0)) || (this.i == 0)
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, n, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, n+1, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, n, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, n+1, daikon.Quant.size(this.theArray)) )
-n < daikon.Quant.size(this.theArray)-1
-(!(n == 0)) || (daikon.Quant.getElement_int(this.theArray, this.i) == 0)
-daikon.Quant.memberOf(n , daikon.Quant.slice(this.theArray, this.i, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(n , daikon.Quant.slice(this.theArray, this.i+1, daikon.Quant.size(this.theArray)) )
-n != daikon.Quant.getElement_int(this.theArray, this.j)
-daikon.Quant.memberOf(n , daikon.Quant.slice(this.theArray, this.j, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(n , daikon.Quant.slice(this.theArray, this.j+1, daikon.Quant.size(this.theArray)) )
-(!(n == 0)) || (daikon.Quant.getElement_int(this.theArray, n) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, n) == 0)) || (n == 0)
-daikon.Quant.memberOf(n , daikon.Quant.slice(this.theArray, n, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(n , daikon.Quant.slice(this.theArray, n+1, daikon.Quant.size(this.theArray)) )
-daikon.Quant.size(this.theArray)-1 > daikon.Quant.getElement_int(this.theArray, n)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, n, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, n+1, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, n), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, n-1), daikon.Quant.size(this.theArray)-1)
-(!(daikon.Quant.getElement_int(this.theArray, n) == 0)) || (daikon.Quant.getElement_int(this.theArray, this.i) == 0)
 ===========================================================================
 misc.Suppress02.f(int):::EXIT
-    Variables: this this.theArray this.theArray[] this.i this.j n orig(this) orig(this.theArray) orig(this.theArray[]) orig(this.i) orig(this.j) orig(n) size(this.theArray[]) size(this.theArray[])-1 orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.i] this.theArray[this.i-1] this.theArray[this.i..] this.theArray[this.i+1..] this.theArray[0..this.i] this.theArray[0..this.i-1] this.theArray[this.j] this.theArray[this.j-1] this.theArray[this.j..] this.theArray[this.j+1..] this.theArray[0..this.j] this.theArray[0..this.j-1] this.theArray[n] this.theArray[n-1] this.theArray[n..] this.theArray[n+1..] this.theArray[0..n] this.theArray[0..n-1] this.theArray[orig(this.i)] this.theArray[orig(this.i)-1] this.theArray[orig(this.i)..] this.theArray[orig(this.i)+1..] this.theArray[0..orig(this.i)] this.theArray[0..orig(this.i)-1] this.theArray[orig(this.j)] this.theArray[orig(this.j)-1] this.theArray[orig(this.j)..] this.theArray[orig(this.j)+1..] this.theArray[0..orig(this.j)] this.theArray[0..orig(this.j)-1] this.theArray[orig(n)] this.theArray[orig(n)-1] this.theArray[orig(n)..] this.theArray[orig(n)+1..] this.theArray[0..orig(n)] this.theArray[0..orig(n)-1] orig(this.theArray[post(this.i)]) orig(this.theArray[post(this.i)-1]) orig(this.theArray[post(this.i)..]) orig(this.theArray[post(this.i)+1..]) orig(this.theArray[0..post(this.i)]) orig(this.theArray[0..post(this.i)-1]) orig(this.theArray[post(this.j)]) orig(this.theArray[post(this.j)-1]) orig(this.theArray[post(this.j)..]) orig(this.theArray[post(this.j)+1..]) orig(this.theArray[0..post(this.j)]) orig(this.theArray[0..post(this.j)-1]) orig(this.theArray[post(n)]) orig(this.theArray[post(n)-1]) orig(this.theArray[post(n)..]) orig(this.theArray[post(n)+1..]) orig(this.theArray[0..post(n)]) orig(this.theArray[0..post(n)-1]) orig(this.theArray[this.i]) orig(this.theArray[this.i-1]) orig(this.theArray[this.i..]) orig(this.theArray[this.i+1..]) orig(this.theArray[0..this.i]) orig(this.theArray[0..this.i-1]) orig(this.theArray[this.j]) orig(this.theArray[this.j-1]) orig(this.theArray[this.j..]) orig(this.theArray[this.j+1..]) orig(this.theArray[0..this.j]) orig(this.theArray[0..this.j-1]) orig(this.theArray[n]) orig(this.theArray[n-1]) orig(this.theArray[n..]) orig(this.theArray[n+1..]) orig(this.theArray[0..n]) orig(this.theArray[0..n-1])
-assignable this.i, this.j, this.theArray[this.i], this.theArray[this.i-1], this.theArray[this.i..], this.theArray[this.i+1..], this.theArray[0..this.i], this.theArray[0..this.i-1], this.theArray[this.j], this.theArray[this.j-1], this.theArray[this.j..], this.theArray[this.j+1..], this.theArray[0..this.j], this.theArray[0..this.j-1]
+    Variables: this this.theArray this.theArray[] this.i this.j n orig(this) orig(this.theArray) orig(this.theArray[]) orig(this.i) orig(this.j) orig(n) size(this.theArray[]) size(this.theArray[])-1 orig(size(this.theArray[])) orig(size(this.theArray[]))-1
+assignable this.i, this.j
 this.theArray == \old(this.theArray)
 daikon.Quant.pairwiseEqual(this.theArray, \old(this.theArray))
-daikon.Quant.eltsNotEqualIndex(daikon.Quant.slice(this.theArray, \old(this.j)+1, daikon.Quant.size(this.theArray)))
-daikon.Quant.noDups(daikon.Quant.slice(this.theArray, 0, \old(this.j)))
-daikon.Quant.noDups(daikon.Quant.slice(this.theArray, 0, \old(n)))
-daikon.Quant.memberOf(\old(this.i) , this.theArray )
-daikon.Quant.memberOf(\old(this.j) , this.theArray )
-daikon.Quant.memberOf(\old(n) , this.theArray )
 (!(\old(n) == 0)) || (this.i == 0)
 this.i <= \old(n)
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, \old(this.i), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, \old(this.i)+1, daikon.Quant.size(this.theArray)) )
-this.i != daikon.Quant.getElement_int(this.theArray, \old(this.j))
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, \old(this.j), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, \old(this.j)+1, daikon.Quant.size(this.theArray)) )
-(!(daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)) || (this.i == 0)
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, \old(n), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.i , daikon.Quant.slice(this.theArray, \old(n)+1, daikon.Quant.size(this.theArray)) )
 (!(this.j == 0)) || (\old(this.i) == 0)
 this.j != \old(this.j)
 (!(\old(n) == 0)) || (this.j == 0)
 (!(this.j == 0)) || (\old(n) == 0)
-(!(this.j == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(this.i)) == 0)
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, \old(this.i), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, \old(this.i)+1, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, \old(this.j), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, \old(this.j)+1, daikon.Quant.size(this.theArray)) )
-(!(this.j == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)) || (this.j == 0)
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, \old(n), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(this.j , daikon.Quant.slice(this.theArray, \old(n)+1, daikon.Quant.size(this.theArray)) )
-\old(this.i) < daikon.Quant.size(this.theArray)-1
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, this.i, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, this.i+1, daikon.Quant.size(this.theArray)) )
-(!(daikon.Quant.getElement_int(this.theArray, this.j) == 0)) || (\old(this.i) == 0)
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, this.j, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, this.j+1, daikon.Quant.size(this.theArray)) )
-(!(\old(this.i) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(this.i)) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, \old(this.i)) == 0)) || (\old(this.i) == 0)
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, \old(this.i), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, \old(this.i)+1, daikon.Quant.size(this.theArray)) )
-(!(daikon.Quant.getElement_int(this.theArray, \old(this.j)) == 0)) || (\old(this.i) == 0)
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, \old(this.j), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, \old(this.j)+1, daikon.Quant.size(this.theArray)) )
-(!(daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)) || (\old(this.i) == 0)
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, \old(n), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.i) , daikon.Quant.slice(this.theArray, \old(n)+1, daikon.Quant.size(this.theArray)) )
-\old(this.j) < daikon.Quant.size(this.theArray)-1
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, this.i, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, this.i+1, daikon.Quant.size(this.theArray)) )
-\old(this.j) != daikon.Quant.getElement_int(this.theArray, this.j)
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, this.j, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, this.j+1, daikon.Quant.size(this.theArray)) )
-(!(\old(this.j) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(this.i)) == 0)
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, \old(this.i), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, \old(this.i)+1, daikon.Quant.size(this.theArray)) )
-(!(\old(this.j) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(this.j)) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, \old(this.j)) == 0)) || (\old(this.j) == 0)
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, \old(this.j), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, \old(this.j)+1, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, \old(n), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(this.j) , daikon.Quant.slice(this.theArray, \old(n)+1, daikon.Quant.size(this.theArray)) )
-\old(n) < daikon.Quant.size(this.theArray)-1
-(!(\old(n) == 0)) || (daikon.Quant.getElement_int(this.theArray, this.i) == 0)
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, this.i, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, this.i+1, daikon.Quant.size(this.theArray)) )
-(!(\old(n) == 0)) || (daikon.Quant.getElement_int(this.theArray, this.j) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, this.j) == 0)) || (\old(n) == 0)
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, this.j, daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, this.j+1, daikon.Quant.size(this.theArray)) )
-(!(\old(n) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(this.i)) == 0)
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, \old(this.i), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, \old(this.i)+1, daikon.Quant.size(this.theArray)) )
-\old(n) != daikon.Quant.getElement_int(this.theArray, \old(this.j))
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, \old(this.j), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, \old(this.j)+1, daikon.Quant.size(this.theArray)) )
-(!(\old(n) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)) || (\old(n) == 0)
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, \old(n), daikon.Quant.size(this.theArray)) )
-daikon.Quant.memberOf(\old(n) , daikon.Quant.slice(this.theArray, \old(n)+1, daikon.Quant.size(this.theArray)) )
-daikon.Quant.size(this.theArray)-1 > daikon.Quant.getElement_int(this.theArray, \old(this.i))
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, \old(this.i), daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, \old(this.i)+1, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, \old(this.i)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, \old(this.i)-1), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.size(this.theArray)-1 > daikon.Quant.getElement_int(this.theArray, \old(this.j))
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, \old(this.j), daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, \old(this.j)+1, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, \old(this.j)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, \old(this.j)-1), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.size(this.theArray)-1 > daikon.Quant.getElement_int(this.theArray, \old(n))
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, \old(n), daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, \old(n)+1, daikon.Quant.size(this.theArray)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, \old(n)), daikon.Quant.size(this.theArray)-1)
-daikon.Quant.eltsLT(daikon.Quant.slice(this.theArray, 0, \old(n)-1), daikon.Quant.size(this.theArray)-1)
-(!(daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)) || (daikon.Quant.getElement_int(this.theArray, this.i) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, this.j) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(this.i)) == 0)
-daikon.Quant.getElement_int(this.theArray, this.j) != daikon.Quant.getElement_int(this.theArray, \old(this.j))
-(!(daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)) || (daikon.Quant.getElement_int(this.theArray, this.j) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, this.j) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, \old(this.j)) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(this.i)) == 0)
-(!(daikon.Quant.getElement_int(this.theArray, \old(n)) == 0)) || (daikon.Quant.getElement_int(this.theArray, \old(this.i)) == 0)
 ===========================================================================
 misc.Suppress02.main(java.lang.String[]):::ENTER
     Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1

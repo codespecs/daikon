@@ -1,6 +1,5 @@
 ===========================================================================
 MapQuick1.StreetNumberSet:::OBJECT
-size(this.begins[]) == size(this.ends[])
 this.begins != null
 this.begins[] contains no duplicates
 this.begins[] elements >= 0
@@ -8,7 +7,7 @@ this.ends != null
 this.ends[] contains no duplicates
 this.ends[] elements >= 0
 size(this.begins[]) >= 1
-this.begins[] <= this.ends[] (elementwise)
+size(this.ends[]) >= 1
 ===========================================================================
 MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::ENTER
 numbers != null
@@ -25,7 +24,6 @@ this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
 ===========================================================================
 MapQuick1.StreetNumberSet.contains(int):::ENTER
 n >= 0
@@ -45,7 +43,6 @@ this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
 ===========================================================================
 MapQuick1.StreetNumberSet.contains(int):::EXIT;condition="return == true"
 return == true
@@ -54,7 +51,6 @@ MapQuick1.StreetNumberSet.contains(int):::EXIT;condition="not(return == true)"
 return == false
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::ENTER
-size(other.begins[]) == size(other.ends[])
 other.begins != null
 other.begins[] contains no duplicates
 other.begins[] elements >= 0
@@ -62,7 +58,7 @@ other.ends != null
 other.ends[] contains no duplicates
 other.ends[] elements >= 0
 size(other.begins[]) >= 1
-other.begins[] <= other.ends[] (elementwise)
+size(other.ends[]) >= 1
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271
 return == false
@@ -73,15 +69,9 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271;condition=
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272
 this.begins == other.begins
 this.begins == orig(other.begins)
-this.begins[] == other.begins[]
-this.begins[] == orig(other.begins[])
 this.ends == other.ends
 this.ends == orig(other.ends)
-this.ends[] == other.ends[]
-this.ends[] == orig(other.ends[])
 orig(this) == orig(other)
-size(this.begins[]) == size(other.ends[])
-size(this.begins[]) == orig(size(other.ends[]))
 return == true
 orig(other) != null
 ===========================================================================
@@ -102,10 +92,6 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT282;condition=
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286
 return == false
 orig(other) != null
-size(this.begins[]) != size(other.begins[])
-size(this.begins[]) != size(other.begins[])-1
-size(this.begins[])-1 != size(other.begins[])
-size(this.begins[])-1 != size(other.begins[])-1
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286;condition="not(return == true)"
 ===========================================================================
@@ -123,9 +109,6 @@ other.begins == orig(other.begins)
 other.begins[] == orig(other.begins[])
 other.ends == orig(other.ends)
 other.ends[] == orig(other.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
-size(other.begins[]) == size(other.ends[])
-size(other.begins[]) == orig(size(other.ends[]))
 (return == true)  ==>  (orig(other) != null)
 other.begins != null
 other.begins[] contains no duplicates
@@ -134,7 +117,7 @@ other.ends != null
 other.ends[] contains no duplicates
 other.ends[] elements >= 0
 size(other.begins[]) >= 1
-other.begins[] <= other.ends[] (elementwise)
+size(other.ends[]) >= 1
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT;condition="return == true"
 return == true
@@ -151,7 +134,6 @@ this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
 (return == true)  ==>  (orig(o) != null)
 (return == true)  ==>  (orig(o.getClass().getName()) == MapQuick1.StreetNumberSet.class)
 ===========================================================================
@@ -169,24 +151,22 @@ this.begins[] one of { [1], [3, 1, 7] }
 this.ends[] elements one of { 1, 5, 7 }
 this.ends[] one of { [5, 1, 7], [7] }
 size(this.begins[]) one of { 1, 3 }
-size(this.begins[]) in this.begins[]
+size(this.ends[]) one of { 1, 3 }
 ===========================================================================
 MapQuick1.StreetNumberSet.hashCode():::EXIT
 this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
 this.begins[] elements one of { 1, 3, 7 }
 this.begins[] one of { [1], [3, 1, 7] }
 this.ends[] elements one of { 1, 5, 7 }
 this.ends[] one of { [5, 1, 7], [7] }
 return == 122
 size(this.begins[]) one of { 1, 3 }
-size(this.begins[]) in this.begins[]
+size(this.ends[]) one of { 1, 3 }
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
-size(other.begins[]) == size(other.ends[])
 other != null
 other.begins != null
 other.begins[] contains no duplicates
@@ -195,7 +175,7 @@ other.ends != null
 other.ends[] contains no duplicates
 other.ends[] elements >= 0
 size(other.begins[]) >= 1
-other.begins[] <= other.ends[] (elementwise)
+size(other.ends[]) >= 1
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT253
 return == true
@@ -216,9 +196,6 @@ other.begins == orig(other.begins)
 other.begins[] == orig(other.begins[])
 other.ends == orig(other.ends)
 other.ends[] == orig(other.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
-size(other.begins[]) == size(other.ends[])
-size(other.begins[]) == orig(size(other.ends[]))
 other.begins != null
 other.begins[] contains no duplicates
 other.begins[] elements >= 0
@@ -226,7 +203,7 @@ other.ends != null
 other.ends[] contains no duplicates
 other.ends[] elements >= 0
 size(other.begins[]) >= 1
-other.begins[] <= other.ends[] (elementwise)
+size(other.ends[]) >= 1
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT;condition="return == true"
 return == true
@@ -241,7 +218,6 @@ this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
 return == false
 ===========================================================================
 MapQuick1.StreetNumberSet.isEmpty():::EXIT;condition="not(return == true)"
@@ -253,13 +229,10 @@ this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
 return >= 0
 this.begins[] elements <= return
 return in this.ends[]
 this.ends[] elements <= return
-(return == 0) ==> (size(this.begins[])-1 == 0)
-return >= size(this.begins[])-1
 ===========================================================================
 MapQuick1.StreetNumberSet.min():::ENTER
 ===========================================================================
@@ -268,7 +241,6 @@ this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
 return >= 0
 return in this.begins[]
 this.begins[] elements >= return
@@ -276,18 +248,15 @@ this.ends[] elements >= return
 ===========================================================================
 MapQuick1.StreetNumberSet.orderStatistic(int):::ENTER
 n >= 0
-n != size(this.begins[])
 ===========================================================================
 MapQuick1.StreetNumberSet.orderStatistic(int):::EXIT
 this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
 return >= 0
 (orig(n) == 0) ==> (return == 0)
 return <= orig(n)
-orig(n) != size(this.begins[])
 ===========================================================================
 MapQuick1.StreetNumberSet.parityOf(int):::ENTER
 i >= 0
@@ -305,5 +274,3 @@ this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
-size(this.begins[]) == orig(size(this.ends[]))
-return >= size(this.begins[])

@@ -53,24 +53,18 @@ this.bits.length-1 == (\old(n) | this.bits.length-1)
 ===========================================================================
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
     Variables: this this.bits this.bits[] other other.bits other.bits[] size(this.bits[]) size(this.bits[])-1 size(other.bits[]) size(other.bits[])-1
-this.bits.length == other.bits.length
 other != null
 other.bits != null
-warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: this.bits[] is a subset of other.bits[]
-warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be implemented: this.bits[] is a superset of other.bits[]
+other.bits.length == 8
 ===========================================================================
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
     Variables: this this.bits this.bits[] other other.bits other.bits[] orig(this) orig(this.bits) orig(this.bits[]) orig(other) orig(other.bits) orig(other.bits[]) size(this.bits[]) size(this.bits[])-1 size(other.bits[]) size(other.bits[])-1 orig(size(this.bits[])) orig(size(this.bits[]))-1 orig(size(other.bits[])) orig(size(other.bits[]))-1
       Modified variables: this.bits[]
       Unmodified variables: this this.bits other other.bits other.bits[] size(this.bits[]) size(other.bits[])
 modifies this.bits[*]
-this.bits.length == other.bits.length
-this.bits.length == \old(other.bits.length)
 other.bits != null
-warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: this.bits[] is a subset of other.bits[]
+other.bits.length == 8
 warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: this.bits[] is a subset of orig(this.bits[])
-warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: other.bits[] is a subset of orig(this.bits[])
-warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be implemented: other.bits[] is a superset of orig(this.bits[])
 ===========================================================================
 six170.FixedSizeSet.remove(int):::ENTER
     Variables: this this.bits this.bits[] n size(this.bits[]) size(this.bits[])-1 this.bits[n] this.bits[n-1] this.bits[n..] this.bits[n+1..] this.bits[0..n] this.bits[0..n-1]
@@ -99,21 +93,15 @@ this.bits.length-1 == (\old(n) | this.bits.length-1)
 ===========================================================================
 six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
     Variables: this this.bits this.bits[] other other.bits other.bits[] size(this.bits[]) size(this.bits[])-1 size(other.bits[]) size(other.bits[])-1
-this.bits.length == other.bits.length
 other != null
 other.bits != null
-warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: this.bits[] is a subset of other.bits[]
-warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be implemented: this.bits[] is a superset of other.bits[]
+other.bits.length == 8
 ===========================================================================
 six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
     Variables: this this.bits this.bits[] other other.bits other.bits[] orig(this) orig(this.bits) orig(this.bits[]) orig(other) orig(other.bits) orig(other.bits[]) size(this.bits[]) size(this.bits[])-1 size(other.bits[]) size(other.bits[])-1 orig(size(this.bits[])) orig(size(this.bits[]))-1 orig(size(other.bits[])) orig(size(other.bits[]))-1
       Modified variables: this.bits[]
       Unmodified variables: this this.bits other other.bits other.bits[] size(this.bits[]) size(other.bits[])
 modifies this.bits[*]
-this.bits.length == other.bits.length
-this.bits.length == \old(other.bits.length)
 other.bits != null
-warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: this.bits[] is a subset of other.bits[]
+other.bits.length == 8
 warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: this.bits[] is a subset of orig(this.bits[])
-warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: other.bits[] is a subset of orig(this.bits[])
-warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be implemented: other.bits[] is a superset of orig(this.bits[])

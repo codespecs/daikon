@@ -23,10 +23,6 @@ misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |list|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |list|) 1)) (NEQ |i| |j|)) (NEQ (select (select elems |list|) |i|) (select (select elems |list|) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |list|) 1))) (NEQ (select (select elems |list|) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |list|) 1))) (EQ (typeof (select (select elems |list|) |i|)) |T_misc.Person|)))
-(EQ (|java-&| (select |CASES| (select |EncapsulateDowncast| |misc|)) (arrayLength |list|)) 0)
-(> (select |CASES| (select |EncapsulateDowncast| |misc|)) (arrayLength |list|))
-(EQ (|java-&| (select |CASES| (select |EncapsulateDowncast| |misc|)) (- (arrayLength |list|) 1)) 0)
-(> (select |SEED| (select |EncapsulateDowncast| |misc|)) (arrayLength |list|))
 ===========================================================================
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT
 (EQ (hash (select |random| (select |EncapsulateDowncast| |misc|))) (hash (select |random| (select |EncapsulateDowncast| |__orig__misc|))))
@@ -35,23 +31,19 @@ misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |list|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |list|) 1)) (NEQ |i| |j|)) (NEQ (select (select elems |list|) |i|) (select (select elems |list|) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |list|) 1))) (NEQ (select (select elems |list|) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |list|) 1))) (EQ (typeof (select (select elems |list|) |i|)) |T_misc.Person|)))
-(EQ (|java-&| (select |CASES| (select |EncapsulateDowncast| |misc|)) (- (arrayLength |list|) 1)) 0)
 ===========================================================================
 misc.Person:::OBJECT
 (NEQ (hash (select |_name| |this|)) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: this._name.toString is printable
 (>= (select |_height| |this|) 0)
-(< (select |_height| |this|) (select |_weight| |this|))
 ===========================================================================
 misc.Person.Person(java.lang.String, int, int):::ENTER
 (NEQ (hash |name|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: name.toString is printable
 (>= |height| 0)
-(< |height| |weight|)
 ===========================================================================
 misc.Person.Person(java.lang.String, int, int):::EXIT
 (EQ (hash (select |_name| |this|)) (hash |__orig__name|))
-(EQ (select |toString| (select |_name| |this|)) (select |toString| |name|))
 (EQ (select |_height| |this|) |__orig__height|)
 (EQ (select |_weight| |this|) |__orig__weight|)
 (EQ (select |toString| |name|) (select |toString| |__orig__name|))

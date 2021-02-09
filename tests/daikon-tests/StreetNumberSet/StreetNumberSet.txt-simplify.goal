@@ -1,6 +1,5 @@
 ===========================================================================
 MapQuick1.StreetNumberSet:::OBJECT
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |this|)))
 (NEQ (hash (select |begins| |this|)) null)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |this|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |this|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1))) (>= (select (select elems (select |begins| |this|)) |i|) 0)))
@@ -8,7 +7,7 @@ MapQuick1.StreetNumberSet:::OBJECT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |this|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |this|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1))) (>= (select (select elems (select |ends| |this|)) |i|) 0)))
 (>= (arrayLength (select |begins| |this|)) 1)
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |this|)) 1)) (EQ |i| |j|)) (<= (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |ends| |this|)) |j|))))
+(>= (arrayLength (select |ends| |this|)) 1)
 ===========================================================================
 MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::ENTER
 (NEQ (hash |numbers|) null)
@@ -25,7 +24,6 @@ MapQuick1.StreetNumberSet.checkRep():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
 ===========================================================================
 MapQuick1.StreetNumberSet.contains(int):::ENTER
 (>= |n| 0)
@@ -41,10 +39,8 @@ MapQuick1.StreetNumberSet.contains(int):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::ENTER
-(EQ (arrayLength (select |begins| |other|)) (arrayLength (select |ends| |other|)))
 (NEQ (hash (select |begins| |other|)) null)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |other|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |begins| |other|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1))) (>= (select (select elems (select |begins| |other|)) |i|) 0)))
@@ -52,7 +48,7 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::ENTER
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |ends| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1))) (>= (select (select elems (select |ends| |other|)) |i|) 0)))
 (>= (arrayLength (select |begins| |other|)) 1)
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (EQ |i| |j|)) (<= (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
+(>= (arrayLength (select |ends| |other|)) 1)
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271
 (EQ |return| |@false|)
@@ -61,15 +57,9 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272
 (EQ (hash (select |begins| |this|)) (hash (select |begins| |other|)))
 (EQ (hash (select |begins| |this|)) (hash (select |begins| |__orig__other|)))
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |other|)) |j|))))
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__other|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |other|)))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__other|)))
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__other|)) |j|))))
 (EQ (hash |__orig__this|) (hash |__orig__other|))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |other|)))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__other|)))
 (EQ |return| |@true|)
 (NEQ (hash |__orig__other|) null)
 ===========================================================================
@@ -84,10 +74,6 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT282
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286
 (EQ |return| |@false|)
 (NEQ (hash |__orig__other|) null)
-(NEQ (arrayLength (select |begins| |this|)) (arrayLength (select |begins| |other|)))
-(NEQ (arrayLength (select |begins| |this|)) (- (arrayLength (select |begins| |other|)) 1))
-(NEQ (- (arrayLength (select |begins| |this|)) 1) (arrayLength (select |begins| |other|)))
-(NEQ (- (arrayLength (select |begins| |this|)) 1) (- (arrayLength (select |begins| |other|)) 1))
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT290
 (EQ |return| |@true|)
@@ -101,9 +87,6 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |begins| |__orig__other|)) |j|))))
 (EQ (hash (select |ends| |other|)) (hash (select |ends| |__orig__other|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |other|)) |i|) (select (select elems (select |ends| |__orig__other|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
-(EQ (arrayLength (select |begins| |other|)) (arrayLength (select |ends| |other|)))
-(EQ (arrayLength (select |begins| |other|)) (arrayLength (select |ends| |__orig__other|)))
 (IMPLIES (EQ |return| |@true|) (NEQ (hash |__orig__other|) null))
 (NEQ (hash (select |begins| |other|)) null)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |other|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |begins| |other|)) |j|))))
@@ -112,7 +95,7 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |ends| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1))) (>= (select (select elems (select |ends| |other|)) |i|) 0)))
 (>= (arrayLength (select |begins| |other|)) 1)
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (EQ |i| |j|)) (<= (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
+(>= (arrayLength (select |ends| |other|)) 1)
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: o.getClass().getName() is printable
@@ -122,7 +105,6 @@ MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
 (IMPLIES (EQ |return| |@true|) (NEQ (hash |__orig__o|) null))
 (IMPLIES (EQ |return| |@true|) (EQ (typeof |__orig__o|) |T_MapQuick1.StreetNumberSet|))
 ===========================================================================
@@ -132,24 +114,22 @@ MapQuick1.StreetNumberSet.hashCode():::ENTER
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1))) (OR (EQ (select (select elems (select |ends| |this|)) |i|) 1) (EQ (select (select elems (select |ends| |this|)) |i|) 5) (EQ (select (select elems (select |ends| |this|)) |i|) 7))))
 (OR (AND (EQ (arrayLength (select |ends| |this|)) 3) (AND  (EQ (select (select elems (select |ends| |this|)) 0) 5) (EQ (select (select elems (select |ends| |this|)) 1) 1) (EQ (select (select elems (select |ends| |this|)) 2) 7))) (AND (EQ (arrayLength (select |ends| |this|)) 1) (EQ (select (select elems (select |ends| |this|)) 0) 7)))
 (OR (EQ (arrayLength (select |begins| |this|)) 1) (EQ (arrayLength (select |begins| |this|)) 3))
-(NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1))) (NEQ (select (select elems (select |begins| |this|)) |i|) (arrayLength (select |begins| |this|))))))
+(OR (EQ (arrayLength (select |ends| |this|)) 1) (EQ (arrayLength (select |ends| |this|)) 3))
 ===========================================================================
 MapQuick1.StreetNumberSet.hashCode():::EXIT
 (EQ (hash (select |begins| |this|)) (hash (select |begins| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1))) (OR (EQ (select (select elems (select |begins| |this|)) |i|) 1) (EQ (select (select elems (select |begins| |this|)) |i|) 3) (EQ (select (select elems (select |begins| |this|)) |i|) 7))))
 (OR (AND (EQ (arrayLength (select |begins| |this|)) 1) (EQ (select (select elems (select |begins| |this|)) 0) 1)) (AND (EQ (arrayLength (select |begins| |this|)) 3) (AND  (EQ (select (select elems (select |begins| |this|)) 0) 3) (EQ (select (select elems (select |begins| |this|)) 1) 1) (EQ (select (select elems (select |begins| |this|)) 2) 7))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1))) (OR (EQ (select (select elems (select |ends| |this|)) |i|) 1) (EQ (select (select elems (select |ends| |this|)) |i|) 5) (EQ (select (select elems (select |ends| |this|)) |i|) 7))))
 (OR (AND (EQ (arrayLength (select |ends| |this|)) 3) (AND  (EQ (select (select elems (select |ends| |this|)) 0) 5) (EQ (select (select elems (select |ends| |this|)) 1) 1) (EQ (select (select elems (select |ends| |this|)) 2) 7))) (AND (EQ (arrayLength (select |ends| |this|)) 1) (EQ (select (select elems (select |ends| |this|)) 0) 7)))
 (EQ |return| 122)
 (OR (EQ (arrayLength (select |begins| |this|)) 1) (EQ (arrayLength (select |begins| |this|)) 3))
-(NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1))) (NEQ (select (select elems (select |begins| |this|)) |i|) (arrayLength (select |begins| |this|))))))
+(OR (EQ (arrayLength (select |ends| |this|)) 1) (EQ (arrayLength (select |ends| |this|)) 3))
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
-(EQ (arrayLength (select |begins| |other|)) (arrayLength (select |ends| |other|)))
 (NEQ (hash |other|) null)
 (NEQ (hash (select |begins| |other|)) null)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |other|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |begins| |other|)) |j|))))
@@ -158,7 +138,7 @@ MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |ends| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1))) (>= (select (select elems (select |ends| |other|)) |i|) 0)))
 (>= (arrayLength (select |begins| |other|)) 1)
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (EQ |i| |j|)) (<= (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
+(>= (arrayLength (select |ends| |other|)) 1)
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT253
 (EQ |return| |@true|)
@@ -175,9 +155,6 @@ MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |begins| |__orig__other|)) |j|))))
 (EQ (hash (select |ends| |other|)) (hash (select |ends| |__orig__other|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |other|)) |i|) (select (select elems (select |ends| |__orig__other|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
-(EQ (arrayLength (select |begins| |other|)) (arrayLength (select |ends| |other|)))
-(EQ (arrayLength (select |begins| |other|)) (arrayLength (select |ends| |__orig__other|)))
 (NEQ (hash (select |begins| |other|)) null)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |other|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |begins| |other|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1))) (>= (select (select elems (select |begins| |other|)) |i|) 0)))
@@ -185,7 +162,7 @@ MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |ends| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |other|)) 1))) (>= (select (select elems (select |ends| |other|)) |i|) 0)))
 (>= (arrayLength (select |begins| |other|)) 1)
-(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (EQ |i| |j|)) (<= (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
+(>= (arrayLength (select |ends| |other|)) 1)
 ===========================================================================
 MapQuick1.StreetNumberSet.isEmpty():::ENTER
 ===========================================================================
@@ -194,7 +171,6 @@ MapQuick1.StreetNumberSet.isEmpty():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
 (EQ |return| |@false|)
 ===========================================================================
 MapQuick1.StreetNumberSet.max():::ENTER
@@ -204,13 +180,10 @@ MapQuick1.StreetNumberSet.max():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
 (>= |return| 0)
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1))) (<= (select (select elems (select |begins| |this|)) |i|) |return|)))
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1))) (NEQ (select (select elems (select |ends| |this|)) |i|) |return|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1))) (<= (select (select elems (select |ends| |this|)) |i|) |return|)))
-(IMPLIES (EQ |return| 0) (EQ (- (arrayLength (select |begins| |this|)) 1) 0))
-(>= |return| (- (arrayLength (select |begins| |this|)) 1))
 ===========================================================================
 MapQuick1.StreetNumberSet.min():::ENTER
 ===========================================================================
@@ -219,7 +192,6 @@ MapQuick1.StreetNumberSet.min():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
 (>= |return| 0)
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1))) (NEQ (select (select elems (select |begins| |this|)) |i|) |return|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1))) (>= (select (select elems (select |begins| |this|)) |i|) |return|)))
@@ -227,18 +199,15 @@ MapQuick1.StreetNumberSet.min():::EXIT
 ===========================================================================
 MapQuick1.StreetNumberSet.orderStatistic(int):::ENTER
 (>= |n| 0)
-(NEQ |n| (arrayLength (select |begins| |this|)))
 ===========================================================================
 MapQuick1.StreetNumberSet.orderStatistic(int):::EXIT
 (EQ (hash (select |begins| |this|)) (hash (select |begins| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
 (>= |return| 0)
 (IMPLIES (EQ |__orig__n| 0) (EQ |return| 0))
 (<= |return| |__orig__n|)
-(NEQ |__orig__n| (arrayLength (select |begins| |this|)))
 ===========================================================================
 MapQuick1.StreetNumberSet.parityOf(int):::ENTER
 (>= |i| 0)
@@ -256,5 +225,3 @@ MapQuick1.StreetNumberSet.size():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |begins| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |begins| |this|)) |i|) (select (select elems (select |begins| |__orig__this|)) |j|))))
 (EQ (hash (select |ends| |this|)) (hash (select |ends| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |ends| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |ends| |this|)) |i|) (select (select elems (select |ends| |__orig__this|)) |j|))))
-(EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__this|)))
-(>= |return| (arrayLength (select |begins| |this|)))

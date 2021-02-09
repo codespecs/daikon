@@ -224,7 +224,6 @@ public class QueueAr
   @ ensures this.theArray == \old(this.theArray);
   @ ensures this.theArray.getClass().getName() == \old(this.theArray.getClass().getName());
   @ ensures this.back == \old(this.back);
-  @ ensures \result == \old(daikon.Quant.getElement_Object(this.theArray, this.front));
   @ ensures daikon.Quant.size(this.theArray) == \old(daikon.Quant.size(this.theArray));
   @ ensures daikon.Quant.getElement_Object(this.theArray, this.currentSize) == daikon.Quant.getElement_Object(this.theArray, \old(this.currentSize)-1);
   @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, \old(this.front)+1, daikon.Quant.size(this.theArray)), \old(daikon.Quant.slice(this.theArray, this.front+1, daikon.Quant.size(this.theArray))));
