@@ -538,7 +538,7 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 	@echo
 	@echo "### Compile source and run DynComp (${PROJECT_FILE})"
 	@echo
-	@echo inst_Files: '$(INST_FILES)'
+#	@echo inst_Files: '$(INST_FILES)'
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
