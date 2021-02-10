@@ -11,7 +11,7 @@ export SHELLOPTS
 make showvars
 make compile daikon.jar
 
-(cd .. && git clone https://github.com/typetools/checker-framework.git)
+utils/plume-scripts/git-clone-related typetools checker-framework
 (cd ../checker-framework && source checker/bin-devel/build.sh)
 CHECKERFRAMEWORK=$(realpath ../checker-framework)
 export CHECKERFRAMEWORK

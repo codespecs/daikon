@@ -44,8 +44,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * methods; it should never be instantiated.
  */
 @SuppressWarnings({
-  "nullness:initialization.static.fields.uninitialized", // library initialized in code added by
-  // run-time instrumentation
   "JavaLangClash" // same class name as one in java.lang.
 })
 public class Runtime {
@@ -102,8 +100,10 @@ public class Runtime {
   static boolean dtraceLimitTerminate = false;
 
   /** Dtrace output stream. Null if no_dtrace is true. */
-  // Not annotated *@MonotonicNonNull* because initialization and use happen in generated
+  @SuppressWarnings(
+      "nullness:initialization.static.field.uninitialized" // initialized and used in generated
   // instrumentation code that cannot be type-checked by a source code checker.
+  )
   static @GuardedBy("<self>") PrintWriter dtrace;
 
   /** Set to true when the dtrace stream is closed. */
@@ -115,11 +115,15 @@ public class Runtime {
   static String method_indent = "";
 
   /** Decl writer setup for writing to the trace file. */
-  // Set in ChicoryPremain.premain().
+  @SuppressWarnings("nullness:initialization.static.field.uninitialized" // Set in
+  // ChicoryPremain.initializeDeclAndDTraceWriters.
+  )
   static DeclWriter decl_writer;
 
   /** Dtrace writer setup for writing to the trace file. */
-  // Set in ChicoryPremain.premain().
+  @SuppressWarnings("nullness:initialization.static.field.uninitialized" // Set in
+  // ChicoryPremain.initializeDeclAndDTraceWriters.
+  )
   static @GuardedBy("Runtime.class") DTraceWriter dtrace_writer;
 
   /**
