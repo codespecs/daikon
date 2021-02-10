@@ -466,7 +466,7 @@ public final class Daikon {
       null; // YOAV: the directory from which we read the dtrace files
 
   /**
-   * A PptMap (mapping String -> PptTopLevel) that contains all the program points. Set in
+   * A PptMap (mapping from String to PptTopLevel) that contains all the program points. Set in
    * mainHelper().
    */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // set in mainHelper()
