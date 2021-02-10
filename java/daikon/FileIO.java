@@ -1801,10 +1801,7 @@ public final class FileIO {
       return;
     }
 
-    @SuppressWarnings({
-      "UnusedVariable",
-      "nullness:flowexpr.parse.error"
-    }) // https://tinyurl.com/cfissue/862
+    @SuppressWarnings({"UnusedVariable", "nullness:contracts.precondition.not.satisfied"})
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
