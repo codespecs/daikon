@@ -31,7 +31,7 @@ public class Instrument implements ClassFileTransformer {
     debug_bin_dir = new File(debug_dir, "bin");
     debug_orig_dir = new File(debug_dir, "orig");
 
-    if (DynComp.debug) {
+    if (DynComp.dump) {
       debug_bin_dir.mkdirs();
       debug_orig_dir.mkdirs();
     }
@@ -174,7 +174,7 @@ public class Instrument implements ClassFileTransformer {
       ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
       JavaClass c = parser.parse();
 
-      if (DynComp.debug) {
+      if (DynComp.dump) {
         c.dump(new File(debug_orig_dir, c.getClassName() + ".class"));
       }
 
@@ -187,7 +187,7 @@ public class Instrument implements ClassFileTransformer {
         if (DynComp.verbose) System.out.printf("Didn't instrument %s%n", c.getClassName());
         return null;
       } else {
-        if (DynComp.debug) {
+        if (DynComp.dump) {
           System.out.printf("Dumping %s to %s%n", njc.getClassName(), debug_bin_dir);
           njc.dump(new File(debug_bin_dir, njc.getClassName() + ".class"));
           BcelUtil.dump(njc, debug_bin_dir);
