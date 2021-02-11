@@ -22,7 +22,7 @@ Further documentation can be found in:
 
 5.8.6 (???, 2021)
 
-Added DynComp --dump option.
+Added DynComp --dump option, which dumps instrumented classes to a file.
 
 ===========================================================================
 

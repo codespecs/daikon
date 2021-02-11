@@ -3989,7 +3989,7 @@ Dump the instrumented classes to @file{debug/bin}.
 
 @item --debug
 Produce debugging information.  (This produces a lot of output!)
-This option also turns on --dump.
+This option also turns on @opiton{--dump}.
 
 @item --debug-dir
 The directory in which to dump instrumented class files (only if
