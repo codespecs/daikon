@@ -26,7 +26,11 @@ public class DynComp {
   public static boolean verbose = false;
 
   /** Dump the instrumented classes to disk. */
-  @Option("-d Dump the instrumented classes to disk")
+  @Option("Dump the instrumented classes to disk")
+  public static boolean dump = false;
+
+  /** Output debugging information. */
+  @Option("-d Output debugging information (implies --dump)")
   public static boolean debug = false;
 
   /** The directory in which to dump instrumented class files. */
@@ -125,9 +129,14 @@ public class DynComp {
     String[] target_args = options.parse(true, args);
     check_args(options, target_args);
 
-    // Turn on basic logging if the debug was selected
+    // Turn on basic logging if debug was selected
     basic.enabled = debug;
     basic.log("target_args = %s%n", Arrays.toString(target_args));
+
+    // Turn on dumping of instrumented classes if debug was selected
+    if (debug) {
+      dump = true;
+    }
 
     // Start the target.  Pass the same options to the premain as
     // were passed here.

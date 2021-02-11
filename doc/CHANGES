@@ -20,6 +20,12 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.8.6 (???, 2021)
+
+Added DynComp --dump option, which dumps instrumented classes to a file.
+
+===========================================================================
+
 5.8.6 (December 2, 2020)
 
 DynComp handles lambdas (Java anonymous functions).
