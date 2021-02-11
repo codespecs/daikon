@@ -77,20 +77,8 @@ public class Premain {
   protected static Set<String> problem_methods =
       new HashSet<>(
           Arrays.asList(
-              // There is a problem in the instrumented code for DecimalFormat that I have
-              // not been able to debug.  It does not crash, but causes floating point rounding
-              // to return incorrect results.
-              "java.text.DecimalFormat.applyPattern",
-              "java.text.DecimalFormat.format",
-              // There is a problem in the instrumented code for BufferedReader that I have
-              // not been able to debug.  It does not crash, but readLine() will sometimes
-              // trucate the result string.
-              "java.io.BufferedReader.readLine",
-              // There is a problem in the instrumented code for StringBuffer that I have
-              // not been able to debug.  It does not crash, but toString() will sometimes
-              // return an empty string.
-              "java.lang.StringBuffer.append",
-              "java.lang.StringBuffer.toString"));
+              // (none at present)
+              ));
 
   /**
    * One of the last phases for DynComp is to write out the comparability values after the user
