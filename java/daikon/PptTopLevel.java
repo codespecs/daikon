@@ -999,14 +999,11 @@ public class PptTopLevel extends Ppt {
    * @param count the number of samples that vt represents
    * @return the set of all invariants weakened or falsified by this sample
    */
-  @SuppressWarnings({
-    "flowexpr.parse.error",
-    "nullness:contracts.precondition.not.satisfied"
-  }) // private field
   @RequiresNonNull({
-    "NIS.suppressor_map",
-    "NIS.suppressor_map_suppression_count",
-    "NIS.all_suppressions"
+    "daikon.suppress.NIS.suppressor_map",
+    "daikon.suppress.NIS.suppressor_map_suppression_count",
+    "daikon.suppress.NIS.all_suppressions",
+    "daikon.suppress.NIS.suppressor_proto_invs"
   })
   public @Nullable Set<Invariant> add_bottom_up(ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
@@ -1412,7 +1409,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Debug print to the specified logger information about each invariant at this ppt. */
-  @RequiresNonNull("NIS.suppressor_map")
+  @RequiresNonNull("daikon.suppress.NIS.suppressor_map")
   public void debug_invs(Logger log) {
 
     for (Iterator<PptSlice> i = views_iterator(); i.hasNext(); ) {

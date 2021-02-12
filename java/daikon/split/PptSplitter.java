@@ -150,11 +150,11 @@ public class PptSplitter implements Serializable {
   }
 
   /** Adds the sample to one of the conditional ppts in the split. */
-  @SuppressWarnings("flowexpr.parse.error") // private field
   @RequiresNonNull({
-    "NIS.suppressor_map",
-    "NIS.suppressor_map_suppression_count",
-    "NIS.all_suppressions"
+    "daikon.suppress.NIS.suppressor_map",
+    "daikon.suppress.NIS.suppressor_map_suppression_count",
+    "daikon.suppress.NIS.all_suppressions",
+    "daikon.suppress.NIS.suppressor_proto_invs"
   })
   public void add_bottom_up(ValueTuple vt, int count) {
 
@@ -213,8 +213,11 @@ public class PptSplitter implements Serializable {
   }
 
   /** Adds implication invariants based on the invariants found on each side of the split. */
-  @SuppressWarnings("flowexpr.parse.error") // private field
-  @RequiresNonNull({"parent.equality_view", "NIS.all_suppressions", "NIS.suppressor_map"})
+  @RequiresNonNull({
+    "parent.equality_view",
+    "daikon.suppress.NIS.all_suppressions",
+    "daikon.suppress.NIS.suppressor_map"
+  })
   public void add_implications() {
 
     // Currently only binary implications are supported

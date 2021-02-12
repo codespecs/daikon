@@ -188,6 +188,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -2238,7 +2239,6 @@ public final class Daikon {
    * have been loaded, all of the program points have been setup, and candidate invariants have been
    * instantiated. This routine processes data to falsify the candidate invariants.
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
@@ -2496,6 +2496,12 @@ public final class Daikon {
   }
 
   /** Initialize NIS suppression. */
+  @EnsuresNonNull({
+    "daikon.suppress.NIS.suppressor_map",
+    "daikon.suppress.NIS.suppressor_map_suppression_count",
+    "daikon.suppress.NIS.all_suppressions",
+    "daikon.suppress.NIS.suppressor_proto_invs"
+  })
   public static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }
@@ -2660,8 +2666,7 @@ public final class Daikon {
    * Undoes the invariants suppressed for the dynamic constant, suppression and equality set
    * optimizations (should yield the same invariants as the simple incremental algorithm.
    */
-  @SuppressWarnings("flowexpr.parse.error") // private field
-  @RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})
+  @RequiresNonNull({"daikon.suppress.NIS.all_suppressions", "daikon.suppress.NIS.suppressor_map"})
   public static void undoOpts(PptMap all_ppts) {
 
     // undo suppressions

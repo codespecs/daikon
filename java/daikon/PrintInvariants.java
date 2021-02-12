@@ -307,7 +307,6 @@ public final class PrintInvariants {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called progrmmatically.
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException {
@@ -1681,8 +1680,7 @@ public final class PrintInvariants {
     }
   }
 
-  @SuppressWarnings("flowexpr.parse.error") // private field
-  @RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})
+  @RequiresNonNull({"daikon.suppress.NIS.all_suppressions", "daikon.suppress.NIS.suppressor_map"})
   public static void print_true_inv_cnt(PptMap ppts) {
 
     // Count printable invariants

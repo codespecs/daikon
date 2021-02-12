@@ -380,7 +380,7 @@ public class InvariantChecker {
      * process the sample by checking it against each existing invariant and issuing an error if any
      * invariant is falsified or weakened.
      */
-    @RequiresNonNull("FileIO.data_trace_state")
+    @RequiresNonNull("daikon.FileIO.data_trace_state")
     @Override
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
@@ -430,7 +430,7 @@ public class InvariantChecker {
       add(ppt, vt, all_ppts);
     }
 
-    @RequiresNonNull("FileIO.data_trace_state")
+    @RequiresNonNull("daikon.FileIO.data_trace_state")
     private void add(PptTopLevel ppt, ValueTuple vt, PptMap all_ppts) {
       // Add the sample to any splitters
       if (ppt.has_splitters()) {

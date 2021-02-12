@@ -134,14 +134,14 @@ public class InvMap implements Serializable {
   }
 
   /** Include FileIO.new_decl_format in the stream */
-  @RequiresNonNull("FileIO.new_decl_format")
+  @RequiresNonNull("daikon.FileIO.new_decl_format")
   private void writeObject(ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
     oos.writeObject(FileIO.new_decl_format);
   }
 
   /** Serialize pptmap and FileIO.new_decl_format */
-  @EnsuresNonNull("FileIO.new_decl_format")
+  @EnsuresNonNull("daikon.FileIO.new_decl_format")
   private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
     FileIO.new_decl_format = (Boolean) ois.readObject();
