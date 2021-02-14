@@ -142,7 +142,7 @@ public class NIS {
   public static @MonotonicNonNull Map<Class<? extends Invariant>, Integer>
       suppressor_map_suppression_count;
 
-  /** List of all suppressions. */
+  /** List of all suppressions. Is set by {@link #init_ni_suppression}. */
   static @MonotonicNonNull List<NISuppressionSet> all_suppressions;
 
   /** List of suppressor invariant prototypes. */
