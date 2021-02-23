@@ -524,6 +524,7 @@ dcomp_rt.jar : dcomp_premain.jar
 	  $(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .; \
 	else \
 	  rm $(DCOMP_RT)/java/lang/invoke/VarHandle*Field*.class; \
+	  cp daikon/dcomp-dummy/DCRuntime.class.dummy $(DCOMP_RT)/java/lang/DCRuntime.class; \
 	  $(JAR) cf dcomp_rt.jar -C $(DCOMP_RT) .; \
 	fi
 

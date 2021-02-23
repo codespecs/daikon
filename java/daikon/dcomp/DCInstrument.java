@@ -63,16 +63,6 @@ public class DCInstrument extends InstructionListUtils {
   protected MethodGen mgen;
   /** Is the current class a member of the JDK? */
   protected boolean in_jdk;
-  /**
-   * Is this the first phase of instrumenting a member of the JDK (via BuildJDK)? This flag is
-   * set/reset in daikon.dcomp.DCInstrument. This flag will never be true for Java 8.
-   */
-  protected boolean initial_jdk_instrument;
-  /**
-   * Is this the second phase of instrumenting a member of the JDK? This flag is set/reset in
-   * daikon.dcomp.Instrument. This flag will never be true for Java 8.
-   */
-  protected static boolean retransforming = false;
 
   /** The BCEL InstructionFactory for generating byte code instructions. */
   protected InstructionFactory ifact;
@@ -129,12 +119,8 @@ public class DCInstrument extends InstructionListUtils {
   protected static String instrumentation_interface;
   /** Either "java.lang" or "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcomp_prefix;
-  /**
-   * We add a dummy local variable to JDK methods during the initial jdk instrumentation (via
-   * BuildJDK) as a flag to indicate that the method needs to be re-instrumented at run time. This
-   * is never done for Java 8.
-   */
-  protected static final String instrumentation_marker_variable = "DaIkOn_instrumented";
+  /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
+  protected @DotSeparatedIdentifiers String dcompRuntimeClassName = "daikon.dcomp.DCRuntime";
 
   /**
    * Don't instrument toString functions. Useful in debugging since we call toString on objects from
@@ -296,7 +282,6 @@ public class DCInstrument extends InstructionListUtils {
     this.orig_class = orig_class;
     this.in_jdk = in_jdk;
     this.loader = loader;
-    initial_jdk_instrument = false;
     gen = new ClassGen(orig_class);
     pool = gen.getConstantPool();
     ifact = new InstructionFactory(gen);
@@ -340,11 +325,6 @@ public class DCInstrument extends InstructionListUtils {
       return gen.getJavaClass().copy();
     }
 
-    if (retransforming) {
-      debug_transform.log("Re-Instrumenting class %s%n", classname);
-      remove_dummy_instrumentation();
-    }
-
     debug_transform.log("Instrumenting class %s%n", classname);
     debug_transform.indent();
 
@@ -352,25 +332,23 @@ public class DCInstrument extends InstructionListUtils {
     ClassInfo class_info = new ClassInfo(classname, loader);
     boolean track_class = false;
 
-    if (!retransforming) {
-      // Handle object methods for this class
-      handle_object(gen);
+    // Handle object methods for this class
+    handle_object(gen);
 
-      // Have all top-level classes implement our interface
-      if (gen.getSuperclassName().equals("java.lang.Object")) {
-        // Add equals method if it doesn't already exist. This ensures
-        // that an instrumented version, equals(Object, DCompMarker),
-        // will be created in this class.
-        Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
-        if (eq == null) {
-          debug_transform.log("Added equals method%n");
-          add_equals_method(gen);
-        }
-
-        // Add DCompInstrumented interface and the required
-        // equals_dcomp_instrumented method.
-        add_dcomp_interface(gen);
+    // Have all top-level classes implement our interface
+    if (gen.getSuperclassName().equals("java.lang.Object")) {
+      // Add equals method if it doesn't already exist. This ensures
+      // that an instrumented version, equals(Object, DCompMarker),
+      // will be created in this class.
+      Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
+      if (eq == null) {
+        debug_transform.log("Added equals method%n");
+        add_equals_method(gen);
       }
+
+      // Add DCompInstrumented interface and the required
+      // equals_dcomp_instrumented method.
+      add_dcomp_interface(gen);
     }
 
     // A very tricky special case: If JUnit is running and the current
@@ -539,11 +517,6 @@ public class DCInstrument extends InstructionListUtils {
         boolean has_code = (il != null);
         if (has_code) {
           set_current_stack_map_table(mg, gen.getMajor());
-          if (retransforming) {
-            // If we are retransforming a JDK class, then
-            // the JVM has removed any StackMapTable.
-            needStackMap = false;
-          }
           build_unitialized_NEW_map(il);
         }
 
@@ -666,11 +639,9 @@ public class DCInstrument extends InstructionListUtils {
     // Add tag accessor methods for each primitive in the class
     create_tag_accessors(gen);
 
-    if (!retransforming) {
-      // Keep track of when the class is initialized (so we don't look
-      // for fields in uninitialized classes)
-      track_class_init();
-    }
+    // Keep track of when the class is initialized (so we don't look
+    // for fields in uninitialized classes)
+    track_class_init();
     debug_transform.exdent();
 
     // The code that builds the list of daikon variables for each ppt
@@ -705,20 +676,17 @@ public class DCInstrument extends InstructionListUtils {
    * <p>Post Java 8 there are increased security checks when loading JDK classes. In particular, the
    * core classes contained in the java.base module may not reference anything outside of java.base.
    * This means we cannot pre-instrument classes in the same manner as was done for Java 8 as this
-   * would introduce references to the DynComp runtime (DCRuntime.java).
+   * would introduce external references to the DynComp runtime (DCRuntime.java).
    *
-   * <p>As an additional complication, the {@code retransformClasses} method of the Java
-   * Instrumentation Interface does not allow adding additional methods or changing method
-   * signatures. Hence, we have adopted the following strategy: We will pre-instrument java.base in
-   * order to add the instrumented versions of the JDK methods. However, these instrumented methods
-   * are dummies that are missing external references to DCRuntime and will never be executed. At
-   * DynComp run time we reinstrument these methods, discarding the bodies of the dummy versions and
-   * replacing them with the correctly instrumented versions.
-   *
-   * <p>A simpler approach would be to just instrument JDK classes as they are loaded. However, a
-   * significant number of JDK classes (>800) are loaded prior to DynComp receiving control.
-   * Experiments have shown that not having these classes instrumented can lead to DynComp producing
-   * comparability sets quite different than those provided by the Java 8 version of Daikon.
+   * <p>However, we can get around this restriction in the following manner: We create a shadow
+   * DynComp runtime called java.lang.DCRuntime that contains all the public methods of
+   * daikon.dcomp.DCRuntime, but with method bodies that contain only a return statement. We
+   * pre-instrument java.base the same as we would for JDK 8, but change all references to
+   * daikon.dcomp.DCRuntime to refer to java.lang.DCRuntime instead, and thus pass the security load
+   * test. During DynComp initialization (in Premain) we use java.lang.instrument.redefineClasses to
+   * replace the dummy java.lang.DCRuntime with a version where each method calls the corresponding
+   * method in daikon.dcomp.DCRuntime. The java runtime does not enforce the security check in this
+   * case.
    */
 
   /**
@@ -747,7 +715,7 @@ public class DCInstrument extends InstructionListUtils {
         if (DynComp.verbose) System.out.printf("Skipping problem class %s%n", classname);
         return gen.getJavaClass().copy();
       }
-      initial_jdk_instrument = true;
+      dcompRuntimeClassName = "java.lang.DCRuntime";
     }
 
     debug_transform.log("Instrumenting class(JDK) %s%n", classname);
@@ -814,18 +782,13 @@ public class DCInstrument extends InstructionListUtils {
           // Add the DCompMarker argument to distinguish our version
           add_dcomp_arg(mg);
 
-          if (initial_jdk_instrument) {
-            // Do not make any other changes to method at this time.
-            // Retransformation during DynComp will do instrumentation.
-          } else {
-            // Instrument the method
-            if (has_code) {
-              // Create the local to store the tag frame for this method
-              tag_frame_local = create_tag_frame_local(mg);
-              build_exception_handler(mg);
-              instrument_method(mg);
-              install_exception_handler(mg);
-            }
+          // Instrument the method
+          if (has_code) {
+            // Create the local to store the tag frame for this method
+            tag_frame_local = create_tag_frame_local(mg);
+            build_exception_handler(mg);
+            instrument_method(mg);
+            install_exception_handler(mg);
           }
         }
 
@@ -841,15 +804,18 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mg);
 
-        if (BcelUtil.javaVersion > 8) {
-          // see comments in instrument();
-          mg.removeAnnotationEntries();
+        // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
+        // the original method to our instrumented method as the signature will
+        // not match anything in the JVM's list.  This won't cause an execution
+        // problem but will produce a massive number of warnings.
+        AnnotationEntryGen[] aes = mg.getAnnotationEntries();
+        for (AnnotationEntryGen item : aes) {
+          String type = item.getTypeName();
+          if (type.endsWith("HotSpotIntrinsicCandidate;")) {
+            mg.removeAnnotationEntry(item);
+          }
         }
 
-        if (initial_jdk_instrument && has_code) {
-          // mark this method as needing to be reinstrumented at run time
-          mg.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
-        }
         gen.addMethod(mg.getMethod());
 
         debug_transform.exdent();
@@ -992,11 +958,7 @@ public class DCInstrument extends InstructionListUtils {
     il.append(new DUP());
     il.append(
         ifact.createInvoke(
-            DCRuntime.class.getName(),
-            "exception_exit",
-            Type.VOID,
-            object_arg,
-            Const.INVOKESTATIC));
+            dcompRuntimeClassName, "exception_exit", Type.VOID, object_arg, Const.INVOKESTATIC));
     il.append(new ATHROW());
 
     add_exception_handler(mg, il);
@@ -1227,11 +1189,7 @@ public class DCInstrument extends InstructionListUtils {
     il.append(ifact.createConstant(params));
     il.append(
         ifact.createInvoke(
-            DCRuntime.class.getName(),
-            "create_tag_frame",
-            object_arr,
-            string_arg,
-            Const.INVOKESTATIC));
+            dcompRuntimeClassName, "create_tag_frame", object_arr, string_arg, Const.INVOKESTATIC));
     il.append(InstructionFactory.createStore(object_arr, tag_frame_local.getIndex()));
     debug_instrument.log("Store Tag frame local at index %d%n", tag_frame_local.getIndex());
 
@@ -1326,7 +1284,7 @@ public class DCInstrument extends InstructionListUtils {
     }
     il.append(
         ifact.createInvoke(
-            DCRuntime.class.getName(), method_name, Type.VOID, method_args, Const.INVOKESTATIC));
+            dcompRuntimeClassName, method_name, Type.VOID, method_args, Const.INVOKESTATIC));
 
     return il;
   }
@@ -1955,7 +1913,7 @@ public class DCInstrument extends InstructionListUtils {
         // this is a super.equals(Object) call
         il.append(
             ifact.createInvoke(
-                "daikon.dcomp.DCRuntime",
+                dcompRuntimeClassName,
                 "dcomp_super_equals",
                 ret_type,
                 new_arg_types,
@@ -1964,7 +1922,7 @@ public class DCInstrument extends InstructionListUtils {
         // just a regular equals(Object) call
         il.append(
             ifact.createInvoke(
-                "daikon.dcomp.DCRuntime",
+                dcompRuntimeClassName,
                 "dcomp_equals",
                 ret_type,
                 new_arg_types,
@@ -2300,11 +2258,7 @@ public class DCInstrument extends InstructionListUtils {
     InstructionList il = new InstructionList();
     il.append(
         ifact.createInvoke(
-            DCRuntime.class.getName(),
-            compare_method,
-            Type.BOOLEAN,
-            two_objects,
-            Const.INVOKESTATIC));
+            dcompRuntimeClassName, compare_method, Type.BOOLEAN, two_objects, Const.INVOKESTATIC));
     assert branch.getTarget() != null;
     il.append(InstructionFactory.createBranchInstruction(boolean_if, branch.getTarget()));
     return il;
@@ -2459,7 +2413,7 @@ public class DCInstrument extends InstructionListUtils {
     // Call the runtime method to handle loading/storing the local/parameter
     il.append(
         ifact.createInvoke(
-            DCRuntime.class.getName(),
+            dcompRuntimeClassName,
             method,
             Type.VOID,
             new Type[] {object_arr, Type.INT},
@@ -2683,10 +2637,6 @@ public class DCInstrument extends InstructionListUtils {
       gen.addMethod(cinit);
     }
 
-    if (initial_jdk_instrument) {
-      return;
-    }
-
     try {
       MethodGen cinit_gen = new MethodGen(cinit, gen.getClassName(), pool);
       set_current_stack_map_table(cinit_gen, gen.getMajor());
@@ -2696,7 +2646,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(ifact.createConstant(gen.getClassName()));
       il.append(
           ifact.createInvoke(
-              DCRuntime.class.getName(), "class_init", Type.VOID, string_arg, Const.INVOKESTATIC));
+              dcompRuntimeClassName, "class_init", Type.VOID, string_arg, Const.INVOKESTATIC));
 
       insert_at_method_start(cinit_gen, il);
       create_new_stack_map_attribute(cinit_gen);
@@ -2959,7 +2909,7 @@ public class DCInstrument extends InstructionListUtils {
   InvokeInstruction dcr_call(String method_name, Type ret_type, Type[] arg_types) {
 
     return ifact.createInvoke(
-        DCRuntime.class.getName(), method_name, ret_type, arg_types, Const.INVOKESTATIC);
+        dcompRuntimeClassName, method_name, ret_type, arg_types, Const.INVOKESTATIC);
   }
 
   /**
@@ -3432,54 +3382,51 @@ public class DCInstrument extends InstructionListUtils {
       mg.addLocalVariable(arg_names[ii], arg_types[ii], null, null);
     }
 
-    if (!initial_jdk_instrument) {
+    // Discard the tags for any primitive arguments passed to system
+    // methods
+    int primitive_cnt = 0;
+    for (Type arg_type : arg_types) {
+      if (arg_type instanceof BasicType) primitive_cnt++;
+    }
+    if (primitive_cnt > 0) {
+      il.append(discard_tag_code(new NOP(), primitive_cnt));
+    }
 
-      // Discard the tags for any primitive arguments passed to system
-      // methods
-      int primitive_cnt = 0;
+    // push a tag if there is a primitive return value
+    Type ret_type = mg.getReturnType();
+    if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
+      il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
+    }
+
+    // If the method is not static, push the instance on the stack
+    if (!mg.isStatic()) {
+      il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
+    }
+
+    // System.out.printf("%s: atc = %d, anc = %d%n", mg.getName(), arg_types.length,
+    // arg_names.length);
+
+    // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
+    if (mg.getName().equals("getCallerClass")
+        && (arg_types.length == 1)
+        && gen.getClassName().equals("sun.reflect.Reflection")) {
+
+      // The call returns the class realFramesToSkip up on the stack. Since we
+      // have added this call in between, we need to increment that number by 1.
+      il.append(InstructionFactory.createLoad(Type.INT, 0));
+      il.append(ifact.createConstant(1));
+      il.append(new IADD());
+      // System.out.printf("adding 1 in %s.%s%n", gen.getClassName(),
+      //                   mg.getName());
+
+    } else { // normal call
+
+      // push each argument on the stack
+      int param_index = 1;
+      if (mg.isStatic()) param_index = 0;
       for (Type arg_type : arg_types) {
-        if (arg_type instanceof BasicType) primitive_cnt++;
-      }
-      if (primitive_cnt > 0) {
-        il.append(discard_tag_code(new NOP(), primitive_cnt));
-      }
-
-      // push a tag if there is a primitive return value
-      Type ret_type = mg.getReturnType();
-      if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
-        il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
-      }
-
-      // If the method is not static, push the instance on the stack
-      if (!mg.isStatic()) {
-        il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
-      }
-
-      // System.out.printf("%s: atc = %d, anc = %d%n", mg.getName(), arg_types.length,
-      // arg_names.length);
-
-      // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
-      if (mg.getName().equals("getCallerClass")
-          && (arg_types.length == 1)
-          && gen.getClassName().equals("sun.reflect.Reflection")) {
-
-        // The call returns the class realFramesToSkip up on the stack. Since we
-        // have added this call in between, we need to increment that number by 1.
-        il.append(InstructionFactory.createLoad(Type.INT, 0));
-        il.append(ifact.createConstant(1));
-        il.append(new IADD());
-        // System.out.printf("adding 1 in %s.%s%n", gen.getClassName(),
-        //                   mg.getName());
-
-      } else { // normal call
-
-        // push each argument on the stack
-        int param_index = 1;
-        if (mg.isStatic()) param_index = 0;
-        for (Type arg_type : arg_types) {
-          il.append(InstructionFactory.createLoad(arg_type, param_index));
-          param_index += arg_type.getSize();
-        }
+        il.append(InstructionFactory.createLoad(arg_type, param_index));
+        param_index += arg_type.getSize();
       }
     }
 
@@ -3627,15 +3574,7 @@ public class DCInstrument extends InstructionListUtils {
         get_method = create_get_tag(gen, f, field_map.get(f));
         set_method = create_set_tag(gen, f, field_map.get(f));
       }
-      if (initial_jdk_instrument) {
-        // mark this method as needing to be reinstrumented at run time
-        get_method.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
-      }
       gen.addMethod(get_method.getMethod());
-      if (initial_jdk_instrument) {
-        // mark this method as needing to be reinstrumented at run time
-        set_method.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
-      }
       gen.addMethod(set_method.getMethod());
     }
 
@@ -3670,15 +3609,7 @@ public class DCInstrument extends InstructionListUtils {
           get_method = create_get_tag(gen, f, field_map.get(f));
           set_method = create_set_tag(gen, f, field_map.get(f));
         }
-        if (initial_jdk_instrument) {
-          // mark this method as needing to be reinstrumented at run time
-          get_method.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
-        }
         gen.addMethod(get_method.getMethod());
-        if (initial_jdk_instrument) {
-          // mark this method as needing to be reinstrumented at run time
-          set_method.addLocalVariable(instrumentation_marker_variable, Type.INT, 0, null, null);
-        }
         gen.addMethod(set_method.getMethod());
       }
     }
@@ -3780,13 +3711,9 @@ public class DCInstrument extends InstructionListUtils {
 
     InstructionList il = new InstructionList();
 
-    // No references to DCRuntime if initial instrument of JDK.
-    // We will fix when we reinstrument.
-    if (!initial_jdk_instrument) {
-      if (!f.isStatic()) il.append(InstructionFactory.createThis());
-      il.append(ifact.createConstant(tag_offset));
-      il.append(dcr_call(methodname, Type.VOID, args));
-    }
+    if (!f.isStatic()) il.append(InstructionFactory.createThis());
+    il.append(ifact.createConstant(tag_offset));
+    il.append(dcr_call(methodname, Type.VOID, args));
     il.append(InstructionFactory.createReturn(Type.VOID));
 
     // Create the get accessor method
@@ -3843,13 +3770,9 @@ public class DCInstrument extends InstructionListUtils {
 
     InstructionList il = new InstructionList();
 
-    // No references to DCRuntime if initial instrument of JDK.
-    // We will fix when we reinstrument.
-    if (!initial_jdk_instrument) {
-      if (!f.isStatic()) il.append(InstructionFactory.createThis());
-      il.append(ifact.createConstant(tag_offset));
-      il.append(dcr_call(methodname, Type.VOID, args));
-    }
+    if (!f.isStatic()) il.append(InstructionFactory.createThis());
+    il.append(ifact.createConstant(tag_offset));
+    il.append(dcr_call(methodname, Type.VOID, args));
     il.append(InstructionFactory.createReturn(Type.VOID));
 
     // Create the get accessor method
@@ -3886,10 +3809,8 @@ public class DCInstrument extends InstructionListUtils {
    * @param gen class to add interface to
    */
   void add_dcomp_interface(ClassGen gen) {
-    if (!retransforming) {
-      gen.addInterface(instrumentation_interface);
-      debug_transform.log("Added interface DCompInstrumented%n");
-    }
+    gen.addInterface(instrumentation_interface);
+    debug_transform.log("Added interface DCompInstrumented%n");
 
     InstructionList il = new InstructionList();
     int flags = Const.ACC_PUBLIC;
@@ -4024,36 +3945,6 @@ public class DCInstrument extends InstructionListUtils {
     method.setMaxLocals();
     gen.addMethod(method.getMethod());
     il.dispose();
-  }
-
-  /**
-   * Removes the placeholder instrumentation methods added by BuildJDK. This method is never called
-   * for Java 8.
-   */
-  void remove_dummy_instrumentation() {
-    for (Method method : gen.getMethods()) {
-      // first check for a DCompMarker argument
-      if (method.getSignature().contains("DCompMarker")) {
-        gen.removeMethod(method);
-        continue;
-      }
-      // get_tag and set_tag methods don't have DCompMarker arguments
-      // check for local variable marker
-      LocalVariableTable lvt = method.getLocalVariableTable();
-      if (lvt == null) {
-        continue;
-      }
-      boolean found = false;
-      for (LocalVariable lv : lvt.getLocalVariableTable()) {
-        if (instrumentation_marker_variable.equals(lv.getName())) {
-          found = true;
-          break;
-        }
-      }
-      if (found) {
-        gen.removeMethod(method);
-      }
-    }
   }
 
   /**

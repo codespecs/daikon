@@ -1,0 +1,170 @@
+package java.lang;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+/**
+ * Runtime support for DynComp, a comparability front end for Chicory. This class is a collection of
+ * methods; it should never be instantiated.
+ */
+public final class DCRuntime {
+
+  public static boolean dcomp_equals(Object o1, Object o2) {
+    return false;
+  }
+
+  public static boolean dcomp_super_equals(Object o1, Object o2) {
+    return false;
+  }
+
+  // needed?
+  public static Object dcomp_clone(Object o) throws Throwable {
+    return null;
+  }
+
+  // needed?
+  public static Object dcomp_super_clone(Object o) throws Throwable {
+    return null;
+  }
+
+  public static boolean has_instrumented(Class<?> c, String method_name) {
+    return false;
+  }
+
+  public static Object uninstrumented_clone(Object orig_obj, Object clone_obj) {
+    return null;
+  }
+
+  public static String uninstrumented_toString(Object orig_obj, String result) {
+    return null;
+  }
+
+  public static boolean object_eq(Object obj1, Object obj2) {
+    return false;
+  }
+
+  public static boolean object_ne(Object obj1, Object obj2) {
+    return false;
+  }
+
+  public static Object[] create_tag_frame(String params) {
+    return null;
+  }
+
+  public static void normal_exit(Object[] tag_frame) {
+  }
+
+  public static void normal_exit_primitive(Object[] tag_frame) {
+  }
+
+  public static void exception_exit(Object throwable) {
+  }
+
+  public static void throw_op() {
+  }
+
+  public static void push_local_tag(Object[] tag_frame, int index) {
+  }
+
+  public static void pop_local_tag(Object[] tag_frame, int index) {
+  }
+
+  public static void push_static_tag(int static_num) {
+  }
+
+  public static void push_array_tag(Object arr_ref) {
+  }
+
+  public static void pop_static_tag(int static_num) {
+  }
+
+  public static void discard_tag(int cnt) {
+  }
+
+  public static void aastore(Object[] arr, int index, Object val) {
+  }
+
+  public static void bastore(byte[] arr, int index, byte val) {
+  }
+
+  public static void zastore(boolean[] arr, int index, boolean val) {
+  }
+
+  public static void castore(char[] arr, int index, char val) {
+  }
+
+  public static void dastore(double[] arr, int index, double val) {
+  }
+
+  public static void fastore(float[] arr, int index, float val) {
+  }
+
+  public static void iastore(int[] arr, int index, int val) {
+  }
+
+  public static void lastore(long[] arr, int index, long val) {
+  }
+
+  public static void sastore(short[] arr, int index, short val) {
+  }
+
+  public static void multianewarray2(int count1, int count2, Object[] arr) {
+  }
+
+  public static void enter(Object[] tag_frame, @Nullable Object obj, int mi_index, Object[] args) {
+  }
+
+  public static void exit( Object[] tag_frame, @Nullable Object obj, int mi_index, Object[] args, Object ret_val, int exit_line_number) {
+  }
+
+  public static void push_field_tag(Object obj, int field_num) {
+  }
+
+  public static void push_field_tag_null_ok(Object obj, int field_num) {
+  }
+
+  public static void pop_field_tag(Object obj, int field_num) {
+  }
+
+  public static void binary_tag_op() {
+  }
+
+  public static void cmp_op() {
+  }
+
+  public static void dup() {
+  }
+
+  public static void dup_x1() {
+  }
+
+  public static void dup_x2() {
+  }
+
+  public static void dup2() {
+  }
+
+  public static void dup2_x1() {
+  }
+
+  public static void dup2_x2() {
+  }
+
+  public static void swap() {
+  }
+
+  public static void primitive_array_load(Object arr_ref, int index) {
+  }
+
+  public static void primitive_array_load_null_ok(Object arr_ref, int index) {
+  }
+
+  public static void ref_array_load(Object arr_ref, int index) {
+  }
+
+  public static void push_const() {
+  }
+
+  public static void class_init(String classname) {
+  }
+
+}

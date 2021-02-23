@@ -2736,6 +2736,10 @@ public final class DCRuntime implements ComparabilityProvider {
     Throwable stack = new Throwable("caller");
     StackTraceElement[] ste_arr = stack.getStackTrace();
     StackTraceElement ste = ste_arr[2];
+    // If JDK 11 runtime transfer method, need to skip another level.
+    if (ste.getClassName().equals("java.lang.DCRuntime")) {
+      ste = ste_arr[3];
+    }
     return (ste.getClassName() + "." + ste.getMethodName());
   }
 

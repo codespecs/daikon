@@ -1,0 +1,31 @@
+This directory contains the transfer version of java.lang.DCRuntime.
+
+Post Java 8 there are increased security checks when loading JDK classes. In particular, the
+core classes contained in the java.base module may not reference anything outside of
+java.base. This means we cannot pre-instrument classes in the same manner as was done for
+Java 8 as this would introduce external references to the DynComp runtime.
+
+However, we can get around this restriction in the following manner: We to create a shadow
+DynComp runtime called java.lang.DCRuntime that contains all the public methods of
+daikon.dcomp.DCRuntime, but the method bodies contain only a return statement.  When we
+pre-instrument java.base we do two things differently from the JDK 8 case: we change all
+references to daikon.dcomp.DCRuntime to refer to java.lang.DCRuntime instead, and we add
+our dummy java.lang.DCRuntime to our java.base replacement jar. This allows us to pass the
+security test when a class from java.base is loaded. Then, during DynComp startup, this
+dummy version is replaced with the version in dcomp-transfer where each method calls the
+corresponding method in daikon.dcomp.DCRuntime.
+
+This file will only need to be modified if additional public methods that are to be used
+in instrumented code are added to the real DCRuntime (daikon.dcomp.DCRuntime).  We do not
+anticipate that happening; but if it does:
+
+1) rename DCRuntime.java to, for example, DCRuntime.java.transfer
+2) delete DCRuntime.class
+3) follow the instructions in ../dcomp-dummy/README to modify and rebuild the dummy version
+4) rename the DCRuntime source file in this directory back to DCRuntime.java
+5) edit DCRuntime.java to add the new transfer methods
+6) run 'make' which will rebuild the file (as well as doing other parts of the build)
+
+Later steps in the build process will include daikon/dcomp-transfer/DCRuntime.class in
+daikon.jar.  During DynDomp startup, Premain will find and load this version to replace the
+dummy version initially loaded from dcomp_rt.jar.
