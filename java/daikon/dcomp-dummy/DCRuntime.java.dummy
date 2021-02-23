@@ -16,16 +16,6 @@ public final class DCRuntime {
     return false;
   }
 
-  // needed?
-  public static Object dcomp_clone(Object o) throws Throwable {
-    return null;
-  }
-
-  // needed?
-  public static Object dcomp_super_clone(Object o) throws Throwable {
-    return null;
-  }
-
   public static boolean has_instrumented(Class<?> c, String method_name) {
     return false;
   }

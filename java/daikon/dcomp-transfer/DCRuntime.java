@@ -16,16 +16,6 @@ public final class DCRuntime {
     return daikon.dcomp.DCRuntime.dcomp_super_equals(o1, o2);
   }
 
-  // needed?
-  public static Object dcomp_clone(Object o) throws Throwable {
-    return daikon.dcomp.DCRuntime.dcomp_clone(o);
-  }
-
-  // needed?
-  public static Object dcomp_super_clone(Object o) throws Throwable {
-    return daikon.dcomp.DCRuntime.dcomp_super_clone(o);
-  }
-
   public static boolean has_instrumented(Class<?> c, String method_name) {
     return daikon.dcomp.DCRuntime.has_instrumented(c, method_name);
   }
