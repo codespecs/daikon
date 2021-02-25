@@ -685,7 +685,7 @@ public class DCInstrument extends InstructionListUtils {
    * daikon.dcomp.DCRuntime to refer to java.lang.DCRuntime instead, and thus pass the security load
    * test. During DynComp initialization (in Premain) we use java.lang.instrument.redefineClasses to
    * replace the dummy java.lang.DCRuntime with a version where each method calls the corresponding
-   * method in daikon.dcomp.DCRuntime. The java runtime does not enforce the security check in this
+   * method in daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this
    * case.
    */
 

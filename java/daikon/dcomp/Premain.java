@@ -218,7 +218,7 @@ public class Premain {
     //
     // At this point in DynComp start up, we use java.lang.instrument.redefineClasses to replace the
     // dummy java.lang.DCRuntime with a version where each method calls the corresponding method in
-    // daikon.dcomp.DCRuntime. The java runtime does not enforce the security check in this case.
+    // daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this case.
     //
     if (BcelUtil.javaVersion > 8 && DCInstrument.jdk_instrumented) {
 
@@ -232,7 +232,7 @@ public class Premain {
         try {
           InputStream inputStream = class_url.openStream();
           if (inputStream != null) {
-            int size = inputStream.read(repClass, 0, 9999);
+            int size = inputStream.read(repClass, 0, repClass.length);
             byte[] truncated = new byte[size];
             System.arraycopy(repClass, 0, truncated, 0, size);
             ClassDefinition cd =
