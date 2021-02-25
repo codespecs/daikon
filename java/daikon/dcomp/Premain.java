@@ -203,18 +203,8 @@ public class Premain {
     }
     inst.addTransformer(transformer, true);
 
-    // Post Java 8 there are increased security checks when loading JDK classes. In particular, the
-    // core classes contained in the java.base module may not reference anything outside of
-    // java.base. This means we cannot pre-instrument classes in the same manner as was done for
-    // Java 8 as this would introduce external references to the DynComp runtime (DCRuntime.java).
-    //
-    // However, we can get around this restriction in the following manner: We to create a shadow
-    // DynComp runtime called java.lang.DCRuntime that contains all the public methods of
-    // daikon.dcomp.DCRuntime, but the method bodies contain only a return statement.  When we
-    // pre-instrument java.base we do two things differently from the JDK 8 case: we change all
-    // references to daikon.dcomp.DCRuntime to refer to java.lang.DCRuntime instead, and we add
-    // our dummy java.lang.DCRuntime to our java.base replacement jar. This allows us to pass the
-    // security test when a class from java.base is loaded.
+    // See the "General Java Runtime instrumentation strategy" comments in DCInstrument.java
+    // for an explaination of how we deal with instrumenting the JDK 11 runtime.
     //
     // At this point in DynComp start up, we use java.lang.instrument.redefineClasses to replace the
     // dummy java.lang.DCRuntime with a version where each method calls the corresponding method in
