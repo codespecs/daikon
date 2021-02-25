@@ -2616,7 +2616,7 @@ Daikon
 
     Fixed several bugs in Annotate, the program that inserts Daikon's
     output into source code as comments.  This eliminates errors reported
-    by the JML syntax checker (available at http://www.jmlspecs.org/).
+    by the JML syntax checker (available at https://www.cs.ucf.edu/~leavens/JML/).
 
 Chicory
 

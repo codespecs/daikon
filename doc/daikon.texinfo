@@ -1682,7 +1682,7 @@ These expression are obviously not valid Java code.
 @cindex output format, JML
 @item JML format
 Produces output in JVM (Java Modeling Language,
-@uref{http://www.jmlspecs.org}); for details, see the
+@uref{https://www.cs.ucf.edu/~leavens/JML/}); for details, see the
 @uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,
 including run-time assertion checking and the
