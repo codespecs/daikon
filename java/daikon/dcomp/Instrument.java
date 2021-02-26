@@ -87,29 +87,13 @@ public class Instrument implements ClassFileTransformer {
       return null;
     }
 
-    if (BcelUtil.javaVersion > 8) {
-      // If this class was pre-instrumented (via BuildJDK)
-      // let DCInstrument know we need to correct the instrumentation.
-      if (Premain.pre_instrumented.contains(className)) {
-        DCInstrument.retransforming = true;
-      } else {
-        if (Premain.retransform_preloads) {
-          // Nothing we can do about classes loaded before we got control
-          // that were not pre-instrumented.
-          if (DynComp.verbose) System.out.printf("Skipping pre-loaded class %s%n", className);
-          return null;
-        }
-        DCInstrument.retransforming = false;
+    // If already instrumented, nothing to do
+    // (This set will be empty if DCInstrument.jdk_instrumented is false)
+    if (Premain.pre_instrumented.contains(className)) {
+      if (DynComp.verbose) {
+        System.out.printf("Skipping pre_instrumented JDK class %s%n", className);
       }
-    } else {
-      // If already instrumented, nothing to do
-      // (This set will be empty if DCInstrument.jdk_instrumented is false)
-      if (Premain.pre_instrumented.contains(className)) {
-        if (DynComp.verbose) {
-          System.out.printf("Skipping pre_instrumented JDK class %s%n", className);
-        }
-        return null;
-      }
+      return null;
     }
 
     boolean in_jdk = false;
@@ -136,6 +120,12 @@ public class Instrument implements ClassFileTransformer {
           if (DynComp.verbose) System.out.printf("Skipping problem class %s%n", className);
           return null;
         }
+      }
+
+      if (className.equals("java/lang/DCRuntime")) {
+        if (DynComp.verbose)
+          System.out.printf("Skipping special DynComp runtime class %s%n", className);
+        return null;
       }
 
       in_jdk = true;

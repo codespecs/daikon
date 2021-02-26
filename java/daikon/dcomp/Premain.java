@@ -14,10 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
+import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -94,12 +95,6 @@ public class Premain {
    */
   protected static boolean in_shutdown = false;
 
-  /** Flag to indicate if we are retransforming a previously loaded class. */
-  protected static boolean retransform_preloads;
-
-  /** Keep track of classes that have already been retransformed. */
-  private static Set<Class<?>> previously_processed_classes = new HashSet<>();
-
   // For debugging
   // protected static Instrumentation instr;
 
@@ -107,9 +102,6 @@ public class Premain {
    * This method is the entry point of the java agent. Its main purpose is to set up the transformer
    * so that when classes from the target app are loaded, they are first transformed in order to add
    * comparability instrumentation.
-   *
-   * <p>If this code is running on Java 9+ and jdk_instrumented is true it also retransforms any JDK
-   * methods that were loaded prior to premain getting control.
    *
    * @param agentArgs string containing the arguments passed to this agent
    * @param inst instrumentation instance to be used to transform classes
@@ -211,50 +203,41 @@ public class Premain {
     }
     inst.addTransformer(transformer, true);
 
-    // For Java 9+ we only partially instrument the JDK as part of building DynComp.
-    // We complete the instrumentation when a JDK class is loaded during program execution.
-    // However, there is Catch-22: "All future class definitions will be seen by the transformer,
-    // except definitions of classes upon which any registered transformer is dependent"
-    // (from the documentation for Instrumentation.addTransformer()).
-    // Thus a JDK class used by DynComp will not be seen by our transformer.  To get around this
-    // we get the list of all the classes already loaded and call retransformClasses on them.
-    // Unfortunately, this process may need to be repeated multiple times as each time we call
-    // retransform on a class it may require the use of a previously unexecuted part of DynComp
-    // which may, in turn, cause more JDK classes to be loaded without our knowledge.
+    // See the "General Java Runtime instrumentation strategy" comments in DCInstrument.java
+    // for an explaination of how we deal with instrumenting the JDK 11 runtime.
     //
-    // Possibility:
-    // There may be a way to use the JDeps tool to get a list of all the dependencies as part of
-    // the DynComp build process and then pass this list to Premain for processing.
-    //
-    // Future work:
-    // We should revisit the problems associated with pre-instrumenting the JDK via BuildJDK.
-    // The current system has a noticeable performance hit at startup in addition to the
-    // retransformation complications noted above.
+    // At this point in DynComp start up, we use java.lang.instrument.redefineClasses to replace the
+    // dummy java.lang.DCRuntime with a version where each method calls the corresponding method in
+    // daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this case.
     //
     if (BcelUtil.javaVersion > 8 && DCInstrument.jdk_instrumented) {
 
-      retransform_preloads = true;
-      Class<?>[] classes_to_retransform = get_retransform_list(inst);
-
-      while (classes_to_retransform.length > 0) {
-        if (DynComp.verbose) {
-          System.out.println("call retransformClasses");
-        }
+      // Buffer for input of our replacement java.lang.DCRuntime.
+      // The size of the current version is 6326 bytes and we do not
+      // anticipate any significant changes.
+      byte[] repClass = new byte[9999];
+      String classname = "daikon/dcomp-transfer/DCRuntime.class";
+      URL class_url = ClassLoader.getSystemResource(classname);
+      if (class_url != null) {
         try {
-          inst.retransformClasses(classes_to_retransform);
-        } catch (Exception e) {
-          System.err.println("Unable to retransformClasses.");
-          System.err.println(e);
+          InputStream inputStream = class_url.openStream();
+          if (inputStream != null) {
+            int size = inputStream.read(repClass, 0, repClass.length);
+            byte[] truncated = new byte[size];
+            System.arraycopy(repClass, 0, truncated, 0, size);
+            ClassDefinition cd =
+                new ClassDefinition(Class.forName("java.lang.DCRuntime"), truncated);
+            inst.redefineClasses(cd);
+          } else {
+            throw new Error("openStream failed for " + class_url);
+          }
+        } catch (Throwable t) {
+          throw new Error("Unexpected error reading " + class_url, t);
         }
-        classes_to_retransform = get_retransform_list(inst);
+      } else {
+        throw new Error("Could not locate " + classname);
       }
     }
-    retransform_preloads = false;
-
-    // Iterator<Class<?>> value = previously_processed_classes.iterator();
-    // while (value.hasNext()) {
-    //   System.out.println(value.next());
-    // }
 
     // Initialize the static tag array
     if (DynComp.verbose) {
@@ -265,41 +248,6 @@ public class Premain {
     if (DynComp.verbose) {
       System.out.println("exit premain");
     }
-  }
-
-  /**
-   * Get an array of already loaded classes that need to be retransformed.
-   *
-   * @param inst instrumentation instance to be used to transform classes
-   * @return an array containing the classes to be retransformed
-   */
-  private static Class<?>[] get_retransform_list(Instrumentation inst) {
-    if (DynComp.verbose) {
-      System.out.println("get retransformation list");
-    }
-
-    ArrayList<Class<?>> class_list = new ArrayList<>();
-
-    // Get the set of already loaded classes.
-    Class<?>[] loaded_classes = inst.getAllLoadedClasses();
-
-    for (Class<?> loaded_class : loaded_classes) {
-      // System.out.println(loaded_class + ": " + loaded_class.getClassLoader());
-      // Skip previously processed classes.
-      if (previously_processed_classes.contains(loaded_class)) continue;
-      // Skip Daikon classes.
-      if (loaded_class.getName().startsWith("daikon.")) continue;
-      // Skip BCEL classes.
-      if (loaded_class.getName().startsWith("org.apache.bcel.")) continue;
-      // Object cannot be instrumented due to its fundimental nature.
-      if (loaded_class.getName().equals("java.lang.Object")) continue;
-      if (inst.isModifiableClass(loaded_class)) {
-        // System.out.println(loaded_class);
-        class_list.add(loaded_class);
-      }
-    }
-    previously_processed_classes = new HashSet<>(Arrays.asList(loaded_classes));
-    return class_list.toArray(new Class<?>[class_list.size()]);
   }
 
   /** Shutdown thread that writes out the comparability results. */
