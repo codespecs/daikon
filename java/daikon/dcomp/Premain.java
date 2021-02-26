@@ -71,8 +71,8 @@ public class Premain {
   protected static Set<String> problem_classes =
       new HashSet<>(
           Arrays.asList(
-              // <clinit> gets a JNI error during initialization.
-              "java.lang.StackTraceElement$HashedModules"));
+              // (none at present)
+              ));
 
   /** Set of methods known to cause problems when instrumented. */
   protected static Set<String> problem_methods =
