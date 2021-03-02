@@ -20,9 +20,10 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.8.8 (???, 2021)
+5.8.8 (March 2, 2021)
 
 Added DynComp --dump option, which dumps instrumented classes to a file.
+Improved DynComp comparability results for JDK 11.
 
 ===========================================================================
 
