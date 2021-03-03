@@ -1648,7 +1648,7 @@ inserted in source code; for more details, see
 @uref{http://www.hpl.hp.com/downloads/crl/jtk/}.  Daikon's @option{ESC/Java} format
 (which can also be specified as @option{ESC} format) is intended for use with the
 original @command{ESC/Java} tool.  Use Daikon's @option{JML} format for use with the
-@uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}
+@uref{https://www.kindsoftware.com/products/opensource/escjava2/, ,ESC/Java2}
 tool.
 
 @cindex Java output format
@@ -1686,7 +1686,7 @@ Produces output in JVM (Java Modeling Language,
 @uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,
 including run-time assertion checking and the
-@uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}
+@uref{https://www.kindsoftware.com/products/opensource/escjava2/, ,ESC/Java2}
 tool.
 
 @c This implementation detail not relevant to users
@@ -1705,7 +1705,7 @@ prover; for details, see the
 @cindex output format, CSharpContract
 @item CSharpContract format
 Produces C# output for use with Microsoft's Code Contracts
-@uref{http://www.microsoft.com/en-us/research/project/code-contracts/,,}.
+@uref{https://www.microsoft.com/en-us/research/project/code-contracts/,,}.
 The format employs some extension/utility methods to improve contract
 readability; the library containing these methods can be found at
 @uref{https://github.com/twschiller/daikon-code-contract-extensions,,}.
@@ -7899,7 +7899,7 @@ correct, but more verbose than it would be if you used Simplify.
 @c is dated Nov 16 2004 (as of Mar 30 2015).
 
 Obtain Simplify from
-@uref{http://kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
+@uref{https://kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
 and unzip the zip file.
 
 Either place the appropriate binary on your path, named @command{Simplify},
