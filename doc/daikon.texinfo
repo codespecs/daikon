@@ -7899,7 +7899,7 @@ correct, but more verbose than it would be if you used Simplify.
 @c is dated Nov 16 2004 (as of Mar 30 2015).
 
 Obtain Simplify from
-@uref{https://kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
+@uref{https://www.kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
 and unzip the zip file.
 
 Either place the appropriate binary on your path, named @command{Simplify},
