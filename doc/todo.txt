@@ -17,34 +17,7 @@ Projects
 
 ===========================================================================
 
-Documentation
-
-  - When running Javadoc on the Daikon source code, the JDK8 version of
-    javadoc produces hundreds of warnings. A primary cause in that
-    method @param and @return tags are now required.  To correct them all at
-    once would be too large a task with too little concrete benefit.
-    Whenever we edit a file/method for some other reason, we should ensure
-    that it has complete javadoc tags.  A "changed warnings" tool could
-    help with this.
-
-===========================================================================
-
-Front ends
-
-  - Add support for loop invariants.
-
-===========================================================================
-
 External tools
-
-  - DynComp robustness
-
-      DynComp/Java and DynComp/C have been successfully used on a
-      number of realistic programs.  Howerver, both versions of
-      DynComp requires extensive instrumentation of the application
-      program in order to track all value flow in the program.  Both
-      should be tested on a wider variety of programs.  Any bugs encountered
-      should be fixed and the test suites enhanced to cover more cases.
 
   - Mechanism to check invariants found by Daikon in programs (ie, add
     as assertions or some other mechanism).  Optimally it would be easy
@@ -131,8 +104,6 @@ Algorithms
         - Take advantage of Java type information (generic and otherwise)
         - Only include variables referenced in a routine (and the routines
           it calls)
-        - Analyze output (with and without DynComp) on a number of real
-          world programs.
 
   - Sequence/array invariant redesign
 
