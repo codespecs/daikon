@@ -6,6 +6,17 @@ set -o verbose
 set -o xtrace
 export SHELLOPTS
 
+# Get some system info for debugging.
+gcc --version
+make --version
+lsb_release -a
+cat /etc/*release
+ldd --version
+cat /proc/version
+find /lib/ | grep -s "libc-" || true
+find /lib64/ | grep -s "libc-" || true
+echo "end of system info"
+
 make showvars compile daikon.jar
 
 echo ".travis-build.sh is running kvasir and DynComp tests"
