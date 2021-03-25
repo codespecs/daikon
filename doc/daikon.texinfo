@@ -9156,4 +9156,4 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  dimensionality consequents UNRETURNED getter globals
 @c  LocalWords:  typedefs celeriacArg Inserter comparator roundoff bitwise
 @c  LocalWords:  Kellen Florian Laure Raytheon pathname customizable ctags
-@c  LocalWords:  myclasspath runtime Year2
+@c  LocalWords:  myclasspath runtime Year2 typedef
