@@ -4688,11 +4688,10 @@ return
 ..fixsgrid():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames
+::Keywords ::UserNames grid[..].ANGLE
 ::MOSErrors
 grid
 grid[..]
-grid[..].ANGLE
 grid[..].ANGLE_UNIT
 grid[..].LEVEL
 grid[..].NAME
@@ -4711,11 +4710,10 @@ grid[..].TYPE
 ..fixsgrid():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames
+::Keywords ::UserNames grid[..].ANGLE
 ::MOSErrors
 grid
 grid[..]
-grid[..].ANGLE
 grid[..].ANGLE_UNIT
 grid[..].LEVEL
 grid[..].NAME
@@ -10491,7 +10489,7 @@ return
 ..polspec():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames p1[..].PREV->PREV->info p1[..].PREV->info p1[..].info pp2[..]->PREV->PREV->info pp2[..]->PREV->info pp2[..]->info
+::Keywords ::UserNames p1[..].PREV->PREV->info p1[..].PREV->info p1[..].info phepol_ptr[..] pp2[..]->PREV->PREV->info pp2[..]->PREV->info pp2[..]->info
 ::MOSErrors
 direction_ptr
 direction_ptr[..]
@@ -10509,7 +10507,6 @@ p1[..].PREV->PREV->PREV[0]
 p1[..].PREV->PREV[0]
 p1[..].PREV[0]
 phepol_ptr
-phepol_ptr[..]
 phepol_unit_ptr
 phepol_unit_ptr[..]
 polarization_ptr
@@ -10526,7 +10523,7 @@ pp2[..][0]
 ..polspec():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames p1[..].PREV->PREV->info p1[..].PREV->info p1[..].info pp2[..]->PREV->PREV->info pp2[..]->PREV->info pp2[..]->info
+::Keywords ::UserNames p1[..].PREV->PREV->info p1[..].PREV->info p1[..].info phepol_ptr[..] pp2[..]->PREV->PREV->info pp2[..]->PREV->info pp2[..]->info
 ::MOSErrors
 direction_ptr
 direction_ptr[..]
@@ -10544,7 +10541,6 @@ p1[..].PREV->PREV->PREV[0]
 p1[..].PREV->PREV[0]
 p1[..].PREV[0]
 phepol_ptr
-phepol_ptr[..]
 phepol_unit_ptr
 phepol_unit_ptr[..]
 polarization_ptr

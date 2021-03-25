@@ -695,7 +695,7 @@ return
 ..addscan():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -744,6 +744,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -790,9 +791,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -813,6 +818,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -1041,7 +1047,7 @@ group_ptr[..].SUPER_GROUP_PTR[4][0]
 ..addscan():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -1090,6 +1096,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -1136,9 +1143,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -1159,6 +1170,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -3733,7 +3745,7 @@ return
 ..fixport():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames elem_ptr[..].PHEPOL elem_ptr[..].PORT_PTR->AMP elem_ptr[..].PORT_PTR->PHEPOL elem_ptr[..].PORT_PTR->PPA elem_ptr[..].PORT_PTR->PSC elem_ptr[..].PORT_PTR->PSH elem_ptr[..].RADIUS
+::Keywords ::UserNames elem_ptr[..].PHEPOL elem_ptr[..].PORT_PTR->AMP elem_ptr[..].PORT_PTR->PHEPOL elem_ptr[..].PORT_PTR->PPA elem_ptr[..].PORT_PTR->PSH elem_ptr[..].RADIUS
 ::MOSErrors
 elem_ptr
 elem_ptr[..]
@@ -3774,6 +3786,7 @@ elem_ptr[..].PORT_PTR->OMIT_POL
 elem_ptr[..].PORT_PTR->PHEPOL_UNIT
 elem_ptr[..].PORT_PTR->PORTNUM
 elem_ptr[..].PORT_PTR->PPA_UNIT
+elem_ptr[..].PORT_PTR->PSC
 elem_ptr[..].PORT_PTR->PSC_UNIT
 elem_ptr[..].PORT_PTR->PSH_UNIT
 elem_ptr[..].PORT_PTR[0]
@@ -3788,7 +3801,7 @@ elem_ptr[..].TYPE
 ..fixport():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames elem_ptr[..].PHEPOL elem_ptr[..].PORT_PTR->AMP elem_ptr[..].PORT_PTR->PHEPOL elem_ptr[..].PORT_PTR->PPA elem_ptr[..].PORT_PTR->PSC elem_ptr[..].PORT_PTR->PSH elem_ptr[..].RADIUS
+::Keywords ::UserNames elem_ptr[..].PHEPOL elem_ptr[..].PORT_PTR->AMP elem_ptr[..].PORT_PTR->PHEPOL elem_ptr[..].PORT_PTR->PPA elem_ptr[..].PORT_PTR->PSH elem_ptr[..].RADIUS
 ::MOSErrors
 elem_ptr
 elem_ptr[..]
@@ -3829,6 +3842,7 @@ elem_ptr[..].PORT_PTR->OMIT_POL
 elem_ptr[..].PORT_PTR->PHEPOL_UNIT
 elem_ptr[..].PORT_PTR->PORTNUM
 elem_ptr[..].PORT_PTR->PPA_UNIT
+elem_ptr[..].PORT_PTR->PSC
 elem_ptr[..].PORT_PTR->PSC_UNIT
 elem_ptr[..].PORT_PTR->PSH_UNIT
 elem_ptr[..].PORT_PTR[0]
@@ -3844,7 +3858,7 @@ return
 ..fixselem():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames elem_ptr[..].PDIM elem_ptr[..].PHEPOL elem_ptr[..].PORT_PTR->AMP elem_ptr[..].PORT_PTR->PHEPOL elem_ptr[..].PORT_PTR->PPA elem_ptr[..].PORT_PTR->PSC elem_ptr[..].PORT_PTR->PSH elem_ptr[..].QDIM elem_ptr[..].RADIUS
+::Keywords ::UserNames elem_ptr[..].PDIM elem_ptr[..].PHEPOL elem_ptr[..].PORT_PTR->AMP elem_ptr[..].PORT_PTR->PHEPOL elem_ptr[..].PORT_PTR->PPA elem_ptr[..].PORT_PTR->PSH elem_ptr[..].QDIM elem_ptr[..].RADIUS
 ::MOSErrors
 elem_ptr
 elem_ptr[..]
@@ -3884,6 +3898,7 @@ elem_ptr[..].PORT_PTR->OMIT_POL
 elem_ptr[..].PORT_PTR->PHEPOL_UNIT
 elem_ptr[..].PORT_PTR->PORTNUM
 elem_ptr[..].PORT_PTR->PPA_UNIT
+elem_ptr[..].PORT_PTR->PSC
 elem_ptr[..].PORT_PTR->PSC_UNIT
 elem_ptr[..].PORT_PTR->PSH_UNIT
 elem_ptr[..].PORT_PTR[0]
@@ -3897,7 +3912,7 @@ elem_ptr[..].TYPE
 ..fixselem():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames elem_ptr[..].PDIM elem_ptr[..].PHEPOL elem_ptr[..].PORT_PTR->AMP elem_ptr[..].PORT_PTR->PHEPOL elem_ptr[..].PORT_PTR->PPA elem_ptr[..].PORT_PTR->PSC elem_ptr[..].PORT_PTR->PSH elem_ptr[..].QDIM elem_ptr[..].RADIUS
+::Keywords ::UserNames elem_ptr[..].PDIM elem_ptr[..].PHEPOL elem_ptr[..].PORT_PTR->AMP elem_ptr[..].PORT_PTR->PHEPOL elem_ptr[..].PORT_PTR->PPA elem_ptr[..].PORT_PTR->PSH elem_ptr[..].QDIM elem_ptr[..].RADIUS
 ::MOSErrors
 elem_ptr
 elem_ptr[..]
@@ -3937,6 +3952,7 @@ elem_ptr[..].PORT_PTR->OMIT_POL
 elem_ptr[..].PORT_PTR->PHEPOL_UNIT
 elem_ptr[..].PORT_PTR->PORTNUM
 elem_ptr[..].PORT_PTR->PPA_UNIT
+elem_ptr[..].PORT_PTR->PSC
 elem_ptr[..].PORT_PTR->PSC_UNIT
 elem_ptr[..].PORT_PTR->PSH_UNIT
 elem_ptr[..].PORT_PTR[0]
@@ -3951,7 +3967,7 @@ return
 ..fixsgrel():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -4000,6 +4016,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -4079,6 +4096,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -4309,7 +4327,7 @@ group_ptr[..].SUPER_GROUP_PTR[4][0]
 ..fixsgrel():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -4358,6 +4376,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -4437,6 +4456,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -7296,7 +7316,7 @@ return
 ..grwrite():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME filename
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -7345,6 +7365,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -7386,9 +7407,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->NEXT[0]
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -7409,6 +7434,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -7637,7 +7663,7 @@ group_ptr[..].SUPER_GROUP_PTR[4][0]
 ..grwrite():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME filename
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -7686,6 +7712,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -7727,9 +7754,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->NEXT[0]
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -7750,6 +7781,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -8845,7 +8877,7 @@ return
 ..mkshex():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames addrem_ptr[..].NODE_PTR->PCOORD addrem_ptr[..].NODE_PTR->QCOORD angle elem_pdim elem_qdim first_node_ptr[..]->LOC_P first_node_ptr[..]->LOC_Q first_node_ptr[..]->NEXT->LOC_P first_node_ptr[..]->NEXT->LOC_Q first_node_ptr[..]->NEXT->NEXT->LOC_P first_node_ptr[..]->NEXT->NEXT->LOC_Q first_node_ptr[..]->NEXT->NEXT->PHEA first_node_ptr[..]->NEXT->NEXT->PSEA first_node_ptr[..]->NEXT->NEXT->PSIZE first_node_ptr[..]->NEXT->NEXT->QSIZE first_node_ptr[..]->NEXT->NEXT->THEA first_node_ptr[..]->NEXT->NEXT->XA first_node_ptr[..]->NEXT->NEXT->YA first_node_ptr[..]->NEXT->NEXT->ZA first_node_ptr[..]->NEXT->PHEA first_node_ptr[..]->NEXT->PSEA first_node_ptr[..]->NEXT->PSIZE first_node_ptr[..]->NEXT->QSIZE first_node_ptr[..]->NEXT->THEA first_node_ptr[..]->NEXT->XA first_node_ptr[..]->NEXT->YA first_node_ptr[..]->NEXT->ZA first_node_ptr[..]->PHEA first_node_ptr[..]->PSEA first_node_ptr[..]->PSIZE first_node_ptr[..]->QSIZE first_node_ptr[..]->THEA first_node_ptr[..]->XA first_node_ptr[..]->YA first_node_ptr[..]->ZA last_node_ptr[..]->LOC_P last_node_ptr[..]->LOC_Q last_node_ptr[..]->PHEA last_node_ptr[..]->PSEA last_node_ptr[..]->PSIZE last_node_ptr[..]->QSIZE last_node_ptr[..]->THEA last_node_ptr[..]->XA last_node_ptr[..]->YA last_node_ptr[..]->ZA pstep qstep
+::Keywords ::UserNames addrem_ptr[..].NODE_PTR->PCOORD addrem_ptr[..].NODE_PTR->QCOORD angle elem_pdim elem_qdim first_node_ptr[..]->LOC_P first_node_ptr[..]->LOC_Q first_node_ptr[..]->NEXT->LOC_P first_node_ptr[..]->NEXT->LOC_Q first_node_ptr[..]->NEXT->NEXT->LOC_P first_node_ptr[..]->NEXT->NEXT->LOC_Q first_node_ptr[..]->NEXT->NEXT->PSIZE first_node_ptr[..]->NEXT->NEXT->QSIZE first_node_ptr[..]->NEXT->NEXT->XA first_node_ptr[..]->NEXT->NEXT->YA first_node_ptr[..]->NEXT->PSIZE first_node_ptr[..]->NEXT->QSIZE first_node_ptr[..]->NEXT->XA first_node_ptr[..]->NEXT->YA first_node_ptr[..]->PSIZE first_node_ptr[..]->QSIZE first_node_ptr[..]->XA first_node_ptr[..]->YA last_node_ptr[..]->LOC_P last_node_ptr[..]->LOC_Q last_node_ptr[..]->PSIZE last_node_ptr[..]->QSIZE last_node_ptr[..]->XA last_node_ptr[..]->YA pstep qstep
 ::MOSErrors
 addrem_ptr
 addrem_ptr[..]
@@ -8926,14 +8958,26 @@ first_node_ptr[..]->NEXT->NEXT->GEOMPORT_PTR
 first_node_ptr[..]->NEXT->NEXT->GEOMPORT_PTR[0]
 first_node_ptr[..]->NEXT->NEXT->NEXT
 first_node_ptr[..]->NEXT->NEXT->NEXT[0]
+first_node_ptr[..]->NEXT->NEXT->PHEA
+first_node_ptr[..]->NEXT->NEXT->PSEA
 first_node_ptr[..]->NEXT->NEXT->SUBGROUP_PTR
 first_node_ptr[..]->NEXT->NEXT->SUBGROUP_PTR[0]
+first_node_ptr[..]->NEXT->NEXT->THEA
+first_node_ptr[..]->NEXT->NEXT->ZA
 first_node_ptr[..]->NEXT->NEXT[0]
+first_node_ptr[..]->NEXT->PHEA
+first_node_ptr[..]->NEXT->PSEA
 first_node_ptr[..]->NEXT->SUBGROUP_PTR
 first_node_ptr[..]->NEXT->SUBGROUP_PTR[0]
+first_node_ptr[..]->NEXT->THEA
+first_node_ptr[..]->NEXT->ZA
 first_node_ptr[..]->NEXT[0]
+first_node_ptr[..]->PHEA
+first_node_ptr[..]->PSEA
 first_node_ptr[..]->SUBGROUP_PTR
 first_node_ptr[..]->SUBGROUP_PTR[0]
+first_node_ptr[..]->THEA
+first_node_ptr[..]->ZA
 first_node_ptr[..][0]
 last_node_ptr
 last_node_ptr[..]
@@ -8996,8 +9040,12 @@ last_node_ptr[..]->NEXT->XA
 last_node_ptr[..]->NEXT->YA
 last_node_ptr[..]->NEXT->ZA
 last_node_ptr[..]->NEXT[0]
+last_node_ptr[..]->PHEA
+last_node_ptr[..]->PSEA
 last_node_ptr[..]->SUBGROUP_PTR
 last_node_ptr[..]->SUBGROUP_PTR[0]
+last_node_ptr[..]->THEA
+last_node_ptr[..]->ZA
 last_node_ptr[..][0]
 nodes_num_ptr
 nodes_num_ptr[..]
@@ -9005,7 +9053,7 @@ nodes_num_ptr[..]
 ..mkshex():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames addrem_ptr[..].NODE_PTR->PCOORD addrem_ptr[..].NODE_PTR->QCOORD angle elem_pdim elem_qdim first_node_ptr[..]->LOC_P first_node_ptr[..]->LOC_Q first_node_ptr[..]->NEXT->LOC_P first_node_ptr[..]->NEXT->LOC_Q first_node_ptr[..]->NEXT->NEXT->LOC_P first_node_ptr[..]->NEXT->NEXT->LOC_Q first_node_ptr[..]->NEXT->NEXT->PHEA first_node_ptr[..]->NEXT->NEXT->PSEA first_node_ptr[..]->NEXT->NEXT->PSIZE first_node_ptr[..]->NEXT->NEXT->QSIZE first_node_ptr[..]->NEXT->NEXT->THEA first_node_ptr[..]->NEXT->NEXT->XA first_node_ptr[..]->NEXT->NEXT->YA first_node_ptr[..]->NEXT->NEXT->ZA first_node_ptr[..]->NEXT->PHEA first_node_ptr[..]->NEXT->PSEA first_node_ptr[..]->NEXT->PSIZE first_node_ptr[..]->NEXT->QSIZE first_node_ptr[..]->NEXT->THEA first_node_ptr[..]->NEXT->XA first_node_ptr[..]->NEXT->YA first_node_ptr[..]->NEXT->ZA first_node_ptr[..]->PHEA first_node_ptr[..]->PSEA first_node_ptr[..]->PSIZE first_node_ptr[..]->QSIZE first_node_ptr[..]->THEA first_node_ptr[..]->XA first_node_ptr[..]->YA first_node_ptr[..]->ZA last_node_ptr[..]->LOC_P last_node_ptr[..]->LOC_Q last_node_ptr[..]->PHEA last_node_ptr[..]->PSEA last_node_ptr[..]->PSIZE last_node_ptr[..]->QSIZE last_node_ptr[..]->THEA last_node_ptr[..]->XA last_node_ptr[..]->YA last_node_ptr[..]->ZA pstep qstep
+::Keywords ::UserNames addrem_ptr[..].NODE_PTR->PCOORD addrem_ptr[..].NODE_PTR->QCOORD angle elem_pdim elem_qdim first_node_ptr[..]->LOC_P first_node_ptr[..]->LOC_Q first_node_ptr[..]->NEXT->LOC_P first_node_ptr[..]->NEXT->LOC_Q first_node_ptr[..]->NEXT->NEXT->LOC_P first_node_ptr[..]->NEXT->NEXT->LOC_Q first_node_ptr[..]->NEXT->NEXT->PSIZE first_node_ptr[..]->NEXT->NEXT->QSIZE first_node_ptr[..]->NEXT->NEXT->XA first_node_ptr[..]->NEXT->NEXT->YA first_node_ptr[..]->NEXT->PSIZE first_node_ptr[..]->NEXT->QSIZE first_node_ptr[..]->NEXT->XA first_node_ptr[..]->NEXT->YA first_node_ptr[..]->PSIZE first_node_ptr[..]->QSIZE first_node_ptr[..]->XA first_node_ptr[..]->YA last_node_ptr[..]->LOC_P last_node_ptr[..]->LOC_Q last_node_ptr[..]->PSIZE last_node_ptr[..]->QSIZE last_node_ptr[..]->XA last_node_ptr[..]->YA pstep qstep
 ::MOSErrors
 addrem_ptr
 addrem_ptr[..]
@@ -9086,14 +9134,26 @@ first_node_ptr[..]->NEXT->NEXT->GEOMPORT_PTR
 first_node_ptr[..]->NEXT->NEXT->GEOMPORT_PTR[0]
 first_node_ptr[..]->NEXT->NEXT->NEXT
 first_node_ptr[..]->NEXT->NEXT->NEXT[0]
+first_node_ptr[..]->NEXT->NEXT->PHEA
+first_node_ptr[..]->NEXT->NEXT->PSEA
 first_node_ptr[..]->NEXT->NEXT->SUBGROUP_PTR
 first_node_ptr[..]->NEXT->NEXT->SUBGROUP_PTR[0]
+first_node_ptr[..]->NEXT->NEXT->THEA
+first_node_ptr[..]->NEXT->NEXT->ZA
 first_node_ptr[..]->NEXT->NEXT[0]
+first_node_ptr[..]->NEXT->PHEA
+first_node_ptr[..]->NEXT->PSEA
 first_node_ptr[..]->NEXT->SUBGROUP_PTR
 first_node_ptr[..]->NEXT->SUBGROUP_PTR[0]
+first_node_ptr[..]->NEXT->THEA
+first_node_ptr[..]->NEXT->ZA
 first_node_ptr[..]->NEXT[0]
+first_node_ptr[..]->PHEA
+first_node_ptr[..]->PSEA
 first_node_ptr[..]->SUBGROUP_PTR
 first_node_ptr[..]->SUBGROUP_PTR[0]
+first_node_ptr[..]->THEA
+first_node_ptr[..]->ZA
 first_node_ptr[..][0]
 last_node_ptr
 last_node_ptr[..]
@@ -9156,8 +9216,12 @@ last_node_ptr[..]->NEXT->XA
 last_node_ptr[..]->NEXT->YA
 last_node_ptr[..]->NEXT->ZA
 last_node_ptr[..]->NEXT[0]
+last_node_ptr[..]->PHEA
+last_node_ptr[..]->PSEA
 last_node_ptr[..]->SUBGROUP_PTR
 last_node_ptr[..]->SUBGROUP_PTR[0]
+last_node_ptr[..]->THEA
+last_node_ptr[..]->ZA
 last_node_ptr[..][0]
 nodes_num_ptr
 nodes_num_ptr[..]
@@ -13445,7 +13509,7 @@ return
 ..sgramp2n():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames geomnode_ptr[..].GEOMPORT_PTR->AMP geomnode_ptr[..].LOC_P geomnode_ptr[..].LOC_Q geomnode_ptr[..].NEXT->GEOMPORT_PTR->AMP geomnode_ptr[..].NEXT->LOC_P geomnode_ptr[..].NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->LOC_P geomnode_ptr[..].NEXT->NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->PHEA geomnode_ptr[..].NEXT->NEXT->PSEA geomnode_ptr[..].NEXT->NEXT->PSIZE geomnode_ptr[..].NEXT->NEXT->QSIZE geomnode_ptr[..].NEXT->NEXT->THEA geomnode_ptr[..].NEXT->NEXT->XA geomnode_ptr[..].NEXT->NEXT->YA geomnode_ptr[..].NEXT->NEXT->ZA geomnode_ptr[..].NEXT->PHEA geomnode_ptr[..].NEXT->PSEA geomnode_ptr[..].NEXT->PSIZE geomnode_ptr[..].NEXT->QSIZE geomnode_ptr[..].NEXT->THEA geomnode_ptr[..].NEXT->XA geomnode_ptr[..].NEXT->YA geomnode_ptr[..].NEXT->ZA geomnode_ptr[..].PHEA geomnode_ptr[..].PSEA geomnode_ptr[..].PSIZE geomnode_ptr[..].QSIZE geomnode_ptr[..].THEA geomnode_ptr[..].XA geomnode_ptr[..].YA geomnode_ptr[..].ZA grampexc_ptr[..].CENTRE grampexc_ptr[..].P1_ET grampexc_ptr[..].P2_ET grampexc_ptr[..].Q1_ET grampexc_ptr[..].Q2_ET port_ptr[..].AMP port_ptr[..].PHEPOL port_ptr[..].PPA port_ptr[..].PSC port_ptr[..].PSH
+::Keywords ::UserNames geomnode_ptr[..].GEOMPORT_PTR->AMP geomnode_ptr[..].LOC_P geomnode_ptr[..].LOC_Q geomnode_ptr[..].NEXT->GEOMPORT_PTR->AMP geomnode_ptr[..].NEXT->LOC_P geomnode_ptr[..].NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->LOC_P geomnode_ptr[..].NEXT->NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->PSIZE geomnode_ptr[..].NEXT->NEXT->QSIZE geomnode_ptr[..].NEXT->NEXT->XA geomnode_ptr[..].NEXT->NEXT->YA geomnode_ptr[..].NEXT->PSIZE geomnode_ptr[..].NEXT->QSIZE geomnode_ptr[..].NEXT->XA geomnode_ptr[..].NEXT->YA geomnode_ptr[..].PSIZE geomnode_ptr[..].QSIZE geomnode_ptr[..].XA geomnode_ptr[..].YA grampexc_ptr[..].CENTRE grampexc_ptr[..].P1_ET grampexc_ptr[..].P2_ET grampexc_ptr[..].Q1_ET grampexc_ptr[..].Q2_ET port_ptr[..].AMP port_ptr[..].PHEPOL port_ptr[..].PPA port_ptr[..].PSH
 ::MOSErrors
 geomnode_ptr
 geomnode_ptr[..]
@@ -13478,15 +13542,27 @@ geomnode_ptr[..].NEXT->NEXT->GEOMPORT_PTR
 geomnode_ptr[..].NEXT->NEXT->GEOMPORT_PTR[0]
 geomnode_ptr[..].NEXT->NEXT->NEXT
 geomnode_ptr[..].NEXT->NEXT->NEXT[0]
+geomnode_ptr[..].NEXT->NEXT->PHEA
+geomnode_ptr[..].NEXT->NEXT->PSEA
 geomnode_ptr[..].NEXT->NEXT->SHAPE geomnode_ptr[..].NEXT->SHAPE geomnode_ptr[..].SHAPE
 geomnode_ptr[..].NEXT->NEXT->SUBGROUP_PTR
 geomnode_ptr[..].NEXT->NEXT->SUBGROUP_PTR[0]
+geomnode_ptr[..].NEXT->NEXT->THEA
+geomnode_ptr[..].NEXT->NEXT->ZA
 geomnode_ptr[..].NEXT->NEXT[0]
+geomnode_ptr[..].NEXT->PHEA
+geomnode_ptr[..].NEXT->PSEA
 geomnode_ptr[..].NEXT->SUBGROUP_PTR
 geomnode_ptr[..].NEXT->SUBGROUP_PTR[0]
+geomnode_ptr[..].NEXT->THEA
+geomnode_ptr[..].NEXT->ZA
 geomnode_ptr[..].NEXT[0]
+geomnode_ptr[..].PHEA
+geomnode_ptr[..].PSEA
 geomnode_ptr[..].SUBGROUP_PTR
 geomnode_ptr[..].SUBGROUP_PTR[0]
+geomnode_ptr[..].THEA
+geomnode_ptr[..].ZA
 grampexc_ptr
 grampexc_ptr[..]
 grampexc_ptr[..].AMP_UNIT
@@ -13533,13 +13609,14 @@ port_ptr[..].OMIT_POL
 port_ptr[..].PHEPOL_UNIT
 port_ptr[..].PORTNUM
 port_ptr[..].PPA_UNIT
+port_ptr[..].PSC
 port_ptr[..].PSC_UNIT
 port_ptr[..].PSH_UNIT
 
 ..sgramp2n():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames geomnode_ptr[..].GEOMPORT_PTR->AMP geomnode_ptr[..].LOC_P geomnode_ptr[..].LOC_Q geomnode_ptr[..].NEXT->GEOMPORT_PTR->AMP geomnode_ptr[..].NEXT->LOC_P geomnode_ptr[..].NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->LOC_P geomnode_ptr[..].NEXT->NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->PHEA geomnode_ptr[..].NEXT->NEXT->PSEA geomnode_ptr[..].NEXT->NEXT->PSIZE geomnode_ptr[..].NEXT->NEXT->QSIZE geomnode_ptr[..].NEXT->NEXT->THEA geomnode_ptr[..].NEXT->NEXT->XA geomnode_ptr[..].NEXT->NEXT->YA geomnode_ptr[..].NEXT->NEXT->ZA geomnode_ptr[..].NEXT->PHEA geomnode_ptr[..].NEXT->PSEA geomnode_ptr[..].NEXT->PSIZE geomnode_ptr[..].NEXT->QSIZE geomnode_ptr[..].NEXT->THEA geomnode_ptr[..].NEXT->XA geomnode_ptr[..].NEXT->YA geomnode_ptr[..].NEXT->ZA geomnode_ptr[..].PHEA geomnode_ptr[..].PSEA geomnode_ptr[..].PSIZE geomnode_ptr[..].QSIZE geomnode_ptr[..].THEA geomnode_ptr[..].XA geomnode_ptr[..].YA geomnode_ptr[..].ZA grampexc_ptr[..].CENTRE grampexc_ptr[..].P1_ET grampexc_ptr[..].P2_ET grampexc_ptr[..].Q1_ET grampexc_ptr[..].Q2_ET port_ptr[..].AMP port_ptr[..].PHEPOL port_ptr[..].PPA port_ptr[..].PSC port_ptr[..].PSH
+::Keywords ::UserNames geomnode_ptr[..].GEOMPORT_PTR->AMP geomnode_ptr[..].LOC_P geomnode_ptr[..].LOC_Q geomnode_ptr[..].NEXT->GEOMPORT_PTR->AMP geomnode_ptr[..].NEXT->LOC_P geomnode_ptr[..].NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->LOC_P geomnode_ptr[..].NEXT->NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->PSIZE geomnode_ptr[..].NEXT->NEXT->QSIZE geomnode_ptr[..].NEXT->NEXT->XA geomnode_ptr[..].NEXT->NEXT->YA geomnode_ptr[..].NEXT->PSIZE geomnode_ptr[..].NEXT->QSIZE geomnode_ptr[..].NEXT->XA geomnode_ptr[..].NEXT->YA geomnode_ptr[..].PSIZE geomnode_ptr[..].QSIZE geomnode_ptr[..].XA geomnode_ptr[..].YA grampexc_ptr[..].CENTRE grampexc_ptr[..].P1_ET grampexc_ptr[..].P2_ET grampexc_ptr[..].Q1_ET grampexc_ptr[..].Q2_ET port_ptr[..].AMP port_ptr[..].PHEPOL port_ptr[..].PPA port_ptr[..].PSH
 ::MOSErrors
 geomnode_ptr
 geomnode_ptr[..]
@@ -13572,15 +13649,27 @@ geomnode_ptr[..].NEXT->NEXT->GEOMPORT_PTR
 geomnode_ptr[..].NEXT->NEXT->GEOMPORT_PTR[0]
 geomnode_ptr[..].NEXT->NEXT->NEXT
 geomnode_ptr[..].NEXT->NEXT->NEXT[0]
+geomnode_ptr[..].NEXT->NEXT->PHEA
+geomnode_ptr[..].NEXT->NEXT->PSEA
 geomnode_ptr[..].NEXT->NEXT->SHAPE geomnode_ptr[..].NEXT->SHAPE geomnode_ptr[..].SHAPE
 geomnode_ptr[..].NEXT->NEXT->SUBGROUP_PTR
 geomnode_ptr[..].NEXT->NEXT->SUBGROUP_PTR[0]
+geomnode_ptr[..].NEXT->NEXT->THEA
+geomnode_ptr[..].NEXT->NEXT->ZA
 geomnode_ptr[..].NEXT->NEXT[0]
+geomnode_ptr[..].NEXT->PHEA
+geomnode_ptr[..].NEXT->PSEA
 geomnode_ptr[..].NEXT->SUBGROUP_PTR
 geomnode_ptr[..].NEXT->SUBGROUP_PTR[0]
+geomnode_ptr[..].NEXT->THEA
+geomnode_ptr[..].NEXT->ZA
 geomnode_ptr[..].NEXT[0]
+geomnode_ptr[..].PHEA
+geomnode_ptr[..].PSEA
 geomnode_ptr[..].SUBGROUP_PTR
 geomnode_ptr[..].SUBGROUP_PTR[0]
+geomnode_ptr[..].THEA
+geomnode_ptr[..].ZA
 grampexc_ptr
 grampexc_ptr[..]
 grampexc_ptr[..].AMP_UNIT
@@ -13627,6 +13716,7 @@ port_ptr[..].OMIT_POL
 port_ptr[..].PHEPOL_UNIT
 port_ptr[..].PORTNUM
 port_ptr[..].PPA_UNIT
+port_ptr[..].PSC
 port_ptr[..].PSC_UNIT
 port_ptr[..].PSH_UNIT
 return
@@ -14977,7 +15067,7 @@ return
 ..sgrphaun():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames geomnode_ptr[..].GEOMPORT_PTR->AMP geomnode_ptr[..].GEOMPORT_PTR->PPA geomnode_ptr[..].GEOMPORT_PTR->PSC geomnode_ptr[..].GEOMPORT_PTR->PSH geomnode_ptr[..].LOC_P geomnode_ptr[..].LOC_Q geomnode_ptr[..].NEXT->GEOMPORT_PTR->AMP geomnode_ptr[..].NEXT->GEOMPORT_PTR->PPA geomnode_ptr[..].NEXT->GEOMPORT_PTR->PSC geomnode_ptr[..].NEXT->GEOMPORT_PTR->PSH geomnode_ptr[..].NEXT->LOC_P geomnode_ptr[..].NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->LOC_P geomnode_ptr[..].NEXT->NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->PHEA geomnode_ptr[..].NEXT->NEXT->PSEA geomnode_ptr[..].NEXT->NEXT->PSIZE geomnode_ptr[..].NEXT->NEXT->QSIZE geomnode_ptr[..].NEXT->NEXT->THEA geomnode_ptr[..].NEXT->NEXT->XA geomnode_ptr[..].NEXT->NEXT->YA geomnode_ptr[..].NEXT->NEXT->ZA geomnode_ptr[..].NEXT->PHEA geomnode_ptr[..].NEXT->PSEA geomnode_ptr[..].NEXT->PSIZE geomnode_ptr[..].NEXT->QSIZE geomnode_ptr[..].NEXT->THEA geomnode_ptr[..].NEXT->XA geomnode_ptr[..].NEXT->YA geomnode_ptr[..].NEXT->ZA geomnode_ptr[..].PHEA geomnode_ptr[..].PSEA geomnode_ptr[..].PSIZE geomnode_ptr[..].QSIZE geomnode_ptr[..].THEA geomnode_ptr[..].XA geomnode_ptr[..].YA geomnode_ptr[..].ZA grphaexc_ptr[..].UNIF_VAL port_ptr[..].AMP port_ptr[..].PHEPOL port_ptr[..].PPA port_ptr[..].PSC port_ptr[..].PSH
+::Keywords ::UserNames geomnode_ptr[..].GEOMPORT_PTR->AMP geomnode_ptr[..].GEOMPORT_PTR->PPA geomnode_ptr[..].GEOMPORT_PTR->PSH geomnode_ptr[..].LOC_P geomnode_ptr[..].LOC_Q geomnode_ptr[..].NEXT->GEOMPORT_PTR->AMP geomnode_ptr[..].NEXT->GEOMPORT_PTR->PPA geomnode_ptr[..].NEXT->GEOMPORT_PTR->PSH geomnode_ptr[..].NEXT->LOC_P geomnode_ptr[..].NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->LOC_P geomnode_ptr[..].NEXT->NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->PSIZE geomnode_ptr[..].NEXT->NEXT->QSIZE geomnode_ptr[..].NEXT->NEXT->XA geomnode_ptr[..].NEXT->NEXT->YA geomnode_ptr[..].NEXT->PSIZE geomnode_ptr[..].NEXT->QSIZE geomnode_ptr[..].NEXT->XA geomnode_ptr[..].NEXT->YA geomnode_ptr[..].PSIZE geomnode_ptr[..].QSIZE geomnode_ptr[..].XA geomnode_ptr[..].YA grphaexc_ptr[..].UNIF_VAL port_ptr[..].AMP port_ptr[..].PHEPOL port_ptr[..].PPA port_ptr[..].PSH
 ::MOSErrors
 geomnode_ptr
 geomnode_ptr[..]
@@ -14992,6 +15082,7 @@ geomnode_ptr[..].GEOMPORT_PTR->NEXT->PSC
 geomnode_ptr[..].GEOMPORT_PTR->NEXT->PSH
 geomnode_ptr[..].GEOMPORT_PTR->NEXT[0]
 geomnode_ptr[..].GEOMPORT_PTR->PHEPOL
+geomnode_ptr[..].GEOMPORT_PTR->PSC geomnode_ptr[..].NEXT->GEOMPORT_PTR->PSC port_ptr[..].PSC
 geomnode_ptr[..].GEOMPORT_PTR[0]
 geomnode_ptr[..].NEXT
 geomnode_ptr[..].NEXT->GEOMPORT_PTR
@@ -15004,15 +15095,27 @@ geomnode_ptr[..].NEXT->NEXT->GEOMPORT_PTR
 geomnode_ptr[..].NEXT->NEXT->GEOMPORT_PTR[0]
 geomnode_ptr[..].NEXT->NEXT->NEXT
 geomnode_ptr[..].NEXT->NEXT->NEXT[0]
+geomnode_ptr[..].NEXT->NEXT->PHEA
+geomnode_ptr[..].NEXT->NEXT->PSEA
 geomnode_ptr[..].NEXT->NEXT->SHAPE geomnode_ptr[..].NEXT->SHAPE geomnode_ptr[..].SHAPE
 geomnode_ptr[..].NEXT->NEXT->SUBGROUP_PTR
 geomnode_ptr[..].NEXT->NEXT->SUBGROUP_PTR[0]
+geomnode_ptr[..].NEXT->NEXT->THEA
+geomnode_ptr[..].NEXT->NEXT->ZA
 geomnode_ptr[..].NEXT->NEXT[0]
+geomnode_ptr[..].NEXT->PHEA
+geomnode_ptr[..].NEXT->PSEA
 geomnode_ptr[..].NEXT->SUBGROUP_PTR
 geomnode_ptr[..].NEXT->SUBGROUP_PTR[0]
+geomnode_ptr[..].NEXT->THEA
+geomnode_ptr[..].NEXT->ZA
 geomnode_ptr[..].NEXT[0]
+geomnode_ptr[..].PHEA
+geomnode_ptr[..].PSEA
 geomnode_ptr[..].SUBGROUP_PTR
 geomnode_ptr[..].SUBGROUP_PTR[0]
+geomnode_ptr[..].THEA
+geomnode_ptr[..].ZA
 grphaexc_ptr
 grphaexc_ptr[..]
 grphaexc_ptr[..].ANGLE_START
@@ -15080,7 +15183,7 @@ port_ptr[..].PSH_UNIT
 ..sgrphaun():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames geomnode_ptr[..].GEOMPORT_PTR->AMP geomnode_ptr[..].GEOMPORT_PTR->PPA geomnode_ptr[..].GEOMPORT_PTR->PSC geomnode_ptr[..].GEOMPORT_PTR->PSH geomnode_ptr[..].LOC_P geomnode_ptr[..].LOC_Q geomnode_ptr[..].NEXT->GEOMPORT_PTR->AMP geomnode_ptr[..].NEXT->GEOMPORT_PTR->PPA geomnode_ptr[..].NEXT->GEOMPORT_PTR->PSC geomnode_ptr[..].NEXT->GEOMPORT_PTR->PSH geomnode_ptr[..].NEXT->LOC_P geomnode_ptr[..].NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->LOC_P geomnode_ptr[..].NEXT->NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->PHEA geomnode_ptr[..].NEXT->NEXT->PSEA geomnode_ptr[..].NEXT->NEXT->PSIZE geomnode_ptr[..].NEXT->NEXT->QSIZE geomnode_ptr[..].NEXT->NEXT->THEA geomnode_ptr[..].NEXT->NEXT->XA geomnode_ptr[..].NEXT->NEXT->YA geomnode_ptr[..].NEXT->NEXT->ZA geomnode_ptr[..].NEXT->PHEA geomnode_ptr[..].NEXT->PSEA geomnode_ptr[..].NEXT->PSIZE geomnode_ptr[..].NEXT->QSIZE geomnode_ptr[..].NEXT->THEA geomnode_ptr[..].NEXT->XA geomnode_ptr[..].NEXT->YA geomnode_ptr[..].NEXT->ZA geomnode_ptr[..].PHEA geomnode_ptr[..].PSEA geomnode_ptr[..].PSIZE geomnode_ptr[..].QSIZE geomnode_ptr[..].THEA geomnode_ptr[..].XA geomnode_ptr[..].YA geomnode_ptr[..].ZA grphaexc_ptr[..].UNIF_VAL port_ptr[..].AMP port_ptr[..].PHEPOL port_ptr[..].PPA port_ptr[..].PSC port_ptr[..].PSH
+::Keywords ::UserNames geomnode_ptr[..].GEOMPORT_PTR->AMP geomnode_ptr[..].GEOMPORT_PTR->PPA geomnode_ptr[..].GEOMPORT_PTR->PSH geomnode_ptr[..].LOC_P geomnode_ptr[..].LOC_Q geomnode_ptr[..].NEXT->GEOMPORT_PTR->AMP geomnode_ptr[..].NEXT->GEOMPORT_PTR->PPA geomnode_ptr[..].NEXT->GEOMPORT_PTR->PSH geomnode_ptr[..].NEXT->LOC_P geomnode_ptr[..].NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->LOC_P geomnode_ptr[..].NEXT->NEXT->LOC_Q geomnode_ptr[..].NEXT->NEXT->PSIZE geomnode_ptr[..].NEXT->NEXT->QSIZE geomnode_ptr[..].NEXT->NEXT->XA geomnode_ptr[..].NEXT->NEXT->YA geomnode_ptr[..].NEXT->PSIZE geomnode_ptr[..].NEXT->QSIZE geomnode_ptr[..].NEXT->XA geomnode_ptr[..].NEXT->YA geomnode_ptr[..].PSIZE geomnode_ptr[..].QSIZE geomnode_ptr[..].XA geomnode_ptr[..].YA grphaexc_ptr[..].UNIF_VAL port_ptr[..].AMP port_ptr[..].PHEPOL port_ptr[..].PPA port_ptr[..].PSH
 ::MOSErrors
 geomnode_ptr
 geomnode_ptr[..]
@@ -15095,6 +15198,7 @@ geomnode_ptr[..].GEOMPORT_PTR->NEXT->PSC
 geomnode_ptr[..].GEOMPORT_PTR->NEXT->PSH
 geomnode_ptr[..].GEOMPORT_PTR->NEXT[0]
 geomnode_ptr[..].GEOMPORT_PTR->PHEPOL
+geomnode_ptr[..].GEOMPORT_PTR->PSC geomnode_ptr[..].NEXT->GEOMPORT_PTR->PSC port_ptr[..].PSC
 geomnode_ptr[..].GEOMPORT_PTR[0]
 geomnode_ptr[..].NEXT
 geomnode_ptr[..].NEXT->GEOMPORT_PTR
@@ -15107,15 +15211,27 @@ geomnode_ptr[..].NEXT->NEXT->GEOMPORT_PTR
 geomnode_ptr[..].NEXT->NEXT->GEOMPORT_PTR[0]
 geomnode_ptr[..].NEXT->NEXT->NEXT
 geomnode_ptr[..].NEXT->NEXT->NEXT[0]
+geomnode_ptr[..].NEXT->NEXT->PHEA
+geomnode_ptr[..].NEXT->NEXT->PSEA
 geomnode_ptr[..].NEXT->NEXT->SHAPE geomnode_ptr[..].NEXT->SHAPE geomnode_ptr[..].SHAPE
 geomnode_ptr[..].NEXT->NEXT->SUBGROUP_PTR
 geomnode_ptr[..].NEXT->NEXT->SUBGROUP_PTR[0]
+geomnode_ptr[..].NEXT->NEXT->THEA
+geomnode_ptr[..].NEXT->NEXT->ZA
 geomnode_ptr[..].NEXT->NEXT[0]
+geomnode_ptr[..].NEXT->PHEA
+geomnode_ptr[..].NEXT->PSEA
 geomnode_ptr[..].NEXT->SUBGROUP_PTR
 geomnode_ptr[..].NEXT->SUBGROUP_PTR[0]
+geomnode_ptr[..].NEXT->THEA
+geomnode_ptr[..].NEXT->ZA
 geomnode_ptr[..].NEXT[0]
+geomnode_ptr[..].PHEA
+geomnode_ptr[..].PSEA
 geomnode_ptr[..].SUBGROUP_PTR
 geomnode_ptr[..].SUBGROUP_PTR[0]
+geomnode_ptr[..].THEA
+geomnode_ptr[..].ZA
 grphaexc_ptr
 grphaexc_ptr[..]
 grphaexc_ptr[..].ANGLE_START
@@ -15353,7 +15469,7 @@ start_ptr[..].ZA
 ..simamp():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -15402,6 +15518,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -15447,9 +15564,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -15470,6 +15591,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -15698,7 +15820,7 @@ group_ptr[..].SUPER_GROUP_PTR[4][0]
 ..simamp():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -15747,6 +15869,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -15792,9 +15915,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -15815,6 +15942,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -16044,7 +16172,7 @@ return
 ..simgroup():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -16093,6 +16221,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -16139,9 +16268,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -16162,6 +16295,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -16390,7 +16524,7 @@ group_ptr[..].SUPER_GROUP_PTR[4][0]
 ..simgroup():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -16439,6 +16573,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -16485,9 +16620,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -16508,6 +16647,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -16737,7 +16877,7 @@ return
 ..simpha():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -16786,6 +16926,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -16828,9 +16969,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -16851,6 +16996,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -17079,7 +17225,7 @@ group_ptr[..].SUPER_GROUP_PTR[4][0]
 ..simpha():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -17128,6 +17274,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -17170,9 +17317,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -17193,6 +17344,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -17422,7 +17574,7 @@ return
 ..simpol():::ENTER
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -17471,6 +17623,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -17512,9 +17665,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->NEXT[0]
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -17535,6 +17692,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
@@ -17763,7 +17921,7 @@ group_ptr[..].SUPER_GROUP_PTR[4][0]
 ..simpol():::EXIT0
 ::ErrorMessages
 ::GLOBLE_FILENAME
-::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PHEA group_ptr[..].GEOMNODE_PTR->PSEA group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->THEA group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GEOMNODE_PTR->ZA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRID_PTR->ROT_ANGLE group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
+::Keywords ::UserNames group_ptr[..].ADDREM_PTR->NODE_PTR->PCOORD group_ptr[..].ADDREM_PTR->NODE_PTR->QCOORD group_ptr[..].ELEM_PTR->PDIM group_ptr[..].ELEM_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->AMP group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL group_ptr[..].ELEM_PTR->PORT_PTR->PPA group_ptr[..].ELEM_PTR->PORT_PTR->PSH group_ptr[..].ELEM_PTR->QDIM group_ptr[..].ELEM_PTR->RADIUS group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->AMP group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PPA group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSH group_ptr[..].GEOMNODE_PTR->LOC_P group_ptr[..].GEOMNODE_PTR->LOC_Q group_ptr[..].GEOMNODE_PTR->PSIZE group_ptr[..].GEOMNODE_PTR->QSIZE group_ptr[..].GEOMNODE_PTR->XA group_ptr[..].GEOMNODE_PTR->YA group_ptr[..].GRAMPEXC_PTR->CENTRE group_ptr[..].GRAMPEXC_PTR->P1_ET group_ptr[..].GRAMPEXC_PTR->P2_ET group_ptr[..].GRAMPEXC_PTR->Q1_ET group_ptr[..].GRAMPEXC_PTR->Q2_ET group_ptr[..].GRID_PTR->ANGLE group_ptr[..].GRID_PTR->PSTEP group_ptr[..].GRID_PTR->QSTEP group_ptr[..].GRPHAEXC_PTR->UNIF_VAL group_ptr[..].NAME group_ptr[..].PSIZE group_ptr[..].QSIZE
 ::MOSErrors
 group_ptr
 group_ptr[..]
@@ -17812,6 +17970,7 @@ group_ptr[..].ELEM_PTR->PORT_PTR->OMIT_POL
 group_ptr[..].ELEM_PTR->PORT_PTR->PHEPOL_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PORTNUM
 group_ptr[..].ELEM_PTR->PORT_PTR->PPA_UNIT
+group_ptr[..].ELEM_PTR->PORT_PTR->PSC group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->PSC
 group_ptr[..].ELEM_PTR->PORT_PTR->PSC_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR->PSH_UNIT
 group_ptr[..].ELEM_PTR->PORT_PTR[0]
@@ -17853,9 +18012,13 @@ group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR->NEXT[0]
 group_ptr[..].GEOMNODE_PTR->GEOMPORT_PTR[0]
 group_ptr[..].GEOMNODE_PTR->NEXT
 group_ptr[..].GEOMNODE_PTR->NEXT[0]
+group_ptr[..].GEOMNODE_PTR->PHEA
+group_ptr[..].GEOMNODE_PTR->PSEA
 group_ptr[..].GEOMNODE_PTR->SHAPE
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR
 group_ptr[..].GEOMNODE_PTR->SUBGROUP_PTR[0]
+group_ptr[..].GEOMNODE_PTR->THEA
+group_ptr[..].GEOMNODE_PTR->ZA
 group_ptr[..].GEOMNODE_PTR[0]
 group_ptr[..].GRAMPEXC_PTR
 group_ptr[..].GRAMPEXC_PTR->AMP_UNIT
@@ -17876,6 +18039,7 @@ group_ptr[..].GRID_PTR->PX
 group_ptr[..].GRID_PTR->PY
 group_ptr[..].GRID_PTR->QX
 group_ptr[..].GRID_PTR->QY
+group_ptr[..].GRID_PTR->ROT_ANGLE
 group_ptr[..].GRID_PTR->TYPE
 group_ptr[..].GRID_PTR[0]
 group_ptr[..].GRPHAEXC_PTR
