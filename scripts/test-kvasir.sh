@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Get some system info for debugging.
+# Note that on some systems, lsb_release fails if 'set -e' is on.
+lsb_release -a
+gcc --version
+make --version
+ldd --version
+find /lib/ | grep -s "libc-" || true
+find /lib64/ | grep -s "libc-" || true
+echo "end of system info"
+echo ""
+
 set -e
 set -o pipefail
 set -o verbose
