@@ -237,6 +237,11 @@ public final class FileIO {
       return parent_ppt_name + "[" + id + "] " + rel_type;
     }
 
+    /**
+     * Intern the ppt name.
+     *
+     * @param in the input stream from which to read the object
+     */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
       if (parent_ppt_name != null) {

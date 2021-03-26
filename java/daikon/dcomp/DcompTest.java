@@ -272,9 +272,13 @@ class DcompTest {
       }
     }
 
+    /** An object. */
     Obj obj1;
+    /** Another object. */
     Obj obj2;
+    /** An uncloneable object. */
     Uncloneable u1;
+    /** Another uncloneable object. */
     Uncloneable u2;
 
     G() {
