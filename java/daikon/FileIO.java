@@ -241,6 +241,8 @@ public final class FileIO {
      * Intern the ppt name.
      *
      * @param in the input stream from which to read the object
+     * @throws IOException if there is a problem reading the stream
+     * @throws ClassNotFoundException if a class cannot be loaded
      */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
