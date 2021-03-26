@@ -270,7 +270,7 @@ class DcompTest {
         //        return super.clone();
         throw new CloneNotSupportedException();
       }
-    };
+    }
 
     Obj obj1;
     Obj obj2;

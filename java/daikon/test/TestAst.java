@@ -257,11 +257,13 @@ public final class TestAst {
     decl = methodDecls.get(21);
     assertEquals("foo20", decl.f2.f0.tokenImage);
     checkMatch(
-        "daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::ENTER",
+        "daikon.test.GenericTestClass.foo20"
+            + "(java.lang.Comparable[][][], java.lang.Object[][]):::ENTER",
         decl,
         matcher);
     checkMatch(
-        "daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::EXIT53",
+        "daikon.test.GenericTestClass.foo20"
+            + "(java.lang.Comparable[][][], java.lang.Object[][]):::EXIT53",
         decl,
         matcher);
 

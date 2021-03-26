@@ -363,7 +363,8 @@ public final class PrintInvariants {
               PrintInvariants.discReasonSetup(Daikon.getOptarg(g));
             } catch (IllegalArgumentException e) {
               assert e.getMessage() != null
-                  : "@AssumeAssertion(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
+                  : "@AssumeAssertion(nullness):  application invariant:  if discReasonSetup"
+                      + " throws IllegalArgumentException, its message is non-null";
               throw new Daikon.UserError(e.getMessage());
             }
           } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
