@@ -66,7 +66,8 @@ public class InvariantChecker {
           "  --" + filter_SWITCH,
           "      Checks only invariants that are not filtered by the default filters",
           "  --" + dir_SWITCH + " directory with invariant and dtrace files",
-          "      We output how many invariants failed for each invariant file. We check for failure against any sample in any dtrace file.",
+          "      We output how many invariants failed for each invariant file. We check for"
+              + " failure against any sample in any dtrace file.",
           "  --" + verbose_SWITCH + " print all failing samples",
           "  --" + Daikon.config_option_SWITCH + " config_var=val",
           "      Sets the specified configuration variable.  ",

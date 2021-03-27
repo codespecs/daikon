@@ -396,7 +396,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     if (cg.getMajor() < Const.MAJOR_1_6) {
       System.out.printf(
-          "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be processed correctly.%n",
+          "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be"
+              + " processed correctly.%n",
           cg.getClassName(), cg.getMajor());
     }
 
@@ -558,7 +559,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
           } catch (Exception e) {
             if (e.getMessage().startsWith("Branch target offset too large")) {
               System.out.printf(
-                  "Chicory warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
+                  "Chicory warning: ClassFile: %s - method %s is too large to instrument and is"
+                      + " being skipped.%n",
                   cg.getClassName(), mg.getName());
               continue;
             } else {

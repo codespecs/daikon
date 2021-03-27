@@ -1733,7 +1733,8 @@ public final class Daikon {
           Class<?> cls = inv_as_object.getClass();
           throw new Daikon.UserError(
               invariantClassName
-                  + ".get_proto() returned object of the wrong type.  It should have been a subclass of invariant, but was "
+                  + ".get_proto() returned object of the wrong type."
+                  + "  It should have been a subclass of invariant, but was "
                   + cls
                   + ": "
                   + inv_as_object);

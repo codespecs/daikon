@@ -149,7 +149,8 @@ public class Premain {
       InputStream strm = Object.class.getResourceAsStream("jdk_classes.txt");
       if (strm == null) {
         System.err.println(
-            "Can't find jdk_classes.txt; see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
+            "Can't find jdk_classes.txt;"
+                + " see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
         System.exit(1);
       }
       BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));

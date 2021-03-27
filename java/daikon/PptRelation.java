@@ -519,7 +519,10 @@ public class PptRelation implements Serializable {
       if (!rel.parent_to_child_map.containsKey(vp)) {
         if (all_found) {
           System.out.printf(
-              "missing variables in newEnterExitRel:%n  parent = %s%n  child = %s%nparent varinfos missing from parent_to_child_map:%n",
+              "missing variables in newEnterExitRel:%n"
+                  + "  parent = %s%n"
+                  + "  child = %s%n"
+                  + "parent varinfos missing from parent_to_child_map:%n",
               parent.name(), child.name());
           all_found = false;
         }
