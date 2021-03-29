@@ -677,7 +677,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     code.add("} catch (Exception e) {");
     code.add(
-        " System.err.println(\"malformed invariant. This is probably a bug in the daikon.tools.runtimechecker tool; please submit a bug report.\");");
+        " System.err.println(\"malformed invariant. This is probably a bug in the"
+            + " daikon.tools.runtimechecker tool; please submit a bug report.\");");
     code.add(" e.printStackTrace();");
     code.add(" System.exit(1);");
     code.add("}");
@@ -697,7 +698,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     StringBuilder code = new StringBuilder();
     code.append(
-        "private void checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time) {");
+        "private void checkObjectInvariants_instrument"
+            + "(daikon.tools.runtimechecker.Violation.Time time) {");
     String objectPptname = classname + ":::OBJECT";
     PptTopLevel objectPpt = pptmap.get(objectPptname);
     if (objectPpt != null) {
@@ -717,7 +719,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       String classname) {
     StringBuilder code = new StringBuilder();
     code.append(
-        "private static void checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time) {");
+        "private static void checkClassInvariantsInstrument"
+            + "(daikon.tools.runtimechecker.Violation.Time time) {");
     String classPptname = classname + ":::CLASS";
     PptTopLevel classPpt = pptmap.get(classPptname);
     if (classPpt != null) {

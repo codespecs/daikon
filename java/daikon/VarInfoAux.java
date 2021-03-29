@@ -202,7 +202,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
     // Interning
     VarInfoAux result = new VarInfoAux(map).intern();
     assert interningMap != null
-        : "@AssumeAssertion(nullness):  application invariant:  postcondition of intern(), which was just called";
+        : "@AssumeAssertion(nullness):  application invariant:  postcondition of intern(), which"
+            + " was just called";
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("New parse " + result);
       debug.fine("Intern table size: " + interningMap.size());

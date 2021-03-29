@@ -998,7 +998,8 @@ public class NIS {
 
       NISuppressionSet ss = suppressee.sample_inv.get_ni_suppressions();
       assert ss != null
-          : "@AssumeAssertion(nullness):  dependent:  this invariant's class can be suppressed, so ss != null";
+          : "@AssumeAssertion(nullness):  dependent:  this invariant's class can be suppressed, so"
+              + " ss != null";
       return (ss.suppressed(ppt, vis));
     }
 
