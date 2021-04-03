@@ -5,13 +5,13 @@ This file lists significant user-visible changes to Daikon.
 (Many other changes, including most bug fixes, are not noted here.)
 
 Further documentation can be found in:
- * the Daikon Manual.  Its source is file daikon.texinfo; formatted, it
-   appears as daikon.html or daikon.pdf.
-   It is available on-line at:
+ * the Daikon Manual.  Its source is file `daikon.texinfo`; formatted, it
+   appears as `daikon.html` or `daikon.pdf`.
+   It is available online at:
    http://plse.cs.washington.edu/daikon/download/doc/daikon.html .
- * the Daikon Developer Manual.  Its source is file developer.texinfo;
-   formatted, it appears as developer.html or developer.pdf.
-   It is available on-line at:
+ * the Daikon Developer Manual.  Its source is file `developer.texinfo`;
+   formatted, it appears as `developer.html` or `developer.pdf`.
+   It is available online at:
    http://plse.cs.washington.edu/daikon/download/doc/developer.html .
  * The Javadoc API documentation for the source code.  This is not
    distributed with Daikon, but you can build it by executing the command
@@ -22,7 +22,8 @@ Further documentation can be found in:
 Version 5.8.8 (March 2, 2021)
 =============================
 
-Added DynComp --dump option, which dumps instrumented classes to a file.
+Added DynComp `--dump` option, which dumps instrumented classes to a file.
+
 Improved DynComp comparability results for JDK 11.
 
 
@@ -33,7 +34,7 @@ DynComp handles lambdas (Java anonymous functions).
 
 Improved DynComp support for JUnit test framework.
 
-Removed DynComp option --no-primitives.
+Removed DynComp option `--no-primitives`.
 
 Removed support for the obsolete version 1 file format.
 
@@ -72,7 +73,7 @@ Windows to generate a trace file, but you should run Daikon on a Unix-like
 system to process that trace file.  We welcome community support for the
 Windows and Cygwin operating systems.
 
-Daikon no longer requires the JAVA_HOME environment variable to be set,
+Daikon no longer requires the `JAVA_HOME` environment variable to be set,
 if the `javac` executable is on the path.
 
 Updated the readelf, Valgrind, and BCEL libraries.  This should improve
@@ -82,11 +83,11 @@ compatibility with operating systems and C versions.
 Version 5.7.2 (November 7, 2018)
 ================================
 
-The Daikon instructions no longer suggest to set CLASSPATH, which is bad
-style.  Instead, a new environment variable DAIKON_CLASSPATH is set by
-daikon.bashrc, if you choose to use that script.
+The Daikon instructions no longer suggest to set `CLASSPATH`, which is bad
+style.  Instead, a new environment variable `DAIKON_CLASSPATH` is set by
+`daikon.bashrc`, if you choose to use that script.
 
-The DAIKONDIR environment variable is not needed.  It is only used for
+The `DAIKONDIR` environment variable is not needed.  It is only used for
 documentation purposes in the manual.
 
 Daikon runs on Cygwin.  However, the Daikon developers no longer support
@@ -101,8 +102,8 @@ Version 5.7.0 (August 22, 2018)
 
 Daikon now requires Java JDK 8; Java JDK 7 is no longer supported.
 
-Implementation detail:  Daikon no longer uses the plume-lib repository, but
-smaller ones such as plume-scripts.
+Implementation detail:  Daikon no longer uses the monolithic plume-lib
+repository, which has been split into smaller ones such as plume-scripts.
 
 
 Version 5.6.6 (July 2, 2018)
@@ -118,19 +119,19 @@ Fjalar/Kvasir:
 Version 5.6.4 (April 3, 2018)
 =============================
 
-Eliminate reliance on plume.jar file, in favor of smaller libraries
+Eliminate reliance on `plume.jar` file, in favor of smaller libraries
 (checklink, html-tools, options, plume-util, etc.).
 
 Fjalar/Kvasir:
 - We updated the underlying Binutils infrastructure to version 2.30.
 
-The --wrap_xml command-line option now produces valid XML.
+The `--wrap_xml` command-line option now produces valid XML.
 
 
 Version 5.6.2 (February 2, 2018)
 ================================
 
-It is no longer necessary to set the DAIKONDIR environment variable when
+It is no longer necessary to set the `DAIKONDIR` environment variable when
 using or building Daikon.
 
 Fjalar/Kvasir:
@@ -143,7 +144,7 @@ Version 5.6.0 (December 4, 2017)
 ================================
 
 Support was added for Ubuntu 17.10.  Please see User Guide notes about using
-the -no-pie option on gcc.
+the `-no-pie` option on gcc.
 
 DynComp:
 - Fixed a few DynComp bugs.
@@ -223,15 +224,15 @@ Version 5.5.0 (February 1, 2017)
 ================================
 
 Kvasir:
-- The option --with-dyncomp has been changed to --dyncomp and is now the default.
-  Use --no-dyncomp to not run the DynComp portion of Kvasir.
+- The option `--with-dyncomp` has been changed to `--dyncomp` and is now the default.
+  Use `--no-dyncomp` to not run the DynComp portion of Kvasir.
 - Clarified instructions for building the sample Fjalar tool.
 
 DynComp:
-- The --compare-sets-file option has been renamed to --comparability-file.
-- The --trace-sets-file option has been renamed to --trace-file.
-- The --no-cset-file option has been removed, this is now the default.
-- The --no-jdk option has been removed, use --rt-file=NONE instead.
+- The `--compare-sets-file` option has been renamed to `--comparability-file`.
+- The `--trace-sets-file` option has been renamed to `--trace-file`.
+- The `--no-cset-file` option has been removed, this is now the default.
+- The `--no-jdk` option has been removed, use `--rt-file=NONE` instead.
 
 Documentation:
 - Improved discussion of DynComp and comparability sets.
@@ -298,16 +299,14 @@ There should be no user-visible differences in the behavior of Kvasir.
 
 Several options to the Kvasir DynComp feature (--with-dyncomp) were renamed
 to be more consistent:
-```
-  --gc-num-tags                => --dyncomp-gc-num-tags
-  --no-dyncomp-gc              => --dyncomp-gc-num-tags=0
-  --dyncomp-fast-mode          => --dyncomp-approximate-literals
-  --separate-entry-exit-comp   => --dyncomp-separate-entry-exit
-  --dyncomp-dataflow-only      => --dyncomp-interactions=none
-  --dyncomp-dataflow-comp      => --dyncomp-interactions=comparisons
-  --dyncomp-units              => --dyncomp-interactions=units
-  [new option; is the default] => --dyncomp-interactions=all
-```
+ * `--gc-num-tags`                => `--dyncomp-gc-num-tags`
+ * `--no-dyncomp-gc`              => `--dyncomp-gc-num-tags=0`
+ * `--dyncomp-fast-mode`          => `--dyncomp-approximate-literals`
+ * `--separate-entry-exit-comp`   => `--dyncomp-separate-entry-exit`
+ * `--dyncomp-dataflow-only`      => `--dyncomp-interactions=none`
+ * `--dyncomp-dataflow-comp`      => `--dyncomp-interactions=comparisons`
+ * `--dyncomp-units`              => `--dyncomp-interactions=units`
+ * [new option; is the default] => `--dyncomp-interactions=all`
 
 
 Version 5.3.8 (August 1, 2016)
@@ -342,9 +341,9 @@ Version 5.3.2 (May 2, 2016)
 ===========================
 
 Daikon:
- - Command-line argument --user-defined-invariant makes Daikon compute a
+ - Command-line argument `--user-defined-invariant` makes Daikon compute a
    user-defined invariant in addition to those that are built in to Daikon.
- - Command-line argument --disable-all-invariants disables all of Daikon's
+ - Command-line argument `--disable-all-invariants` disables all of Daikon's
    built-in invariants.  Subsequent command-line options may enable some of
    them.
 
@@ -444,7 +443,7 @@ Chicory:
   to other initialization methods.
 
 Daikon:
-- The --shiny-print option was renamed --abridged-vars to match the
+- The `--shiny-print` option was renamed `--abridged-vars` to match the
   documentation.
 
 Kvasir:
@@ -478,7 +477,7 @@ Version 5.2.10 (August 4, 2015)
 
 Chicory:
 - Modified generation of comparability values when using input from DynComp
-  .decls file via --comparability-file option.  When the resulting .dtrace
+  .decls file via `--comparability-file` option.  When the resulting .dtrace
   file is fed to Daikon, the number of uninteresting invariants is reduced.
 
 DynComp:
@@ -527,7 +526,7 @@ Version 5.2.6 (June 2, 2015)
 ============================
 
 Daikon:
-  Changed default value of --suppressSplitterErrors command-line option to true.
+  Changed default value of `--suppressSplitterErrors` command-line option to true.
 
 Chicory:
   Improved support for nested classes.  When processing an object of inner
@@ -569,15 +568,15 @@ Version 5.2.2 (April 10, 2015)
 
 **Tools that process invariant files:**
 
-Renamed LogicalCompare program's --cfg command-line argument to
---config_option, for consistency with other programs in the Daikon suite.
+Renamed LogicalCompare program's `--cfg` command-line argument to
+`--config_option`, for consistency with other programs in the Daikon suite.
 
 Improved the documentation for the Daikon runtimechecker tool.
 
 **Kvasir C/C++ front end:**
 
 Fixed a problem with creating pointer type disambiguation files when
-using the --disambig and --disambig-file options to Kvasir.
+using the `--disambig` and `--disambig-file` options to Kvasir.
 
 Updated the Binutils-based code in Fjalar/Kvasir from v2.24 to v2.25.
 There should be no user-visible differences in the behavior of Kvasir.
@@ -982,7 +981,7 @@ saving an appreciable amount of memory.
 Chicory
 -------
 
-Documented Chicory options --boot-classes=REGEX, --linked-lists.
+Documented Chicory options `--boot-classes=REGEX`, `--linked-lists`.
 
 Kvasir
 ------
@@ -1012,7 +1011,7 @@ now be found if it is anywhere in the classpath.
 InvariantChecker
 ----------------
 
-Added --verbose option that will print all samples that violate an
+Added `--verbose` option that will print all samples that violate an
 invariant.
 
 
