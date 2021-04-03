@@ -206,7 +206,7 @@ instructions for your operating system.
 
 
 Differences from previous versions of Daikon appear
-in the file @url{CHANGES,,@file{doc/CHANGES}} in the distribution.
+in the file @url{CHANGELOG.md,,@file{doc/CHANGELOG.md}} in the distribution.
 To be notified of new releases, or to join discussions about Daikon,
 subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
@@ -8614,7 +8614,7 @@ and about debugging flags.
 
 This manual describes Daikon version 5.8.9, released March 3, 2021.
 A more detailed list of revisions since mid-2001 can be found in file
-@url{CHANGES,,@file{doc/CHANGES}}
+@url{CHANGELOG.md,,@file{doc/CHANGELOG.md}}
 in the distribution; this section gives a
 high-level view of the package's history.
 
