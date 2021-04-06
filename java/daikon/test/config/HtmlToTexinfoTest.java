@@ -38,8 +38,10 @@ public class HtmlToTexinfoTest {
 
     // Additional test casess
     testJavadocHtmlToTexinfoHelper(
-        "Split bi-implications {@code a <==> b} into two separate implications {@code a ==> b} and {@code b ==> a})",
-        "Split bi-implications @code{a <==> b} into two separate implications @code{a ==> b} and @code{b ==> a})");
+        "Split bi-implications {@code a <==> b} into two separate implications {@code a ==> b} and"
+            + " {@code b ==> a})",
+        "Split bi-implications @code{a <==> b} into two separate implications @code{a ==> b} and"
+            + " @code{b ==> a})");
     testJavadocHtmlToTexinfoHelper(
         "     * {@code {e1, e2, e3, ...} subset of x[]}.",
         "     * @code{@{e1, e2, e3, ...@} subset of x[]}.");

@@ -591,7 +591,8 @@ public abstract class DaikonVariableInfo
             debug_vars.log("Pure method");
             debug_vars.indent();
             assert meth.member != null
-                : "@AssumeAssertion(nullness): member of method_infos have .member field"; // dependent type
+                : "@AssumeAssertion(nullness): member of method_infos have"
+                    + " .member field"; // dependent type
             newChild.addChildNodes(
                 cinfo,
                 ((Method) meth.member).getReturnType(),
@@ -630,7 +631,8 @@ public abstract class DaikonVariableInfo
                 debug_vars.log("Pure method");
                 debug_vars.indent();
                 assert meth.member != null
-                    : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
+                    : "@AssumeAssertion(nullness): member of"
+                        + " method_infos have .member field"; // fix with dependent type
                 newChild.addChildNodes(
                     cinfo,
                     ((Method) meth.member).getReturnType(),

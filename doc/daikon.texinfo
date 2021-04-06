@@ -153,17 +153,20 @@ detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for download from
-@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.  The distribution
-includes both source code and
+@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.
+Daikon's license permits unrestricted use (@pxref{License}).
+The distribution includes both source code
+(also available on @uref{https://github.com/codespecs/daikon, , GitHub})
+and
 @uref{http://plse.cs.washington.edu/daikon/download/doc/, ,documentation},
-and Daikon's license permits unrestricted use (@pxref{License}).  Many
-researchers and practitioners have used Daikon; those uses, and Daikon
+Many researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
 @uref{http://plse.cs.washington.edu/daikon/pubs/, ,publications}.
 
 For more information on Daikon,
 @pxref{Top, , Introduction, developer, Daikon Developer Manual}.
 For instance, the @cite{Daikon Developer Manual} indicates how to
+obtain Daikon's source code and how to
 extend Daikon with new invariants, new derived variables, and front
 ends for new languages.  It also contains information about the
 implementation and about debugging flags.
@@ -179,7 +182,7 @@ instructions.
 The main way to install Daikon is from a release, as explained in this
 section.
 (Alternately,
-@pxref{Version control repository,,,developer,Daikon Developer Manual},
+@pxref{Source code (version control repository),,,developer,Daikon Developer Manual},
 to obtain the latest Daikon source code from its version control repository.)
 Here is an overview of the steps.
 

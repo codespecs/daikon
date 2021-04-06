@@ -318,7 +318,7 @@ public class ChicoryPremain {
 
       if (plse_urls.size() == 0) {
         System.err.printf(
-            "%nBCEL 6.1 or newer must be on the classpath.  Normally it is found in daikon.jar .%n");
+            "%nBCEL 6.1 or newer must be on the classpath.  Normally it is found in daikon.jar.%n");
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }

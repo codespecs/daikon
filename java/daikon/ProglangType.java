@@ -514,7 +514,8 @@ public final @Interned class ProglangType implements Serializable {
             v.add(parser.sval);
           } else if (parser.ttype == StreamTokenizer.TT_WORD) {
             assert parser.sval != null
-                : "@AssumeAssertion(nullness): dependent: representation invariant of StreamTokenizer";
+                : "@AssumeAssertion(nullness): dependent: representation invariant of"
+                    + " StreamTokenizer";
             if (parser.sval.equals("nonsensical")) {
               return null;
             }
@@ -524,7 +525,9 @@ public final @Interned class ProglangType implements Serializable {
             v.add(Integer.toString((int) parser.nval));
           } else {
             System.out.printf(
-                "Warning: at %s line %d%n  bad ttype %c [int=%d] while parsing %s%n  Proceeding with value 'null'%n",
+                "Warning: at %s line %d%n"
+                    + "  bad ttype %c [int=%d] while parsing %s%n"
+                    + "  Proceeding with value 'null'%n",
                 filename, reader.getLineNumber(), (char) parser.ttype, parser.ttype, value_orig);
             v.add(null);
           }

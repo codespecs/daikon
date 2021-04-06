@@ -139,7 +139,7 @@ This chapter describes how to customize or modify Daikon.
 
 @menu
 * Compiling Daikon::
-* Version control repository::
+* Source code (version control repository)::
 * Using Eclipse::
 * New invariants::
 * New derived variables::
@@ -198,9 +198,10 @@ distribution into multiple @file{.java} files, which are then compiled.
 If you have a C compiler, you almost certainly have @command{cpp}.
 
 
-@node    Version control repository
-@section Version control repository
+@node    Source code (version control repository)
+@section Source code (version control repository)
 
+@cindex source code
 @cindex repository
 @cindex Git repository
 @cindex version control repository
@@ -1213,8 +1214,8 @@ behavior and possibly update the goals.
 
 The Daikon distribution contains unit tests, but not regression tests
 (which would make the distribution much larger).  The regression tests
-appear in Daikon's version control repository (@pxref{Version control
-repository}), within the @file{tests} subdirectory.
+appear in Daikon's version control repository (@pxref{Source code (version control
+repository)}), within the @file{tests} subdirectory.
 
 @menu
 * Unit testing::
