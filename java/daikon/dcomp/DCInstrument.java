@@ -607,7 +607,8 @@ public class DCInstrument extends InstructionListUtils {
             if (s.startsWith("Branch target offset too large")
                 || s.startsWith("Code array too big")) {
               System.out.printf(
-                  "DynComp warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
+                  "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
+                      + " being skipped.%n",
                   classname, mg.getName());
               // Build a dummy instrumented method that has DCompMarker
               // argument and no instrumentation.

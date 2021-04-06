@@ -31,7 +31,8 @@ public class MemMonitor implements Runnable {
     long initial_mem_load = mem_usage();
     fout.println("Initial memory load, " + initial_mem_load);
     fout.println(
-        "Format: pptName, peak_mem_usage, num_samples, num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars");
+        "Format: pptName, peak_mem_usage, num_samples, num_static_vars, num_orig_vars,"
+            + " num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars");
     fout.close();
   }
 

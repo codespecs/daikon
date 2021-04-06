@@ -49,8 +49,14 @@ public class TraceSelect {
   private static final String usage =
       StringsPlume.joinLines(
           "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
-          "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
+          "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace"
+              + " foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
+  /**
+   * The entry point of TraceSelect
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) {
     try {
       mainHelper(args);

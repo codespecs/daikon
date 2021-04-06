@@ -424,7 +424,8 @@ public class Chicory {
       System.exit(daikonResult);
     } else if (daikon_online) {
       assert daikon_proc != null
-          : "@AssumeAssertion(nullness): conditional: just tested daikon_online, and ran runDaikon() earlier in this method";
+          : "@AssumeAssertion(nullness): conditional: just tested daikon_online, and ran"
+              + " runDaikon() earlier in this method";
       if (targetResult != 0) {
         System.out.printf("Warning: Target exited with %d status%n", targetResult);
       }
