@@ -31,8 +31,7 @@ if [ ! -d ../fjalar ] ; then
   else
     mkdir -p "/tmp/$USER" && (cd "/tmp/$USER" && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
   fi
-  # "--debug" is temporary.
-  "/tmp/$USER/plume-scripts/git-clone-related" --debug codespecs fjalar
+  "/tmp/$USER/plume-scripts/git-clone-related" codespecs fjalar
 fi
 
 # The Valgrind configure script fails if SHELLOPTS is defined.
