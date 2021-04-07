@@ -2068,7 +2068,7 @@ complete overnight.
 
 @need 1000
 @item
-Edit the @file{doc/CHANGES} file to indicate what has changed
+Edit the @file{doc/CHANGELOG.md} file to indicate what has changed
 in this version.  A good way to determine what has changed is to diff
 the Texinfo source files in the @file{doc/} directory against the previous
 versions:
@@ -2215,7 +2215,7 @@ cd $DAIKONDIR && make very-clean clean-kvasir && make rebuild-everything
 @item
 Once you have successfully reached this point, you are ready to make a release
 candidate and begin testing it.
-The following command will verify that @file{doc/CHANGES} is up-to-date and then list
+The following command will verify that @file{doc/CHANGELOG.md} is up-to-date and then list
 any uncommitted files.
 
 @example
@@ -2529,13 +2529,13 @@ the actual number of the release.
 Daikon version <version number> is available at:
 http://plse.cs.washington.edu/daikon/download/
 
-Please see the entry from the doc/CHANGES file that appears below for more details.
+Please see the entry from the doc/CHANGELOG.md file that appears below for more details.
 
   <your name>
 
-<a copy of the current entry from the doc/CHANGES file, with
+<a copy of the current entry from the doc/CHANGELOG.md file, with
 paragraphs refilled (remove unnecessary line breaks that trim lines
-to 80 columns for the CHANGES file but aren't desirable in email)>
+to 80 columns for the CHANGELOG.md file but aren't desirable in email)>
 @end example
 
 Note that if you use Microsoft Outlook 2010 or 2013 as your mailer,
