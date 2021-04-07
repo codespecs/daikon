@@ -212,8 +212,8 @@ fjalar/valgrind/Makefile: fjalar/valgrind/Makefile.in
 .PHONY: kvasir
 kvasir:
 	$(MAKE) fjalar/valgrind/Makefile
-	$(MAKE) -C fjalar/valgrind
-	$(MAKE) -C fjalar/valgrind install
+	$(MAKE) -C fjalar/valgrind --no-print-directory
+	$(MAKE) -C fjalar/valgrind install >/dev/null
 
 build-kvasir:
 ifeq (Linux x86_64,$(shell uname -sm))
