@@ -112,6 +112,7 @@ public class SpinfoFile {
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @throws IOException if an I/O error occurs
    */
+  @SuppressWarnings("nullness:initialization.invalid.field.access") // diagnostic code prints fields
   @RequiresNonNull("tempDir")
   @EnsuresNonNull({"statementReplacer", "splitterObjects"})
   public void parseFile(@UnknownInitialization SpinfoFile this, LineNumberReader spinfoFile)
@@ -163,7 +164,10 @@ public class SpinfoFile {
    *
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param replaceStatements the List into which the ReplaceStatements are added
+   * @throws IOException if there is a problem reading the file
+   * @throws ParseException if there is a problem parsing
    */
+  @SuppressWarnings("nullness:initialization.invalid.field.access") // diagnostic code prints fields
   private void readReplaceStatements(
       @UnknownInitialization SpinfoFile this,
       LineNumberReader spinfoFile,
@@ -225,6 +229,7 @@ public class SpinfoFile {
    * @return an array of arrays with each array containing the SplitterObjects for one of lists of
    *     ppt statements found in pptSections
    */
+  @SuppressWarnings("nullness:initialization.invalid.field.access") // diagnostic code prints fields
   @RequiresNonNull("tempDir")
   private SplitterObject[][] createSplitterObjects(
       @UnknownInitialization SpinfoFile this, List<List<String>> pptSections) {
