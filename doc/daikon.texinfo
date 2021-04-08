@@ -3389,8 +3389,12 @@ value is marked as nonsensical.
 
 @item --omit-var=@var{regex}
 @cindex variables, omit
-Do not include variables whose name matches the regular expression.  Variables
-will be omitted from each program point in which they appear.
+Do not include variables whose name matches the regular expression.
+(For static fields, the fully-qualified name is used.)
+Variables will be omitted from each program point in which they appear.
+Also see Daikon's @code{--var-omit-pattern} command-line argument.
+Note that you may need to omit the same variables from downstream tools
+that process invariant files, such as Annotate
 
 @item --std-visibility
 @cindex private variables
