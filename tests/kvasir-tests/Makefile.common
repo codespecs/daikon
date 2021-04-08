@@ -21,7 +21,7 @@ CFLAGS += -fno-stack-protector
 CFLAGS += -fcommon
 
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
-KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
+KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/libexec/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
 # --dyncomp is now the default; turn back off to minimize changes to this Makefile
 KVASIR_OPTIONS := $(KVASIR_OPTIONS) --no-dyncomp
@@ -362,17 +362,7 @@ $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt
 endif
 
 $(DIFF_NAME).comp.diff: $(NAME).comp $(call goal_name,$(NAME).comp)
-# flex-pristine fails on Azure CentOS 8.1.1911 for unknown reasons
-ifeq ($(GOAL), goal-CentOS1911)
-ifeq ($(NAME), flex-pristine)
-		@echo skipping $(NAME) $(GOAL)
-		@touch $@
-else
 	-diff --text -F::: -u $(call goal_name,$(NAME).comp) $(NAME).comp >$@ 2>&1
-endif
-else
-	-diff --text -F::: -u $(call goal_name,$(NAME).comp) $(NAME).comp >$@ 2>&1
-endif
 
 ifeq ($(COUNTS_ONLY),)
 DIFF_FILES := $(DIFF_NAME).comp.diff $(DIFF_NAME).decls.diff $(DIFF_NAME).dtrace.diff $(DIFF_NAME).counts.diff $(DIFF_NAME).out.diff

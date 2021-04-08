@@ -17,7 +17,7 @@ CFLAGS += -gdwarf-2
 # We turn if back off to get baseline results to match Fedora.
 CFLAGS += -fno-stack-protector
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
-KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
+KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/libexec/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
 # --dyncomp is now the default; turn back off to minimize changes to this Makefile
 KVASIR_OPTIONS := $(KVASIR_OPTIONS) --no-dyncomp
