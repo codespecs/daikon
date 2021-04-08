@@ -45,7 +45,6 @@ class ReplaceStatement {
    *     (with the exception of package-name-like prefixes)
    * @throws ParseException if there is a problem parsing
    */
-  @SuppressWarnings("nullness:initialization.invalid.field.access") // access field in assert
   public ReplaceStatement(String methodDeclaration, String returnStatement) throws ParseException {
     methodName = "";
     this.returnStatement = returnStatement;
