@@ -77,15 +77,13 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
       if (inv1.justified() && (inv1 instanceof Implication)) {
         nonce++;
         Implication imp = (Implication) inv1;
-        if (!repeatFilter.contains(imp.consequent().format())) {
-          repeatFilter.add(imp.consequent().format());
+        if (repeatFilter.add(imp.consequent().format())) {
           // inv1.ppt.invs.add (imp.consequent());
           accum.add(imp.consequent());
         }
         // add both sides of a biimplication
         if (imp.iff == true) {
-          if (!repeatFilter.contains(imp.predicate().format())) {
-            repeatFilter.add(imp.predicate().format());
+          if (repeatFilter.add(imp.predicate().format())) {
             // inv1.ppt.invs.add (imp.predicate());
             accum.add(imp.predicate());
           }
