@@ -438,7 +438,7 @@ public class PptSliceEquality extends PptSlice {
     if (key == null) {
       throw new IllegalArgumentException();
     }
-    List<VarInfo> elements = map.computeIfAbsent(key, unused -> new ArrayList<VarInfo>());
+    List<VarInfo> elements = map.computeIfAbsent(key, __ -> new ArrayList<VarInfo>());
     elements.add(value);
   }
 

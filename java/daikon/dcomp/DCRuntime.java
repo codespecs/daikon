@@ -637,7 +637,7 @@ public final class DCRuntime implements ComparabilityProvider {
     // instrumented user method.  Since it might be on a new thread
     // we need to check/set the per-thread data map.
     Thread t = Thread.currentThread();
-    ThreadData td = thread_to_data.computeIfAbsent(t, unused -> new ThreadData());
+    ThreadData td = thread_to_data.computeIfAbsent(t, __ -> new ThreadData());
 
     int frame_size = ((int) params.charAt(0)) - '0';
     // Character.digit (params.charAt(0), Character.MAX_RADIX);
@@ -2192,7 +2192,7 @@ public final class DCRuntime implements ComparabilityProvider {
   static void add_variable_traced(Map<DaikonVariableInfo, DVSet> sets, DaikonVariableInfo dv) {
     try {
       DaikonVariableInfo parent = (DaikonVariableInfo) TagEntry.tracer_find(dv);
-      DVSet set = sets.computeIfAbsent(parent, unused -> new DVSet());
+      DVSet set = sets.computeIfAbsent(parent, __ -> new DVSet());
       set.add(dv);
     } catch (NullPointerException e) {
       throw new Error(e);
@@ -2323,7 +2323,7 @@ public final class DCRuntime implements ComparabilityProvider {
     // Add this variable into the set of its leader
     if (dv.declShouldPrint()) {
       DaikonVariableInfo leader = (DaikonVariableInfo) TagEntry.find(dv);
-      DVSet set = sets.computeIfAbsent(leader, unused -> new DVSet());
+      DVSet set = sets.computeIfAbsent(leader, __ -> new DVSet());
       set.add(dv);
     }
 

@@ -1467,7 +1467,7 @@ public class PptTopLevel extends Ppt {
     for (Iterator<PptSlice> j = views_iterator(); j.hasNext(); ) {
       PptSlice slice = j.next();
       for (Invariant inv : slice.invs) {
-        Cnt cnt = inv_map.computeIfAbsent(inv.getClass(), unused -> new Cnt());
+        Cnt cnt = inv_map.computeIfAbsent(inv.getClass(), __ -> new Cnt());
         cnt.cnt++;
       }
     }

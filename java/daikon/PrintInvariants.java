@@ -1640,7 +1640,7 @@ public final class PrintInvariants {
         filter_class = filter.getClass();
       }
       Map<Class<? extends Invariant>, Integer> inv_map =
-          filter_map.computeIfAbsent(filter_class, unused -> new LinkedHashMap<>());
+          filter_map.computeIfAbsent(filter_class, __ -> new LinkedHashMap<>());
       Integer cnt = inv_map.get(inv.getClass());
       if (cnt == null) {
         cnt = 1;

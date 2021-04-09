@@ -340,7 +340,7 @@ class TagEntry extends WeakReference<Object> {
     // whose key is its root.
     for (Object obj : object_map.keySet()) {
       Object rep = find(obj);
-      List<Object> set = sets.computeIfAbsent(rep, unused -> new ArrayList<Object>());
+      List<Object> set = sets.computeIfAbsent(rep, __ -> new ArrayList<Object>());
       set.add(obj);
     }
 

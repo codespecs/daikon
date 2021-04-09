@@ -269,7 +269,7 @@ public class Runtime {
         }
         Thread t = Thread.currentThread();
         Deque<CallInfo> callstack =
-            thread_to_callstack.computeIfAbsent(t, unused -> new ArrayDeque<CallInfo>());
+            thread_to_callstack.computeIfAbsent(t, __ -> new ArrayDeque<CallInfo>());
         callstack.push(new CallInfo(nonce, capture));
       }
 

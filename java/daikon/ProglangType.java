@@ -227,7 +227,7 @@ public final @Interned class ProglangType implements Serializable {
     @Interned ProglangType result = new ProglangType(t_base, t_dims);
 
     List<ProglangType> v =
-        all_known_types.computeIfAbsent(t_base, unused -> new ArrayList<ProglangType>());
+        all_known_types.computeIfAbsent(t_base, __ -> new ArrayList<ProglangType>());
 
     v.add(result);
 

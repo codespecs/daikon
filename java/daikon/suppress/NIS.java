@@ -638,9 +638,9 @@ public class NIS {
             if (!v1.compatible(v2)) {
               System.out.printf("inv %s has incompatible variables%n", ie.format());
             }
-            Count cnt = var_map.computeIfAbsent(v1, unused -> new Count(0));
+            Count cnt = var_map.computeIfAbsent(v1, __ -> new Count(0));
             cnt.val++;
-            cnt = var_map.computeIfAbsent(v2, unused -> new Count(0));
+            cnt = var_map.computeIfAbsent(v2, __ -> new Count(0));
             cnt.val++;
           }
           System.out.printf("%d distinct variables%n", var_map.size());
