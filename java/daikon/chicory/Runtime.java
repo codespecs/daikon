@@ -268,6 +268,7 @@ public class Runtime {
           capture = (mi.call_cnt % 10000) == 0;
         }
         Thread t = Thread.currentThread();
+        @SuppressWarnings("lock:method.invocation.invalid") // CF bug: inference failed
         Deque<CallInfo> callstack =
             thread_to_callstack.computeIfAbsent(t, __ -> new ArrayDeque<CallInfo>());
         callstack.push(new CallInfo(nonce, capture));
