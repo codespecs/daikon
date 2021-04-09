@@ -2986,9 +2986,7 @@ public class PptTopLevel extends Ppt {
       while (!working.isEmpty()) {
         PptTopLevel ppt = working.iterator().next();
         working.remove(ppt);
-        if (!closure.contains(ppt)) {
-          closure.add(ppt);
-        }
+        closure.add(ppt);
       }
     }
 
