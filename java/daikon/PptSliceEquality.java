@@ -225,11 +225,7 @@ public class PptSliceEquality extends PptSlice {
       if (v.equalitySet != null) {
         continue;
       }
-      List<VarInfo> vlist = varmap.get(v);
-      if (vlist == null) {
-        vlist = new ArrayList<VarInfo>(1);
-        vlist.add(v);
-      }
+      List<VarInfo> vlist = varmap.computeIfAbsent(v, Collections::singletonList);
       Equality eq = new Equality(vlist, this);
       Integer sample_cnt = sample_cnt_map.get(v);
       if (sample_cnt != null) eq.setSamples(sample_cnt.intValue());
@@ -442,11 +438,7 @@ public class PptSliceEquality extends PptSlice {
     if (key == null) {
       throw new IllegalArgumentException();
     }
-    List<VarInfo> elements = map.get(key);
-    if (elements == null) {
-      elements = new ArrayList<VarInfo>();
-      map.put(key, elements);
-    }
+    List<VarInfo> elements = map.computeIfAbsent(key, unused -> new ArrayList<VarInfo>());
     elements.add(value);
   }
 

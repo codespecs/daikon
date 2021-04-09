@@ -2461,8 +2461,7 @@ public final class Daikon {
           continue;
         }
         leader_cnt++;
-        Count cnt = type_map.get(v.file_rep_type);
-        if (cnt == null) type_map.put(v.file_rep_type, cnt = new Count(0));
+        Count cnt = type_map.computeIfAbsent(v.file_rep_type, unused -> new Count(0));
         cnt.val++;
       }
       System.out.println("  vars       = " + ppt.var_infos.length);

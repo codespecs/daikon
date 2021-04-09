@@ -226,11 +226,8 @@ public final @Interned class ProglangType implements Serializable {
     @SuppressWarnings("interning") // test above did not find one, so the new one is interned
     @Interned ProglangType result = new ProglangType(t_base, t_dims);
 
-    List<ProglangType> v = all_known_types.get(t_base);
-    if (v == null) {
-      v = new ArrayList<ProglangType>();
-      all_known_types.put(t_base, v);
-    }
+    List<ProglangType> v =
+        all_known_types.computeIfAbsent(t_base, unused -> new ArrayList<ProglangType>());
 
     v.add(result);
 
