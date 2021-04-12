@@ -5,11 +5,11 @@ This file lists significant user-visible changes to Daikon.
 (Many other changes, including most bug fixes, are not noted here.)
 
 Further documentation can be found in:
- * the Daikon Manual.  Its source is file `daikon.texinfo`; formatted, it
+ * The Daikon Manual.  Its source is file `daikon.texinfo`; formatted, it
    appears as `daikon.html` or `daikon.pdf`.
    It is available online at:
    http://plse.cs.washington.edu/daikon/download/doc/daikon.html .
- * the Daikon Developer Manual.  Its source is file `developer.texinfo`;
+ * The Daikon Developer Manual.  Its source is file `developer.texinfo`;
    formatted, it appears as `developer.html` or `developer.pdf`.
    It is available online at:
    http://plse.cs.washington.edu/daikon/download/doc/developer.html .
